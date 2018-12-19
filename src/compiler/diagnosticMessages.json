@@ -1752,6 +1752,10 @@
         "category": "Error",
         "code": 2492
     },
+    "Tuple type '{0}' of length '{1}' has no element at index '{2}'.": {
+        "category": "Error",
+        "code": 2493
+    },
     "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.": {
         "category": "Error",
         "code": 2494

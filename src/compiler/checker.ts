@@ -9609,7 +9609,13 @@ namespace ts {
                 if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
                     if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
-                        error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
+                        if (isTupleType(objectType)) {
+                            error(indexNode, Diagnostics.Tuple_type_0_of_length_1_has_no_element_at_index_2,
+                                typeToString(objectType), getTypeReferenceArity(objectType), unescapeLeadingUnderscores(propName));
+                        }
+                        else {
+                            error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
+                        }
                     }
                     return mapType(objectType, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
                 }
