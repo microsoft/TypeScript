@@ -6836,12 +6836,13 @@ namespace ts {
                 const masterList = signatureLists[indexWithLengthOverOne !== undefined ? indexWithLengthOverOne : 0];
                 let results: Signature[] | undefined = masterList.slice();
                 for (const signatures of signatureLists) {
-                    if (signatures === masterList) continue;
-                    const signature = signatures[0];
-                    Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
-                    results = signature.typeParameters && some(results, s => !!s.typeParameters) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
-                    if (!results) {
-                        break;
+                    if (signatures !== masterList) {
+                        const signature = signatures[0];
+                        Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
+                        results = signature.typeParameters && some(results, s => !!s.typeParameters) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
+                        if (!results) {
+                            break;
+                        }
                     }
                 }
                 result = results;
@@ -6853,24 +6854,14 @@ namespace ts {
             if (!left && !right) {
                 return;
             }
-            if (!left) {
-                return right;
-            }
-            if (!right) {
-                return left;
+            if (!left || !right) {
+                return left || right;
             }
             // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
             // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
             // permissive when calling, for now, we'll union the `this` types just like the overlapping-union-signature check does
             const thisType = getUnionType([getTypeOfSymbol(left), getTypeOfSymbol(right)], UnionReduction.Subtype);
             return createSymbolWithType(left, thisType);
-        }
-
-        function combineParameterNames(index: number, left: __String, right: __String): __String {
-            if (left === right) {
-                return left;
-            }
-            return `arg${index}` as __String;
         }
 
         function combineUnionParameters(left: Signature, right: Signature) {
@@ -6888,7 +6879,10 @@ namespace ts {
                 const isOptional = i > getMinArgumentCount(longest) && i > getMinArgumentCount(shorter);
                 const leftName = getParameterNameAtPosition(left, i);
                 const rightName = getParameterNameAtPosition(right, i);
-                const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0), combineParameterNames(i, leftName, rightName));
+                const paramSymbol = createSymbol(
+                    SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0),
+                    leftName === rightName ? leftName : `arg${i}` as __String
+                );
                 paramSymbol.type = isRestParam ? createArrayType(unionParamType) : unionParamType;
                 params[i] = paramSymbol;
             }
