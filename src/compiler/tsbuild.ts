@@ -331,7 +331,7 @@ namespace ts {
 
         // TODO: To do better with watch mode and normal build mode api that creates program and emits files
         // This currently helps enable --diagnostics and --extendedDiagnostics
-        afterProgramEmitAndDiagnostics?(program: Program): void;
+        afterProgramEmitAndDiagnostics?(program: T): void;
     }
 
     export interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
