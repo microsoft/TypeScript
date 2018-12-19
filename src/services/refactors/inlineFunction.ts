@@ -106,7 +106,7 @@ namespace ts.refactor.inlineFunction {
         return {
             declaration,
             usages,
-            selectedUsage: call ? call : undefined,
+            selectedUsage: call,
             allAvailable,
             selectedAvailable
         };
@@ -117,24 +117,9 @@ namespace ts.refactor.inlineFunction {
         target: InlineableFunction,
         checker: TypeChecker
     ): ReadonlyArray<CallExpression> {
-        // const targetSymbol = checker.getSymbolAtLocation(target.name!)!;
         const calls: CallExpression[] = [];
         FindAllReferences.Core.eachSignatureCall(target, [file], checker, c => { calls.push(c); });
         return calls;
-        // const calls = findDescendants(scope, isCallExpression);
-        // if (isMethodDeclaration(target)) {
-        //     return calls.filter(c => {
-        //         const property = <PropertyAccessExpression>c.expression;
-        //         if (isThisProperty(property)) {
-        //             return checker.getSymbolAtLocation(property) === targetSymbol;
-        //         }
-        //         const obj = property.expression;
-        //         const type = obj.contextualType || checker.getTypeAtLocation(obj);
-        //         const members = type.symbol.members;
-        //         return members && members.get(targetSymbol.escapedName);
-        //     });
-        // }
-        // return calls.filter(n => checker.getSymbolAtLocation(n.expression) === targetSymbol);
     }
 
     function canInline(
