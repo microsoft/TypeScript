@@ -4426,6 +4426,22 @@ namespace ts {
             return location.kind === SyntaxKind.SourceFile || isAmbientModule(location);
         }
 
+        function getNameOfSymbolFromNameType(symbol: Symbol, context?: NodeBuilderContext) {
+            const nameType = symbol.nameType;
+            if (nameType) {
+                if (nameType.flags & TypeFlags.StringOrNumberLiteral) {
+                    const name = "" + (<StringLiteralType | NumberLiteralType>nameType).value;
+                    if (!isIdentifierText(name, compilerOptions.target) && !isNumericLiteralName(name)) {
+                        return `"${escapeString(name, CharacterCodes.doubleQuote)}"`;
+                    }
+                    return name;
+                }
+                if (nameType.flags & TypeFlags.UniqueESSymbol) {
+                    return `[${getNameOfSymbolAsWritten((<UniqueESSymbolType>nameType).symbol, context)}]`;
+                }
+            }
+        }
+
         /**
          * Gets a human-readable name for a symbol.
          * Should *not* be used for the right-hand side of a `.` -- use `symbolName(symbol)` for that instead.
@@ -4450,6 +4466,13 @@ namespace ts {
                     if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
                         return symbolName(symbol);
                     }
+                    if (isComputedPropertyName(name) && !(getCheckFlags(symbol) & CheckFlags.Late) && symbol.nameType && symbol.nameType.flags & TypeFlags.StringOrNumberLiteral) {
+                        // Computed property name isn't late bound, but has a well-known name type - use name type to generate a symbol name
+                        const result = getNameOfSymbolFromNameType(symbol, context);
+                        if (result !== undefined) {
+                            return result;
+                        }
+                    }
                     return declarationNameToString(name);
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
@@ -4465,16 +4488,8 @@ namespace ts {
                         return declaration.kind === SyntaxKind.ClassExpression ? "(Anonymous class)" : "(Anonymous function)";
                 }
             }
-            const nameType = symbol.nameType;
-            if (nameType) {
-                if (nameType.flags & TypeFlags.StringLiteral && !isIdentifierText((<StringLiteralType>nameType).value, compilerOptions.target)) {
-                    return `"${escapeString((<StringLiteralType>nameType).value, CharacterCodes.doubleQuote)}"`;
-                }
-                if (nameType && nameType.flags & TypeFlags.UniqueESSymbol) {
-                    return `[${getNameOfSymbolAsWritten((<UniqueESSymbolType>nameType).symbol, context)}]`;
-                }
-            }
-            return symbolName(symbol);
+            const name = getNameOfSymbolFromNameType(symbol, context);
+            return name !== undefined ? name : symbolName(symbol);
         }
 
         function isDeclarationVisible(node: Node): boolean {
