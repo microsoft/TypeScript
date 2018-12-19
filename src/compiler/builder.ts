@@ -426,7 +426,7 @@ namespace ts {
         /**
          * Computing hash to for signature verification
          */
-        const computeHash = host.createHash || identity;
+        const computeHash = host.createHash || generateDjb2Hash;
         const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
 
         // To ensure that we arent storing any references to old program or new program without state
