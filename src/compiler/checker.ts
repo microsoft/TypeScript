@@ -21221,16 +21221,6 @@ namespace ts {
             return tryGetTypeAtPosition(signature, pos) || anyType;
         }
 
-        function getTupleTypeForArgumentAtPos(restType: Type, pos: number, paramCount: number) {
-            if (isTupleType(restType)) {
-                if (pos - paramCount < getLengthOfTupleType(restType)) {
-                    return restType.typeArguments![pos - paramCount];
-                }
-                return getRestTypeOfTupleType(restType);
-            }
-            return getIndexTypeOfType(restType, IndexKind.Number);
-        }
-
         function tryGetTypeAtPosition(signature: Signature, pos: number): Type | undefined {
             const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             if (pos < paramCount) {
@@ -21238,7 +21228,13 @@ namespace ts {
             }
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
-                return getTupleTypeForArgumentAtPos(restType, pos, paramCount);
+                if (isTupleType(restType)) {
+                    if (pos - paramCount < getLengthOfTupleType(restType)) {
+                        return restType.typeArguments![pos - paramCount];
+                    }
+                    return getRestTypeOfTupleType(restType);
+                }
+                return getIndexTypeOfType(restType, IndexKind.Number);
             }
             return undefined;
         }
