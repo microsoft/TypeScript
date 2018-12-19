@@ -1015,6 +1015,14 @@
         "category": "Error",
         "code": 1351
     },
+    "A bigint literal cannot use exponential notation.": {
+        "category": "Error",
+        "code": 1352
+    },
+    "A bigint literal must be an integer.": {
+        "category": "Error",
+        "code": 1353
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1636,14 +1644,6 @@
         "category": "Error",
         "code": 2458
     },
-    "Type '{0}' has no property '{1}' and no string index signature.": {
-        "category": "Error",
-        "code": 2459
-    },
-    "Type '{0}' has no property '{1}'.": {
-        "category": "Error",
-        "code": 2460
-    },
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
@@ -1696,7 +1696,7 @@
         "category": "Error",
         "code": 2473
     },
-    "In 'const' enum declarations member initializer must be constant expression.": {
+    "const enum member initializers can only contain literal values and other computed enum values.": {
         "category": "Error",
         "code": 2474
     },
@@ -1760,7 +1760,7 @@
         "category": "Error",
         "code": 2492
     },
-    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
+    "Tuple type '{0}' of length '{1}' has no element at index '{2}'.": {
         "category": "Error",
         "code": 2493
     },

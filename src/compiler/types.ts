@@ -1745,6 +1745,9 @@ namespace ts {
     export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
+    /* @internal */
+    export type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
+
     export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
@@ -2614,6 +2617,8 @@ namespace ts {
     export interface SourceFileLike {
         readonly text: string;
         lineMap?: ReadonlyArray<number>;
+        /* @internal */
+        getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
     }
 
 
@@ -5528,9 +5533,9 @@ namespace ts {
 
     /* @internal */
     export interface DocumentPositionMapperHost {
-        getSourceFileLike(path: Path): SourceFileLike | undefined;
+        getSourceFileLike(fileName: string): SourceFileLike | undefined;
         getCanonicalFileName(path: string): string;
-        log?(text: string): void;
+        log(text: string): void;
     }
 
     /**
