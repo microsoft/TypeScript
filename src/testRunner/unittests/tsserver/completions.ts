@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: completions", () => {
+    describe("unittests:: tsserver:: completions", () => {
         it("works", () => {
             const aTs: File = {
                 path: "/a.ts",

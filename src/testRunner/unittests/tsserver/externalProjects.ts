@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: ExternalProjects", () => {
+    describe("unittests:: tsserver:: ExternalProjects", () => {
         describe("correctly handling add/remove tsconfig - 1", () => {
             function verifyAddRemoveConfig(lazyConfiguredProjectsFromExternalProject: boolean) {
                 const f1 = {

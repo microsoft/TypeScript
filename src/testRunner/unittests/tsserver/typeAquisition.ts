@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: autoDiscovery", () => {
+    describe("unittests:: tsserver:: autoDiscovery", () => {
         it("does not depend on extension", () => {
             const file1 = {
                 path: "/a/b/app.html",
@@ -22,7 +22,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("tsserver:: prefer typings to js", () => {
+    describe("unittests:: tsserver:: prefer typings to js", () => {
         it("during second resolution pass", () => {
             const typingsCacheLocation = "/a/typings";
             const f1 = {

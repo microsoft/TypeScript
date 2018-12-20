@@ -1,6 +1,6 @@
 namespace ts {
     interface ExpectedResult { typeAcquisition: TypeAcquisition; errors: Diagnostic[]; }
-    describe("config:: convertTypeAcquisitionFromJson", () => {
+    describe("unittests:: config:: convertTypeAcquisitionFromJson", () => {
         function assertTypeAcquisition(json: any, configFileName: string, expectedResult: ExpectedResult) {
             assertTypeAcquisitionWithJson(json, configFileName, expectedResult);
             assertTypeAcquisitionWithJsonNode(json, configFileName, expectedResult);

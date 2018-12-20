@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: rename", () => {
+    describe("unittests:: tsserver:: rename", () => {
         it("works with fileToRename", () => {
             const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
             const bTs: File = { path: "/b.ts", content: 'import { a } from "./a";' };

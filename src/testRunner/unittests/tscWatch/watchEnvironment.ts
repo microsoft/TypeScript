@@ -1,6 +1,6 @@
 namespace ts.tscWatch {
     import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
-    describe("tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
+    describe("unittests:: tsc-watch:: watchEnvironment:: tsc-watch with different polling/non polling options", () => {
         it("watchFile using dynamic priority polling", () => {
             const projectFolder = "/a/username/project";
             const file1: File = {

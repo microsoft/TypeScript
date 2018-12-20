@@ -1,5 +1,5 @@
 namespace ts {
-    describe("customTransforms", () => {
+    describe("unittests:: customTransforms", () => {
         function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: CustomTransformers, options: CompilerOptions = {}) {
             it(name, () => {
                 const roots = sources.map(source => createSourceFile(source.file, source.text, ScriptTarget.ES2015));

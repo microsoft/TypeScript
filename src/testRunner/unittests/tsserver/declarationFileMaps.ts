@@ -40,7 +40,7 @@ namespace ts.projectSystem {
         assert.deepEqual(output.outputFiles, expectedFiles.map((e): OutputFile => ({ name: e.path, text: e.content, writeByteOrderMark: false })));
     }
 
-    describe("tsserver:: with declaration file maps:: project references", () => {
+    describe("unittests:: tsserver:: with declaration file maps:: project references", () => {
         const aTs: File = {
             path: "/a/a.ts",
             content: "export function fnA() {}\nexport interface IfaceA {}\nexport const instanceA: IfaceA = {};",

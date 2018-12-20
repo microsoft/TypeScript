@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: ProjectsUpdatedInBackground", () => {
+    describe("unittests:: tsserver:: events:: ProjectsUpdatedInBackground", () => {
         function verifyFiles(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
             assert.equal(actual.length, expected.length, `Incorrect number of ${caption}. Actual: ${actual} Expected: ${expected}`);
             const seen = createMap<true>();

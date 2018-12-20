@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: syntax operations", () => {
+    describe("unittests:: tsserver:: syntax operations", () => {
         function navBarFull(session: TestSession, file: File) {
             return JSON.stringify(session.executeCommandSeq<protocol.FileRequest>({
                 command: protocol.CommandTypes.NavBarFull,

@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: format settings", () => {
+    describe("unittests:: tsserver:: format settings", () => {
         it("can be set globally", () => {
             const f1 = {
                 path: "/a/b/app.ts",

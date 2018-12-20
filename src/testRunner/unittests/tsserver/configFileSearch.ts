@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: searching for config file", () => {
+    describe("unittests:: tsserver:: searching for config file", () => {
         it("should stop at projectRootPath if given", () => {
             const f1 = {
                 path: "/a/file1.ts",

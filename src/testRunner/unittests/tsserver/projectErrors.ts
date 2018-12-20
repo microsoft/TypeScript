@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: Project Errors", () => {
+    describe("unittests:: tsserver:: Project Errors", () => {
         function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: ReadonlyArray<string>): void {
             assert.isTrue(projectFiles !== undefined, "missing project files");
             checkProjectErrorsWorker(projectFiles.projectErrors, expectedErrors);
@@ -200,7 +200,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("tsserver:: Project Errors are reported as appropriate", () => {
+    describe("unittests:: tsserver:: Project Errors are reported as appropriate", () => {
         function createErrorLogger() {
             let hasError = false;
             const errorLogger: server.Logger = {
@@ -481,7 +481,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("tsserver:: Project Errors for Configure file diagnostics events", () => {
+    describe("unittests:: tsserver:: Project Errors for Configure file diagnostics events", () => {
         function getUnknownCompilerOptionDiagnostic(configFile: File, prop: string): ConfigFileDiagnostic {
             const d = Diagnostics.Unknown_compiler_option_0;
             const start = configFile.content.indexOf(prop) - 1; // start at "prop"
@@ -671,7 +671,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("tsserver:: Project Errors dont include overwrite emit error", () => {
+    describe("unittests:: tsserver:: Project Errors dont include overwrite emit error", () => {
         it("for inferred project", () => {
             const f1 = {
                 path: "/a/b/f1.js",
@@ -754,7 +754,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("tsserver:: Project Errors reports Options Diagnostic locations correctly with changes in configFile contents", () => {
+    describe("unittests:: tsserver:: Project Errors reports Options Diagnostic locations correctly with changes in configFile contents", () => {
         it("when options change", () => {
             const file = {
                 path: "/a/b/app.ts",
@@ -818,7 +818,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("tsserver:: Project Errors with config file change", () => {
+    describe("unittests:: tsserver:: Project Errors with config file change", () => {
         it("Updates diagnostics when '--noUnusedLabels' changes", () => {
             const aTs: File = { path: "/a.ts", content: "label: while (1) {}" };
             const options = (allowUnusedLabels: boolean) => `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;

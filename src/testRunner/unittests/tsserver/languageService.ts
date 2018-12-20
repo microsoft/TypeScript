@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: Language service", () => {
+    describe("unittests:: tsserver:: Language service", () => {
         it("should work correctly on case-sensitive file systems", () => {
             const lib = {
                 path: "/a/Lib/lib.d.ts",

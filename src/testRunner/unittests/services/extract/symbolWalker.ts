@@ -1,5 +1,5 @@
 namespace ts {
-    describe("services:: extract:: Symbol Walker", () => {
+    describe("unittests:: services:: extract:: Symbol Walker", () => {
         function test(description: string, source: string, verifier: (file: SourceFile, checker: TypeChecker) => void) {
             it(description, () => {
                 const result = Harness.Compiler.compileFiles([{

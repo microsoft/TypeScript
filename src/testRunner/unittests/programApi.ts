@@ -11,7 +11,7 @@ namespace ts {
         assert.equal(notFound.length, 0, `Not found ${notFound} in actual: ${missingPaths} expected: ${expected}`);
     }
 
-    describe("Program.getMissingFilePaths", () => {
+    describe("unittests:: Program.getMissingFilePaths", () => {
 
         const options: CompilerOptions = {
             noLib: true,
@@ -127,7 +127,7 @@ namespace ts {
         });
     });
 
-    describe("Program.isSourceFileFromExternalLibrary", () => {
+    describe("unittests:: Program.isSourceFileFromExternalLibrary", () => {
         it("works on redirect files", () => {
             // In this example '/node_modules/foo/index.d.ts' will redirect to '/node_modules/bar/node_modules/foo/index.d.ts'.
             const a = new documents.TextDocument("/a.ts", 'import * as bar from "bar"; import * as foo from "foo";');

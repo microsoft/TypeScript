@@ -42,7 +42,7 @@ namespace ts {
         }
     }
 
-    describe("services:: extract:: extractRanges", () => {
+    describe("unittests:: services:: extract:: extractRanges", () => {
         it("get extract range from selection", () => {
             testExtractRange(`
                 [#|

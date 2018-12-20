@@ -1,5 +1,5 @@
 namespace ts {
-    describe("config:: initTSConfig", () => {
+    describe("unittests:: config:: initTSConfig", () => {
         function initTSConfigCorrectly(name: string, commandLinesArgs: string[]) {
             describe(name, () => {
                 const commandLine = parseCommandLine(commandLinesArgs);

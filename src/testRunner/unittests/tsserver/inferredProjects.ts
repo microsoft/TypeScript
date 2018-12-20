@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: Inferred projects", () => {
+    describe("unittests:: tsserver:: Inferred projects", () => {
         it("should support files without extensions", () => {
             const f = {
                 path: "/a/compile",

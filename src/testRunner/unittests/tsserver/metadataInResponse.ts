@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: with metadata in response", () => {
+    describe("unittests:: tsserver:: with metadata in response", () => {
         const metadata = "Extra Info";
         function verifyOutput(host: TestServerHost, expectedResponse: protocol.Response) {
             const output = host.getOutput().map(mapOutputToJson);

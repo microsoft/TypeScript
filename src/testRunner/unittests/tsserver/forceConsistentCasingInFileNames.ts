@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: forceConsistentCasingInFileNames", () => {
+    describe("unittests:: tsserver:: forceConsistentCasingInFileNames", () => {
         it("works when extends is specified with a case insensitive file system", () => {
             const rootPath = "/Users/username/dev/project";
             const file1: File = {

@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: maxNodeModuleJsDepth for inferred projects", () => {
+    describe("unittests:: tsserver:: maxNodeModuleJsDepth for inferred projects", () => {
         it("should be set to 2 if the project has js root files", () => {
             const file1: File = {
                 path: "/a/b/file1.js",

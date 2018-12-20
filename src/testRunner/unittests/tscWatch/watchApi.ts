@@ -1,5 +1,5 @@
 namespace ts.tscWatch {
-    describe("tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
+    describe("unittests:: tsc-watch:: watchAPI:: tsc-watch with custom module resolution", () => {
         const projectRoot = "/user/username/projects/project";
         const configFileJson: any = {
             compilerOptions: { module: "commonjs", resolveJsonModule: true },

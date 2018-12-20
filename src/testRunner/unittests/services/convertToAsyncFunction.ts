@@ -343,7 +343,7 @@ interface Array<T> {}`
         }
     }
 
-    describe("services:: convertToAsyncFunctions", () => {
+    describe("unittests:: services:: convertToAsyncFunctions", () => {
         _testConvertToAsyncFunction("convertToAsyncFunction_basic", `
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });

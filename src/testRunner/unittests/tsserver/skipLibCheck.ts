@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: with skipLibCheck", () => {
+    describe("unittests:: tsserver:: with skipLibCheck", () => {
         it("should be turned on for js-only inferred projects", () => {
             const file1 = {
                 path: "/a/b/file1.js",

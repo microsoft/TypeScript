@@ -1,4 +1,4 @@
-describe("services:: DocumentRegistry", () => {
+describe("unittests:: services:: DocumentRegistry", () => {
     it("documents are shared between projects", () => {
         const documentRegistry = ts.createDocumentRegistry();
         const defaultCompilerOptions = ts.getDefaultCompilerOptions();

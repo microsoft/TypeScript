@@ -1,5 +1,5 @@
 namespace ts {
-    describe("services:: languageService", () => {
+    describe("unittests:: services:: languageService", () => {
         const files: {[index: string]: string} = {
             "foo.ts": `import Vue from "./vue";
 import Component from "./vue-class-component";

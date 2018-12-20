@@ -1,5 +1,5 @@
 namespace ts {
-    describe("services:: extract:: extractConstants", () => {
+    describe("unittests:: services:: extract:: extractConstants", () => {
         testExtractConstant("extractConstant_TopLevel",
             `let x = [#|1|];`);
 

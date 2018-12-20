@@ -96,7 +96,7 @@ namespace ts {
         checkResult(prog, host);
     }
 
-    describe("config:: project-references meta check", () => {
+    describe("unittests:: config:: project-references meta check", () => {
         it("default setup was created correctly", () => {
             const spec: TestSpecification = {
                 "/primary": {
@@ -118,7 +118,7 @@ namespace ts {
     /**
      * Validate that we enforce the basic settings constraints for referenced projects
      */
-    describe("config:: project-references constraint checking for settings", () => {
+    describe("unittests:: config:: project-references constraint checking for settings", () => {
         it("errors when declaration = false", () => {
             const spec: TestSpecification = {
                 "/primary": {
@@ -248,7 +248,7 @@ namespace ts {
     /**
      * Path mapping behavior
      */
-    describe("config:: project-references path mapping", () => {
+    describe("unittests:: config:: project-references path mapping", () => {
         it("redirects to the output .d.ts file", () => {
             const spec: TestSpecification = {
                 "/alpha": {
@@ -268,7 +268,7 @@ namespace ts {
         });
     });
 
-    describe("config:: project-references nice-behavior", () => {
+    describe("unittests:: config:: project-references nice-behavior", () => {
         it("issues a nice error when the input file is missing", () => {
             const spec: TestSpecification = {
                 "/alpha": {
@@ -289,7 +289,7 @@ namespace ts {
     /**
      * 'composite' behavior
      */
-    describe("config:: project-references behavior changes under composite: true", () => {
+    describe("unittests:: config:: project-references behavior changes under composite: true", () => {
         it("doesn't infer the rootDir from source paths", () => {
             const spec: TestSpecification = {
                 "/alpha": {
@@ -308,7 +308,7 @@ namespace ts {
         });
     });
 
-    describe("config:: project-references errors when a file in a composite project occurs outside the root", () => {
+    describe("unittests:: config:: project-references errors when a file in a composite project occurs outside the root", () => {
         it("Errors when a file is outside the rootdir", () => {
             const spec: TestSpecification = {
                 "/alpha": {

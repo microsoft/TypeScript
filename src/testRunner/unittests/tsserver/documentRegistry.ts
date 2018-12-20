@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: document registry in project service", () => {
+    describe("unittests:: tsserver:: document registry in project service", () => {
         const projectRootPath = "/user/username/projects/project";
         const importModuleContent = `import {a} from "./module1"`;
         const file: File = {

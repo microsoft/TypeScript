@@ -1,4 +1,4 @@
-describe("services:: PatternMatcher", () => {
+describe("unittests:: services:: PatternMatcher", () => {
     describe("BreakIntoCharacterSpans", () => {
         it("EmptyIdentifier", () => {
             verifyBreakIntoCharacterSpans("");

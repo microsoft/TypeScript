@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: typeReferenceDirectives", () => {
+    describe("unittests:: tsserver:: typeReferenceDirectives", () => {
         it("when typeReferenceDirective contains UpperCasePackage", () => {
             const projectLocation = "/user/username/projects/myproject";
             const libProjectLocation = `${projectLocation}/lib`;

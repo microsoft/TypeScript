@@ -1,5 +1,5 @@
 namespace ts {
-    describe("services:: hostNewLineSupport", () => {
+    describe("unittests:: services:: hostNewLineSupport", () => {
         function testLSWithFiles(settings: CompilerOptions, files: Harness.Compiler.TestFile[]) {
             function snapFor(path: string): IScriptSnapshot | undefined {
                 if (path === "lib.d.ts") {

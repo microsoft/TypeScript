@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: navigate-to for javascript project", () => {
+    describe("unittests:: tsserver:: navigate-to for javascript project", () => {
         function containsNavToItem(items: protocol.NavtoItem[], itemName: string, itemKind: string) {
             return find(items, item => item.name === itemName && item.kind === itemKind) !== undefined;
         }

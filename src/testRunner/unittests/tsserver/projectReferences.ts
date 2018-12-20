@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: with project references and tsbuild", () => {
+    describe("unittests:: tsserver:: with project references and tsbuild", () => {
         function createHost(files: ReadonlyArray<File>, rootNames: ReadonlyArray<string>) {
             const host = createServerHost(files);
 

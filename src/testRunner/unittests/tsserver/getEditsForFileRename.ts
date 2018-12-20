@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserver:: getEditsForFileRename", () => {
+    describe("unittests:: tsserver:: getEditsForFileRename", () => {
         it("works for host implementing 'resolveModuleNames' and 'getResolvedModuleWithFailedLookupLocationsFromCache'", () => {
             const userTs: File = {
                 path: "/user.ts",
