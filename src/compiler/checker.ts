@@ -6873,7 +6873,7 @@ namespace ts {
                 const shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
                 const unionParamType = getIntersectionType([longestParamType, shorterParamType]);
                 const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
-                const isOptional = i > getMinArgumentCount(longest) && i > getMinArgumentCount(shorter);
+                const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);
                 const leftName = getParameterNameAtPosition(left, i);
                 const rightName = getParameterNameAtPosition(right, i);
                 const paramSymbol = createSymbol(
