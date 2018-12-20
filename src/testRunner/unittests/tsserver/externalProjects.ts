@@ -1,5 +1,469 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: ExternalProjects", () => {
+        describe("can handle tsconfig file name with difference casing", () => {
+            function verifyConfigFileCasing(lazyConfiguredProjectsFromExternalProject: boolean) {
+                const f1 = {
+                    path: "/a/b/app.ts",
+                    content: "let x = 1"
+                };
+                const config = {
+                    path: "/a/b/tsconfig.json",
+                    content: JSON.stringify({
+                        include: []
+                    })
+                };
+
+                const host = createServerHost([f1, config], { useCaseSensitiveFileNames: false });
+                const service = createProjectService(host);
+                service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
+                const upperCaseConfigFilePath = combinePaths(getDirectoryPath(config.path).toUpperCase(), getBaseFileName(config.path));
+                service.openExternalProject(<protocol.ExternalProject>{
+                    projectFileName: "/a/b/project.csproj",
+                    rootFiles: toExternalFiles([f1.path, upperCaseConfigFilePath]),
+                    options: {}
+                });
+                service.checkNumberOfProjects({ configuredProjects: 1 });
+                const project = service.configuredProjects.get(config.path)!;
+                if (lazyConfiguredProjectsFromExternalProject) {
+                    assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.Full); // External project referenced configured project pending to be reloaded
+                    checkProjectActualFiles(project, emptyArray);
+                }
+                else {
+                    assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded
+                    checkProjectActualFiles(project, [upperCaseConfigFilePath]);
+                }
+
+                service.openClientFile(f1.path);
+                service.checkNumberOfProjects({ configuredProjects: 1, inferredProjects: 1 });
+
+                assert.equal(project.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project is updated
+                checkProjectActualFiles(project, [upperCaseConfigFilePath]);
+                checkProjectActualFiles(service.inferredProjects[0], [f1.path]);
+            }
+
+            it("when lazyConfiguredProjectsFromExternalProject not set", () => {
+                verifyConfigFileCasing(/*lazyConfiguredProjectsFromExternalProject*/ false);
+            });
+
+            it("when lazyConfiguredProjectsFromExternalProject is set", () => {
+                verifyConfigFileCasing(/*lazyConfiguredProjectsFromExternalProject*/ true);
+            });
+        });
+
+        it("remove not-listed external projects", () => {
+            const f1 = {
+                path: "/a/app.ts",
+                content: "let x = 1"
+            };
+            const f2 = {
+                path: "/b/app.ts",
+                content: "let x = 1"
+            };
+            const f3 = {
+                path: "/c/app.ts",
+                content: "let x = 1"
+            };
+            const makeProject = (f: File) => ({ projectFileName: f.path + ".csproj", rootFiles: [toExternalFile(f.path)], options: {} });
+            const p1 = makeProject(f1);
+            const p2 = makeProject(f2);
+            const p3 = makeProject(f3);
+
+            const host = createServerHost([f1, f2, f3]);
+            const session = createSession(host);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 1,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1, p2] }
+            });
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { externalProjects: 2 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+            assert.equal(projectService.externalProjects[1].getProjectName(), p2.projectFileName);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 2,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p1, p3] }
+            });
+            checkNumberOfProjects(projectService, { externalProjects: 2 });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p1.projectFileName);
+            assert.equal(projectService.externalProjects[1].getProjectName(), p3.projectFileName);
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 3,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [] }
+            });
+            checkNumberOfProjects(projectService, { externalProjects: 0 });
+
+            session.executeCommand(<protocol.OpenExternalProjectsRequest>{
+                seq: 3,
+                type: "request",
+                command: "openExternalProjects",
+                arguments: { projects: [p2] }
+            });
+            assert.equal(projectService.externalProjects[0].getProjectName(), p2.projectFileName);
+        });
+
+        it("should not close external project with no open files", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "let y =1;"
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([file1.path, file2.path]),
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfExternalProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            // open client file - should not lead to creation of inferred project
+            projectService.openClientFile(file1.path, file1.content);
+            checkNumberOfExternalProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            // close client file - external project should still exists
+            projectService.closeClientFile(file1.path);
+            checkNumberOfExternalProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            projectService.closeExternalProject(externalProjectName);
+            checkNumberOfExternalProjects(projectService, 0);
+            checkNumberOfInferredProjects(projectService, 0);
+        });
+
+        it("external project for dynamic file", () => {
+            const externalProjectName = "^ScriptDocument1 file1.ts";
+            const externalFiles = toExternalFiles(["^ScriptDocument1 file1.ts"]);
+            const host = createServerHost([]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                rootFiles: externalFiles,
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfExternalProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 0);
+
+            externalFiles[0].content = "let x =1;";
+            projectService.applyChangesInOpenFiles(externalFiles, [], []);
+        });
+
+        it("external project that included config files", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+            const config1 = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify(
+                    {
+                        compilerOptions: {},
+                        files: ["f1.ts"]
+                    }
+                )
+            };
+            const file2 = {
+                path: "/a/c/f2.ts",
+                content: "let y =1;"
+            };
+            const config2 = {
+                path: "/a/c/tsconfig.json",
+                content: JSON.stringify(
+                    {
+                        compilerOptions: {},
+                        files: ["f2.ts"]
+                    }
+                )
+            };
+            const file3 = {
+                path: "/a/d/f3.ts",
+                content: "let z =1;"
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, file2, file3, config1, config2]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([config1.path, config2.path, file3.path]),
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfProjects(projectService, { configuredProjects: 2 });
+            const proj1 = projectService.configuredProjects.get(config1.path);
+            const proj2 = projectService.configuredProjects.get(config2.path);
+            assert.isDefined(proj1);
+            assert.isDefined(proj2);
+
+            // open client file - should not lead to creation of inferred project
+            projectService.openClientFile(file1.path, file1.content);
+            checkNumberOfProjects(projectService, { configuredProjects: 2 });
+            assert.strictEqual(projectService.configuredProjects.get(config1.path), proj1);
+            assert.strictEqual(projectService.configuredProjects.get(config2.path), proj2);
+
+            projectService.openClientFile(file3.path, file3.content);
+            checkNumberOfProjects(projectService, { configuredProjects: 2, inferredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(config1.path), proj1);
+            assert.strictEqual(projectService.configuredProjects.get(config2.path), proj2);
+
+            projectService.closeExternalProject(externalProjectName);
+            // open file 'file1' from configured project keeps project alive
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(config1.path), proj1);
+            assert.isUndefined(projectService.configuredProjects.get(config2.path));
+
+            projectService.closeClientFile(file3.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(config1.path), proj1);
+            assert.isUndefined(projectService.configuredProjects.get(config2.path));
+            assert.isTrue(projectService.inferredProjects[0].isOrphan());
+
+            projectService.closeClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1, inferredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(config1.path), proj1);
+            assert.isUndefined(projectService.configuredProjects.get(config2.path));
+            assert.isTrue(projectService.inferredProjects[0].isOrphan());
+
+            projectService.openClientFile(file2.path, file2.content);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.isUndefined(projectService.configuredProjects.get(config1.path));
+            assert.isDefined(projectService.configuredProjects.get(config2.path));
+        });
+
+        it("external project with included config file opened after configured project", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: {} })
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, configFile]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([configFile.path]),
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            projectService.closeClientFile(file1.path);
+            // configured project is alive since it is opened as part of external project
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+
+            projectService.closeExternalProject(externalProjectName);
+            checkNumberOfProjects(projectService, { configuredProjects: 0 });
+        });
+
+        it("external project with included config file opened after configured project and then closed", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1"
+            };
+            const file2 = {
+                path: "/a/f2.ts",
+                content: "let x = 1"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: {} })
+            };
+            const externalProjectName = "externalproject";
+            const host = createServerHost([file1, file2, libFile, configFile]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const project = projectService.configuredProjects.get(configFile.path);
+
+            projectService.openExternalProject({
+                rootFiles: toExternalFiles([configFile.path]),
+                options: {},
+                projectFileName: externalProjectName
+            });
+
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
+
+            projectService.closeExternalProject(externalProjectName);
+            // configured project is alive since file is still open
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
+
+            projectService.closeClientFile(file1.path);
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            assert.strictEqual(projectService.configuredProjects.get(configFile.path), project);
+
+            projectService.openClientFile(file2.path);
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            assert.isUndefined(projectService.configuredProjects.get(configFile.path));
+        });
+
+        it("can correctly update external project when set of root files has changed", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x = 1"
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "let y = 1"
+            };
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host);
+
+            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path]) });
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkProjectActualFiles(projectService.externalProjects[0], [file1.path]);
+
+            projectService.openExternalProject({ projectFileName: "project", options: {}, rootFiles: toExternalFiles([file1.path, file2.path]) });
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkProjectRootFiles(projectService.externalProjects[0], [file1.path, file2.path]);
+        });
+
+        it("can update external project when set of root files was not changed", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: `export * from "m"`
+            };
+            const file2 = {
+                path: "/a/b/f2.ts",
+                content: "export let y = 1"
+            };
+            const file3 = {
+                path: "/a/m.ts",
+                content: "export let y = 1"
+            };
+
+            const host = createServerHost([file1, file2, file3]);
+            const projectService = createProjectService(host);
+
+            projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.NodeJs }, rootFiles: toExternalFiles([file1.path, file2.path]) });
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkProjectRootFiles(projectService.externalProjects[0], [file1.path, file2.path]);
+            checkProjectActualFiles(projectService.externalProjects[0], [file1.path, file2.path]);
+
+            projectService.openExternalProject({ projectFileName: "project", options: { moduleResolution: ModuleResolutionKind.Classic }, rootFiles: toExternalFiles([file1.path, file2.path]) });
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+            checkProjectRootFiles(projectService.externalProjects[0], [file1.path, file2.path]);
+            checkProjectActualFiles(projectService.externalProjects[0], [file1.path, file2.path, file3.path]);
+        });
+
+        it("language service disabled state is updated in external projects", () => {
+            const f1 = {
+                path: "/a/app.js",
+                content: "var x = 1"
+            };
+            const f2 = {
+                path: "/a/largefile.js",
+                content: ""
+            };
+            const host = createServerHost([f1, f2]);
+            const originalGetFileSize = host.getFileSize;
+            host.getFileSize = (filePath: string) =>
+                filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
+
+            const service = createProjectService(host);
+            const projectFileName = "/a/proj.csproj";
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path, f2.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 1");
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isTrue(service.externalProjects[0].languageServiceEnabled, "language service should be enabled");
+
+            service.openExternalProject({
+                projectFileName,
+                rootFiles: toExternalFiles([f1.path, f2.path]),
+                options: {}
+            });
+            service.checkNumberOfProjects({ externalProjects: 1 });
+            assert.isFalse(service.externalProjects[0].languageServiceEnabled, "language service should be disabled - 2");
+        });
+
+        describe("deleting config file opened from the external project works", () => {
+            function verifyDeletingConfigFile(lazyConfiguredProjectsFromExternalProject: boolean) {
+                const site = {
+                    path: "/user/someuser/project/js/site.js",
+                    content: ""
+                };
+                const configFile = {
+                    path: "/user/someuser/project/tsconfig.json",
+                    content: "{}"
+                };
+                const projectFileName = "/user/someuser/project/WebApplication6.csproj";
+                const host = createServerHost([libFile, site, configFile]);
+                const projectService = createProjectService(host);
+                projectService.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
+
+                const externalProject: protocol.ExternalProject = {
+                    projectFileName,
+                    rootFiles: [toExternalFile(site.path), toExternalFile(configFile.path)],
+                    options: { allowJs: false },
+                    typeAcquisition: { include: [] }
+                };
+
+                projectService.openExternalProjects([externalProject]);
+
+                let knownProjects = projectService.synchronizeProjectList([]);
+                checkNumberOfProjects(projectService, { configuredProjects: 1, externalProjects: 0, inferredProjects: 0 });
+
+                const configProject = configuredProjectAt(projectService, 0);
+                checkProjectActualFiles(configProject, lazyConfiguredProjectsFromExternalProject ?
+                    emptyArray : // Since no files opened from this project, its not loaded
+                    [configFile.path]);
+
+                host.reloadFS([libFile, site]);
+                host.checkTimeoutQueueLengthAndRun(1);
+
+                knownProjects = projectService.synchronizeProjectList(map(knownProjects, proj => proj.info!)); // TODO: GH#18217 GH#20039
+                checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 0, inferredProjects: 0 });
+
+                externalProject.rootFiles.length = 1;
+                projectService.openExternalProjects([externalProject]);
+
+                checkNumberOfProjects(projectService, { configuredProjects: 0, externalProjects: 1, inferredProjects: 0 });
+                checkProjectActualFiles(projectService.externalProjects[0], [site.path, libFile.path]);
+            }
+            it("when lazyConfiguredProjectsFromExternalProject not set", () => {
+                verifyDeletingConfigFile(/*lazyConfiguredProjectsFromExternalProject*/ false);
+            });
+            it("when lazyConfiguredProjectsFromExternalProject is set", () => {
+                verifyDeletingConfigFile(/*lazyConfiguredProjectsFromExternalProject*/ true);
+            });
+        });
+
         describe("correctly handling add/remove tsconfig - 1", () => {
             function verifyAddRemoveConfig(lazyConfiguredProjectsFromExternalProject: boolean) {
                 const f1 = {

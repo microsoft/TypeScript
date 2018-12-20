@@ -1,5 +1,125 @@
 namespace ts.projectSystem {
     describe("unittests:: tsserver:: Inferred projects", () => {
+        it("create inferred project", () => {
+            const appFile: File = {
+                path: "/a/b/c/app.ts",
+                content: `
+                import {f} from "./module"
+                console.log(f)
+                `
+            };
+
+            const moduleFile: File = {
+                path: "/a/b/c/module.d.ts",
+                content: `export let x: number`
+            };
+            const host = createServerHost([appFile, moduleFile, libFile]);
+            const projectService = createProjectService(host);
+            const { configFileName } = projectService.openClientFile(appFile.path);
+
+            assert(!configFileName, `should not find config, got: '${configFileName}`);
+            checkNumberOfConfiguredProjects(projectService, 0);
+            checkNumberOfInferredProjects(projectService, 1);
+
+            const project = projectService.inferredProjects[0];
+
+            checkArray("inferred project", project.getFileNames(), [appFile.path, libFile.path, moduleFile.path]);
+            const configFileLocations = ["/a/b/c/", "/a/b/", "/a/", "/"];
+            const configFiles = flatMap(configFileLocations, location => [location + "tsconfig.json", location + "jsconfig.json"]);
+            checkWatchedFiles(host, configFiles.concat(libFile.path, moduleFile.path));
+            checkWatchedDirectories(host, ["/a/b/c"], /*recursive*/ false);
+            checkWatchedDirectories(host, [combinePaths(getDirectoryPath(appFile.path), nodeModulesAtTypes)], /*recursive*/ true);
+        });
+
+        it("should use only one inferred project if 'useOneInferredProject' is set", () => {
+            const file1 = {
+                path: "/a/b/main.ts",
+                content: "let x =1;"
+            };
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "target": "es6"
+                    },
+                    "files": [ "main.ts" ]
+                }`
+            };
+            const file2 = {
+                path: "/a/c/main.ts",
+                content: "let x =1;"
+            };
+
+            const file3 = {
+                path: "/a/d/main.ts",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost([file1, file2, file3, libFile]);
+            const projectService = createProjectService(host, { useSingleInferredProject: true });
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(file2.path);
+            projectService.openClientFile(file3.path);
+
+            checkNumberOfConfiguredProjects(projectService, 0);
+            checkNumberOfInferredProjects(projectService, 1);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file1.path, file2.path, file3.path, libFile.path]);
+
+
+            host.reloadFS([file1, configFile, file2, file3, libFile]);
+            host.checkTimeoutQueueLengthAndRun(2); // load configured project from disk + ensureProjectsForOpenFiles
+            checkNumberOfConfiguredProjects(projectService, 1);
+            checkNumberOfInferredProjects(projectService, 1);
+            checkProjectActualFiles(projectService.inferredProjects[0], [file2.path, file3.path, libFile.path]);
+        });
+
+        it("disable inferred project", () => {
+            const file1 = {
+                path: "/a/b/f1.ts",
+                content: "let x =1;"
+            };
+
+            const host = createServerHost([file1]);
+            const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
+
+            projectService.openClientFile(file1.path, file1.content);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const proj = projectService.inferredProjects[0];
+            assert.isDefined(proj);
+
+            assert.isFalse(proj.languageServiceEnabled);
+        });
+
+        it("project settings for inferred projects", () => {
+            const file1 = {
+                path: "/a/b/app.ts",
+                content: `import {x} from "mod"`
+            };
+            const modFile = {
+                path: "/a/mod.ts",
+                content: "export let x: number"
+            };
+            const host = createServerHost([file1, modFile]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(file1.path);
+            projectService.openClientFile(modFile.path);
+
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+            const inferredProjects = projectService.inferredProjects.slice();
+            checkProjectActualFiles(inferredProjects[0], [file1.path]);
+            checkProjectActualFiles(inferredProjects[1], [modFile.path]);
+
+            projectService.setCompilerOptionsForInferredProjects({ moduleResolution: ModuleResolutionKind.Classic });
+            host.checkTimeoutQueueLengthAndRun(3);
+            checkNumberOfProjects(projectService, { inferredProjects: 2 });
+            assert.strictEqual(projectService.inferredProjects[0], inferredProjects[0]);
+            assert.strictEqual(projectService.inferredProjects[1], inferredProjects[1]);
+            checkProjectActualFiles(inferredProjects[0], [file1.path, modFile.path]);
+            assert.isTrue(inferredProjects[1].isOrphan());
+        });
+
         it("should support files without extensions", () => {
             const f = {
                 path: "/a/compile",
