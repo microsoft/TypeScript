@@ -54,6 +54,18 @@ namespace ts {
          * compilerOptions for the program
          */
         compilerOptions: CompilerOptions;
+        /**
+         * Files pending to be emitted
+         */
+        affectedFilesPendingEmit: ReadonlyArray<Path> | undefined;
+        /**
+         * Current index to retrieve pending affected file
+         */
+        affectedFilesPendingEmitIndex: number | undefined;
+        /**
+         * Already seen affected files
+         */
+        seenEmittedFiles: Map<true> | undefined;
     }
 
     function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined): boolean {
@@ -89,6 +101,10 @@ namespace ts {
 
             // Copy old state's changed files set
             copyEntries(oldState!.changedFilesSet, state.changedFilesSet);
+            if (!compilerOptions.outFile && !compilerOptions.out && oldState!.affectedFilesPendingEmit) {
+                state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit;
+                state.affectedFilesPendingEmitIndex = oldState!.affectedFilesPendingEmitIndex;
+            }
         }
 
         // Update changed files and copy semantic diagnostics if we can
@@ -204,6 +220,27 @@ namespace ts {
     }
 
     /**
+     * Returns next file to be emitted from files that retrieved semantic diagnostics but did not emit yet
+     */
+    function getNextAffectedFilePendingEmit(state: BuilderProgramState): SourceFile | undefined {
+        const { affectedFilesPendingEmit } = state;
+        if (affectedFilesPendingEmit) {
+            const seenEmittedFiles = state.seenEmittedFiles || (state.seenEmittedFiles = createMap());
+            for (let affectedFilesIndex = state.affectedFilesPendingEmitIndex!; affectedFilesIndex < affectedFilesPendingEmit.length; affectedFilesIndex++) {
+                const affectedFile = Debug.assertDefined(state.program).getSourceFileByPath(affectedFilesPendingEmit[affectedFilesIndex]);
+                if (affectedFile && !seenEmittedFiles.has(affectedFile.path)) {
+                    // emit this file
+                    state.affectedFilesPendingEmitIndex = affectedFilesIndex;
+                    return affectedFile;
+                }
+            }
+            state.affectedFilesPendingEmit = undefined;
+            state.affectedFilesPendingEmitIndex = undefined;
+        }
+        return undefined;
+    }
+
+    /**
      * Remove the semantic diagnostics cached from old state for affected File and the files that are referencing modules that export entities from affected file
      */
     function cleanSemanticDiagnosticsOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile) {
@@ -312,21 +349,26 @@ namespace ts {
      * This is called after completing operation on the next affected file.
      * The operations here are postponed to ensure that cancellation during the iteration is handled correctly
      */
-    function doneWithAffectedFile(state: BuilderProgramState, affected: SourceFile | Program) {
+    function doneWithAffectedFile(state: BuilderProgramState, affected: SourceFile | Program, isPendingEmit?: boolean) {
         if (affected === state.program) {
             state.changedFilesSet.clear();
         }
         else {
             state.seenAffectedFiles!.set((affected as SourceFile).path, true);
-            state.affectedFilesIndex!++;
+            if (isPendingEmit) {
+                state.affectedFilesPendingEmitIndex!++;
+            }
+            else {
+                state.affectedFilesIndex!++;
+            }
         }
     }
 
     /**
      * Returns the result with affected file
      */
-    function toAffectedFileResult<T>(state: BuilderProgramState, result: T, affected: SourceFile | Program): AffectedFileResult<T> {
-        doneWithAffectedFile(state, affected);
+    function toAffectedFileResult<T>(state: BuilderProgramState, result: T, affected: SourceFile | Program, isPendingEmit?: boolean): AffectedFileResult<T> {
+        doneWithAffectedFile(state, affected, isPendingEmit);
         return { result, affected };
     }
 
@@ -442,10 +484,20 @@ namespace ts {
          * in that order would be used to write the files
          */
         function emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult> {
-            const affected = getNextAffectedFile(state, cancellationToken, computeHash);
+            let affected = getNextAffectedFile(state, cancellationToken, computeHash);
+            let isPendingEmitFile = false;
             if (!affected) {
+                affected = getNextAffectedFilePendingEmit(state);
                 // Done
-                return undefined;
+                if (!affected) {
+                    return undefined;
+                }
+                isPendingEmitFile = true;
+            }
+
+            // Mark seen emitted files if there are pending files to be emitted
+            if (state.affectedFilesPendingEmit && state.program !== affected) {
+                (state.seenEmittedFiles || (state.seenEmittedFiles = createMap())).set((affected as SourceFile).path, true);
             }
 
             return toAffectedFileResult(
@@ -453,7 +505,8 @@ namespace ts {
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
                 // Otherwise just affected file
                 Debug.assertDefined(state.program).emit(affected === state.program ? undefined : affected as SourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers),
-                affected
+                affected,
+                isPendingEmitFile
             );
         }
 
@@ -552,12 +605,22 @@ namespace ts {
                 return getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken);
             }
 
-            if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
-                // When semantic builder asks for diagnostics of the whole program,
-                // ensure that all the affected files are handled
-                let affected: SourceFile | Program | undefined;
-                while (affected = getNextAffectedFile(state, cancellationToken, computeHash)) {
-                    doneWithAffectedFile(state, affected);
+            // When semantic builder asks for diagnostics of the whole program,
+            // ensure that all the affected files are handled
+            let affected: SourceFile | Program | undefined;
+            let affectedFilesPendingEmit: Path[] | undefined;
+            while (affected = getNextAffectedFile(state, cancellationToken, computeHash)) {
+                if (affected !== state.program && kind === BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram) {
+                    (affectedFilesPendingEmit || (affectedFilesPendingEmit = [])).push((affected as SourceFile).path);
+                }
+                doneWithAffectedFile(state, affected);
+            }
+
+            // In case of emit builder, cache the files to be emitted
+            if (affectedFilesPendingEmit) {
+                state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, affectedFilesPendingEmit);
+                if (state.affectedFilesPendingEmitIndex === undefined) {
+                    state.affectedFilesPendingEmitIndex = 0;
                 }
             }
 

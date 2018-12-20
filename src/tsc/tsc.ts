@@ -204,9 +204,8 @@ namespace ts {
             reportWatchModeWithoutSysSupport();
         }
 
-        // TODO: change this to host if watch => watchHost otherwiue without watch
         const buildHost = buildOptions.watch ?
-            createSolutionBuilderWithWatchHost(sys, createSemanticDiagnosticsBuilderProgram, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
+            createSolutionBuilderWithWatchHost(sys, createEmitAndSemanticDiagnosticsBuilderProgram, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
             createSolutionBuilderHost(sys, createAbstractBuilder, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
         updateCreateProgram(buildHost);
         buildHost.afterProgramEmitAndDiagnostics = (program: BuilderProgram) => reportStatistics(program.getProgram());

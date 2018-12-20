@@ -389,9 +389,8 @@ namespace ts {
         return host;
     }
 
-    // TODO: we should use emit and semantic diagnostics builder but that needs to handle errors little differently so handle it later
     export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = SemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
-        const host = createSolutionBuilderHostBase(system, createProgram || createSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
+        const host = createSolutionBuilderHostBase(system, createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
         const watchHost = createWatchHost(system, reportWatchStatus);
         copyProperities(host, watchHost);
         return host;
