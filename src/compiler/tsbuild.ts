@@ -119,7 +119,7 @@ namespace ts {
             newestDeclarationFileContentChangedTime?: Date;
             newestOutputFileTime?: Date;
             newestOutputFileName?: string;
-            oldestOutputFileName?: string;
+            oldestOutputFileName: string;
         }
 
         /**
@@ -332,6 +332,9 @@ namespace ts {
         // TODO: To do better with watch mode and normal build mode api that creates program and emits files
         // This currently helps enable --diagnostics and --extendedDiagnostics
         afterProgramEmitAndDiagnostics?(program: T): void;
+
+        // For testing
+        now?(): Date;
     }
 
     export interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
@@ -991,16 +994,40 @@ namespace ts {
                 return;
             }
 
+            if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
+                // Fake build
+                updateOutputTimestamps(proj);
+                return;
+            }
+
             const buildResult = buildSingleProject(resolved);
-            const dependencyGraph = getGlobalDependencyGraph();
-            const referencingProjects = dependencyGraph.referencingProjectsMap.getValue(resolved);
+            if (buildResult & BuildResultFlags.AnyErrors) return;
+
+            const { referencingProjectsMap, buildQueue } = getGlobalDependencyGraph();
+            const referencingProjects = referencingProjectsMap.getValue(resolved);
             if (!referencingProjects) return;
+
             // Always use build order to queue projects
-            for (const project of dependencyGraph.buildQueue) {
+            for (let index = buildQueue.indexOf(resolved) + 1; index < buildQueue.length; index++) {
+                const project = buildQueue[index];
                 const prepend = referencingProjects.getValue(project);
-                // If the project is referenced with prepend, always build downstream projectm,
-                // otherwise queue it only if declaration output changed
-                if (prepend || (prepend !== undefined && !(buildResult & BuildResultFlags.DeclarationOutputUnchanged))) {
+                if (prepend !== undefined) {
+                    // If the project is referenced with prepend, always build downstream project,
+                    // If declaration output is changed changed, build the project
+                    // otherwise mark the project UpToDateWithUpstreamTypes so it updates output time stamps
+                    const status = projectStatus.getValue(project);
+                    if (prepend || !(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
+                        if (status && (status.type === UpToDateStatusType.UpToDate || status.type === UpToDateStatusType.UpToDateWithUpstreamTypes)) {
+                            projectStatus.setValue(project, {
+                                type: UpToDateStatusType.OutOfDateWithUpstream,
+                                outOfDateOutputFileName: status.oldestOutputFileName,
+                                newerProjectName: resolved
+                            });
+                        }
+                    }
+                    else if (status && status.type === UpToDateStatusType.UpToDate) {
+                        status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
+                    }
                     addProjToQueue(project);
                 }
             }
@@ -1110,6 +1137,7 @@ namespace ts {
             let declDiagnostics: Diagnostic[] | undefined;
             const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
             const outputFiles: OutputFile[] = [];
+            // TODO:: handle declaration diagnostics in incremental build.
             emitFilesAndReportErrors(program, reportDeclarationDiagnostics, writeFileName, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
@@ -1118,6 +1146,7 @@ namespace ts {
 
             // Actual Emit
             const emitterDiagnostics = createDiagnosticCollection();
+            const emittedOutputs = createFileMap<true>(toPath as ToPath);
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(name)) {
@@ -1131,6 +1160,7 @@ namespace ts {
                     }
                 }
 
+                emittedOutputs.setValue(name, true);
                 writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
@@ -1143,9 +1173,13 @@ namespace ts {
                 return buildErrors(emitDiagnostics, BuildResultFlags.EmitErrors, "Emit");
             }
 
+            // Update time stamps for rest of the outputs
+            newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(configFile, newestDeclarationFileContentChangedTime, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
+
             const status: UpToDateStatus = {
                 type: UpToDateStatusType.UpToDate,
-                newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
+                newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime,
+                oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(configFile)
             };
             diagnostics.removeKey(proj);
             projectStatus.setValue(proj, status);
@@ -1175,23 +1209,34 @@ namespace ts {
             if (options.dry) {
                 return reportStatus(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
             }
-
-            if (options.verbose) {
-                reportStatus(Diagnostics.Updating_output_timestamps_of_project_0, proj.options.configFilePath!);
-            }
-
-            const now = new Date();
-            const outputs = getAllProjectOutputs(proj);
-            let priorNewestUpdateTime = minimumDate;
-            for (const file of outputs) {
-                if (isDeclarationFile(file)) {
-                    priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file) || missingFileModifiedTime);
-                }
-
-                host.setModifiedTime(file, now);
-            }
-
+            const priorNewestUpdateTime = updateOutputTimestampsWorker(proj, minimumDate, Diagnostics.Updating_output_timestamps_of_project_0);
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
+        }
+
+        function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: FileMap<true>) {
+            const outputs = getAllProjectOutputs(proj);
+            if (!skipOutputs || outputs.length !== skipOutputs.getSize()) {
+                if (options.verbose) {
+                    reportStatus(verboseMessage, proj.options.configFilePath!);
+                }
+                const now = host.now ? host.now() : new Date();
+                for (const file of outputs) {
+                    if (skipOutputs && skipOutputs.hasKey(file)) {
+                        continue;
+                    }
+
+                    if (isDeclarationFile(file)) {
+                        priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file) || missingFileModifiedTime);
+                    }
+
+                    host.setModifiedTime(file, now);
+                    if (proj.options.listEmittedFiles) {
+                        writeFileName(`TSFILE: ${file}`);
+                    }
+                }
+            }
+
+            return priorNewestUpdateTime;
         }
 
         function getFilesToClean(): string[] {
@@ -1366,6 +1411,20 @@ namespace ts {
             }
             return outputs;
         }
+    }
+
+    function getFirstProjectOutput(project: ParsedCommandLine): string {
+        if (project.options.outFile || project.options.out) {
+            return first(getOutFileOutputs(project));
+        }
+
+        for (const inputFile of project.fileNames) {
+            const outputs = getOutputFileNames(inputFile, project);
+            if (outputs.length) {
+                return first(outputs);
+            }
+        }
+        return Debug.fail(`project ${project.options.configFilePath} expected to have atleast one output`);
     }
 
     export function formatUpToDateStatus<T>(configFileName: string, status: UpToDateStatus, relName: (fileName: string) => string, formatMessage: (message: DiagnosticMessage, ...args: string[]) => T) {
