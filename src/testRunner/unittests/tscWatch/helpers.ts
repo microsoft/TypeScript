@@ -164,6 +164,26 @@ namespace ts.tscWatch {
         };
     }
 
+    export function getDiagnosticWithoutFile(message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
+        let text = getLocaleSpecificMessage(message);
+
+        if (arguments.length > 1) {
+            text = formatStringFromArgs(text, arguments, 1);
+        }
+
+        return getDiagnosticOfFileFrom(/*file*/ undefined, text, /*start*/ undefined, /*length*/ undefined, message);
+    }
+
+    export function getDiagnosticOfFile(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
+        let text = getLocaleSpecificMessage(message);
+
+        if (arguments.length > 4) {
+            text = formatStringFromArgs(text, arguments, 4);
+        }
+
+        return getDiagnosticOfFileFrom(file, text, start, length, message);
+    }
+
     export function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
         let text = getLocaleSpecificMessage(message);
 
@@ -173,6 +193,11 @@ namespace ts.tscWatch {
 
         return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase()))!,
             text, start, length, message);
+    }
+
+    export function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
+        const quotedOption = `"${option}"`;
+        return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
     }
 
     export function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {
