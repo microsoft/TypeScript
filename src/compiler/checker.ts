@@ -6851,9 +6851,6 @@ namespace ts {
         }
 
         function combineUnionThisParam(left: Symbol | undefined, right: Symbol | undefined): Symbol | undefined {
-            if (!left && !right) {
-                return;
-            }
             if (!left || !right) {
                 return left || right;
             }
