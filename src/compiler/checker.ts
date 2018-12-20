@@ -6799,7 +6799,12 @@ namespace ts {
         // type is the union of the constituent return types.
         function getUnionSignatures(signatureLists: ReadonlyArray<ReadonlyArray<Signature>>): Signature[] {
             let result: Signature[] | undefined;
+            let indexWithLengthOverOne: number | undefined;
             for (let i = 0; i < signatureLists.length; i++) {
+                if (signatureLists[i].length === 0) return emptyArray;
+                if (signatureLists[i].length > 1) {
+                    indexWithLengthOverOne = indexWithLengthOverOne === undefined ? i : -1; // -1 is a signal there are multiple overload sets
+                }
                 for (const signature of signatureLists[i]) {
                     // Only process signatures with parameter lists that aren't already in the result list
                     if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true)) {
@@ -6823,7 +6828,89 @@ namespace ts {
                     }
                 }
             }
+            if (!length(result) && indexWithLengthOverOne !== -1) {
+                // No sufficiently similar signature existed to subsume all the other signatures in the union - time to see if we can make a single
+                // signature that handles all over them. We only do this when there are overloads in only one constituent.
+                // (Overloads are conditional in nature and having overloads in multiple constituents would necessitate making a power set of
+                // signatures from the type, whose ordering would be non-obvious)
+                const masterList = signatureLists[indexWithLengthOverOne !== undefined ? indexWithLengthOverOne : 0];
+                let results: Signature[] | undefined = masterList.slice();
+                for (const signatures of signatureLists) {
+                    if (signatures !== masterList) {
+                        const signature = signatures[0];
+                        Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
+                        results = signature.typeParameters && some(results, s => !!s.typeParameters) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
+                        if (!results) {
+                            break;
+                        }
+                    }
+                }
+                result = results;
+            }
             return result || emptyArray;
+        }
+
+        function combineUnionThisParam(left: Symbol | undefined, right: Symbol | undefined): Symbol | undefined {
+            if (!left || !right) {
+                return left || right;
+            }
+            // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
+            // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
+            // permissive when calling, for now, we'll union the `this` types just like the overlapping-union-signature check does
+            const thisType = getUnionType([getTypeOfSymbol(left), getTypeOfSymbol(right)], UnionReduction.Subtype);
+            return createSymbolWithType(left, thisType);
+        }
+
+        function combineUnionParameters(left: Signature, right: Signature) {
+            const longest = getParameterCount(left) >= getParameterCount(right) ? left : right;
+            const shorter = longest === left ? right : left;
+            const longestCount = getParameterCount(longest);
+            const eitherHasEffectiveRest = (hasEffectiveRestParameter(left) || hasEffectiveRestParameter(right));
+            const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
+            const params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
+            for (let i = 0; i < longestCount; i++) {
+                const longestParamType = tryGetTypeAtPosition(longest, i)!;
+                const shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
+                const unionParamType = getIntersectionType([longestParamType, shorterParamType]);
+                const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
+                const isOptional = i >= getMinArgumentCount(longest) && i >= getMinArgumentCount(shorter);
+                const leftName = getParameterNameAtPosition(left, i);
+                const rightName = getParameterNameAtPosition(right, i);
+                const paramSymbol = createSymbol(
+                    SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0),
+                    leftName === rightName ? leftName : `arg${i}` as __String
+                );
+                paramSymbol.type = isRestParam ? createArrayType(unionParamType) : unionParamType;
+                params[i] = paramSymbol;
+            }
+            if (needsExtraRestElement) {
+                const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
+                restParamSymbol.type = createArrayType(getTypeAtPosition(shorter, longestCount));
+                params[longestCount] = restParamSymbol;
+            }
+            return params;
+        }
+
+        function combineSignaturesOfUnionMembers(left: Signature, right: Signature): Signature {
+            const declaration = left.declaration;
+            const params = combineUnionParameters(left, right);
+            const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter);
+            const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
+            const hasRestParam = left.hasRestParameter || right.hasRestParameter;
+            const hasLiteralTypes = left.hasLiteralTypes || right.hasLiteralTypes;
+            const result = createSignature(
+                declaration,
+                left.typeParameters || right.typeParameters,
+                thisParam,
+                params,
+                /*resolvedReturnType*/ undefined,
+                /*resolvedTypePredicate*/ undefined,
+                minArgCount,
+                hasRestParam,
+                hasLiteralTypes
+            );
+            result.unionSignatures = concatenate(left.unionSignatures || [left], [right]);
+            return result;
         }
 
         function getUnionIndexInfo(types: ReadonlyArray<Type>, kind: IndexKind): IndexInfo | undefined {
@@ -17566,6 +17653,26 @@ namespace ts {
         }
 
         function getJsxPropsTypeForSignatureFromMember(sig: Signature, forcedLookupLocation: __String) {
+            if (sig.unionSignatures) {
+                // JSX Elements using the legacy `props`-field based lookup (eg, react class components) need to treat the `props` member as an input
+                // instead of an output position when resolving the signature. We need to go back to the input signatures of the composite signature,
+                // get the type of `props` on each return type individually, and then _intersect them_, rather than union them (as would normally occur
+                // for a union signature). It's an unfortunate quirk of looking in the output of the signature for the type we want to use for the input.
+                // The default behavior of `getTypeOfFirstParameterOfSignatureWithFallback` when no `props` member name is defined is much more sane.
+                const results: Type[] = [];
+                for (const signature of sig.unionSignatures) {
+                    const instance = getReturnTypeOfSignature(signature);
+                    if (isTypeAny(instance)) {
+                        return instance;
+                    }
+                    const propType = getTypeOfPropertyOfType(instance, forcedLookupLocation);
+                    if (!propType) {
+                        return;
+                    }
+                    results.push(propType);
+                }
+                return getIntersectionType(results);
+            }
             const instanceType = getReturnTypeOfSignature(sig);
             return isTypeAny(instanceType) ? instanceType : getTypeOfPropertyOfType(instanceType, forcedLookupLocation);
         }
