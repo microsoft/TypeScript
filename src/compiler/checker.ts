@@ -7669,38 +7669,37 @@ namespace ts {
                 return props[0];
             }
             let declarations: Declaration[] | undefined;
-            let commonType: Type | undefined;
+            let firstType: Type | undefined;
             let nameType: Type | undefined;
             const propTypes: Type[] = [];
-            let first = true;
-            let commonValueDeclaration: Declaration | undefined;
+            let firstValueDeclaration: Declaration | undefined;
             let hasNonUniformValueDeclaration = false;
             for (const prop of props) {
-                if (!commonValueDeclaration) {
-                    commonValueDeclaration = prop.valueDeclaration;
+                if (!firstValueDeclaration) {
+                    firstValueDeclaration = prop.valueDeclaration;
                 }
-                else if (prop.valueDeclaration !== commonValueDeclaration) {
+                else if (prop.valueDeclaration !== firstValueDeclaration) {
                     hasNonUniformValueDeclaration = true;
                 }
                 declarations = addRange(declarations, prop.declarations);
                 const type = getTypeOfSymbol(prop);
-                if (first) {
-                    commonType = type;
+                if (!firstType) {
+                    firstType = type;
                     nameType = prop.nameType;
-                    first = false;
                 }
-                else {
-                    if (type !== commonType) {
-                        checkFlags |= CheckFlags.HasNonUniformType;
-                    }
+                else if (type !== firstType) {
+                    checkFlags |= CheckFlags.HasNonUniformType;
+                }
+                if (isLiteralType(type)) {
+                    checkFlags |= CheckFlags.HasLiteralType;
                 }
                 propTypes.push(type);
             }
             addRange(propTypes, indexTypes);
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
-            if (!hasNonUniformValueDeclaration && commonValueDeclaration) {
-                result.valueDeclaration = commonValueDeclaration;
+            if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
+                result.valueDeclaration = firstValueDeclaration;
             }
             result.declarations = declarations!;
             result.nameType = nameType;
@@ -14814,17 +14813,8 @@ namespace ts {
         }
 
         function isDiscriminantType(type: Type): boolean {
-            if (type.flags & TypeFlags.Union) {
-                if (type.flags & (TypeFlags.Boolean | TypeFlags.EnumLiteral)) {
-                    return true;
-                }
-                let combined = 0;
-                for (const t of (<UnionType>type).types) combined |= t.flags;
-                if (combined & TypeFlags.Unit && !(combined & TypeFlags.Instantiable)) {
-                    return true;
-                }
-            }
-            return false;
+            return !!(type.flags & TypeFlags.Union &&
+                (type.flags & (TypeFlags.Boolean | TypeFlags.EnumLiteral) || !isGenericIndexType(type)));
         }
 
         function isDiscriminantProperty(type: Type | undefined, name: __String) {
@@ -14832,7 +14822,9 @@ namespace ts {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
                     if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
-                        (<TransientSymbol>prop).isDiscriminantProperty = !!((<TransientSymbol>prop).checkFlags & CheckFlags.HasNonUniformType) && isDiscriminantType(getTypeOfSymbol(prop));
+                        (<TransientSymbol>prop).isDiscriminantProperty =
+                            ((<TransientSymbol>prop).checkFlags & CheckFlags.Discriminant) === CheckFlags.Discriminant &&
+                            isDiscriminantType(getTypeOfSymbol(prop));
                     }
                     return !!(<TransientSymbol>prop).isDiscriminantProperty;
                 }
