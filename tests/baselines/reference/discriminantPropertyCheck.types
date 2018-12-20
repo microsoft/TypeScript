@@ -310,3 +310,71 @@ function func2(inst: Instance) {
     }
 }
 
+// Repro from #29106
+
+const f = (_a: string, _b: string): void => {};
+>f : (_a: string, _b: string) => void
+>(_a: string, _b: string): void => {} : (_a: string, _b: string) => void
+>_a : string
+>_b : string
+
+interface A {
+  a?: string;
+>a : string | undefined
+
+  b?: string;
+>b : string | undefined
+}
+
+interface B {
+  a: string;
+>a : string
+
+  b: string;
+>b : string
+}
+
+type U = A | B;
+>U : U
+
+const u: U = {} as any;
+>u : U
+>{} as any : any
+>{} : {}
+
+u.a && u.b && f(u.a, u.b);
+>u.a && u.b && f(u.a, u.b) : void | "" | undefined
+>u.a && u.b : string | undefined
+>u.a : string | undefined
+>u : U
+>a : string | undefined
+>u.b : string | undefined
+>u : U
+>b : string | undefined
+>f(u.a, u.b) : void
+>f : (_a: string, _b: string) => void
+>u.a : string
+>u : U
+>a : string
+>u.b : string
+>u : U
+>b : string
+
+u.b && u.a && f(u.a, u.b);
+>u.b && u.a && f(u.a, u.b) : void | "" | undefined
+>u.b && u.a : string | undefined
+>u.b : string | undefined
+>u : U
+>b : string | undefined
+>u.a : string | undefined
+>u : U
+>a : string | undefined
+>f(u.a, u.b) : void
+>f : (_a: string, _b: string) => void
+>u.a : string
+>u : U
+>a : string
+>u.b : string
+>u : U
+>b : string
+
