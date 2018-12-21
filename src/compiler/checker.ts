@@ -4239,18 +4239,28 @@ namespace ts {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
                 }
                 if (type.flags & TypeFlags.Range) {
-                    let operator;
-                    let basis;
                     if ((<RangeType>type).min && !(<RangeType>type).max) {
-                        operator = (<RangeType>type).minOpen ? createToken(SyntaxKind.GreaterThanToken) : createToken(SyntaxKind.GreaterThanEqualsToken);
-                        basis = createLiteral((<RangeType>type).min!.value);
+                        const operator = (<RangeType>type).minOpen ? createToken(SyntaxKind.GreaterThanToken) : createToken(SyntaxKind.GreaterThanEqualsToken);
+                        const basis = createLiteral((<RangeType>type).min!.value);
                         return createHalfRangeTypeNode(operator, basis);
                     }
                     else if (!(<RangeType>type).min && (<RangeType>type).max) {
-                        operator = (<RangeType>type).maxOpen ? createToken(SyntaxKind.LessThanToken) : createToken(SyntaxKind.LessThanEqualsToken);
-                        basis = createLiteral((<RangeType>type).max!.value);
+                        const operator = (<RangeType>type).maxOpen ? createToken(SyntaxKind.LessThanToken) : createToken(SyntaxKind.LessThanEqualsToken);
+                        const basis = createLiteral((<RangeType>type).max!.value);
                         return createHalfRangeTypeNode(operator, basis);
-                    } // TODO: "full" range handling (e.g. union)
+                    }
+                    else if ((<RangeType>type).min && (<RangeType>type).max) {
+                        const min = <RangeType>createType(TypeFlags.Range);
+                        min.min = (<RangeType>type).min;
+                        min.minOpen = (<RangeType>type).minOpen;
+                        const max = <RangeType>createType(TypeFlags.Range);
+                        max.max = (<RangeType>type).max;
+                        max.maxOpen = (<RangeType>type).maxOpen;
+                        return createIntersectionTypeNode([typeToTypeNodeHelper(min, context), typeToTypeNodeHelper(max, context)]);
+                    }
+                    else if (!(<RangeType>type).min && !(<RangeType>type).max) {
+                        return createKeywordTypeNode(SyntaxKind.NumberKeyword);
+                    }
                 }
 
                 return Debug.fail("Should be unreachable.");
