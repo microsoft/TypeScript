@@ -1,37 +1,17 @@
 //// [rangeTypeFalsiness.ts]
-function a(arg: (> 0)) {
-    if(!arg) {
-        return false;
-    }
-    else {
-        return true;
-    }
+function a(arg: (> 0)): true {
+    return !!arg;
 }
 
-function b(arg: (>= 0)) {
-    if (!arg) {
-        return false;
-    }
-    else {
-        return true;
-    }
+function b(arg: (>= 0)): boolean {
+    return !!arg;
 }
 
 
 //// [rangeTypeFalsiness.js]
 function a(arg) {
-    if (!arg) {
-        return false;
-    }
-    else {
-        return true;
-    }
+    return !!arg;
 }
 function b(arg) {
-    if (!arg) {
-        return false;
-    }
-    else {
-        return true;
-    }
+    return !!arg;
 }

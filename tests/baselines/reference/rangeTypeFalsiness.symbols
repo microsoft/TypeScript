@@ -1,29 +1,17 @@
 === tests/cases/compiler/rangeTypeFalsiness.ts ===
-function a(arg: (> 0)) {
+function a(arg: (> 0)): true {
 >a : Symbol(a, Decl(rangeTypeFalsiness.ts, 0, 0))
 >arg : Symbol(arg, Decl(rangeTypeFalsiness.ts, 0, 11))
 
-    if(!arg) {
+    return !!arg;
 >arg : Symbol(arg, Decl(rangeTypeFalsiness.ts, 0, 11))
-
-        return false;
-    }
-    else {
-        return true;
-    }
 }
 
-function b(arg: (>= 0)) {
->b : Symbol(b, Decl(rangeTypeFalsiness.ts, 7, 1))
->arg : Symbol(arg, Decl(rangeTypeFalsiness.ts, 9, 11))
+function b(arg: (>= 0)): boolean {
+>b : Symbol(b, Decl(rangeTypeFalsiness.ts, 2, 1))
+>arg : Symbol(arg, Decl(rangeTypeFalsiness.ts, 4, 11))
 
-    if (!arg) {
->arg : Symbol(arg, Decl(rangeTypeFalsiness.ts, 9, 11))
-
-        return false;
-    }
-    else {
-        return true;
-    }
+    return !!arg;
+>arg : Symbol(arg, Decl(rangeTypeFalsiness.ts, 4, 11))
 }
 
