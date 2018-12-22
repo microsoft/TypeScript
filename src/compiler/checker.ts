@@ -7935,7 +7935,7 @@ namespace ts {
                 const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                 const circularityMapper = createTypeMapper(typeParameters!, map(typeParameters!, () => baseDefaultType));
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                    result[i] = instantiateType(getConstraintFromTypeParameter(typeParameters![i]) || baseDefaultType, circularityMapper);
+                    result[i] = instantiateType(getConstraintOfTypeParameter(typeParameters![i]) || baseDefaultType, circularityMapper);
                 }
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
                     const mapper = createTypeMapper(typeParameters!, result);
