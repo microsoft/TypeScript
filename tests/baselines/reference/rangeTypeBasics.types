@@ -115,7 +115,7 @@ type F3 = (<4>);
 > : any
 
 type F4 = (< +);
->F4 : () => any
+>F4 : F4
 >+ : number
 > : any
 
@@ -141,5 +141,5 @@ type F7 = (>= );
 > : any
 
 type F8 = (< );
->F8 : () => any
+>F8 : F8
 

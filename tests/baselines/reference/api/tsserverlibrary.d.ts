@@ -2361,7 +2361,7 @@ declare namespace ts {
         Literal = 2944,
         Unit = 109440,
         StringOrNumberLiteral = 384,
-        PossiblyFalsy = 117724,
+        PossiblyFalsy = 4312028,
         StringLike = 132,
         NumberLike = 4194600,
         BigIntLike = 2112,
