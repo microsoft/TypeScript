@@ -66,6 +66,10 @@ namespace ts {
          * Already seen affected files
          */
         seenEmittedFiles: Map<true> | undefined;
+        /**
+         * true if program has been emitted
+         */
+        programEmitComplete?: true;
     }
 
     function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined): boolean {
@@ -352,6 +356,7 @@ namespace ts {
     function doneWithAffectedFile(state: BuilderProgramState, affected: SourceFile | Program, isPendingEmit?: boolean) {
         if (affected === state.program) {
             state.changedFilesSet.clear();
+            state.programEmitComplete = true;
         }
         else {
             state.seenAffectedFiles!.set((affected as SourceFile).path, true);
@@ -487,12 +492,22 @@ namespace ts {
             let affected = getNextAffectedFile(state, cancellationToken, computeHash);
             let isPendingEmitFile = false;
             if (!affected) {
-                affected = getNextAffectedFilePendingEmit(state);
-                // Done
-                if (!affected) {
-                    return undefined;
+                if (!state.compilerOptions.out && !state.compilerOptions.outFile) {
+                    affected = getNextAffectedFilePendingEmit(state);
+                    if (!affected) {
+                        return undefined;
+                    }
+                    isPendingEmitFile = true;
                 }
-                isPendingEmitFile = true;
+                else {
+                    const program = Debug.assertDefined(state.program);
+                    // Check if program uses any prepend project references, if thats the case we cant track of the js files of those, so emit even though there are no changes
+                    if (state.programEmitComplete || !some(program.getProjectReferences(), ref => !!ref.prepend)) {
+                        state.programEmitComplete = true;
+                        return undefined;
+                    }
+                    affected = program;
+                }
             }
 
             // Mark seen emitted files if there are pending files to be emitted
