@@ -90,7 +90,7 @@ jake help             # List the above commands.
 ## Usage
 
 ```bash
-node built/local/tsc.js hello.ts
+tsc hello.ts
 ```
 
 
