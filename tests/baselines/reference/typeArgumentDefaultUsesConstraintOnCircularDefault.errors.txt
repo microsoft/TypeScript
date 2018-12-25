@@ -1,9 +1,10 @@
 tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts(3,18): error TS2322: Type '{ foo: string; }' is not assignable to type 'Test<string>'.
   Object literal may only specify known properties, and 'foo' does not exist in type 'Test<string>'.
 tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts(5,19): error TS2322: Type '{}' is not assignable to type 'string'.
+tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts(9,20): error TS2313: Type parameter 'T' has a circular constraint.
 
 
-==== tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts (2 errors) ====
+==== tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts (3 errors) ====
     type Test<T extends string = T> = { value: T };
     
     let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
@@ -15,4 +16,12 @@ tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts(5,19)
                       ~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts:1:37: The expected type comes from property 'value' which is declared here on type 'Test<string>'
+    
+    // Simplified repro from #28873
+    
+    class C1<T extends C1 = any> {}  // Error, circular constraint
+                       ~~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+    
+    class C2<T extends C2<any> = any> {}
     

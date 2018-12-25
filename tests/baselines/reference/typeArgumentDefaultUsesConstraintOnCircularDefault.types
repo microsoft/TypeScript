@@ -15,3 +15,11 @@ let zzy: Test = { value: {} };  // should error
 >value : {}
 >{} : {}
 
+// Simplified repro from #28873
+
+class C1<T extends C1 = any> {}  // Error, circular constraint
+>C1 : C1<T>
+
+class C2<T extends C2<any> = any> {}
+>C2 : C2<T>
+
