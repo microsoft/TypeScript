@@ -19628,8 +19628,11 @@ namespace ts {
 
         function isUniformType(type: Type): boolean {
             // jw todo: more cases
-            if (isUnitType(type) || (type.flags & TypeFlags.Boolean)) {
+            if (isUnitType(type) || (type.flags & TypeFlags.Primitive)) {
                 return true;
+            }
+            if (type.flags & TypeFlags.TypeParameter) {
+                return !!getUniformityConstraintFromTypeParameter(<TypeParameter> type);
             }
             return false;   
         }
