@@ -465,9 +465,9 @@ namespace ts {
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     ((node as JSDocPropertyLikeTag).isNameFirst
                         ? visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)
+                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)
                         : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
+                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (<JSDocAugmentsTag>node).class);
@@ -480,9 +480,9 @@ namespace ts {
                     ((node as JSDocTypedefTag).typeExpression &&
                         (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression
                         ? visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).fullName)
+                            visitNode(cbNode, (<JSDocTypedefTag>node).fullName)
                         : visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression));
+                            visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression));
             case SyntaxKind.JSDocCallbackTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
@@ -752,7 +752,7 @@ namespace ts {
                             statement.expression = parseLiteralNode() as StringLiteral | NumericLiteral;
                             break;
                         }
-                    // falls through
+                        // falls through
                     default:
                         statement.expression = parseObjectLiteralExpression();
                         break;
@@ -1251,7 +1251,7 @@ namespace ts {
             const p = pos! >= 0 ? pos! : scanner.getStartPos();
             return isNodeKind(kind) || kind === SyntaxKind.Unknown ? new NodeConstructor(kind, p, p) :
                 kind === SyntaxKind.Identifier ? new IdentifierConstructor(kind, p, p) :
-                    new TokenConstructor(kind, p, p);
+                new TokenConstructor(kind, p, p);
         }
 
         function createNodeWithJSDoc(kind: SyntaxKind, pos?: number): Node {
@@ -1517,7 +1517,7 @@ namespace ts {
                         case SyntaxKind.DotToken: // Not an array literal member, but don't want to close the array (see `tests/cases/fourslash/completionsDotInArrayLiteralInObjectLiteral.ts`)
                             return true;
                     }
-                // falls through
+                    // falls through
                 case ParsingContext.ArgumentExpressions:
                     return token() === SyntaxKind.DotDotDotToken || isStartOfExpression();
                 case ParsingContext.Parameters:
@@ -3981,7 +3981,7 @@ namespace ts {
                     if (isAwaitExpression()) {
                         return parseAwaitExpression();
                     }
-                // falls through
+                    // falls through
                 default:
                     return parseUpdateExpression();
             }
@@ -4015,8 +4015,8 @@ namespace ts {
                     if (sourceFile.languageVariant !== LanguageVariant.JSX) {
                         return false;
                     }
-                // We are in JSX context and the token is part of JSXElement.
-                // falls through
+                    // We are in JSX context and the token is part of JSXElement.
+                    // falls through
                 default:
                     return true;
             }
@@ -5907,8 +5907,8 @@ namespace ts {
 
         function tryParseTypeArguments(): NodeArray<TypeNode> | undefined {
             return token() === SyntaxKind.LessThanToken
-                ? parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken)
-                : undefined;
+               ? parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken)
+               : undefined;
         }
 
         function isHeritageClause(): boolean {
@@ -6245,8 +6245,8 @@ namespace ts {
             // Try to use the first top-level import/export when available, then
             // fall back to looking for an 'import.meta' somewhere in the tree if necessary.
             sourceFile.externalModuleIndicator =
-                forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
-                getImportMetaIfNecessary(sourceFile);
+                    forEach(sourceFile.statements, isAnExternalModuleIndicatorNode) ||
+                    getImportMetaIfNecessary(sourceFile);
         }
 
         function isAnExternalModuleIndicatorNode(node: Node) {
@@ -6255,8 +6255,8 @@ namespace ts {
                 || node.kind === SyntaxKind.ImportDeclaration
                 || node.kind === SyntaxKind.ExportAssignment
                 || node.kind === SyntaxKind.ExportDeclaration
-                ? node
-                : undefined;
+                    ? node
+                    : undefined;
         }
 
         function getImportMetaIfNecessary(sourceFile: SourceFile) {
@@ -6624,7 +6624,7 @@ namespace ts {
                                 break;
                             case SyntaxKind.AtToken:
                                 scanner.setTextPos(scanner.getTextPos() - 1);
-                            // falls through
+                                // falls through
                             case SyntaxKind.EndOfFileToken:
                                 // Done
                                 break loop;
@@ -6658,8 +6658,8 @@ namespace ts {
                                     indent += 1;
                                     break;
                                 }
-                            // record the * as a comment
-                            // falls through
+                                // record the * as a comment
+                                // falls through
                             default:
                                 state = JSDocState.SavingComments; // leading identifiers start recording as well
                                 pushComment(scanner.getTokenText());
@@ -7855,7 +7855,7 @@ namespace ts {
                 return;
             }
             if (pragma.args) {
-                const argument: { [index: string]: string | { value: string, pos: number, end: number } } = {};
+                const argument: {[index: string]: string | {value: string, pos: number, end: number}} = {};
                 for (const arg of pragma.args) {
                     const matcher = getNamedArgRegEx(arg.name);
                     const matchResult = matcher.exec(text);
@@ -7912,11 +7912,11 @@ namespace ts {
         return;
     }
 
-    function getNamedPragmaArguments(pragma: PragmaDefinition, text: string | undefined): { [index: string]: string } | "fail" {
+    function getNamedPragmaArguments(pragma: PragmaDefinition, text: string | undefined): {[index: string]: string} | "fail" {
         if (!text) return {};
         if (!pragma.args) return {};
         const args = text.split(/\s+/);
-        const argMap: { [index: string]: string } = {};
+        const argMap: {[index: string]: string} = {};
         for (let i = 0; i < pragma.args.length; i++) {
             const argument = pragma.args[i];
             if (!args[i] && !argument.optional) {
