@@ -11617,7 +11617,7 @@ interface RTCPeerConnection extends EventTarget {
     addTransceiver(trackOrKind: MediaStreamTrack | string, init?: RTCRtpTransceiverInit): RTCRtpTransceiver;
     close(): void;
     createAnswer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
-    createDataChannel(label: string, dataChannelDict?: RTCDataChannelInit): RTCDataChannel;
+    createDataChannel(label: string | null, dataChannelDict?: RTCDataChannelInit): RTCDataChannel;
     createOffer(options?: RTCOfferOptions): Promise<RTCSessionDescriptionInit>;
     getConfiguration(): RTCConfiguration;
     getIdentityAssertion(): Promise<string>;
