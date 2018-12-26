@@ -50,11 +50,15 @@ namespace ts {
         /**
          * Cache of all files excluding default library file for the current program
          */
-        allFilesExcludingDefaultLibraryFile: ReadonlyArray<SourceFile> | undefined;
+        allFilesExcludingDefaultLibraryFile?: ReadonlyArray<SourceFile>;
         /**
          * Cache of all the file names
          */
-        allFileNames: ReadonlyArray<string> | undefined;
+        allFileNames?: ReadonlyArray<string>;
+    }
+
+    export function cloneMapOrUndefined<T>(map: ReadonlyMap<T> | undefined) {
+        return map ? cloneMap(map) : undefined;
     }
 }
 
@@ -230,9 +234,32 @@ namespace ts.BuilderState {
             fileInfos,
             referencedMap,
             exportedModulesMap,
-            hasCalledUpdateShapeSignature,
-            allFilesExcludingDefaultLibraryFile: undefined,
-            allFileNames: undefined
+            hasCalledUpdateShapeSignature
+        };
+    }
+
+    /**
+     * Releases needed properties
+     */
+    export function releaseCache(state: BuilderState) {
+        state.allFilesExcludingDefaultLibraryFile = undefined;
+        state.allFileNames = undefined;
+    }
+
+    /**
+     * Creates a clone of the state
+     */
+    export function clone(state: Readonly<BuilderState>): BuilderState {
+        const fileInfos = createMap<FileInfo>();
+        state.fileInfos.forEach((value, key) => {
+            fileInfos.set(key, { ...value });
+        });
+        // Dont need to backup allFiles info since its cache anyway
+        return {
+            fileInfos,
+            referencedMap: cloneMapOrUndefined(state.referencedMap),
+            exportedModulesMap: cloneMapOrUndefined(state.exportedModulesMap),
+            hasCalledUpdateShapeSignature: cloneMap(state.hasCalledUpdateShapeSignature),
         };
     }
 

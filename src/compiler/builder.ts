@@ -158,6 +158,38 @@ namespace ts {
     }
 
     /**
+     * Releases program and other related not needed properties
+     */
+    function releaseCache(state: BuilderProgramState) {
+        BuilderState.releaseCache(state);
+        state.program = undefined;
+    }
+
+    /**
+     * Creates a clone of the state
+     */
+    function cloneBuilderProgramState(state: Readonly<BuilderProgramState>): BuilderProgramState {
+        const newState = BuilderState.clone(state) as BuilderProgramState;
+        newState.semanticDiagnosticsPerFile = cloneMapOrUndefined(state.semanticDiagnosticsPerFile);
+        newState.changedFilesSet = cloneMap(state.changedFilesSet);
+        newState.affectedFiles = state.affectedFiles;
+        newState.affectedFilesIndex = state.affectedFilesIndex;
+        newState.currentChangedFilePath = state.currentChangedFilePath;
+        newState.currentAffectedFilesSignatures = cloneMapOrUndefined(state.currentAffectedFilesSignatures);
+        newState.currentAffectedFilesExportedModulesMap = cloneMapOrUndefined(state.currentAffectedFilesExportedModulesMap);
+        newState.seenAffectedFiles = cloneMapOrUndefined(state.seenAffectedFiles);
+        newState.cleanedDiagnosticsOfLibFiles = state.cleanedDiagnosticsOfLibFiles;
+        newState.semanticDiagnosticsFromOldState = cloneMapOrUndefined(state.semanticDiagnosticsFromOldState);
+        newState.program = state.program;
+        newState.compilerOptions = state.compilerOptions;
+        newState.affectedFilesPendingEmit = state.affectedFilesPendingEmit;
+        newState.affectedFilesPendingEmitIndex = state.affectedFilesPendingEmitIndex;
+        newState.seenEmittedFiles = cloneMapOrUndefined(state.seenEmittedFiles);
+        newState.programEmitComplete = state.programEmitComplete;
+        return newState;
+    }
+
+    /**
      * Verifies that source file is ok to be used in calls that arent handled by next
      */
     function assertSourceFileOkWithoutNextAffectedCall(state: BuilderProgramState, sourceFile: SourceFile | undefined) {
@@ -474,7 +506,8 @@ namespace ts {
          * Computing hash to for signature verification
          */
         const computeHash = host.createHash || generateDjb2Hash;
-        const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
+        let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
+        let backupState: BuilderProgramState | undefined;
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -483,9 +516,21 @@ namespace ts {
 
         const result = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
         result.getState = () => state;
+        result.backupCurrentState = () => {
+            Debug.assert(backupState === undefined);
+            backupState = cloneBuilderProgramState(state);
+        };
+        result.useBackupState = () => {
+            state = Debug.assertDefined(backupState);
+            backupState = undefined;
+        };
         result.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.assertDefined(state.program), sourceFile);
         result.getSemanticDiagnostics = getSemanticDiagnostics;
         result.emit = emit;
+        result.releaseProgram = () => {
+            releaseCache(state);
+            backupState = undefined;
+        };
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
             (result as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
@@ -666,6 +711,8 @@ namespace ts {
     export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: ReadonlyArray<Diagnostic>): BuilderProgram {
         return {
             getState: notImplemented,
+            backupCurrentState: noop,
+            useBackupState: noop,
             getProgram: () => Debug.assertDefined(state.program),
             getProgramOrUndefined: () => state.program,
             releaseProgram: () => state.program = undefined,
@@ -710,6 +757,10 @@ namespace ts {
     export interface BuilderProgram {
         /*@internal*/
         getState(): BuilderProgramState;
+        /*@internal*/
+        backupCurrentState(): void;
+        /*@internal*/
+        useBackupState(): void;
         /**
          * Returns current program
          */

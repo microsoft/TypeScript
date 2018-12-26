@@ -382,8 +382,6 @@ namespace ts {
         host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
         host.reportSolutionBuilderStatus = reportSolutionBuilderStatus || createBuilderStatusReporter(system);
         return host;
-
-        // TODO after program create
     }
 
     export function createSolutionBuilderHost<T extends BuilderProgram = BuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
@@ -499,9 +497,7 @@ namespace ts {
             clearMap(allWatchedWildcardDirectories, wildCardWatches => clearMap(wildCardWatches, closeFileWatcherOf));
             clearMap(allWatchedInputFiles, inputFileWatches => clearMap(inputFileWatches, closeFileWatcher));
             clearMap(allWatchedConfigFiles, closeFileWatcher);
-            if (!options.watch) {
-                builderPrograms.clear();
-            }
+            builderPrograms.clear();
             updateGetSourceFile();
         }
 
@@ -576,7 +572,7 @@ namespace ts {
                     hostWithWatch,
                     resolved,
                     () => {
-                    invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
+                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
                     },
                     PollingInterval.High,
                     WatchType.ConfigFile,
@@ -1132,15 +1128,17 @@ namespace ts {
                 return buildErrors(semanticDiagnostics, BuildResultFlags.TypeErrors, "Semantic");
             }
 
+            // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
+            program.backupCurrentState();
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
             let declDiagnostics: Diagnostic[] | undefined;
             const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
             const outputFiles: OutputFile[] = [];
-            // TODO:: handle declaration diagnostics in incremental build.
             emitFilesAndReportErrors(program, reportDeclarationDiagnostics, writeFileName, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
+                program.useBackupState();
                 return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
             }
 
