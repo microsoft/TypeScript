@@ -845,6 +845,8 @@ namespace ts {
 
         // For error recovery purposes.
         expression?: Expression;
+
+        uniformityConstraint?: boolean;
     }
 
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
@@ -4175,6 +4177,8 @@ namespace ts {
         isThisType?: boolean;
         /* @internal */
         resolvedDefaultType?: Type;
+        /* @internal */
+        uniformityConstraint?: boolean;
     }
 
     // Indexed access types (TypeFlags.IndexedAccess)

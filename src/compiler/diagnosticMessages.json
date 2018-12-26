@@ -2537,6 +2537,10 @@
         "category": "Error",
         "code": 2743
     },
+    "Type {0} does not satisfy uniformity constraint. Values of type {0} do not behave identically under typeof": {
+        "category": "Error",
+        "code": 2744
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

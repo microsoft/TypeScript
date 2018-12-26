@@ -3936,7 +3936,7 @@ namespace ts {
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
-                return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode);
+                return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode, type.uniformityConstraint);
             }
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
@@ -8223,6 +8223,11 @@ namespace ts {
             return decl && getEffectiveConstraintOfTypeParameter(decl);
         }
 
+        function getUniformityConstraintDeclaration(type: TypeParameter) {
+            const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
+            return decl && decl.uniformityConstraint;
+        }
+
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
             let inferences: Type[] | undefined;
             if (typeParameter.symbol) {
@@ -8281,6 +8286,13 @@ namespace ts {
                 }
             }
             return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
+        }
+
+        function getUniformityConstraintFromTypeParameter(typeParameter: TypeParameter): boolean | undefined {
+            if(typeParameter.uniformityConstraint === undefined) {
+                typeParameter.uniformityConstraint = getUniformityConstraintDeclaration(typeParameter);
+            }
+            return typeParameter.uniformityConstraint;
         }
 
         function getParentSymbolOfTypeParameter(typeParameter: TypeParameter): Symbol | undefined {
@@ -14481,6 +14493,14 @@ namespace ts {
                 inference.inferredType = inferredType;
 
                 const constraint = getConstraintOfTypeParameter(inference.typeParameter);
+                const uniformityConstraint = getUniformityConstraintFromTypeParameter(inference.typeParameter);
+                if (uniformityConstraint) {
+                    if (!isUniformType(inferredType)) {
+                        const decl = getDeclarationOfKind<TypeParameterDeclaration>(inference.typeParameter.symbol, SyntaxKind.TypeParameter);
+                        error(decl, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(inferredType));
+                    }
+                    // jw todo
+                }
                 if (constraint) {
                     const instantiatedConstraint = instantiateType(constraint, context);
                     if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
@@ -15769,7 +15789,8 @@ namespace ts {
             function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {
                 // We have '==', '!=', '====', or !==' operator with 'typeof xxx' and string literal operands
                 const target = getReferenceCandidate(typeOfExpr.expression);
-                if (!isMatchingReference(reference, target)) {
+                const isNarrowableUnderUniformity = (type.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>type) && getTypeOfNode(target) === type;
+                if (!isMatchingReference(reference, target) && !isNarrowableUnderUniformity) {
                     // For a reference of the form 'x.y', where 'x' has a narrowable declared type, a
                     // 'typeof x === ...' type guard resets the narrowed type of 'y' to its declared type.
                     if (containsMatchingReference(reference, target) && hasNarrowableDeclaredType(target)) {
@@ -19605,6 +19626,14 @@ namespace ts {
                 createTupleType(append(types.slice(0, spreadIndex), getUnionType(types.slice(spreadIndex))), spreadIndex, /*hasRestElement*/ true);
         }
 
+        function isUniformType(type: Type): boolean {
+            // jw todo: more cases
+            if (isUnitType(type) || (type.flags & TypeFlags.Boolean)) {
+                return true;
+            }
+            return false;   
+        }
+        
         function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
             const isJavascript = isInJSFile(signature.declaration);
             const typeParameters = signature.typeParameters!;
@@ -19613,6 +19642,15 @@ namespace ts {
             for (let i = 0; i < typeArgumentNodes.length; i++) {
                 Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                const uniformityConstraint = getUniformityConstraintFromTypeParameter(typeParameters[i]);
+                if (uniformityConstraint) {
+                    if (!isUniformType(typeArgumentTypes[i])) {
+                        const decl = getDeclarationOfKind<TypeParameterDeclaration>(typeParameters[i].symbol, SyntaxKind.TypeParameter);
+                        error(decl, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArgumentTypes[i]));
+                        //error
+                    }
+                    // jw todo
+                }
                 if (constraint) {
                     const errorInfo = reportErrors && headMessage ? (() => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1)) : undefined;
                     const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
@@ -23566,6 +23604,18 @@ namespace ts {
             let result = true;
             for (let i = 0; i < typeParameters.length; i++) {
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
+                const uniformityConstraint = getUniformityConstraintFromTypeParameter(typeParameters[i]);
+                if (uniformityConstraint) {
+                    if (!typeArguments) {
+                        typeArguments = getEffectiveTypeArguments(node, typeParameters);
+                        mapper = createTypeMapper(typeParameters, typeArguments);
+                    }
+                    if (!isUniformType(typeArguments[i])) {
+                        error(node, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArguments[i]));
+                        // error 
+                    }
+                    // jw todo
+                }
                 if (constraint) {
                     if (!typeArguments) {
                         typeArguments = getEffectiveTypeArguments(node, typeParameters);
