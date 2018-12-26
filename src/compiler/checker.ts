@@ -25374,9 +25374,8 @@ namespace ts {
             visit(node.initializer!);
 
             function visit(n: Node): void {
-                if (isTypeNode(n) || isDeclarationName(n)) {
+                if (isTypeNode(n)) {
                     // do not dive in types
-                    // skip declaration names (i.e. in object literal expressions)
                     return;
                 }
                 if (n.kind === SyntaxKind.PropertyAccessExpression) {
@@ -25384,6 +25383,9 @@ namespace ts {
                     return visit((<PropertyAccessExpression>n).expression);
                 }
                 else if (n.kind === SyntaxKind.Identifier) {
+                    if (isDeclarationName(n) && n.parent.kind !== SyntaxKind.ShorthandPropertyAssignment) {
+                        return;
+                    }
                     // check FunctionLikeDeclaration.locals (stores parameters\function local variable)
                     // if it contains entry with a specified name
                     const symbol = resolveName(n, (<Identifier>n).escapedText, SymbolFlags.Value | SymbolFlags.Alias, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined, /*isUse*/ false);
@@ -25412,13 +25414,22 @@ namespace ts {
                                     if (current === node.initializer) {
                                         return "quit";
                                     }
-                                    return isFunctionLike(current.parent) ||
-                                        // computed property names/initializers in instance property declaration of class like entities
-                                        // are executed in constructor and thus deferred
-                                        (current.parent.kind === SyntaxKind.PropertyDeclaration &&
-                                         !(hasModifier(current.parent, ModifierFlags.Static)) &&
-                                         isClassLike(current.parent.parent));
-                                    })) {
+                                    if (current.kind === SyntaxKind.ComputedPropertyName) {
+                                        // computed property names are eagerly evaluated
+                                        return false;
+                                    }
+                                    if (isFunctionExpressionOrArrowFunction(current.parent)) {
+                                        // generator functions and async functions are not inlined in control flow when immediately invoked
+                                        if (current.parent.asteriskToken || hasModifier(current.parent, ModifierFlags.Async)) {
+                                            return true;
+                                        }
+                                        return !getImmediatelyInvokedFunctionExpression(current.parent);
+                                    }
+                                    return isFunctionLikeDeclaration(current.parent) ||
+                                        // initializers in instance property declaration of class like entities are executed in constructor and thus deferred
+                                        current.parent.kind === SyntaxKind.PropertyDeclaration && !hasModifier(current.parent, ModifierFlags.Static);
+                                })
+                            ) {
                                 return;
                             }
                             // fall through to report error
