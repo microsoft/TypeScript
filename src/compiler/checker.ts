@@ -14497,7 +14497,7 @@ namespace ts {
                 if (uniformityConstraint) {
                     if (!isUniformType(inferredType)) {
                         const decl = getDeclarationOfKind<TypeParameterDeclaration>(inference.typeParameter.symbol, SyntaxKind.TypeParameter);
-                        error(decl, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(inferredType));
+                        error(decl, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(inferredType), typeToString(inference.typeParameter));
                     }
                     // jw todo
                 }
@@ -19649,7 +19649,7 @@ namespace ts {
                 if (uniformityConstraint) {
                     if (!isUniformType(typeArgumentTypes[i])) {
                         const decl = getDeclarationOfKind<TypeParameterDeclaration>(typeParameters[i].symbol, SyntaxKind.TypeParameter);
-                        error(decl, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArgumentTypes[i]));
+                        error(decl, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArgumentTypes[i]), typeToString(typeParameters[i]));
                         //error
                     }
                     // jw todo
@@ -23614,7 +23614,7 @@ namespace ts {
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     if (!isUniformType(typeArguments[i])) {
-                        error(node, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArguments[i]));
+                        error(node, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArguments[i]), typeToString(typeParameters[i]));
                         // error 
                     }
                     // jw todo

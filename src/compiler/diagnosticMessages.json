@@ -2537,7 +2537,7 @@
         "category": "Error",
         "code": 2743
     },
-    "Type {0} does not satisfy uniformity constraint. Values of type {0} do not behave identically under typeof": {
+    "Type '{0}' does not satisfy uniformity constraint of type '{1}'. Values of type '{0}' do not behave identically under typeof": {
         "category": "Error",
         "code": 2744
     },
