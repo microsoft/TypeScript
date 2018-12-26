@@ -10,11 +10,17 @@ tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(21,8): error TS23
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(21,8): error TS2538: Type 'any' cannot be used as an index type.
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(22,8): error TS2538: Type 'any' cannot be used as an index type.
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(22,12): error TS2339: Property 'toExponential' does not exist on type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(25,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(29,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(31,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(32,4): error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(34,4): error TS2538: Type 'any' cannot be used as an index type.
+tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,4): error TS2538: Type 'any' cannot be used as an index type.
 tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS2365: Operator '+' cannot be applied to types '1' and '{}'.
 
 
-==== tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts (14 errors) ====
+==== tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts (20 errors) ====
     // destructuring in variable declarations
     let foo = "bar";
     let {[foo]: bar} = {bar: "bar"};
@@ -64,18 +70,30 @@ tests/cases/compiler/computedPropertiesInDestructuring1_ES6.ts(35,5): error TS23
     
     // destructuring assignment
     ({[foo]: bar} = {bar: "bar"});
+       ~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
     
     ({["bar"]: bar2} = {bar: "bar"});
     
     ({[foo2()]: bar3} = {bar: "bar"});
+       ~~~~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
     
     [{[foo]: bar4}] = [{bar: "bar"}];
+       ~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
     [{[foo2()]: bar5}] = [{bar: "bar"}];
+       ~~~~~~
+!!! error TS2537: Type '{ bar: string; }' has no matching index signature for type 'string'.
     
     [{[foo()]: bar4}] = [{bar: "bar"}];
        ~~~~~
 !!! error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
+       ~~~~~
+!!! error TS2538: Type 'any' cannot be used as an index type.
     [{[(1 + {})]: bar4}] = [{bar: "bar"}];
+       ~~~~~~~~
+!!! error TS2538: Type 'any' cannot be used as an index type.
         ~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types '1' and '{}'.
     

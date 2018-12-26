@@ -1,0 +1,61 @@
+=== tests/cases/compiler/controlFlowDestructuringLoop.ts ===
+// Repro from #28758
+
+interface NumVal { val: number; }
+>val : number
+
+interface StrVal { val: string; }
+>val : string
+
+type Val = NumVal | StrVal;
+>Val : Val
+
+function isNumVal(x: Val): x is NumVal {
+>isNumVal : (x: Val) => x is NumVal
+>x : Val
+
+    return typeof x.val === 'number';
+>typeof x.val === 'number' : boolean
+>typeof x.val : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x.val : string | number
+>x : Val
+>val : string | number
+>'number' : "number"
+}
+
+function foo(things: Val[]): void {
+>foo : (things: Val[]) => void
+>things : Val[]
+
+    for (const thing of things) {
+>thing : Val
+>things : Val[]
+
+        if (isNumVal(thing)) {
+>isNumVal(thing) : boolean
+>isNumVal : (x: Val) => x is NumVal
+>thing : Val
+
+            const { val } = thing;
+>val : number
+>thing : NumVal
+
+            val.toFixed(2);
+>val.toFixed(2) : string
+>val.toFixed : (fractionDigits?: number | undefined) => string
+>val : number
+>toFixed : (fractionDigits?: number | undefined) => string
+>2 : 2
+        }
+        else {
+            const { val } = thing;
+>val : string
+>thing : StrVal
+
+            val.length;
+>val.length : number
+>val : string
+>length : number
+        }
+    }
+}

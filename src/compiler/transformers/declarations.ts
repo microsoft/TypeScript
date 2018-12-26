@@ -45,6 +45,7 @@ namespace ts {
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
             reportPrivateInBaseOfClassExpression,
+            reportLikelyUnsafeImportRequiredError,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode
@@ -150,6 +151,14 @@ namespace ts {
                 context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode),
                     "this"));
+            }
+        }
+
+        function reportLikelyUnsafeImportRequiredError(specifier: string) {
+            if (errorNameNode) {
+                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                    declarationNameToString(errorNameNode),
+                    specifier));
             }
         }
 
@@ -1091,7 +1100,8 @@ namespace ts {
                     if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                         // We must add a temporary declaration for the extends clause expression
 
-                        const newId = createOptimisticUniqueName(`${unescapeLeadingUnderscores(input.name!.escapedText)}_base`); // TODO: GH#18217
+                        const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
+                        const newId = createOptimisticUniqueName(`${oldId}_base`);
                         getSymbolAccessibilityDiagnostic = () => ({
                             diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                             errorNode: extendsClause,

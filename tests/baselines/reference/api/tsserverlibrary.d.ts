@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.2";
+    const versionMajorMinor = "3.3";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -1976,7 +1976,8 @@ declare namespace ts {
         AllowEmptyTuple = 524288,
         AllowUniqueESSymbolType = 1048576,
         AllowEmptyIndexInfoType = 2097152,
-        IgnoreErrors = 3112960,
+        AllowNodeModulesRelativePaths = 67108864,
+        IgnoreErrors = 70221824,
         InObjectTypeLiteral = 4194304,
         InTypeAlias = 8388608,
         InInitialEntityName = 16777216,
@@ -2450,7 +2451,6 @@ declare namespace ts {
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
-        experimentalBigInt?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         importHelpers?: boolean;
@@ -3132,7 +3132,6 @@ declare namespace ts {
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
-/** Non-internal stuff goes here */
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
     function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): SortedReadonlyArray<T>;
@@ -3479,6 +3478,7 @@ declare namespace ts {
     type TemplateLiteralToken = NoSubstitutionTemplateLiteral | TemplateHead | TemplateMiddle | TemplateTail;
     function isTemplateLiteralToken(node: Node): node is TemplateLiteralToken;
     function isTemplateMiddleOrTemplateTail(node: Node): node is TemplateMiddle | TemplateTail;
+    function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier;
     function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken;
     function isModifier(node: Node): node is Modifier;
     function isEntityName(node: Node): node is EntityName;
@@ -4868,7 +4868,7 @@ declare namespace ts {
         message: string;
         position: number;
     }
-    class TextChange {
+    interface TextChange {
         span: TextSpan;
         newText: string;
     }
@@ -8436,11 +8436,17 @@ declare namespace ts.server {
     }
     interface FileStats {
         readonly js: number;
+        readonly jsSize?: number;
         readonly jsx: number;
+        readonly jsxSize?: number;
         readonly ts: number;
+        readonly tsSize?: number;
         readonly tsx: number;
+        readonly tsxSize?: number;
         readonly dts: number;
+        readonly dtsSize?: number;
         readonly deferred: number;
+        readonly deferredSize?: number;
     }
     interface OpenFileInfo {
         readonly checkJs: boolean;
@@ -8491,10 +8497,6 @@ declare namespace ts.server {
         syntaxOnly?: boolean;
     }
     class ProjectService {
-        /**
-         * Container of all known scripts
-         */
-        private readonly filenameToScriptInfo;
         private readonly scriptInfoInNodeModulesWatchers;
         /**
          * Contains all the deleted script info's version information so that
@@ -8593,6 +8595,9 @@ declare namespace ts.server {
         getHostFormatCodeOptions(): FormatCodeSettings;
         getHostPreferences(): protocol.UserPreferences;
         private onSourceFileChanged;
+        private handleSourceMapProjects;
+        private delayUpdateSourceInfoProjects;
+        private delayUpdateProjectsOfScriptInfoPath;
         private handleDeletedFile;
         private onConfigChangedForConfiguredProject;
         /**
@@ -8683,6 +8688,8 @@ declare namespace ts.server {
          */
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
         getScriptInfoForPath(fileName: Path): ScriptInfo | undefined;
+        private addSourceInfoToSourceMap;
+        private addMissingSourceMapFile;
         setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
         closeLog(): void;
         /**
@@ -8720,6 +8727,7 @@ declare namespace ts.server {
         private findExternalProjectContainingOpenScriptInfo;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         private removeOrphanConfiguredProjects;
+        private removeOrphanScriptInfos;
         private telemetryOnOpenFile;
         /**
          * Close file whose contents is managed by the client
@@ -8894,7 +8902,7 @@ declare namespace ts.server {
         private getFullNavigateToItems;
         private getSupportedCodeFixes;
         private isLocation;
-        private extractPositionAndRange;
+        private extractPositionOrRange;
         private getApplicableRefactors;
         private getEditsForRefactor;
         private organizeImports;

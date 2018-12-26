@@ -449,8 +449,7 @@ namespace ts.refactor.extractSymbol {
                     case SyntaxKind.ThisKeyword:
                         rangeFacts |= RangeFacts.UsesThis;
                         break;
-                    case SyntaxKind.LabeledStatement:
-                        {
+                    case SyntaxKind.LabeledStatement: {
                             const label = (<LabeledStatement>node).label;
                             (seenLabels || (seenLabels = [])).push(label.escapedText);
                             forEachChild(node, visit);
@@ -458,8 +457,7 @@ namespace ts.refactor.extractSymbol {
                             break;
                         }
                     case SyntaxKind.BreakStatement:
-                    case SyntaxKind.ContinueStatement:
-                        {
+                    case SyntaxKind.ContinueStatement: {
                             const label = (<BreakStatement | ContinueStatement>node).label;
                             if (label) {
                                 if (!contains(seenLabels, label.escapedText)) {
@@ -677,7 +675,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
-                return `method '${scope.name.getText()}`;
+                return `method '${scope.name.getText()}'`;
             case SyntaxKind.GetAccessor:
                 return `'get ${scope.name.getText()}'`;
             case SyntaxKind.SetAccessor:

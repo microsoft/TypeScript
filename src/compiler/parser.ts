@@ -462,52 +462,46 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
-                if ((node as JSDocPropertyLikeTag).isNameFirst) {
-                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression);
-                }
-                else {
-                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).name);
-                }
-            case SyntaxKind.JSDocReturnTag:
-                return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
-            case SyntaxKind.JSDocTypeTag:
-                return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    ((node as JSDocPropertyLikeTag).isNameFirst
+                        ? visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
+                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)
+                        : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
+                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
             case SyntaxKind.JSDocAugmentsTag:
-                return visitNode(cbNode, (<JSDocAugmentsTag>node).class);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (<JSDocAugmentsTag>node).class);
             case SyntaxKind.JSDocTemplateTag:
-                return visitNode(cbNode, (<JSDocTemplateTag>node).constraint) || visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (<JSDocTemplateTag>node).constraint) ||
+                    visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
-                if ((node as JSDocTypedefTag).typeExpression &&
-                    (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression) {
-                    return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).fullName);
-                }
-                else {
-                    return visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
-                }
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    ((node as JSDocTypedefTag).typeExpression &&
+                        (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression
+                        ? visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
+                            visitNode(cbNode, (<JSDocTypedefTag>node).fullName)
+                        : visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
+                            visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression));
             case SyntaxKind.JSDocCallbackTag:
-                return visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
+            case SyntaxKind.JSDocReturnTag:
+            case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocThisTag:
-                return visitNode(cbNode, (node as JSDocThisTag).typeExpression);
             case SyntaxKind.JSDocEnumTag:
-                return visitNode(cbNode, (node as JSDocEnumTag).typeExpression);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression);
             case SyntaxKind.JSDocSignature:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    forEach((<JSDocSignature>node).typeParameters, cbNode) ||
+                return forEach((<JSDocSignature>node).typeParameters, cbNode) ||
                     forEach((<JSDocSignature>node).parameters, cbNode) ||
                     visitNode(cbNode, (<JSDocSignature>node).type);
             case SyntaxKind.JSDocTypeLiteral:
-                if ((node as JSDocTypeLiteral).jsDocPropertyTags) {
-                    for (const tag of (node as JSDocTypeLiteral).jsDocPropertyTags!) {
-                        visitNode(cbNode, tag);
-                    }
-                }
-                return;
+                return forEach((node as JSDocTypeLiteral).jsDocPropertyTags, cbNode);
+            case SyntaxKind.JSDocTag:
+            case SyntaxKind.JSDocClassTag:
+                return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
         }
@@ -1723,6 +1717,8 @@ namespace ts {
         }
 
         function currentNode(parsingContext: ParsingContext): Node | undefined {
+            // If we don't have a cursor or the parsing context isn't reusable, there's nothing to reuse.
+            //
             // If there is an outstanding parse error that we've encountered, but not attached to
             // some node, then we cannot get a node from the old source tree.  This is because we
             // want to mark the next node we encounter as being unusable.
@@ -1730,30 +1726,17 @@ namespace ts {
             // Note: This may be too conservative.  Perhaps we could reuse the node and set the bit
             // on it (or its leftmost child) as having the error.  For now though, being conservative
             // is nice and likely won't ever affect perf.
-            if (parseErrorBeforeNextFinishedNode) {
-                return undefined;
-            }
-
-            if (!syntaxCursor) {
-                // if we don't have a cursor, we could never return a node from the old tree.
+            if (!syntaxCursor || !isReusableParsingContext(parsingContext) || parseErrorBeforeNextFinishedNode) {
                 return undefined;
             }
 
             const node = syntaxCursor.currentNode(scanner.getStartPos());
 
             // Can't reuse a missing node.
-            if (nodeIsMissing(node)) {
-                return undefined;
-            }
-
             // Can't reuse a node that intersected the change range.
-            if (node.intersectsChange) {
-                return undefined;
-            }
-
             // Can't reuse a node that contains a parse error.  This is necessary so that we
             // produce the same set of errors again.
-            if (containsParseError(node)) {
+            if (nodeIsMissing(node) || node.intersectsChange || containsParseError(node)) {
                 return undefined;
             }
 
@@ -1794,6 +1777,23 @@ namespace ts {
             return node;
         }
 
+        function isReusableParsingContext(parsingContext: ParsingContext): boolean {
+            switch (parsingContext) {
+                case ParsingContext.ClassMembers:
+                case ParsingContext.SwitchClauses:
+                case ParsingContext.SourceElements:
+                case ParsingContext.BlockStatements:
+                case ParsingContext.SwitchClauseStatements:
+                case ParsingContext.EnumMembers:
+                case ParsingContext.TypeMembers:
+                case ParsingContext.VariableDeclarations:
+                case ParsingContext.JSDocParameters:
+                case ParsingContext.Parameters:
+                    return true;
+            }
+            return false;
+        }
+
         function canReuseNode(node: Node, parsingContext: ParsingContext): boolean {
             switch (parsingContext) {
                 case ParsingContext.ClassMembers:
@@ -1820,25 +1820,23 @@ namespace ts {
                 case ParsingContext.Parameters:
                     return isReusableParameter(node);
 
-                case ParsingContext.RestProperties:
-                    return false;
-
                 // Any other lists we do not care about reusing nodes in.  But feel free to add if
                 // you can do so safely.  Danger areas involve nodes that may involve speculative
                 // parsing.  If speculative parsing is involved with the node, then the range the
                 // parser reached while looking ahead might be in the edited range (see the example
                 // in canReuseVariableDeclaratorNode for a good case of this).
-                case ParsingContext.HeritageClauses:
+
+                // case ParsingContext.HeritageClauses:
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // heritage clauses.
 
-                case ParsingContext.TypeParameters:
+                // case ParsingContext.TypeParameters:
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // type parameters.  Note that that's because type *parameters* only occur in
                 // unambiguous *type* contexts.  While type *arguments* occur in very ambiguous
                 // *expression* contexts.
 
-                case ParsingContext.TupleElementTypes:
+                // case ParsingContext.TupleElementTypes:
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // tuple types.
 
@@ -1847,28 +1845,28 @@ namespace ts {
                 // produced from speculative parsing a < as a type argument list), we only have
                 // the types because speculative parsing succeeded.  Thus, the lookahead never
                 // went past the end of the list and rewound.
-                case ParsingContext.TypeArguments:
+                // case ParsingContext.TypeArguments:
 
                 // Note: these are almost certainly not safe to ever reuse.  Expressions commonly
                 // need a large amount of lookahead, and we should not reuse them as they may
                 // have actually intersected the edit.
-                case ParsingContext.ArgumentExpressions:
+                // case ParsingContext.ArgumentExpressions:
 
                 // This is not safe to reuse for the same reason as the 'AssignmentExpression'
                 // cases.  i.e. a property assignment may end with an expression, and thus might
                 // have lookahead far beyond it's old node.
-                case ParsingContext.ObjectLiteralMembers:
+                // case ParsingContext.ObjectLiteralMembers:
 
                 // This is probably not safe to reuse.  There can be speculative parsing with
                 // type names in a heritage clause.  There can be generic names in the type
                 // name list, and there can be left hand side expressions (which can have type
                 // arguments.)
-                case ParsingContext.HeritageClauseElement:
+                // case ParsingContext.HeritageClauseElement:
 
                 // Perhaps safe to reuse, but it's unlikely we'd see more than a dozen attributes
                 // on any given element. Same for children.
-                case ParsingContext.JsxAttributes:
-                case ParsingContext.JsxChildren:
+                // case ParsingContext.JsxAttributes:
+                // case ParsingContext.JsxChildren:
 
             }
 
