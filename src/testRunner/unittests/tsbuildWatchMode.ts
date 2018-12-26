@@ -479,6 +479,113 @@ let x: string = 10;`);
             it("when preserveWatchOutput is passed on command line", () => {
                 verifyIncrementalErrors({ preserveWatchOutput: true, watch: true }, /*disabledConsoleClear*/ true);
             });
+
+            describe("when declaration emit errors are present", () => {
+                const solution = "solution";
+                const subProject = "app";
+                const subProjectLocation = `${projectsLocation}/${solution}/${subProject}`;
+                const fileWithError: File = {
+                    path: `${subProjectLocation}/fileWithError.ts`,
+                    content: `export var myClassWithError = class {
+        tags() { }
+        private p = 12
+    };`
+                };
+                const fileWithFixedError: File = {
+                    path: fileWithError.path,
+                    content: fileWithError.content.replace("private p = 12", "")
+                };
+                const fileWithoutError: File = {
+                    path: `${subProjectLocation}/fileWithoutError.ts`,
+                    content: `export class myClass { }`
+                };
+                const tsconfig: File = {
+                    path: `${subProjectLocation}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { composite: true } })
+                };
+                const expectedDtsEmitErrors = [
+                    `${subProject}/fileWithError.ts(1,12): error TS4094: Property 'p' of exported class expression may not be private or protected.\n`
+                ];
+                const outputs = [
+                    changeExtension(fileWithError.path, Extension.Js),
+                    changeExtension(fileWithError.path, Extension.Dts),
+                    changeExtension(fileWithoutError.path, Extension.Js),
+                    changeExtension(fileWithoutError.path, Extension.Dts)
+                ];
+
+                function verifyDtsErrors(host: TsBuildWatchSystem, isIncremental: boolean, expectedErrors: ReadonlyArray<string>) {
+                    (isIncremental ? checkOutputErrorsIncremental : checkOutputErrorsInitial)(host, expectedErrors);
+                    outputs.forEach(f => assert.equal(host.fileExists(f), !expectedErrors.length, `Expected file ${f} to ${!expectedErrors.length ? "exist" : "not exist"}`));
+                }
+
+                function createSolutionWithWatch(withFixedError?: true) {
+                    const files = [libFile, withFixedError ? fileWithFixedError : fileWithError, fileWithoutError, tsconfig];
+                    const host = createTsBuildWatchSystem(files, { currentDirectory: `${projectsLocation}/${solution}` });
+                    createSolutionBuilderWithWatch(host, [subProject]);
+                    verifyDtsErrors(host, /*isIncremental*/ false, withFixedError ? emptyArray : expectedDtsEmitErrors);
+                    return host;
+                }
+
+                function incrementalBuild(host: TsBuildWatchSystem) {
+                    host.checkTimeoutQueueLengthAndRun(1); // Build the app
+                    host.checkTimeoutQueueLength(0);
+                }
+
+                function fixError(host: TsBuildWatchSystem) {
+                    // Fix error
+                    host.writeFile(fileWithError.path, fileWithFixedError.content);
+                    host.writtenFiles.clear();
+                    incrementalBuild(host);
+                    verifyDtsErrors(host, /*isIncremental*/ true, emptyArray);
+                }
+
+                it("when fixing error files all files are emitted", () => {
+                    const host = createSolutionWithWatch();
+                    fixError(host);
+                });
+
+                it("when file with no error changes, declaration errors are reported", () => {
+                    const host = createSolutionWithWatch();
+                    host.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
+                    incrementalBuild(host);
+                    verifyDtsErrors(host, /*isIncremental*/ true, expectedDtsEmitErrors);
+                });
+
+                describe("when reporting errors on introducing error", () => {
+                    function createSolutionWithIncrementalError() {
+                        const host = createSolutionWithWatch(/*withFixedError*/ true);
+                        host.writeFile(fileWithError.path, fileWithError.content);
+                        host.writtenFiles.clear();
+
+                        incrementalBuild(host);
+                        checkOutputErrorsIncremental(host, expectedDtsEmitErrors);
+                        assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
+                        return host;
+                    }
+
+                    function verifyWrittenFile(host: TsBuildWatchSystem, f: string) {
+                        assert.isTrue(host.writtenFiles.has(host.toFullPath(f)), `Expected to write ${f}: ${arrayFrom(host.writtenFiles.keys())}`);
+                    }
+
+                    it("when fixing errors only changed file is emitted", () => {
+                        const host = createSolutionWithIncrementalError();
+                        fixError(host);
+                        assert.equal(host.writtenFiles.size, 2, `Expected to write only changed files: ${arrayFrom(host.writtenFiles.keys())}`);
+                        verifyWrittenFile(host, outputs[0]);
+                        verifyWrittenFile(host, outputs[1]);
+                    });
+
+                    it("when file with no error changes, declaration errors are reported", () => {
+                        const host = createSolutionWithIncrementalError();
+                        host.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
+                        host.writtenFiles.clear();
+
+                        incrementalBuild(host);
+                        checkOutputErrorsIncremental(host, expectedDtsEmitErrors);
+                        assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
+                    });
+                });
+            });
         });
 
         describe("tsc-watch and tsserver works with project references", () => {
