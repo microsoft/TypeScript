@@ -7928,22 +7928,17 @@ namespace ts {
             const numTypeArguments = length(typeArguments);
             if (isJavaScriptImplicitAny || (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters)) {
                 const result = typeArguments ? typeArguments.slice() : [];
-
-                // Map an unsatisfied type parameter with a default type.
-                // If a type parameter does not have a default type, or if the default type
-                // is a forward reference, the empty object type is used.
-                const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
-                const circularityMapper = createTypeMapper(typeParameters!, map(typeParameters!, () => baseDefaultType));
+                // Map invalid forward references in default types to the error type
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                    result[i] = instantiateType(getConstraintFromTypeParameter(typeParameters![i]) || baseDefaultType, circularityMapper);
+                    result[i] = errorType;
                 }
+                const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                    const mapper = createTypeMapper(typeParameters!, result);
                     let defaultType = getDefaultFromTypeParameter(typeParameters![i]);
                     if (isJavaScriptImplicitAny && defaultType && isTypeIdenticalTo(defaultType, emptyObjectType)) {
                         defaultType = anyType;
                     }
-                    result[i] = defaultType ? instantiateType(defaultType, mapper) : baseDefaultType;
+                    result[i] = defaultType ? instantiateType(defaultType, createTypeMapper(typeParameters!, result)) : baseDefaultType;
                 }
                 result.length = typeParameters!.length;
                 return result;
@@ -26465,6 +26460,7 @@ namespace ts {
                     if (produceDiagnostics) {
                         if (node.default) {
                             seenDefault = true;
+                            checkTypeParametersNotReferenced(node.default, typeParameterDeclarations, i);
                         }
                         else if (seenDefault) {
                             error(node, Diagnostics.Required_type_parameters_may_not_follow_optional_type_parameters);
@@ -26476,6 +26472,24 @@ namespace ts {
                         }
                     }
                 }
+            }
+        }
+
+        /** Check that type parameter defaults only reference previously declared type parameters */
+        function checkTypeParametersNotReferenced(root: TypeNode, typeParameters: ReadonlyArray<TypeParameterDeclaration>, index: number) {
+            visit(root);
+            function visit(node: Node) {
+                if (node.kind === SyntaxKind.TypeReference) {
+                    const type = getTypeFromTypeReference(<TypeReferenceNode>node);
+                    if (type.flags & TypeFlags.TypeParameter) {
+                        for (let i = index; i < typeParameters.length; i++) {
+                            if (type.symbol === getSymbolOfNode(typeParameters[i])) {
+                                error(node, Diagnostics.Type_parameter_defaults_can_only_reference_previously_declared_type_parameters);
+                            }
+                        }
+                    }
+                }
+                forEachChild(node, visit);
             }
         }
 
