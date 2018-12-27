@@ -15,7 +15,7 @@ declare var receiver: typeof tuple;
 
 [...receiver] = tuple;
 >[...receiver] = tuple : [boolean, number, ...string[]]
->[...receiver] : (string | number | boolean)[]
+>[...receiver] : [boolean, number, ...string[]]
 >...receiver : string | number | boolean
 >receiver : [boolean, number, ...string[]]
 >tuple : [boolean, number, ...string[]]

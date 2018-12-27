@@ -1,0 +1,94 @@
+=== tests/cases/conformance/es6/spread/spreadUnionType.ts ===
+function foo1(a: number[] | string[]): number[] | string[]  {
+>foo1 : (a: number[] | string[]) => number[] | string[]
+>a : number[] | string[]
+
+    const z = [...a]
+>z : number[] | string[]
+>[...a] : number[] | string[]
+>...a : string | number
+>a : number[] | string[]
+
+    return z
+>z : number[] | string[]
+}
+
+function bar1(a: (number | string)[]): (number | string)[]  {
+>bar1 : (a: (string | number)[]) => (string | number)[]
+>a : (string | number)[]
+
+    const z = [...a]
+>z : (string | number)[]
+>[...a] : (string | number)[]
+>...a : string | number
+>a : (string | number)[]
+
+    return z
+>z : (string | number)[]
+}
+
+function baz1(a: number[] | string[], b: number[] | boolean[]): (number | string | boolean)[]  {
+>baz1 : (a: number[] | string[], b: number[] | boolean[]) => (string | number | boolean)[]
+>a : number[] | string[]
+>b : number[] | boolean[]
+
+    const z = [...a, ...b]
+>z : (string | number | boolean)[]
+>[...a, ...b] : (string | number | boolean)[]
+>...a : string | number
+>a : number[] | string[]
+>...b : number | boolean
+>b : number[] | boolean[]
+
+    return z
+>z : (string | number | boolean)[]
+}
+
+function baz2(a: (number | string)[], b: (number | boolean)[]): (number | string | boolean)[]  {
+>baz2 : (a: (string | number)[], b: (number | boolean)[]) => (string | number | boolean)[]
+>a : (string | number)[]
+>b : (number | boolean)[]
+
+    const z = [...a, ...b]
+>z : (string | number | boolean)[]
+>[...a, ...b] : (string | number | boolean)[]
+>...a : string | number
+>a : (string | number)[]
+>...b : number | boolean
+>b : (number | boolean)[]
+
+    return z
+>z : (string | number | boolean)[]
+}
+
+function baz3(a: [number, string]): [number, string]  {
+>baz3 : (a: [number, string]) => [number, string]
+>a : [number, string]
+
+    const z = [...a]
+>z : [number, string]
+>[...a] : [number, string]
+>...a : string | number
+>a : [number, string]
+
+    return z
+>z : [number, string]
+}
+
+function baz4(a: [number, string], b: (number | boolean)[]): (number | string | boolean)[]  {
+>baz4 : (a: [number, string], b: (number | boolean)[]) => (string | number | boolean)[]
+>a : [number, string]
+>b : (number | boolean)[]
+
+    const z = [...a, ...b]
+>z : (string | number | boolean)[]
+>[...a, ...b] : (string | number | boolean)[]
+>...a : string | number
+>a : [number, string]
+>...b : number | boolean
+>b : (number | boolean)[]
+
+    return z
+>z : (string | number | boolean)[]
+}
+

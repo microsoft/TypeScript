@@ -1,0 +1,79 @@
+=== tests/cases/conformance/es6/spread/spreadUnionType.ts ===
+function foo1(a: number[] | string[]): number[] | string[]  {
+>foo1 : Symbol(foo1, Decl(spreadUnionType.ts, 0, 0))
+>a : Symbol(a, Decl(spreadUnionType.ts, 0, 14))
+
+    const z = [...a]
+>z : Symbol(z, Decl(spreadUnionType.ts, 1, 9))
+>a : Symbol(a, Decl(spreadUnionType.ts, 0, 14))
+
+    return z
+>z : Symbol(z, Decl(spreadUnionType.ts, 1, 9))
+}
+
+function bar1(a: (number | string)[]): (number | string)[]  {
+>bar1 : Symbol(bar1, Decl(spreadUnionType.ts, 3, 1))
+>a : Symbol(a, Decl(spreadUnionType.ts, 5, 14))
+
+    const z = [...a]
+>z : Symbol(z, Decl(spreadUnionType.ts, 6, 9))
+>a : Symbol(a, Decl(spreadUnionType.ts, 5, 14))
+
+    return z
+>z : Symbol(z, Decl(spreadUnionType.ts, 6, 9))
+}
+
+function baz1(a: number[] | string[], b: number[] | boolean[]): (number | string | boolean)[]  {
+>baz1 : Symbol(baz1, Decl(spreadUnionType.ts, 8, 1))
+>a : Symbol(a, Decl(spreadUnionType.ts, 10, 14))
+>b : Symbol(b, Decl(spreadUnionType.ts, 10, 37))
+
+    const z = [...a, ...b]
+>z : Symbol(z, Decl(spreadUnionType.ts, 11, 9))
+>a : Symbol(a, Decl(spreadUnionType.ts, 10, 14))
+>b : Symbol(b, Decl(spreadUnionType.ts, 10, 37))
+
+    return z
+>z : Symbol(z, Decl(spreadUnionType.ts, 11, 9))
+}
+
+function baz2(a: (number | string)[], b: (number | boolean)[]): (number | string | boolean)[]  {
+>baz2 : Symbol(baz2, Decl(spreadUnionType.ts, 13, 1))
+>a : Symbol(a, Decl(spreadUnionType.ts, 15, 14))
+>b : Symbol(b, Decl(spreadUnionType.ts, 15, 37))
+
+    const z = [...a, ...b]
+>z : Symbol(z, Decl(spreadUnionType.ts, 16, 9))
+>a : Symbol(a, Decl(spreadUnionType.ts, 15, 14))
+>b : Symbol(b, Decl(spreadUnionType.ts, 15, 37))
+
+    return z
+>z : Symbol(z, Decl(spreadUnionType.ts, 16, 9))
+}
+
+function baz3(a: [number, string]): [number, string]  {
+>baz3 : Symbol(baz3, Decl(spreadUnionType.ts, 18, 1))
+>a : Symbol(a, Decl(spreadUnionType.ts, 20, 14))
+
+    const z = [...a]
+>z : Symbol(z, Decl(spreadUnionType.ts, 21, 9))
+>a : Symbol(a, Decl(spreadUnionType.ts, 20, 14))
+
+    return z
+>z : Symbol(z, Decl(spreadUnionType.ts, 21, 9))
+}
+
+function baz4(a: [number, string], b: (number | boolean)[]): (number | string | boolean)[]  {
+>baz4 : Symbol(baz4, Decl(spreadUnionType.ts, 23, 1))
+>a : Symbol(a, Decl(spreadUnionType.ts, 25, 14))
+>b : Symbol(b, Decl(spreadUnionType.ts, 25, 34))
+
+    const z = [...a, ...b]
+>z : Symbol(z, Decl(spreadUnionType.ts, 26, 9))
+>a : Symbol(a, Decl(spreadUnionType.ts, 25, 14))
+>b : Symbol(b, Decl(spreadUnionType.ts, 25, 34))
+
+    return z
+>z : Symbol(z, Decl(spreadUnionType.ts, 26, 9))
+}
+

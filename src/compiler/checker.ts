@@ -17908,6 +17908,10 @@ namespace ts {
             if (!hasNonEndingSpreadElement) {
                 const hasRestElement = elementCount > 0 && elements[elementCount - 1].kind === SyntaxKind.SpreadElement;
                 const minLength = elementCount - (hasRestElement ? 1 : 0);
+                if (hasRestElement && minLength === 0 && elementTypes[0] && elementTypes[0].flags & TypeFlags.Union) {
+                    // If array literal is only have one rest element and the rest element is an union, We will re-distribute the type from the original of the rest element 
+                    return checkExpression((<SpreadElement>elements[0]).expression);
+                }
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
                 let tupleResult: Type | undefined;
