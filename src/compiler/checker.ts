@@ -17531,7 +17531,7 @@ namespace ts {
         // be "pushed" onto a node using the contextualType property.
         function getApparentTypeOfContextualType(node: Expression): Type | undefined {
             let contextualType = getContextualType(node);
-            contextualType = contextualType && mapType(contextualType, getApparentType);
+            contextualType = contextualType && mapType(contextualType, getApparentType, /*noReductions*/ true);
             if (contextualType && contextualType.flags & TypeFlags.Union) {
                 if (isObjectLiteralExpression(node)) {
                     return discriminateContextualTypeByObjectMembers(node, contextualType as UnionType);
