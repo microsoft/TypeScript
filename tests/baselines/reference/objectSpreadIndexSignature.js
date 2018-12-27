@@ -10,6 +10,11 @@ let ii = { ...indexed1, ...indexed2 };
 // both have indexer, so i[1001]: number | boolean
 ii[1001];
 
+let iii = { ...indexed2, ...indexed4 };
+// merging number and string indexer
+iii.foo; // number | boolean
+iii[10001]; // number
+
 declare const b: boolean;
 indexed3 = { ...b ? indexed3 : undefined };
 
@@ -54,6 +59,10 @@ i[101];
 var ii = __assign({}, indexed1, indexed2);
 // both have indexer, so i[1001]: number | boolean
 ii[1001];
+var iii = __assign({}, indexed2, indexed4);
+// merging number and string indexer
+iii.foo; // number | boolean
+iii[10001]; // number
 indexed3 = __assign({}, b ? indexed3 : undefined);
 var writable = __assign({}, roindex);
 writable.a = 0; // should be ok.

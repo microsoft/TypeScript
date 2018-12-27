@@ -6948,11 +6948,6 @@ namespace ts {
                 getIntersectionType([info1.type, info2.type]), info1.isReadonly && info2.isReadonly);
         }
 
-        function unionSpreadIndexInfos(info1: IndexInfo | undefined, info2: IndexInfo | undefined): IndexInfo | undefined {
-            return !info1 ? info2 : !info2 ? info1 : createIndexInfo(
-                getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
-        }
-
         function includeMixinType(type: Type, types: ReadonlyArray<Type>, index: number): Type {
             const mixedTypes: Type[] = [];
             for (let i = 0; i < types.length; i++) {
@@ -10228,16 +10223,24 @@ namespace ts {
 
             const members = createSymbolTable();
             const skippedPrivateMembers = createUnderscoreEscapedMap<boolean>();
-            let stringIndexInfo: IndexInfo | undefined;
-            let numberIndexInfo: IndexInfo | undefined;
-            if (left === emptyObjectType) {
-                // for the first spread element, left === emptyObjectType, so take the right's string indexer
-                stringIndexInfo = getIndexInfoOfType(right, IndexKind.String);
-                numberIndexInfo = getIndexInfoOfType(right, IndexKind.Number);
+            const leftStringIndexInfo = getIndexInfoOfType(left, IndexKind.String);
+            const leftNumberIndexInfo = getIndexInfoOfType(left, IndexKind.Number);
+            const rightStringIndexInfo = getIndexInfoOfType(right, IndexKind.String);
+            const rightNumberIndexInfo = getIndexInfoOfType(right, IndexKind.Number);
+
+            const numberIndexTypes: Type[] = [];
+            const stringIndexTypes: Type[] = [];
+            if (leftStringIndexInfo) {
+                stringIndexTypes.push(leftStringIndexInfo.type);
             }
-            else {
-                stringIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.String), getIndexInfoOfType(right, IndexKind.String));
-                numberIndexInfo = unionSpreadIndexInfos(getIndexInfoOfType(left, IndexKind.Number), getIndexInfoOfType(right, IndexKind.Number));
+            if (leftNumberIndexInfo) {
+                numberIndexTypes.push(leftNumberIndexInfo.type);
+            }
+            if (rightStringIndexInfo) {
+                stringIndexTypes.push(rightStringIndexInfo.type);
+            }
+            if (rightNumberIndexInfo) {
+                numberIndexTypes.push(rightNumberIndexInfo.type);
             }
 
             for (const rightProp of getPropertiesOfType(right)) {
@@ -10273,22 +10276,10 @@ namespace ts {
                 }
             }
 
-            if (stringIndexInfo || numberIndexInfo) {
-                const addToNumberIndex: Type[] = [];
-                const addToStringIndex: Type[] = [];
+            if (stringIndexTypes.length || numberIndexTypes.length) {
                 members.forEach((symbol, key) => {
-                    const type = getTypeOfSymbol(symbol);
-                    addToStringIndex.push(type);
-                    if (isNumericLiteralName(key)) {
-                        addToNumberIndex.push(type);
-                    }
+                    (isNumericLiteralName(key) ? numberIndexTypes : stringIndexTypes).push(getTypeOfSymbol(symbol));
                 });
-                if (stringIndexInfo) {
-                    stringIndexInfo = createIndexInfo(getUnionType([stringIndexInfo.type, ...addToStringIndex]), stringIndexInfo.isReadonly);
-                }
-                if (numberIndexInfo) {
-                    numberIndexInfo = createIndexInfo(getUnionType([numberIndexInfo.type, ...addToNumberIndex]), numberIndexInfo.isReadonly);
-                }
             }
 
             const spread = createAnonymousType(
@@ -10296,8 +10287,8 @@ namespace ts {
                 members,
                 emptyArray,
                 emptyArray,
-                getNonReadonlyIndexSignature(stringIndexInfo),
-                getNonReadonlyIndexSignature(numberIndexInfo));
+                leftStringIndexInfo || rightStringIndexInfo ? createIndexInfo(getUnionType(stringIndexTypes.concat(numberIndexTypes), UnionReduction.Subtype), /*readonly*/ false) : undefined,
+                leftNumberIndexInfo || rightNumberIndexInfo ? createIndexInfo(getUnionType(numberIndexTypes, UnionReduction.Subtype), /*readonly*/ false) : undefined);
             spread.flags |= TypeFlags.ContainsObjectLiteral | typeFlags;
             spread.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsSpread | objectFlags;
             return spread;
@@ -10322,13 +10313,6 @@ namespace ts {
             result.nameType = prop.nameType;
             result.syntheticOrigin = prop;
             return result;
-        }
-
-        function getNonReadonlyIndexSignature(index: IndexInfo | undefined) {
-            if (index && index.isReadonly) {
-                return createIndexInfo(index.type, /*isReadonly*/ false, index.declaration);
-            }
-            return index;
         }
 
         function createLiteralType(flags: TypeFlags, value: string | number | PseudoBigInt, symbol: Symbol | undefined) {

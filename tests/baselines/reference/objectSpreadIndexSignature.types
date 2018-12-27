@@ -42,6 +42,23 @@ ii[1001];
 >ii : { [x: string]: number | boolean; c: boolean; a: number; }
 >1001 : 1001
 
+let iii = { ...indexed2, ...indexed4 };
+>iii : { [x: string]: number | boolean; [x: number]: number; c: boolean; }
+>{ ...indexed2, ...indexed4 } : { [x: string]: number | boolean; [x: number]: number; c: boolean; }
+>indexed2 : { [n: string]: boolean; c: boolean; }
+>indexed4 : { [n: number]: number; }
+
+// merging number and string indexer
+iii.foo; // number | boolean
+>iii.foo : number | boolean
+>iii : { [x: string]: number | boolean; [x: number]: number; c: boolean; }
+>foo : number | boolean
+
+iii[10001]; // number
+>iii[10001] : number
+>iii : { [x: string]: number | boolean; [x: number]: number; c: boolean; }
+>10001 : 10001
+
 declare const b: boolean;
 >b : boolean
 

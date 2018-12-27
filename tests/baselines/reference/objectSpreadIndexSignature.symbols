@@ -35,85 +35,97 @@ let ii = { ...indexed1, ...indexed2 };
 ii[1001];
 >ii : Symbol(ii, Decl(objectSpreadIndexSignature.ts, 7, 3))
 
+let iii = { ...indexed2, ...indexed4 };
+>iii : Symbol(iii, Decl(objectSpreadIndexSignature.ts, 11, 3))
+>indexed2 : Symbol(indexed2, Decl(objectSpreadIndexSignature.ts, 1, 11))
+>indexed4 : Symbol(indexed4, Decl(objectSpreadIndexSignature.ts, 3, 11))
+
+// merging number and string indexer
+iii.foo; // number | boolean
+>iii : Symbol(iii, Decl(objectSpreadIndexSignature.ts, 11, 3))
+
+iii[10001]; // number
+>iii : Symbol(iii, Decl(objectSpreadIndexSignature.ts, 11, 3))
+
 declare const b: boolean;
->b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 11, 13))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 16, 13))
 
 indexed3 = { ...b ? indexed3 : undefined };
 >indexed3 : Symbol(indexed3, Decl(objectSpreadIndexSignature.ts, 2, 11))
->b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 11, 13))
+>b : Symbol(b, Decl(objectSpreadIndexSignature.ts, 16, 13))
 >indexed3 : Symbol(indexed3, Decl(objectSpreadIndexSignature.ts, 2, 11))
 >undefined : Symbol(undefined)
 
 declare var roindex: { readonly [x:string]: number };
->roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 14, 11))
->x : Symbol(x, Decl(objectSpreadIndexSignature.ts, 14, 33))
+>roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 19, 11))
+>x : Symbol(x, Decl(objectSpreadIndexSignature.ts, 19, 33))
 
 var writable = { ...roindex };
->writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 15, 3))
->roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 14, 11))
+>writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 20, 3))
+>roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 19, 11))
 
 writable.a = 0;  // should be ok.
->writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 15, 3))
+>writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 20, 3))
 
 var mixed = { foo: true, ...indexed3, bar: 'bar' };
->mixed : Symbol(mixed, Decl(objectSpreadIndexSignature.ts, 18, 3))
->foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 18, 13))
+>mixed : Symbol(mixed, Decl(objectSpreadIndexSignature.ts, 23, 3))
+>foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 23, 13))
 >indexed3 : Symbol(indexed3, Decl(objectSpreadIndexSignature.ts, 2, 11))
->bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 18, 37))
+>bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 23, 37))
 
 mixed.foo; // boolean
->mixed.foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 18, 13))
->mixed : Symbol(mixed, Decl(objectSpreadIndexSignature.ts, 18, 3))
->foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 18, 13))
+>mixed.foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 23, 13))
+>mixed : Symbol(mixed, Decl(objectSpreadIndexSignature.ts, 23, 3))
+>foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 23, 13))
 
 mixed.bar; // string
->mixed.bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 18, 37))
->mixed : Symbol(mixed, Decl(objectSpreadIndexSignature.ts, 18, 3))
->bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 18, 37))
+>mixed.bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 23, 37))
+>mixed : Symbol(mixed, Decl(objectSpreadIndexSignature.ts, 23, 3))
+>bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 23, 37))
 
 mixed.baz; // string | number | boolean
->mixed : Symbol(mixed, Decl(objectSpreadIndexSignature.ts, 18, 3))
+>mixed : Symbol(mixed, Decl(objectSpreadIndexSignature.ts, 23, 3))
 
 var mixed2 = { foo: true, ...indexed4, bar: 'bar' };
->mixed2 : Symbol(mixed2, Decl(objectSpreadIndexSignature.ts, 23, 3))
->foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 23, 14))
+>mixed2 : Symbol(mixed2, Decl(objectSpreadIndexSignature.ts, 28, 3))
+>foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 28, 14))
 >indexed4 : Symbol(indexed4, Decl(objectSpreadIndexSignature.ts, 3, 11))
->bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 23, 38))
+>bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 28, 38))
 
 mixed2.foo; // boolean
->mixed2.foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 23, 14))
->mixed2 : Symbol(mixed2, Decl(objectSpreadIndexSignature.ts, 23, 3))
->foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 23, 14))
+>mixed2.foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 28, 14))
+>mixed2 : Symbol(mixed2, Decl(objectSpreadIndexSignature.ts, 28, 3))
+>foo : Symbol(foo, Decl(objectSpreadIndexSignature.ts, 28, 14))
 
 mixed2.bar; // string
->mixed2.bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 23, 38))
->mixed2 : Symbol(mixed2, Decl(objectSpreadIndexSignature.ts, 23, 3))
->bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 23, 38))
+>mixed2.bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 28, 38))
+>mixed2 : Symbol(mixed2, Decl(objectSpreadIndexSignature.ts, 28, 3))
+>bar : Symbol(bar, Decl(objectSpreadIndexSignature.ts, 28, 38))
 
 mixed2[1]; // number
->mixed2 : Symbol(mixed2, Decl(objectSpreadIndexSignature.ts, 23, 3))
+>mixed2 : Symbol(mixed2, Decl(objectSpreadIndexSignature.ts, 28, 3))
 
 var mixed3 = { ...indexed4, '1': 'foo'};
->mixed3 : Symbol(mixed3, Decl(objectSpreadIndexSignature.ts, 28, 3))
+>mixed3 : Symbol(mixed3, Decl(objectSpreadIndexSignature.ts, 33, 3))
 >indexed4 : Symbol(indexed4, Decl(objectSpreadIndexSignature.ts, 3, 11))
->'1' : Symbol('1', Decl(objectSpreadIndexSignature.ts, 28, 27))
+>'1' : Symbol('1', Decl(objectSpreadIndexSignature.ts, 33, 27))
 
 mixed3[0]; // string | number
->mixed3 : Symbol(mixed3, Decl(objectSpreadIndexSignature.ts, 28, 3))
+>mixed3 : Symbol(mixed3, Decl(objectSpreadIndexSignature.ts, 33, 3))
 
 mixed3[1]; // string
->mixed3 : Symbol(mixed3, Decl(objectSpreadIndexSignature.ts, 28, 3))
->1 : Symbol('1', Decl(objectSpreadIndexSignature.ts, 28, 27))
+>mixed3 : Symbol(mixed3, Decl(objectSpreadIndexSignature.ts, 33, 3))
+>1 : Symbol('1', Decl(objectSpreadIndexSignature.ts, 33, 27))
 
 var mixed4 = { ...indexed3, '1': 'foo'};
->mixed4 : Symbol(mixed4, Decl(objectSpreadIndexSignature.ts, 32, 3))
+>mixed4 : Symbol(mixed4, Decl(objectSpreadIndexSignature.ts, 37, 3))
 >indexed3 : Symbol(indexed3, Decl(objectSpreadIndexSignature.ts, 2, 11))
->'1' : Symbol('1', Decl(objectSpreadIndexSignature.ts, 32, 27))
+>'1' : Symbol('1', Decl(objectSpreadIndexSignature.ts, 37, 27))
 
 mixed4.foo; // string | number
->mixed4 : Symbol(mixed4, Decl(objectSpreadIndexSignature.ts, 32, 3))
+>mixed4 : Symbol(mixed4, Decl(objectSpreadIndexSignature.ts, 37, 3))
 
 mixed4[1]; // string
->mixed4 : Symbol(mixed4, Decl(objectSpreadIndexSignature.ts, 32, 3))
->1 : Symbol('1', Decl(objectSpreadIndexSignature.ts, 32, 27))
+>mixed4 : Symbol(mixed4, Decl(objectSpreadIndexSignature.ts, 37, 3))
+>1 : Symbol('1', Decl(objectSpreadIndexSignature.ts, 37, 27))
 
