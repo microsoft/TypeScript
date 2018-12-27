@@ -206,7 +206,7 @@ var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
 >({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o) : { a: number; b: string; }
 >{ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o : { a: number; b: string; }
->{ [computed]: stillNotGreat, [computed2]: soSo, ...o } : { a: number; b: string; }
+>{ [computed]: stillNotGreat, [computed2]: soSo, ...o } : { [x: string]: any; a: number; b: string; }
 >[computed] : any
 >computed : string
 >stillNotGreat : any

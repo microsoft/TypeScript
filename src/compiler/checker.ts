@@ -6949,7 +6949,7 @@ namespace ts {
         }
 
         function unionSpreadIndexInfos(info1: IndexInfo | undefined, info2: IndexInfo | undefined): IndexInfo | undefined {
-            return info1 && info2 && createIndexInfo(
+            return !info1 ? info2 : !info2 ? info1 : createIndexInfo(
                 getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
         }
 
@@ -10270,6 +10270,24 @@ namespace ts {
                 }
                 else {
                     members.set(leftProp.escapedName, getSpreadSymbol(leftProp));
+                }
+            }
+
+            if (stringIndexInfo || numberIndexInfo) {
+                const addToNumberIndex: Type[] = [];
+                const addToStringIndex: Type[] = [];
+                members.forEach((symbol, key) => {
+                    const type = getTypeOfSymbol(symbol);
+                    addToStringIndex.push(type);
+                    if (isNumericLiteralName(key)) {
+                        addToNumberIndex.push(type);
+                    }
+                });
+                if (stringIndexInfo) {
+                    stringIndexInfo = createIndexInfo(getUnionType([stringIndexInfo.type, ...addToStringIndex]), stringIndexInfo.isReadonly);
+                }
+                if (numberIndexInfo) {
+                    numberIndexInfo = createIndexInfo(getUnionType([numberIndexInfo.type, ...addToNumberIndex]), numberIndexInfo.isReadonly);
                 }
             }
 

@@ -13,17 +13,21 @@ declare let indexed3: { [n: string]: number };
 >indexed3 : { [n: string]: number; }
 >n : string
 
+declare let indexed4: { [n: number]: number };
+>indexed4 : { [n: number]: number; }
+>n : number
+
 let i = { ...indexed1, b: 11 };
->i : { b: number; a: number; }
->{ ...indexed1, b: 11 } : { b: number; a: number; }
+>i : { [x: string]: number; b: number; a: number; }
+>{ ...indexed1, b: 11 } : { [x: string]: number; b: number; a: number; }
 >indexed1 : { [n: string]: number; a: number; }
 >b : number
 >11 : 11
 
 // only indexed has indexer, so i[101]: any
 i[101];
->i[101] : any
->i : { b: number; a: number; }
+>i[101] : number
+>i : { [x: string]: number; b: number; a: number; }
 >101 : 101
 
 let ii = { ...indexed1, ...indexed2 };
@@ -42,9 +46,9 @@ declare const b: boolean;
 >b : boolean
 
 indexed3 = { ...b ? indexed3 : undefined };
->indexed3 = { ...b ? indexed3 : undefined } : {} | { [n: string]: number; }
+>indexed3 = { ...b ? indexed3 : undefined } : {} | { [x: string]: number; }
 >indexed3 : { [n: string]: number; }
->{ ...b ? indexed3 : undefined } : {} | { [n: string]: number; }
+>{ ...b ? indexed3 : undefined } : {} | { [x: string]: number; }
 >b ? indexed3 : undefined : { [n: string]: number; } | undefined
 >b : boolean
 >indexed3 : { [n: string]: number; }
@@ -65,4 +69,86 @@ writable.a = 0;  // should be ok.
 >writable : { [x: string]: number; }
 >a : number
 >0 : 0
+
+var mixed = { foo: true, ...indexed3, bar: 'bar' };
+>mixed : { [x: string]: string | number | boolean; bar: string; foo: boolean; }
+>{ foo: true, ...indexed3, bar: 'bar' } : { [x: string]: string | number | boolean; bar: string; foo: boolean; }
+>foo : boolean
+>true : true
+>indexed3 : { [n: string]: number; }
+>bar : string
+>'bar' : "bar"
+
+mixed.foo; // boolean
+>mixed.foo : boolean
+>mixed : { [x: string]: string | number | boolean; bar: string; foo: boolean; }
+>foo : boolean
+
+mixed.bar; // string
+>mixed.bar : string
+>mixed : { [x: string]: string | number | boolean; bar: string; foo: boolean; }
+>bar : string
+
+mixed.baz; // string | number | boolean
+>mixed.baz : string | number | boolean
+>mixed : { [x: string]: string | number | boolean; bar: string; foo: boolean; }
+>baz : string | number | boolean
+
+var mixed2 = { foo: true, ...indexed4, bar: 'bar' };
+>mixed2 : { [x: number]: number; bar: string; foo: boolean; }
+>{ foo: true, ...indexed4, bar: 'bar' } : { [x: number]: number; bar: string; foo: boolean; }
+>foo : boolean
+>true : true
+>indexed4 : { [n: number]: number; }
+>bar : string
+>'bar' : "bar"
+
+mixed2.foo; // boolean
+>mixed2.foo : boolean
+>mixed2 : { [x: number]: number; bar: string; foo: boolean; }
+>foo : boolean
+
+mixed2.bar; // string
+>mixed2.bar : string
+>mixed2 : { [x: number]: number; bar: string; foo: boolean; }
+>bar : string
+
+mixed2[1]; // number
+>mixed2[1] : number
+>mixed2 : { [x: number]: number; bar: string; foo: boolean; }
+>1 : 1
+
+var mixed3 = { ...indexed4, '1': 'foo'};
+>mixed3 : { [x: number]: string | number; '1': string; }
+>{ ...indexed4, '1': 'foo'} : { [x: number]: string | number; '1': string; }
+>indexed4 : { [n: number]: number; }
+>'1' : string
+>'foo' : "foo"
+
+mixed3[0]; // string | number
+>mixed3[0] : string | number
+>mixed3 : { [x: number]: string | number; '1': string; }
+>0 : 0
+
+mixed3[1]; // string
+>mixed3[1] : string
+>mixed3 : { [x: number]: string | number; '1': string; }
+>1 : 1
+
+var mixed4 = { ...indexed3, '1': 'foo'};
+>mixed4 : { [x: string]: string | number; '1': string; }
+>{ ...indexed3, '1': 'foo'} : { [x: string]: string | number; '1': string; }
+>indexed3 : { [n: string]: number; }
+>'1' : string
+>'foo' : "foo"
+
+mixed4.foo; // string | number
+>mixed4.foo : string | number
+>mixed4 : { [x: string]: string | number; '1': string; }
+>foo : string | number
+
+mixed4[1]; // string
+>mixed4[1] : string
+>mixed4 : { [x: string]: string | number; '1': string; }
+>1 : 1
 
