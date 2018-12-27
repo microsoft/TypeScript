@@ -3124,12 +3124,12 @@ namespace ts {
     /* @internal */
     export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, directoryStructureHost: DirectoryStructureHost = host): ParseConfigFileHost {
         return {
-            fileExists: f => host.fileExists(f),
+            fileExists: f => directoryStructureHost.fileExists(f),
             readDirectory(root, extensions, excludes, includes, depth) {
                 Debug.assertDefined(directoryStructureHost.readDirectory, "'CompilerHost.readDirectory' must be implemented to correctly process 'projectReferences'");
                 return directoryStructureHost.readDirectory!(root, extensions, excludes, includes, depth);
             },
-            readFile: f => host.readFile(f),
+            readFile: f => directoryStructureHost.readFile(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
             getCurrentDirectory: () => host.getCurrentDirectory(),
             onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic || (() => undefined),
