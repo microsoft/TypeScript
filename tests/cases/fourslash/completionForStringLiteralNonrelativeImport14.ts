@@ -25,4 +25,4 @@
 // @Filename: some/other/path.ts
 //// export var y = 10;
 
-verify.completions({ marker: test.markerNames(), exact: ["lib", "tests", "/module1", "/module2"], isNewIdentifierLocation: true });
+verify.completions({ marker: test.markerNames(), exact: ["lib", "lib.es3", "tests", "/module1", "/module2"], isNewIdentifierLocation: true });
