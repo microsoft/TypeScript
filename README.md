@@ -3,6 +3,7 @@
 [![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
 [![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/Microsoft/TypeScript/blob/master/LICENSE.txt)
+[![PR's Welcome](https://img.shields.io/badge/PRs%20-welcome-brightgreen.svg)](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md)
 
 # TypeScript
 
