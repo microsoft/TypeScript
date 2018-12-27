@@ -1,4 +1,4 @@
-//// [emitter.noCatchBinding.esnext.ts]
+//// [emitter.noCatchBinding.es2019.ts]
 function f() {
     try { } catch { }
     try { } catch { 
@@ -7,7 +7,8 @@ function f() {
     try { } catch { } finally { }
 }
 
-//// [emitter.noCatchBinding.esnext.js]
+
+//// [emitter.noCatchBinding.es2019.js]
 function f() {
     try { }
     catch { }

@@ -3259,7 +3259,7 @@ namespace ts {
         let transformFlags = subtreeFlags;
 
         if (!node.variableDeclaration) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2019;
         }
         else if (isBindingPattern(node.variableDeclaration.name)) {
             transformFlags |= TransformFlags.AssertES2015;

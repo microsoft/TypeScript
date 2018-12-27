@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2019
 function f() {
     try { } catch { }
     try { } catch { 

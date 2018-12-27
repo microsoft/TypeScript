@@ -1,4 +1,4 @@
-=== tests/cases/conformance/emitter/esnext/noCatchBinding/emitter.noCatchBinding.esnext.ts ===
+=== tests/cases/conformance/emitter/es2019/noCatchBinding/emitter.noCatchBinding.es2019.ts ===
 function f() {
 >f : () => void
 
@@ -8,3 +8,4 @@ function f() {
     }
     try { } catch { } finally { }
 }
+
