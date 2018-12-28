@@ -4,13 +4,13 @@ type Test<T extends string = T> = { value: T };
 >value : T
 
 let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
->zz : Test<string>
+>zz : Test<any>
 >{ foo: "abc" } : { foo: string; }
 >foo : string
 >"abc" : "abc"
 
 let zzy: Test = { value: {} };  // should error
->zzy : Test<string>
+>zzy : Test<any>
 >{ value: {} } : { value: {}; }
 >value : {}
 >{} : {}
