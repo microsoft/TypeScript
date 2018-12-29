@@ -4919,7 +4919,7 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer && !getContextualTypeForVariableLikeDeclaration(walkUpBindingElementsAndPatterns(declaration)) ?
+            return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) ?
                 getUnionType([type, checkDeclarationInitializer(declaration)], UnionReduction.Subtype) :
                 type;
         }
@@ -22810,7 +22810,8 @@ namespace ts {
             const type = getTypeOfExpression(initializer, /*cache*/ true);
             const widened = getCombinedNodeFlags(declaration) & NodeFlags.Const ||
                 isDeclarationReadonly(declaration) ||
-                isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
+                isTypeAssertion(initializer) ||
+                isLiteralOfContextualType(type, getContextualType(initializer)) ? type : getWidenedLiteralType(type);
             if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
                     reportImplicitAny(declaration, anyType);
