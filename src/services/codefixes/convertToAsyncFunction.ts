@@ -60,7 +60,7 @@ namespace ts.codefix {
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
         const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfExpressionsToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
-        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body) : emptyArray;
+        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body, checker) : emptyArray;
         const transformer: Transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, constIdentifiers, originalTypeMap, isInJSFile: isInJavascript };
 
         if (!returnStatements.length) {
@@ -87,10 +87,10 @@ namespace ts.codefix {
         }
     }
 
-    function getReturnStatementsWithPromiseHandlers(body: Block): ReadonlyArray<ReturnStatement> {
+    function getReturnStatementsWithPromiseHandlers(body: Block, checker: TypeChecker): ReadonlyArray<ReturnStatement> {
         const res: ReturnStatement[] = [];
         forEachReturnStatement(body, ret => {
-            if (isReturnStatementWithFixablePromiseHandler(ret)) res.push(ret);
+            if (isReturnStatementWithFixablePromiseHandler(ret, checker)) res.push(ret);
         });
         return res;
     }
@@ -450,7 +450,7 @@ namespace ts.codefix {
                             seenReturnStatement = true;
                         }
 
-                        if (isReturnStatementWithFixablePromiseHandler(statement)) {
+                        if (isReturnStatementWithFixablePromiseHandler(statement, transformer.checker)) {
                             refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                         }
                         else {
@@ -466,7 +466,7 @@ namespace ts.codefix {
                             seenReturnStatement);
                 }
                 else {
-                    const innerRetStmts = isFixablePromiseHandler(funcBody) ? [createReturn(funcBody)] : emptyArray;
+                    const innerRetStmts = isFixablePromiseHandler(funcBody, transformer.checker) ? [createReturn(funcBody)] : emptyArray;
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
