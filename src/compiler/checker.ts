@@ -15789,14 +15789,34 @@ namespace ts {
             function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {
                 // We have '==', '!=', '====', or !==' operator with 'typeof xxx' and string literal operands
                 const target = getReferenceCandidate(typeOfExpr.expression);
-                const isNarrowableUnderUniformity = (type.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>type) && getTypeOfNode(target) === type;
-                if (!isMatchingReference(reference, target) && !isNarrowableUnderUniformity) {
+                if (!isMatchingReference(reference, target)) {
                     // For a reference of the form 'x.y', where 'x' has a narrowable declared type, a
                     // 'typeof x === ...' type guard resets the narrowed type of 'y' to its declared type.
                     if (containsMatchingReference(reference, target) && hasNarrowableDeclaredType(target)) {
                         return declaredType;
                     }
-                    return type;
+                    if(!isIdentifier(target)) {
+                        return type;
+                    }
+                    const targetType = getTypeOfExpression(target);
+                    const isNarrowableUnderUniformity = (targetType.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>targetType);
+                    if (!isNarrowableUnderUniformity) {
+                        return type;
+                    }
+                    if (type.flags & TypeFlags.Conditional) {
+                        if (!assumeTrue || operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
+                            return type;
+                        }
+                        const substType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
+                        if (!substType) {
+                            return type;
+                        }
+                        const subst = getIntersectionType([targetType, substType]);
+                        return getConditionalTypeInstantiation(<ConditionalType>type, createTypeMapper([<TypeVariable>targetType], [subst]));
+                    }
+                    if (targetType !== type) {
+                        return type;
+                    }
                 }
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                     assumeTrue = !assumeTrue;
