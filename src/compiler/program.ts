@@ -1691,11 +1691,11 @@ namespace ts {
         /**
          * Skip errors if previous line start with '// @ts-ignore' comment, not counting non-empty non-comment lines
          */
-        function shouldReportDiagnostic(diagnostic: Diagnostic) {
+        function shouldReportDiagnostic(diagnostic: DiagnosticWithLocation) {
             const { file, start } = diagnostic;
             if (file) {
                 const lineStarts = getLineStarts(file);
-                let { line } = computeLineAndCharacterOfPosition(lineStarts, start!); // TODO: GH#18217
+                let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
                 while (line > 0) {
                     const previousLineText = file.text.slice(lineStarts[line - 1], lineStarts[line]);
                     const result = ignoreDiagnosticCommentRegEx.exec(previousLineText);
