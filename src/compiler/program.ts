@@ -1672,7 +1672,7 @@ namespace ts {
                 for (const diags of [bindDiagnostics, checkDiagnostics, fileProcessingDiagnosticsInFile, programDiagnosticsInFile, isCheckJs ? sourceFile.jsDocDiagnostics : undefined]) {
                     if (diags) {
                         for (const diag of diags) {
-                            if (shouldReportDiagnostic(diag)) {
+                            if (!diag.start || !diag.file || shouldReportDiagnostic(diag.file, diag.start)) {
                                 diagnostics = append(diagnostics, diag);
                             }
                         }
@@ -1691,8 +1691,7 @@ namespace ts {
         /**
          * Skip errors if previous line start with '// @ts-ignore' comment, not counting non-empty non-comment lines
          */
-        function shouldReportDiagnostic(diagnostic: DiagnosticWithLocation) {
-            const { file, start } = diagnostic;
+        function shouldReportDiagnostic(file: SourceFile, start: number) {
             if (file) {
                 const lineStarts = getLineStarts(file);
                 let { line } = computeLineAndCharacterOfPosition(lineStarts, start);
