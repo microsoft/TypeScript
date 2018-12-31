@@ -37,6 +37,10 @@ namespace ts.OutliningElementsCollector {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
             }
 
+            if (isFunctionExpressionAssignedToVariable(n)) {
+                addOutliningForLeadingCommentsForNode(n.parent.parent.parent, sourceFile, cancellationToken, out);
+            }
+
             const span = getOutliningSpanForNode(n, sourceFile);
             if (span) out.push(span);
 
@@ -53,6 +57,12 @@ namespace ts.OutliningElementsCollector {
                 n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
+        }
+
+        function isFunctionExpressionAssignedToVariable(n: Node) {
+            return (isFunctionExpression(n) || isArrowFunction(n)) &&
+                n.parent && n.parent.parent && n.parent.parent.parent &&
+                isVariableStatement(n.parent.parent.parent);
         }
     }
 
