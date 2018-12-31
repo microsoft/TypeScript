@@ -3677,15 +3677,17 @@ namespace ts {
         Readonly          = 1 << 3,         // Readonly transient symbol
         Partial           = 1 << 4,         // Synthetic property present in some but not all constituents
         HasNonUniformType = 1 << 5,         // Synthetic property with non-uniform type in constituents
-        ContainsPublic    = 1 << 6,         // Synthetic property with public constituent(s)
-        ContainsProtected = 1 << 7,         // Synthetic property with protected constituent(s)
-        ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
-        ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
-        Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
-        ReverseMapped     = 1 << 11,        // Property of reverse-inferred homomorphic mapped type
-        OptionalParameter = 1 << 12,        // Optional parameter
-        RestParameter     = 1 << 13,        // Rest parameter
-        Synthetic = SyntheticProperty | SyntheticMethod
+        HasLiteralType    = 1 << 6,         // Synthetic property with at least one literal type in constituents
+        ContainsPublic    = 1 << 7,         // Synthetic property with public constituent(s)
+        ContainsProtected = 1 << 8,         // Synthetic property with protected constituent(s)
+        ContainsPrivate   = 1 << 9,         // Synthetic property with private constituent(s)
+        ContainsStatic    = 1 << 10,        // Synthetic property with static constituent(s)
+        Late              = 1 << 11,        // Late-bound symbol for a computed property with a dynamic name
+        ReverseMapped     = 1 << 12,        // Property of reverse-inferred homomorphic mapped type
+        OptionalParameter = 1 << 13,        // Optional parameter
+        RestParameter     = 1 << 14,        // Rest parameter
+        Synthetic = SyntheticProperty | SyntheticMethod,
+        Discriminant = HasNonUniformType | HasLiteralType
     }
 
     /* @internal */
