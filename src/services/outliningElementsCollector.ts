@@ -175,6 +175,7 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.ModuleBlock:
                 return spanForNode(n.parent);
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
