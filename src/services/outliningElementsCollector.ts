@@ -60,9 +60,11 @@ namespace ts.OutliningElementsCollector {
         }
 
         function isFunctionExpressionAssignedToVariable(n: Node) {
-            return (isFunctionExpression(n) || isArrowFunction(n)) &&
-                n.parent && n.parent.parent && n.parent.parent.parent &&
-                isVariableStatement(n.parent.parent.parent);
+            if (!isFunctionExpression(n) && !isArrowFunction(n)) {
+                return false;
+            }
+            const ancestor = findAncestor(n, isVariableStatement);
+            return !!ancestor && getSingleInitializerOfVariableStatementOrPropertyDeclaration(ancestor) === n;
         }
     }
 
