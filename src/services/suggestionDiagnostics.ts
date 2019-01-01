@@ -117,7 +117,8 @@ namespace ts {
     }
 
     function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
-        if (!visitedNestedConvertibleFunctions.has(getKeyFromNode(node)) && isConvertibleFunction(node, checker)) {
+        // need to check function before checking map so that deeper levels of nested callbacks are checked
+        if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
             diags.push(createDiagnosticForNode(
                 !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
                 Diagnostics.This_may_be_converted_to_an_async_function));
@@ -128,7 +129,7 @@ namespace ts {
         return !isAsyncFunction(node) &&
             node.body &&
             isBlock(node.body) &&
-            hasReturnStatementWithPromiseHandler(node.body, checker) &&
+            hasReturnStatementWithPromiseHandler(node.body) &&
             returnsPromise(node, checker);
     }
 
@@ -143,25 +144,25 @@ namespace ts {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    function hasReturnStatementWithPromiseHandler(body: Block, checker: TypeChecker): boolean {
-        return !!forEachReturnStatement(body, stmt => isReturnStatementWithFixablePromiseHandler(stmt, checker));
+    function hasReturnStatementWithPromiseHandler(body: Block): boolean {
+        return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
     }
 
-    export function isReturnStatementWithFixablePromiseHandler(node: Node, checker: TypeChecker): node is ReturnStatement {
-        return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression, checker);
+    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement {
+        return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
     }
 
     // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
-    export function isFixablePromiseHandler(node: Node, checker: TypeChecker): boolean {
+    export function isFixablePromiseHandler(node: Node): boolean {
         // ensure outermost call exists and is a promise handler
-        if (!isPromiseHandler(node) || !node.arguments.every((arg) => isFixablePromiseArgument(arg, checker))) {
+        if (!isPromiseHandler(node) || !node.arguments.every(isFixablePromiseArgument)) {
             return false;
         }
 
         // ensure all chained calls are valid
         let currentNode = node.expression;
         while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
-            if (isCallExpression(currentNode) && !currentNode.arguments.every(arg => isFixablePromiseArgument(arg, checker))) {
+            if (isCallExpression(currentNode) && !currentNode.arguments.every(isFixablePromiseArgument)) {
                 return false;
             }
             currentNode = currentNode.expression;
@@ -174,14 +175,12 @@ namespace ts {
     }
 
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
-    function isFixablePromiseArgument(arg: Expression, checker: TypeChecker): boolean {
+    function isFixablePromiseArgument(arg: Expression): boolean {
         switch (arg.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                if (isConvertibleFunction(arg as FunctionLikeDeclaration, checker)) {
-                    visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
-                }
+                visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
                 /* falls through */
             case SyntaxKind.NullKeyword:
             case SyntaxKind.Identifier: // identifier includes undefined
