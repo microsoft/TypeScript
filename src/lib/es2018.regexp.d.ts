@@ -1,12 +1,12 @@
 interface RegExpMatchArray {
     groups?: {
-        [key: string]: string
+        [key: string]: string | undefined
     }
 }
 
 interface RegExpExecArray {
     groups?: {
-        [key: string]: string
+        [key: string]: string | undefined
     }
 }
 
