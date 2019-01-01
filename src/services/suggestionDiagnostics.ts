@@ -117,14 +117,14 @@ namespace ts {
     }
 
     function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
-        if (!visitedNestedConvertibleFunctions.has(getKeyFromNode(node)) && isConvertableFunction(node, checker)) {
+        if (!visitedNestedConvertibleFunctions.has(getKeyFromNode(node)) && isConvertibleFunction(node, checker)) {
             diags.push(createDiagnosticForNode(
                 !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
                 Diagnostics.This_may_be_converted_to_an_async_function));
         }
     }
 
-    function isConvertableFunction(node: FunctionLikeDeclaration, checker: TypeChecker) {
+    function isConvertibleFunction(node: FunctionLikeDeclaration, checker: TypeChecker) {
         return !isAsyncFunction(node) &&
             node.body &&
             isBlock(node.body) &&
@@ -179,7 +179,7 @@ namespace ts {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                if (isConvertableFunction(arg as FunctionLikeDeclaration, checker)) {
+                if (isConvertibleFunction(arg as FunctionLikeDeclaration, checker)) {
                     visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
                 }
                 /* falls through */
