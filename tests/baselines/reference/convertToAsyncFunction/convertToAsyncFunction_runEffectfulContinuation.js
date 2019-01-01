@@ -5,7 +5,7 @@ function /*[#|*/f/*|]*/() {
 }
 function res(result) {
     return Promise.resolve().then(x => console.log(result));
-} 
+}
 
 // ==ASYNC FUNCTION::Convert to async function==
 
@@ -16,4 +16,4 @@ async function f() {
 }
 function res(result) {
     return Promise.resolve().then(x => console.log(result));
-} 
+}
