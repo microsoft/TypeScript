@@ -1,0 +1,38 @@
+=== tests/cases/conformance/types/mapped/mappedTypes7.ts ===
+interface I {
+    a: number;
+>a : number
+
+    b: number;
+>b : number
+}
+type J = {
+>J : J
+
+    [K in 'b' | 'a']: I[K]
+};
+
+type L = Pick<J, 'a'>
+>L : Pick<J, "a">
+
+declare const j: J;
+>j : J
+
+j.a;
+>j.a : number
+>j : J
+>a : number
+
+j.b;
+>j.b : number
+>j : J
+>b : number
+
+declare const l: L
+>l : Pick<J, "a">
+
+l.a
+>l.a : number
+>l : Pick<J, "a">
+>a : number
+

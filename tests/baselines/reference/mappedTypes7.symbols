@@ -1,0 +1,48 @@
+=== tests/cases/conformance/types/mapped/mappedTypes7.ts ===
+interface I {
+>I : Symbol(I, Decl(mappedTypes7.ts, 0, 0))
+
+    a: number;
+>a : Symbol(I.a, Decl(mappedTypes7.ts, 0, 13))
+
+    b: number;
+>b : Symbol(I.b, Decl(mappedTypes7.ts, 1, 14))
+}
+type J = {
+>J : Symbol(J, Decl(mappedTypes7.ts, 3, 1))
+
+    [K in 'b' | 'a']: I[K]
+>K : Symbol(K, Decl(mappedTypes7.ts, 5, 5))
+>I : Symbol(I, Decl(mappedTypes7.ts, 0, 0))
+>K : Symbol(K, Decl(mappedTypes7.ts, 5, 5))
+
+};
+
+type L = Pick<J, 'a'>
+>L : Symbol(L, Decl(mappedTypes7.ts, 6, 2))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>J : Symbol(J, Decl(mappedTypes7.ts, 3, 1))
+
+declare const j: J;
+>j : Symbol(j, Decl(mappedTypes7.ts, 10, 13))
+>J : Symbol(J, Decl(mappedTypes7.ts, 3, 1))
+
+j.a;
+>j.a : Symbol(a, Decl(mappedTypes7.ts, 0, 13))
+>j : Symbol(j, Decl(mappedTypes7.ts, 10, 13))
+>a : Symbol(a, Decl(mappedTypes7.ts, 0, 13))
+
+j.b;
+>j.b : Symbol(b, Decl(mappedTypes7.ts, 1, 14))
+>j : Symbol(j, Decl(mappedTypes7.ts, 10, 13))
+>b : Symbol(b, Decl(mappedTypes7.ts, 1, 14))
+
+declare const l: L
+>l : Symbol(l, Decl(mappedTypes7.ts, 14, 13))
+>L : Symbol(L, Decl(mappedTypes7.ts, 6, 2))
+
+l.a
+>l.a : Symbol(a, Decl(mappedTypes7.ts, 0, 13))
+>l : Symbol(l, Decl(mappedTypes7.ts, 14, 13))
+>a : Symbol(a, Decl(mappedTypes7.ts, 0, 13))
+

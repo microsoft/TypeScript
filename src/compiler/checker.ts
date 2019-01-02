@@ -7141,10 +7141,11 @@ namespace ts {
                     prop.type = strictNullChecks && isOptional && !isTypeAssignableTo(undefinedType, propType) ? getOptionalType(propType) :
                         strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
                         propType;
-                    if (modifiersProp) {
-                        prop.syntheticOrigin = modifiersProp;
-                        prop.declarations = modifiersProp.declarations;
-                    }
+                    
+                    const templateProp = (templateType.flags & TypeFlags.IndexedAccess) &&  getPropertyOfType((<IndexedAccessType>templateType).objectType, propName)
+
+                    prop.syntheticOrigin = templateProp || modifiersProp;
+                    prop.declarations = templateProp && templateProp.declarations || modifiersProp && modifiersProp.declarations || undefined!;
                     prop.nameType = t;
                     members.set(propName, prop);
                 }
