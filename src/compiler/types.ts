@@ -3435,7 +3435,8 @@ namespace ts {
         | ModuleDeclaration
         | TypeAliasDeclaration
         | InterfaceDeclaration
-        | EnumDeclaration;
+        | EnumDeclaration
+        | ExportAssignment;
 
     /* @internal */
     export interface SymbolVisibilityResult {

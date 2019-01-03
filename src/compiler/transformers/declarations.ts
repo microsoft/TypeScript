@@ -1008,7 +1008,43 @@ namespace ts {
                             return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
                         });
                         const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input, isPrivate), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
-                        return [clean, namespaceDecl];
+
+                        if (!hasModifier(clean, ModifierFlags.ExportDefault)) {
+                            return [clean, namespaceDecl];
+                        }
+
+                        const modifierFlags = (getModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient;
+                        const cleanDeclaration = updateFunctionDeclaration(
+                            clean,
+                            /*decorators*/ undefined,
+                            createModifiersFromModifierFlags(modifierFlags),
+                            /*asteriskToken*/ undefined,
+                            clean.name,
+                            clean.typeParameters,
+                            clean.parameters,
+                            clean.type,
+                            /*body*/ undefined
+                        );
+
+                        const namespaceDeclaration = updateModuleDeclaration(
+                            namespaceDecl,
+                            /*decorators*/ undefined,
+                            createModifiersFromModifierFlags(modifierFlags),
+                            input.name!,
+                            createModuleBlock(declarations)
+                        );
+
+                        const exportDefaultDeclaration = createExportAssignment(
+                            /*decorators*/ undefined,
+                            /*modifiers*/undefined,
+                            /*isExportEquals*/false,
+                            clean.name!
+                        );
+
+                        resultHasExternalModuleIndicator = true;
+                        resultHasScopeMarker = true;
+
+                        return [cleanDeclaration, namespaceDeclaration, exportDefaultDeclaration];
                     }
                     else {
                         return clean;
@@ -1153,6 +1189,8 @@ namespace ts {
                         return preserveJsDoc(updateEnumMember(m, m.name, constValue !== undefined ? createLiteral(constValue) : undefined), m);
                     }))));
                 }
+                case SyntaxKind.ExportAssignment:
+                    return;
             }
             // Anything left unhandled is an error, so this should be unreachable
             return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
