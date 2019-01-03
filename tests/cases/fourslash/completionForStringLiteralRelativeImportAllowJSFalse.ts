@@ -22,51 +22,32 @@
 
 
 // @Filename: f1.ts
-//// /*f1*/
+////
 // @Filename: f2.js
-//// /*f2*/
+////
 // @Filename: f3.d.ts
-//// /*f3*/
+////
 // @Filename: f4.tsx
-//// /f4*/
+////
 // @Filename: f5.js
-//// /*f5*/
+////
 // @Filename: f6.jsx
-//// /*f6*/
+////
 // @Filename: f7.ts
-//// /*f7*/
+////
 // @Filename: d1/f8.ts
-//// /*d1f1*/
+////
 // @Filename: d1/f9.ts
-//// /*d1f9*/
+////
 // @Filename: d2/f10.ts
-//// /*d2f1*/
+////
 // @Filename: d2/f11.ts
-//// /*d2f11*/
+////
 
 const kinds = ["import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-    verify.completionListIsEmpty();
-
-    goTo.marker(kind + "1");
-    verify.completionListContains("f1");
-    verify.completionListContains("f3");
-    verify.completionListContains("f4");
-    verify.completionListContains("f7");
-    verify.completionListContains("d1");
-    verify.completionListContains("d2");
-    verify.not.completionListItemsCountIsGreaterThan(6);
-
-    goTo.marker(kind + "2");
-    verify.completionListContains("f8");
-    verify.completionListContains("f9");
-    verify.not.completionListItemsCountIsGreaterThan(2);
-
-    goTo.marker(kind + "3");
-    verify.completionListContains("f10");
-    verify.completionListContains("f11");
-    verify.completionListContains("d3");
-    verify.not.completionListItemsCountIsGreaterThan(3);
-}
+verify.completions(
+    { marker: kinds.map(k => k + "0"), exact: [], isNewIdentifierLocation: true },
+    { marker: kinds.map(k => k + "1"), exact: ["f1", "f3", "f4", "f7", "d1", "d2"], isNewIdentifierLocation: true },
+    { marker: kinds.map(k => k + "2"), exact: ["f8", "f9"], isNewIdentifierLocation: true },
+    { marker: kinds.map(k => k + "3"), exact: ["f10", "f11", "d3"], isNewIdentifierLocation: true },
+);

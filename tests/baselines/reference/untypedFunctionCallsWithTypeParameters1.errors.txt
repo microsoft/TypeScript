@@ -2,7 +2,7 @@ tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(3,12): error TS2
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(5,10): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(8,10): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(10,7): error TS2420: Class 'C' incorrectly implements interface 'Function'.
-  Property 'apply' is missing in type 'C'.
+  Type 'C' is missing the following properties from type 'Function': apply, call, bind
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(18,10): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'C' has no compatible call signatures.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(22,10): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(28,12): error TS2558: Expected 0 type arguments, but got 1.
@@ -29,7 +29,7 @@ tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2
     class C implements Function {
           ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'Function'.
-!!! error TS2420:   Property 'apply' is missing in type 'C'.
+!!! error TS2420:   Type 'C' is missing the following properties from type 'Function': apply, call, bind
         prototype = null;
         length = 1;
         arguments = null;

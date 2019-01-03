@@ -6,19 +6,18 @@
 ////    foo./*memberCompletion*/toString;
 ////}/*editDeclaration*/
 
-goTo.marker("requestCompletion");
-verify.completionListContains("foo");
+function check() {
+    verify.completions(
+        { marker: "requestCompletion", includes: "foo" },
+        { marker: "memberCompletion", includes: "toExponential" },
+    );
+}
 
-goTo.marker("memberCompletion");
-verify.completionListContains("toExponential");
+check();
 
 // Now change the decl by adding a semicolon
 goTo.marker("editDeclaration");
 edit.insert(";");
 
 // foo should still be there
-goTo.marker("requestCompletion");
-verify.completionListContains("foo");
-
-goTo.marker("memberCompletion");
-verify.completionListContains("toExponential");
+check();

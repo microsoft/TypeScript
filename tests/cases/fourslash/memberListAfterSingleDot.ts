@@ -2,5 +2,4 @@
 
 ////./**/
 
-goTo.marker();
-verify.completionListIsEmpty();
+verify.completions({ marker: "", exact: undefined });

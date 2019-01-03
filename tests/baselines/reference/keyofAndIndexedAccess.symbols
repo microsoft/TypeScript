@@ -1767,9 +1767,14 @@ function updateIds<T extends Record<K, string>, K extends string>(
 >idFields : Symbol(idFields, Decl(keyofAndIndexedAccess.ts, 483, 11))
 >K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 482, 47))
 
-    idMapping: { [oldId: string]: string }
+    idMapping: Partial<Record<T[K], T[K]>>
 >idMapping : Symbol(idMapping, Decl(keyofAndIndexedAccess.ts, 484, 18))
->oldId : Symbol(oldId, Decl(keyofAndIndexedAccess.ts, 485, 18))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 482, 19))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 482, 47))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 482, 19))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 482, 47))
 
 ): Record<K, string> {
 >Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
@@ -1779,8 +1784,10 @@ function updateIds<T extends Record<K, string>, K extends string>(
 >idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 487, 14))
 >idFields : Symbol(idFields, Decl(keyofAndIndexedAccess.ts, 483, 11))
 
-        const newId = idMapping[obj[idField]];
+        const newId: T[K] | undefined = idMapping[obj[idField]];
 >newId : Symbol(newId, Decl(keyofAndIndexedAccess.ts, 488, 13))
+>T : Symbol(T, Decl(keyofAndIndexedAccess.ts, 482, 19))
+>K : Symbol(K, Decl(keyofAndIndexedAccess.ts, 482, 47))
 >idMapping : Symbol(idMapping, Decl(keyofAndIndexedAccess.ts, 484, 18))
 >obj : Symbol(obj, Decl(keyofAndIndexedAccess.ts, 482, 66))
 >idField : Symbol(idField, Decl(keyofAndIndexedAccess.ts, 487, 14))

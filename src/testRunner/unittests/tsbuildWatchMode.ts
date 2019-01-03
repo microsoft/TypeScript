@@ -1,6 +1,8 @@
 namespace ts.tscWatch {
-    export import libFile = TestFSWithWatch.libFile;
-    function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
+    import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
+    import getFilePathInProject = TestFSWithWatch.getTsBuildProjectFilePath;
+    import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
+    export function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderWithWatchHost(system);
         return ts.createSolutionBuilder(host, rootNames, defaultOptions || { watch: true });
     }
@@ -12,8 +14,7 @@ namespace ts.tscWatch {
         return solutionBuilder;
     }
 
-    describe("tsbuild-watch program updates", () => {
-        const projectsLocation = "/user/username/projects";
+    describe("unittests:: tsbuild-watch program updates", () => {
         const project = "sample1";
         const enum SubProject {
             core = "core",
@@ -24,21 +25,8 @@ namespace ts.tscWatch {
         type ReadonlyFile = Readonly<File>;
         /** [tsconfig, index] | [tsconfig, index, anotherModule, someDecl] */
         type SubProjectFiles = [ReadonlyFile, ReadonlyFile] | [ReadonlyFile, ReadonlyFile, ReadonlyFile, ReadonlyFile];
-        const root = Harness.IO.getWorkspaceRoot();
-
         function getProjectPath(project: string) {
             return `${projectsLocation}/${project}`;
-        }
-
-        function getFilePathInProject(project: string, file: string) {
-            return `${projectsLocation}/${project}/${file}`;
-        }
-
-        function getFileFromProject(project: string, file: string): File {
-            return {
-                path: getFilePathInProject(project, file),
-                content: Harness.IO.readFile(`${root}/tests/projects/${project}/${file}`)!
-            };
         }
 
         function projectPath(subProject: SubProject) {

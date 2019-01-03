@@ -23,7 +23,7 @@ namespace project {
         program?: ts.Program;
         compilerOptions?: ts.CompilerOptions;
         errors: ReadonlyArray<ts.Diagnostic>;
-        sourceMapData?: ReadonlyArray<ts.SourceMapData>;
+        sourceMapData?: ReadonlyArray<ts.SourceMapEmitResult>;
     }
 
     interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
@@ -67,7 +67,7 @@ namespace project {
 
     class ProjectCompilerHost extends fakes.CompilerHost {
         private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
-        private _projectParseConfigHost: ProjectParseConfigHost;
+        private _projectParseConfigHost: ProjectParseConfigHost | undefined;
 
         constructor(sys: fakes.System | vfs.FileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
             super(sys, compilerOptions);
@@ -310,18 +310,16 @@ namespace project {
             const program = ts.createProgram(getInputFiles(), compilerOptions, compilerHost);
             const errors = ts.getPreEmitDiagnostics(program);
 
-            const emitResult = program.emit();
-            ts.addRange(errors, emitResult.diagnostics);
-            const sourceMapData = emitResult.sourceMaps;
+            const { sourceMaps: sourceMapData, diagnostics: emitDiagnostics } = program.emit();
 
             // Clean up source map data that will be used in baselining
             if (sourceMapData) {
                 for (const data of sourceMapData) {
-                    for (let j = 0; j < data.sourceMapSources.length; j++) {
-                        data.sourceMapSources[j] = this.cleanProjectUrl(data.sourceMapSources[j]);
-                    }
-                    data.jsSourceMappingURL = this.cleanProjectUrl(data.jsSourceMappingURL);
-                    data.sourceMapSourceRoot = this.cleanProjectUrl(data.sourceMapSourceRoot);
+                    data.sourceMap = {
+                        ...data.sourceMap,
+                        sources: data.sourceMap.sources.map(source => this.cleanProjectUrl(source)),
+                        sourceRoot: data.sourceMap.sourceRoot && this.cleanProjectUrl(data.sourceMap.sourceRoot)
+                    };
                 }
             }
 
@@ -329,7 +327,7 @@ namespace project {
                 configFileSourceFiles,
                 moduleKind,
                 program,
-                errors,
+                errors: ts.concatenate(errors, emitDiagnostics),
                 sourceMapData
             };
         }
@@ -427,6 +425,7 @@ namespace project {
             skipDefaultLibCheck: false,
             moduleResolution: ts.ModuleResolutionKind.Classic,
             module: moduleKind,
+            newLine: ts.NewLineKind.CarriageReturnLineFeed,
             mapRoot: testCase.resolveMapRoot && testCase.mapRoot
                 ? vpath.resolve(vfs.srcFolder, testCase.mapRoot)
                 : testCase.mapRoot,

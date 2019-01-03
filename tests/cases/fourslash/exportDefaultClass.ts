@@ -5,8 +5,4 @@
 ////}
 //// /*2*/
 
-goTo.marker('1');
-verify.completionListContains("C", "class C", /*documentation*/ undefined, "class");
-
-goTo.marker('2');
-verify.completionListContains("C", "class C", /*documentation*/ undefined, "class");
+verify.completions({ marker: test.markers(), includes: { name: "C", text: "class C", kind: "class", kindModifiers: "export" } });

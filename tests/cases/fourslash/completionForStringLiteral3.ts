@@ -9,4 +9,4 @@
 ////
 ////f("/*2*/
 
-verify.completionsAt(["1", "2"], ["A", "B", "C"], { isNewIdentifierLocation: true });
+verify.completions({ marker: ["1", "2"], exact: ["A", "B", "C"], isNewIdentifierLocation: true });

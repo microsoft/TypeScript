@@ -84,3 +84,25 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS
         }
     }
     
+    // Repro from #28935
+    
+    type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]: string };
+    
+    function f30(foo: Foo) {
+        if (foo.tag) {
+            foo;
+        }
+        else {
+            foo;
+        }
+    }
+    
+    function f31(foo: Foo) {
+        if (foo.tag === true) {
+            foo;
+        }
+        else {
+            foo;
+        }
+    }
+    

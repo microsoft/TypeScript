@@ -7,11 +7,6 @@
             "kind": "JSDocTypedefTag",
             "pos": 8,
             "end": 100,
-            "atToken": {
-                "kind": "AtToken",
-                "pos": 8,
-                "end": 9
-            },
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -39,11 +34,6 @@
                         "kind": "JSDocPropertyTag",
                         "pos": 47,
                         "end": 74,
-                        "atToken": {
-                            "kind": "AtToken",
-                            "pos": 47,
-                            "end": 48
-                        },
                         "tagName": {
                             "kind": "Identifier",
                             "pos": 48,
@@ -73,11 +63,6 @@
                         "kind": "JSDocPropertyTag",
                         "pos": 74,
                         "end": 100,
-                        "atToken": {
-                            "kind": "AtToken",
-                            "pos": 74,
-                            "end": 75
-                        },
                         "tagName": {
                             "kind": "Identifier",
                             "pos": 75,

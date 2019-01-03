@@ -22,18 +22,24 @@
 ////alpha.f(new a/*c0*/);
 ////alpha.f(new /*c1*/);
 
-goTo.eachMarker(["a0", "a1"], () => {
-    verify.completionListContains("Name", "namespace Name", "", "module", undefined, undefined, { isRecommended: true });
-});
-
-goTo.eachMarker(["b0", "b1"], () => {
-    verify.completionListContains({ name: "Name", source: "/a" }, "namespace Name", "", "module", undefined, /*hasAction*/ true, {
-        includeExternalModuleExports: true,
-        isRecommended: true,
-        sourceDisplay: "./a",
-    });
-});
-
-goTo.eachMarker(["c0", "c1"], () => {
-    verify.completionListContains("alpha", "import alpha", "", "alias", undefined, undefined, { isRecommended: true });
-});
+verify.completions(
+    {
+        marker: ["a0", "a1"],
+        includes: { name: "Name", text: "namespace Name", kind: "module", kindModifiers: "export", isRecommended: true },
+    },
+    {
+        marker: ["b0", "b1"],
+        includes: {
+            name: "Name",
+            source: "/a",
+            sourceDisplay: "./a",
+            text: "namespace Name",
+            kind: "module",
+            kindModifiers: "export",
+            hasAction: true,
+            isRecommended: true,
+        },
+        preferences: { includeCompletionsForModuleExports: true },
+    },
+    { marker: ["c0", "c1"], includes: { name: "alpha", text: "import alpha", kind: "alias", isRecommended: true } },
+);

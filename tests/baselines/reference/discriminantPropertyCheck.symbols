@@ -311,3 +311,69 @@ function func2(inst: Instance) {
     }
 }
 
+// Repro from #29106
+
+const f = (_a: string, _b: string): void => {};
+>f : Symbol(f, Decl(discriminantPropertyCheck.ts, 102, 5))
+>_a : Symbol(_a, Decl(discriminantPropertyCheck.ts, 102, 11))
+>_b : Symbol(_b, Decl(discriminantPropertyCheck.ts, 102, 22))
+
+interface A {
+>A : Symbol(A, Decl(discriminantPropertyCheck.ts, 102, 47))
+
+  a?: string;
+>a : Symbol(A.a, Decl(discriminantPropertyCheck.ts, 104, 13))
+
+  b?: string;
+>b : Symbol(A.b, Decl(discriminantPropertyCheck.ts, 105, 13))
+}
+
+interface B {
+>B : Symbol(B, Decl(discriminantPropertyCheck.ts, 107, 1))
+
+  a: string;
+>a : Symbol(B.a, Decl(discriminantPropertyCheck.ts, 109, 13))
+
+  b: string;
+>b : Symbol(B.b, Decl(discriminantPropertyCheck.ts, 110, 12))
+}
+
+type U = A | B;
+>U : Symbol(U, Decl(discriminantPropertyCheck.ts, 112, 1))
+>A : Symbol(A, Decl(discriminantPropertyCheck.ts, 102, 47))
+>B : Symbol(B, Decl(discriminantPropertyCheck.ts, 107, 1))
+
+const u: U = {} as any;
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>U : Symbol(U, Decl(discriminantPropertyCheck.ts, 112, 1))
+
+u.a && u.b && f(u.a, u.b);
+>u.a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u.b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>f : Symbol(f, Decl(discriminantPropertyCheck.ts, 102, 5))
+>u.a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u.b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+
+u.b && u.a && f(u.a, u.b);
+>u.b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u.a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>f : Symbol(f, Decl(discriminantPropertyCheck.ts, 102, 5))
+>u.a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u.b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+
