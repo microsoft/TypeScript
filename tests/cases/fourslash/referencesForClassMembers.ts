@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Base {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: number;
+////    [|{| "isDefinition": true |}a|]: number;
 ////    [|{| "isWriteAccess": true, "isDefinition": true |}method|](): void { }
 ////}
 ////class MyClass extends Base {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|];
+////    [|{| "isDefinition": true |}a|];
 ////    [|{| "isWriteAccess": true, "isDefinition": true |}method|]() { }
 ////}
 ////

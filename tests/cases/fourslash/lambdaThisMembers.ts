@@ -9,8 +9,4 @@
 ////     }
 //// }
 
-goTo.marker();
-verify.completionListContains("a");
-verify.completionListContains("b");
-verify.completionListCount(2);
-
+verify.completions({ marker: "", exact: ["a", "b"] });

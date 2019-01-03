@@ -2,22 +2,22 @@
 // #24131
 const a = {};
 >a : typeof a
->{} : { [x: string]: any; }
+>{} : {}
 
 a.d = function() {};
->a.d = function() {} : { (): void; prototype: { [x: string]: any; }; }
->a.d : { (): void; prototype: { [x: string]: any; }; }
+>a.d = function() {} : { (): void; prototype: {}; }
+>a.d : { (): void; prototype: {}; }
 >a : typeof a
->d : { (): void; prototype: { [x: string]: any; }; }
->function() {} : { (): void; prototype: { [x: string]: any; }; }
+>d : { (): void; prototype: {}; }
+>function() {} : { (): void; prototype: {}; }
 
 === tests/cases/conformance/salsa/b.js ===
 a.d.prototype = {};
->a.d.prototype = {} : { [x: string]: any; }
->a.d.prototype : { [x: string]: any; }
->a.d : { (): void; prototype: { [x: string]: any; }; }
+>a.d.prototype = {} : {}
+>a.d.prototype : {}
+>a.d : { (): void; prototype: {}; }
 >a : typeof a
->d : { (): void; prototype: { [x: string]: any; }; }
->prototype : { [x: string]: any; }
->{} : { [x: string]: any; }
+>d : { (): void; prototype: {}; }
+>prototype : {}
+>{} : {}
 

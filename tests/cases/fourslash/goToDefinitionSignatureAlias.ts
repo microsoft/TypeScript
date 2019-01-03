@@ -21,9 +21,20 @@
 ////o.[|/*useM*/m|]();
 
 ////class Component { /*componentCtr*/constructor(props: {}) {} }
+////type ComponentClass = /*ComponentClass*/new () => Component;
+////interface ComponentClass2 { /*ComponentClass2*/new(): Component; }
+////
 ////class /*MyComponent*/MyComponent extends Component {}
-////<[|/*jsxMyComponent*/MyComponent|] />
+////<[|/*jsxMyComponent*/MyComponent|] />;
 ////new [|/*newMyComponent*/MyComponent|]({});
+////
+////declare const /*MyComponent2*/MyComponent2: ComponentClass;
+////<[|/*jsxMyComponent2*/MyComponent2|] />;
+////new [|/*newMyComponent2*/MyComponent2|]();
+////
+////declare const /*MyComponent3*/MyComponent3: ComponentClass2;
+////<[|/*jsxMyComponent3*/MyComponent3|] />;
+////new [|/*newMyComponent3*/MyComponent3|]();
 
 verify.noErrors();
 
@@ -38,4 +49,10 @@ verify.goToDefinition({
 
     jsxMyComponent: "MyComponent",
     newMyComponent: ["MyComponent", "componentCtr"],
+
+    jsxMyComponent2: "MyComponent2",
+    newMyComponent2: ["MyComponent2", "ComponentClass"],
+
+    jsxMyComponent3: "MyComponent3",
+    newMyComponent3: ["MyComponent3", "ComponentClass2"],
 });

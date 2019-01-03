@@ -1,6 +1,5 @@
 tests/cases/conformance/types/thisType/typeRelationships.ts(9,9): error TS2322: Type 'C' is not assignable to type 'this'.
-tests/cases/conformance/types/thisType/typeRelationships.ts(35,9): error TS2322: Type 'C' is not assignable to type 'D'.
-  Property 'self1' is missing in type 'C'.
+tests/cases/conformance/types/thisType/typeRelationships.ts(35,9): error TS2739: Type 'C' is missing the following properties from type 'D': self1, self2, self3, d, bar
 tests/cases/conformance/types/thisType/typeRelationships.ts(36,9): error TS2322: Type 'D' is not assignable to type 'this'.
 
 
@@ -43,8 +42,7 @@ tests/cases/conformance/types/thisType/typeRelationships.ts(36,9): error TS2322:
             this.d = this.self;
             this.d = this.c;  // Error
             ~~~~~~
-!!! error TS2322: Type 'C' is not assignable to type 'D'.
-!!! error TS2322:   Property 'self1' is missing in type 'C'.
+!!! error TS2739: Type 'C' is missing the following properties from type 'D': self1, self2, self3, d, bar
             this.self = this.d;  // Error
             ~~~~~~~~~
 !!! error TS2322: Type 'D' is not assignable to type 'this'.

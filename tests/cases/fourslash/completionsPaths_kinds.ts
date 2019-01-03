@@ -22,6 +22,9 @@
 
 verify.completions({
     marker: ["0", "1"],
-    exact: [{ name: "b", kind: "script" }, { name: "dir", kind: "directory" }],
+    exact: [
+        { name: "b", kind: "script", kindModifiers: ".ts" },
+        { name: "dir", kind: "directory" },
+    ],
     isNewIdentifierLocation: true
 });

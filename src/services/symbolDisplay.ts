@@ -128,13 +128,17 @@ namespace ts.SymbolDisplay {
         let documentation: SymbolDisplayPart[] | undefined;
         let tags: JSDocTagInfo[] | undefined;
         const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
-        let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
+        let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
         let hasAddedSymbolInfo = false;
-        const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
+        const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location);
         let type: Type | undefined;
         let printer: Printer;
         let documentationFromAlias: SymbolDisplayPart[] | undefined;
         let tagsFromAlias: JSDocTagInfo[] | undefined;
+
+        if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
+            return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
+        }
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
@@ -285,7 +289,7 @@ namespace ts.SymbolDisplay {
             addFullSymbolName(symbol);
             writeTypeParametersOfSymbol(symbol, sourceFile);
         }
-        if (symbolFlags & SymbolFlags.TypeAlias) {
+        if ((symbolFlags & SymbolFlags.TypeAlias) && (semanticMeaning & SemanticMeaning.Type)) {
             prefixNextMeaning();
             displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
             displayParts.push(spacePart());
@@ -530,7 +534,7 @@ namespace ts.SymbolDisplay {
             tags = tagsFromAlias;
         }
 
-        return { displayParts, documentation, symbolKind, tags: tags! };
+        return { displayParts, documentation, symbolKind, tags: tags!.length === 0 ? undefined : tags };
 
         function getPrinter() {
             if (!printer) {
@@ -611,7 +615,8 @@ namespace ts.SymbolDisplay {
                 displayParts.push(textPart(allSignatures.length === 2 ? "overload" : "overloads"));
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
-            documentation = signature.getDocumentationComment(typeChecker);
+            const docComment = signature.getDocumentationComment(typeChecker);
+            documentation = docComment.length === 0 ? undefined : docComment;
             tags = signature.getJsDocTags();
         }
 

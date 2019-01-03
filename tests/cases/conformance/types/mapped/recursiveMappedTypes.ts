@@ -13,3 +13,12 @@ type Recurse1 = {
 type Recurse2 = {
     [K in keyof Recurse1]: Recurse1[K]
 }
+
+// Repro from #27881
+
+export type Circular<T> = {[P in keyof T]: Circular<T>};
+type tup = [number, number, number, number];
+
+function foo(arg: Circular<tup>): tup {
+  return arg;
+}

@@ -197,8 +197,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 6 >                                                     
 7 >                                                       name: nameC
 8 >                                                                      , 
-9 >                                                                        skill: skillC
-10>                                                                                          } = { name: "Edger", skill: "cutting edges" };
+9 >                                                                        skill: skillC } = { name: "Edger", skill: "cutting edges" }
+10>                                                                                         ;
 1->Emitted(6, 1) Source(13, 5) + SourceIndex(0)
 2 >Emitted(6, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(6, 6) Source(13, 14) + SourceIndex(0)
@@ -207,7 +207,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatement1.ts
 6 >Emitted(6, 56) Source(13, 18) + SourceIndex(0)
 7 >Emitted(6, 71) Source(13, 29) + SourceIndex(0)
 8 >Emitted(6, 73) Source(13, 31) + SourceIndex(0)
-9 >Emitted(6, 90) Source(13, 44) + SourceIndex(0)
+9 >Emitted(6, 90) Source(13, 90) + SourceIndex(0)
 10>Emitted(6, 91) Source(13, 91) + SourceIndex(0)
 ---
 >>>var nameA = robotA.name, a = hello;

@@ -1,8 +1,8 @@
-tests/cases/conformance/ambient/ambientErrors.ts(2,15): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/ambient/ambientErrors.ts(2,17): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(17,22): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 tests/cases/conformance/ambient/ambientErrors.ts(20,24): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(29,9): error TS1066: In ambient enum declarations member initializer must be constant expression.
-tests/cases/conformance/ambient/ambientErrors.ts(34,11): error TS1039: Initializers are not allowed in ambient contexts.
+tests/cases/conformance/ambient/ambientErrors.ts(34,13): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(35,19): error TS1183: An implementation cannot be declared in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(37,20): error TS1039: Initializers are not allowed in ambient contexts.
 tests/cases/conformance/ambient/ambientErrors.ts(38,13): error TS1039: Initializers are not allowed in ambient contexts.
@@ -17,7 +17,7 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
 ==== tests/cases/conformance/ambient/ambientErrors.ts (14 errors) ====
     // Ambient variable with an initializer 
     declare var x = 4;
-                  ~
+                    ~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
     
     // Ambient functions with invalid overloads
@@ -57,7 +57,7 @@ tests/cases/conformance/ambient/ambientErrors.ts(57,5): error TS2309: An export 
     // Ambient module with initializers for values, bodies for functions / classes
     declare module M1 {
         var x = 3;
-              ~
+                ~
 !!! error TS1039: Initializers are not allowed in ambient contexts.
         function fn() { }
                       ~

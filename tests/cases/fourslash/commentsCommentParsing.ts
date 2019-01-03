@@ -244,8 +244,18 @@ verify.quickInfoAt("13q", "function noHelpComment2(): void");
 verify.signatureHelp({ marker: "14", docComment: "" });
 verify.quickInfoAt("14q", "function noHelpComment3(): void");
 
-goTo.marker('15');
-verify.completionListContains("sum", "function sum(a: number, b: number): number", "Adds two integers and returns the result");
+verify.completions({
+    marker: "15",
+    includes: {
+        name: "sum",
+        text: "function sum(a: number, b: number): number",
+        documentation: "Adds two integers and returns the result",
+        tags: [
+            { name: "param", text: "a first number" },
+            { name: "param", text: "b second number" },
+        ],
+    },
+});
 
 const addTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
     { name: "param", text: "a first number" },
@@ -270,10 +280,13 @@ verify.signatureHelp({
 });
 verify.quickInfoAt("17aq", "(parameter) b: number", "second number");
 
-goTo.marker('18');
-verify.quickInfoIs("(parameter) a: number", "first number");
-verify.completionListContains("a", "(parameter) a: number", "first number");
-verify.completionListContains("b", "(parameter) b: number", "second number");
+verify.completions({
+    marker: "18",
+    includes: [
+        { name: "a", text: "(parameter) a: number", documentation: "first number", tags: [{ name: "param", text: "a first number" }] },
+        { name: "b", text: "(parameter) b: number", documentation: "second number", tags: [{ name: "param", text: "b second number" }] },
+    ],
+});
 
 const multiplyTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
     { name: "param", text: "" },
@@ -306,9 +319,18 @@ verify.quickInfoAt("22aq", "(parameter) d: any");
 verify.signatureHelp({ marker: "23", docComment: "This is multiplication function", parameterDocComment: "LastParam", tags: multiplyTags });
 verify.quickInfoAt("23aq", "(parameter) e: any", "LastParam");
 
-goTo.marker('24');
-verify.completionListContains("aOrb", "(parameter) aOrb: any", "");
-verify.completionListContains("opt", "(parameter) opt: any", "optional parameter");
+verify.completions({
+    marker: "24",
+    includes: [
+        { name: "aOrb", text: "(parameter) aOrb: any" },
+        {
+            name: "opt",
+            text: "(parameter) opt: any",
+            documentation: "optional parameter",
+            tags: [{ name: "param", text: "opt optional parameter" }],
+        },
+    ]
+});
 
 verify.signatureHelp({
     marker: "25",
@@ -323,13 +345,36 @@ verify.quickInfos({
 
 verify.signatureHelp({ marker: "26", overloadsCount: 2, docComment: "" });
 verify.quickInfos({
-    "26q": "function f1(b: string): any (+1 overload)",
+    "26q": ["function f1(b: string): any (+1 overload)", "fn f1 with number"],
     "26aq": "(parameter) b: string"
 });
 
-goTo.marker('27');
-verify.completionListContains("multiply", "function multiply(a: number, b: number, c?: number, d?: any, e?: any): void", "This is multiplication function");
-verify.completionListContains("f1", "function f1(a: number): any (+1 overload)", "fn f1 with number");
+verify.completions({
+    marker: "27",
+    includes: [
+        {
+            name: "multiply",
+            text: "function multiply(a: number, b: number, c?: number, d?: any, e?: any): void",
+            documentation: "This is multiplication function",
+            tags: [
+                { name: "param", text: "" },
+                { name: "param", text: "a first number" },
+                { name: "param", text: "b" },
+                { name: "param", text: "c" },
+                { name: "param", text: "d" },
+                { name: "anotherTag", text: undefined },
+                { name: "param", text: "e LastParam" },
+                { name: "anotherTag", text: undefined },
+            ],
+        },
+        {
+            name: "f1",
+            text: "function f1(a: number): any (+1 overload)",
+            documentation: "fn f1 with number",
+            tags: [{ name: "param", text: "b about b" }],
+        },
+    ],
+});
 
 const subtractDoc = "This is subtract function";
 const subtractTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
@@ -419,11 +464,25 @@ verify.quickInfos({
 verify.signatureHelp({ marker: "38", docComment: concatDoc, parameterDocComment: "is second string", tags: concatTags });
 verify.quickInfoAt("38aq", "(parameter) bar: string", "is second string");
 
-goTo.marker('39');
-verify.completionListContains("a", "(parameter) a: number", "this is inline comment for a\nit is first parameter");
-verify.completionListContains("b", "(parameter) b: number", "this is inline comment for b");
-verify.completionListContains("c", "(parameter) c: number", "it is third parameter");
-verify.completionListContains("d", "(parameter) d: number", "");
+verify.completions({
+    marker: "39",
+    includes: [
+        {
+            name: "a",
+            text: "(parameter) a: number",
+            documentation: "this is inline comment for a\nit is first parameter",
+            tags: [{ name: "param", text: "a it is first parameter" }],
+        },
+        { name: "b", text: "(parameter) b: number", documentation: "this is inline comment for b" },
+        {
+            name: "c",
+            text: "(parameter) c: number",
+            documentation: "it is third parameter",
+            tags: [{ name: "param", text: "c it is third parameter" }],
+        },
+        { name: "d", text: "(parameter) d: number" },
+    ],
+});
 
 const jsdocTestDocComment = "this is jsdoc style function with param tag as well as inline parameter help";
 const jsdocTestTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
@@ -451,10 +510,22 @@ verify.quickInfoAt("42aq", "(parameter) c: number", "it is third parameter");
 verify.signatureHelp({ marker: "43", docComment: jsdocTestDocComment, tags: jsdocTestTags });
 verify.quickInfoAt("43aq", "(parameter) d: number");
 
-goTo.marker('44');
-verify.completionListContains("jsDocParamTest", "function jsDocParamTest(a: number, b: number, c: number, d: number): number", jsdocTestDocComment);
-verify.completionListContains("x", "var x: any", "This is a comment");
-verify.completionListContains("y", "var y: any", "This is a comment");
+verify.completions({
+    marker: "44",
+    includes: [
+        {
+            name: "jsDocParamTest",
+            text: "function jsDocParamTest(a: number, b: number, c: number, d: number): number",
+            documentation: jsdocTestDocComment,
+            tags: [
+                { name: "param", text: "a it is first parameter" },
+                { name: "param", text: "c it is third parameter" },
+            ],
+        },
+        { name: "x", text: "var x: any", documentation: "This is a comment" },
+        { name: "y", text: "var y: any", documentation: "This is a comment" },
+    ],
+});
 
 verify.signatureHelp({ marker: "45", docComment: "This is function comment\nAnd properly aligned comment" });
 verify.quickInfoAt("45q", "function jsDocCommentAlignmentTest1(): void", "This is function comment\nAnd properly aligned comment");

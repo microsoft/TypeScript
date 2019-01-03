@@ -35,7 +35,7 @@ x.name
 === tests/cases/conformance/salsa/def.js ===
 var Outer = {}
 >Outer : typeof Outer
->{} : { [x: string]: any; }
+>{} : {}
 
 Outer.Inner = class {
 >Outer.Inner = class {  name() {    return 'hi'  }} : typeof Inner

@@ -9,13 +9,7 @@
 //// /// <reference path/*0*/=/*1*/"/*8*/
 //// /// <reference path/*2*/=/*3*/"/*9*/"/*4*/ /*5*///*6*/>/*7*/
 
-for(let m = 0; m < 8; ++m) {
-    goTo.marker("" + m);
-    verify.not.completionListItemsCountIsGreaterThan(0);
-}
-
-for(let m of ["8", "9"]) {
-    goTo.marker(m);
-    verify.completionListContains("f.ts");
-    verify.not.completionListItemsCountIsGreaterThan(1);
-}
+verify.completions(
+    { marker: ["0", "1", "2", "3", "4", "5", "6", "7"], exact: undefined, isNewIdentifierLocation: true },
+    { marker: ["8", "9"], exact: "f.ts", isNewIdentifierLocation: true },
+);

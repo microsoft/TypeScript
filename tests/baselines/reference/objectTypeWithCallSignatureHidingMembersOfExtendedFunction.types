@@ -55,8 +55,8 @@ var r1d = i.data;
 >data : number
 
 var r1e = i['hm']; // should be Object
->r1e : any
->i['hm'] : any
+>r1e : error
+>i['hm'] : error
 >i : I
 >'hm' : "hm"
 
@@ -104,8 +104,8 @@ var r2d = x.data;
 >data : number
 
 var r2e = x['hm']; // should be Object
->r2e : any
->x['hm'] : any
+>r2e : error
+>x['hm'] : error
 >x : { (): void; apply(a: any, b?: any): void; call(thisArg: number, ...argArray: number[]): any; }
 >'hm' : "hm"
 

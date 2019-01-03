@@ -1,0 +1,268 @@
+=== tests/cases/compiler/typeGuardNarrowsIndexedAccessOfKnownProperty.ts ===
+interface Square {
+>Square : Symbol(Square, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 0))
+
+    ["dash-ok"]: "square";
+>["dash-ok"] : Symbol(Square["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 18))
+>"dash-ok" : Symbol(Square["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 18))
+
+    ["square-size"]: number;
+>["square-size"] : Symbol(Square["square-size"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 1, 26))
+>"square-size" : Symbol(Square["square-size"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 1, 26))
+}
+ interface Rectangle {
+>Rectangle : Symbol(Rectangle, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 3, 1))
+
+    ["dash-ok"]: "rectangle";
+>["dash-ok"] : Symbol(Rectangle["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 4, 22))
+>"dash-ok" : Symbol(Rectangle["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 4, 22))
+
+    width: number;
+>width : Symbol(Rectangle.width, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 5, 29))
+
+    height: number;
+>height : Symbol(Rectangle.height, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 6, 18))
+}
+ interface Circle {
+>Circle : Symbol(Circle, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 8, 1))
+
+    ["dash-ok"]: "circle";
+>["dash-ok"] : Symbol(Circle["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 9, 19))
+>"dash-ok" : Symbol(Circle["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 9, 19))
+
+    radius: number;
+>radius : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 10, 26))
+}
+ type Shape = Square | Rectangle | Circle;
+>Shape : Symbol(Shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 12, 1))
+>Square : Symbol(Square, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 0))
+>Rectangle : Symbol(Rectangle, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 3, 1))
+>Circle : Symbol(Circle, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 8, 1))
+
+interface Subshape {
+>Subshape : Symbol(Subshape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 13, 42))
+
+    "0": {
+>"0" : Symbol(Subshape["0"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 14, 20))
+
+        sub: {
+>sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+
+            under: {
+>under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+
+                shape: Shape;
+>shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>Shape : Symbol(Shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 12, 1))
+            }
+        }
+    }
+}
+function area(s: Shape): number {
+>area : Symbol(area, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 22, 1))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
+>Shape : Symbol(Shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 12, 1))
+
+    switch(s['dash-ok']) {
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
+>'dash-ok' : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 9, 19))
+
+        case "square": return s['square-size'] * s['square-size'];
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
+>'square-size' : Symbol(Square["square-size"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 1, 26))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
+>'square-size' : Symbol(Square["square-size"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 1, 26))
+
+        case "rectangle": return s.width * s['height'];
+>s.width : Symbol(Rectangle.width, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 5, 29))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
+>width : Symbol(Rectangle.width, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 5, 29))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
+>'height' : Symbol(Rectangle.height, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 6, 18))
+
+        case "circle": return Math.PI * s['radius'] * s.radius;
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
+>'radius' : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 10, 26))
+>s.radius : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 10, 26))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
+>radius : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 10, 26))
+    }
+}
+function subarea(s: Subshape): number {
+>subarea : Symbol(subarea, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 29, 1))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 30, 17))
+>Subshape : Symbol(Subshape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 13, 42))
+
+    switch(s[0]["sub"].under["shape"]["dash-ok"]) {
+>s[0]["sub"].under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 30, 17))
+>0 : Symbol(Subshape["0"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 14, 20))
+>"sub" : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>"shape" : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>"dash-ok" : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 9, 19))
+
+        case "square": return s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"];
+>s[0].sub.under.shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>s[0].sub.under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>s[0].sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 30, 17))
+>0 : Symbol(Subshape["0"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 14, 20))
+>sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>"square-size" : Symbol(Square["square-size"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 1, 26))
+>s[0].sub.under.shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>s[0].sub.under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>s[0].sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 30, 17))
+>0 : Symbol(Subshape["0"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 14, 20))
+>sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>"square-size" : Symbol(Square["square-size"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 1, 26))
+
+        case "rectangle": return s[0]["sub"]["under"]["shape"]["width"] * s[0]["sub"]["under"]["shape"].height;
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 30, 17))
+>0 : Symbol(Subshape["0"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 14, 20))
+>"sub" : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>"under" : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>"shape" : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>"width" : Symbol(Rectangle.width, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 5, 29))
+>s[0]["sub"]["under"]["shape"].height : Symbol(Rectangle.height, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 6, 18))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 30, 17))
+>0 : Symbol(Subshape["0"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 14, 20))
+>"sub" : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>"under" : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>"shape" : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>height : Symbol(Rectangle.height, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 6, 18))
+
+        case "circle": return Math.PI * s[0].sub.under["shape"].radius * s[0]["sub"].under.shape["radius"];
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>s[0].sub.under["shape"].radius : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 10, 26))
+>s[0].sub.under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>s[0].sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 30, 17))
+>0 : Symbol(Subshape["0"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 14, 20))
+>sub : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>"shape" : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>radius : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 10, 26))
+>s[0]["sub"].under.shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>s[0]["sub"].under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 30, 17))
+>0 : Symbol(Subshape["0"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 14, 20))
+>"sub" : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
+>under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
+>shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
+>"radius" : Symbol(Circle.radius, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 10, 26))
+    }
+}
+
+interface X {
+>X : Symbol(X, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 36, 1))
+
+    0: "xx",
+>0 : Symbol(X[0], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 38, 13))
+
+    1: number
+>1 : Symbol(X[1], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 39, 12))
+}
+
+interface Y {
+>Y : Symbol(Y, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 41, 1))
+
+    0: "yy",
+>0 : Symbol(Y[0], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 43, 13))
+
+    1: string
+>1 : Symbol(Y[1], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 44, 12))
+}
+
+type A = ["aa", number];
+>A : Symbol(A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 46, 1))
+
+type B = ["bb", string];
+>B : Symbol(B, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 48, 24))
+
+type Z = X | Y;
+>Z : Symbol(Z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 49, 24))
+>X : Symbol(X, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 36, 1))
+>Y : Symbol(Y, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 41, 1))
+
+type C = A | B;
+>C : Symbol(C, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 51, 15))
+>A : Symbol(A, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 46, 1))
+>B : Symbol(B, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 48, 24))
+
+function check(z: Z, c: C) {
+>check : Symbol(check, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 53, 15))
+>z : Symbol(z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 15))
+>Z : Symbol(Z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 49, 24))
+>c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 20))
+>C : Symbol(C, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 51, 15))
+
+    z[0] // fine, typescript sees "xx" | "yy"
+>z : Symbol(z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 15))
+>0 : Symbol(0, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 38, 13), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 43, 13))
+
+    switch (z[0]) {
+>z : Symbol(z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 15))
+>0 : Symbol(0, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 38, 13), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 43, 13))
+
+        case "xx":
+            var xx: number = z[1] // should be number
+>xx : Symbol(xx, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 59, 15))
+>z : Symbol(z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 15))
+>1 : Symbol(X[1], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 39, 12))
+
+            break;
+        case "yy":
+            var yy: string = z[1] // should be string
+>yy : Symbol(yy, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 62, 15))
+>z : Symbol(z, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 15))
+>1 : Symbol(Y[1], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 44, 12))
+
+            break;
+    }
+    c[0] // fine, typescript sees "xx" | "yy"
+>c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 20))
+>0 : Symbol(0)
+
+    switch (c[0]) {
+>c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 20))
+>0 : Symbol(0)
+
+        case "aa":
+            var aa: number = c[1] // should be number
+>aa : Symbol(aa, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 68, 15))
+>c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 20))
+>1 : Symbol(1)
+
+            break;
+        case "bb":
+            var bb: string = c[1] // should be string
+>bb : Symbol(bb, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 71, 15))
+>c : Symbol(c, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 55, 20))
+>1 : Symbol(1)
+
+            break;
+    }
+}
+
+export function g(pair: [number, string?]): string {
+>g : Symbol(g, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 74, 1))
+>pair : Symbol(pair, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 76, 18))
+
+    return pair[1] ? pair[1] : 'nope';
+>pair : Symbol(pair, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 76, 18))
+>1 : Symbol(1)
+>pair : Symbol(pair, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 76, 18))
+>1 : Symbol(1)
+}
+

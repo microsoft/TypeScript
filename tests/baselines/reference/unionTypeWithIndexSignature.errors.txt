@@ -1,6 +1,6 @@
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(11,3): error TS2339: Property 'bar' does not exist on type 'Missing'.
   Property 'bar' does not exist on type '{ [s: string]: string; }'.
-tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(14,4): error TS2540: Cannot assign to 'foo' because it is a constant or a read-only property.
+tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(14,4): error TS2540: Cannot assign to 'foo' because it is a read-only property.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(24,1): error TS7017: Element implicitly has an 'any' type because type 'Both' has no index signature.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(25,1): error TS2322: Type '"not ok"' is not assignable to type 'number'.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(26,1): error TS7017: Element implicitly has an 'any' type because type 'Both' has no index signature.
@@ -25,7 +25,7 @@ tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(26,1): error 
     declare var ro: RO
     ro.foo = 'not allowed'
        ~~~
-!!! error TS2540: Cannot assign to 'foo' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'foo' because it is a read-only property.
     type Num = { '0': string } | { [n: number]: number }
     declare var num: Num
     num[0] = 1

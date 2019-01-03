@@ -13,14 +13,11 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(25,5): error TS23
     Type 'A extends string ? keyof A : A' is not assignable to type 'B extends string ? keyof B : B'.
       Type 'A' is not assignable to type 'B'.
 tests/cases/conformance/types/conditional/conditionalTypes2.ts(73,12): error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
-  Type 'Bar & Extract<T, Foo>' is not assignable to type '{ foo: string; bat: string; }'.
-    Property 'bat' is missing in type 'Bar & Foo'.
-      Type 'Extract<Foo & T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
-        Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
-          Property 'bat' is missing in type 'Bar & Foo'.
+  Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
+    Type 'Extract<Foo & T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
+      Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
 tests/cases/conformance/types/conditional/conditionalTypes2.ts(74,12): error TS2345: Argument of type 'Extract<T, Foo & Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
-  Type 'Foo & Bar & T' is not assignable to type '{ foo: string; bat: string; }'.
-    Property 'bat' is missing in type 'Foo & Bar'.
+  Property 'bat' is missing in type 'Foo & Bar' but required in type '{ foo: string; bat: string; }'.
 tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2345: Argument of type 'Extract2<T, Foo, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
   Type 'T extends Bar ? T : never' is not assignable to type '{ foo: string; bat: string; }'.
     Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
@@ -120,16 +117,16 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
         fooBat(x);  // Error
                ~
 !!! error TS2345: Argument of type 'Extract<Extract<T, Foo>, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
-!!! error TS2345:   Type 'Bar & Extract<T, Foo>' is not assignable to type '{ foo: string; bat: string; }'.
-!!! error TS2345:     Property 'bat' is missing in type 'Bar & Foo'.
-!!! error TS2345:       Type 'Extract<Foo & T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
-!!! error TS2345:         Type 'Bar & Foo & T' is not assignable to type '{ foo: string; bat: string; }'.
-!!! error TS2345:           Property 'bat' is missing in type 'Bar & Foo'.
+!!! error TS2345:   Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
+!!! error TS2345:     Type 'Extract<Foo & T, Bar>' is not assignable to type '{ foo: string; bat: string; }'.
+!!! error TS2345:       Property 'bat' is missing in type 'Bar & Foo' but required in type '{ foo: string; bat: string; }'.
+!!! related TS2728 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43: 'bat' is declared here.
+!!! related TS2728 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43: 'bat' is declared here.
         fooBat(y);  // Error
                ~
 !!! error TS2345: Argument of type 'Extract<T, Foo & Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
-!!! error TS2345:   Type 'Foo & Bar & T' is not assignable to type '{ foo: string; bat: string; }'.
-!!! error TS2345:     Property 'bat' is missing in type 'Foo & Bar'.
+!!! error TS2345:   Property 'bat' is missing in type 'Foo & Bar' but required in type '{ foo: string; bat: string; }'.
+!!! related TS2728 tests/cases/conformance/types/conditional/conditionalTypes2.ts:62:43: 'bat' is declared here.
         fooBat(z);  // Error
                ~
 !!! error TS2345: Argument of type 'Extract2<T, Foo, Bar>' is not assignable to parameter of type '{ foo: string; bat: string; }'.
@@ -206,4 +203,47 @@ tests/cases/conformance/types/conditional/conditionalTypes2.ts(75,12): error TS2
     
     type C2<T, V, E> =
         T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
+    
+    // Repro from #28654
+    
+    type MaybeTrue<T extends { b: boolean }> = true extends T["b"] ? "yes" : "no";
+    
+    type T0 = MaybeTrue<{ b: never }>     // "no"
+    type T1 = MaybeTrue<{ b: false }>;    // "no"
+    type T2 = MaybeTrue<{ b: true }>;     // "yes"
+    type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
+    
+    // Repro from #28824
+    
+    type Union = 'a' | 'b';
+    type Product<A extends Union, B> = { f1: A, f2: B};
+    type ProductUnion = Product<'a', 0> | Product<'b', 1>;
+    
+    // {a: "b"; b: "a"}
+    type UnionComplement = {
+      [K in Union]: Exclude<Union, K>
+    };
+    type UCA = UnionComplement['a'];
+    type UCB = UnionComplement['b'];
+    
+    // {a: "a"; b: "b"}
+    type UnionComplementComplement = {
+      [K in Union]: Exclude<Union, Exclude<Union, K>>
+    };
+    type UCCA = UnionComplementComplement['a'];
+    type UCCB = UnionComplementComplement['b'];
+    
+    // {a: Product<'b', 1>; b: Product<'a', 0>}
+    type ProductComplement = {
+      [K in Union]: Exclude<ProductUnion, { f1: K }>
+    };
+    type PCA = ProductComplement['a'];
+    type PCB = ProductComplement['b'];
+    
+    // {a: Product<'a', 0>; b: Product<'b', 1>}
+    type ProductComplementComplement = {
+      [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
+    };
+    type PCCA = ProductComplementComplement['a'];
+    type PCCB = ProductComplementComplement['b'];
     

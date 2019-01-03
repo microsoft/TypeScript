@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="tr-TR" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="HobbitID" Val="6d166059-1f22-4f75-80d1-261d6407ef5d" />
@@ -480,7 +480,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would build project '{0}']]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[non-dry bir derleme '{0}' projesini derler]]></Val>
+            <Val><![CDATA[-dry bayrağı kullanılmayan bir derleme '{0}' projesini derler]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -489,7 +489,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A non-dry build would delete the following files: {0}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[non-dry bir derleme şu dosyaları siler: {0}]]></Val>
+            <Val><![CDATA[-dry bayrağı kullanılmayan bir derleme şu dosyaları siler: {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1041,7 +1041,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Add or remove braces in an arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ok işlevine küme ayracı ekleyin veya kaldırın]]></Val>
+            <Val><![CDATA[Ok işlevine küme ayracı ekle veya kaldır]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1149,7 +1149,7 @@
         <Str Cat="Text">
           <Val><![CDATA[All destructured elements are unused.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Yok edilen öğelerin hiçbiri kullanılmamış.]]></Val>
+            <Val><![CDATA[Yapısı bozulan öğelerin hiçbiri kullanılmıyor.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2148,7 +2148,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Cannot prepend project '{0}' because it does not have 'outFile' set]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' projesi, 'outFile' kümesi içermediğinden başa eklenemiyor]]></Val>
+            <Val><![CDATA[{0}' projesi için 'outFile' ayarlanmadığından başa eklenemiyor]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -2892,7 +2892,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Delete the outputs of all projects]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Tüm projelerin çıkışlarını silin]]></Val>
+            <Val><![CDATA[Tüm projelerin çıkışlarını sil]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3357,7 +3357,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enable verbose logging]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ayrıntılı günlüğe yazmayı etkinleştirin]]></Val>
+            <Val><![CDATA[Ayrıntılı günlüğe yazmayı etkinleştir]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3411,7 +3411,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Enum declarations can only merge with namespace or other enum declarations.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Enum bildirimleri yalnızca ad alanı veya diğer enum bildirimleri ile birleştirilebilir.]]></Val>
+            <Val><![CDATA[Sabit listesi bildirimleri yalnızca ad alanı veya diğer sabit listesi bildirimleri ile birleştirilebilir.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5307,7 +5307,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Module '{0}' has no exported member '{1}'. Did you mean '{2}'?]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['{0}' modülünün dışa aktarılan '{1}' adlı bir üyesi yok. Şunu mu demek istediniz: '{2}'?]]></Val>
+            <Val><![CDATA[{0}' modülünün dışarı aktarılan '{1}' adlı bir üyesi yok. Şunu mu demek istediniz: '{2}'?]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -6822,7 +6822,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Remove braces from arrow function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Ok işlevinden köşeli ayraçları kaldırın]]></Val>
+            <Val><![CDATA[Ok işlevinden küme ayraçlarını kaldır]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

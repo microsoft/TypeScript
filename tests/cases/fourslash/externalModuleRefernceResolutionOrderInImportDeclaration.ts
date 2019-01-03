@@ -16,5 +16,4 @@
 
 goTo.marker('1');
 edit.insert("file1.");
-verify.completionListContains("bar");
-verify.not.completionListContains("foo");
+verify.completions({ includes: "bar", excludes: "foo" });

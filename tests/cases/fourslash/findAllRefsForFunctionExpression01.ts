@@ -9,4 +9,4 @@
 /////// <reference path="file1.ts" />
 ////foo();
 
-verify.singleReferenceGroup("(local function) foo(a?: void, b?: () => (a?: void, b?: any) => void): void");
+verify.singleReferenceGroup("(local function) foo(a?: void, b?: () => (a?: void, b?: ...) => void): void");

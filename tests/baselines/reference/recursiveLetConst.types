@@ -63,7 +63,7 @@ let z1 = function () { return z1; }
 
 let z2 = { f() { return z2;}}
 >z2 : { f(): any; }
->{ f() { return z2;}} : { f(): any; }
+>{ f() { return z2;}} : { f(): { f(): any; }; }
 >f : () => { f(): any; }
 >z2 : { f(): any; }
 

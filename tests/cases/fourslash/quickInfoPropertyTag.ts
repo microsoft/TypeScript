@@ -12,5 +12,4 @@
 /////** @type {I} */
 ////const obj = { /**/x: 10 };
 
-// TODO: GH#21123 There shouldn't be a "    " before "More doc"
-verify.quickInfoAt("", "(property) x: number", "Doc\n    More doc");
+verify.quickInfoAt("", "(property) x: number", "Doc\nMore doc");

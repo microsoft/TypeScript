@@ -18,18 +18,16 @@
 ////    { a: 7, ...undefined }
 ////spreadNull./*3*/a;
 ////spreadUndefined./*4*/a;
-goTo.marker('1');
-verify.completionListContains('a', '(property) a: number');
-verify.completionListContains('b', '(property) b: string');
-verify.completionListCount(2);
-goTo.marker('2');
-verify.completionListContains('a', '(property) a: number');
-verify.completionListContains('b', '(property) b: boolean');
-verify.completionListContains('c', '(property) c: number');
-verify.completionListCount(3);
-goTo.marker('3');
-verify.completionListContains('a', '(property) a: number');
-verify.completionListCount(1);
-goTo.marker('4');
-verify.completionListContains('a', '(property) a: number');
-verify.completionListCount(1);
+
+const a: FourSlashInterface.ExpectedCompletionEntry = { name: "a", text: "(property) a: number" };
+verify.completions(
+    {
+        marker: "1",
+        exact: [a, { name: "b", text: "(property) b: string" }],
+    },
+    {
+        marker: "2",
+        exact: [a, { name: "b", text: "(property) b: boolean" }, { name: "c", text: "(property) c: number" }],
+    },
+    { marker: ["3", "4"], exact: a },
+);

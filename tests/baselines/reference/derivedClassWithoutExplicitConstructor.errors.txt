@@ -16,6 +16,7 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     var r = new Derived(); // error
             ~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts:3:17: An argument for 'x' was not provided.
     var r2 = new Derived(1); 
     
     class Base2<T> {
@@ -31,4 +32,5 @@ tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/de
     var d = new D(); // error
             ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/constructorDeclarations/automaticConstructors/derivedClassWithoutExplicitConstructor.ts:16:17: An argument for 'x' was not provided.
     var d2 = new D(new Date()); // ok

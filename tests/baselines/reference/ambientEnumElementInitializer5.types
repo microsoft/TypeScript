@@ -3,7 +3,7 @@ declare enum E {
 >E : E
 
  e = -0xA
->e : E
+>e : E.e
 >-0xA : -10
 >0xA : 10
 }

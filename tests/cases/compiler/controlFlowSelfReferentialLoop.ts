@@ -100,3 +100,22 @@ function md5(string:string): void {
     }
 }
 export default md5;
+
+// Repro from #26655
+
+interface DataShape {
+  message: { id: string }
+}
+
+function getObject(id: string | number) {
+  return {} as any
+}
+
+;(() => {
+  let id: string | number = 'a'
+  while (1) {
+    const data = getObject(id) as DataShape
+    const message = data.message
+    id = message.id
+  }
+})()

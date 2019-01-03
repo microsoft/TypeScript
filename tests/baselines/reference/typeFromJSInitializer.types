@@ -44,11 +44,11 @@ a.unknown = true
 >true : true
 
 a.unknown = {}
->a.unknown = {} : { [x: string]: any; }
+>a.unknown = {} : {}
 >a.unknown : any
 >a : A
 >unknown : any
->{} : { [x: string]: any; }
+>{} : {}
 
 a.unknown = 'hi'
 >a.unknown = 'hi' : "hi"
@@ -72,11 +72,11 @@ a.unknowable = true
 >true : true
 
 a.unknowable = {}
->a.unknowable = {} : { [x: string]: any; }
+>a.unknowable = {} : {}
 >a.unknowable : any
 >a : A
 >unknowable : any
->{} : { [x: string]: any; }
+>{} : {}
 
 a.unknowable = 'hi'
 >a.unknowable = 'hi' : "hi"

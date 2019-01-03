@@ -1,5 +1,5 @@
 namespace ts {
-    describe("customTransforms", () => {
+    describe("unittests:: customTransforms", () => {
         function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: CustomTransformers, options: CompilerOptions = {}) {
             it(name, () => {
                 const roots = sources.map(source => createSourceFile(source.file, source.text, ScriptTarget.ES2015));
@@ -18,17 +18,15 @@ namespace ts {
                     writeFile: (fileName, text) => outputs.set(fileName, text),
                 };
 
-                const program = createProgram(arrayFrom(fileMap.keys()), options, host);
+                const program = createProgram(arrayFrom(fileMap.keys()), { newLine: NewLineKind.LineFeed, ...options }, host);
                 program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
-                Harness.Baseline.runBaseline(`customTransforms/${name}.js`, () => {
-                    let content = "";
-                    for (const [file, text] of arrayFrom(outputs.entries())) {
-                        if (content) content += "\n\n";
-                        content += `// [${file}]\n`;
-                        content += text;
-                    }
-                    return content;
-                });
+                let content = "";
+                for (const [file, text] of arrayFrom(outputs.entries())) {
+                    if (content) content += "\n\n";
+                    content += `// [${file}]\n`;
+                    content += text;
+                }
+                Harness.Baseline.runBaseline(`customTransforms/${name}.js`, content);
             });
         }
 

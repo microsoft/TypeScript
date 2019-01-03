@@ -34,13 +34,13 @@ var am;
 === tests/cases/conformance/salsa/roots.js ===
 var First = {};
 >First : typeof First
->{} : { [x: string]: any; }
+>{} : {}
 
 var Common = {};
 >Common : typeof Common
->{} : { [x: string]: any; }
+>{} : {}
 
 var Workspace = {};
 >Workspace : typeof Workspace
->{} : { [x: string]: any; }
+>{} : {}
 

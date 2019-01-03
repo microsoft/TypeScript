@@ -46,7 +46,7 @@ declare enum E1 {
 >E1 : E1
 
     y = 4.23
->y : E1
+>y : E1.y
 >4.23 : 4.23
 }
 

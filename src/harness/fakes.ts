@@ -215,7 +215,7 @@ namespace fakes {
 
         private _setParentNodes: boolean;
         private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
-        private _parseConfigHost: ParseConfigHost;
+        private _parseConfigHost: ParseConfigHost | undefined;
         private _newLine: string;
 
         constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {
@@ -372,6 +372,42 @@ namespace fakes {
             }
 
             return parsed;
+        }
+    }
+
+    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost {
+        diagnostics: ts.Diagnostic[] = [];
+
+        reportDiagnostic(diagnostic: ts.Diagnostic) {
+            this.diagnostics.push(diagnostic);
+        }
+
+        reportSolutionBuilderStatus(diagnostic: ts.Diagnostic) {
+            this.diagnostics.push(diagnostic);
+        }
+
+        clearDiagnostics() {
+            this.diagnostics.length = 0;
+        }
+
+        assertDiagnosticMessages(...expected: ts.DiagnosticMessage[]) {
+            const actual = this.diagnostics.slice();
+            if (actual.length !== expected.length) {
+                assert.fail<any>(actual, expected, `Diagnostic arrays did not match - got\r\n${actual.map(a => "  " + a.messageText).join("\r\n")}\r\nexpected\r\n${expected.map(e => "  " + e.message).join("\r\n")}`);
+            }
+            for (let i = 0; i < actual.length; i++) {
+                if (actual[i].code !== expected[i].code) {
+                    assert.fail(actual[i].messageText, expected[i].message, `Mismatched error code - expected diagnostic ${i} "${actual[i].messageText}" to match ${expected[i].message}`);
+                }
+            }
+        }
+
+        printDiagnostics(header = "== Diagnostics ==") {
+            const out = ts.createDiagnosticReporter(ts.sys);
+            ts.sys.write(header + "\r\n");
+            for (const d of this.diagnostics) {
+                out(d);
+            }
         }
     }
 }

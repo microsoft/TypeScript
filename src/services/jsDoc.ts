@@ -208,7 +208,7 @@ namespace ts.JsDoc {
             kindModifiers: "",
             displayParts: [textPart(name)],
             documentation: emptyArray,
-            tags: emptyArray,
+            tags: undefined,
             codeActions: undefined,
         };
     }
@@ -242,7 +242,7 @@ namespace ts.JsDoc {
             kindModifiers: "",
             displayParts: [textPart(name)],
             documentation: emptyArray,
-            tags: emptyArray,
+            tags: undefined,
             codeActions: undefined,
         };
     }
@@ -312,7 +312,7 @@ namespace ts.JsDoc {
         const preamble = "/**" + newLine + indentationStr + " * ";
         const result =
             preamble + newLine +
-            parameterDocComments(parameters, hasJavaScriptFileExtension(sourceFile.fileName), indentationStr, newLine) +
+            parameterDocComments(parameters, hasJSFileExtension(sourceFile.fileName), indentationStr, newLine) +
             indentationStr + " */" +
             (tokenStart === position ? newLine + indentationStr : "");
 
@@ -367,7 +367,7 @@ namespace ts.JsDoc {
                 const varStatement = <VariableStatement>commentOwner;
                 const varDeclarations = varStatement.declarationList.declarations;
                 const parameters = varDeclarations.length === 1 && varDeclarations[0].initializer
-                    ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer!)
+                    ? getParametersFromRightHandSideOfAssignment(varDeclarations[0].initializer)
                     : undefined;
                 return { commentOwner, parameters };
             }
@@ -383,7 +383,7 @@ namespace ts.JsDoc {
 
             case SyntaxKind.BinaryExpression: {
                 const be = commentOwner as BinaryExpression;
-                if (getSpecialPropertyAssignmentKind(be) === SpecialPropertyAssignmentKind.None) {
+                if (getAssignmentDeclarationKind(be) === AssignmentDeclarationKind.None) {
                     return "quit";
                 }
                 const parameters = isFunctionLike(be.right) ? be.right.parameters : emptyArray;

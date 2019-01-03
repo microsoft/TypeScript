@@ -12,7 +12,7 @@ this.a;
 >a : any
 
 a;
->a : any
+>a : error
 
 === tests/cases/conformance/salsa/b.js ===
 this.a;
@@ -21,5 +21,5 @@ this.a;
 >a : any
 
 a;
->a : any
+>a : error
 

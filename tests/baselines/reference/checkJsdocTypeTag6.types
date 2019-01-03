@@ -16,11 +16,11 @@ var g = function (prop) {
 
 /** @type {(a: number) => number} */
 function add1(a, b) { return a + b; }
->add1 : (a: any, b: any) => number
->a : any
+>add1 : (a: number, b: any) => number
+>a : number
 >b : any
 >a + b : any
->a : any
+>a : number
 >b : any
 
 /** @type {(a: number, b: number) => number} */

@@ -199,7 +199,7 @@ var r3 = foo3(a); // any
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 declare function foo14(x: E): E;
 >foo14 : { (x: E): E; (x: any): any; }

@@ -4,7 +4,7 @@ var CustomTag = "h1";
 >"h1" : "h1"
 
 <CustomTag> Hello World </CustomTag>  // No error
-><CustomTag> Hello World </CustomTag> : any
+><CustomTag> Hello World </CustomTag> : error
 >CustomTag : string
 >CustomTag : string
 

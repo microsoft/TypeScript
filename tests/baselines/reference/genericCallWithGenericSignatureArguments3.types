@@ -93,11 +93,11 @@ var r5 = foo(new Object(), (x) => '', (x) => ''); // Object => Object
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 enum F { A }
 >F : F
->A : F
+>A : F.A
 
 var r6 = foo(E.A, (x: number) => E.A, (x: F) => F.A); // number => number 
 >r6 : (x: number) => number

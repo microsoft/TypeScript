@@ -158,7 +158,7 @@ xx = (typeof xx, 'unused');
 >xx : any
 >(typeof xx, 'unused') : "unused"
 >typeof xx, 'unused' : "unused"
->typeof xx : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof xx : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >xx : any
 >'unused' : "unused"
 

@@ -5,7 +5,7 @@ var x: typeof undefined;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 E = x;
 >E = x : any

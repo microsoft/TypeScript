@@ -6,7 +6,7 @@ import moment = require("moment-timezone");
 
 === tests/cases/compiler/node_modules/moment/index.d.ts ===
 declare function moment(): moment.Moment;
->moment : () => import("omen").Moment
+>moment : () => import("tests/cases/compiler/node_modules/moment/index.d.ts").Moment
 >moment : any
 
 declare namespace moment {
@@ -16,7 +16,7 @@ declare namespace moment {
   }
 }
 export = moment;
->moment : () => import("omen").Moment
+>moment : () => import("tests/cases/compiler/node_modules/moment/index.d.ts").Moment
 
 === tests/cases/compiler/node_modules/moment-timezone/index.d.ts ===
 import * as moment from 'moment';

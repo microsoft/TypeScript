@@ -7,4 +7,4 @@
 ////
 ////declare function foo<TString, TNumber>(obj: I<TString, TNumber>): { /*1*/
 
-verify.completionsAt("1", ["readonly"], { isNewIdentifierLocation: true });
+verify.completions({ marker: "1", exact: "readonly", isNewIdentifierLocation: true });

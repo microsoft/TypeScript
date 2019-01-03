@@ -1,7 +1,7 @@
 === tests/cases/conformance/salsa/a.js ===
 var obj = {};
 >obj : typeof obj
->{} : { [x: string]: any; }
+>{} : {}
 
 obj.method = function (hunch) {
 >obj.method = function (hunch) {    return true;} : (hunch: any) => boolean

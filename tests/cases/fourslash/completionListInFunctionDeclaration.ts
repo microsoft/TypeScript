@@ -3,15 +3,14 @@
 ////var a = 0;
 ////function foo(/**/
 
-goTo.marker();
-verify.completionListIsEmpty();
+verify.completions({ marker: "", exact: undefined });
 edit.insert("a");  // foo(a|
-verify.completionListIsEmpty();
+verify.completions({ exact: undefined });
 edit.insert(" , "); // foo(a ,|
-verify.completionListIsEmpty();
+verify.completions({ exact: undefined });
 edit.insert("b"); // foo(a ,b|
-verify.completionListIsEmpty();
+verify.completions({ exact: undefined });
 edit.insert(":"); // foo(a ,b:| <- type ref
-verify.not.completionListIsEmpty();
+verify.completions({ exact: completion.globalTypes });
 edit.insert("number, "); // foo(a ,b:number,|
-verify.completionListIsEmpty();
+verify.completions({ exact: undefined });

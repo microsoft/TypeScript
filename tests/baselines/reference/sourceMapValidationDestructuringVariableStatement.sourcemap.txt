@@ -181,15 +181,15 @@ sourceFile:sourceMapValidationDestructuringVariableStatement.ts
 4 >                                                  
 5 >                                                    name: nameC
 6 >                                                                   , 
-7 >                                                                     skill: skillC
-8 >                                                                                       } = { name: "Edger", skill: "cutting edges" };
+7 >                                                                     skill: skillC } = { name: "Edger", skill: "cutting edges" }
+8 >                                                                                      ;
 1->Emitted(6, 1) Source(13, 5) + SourceIndex(0)
 2 >Emitted(6, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(6, 51) Source(13, 79) + SourceIndex(0)
 4 >Emitted(6, 53) Source(13, 7) + SourceIndex(0)
 5 >Emitted(6, 68) Source(13, 18) + SourceIndex(0)
 6 >Emitted(6, 70) Source(13, 20) + SourceIndex(0)
-7 >Emitted(6, 87) Source(13, 33) + SourceIndex(0)
+7 >Emitted(6, 87) Source(13, 79) + SourceIndex(0)
 8 >Emitted(6, 88) Source(13, 80) + SourceIndex(0)
 ---
 >>>if (nameA == nameB) {

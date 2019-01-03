@@ -22,4 +22,7 @@ verify.referenceGroups(g0, [g0Group, g1Group]);
 verify.referenceGroups(g1, [g1Group, g0Group]);
 verify.referenceGroups(f2, [bf, af, g0Group, g1Group]);
 
-verify.rangesWithSameTextAreRenameLocations();
+verify.renameLocations([f0, f1], [f0, f1, f2]);
+verify.renameLocations(f2, [{ range: f2, prefixText: "f as " }]);
+verify.renameLocations(g0, [g0, g1]);
+verify.renameLocations(g1, [{ range: g1, prefixText: "g as " }]);

@@ -1,0 +1,54 @@
+=== tests/cases/compiler/enumLiteralUnionNotWidened.ts ===
+// repro from #22093
+enum A { one = "one", two = "two" };
+>A : A
+>one : A.one
+>"one" : "one"
+>two : A.two
+>"two" : "two"
+
+enum B { foo = "foo", bar = "bar" };
+>B : B
+>foo : B.foo
+>"foo" : "foo"
+>bar : B.bar
+>"bar" : "bar"
+
+type C = A | B.foo;
+>C : C
+>B : any
+
+type D = A | "foo";
+>D : D
+
+class List<T>
+>List : List<T>
+{
+	private readonly items: T[] = [];
+>items : T[]
+>[] : undefined[]
+}
+
+function asList<T>(arg: T): List<T> { return new List(); }
+>asList : <T>(arg: T) => List<T>
+>arg : T
+>new List() : List<T>
+>List : typeof List
+
+// TypeScript incorrectly infers the return type of "asList(x)" to be "List<A | B>"
+// The correct type is "List<A | B.foo>"
+function fn1(x: C): List<C> { return asList(x); }
+>fn1 : (x: C) => List<C>
+>x : C
+>asList(x) : List<C>
+>asList : <T>(arg: T) => List<T>
+>x : C
+
+// If we use the literal "foo" instead of B.foo, the correct type is inferred
+function fn2(x: D): List<D> { return asList(x); }
+>fn2 : (x: D) => List<D>
+>x : D
+>asList(x) : List<D>
+>asList : <T>(arg: T) => List<T>
+>x : D
+

@@ -6,5 +6,5 @@ module M {
     }
     export import X = N;
 >X : any
->N : any
+>N : error
 }

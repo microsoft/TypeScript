@@ -1317,7 +1317,9 @@ define(function () {
 
             phoneSized = MobileDetect.isPhoneSized(maxPhoneWidth);
 >phoneSized : Symbol(phoneSized, Decl(fixSignatureCaching.ts, 470, 26))
+>MobileDetect.isPhoneSized : Symbol(MobileDetect.isPhoneSized, Decl(fixSignatureCaching.ts, 961, 57), Decl(fixSignatureCaching.ts, 965, 12))
 >MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>isPhoneSized : Symbol(MobileDetect.isPhoneSized, Decl(fixSignatureCaching.ts, 961, 57), Decl(fixSignatureCaching.ts, 965, 12))
 >maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 466, 60))
 
             if (phoneSized === undefined) {
@@ -2015,7 +2017,9 @@ define(function () {
 >maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 942, 32))
 
             return MobileDetect.isPhoneSized(maxPhoneWidth || this.maxPhoneWidth);
+>MobileDetect.isPhoneSized : Symbol(MobileDetect.isPhoneSized, Decl(fixSignatureCaching.ts, 961, 57), Decl(fixSignatureCaching.ts, 965, 12))
 >MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>isPhoneSized : Symbol(MobileDetect.isPhoneSized, Decl(fixSignatureCaching.ts, 961, 57), Decl(fixSignatureCaching.ts, 965, 12))
 >maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 942, 32))
 
         },
@@ -2047,7 +2051,9 @@ define(function () {
 >screen : Symbol(Window.screen, Decl(lib.dom.d.ts, --, --))
 
         MobileDetect.isPhoneSized = function (maxPhoneWidth) {
+>MobileDetect.isPhoneSized : Symbol(MobileDetect.isPhoneSized, Decl(fixSignatureCaching.ts, 961, 57), Decl(fixSignatureCaching.ts, 965, 12))
 >MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>isPhoneSized : Symbol(MobileDetect.isPhoneSized, Decl(fixSignatureCaching.ts, 961, 57), Decl(fixSignatureCaching.ts, 965, 12))
 >maxPhoneWidth : Symbol(maxPhoneWidth, Decl(fixSignatureCaching.ts, 962, 46))
 
             return maxPhoneWidth < 0 ? undefined : impl.getDeviceSmallerSide() <= maxPhoneWidth;
@@ -2059,16 +2065,22 @@ define(function () {
         };
     } else {
         MobileDetect.isPhoneSized = function () {};
+>MobileDetect.isPhoneSized : Symbol(MobileDetect.isPhoneSized, Decl(fixSignatureCaching.ts, 961, 57), Decl(fixSignatureCaching.ts, 965, 12))
 >MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>isPhoneSized : Symbol(MobileDetect.isPhoneSized, Decl(fixSignatureCaching.ts, 961, 57), Decl(fixSignatureCaching.ts, 965, 12))
     }
 
     // should not be replaced by a completely new object - just overwrite existing methods
     MobileDetect._impl = impl;
+>MobileDetect._impl : Symbol(MobileDetect._impl, Decl(fixSignatureCaching.ts, 967, 5))
 >MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>_impl : Symbol(MobileDetect._impl, Decl(fixSignatureCaching.ts, 967, 5))
 >impl : Symbol(impl, Decl(fixSignatureCaching.ts, 6, 7))
 
     MobileDetect.version = '1.3.3 2016-07-31';
+>MobileDetect.version : Symbol(MobileDetect.version, Decl(fixSignatureCaching.ts, 970, 30))
 >MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
+>version : Symbol(MobileDetect.version, Decl(fixSignatureCaching.ts, 970, 30))
 
     return MobileDetect;
 >MobileDetect : Symbol(MobileDetect, Decl(fixSignatureCaching.ts, 644, 6))
@@ -2098,3 +2110,4 @@ define(function () {
 >Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
 })());
+

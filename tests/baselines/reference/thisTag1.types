@@ -18,8 +18,8 @@ function f(s) {
 }
 
 const o = {
->o : { [x: string]: any; f: (s: string) => number; n: number; }
->{    f,    n: 1} : { [x: string]: any; f: (s: string) => number; n: number; }
+>o : { f: (s: string) => number; n: number; }
+>{    f,    n: 1} : { f: (s: string) => number; n: number; }
 
     f,
 >f : (s: string) => number
@@ -31,7 +31,7 @@ const o = {
 o.f('hi')
 >o.f('hi') : number
 >o.f : (s: string) => number
->o : { [x: string]: any; f: (s: string) => number; n: number; }
+>o : { f: (s: string) => number; n: number; }
 >f : (s: string) => number
 >'hi' : "hi"
 
