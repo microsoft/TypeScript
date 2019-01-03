@@ -8225,7 +8225,7 @@ namespace ts {
 
         function getUniformityConstraintDeclaration(type: TypeParameter) {
             const decl = type.symbol && getDeclarationOfKind<TypeParameterDeclaration>(type.symbol, SyntaxKind.TypeParameter);
-            return decl && decl.uniformityConstraint;
+            return decl && decl.uniformityConstraint ? decl.uniformityConstraint : 0;
         }
 
         function getInferredTypeParameterConstraint(typeParameter: TypeParameter) {
@@ -8288,7 +8288,7 @@ namespace ts {
             return typeParameter.constraint === noConstraintType ? undefined : typeParameter.constraint;
         }
 
-        function getUniformityConstraintFromTypeParameter(typeParameter: TypeParameter): boolean | undefined {
+        function getUniformityConstraintFromTypeParameter(typeParameter: TypeParameter): UniformityFlags {
             if(typeParameter.uniformityConstraint === undefined) {
                 typeParameter.uniformityConstraint = getUniformityConstraintDeclaration(typeParameter);
             }
@@ -15737,7 +15737,7 @@ namespace ts {
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
                             return declaredType;
                         }
-                        break;
+                        return narrowTypeByUniformEquality(type, operator, left, right, assumeTrue);
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
@@ -15748,6 +15748,39 @@ namespace ts {
                         break;
                     case SyntaxKind.CommaToken:
                         return narrowType(type, expr.right, assumeTrue);
+                }
+                return type;
+            }
+
+            function narrowTypeByUniformEquality(type: Type, operator: SyntaxKind, left: Expression, right: Expression, assumeTrue: boolean): Type {
+                if (!assumeTrue || operator !== SyntaxKind.EqualsEqualsEqualsToken) {
+                    return type;
+                }
+                const lType = getTypeOfExpression(left);
+                const rType = getTypeOfExpression(right);
+                let target, targetType;
+                let valueType;
+                if ((lType.flags & TypeFlags.TypeVariable) && (getUniformityConstraintFromTypeParameter(<TypeParameter>lType) & UniformityFlags.Equality)) {
+                    target = left;
+                    targetType = lType;
+                    valueType = rType;
+                }
+                else if ((rType.flags & TypeFlags.TypeVariable) && (getUniformityConstraintFromTypeParameter(<TypeParameter>rType) & UniformityFlags.Equality)) {
+                    target = right;
+                    targetType = rType;
+                    valueType = lType;
+                } else {
+                    return type;
+                }
+                if (!isIdentifier(target) || !isUnitType(valueType)) {
+                    return type;
+                }
+                if (type.flags & TypeFlags.Conditional) {
+                    const subst = getIntersectionType([targetType, valueType]);
+                    return getConditionalTypeInstantiation(<ConditionalType>type, createTypeMapper([<TypeVariable>targetType], [subst]));
+                }
+                if (targetType === type) {
+                    return getIntersectionType([type, valueType]);
                 }
                 return type;
             }
@@ -15799,7 +15832,7 @@ namespace ts {
                         return type;
                     }
                     const targetType = getTypeOfExpression(target);
-                    const isNarrowableUnderUniformity = (targetType.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>targetType);
+                    const isNarrowableUnderUniformity = (targetType.flags & TypeFlags.TypeVariable) && (getUniformityConstraintFromTypeParameter(<TypeParameter>targetType) & UniformityFlags.TypeOf);
                     if (!isNarrowableUnderUniformity) {
                         return type;
                     }
@@ -22697,6 +22730,13 @@ namespace ts {
             checkTruthinessExpression(node.condition);
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
+            if (isBinaryExpression(node.condition) && node.condition.left.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(node.condition.right)) {
+                const typeofTest = getTypeOfExpression((<TypeOfExpression>node.condition.left).expression);
+                if((typeofTest.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>typeofTest)) {
+//                    const typeNode = createConditionalTypeNode(typeofTest, extendsTypeNode, type1, type2);
+//                    return getTypeFromTypeNode(typeNode);
+                }
+            }
             return getUnionType([type1, type2], UnionReduction.Subtype);
         }
 
