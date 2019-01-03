@@ -1,4 +1,3 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(1,33): error TS2501: A rest element cannot contain a binding pattern.
 tests/cases/conformance/es6/destructuring/iterableArrayPattern28.ts(2,52): error TS2322: Type 'true' is not assignable to type 'number'.
 
 
