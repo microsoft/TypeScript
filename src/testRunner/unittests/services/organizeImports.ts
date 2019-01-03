@@ -274,6 +274,16 @@ export const Other = 1;
                 assert.isEmpty(changes);
             });
 
+            it("doesn't crash on shorthand ambient module", () => {
+                const testFile = {
+                    path: "/a.ts",
+                    content: "declare module '*';",
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
+
             testOrganizeImports("Renamed_used",
                 {
                     path: "/test.ts",
