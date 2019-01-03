@@ -1281,7 +1281,59 @@ interface Document {
                 checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
             }
         });
+
+        it("reports errors correctly with isolatedModules", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `export const a: string = "";`
+            };
+            const bFile: File = {
+                path: `${currentDirectory}/b.ts`,
+                content: `import { a } from "./a";
+const b: string = a;`
+            };
+            const configFile: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        isolatedModules: true
+                    }
+                })
+            };
+
+            const files = [aFile, bFile, libFile, configFile];
+
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            verifyProgramFiles();
+            checkOutputErrorsInitial(host, emptyArray);
+            assert.equal(host.readFile(`${currentDirectory}/a.js`), `"use strict";
+exports.__esModule = true;
+exports.a = "";
+`, "Contents of a.js");
+            assert.equal(host.readFile(`${currentDirectory}/b.js`), `"use strict";
+exports.__esModule = true;
+var a_1 = require("./a");
+var b = a_1.a;
+`, "Contents of b.js");
+            const modifiedTime = host.getModifiedTime(`${currentDirectory}/b.js`);
+
+            host.writeFile(aFile.path, `export const a: number = 1`);
+            host.runQueuedTimeoutCallbacks();
+            verifyProgramFiles();
+            checkOutputErrorsIncremental(host, [
+                getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("b"), 1, Diagnostics.Type_0_is_not_assignable_to_type_1, "number", "string")
+            ]);
+            assert.equal(host.readFile(`${currentDirectory}/a.js`), `"use strict";
+exports.__esModule = true;
+exports.a = 1;
+`, "Contents of a.js");
+            assert.equal(host.getModifiedTime(`${currentDirectory}/b.js`), modifiedTime, "Timestamp of b.js");
+
+            function verifyProgramFiles() {
+                checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
+            }
+        });
     });
-
-
 }
