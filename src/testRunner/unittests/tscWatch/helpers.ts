@@ -29,18 +29,18 @@ namespace ts.tscWatch {
         checkArray(`Program rootFileNames`, program.getRootFileNames(), expectedFiles);
     }
 
-    export function createWatchOfConfigFileReturningBuilder(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
-        const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, {}, host);
-        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
-        const watch = createWatchProgram(compilerHost);
-        return () => watch.getCurrentProgram();
+    export interface Watch {
+        (): Program;
+        getBuilderProgram(): EmitAndSemanticDiagnosticsBuilderProgram;
     }
 
     export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
         const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, {}, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
-        return () => watch.getCurrentProgram().getProgram();
+        const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
+        result.getBuilderProgram = () => watch.getCurrentProgram();
+        return result;
     }
 
     export function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, maxNumberOfFilesToIterateForInvalidation?: number) {
@@ -152,7 +152,21 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    export function getDiagnosticOfFileFrom(file: SourceFile | undefined, text: string, start: number | undefined, length: number | undefined, message: DiagnosticMessage): Diagnostic {
+    function isDiagnosticMessageChain(message: DiagnosticMessage | DiagnosticMessageChain): message is DiagnosticMessageChain {
+        return !!(message as DiagnosticMessageChain).messageText;
+    }
+
+    export function getDiagnosticOfFileFrom(file: SourceFile | undefined, start: number | undefined, length: number | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ..._args: (string | number)[]): Diagnostic {
+        let text: DiagnosticMessageChain | string;
+        if (isDiagnosticMessageChain(message)) {
+            text = message;
+        }
+        else {
+            text = getLocaleSpecificMessage(message);
+            if (arguments.length > 4) {
+                text = formatStringFromArgs(text, arguments, 4);
+            }
+        }
         return {
             file,
             start,
@@ -164,35 +178,17 @@ namespace ts.tscWatch {
         };
     }
 
-    export function getDiagnosticWithoutFile(message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
-        let text = getLocaleSpecificMessage(message);
-
-        if (arguments.length > 1) {
-            text = formatStringFromArgs(text, arguments, 1);
-        }
-
-        return getDiagnosticOfFileFrom(/*file*/ undefined, text, /*start*/ undefined, /*length*/ undefined, message);
+    export function getDiagnosticWithoutFile(message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
+        return getDiagnosticOfFileFrom(/*file*/ undefined, /*start*/ undefined, /*length*/ undefined, message, ...args);
     }
 
-    export function getDiagnosticOfFile(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
-        let text = getLocaleSpecificMessage(message);
-
-        if (arguments.length > 4) {
-            text = formatStringFromArgs(text, arguments, 4);
-        }
-
-        return getDiagnosticOfFileFrom(file, text, start, length, message);
+    export function getDiagnosticOfFile(file: SourceFile, start: number, length: number, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
+        return getDiagnosticOfFileFrom(file, start, length, message, ...args);
     }
 
-    export function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
-        let text = getLocaleSpecificMessage(message);
-
-        if (arguments.length > 5) {
-            text = formatStringFromArgs(text, arguments, 5);
-        }
-
+    export function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
         return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase()))!,
-            text, start, length, message);
+            start, length, message, ...args);
     }
 
     export function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
