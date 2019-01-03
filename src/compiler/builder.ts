@@ -281,10 +281,19 @@ namespace ts {
         }
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        return !!forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
+        if (forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
             !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
             exportedModules.has(filePath) &&
             removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile)
+        )) {
+            return true;
+        }
+
+        // Remove diagnostics of files that import this file (without going to exports of referencing files)
+        return !!forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
+            referencesInFile.has(filePath) &&
+            !seenFileAndExportsOfFile.has(referencingFilePath) && // Not already removed diagnostic file
+            removeSemanticDiagnosticsOf(state, referencingFilePath as Path) // Dont add to seen since this is not yet done with the export removal
         );
     }
 
