@@ -760,5 +760,63 @@ namespace ts.projectSystem {
             assert.equal(project2.pendingReload, ConfigFileProgramReloadLevel.None); // External project referenced configured project loaded
             checkProjectActualFiles(project2, [config.path, f1.path]);
         });
+
+        it("handles creation of external project with jsconfig before jsconfig creation watcher is invoked", () => {
+            const projectLocation = `/user/username/projects/WebApplication36/WebApplication36`;
+            const projectFileName = `${projectLocation}/WebApplication36.csproj`;
+            const tsconfig: File = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [libFile, tsconfig];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+
+            // Create external project
+            service.openExternalProjects([{
+                projectFileName,
+                rootFiles: [{ fileName: tsconfig.path }],
+                options: { allowJs: false }
+            }]);
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const configProject = service.configuredProjects.get(tsconfig.path.toLowerCase())!;
+            checkProjectActualFiles(configProject, [tsconfig.path]);
+
+            // write js file, open external project and open it for edit
+            const jsFilePath = `${projectLocation}/javascript.js`;
+            host.writeFile(jsFilePath, "");
+            service.openExternalProjects([{
+                projectFileName,
+                rootFiles: [{ fileName: tsconfig.path }, { fileName: jsFilePath }],
+                options: { allowJs: false }
+            }]);
+            service.applyChangesInOpenFiles([
+                { fileName: jsFilePath, scriptKind: ScriptKind.JS, content: "" }
+            ], /*changedFiles*/ undefined, /*closedFiles*/ undefined);
+            checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
+            checkProjectActualFiles(configProject, [tsconfig.path]);
+            const inferredProject = service.inferredProjects[0];
+            checkProjectActualFiles(inferredProject, [libFile.path, jsFilePath]);
+
+            // write jsconfig file
+            const jsConfig: File = {
+                path: `${projectLocation}/jsconfig.json`,
+                content: "{}"
+            };
+            // Dont invoke file creation watchers as the repro suggests
+            host.ensureFileOrFolder(jsConfig, /*ignoreWatchInvokedWithTriggerAsFileCreate*/ true);
+
+            // Open external project
+            service.openExternalProjects([{
+                projectFileName,
+                rootFiles: [{ fileName: jsConfig.path }, { fileName: tsconfig.path }, { fileName: jsFilePath }],
+                options: { allowJs: false }
+            }]);
+            checkNumberOfProjects(service, { configuredProjects: 2, inferredProjects: 1 });
+            checkProjectActualFiles(configProject, [tsconfig.path]);
+            assert.isTrue(inferredProject.isOrphan());
+            const jsConfigProject = service.configuredProjects.get(jsConfig.path.toLowerCase())!;
+            checkProjectActualFiles(jsConfigProject, [jsConfig.path, jsFilePath, libFile.path]);
+        });
     });
 }
