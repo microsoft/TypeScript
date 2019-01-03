@@ -2,6 +2,7 @@
 [![VSTS Build Status](https://typescript.visualstudio.com/_apis/public/build/definitions/cf7ac146-d525-443c-b23c-0d58337efebc/4/badge)](https://typescript.visualstudio.com/TypeScript/_build/latest?definitionId=4&view=logs) 
 [![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
 [![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
+[![Twitter](https://img.shields.io/twitter/follow/typescriptlang.svg?style=social&label=Follow)](https://twitter.com/intent/follow?screen_name=typescriptlang)
 
 # TypeScript
 
