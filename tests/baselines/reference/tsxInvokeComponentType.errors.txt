@@ -1,6 +1,4 @@
-tests/cases/compiler/tsxInvokeComponentType.tsx(6,14): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { someKey: string; } & { children?: ReactNode; }'.
-  Type '{}' is not assignable to type '{ someKey: string; }'.
-    Property 'someKey' is missing in type '{}'.
+tests/cases/compiler/tsxInvokeComponentType.tsx(6,14): error TS2741: Property 'someKey' is missing in type '{}' but required in type '{ someKey: string; }'.
 
 
 ==== tests/cases/compiler/tsxInvokeComponentType.tsx (1 errors) ====
@@ -11,9 +9,8 @@ tests/cases/compiler/tsxInvokeComponentType.tsx(6,14): error TS2322: Type '{}' i
     
     const bad = <Elem />;
                  ~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { someKey: string; } & { children?: ReactNode; }'.
-!!! error TS2322:   Type '{}' is not assignable to type '{ someKey: string; }'.
-!!! error TS2322:     Property 'someKey' is missing in type '{}'.
+!!! error TS2741: Property 'someKey' is missing in type '{}' but required in type '{ someKey: string; }'.
+!!! related TS2728 tests/cases/compiler/tsxInvokeComponentType.tsx:4:37: 'someKey' is declared here.
     
     const good = <Elem someKey="ok" />;
     

@@ -141,3 +141,13 @@ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
     t[k] = "hello";  // Error
     t[k] = [10, 20];  // Error
 }
+
+// Repro from #28839
+
+function f30<T, K extends keyof T>() {
+    let x: Partial<Record<keyof T, string>>[K] = "hello";
+}
+
+function f31<T, K extends keyof T>() {
+    let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
+}

@@ -4,11 +4,11 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(9,13): error TS2574: A
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,13): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,16): error TS8020: JSDoc types can only be used inside documentation comments.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(23,31): error TS2344: Type 'number[]' does not satisfy the constraint '[number, ...number[]]'.
-  Property '0' is missing in type 'number[]'.
+  Property '0' is missing in type 'number[]' but required in type '[number, ...number[]]'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(24,31): error TS2344: Type '[]' does not satisfy the constraint '[number, ...number[]]'.
-  Property '0' is missing in type '[]'.
+  Property '0' is missing in type '[]' but required in type '[number, ...number[]]'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(29,18): error TS2344: Type 'number[]' does not satisfy the constraint '[number]'.
-  Property '0' is missing in type 'number[]'.
+  Property '0' is missing in type 'number[]' but required in type '[number]'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(30,18): error TS2344: Type '[number, ...number[]]' does not satisfy the constraint '[number]'.
   Types of property 'length' are incompatible.
     Type 'number' is not assignable to type '1'.
@@ -23,7 +23,7 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(35,31): error TS2344: 
   Property '3' is incompatible with rest element type.
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: Argument of type '[]' is not assignable to parameter of type '[{}, ...{}[]]'.
-  Property '0' is missing in type '[]'.
+  Property '0' is missing in type '[]' but required in type '[{}, ...{}[]]'.
 
 
 ==== tests/cases/conformance/types/tuple/restTupleElements1.ts (14 errors) ====
@@ -62,11 +62,11 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
     assign<[number, ...number[]], number[]>();  // Error
                                   ~~~~~~~~
 !!! error TS2344: Type 'number[]' does not satisfy the constraint '[number, ...number[]]'.
-!!! error TS2344:   Property '0' is missing in type 'number[]'.
+!!! error TS2344:   Property '0' is missing in type 'number[]' but required in type '[number, ...number[]]'.
     assign<[number, ...number[]], []>();  // Error
                                   ~~
 !!! error TS2344: Type '[]' does not satisfy the constraint '[number, ...number[]]'.
-!!! error TS2344:   Property '0' is missing in type '[]'.
+!!! error TS2344:   Property '0' is missing in type '[]' but required in type '[number, ...number[]]'.
     assign<[number, ...number[]], [number]>();
     assign<[number, ...number[]], [number, number]>();
     assign<[number, ...number[]], [number, number, ...number[]]>();
@@ -74,7 +74,7 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
     assign<[number], [...number[]]>();  // Error
                      ~~~~~~~~~~~~~
 !!! error TS2344: Type 'number[]' does not satisfy the constraint '[number]'.
-!!! error TS2344:   Property '0' is missing in type 'number[]'.
+!!! error TS2344:   Property '0' is missing in type 'number[]' but required in type '[number]'.
     assign<[number], [number, ...number[]]>();  // Error
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '[number, ...number[]]' does not satisfy the constraint '[number]'.
@@ -125,7 +125,7 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2345: A
     f0([]);  // Error
        ~~
 !!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[{}, ...{}[]]'.
-!!! error TS2345:   Property '0' is missing in type '[]'.
+!!! error TS2345:   Property '0' is missing in type '[]' but required in type '[{}, ...{}[]]'.
     f0([1]);
     f0([1, 2, 3]);
     f0([1, "hello", true]);

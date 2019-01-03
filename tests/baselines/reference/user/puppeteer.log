@@ -11,6 +11,9 @@ lib/Browser.js(71,49): error TS2322: Type 'Promise<CDPSession>' is not assignabl
                 Type 'T' is not assignable to type 'symbol'.
                   Type 'string | number | symbol' is not assignable to type 'symbol'.
                     Type 'string' is not assignable to type 'symbol'.
+lib/BrowserFetcher.js(100,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+lib/BrowserFetcher.js(195,13): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+lib/Connection.js(91,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 lib/Coverage.js(109,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Coverage.js(196,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/ElementHandle.js(24,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -23,6 +26,7 @@ lib/FrameManager.js(28,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(54,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(76,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/FrameManager.js(127,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/FrameManager.js(310,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 lib/FrameManager.js(685,57): error TS2345: Argument of type 'string | number | Function' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
 lib/FrameManager.js(773,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -37,9 +41,15 @@ lib/NetworkManager.js(313,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/NetworkManager.js(640,13): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(66,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(185,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(205,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+lib/Page.js(225,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+lib/Page.js(325,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 lib/Page.js(394,22): error TS2503: Cannot find namespace 'Protocol'.
 lib/Page.js(407,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(646,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+lib/Page.js(655,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 lib/Page.js(731,19): error TS2503: Cannot find namespace 'Protocol'.
+lib/Page.js(899,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 lib/Page.js(928,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(929,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(930,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
@@ -51,6 +61,7 @@ lib/Page.js(935,3): error TS2322: Type '{ width: number; height: number; }' is n
 lib/Page.js(936,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(937,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(938,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
+lib/TaskQueue.js(7,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 lib/externs.d.ts(3,29): error TS2497: Module '"/puppeteer/puppeteer/lib/Target"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(5,32): error TS2497: Module '"/puppeteer/puppeteer/lib/TaskQueue"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(9,37): error TS2497: Module '"/puppeteer/puppeteer/lib/ElementHandle"' resolves to a non-module entity and cannot be imported using this construct.
@@ -62,6 +73,8 @@ lib/externs.d.ts(17,121): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(59,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(77,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/helper.js(101,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/helper.js(184,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+lib/helper.js(193,81): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 
 
 

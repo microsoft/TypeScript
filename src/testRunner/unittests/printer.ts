@@ -1,5 +1,5 @@
 namespace ts {
-    describe("PrinterAPI", () => {
+    describe("unittests:: PrinterAPI", () => {
         function makePrintsCorrectly(prefix: string) {
             return function printsCorrectly(name: string, options: PrinterOptions, printCallback: (printer: Printer) => string) {
                 it(name, () => {

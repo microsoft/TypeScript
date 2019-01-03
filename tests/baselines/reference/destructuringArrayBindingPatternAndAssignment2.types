@@ -42,7 +42,7 @@ var [b3 = "string", b4, b5] = bar();  // Error
 >b3 : string | Number
 >"string" : "string"
 >b4 : Number
->b5 : Number
+>b5 : number
 >bar() : J
 >bar : () => J
 
