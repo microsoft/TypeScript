@@ -64,7 +64,9 @@ namespace ts {
         const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
-        if (!compilerOptions.outFile && !compilerOptions.out) {
+        // With --out or --outFile, any change affects all semantic diagnostics so no need to cache them
+        // With --isolatedModules, emitting changed file doesnt emit dependent files so we cant know of dependent files to retrieve errors so dont cache the errors
+        if (!compilerOptions.outFile && !compilerOptions.out && !compilerOptions.isolatedModules) {
             state.semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
         }
         state.changedFilesSet = createMap<true>();
@@ -338,15 +340,19 @@ namespace ts {
      */
     function getSemanticDiagnosticsOfFile(state: BuilderProgramState, sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
         const path = sourceFile.path;
-        const cachedDiagnostics = state.semanticDiagnosticsPerFile!.get(path);
-        // Report the semantic diagnostics from the cache if we already have those diagnostics present
-        if (cachedDiagnostics) {
-            return cachedDiagnostics;
+        if (state.semanticDiagnosticsPerFile) {
+            const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
+            // Report the semantic diagnostics from the cache if we already have those diagnostics present
+            if (cachedDiagnostics) {
+                return cachedDiagnostics;
+            }
         }
 
         // Diagnostics werent cached, get them from program, and cache the result
         const diagnostics = state.program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        state.semanticDiagnosticsPerFile!.set(path, diagnostics);
+        if (state.semanticDiagnosticsPerFile) {
+            state.semanticDiagnosticsPerFile.set(path, diagnostics);
+        }
         return diagnostics;
     }
 
