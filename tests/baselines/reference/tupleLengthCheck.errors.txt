@@ -1,5 +1,5 @@
-tests/cases/conformance/types/tuple/tupleLengthCheck.ts(5,14): error TS2339: Property '2' does not exist on type '[number, string]'.
-tests/cases/conformance/types/tuple/tupleLengthCheck.ts(6,14): error TS2339: Property '1000' does not exist on type '[number, string]'.
+tests/cases/conformance/types/tuple/tupleLengthCheck.ts(5,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/tuple/tupleLengthCheck.ts(6,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '1000'.
 
 
 ==== tests/cases/conformance/types/tuple/tupleLengthCheck.ts (2 errors) ====
@@ -9,10 +9,10 @@ tests/cases/conformance/types/tuple/tupleLengthCheck.ts(6,14): error TS2339: Pro
     const a1 = a[1]
     const a2 = a[2]
                  ~
-!!! error TS2339: Property '2' does not exist on type '[number, string]'.
+!!! error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
     const a3 = a[1000]
                  ~~~~
-!!! error TS2339: Property '1000' does not exist on type '[number, string]'.
+!!! error TS2493: Tuple type '[number, string]' of length '2' has no element at index '1000'.
     
     const a4 = rest[1]
     const a5 = rest[2]
