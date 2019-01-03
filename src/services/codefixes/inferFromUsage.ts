@@ -187,24 +187,10 @@ namespace ts.codefix {
         }
     }
 
-    function isApplicableFunctionForInference(declaration: FunctionLike): declaration is MethodDeclaration | FunctionDeclaration | ConstructorDeclaration {
-        switch (declaration.kind) {
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.Constructor:
-                return true;
-            case SyntaxKind.FunctionExpression:
-                const parent = declaration.parent;
-                return isVariableDeclaration(parent) && isIdentifier(parent.name) || !!declaration.name;
-        }
-        return false;
-    }
-
     function annotateParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterDeclaration: ParameterDeclaration, containingFunction: FunctionLike, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
-        if (!isIdentifier(parameterDeclaration.name) || !isApplicableFunctionForInference(containingFunction)) {
+        if (!isIdentifier(parameterDeclaration.name)) {
             return;
         }
-
         const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
             containingFunction.parameters.map<ParameterInference>(p => ({
                 declaration: p,
@@ -216,11 +202,14 @@ namespace ts.codefix {
             annotateJSDocParameters(changes, sourceFile, parameterInferences, program, host);
         }
         else {
+            const needParens = isArrowFunction(containingFunction) && !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
+            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), createToken(SyntaxKind.OpenParenToken));
             for (const { declaration, type } of parameterInferences) {
                 if (declaration && !declaration.type && !declaration.initializer) {
                     annotate(changes, sourceFile, declaration, type, program, host);
                 }
             }
+            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), createToken(SyntaxKind.CloseParenToken));
         }
     }
 
@@ -342,12 +331,13 @@ namespace ts.codefix {
         return InferFromReference.unifyFromContext(types, checker);
     }
 
-    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+    function inferTypeForParametersFromUsage(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
         let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
                 searchToken = findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile);
                 break;
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 const parent = containingFunction.parent;
                 searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
@@ -379,8 +369,8 @@ namespace ts.codefix {
         interface UsageContext {
             isNumber?: boolean;
             isString?: boolean;
-            hasNonVacuousType?: boolean;
-            hasNonVacuousNonAnonymousType?: boolean;
+            /** Used ambiguously, eg x + ___ or object[___]; results in string | number if no other evidence exists */
+            isNumberOrString?: boolean;
 
             candidateTypes?: Type[];
             properties?: UnderscoreEscapedMap<UsageContext>;
@@ -399,7 +389,7 @@ namespace ts.codefix {
             return inferFromContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLike, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
             const checker = program.getTypeChecker();
             if (references.length === 0) {
                 return undefined;
@@ -413,10 +403,9 @@ namespace ts.codefix {
                 cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
-            const isConstructor = declaration.kind === SyntaxKind.Constructor;
-            const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-            return callContexts && declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
-                const types: Type[] = [];
+            const callContexts = [...usageContext.constructContexts || [], ...usageContext.callContexts || []];
+            return declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
+                const types = [];
                 const isRest = isRestParameter(parameter);
                 let isOptional = false;
                 for (const callContext of callContexts) {
@@ -434,7 +423,8 @@ namespace ts.codefix {
                     }
                 }
                 if (isIdentifier(parameter.name)) {
-                    types.push(...inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken));
+                    const inferred = inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken);
+                    types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
                 }
                 const type = unifyFromContext(types, checker);
                 return {
@@ -510,8 +500,7 @@ namespace ts.codefix {
                     break;
 
                 case SyntaxKind.PlusToken:
-                    usageContext.isNumber = true;
-                    usageContext.isString = true;
+                    usageContext.isNumberOrString = true;
                     break;
 
                 // case SyntaxKind.ExclamationToken:
@@ -582,8 +571,7 @@ namespace ts.codefix {
                         usageContext.isString = true;
                     }
                     else {
-                        usageContext.isNumber = true;
-                        usageContext.isString = true;
+                        usageContext.isNumberOrString = true;
                     }
                     break;
 
@@ -657,8 +645,7 @@ namespace ts.codefix {
 
         function inferTypeFromPropertyElementExpressionContext(parent: ElementAccessExpression, node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
             if (node === parent.argumentExpression) {
-                usageContext.isNumber = true;
-                usageContext.isString = true;
+                usageContext.isNumberOrString = true;
                 return;
             }
             else {
@@ -674,17 +661,50 @@ namespace ts.codefix {
             }
         }
 
+        interface Priority {
+            high: (t: Type) => boolean;
+            low: (t: Type) => boolean;
+        }
+
+        function removeLowPriorityInferences(inferences: ReadonlyArray<Type>, priorities: Priority[]): Type[] {
+            const toRemove: ((t: Type) => boolean)[] = [];
+            for (const i of inferences) {
+                for (const { high, low } of priorities) {
+                    if (high(i)) {
+                        Debug.assert(!low(i));
+                        toRemove.push(low);
+                    }
+                }
+            }
+            return inferences.filter(i => toRemove.every(f => !f(i)));
+        }
+
         export function unifyFromContext(inferences: ReadonlyArray<Type>, checker: TypeChecker, fallback = checker.getAnyType()): Type {
             if (!inferences.length) return fallback;
-            const hasNonVacuousType = inferences.some(i => !(i.flags & (TypeFlags.Any | TypeFlags.Void)));
-            const hasNonVacuousNonAnonymousType = inferences.some(
-                i => !(i.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
-            const anons = inferences.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
-            const good = [];
-            if (!hasNonVacuousNonAnonymousType && anons.length) {
+
+            // 1. string or number individually override string | number
+            // 2. non-any, non-void overrides any or void
+            // 3. non-nullable, non-any, non-void, non-anonymous overrides anonymous types
+            const stringNumber = checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
+            const priorities: Priority[] = [
+                {
+                    high: t => t === checker.getStringType() || t === checker.getNumberType(),
+                    low: t => t === stringNumber
+                },
+                {
+                    high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Void)),
+                    low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
+                },
+                {
+                    high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(t) & ObjectFlags.Anonymous),
+                    low: t => !!(checker.getObjectFlags(t) & ObjectFlags.Anonymous)
+                }];
+            let good = removeLowPriorityInferences(inferences, priorities);
+            const anons = good.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
+            if (anons.length) {
+                good = good.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
                 good.push(unifyAnonymousTypes(anons, checker));
             }
-            good.push(...inferences.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous) && !(hasNonVacuousType && i.flags & (TypeFlags.Any | TypeFlags.Void))));
             return checker.getWidenedType(checker.getUnionType(good));
         }
 
@@ -731,11 +751,15 @@ namespace ts.codefix {
 
         function inferFromContext(usageContext: UsageContext, checker: TypeChecker) {
             const types = [];
+
             if (usageContext.isNumber) {
                 types.push(checker.getNumberType());
             }
             if (usageContext.isString) {
                 types.push(checker.getStringType());
+            }
+            if (usageContext.isNumberOrString) {
+                types.push(checker.getUnionType([checker.getStringType(), checker.getNumberType()]));
             }
 
             types.push(...(usageContext.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
@@ -750,7 +774,7 @@ namespace ts.codefix {
             }
 
             if (usageContext.numberIndexContext) {
-                return [checker.createArrayType(recur(usageContext.numberIndexContext))];
+                types.push(checker.createArrayType(recur(usageContext.numberIndexContext)));
             }
             else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.stringIndexContext) {
                 const members = createUnderscoreEscapedMap<Symbol>();

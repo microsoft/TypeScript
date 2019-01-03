@@ -1,5 +1,4 @@
 // @target: esnext
-// @experimentalBigInt: true
 
 // @filename: a.ts
 interface BigIntIndex<E> {

@@ -1,5 +1,4 @@
 namespace ts.tscWatch {
-    export import libFile = TestFSWithWatch.libFile;
     import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
     import getFilePathInProject = TestFSWithWatch.getTsBuildProjectFilePath;
     import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
@@ -15,7 +14,7 @@ namespace ts.tscWatch {
         return solutionBuilder;
     }
 
-    describe("tsbuild-watch program updates", () => {
+    describe("unittests:: tsbuild-watch program updates", () => {
         const project = "sample1";
         const enum SubProject {
             core = "core",

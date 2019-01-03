@@ -1,7 +1,6 @@
 tests/cases/compiler/interfaceInheritance.ts(22,7): error TS2420: Class 'C1' incorrectly implements interface 'I2'.
-  Property 'i1P1' is missing in type 'C1'.
-tests/cases/compiler/interfaceInheritance.ts(30,1): error TS2322: Type 'I3' is not assignable to type 'I2'.
-  Property 'i1P1' is missing in type 'I3'.
+  Type 'C1' is missing the following properties from type 'I2': i1P1, i1P2
+tests/cases/compiler/interfaceInheritance.ts(30,1): error TS2739: Type 'I3' is missing the following properties from type 'I2': i1P1, i1P2
 tests/cases/compiler/interfaceInheritance.ts(37,1): error TS2322: Type 'I5' is not assignable to type 'I4'.
   Types of property 'one' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -35,7 +34,7 @@ tests/cases/compiler/interfaceInheritance.ts(38,1): error TS2322: Type 'I4' is n
     class C1 implements I2 { // should be an error - it doesn't implement the members of I1
           ~~
 !!! error TS2420: Class 'C1' incorrectly implements interface 'I2'.
-!!! error TS2420:   Property 'i1P1' is missing in type 'C1'.
+!!! error TS2420:   Type 'C1' is missing the following properties from type 'I2': i1P1, i1P2
         public i2P1: string;
     }
     
@@ -45,8 +44,7 @@ tests/cases/compiler/interfaceInheritance.ts(38,1): error TS2322: Type 'I4' is n
     i1 = i2;
     i2 = i3; // should be an error - i3 does not implement the members of i1
     ~~
-!!! error TS2322: Type 'I3' is not assignable to type 'I2'.
-!!! error TS2322:   Property 'i1P1' is missing in type 'I3'.
+!!! error TS2739: Type 'I3' is missing the following properties from type 'I2': i1P1, i1P2
     
     var c1: C1;
     

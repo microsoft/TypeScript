@@ -16,6 +16,6 @@ var x = 1;
 >x : Symbol(x, Decl(systemModule14.ts, 7, 3))
 
 export {foo as b}
->foo : Symbol(b, Decl(systemModule14.ts, 8, 8))
+>foo : Symbol(foo, Decl(systemModule14.ts, 0, 0))
 >b : Symbol(b, Decl(systemModule14.ts, 8, 8))
 

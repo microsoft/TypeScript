@@ -8,7 +8,7 @@ namespace ts {
             "/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map",
             "/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts"];
 
-        describe("tsbuild - sanity check of clean build of 'sample1' project", () => {
+        describe("unittests:: tsbuild - sanity check of clean build of 'sample1' project", () => {
             it("can build the sample project 'sample1' without error", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -61,7 +61,7 @@ namespace ts {
             });
         });
 
-        describe("tsbuild - dry builds", () => {
+        describe("unittests:: tsbuild - dry builds", () => {
             it("doesn't write any files in a dry build", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -90,7 +90,7 @@ namespace ts {
             });
         });
 
-        describe("tsbuild - clean builds", () => {
+        describe("unittests:: tsbuild - clean builds", () => {
             it("removes all files it built", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -111,7 +111,7 @@ namespace ts {
             });
         });
 
-        describe("tsbuild - force builds", () => {
+        describe("unittests:: tsbuild - force builds", () => {
             it("always builds under --force", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -137,7 +137,7 @@ namespace ts {
             });
         });
 
-        describe("tsbuild - can detect when and what to rebuild", () => {
+        describe("unittests:: tsbuild - can detect when and what to rebuild", () => {
             const fs = projFs.shadow();
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: true });
@@ -200,7 +200,7 @@ namespace ts {
             });
         });
 
-        describe("tsbuild - downstream-blocked compilations", () => {
+        describe("unittests:: tsbuild - downstream-blocked compilations", () => {
             it("won't build downstream projects if upstream projects have errors", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -222,7 +222,7 @@ namespace ts {
             });
         });
 
-        describe("tsbuild - project invalidation", () => {
+        describe("unittests:: tsbuild - project invalidation", () => {
             it("invalidates projects correctly", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -270,7 +270,7 @@ export class cNew {}`);
             });
         });
 
-        describe("tsbuild - with resolveJsonModule option", () => {
+        describe("unittests:: tsbuild - with resolveJsonModule option", () => {
             const projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite");
             const allExpectedOutputs = ["/src/tests/dist/src/index.js", "/src/tests/dist/src/index.d.ts", "/src/tests/dist/src/hello.json"];
 
@@ -320,7 +320,7 @@ export default hello.hello`);
             });
         });
 
-        describe("tsbuild - lists files", () => {
+        describe("unittests:: tsbuild - lists files", () => {
             it("listFiles", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -369,7 +369,7 @@ export default hello.hello`);
             });
         });
 
-        describe("tsbuild - with rootDir of project reference in parentDirectory", () => {
+        describe("unittests:: tsbuild - with rootDir of project reference in parentDirectory", () => {
             const projFs = loadProjectFromDisk("tests/projects/projectReferenceWithRootDirInParent");
             const allExpectedOutputs = [
                 "/src/dist/other/other.js", "/src/dist/other/other.d.ts",
@@ -388,7 +388,7 @@ export default hello.hello`);
             });
         });
 
-        describe("tsbuild - when project reference is referenced transitively", () => {
+        describe("unittests:: tsbuild - when project reference is referenced transitively", () => {
             const projFs = loadProjectFromDisk("tests/projects/transitiveReferences");
             const allExpectedOutputs = [
                 "/src/a.js", "/src/a.d.ts",
@@ -460,7 +460,7 @@ export const b = new A();`);
     export namespace OutFile {
         const outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
 
-        describe("tsbuild - baseline sectioned sourcemaps", () => {
+        describe("unittests:: tsbuild - baseline sectioned sourcemaps", () => {
             let fs: vfs.FileSystem | undefined;
             before(() => {
                 fs = outFileFs.shadow();
@@ -480,7 +480,7 @@ export const b = new A();`);
             });
         });
 
-        describe("tsbuild - downstream prepend projects always get rebuilt", () => {
+        describe("unittests:: tsbuild - downstream prepend projects always get rebuilt", () => {
             it("", () => {
                 const fs = outFileFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -508,7 +508,7 @@ export const b = new A();`);
             "/src/core/index.d.ts.map",
         ];
 
-        describe("tsbuild - empty files option in tsconfig", () => {
+        describe("unittests:: tsbuild - empty files option in tsconfig", () => {
             it("has empty files diagnostic when files is empty and no references are provided", () => {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
@@ -541,7 +541,7 @@ export const b = new A();`);
         });
     }
 
-    describe("tsbuild - graph-ordering", () => {
+    describe("unittests:: tsbuild - graph-ordering", () => {
         let host: fakes.SolutionBuilderHost | undefined;
         const deps: [string, string][] = [
             ["A", "B"],
