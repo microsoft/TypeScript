@@ -14438,7 +14438,12 @@ namespace ts {
                     priority |= InferencePriority.MappedTypeConstraint;
                     inferFromTypes(getIndexType(source), constraintType);
                     priority = savePriority;
-                    inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
+                    const valueTypes = compact([
+                        getIndexTypeOfType(source, IndexKind.String),
+                        getIndexTypeOfType(source, IndexKind.Number),
+                        ...map(getPropertiesOfType(source), getTypeOfSymbol)
+                    ]);
+                    inferFromTypes(getUnionType(valueTypes), getTemplateTypeFromMappedType(<MappedType>target));
                     return true;
                 }
                 return false;
