@@ -11196,7 +11196,7 @@ namespace ts {
                 case SyntaxKind.ArrayLiteralExpression:
                     return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation);
                 case SyntaxKind.JsxAttributes:
-                    return elaborateJsxAttributes(node as JsxAttributes, source, target, relation);
+                    return elaborateJsxComponents(node as JsxAttributes, source, target, relation);
                 case SyntaxKind.ArrowFunction:
                     return elaborateArrowFunction(node as ArrowFunction, source, target, relation);
             }
@@ -11336,8 +11336,46 @@ namespace ts {
             }
         }
 
-        function elaborateJsxAttributes(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            return elaborateElementwise(generateJsxAttributes(node), source, target, relation);
+        function *generateJsxChildren(node: JsxElement): ElaborationIterator {
+            if (!length(node.children)) return;
+            for(let i=0; i < node.children.length; i++) {
+                const child = node.children[i];
+                const nameType = getLiteralType(i);
+                switch (child.kind) {
+                    case SyntaxKind.JsxText:
+                        if (child.containsOnlyWhiteSpaces) {
+                            break; // Whitespace only jsx text isn't real jsx text
+                        }
+                        // child is of type string
+                        yield { errorNode: child, innerExpression: undefined, nameType };
+                        break;
+                    case SyntaxKind.JsxExpression:
+                        // child is of the type of the expression
+                        yield { errorNode: child, innerExpression: child.expression, nameType };
+                        break;
+                    case SyntaxKind.JsxElement:
+                    case SyntaxKind.JsxSelfClosingElement:
+                    case SyntaxKind.JsxFragment:
+                        // child is of type JSX.Element
+                        yield { errorNode: child, innerExpression: undefined, nameType };
+                        break;
+                    default:
+                        return Debug.assertNever(child, "Found invalid jsx child");
+                }
+            }
+        }
+
+        function elaborateJsxComponents(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation);
+            if (isJsxOpeningElement(node.parent) && isJsxElement(node.parent.parent)) {
+                const childPropName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
+                const childrenNameType = getLiteralType(childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName));
+                const childrenTargetType = getIndexedAccessType(target, childrenNameType);
+                if (isArrayLikeType(childrenTargetType)) {
+                    result = elaborateElementwise(generateJsxChildren(node.parent.parent), getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) || result;
+                }
+            }
+            return result;
         }
 
         function *generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
@@ -17493,11 +17531,23 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
-        function getContextualTypeForChildJsxExpression(node: JsxElement) {
+        function getContextualTypeForChildJsxExpression(node: JsxElement, child: JsxChild) {
             const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName);
             // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
             const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
-            return attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : undefined;
+            if (!(attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "")) {
+                return undefined;
+            }
+            const childIndex = node.children.indexOf(child);
+            const childFieldType = getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName);
+            return childFieldType && mapType(childFieldType, t => {
+                if (isArrayLikeType(t)) {
+                    return getIndexedAccessType(t, getLiteralType(childIndex));
+                }
+                else {
+                    return t;
+                }
+            }, /*noReductions*/ true);
         }
 
         function getContextualTypeForJsxExpression(node: JsxExpression): Type | undefined {
@@ -17505,7 +17555,7 @@ namespace ts {
             return isJsxAttributeLike(exprParent)
                 ? getContextualType(node)
                 : isJsxElement(exprParent)
-                    ? getContextualTypeForChildJsxExpression(exprParent)
+                    ? getContextualTypeForChildJsxExpression(exprParent, node)
                     : undefined;
         }
 
