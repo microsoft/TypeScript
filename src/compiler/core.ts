@@ -130,7 +130,7 @@ namespace ts {
             constructor(shimMap: ShimMap<T>, selector: (data: MapLike<T>, key: string) => U) {
                 this.shimMap = shimMap;
                 this.selector = selector;
-                
+
                 if (!shimMap.currentIteratoKeys) {
                     // Create the key array on the map over which we (and other new iterators)
                     // will iterate.
@@ -146,17 +146,18 @@ namespace ts {
                 // Check if we still have the same key array. Otherwise, this means
                 // an element has been deleted from the map in the meanwhile, so we
                 // cannot continue.
-                if (this.index != -1 && this.originalIteratoKeys != this.shimMap.currentIteratoKeys)
+                if (this.index !== -1 && this.originalIteratoKeys !== this.shimMap.currentIteratoKeys) {
                     throw new Error("Cannot continue iteration because a map element has been deleted.");
+                }
 
                 const iteratorKeys = this.originalIteratoKeys;
-                if (this.index != -1 && this.index < iteratorKeys.length) {
+                if (this.index !== -1 && this.index < iteratorKeys.length) {
                     const index = this.index++;
                     return { value: this.selector(this.shimMap.data, iteratorKeys[index]), done: false };
                 }
                 else {
                     // Ensure subsequent invocations will always return done.
-                    this.index = -1;                    
+                    this.index = -1;
 
                     return { value: undefined as never, done: true };
                 }
@@ -167,7 +168,7 @@ namespace ts {
             size = 0;
 
             data = createDictionaryObject<T>();
-            
+
             currentIteratoKeys?: string[];
 
             get(key: string): T | undefined {
@@ -183,7 +184,7 @@ namespace ts {
                         this.currentIteratoKeys.push(key);
                     }
                 }
-                
+
                 this.data[key] = value;
                 return this;
             }
@@ -236,8 +237,9 @@ namespace ts {
                 const iterator = this.entries();
                 while (true) {
                     const { value: entry, done } = iterator.next();
-                    if (done)
+                    if (done) {
                         break;
+                    }
 
                     action(entry[1], entry[0]);
                 }
