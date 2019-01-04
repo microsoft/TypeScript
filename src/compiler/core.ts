@@ -118,47 +118,48 @@ namespace ts {
     export const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
-    function shimMap(): new <T>() => Map<T> {
+    export function shimMap(): new <T>() => Map<T> {
+
+        interface MapEntry<T> {
+            key?: string;
+            value?: T;
+
+            // Linked list references
+            nextEntry?: MapEntry<T>;
+            previousEntry?: MapEntry<T>;
+
+            /**
+             * Specifies if the iterator should skip the next entry.
+             * This will be set when an entry is deleted.
+             * See https://github.com/Microsoft/TypeScript/pull/27292 for more information.
+             */
+            skipNext?: boolean;
+        }
 
         class MapIterator<T, U extends (string | T | [string, T])> {
-            index = 0;
+            private currentEntry?: MapEntry<T>;
+            private selector: (key: string, value: T) => U;
 
-            private shimMap: ShimMap<T>;
-            private originalIteratorKeys: string[];
-            private selector: (data: MapLike<T>, key: string) => U;
-
-            constructor(shimMap: ShimMap<T>, selector: (data: MapLike<T>, key: string) => U) {
-                this.shimMap = shimMap;
+            constructor(currentEntry: MapEntry<T>, selector: (key: string, value: T) => U) {
+                this.currentEntry = currentEntry;
                 this.selector = selector;
-
-                if (!shimMap.currentIteratorKeys) {
-                    // Create the key array on the map over which we (and other new iterators)
-                    // will iterate.
-                    shimMap.currentIteratorKeys = Object.keys(shimMap.data);
-                }
-
-                // Copy the key array to allow us later to check if the map has cleared
-                // or replaced the array.
-                this.originalIteratorKeys = shimMap.currentIteratorKeys;
             }
 
             public next(): { value: U, done: false } | { value: never, done: true } {
-                // Check if we still have the same key array. Otherwise, this means
-                // an element has been deleted from the map in the meanwhile, so we
-                // cannot continue.
-                if (this.index !== -1 && this.originalIteratorKeys !== this.shimMap.currentIteratorKeys) {
-                    throw new Error("Cannot continue iteration because a map element has been deleted.");
+                // Navigate to the next element.
+                while (this.currentEntry) {
+                    const skipNext = !!this.currentEntry.skipNext;
+                    this.currentEntry = this.currentEntry.nextEntry;
+
+                    if (!skipNext) {
+                        break;
+                    }
                 }
 
-                const iteratorKeys = this.originalIteratorKeys;
-                if (this.index !== -1 && this.index < iteratorKeys.length) {
-                    const index = this.index++;
-                    return { value: this.selector(this.shimMap.data, iteratorKeys[index]), done: false };
+                if (this.currentEntry) {
+                    return { value: this.selector(this.currentEntry.key!, this.currentEntry.value!), done: false };
                 }
                 else {
-                    // Ensure subsequent invocations will always return done.
-                    this.index = -1;
-
                     return { value: undefined as never, done: true };
                 }
             }
@@ -167,25 +168,48 @@ namespace ts {
         class ShimMap<T> implements Map<T> {
             size = 0;
 
-            data = createDictionaryObject<T>();
+            private data = createDictionaryObject<MapEntry<T>>();
 
-            currentIteratorKeys?: string[];
+            // Linked list references for iterators.
+            // See https://github.com/Microsoft/TypeScript/pull/27292
+            // for more information.
+            private readonly linkedListStart: MapEntry<T>;
+            private linkedListEnd: MapEntry<T>;
+
+            constructor() {
+                // Create a (stub) start element that will not
+                // contain a key and value.
+                this.linkedListStart = {};
+                // When the map is empty, the end element is the same as the
+                // start element.
+                this.linkedListEnd = this.linkedListStart;
+            }
 
             get(key: string): T | undefined {
-                return this.data[key];
+                const entry = this.data[key] as MapEntry<T> | undefined;
+                return entry && entry.value!;
             }
 
             set(key: string, value: T): this {
                 if (!this.has(key)) {
                     this.size++;
 
-                    if (this.currentIteratorKeys) {
-                        // Add the new entry.
-                        this.currentIteratorKeys.push(key);
-                    }
+                    // Append the new element at the end of the linked list.
+                    const newEntry: MapEntry<T> = {
+                        key,
+                        value
+                    };
+                    this.data[key] = newEntry;
+
+                    const previousEndElement = this.linkedListEnd;
+                    previousEndElement.nextEntry = newEntry;
+                    newEntry.previousEntry = previousEndElement;
+                    this.linkedListEnd = newEntry;
+                }
+                else {
+                    this.data[key].value = value;
                 }
 
-                this.data[key] = value;
                 return this;
             }
 
@@ -197,16 +221,28 @@ namespace ts {
             delete(key: string): boolean {
                 if (this.has(key)) {
                     this.size--;
+                    const entry = this.data[key];
                     delete this.data[key];
 
-                    if (this.currentIteratorKeys) {
-                        // Clear the iteratorKeys array. This means if iterators are still active
-                        // they will throw on the next() call.
-                        this.currentIteratorKeys = undefined;
+                    // Adjust the linked list references.
+                    const previousElement = entry.previousEntry!;
+                    previousElement.nextEntry = entry.nextEntry;
+
+                    // Adjust the forward reference of the deleted element
+                    // in case an iterator still references it.
+                    entry.previousEntry = undefined;
+                    entry.nextEntry = previousElement;
+                    entry.skipNext = true;
+
+                    // When the deleted entry was the last one, we need to
+                    // adust the endElement reference
+                    if (this.linkedListEnd === entry) {
+                        this.linkedListEnd = previousElement;
                     }
 
                     return true;
                 }
+
                 return false;
             }
 
@@ -214,23 +250,35 @@ namespace ts {
                 this.data = createDictionaryObject<T>();
                 this.size = 0;
 
-                if (this.currentIteratorKeys) {
-                    // Clear the iteratorKeys array. This means if iterators are still active
-                    // they will throw on their next() call.
-                    this.currentIteratorKeys = undefined;
+                // Reset the linked list. Note that we must adjust the forward
+                // references of the deleted entries to ensure iterators stuck
+                // in the middle of the list don't continue with deleted entries,
+                // but can continue with new entries added after the clear()
+                // operation.
+                const startEntry = this.linkedListStart;
+                let currentEntry = startEntry.nextEntry;
+                while (currentEntry) {
+                    const nextEntry = currentEntry.nextEntry;
+                    currentEntry.previousEntry = undefined;
+                    currentEntry.nextEntry = startEntry;
+                    currentEntry.skipNext = true;
+
+                    currentEntry = nextEntry;
                 }
+                this.linkedListStart.nextEntry = undefined;
+                this.linkedListEnd = this.linkedListStart;
             }
 
             keys(): Iterator<string> {
-                return new MapIterator(this, (_data, key) => key);
+                return new MapIterator(this.linkedListStart, key => key);
             }
 
             values(): Iterator<T> {
-                return new MapIterator(this, (data, key) => data[key]);
+                return new MapIterator(this.linkedListStart, (_key, value) => value);
             }
 
             entries(): Iterator<[string, T]> {
-                return new MapIterator(this, (data, key) => [key, data[key]] as [string, T]);
+                return new MapIterator(this.linkedListStart, (key, value) => [key, value] as [string, T]);
             }
 
             forEach(action: (value: T, key: string) => void): void {
