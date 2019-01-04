@@ -1449,6 +1449,11 @@ type Record<K extends keyof any, T> = {
 type Exclude<T, U> = T extends U ? never : T;
 
 /**
+ * Omit from T the properties whose keys are in U
+ */
+type Omit<T, U extends keyof T> = Pick<T, Exclude<keyof T, U>>;
+
+/**
  * Extract from T those types that are assignable to U
  */
 type Extract<T, U> = T extends U ? T : never;
