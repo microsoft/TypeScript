@@ -1583,7 +1583,9 @@ namespace ts.FindAllReferences.Core {
         if (!excludeReferenceToShorthandBinding) {
             const bindingElement = getObjectBindingElementWithoutPropertyName(symbol);
             const bindingElementPropertySymbol = bindingElement && getPropertySymbolFromBindingElement(checker, bindingElement);
-            return bindingElementPropertySymbol && fromRoot(bindingElementPropertySymbol);
+            if (bindingElementPropertySymbol) {
+                return fromRoot(bindingElementPropertySymbol);
+            }
         }
 
         // symbolAtLocation for a binding element is the local symbol. See if the search symbol is the property.
