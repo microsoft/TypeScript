@@ -124,33 +124,33 @@ namespace ts {
             index = 0;
 
             private shimMap: ShimMap<T>;
-            private originalIteratoKeys: string[];
+            private originalIteratorKeys: string[];
             private selector: (data: MapLike<T>, key: string) => U;
 
             constructor(shimMap: ShimMap<T>, selector: (data: MapLike<T>, key: string) => U) {
                 this.shimMap = shimMap;
                 this.selector = selector;
 
-                if (!shimMap.currentIteratoKeys) {
+                if (!shimMap.currentIteratorKeys) {
                     // Create the key array on the map over which we (and other new iterators)
                     // will iterate.
-                    shimMap.currentIteratoKeys = Object.keys(shimMap.data);
+                    shimMap.currentIteratorKeys = Object.keys(shimMap.data);
                 }
 
                 // Copy the key array to allow us later to check if the map has cleared
                 // or replaced the array.
-                this.originalIteratoKeys = shimMap.currentIteratoKeys;
+                this.originalIteratorKeys = shimMap.currentIteratorKeys;
             }
 
             public next(): { value: U, done: false } | { value: never, done: true } {
                 // Check if we still have the same key array. Otherwise, this means
                 // an element has been deleted from the map in the meanwhile, so we
                 // cannot continue.
-                if (this.index !== -1 && this.originalIteratoKeys !== this.shimMap.currentIteratoKeys) {
+                if (this.index !== -1 && this.originalIteratorKeys !== this.shimMap.currentIteratorKeys) {
                     throw new Error("Cannot continue iteration because a map element has been deleted.");
                 }
 
-                const iteratorKeys = this.originalIteratoKeys;
+                const iteratorKeys = this.originalIteratorKeys;
                 if (this.index !== -1 && this.index < iteratorKeys.length) {
                     const index = this.index++;
                     return { value: this.selector(this.shimMap.data, iteratorKeys[index]), done: false };
@@ -169,7 +169,7 @@ namespace ts {
 
             data = createDictionaryObject<T>();
 
-            currentIteratoKeys?: string[];
+            currentIteratorKeys?: string[];
 
             get(key: string): T | undefined {
                 return this.data[key];
@@ -179,9 +179,9 @@ namespace ts {
                 if (!this.has(key)) {
                     this.size++;
 
-                    if (this.currentIteratoKeys) {
+                    if (this.currentIteratorKeys) {
                         // Add the new entry.
-                        this.currentIteratoKeys.push(key);
+                        this.currentIteratorKeys.push(key);
                     }
                 }
 
@@ -199,10 +199,10 @@ namespace ts {
                     this.size--;
                     delete this.data[key];
 
-                    if (this.currentIteratoKeys) {
+                    if (this.currentIteratorKeys) {
                         // Clear the iteratorKeys array. This means if iterators are still active
                         // they will throw on the next() call.
-                        this.currentIteratoKeys = undefined;
+                        this.currentIteratorKeys = undefined;
                     }
 
                     return true;
@@ -214,10 +214,10 @@ namespace ts {
                 this.data = createDictionaryObject<T>();
                 this.size = 0;
 
-                if (this.currentIteratoKeys) {
+                if (this.currentIteratorKeys) {
                     // Clear the iteratorKeys array. This means if iterators are still active
                     // they will throw on their next() call.
-                    this.currentIteratoKeys = undefined;
+                    this.currentIteratorKeys = undefined;
                 }
             }
 
