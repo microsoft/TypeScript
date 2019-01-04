@@ -159,8 +159,8 @@ namespace ts.FindAllReferences {
         return { displayParts, kind: symbolKind };
     }
 
-    export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker, usePrefixAndSuffixForRenamingShorthandExports: boolean): RenameLocation {
-        return { ...entryToDocumentSpan(entry), ...getPrefixAndSuffixText(entry, originalNode, checker, usePrefixAndSuffixForRenamingShorthandExports) };
+    export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker): RenameLocation {
+        return { ...entryToDocumentSpan(entry), ...getPrefixAndSuffixText(entry, originalNode, checker) };
     }
 
     export function toReferenceEntry(entry: Entry): ReferenceEntry {
@@ -180,7 +180,7 @@ namespace ts.FindAllReferences {
         };
     }
 
-    function entryToDocumentSpan(entry: Entry): DocumentSpan {
+    export function entryToDocumentSpan(entry: Entry): DocumentSpan {
         if (entry.kind === EntryKind.Span) {
             return { textSpan: entry.textSpan, fileName: entry.fileName };
         }
@@ -191,7 +191,7 @@ namespace ts.FindAllReferences {
     }
 
     interface PrefixAndSuffix { readonly prefixText?: string; readonly suffixText?: string; }
-    function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker, usePrefixAndSuffixForRenamingShorthandExports: boolean): PrefixAndSuffix {
+    function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker): PrefixAndSuffix {
         if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
             const { node, kind } = entry;
             const name = originalNode.text;
@@ -210,7 +210,7 @@ namespace ts.FindAllReferences {
                 const originalSymbol = isExportSpecifier(originalNode.parent) ? checker.getExportSpecifierLocalTargetSymbol(originalNode.parent) : checker.getSymbolAtLocation(originalNode);
                 return contains(originalSymbol!.declarations, entry.node.parent) ? { prefixText: name + " as " } : emptyOptions;
             }
-            else if (usePrefixAndSuffixForRenamingShorthandExports && isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
+            else if (isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
                 return originalNode === entry.node ? { prefixText: name + " as " } : { suffixText: " as " + name };
             }
         }
@@ -1147,7 +1147,7 @@ namespace ts.FindAllReferences.Core {
         const { symbol } = importOrExport;
 
         if (importOrExport.kind === ImportExport.Import) {
-            if (!state.options.isForRename) {
+            if (!state.options.usePrefixAndSuffixForRenamingShorthandExports || !state.options.isForRename) {
                 searchForImportedSymbol(symbol, state);
             }
         }

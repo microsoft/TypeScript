@@ -1559,7 +1559,8 @@ namespace ts {
                     ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
             }
             else {
-                return getReferencesWorker(node, position, { findInStrings, findInComments, usePrefixAndSuffixForRenamingShorthandExports, isForRename: true }, (entry, node, typeChecker) => FindAllReferences.toRenameLocation(entry, node, typeChecker, usePrefixAndSuffixForRenamingShorthandExports));
+                return getReferencesWorker(node, position, { findInStrings, findInComments, usePrefixAndSuffixForRenamingShorthandExports, isForRename: true },
+                    usePrefixAndSuffixForRenamingShorthandExports ? FindAllReferences.toRenameLocation : FindAllReferences.entryToDocumentSpan);
             }
         }
 
