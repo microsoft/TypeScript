@@ -11338,41 +11338,94 @@ namespace ts {
 
         function *generateJsxChildren(node: JsxElement): ElaborationIterator {
             if (!length(node.children)) return;
-            for(let i=0; i < node.children.length; i++) {
+            let memberOffset = 0;
+            for (let i = 0; i < node.children.length; i++) {
                 const child = node.children[i];
-                const nameType = getLiteralType(i);
-                switch (child.kind) {
-                    case SyntaxKind.JsxText:
-                        if (child.containsOnlyWhiteSpaces) {
-                            break; // Whitespace only jsx text isn't real jsx text
-                        }
-                        // child is of type string
-                        yield { errorNode: child, innerExpression: undefined, nameType };
-                        break;
-                    case SyntaxKind.JsxExpression:
-                        // child is of the type of the expression
-                        yield { errorNode: child, innerExpression: child.expression, nameType };
-                        break;
-                    case SyntaxKind.JsxElement:
-                    case SyntaxKind.JsxSelfClosingElement:
-                    case SyntaxKind.JsxFragment:
-                        // child is of type JSX.Element
-                        yield { errorNode: child, innerExpression: undefined, nameType };
-                        break;
-                    default:
-                        return Debug.assertNever(child, "Found invalid jsx child");
+                const nameType = getLiteralType(i - memberOffset);
+                const elem = getElaborationElementForJsxChild(child, nameType);
+                if (elem) {
+                    yield elem;
                 }
+                else {
+                    memberOffset++;
+                }
+            }
+        }
+
+        function getElaborationElementForJsxChild(child: JsxChild, nameType: LiteralType) {
+            switch (child.kind) {
+                case SyntaxKind.JsxExpression:
+                    // child is of the type of the expression
+                    return { errorNode: child, innerExpression: child.expression, nameType };
+                case SyntaxKind.JsxText:
+                    if (child.containsOnlyWhiteSpaces) {
+                        break; // Whitespace only jsx text isn't real jsx text
+                    }
+                    // child is a string
+                    return { errorNode: child, innerExpression: undefined, nameType };
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxFragment:
+                    // child is of type JSX.Element
+                    return { errorNode: child, innerExpression: child, nameType };
+                default:
+                    return Debug.assertNever(child, "Found invalid jsx child");
             }
         }
 
         function elaborateJsxComponents(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
             let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation);
             if (isJsxOpeningElement(node.parent) && isJsxElement(node.parent.parent)) {
+                const containingElement = node.parent.parent;
                 const childPropName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
                 const childrenNameType = getLiteralType(childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName));
                 const childrenTargetType = getIndexedAccessType(target, childrenNameType);
-                if (isArrayLikeType(childrenTargetType)) {
-                    result = elaborateElementwise(generateJsxChildren(node.parent.parent), getIndexedAccessType(source, childrenNameType), childrenTargetType, relation) || result;
+                const validChildren = filter(containingElement.children, i => !isJsxText(i) || !i.containsOnlyWhiteSpaces);
+                if (!length(validChildren)) {
+                    return result;
+                }
+                const moreThanOneRealChildren = length(validChildren) > 1;
+                const arrayLikeTargetParts = filterType(childrenTargetType, isArrayOrTupleLikeType);
+                const nonArrayLikeTargetParts = filterType(childrenTargetType, t => !isArrayOrTupleLikeType(t));
+                if (moreThanOneRealChildren) {
+                    if (arrayLikeTargetParts !== neverType) {
+                        const realSource = createTupleType(checkJsxChildren(containingElement, CheckMode.Normal));
+                        result = elaborateElementwise(generateJsxChildren(containingElement), realSource, arrayLikeTargetParts, relation) || result;
+                    }
+                    else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
+                        // arity mismatch
+                        result = true;
+                        error(
+                            containingElement.openingElement.tagName,
+                            Diagnostics.Target_JSX_element_expects_0_prop_of_type_1_but_multiple_children_were_provided,
+                            childPropName ? unescapeLeadingUnderscores(childPropName) : "children",
+                            typeToString(childrenTargetType)
+                        );
+                    }
+                }
+                else {
+                    if (nonArrayLikeTargetParts !== neverType) {
+                        const child = validChildren[0];
+                        const elem = getElaborationElementForJsxChild(child, childrenNameType);
+                        if (elem) {
+                            result = elaborateElementwise(
+                                (function*() { yield elem; })(),
+                                source,
+                                target,
+                                relation
+                            ) || result;
+                        }
+                    }
+                    else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
+                        // arity mismatch
+                        result = true;
+                        error(
+                            containingElement.openingElement.tagName,
+                            Diagnostics.Target_JSX_element_expects_0_prop_of_type_1_but_only_a_single_child_was_provided,
+                            childPropName ? unescapeLeadingUnderscores(childPropName) : "children",
+                            typeToString(childrenTargetType)
+                        );
+                    }
                 }
             }
             return result;
@@ -13514,6 +13567,10 @@ namespace ts {
 
         function isTupleLikeType(type: Type): boolean {
             return isTupleType(type) || !!getPropertyOfType(type, "0" as __String);
+        }
+
+        function isArrayOrTupleLikeType(type: Type): boolean {
+            return isArrayLikeType(type) || isTupleLikeType(type);
         }
 
         function getTupleElementType(type: Type, index: number) {

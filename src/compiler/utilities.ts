@@ -888,7 +888,7 @@ namespace ts {
         }
 
         const isMissing = nodeIsMissing(errorNode);
-        const pos = isMissing
+        const pos = isMissing || isJsxText(node)
             ? errorNode.pos
             : skipTrivia(sourceFile.text, errorNode.pos);
 
