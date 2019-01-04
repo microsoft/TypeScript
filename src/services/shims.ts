@@ -841,7 +841,7 @@ namespace ts {
         public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string {
             return this.forwardJSONCall(
                 `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
-                () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments)
+                () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, /*usePrefixAndSuffixForRenamingShorthandExports*/ true)
             );
         }
 

@@ -39,6 +39,8 @@ namespace ts.FindAllReferences {
         readonly isForRename?: boolean;
         /** True if we are searching for implementations. We will have a different method of adding references if so. */
         readonly implementations?: boolean;
+        /** User setting to allow backwards compatibility for renaming shorthand literal exports */
+        readonly usePrefixAndSuffixForRenamingShorthandExports?: boolean;
     }
 
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
@@ -157,8 +159,8 @@ namespace ts.FindAllReferences {
         return { displayParts, kind: symbolKind };
     }
 
-    export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker): RenameLocation {
-        return { ...entryToDocumentSpan(entry), ...getPrefixAndSuffixText(entry, originalNode, checker) };
+    export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker, usePrefixAndSuffixForRenamingShorthandExports: boolean): RenameLocation {
+        return { ...entryToDocumentSpan(entry), ...getPrefixAndSuffixText(entry, originalNode, checker, usePrefixAndSuffixForRenamingShorthandExports) };
     }
 
     export function toReferenceEntry(entry: Entry): ReferenceEntry {
@@ -189,7 +191,7 @@ namespace ts.FindAllReferences {
     }
 
     interface PrefixAndSuffix { readonly prefixText?: string; readonly suffixText?: string; }
-    function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker): PrefixAndSuffix {
+    function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker, usePrefixAndSuffixForRenamingShorthandExports: boolean): PrefixAndSuffix {
         if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
             const { node, kind } = entry;
             const name = originalNode.text;
@@ -208,7 +210,7 @@ namespace ts.FindAllReferences {
                 const originalSymbol = isExportSpecifier(originalNode.parent) ? checker.getExportSpecifierLocalTargetSymbol(originalNode.parent) : checker.getSymbolAtLocation(originalNode);
                 return contains(originalSymbol!.declarations, entry.node.parent) ? { prefixText: name + " as " } : emptyOptions;
             }
-            else if (isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
+            else if (usePrefixAndSuffixForRenamingShorthandExports && isExportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
                 return originalNode === entry.node ? { prefixText: name + " as " } : { suffixText: " as " + name };
             }
         }
@@ -1102,7 +1104,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
-        if (!state.options.isForRename || alwaysGetReferences) {
+        if (!state.options.usePrefixAndSuffixForRenamingShorthandExports || !state.options.isForRename || alwaysGetReferences) {
             const exportKind = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.assertDefined(exportSpecifier.symbol);
             const exportInfo = Debug.assertDefined(getExportInfo(exportSymbol, exportKind, state.checker));
