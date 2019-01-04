@@ -7169,10 +7169,9 @@ namespace ts {
                     // type, we include 'undefined' in the type. Similarly, when creating a non-optional property in strictNullChecks
                     // mode, if the underlying property is optional we remove 'undefined' from the type.
                     prop.type = strictNullChecks && isOptional && !isTypeAssignableTo(undefinedType, propType) ? getOptionalType(propType) :
-                        strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) :
-                        propType;
-                    
-                    const templateProp = (templateType.flags & TypeFlags.IndexedAccess) &&  getPropertyOfType((<IndexedAccessType>templateType).objectType, propName)
+                        strictNullChecks && !isOptional && modifiersProp && modifiersProp.flags & SymbolFlags.Optional ? getTypeWithFacts(propType, TypeFacts.NEUndefined) : propType;
+
+                    const templateProp = (templateType.flags & TypeFlags.IndexedAccess) && getPropertyOfType((<IndexedAccessType>templateType).objectType, propName);
 
                     prop.syntheticOrigin = templateProp || modifiersProp;
                     prop.declarations = templateProp && templateProp.declarations || modifiersProp && modifiersProp.declarations || undefined!;
