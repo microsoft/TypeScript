@@ -1013,11 +1013,11 @@ namespace ts {
                             return [clean, namespaceDecl];
                         }
 
-                        const modifierFlags = (getModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient;
+                        const modifiers = createModifiersFromModifierFlags((getModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient);
                         const cleanDeclaration = updateFunctionDeclaration(
                             clean,
                             /*decorators*/ undefined,
-                            createModifiersFromModifierFlags(modifierFlags),
+                            modifiers,
                             /*asteriskToken*/ undefined,
                             clean.name,
                             clean.typeParameters,
@@ -1029,16 +1029,16 @@ namespace ts {
                         const namespaceDeclaration = updateModuleDeclaration(
                             namespaceDecl,
                             /*decorators*/ undefined,
-                            createModifiersFromModifierFlags(modifierFlags),
-                            input.name!,
-                            createModuleBlock(declarations)
+                            modifiers,
+                            namespaceDecl.name,
+                            namespaceDecl.body
                         );
 
                         const exportDefaultDeclaration = createExportAssignment(
                             /*decorators*/ undefined,
-                            /*modifiers*/undefined,
-                            /*isExportEquals*/false,
-                            clean.name!
+                            /*modifiers*/ undefined,
+                            /*isExportEquals*/ false,
+                            namespaceDecl.name
                         );
 
                         resultHasExternalModuleIndicator = true;
