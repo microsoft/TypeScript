@@ -822,6 +822,12 @@ namespace ts {
                                 const dtsOutfile = changeExtension(out, ".d.ts");
                                 processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
                             }
+                            // If this is not module emit, include all d.ts files from the reference
+                            else if (getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
+                                parsedRef.commandLine.fileNames.forEach(fileName =>
+                                    fileExtensionIs(fileName, Extension.Dts) &&
+                                    processSourceFile(fileName, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined));
+                            }
                         }
                     }
                 }
@@ -2129,7 +2135,7 @@ namespace ts {
                 if (fail) {
                     if (!sourceFile) {
                         const redirect = getProjectReferenceRedirect(fileName);
-                        if (redirect) {
+                        if (redirect && !fileExtensionIs(fileName, Extension.Dts)) {
                             fail(Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect, fileName);
                         }
                         else {
@@ -2343,8 +2349,8 @@ namespace ts {
         }
 
         function getProjectReferenceRedirect(fileName: string): string | undefined {
-            // Ignore dts or any of the non ts files
-            if (!resolvedProjectReferences || !resolvedProjectReferences.length || fileExtensionIs(fileName, Extension.Dts) || !fileExtensionIsOneOf(fileName, supportedTSExtensions)) {
+            // Ignore any of the non ts files
+            if (!resolvedProjectReferences || !resolvedProjectReferences.length || !fileExtensionIsOneOf(fileName, supportedTSExtensions)) {
                 return undefined;
             }
 
@@ -2355,9 +2361,11 @@ namespace ts {
                 return undefined;
             }
             const out = referencedProject.commandLine.options.outFile || referencedProject.commandLine.options.out;
-            return out ?
-                changeExtension(out, Extension.Dts) :
-                getOutputDeclarationFileName(fileName, referencedProject.commandLine);
+            return fileExtensionIs(fileName, Extension.Dts) ?
+                fileName :
+                out ?
+                    changeExtension(out, Extension.Dts) :
+                    getOutputDeclarationFileName(fileName, referencedProject.commandLine);
         }
 
         /**

@@ -455,6 +455,29 @@ export const b = new A();`);
                     expectedFileTraces);
             });
         });
+
+        it("unittests:: tsbuild - with ambient declarations without --out", () => {
+            const projFs = loadProjectFromDisk("tests/projects/ambientDefinitions");
+            const allExpectedOutputs = [
+                "/src/converter/length.js", "/src/converter/length.js.map",
+                "/src/converter/length.d.ts", "/src/converter/length.d.ts.map"
+            ];
+            const expectedFileTraces = [
+                ...getLibs(),
+                "/src/utils/utils.d.ts",
+                "/src/converter/length.ts"
+            ];
+
+            const fs = projFs.shadow();
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host, ["/src/converter/tsconfig.json"], { listFiles: true });
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(/*empty*/);
+            for (const output of allExpectedOutputs) {
+                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
+            assert.deepEqual(host.traces, expectedFileTraces);
+        });
     }
 
     export namespace OutFile {
