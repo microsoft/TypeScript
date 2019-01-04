@@ -83,7 +83,7 @@ namespace ts.OrganizeImports {
 
     function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
         const typeChecker = program.getTypeChecker();
-        const jsxNamespace = typeChecker.getJsxNamespace();
+        const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
 
         const usedImports: ImportDeclaration[] = [];
