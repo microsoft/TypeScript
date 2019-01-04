@@ -2541,11 +2541,11 @@
         "category": "Error",
         "code": 2744
     },
-    "Target JSX element expects {0} prop of type {1}, but only a single child was provided.": {
+    "Target JSX element expects a '{0}' prop of type '{1}', but only a single child was provided.": {
         "category": "Error",
         "code": 2745
     },
-    "Target JSX element expects {0} prop of type {1}, but multiple children were provided.": {
+    "Target JSX element expects a '{0}' prop of type '{1}', but multiple children were provided.": {
         "category": "Error",
         "code": 2746
     },

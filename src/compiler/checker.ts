@@ -11397,7 +11397,7 @@ namespace ts {
                         result = true;
                         error(
                             containingElement.openingElement.tagName,
-                            Diagnostics.Target_JSX_element_expects_0_prop_of_type_1_but_multiple_children_were_provided,
+                            Diagnostics.Target_JSX_element_expects_a_0_prop_of_type_1_but_multiple_children_were_provided,
                             childPropName ? unescapeLeadingUnderscores(childPropName) : "children",
                             typeToString(childrenTargetType)
                         );
@@ -11421,7 +11421,7 @@ namespace ts {
                         result = true;
                         error(
                             containingElement.openingElement.tagName,
-                            Diagnostics.Target_JSX_element_expects_0_prop_of_type_1_but_only_a_single_child_was_provided,
+                            Diagnostics.Target_JSX_element_expects_a_0_prop_of_type_1_but_only_a_single_child_was_provided,
                             childPropName ? unescapeLeadingUnderscores(childPropName) : "children",
                             typeToString(childrenTargetType)
                         );

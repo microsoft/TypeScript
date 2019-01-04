@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(42,11): error TS2746: Target JSX element expects children prop of type Element, but multiple children were provided.
+tests/cases/conformance/jsx/file.tsx(42,11): error TS2746: Target JSX element expects a 'children' prop of type 'Element', but multiple children were provided.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -45,4 +45,4 @@ tests/cases/conformance/jsx/file.tsx(42,11): error TS2746: Target JSX element ex
     // Error
     let k5 = <SingleChildComp a={10} b="hi"><></><Button /><AnotherButton /></SingleChildComp>;
               ~~~~~~~~~~~~~~~
-!!! error TS2746: Target JSX element expects children prop of type Element, but multiple children were provided.
+!!! error TS2746: Target JSX element expects a 'children' prop of type 'Element', but multiple children were provided.
