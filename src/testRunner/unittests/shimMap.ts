@@ -50,10 +50,13 @@ namespace ts {
                     map.set("Z", "Z");
                 }
                 else if (key === "Z") {
-                    // Check that the map behaves correctly when an item is
+                    // Check that the map behaves correctly when two items are
                     // added and removed immediately.
                     map.set("X", "X");
-                    map.delete("X");
+                    map.set("X1", "X1");
+                    map.set("X2", "X2");
+                    map.delete("X1");
+                    map.delete("X2");
                     map.set("Y", "Y");
                 }
             };
@@ -78,7 +81,7 @@ namespace ts {
         }
 
         it("iterates values in insertion order and handles changes", () => {
-            const expectedResult = "1:1;3:3;2:Y2;4:X4;0:X0;3:Y3;999:999;A:A;Z:Z;Y:Y;";
+            const expectedResult = "1:1;3:3;2:Y2;4:X4;0:X0;3:Y3;999:999;A:A;Z:Z;X:X;Y:Y;";
 
             // First, ensure the test actually has the same behavior as a native Map.
             let nativeMap = createMap<string>();
