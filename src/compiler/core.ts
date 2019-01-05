@@ -165,10 +165,9 @@ namespace ts {
             }
         }
 
-        class ShimMap<T> implements Map<T> {
-            size = 0;
-
+        return class <T> implements Map<T> {
             private data = createDictionaryObject<MapEntry<T>>();
+            public size = 0;
 
             // Linked list references for iterators.
             // See https://github.com/Microsoft/TypeScript/pull/27292
@@ -242,7 +241,6 @@ namespace ts {
 
                     return true;
                 }
-
                 return false;
             }
 
@@ -292,9 +290,7 @@ namespace ts {
                     action(entry[1], entry[0]);
                 }
             }
-        }
-
-        return ShimMap;
+        };
     }
 
     export function length(array: ReadonlyArray<any> | undefined): number {
