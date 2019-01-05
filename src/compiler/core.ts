@@ -223,21 +223,24 @@ namespace ts {
                     const entry = this.data[key];
                     delete this.data[key];
 
-                    // Adjust the linked list references.
-                    const previousElement = entry.previousEntry!;
-                    previousElement.nextEntry = entry.nextEntry;
+                    // Adjust the linked list references of the neighbor entries.
+                    const previousEntry = entry.previousEntry!;
+                    previousEntry.nextEntry = entry.nextEntry;
+                    if (entry.nextEntry) {
+                        entry.nextEntry.previousEntry = previousEntry;
+                    }
+
+                    // When the deleted entry was the last one, we need to
+                    // adust the endElement reference.
+                    if (this.linkedListEnd === entry) {
+                        this.linkedListEnd = previousEntry;
+                    }
 
                     // Adjust the forward reference of the deleted element
                     // in case an iterator still references it.
                     entry.previousEntry = undefined;
-                    entry.nextEntry = previousElement;
+                    entry.nextEntry = previousEntry;
                     entry.skipNext = true;
-
-                    // When the deleted entry was the last one, we need to
-                    // adust the endElement reference
-                    if (this.linkedListEnd === entry) {
-                        this.linkedListEnd = previousElement;
-                    }
 
                     return true;
                 }
