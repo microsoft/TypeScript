@@ -1,4 +1,4 @@
-describe("core paths", () => {
+describe("unittests:: core paths", () => {
     it("normalizeSlashes", () => {
         assert.strictEqual(ts.normalizeSlashes("a"), "a");
         assert.strictEqual(ts.normalizeSlashes("a/b"), "a/b");
