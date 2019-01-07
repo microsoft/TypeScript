@@ -342,6 +342,7 @@ export default hello.hello`);
 
                 function getCoreOutputs() {
                     return [
+                        "/src/core/some_decl.d.ts",
                         "/src/core/index.d.ts",
                         "/src/core/anotherModule.d.ts"
                     ];
@@ -456,27 +457,120 @@ export const b = new A();`);
             });
         });
 
-        it("unittests:: tsbuild - with ambient declarations without --out", () => {
+        describe("unittests:: tsbuild - with ambient declarations", () => {
             const projFs = loadProjectFromDisk("tests/projects/ambientDefinitions");
-            const allExpectedOutputs = [
-                "/src/converter/length.js", "/src/converter/length.js.map",
-                "/src/converter/length.d.ts", "/src/converter/length.d.ts.map"
-            ];
-            const expectedFileTraces = [
-                ...getLibs(),
-                "/src/utils/utils.d.ts",
-                "/src/converter/length.ts"
+            function getExpectedOutputs(withoutExtension: string) {
+                return [`${withoutExtension}.js`, `${withoutExtension}.js.map`, `${withoutExtension}.d.ts`, `${withoutExtension}.d.ts.map`];
+            }
+            const expectedOutputsUtils = getExpectedOutputs("/src/utils/someFile");
+            const expectedOutputsConverter = getExpectedOutputs("/src/converter/length");
+            const allExpectedOutputs = [...expectedOutputsUtils, ...expectedOutputsConverter];
+            const allExpectedOutputsWithOutFile = [
+                ...getExpectedOutputs("/src/utils/result"),
+                ...expectedOutputsConverter
             ];
 
-            const fs = projFs.shadow();
-            const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host, ["/src/converter/tsconfig.json"], { listFiles: true });
-            builder.buildAllProjects();
-            host.assertDiagnosticMessages(/*empty*/);
-            for (const output of allExpectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            const expectedFileTracesUtils = [
+                ...getLibs(),
+                "/src/utils/someFile.ts",
+                "/src/utils/types.d.ts",
+                "/src/utils/unusedFile.ts",
+            ];
+
+            function verifyDtsIncluded(modifyFs: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedFileTraces: ReadonlyArray<string>) {
+                const fs = projFs.shadow();
+                modifyFs(fs);
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/converter/tsconfig.json"], { listFiles: true });
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(/*empty*/);
+                for (const output of allExpectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+                assert.deepEqual(host.traces, expectedFileTraces);
             }
-            assert.deepEqual(host.traces, expectedFileTraces);
+
+            function makeModules(fs: vfs.FileSystem) {
+                const tsconfigBaseFile = "/src/tsconfig_base.json";
+                const tsconfigBase = JSON.parse(fs.readFileSync(tsconfigBaseFile, "utf8"));
+                tsconfigBase.compilerOptions.module = "amd";
+                fs.writeFileSync(tsconfigBaseFile, JSON.stringify(tsconfigBase));
+
+                const lengthFile = "/src/converter/length.ts";
+                const lengthContent = fs.readFileSync(lengthFile, "utf8");
+                fs.writeFileSync(lengthFile, `import { leftPad } from "utils";
+import { foo } from "../utils/someFile";
+
+${lengthContent}`);
+
+                fs.writeFileSync("/src/utils/types.d.ts", `declare module "utils" {
+    export function leftPad(s: string, n: number): string;
+}`);
+
+                const someFile = "/src/utils/someFile.ts";
+                const someFileContent = fs.readFileSync(someFile, "utf8");
+                fs.writeFileSync(someFile, `export ${someFileContent}`);
+
+                const unUsedFile = "/src/utils/unusedFile.ts";
+                const unUsedFileContent = fs.readFileSync(unUsedFile, "utf8");
+                fs.writeFileSync(unUsedFile, `export ${unUsedFileContent}`);
+            }
+
+            function makeOutFile(fs: vfs.FileSystem) {
+                const tsconfigFile = "/src/utils/tsconfig.json";
+                const tsconfig = JSON.parse(fs.readFileSync(tsconfigFile, "utf8"));
+                tsconfig.compilerOptions = { outFile: "result.js" };
+                fs.writeFileSync(tsconfigFile, JSON.stringify(tsconfig));
+            }
+
+            describe("Non modules", () => {
+                it("without --out", () => {
+                    verifyDtsIncluded(noop, allExpectedOutputs, [
+                        ...expectedFileTracesUtils,
+                        ...getLibs(),
+                        "/src/utils/someFile.d.ts", // output d.ts
+                        "/src/utils/types.d.ts", // source d.ts
+                        "/src/utils/unusedFile.d.ts", // output d.ts
+                        "/src/converter/length.ts"
+                    ]);
+                });
+
+                it("with --out", () => {
+                    verifyDtsIncluded(fs => makeOutFile(fs), allExpectedOutputsWithOutFile, [
+                        ...expectedFileTracesUtils,
+                        ...getLibs(),
+                        "/src/utils/result.d.ts", // out file
+                        "/src/utils/types.d.ts", // d.ts should be included by default
+                        "/src/converter/length.ts"
+                    ]);
+                });
+            });
+
+            describe("modules", () => {
+                it("without --out", () => {
+                    verifyDtsIncluded(fs => makeModules(fs), allExpectedOutputs, [
+                        ...expectedFileTracesUtils,
+                        ...getLibs(),
+                        "/src/utils/types.d.ts", // d.ts should be included by default
+                        "/src/utils/someFile.d.ts", // As part of module resolution
+                        "/src/converter/length.ts"
+                    ]);
+                });
+
+                it.skip("with --out", () => {
+                    // TODO:: Handle many ts to single dts in modules scenario
+                    verifyDtsIncluded(fs => {
+                        makeModules(fs);
+                        makeOutFile(fs);
+                    }, allExpectedOutputsWithOutFile, [
+                        ...expectedFileTracesUtils,
+                        ...getLibs(),
+                        "/src/utils/types.d.ts", // d.ts from source
+                        "/src/utils/result.d.ts", // out file as part of resolution
+                        "/src/converter/length.ts"
+                    ]);
+                });
+            });
         });
     }
 

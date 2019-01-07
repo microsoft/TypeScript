@@ -818,16 +818,21 @@ namespace ts {
                     for (const parsedRef of resolvedProjectReferences) {
                         if (parsedRef) {
                             const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
-                            if (out) {
-                                const dtsOutfile = changeExtension(out, ".d.ts");
-                                processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
-                            }
-                            // If this is not module emit, include all d.ts files from the reference
-                            else if (getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
-                                parsedRef.commandLine.fileNames.forEach(fileName =>
-                                    fileExtensionIs(fileName, Extension.Dts) &&
-                                    processSourceFile(fileName, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined));
-                            }
+                            const nonModuleEmit = getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None;
+
+                            // Include all .d.ts files from referenced project
+                            // Include --out file if specified or otherwise for non module emit, all the generated .d.ts files
+                            parsedRef.commandLine.fileNames.forEach(fileName => {
+                                if (fileExtensionIs(fileName, Extension.Dts)) {
+                                    processSourceFile(fileName, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                                }
+                                else if (out) {
+                                    processSourceFile(changeExtension(out, ".d.ts"), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                                }
+                                else if (nonModuleEmit && hasTSFileExtension(fileName)) {
+                                    processSourceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                                }
+                            });
                         }
                     }
                 }
@@ -2350,7 +2355,7 @@ namespace ts {
 
         function getProjectReferenceRedirect(fileName: string): string | undefined {
             // Ignore any of the non ts files
-            if (!resolvedProjectReferences || !resolvedProjectReferences.length || !fileExtensionIsOneOf(fileName, supportedTSExtensions)) {
+            if (!resolvedProjectReferences || !resolvedProjectReferences.length || !hasTSFileExtension(fileName)) {
                 return undefined;
             }
 

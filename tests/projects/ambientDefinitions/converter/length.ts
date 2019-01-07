@@ -6,3 +6,7 @@ function formatInches(i: number) {
     i = i - ft * 12;
     return `${ft}' ${leftPad(i.toString(), 2)}`;
 }
+
+function someAnotherFunction() {
+    return foo();
+}
