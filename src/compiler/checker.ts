@@ -519,6 +519,7 @@ namespace ts {
         let deferredGlobalExcludeSymbol: Symbol;
         let deferredGlobalPickSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
+        let deferredGlobalThisType: ObjectType; // (unbound) `window` has type Window & globalThis; `this` and `globalThis` and `global` have type GlobalThis
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -8976,6 +8977,13 @@ namespace ts {
             return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
         }
 
+        function getGlobalThisType() {
+            // TODO: Maybe should allow d.ts file to override this? Probably? Or just Window?
+            return deferredGlobalThisType ||
+                (deferredGlobalThisType = createAnonymousType(undefined, globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined)) ||
+                emptyObjectType;
+        }
+
         function getGlobalExtractSymbol(): Symbol {
             return deferredGlobalExtractSymbol || (deferredGlobalExtractSymbol = getGlobalSymbol("Extract" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
@@ -16757,6 +16765,16 @@ namespace ts {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== errorType) {
                     return getFlowTypeOfReference(node, type);
+                }
+            }
+            if (isSourceFile(container)) {
+                // look up in the source file's locals or exports
+                if (container.commonJsModuleIndicator) {
+                    const fileSymbol = getSymbolOfNode(container);
+                    return fileSymbol && getTypeOfSymbol(fileSymbol);
+                }
+                else {
+                    return getGlobalThisType();
                 }
             }
         }
