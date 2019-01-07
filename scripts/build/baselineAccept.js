@@ -12,12 +12,12 @@ function baselineAccept(subfolder = "") {
 }
 
 function baselineCopy(subfolder = "") {
-    return gulp.src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**`, `!${localBaseline}${subfolder}/**/*.delete`], { base: localBaseline, read: false })
+    return gulp.src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**`, `!${localBaseline}${subfolder}/**/*.delete`], { base: localBaseline })
         .pipe(gulp.dest(refBaseline));
 }
 
 function baselineDelete(subfolder = "") {
-    return gulp.src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**/*.delete`], { base: localBaseline, read: false })
+    return gulp.src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**/*.delete`], { base: localBaseline })
         .pipe(rm())
         .pipe(rename({ extname: "" }))
         .pipe(rm(refBaseline));
