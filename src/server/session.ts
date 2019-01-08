@@ -1233,7 +1233,7 @@ namespace ts.server {
                 { fileName: args.file, pos: position },
                 !!args.findInStrings,
                 !!args.findInComments,
-                this.getPreferences(file).usePrefixAndSuffixForRenamingShorthandExports || false
+                this.getHostPreferences().usePrefixAndSuffixForRenamingShorthandExports || false
             );
             if (!simplifiedResult) return locations;
 
