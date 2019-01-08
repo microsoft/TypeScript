@@ -151,7 +151,7 @@ namespace ts {
                     const toImport = oldFromNew !== undefined
                         // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                         // TODO:GH#18217
-                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, host)
+                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew)
                         : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
@@ -192,28 +192,35 @@ namespace ts {
             const resolved = host.resolveModuleNames
                 ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
                 : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
-            return getSourceFileToImportFromResolved(resolved, oldToNew, host);
+            return getSourceFileToImportFromResolved(resolved, oldToNew);
         }
     }
 
-    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, host: LanguageServiceHost): ToImport | undefined {
+    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater): ToImport | undefined {
         // Search through all locations looking for a moved file, and only then test already existing files.
         // This is because if `a.ts` is compiled to `a.js` and `a.ts` is moved, we don't want to resolve anything to `a.js`, but to `a.ts`'s new location.
-        return tryEach(tryGetNewFile) || tryEach(tryGetOldFile);
+        if (!resolved) return undefined;
 
-        function tryEach(cb: (oldFileName: string) => ToImport | undefined): ToImport | undefined {
-            return resolved && (
-                (resolved.resolvedModule && cb(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, cb));
+        // First try resolved module
+        if (resolved.resolvedModule) {
+            const result = tryChange(resolved.resolvedModule.resolvedFileName);
+            if (result) return result;
         }
 
-        function tryGetNewFile(oldFileName: string): ToImport | undefined {
-            const newFileName = oldToNew(oldFileName);
-            return newFileName !== undefined && host.fileExists!(newFileName) ? { newFileName, updated: true } : undefined; // TODO: GH#18217
+        // Then failed lookups except package.json since we dont want to touch them (only included ts/js files)
+        const result = forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
+        if (result) return result;
+
+        // If nothing changed, then result is resolved module file thats not updated
+        return resolved.resolvedModule && { newFileName: resolved.resolvedModule.resolvedFileName, updated: false };
+
+        function tryChangeWithIgnoringPackageJson(oldFileName: string) {
+            return !endsWith(oldFileName, "/package.json") ? tryChange(oldFileName) : undefined;
         }
 
-        function tryGetOldFile(oldFileName: string): ToImport | undefined {
+        function tryChange(oldFileName: string) {
             const newFileName = oldToNew(oldFileName);
-            return host.fileExists!(oldFileName) ? newFileName !== undefined ? { newFileName, updated: true } : { newFileName: oldFileName, updated: false } : undefined; // TODO: GH#18217
+            return newFileName && { newFileName, updated: true };
         }
     }
 
