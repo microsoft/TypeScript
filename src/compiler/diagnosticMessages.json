@@ -1776,7 +1776,7 @@
         "category": "Error",
         "code": 2496
     },
-    "This module can only be imported with ECMAScript imports by turning on the '{0}' flag and using a default import.": {
+    "This module can only be referenced with ECMAScript imports/exports by turning on the '{0}' flag and referencing its default export.": {
         "category": "Error",
         "code": 2497
     },

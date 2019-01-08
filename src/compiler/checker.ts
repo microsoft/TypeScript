@@ -2415,7 +2415,7 @@ namespace ts {
                         ? "allowSyntheticDefaultImports"
                         : "esModuleInterop";
 
-                    error(referencingLocation, Diagnostics.This_module_can_only_be_imported_with_ECMAScript_imports_by_turning_on_the_0_flag_and_using_a_default_import, compilerOptionName);
+                    error(referencingLocation, Diagnostics.This_module_can_only_be_referenced_with_ECMAScript_imports_Slashexports_by_turning_on_the_0_flag_and_referencing_its_default_export, compilerOptionName);
 
                     return symbol;
                 }
