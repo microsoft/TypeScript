@@ -4,27 +4,20 @@
 ////declare function log(s: string | number): void;
 ////const [|{| "isWriteAccess": true, "isDefinition": true |}q|] = 1;
 ////export { [|{| "isWriteAccess": true, "isDefinition": true |}q|] };
-////export function foo() {
-////    return 3;
-////}
 ////const x = {
-////    z: 'value'
+////    [|{| "isWriteAccess": true, "isDefinition": true |}z|]: 'value'
 ////}
-////const { z } = x;
-////log(z);
+////const { [|{| "isWriteAccess": true, "isDefinition": true |}z|] } = x;
+////log([|z|]);
 
 // @Filename: /file2.ts
 ////declare function log(s: string | number): void;
-////import {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}q|],
-////    foo
-////} from "./file1";
+////import { [|{| "isWriteAccess": true, "isDefinition": true |}q|] } from "./file1";
 ////log([|q|] + 1);
-////log(foo());
 
 verify.noErrors();
 
-const [q0, q1, q2, q3] = test.ranges();
+const [q0, q1, z0, z1, z2, q2, q3] = test.ranges();
 const qFile1Ranges = [q0, q1];
 const qFile2Ranges = [q2, q3];
 const qFile1ReferenceGroup: FourSlashInterface.ReferenceGroup = {
@@ -42,5 +35,17 @@ const qFile2ReferenceGroup: FourSlashInterface.ReferenceGroup = {
 // verify.renameLocations(q1, { ranges: [{ range: q1, prefixText: "q as " }, q2, q3], usePrefixAndSuffixForRenamingShorthandExports: true });
 // verify.renameLocations([q2, q3], { ranges: [{ range: q2, prefixText: "q as " }, q3], usePrefixAndSuffixForRenamingShorthandExports: true });
 
-// verify.renameLocations(q0, { ranges: [q0, q1, q2, q3], usePrefixAndSuffixForRenamingShorthandExports: false });
-verify.renameLocations(q1, { ranges: [q0, q1, q2, q3], usePrefixAndSuffixForRenamingShorthandExports: false });
+// verify.renameLocations([q0, q1, q2, q3], { ranges: [q0, q1, q2, q3], usePrefixAndSuffixForRenamingShorthandExports: false });
+
+const zReferenceGroup1: FourSlashInterface.ReferenceGroup = {
+    definition: "(property) z: string",
+    ranges: [z0]
+};
+const zReferenceGroup2: FourSlashInterface.ReferenceGroup = {
+    definition: "const z: string",
+    ranges: [z1, z2]
+};
+
+verify.referenceGroups([z0], [{ ...zReferenceGroup1, ranges: [z0, z1] }]);
+verify.referenceGroups([z1], [zReferenceGroup1, zReferenceGroup2]);
+verify.referenceGroups([z2], [zReferenceGroup2]);
