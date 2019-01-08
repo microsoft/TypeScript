@@ -1,0 +1,30 @@
+=== tests/cases/conformance/es2019/b.js ===
+var a = 10;
+>a : number
+>10 : 10
+
+this.a;
+>this.a : number
+>this : GlobalThis
+>a : number
+
+this.b;
+>this.b : number
+>this : GlobalThis
+>b : number
+
+=== tests/cases/conformance/es2019/actual.ts ===
+var b = 10;
+>b : number
+>10 : 10
+
+this.a;
+>this.a : number
+>this : GlobalThis
+>a : number
+
+this.b;
+>this.b : number
+>this : GlobalThis
+>b : number
+

@@ -16768,16 +16768,15 @@ namespace ts {
                 if (type && type !== errorType) {
                     return getFlowTypeOfReference(node, type);
                 }
-                if (isSourceFile(container)) {
-                    // TODO: Should go outside the isInJS check; I need to provide a way to print the type name first, though.
-                    // look up in the source file's locals or exports
-                    if (container.commonJsModuleIndicator) {
-                        const fileSymbol = getSymbolOfNode(container);
-                        return fileSymbol && getTypeOfSymbol(fileSymbol);
-                    }
-                    else {
-                        return getGlobalThisType();
-                    }
+            }
+            if (isSourceFile(container)) {
+                // look up in the source file's locals or exports
+                if (container.commonJsModuleIndicator) {
+                    const fileSymbol = getSymbolOfNode(container);
+                    return fileSymbol && getTypeOfSymbol(fileSymbol);
+                }
+                else {
+                    return getGlobalThisType();
                 }
             }
         }
