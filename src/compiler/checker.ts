@@ -8978,9 +8978,11 @@ namespace ts {
         }
 
         function getGlobalThisType() {
-            // TODO: Maybe should allow d.ts file to override this? Probably? Or just Window?
+            // TODO: Maybe should allow d.ts file to override this via getGlobalTypeSymbol? Probably? Or just Window?
+            const t = createObjectType(ObjectFlags.Interface, createSymbol(SymbolFlags.Type, "GlobalThis" as __String));
+            setStructuredTypeMembers(t, globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined);
             return deferredGlobalThisType ||
-                (deferredGlobalThisType = createAnonymousType(undefined, globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined)) ||
+                (deferredGlobalThisType = t) ||
                 emptyObjectType;
         }
 
@@ -16766,15 +16768,16 @@ namespace ts {
                 if (type && type !== errorType) {
                     return getFlowTypeOfReference(node, type);
                 }
-            }
-            if (isSourceFile(container)) {
-                // look up in the source file's locals or exports
-                if (container.commonJsModuleIndicator) {
-                    const fileSymbol = getSymbolOfNode(container);
-                    return fileSymbol && getTypeOfSymbol(fileSymbol);
-                }
-                else {
-                    return getGlobalThisType();
+                if (isSourceFile(container)) {
+                    // TODO: Should go outside the isInJS check; I need to provide a way to print the type name first, though.
+                    // look up in the source file's locals or exports
+                    if (container.commonJsModuleIndicator) {
+                        const fileSymbol = getSymbolOfNode(container);
+                        return fileSymbol && getTypeOfSymbol(fileSymbol);
+                    }
+                    else {
+                        return getGlobalThisType();
+                    }
                 }
             }
         }
