@@ -1474,7 +1474,7 @@ namespace ts.server {
             // only to the previous line.  If all this is true, then
             // add edits necessary to properly indent the current line.
             if ((args.key === "\n") && ((!edits) || (edits.length === 0) || allEditsBeforePos(edits, position))) {
-                const { lineText, absolutePosition } = scriptInfo.getLineInfo(args.line);
+                const { lineText, absolutePosition } = scriptInfo.getAbsolutePositionAndLineText(args.line);
                 if (lineText && lineText.search("\\S") < 0) {
                     const preferredIndent = languageService.getIndentationAtPosition(file, position, formatOptions);
                     let hasIndent = 0;

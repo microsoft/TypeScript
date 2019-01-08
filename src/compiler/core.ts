@@ -112,13 +112,13 @@ namespace ts {
     }
 
     // The global Map object. This may not be available, so we must test for it.
-    declare const Map: { new <T>(): Map<T> } | undefined;
+    declare const Map: (new <T>() => Map<T>) | undefined;
     // Internet Explorer's Map doesn't support iteration, so don't use it.
     // tslint:disable-next-line no-in-operator variable-name
     export const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
-    function shimMap(): { new <T>(): Map<T> } {
+    function shimMap(): new <T>() => Map<T> {
 
         class MapIterator<T, U extends (string | T | [string, T])> {
             private data: MapLike<T>;

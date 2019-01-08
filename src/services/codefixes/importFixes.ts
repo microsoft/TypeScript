@@ -375,7 +375,7 @@ namespace ts.codefix {
         const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
             && symbolToken.parent.tagName === symbolToken
             && (isIntrinsicJsxName(symbolToken.text) || checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.All, /*excludeGlobals*/ false))
-            ? checker.getJsxNamespace()
+            ? checker.getJsxNamespace(sourceFile)
             : symbolToken.text;
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default);
