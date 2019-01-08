@@ -17,7 +17,7 @@ function baselineCopy(subfolder = "") {
 }
 
 function baselineDelete(subfolder = "") {
-    return gulp.src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**/*.delete`], { base: localBaseline })
+    return gulp.src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**/*.delete`], { base: localBaseline, read: false })
         .pipe(rm())
         .pipe(rename({ extname: "" }))
         .pipe(rm(refBaseline));
