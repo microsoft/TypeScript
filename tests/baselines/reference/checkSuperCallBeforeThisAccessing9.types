@@ -30,6 +30,6 @@ class Derived2 {
     constructor() {
         super();
 >super() : void
->super : typeof Based
+>super : any
     }
 }

@@ -27,6 +27,5 @@ class Derived2 {
 
     constructor() {
         super();
->super : Symbol(Based, Decl(noSuperInJSDocExtends.js, 0, 0))
     }
 }
