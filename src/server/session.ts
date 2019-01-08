@@ -315,7 +315,7 @@ namespace ts.server {
         initialLocation: DocumentPosition,
         findInStrings: boolean,
         findInComments: boolean,
-        usePrefixAndSuffixForRenamingShorthandExports: boolean
+        usePrefixAndSuffixTextForRename: boolean
     ): ReadonlyArray<RenameLocation> {
         const outputs: RenameLocation[] = [];
 
@@ -324,7 +324,7 @@ namespace ts.server {
             defaultProject,
             initialLocation,
             ({ project, location }, tryAddToTodo) => {
-            for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, usePrefixAndSuffixForRenamingShorthandExports) || emptyArray) {
+            for (const output of project.getLanguageService().findRenameLocations(location.fileName, location.pos, findInStrings, findInComments, usePrefixAndSuffixTextForRename) || emptyArray) {
                     if (!contains(outputs, output, documentSpansEqual) && !tryAddToTodo(project, documentSpanLocation(output))) {
                         outputs.push(output);
                     }
@@ -1233,7 +1233,7 @@ namespace ts.server {
                 { fileName: args.file, pos: position },
                 !!args.findInStrings,
                 !!args.findInComments,
-                this.getHostPreferences().usePrefixAndSuffixForRenamingShorthandExports || false
+                this.getHostPreferences().usePrefixAndSuffixTextForRename || false
             );
             if (!simplifiedResult) return locations;
 

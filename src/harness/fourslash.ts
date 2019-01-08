@@ -1170,7 +1170,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: FourSlashInterface.RenameLocationsOptions) {
-            const { findInStrings = false, findInComments = false, ranges = this.getRanges(), usePrefixAndSuffixForRenamingShorthandExports = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, usePrefixAndSuffixForRenamingShorthandExports: true } : options;
+            const { findInStrings = false, findInComments = false, ranges = this.getRanges(), usePrefixAndSuffixTextForRename = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, usePrefixAndSuffixTextForRename: true } : options;
 
             for (const startRange of toArray(startRanges)) {
                 this.goToRangeStart(startRange);
@@ -1182,7 +1182,7 @@ Actual: ${stringify(fullActual)}`);
                 }
 
                 const references = this.languageService.findRenameLocations(
-                    this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments, usePrefixAndSuffixForRenamingShorthandExports);
+                    this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments, usePrefixAndSuffixTextForRename);
 
                 const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
@@ -5086,7 +5086,7 @@ namespace FourSlashInterface {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
         readonly ranges: ReadonlyArray<RenameLocationOptions>;
-        readonly usePrefixAndSuffixForRenamingShorthandExports?: boolean;
+        readonly usePrefixAndSuffixTextForRename?: boolean;
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
 }

@@ -28,14 +28,14 @@ const qFile2ReferenceGroup: FourSlashInterface.ReferenceGroup = {
     definition: "(alias) const q: 1\nimport q",
     ranges: qFile2Ranges
 };
-// verify.referenceGroups([q0, q1], [qFile1ReferenceGroup, qFile2ReferenceGroup]);
-// verify.referenceGroups([q2, q3], [qFile2ReferenceGroup, qFile1ReferenceGroup]);
+verify.referenceGroups([q0, q1], [qFile1ReferenceGroup, qFile2ReferenceGroup]);
+verify.referenceGroups([q2, q3], [qFile2ReferenceGroup, qFile1ReferenceGroup]);
 
-// verify.renameLocations(q0, { ranges: [q0, { range: q1, suffixText: " as q" }], usePrefixAndSuffixForRenamingShorthandExports: true });
-// verify.renameLocations(q1, { ranges: [{ range: q1, prefixText: "q as " }, q2, q3], usePrefixAndSuffixForRenamingShorthandExports: true });
-// verify.renameLocations([q2, q3], { ranges: [{ range: q2, prefixText: "q as " }, q3], usePrefixAndSuffixForRenamingShorthandExports: true });
+verify.renameLocations(q0, { ranges: [q0, { range: q1, suffixText: " as q" }], usePrefixAndSuffixTextForRename: true });
+verify.renameLocations(q1, { ranges: [{ range: q1, prefixText: "q as " }, q2, q3], usePrefixAndSuffixTextForRename: true });
+verify.renameLocations([q2, q3], { ranges: [{ range: q2, prefixText: "q as " }, q3], usePrefixAndSuffixTextForRename: true });
 
-// verify.renameLocations([q0, q1, q2, q3], { ranges: [q0, q1, q2, q3], usePrefixAndSuffixForRenamingShorthandExports: false });
+verify.renameLocations([q0, q1, q2, q3], { ranges: [q0, q1, q2, q3], usePrefixAndSuffixTextForRename: false });
 
 const zReferenceGroup1: FourSlashInterface.ReferenceGroup = {
     definition: "(property) z: string",
@@ -50,7 +50,7 @@ verify.referenceGroups([z0], [{ ...zReferenceGroup1, ranges: [z0, z1] }]);
 verify.referenceGroups([z1], [zReferenceGroup1, zReferenceGroup2]);
 verify.referenceGroups([z2], [zReferenceGroup2]);
 
-verify.renameLocations([z0], { ranges: [z0, { range: z1, suffixText: ": z" }], usePrefixAndSuffixForRenamingShorthandExports: true });
-verify.renameLocations([z1, z2], { ranges: [{ range: z1, prefixText: "z: " }, z2], usePrefixAndSuffixForRenamingShorthandExports: true });
+verify.renameLocations([z0], { ranges: [z0, { range: z1, suffixText: ": z" }], usePrefixAndSuffixTextForRename: true });
+verify.renameLocations([z1, z2], { ranges: [{ range: z1, prefixText: "z: " }, z2], usePrefixAndSuffixTextForRename: true });
 
-verify.renameLocations([z0], { ranges: [z0, z1, z2], usePrefixAndSuffixForRenamingShorthandExports: false });
+verify.renameLocations([z0], { ranges: [z0, z1, z2], usePrefixAndSuffixTextForRename: false });
