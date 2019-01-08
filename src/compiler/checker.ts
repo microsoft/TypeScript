@@ -8690,7 +8690,6 @@ namespace ts {
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.JSDocTypeReference)) {
                 return errorType;
             }
-            const assignedType = getAssignedClassType(symbol);
             const valueType = getTypeOfSymbol(symbol);
             const referenceType = valueType.symbol && valueType.symbol !== symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
             if (!popTypeResolution()) {
@@ -8698,10 +8697,8 @@ namespace ts {
                 error(node, Diagnostics.JSDoc_type_0_circularly_references_itself, symbolToString(symbol));
                 return errorType;
             }
-            if (referenceType || assignedType) {
-                // TODO: GH#18217 (should the `|| assignedType` be at a lower precedence?)
-                const type = (referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType)!;
-                return getSymbolLinks(symbol).resolvedJSDocType = type;
+            if (referenceType) {
+                return getSymbolLinks(symbol).resolvedJSDocType = referenceType;
             }
         }
 
@@ -8722,7 +8719,7 @@ namespace ts {
 
             if (symbol.flags & SymbolFlags.Function &&
                 isJSDocTypeReference(node) &&
-                (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) { // todo change condition to isJsConstructor
+                isJSConstructor(symbol.valueDeclaration)) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>getTypeOfSymbol(symbol));
                 if (resolved.callSignatures.length === 1) {
                     return getReturnTypeOfSignature(resolved.callSignatures[0]);
