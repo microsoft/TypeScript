@@ -1581,7 +1581,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         if (!excludeReferenceToShorthandBinding) {
-            const bindingElement = getObjectBindingElementWithoutPropertyName(symbol);
+            const bindingElement = getObjectBindingElementWithoutPropertyNameOrUndefined(symbol);
             const bindingElementPropertySymbol = bindingElement && getPropertySymbolFromBindingElement(checker, bindingElement);
             if (bindingElementPropertySymbol) {
                 return fromRoot(bindingElementPropertySymbol);
