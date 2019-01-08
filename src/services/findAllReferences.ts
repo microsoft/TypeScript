@@ -39,7 +39,7 @@ namespace ts.FindAllReferences {
         readonly isForRename?: boolean;
         /** True if we are searching for implementations. We will have a different method of adding references if so. */
         readonly implementations?: boolean;
-        /** User setting to allow backwards compatibility for renaming shorthand literal exports */
+        /** User setting to allow backwards compatibility for renaming shorthand properties and import/export specifiers */
         readonly usePrefixAndSuffixTextForRename?: boolean;
     }
 
