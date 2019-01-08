@@ -6,7 +6,7 @@ function _this() { //Error
 >10 : 10
 }
 var f = () => this;
->f : () => any
->() => this : () => any
->this : any
+>f : () => GlobalThis
+>() => this : () => GlobalThis
+>this : GlobalThis
 

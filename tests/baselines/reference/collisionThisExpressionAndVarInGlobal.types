@@ -4,7 +4,7 @@ var _this = 1;
 >1 : 1
 
 var f = () => this;
->f : () => any
->() => this : () => any
->this : any
+>f : () => GlobalThis
+>() => this : () => GlobalThis
+>this : GlobalThis
 

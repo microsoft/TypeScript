@@ -187,19 +187,25 @@ i3_i = {
 
     l: this.f,
 >l : Symbol(l, Decl(commentsInterface.ts, 56, 56))
+>this : Symbol(GlobalThis)
 
     /** own x*/
     x: this.f(10),
 >x : Symbol(x, Decl(commentsInterface.ts, 57, 14))
+>this : Symbol(GlobalThis)
 
     nc_x: this.l(this.x),
 >nc_x : Symbol(nc_x, Decl(commentsInterface.ts, 59, 18))
+>this : Symbol(GlobalThis)
+>this : Symbol(GlobalThis)
 
     nc_f: this.f,
 >nc_f : Symbol(nc_f, Decl(commentsInterface.ts, 60, 25))
+>this : Symbol(GlobalThis)
 
     nc_l: this.l
 >nc_l : Symbol(nc_l, Decl(commentsInterface.ts, 61, 17))
+>this : Symbol(GlobalThis)
 
 };
 i3_i.f(10);
