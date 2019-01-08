@@ -1549,7 +1549,7 @@ namespace ts {
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
 
-        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, usePrefixAndSuffixForRenamingShorthandExports: boolean): RenameLocation[] | undefined {
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, usePrefixAndSuffixTextForRename: boolean): RenameLocation[] | undefined {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position);
@@ -1559,8 +1559,8 @@ namespace ts {
                     ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
             }
             else {
-                return getReferencesWorker(node, position, { findInStrings, findInComments, usePrefixAndSuffixForRenamingShorthandExports, isForRename: true },
-                    usePrefixAndSuffixForRenamingShorthandExports ? FindAllReferences.toRenameLocation : FindAllReferences.entryToDocumentSpan);
+                return getReferencesWorker(node, position, { findInStrings, findInComments, usePrefixAndSuffixTextForRename, isForRename: true },
+                    usePrefixAndSuffixTextForRename ? FindAllReferences.toRenameLocation : FindAllReferences.entryToDocumentSpan);
             }
         }
 

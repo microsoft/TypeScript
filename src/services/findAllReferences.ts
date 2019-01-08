@@ -40,7 +40,7 @@ namespace ts.FindAllReferences {
         /** True if we are searching for implementations. We will have a different method of adding references if so. */
         readonly implementations?: boolean;
         /** User setting to allow backwards compatibility for renaming shorthand literal exports */
-        readonly usePrefixAndSuffixForRenamingShorthandExports?: boolean;
+        readonly usePrefixAndSuffixTextForRename?: boolean;
     }
 
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
@@ -486,7 +486,7 @@ namespace ts.FindAllReferences.Core {
 
     /** Core find-all-references algorithm for a normal symbol. */
     function getReferencedSymbolsForSymbol(originalSymbol: Symbol, node: Node | undefined, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
-        const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, !options.usePrefixAndSuffixForRenamingShorthandExports || !options.isForRename) || originalSymbol;
+        const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, !options.usePrefixAndSuffixTextForRename || !options.isForRename) || originalSymbol;
 
         // Compute the meaning from the location and the symbol it references
         const searchMeaning = node ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
@@ -495,7 +495,7 @@ namespace ts.FindAllReferences.Core {
         const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
         const exportSpecifier = !options.isForRename ? undefined : find(symbol.declarations, isExportSpecifier);
-        if (exportSpecifier) {
+        if (exportSpecifier && (exportSpecifier.propertyName || options.usePrefixAndSuffixTextForRename)) {
             // When renaming at an export specifier, rename the export and not the thing being exported.
             getReferencesAtExportSpecifier(exportSpecifier.name, symbol, exportSpecifier, state.createSearch(node, originalSymbol, /*comingFrom*/ undefined), state, /*addReferencesHere*/ true, /*alwaysGetReferences*/ true);
         }
@@ -504,7 +504,7 @@ namespace ts.FindAllReferences.Core {
             searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.assertDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
         }
         else {
-            const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, !!options.isForRename, !!options.implementations) : [symbol] });
+            const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, !!options.isForRename, !!options.implementations, !!options.usePrefixAndSuffixTextForRename) : [symbol] });
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -1104,7 +1104,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
-        if (!state.options.usePrefixAndSuffixForRenamingShorthandExports || !state.options.isForRename || alwaysGetReferences) {
+        if ((!state.options.usePrefixAndSuffixTextForRename && referenceLocation !== propertyName) || !state.options.isForRename || alwaysGetReferences) {
             const exportKind = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.assertDefined(exportSpecifier.symbol);
             const exportInfo = Debug.assertDefined(getExportInfo(exportSymbol, exportKind, state.checker));
@@ -1147,7 +1147,7 @@ namespace ts.FindAllReferences.Core {
         const { symbol } = importOrExport;
 
         if (importOrExport.kind === ImportExport.Import) {
-            if (!state.options.usePrefixAndSuffixForRenamingShorthandExports || !state.options.isForRename) {
+            if (!state.options.usePrefixAndSuffixTextForRename || !state.options.isForRename) {
                 searchForImportedSymbol(symbol, state);
             }
         }
@@ -1516,10 +1516,10 @@ namespace ts.FindAllReferences.Core {
 
     // For certain symbol kinds, we need to include other symbols in the search set.
     // This is not needed when searching for re-exports.
-    function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRename: boolean, implementations: boolean): Symbol[] {
+    function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRename: boolean, implementations: boolean, usePrefixAndSuffixTextForRename: boolean): Symbol[] {
         const result: Symbol[] = [];
         forEachRelatedSymbol<void>(symbol, location, checker, isForRename,
-            !isForRename || usePrefixAndSuffixForRenamingShorthandExports,
+            !isForRename || usePrefixAndSuffixTextForRename,
             (sym, root, base) => { result.push(base || root || sym); },
             /*allowBaseTypes*/ () => !implementations);
         return result;
@@ -1618,7 +1618,7 @@ namespace ts.FindAllReferences.Core {
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
         const { checker } = state;
         return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
-            !state.options.isForRename || !!state.options.usePrefixAndSuffixForRenamingShorthandExports,
+            !state.options.isForRename || !!state.options.usePrefixAndSuffixTextForRename,
             (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => search.includes(baseSymbol || rootSymbol || sym)
                 // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
                 ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
