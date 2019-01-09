@@ -1898,6 +1898,7 @@ namespace ts {
                         case SyntaxKind.StringLiteral:
                             return createIdentifier("String");
 
+                        case SyntaxKind.PrefixUnaryExpression:
                         case SyntaxKind.NumericLiteral:
                             return createIdentifier("Number");
 
