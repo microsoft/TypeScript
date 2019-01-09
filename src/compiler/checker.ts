@@ -16639,7 +16639,7 @@ namespace ts {
 
         function checkThisBeforeSuper(node: Node, container: Node, diagnosticMessage: DiagnosticMessage) {
             const containingClassDecl = <ClassDeclaration>container.parent;
-            const baseTypeNode = getEffectiveBaseTypeNode(containingClassDecl);
+            const baseTypeNode = getClassExtendsHeritageElement(containingClassDecl);
 
             // If a containing class does not have extends clause or the class extends null
             // skip checking whether super statement is called before "this" accessing.
@@ -17000,7 +17000,7 @@ namespace ts {
 
             // at this point the only legal case for parent is ClassLikeDeclaration
             const classLikeDeclaration = <ClassLikeDeclaration>container.parent;
-            if (!getEffectiveBaseTypeNode(classLikeDeclaration)) {
+            if (!getClassExtendsHeritageElement(classLikeDeclaration)) {
                 error(node, Diagnostics.super_can_only_be_referenced_in_a_derived_class);
                 return errorType;
             }
@@ -23607,7 +23607,7 @@ namespace ts {
             // Constructors of classes with no extends clause may not contain super calls, whereas
             // constructors of derived classes must contain at least one super call somewhere in their function body.
             const containingClassDecl = <ClassDeclaration>node.parent;
-            if (getEffectiveBaseTypeNode(containingClassDecl)) {
+            if (getClassExtendsHeritageElement(containingClassDecl)) {
                 captureLexicalThis(node.parent, containingClassDecl);
                 const classExtendsNull = classDeclarationExtendsNull(containingClassDecl);
                 const superCall = getSuperCallInConstructor(node);
