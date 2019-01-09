@@ -16714,7 +16714,7 @@ namespace ts {
                 if (type === globalThisType && capturedByArrowFunction) {
                     error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this);
                 }
-                if (!type) {
+                else if (!type) {
                     // With noImplicitThis, functions may not reference 'this' if it has type 'any'
                     const diag = error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
                     if (!isSourceFile(container)) {

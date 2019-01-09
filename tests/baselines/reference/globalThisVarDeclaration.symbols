@@ -12,6 +12,28 @@ this.b;
 >this : Symbol(typeof globalThis)
 >b : Symbol(b, Decl(actual.ts, 0, 3))
 
+globalThis.a;
+>globalThis.a : Symbol(a, Decl(b.js, 0, 3))
+>globalThis : Symbol(globalThis, Decl(lib.esnext.globalthis.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+globalThis.b;
+>globalThis.b : Symbol(b, Decl(actual.ts, 0, 3))
+>globalThis : Symbol(globalThis, Decl(lib.esnext.globalthis.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+self.a;
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+
+self.b;
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+
+window.a;
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+window.b;
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
 === tests/cases/conformance/es2019/actual.ts ===
 var b = 10;
 >b : Symbol(b, Decl(actual.ts, 0, 3))
@@ -25,4 +47,27 @@ this.b;
 >this.b : Symbol(b, Decl(actual.ts, 0, 3))
 >this : Symbol(typeof globalThis)
 >b : Symbol(b, Decl(actual.ts, 0, 3))
+
+globalThis.a;
+>globalThis.a : Symbol(a, Decl(b.js, 0, 3))
+>globalThis : Symbol(globalThis, Decl(lib.esnext.globalthis.d.ts, --, --))
+>a : Symbol(a, Decl(b.js, 0, 3))
+
+globalThis.b;
+>globalThis.b : Symbol(b, Decl(actual.ts, 0, 3))
+>globalThis : Symbol(globalThis, Decl(lib.esnext.globalthis.d.ts, --, --))
+>b : Symbol(b, Decl(actual.ts, 0, 3))
+
+self.a;
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+
+self.b;
+>self : Symbol(self, Decl(lib.dom.d.ts, --, --))
+
+window.a;
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+window.b;
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
 

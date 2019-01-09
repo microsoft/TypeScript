@@ -1,0 +1,49 @@
+tests/cases/conformance/es2019/actual.ts(6,6): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/actual.ts(7,6): error TS2339: Property 'b' does not exist on type 'Window'.
+tests/cases/conformance/es2019/actual.ts(8,8): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/actual.ts(9,8): error TS2339: Property 'b' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(6,6): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(7,6): error TS2339: Property 'b' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(8,8): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(9,8): error TS2339: Property 'b' does not exist on type 'Window'.
+
+
+==== tests/cases/conformance/es2019/b.js (4 errors) ====
+    var a = 10;
+    this.a;
+    this.b;
+    globalThis.a;
+    globalThis.b;
+    self.a;
+         ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    self.b;
+         ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    window.a;
+           ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    window.b;
+           ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    
+==== tests/cases/conformance/es2019/actual.ts (4 errors) ====
+    var b = 10;
+    this.a;
+    this.b;
+    globalThis.a;
+    globalThis.b;
+    self.a;
+         ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    self.b;
+         ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    window.a;
+           ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    window.b;
+           ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    
+    

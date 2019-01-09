@@ -13,6 +13,36 @@ this.b;
 >this : typeof globalThis
 >b : number
 
+globalThis.a;
+>globalThis.a : number
+>globalThis : typeof globalThis
+>a : number
+
+globalThis.b;
+>globalThis.b : number
+>globalThis : typeof globalThis
+>b : number
+
+self.a;
+>self.a : any
+>self : Window
+>a : any
+
+self.b;
+>self.b : any
+>self : Window
+>b : any
+
+window.a;
+>window.a : any
+>window : Window
+>a : any
+
+window.b;
+>window.b : any
+>window : Window
+>b : any
+
 === tests/cases/conformance/es2019/actual.ts ===
 var b = 10;
 >b : number
@@ -27,4 +57,35 @@ this.b;
 >this.b : number
 >this : typeof globalThis
 >b : number
+
+globalThis.a;
+>globalThis.a : number
+>globalThis : typeof globalThis
+>a : number
+
+globalThis.b;
+>globalThis.b : number
+>globalThis : typeof globalThis
+>b : number
+
+self.a;
+>self.a : any
+>self : Window
+>a : any
+
+self.b;
+>self.b : any
+>self : Window
+>b : any
+
+window.a;
+>window.a : any
+>window : Window
+>a : any
+
+window.b;
+>window.b : any
+>window : Window
+>b : any
+
 
