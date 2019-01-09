@@ -4097,7 +4097,7 @@
         "category": "Error",
         "code": 7040
     },
-    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+    "The containing arrow function captures the global value of 'this'.": {
         "category": "Error",
         "code": 7041
     },
