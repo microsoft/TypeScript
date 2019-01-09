@@ -274,6 +274,16 @@ export const Other = 1;
                 assert.isEmpty(changes);
             });
 
+            it("doesn't crash on shorthand ambient module", () => {
+                const testFile = {
+                    path: "/a.ts",
+                    content: "declare module '*';",
+                };
+                const languageService = makeLanguageService(testFile);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
+                assert.isEmpty(changes);
+            });
+
             testOrganizeImports("Renamed_used",
                 {
                     path: "/test.ts",
@@ -585,6 +595,34 @@ import { React, Other } from "react";
 `,
                 },
                 reactLibFile);
+
+            testOrganizeImports("JsxPragmaTsx",
+                {
+                    path: "/test.tsx",
+                    content: `/** @jsx jsx */
+
+import { Global, jsx } from '@emotion/core';
+import * as React from 'react';
+
+export const App: React.FunctionComponent = _ => <Global><h1>Hello!</h1></Global>
+`,
+                },
+                {
+                    path: "/@emotion/core/index.d.ts",
+                    content: `import {  createElement } from 'react'
+export const jsx: typeof createElement;
+export function Global(props: any): ReactElement<any>;`
+                },
+                {
+                    path: reactLibFile.path,
+                    content: `${reactLibFile.content}
+export namespace React {
+    interface FunctionComponent {
+    }
+}
+`
+                }
+            );
 
             describe("Exports", () => {
 

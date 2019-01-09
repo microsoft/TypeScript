@@ -45,8 +45,8 @@ const [f, g = f, h = i, i = f] = [1]; // error for h = i
 >c : number
 >d : number
 >c : number
->e : number
->e : number
+>e : any
+>e : any
 
 })([1]);
 >[1] : number[]

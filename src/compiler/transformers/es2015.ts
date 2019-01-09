@@ -780,7 +780,7 @@ namespace ts {
                 enableSubstitutionsForBlockScopedBindings();
             }
 
-            const extendsClauseElement = getEffectiveBaseTypeNode(node);
+            const extendsClauseElement = getClassExtendsHeritageElement(node);
             const classFunction = createFunctionExpression(
                 /*modifiers*/ undefined,
                 /*asteriskToken*/ undefined,

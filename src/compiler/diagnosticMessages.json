@@ -2537,6 +2537,10 @@
         "category": "Error",
         "code": 2743
     },
+    "Type parameter defaults can only reference previously declared type parameters.": {
+        "category": "Error",
+        "code": 2744
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

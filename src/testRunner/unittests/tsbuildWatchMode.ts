@@ -621,7 +621,7 @@ let x: string = 10;`);
                     const { host, solutionBuilder } = createSolutionOfProject(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
 
                     // Build in watch mode
-                    const watch = createWatchOfConfigFileReturningBuilder(watchConfig, host);
+                    const watch = createWatchOfConfigFile(watchConfig, host);
                     checkOutputErrorsInitial(host, emptyArray);
 
                     return { host, solutionBuilder, watch };
@@ -647,10 +647,8 @@ let x: string = 10;`);
                     projectSystem.checkProjectActualFiles(service.configuredProjects.get(configFile.toLowerCase())!, expectedFiles);
                 }
 
-                type Watch = () => BuilderProgram;
-
                 function verifyDependencies(watch: Watch, filePath: string, expected: ReadonlyArray<string>) {
-                    checkArray(`${filePath} dependencies`, watch().getAllDependencies(watch().getSourceFile(filePath)!), expected);
+                    checkArray(`${filePath} dependencies`, watch.getBuilderProgram().getAllDependencies(watch().getSourceFile(filePath)!), expected);
                 }
 
                 describe("on sample project", () => {
@@ -684,7 +682,7 @@ let x: string = 10;`);
 
                             host.checkTimeoutQueueLengthAndRun(1);
                             checkOutputErrorsIncremental(host, emptyArray);
-                            checkProgramActualFiles(watch().getProgram(), expectedFilesAfterEdit);
+                            checkProgramActualFiles(watch(), expectedFilesAfterEdit);
 
                         });
 
@@ -784,7 +782,7 @@ export function gfoo() {
                         expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
                         dependencies: ReadonlyArray<[string, ReadonlyArray<string>]>,
                         expectedWatchedDirectories?: ReadonlyArray<string>) {
-                        checkProgramActualFiles(watch().getProgram(), expectedProgramFiles);
+                        checkProgramActualFiles(watch(), expectedProgramFiles);
                         verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, expectedWatchedDirectories);
                         for (const [file, deps] of dependencies) {
                             verifyDependencies(watch, file, deps);
