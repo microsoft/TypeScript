@@ -8,6 +8,6 @@ foo(()=>this.window);
 >foo : (x: any) => void
 >()=>this.window : () => Window
 >this.window : Window
->this : GlobalThis
+>this : typeof globalThis
 >window : Window
 

@@ -3,6 +3,6 @@ export var x = () => this.window;
 >x : () => Window
 >() => this.window : () => Window
 >this.window : Window
->this : GlobalThis
+>this : typeof globalThis
 >window : Window
 

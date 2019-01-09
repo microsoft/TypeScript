@@ -7,9 +7,9 @@ module a {
 >10 : 10
 }
 var f = () => this;
->f : () => GlobalThis
->() => this : () => GlobalThis
->this : GlobalThis
+>f : () => typeof globalThis
+>() => this : () => typeof globalThis
+>this : typeof globalThis
 
 import _this = a; // Error
 >_this : typeof a

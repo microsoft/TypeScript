@@ -2,7 +2,7 @@
 // Add a lambda to ensure global 'this' capture is triggered
 (()=>this.window);
 >this.window : Symbol(window, Decl(lib.dom.d.ts, --, --))
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 
 var parts = [];

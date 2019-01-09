@@ -1,12 +1,12 @@
 === tests/cases/conformance/salsa/a.js ===
 this.a = 10;
 >this.a : Symbol(a, Decl(a.js, 0, 0))
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >a : Symbol(a, Decl(a.js, 0, 0))
 
 this.a;
 >this.a : Symbol(a, Decl(a.js, 0, 0))
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >a : Symbol(a, Decl(a.js, 0, 0))
 
 a;
@@ -15,7 +15,7 @@ a;
 === tests/cases/conformance/salsa/b.js ===
 this.a;
 >this.a : Symbol(a, Decl(a.js, 0, 0))
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >a : Symbol(a, Decl(a.js, 0, 0))
 
 a;

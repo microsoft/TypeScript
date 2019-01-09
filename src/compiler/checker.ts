@@ -8978,12 +8978,12 @@ namespace ts {
         }
 
         function getGlobalThisType() {
-            // TODO: Maybe should allow d.ts file to override this via getGlobalTypeSymbol? Probably? Or just Window?
-            const t = createObjectType(ObjectFlags.Interface, createSymbol(SymbolFlags.Type, "GlobalThis" as __String));
-            setStructuredTypeMembers(t, globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined);
-            return deferredGlobalThisType ||
-                (deferredGlobalThisType = t) ||
-                emptyObjectType;
+            if (!deferredGlobalThisType) {
+                const t = createObjectType(ObjectFlags.Interface, createSymbol(SymbolFlags.Type, "typeof globalThis" as __String));
+                setStructuredTypeMembers(t, globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined);
+                deferredGlobalThisType = t;
+            }
+            return deferredGlobalThisType;
         }
 
         function getGlobalExtractSymbol(): Symbol {
@@ -10117,6 +10117,10 @@ namespace ts {
         function getTypeFromImportTypeNode(node: ImportTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
+                if (node.isGlobalThis) {
+                    Debug.assert(!!node.isTypeOf);
+                    return links.resolvedType = getGlobalThisType();
+                }
                 if (node.isTypeOf && node.typeArguments) { // Only the non-typeof form can make use of type arguments
                     error(node, Diagnostics.Type_arguments_cannot_be_used_here);
                     links.resolvedSymbol = unknownSymbol;

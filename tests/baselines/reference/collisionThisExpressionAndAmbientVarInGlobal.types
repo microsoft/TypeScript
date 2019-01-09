@@ -3,9 +3,9 @@ declare var _this: number; // no error as no code gen
 >_this : number
 
 var f = () => this;
->f : () => GlobalThis
->() => this : () => GlobalThis
->this : GlobalThis
+>f : () => typeof globalThis
+>() => this : () => typeof globalThis
+>this : typeof globalThis
 
 _this = 10; // Error
 >_this = 10 : 10

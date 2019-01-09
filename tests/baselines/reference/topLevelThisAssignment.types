@@ -2,13 +2,13 @@
 this.a = 10;
 >this.a = 10 : 10
 >this.a : number
->this : GlobalThis
+>this : typeof globalThis
 >a : number
 >10 : 10
 
 this.a;
 >this.a : number
->this : GlobalThis
+>this : typeof globalThis
 >a : number
 
 a;
@@ -17,7 +17,7 @@ a;
 === tests/cases/conformance/salsa/b.js ===
 this.a;
 >this.a : number
->this : GlobalThis
+>this : typeof globalThis
 >a : number
 
 a;

@@ -38,7 +38,7 @@ D.prototype.foo = () =>  {
 >foo : Symbol(D.foo, Decl(a.js, 14, 21))
 
     this.n = 'not checked, so no error'
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >n : Symbol(n, Decl(a.js, 15, 26))
 }
 

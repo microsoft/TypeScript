@@ -4,7 +4,7 @@
 >(()=>this.window) : () => Window
 >()=>this.window : () => Window
 >this.window : Window
->this : GlobalThis
+>this : typeof globalThis
 >window : Window
 
 var parts = [];

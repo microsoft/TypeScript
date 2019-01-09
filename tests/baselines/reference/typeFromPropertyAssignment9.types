@@ -159,7 +159,7 @@ min.nest = this.min.nest || function () { };
 >this.min.nest || function () { } : { (): void; other: typeof other; }
 >this.min.nest : { (): void; other: typeof other; }
 >this.min : typeof min
->this : GlobalThis
+>this : typeof globalThis
 >min : typeof min
 >nest : { (): void; other: typeof other; }
 >function () { } : { (): void; other: typeof other; }

@@ -4,12 +4,12 @@ var a = 10;
 
 this.a;
 >this.a : Symbol(a, Decl(b.js, 0, 3))
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >a : Symbol(a, Decl(b.js, 0, 3))
 
 this.b;
 >this.b : Symbol(b, Decl(actual.ts, 0, 3))
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >b : Symbol(b, Decl(actual.ts, 0, 3))
 
 === tests/cases/conformance/es2019/actual.ts ===
@@ -18,11 +18,11 @@ var b = 10;
 
 this.a;
 >this.a : Symbol(a, Decl(b.js, 0, 3))
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >a : Symbol(a, Decl(b.js, 0, 3))
 
 this.b;
 >this.b : Symbol(b, Decl(actual.ts, 0, 3))
->this : Symbol(GlobalThis)
+>this : Symbol(typeof globalThis)
 >b : Symbol(b, Decl(actual.ts, 0, 3))
 

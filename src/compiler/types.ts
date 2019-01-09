@@ -55,6 +55,7 @@ namespace ts {
         | SyntaxKind.FromKeyword
         | SyntaxKind.FunctionKeyword
         | SyntaxKind.GetKeyword
+        | SyntaxKind.GlobalThisKeyword
         | SyntaxKind.IfKeyword
         | SyntaxKind.ImplementsKeyword
         | SyntaxKind.ImportKeyword
@@ -254,6 +255,7 @@ namespace ts {
         ConstructorKeyword,
         DeclareKeyword,
         GetKeyword,
+        GlobalThisKeyword,
         InferKeyword,
         IsKeyword,
         KeyOfKeyword,
@@ -1125,6 +1127,7 @@ namespace ts {
 
     export interface ImportTypeNode extends NodeWithTypeArguments {
         kind: SyntaxKind.ImportType;
+        isGlobalThis: boolean;
         isTypeOf?: boolean;
         argument: TypeNode;
         qualifier?: EntityName;
