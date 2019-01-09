@@ -144,7 +144,7 @@ namespace ts.projectSystem {
                     },
                     {
                         fileName: "/Foo/x.ts",
-                        textChanges: [{ start: { line: 0, offset: 0 }, end: { line: 0, offset: 0 }, newText: "const x = 0;" }],
+                        textChanges: [{ start: { line: 0, offset: 0 }, end: { line: 0, offset: 0 }, newText: "const x = 0;\n" }],
                     },
                 ],
                 renameFilename: undefined,
