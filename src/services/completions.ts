@@ -104,7 +104,7 @@ namespace ts.Completions {
             getJSCompletionEntries(sourceFile, location!.pos, uniqueNames, compilerOptions.target!, entries); // TODO: GH#18217
         }
         else {
-            if ((!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
+            if (!isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
                 return undefined;
             }
 
