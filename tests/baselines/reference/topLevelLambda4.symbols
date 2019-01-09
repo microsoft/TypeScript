@@ -2,6 +2,6 @@
 export var x = () => this.window;
 >x : Symbol(x, Decl(topLevelLambda4.ts, 0, 10))
 >this.window : Symbol(window, Decl(lib.dom.d.ts, --, --))
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 

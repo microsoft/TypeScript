@@ -39,7 +39,7 @@ declare var hasOwnProperty:any;
 
 <div>
   {this.props.children}
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 
 </div>;
 
@@ -59,7 +59,7 @@ declare var hasOwnProperty:any;
 >Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 2, 11))
 
     {this.props.children}
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 
 </Composite>;
 >Composite : Symbol(Composite, Decl(jsxReactTestSuite.tsx, 2, 11))
@@ -158,7 +158,7 @@ var x =
 >Component : Symbol(Component, Decl(jsxReactTestSuite.tsx, 1, 11))
 
     {...this.props} sound="moo" />;
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 >sound : Symbol(sound, Decl(jsxReactTestSuite.tsx, 93, 19))
 
 <font-face />;

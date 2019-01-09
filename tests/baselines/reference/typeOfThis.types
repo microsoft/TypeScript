@@ -439,6 +439,7 @@ var q2 = (s = this) => {
 
     var s: typeof globalThis;
 >s : typeof globalThis
+>globalThis : typeof globalThis
 
     s.spaaaaaaace = 4;
 >s.spaaaaaaace = 4 : 4
@@ -450,6 +451,7 @@ var q2 = (s = this) => {
     //type of 'this' in a fat arrow expression body is typeof globalThis
     var t: typeof globalThis;
 >t : typeof globalThis
+>globalThis : typeof globalThis
 
     var t = this;
 >t : typeof globalThis
@@ -466,6 +468,7 @@ var q2 = (s = this) => {
 //type of 'this' in global module is GlobalThis
 var t: typeof globalThis;
 >t : typeof globalThis
+>globalThis : typeof globalThis
 
 var t = this;
 >t : typeof globalThis

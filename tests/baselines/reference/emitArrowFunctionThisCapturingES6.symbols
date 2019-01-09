@@ -3,7 +3,7 @@ var f1 = () => {
 >f1 : Symbol(f1, Decl(emitArrowFunctionThisCapturingES6.ts, 0, 3))
 
     this.age = 10
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 
 };
 
@@ -13,7 +13,7 @@ var f2 = (x: string) => {
 
     this.name = x
 >this.name : Symbol(name, Decl(lib.dom.d.ts, --, --))
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 >name : Symbol(name, Decl(lib.dom.d.ts, --, --))
 >x : Symbol(x, Decl(emitArrowFunctionThisCapturingES6.ts, 4, 10))
 }
@@ -26,7 +26,7 @@ foo(() => {
 >foo : Symbol(foo, Decl(emitArrowFunctionThisCapturingES6.ts, 6, 1))
 
     this.age = 100;
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 
     return true;
 });

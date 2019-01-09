@@ -14,7 +14,7 @@ class Foo {
     public baz() {
 
         return this.bar; // doesn't get rewritten to Foo.bar.
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 
     }
 

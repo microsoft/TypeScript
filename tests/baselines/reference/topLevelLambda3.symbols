@@ -2,6 +2,6 @@
 var f = () => {this.window;}
 >f : Symbol(f, Decl(topLevelLambda3.ts, 0, 3))
 >this.window : Symbol(window, Decl(lib.dom.d.ts, --, --))
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 

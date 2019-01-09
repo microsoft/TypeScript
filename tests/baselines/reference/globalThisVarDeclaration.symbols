@@ -4,24 +4,25 @@ var a = 10;
 
 this.a;
 >this.a : Symbol(a, Decl(b.js, 0, 3))
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 >a : Symbol(a, Decl(b.js, 0, 3))
 
 this.b;
 >this.b : Symbol(b, Decl(actual.ts, 0, 3))
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 >b : Symbol(b, Decl(actual.ts, 0, 3))
 
 globalThis.a;
 >globalThis.a : Symbol(a, Decl(b.js, 0, 3))
->globalThis : Symbol(globalThis, Decl(lib.esnext.globalthis.d.ts, --, --))
+>globalThis : Symbol(globalThis)
 >a : Symbol(a, Decl(b.js, 0, 3))
 
 globalThis.b;
 >globalThis.b : Symbol(b, Decl(actual.ts, 0, 3))
->globalThis : Symbol(globalThis, Decl(lib.esnext.globalthis.d.ts, --, --))
+>globalThis : Symbol(globalThis)
 >b : Symbol(b, Decl(actual.ts, 0, 3))
 
+// DOM access is not supported until the index signature is handled more strictly
 self.a;
 >self : Symbol(self, Decl(lib.dom.d.ts, --, --))
 
@@ -33,6 +34,12 @@ window.a;
 
 window.b;
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+top.a;
+>top : Symbol(top, Decl(lib.dom.d.ts, --, --))
+
+top.b;
+>top : Symbol(top, Decl(lib.dom.d.ts, --, --))
 
 === tests/cases/conformance/es2019/actual.ts ===
 var b = 10;
@@ -40,24 +47,25 @@ var b = 10;
 
 this.a;
 >this.a : Symbol(a, Decl(b.js, 0, 3))
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 >a : Symbol(a, Decl(b.js, 0, 3))
 
 this.b;
 >this.b : Symbol(b, Decl(actual.ts, 0, 3))
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 >b : Symbol(b, Decl(actual.ts, 0, 3))
 
 globalThis.a;
 >globalThis.a : Symbol(a, Decl(b.js, 0, 3))
->globalThis : Symbol(globalThis, Decl(lib.esnext.globalthis.d.ts, --, --))
+>globalThis : Symbol(globalThis)
 >a : Symbol(a, Decl(b.js, 0, 3))
 
 globalThis.b;
 >globalThis.b : Symbol(b, Decl(actual.ts, 0, 3))
->globalThis : Symbol(globalThis, Decl(lib.esnext.globalthis.d.ts, --, --))
+>globalThis : Symbol(globalThis)
 >b : Symbol(b, Decl(actual.ts, 0, 3))
 
+// same here -- no DOM access to globalThis yet
 self.a;
 >self : Symbol(self, Decl(lib.dom.d.ts, --, --))
 
@@ -69,5 +77,11 @@ window.a;
 
 window.b;
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+
+top.a;
+>top : Symbol(top, Decl(lib.dom.d.ts, --, --))
+
+top.b;
+>top : Symbol(top, Decl(lib.dom.d.ts, --, --))
 
 

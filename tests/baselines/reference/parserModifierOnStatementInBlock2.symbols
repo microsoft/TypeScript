@@ -2,6 +2,6 @@
 {
    declare var x = this;
 >x : Symbol(x, Decl(parserModifierOnStatementInBlock2.ts, 1, 14))
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
 }
 

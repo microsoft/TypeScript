@@ -23,6 +23,7 @@ globalThis.b;
 >globalThis : typeof globalThis
 >b : number
 
+// DOM access is not supported until the index signature is handled more strictly
 self.a;
 >self.a : any
 >self : Window
@@ -41,6 +42,16 @@ window.a;
 window.b;
 >window.b : any
 >window : Window
+>b : any
+
+top.a;
+>top.a : any
+>top : Window
+>a : any
+
+top.b;
+>top.b : any
+>top : Window
 >b : any
 
 === tests/cases/conformance/es2019/actual.ts ===
@@ -68,6 +79,7 @@ globalThis.b;
 >globalThis : typeof globalThis
 >b : number
 
+// same here -- no DOM access to globalThis yet
 self.a;
 >self.a : any
 >self : Window
@@ -86,6 +98,16 @@ window.a;
 window.b;
 >window.b : any
 >window : Window
+>b : any
+
+top.a;
+>top.a : any
+>top : Window
+>a : any
+
+top.b;
+>top.b : any
+>top : Window
 >b : any
 
 

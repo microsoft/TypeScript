@@ -88,7 +88,6 @@ namespace ts {
         from: SyntaxKind.FromKeyword,
         function: SyntaxKind.FunctionKeyword,
         get: SyntaxKind.GetKeyword,
-        globalThis: SyntaxKind.GlobalThisKeyword,
         if: SyntaxKind.IfKeyword,
         implements: SyntaxKind.ImplementsKeyword,
         import: SyntaxKind.ImportKeyword,

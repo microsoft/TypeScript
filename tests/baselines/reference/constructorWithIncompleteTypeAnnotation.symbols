@@ -579,7 +579,7 @@ module TypeScriptAllInOne {
         }
         public method2() {
             return 2 * this.method1(2);
->this : Symbol(typeof globalThis)
+>this : Symbol(globalThis)
         }
     }
 

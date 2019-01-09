@@ -2869,7 +2869,7 @@ namespace ts {
 
         function isStartOfTypeOfImportType() {
             nextToken();
-            return token() === SyntaxKind.ImportKeyword || token() === SyntaxKind.GlobalThisKeyword;
+            return token() === SyntaxKind.ImportKeyword;
         }
 
         function parseImportType(): ImportTypeNode {
@@ -2877,10 +2877,6 @@ namespace ts {
             const node = createNode(SyntaxKind.ImportType) as ImportTypeNode;
             if (parseOptional(SyntaxKind.TypeOfKeyword)) {
                 node.isTypeOf = true;
-                node.isGlobalThis = parseOptional(SyntaxKind.GlobalThisKeyword);
-                if (node.isGlobalThis) {
-                    return finishNode(node);
-                }
             }
             parseExpected(SyntaxKind.ImportKeyword);
             parseExpected(SyntaxKind.OpenParenToken);

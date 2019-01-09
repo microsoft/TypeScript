@@ -519,7 +519,7 @@ namespace ts {
         let deferredGlobalExcludeSymbol: Symbol;
         let deferredGlobalPickSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
-        let deferredGlobalThisType: ObjectType; // (unbound) `window` has type Window & globalThis; `this` and `globalThis` and `global` have type GlobalThis
+        let deferredGlobalThisSymbol: Symbol | undefined;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -1502,6 +1502,9 @@ namespace ts {
                 }
 
                 if (!excludeGlobals) {
+                    if (name === "globalThis" as __String) {
+                        return getGlobalThisSymbol();
+                    }
                     result = lookup(globals, name, meaning);
                 }
             }
@@ -8977,13 +8980,14 @@ namespace ts {
             return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
         }
 
-        function getGlobalThisType() {
-            if (!deferredGlobalThisType) {
-                const t = createObjectType(ObjectFlags.Interface, createSymbol(SymbolFlags.Type, "typeof globalThis" as __String));
-                setStructuredTypeMembers(t, globals, emptyArray, emptyArray, createIndexInfo(anyType, /*isReadonly*/ false), undefined);
-                deferredGlobalThisType = t;
+        function getGlobalThisSymbol() {
+            if (!deferredGlobalThisSymbol) {
+                const s = createSymbol(SymbolFlags.ValueModule | SymbolFlags.NamespaceModule, "globalThis" as __String);
+                s.exports = globals;
+                s.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
+                deferredGlobalThisSymbol = s;
             }
-            return deferredGlobalThisType;
+            return deferredGlobalThisSymbol;
         }
 
         function getGlobalExtractSymbol(): Symbol {
@@ -10117,10 +10121,6 @@ namespace ts {
         function getTypeFromImportTypeNode(node: ImportTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                if (node.isGlobalThis) {
-                    Debug.assert(!!node.isTypeOf);
-                    return links.resolvedType = getGlobalThisType();
-                }
                 if (node.isTypeOf && node.typeArguments) { // Only the non-typeof form can make use of type arguments
                     error(node, Diagnostics.Type_arguments_cannot_be_used_here);
                     links.resolvedSymbol = unknownSymbol;
@@ -16709,7 +16709,7 @@ namespace ts {
             }
 
             const type = tryGetThisTypeAt(node, container);
-            const globalThisType = getGlobalThisType();
+            const globalThisType = getTypeOfSymbol(getGlobalThisSymbol());
             if (noImplicitThis) {
                 if (type === globalThisType && capturedByArrowFunction) {
                     error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this);
@@ -16782,7 +16782,7 @@ namespace ts {
                     return fileSymbol && getTypeOfSymbol(fileSymbol);
                 }
                 else {
-                    return getGlobalThisType();
+                    return getTypeOfSymbol(getGlobalThisSymbol());
                 }
             }
         }
@@ -19041,6 +19041,12 @@ namespace ts {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);
                 if (!(indexInfo && indexInfo.type)) {
                     if (isJSLiteralType(leftType)) {
+                        return anyType;
+                    }
+                    if (leftType.symbol === getGlobalThisSymbol()) {
+                        if (noImplicitAny) {
+                            error(right, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(leftType));
+                        }
                         return anyType;
                     }
                     if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
