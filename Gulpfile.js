@@ -117,7 +117,8 @@ const generatedLCGFile = "built/local/enu/diagnosticMessages.generated.json.lcg"
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
+    .map(f => f.toLowerCase())
     .map(f => `built/local/${f}/diagnosticMessages.generated.json`)
     .concat(generatedLCGFile);
 

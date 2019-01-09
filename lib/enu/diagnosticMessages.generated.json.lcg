@@ -51,6 +51,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";A_class_can_only_implement_an_object_type_or_intersection_of_object_types_with_statically_known_memb_2422" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[A class can only implement an object type or intersection of object types with statically known members.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";A_class_declaration_without_the_default_modifier_must_have_a_name_1211" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[A class declaration without the 'default' modifier must have a name.]]></Val>
@@ -60,12 +66,6 @@
             <Item ItemId=";A_class_may_only_extend_another_class_2311" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[A class may only extend another class.]]></Val>
-              </Str>
-              <Disp Icon="Str" />
-            </Item>
-            <Item ItemId=";A_class_may_only_implement_another_class_or_interface_2422" ItemType="0" PsrId="306" Leaf="true">
-              <Str Cat="Text">
-                <Val><![CDATA[A class may only implement another class or interface.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -693,6 +693,18 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Add_missing_new_operator_to_all_calls_95072" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add missing 'new' operator to all calls]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Add_missing_new_operator_to_call_95071" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add missing 'new' operator to call]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Add_missing_super_call_90001" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add missing 'super()' call]]></Val>
@@ -705,9 +717,21 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Add_names_to_all_parameters_without_names_95073" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add names to all parameters without names]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Add_or_remove_braces_in_an_arrow_function_95058" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Add or remove braces in an arrow function]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Add_parameter_name_90034" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Add parameter name]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1077,9 +1101,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";An_interface_may_only_extend_a_class_or_another_interface_2312" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";An_interface_can_only_extend_an_object_type_or_intersection_of_object_types_with_statically_known_me_2312" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[An interface may only extend a class or another interface.]]></Val>
+                <Val><![CDATA[An interface can only extend an object type or intersection of object types with statically known members.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1209,9 +1233,9 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Base_constructor_return_type_0_is_not_a_class_or_interface_type_2509" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_2509" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Base constructor return type '{0}' is not a class or interface type.]]></Val>
+                <Val><![CDATA[Base constructor return type '{0}' is not an object type or intersection of object types with statically known members.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -1317,9 +1341,15 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
-            <Item ItemId=";Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property_2540" ItemType="0" PsrId="306" Leaf="true">
+            <Item ItemId=";Cannot_assign_to_0_because_it_is_a_constant_2588" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
-                <Val><![CDATA[Cannot assign to '{0}' because it is a constant or a read-only property.]]></Val>
+                <Val><![CDATA[Cannot assign to '{0}' because it is a constant.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Cannot_assign_to_0_because_it_is_a_read_only_property_2540" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Cannot assign to '{0}' because it is a read-only property.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
@@ -4299,6 +4329,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1_7051" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Parameter has a name but no type. Did you mean '{0}: {1}'?]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Parameter_type_of_public_setter_0_from_exported_class_has_or_is_using_name_1_from_private_module_2_4036" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Parameter type of public setter '{0}' from exported class has or is using name '{1}' from private module '{2}'.]]></Val>
@@ -5538,6 +5574,12 @@
             <Item ItemId=";The_import_meta_meta_property_is_only_allowed_using_ESNext_for_the_target_and_module_compiler_option_1343" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[The 'import.meta' meta-property is only allowed using 'ESNext' for the 'target' and 'module' compiler options.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_a_2742" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[The inferred type of '{0}' cannot be named without a reference to '{1}'. This is likely not portable. A type annotation is necessary.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>

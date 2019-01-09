@@ -1,0 +1,67 @@
+=== tests/cases/compiler/reactSFCAndFunctionResolvable.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react';
+>React : Symbol(React, Decl(reactSFCAndFunctionResolvable.tsx, 2, 6))
+
+declare const Radio: (props: {}) => React.ReactElement<{}>;
+>Radio : Symbol(Radio, Decl(reactSFCAndFunctionResolvable.tsx, 4, 13))
+>props : Symbol(props, Decl(reactSFCAndFunctionResolvable.tsx, 4, 22))
+>React : Symbol(React, Decl(reactSFCAndFunctionResolvable.tsx, 2, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+declare const OtherRadio: () => React.ReactElement<{}>;
+>OtherRadio : Symbol(OtherRadio, Decl(reactSFCAndFunctionResolvable.tsx, 5, 13))
+>React : Symbol(React, Decl(reactSFCAndFunctionResolvable.tsx, 2, 6))
+>ReactElement : Symbol(React.ReactElement, Decl(react16.d.ts, 135, 9))
+
+declare const Checkbox: React.SFC;
+>Checkbox : Symbol(Checkbox, Decl(reactSFCAndFunctionResolvable.tsx, 6, 13))
+>React : Symbol(React, Decl(reactSFCAndFunctionResolvable.tsx, 2, 6))
+>SFC : Symbol(React.SFC, Decl(react16.d.ts, 400, 9))
+
+declare const condition1: boolean;
+>condition1 : Symbol(condition1, Decl(reactSFCAndFunctionResolvable.tsx, 8, 13))
+
+declare const condition2: boolean;
+>condition2 : Symbol(condition2, Decl(reactSFCAndFunctionResolvable.tsx, 9, 13))
+
+declare const condition3: boolean;
+>condition3 : Symbol(condition3, Decl(reactSFCAndFunctionResolvable.tsx, 10, 13))
+
+const RandomComponent: React.SFC = () => {
+>RandomComponent : Symbol(RandomComponent, Decl(reactSFCAndFunctionResolvable.tsx, 12, 5))
+>React : Symbol(React, Decl(reactSFCAndFunctionResolvable.tsx, 2, 6))
+>SFC : Symbol(React.SFC, Decl(react16.d.ts, 400, 9))
+
+  const Component =
+>Component : Symbol(Component, Decl(reactSFCAndFunctionResolvable.tsx, 13, 7))
+
+    condition1
+>condition1 : Symbol(condition1, Decl(reactSFCAndFunctionResolvable.tsx, 8, 13))
+
+      ? Radio
+>Radio : Symbol(Radio, Decl(reactSFCAndFunctionResolvable.tsx, 4, 13))
+
+      : Checkbox;
+>Checkbox : Symbol(Checkbox, Decl(reactSFCAndFunctionResolvable.tsx, 6, 13))
+
+  const OtherComponent =
+>OtherComponent : Symbol(OtherComponent, Decl(reactSFCAndFunctionResolvable.tsx, 18, 7))
+
+    condition2
+>condition2 : Symbol(condition2, Decl(reactSFCAndFunctionResolvable.tsx, 9, 13))
+
+      ? OtherRadio
+>OtherRadio : Symbol(OtherRadio, Decl(reactSFCAndFunctionResolvable.tsx, 5, 13))
+
+      : Checkbox;
+>Checkbox : Symbol(Checkbox, Decl(reactSFCAndFunctionResolvable.tsx, 6, 13))
+
+  return condition1 ? <Component /> : <OtherComponent />;
+>condition1 : Symbol(condition1, Decl(reactSFCAndFunctionResolvable.tsx, 8, 13))
+>Component : Symbol(Component, Decl(reactSFCAndFunctionResolvable.tsx, 13, 7))
+>OtherComponent : Symbol(OtherComponent, Decl(reactSFCAndFunctionResolvable.tsx, 18, 7))
+
+};
+

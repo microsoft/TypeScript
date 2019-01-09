@@ -37,7 +37,7 @@ namespace ts.server {
         private sequence = 0;
         private lineMaps: Map<number[]> = createMap<number[]>();
         private messages: string[] = [];
-        private lastRenameEntry: RenameEntry;
+        private lastRenameEntry: RenameEntry | undefined;
 
         constructor(private host: SessionClientHost) {
         }
@@ -431,7 +431,7 @@ namespace ts.server {
                 this.getRenameInfo(fileName, position, findInStrings, findInComments);
             }
 
-            return this.lastRenameEntry.locations;
+            return this.lastRenameEntry!.locations;
         }
 
         private decodeNavigationBarItems(items: protocol.NavigationBarItem[] | undefined, fileName: string, lineMap: number[]): NavigationBarItem[] {
