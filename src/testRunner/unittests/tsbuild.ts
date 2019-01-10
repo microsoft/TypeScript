@@ -1,5 +1,23 @@
 namespace ts {
     let currentTime = 100;
+
+    function getExpectedDiagnosticForProjectsInBuild(...projects: string[]): fakes.ExpectedDiagnostic {
+        return [Diagnostics.Projects_in_this_build_Colon_0, projects.map(p => "\r\n    * " + p).join("")];
+    }
+
+    function verifyBuildWithProjFs(rootNames: ReadonlyArray<string>, projFs: vfs.FileSystem, modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedFileTraces: ReadonlyArray<string>, ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
+        const fs = projFs.shadow();
+        const host = new fakes.SolutionBuilderHost(fs);
+        modifyDiskLayout(fs);
+        const builder = createSolutionBuilder(host, rootNames, { listFiles: true });
+        builder.buildAllProjects();
+        host.assertDiagnosticMessages(...expectedDiagnostics);
+        for (const output of allExpectedOutputs) {
+            assert(fs.existsSync(output), `Expect file ${output} to exist`);
+        }
+        assert.deepEqual(host.traces, expectedFileTraces);
+    }
+
     export namespace Sample1 {
         tick();
         const projFs = loadProjectFromDisk("tests/projects/sample1");
@@ -67,7 +85,11 @@ namespace ts {
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/tests"], { dry: true, force: false, verbose: false });
                 builder.buildAllProjects();
-                host.assertDiagnosticMessages(Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0, Diagnostics.A_non_dry_build_would_build_project_0);
+                host.assertDiagnosticMessages(
+                    [Diagnostics.A_non_dry_build_would_build_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.A_non_dry_build_would_build_project_0, "/src/logic/tsconfig.json"],
+                    [Diagnostics.A_non_dry_build_would_build_project_0, "/src/tests/tsconfig.json"]
+                );
 
                 // Check for outputs to not be written. Not an exhaustive list
                 for (const output of allExpectedOutputs) {
@@ -86,7 +108,11 @@ namespace ts {
                 host.clearDiagnostics();
                 builder = createSolutionBuilder(host, ["/src/tests"], { dry: true, force: false, verbose: false });
                 builder.buildAllProjects();
-                host.assertDiagnosticMessages(Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date, Diagnostics.Project_0_is_up_to_date);
+                host.assertDiagnosticMessages(
+                    [Diagnostics.Project_0_is_up_to_date, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_up_to_date, "/src/logic/tsconfig.json"],
+                    [Diagnostics.Project_0_is_up_to_date, "/src/tests/tsconfig.json"]
+                );
             });
         });
 
@@ -146,13 +172,14 @@ namespace ts {
                 host.clearDiagnostics();
                 builder.resetBuildContext();
                 builder.buildAllProjects();
-                host.assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
-                    Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
-                    Diagnostics.Building_project_0,
-                    Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
-                    Diagnostics.Building_project_0,
-                    Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
-                    Diagnostics.Building_project_0);
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
+                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tests/tsconfig.json", "src/tests/index.js"],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]);
                 tick();
             });
 
@@ -161,10 +188,12 @@ namespace ts {
                 host.clearDiagnostics();
                 builder.resetBuildContext();
                 builder.buildAllProjects();
-                host.assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
-                    Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
-                    Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
-                    Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2);
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/tests/tsconfig.json", "src/tests/index.ts", "src/tests/index.js"]
+                );
                 tick();
             });
 
@@ -175,11 +204,13 @@ namespace ts {
                 builder.resetBuildContext();
                 builder.buildAllProjects();
 
-                host.assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
-                    Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
-                    Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
-                    Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
-                    Diagnostics.Building_project_0);
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/tests/index.ts"],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
+                );
                 tick();
             });
 
@@ -190,13 +221,15 @@ namespace ts {
                 builder.resetBuildContext();
                 builder.buildAllProjects();
 
-                host.assertDiagnosticMessages(Diagnostics.Projects_in_this_build_Colon_0,
-                    Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,
-                    Diagnostics.Building_project_0,
-                    Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
-                    Diagnostics.Updating_output_timestamps_of_project_0,
-                    Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
-                    Diagnostics.Updating_output_timestamps_of_project_0);
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/core/tsconfig.json", "src/core/anotherModule.js", "src/core/index.ts"],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/logic/tsconfig.json"],
+                    [Diagnostics.Updating_output_timestamps_of_project_0, "/src/logic/tsconfig.json"],
+                    [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/tests/tsconfig.json"],
+                    [Diagnostics.Updating_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
+                );
             });
         });
 
@@ -210,14 +243,14 @@ namespace ts {
                 replaceText(fs, "/src/logic/index.ts", "c.multiply(10, 15)", `c.muitply()`);
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(
-                    Diagnostics.Projects_in_this_build_Colon_0,
-                    Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
-                    Diagnostics.Building_project_0,
-                    Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
-                    Diagnostics.Building_project_0,
-                    Diagnostics.Property_0_does_not_exist_on_type_1,
-                    Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors,
-                    Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
+                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                    [Diagnostics.Property_0_does_not_exist_on_type_1, "muitply", `typeof import("/src/core/index")`],
+                    [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, "src/tests/tsconfig.json", "src/logic"],
+                    [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, "/src/tests/tsconfig.json", "/src/logic"]
                 );
             });
         });
@@ -274,12 +307,12 @@ export class cNew {}`);
             const projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite");
             const allExpectedOutputs = ["/src/tests/dist/src/index.js", "/src/tests/dist/src/index.d.ts", "/src/tests/dist/src/hello.json"];
 
-            function verifyProjectWithResolveJsonModule(configFile: string, ...expectedDiagnosticMessages: DiagnosticMessage[]) {
+            function verifyProjectWithResolveJsonModule(configFile: string, ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
                 const fs = projFs.shadow();
                 verifyProjectWithResolveJsonModuleWithFs(fs, configFile, allExpectedOutputs, ...expectedDiagnosticMessages);
             }
 
-            function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: ReadonlyArray<string>, ...expectedDiagnosticMessages: DiagnosticMessage[]) {
+            function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: ReadonlyArray<string>, ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
@@ -293,7 +326,10 @@ export class cNew {}`);
             }
 
             it("with resolveJsonModule and include only", () => {
-                verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withInclude.json", Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+                verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withInclude.json", [
+                    Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern,
+                    "/src/tests/src/hello.json"
+                ]);
             });
 
             it("with resolveJsonModule and include of *.json along with other include", () => {
@@ -409,17 +445,8 @@ export default hello.hello`);
                 "/src/c.ts"
             ];
 
-            function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedDiagnostics: DiagnosticMessage[], expectedFileTraces: ReadonlyArray<string>) {
-                const fs = projFs.shadow();
-                const host = new fakes.SolutionBuilderHost(fs);
-                modifyDiskLayout(fs);
-                const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
-                builder.buildAllProjects();
-                host.assertDiagnosticMessages(...expectedDiagnostics);
-                for (const output of allExpectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
-                assert.deepEqual(host.traces, expectedFileTraces);
+            function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedFileTraces: ReadonlyArray<string>, ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
+                verifyBuildWithProjFs(["/src/tsconfig.c.json"], projFs, modifyDiskLayout, allExpectedOutputs, expectedFileTraces, ...expectedDiagnostics);
             }
 
             function modifyFsBTsToNonRelativeImport(fs: vfs.FileSystem, moduleResolution: "node" | "classic") {
@@ -436,11 +463,11 @@ export const b = new A();`);
             }
 
             it("verify that it builds correctly", () => {
-                verifyBuild(noop, allExpectedOutputs, emptyArray, expectedFileTraces);
+                verifyBuild(noop, allExpectedOutputs, expectedFileTraces);
             });
 
             it("verify that it builds correctly when the referenced project uses different module resolution", () => {
-                verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "classic"), allExpectedOutputs, emptyArray, expectedFileTraces);
+                verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "classic"), allExpectedOutputs, expectedFileTraces);
             });
 
             it("verify that it build reports error about module not found with node resolution with external module name", () => {
@@ -452,8 +479,9 @@ export const b = new A();`);
                 ];
                 verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
                     allExpectedOutputs,
-                    [Diagnostics.Cannot_find_module_0],
-                    expectedFileTraces);
+                    expectedFileTraces,
+                    [Diagnostics.Cannot_find_module_0, "a"]
+                );
             });
         });
 
@@ -477,20 +505,11 @@ export const b = new A();`);
                 "/src/utils/unusedFile.ts",
             ];
 
-            function verifyDtsIncluded(modifyFs: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedFileTraces: ReadonlyArray<string>) {
-                const fs = projFs.shadow();
-                modifyFs(fs);
-                const host = new fakes.SolutionBuilderHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/converter/tsconfig.json"], { listFiles: true });
-                builder.buildAllProjects();
-                host.assertDiagnosticMessages(/*empty*/);
-                for (const output of allExpectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
-                assert.deepEqual(host.traces, expectedFileTraces);
+            function verifyDtsIncluded(modifyFs: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedFileTraces: ReadonlyArray<string>, ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
+                verifyBuildWithProjFs(["/src/converter/tsconfig.json"], projFs, modifyFs, allExpectedOutputs, expectedFileTraces, ...expectedDiagnostics);
             }
 
-            function makeModules(fs: vfs.FileSystem) {
+            function makeModules(fs: vfs.FileSystem, someFileModuleSpecifier?: string) {
                 const tsconfigBaseFile = "/src/tsconfig_base.json";
                 const tsconfigBase = JSON.parse(fs.readFileSync(tsconfigBaseFile, "utf8"));
                 tsconfigBase.compilerOptions.module = "amd";
@@ -499,7 +518,7 @@ export const b = new A();`);
                 const lengthFile = "/src/converter/length.ts";
                 const lengthContent = fs.readFileSync(lengthFile, "utf8");
                 fs.writeFileSync(lengthFile, `import { leftPad } from "utils";
-import { foo } from "../utils/someFile";
+import { foo } from "${someFileModuleSpecifier || "../utils/someFile"}";
 
 ${lengthContent}`);
 
@@ -520,6 +539,7 @@ ${lengthContent}`);
                 const tsconfigFile = "/src/utils/tsconfig.json";
                 const tsconfig = JSON.parse(fs.readFileSync(tsconfigFile, "utf8"));
                 tsconfig.compilerOptions = { outFile: "result.js" };
+                tsconfig.exclude = ["result.d.ts"];
                 fs.writeFileSync(tsconfigFile, JSON.stringify(tsconfig));
             }
 
@@ -557,18 +577,32 @@ ${lengthContent}`);
                     ]);
                 });
 
-                it.skip("with --out", () => {
-                    // TODO:: Handle many ts to single dts in modules scenario
+                it("with --out", () => {
+                    verifyDtsIncluded(fs => {
+                        makeModules(fs, "someFile"); // With --out result.d.ts is generated with declare module "someFile"
+                        makeOutFile(fs);
+                    }, allExpectedOutputsWithOutFile, [
+                            ...expectedFileTracesUtils,
+                            ...getLibs(),
+                            "/src/utils/result.d.ts", // out file
+                            "/src/utils/types.d.ts", // d.ts from source
+                            "/src/converter/length.ts"
+                        ]);
+                });
+
+                it("with --out and resolutions going to relative source files", () => {
                     verifyDtsIncluded(fs => {
                         makeModules(fs);
                         makeOutFile(fs);
-                    }, allExpectedOutputsWithOutFile, [
-                        ...expectedFileTracesUtils,
-                        ...getLibs(),
-                        "/src/utils/types.d.ts", // d.ts from source
-                        "/src/utils/result.d.ts", // out file as part of resolution
-                        "/src/converter/length.ts"
-                    ]);
+                    }, getExpectedOutputs("/src/utils/result"), [ // because of error no length.js
+                            ...expectedFileTracesUtils,
+                            ...getLibs(),
+                            "/src/utils/result.d.ts", // out file
+                            "/src/utils/types.d.ts", // d.ts from source
+                            "/src/converter/length.ts"
+                        ],
+                        [Diagnostics.Cannot_find_module_0, "../utils/someFile"]
+                    );
                 });
             });
         });
@@ -633,7 +667,7 @@ ${lengthContent}`);
 
                 host.clearDiagnostics();
                 builder.buildAllProjects();
-                host.assertDiagnosticMessages(Diagnostics.The_files_list_in_config_file_0_is_empty);
+                host.assertDiagnosticMessages([Diagnostics.The_files_list_in_config_file_0_is_empty, "/src/no-references/tsconfig.json"]);
 
                 // Check for outputs to not be written.
                 for (const output of allExpectedOutputs) {

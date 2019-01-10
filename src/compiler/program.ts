@@ -2257,8 +2257,13 @@ namespace ts {
 
             let redirectedPath: Path | undefined;
             if (refFile) {
-                const redirect = getProjectReferenceRedirect(fileName);
-                if (redirect) {
+                const redirectProject = getProjectReferenceRedirectProject(fileName);
+                if (redirectProject) {
+                    if (redirectProject.commandLine.options.outFile || redirectProject.commandLine.options.out) {
+                        // Shouldnt create many to 1 mapping file in --out scenario
+                        return undefined;
+                    }
+                    const redirect = getProjectReferenceOutputName(redirectProject, fileName);
                     ((refFile.redirectedReferences || (refFile.redirectedReferences = [])) as string[]).push(fileName);
                     fileName = redirect;
                     // Once we start redirecting to a file, we can potentially come back to it
@@ -2354,6 +2359,11 @@ namespace ts {
         }
 
         function getProjectReferenceRedirect(fileName: string): string | undefined {
+            const referencedProject = getProjectReferenceRedirectProject(fileName);
+            return referencedProject && getProjectReferenceOutputName(referencedProject, fileName);
+        }
+
+        function getProjectReferenceRedirectProject(fileName: string): ResolvedProjectReference | undefined {
             // Ignore any of the non ts files
             if (!resolvedProjectReferences || !resolvedProjectReferences.length || !hasTSFileExtension(fileName)) {
                 return undefined;
@@ -2361,10 +2371,10 @@ namespace ts {
 
             // If this file is produced by a referenced project, we need to rewrite it to
             // look in the output folder of the referenced project rather than the input
-            const referencedProject = getResolvedProjectReferenceToRedirect(fileName);
-            if (!referencedProject) {
-                return undefined;
-            }
+            return getResolvedProjectReferenceToRedirect(fileName);
+        }
+
+        function getProjectReferenceOutputName(referencedProject: ResolvedProjectReference, fileName: string) {
             const out = referencedProject.commandLine.options.outFile || referencedProject.commandLine.options.out;
             return fileExtensionIs(fileName, Extension.Dts) ?
                 fileName :
