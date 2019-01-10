@@ -2527,8 +2527,9 @@ declare namespace ts {
         AMD = 2,
         UMD = 3,
         System = 4,
-        ES2015 = 5,
-        ESNext = 6
+        Hybrid = 5,
+        ES2015 = 6,
+        ESNext = 7
     }
     enum JsxEmit {
         None = 0,

@@ -357,6 +357,7 @@ namespace ts.codefix {
             case ModuleKind.AMD:
             case ModuleKind.CommonJS:
             case ModuleKind.UMD:
+            case ModuleKind.Hybrid:
                 return ImportKind.Equals;
             case ModuleKind.System:
             case ModuleKind.ES2015:

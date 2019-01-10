@@ -7175,6 +7175,7 @@ namespace ts {
             case ModuleKind.AMD:
             case ModuleKind.ES2015:
             case ModuleKind.ESNext:
+            case ModuleKind.Hybrid:
                 return true;
             default:
                 return false;

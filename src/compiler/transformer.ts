@@ -4,6 +4,7 @@ namespace ts {
         switch (moduleKind) {
             case ModuleKind.ESNext:
             case ModuleKind.ES2015:
+            case ModuleKind.Hybrid:
                 return transformES2015Module;
             case ModuleKind.System:
                 return transformSystemModule;

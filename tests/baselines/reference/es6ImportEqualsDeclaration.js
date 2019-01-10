@@ -13,5 +13,5 @@ void a;
 var a = 10;
 module.exports = a;
 //// [client.js]
-const var a = require("server");
+const a = require("server");
 void a;

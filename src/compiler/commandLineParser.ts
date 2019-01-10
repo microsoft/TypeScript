@@ -217,7 +217,8 @@ namespace ts {
                 umd: ModuleKind.UMD,
                 es6: ModuleKind.ES2015,
                 es2015: ModuleKind.ES2015,
-                esnext: ModuleKind.ESNext
+                esnext: ModuleKind.ESNext,
+                hybrid: ModuleKind.Hybrid
             }),
             affectsModuleResolution: true,
             paramType: Diagnostics.KIND,

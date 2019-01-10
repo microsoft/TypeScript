@@ -2410,7 +2410,7 @@ namespace ts {
 
             if (!dontResolveAlias && symbol) {
                 if (!(symbol.flags & (SymbolFlags.Module | SymbolFlags.Variable)) && !getDeclarationOfKind(symbol, SyntaxKind.SourceFile)) {
-                    const compilerOptionName = moduleKind >= ModuleKind.ES2015
+                    const compilerOptionName = moduleKind >= ModuleKind.Hybrid
                         ? "allowSyntheticDefaultImports"
                         : "esModuleInterop";
 
@@ -26473,7 +26473,7 @@ namespace ts {
          */
         function checkClassNameCollisionWithObject(name: Identifier): void {
             if (languageVersion === ScriptTarget.ES5 && name.escapedText === "Object"
-                && moduleKind !== ModuleKind.ES2015 && moduleKind !== ModuleKind.ESNext) {
+                && moduleKind !== ModuleKind.ES2015 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Hybrid) {
                 error(name, Diagnostics.Class_name_cannot_be_Object_when_targeting_ES5_with_module_0, ModuleKind[moduleKind]); // https://github.com/Microsoft/TypeScript/issues/17494
             }
         }
@@ -27582,7 +27582,7 @@ namespace ts {
                         error(node.moduleSpecifier, Diagnostics.Module_0_uses_export_and_cannot_be_used_with_export_Asterisk, symbolToString(moduleSymbol));
                     }
 
-                    if (moduleKind !== ModuleKind.System && moduleKind !== ModuleKind.ES2015 && moduleKind !== ModuleKind.ESNext) {
+                    if (moduleKind !== ModuleKind.System && moduleKind !== ModuleKind.ES2015 && moduleKind !== ModuleKind.ESNext && moduleKind !== ModuleKind.Hybrid) {
                         checkExternalEmitHelpers(node, ExternalEmitHelpers.ExportStar);
                     }
                 }
@@ -30706,7 +30706,7 @@ namespace ts {
                 return grammarErrorOnNode(node.exclamationToken, Diagnostics.A_definite_assignment_assertion_is_not_permitted_in_this_context);
             }
 
-            if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.ESNext && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
+            if (compilerOptions.module !== ModuleKind.ES2015 && compilerOptions.module !== ModuleKind.ESNext && compilerOptions.module !== ModuleKind.Hybrid && compilerOptions.module !== ModuleKind.System && !compilerOptions.noEmit &&
                 !(node.parent.parent.flags & NodeFlags.Ambient) && hasModifier(node.parent.parent, ModifierFlags.Export)) {
                 checkESModuleMarker(node.name);
             }

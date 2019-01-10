@@ -10,5 +10,5 @@ import * as a from "a";
 
 //// [a.js]
 var a = 10;
-module.exports = a;
+module.exports = a; // Error: export = not allowed in ES6
 //// [b.js]

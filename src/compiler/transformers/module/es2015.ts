@@ -58,8 +58,8 @@ namespace ts {
         function visitImportAssignment(node: ImportEqualsDeclaration): VisitResult<Node> {
             if (isExternalModuleReference(node.moduleReference)) {
                 // We issue an error for an import= when targeting es6, however we will emit is as a cjs-style `require` for hybrid environments
-                return createVariableStatement(
-                    getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? [createModifier(SyntaxKind.ConstKeyword)] : /*modifiers*/ undefined,
+                return setOriginalNode(setTextRange(createVariableStatement(
+                    /*modifiers*/ undefined,
                     createVariableDeclarationList([
                         createVariableDeclaration(
                             node.name,
@@ -69,9 +69,10 @@ namespace ts {
                                 /*typeArguments*/ undefined,
                                 [node.moduleReference.expression]
                             )
-                        )
-                    ])
-                );
+                        )],
+                        getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? NodeFlags.Const : 0
+                    )
+                ), node), node);
             }
             return undefined; // ts transformer should have handled namespacy import assignments
         }
@@ -81,7 +82,7 @@ namespace ts {
                 return node;
             }
             // We issue an error for an export= when targeting es6, however we will emit is as a cjs-style `module.export=` for hybrid environments
-            return createExpressionStatement(createAssignment(createPropertyAccess(createIdentifier("module"), "exports"), node.expression));
+            return setOriginalNode(setTextRange(createExpressionStatement(createAssignment(createPropertyAccess(createIdentifier("module"), "exports"), node.expression)), node), node);
         }
 
         //

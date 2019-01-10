@@ -1,0 +1,35 @@
+=== tests/cases/compiler/importer.ts ===
+import f = require("./cjsyexporter");
+>f : Symbol(f, Decl(importer.ts, 0, 0))
+
+f();
+>f : Symbol(f, Decl(importer.ts, 0, 0))
+
+import {x, y} from "./esmyexporter";
+>x : Symbol(x, Decl(importer.ts, 3, 8))
+>y : Symbol(y, Decl(importer.ts, 3, 10))
+
+void x;
+>x : Symbol(x, Decl(importer.ts, 3, 8))
+
+void y;
+>y : Symbol(y, Decl(importer.ts, 3, 10))
+
+=== tests/cases/compiler/cjsyexporter.ts ===
+function f(): void {}
+>f : Symbol(f, Decl(cjsyexporter.ts, 0, 0))
+
+export = f;
+>f : Symbol(f, Decl(cjsyexporter.ts, 0, 0))
+
+=== tests/cases/compiler/esmyexporter.ts ===
+const x = 0;
+>x : Symbol(x, Decl(esmyexporter.ts, 0, 5))
+
+const y = 0;
+>y : Symbol(y, Decl(esmyexporter.ts, 1, 5))
+
+export {x, y}
+>x : Symbol(x, Decl(esmyexporter.ts, 2, 8))
+>y : Symbol(y, Decl(esmyexporter.ts, 2, 10))
+
