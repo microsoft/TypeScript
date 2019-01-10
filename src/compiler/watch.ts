@@ -121,6 +121,20 @@ namespace ts {
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }
 
+    export function listEmittedFiles(program: ProgramToEmitFilesAndReportErrors, emittedFiles: string[] | undefined, writeFileName: (s: string) => void) {
+        const currentDir = program.getCurrentDirectory();
+        forEach(emittedFiles, file => {
+            const filepath = getNormalizedAbsolutePath(file, currentDir);
+            writeFileName(`TSFILE: ${filepath}`);
+        });
+    }
+    export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
+        if (!program.getCompilerOptions().listFiles) return;
+        forEach(program.getSourceFiles(), file => {
+            writeFileName(file.fileName);
+        });
+    }
+
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
@@ -152,33 +166,15 @@ namespace ts {
 
         sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
         if (writeFileName) {
-            const currentDir = program.getCurrentDirectory();
-            forEach(emittedFiles, file => {
-                const filepath = getNormalizedAbsolutePath(file, currentDir);
-                writeFileName(`TSFILE: ${filepath}`);
-            });
-
-            if (program.getCompilerOptions().listFiles) {
-                forEach(program.getSourceFiles(), file => {
-                    writeFileName(file.fileName);
-                });
-            }
+            listEmittedFiles(program, emittedFiles, writeFileName);
+            listFiles(program, writeFileName);
         }
 
         if (reportSummary) {
             reportSummary(getErrorCountForSummary(diagnostics));
         }
 
-        if (emitSkipped && diagnostics.length > 0) {
-            // If the emitter didn't emit anything, then pass that value along.
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        else if (diagnostics.length > 0) {
-            // The emitter emitted something, inform the caller if that happened in the presence
-            // of diagnostics or not.
-            return ExitStatus.DiagnosticsPresent_OutputsGenerated;
-        }
-        return ExitStatus.Success;
+        return { emittedFiles, emitSkipped, diagnostics };
     }
 
     const noopFileWatcher: FileWatcher = { close: noop };

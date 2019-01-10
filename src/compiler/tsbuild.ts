@@ -1059,12 +1059,10 @@ namespace ts {
 
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
-            let declDiagnostics: Diagnostic[] | undefined;
-            const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
             const outputFiles: OutputFile[] = [];
-            emitFilesAndReportErrors(program, reportDeclarationDiagnostics, writeFileName, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
+            const { emittedFiles, diagnostics: declDiagnostics } = emitFilesAndReportErrors(program, noop, /*writeFileName*/ undefined, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
             // Don't emit .d.ts if there are decl file errors
-            if (declDiagnostics) {
+            if (declDiagnostics.length) {
                 return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
             }
 
@@ -1094,6 +1092,10 @@ namespace ts {
             if (emitDiagnostics.length) {
                 return buildErrors(emitDiagnostics, BuildResultFlags.EmitErrors, "Emit");
             }
+            if (writeFileName) {
+                listEmittedFiles(program, emittedFiles, writeFileName);
+                listFiles(program, writeFileName);
+            }
 
             const status: UpToDateStatus = {
                 type: UpToDateStatusType.UpToDate,
@@ -1109,6 +1111,9 @@ namespace ts {
             function buildErrors(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
                 resultFlags |= errorFlags;
                 reportAndStoreErrors(proj, diagnostics);
+                if (writeFileName) {
+                    listFiles(program, writeFileName);
+                }
                 projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
                 if (host.afterProgramEmitAndDiagnostics) {
                     host.afterProgramEmitAndDiagnostics(program);

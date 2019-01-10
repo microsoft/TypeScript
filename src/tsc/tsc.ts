@@ -245,14 +245,23 @@ namespace ts {
             configFileParsingDiagnostics
         };
         const program = createProgram(programOptions);
-        const exitStatus = emitFilesAndReportErrors(
+        const { emitSkipped, diagnostics } = emitFilesAndReportErrors(
             program,
             reportDiagnostic,
             s => sys.write(s + sys.newLine),
             createReportErrorSummary(options)
         );
         reportStatistics(program);
-        return sys.exit(exitStatus);
+        if (emitSkipped && diagnostics.length > 0) {
+            // If the emitter didn't emit anything, then pass that value along.
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+        }
+        else if (diagnostics.length > 0) {
+            // The emitter emitted something, inform the caller if that happened in the presence
+            // of diagnostics or not.
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsGenerated);
+        }
+        return sys.exit(ExitStatus.Success);
     }
 
     function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
