@@ -2513,14 +2513,15 @@ namespace ts {
     }
 
     export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
-        if (isInJSFile(node)) {
+        const baseType = getClassExtendsHeritageElement(node);
+        if (baseType && isInJSFile(node)) {
             // Prefer an @augments tag because it may have type parameters.
             const tag = getJSDocAugmentsTag(node);
             if (tag) {
                 return tag.class;
             }
         }
-        return getClassExtendsHeritageElement(node);
+        return baseType;
     }
 
     export function getClassExtendsHeritageElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
