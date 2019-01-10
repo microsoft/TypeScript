@@ -17,6 +17,7 @@ var a = /** @class */ (function () {
     }
     return a;
 }());
+module.exports = a;
 //// [main.js]
 import * as a from "./a";
 a;

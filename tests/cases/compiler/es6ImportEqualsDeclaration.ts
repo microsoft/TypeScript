@@ -6,3 +6,4 @@ export = a;
 
 // @filename: client.ts
 import a = require("server");
+void a;

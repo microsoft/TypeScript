@@ -47,8 +47,7 @@ namespace ts {
         function visitor(node: Node): VisitResult<Node> {
             switch (node.kind) {
                 case SyntaxKind.ImportEqualsDeclaration:
-                    // Elide `import=` as it is not legal with --module ES6
-                    return undefined;
+                    return visitImportAssignment(<ImportEqualsDeclaration>node);
                 case SyntaxKind.ExportAssignment:
                     return visitExportAssignment(<ExportAssignment>node);
             }
@@ -56,9 +55,33 @@ namespace ts {
             return node;
         }
 
-        function visitExportAssignment(node: ExportAssignment): VisitResult<ExportAssignment> {
-            // Elide `export=` as it is not legal with --module ES6
-            return node.isExportEquals ? undefined : node;
+        function visitImportAssignment(node: ImportEqualsDeclaration): VisitResult<Node> {
+            if (isExternalModuleReference(node.moduleReference)) {
+                // We issue an error for an import= when targeting es6, however we will emit is as a cjs-style `require` for hybrid environments
+                return createVariableStatement(
+                    getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? [createModifier(SyntaxKind.ConstKeyword)] : /*modifiers*/ undefined,
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            node.name,
+                            /*type*/ undefined,
+                            createCall(
+                                createIdentifier("require"),
+                                /*typeArguments*/ undefined,
+                                [node.moduleReference.expression]
+                            )
+                        )
+                    ])
+                );
+            }
+            return undefined; // ts transformer should have handled namespacy import assignments
+        }
+
+        function visitExportAssignment(node: ExportAssignment): VisitResult<Node> {
+            if (!node.isExportEquals) {
+                return node;
+            }
+            // We issue an error for an export= when targeting es6, however we will emit is as a cjs-style `module.export=` for hybrid environments
+            return createExpressionStatement(createAssignment(createPropertyAccess(createIdentifier("module"), "exports"), node.expression));
         }
 
         //

@@ -2,6 +2,10 @@
 import a = require("server");
 >a : number
 
+void a;
+>void a : undefined
+>a : number
+
 === tests/cases/compiler/server.ts ===
 var a = 10;
 >a : number

@@ -10,4 +10,5 @@ import * as a from "a";
 
 //// [a.js]
 var a = 10;
+module.exports = a;
 //// [b.js]

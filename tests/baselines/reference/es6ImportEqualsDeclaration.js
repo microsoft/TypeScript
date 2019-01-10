@@ -6,7 +6,12 @@ export = a;
 
 //// [client.ts]
 import a = require("server");
+void a;
+
 
 //// [server.js]
 var a = 10;
+module.exports = a;
 //// [client.js]
+const var a = require("server");
+void a;
