@@ -3,11 +3,11 @@
  * @param {number} xyz.p
  */
 function g(xyz) {
->g : (xyz: any) => void
+>g : (xyz: any) => any
 >xyz : any
 
-    xyz.x;
->xyz.x : any
+    return xyz.p;
+>xyz.p : any
 >xyz : any
->x : any
+>p : any
 }
