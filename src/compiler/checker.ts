@@ -14771,6 +14771,9 @@ namespace ts {
                     return symbol !== unknownSymbol ? (isConstraintPosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
                 case SyntaxKind.ThisKeyword:
                     return "0";
+                case SyntaxKind.NonNullExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                    return getFlowCacheKey((<NonNullExpression | ParenthesizedExpression>node).expression);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const propName = getAccessedPropertyName(<AccessExpression>node);
@@ -14783,6 +14786,11 @@ namespace ts {
         }
 
         function isMatchingReference(source: Node, target: Node): boolean {
+            switch (target.kind) {
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.NonNullExpression:
+                    return isMatchingReference(source, (target as NonNullExpression | ParenthesizedExpression).expression);
+            }
             switch (source.kind) {
                 case SyntaxKind.Identifier:
                     return target.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target) ||
@@ -14792,6 +14800,9 @@ namespace ts {
                     return target.kind === SyntaxKind.ThisKeyword;
                 case SyntaxKind.SuperKeyword:
                     return target.kind === SyntaxKind.SuperKeyword;
+                case SyntaxKind.NonNullExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                    return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     return isAccessExpression(target) &&
