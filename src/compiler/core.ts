@@ -1391,7 +1391,7 @@ namespace ts {
         return result;
     }
 
-    export function copyProperities<T1 extends T2, T2>(first: T1, second: T2) {
+    export function copyProperties<T1 extends T2, T2>(first: T1, second: T2) {
         for (const id in second) {
             if (hasOwnProperty.call(second, id)) {
                 (first as any)[id] = second[id];

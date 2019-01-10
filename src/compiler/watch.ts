@@ -317,7 +317,7 @@ namespace ts {
     function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
         const writeFileName = (s: string) => system.write(s + system.newLine);
         const result = createProgramHost(system, createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>) as WatchCompilerHost<T>;
-        copyProperities(result, createWatchHost(system, reportWatchStatus));
+        copyProperties(result, createWatchHost(system, reportWatchStatus));
         result.afterProgramCreate = builderProgram => {
             const compilerOptions = builderProgram.getCompilerOptions();
             const newLine = getNewLineCharacter(compilerOptions, () => system.newLine);

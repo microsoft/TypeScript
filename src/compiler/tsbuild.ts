@@ -393,7 +393,7 @@ namespace ts {
     export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = SemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
         const host = createSolutionBuilderHostBase(system, createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
         const watchHost = createWatchHost(system, reportWatchStatus);
-        copyProperities(host, watchHost);
+        copyProperties(host, watchHost);
         return host;
     }
 
