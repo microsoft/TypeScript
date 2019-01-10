@@ -1,0 +1,13 @@
+=== tests/cases/conformance/jsdoc/paramTagNestedWithoutTopLevelObject.js ===
+/**
+ * @param {number} xyz.p
+ */
+function g(xyz) {
+>g : (xyz: any) => void
+>xyz : any
+
+    xyz.x;
+>xyz.x : any
+>xyz : any
+>x : any
+}
