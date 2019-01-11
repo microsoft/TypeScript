@@ -660,7 +660,7 @@ namespace ts.NavigationBar {
         else if (isCallExpression(parent)) {
             const name = getCalledExpressionName(parent.expression);
             if (name !== undefined) {
-                const args = mapDefined(parent.arguments, a => isStringLiteral(a) ? a.getText(curSourceFile) : undefined).join(", ");
+                const args = mapDefined(parent.arguments, a => isStringLiteralLike(a) ? a.getText(curSourceFile) : undefined).join(", ");
                 return `${name}(${args}) callback`;
             }
         }

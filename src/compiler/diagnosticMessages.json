@@ -1015,6 +1015,14 @@
         "category": "Error",
         "code": 1351
     },
+    "A bigint literal cannot use exponential notation.": {
+        "category": "Error",
+        "code": 1352
+    },
+    "A bigint literal must be an integer.": {
+        "category": "Error",
+        "code": 1353
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1636,14 +1644,6 @@
         "category": "Error",
         "code": 2458
     },
-    "Type '{0}' has no property '{1}' and no string index signature.": {
-        "category": "Error",
-        "code": 2459
-    },
-    "Type '{0}' has no property '{1}'.": {
-        "category": "Error",
-        "code": 2460
-    },
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
@@ -1760,7 +1760,7 @@
         "category": "Error",
         "code": 2492
     },
-    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
+    "Tuple type '{0}' of length '{1}' has no element at index '{2}'.": {
         "category": "Error",
         "code": 2493
     },
@@ -1776,7 +1776,7 @@
         "category": "Error",
         "code": 2496
     },
-    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "This module can only be referenced with ECMAScript imports/exports by turning on the '{0}' flag and referencing its default export.": {
         "category": "Error",
         "code": 2497
     },
@@ -2532,6 +2532,10 @@
     "No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.": {
         "category": "Error",
         "code": 2743
+    },
+    "Type parameter defaults can only reference previously declared type parameters.": {
+        "category": "Error",
+        "code": 2744
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

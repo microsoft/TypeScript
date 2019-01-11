@@ -787,7 +787,13 @@ namespace ts {
         // Key is a file name. Value is the (non-empty, or undefined) list of files that redirect to it.
         let redirectTargetsMap = createMultiMap<string>();
 
-        const filesByName = createMap<SourceFile | undefined>();
+        /**
+         * map with
+         * - SourceFile if present
+         * - false if sourceFile missing for source of project reference redirect
+         * - undefined otherwise
+         */
+        const filesByName = createMap<SourceFile | false | undefined>();
         let missingFilePaths: ReadonlyArray<Path> | undefined;
         // stores 'filename -> file association' ignoring case
         // used to track cases when two file names differ only in casing
@@ -854,7 +860,7 @@ namespace ts {
                 }
             }
 
-            missingFilePaths = arrayFrom(filesByName.keys(), p => <Path>p).filter(p => !filesByName.get(p));
+            missingFilePaths = arrayFrom(mapDefinedIterator(filesByName.entries(), ([path, file]) => file === undefined ? path as Path : undefined));
             files = stableSort(processingDefaultLibFiles, compareDefaultLibFiles).concat(processingOtherFiles);
             processingDefaultLibFiles = undefined;
             processingOtherFiles = undefined;
@@ -1567,7 +1573,7 @@ namespace ts {
         }
 
         function getSourceFileByPath(path: Path): SourceFile | undefined {
-            return filesByName.get(path);
+            return filesByName.get(path) || undefined;
         }
 
         function getDiagnosticsHelper<T extends Diagnostic>(
@@ -2104,7 +2110,7 @@ namespace ts {
 
         /** This should have similar behavior to 'processSourceFile' without diagnostics or mutation. */
         function getSourceFileFromReference(referencingFile: SourceFile, ref: FileReference): SourceFile | undefined {
-            return getSourceFileFromReferenceWorker(resolveTripleslashReference(ref.fileName, referencingFile.fileName), fileName => filesByName.get(toPath(fileName)));
+            return getSourceFileFromReferenceWorker(resolveTripleslashReference(ref.fileName, referencingFile.fileName), fileName => filesByName.get(toPath(fileName)) || undefined);
         }
 
         function getSourceFileFromReferenceWorker(
@@ -2221,8 +2227,9 @@ namespace ts {
                         processReferencedFiles(file, isDefaultLib);
                         processTypeReferenceDirectives(file);
                     }
-
-                    processLibReferenceDirectives(file);
+                    if (!options.noLib) {
+                        processLibReferenceDirectives(file);
+                    }
 
                     modulesWithElidedImports.set(file.path, false);
                     processImportedModules(file);
@@ -2235,7 +2242,7 @@ namespace ts {
                     }
                 }
 
-                return file;
+                return file || undefined;
             }
 
             let redirectedPath: Path | undefined;
@@ -2309,8 +2316,10 @@ namespace ts {
                     processReferencedFiles(file, isDefaultLib);
                     processTypeReferenceDirectives(file);
                 }
+                if (!options.noLib) {
+                    processLibReferenceDirectives(file);
+                }
 
-                processLibReferenceDirectives(file);
 
                 // always process imported modules to record module name resolutions
                 processImportedModules(file);
@@ -2327,9 +2336,12 @@ namespace ts {
         }
 
         function addFileToFilesByName(file: SourceFile | undefined, path: Path, redirectedPath: Path | undefined) {
-            filesByName.set(path, file);
             if (redirectedPath) {
                 filesByName.set(redirectedPath, file);
+                filesByName.set(path, file || false);
+            }
+            else {
+                filesByName.set(path, file);
             }
         }
 
