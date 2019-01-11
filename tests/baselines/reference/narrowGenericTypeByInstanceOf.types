@@ -1,0 +1,540 @@
+=== tests/cases/compiler/narrowGenericTypeByInstanceOf.ts ===
+import { stringify } from "querystring";
+>stringify : any
+
+function example1() {
+>example1 : () => void
+
+  class Parent<T> {
+>Parent : Parent<T>
+
+    value: T;
+>value : T
+  }
+
+  class Child<T> extends Parent<T> {
+>Child : Child<T>
+>Parent : Parent<T>
+
+    other: T;
+>other : T
+  }
+
+  const obj = new Parent<number>();
+>obj : Parent<number>
+>new Parent<number>() : Parent<number>
+>Parent : typeof Parent
+
+  function onlyChildNumber(child: Child<number>) {
+>onlyChildNumber : (child: Child<number>) => void
+>child : Child<number>
+
+    // no-op
+  }
+  function onlyChildString(child: Child<string>) {
+>onlyChildString : (child: Child<string>) => void
+>child : Child<string>
+
+    // no-op
+  }
+
+  if (obj instanceof Child) {
+>obj instanceof Child : boolean
+>obj : Parent<number>
+>Child : typeof Child
+
+    onlyChildNumber(obj); // should PASS
+>onlyChildNumber(obj) : void
+>onlyChildNumber : (child: Child<number>) => void
+>obj : Child<number>
+
+    onlyChildString(obj); // should ERROR: Child<number> is not assignable to Child<string>.
+>onlyChildString(obj) : void
+>onlyChildString : (child: Child<string>) => void
+>obj : Child<number>
+  }
+}
+function example2() {
+>example2 : () => void
+
+  class Parent<A, B> {
+>Parent : Parent<A, B>
+
+    value1: A;
+>value1 : A
+
+    value2: B;
+>value2 : B
+  }
+
+  class Child<T> extends Parent<T, T> {
+>Child : Child<T>
+>Parent : Parent<T, T>
+
+    other: T;
+>other : T
+  }
+
+  const obj = new Parent<number, number>();
+>obj : Parent<number, number>
+>new Parent<number, number>() : Parent<number, number>
+>Parent : typeof Parent
+
+  function onlyChildNumber(child: Child<number>) {
+>onlyChildNumber : (child: Child<number>) => void
+>child : Child<number>
+
+    // no-op
+  }
+  function onlyChildString(child: Child<string>) {
+>onlyChildString : (child: Child<string>) => void
+>child : Child<string>
+
+    // no-op
+  }
+
+  if (obj instanceof Child) {
+>obj instanceof Child : boolean
+>obj : Parent<number, number>
+>Child : typeof Child
+
+    onlyChildNumber(obj); // should PASS
+>onlyChildNumber(obj) : void
+>onlyChildNumber : (child: Child<number>) => void
+>obj : Child<number>
+
+    onlyChildString(obj); // should ERROR: Child<number> is not assignable to Child<string>.
+>onlyChildString(obj) : void
+>onlyChildString : (child: Child<string>) => void
+>obj : Child<number>
+  }
+}
+
+function example3() {
+>example3 : () => void
+
+  class Parent<A, B> {
+>Parent : Parent<A, B>
+
+    value1: A;
+>value1 : A
+
+    value2: B;
+>value2 : B
+  }
+
+  class Child<C, D> extends Parent<D, C> {
+>Child : Child<C, D>
+>Parent : Parent<D, C>
+
+    value3: C;
+>value3 : C
+
+    value4: D;
+>value4 : D
+  }
+
+  const obj = new Parent<number, string>();
+>obj : Parent<number, string>
+>new Parent<number, string>() : Parent<number, string>
+>Parent : typeof Parent
+
+  function onlyChildNumberString(child: Child<number, string>) {
+>onlyChildNumberString : (child: Child<number, string>) => void
+>child : Child<number, string>
+
+    // no-op
+  }
+  function onlyChildStringNumber(child: Child<string, number>) {
+>onlyChildStringNumber : (child: Child<string, number>) => void
+>child : Child<string, number>
+
+    // no-op
+  }
+  function onlyChildNumberNumber(child: Child<string, number>) {
+>onlyChildNumberNumber : (child: Child<string, number>) => void
+>child : Child<string, number>
+
+    // no-op
+  }
+
+  if (obj instanceof Child) {
+>obj instanceof Child : boolean
+>obj : Parent<number, string>
+>Child : typeof Child
+
+    onlyChildNumberString(obj); // should ERROR: Child<string, number> is not assignable to Child<number, string>.
+>onlyChildNumberString(obj) : void
+>onlyChildNumberString : (child: Child<number, string>) => void
+>obj : Child<string, number>
+
+    onlyChildNumberNumber(obj); // should ERROR: Child<number, number> is not assignable to Child<number, string>.
+>onlyChildNumberNumber(obj) : void
+>onlyChildNumberNumber : (child: Child<string, number>) => void
+>obj : Child<string, number>
+
+    onlyChildStringNumber(obj); // should PASS
+>onlyChildStringNumber(obj) : void
+>onlyChildStringNumber : (child: Child<string, number>) => void
+>obj : Child<string, number>
+  }
+}
+
+function example4() {
+>example4 : () => void
+
+  class Parent<A, B> {
+>Parent : Parent<A, B>
+
+    value1: A;
+>value1 : A
+
+    value2: B;
+>value2 : B
+  }
+
+  class Child<C> extends Parent<C, C> {
+>Child : Child<C>
+>Parent : Parent<C, C>
+
+    value3: C;
+>value3 : C
+  }
+
+  const obj1 = new Parent<number, string>();
+>obj1 : Parent<number, string>
+>new Parent<number, string>() : Parent<number, string>
+>Parent : typeof Parent
+
+  const obj2 = new Parent<number, number>();
+>obj2 : Parent<number, number>
+>new Parent<number, number>() : Parent<number, number>
+>Parent : typeof Parent
+
+  function onlyChildNumber(child: Child<number>) {
+>onlyChildNumber : (child: Child<number>) => void
+>child : Child<number>
+
+    // no-op
+  }
+  function onlyChildString(child: Child<string>) {
+>onlyChildString : (child: Child<string>) => void
+>child : Child<string>
+
+    // no-op
+  }
+  function onlyChildStringAndNumber(child: Child<string & number>) {
+>onlyChildStringAndNumber : (child: Child<string & number>) => void
+>child : Child<string & number>
+
+    // no-op
+  }
+
+  if (obj1 instanceof Child) {
+>obj1 instanceof Child : boolean
+>obj1 : Parent<number, string>
+>Child : typeof Child
+
+    onlyChildNumber(obj1);
+>onlyChildNumber(obj1) : void
+>onlyChildNumber : (child: Child<number>) => void
+>obj1 : Parent<number, string> & Child<string | number>
+
+    onlyChildString(obj1);
+>onlyChildString(obj1) : void
+>onlyChildString : (child: Child<string>) => void
+>obj1 : Parent<number, string> & Child<string | number>
+
+    onlyChildStringAndNumber(obj1);
+>onlyChildStringAndNumber(obj1) : void
+>onlyChildStringAndNumber : (child: Child<string & number>) => void
+>obj1 : Parent<number, string> & Child<string | number>
+  }
+  if (obj2 instanceof Child) {
+>obj2 instanceof Child : boolean
+>obj2 : Parent<number, number>
+>Child : typeof Child
+
+    onlyChildNumber(obj2);
+>onlyChildNumber(obj2) : void
+>onlyChildNumber : (child: Child<number>) => void
+>obj2 : Child<number>
+
+    onlyChildString(obj2);
+>onlyChildString(obj2) : void
+>onlyChildString : (child: Child<string>) => void
+>obj2 : Child<number>
+
+    onlyChildStringAndNumber(obj2);
+>onlyChildStringAndNumber(obj2) : void
+>onlyChildStringAndNumber : (child: Child<string & number>) => void
+>obj2 : Child<number>
+  }
+}
+
+function example5<S, T>() {
+>example5 : <S, T>() => void
+
+  class Parent<A, B> {
+>Parent : Parent<A, B>
+
+    value1: A;
+>value1 : A
+
+    value2: B;
+>value2 : B
+  }
+
+  class Child<C> extends Parent<C, C> {
+>Child : Child<C>
+>Parent : Parent<C, C>
+
+    value3: C;
+>value3 : C
+  }
+
+  const obj = new Parent<S, T>();
+>obj : Parent<S, T>
+>new Parent<S, T>() : Parent<S, T>
+>Parent : typeof Parent
+
+  function onlyChildS(child: Child<S>) {
+>onlyChildS : (child: Child<S>) => void
+>child : Child<S>
+
+    // no-op
+  }
+  function onlyChildT(child: Child<T>) {
+>onlyChildT : (child: Child<T>) => void
+>child : Child<T>
+
+    // no-op
+  }
+  function onlyChildSAndT(child: Child<S & T>) {
+>onlyChildSAndT : (child: Child<S & T>) => void
+>child : Child<S & T>
+
+    // no-op
+  }
+
+  if (obj instanceof Child) {
+>obj instanceof Child : boolean
+>obj : Parent<S, T>
+>Child : typeof Child
+
+    onlyChildS(obj);
+>onlyChildS(obj) : void
+>onlyChildS : (child: Child<S>) => void
+>obj : Parent<S, T> & Child<S | T>
+
+    onlyChildT(obj);
+>onlyChildT(obj) : void
+>onlyChildT : (child: Child<T>) => void
+>obj : Parent<S, T> & Child<S | T>
+
+    onlyChildSAndT(obj);
+>onlyChildSAndT(obj) : void
+>onlyChildSAndT : (child: Child<S & T>) => void
+>obj : Parent<S, T> & Child<S | T>
+  }
+}
+
+function example6() {
+>example6 : () => void
+
+  class Parent<A, B> {
+>Parent : Parent<A, B>
+
+    value1: A;
+>value1 : A
+
+    value2: B;
+>value2 : B
+  }
+
+  class Child<C> extends Parent<C, C> {
+>Child : Child<C>
+>Parent : Parent<C, C>
+
+    value3: C;
+>value3 : C
+  }
+
+  const obj:
+>obj : Parent<{ foo: string; }, { foo: string; }> | Parent<string, string> | Parent<number, number>
+
+    | Parent<{ foo: string }, { foo: string }>
+>foo : string
+>foo : string
+
+    | Parent<string, string>
+    | Parent<number, number> = undefined as any;
+>undefined as any : any
+>undefined : undefined
+
+  const obj1 = undefined as Parent<{ foo: string }, { foo: string }>;
+>obj1 : Parent<{ foo: string; }, { foo: string; }>
+>undefined as Parent<{ foo: string }, { foo: string }> : Parent<{ foo: string; }, { foo: string; }>
+>undefined : undefined
+>foo : string
+>foo : string
+
+  const obj2 = undefined as Parent<string, string>;
+>obj2 : Parent<string, string>
+>undefined as Parent<string, string> : Parent<string, string>
+>undefined : undefined
+
+  const obj3 = undefined as Parent<number, number>;
+>obj3 : Parent<number, number>
+>undefined as Parent<number, number> : Parent<number, number>
+>undefined : undefined
+
+  const obj4 = undefined as string | { foo: string };
+>obj4 : string | { foo: string; }
+>undefined as string | { foo: string } : string | { foo: string; }
+>undefined : undefined
+>foo : string
+
+  const obj5 = undefined as { foo: string };
+>obj5 : { foo: string; }
+>undefined as { foo: string } : { foo: string; }
+>undefined : undefined
+>foo : string
+
+  function onlyChildString(child: Child<string>) {
+>onlyChildString : (child: Child<string>) => void
+>child : Child<string>
+
+    // no-op
+  }
+  function onlyChildNumber(child: Child<number>) {
+>onlyChildNumber : (child: Child<number>) => void
+>child : Child<number>
+
+    // no-op
+  }
+
+  if (obj instanceof Child) {
+>obj instanceof Child : boolean
+>obj : Parent<{ foo: string; }, { foo: string; }> | Parent<string, string> | Parent<number, number>
+>Child : typeof Child
+
+    onlyChildString(obj);
+>onlyChildString(obj) : void
+>onlyChildString : (child: Child<string>) => void
+>obj : Child<string> | Child<number> | Child<{ foo: string; }>
+
+    onlyChildNumber(obj);
+>onlyChildNumber(obj) : void
+>onlyChildNumber : (child: Child<number>) => void
+>obj : Child<string> | Child<number> | Child<{ foo: string; }>
+  }
+
+  if (obj1 instanceof Child) {
+>obj1 instanceof Child : boolean
+>obj1 : Parent<{ foo: string; }, { foo: string; }>
+>Child : typeof Child
+
+    console.log(obj1);
+>console.log(obj1) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>obj1 : Child<{ foo: string; }>
+  }
+  if (obj2 instanceof Child) {
+>obj2 instanceof Child : boolean
+>obj2 : Parent<string, string>
+>Child : typeof Child
+
+    console.log(obj2);
+>console.log(obj2) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>obj2 : Child<string>
+  }
+  if (obj3 instanceof Child) {
+>obj3 instanceof Child : boolean
+>obj3 : Parent<number, number>
+>Child : typeof Child
+
+    console.log(obj3);
+>console.log(obj3) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>obj3 : Child<number>
+  }
+  if (obj4 instanceof Child) {
+>obj4 instanceof Child : boolean
+>obj4 : string | { foo: string; }
+>Child : typeof Child
+
+    console.log(obj4);
+>console.log(obj4) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>obj4 : (string & Child<any>) | ({ foo: string; } & Child<any>)
+  }
+  if (obj5 instanceof Child) {
+>obj5 instanceof Child : boolean
+>obj5 : { foo: string; }
+>Child : typeof Child
+
+    console.log(obj5);
+>console.log(obj5) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>obj5 : { foo: string; } & Child<any>
+  }
+}
+
+function negative1() {
+>negative1 : () => void
+
+  class Parent<A, B> {
+>Parent : Parent<A, B>
+
+    value1: A;
+>value1 : A
+
+    value2: B;
+>value2 : B
+  }
+
+  class Child<C> extends Parent<C, C> {
+>Child : Child<C>
+>Parent : Parent<C, C>
+
+    value3: C;
+>value3 : C
+  }
+
+  const obj:
+>obj : Parent<string, string> | Parent<string, number> | Child<string>
+
+    | Parent<string, string>
+    | Parent<string, number>
+    | Child<string> = undefined as any;
+>undefined as any : any
+>undefined : undefined
+
+  if (obj instanceof Child) {
+>obj instanceof Child : boolean
+>obj : Parent<string, string> | Parent<string, number> | Child<string>
+>Child : typeof Child
+
+    return;
+  }
+
+  console.log(obj);
+>console.log(obj) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>obj : Parent<string, string> | Parent<string, number>
+}
+

@@ -16061,6 +16061,76 @@ namespace ts {
                 return getTypeWithFacts(mapType(type, narrowTypeForTypeofSwitch(impliedType)), switchFacts);
             }
 
+            function inferSubtypeTypeParameters(superType: Type, childTypeParameters: ReadonlyArray<TypeParameter>, childConstructor: Signature): Type | undefined {
+                // inferSubtypeTypeParameters infers the best possible parameters for the given childConstructor such that it represents every possible subtype of superType.
+                // An inferenceContext is created to permit us to develop inferences.
+                const inferenceContext = createInferenceContext(
+                    childTypeParameters,
+                    childConstructor,
+                    InferenceFlags.AnyDefault, // TODO: we might consider stricter flags in the future
+                );
+
+                // Infer the types from superType onto the return type of the child constructor.
+                inferTypes(inferenceContext.inferences, superType, getReturnTypeOfSignature(childConstructor), InferencePriority.ReturnType);
+
+                // We extract the inferred arguments from the inference context.
+                const childArguments = getInferredTypes(inferenceContext);
+
+                // Lastly, supply the childType with the new parameters.
+                return instantiateType(getReturnTypeOfSignature(childConstructor), param => {
+                    if (childTypeParameters.indexOf(param) >= 0) {
+                        return childArguments[childTypeParameters.indexOf(param)];
+                    }
+                    return param;
+                });
+            }
+
+            function narrowTypeParametersByAssignability(superType: Type, childType: Type): Type | undefined {
+                if (superType.flags & TypeFlags.Never) {
+                    return undefined;
+                }
+                // Attempt to narrow `superType` to `childType`.
+                // If this is possible via an instantiation of childType's parameters, return the narrowed type.
+                // Otherwise, return undefined.
+
+                if (!(childType.flags & TypeFlags.Object)) {
+                    return undefined;
+                }
+
+                const childObjectType = <ObjectType>childType;
+
+                if (!childObjectType.constructSignatures) {
+                    // TODO: can we do anything if a construct signature doesn't exist?
+                    return undefined;
+                }
+
+                if (childObjectType.constructSignatures.length === 0) {
+                    // TODO: can we do anything if a construct signature doesn't exist?
+                    return undefined;
+                }
+
+                // TODO: how should we select the constructor if there is more than one?
+                // We should probably select the most-general overload, or maybe try all of them.
+                const childConstructor = childObjectType.constructSignatures[0];
+
+                if (!childConstructor.typeParameters) {
+                    // Narrowing via type parameter assignment is only feasible if type parameters exist.
+                    return undefined;
+                }
+
+                const childTypeParameters = childConstructor.typeParameters;
+
+                if (superType.flags & TypeFlags.Union) {
+                    // When the super type is a union type, it makes sense to spread across.
+                    // If it's possible for the child type to be a subtype, then we should instead skip it.
+                    return getUnionType(
+                        (<UnionType>superType).types.map(superTypeAlternative => inferSubtypeTypeParameters(superTypeAlternative, childTypeParameters, childConstructor)).map(type => type || neverType)
+                    );
+                }
+
+                return inferSubtypeTypeParameters(superType, childTypeParameters, childConstructor);
+            }
+
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 const left = getReferenceCandidate(expr.left);
                 if (!isMatchingReference(reference, left)) {
@@ -16085,6 +16155,12 @@ namespace ts {
                     const prototypePropertyType = getTypeOfSymbol(prototypeProperty);
                     if (!isTypeAny(prototypePropertyType)) {
                         targetType = prototypePropertyType;
+                    }
+
+                    const narrowedGenericClassTypeCandidate = narrowTypeParametersByAssignability(type, rightType);
+                    if (narrowedGenericClassTypeCandidate && !(narrowedGenericClassTypeCandidate.flags & TypeFlags.Never)) {
+                        // When applicable, this overrides the basic target.
+                        targetType = narrowedGenericClassTypeCandidate;
                     }
                 }
 
