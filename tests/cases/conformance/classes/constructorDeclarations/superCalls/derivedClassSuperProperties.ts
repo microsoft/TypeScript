@@ -1,3 +1,5 @@
+// @target: ES5
+
 class Base {
     constructor(a?) { }
 
@@ -5,6 +7,7 @@ class Base {
 }
 
 class Derived1 extends Base {
+    prop = true;
     constructor() {
         super.receivesAnything();
         super();
@@ -12,6 +15,7 @@ class Derived1 extends Base {
 }
 
 class Derived2 extends Base {
+    prop = true;
     constructor() {
         super.receivesAnything(this);
         super();
@@ -19,6 +23,7 @@ class Derived2 extends Base {
 }
 
 class Derived3 extends Base {
+    prop = true;
     constructor() {
         super.receivesAnything();
         super(this);
@@ -26,6 +31,7 @@ class Derived3 extends Base {
 }
 
 class Derived4 extends Base {
+    prop = true;
     constructor() {
         super.receivesAnything(this);
         super(this);
@@ -33,6 +39,7 @@ class Derived4 extends Base {
 }
 
 class Derived5 extends Base {
+    prop = true;
     constructor() {
         super();
         super.receivesAnything();
@@ -40,6 +47,7 @@ class Derived5 extends Base {
 }
 
 class Derived6 extends Base {
+    prop = true;
     constructor() {
         super(this);
         super.receivesAnything();
@@ -47,6 +55,7 @@ class Derived6 extends Base {
 }
 
 class Derived7 extends Base {
+    prop = true;
     constructor() {
         super();
         super.receivesAnything(this);
@@ -54,13 +63,33 @@ class Derived7 extends Base {
 }
 
 class Derived8 extends Base {
+    prop = true;
     constructor() {
         super(this);
         super.receivesAnything(this);
     }
 }
 
-class DerivedWithFunction extends Base {
+class DerivedWithArrowFunction extends Base {
+    prop = true;
+    constructor() {
+        (() => this)();
+        super();
+    }
+}
+
+class DerivedWithFunctionDeclaration extends Base {
+    prop = true;
+    constructor() {
+        function declaration() {
+            return this;
+        }
+        super();
+    }
+}
+
+class DerivedWithFunctionExpression extends Base {
+    prop = true;
     constructor() {
         (function () {
             return this;
@@ -70,6 +99,7 @@ class DerivedWithFunction extends Base {
 }
 
 class DerivedWithClassExpression extends Base {
+    prop = true;
     constructor() {
         console.log(class { });
         super();
@@ -77,6 +107,7 @@ class DerivedWithClassExpression extends Base {
 }
 
 class DerivedWithDerivedClassExpression extends Base {
+    prop = true;
     constructor() {
         console.log(class extends Base {
             constructor() {
@@ -86,13 +117,52 @@ class DerivedWithDerivedClassExpression extends Base {
         super();
     }
 }
+
 class DerivedWithNewDerivedClassExpression extends Base {
+    prop = true;
     constructor() {
         console.log(new class extends Base {
             constructor() {
                 super();
             }
         }());
+        super();
+    }
+}
+
+class DerivedWithObjectAccessors extends Base {
+    prop = true;
+    constructor() {
+        const obj = {
+            get prop() {
+                return true;
+            },
+            set prop(param: boolean) {
+                this._prop = param;
+            }
+        };
+        super();
+    }
+}
+
+class DerivedWithObjectComputedPropertyName extends Base {
+    private propName = "prop";
+    constructor() {
+        const obj = {
+            [this.propName]: true,
+        };
+        super();
+    }
+}
+
+class DerivedWithObjectMethod extends Base {
+    prop = true;
+    constructor() {
+        const obj = {
+            getProp() {
+                return this;
+            },
+        };
         super();
     }
 }

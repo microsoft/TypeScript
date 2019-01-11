@@ -23634,7 +23634,7 @@ namespace ts {
                     return true;
                 }
 
-                if (isClassLike(node) || isFunctionLike(node)) {
+                if (isNewThisScope(node)) {
                     return undefined;
                 }
 

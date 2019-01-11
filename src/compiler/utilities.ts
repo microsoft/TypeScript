@@ -6258,6 +6258,23 @@ namespace ts {
         return isSourceFile(node) || isModuleBlock(node) || isBlock(node) && isFunctionLike(node.parent);
     }
 
+    /* @internal */
+    export function isNewThisScope(node: Node): boolean {
+        switch (node.kind) {
+            case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.GetAccessor:
+            case SyntaxKind.SetAccessor:
+                return true;
+            case SyntaxKind.Block:
+                return isMethodDeclaration(node.parent);
+            default:
+                return false;
+        }
+    }
+
     // Classes
     export function isClassElement(node: Node): node is ClassElement {
         const kind = node.kind;
