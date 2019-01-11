@@ -61,6 +61,7 @@
         "codefixes/fixClassDoesntImplementInheritedAbstractMember.ts",
         "codefixes/fixClassSuperMustPrecedeThisAccess.ts",
         "codefixes/fixConstructorForDerivedNeedSuperCall.ts",
+        "codefixes/fixEnableExperimentalDecorators.ts",
         "codefixes/fixExtendsInterfaceBecomesImplements.ts",
         "codefixes/fixForgottenThisPropertyAccess.ts",
         "codefixes/fixUnusedIdentifier.ts",

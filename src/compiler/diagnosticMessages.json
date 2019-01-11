@@ -4811,5 +4811,9 @@
     "Add names to all parameters without names": {
         "category": "Message",
         "code": 95073
+    },
+    "Enable the 'experimentalDecorators' option in your configuration file": {
+        "category": "Message",
+        "code": 95074
     }
 }
