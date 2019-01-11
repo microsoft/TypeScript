@@ -1776,7 +1776,7 @@
         "category": "Error",
         "code": 2496
     },
-    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "This module can only be referenced with ECMAScript imports/exports by turning on the '{0}' flag and referencing its default export.": {
         "category": "Error",
         "code": 2497
     },
@@ -4815,5 +4815,9 @@
     "Add names to all parameters without names": {
         "category": "Message",
         "code": 95073
+    },
+    "Enable the 'experimentalDecorators' option in your configuration file": {
+        "category": "Message",
+        "code": 95074
     }
 }

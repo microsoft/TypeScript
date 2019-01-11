@@ -2234,8 +2234,9 @@ namespace ts {
                         processReferencedFiles(file, isDefaultLib);
                         processTypeReferenceDirectives(file);
                     }
-
-                    processLibReferenceDirectives(file);
+                    if (!options.noLib) {
+                        processLibReferenceDirectives(file);
+                    }
 
                     modulesWithElidedImports.set(file.path, false);
                     processImportedModules(file);
@@ -2322,8 +2323,10 @@ namespace ts {
                     processReferencedFiles(file, isDefaultLib);
                     processTypeReferenceDirectives(file);
                 }
+                if (!options.noLib) {
+                    processLibReferenceDirectives(file);
+                }
 
-                processLibReferenceDirectives(file);
 
                 // always process imported modules to record module name resolutions
                 processImportedModules(file);
