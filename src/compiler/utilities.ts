@@ -7024,6 +7024,7 @@ namespace ts {
         };
     }
 
+    export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: (string | number | undefined)[]): string;
     export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
         let text = getLocaleSpecificMessage(message);
 

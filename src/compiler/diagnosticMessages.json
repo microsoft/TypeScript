@@ -2541,13 +2541,17 @@
         "category": "Error",
         "code": 2744
     },
-    "Target JSX element expects a '{0}' prop of type '{1}', but only a single child was provided.": {
+    "This JSX tag's '{0}' prop expects type '{1}' which requires multiple children, but only a single child was provided.": {
         "category": "Error",
         "code": 2745
     },
-    "Target JSX element expects a '{0}' prop of type '{1}', but multiple children were provided.": {
+    "This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.": {
         "category": "Error",
         "code": 2746
+    },
+    "'{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.": {
+        "category": "Error",
+        "code": 2747
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

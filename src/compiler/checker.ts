@@ -11336,13 +11336,13 @@ namespace ts {
             }
         }
 
-        function *generateJsxChildren(node: JsxElement): ElaborationIterator {
+        function *generateJsxChildren(node: JsxElement, getInvalidTextDiagnostic: () => DiagnosticMessage): ElaborationIterator {
             if (!length(node.children)) return;
             let memberOffset = 0;
             for (let i = 0; i < node.children.length; i++) {
                 const child = node.children[i];
                 const nameType = getLiteralType(i - memberOffset);
-                const elem = getElaborationElementForJsxChild(child, nameType);
+                const elem = getElaborationElementForJsxChild(child, nameType, getInvalidTextDiagnostic);
                 if (elem) {
                     yield elem;
                 }
@@ -11352,7 +11352,7 @@ namespace ts {
             }
         }
 
-        function getElaborationElementForJsxChild(child: JsxChild, nameType: LiteralType) {
+        function getElaborationElementForJsxChild(child: JsxChild, nameType: LiteralType, getInvalidTextDiagnostic: () => DiagnosticMessage) {
             switch (child.kind) {
                 case SyntaxKind.JsxExpression:
                     // child is of the type of the expression
@@ -11362,7 +11362,7 @@ namespace ts {
                         break; // Whitespace only jsx text isn't real jsx text
                     }
                     // child is a string
-                    return { errorNode: child, innerExpression: undefined, nameType };
+                    return { errorNode: child, innerExpression: undefined, nameType, errorMessage: getInvalidTextDiagnostic() };
                 case SyntaxKind.JsxElement:
                 case SyntaxKind.JsxSelfClosingElement:
                 case SyntaxKind.JsxFragment:
@@ -11375,10 +11375,12 @@ namespace ts {
 
         function elaborateJsxComponents(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
             let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation);
+            let invalidTextDiagnostic: DiagnosticMessage | undefined;
             if (isJsxOpeningElement(node.parent) && isJsxElement(node.parent.parent)) {
                 const containingElement = node.parent.parent;
                 const childPropName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
-                const childrenNameType = getLiteralType(childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName));
+                const childrenPropName = childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName);
+                const childrenNameType = getLiteralType(childrenPropName);
                 const childrenTargetType = getIndexedAccessType(target, childrenNameType);
                 const validChildren = filter(containingElement.children, i => !isJsxText(i) || !i.containsOnlyWhiteSpaces);
                 if (!length(validChildren)) {
@@ -11390,15 +11392,15 @@ namespace ts {
                 if (moreThanOneRealChildren) {
                     if (arrayLikeTargetParts !== neverType) {
                         const realSource = createTupleType(checkJsxChildren(containingElement, CheckMode.Normal));
-                        result = elaborateElementwise(generateJsxChildren(containingElement), realSource, arrayLikeTargetParts, relation) || result;
+                        result = elaborateElementwise(generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic), realSource, arrayLikeTargetParts, relation) || result;
                     }
                     else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
                         // arity mismatch
                         result = true;
                         error(
                             containingElement.openingElement.tagName,
-                            Diagnostics.Target_JSX_element_expects_a_0_prop_of_type_1_but_multiple_children_were_provided,
-                            childPropName ? unescapeLeadingUnderscores(childPropName) : "children",
+                            Diagnostics.This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided,
+                            childrenPropName,
                             typeToString(childrenTargetType)
                         );
                     }
@@ -11406,7 +11408,7 @@ namespace ts {
                 else {
                     if (nonArrayLikeTargetParts !== neverType) {
                         const child = validChildren[0];
-                        const elem = getElaborationElementForJsxChild(child, childrenNameType);
+                        const elem = getElaborationElementForJsxChild(child, childrenNameType, getInvalidTextualChildDiagnostic);
                         if (elem) {
                             result = elaborateElementwise(
                                 (function*() { yield elem; })(),
@@ -11421,14 +11423,26 @@ namespace ts {
                         result = true;
                         error(
                             containingElement.openingElement.tagName,
-                            Diagnostics.Target_JSX_element_expects_a_0_prop_of_type_1_but_only_a_single_child_was_provided,
-                            childPropName ? unescapeLeadingUnderscores(childPropName) : "children",
+                            Diagnostics.This_JSX_tag_s_0_prop_expects_type_1_which_requires_multiple_children_but_only_a_single_child_was_provided,
+                            childrenPropName,
                             typeToString(childrenTargetType)
                         );
                     }
                 }
             }
             return result;
+
+            function getInvalidTextualChildDiagnostic() {
+                if (!invalidTextDiagnostic) {
+                    const tagNameText = getTextOfNode(node.parent.tagName);
+                    const childPropName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
+                    const childrenPropName = childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName);
+                    const childrenTargetType = getIndexedAccessType(target, getLiteralType(childrenPropName));
+                    const diagnostic = Diagnostics._0_components_don_t_accept_text_as_child_elements_Text_in_JSX_has_the_type_string_but_the_expected_type_of_1_is_2;
+                    invalidTextDiagnostic = { ...diagnostic, key: "!!ALREADY FORMATTED!!", message: formatMessage(/*_dummy*/ undefined, diagnostic, tagNameText, childrenPropName, typeToString(childrenTargetType)) };
+                }
+                return invalidTextDiagnostic;
+            }
         }
 
         function *generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
