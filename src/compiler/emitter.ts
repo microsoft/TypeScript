@@ -4389,7 +4389,7 @@ namespace ts {
                 return;
             }
 
-            const { line: sourceLine, character: sourceCharacter } = getLineAndCharacterOfPosition(currentSourceFile!, pos);
+            const { line: sourceLine, character: sourceCharacter } = getLineAndCharacterOfPosition(sourceMapSource, pos);
             sourceMapGenerator!.addMapping(
                 writer.getLine(),
                 writer.getColumn(),
