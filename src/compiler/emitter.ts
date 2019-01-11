@@ -2561,6 +2561,7 @@ namespace ts {
         function emitJsxSelfClosingElement(node: JsxSelfClosingElement) {
             writePunctuation("<");
             emitJsxTagName(node.tagName);
+            emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emit(node.attributes);
             writePunctuation("/>");
@@ -2577,6 +2578,7 @@ namespace ts {
 
             if (isJsxOpeningElement(node)) {
                 emitJsxTagName(node.tagName);
+                emitTypeArguments(node, node.typeArguments);
                 if (node.attributes.properties && node.attributes.properties.length > 0) {
                     writeSpace();
                 }

@@ -78,7 +78,8 @@ namespace ts {
         if (useOldState) {
             // Verify the sanity of old state
             if (!oldState!.currentChangedFilePath) {
-                Debug.assert(!oldState!.affectedFiles && (!oldState!.currentAffectedFilesSignatures || !oldState!.currentAffectedFilesSignatures!.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
+                const affectedSignatures = oldState!.currentAffectedFilesSignatures;
+                Debug.assert(!oldState!.affectedFiles && (!affectedSignatures || !affectedSignatures.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
             }
             if (canCopySemanticDiagnostics) {
                 Debug.assert(!forEachKey(oldState!.changedFilesSet, path => oldState!.semanticDiagnosticsPerFile!.has(path)), "Semantic diagnostics shouldnt be available for changed files");
