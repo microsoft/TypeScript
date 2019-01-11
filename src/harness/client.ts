@@ -385,7 +385,7 @@ namespace ts.server {
         }
 
         getRenameInfo(fileName: string, position: number, _options?: RenameInfoOptions, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
-            // not using options they should be sent with a RenameInfo request, which this function does not perform
+            // Not passing along 'options' because server should already have those from the 'configure' command
             const args: protocol.RenameRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), findInStrings, findInComments };
 
             const request = this.processRequest<protocol.RenameRequest>(CommandNames.Rename, args);
