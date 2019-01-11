@@ -19,42 +19,6 @@ namespace ts.codefix {
     });
 
     function makeChange(changeTracker: textChanges.ChangeTracker, configFile: TsConfigSourceFile) {
-        const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
-        if (tsconfigObjectLiteral === undefined) {
-            return;
-        }
-
-        const compilerOptionsProperty = findJsonProperty(tsconfigObjectLiteral, "compilerOptions");
-        if (compilerOptionsProperty === undefined) {
-            changeTracker.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createCompilerOptionsAssignment());
-            return;
-        }
-
-        const compilerOptions = compilerOptionsProperty.initializer;
-        if (!isObjectLiteralExpression(compilerOptions)) {
-            return;
-        }
-
-        const experimentalDecoratorsProperty = findJsonProperty(compilerOptions, "experimentalDecorators");
-
-        if (experimentalDecoratorsProperty === undefined) {
-            changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createExperimentalDecoratorsAssignment());
-        }
-        else {
-            changeTracker.replaceNodeWithText(configFile, experimentalDecoratorsProperty.initializer, "true");
-        }
-    }
-
-    function createCompilerOptionsAssignment() {
-        return createJsonPropertyAssignment(
-            "compilerOptions",
-            createObjectLiteral([
-                createExperimentalDecoratorsAssignment(),
-            ]),
-        );
-    }
-
-    function createExperimentalDecoratorsAssignment() {
-        return createJsonPropertyAssignment("experimentalDecorators", createTrue());
+        setJsonCompilerOptionValue(changeTracker, configFile, "experimentalDecorators", createTrue());
     }
 }
