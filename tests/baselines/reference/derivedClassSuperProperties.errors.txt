@@ -1,0 +1,131 @@
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(9,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(16,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(16,32): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(23,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(24,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(30,9): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(30,32): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(31,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(44,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts(58,15): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts (10 errors) ====
+    class Base {
+        constructor(a?) { }
+    
+        receivesAnything(param?) { }
+    }
+    
+    class Derived1 extends Base {
+        constructor() {
+            super.receivesAnything();
+            ~~~~~
+!!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+            super();
+        }
+    }
+    
+    class Derived2 extends Base {
+        constructor() {
+            super.receivesAnything(this);
+            ~~~~~
+!!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+                                   ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+            super();
+        }
+    }
+    
+    class Derived3 extends Base {
+        constructor() {
+            super.receivesAnything();
+            ~~~~~
+!!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+            super(this);
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+        }
+    }
+    
+    class Derived4 extends Base {
+        constructor() {
+            super.receivesAnything(this);
+            ~~~~~
+!!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
+                                   ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+            super(this);
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+        }
+    }
+    
+    class Derived5 extends Base {
+        constructor() {
+            super();
+            super.receivesAnything();
+        }
+    }
+    
+    class Derived6 extends Base {
+        constructor() {
+            super(this);
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+            super.receivesAnything();
+        }
+    }
+    
+    class Derived7 extends Base {
+        constructor() {
+            super();
+            super.receivesAnything(this);
+        }
+    }
+    
+    class Derived8 extends Base {
+        constructor() {
+            super(this);
+                  ~~~~
+!!! error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
+            super.receivesAnything(this);
+        }
+    }
+    
+    class DerivedWithFunction extends Base {
+        constructor() {
+            (function () {
+                return this;
+            })();
+            super();
+        }
+    }
+    
+    class DerivedWithClassExpression extends Base {
+        constructor() {
+            console.log(class { });
+            super();
+        }
+    }
+    
+    class DerivedWithDerivedClassExpression extends Base {
+        constructor() {
+            console.log(class extends Base {
+                constructor() {
+                    super();
+                }
+            });
+            super();
+        }
+    }
+    class DerivedWithNewDerivedClassExpression extends Base {
+        constructor() {
+            console.log(new class extends Base {
+                constructor() {
+                    super();
+                }
+            }());
+            super();
+        }
+    }

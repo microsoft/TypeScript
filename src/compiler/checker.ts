@@ -23613,12 +23613,12 @@ namespace ts {
                                 superCallStatement = <ExpressionStatement>statement;
                                 break;
                             }
-                            if (!isPrologueDirective(statement)) {
+                            if (!isPrologueDirective(statement) && statementRefersToSuperOrThis(statement)) {
                                 break;
                             }
                         }
                         if (!superCallStatement) {
-                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_when_a_class_contains_initialized_properties_or_has_parameter_properties);
+                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_to_refer_to_super_or_this_when_a_derived_class_contains_initialized_properties_or_has_parameter_properties);
                         }
                     }
                 }
@@ -23626,6 +23626,20 @@ namespace ts {
                     error(node, Diagnostics.Constructors_for_derived_classes_must_contain_a_super_call);
                 }
             }
+        }
+
+        function statementRefersToSuperOrThis(statement: Statement): boolean {
+            return !!forEachChild(statement, function visitNode(node: Node): true | undefined {
+                if (node.kind === SyntaxKind.SuperKeyword || node.kind === SyntaxKind.ThisKeyword) {
+                    return true;
+                }
+
+                if (isClassLike(node) || isFunctionLike(node)) {
+                    return undefined;
+                }
+
+                return forEachChild(node, visitNode);
+            });
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {

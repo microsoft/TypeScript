@@ -25,7 +25,8 @@ class D extends A {
     public s: number = 9;
 
     constructor () {
-        var x = 1; // Error
+        var x = 1; // No error
+        var y = this.s; // Error
         super();
         "use strict";
     }

@@ -1,0 +1,243 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts ===
+class Base {
+>Base : Base
+
+    constructor(a?) { }
+>a : any
+
+    receivesAnything(param?) { }
+>receivesAnything : (param?: any) => void
+>param : any
+}
+
+class Derived1 extends Base {
+>Derived1 : Derived1
+>Base : Base
+
+    constructor() {
+        super.receivesAnything();
+>super.receivesAnything() : void
+>super.receivesAnything : (param?: any) => void
+>super : Base
+>receivesAnything : (param?: any) => void
+
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class Derived2 extends Base {
+>Derived2 : Derived2
+>Base : Base
+
+    constructor() {
+        super.receivesAnything(this);
+>super.receivesAnything(this) : void
+>super.receivesAnything : (param?: any) => void
+>super : Base
+>receivesAnything : (param?: any) => void
+>this : this
+
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class Derived3 extends Base {
+>Derived3 : Derived3
+>Base : Base
+
+    constructor() {
+        super.receivesAnything();
+>super.receivesAnything() : void
+>super.receivesAnything : (param?: any) => void
+>super : Base
+>receivesAnything : (param?: any) => void
+
+        super(this);
+>super(this) : void
+>super : typeof Base
+>this : this
+    }
+}
+
+class Derived4 extends Base {
+>Derived4 : Derived4
+>Base : Base
+
+    constructor() {
+        super.receivesAnything(this);
+>super.receivesAnything(this) : void
+>super.receivesAnything : (param?: any) => void
+>super : Base
+>receivesAnything : (param?: any) => void
+>this : this
+
+        super(this);
+>super(this) : void
+>super : typeof Base
+>this : this
+    }
+}
+
+class Derived5 extends Base {
+>Derived5 : Derived5
+>Base : Base
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Base
+
+        super.receivesAnything();
+>super.receivesAnything() : void
+>super.receivesAnything : (param?: any) => void
+>super : Base
+>receivesAnything : (param?: any) => void
+    }
+}
+
+class Derived6 extends Base {
+>Derived6 : Derived6
+>Base : Base
+
+    constructor() {
+        super(this);
+>super(this) : void
+>super : typeof Base
+>this : this
+
+        super.receivesAnything();
+>super.receivesAnything() : void
+>super.receivesAnything : (param?: any) => void
+>super : Base
+>receivesAnything : (param?: any) => void
+    }
+}
+
+class Derived7 extends Base {
+>Derived7 : Derived7
+>Base : Base
+
+    constructor() {
+        super();
+>super() : void
+>super : typeof Base
+
+        super.receivesAnything(this);
+>super.receivesAnything(this) : void
+>super.receivesAnything : (param?: any) => void
+>super : Base
+>receivesAnything : (param?: any) => void
+>this : this
+    }
+}
+
+class Derived8 extends Base {
+>Derived8 : Derived8
+>Base : Base
+
+    constructor() {
+        super(this);
+>super(this) : void
+>super : typeof Base
+>this : this
+
+        super.receivesAnything(this);
+>super.receivesAnything(this) : void
+>super.receivesAnything : (param?: any) => void
+>super : Base
+>receivesAnything : (param?: any) => void
+>this : this
+    }
+}
+
+class DerivedWithFunction extends Base {
+>DerivedWithFunction : DerivedWithFunction
+>Base : Base
+
+    constructor() {
+        (function () {
+>(function () {            return this;        })() : any
+>(function () {            return this;        }) : () => any
+>function () {            return this;        } : () => any
+
+            return this;
+>this : any
+
+        })();
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithClassExpression extends Base {
+>DerivedWithClassExpression : DerivedWithClassExpression
+>Base : Base
+
+    constructor() {
+        console.log(class { });
+>console.log(class { }) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>class { } : typeof (Anonymous class)
+
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithDerivedClassExpression extends Base {
+>DerivedWithDerivedClassExpression : DerivedWithDerivedClassExpression
+>Base : Base
+
+    constructor() {
+        console.log(class extends Base {
+>console.log(class extends Base {            constructor() {                super();            }        }) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>class extends Base {            constructor() {                super();            }        } : typeof (Anonymous class)
+>Base : Base
+
+            constructor() {
+                super();
+>super() : void
+>super : typeof Base
+            }
+        });
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+class DerivedWithNewDerivedClassExpression extends Base {
+>DerivedWithNewDerivedClassExpression : DerivedWithNewDerivedClassExpression
+>Base : Base
+
+    constructor() {
+        console.log(new class extends Base {
+>console.log(new class extends Base {            constructor() {                super();            }        }()) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>new class extends Base {            constructor() {                super();            }        }() : (Anonymous class)
+>class extends Base {            constructor() {                super();            }        } : typeof (Anonymous class)
+>Base : Base
+
+            constructor() {
+                super();
+>super() : void
+>super : typeof Base
+            }
+        }());
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
