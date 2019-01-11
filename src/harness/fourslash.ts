@@ -1308,8 +1308,9 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRenameInfoSucceeded(displayName: string | undefined, fullDisplayName: string | undefined, kind: string | undefined, kindModifiers: string | undefined, fileToRename: string | undefined, expectedRange: Range | undefined): void {
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
+        public verifyRenameInfoSucceeded(displayName: string | undefined, fullDisplayName: string | undefined, kind: string | undefined, kindModifiers: string | undefined, fileToRename: string | undefined, expectedRange: Range | undefined, allowRenameOfImportPath: boolean | undefined): void {
+            allowRenameOfImportPath = allowRenameOfImportPath === undefined ? true : allowRenameOfImportPath;
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { allowRenameOfImportPath });
             if (!renameInfo.canRename) {
                 throw this.raiseError("Rename did not succeed");
             }
@@ -1334,8 +1335,9 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRenameInfoFailed(message?: string) {
-            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
+        public verifyRenameInfoFailed(message?: string, allowRenameOfImportPath?: boolean) {
+            allowRenameOfImportPath = allowRenameOfImportPath === undefined ? true : allowRenameOfImportPath;
+            const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition, { allowRenameOfImportPath });
             if (renameInfo.canRename) {
                 throw this.raiseError("Rename was expected to fail");
             }
@@ -4091,12 +4093,12 @@ namespace FourSlashInterface {
             this.state.verifySemanticClassifications(classifications);
         }
 
-        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, expectedRange?: FourSlash.Range) {
-            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange);
+        public renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, expectedRange?: FourSlash.Range, allowRenameOfImportPath?: boolean) {
+            this.state.verifyRenameInfoSucceeded(displayName, fullDisplayName, kind, kindModifiers, fileToRename, expectedRange, allowRenameOfImportPath);
         }
 
-        public renameInfoFailed(message?: string) {
-            this.state.verifyRenameInfoFailed(message);
+        public renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean) {
+            this.state.verifyRenameInfoFailed(message, allowRenameOfImportPath);
         }
 
         public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {
