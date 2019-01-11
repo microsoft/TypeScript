@@ -12750,7 +12750,12 @@ node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(339,39): error
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(340,39): error TS2339: Property 'y' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(344,24): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(352,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(355,22): error TS2339: Property '_useSoftMenu' does not exist on type 'typeof ContextMenu'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(383,20): error TS2339: Property '_pendingMenu' does not exist on type 'typeof ContextMenu'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(390,26): error TS2339: Property '_pendingMenu' does not exist on type 'typeof ContextMenu'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(392,29): error TS2339: Property '_pendingMenu' does not exist on type 'typeof ContextMenu'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(408,17): error TS2339: Property 'consume' does not exist on type 'Event'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(418,45): error TS2339: Property '_useSoftMenu' does not exist on type 'typeof ContextMenu'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(420,46): error TS2339: Property 'ownerDocument' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(422,101): error TS2339: Property 'ownerDocument' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(442,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
