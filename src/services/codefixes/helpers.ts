@@ -1,5 +1,13 @@
 /* @internal */
 namespace ts.codefix {
+    export function createJsonPropertyAssignment(name: string, initializer: Expression) {
+        return createPropertyAssignment(createStringLiteral(name), initializer);
+    }
+
+    export function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
+        return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
+    }
+
     /**
      * Finds members of the resolved type that are missing in the class pointed to by class decl
      * and generates source code for the missing members.
