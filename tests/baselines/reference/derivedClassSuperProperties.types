@@ -228,6 +228,29 @@ class DerivedWithFunctionDeclaration extends Base {
     }
 }
 
+class DerivedWithFunctionDeclarationAndThisParam extends Base {
+>DerivedWithFunctionDeclarationAndThisParam : DerivedWithFunctionDeclarationAndThisParam
+>Base : Base
+
+    prop = true;
+>prop : boolean
+>true : true
+
+    constructor() {
+        function declaration(param = this) {
+>declaration : (param?: any) => any
+>param : any
+>this : any
+
+            return param;
+>param : any
+        }
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
 class DerivedWithFunctionExpression extends Base {
 >DerivedWithFunctionExpression : DerivedWithFunctionExpression
 >Base : Base
@@ -344,7 +367,7 @@ class DerivedWithObjectAccessors extends Base {
     constructor() {
         const obj = {
 >obj : { prop: boolean; }
->{            get prop() {                return true;            },            set prop(param: boolean) {                this._prop = param;            }        } : { prop: boolean; }
+>{            get prop() {                return true;            },            set prop(param) {                this._prop = param;            }        } : { prop: boolean; }
 
             get prop() {
 >prop : boolean
@@ -353,7 +376,7 @@ class DerivedWithObjectAccessors extends Base {
 >true : true
 
             },
-            set prop(param: boolean) {
+            set prop(param) {
 >prop : boolean
 >param : boolean
 
@@ -371,11 +394,55 @@ class DerivedWithObjectAccessors extends Base {
     }
 }
 
+class DerivedWithObjectAccessorsUsingThis extends Base {
+>DerivedWithObjectAccessorsUsingThis : DerivedWithObjectAccessorsUsingThis
+>Base : Base
+
+    propName = "prop";
+>propName : string
+>"prop" : "prop"
+
+    constructor() {
+        const obj = {
+>obj : { [x: string]: any; }
+>{            get [this.propName]() {                return true;            },            set [this.propName](param) {                this._prop = param;            }        } : { [x: string]: any; }
+
+            get [this.propName]() {
+>[this.propName] : boolean
+>this.propName : string
+>this : this
+>propName : string
+
+                return true;
+>true : true
+
+            },
+            set [this.propName](param) {
+>[this.propName] : any
+>this.propName : string
+>this : this
+>propName : string
+>param : any
+
+                this._prop = param;
+>this._prop = param : any
+>this._prop : any
+>this : any
+>_prop : any
+>param : any
+            }
+        };
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
 class DerivedWithObjectComputedPropertyName extends Base {
 >DerivedWithObjectComputedPropertyName : DerivedWithObjectComputedPropertyName
 >Base : Base
 
-    private propName = "prop";
+    propName = "prop";
 >propName : string
 >"prop" : "prop"
 

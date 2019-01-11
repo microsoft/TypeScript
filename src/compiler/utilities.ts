@@ -6265,11 +6265,17 @@ namespace ts {
             case SyntaxKind.ClassExpression:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.GetAccessor:
-            case SyntaxKind.SetAccessor:
+            case SyntaxKind.Parameter:
                 return true;
             case SyntaxKind.Block:
-                return isMethodDeclaration(node.parent);
+                switch (node.parent.kind) {
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.SetAccessor:
+                        return true;
+                    default:
+                        return false;
+                }
             default:
                 return false;
         }

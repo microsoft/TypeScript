@@ -87,6 +87,16 @@ class DerivedWithFunctionDeclaration extends Base {
     }
 }
 
+class DerivedWithFunctionDeclarationAndThisParam extends Base {
+    prop = true;
+    constructor() {
+        function declaration(param = this) {
+            return param;
+        }
+        super();
+    }
+}
+
 class DerivedWithFunctionExpression extends Base {
     prop = true;
     constructor() {
@@ -136,7 +146,22 @@ class DerivedWithObjectAccessors extends Base {
             get prop() {
                 return true;
             },
-            set prop(param: boolean) {
+            set prop(param) {
+                this._prop = param;
+            }
+        };
+        super();
+    }
+}
+
+class DerivedWithObjectAccessorsUsingThis extends Base {
+    propName = "prop";
+    constructor() {
+        const obj = {
+            get [this.propName]() {
+                return true;
+            },
+            set [this.propName](param) {
                 this._prop = param;
             }
         };
@@ -145,7 +170,7 @@ class DerivedWithObjectAccessors extends Base {
 }
 
 class DerivedWithObjectComputedPropertyName extends Base {
-    private propName = "prop";
+    propName = "prop";
     constructor() {
         const obj = {
             [this.propName]: true,
@@ -295,6 +320,20 @@ var DerivedWithFunctionDeclaration = /** @class */ (function (_super) {
     }
     return DerivedWithFunctionDeclaration;
 }(Base));
+var DerivedWithFunctionDeclarationAndThisParam = /** @class */ (function (_super) {
+    __extends(DerivedWithFunctionDeclarationAndThisParam, _super);
+    function DerivedWithFunctionDeclarationAndThisParam() {
+        var _this = this;
+        _this.prop = true;
+        function declaration(param) {
+            if (param === void 0) { param = this; }
+            return param;
+        }
+        _this = _super.call(this) || this;
+        return _this;
+    }
+    return DerivedWithFunctionDeclarationAndThisParam;
+}(Base));
 var DerivedWithFunctionExpression = /** @class */ (function (_super) {
     __extends(DerivedWithFunctionExpression, _super);
     function DerivedWithFunctionExpression() {
@@ -374,6 +413,33 @@ var DerivedWithObjectAccessors = /** @class */ (function (_super) {
         return _this;
     }
     return DerivedWithObjectAccessors;
+}(Base));
+var DerivedWithObjectAccessorsUsingThis = /** @class */ (function (_super) {
+    __extends(DerivedWithObjectAccessorsUsingThis, _super);
+    function DerivedWithObjectAccessorsUsingThis() {
+        var _a;
+        var _this = this;
+        _this.propName = "prop";
+        var obj = (_a = {},
+            Object.defineProperty(_a, _this.propName, {
+                get: function () {
+                    return true;
+                },
+                enumerable: true,
+                configurable: true
+            }),
+            Object.defineProperty(_a, _this.propName, {
+                set: function (param) {
+                    this._prop = param;
+                },
+                enumerable: true,
+                configurable: true
+            }),
+            _a);
+        _this = _super.call(this) || this;
+        return _this;
+    }
+    return DerivedWithObjectAccessorsUsingThis;
 }(Base));
 var DerivedWithObjectComputedPropertyName = /** @class */ (function (_super) {
     __extends(DerivedWithObjectComputedPropertyName, _super);

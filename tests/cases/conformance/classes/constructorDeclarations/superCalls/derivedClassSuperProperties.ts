@@ -88,6 +88,16 @@ class DerivedWithFunctionDeclaration extends Base {
     }
 }
 
+class DerivedWithFunctionDeclarationAndThisParam extends Base {
+    prop = true;
+    constructor() {
+        function declaration(param = this) {
+            return param;
+        }
+        super();
+    }
+}
+
 class DerivedWithFunctionExpression extends Base {
     prop = true;
     constructor() {
@@ -137,7 +147,22 @@ class DerivedWithObjectAccessors extends Base {
             get prop() {
                 return true;
             },
-            set prop(param: boolean) {
+            set prop(param) {
+                this._prop = param;
+            }
+        };
+        super();
+    }
+}
+
+class DerivedWithObjectAccessorsUsingThis extends Base {
+    propName = "prop";
+    constructor() {
+        const obj = {
+            get [this.propName]() {
+                return true;
+            },
+            set [this.propName](param) {
                 this._prop = param;
             }
         };
@@ -146,7 +171,7 @@ class DerivedWithObjectAccessors extends Base {
 }
 
 class DerivedWithObjectComputedPropertyName extends Base {
-    private propName = "prop";
+    propName = "prop";
     constructor() {
         const obj = {
             [this.propName]: true,
