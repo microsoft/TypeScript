@@ -1,0 +1,324 @@
+=== tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts ===
+class GrandParent {
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+
+    private static privateStaticGrandParent = "unset";
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+    protected static protectedStaticGrandParent = "unset";
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+    public static publicStaticGrandParent = "unset";
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+    testGrandparent() {
+>testGrandparent : Symbol(GrandParent.testGrandparent, Decl(classWithPrivateStaticProperty.ts, 3, 52))
+
+        GrandParent.privateStaticGrandParent = "set";
+>GrandParent.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        GrandParent.protectedStaticGrandParent = "set";
+>GrandParent.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        GrandParent.publicStaticGrandParent = "set";
+>GrandParent.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Parent.privateStaticGrandParent = "set";
+>Parent.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        Parent.protectedStaticGrandParent = "set";
+>Parent.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        Parent.publicStaticGrandParent = "set";
+>Parent.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Parent.privateStaticParent = "set";
+>Parent.privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+
+        Parent.protectedStaticParent = "set";
+>Parent.protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+
+        Parent.publicStaticParent = "set";
+>Parent.publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+
+        Child.privateStaticGrandParent = "set";
+>Child.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        Child.protectedStaticGrandParent = "set";
+>Child.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        Child.publicStaticGrandParent = "set";
+>Child.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Child.privateStaticParent = "set";
+>Child.privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+
+        Child.protectedStaticParent = "set";
+>Child.protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+
+        Child.publicStaticParent = "set";
+>Child.publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+
+        Child.privateStaticChild = "set";
+>Child.privateStaticChild : Symbol(Child.privateStaticChild, Decl(classWithPrivateStaticProperty.ts, 58, 28))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticChild : Symbol(Child.privateStaticChild, Decl(classWithPrivateStaticProperty.ts, 58, 28))
+
+        Child.protectedStaticChild = "set";
+>Child.protectedStaticChild : Symbol(Child.protectedStaticChild, Decl(classWithPrivateStaticProperty.ts, 59, 48))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticChild : Symbol(Child.protectedStaticChild, Decl(classWithPrivateStaticProperty.ts, 59, 48))
+
+        Child.publicStaticChild = "set";
+>Child.publicStaticChild : Symbol(Child.publicStaticChild, Decl(classWithPrivateStaticProperty.ts, 60, 52))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticChild : Symbol(Child.publicStaticChild, Decl(classWithPrivateStaticProperty.ts, 60, 52))
+    }
+}
+
+class Parent extends GrandParent {
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+
+    private static privateStaticParent = "unset";
+>privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+
+    protected static protectedStaticParent = "unset";
+>protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+
+    public static publicStaticParent = "unset";
+>publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+
+    testParent() {
+>testParent : Symbol(Parent.testParent, Decl(classWithPrivateStaticProperty.ts, 32, 47))
+
+        GrandParent.privateStaticGrandParent = "set";
+>GrandParent.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        GrandParent.protectedStaticGrandParent = "set";
+>GrandParent.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        GrandParent.publicStaticGrandParent = "set";
+>GrandParent.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Parent.privateStaticGrandParent = "set";
+>Parent.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        Parent.protectedStaticGrandParent = "set";
+>Parent.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        Parent.publicStaticGrandParent = "set";
+>Parent.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Parent.privateStaticParent = "set";
+>Parent.privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+
+        Parent.protectedStaticParent = "set";
+>Parent.protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+
+        Parent.publicStaticParent = "set";
+>Parent.publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+
+        Child.privateStaticGrandParent = "set";
+>Child.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        Child.protectedStaticGrandParent = "set";
+>Child.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        Child.publicStaticGrandParent = "set";
+>Child.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Child.privateStaticParent = "set";
+>Child.privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+
+        Child.protectedStaticParent = "set";
+>Child.protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+
+        Child.publicStaticParent = "set";
+>Child.publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+
+        Child.privateStaticChild = "set";
+>Child.privateStaticChild : Symbol(Child.privateStaticChild, Decl(classWithPrivateStaticProperty.ts, 58, 28))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticChild : Symbol(Child.privateStaticChild, Decl(classWithPrivateStaticProperty.ts, 58, 28))
+
+        Child.protectedStaticChild = "set";
+>Child.protectedStaticChild : Symbol(Child.protectedStaticChild, Decl(classWithPrivateStaticProperty.ts, 59, 48))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticChild : Symbol(Child.protectedStaticChild, Decl(classWithPrivateStaticProperty.ts, 59, 48))
+
+        Child.publicStaticChild = "set";
+>Child.publicStaticChild : Symbol(Child.publicStaticChild, Decl(classWithPrivateStaticProperty.ts, 60, 52))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticChild : Symbol(Child.publicStaticChild, Decl(classWithPrivateStaticProperty.ts, 60, 52))
+    }
+}
+
+class Child extends Parent {
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+
+    private static privateStaticChild = "unset";
+>privateStaticChild : Symbol(Child.privateStaticChild, Decl(classWithPrivateStaticProperty.ts, 58, 28))
+
+    protected static protectedStaticChild = "unset";
+>protectedStaticChild : Symbol(Child.protectedStaticChild, Decl(classWithPrivateStaticProperty.ts, 59, 48))
+
+    protected static publicStaticChild = "unset";
+>publicStaticChild : Symbol(Child.publicStaticChild, Decl(classWithPrivateStaticProperty.ts, 60, 52))
+
+    testChild() {
+>testChild : Symbol(Child.testChild, Decl(classWithPrivateStaticProperty.ts, 61, 49))
+
+        GrandParent.privateStaticGrandParent = "set";
+>GrandParent.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        GrandParent.protectedStaticGrandParent = "set";
+>GrandParent.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        GrandParent.publicStaticGrandParent = "set";
+>GrandParent.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>GrandParent : Symbol(GrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 0))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Parent.privateStaticGrandParent = "set";
+>Parent.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        Parent.protectedStaticGrandParent = "set";
+>Parent.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        Parent.publicStaticGrandParent = "set";
+>Parent.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Parent.privateStaticParent = "set";
+>Parent.privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+
+        Parent.protectedStaticParent = "set";
+>Parent.protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+
+        Parent.publicStaticParent = "set";
+>Parent.publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+>Parent : Symbol(Parent, Decl(classWithPrivateStaticProperty.ts, 27, 1))
+>publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+
+        Child.privateStaticGrandParent = "set";
+>Child.privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticGrandParent : Symbol(GrandParent.privateStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 0, 19))
+
+        Child.protectedStaticGrandParent = "set";
+>Child.protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticGrandParent : Symbol(GrandParent.protectedStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 1, 54))
+
+        Child.publicStaticGrandParent = "set";
+>Child.publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticGrandParent : Symbol(GrandParent.publicStaticGrandParent, Decl(classWithPrivateStaticProperty.ts, 2, 58))
+
+        Child.privateStaticParent = "set";
+>Child.privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticParent : Symbol(Parent.privateStaticParent, Decl(classWithPrivateStaticProperty.ts, 29, 34))
+
+        Child.protectedStaticParent = "set";
+>Child.protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticParent : Symbol(Parent.protectedStaticParent, Decl(classWithPrivateStaticProperty.ts, 30, 49))
+
+        Child.publicStaticParent = "set";
+>Child.publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticParent : Symbol(Parent.publicStaticParent, Decl(classWithPrivateStaticProperty.ts, 31, 53))
+
+        Child.privateStaticChild = "set";
+>Child.privateStaticChild : Symbol(Child.privateStaticChild, Decl(classWithPrivateStaticProperty.ts, 58, 28))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>privateStaticChild : Symbol(Child.privateStaticChild, Decl(classWithPrivateStaticProperty.ts, 58, 28))
+
+        Child.protectedStaticChild = "set";
+>Child.protectedStaticChild : Symbol(Child.protectedStaticChild, Decl(classWithPrivateStaticProperty.ts, 59, 48))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>protectedStaticChild : Symbol(Child.protectedStaticChild, Decl(classWithPrivateStaticProperty.ts, 59, 48))
+
+        Child.publicStaticChild = "set";
+>Child.publicStaticChild : Symbol(Child.publicStaticChild, Decl(classWithPrivateStaticProperty.ts, 60, 52))
+>Child : Symbol(Child, Decl(classWithPrivateStaticProperty.ts, 56, 1))
+>publicStaticChild : Symbol(Child.publicStaticChild, Decl(classWithPrivateStaticProperty.ts, 60, 52))
+    }
+}
+

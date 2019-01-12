@@ -1,0 +1,441 @@
+=== tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts ===
+class GrandParent {
+>GrandParent : GrandParent
+
+    private static privateStaticGrandParent = "unset";
+>privateStaticGrandParent : string
+>"unset" : "unset"
+
+    protected static protectedStaticGrandParent = "unset";
+>protectedStaticGrandParent : string
+>"unset" : "unset"
+
+    public static publicStaticGrandParent = "unset";
+>publicStaticGrandParent : string
+>"unset" : "unset"
+
+    testGrandparent() {
+>testGrandparent : () => void
+
+        GrandParent.privateStaticGrandParent = "set";
+>GrandParent.privateStaticGrandParent = "set" : "set"
+>GrandParent.privateStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        GrandParent.protectedStaticGrandParent = "set";
+>GrandParent.protectedStaticGrandParent = "set" : "set"
+>GrandParent.protectedStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        GrandParent.publicStaticGrandParent = "set";
+>GrandParent.publicStaticGrandParent = "set" : "set"
+>GrandParent.publicStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Parent.privateStaticGrandParent = "set";
+>Parent.privateStaticGrandParent = "set" : "set"
+>Parent.privateStaticGrandParent : string
+>Parent : typeof Parent
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        Parent.protectedStaticGrandParent = "set";
+>Parent.protectedStaticGrandParent = "set" : "set"
+>Parent.protectedStaticGrandParent : string
+>Parent : typeof Parent
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        Parent.publicStaticGrandParent = "set";
+>Parent.publicStaticGrandParent = "set" : "set"
+>Parent.publicStaticGrandParent : string
+>Parent : typeof Parent
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Parent.privateStaticParent = "set";
+>Parent.privateStaticParent = "set" : "set"
+>Parent.privateStaticParent : string
+>Parent : typeof Parent
+>privateStaticParent : string
+>"set" : "set"
+
+        Parent.protectedStaticParent = "set";
+>Parent.protectedStaticParent = "set" : "set"
+>Parent.protectedStaticParent : string
+>Parent : typeof Parent
+>protectedStaticParent : string
+>"set" : "set"
+
+        Parent.publicStaticParent = "set";
+>Parent.publicStaticParent = "set" : "set"
+>Parent.publicStaticParent : string
+>Parent : typeof Parent
+>publicStaticParent : string
+>"set" : "set"
+
+        Child.privateStaticGrandParent = "set";
+>Child.privateStaticGrandParent = "set" : "set"
+>Child.privateStaticGrandParent : string
+>Child : typeof Child
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        Child.protectedStaticGrandParent = "set";
+>Child.protectedStaticGrandParent = "set" : "set"
+>Child.protectedStaticGrandParent : string
+>Child : typeof Child
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        Child.publicStaticGrandParent = "set";
+>Child.publicStaticGrandParent = "set" : "set"
+>Child.publicStaticGrandParent : string
+>Child : typeof Child
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Child.privateStaticParent = "set";
+>Child.privateStaticParent = "set" : "set"
+>Child.privateStaticParent : string
+>Child : typeof Child
+>privateStaticParent : string
+>"set" : "set"
+
+        Child.protectedStaticParent = "set";
+>Child.protectedStaticParent = "set" : "set"
+>Child.protectedStaticParent : string
+>Child : typeof Child
+>protectedStaticParent : string
+>"set" : "set"
+
+        Child.publicStaticParent = "set";
+>Child.publicStaticParent = "set" : "set"
+>Child.publicStaticParent : string
+>Child : typeof Child
+>publicStaticParent : string
+>"set" : "set"
+
+        Child.privateStaticChild = "set";
+>Child.privateStaticChild = "set" : "set"
+>Child.privateStaticChild : string
+>Child : typeof Child
+>privateStaticChild : string
+>"set" : "set"
+
+        Child.protectedStaticChild = "set";
+>Child.protectedStaticChild = "set" : "set"
+>Child.protectedStaticChild : string
+>Child : typeof Child
+>protectedStaticChild : string
+>"set" : "set"
+
+        Child.publicStaticChild = "set";
+>Child.publicStaticChild = "set" : "set"
+>Child.publicStaticChild : string
+>Child : typeof Child
+>publicStaticChild : string
+>"set" : "set"
+    }
+}
+
+class Parent extends GrandParent {
+>Parent : Parent
+>GrandParent : GrandParent
+
+    private static privateStaticParent = "unset";
+>privateStaticParent : string
+>"unset" : "unset"
+
+    protected static protectedStaticParent = "unset";
+>protectedStaticParent : string
+>"unset" : "unset"
+
+    public static publicStaticParent = "unset";
+>publicStaticParent : string
+>"unset" : "unset"
+
+    testParent() {
+>testParent : () => void
+
+        GrandParent.privateStaticGrandParent = "set";
+>GrandParent.privateStaticGrandParent = "set" : "set"
+>GrandParent.privateStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        GrandParent.protectedStaticGrandParent = "set";
+>GrandParent.protectedStaticGrandParent = "set" : "set"
+>GrandParent.protectedStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        GrandParent.publicStaticGrandParent = "set";
+>GrandParent.publicStaticGrandParent = "set" : "set"
+>GrandParent.publicStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Parent.privateStaticGrandParent = "set";
+>Parent.privateStaticGrandParent = "set" : "set"
+>Parent.privateStaticGrandParent : string
+>Parent : typeof Parent
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        Parent.protectedStaticGrandParent = "set";
+>Parent.protectedStaticGrandParent = "set" : "set"
+>Parent.protectedStaticGrandParent : string
+>Parent : typeof Parent
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        Parent.publicStaticGrandParent = "set";
+>Parent.publicStaticGrandParent = "set" : "set"
+>Parent.publicStaticGrandParent : string
+>Parent : typeof Parent
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Parent.privateStaticParent = "set";
+>Parent.privateStaticParent = "set" : "set"
+>Parent.privateStaticParent : string
+>Parent : typeof Parent
+>privateStaticParent : string
+>"set" : "set"
+
+        Parent.protectedStaticParent = "set";
+>Parent.protectedStaticParent = "set" : "set"
+>Parent.protectedStaticParent : string
+>Parent : typeof Parent
+>protectedStaticParent : string
+>"set" : "set"
+
+        Parent.publicStaticParent = "set";
+>Parent.publicStaticParent = "set" : "set"
+>Parent.publicStaticParent : string
+>Parent : typeof Parent
+>publicStaticParent : string
+>"set" : "set"
+
+        Child.privateStaticGrandParent = "set";
+>Child.privateStaticGrandParent = "set" : "set"
+>Child.privateStaticGrandParent : string
+>Child : typeof Child
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        Child.protectedStaticGrandParent = "set";
+>Child.protectedStaticGrandParent = "set" : "set"
+>Child.protectedStaticGrandParent : string
+>Child : typeof Child
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        Child.publicStaticGrandParent = "set";
+>Child.publicStaticGrandParent = "set" : "set"
+>Child.publicStaticGrandParent : string
+>Child : typeof Child
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Child.privateStaticParent = "set";
+>Child.privateStaticParent = "set" : "set"
+>Child.privateStaticParent : string
+>Child : typeof Child
+>privateStaticParent : string
+>"set" : "set"
+
+        Child.protectedStaticParent = "set";
+>Child.protectedStaticParent = "set" : "set"
+>Child.protectedStaticParent : string
+>Child : typeof Child
+>protectedStaticParent : string
+>"set" : "set"
+
+        Child.publicStaticParent = "set";
+>Child.publicStaticParent = "set" : "set"
+>Child.publicStaticParent : string
+>Child : typeof Child
+>publicStaticParent : string
+>"set" : "set"
+
+        Child.privateStaticChild = "set";
+>Child.privateStaticChild = "set" : "set"
+>Child.privateStaticChild : string
+>Child : typeof Child
+>privateStaticChild : string
+>"set" : "set"
+
+        Child.protectedStaticChild = "set";
+>Child.protectedStaticChild = "set" : "set"
+>Child.protectedStaticChild : string
+>Child : typeof Child
+>protectedStaticChild : string
+>"set" : "set"
+
+        Child.publicStaticChild = "set";
+>Child.publicStaticChild = "set" : "set"
+>Child.publicStaticChild : string
+>Child : typeof Child
+>publicStaticChild : string
+>"set" : "set"
+    }
+}
+
+class Child extends Parent {
+>Child : Child
+>Parent : Parent
+
+    private static privateStaticChild = "unset";
+>privateStaticChild : string
+>"unset" : "unset"
+
+    protected static protectedStaticChild = "unset";
+>protectedStaticChild : string
+>"unset" : "unset"
+
+    protected static publicStaticChild = "unset";
+>publicStaticChild : string
+>"unset" : "unset"
+
+    testChild() {
+>testChild : () => void
+
+        GrandParent.privateStaticGrandParent = "set";
+>GrandParent.privateStaticGrandParent = "set" : "set"
+>GrandParent.privateStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        GrandParent.protectedStaticGrandParent = "set";
+>GrandParent.protectedStaticGrandParent = "set" : "set"
+>GrandParent.protectedStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        GrandParent.publicStaticGrandParent = "set";
+>GrandParent.publicStaticGrandParent = "set" : "set"
+>GrandParent.publicStaticGrandParent : string
+>GrandParent : typeof GrandParent
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Parent.privateStaticGrandParent = "set";
+>Parent.privateStaticGrandParent = "set" : "set"
+>Parent.privateStaticGrandParent : string
+>Parent : typeof Parent
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        Parent.protectedStaticGrandParent = "set";
+>Parent.protectedStaticGrandParent = "set" : "set"
+>Parent.protectedStaticGrandParent : string
+>Parent : typeof Parent
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        Parent.publicStaticGrandParent = "set";
+>Parent.publicStaticGrandParent = "set" : "set"
+>Parent.publicStaticGrandParent : string
+>Parent : typeof Parent
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Parent.privateStaticParent = "set";
+>Parent.privateStaticParent = "set" : "set"
+>Parent.privateStaticParent : string
+>Parent : typeof Parent
+>privateStaticParent : string
+>"set" : "set"
+
+        Parent.protectedStaticParent = "set";
+>Parent.protectedStaticParent = "set" : "set"
+>Parent.protectedStaticParent : string
+>Parent : typeof Parent
+>protectedStaticParent : string
+>"set" : "set"
+
+        Parent.publicStaticParent = "set";
+>Parent.publicStaticParent = "set" : "set"
+>Parent.publicStaticParent : string
+>Parent : typeof Parent
+>publicStaticParent : string
+>"set" : "set"
+
+        Child.privateStaticGrandParent = "set";
+>Child.privateStaticGrandParent = "set" : "set"
+>Child.privateStaticGrandParent : string
+>Child : typeof Child
+>privateStaticGrandParent : string
+>"set" : "set"
+
+        Child.protectedStaticGrandParent = "set";
+>Child.protectedStaticGrandParent = "set" : "set"
+>Child.protectedStaticGrandParent : string
+>Child : typeof Child
+>protectedStaticGrandParent : string
+>"set" : "set"
+
+        Child.publicStaticGrandParent = "set";
+>Child.publicStaticGrandParent = "set" : "set"
+>Child.publicStaticGrandParent : string
+>Child : typeof Child
+>publicStaticGrandParent : string
+>"set" : "set"
+
+        Child.privateStaticParent = "set";
+>Child.privateStaticParent = "set" : "set"
+>Child.privateStaticParent : string
+>Child : typeof Child
+>privateStaticParent : string
+>"set" : "set"
+
+        Child.protectedStaticParent = "set";
+>Child.protectedStaticParent = "set" : "set"
+>Child.protectedStaticParent : string
+>Child : typeof Child
+>protectedStaticParent : string
+>"set" : "set"
+
+        Child.publicStaticParent = "set";
+>Child.publicStaticParent = "set" : "set"
+>Child.publicStaticParent : string
+>Child : typeof Child
+>publicStaticParent : string
+>"set" : "set"
+
+        Child.privateStaticChild = "set";
+>Child.privateStaticChild = "set" : "set"
+>Child.privateStaticChild : string
+>Child : typeof Child
+>privateStaticChild : string
+>"set" : "set"
+
+        Child.protectedStaticChild = "set";
+>Child.protectedStaticChild = "set" : "set"
+>Child.protectedStaticChild : string
+>Child : typeof Child
+>protectedStaticChild : string
+>"set" : "set"
+
+        Child.publicStaticChild = "set";
+>Child.publicStaticChild = "set" : "set"
+>Child.publicStaticChild : string
+>Child : typeof Child
+>publicStaticChild : string
+>"set" : "set"
+    }
+}
+

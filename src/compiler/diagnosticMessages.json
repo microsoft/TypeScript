@@ -2541,6 +2541,10 @@
         "category": "Error",
         "code": 2744
     },
+    "Static property '{0}' is private and only accessible via class '{1}' (not via '{2}').": {
+        "category": "Error",
+        "code": 2745
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

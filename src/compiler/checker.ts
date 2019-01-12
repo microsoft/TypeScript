@@ -18908,13 +18908,24 @@ namespace ts {
 
             // Property is known to be private or protected at this point
 
-            // Private property is accessible if the property is within the declaring class
             if (flags & ModifierFlags.Private) {
                 const declaringClassDeclaration = getClassLikeDeclarationOfSymbol(getParentOfSymbol(prop)!)!;
+
+                // Private property is accessible if the property is within the declaring class
                 if (!isNodeWithinClass(node, declaringClassDeclaration)) {
                     error(errorNode, Diagnostics.Property_0_is_private_and_only_accessible_within_class_1, symbolToString(prop), typeToString(getDeclaringClass(prop)!));
                     return false;
                 }
+
+                // Accessing a private static property via a child class is also disallowed (GH #8624)
+                if (isPropertyAccessExpression(node) && hasModifier(prop.valueDeclaration, ModifierFlags.Private) && hasStaticModifier(prop.valueDeclaration)) {
+                    const accessingSymbol = getSymbolAtLocation(node.expression);
+                    if (accessingSymbol !== undefined && accessingSymbol.valueDeclaration !== declaringClassDeclaration) {
+                        error(errorNode, Diagnostics.Static_property_0_is_private_and_only_accessible_via_class_1_not_via_2, symbolToString(prop), typeToString(getDeclaringClass(prop)!), typeToString(getDeclaredTypeOfClassOrInterface(accessingSymbol)));
+                        return false;
+                    }
+                }
+
                 return true;
             }
 

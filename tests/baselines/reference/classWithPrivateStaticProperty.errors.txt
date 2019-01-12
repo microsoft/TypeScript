@@ -1,0 +1,153 @@
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(11,16): error TS2745: Static property 'privateStaticGrandParent' is private and only accessible via class 'GrandParent' (not via 'Parent').
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(14,16): error TS2341: Property 'privateStaticParent' is private and only accessible within class 'Parent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(15,16): error TS2445: Property 'protectedStaticParent' is protected and only accessible within class 'Parent' and its subclasses.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(18,15): error TS2745: Static property 'privateStaticGrandParent' is private and only accessible via class 'GrandParent' (not via 'Child').
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(21,15): error TS2341: Property 'privateStaticParent' is private and only accessible within class 'Parent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(22,15): error TS2445: Property 'protectedStaticParent' is protected and only accessible within class 'Parent' and its subclasses.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(24,15): error TS2341: Property 'privateStaticChild' is private and only accessible within class 'Child'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(25,15): error TS2445: Property 'protectedStaticChild' is protected and only accessible within class 'Child' and its subclasses.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(26,15): error TS2445: Property 'publicStaticChild' is protected and only accessible within class 'Child' and its subclasses.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(36,21): error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(40,16): error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(47,15): error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(50,15): error TS2745: Static property 'privateStaticParent' is private and only accessible via class 'Parent' (not via 'Child').
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(53,15): error TS2341: Property 'privateStaticChild' is private and only accessible within class 'Child'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(54,15): error TS2445: Property 'protectedStaticChild' is protected and only accessible within class 'Child' and its subclasses.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(55,15): error TS2445: Property 'publicStaticChild' is protected and only accessible within class 'Child' and its subclasses.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(65,21): error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(69,16): error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(72,16): error TS2341: Property 'privateStaticParent' is private and only accessible within class 'Parent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(76,15): error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts(79,15): error TS2341: Property 'privateStaticParent' is private and only accessible within class 'Parent'.
+
+
+==== tests/cases/conformance/types/members/classWithPrivateStaticProperty.ts (21 errors) ====
+    class GrandParent {
+        private static privateStaticGrandParent = "unset";
+        protected static protectedStaticGrandParent = "unset";
+        public static publicStaticGrandParent = "unset";
+    
+        testGrandparent() {
+            GrandParent.privateStaticGrandParent = "set";
+            GrandParent.protectedStaticGrandParent = "set";
+            GrandParent.publicStaticGrandParent = "set";
+    
+            Parent.privateStaticGrandParent = "set";
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2745: Static property 'privateStaticGrandParent' is private and only accessible via class 'GrandParent' (not via 'Parent').
+            Parent.protectedStaticGrandParent = "set";
+            Parent.publicStaticGrandParent = "set";
+            Parent.privateStaticParent = "set";
+                   ~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticParent' is private and only accessible within class 'Parent'.
+            Parent.protectedStaticParent = "set";
+                   ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'protectedStaticParent' is protected and only accessible within class 'Parent' and its subclasses.
+            Parent.publicStaticParent = "set";
+    
+            Child.privateStaticGrandParent = "set";
+                  ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2745: Static property 'privateStaticGrandParent' is private and only accessible via class 'GrandParent' (not via 'Child').
+            Child.protectedStaticGrandParent = "set";
+            Child.publicStaticGrandParent = "set";
+            Child.privateStaticParent = "set";
+                  ~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticParent' is private and only accessible within class 'Parent'.
+            Child.protectedStaticParent = "set";
+                  ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'protectedStaticParent' is protected and only accessible within class 'Parent' and its subclasses.
+            Child.publicStaticParent = "set";
+            Child.privateStaticChild = "set";
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticChild' is private and only accessible within class 'Child'.
+            Child.protectedStaticChild = "set";
+                  ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'protectedStaticChild' is protected and only accessible within class 'Child' and its subclasses.
+            Child.publicStaticChild = "set";
+                  ~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'publicStaticChild' is protected and only accessible within class 'Child' and its subclasses.
+        }
+    }
+    
+    class Parent extends GrandParent {
+        private static privateStaticParent = "unset";
+        protected static protectedStaticParent = "unset";
+        public static publicStaticParent = "unset";
+    
+        testParent() {
+            GrandParent.privateStaticGrandParent = "set";
+                        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+            GrandParent.protectedStaticGrandParent = "set";
+            GrandParent.publicStaticGrandParent = "set";
+    
+            Parent.privateStaticGrandParent = "set";
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+            Parent.protectedStaticGrandParent = "set";
+            Parent.publicStaticGrandParent = "set";
+            Parent.privateStaticParent = "set";
+            Parent.protectedStaticParent = "set";
+            Parent.publicStaticParent = "set";
+    
+            Child.privateStaticGrandParent = "set";
+                  ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+            Child.protectedStaticGrandParent = "set";
+            Child.publicStaticGrandParent = "set";
+            Child.privateStaticParent = "set";
+                  ~~~~~~~~~~~~~~~~~~~
+!!! error TS2745: Static property 'privateStaticParent' is private and only accessible via class 'Parent' (not via 'Child').
+            Child.protectedStaticParent = "set";
+            Child.publicStaticParent = "set";
+            Child.privateStaticChild = "set";
+                  ~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticChild' is private and only accessible within class 'Child'.
+            Child.protectedStaticChild = "set";
+                  ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'protectedStaticChild' is protected and only accessible within class 'Child' and its subclasses.
+            Child.publicStaticChild = "set";
+                  ~~~~~~~~~~~~~~~~~
+!!! error TS2445: Property 'publicStaticChild' is protected and only accessible within class 'Child' and its subclasses.
+        }
+    }
+    
+    class Child extends Parent {
+        private static privateStaticChild = "unset";
+        protected static protectedStaticChild = "unset";
+        protected static publicStaticChild = "unset";
+    
+        testChild() {
+            GrandParent.privateStaticGrandParent = "set";
+                        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+            GrandParent.protectedStaticGrandParent = "set";
+            GrandParent.publicStaticGrandParent = "set";
+    
+            Parent.privateStaticGrandParent = "set";
+                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+            Parent.protectedStaticGrandParent = "set";
+            Parent.publicStaticGrandParent = "set";
+            Parent.privateStaticParent = "set";
+                   ~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticParent' is private and only accessible within class 'Parent'.
+            Parent.protectedStaticParent = "set";
+            Parent.publicStaticParent = "set";
+    
+            Child.privateStaticGrandParent = "set";
+                  ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticGrandParent' is private and only accessible within class 'GrandParent'.
+            Child.protectedStaticGrandParent = "set";
+            Child.publicStaticGrandParent = "set";
+            Child.privateStaticParent = "set";
+                  ~~~~~~~~~~~~~~~~~~~
+!!! error TS2341: Property 'privateStaticParent' is private and only accessible within class 'Parent'.
+            Child.protectedStaticParent = "set";
+            Child.publicStaticParent = "set";
+            Child.privateStaticChild = "set";
+            Child.protectedStaticChild = "set";
+            Child.publicStaticChild = "set";
+        }
+    }
+    
