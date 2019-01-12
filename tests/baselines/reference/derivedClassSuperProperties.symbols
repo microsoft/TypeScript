@@ -232,12 +232,47 @@ class DerivedWithFunctionExpression extends Base {
     }
 }
 
-class DerivedWithClassExpression extends Base {
->DerivedWithClassExpression : Symbol(DerivedWithClassExpression, Decl(derivedClassSuperProperties.ts, 106, 1))
+class DerivedWithClassDeclaration extends Base {
+>DerivedWithClassDeclaration : Symbol(DerivedWithClassDeclaration, Decl(derivedClassSuperProperties.ts, 106, 1))
 >Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
 
     prop = true;
->prop : Symbol(DerivedWithClassExpression.prop, Decl(derivedClassSuperProperties.ts, 108, 47))
+>prop : Symbol(DerivedWithClassDeclaration.prop, Decl(derivedClassSuperProperties.ts, 108, 48))
+
+    constructor() {
+        class InnerClass { }
+>InnerClass : Symbol(InnerClass, Decl(derivedClassSuperProperties.ts, 110, 19))
+
+        super();
+>super : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
+    }
+}
+
+class DerivedWithClassDeclarationExtendingMember extends Base {
+>DerivedWithClassDeclarationExtendingMember : Symbol(DerivedWithClassDeclarationExtendingMember, Decl(derivedClassSuperProperties.ts, 114, 1))
+>Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
+
+    memberClass = class { };
+>memberClass : Symbol(DerivedWithClassDeclarationExtendingMember.memberClass, Decl(derivedClassSuperProperties.ts, 116, 63))
+
+    constructor() {
+        class InnerClass extends this.memberClass { }
+>InnerClass : Symbol(InnerClass, Decl(derivedClassSuperProperties.ts, 118, 19))
+>this.memberClass : Symbol(DerivedWithClassDeclarationExtendingMember.memberClass, Decl(derivedClassSuperProperties.ts, 116, 63))
+>this : Symbol(DerivedWithClassDeclarationExtendingMember, Decl(derivedClassSuperProperties.ts, 114, 1))
+>memberClass : Symbol(DerivedWithClassDeclarationExtendingMember.memberClass, Decl(derivedClassSuperProperties.ts, 116, 63))
+
+        super();
+>super : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
+    }
+}
+
+class DerivedWithClassExpression extends Base {
+>DerivedWithClassExpression : Symbol(DerivedWithClassExpression, Decl(derivedClassSuperProperties.ts, 122, 1))
+>Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
+
+    prop = true;
+>prop : Symbol(DerivedWithClassExpression.prop, Decl(derivedClassSuperProperties.ts, 124, 47))
 
     constructor() {
         console.log(class { });
@@ -250,12 +285,33 @@ class DerivedWithClassExpression extends Base {
     }
 }
 
+class DerivedWithClassExpressionExtendingMember extends Base {
+>DerivedWithClassExpressionExtendingMember : Symbol(DerivedWithClassExpressionExtendingMember, Decl(derivedClassSuperProperties.ts, 130, 1))
+>Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
+
+    memberClass = class { };
+>memberClass : Symbol(DerivedWithClassExpressionExtendingMember.memberClass, Decl(derivedClassSuperProperties.ts, 132, 62))
+
+    constructor() {
+        console.log(class extends this.memberClass { });
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>this.memberClass : Symbol(DerivedWithClassExpressionExtendingMember.memberClass, Decl(derivedClassSuperProperties.ts, 132, 62))
+>this : Symbol(DerivedWithClassExpressionExtendingMember, Decl(derivedClassSuperProperties.ts, 130, 1))
+>memberClass : Symbol(DerivedWithClassExpressionExtendingMember.memberClass, Decl(derivedClassSuperProperties.ts, 132, 62))
+
+        super();
+>super : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
+    }
+}
+
 class DerivedWithDerivedClassExpression extends Base {
->DerivedWithDerivedClassExpression : Symbol(DerivedWithDerivedClassExpression, Decl(derivedClassSuperProperties.ts, 114, 1))
+>DerivedWithDerivedClassExpression : Symbol(DerivedWithDerivedClassExpression, Decl(derivedClassSuperProperties.ts, 138, 1))
 >Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
 
     prop = true;
->prop : Symbol(DerivedWithDerivedClassExpression.prop, Decl(derivedClassSuperProperties.ts, 116, 54))
+>prop : Symbol(DerivedWithDerivedClassExpression.prop, Decl(derivedClassSuperProperties.ts, 140, 54))
 
     constructor() {
         console.log(class extends Base {
@@ -268,6 +324,16 @@ class DerivedWithDerivedClassExpression extends Base {
                 super();
 >super : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
             }
+            public foo() {
+>foo : Symbol((Anonymous class).foo, Decl(derivedClassSuperProperties.ts, 146, 13))
+
+                return this;
+>this : Symbol((Anonymous class), Decl(derivedClassSuperProperties.ts, 143, 20))
+            }
+            public bar = () => this;
+>bar : Symbol((Anonymous class).bar, Decl(derivedClassSuperProperties.ts, 149, 13))
+>this : Symbol((Anonymous class), Decl(derivedClassSuperProperties.ts, 143, 20))
+
         });
         super();
 >super : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
@@ -275,11 +341,11 @@ class DerivedWithDerivedClassExpression extends Base {
 }
 
 class DerivedWithNewDerivedClassExpression extends Base {
->DerivedWithNewDerivedClassExpression : Symbol(DerivedWithNewDerivedClassExpression, Decl(derivedClassSuperProperties.ts, 126, 1))
+>DerivedWithNewDerivedClassExpression : Symbol(DerivedWithNewDerivedClassExpression, Decl(derivedClassSuperProperties.ts, 154, 1))
 >Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
 
     prop = true;
->prop : Symbol(DerivedWithNewDerivedClassExpression.prop, Decl(derivedClassSuperProperties.ts, 128, 57))
+>prop : Symbol(DerivedWithNewDerivedClassExpression.prop, Decl(derivedClassSuperProperties.ts, 156, 57))
 
     constructor() {
         console.log(new class extends Base {
@@ -299,27 +365,27 @@ class DerivedWithNewDerivedClassExpression extends Base {
 }
 
 class DerivedWithObjectAccessors extends Base {
->DerivedWithObjectAccessors : Symbol(DerivedWithObjectAccessors, Decl(derivedClassSuperProperties.ts, 138, 1))
+>DerivedWithObjectAccessors : Symbol(DerivedWithObjectAccessors, Decl(derivedClassSuperProperties.ts, 166, 1))
 >Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
 
     prop = true;
->prop : Symbol(DerivedWithObjectAccessors.prop, Decl(derivedClassSuperProperties.ts, 140, 47))
+>prop : Symbol(DerivedWithObjectAccessors.prop, Decl(derivedClassSuperProperties.ts, 168, 47))
 
     constructor() {
         const obj = {
->obj : Symbol(obj, Decl(derivedClassSuperProperties.ts, 143, 13))
+>obj : Symbol(obj, Decl(derivedClassSuperProperties.ts, 171, 13))
 
             get prop() {
->prop : Symbol(prop, Decl(derivedClassSuperProperties.ts, 143, 21), Decl(derivedClassSuperProperties.ts, 146, 14))
+>prop : Symbol(prop, Decl(derivedClassSuperProperties.ts, 171, 21), Decl(derivedClassSuperProperties.ts, 174, 14))
 
                 return true;
             },
             set prop(param) {
->prop : Symbol(prop, Decl(derivedClassSuperProperties.ts, 143, 21), Decl(derivedClassSuperProperties.ts, 146, 14))
->param : Symbol(param, Decl(derivedClassSuperProperties.ts, 147, 21))
+>prop : Symbol(prop, Decl(derivedClassSuperProperties.ts, 171, 21), Decl(derivedClassSuperProperties.ts, 174, 14))
+>param : Symbol(param, Decl(derivedClassSuperProperties.ts, 175, 21))
 
                 this._prop = param;
->param : Symbol(param, Decl(derivedClassSuperProperties.ts, 147, 21))
+>param : Symbol(param, Decl(derivedClassSuperProperties.ts, 175, 21))
             }
         };
         super();
@@ -328,33 +394,33 @@ class DerivedWithObjectAccessors extends Base {
 }
 
 class DerivedWithObjectAccessorsUsingThis extends Base {
->DerivedWithObjectAccessorsUsingThis : Symbol(DerivedWithObjectAccessorsUsingThis, Decl(derivedClassSuperProperties.ts, 153, 1))
+>DerivedWithObjectAccessorsUsingThis : Symbol(DerivedWithObjectAccessorsUsingThis, Decl(derivedClassSuperProperties.ts, 181, 1))
 >Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
 
     propName = "prop";
->propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 155, 56))
+>propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 183, 56))
 
     constructor() {
         const obj = {
->obj : Symbol(obj, Decl(derivedClassSuperProperties.ts, 158, 13))
+>obj : Symbol(obj, Decl(derivedClassSuperProperties.ts, 186, 13))
 
             get [this.propName]() {
->[this.propName] : Symbol([this.propName], Decl(derivedClassSuperProperties.ts, 158, 21))
->this.propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 155, 56))
->this : Symbol(DerivedWithObjectAccessorsUsingThis, Decl(derivedClassSuperProperties.ts, 153, 1))
->propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 155, 56))
+>[this.propName] : Symbol([this.propName], Decl(derivedClassSuperProperties.ts, 186, 21))
+>this.propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 183, 56))
+>this : Symbol(DerivedWithObjectAccessorsUsingThis, Decl(derivedClassSuperProperties.ts, 181, 1))
+>propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 183, 56))
 
                 return true;
             },
             set [this.propName](param) {
->[this.propName] : Symbol([this.propName], Decl(derivedClassSuperProperties.ts, 161, 14))
->this.propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 155, 56))
->this : Symbol(DerivedWithObjectAccessorsUsingThis, Decl(derivedClassSuperProperties.ts, 153, 1))
->propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 155, 56))
->param : Symbol(param, Decl(derivedClassSuperProperties.ts, 162, 32))
+>[this.propName] : Symbol([this.propName], Decl(derivedClassSuperProperties.ts, 189, 14))
+>this.propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 183, 56))
+>this : Symbol(DerivedWithObjectAccessorsUsingThis, Decl(derivedClassSuperProperties.ts, 181, 1))
+>propName : Symbol(DerivedWithObjectAccessorsUsingThis.propName, Decl(derivedClassSuperProperties.ts, 183, 56))
+>param : Symbol(param, Decl(derivedClassSuperProperties.ts, 190, 32))
 
                 this._prop = param;
->param : Symbol(param, Decl(derivedClassSuperProperties.ts, 162, 32))
+>param : Symbol(param, Decl(derivedClassSuperProperties.ts, 190, 32))
             }
         };
         super();
@@ -363,21 +429,21 @@ class DerivedWithObjectAccessorsUsingThis extends Base {
 }
 
 class DerivedWithObjectComputedPropertyName extends Base {
->DerivedWithObjectComputedPropertyName : Symbol(DerivedWithObjectComputedPropertyName, Decl(derivedClassSuperProperties.ts, 168, 1))
+>DerivedWithObjectComputedPropertyName : Symbol(DerivedWithObjectComputedPropertyName, Decl(derivedClassSuperProperties.ts, 196, 1))
 >Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
 
     propName = "prop";
->propName : Symbol(DerivedWithObjectComputedPropertyName.propName, Decl(derivedClassSuperProperties.ts, 170, 58))
+>propName : Symbol(DerivedWithObjectComputedPropertyName.propName, Decl(derivedClassSuperProperties.ts, 198, 58))
 
     constructor() {
         const obj = {
->obj : Symbol(obj, Decl(derivedClassSuperProperties.ts, 173, 13))
+>obj : Symbol(obj, Decl(derivedClassSuperProperties.ts, 201, 13))
 
             [this.propName]: true,
->[this.propName] : Symbol([this.propName], Decl(derivedClassSuperProperties.ts, 173, 21))
->this.propName : Symbol(DerivedWithObjectComputedPropertyName.propName, Decl(derivedClassSuperProperties.ts, 170, 58))
->this : Symbol(DerivedWithObjectComputedPropertyName, Decl(derivedClassSuperProperties.ts, 168, 1))
->propName : Symbol(DerivedWithObjectComputedPropertyName.propName, Decl(derivedClassSuperProperties.ts, 170, 58))
+>[this.propName] : Symbol([this.propName], Decl(derivedClassSuperProperties.ts, 201, 21))
+>this.propName : Symbol(DerivedWithObjectComputedPropertyName.propName, Decl(derivedClassSuperProperties.ts, 198, 58))
+>this : Symbol(DerivedWithObjectComputedPropertyName, Decl(derivedClassSuperProperties.ts, 196, 1))
+>propName : Symbol(DerivedWithObjectComputedPropertyName.propName, Decl(derivedClassSuperProperties.ts, 198, 58))
 
         };
         super();
@@ -386,18 +452,18 @@ class DerivedWithObjectComputedPropertyName extends Base {
 }
 
 class DerivedWithObjectMethod extends Base {
->DerivedWithObjectMethod : Symbol(DerivedWithObjectMethod, Decl(derivedClassSuperProperties.ts, 178, 1))
+>DerivedWithObjectMethod : Symbol(DerivedWithObjectMethod, Decl(derivedClassSuperProperties.ts, 206, 1))
 >Base : Symbol(Base, Decl(derivedClassSuperProperties.ts, 0, 0))
 
     prop = true;
->prop : Symbol(DerivedWithObjectMethod.prop, Decl(derivedClassSuperProperties.ts, 180, 44))
+>prop : Symbol(DerivedWithObjectMethod.prop, Decl(derivedClassSuperProperties.ts, 208, 44))
 
     constructor() {
         const obj = {
->obj : Symbol(obj, Decl(derivedClassSuperProperties.ts, 183, 13))
+>obj : Symbol(obj, Decl(derivedClassSuperProperties.ts, 211, 13))
 
             getProp() {
->getProp : Symbol(getProp, Decl(derivedClassSuperProperties.ts, 183, 21))
+>getProp : Symbol(getProp, Decl(derivedClassSuperProperties.ts, 211, 21))
 
                 return this;
             },

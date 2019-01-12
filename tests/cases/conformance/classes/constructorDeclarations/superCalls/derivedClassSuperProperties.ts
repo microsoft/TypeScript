@@ -108,10 +108,34 @@ class DerivedWithFunctionExpression extends Base {
     }
 }
 
+class DerivedWithClassDeclaration extends Base {
+    prop = true;
+    constructor() {
+        class InnerClass { }
+        super();
+    }
+}
+
+class DerivedWithClassDeclarationExtendingMember extends Base {
+    memberClass = class { };
+    constructor() {
+        class InnerClass extends this.memberClass { }
+        super();
+    }
+}
+
 class DerivedWithClassExpression extends Base {
     prop = true;
     constructor() {
         console.log(class { });
+        super();
+    }
+}
+
+class DerivedWithClassExpressionExtendingMember extends Base {
+    memberClass = class { };
+    constructor() {
+        console.log(class extends this.memberClass { });
         super();
     }
 }
@@ -123,6 +147,10 @@ class DerivedWithDerivedClassExpression extends Base {
             constructor() {
                 super();
             }
+            public foo() {
+                return this;
+            }
+            public bar = () => this;
         });
         super();
     }

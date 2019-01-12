@@ -6261,8 +6261,13 @@ namespace ts {
     /* @internal */
     export function isNewThisScope(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.ClassDeclaration:
-            case SyntaxKind.ClassExpression:
+            case SyntaxKind.ArrowFunction:
+                switch (node.parent.kind) {
+                    case SyntaxKind.PropertyDeclaration:
+                        return true;
+                    default:
+                        return false;
+                }
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.Parameter:

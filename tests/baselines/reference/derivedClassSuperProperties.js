@@ -107,10 +107,34 @@ class DerivedWithFunctionExpression extends Base {
     }
 }
 
+class DerivedWithClassDeclaration extends Base {
+    prop = true;
+    constructor() {
+        class InnerClass { }
+        super();
+    }
+}
+
+class DerivedWithClassDeclarationExtendingMember extends Base {
+    memberClass = class { };
+    constructor() {
+        class InnerClass extends this.memberClass { }
+        super();
+    }
+}
+
 class DerivedWithClassExpression extends Base {
     prop = true;
     constructor() {
         console.log(class { });
+        super();
+    }
+}
+
+class DerivedWithClassExpressionExtendingMember extends Base {
+    memberClass = class { };
+    constructor() {
+        console.log(class extends this.memberClass { });
         super();
     }
 }
@@ -122,6 +146,10 @@ class DerivedWithDerivedClassExpression extends Base {
             constructor() {
                 super();
             }
+            public foo() {
+                return this;
+            }
+            public bar = () => this;
         });
         super();
     }
@@ -347,20 +375,77 @@ var DerivedWithFunctionExpression = /** @class */ (function (_super) {
     }
     return DerivedWithFunctionExpression;
 }(Base));
+var DerivedWithClassDeclaration = /** @class */ (function (_super) {
+    __extends(DerivedWithClassDeclaration, _super);
+    function DerivedWithClassDeclaration() {
+        var _this = this;
+        _this.prop = true;
+        var InnerClass = /** @class */ (function () {
+            function InnerClass() {
+            }
+            return InnerClass;
+        }());
+        _this = _super.call(this) || this;
+        return _this;
+    }
+    return DerivedWithClassDeclaration;
+}(Base));
+var DerivedWithClassDeclarationExtendingMember = /** @class */ (function (_super) {
+    __extends(DerivedWithClassDeclarationExtendingMember, _super);
+    function DerivedWithClassDeclarationExtendingMember() {
+        var _this = this;
+        _this.memberClass = /** @class */ (function () {
+            function class_1() {
+            }
+            return class_1;
+        }());
+        var InnerClass = /** @class */ (function (_super) {
+            __extends(InnerClass, _super);
+            function InnerClass() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            return InnerClass;
+        }(_this.memberClass));
+        _this = _super.call(this) || this;
+        return _this;
+    }
+    return DerivedWithClassDeclarationExtendingMember;
+}(Base));
 var DerivedWithClassExpression = /** @class */ (function (_super) {
     __extends(DerivedWithClassExpression, _super);
     function DerivedWithClassExpression() {
         var _this = this;
         _this.prop = true;
         console.log(/** @class */ (function () {
-            function class_1() {
+            function class_2() {
             }
-            return class_1;
+            return class_2;
         }()));
         _this = _super.call(this) || this;
         return _this;
     }
     return DerivedWithClassExpression;
+}(Base));
+var DerivedWithClassExpressionExtendingMember = /** @class */ (function (_super) {
+    __extends(DerivedWithClassExpressionExtendingMember, _super);
+    function DerivedWithClassExpressionExtendingMember() {
+        var _this = this;
+        _this.memberClass = /** @class */ (function () {
+            function class_3() {
+            }
+            return class_3;
+        }());
+        console.log(/** @class */ (function (_super) {
+            __extends(class_4, _super);
+            function class_4() {
+                return _super !== null && _super.apply(this, arguments) || this;
+            }
+            return class_4;
+        }(_this.memberClass)));
+        _this = _super.call(this) || this;
+        return _this;
+    }
+    return DerivedWithClassExpressionExtendingMember;
 }(Base));
 var DerivedWithDerivedClassExpression = /** @class */ (function (_super) {
     __extends(DerivedWithDerivedClassExpression, _super);
@@ -368,11 +453,16 @@ var DerivedWithDerivedClassExpression = /** @class */ (function (_super) {
         var _this = this;
         _this.prop = true;
         console.log(/** @class */ (function (_super) {
-            __extends(class_2, _super);
-            function class_2() {
-                return _super.call(this) || this;
+            __extends(class_5, _super);
+            function class_5() {
+                var _this = _super.call(this) || this;
+                _this.bar = function () { return _this; };
+                return _this;
             }
-            return class_2;
+            class_5.prototype.foo = function () {
+                return this;
+            };
+            return class_5;
         }(Base)));
         _this = _super.call(this) || this;
         return _this;
@@ -385,11 +475,11 @@ var DerivedWithNewDerivedClassExpression = /** @class */ (function (_super) {
         var _this = this;
         _this.prop = true;
         console.log(new /** @class */ (function (_super) {
-            __extends(class_3, _super);
-            function class_3() {
+            __extends(class_6, _super);
+            function class_6() {
                 return _super.call(this) || this;
             }
-            return class_3;
+            return class_6;
         }(Base))());
         _this = _super.call(this) || this;
         return _this;
