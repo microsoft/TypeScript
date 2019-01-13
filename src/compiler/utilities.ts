@@ -6258,24 +6258,23 @@ namespace ts {
         return isSourceFile(node) || isModuleBlock(node) || isBlock(node) && isFunctionLike(node.parent);
     }
 
-    /* @internal */
+    /**
+     * @returns Whether a node or its children refer to a different `this` than its parent.
+     * @internal
+     */
     export function isNewThisScope(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.ArrowFunction:
-                switch (node.parent.kind) {
-                    case SyntaxKind.PropertyDeclaration:
-                        return true;
-                    default:
-                        return false;
-                }
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.Parameter:
+            case SyntaxKind.PropertyDeclaration:
                 return true;
             case SyntaxKind.Block:
                 switch (node.parent.kind) {
-                    case SyntaxKind.GetAccessor:
+                    // The `extends` clause of a class is its parent scope, unlike its constructor and methods
+                    case SyntaxKind.Constructor:
                     case SyntaxKind.MethodDeclaration:
+                    // Object properties can have computed names; only method-like bodies start a new scope
+                    case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                         return true;
                     default:

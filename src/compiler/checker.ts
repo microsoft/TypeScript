@@ -23613,7 +23613,7 @@ namespace ts {
                                 superCallStatement = <ExpressionStatement>statement;
                                 break;
                             }
-                            if (!isPrologueDirective(statement) && nodeRefersToSuperOrThis(statement)) {
+                            if (!isPrologueDirective(statement) && nodeReferencesSuperOrThis(statement)) {
                                 break;
                             }
                         }
@@ -23628,7 +23628,7 @@ namespace ts {
             }
         }
 
-        function nodeRefersToSuperOrThis(node: Statement): boolean {
+        function nodeReferencesSuperOrThis(node: Statement): boolean {
             if (node.kind === SyntaxKind.SuperKeyword || node.kind === SyntaxKind.ThisKeyword) {
                 return true;
             }
@@ -23637,7 +23637,7 @@ namespace ts {
                 return false;
             }
 
-            return !!forEachChild(node, nodeRefersToSuperOrThis);
+            return !!forEachChild(node, nodeReferencesSuperOrThis);
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {

@@ -78,6 +78,14 @@ class DerivedWithArrowFunction extends Base {
     }
 }
 
+class DerivedWithArrowFunctionParameter extends Base {
+    prop = true;
+    constructor() {
+        const lambda = (param = this) => {};
+        super();
+    }
+}
+
 class DerivedWithFunctionDeclaration extends Base {
     prop = true;
     constructor() {
@@ -111,7 +119,16 @@ class DerivedWithFunctionExpression extends Base {
 class DerivedWithClassDeclaration extends Base {
     prop = true;
     constructor() {
-        class InnerClass { }
+        class InnerClass {
+            private method() {
+                return this;
+            }
+            private property = 7;
+            constructor() {
+                this.property;
+                this.method();
+            }
+        }
         super();
     }
 }
@@ -119,7 +136,17 @@ class DerivedWithClassDeclaration extends Base {
 class DerivedWithClassDeclarationExtendingMember extends Base {
     memberClass = class { };
     constructor() {
-        class InnerClass extends this.memberClass { }
+        class InnerClass extends this.memberClass {
+            private method() {
+                return this;
+            }
+            private property = 7;
+            constructor() {
+                super();
+                this.property;
+                this.method();
+            }
+        }
         super();
     }
 }
@@ -127,7 +154,16 @@ class DerivedWithClassDeclarationExtendingMember extends Base {
 class DerivedWithClassExpression extends Base {
     prop = true;
     constructor() {
-        console.log(class { });
+        console.log(class {
+            private method() {
+                return this;
+            }
+            private property = 7;
+            constructor() {
+                this.property;
+                this.method();
+            }
+        });
         super();
     }
 }
@@ -183,16 +219,43 @@ class DerivedWithObjectAccessors extends Base {
     }
 }
 
-class DerivedWithObjectAccessorsUsingThis extends Base {
+class DerivedWithObjectAccessorsUsingThisInKeys extends Base {
     propName = "prop";
     constructor() {
         const obj = {
+            _prop: "prop",
             get [this.propName]() {
                 return true;
             },
             set [this.propName](param) {
                 this._prop = param;
             }
+        };
+        super();
+    }
+}
+
+class DerivedWithObjectAccessorsUsingThisInBodies extends Base {
+    propName = "prop";
+    constructor() {
+        const obj = {
+            _prop: "prop",
+            get prop() {
+                return this._prop;
+            },
+            set prop(param) {
+                this._prop = param;
+            }
+        };
+        super();
+    }
+}
+
+class DerivedWithObjectComputedPropertyBody extends Base {
+    propName = "prop";
+    constructor() {
+        const obj = {
+            prop: this.propName,
         };
         super();
     }

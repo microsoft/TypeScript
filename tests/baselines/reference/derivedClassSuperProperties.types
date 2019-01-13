@@ -207,6 +207,27 @@ class DerivedWithArrowFunction extends Base {
     }
 }
 
+class DerivedWithArrowFunctionParameter extends Base {
+>DerivedWithArrowFunctionParameter : DerivedWithArrowFunctionParameter
+>Base : Base
+
+    prop = true;
+>prop : boolean
+>true : true
+
+    constructor() {
+        const lambda = (param = this) => {};
+>lambda : (param?: this) => void
+>(param = this) => {} : (param?: this) => void
+>param : this
+>this : this
+
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
 class DerivedWithFunctionDeclaration extends Base {
 >DerivedWithFunctionDeclaration : DerivedWithFunctionDeclaration
 >Base : Base
@@ -284,9 +305,32 @@ class DerivedWithClassDeclaration extends Base {
 >true : true
 
     constructor() {
-        class InnerClass { }
+        class InnerClass {
 >InnerClass : InnerClass
 
+            private method() {
+>method : () => this
+
+                return this;
+>this : this
+            }
+            private property = 7;
+>property : number
+>7 : 7
+
+            constructor() {
+                this.property;
+>this.property : number
+>this : this
+>property : number
+
+                this.method();
+>this.method() : this
+>this.method : () => this
+>this : this
+>method : () => this
+            }
+        }
         super();
 >super() : void
 >super : typeof Base
@@ -302,12 +346,39 @@ class DerivedWithClassDeclarationExtendingMember extends Base {
 >class { } : typeof (Anonymous class)
 
     constructor() {
-        class InnerClass extends this.memberClass { }
+        class InnerClass extends this.memberClass {
 >InnerClass : InnerClass
 >this.memberClass : (Anonymous class)
 >this : this
 >memberClass : typeof (Anonymous class)
 
+            private method() {
+>method : () => this
+
+                return this;
+>this : this
+            }
+            private property = 7;
+>property : number
+>7 : 7
+
+            constructor() {
+                super();
+>super() : void
+>super : typeof (Anonymous class)
+
+                this.property;
+>this.property : number
+>this : this
+>property : number
+
+                this.method();
+>this.method() : this
+>this.method : () => this
+>this : this
+>method : () => this
+            }
+        }
         super();
 >super() : void
 >super : typeof Base
@@ -323,13 +394,36 @@ class DerivedWithClassExpression extends Base {
 >true : true
 
     constructor() {
-        console.log(class { });
->console.log(class { }) : void
+        console.log(class {
+>console.log(class {            private method() {                return this;            }            private property = 7;            constructor() {                this.property;                this.method();            }        }) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
 >console : Console
 >log : (message?: any, ...optionalParams: any[]) => void
->class { } : typeof (Anonymous class)
+>class {            private method() {                return this;            }            private property = 7;            constructor() {                this.property;                this.method();            }        } : typeof (Anonymous class)
 
+            private method() {
+>method : () => this
+
+                return this;
+>this : this
+            }
+            private property = 7;
+>property : number
+>7 : 7
+
+            constructor() {
+                this.property;
+>this.property : number
+>this : this
+>property : number
+
+                this.method();
+>this.method() : this
+>this.method : () => this
+>this : this
+>method : () => this
+            }
+        });
         super();
 >super() : void
 >super : typeof Base
@@ -469,8 +563,8 @@ class DerivedWithObjectAccessors extends Base {
     }
 }
 
-class DerivedWithObjectAccessorsUsingThis extends Base {
->DerivedWithObjectAccessorsUsingThis : DerivedWithObjectAccessorsUsingThis
+class DerivedWithObjectAccessorsUsingThisInKeys extends Base {
+>DerivedWithObjectAccessorsUsingThisInKeys : DerivedWithObjectAccessorsUsingThisInKeys
 >Base : Base
 
     propName = "prop";
@@ -479,8 +573,12 @@ class DerivedWithObjectAccessorsUsingThis extends Base {
 
     constructor() {
         const obj = {
->obj : { [x: string]: any; }
->{            get [this.propName]() {                return true;            },            set [this.propName](param) {                this._prop = param;            }        } : { [x: string]: any; }
+>obj : { [x: string]: any; _prop: string; }
+>{            _prop: "prop",            get [this.propName]() {                return true;            },            set [this.propName](param) {                this._prop = param;            }        } : { [x: string]: any; _prop: string; }
+
+            _prop: "prop",
+>_prop : string
+>"prop" : "prop"
 
             get [this.propName]() {
 >[this.propName] : boolean
@@ -506,6 +604,76 @@ class DerivedWithObjectAccessorsUsingThis extends Base {
 >_prop : any
 >param : any
             }
+        };
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithObjectAccessorsUsingThisInBodies extends Base {
+>DerivedWithObjectAccessorsUsingThisInBodies : DerivedWithObjectAccessorsUsingThisInBodies
+>Base : Base
+
+    propName = "prop";
+>propName : string
+>"prop" : "prop"
+
+    constructor() {
+        const obj = {
+>obj : { _prop: string; prop: any; }
+>{            _prop: "prop",            get prop() {                return this._prop;            },            set prop(param) {                this._prop = param;            }        } : { _prop: string; prop: any; }
+
+            _prop: "prop",
+>_prop : string
+>"prop" : "prop"
+
+            get prop() {
+>prop : any
+
+                return this._prop;
+>this._prop : any
+>this : any
+>_prop : any
+
+            },
+            set prop(param) {
+>prop : any
+>param : any
+
+                this._prop = param;
+>this._prop = param : any
+>this._prop : any
+>this : any
+>_prop : any
+>param : any
+            }
+        };
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithObjectComputedPropertyBody extends Base {
+>DerivedWithObjectComputedPropertyBody : DerivedWithObjectComputedPropertyBody
+>Base : Base
+
+    propName = "prop";
+>propName : string
+>"prop" : "prop"
+
+    constructor() {
+        const obj = {
+>obj : { prop: string; }
+>{            prop: this.propName,        } : { prop: string; }
+
+            prop: this.propName,
+>prop : string
+>this.propName : string
+>this : this
+>propName : string
+
         };
         super();
 >super() : void
