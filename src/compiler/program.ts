@@ -203,7 +203,7 @@ namespace ts {
         return compilerHost;
     }
 
-    interface ComplierHostLikeForCache {
+    interface CompilerHostLikeForCache {
         fileExists(fileName: string): boolean;
         readFile(fileName: string, encoding?: string): string | undefined;
         directoryExists?(directory: string): boolean;
@@ -213,7 +213,7 @@ namespace ts {
 
     /*@internal*/
     export function changeCompilerHostLikeToUseCache(
-        host: ComplierHostLikeForCache,
+        host: CompilerHostLikeForCache,
         toPath: (fileName: string) => Path,
         getSourceFile?: CompilerHost["getSourceFile"]
     ) {
