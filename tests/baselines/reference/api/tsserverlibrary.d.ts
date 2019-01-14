@@ -4708,7 +4708,7 @@ declare namespace ts {
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, usePrefixAndSuffixTextForRename: boolean): ReadonlyArray<RenameLocation> | undefined;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename: boolean): ReadonlyArray<RenameLocation> | undefined;
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
@@ -7928,7 +7928,7 @@ declare namespace ts.server.protocol {
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly allowRenameOfImportPath?: boolean;
-        readonly usePrefixAndSuffixTextForRename?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;

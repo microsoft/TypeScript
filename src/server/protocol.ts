@@ -2906,7 +2906,7 @@ namespace ts.server.protocol {
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
         readonly allowRenameOfImportPath?: boolean;
-        readonly usePrefixAndSuffixTextForRename?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     }
 
     export interface CompilerOptions {
