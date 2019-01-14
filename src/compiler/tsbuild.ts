@@ -1422,7 +1422,7 @@ namespace ts {
                 return first(outputs);
             }
         }
-        return Debug.fail(`project ${project.options.configFilePath} expected to have atleast one output`);
+        return Debug.fail(`project ${project.options.configFilePath} expected to have at least one output`);
     }
 
     export function formatUpToDateStatus<T>(configFileName: string, status: UpToDateStatus, relName: (fileName: string) => string, formatMessage: (message: DiagnosticMessage, ...args: string[]) => T) {
