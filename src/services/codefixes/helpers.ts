@@ -24,14 +24,14 @@ namespace ts.codefix {
             useCaseSensitiveFileNames: context.host.useCaseSensitiveFileNames ? () => context.host.useCaseSensitiveFileNames!() : undefined,
             getSourceFiles: () => context.program.getSourceFiles(),
             getCommonSourceDirectory: () => context.program.getCommonSourceDirectory(),
-        }
+        };
     }
 
     export function getNoopSymbolTrackerWithResolver(context: TypeConstructionContext): SymbolTracker {
         return {
-            trackSymbol: ts.noop,
+            trackSymbol: noop,
             moduleResolverHost: getModuleSpecifierResolverHost(context),
-        }
+        };
     }
 
     export interface TypeConstructionContext {
@@ -143,19 +143,20 @@ namespace ts.codefix {
         inJs: boolean,
         makeStatic: boolean,
         preferences: UserPreferences,
-        body: boolean,
+        contextNode: Node,
     ): MethodDeclaration {
+        const body = !isInterfaceDeclaration(contextNode);
         const { typeArguments, arguments: args, parent } = call;
         const checker = context.program.getTypeChecker();
         const tracker = getNoopSymbolTrackerWithResolver(context);
         const types = map(args, arg =>
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-            checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), call, /*flags*/ undefined, tracker));
+            checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, /*flags*/ undefined, tracker));
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text :
                 isPropertyAccessExpression(arg) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
-        const returnType = inJs ? undefined : contextualType && checker.typeToTypeNode(contextualType, call, /*flags*/ undefined, tracker) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        const returnType = inJs ? undefined : contextualType && checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
