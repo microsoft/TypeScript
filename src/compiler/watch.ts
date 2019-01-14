@@ -203,17 +203,14 @@ namespace ts {
         TypeRoots = "Type roots"
     }
 
-    interface WatchFactory<X, Y= undefined> extends ts.WatchFactory<X, Y> {
-        watchLogLevel: WatchLogLevel;
+    interface WatchFactory<X, Y = undefined> extends ts.WatchFactory<X, Y> {
         writeLog: (s: string) => void;
     }
 
     export function createWatchFactory<Y = undefined>(host: { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
-        const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose :
-            options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
+        const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose : options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
         const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
         const result = getWatchFactory<WatchType, Y>(watchLogLevel, writeLog) as WatchFactory<WatchType, Y>;
-        result.watchLogLevel = watchLogLevel;
         result.writeLog = writeLog;
         return result;
     }
@@ -590,7 +587,7 @@ namespace ts {
             newLine = updateNewLine();
         }
 
-        const { watchFile, watchFilePath, watchDirectory, watchLogLevel, writeLog } = createWatchFactory<string>(host, compilerOptions);
+        const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<string>(host, compilerOptions);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
@@ -685,11 +682,9 @@ namespace ts {
 
         function createNewProgram(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
             // Compile the program
-            if (watchLogLevel !== WatchLogLevel.None) {
-                writeLog("CreatingProgramWith::");
-                writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
-                writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
-            }
+            writeLog("CreatingProgramWith::");
+            writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
+            writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
 
             const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
             hasChangedCompilerOptions = false;
