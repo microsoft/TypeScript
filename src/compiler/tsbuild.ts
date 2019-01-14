@@ -1008,8 +1008,8 @@ namespace ts {
                 const project = buildQueue[index];
                 const prepend = referencingProjects.getValue(project);
                 if (prepend !== undefined) {
-                    // If the project is referenced with prepend, always build downstream project,
-                    // If declaration output is changed changed, build the project
+                    // If the project is referenced with prepend, always build downstream projects,
+                    // If declaration output is changed, build the project
                     // otherwise mark the project UpToDateWithUpstreamTypes so it updates output time stamps
                     const status = projectStatus.getValue(project);
                     if (prepend || !(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
