@@ -265,11 +265,11 @@ namespace ts {
         const { affectedFilesPendingEmit } = state;
         if (affectedFilesPendingEmit) {
             const seenEmittedFiles = state.seenEmittedFiles || (state.seenEmittedFiles = createMap());
-            for (let affectedFilesIndex = state.affectedFilesPendingEmitIndex!; affectedFilesIndex < affectedFilesPendingEmit.length; affectedFilesIndex++) {
-                const affectedFile = Debug.assertDefined(state.program).getSourceFileByPath(affectedFilesPendingEmit[affectedFilesIndex]);
+            for (let i = state.affectedFilesPendingEmitIndex!; i < affectedFilesPendingEmit.length; i++) {
+                const affectedFile = Debug.assertDefined(state.program).getSourceFileByPath(affectedFilesPendingEmit[i]);
                 if (affectedFile && !seenEmittedFiles.has(affectedFile.path)) {
                     // emit this file
-                    state.affectedFilesPendingEmitIndex = affectedFilesIndex;
+                    state.affectedFilesPendingEmitIndex = i;
                     return affectedFile;
                 }
             }
@@ -695,6 +695,10 @@ namespace ts {
             // In case of emit builder, cache the files to be emitted
             if (affectedFilesPendingEmit) {
                 state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, affectedFilesPendingEmit);
+                // affectedFilesPendingEmitIndex === undefined
+                // - means the emit state.affectedFilesPendingEmit was undefined before adding current affected files
+                //   so start from 0 as array would be affectedFilesPendingEmit
+                // else, continue to iterate from existing index, the current set is appended to existing files
                 if (state.affectedFilesPendingEmitIndex === undefined) {
                     state.affectedFilesPendingEmitIndex = 0;
                 }
