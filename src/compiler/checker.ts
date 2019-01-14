@@ -1227,7 +1227,7 @@ namespace ts {
                     }
                 });
 
-                return ancestorChangingReferenceScope !== undefined && ancestorChangingReferenceScope !== declaration;
+                return ancestorChangingReferenceScope !== undefined;
             }
         }
 
