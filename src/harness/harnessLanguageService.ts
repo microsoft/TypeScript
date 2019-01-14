@@ -472,8 +472,8 @@ namespace Harness.LanguageService {
         getRenameInfo(fileName: string, position: number): ts.RenameInfo {
             return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position));
         }
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ts.RenameLocation[] {
-            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments));
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename: boolean): ts.RenameLocation[] {
+            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename));
         }
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));

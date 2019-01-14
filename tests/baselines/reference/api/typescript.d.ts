@@ -4708,7 +4708,7 @@ declare namespace ts {
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, usePrefixAndSuffixTextForRename: boolean): ReadonlyArray<RenameLocation> | undefined;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename: boolean): ReadonlyArray<RenameLocation> | undefined;
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
