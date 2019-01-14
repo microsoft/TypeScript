@@ -24785,9 +24785,17 @@ namespace ts {
                         return;
                     }
                     if (!containsArgumentsReference(decl)) {
-                        error(node.name,
-                            Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
-                            idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                        if (isQualifiedName(node.name)) {
+                            error(node.name,
+                                Diagnostics.Qualified_name_0_is_not_allowed_without_a_leading_param_object_1,
+                                entityNameToString(node.name),
+                                entityNameToString(node.name.left));
+                        }
+                        else {
+                            error(node.name,
+                                Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
+                                idText(node.name));
+                        }
                     }
                     else if (findLast(getJSDocTags(decl), isJSDocParameterTag) === node &&
                         node.typeExpression && node.typeExpression.type &&
