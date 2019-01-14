@@ -1522,14 +1522,14 @@ namespace ts.FindAllReferences.Core {
     // This is not needed when searching for re-exports.
     function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRenameWithPrefixAndSuffixText: boolean, implementations: boolean): Symbol[] {
         const result: Symbol[] = [];
-        forEachRelatedSymbol<void>(symbol, location, checker, isForRenameWithPrefixAndSuffixText,
+        forEachRelatedSymbol<void>(symbol, location, checker, isForRenameWithPrefixAndSuffixText, !isForRenameWithPrefixAndSuffixText,
             (sym, root, base) => { result.push(base || root || sym); },
             /*allowBaseTypes*/ () => !implementations);
         return result;
     }
 
     function forEachRelatedSymbol<T>(
-        symbol: Symbol, location: Node, checker: TypeChecker, isForRenamePopulateSearchSymbolSet: boolean,
+        symbol: Symbol, location: Node, checker: TypeChecker, isForRenamePopulateSearchSymbolSet: boolean, onlyIncludeBindingElementAtReferenceLocation: boolean,
         cbSymbol: (symbol: Symbol, rootSymbol?: Symbol, baseSymbol?: Symbol, kind?: NodeEntryKind) => T | undefined,
         allowBaseTypes: (rootSymbol: Symbol) => boolean,
     ): T | undefined {
@@ -1583,9 +1583,14 @@ namespace ts.FindAllReferences.Core {
         }
 
         // symbolAtLocation for a binding element is the local symbol. See if the search symbol is the property.
-        // Don't do this when populating search set for a rename -- just rename the local.
+        // Don't do this when populating search set for a rename when prefix and suffix text are available -- just rename the local.
         if (!isForRenamePopulateSearchSymbolSet) {
-            const bindingElementPropertySymbol = isObjectBindingElementWithoutPropertyName(location.parent) ? getPropertySymbolFromBindingElement(checker, location.parent) : undefined;
+            let bindingElementPropertySymbol: Symbol | undefined;
+            if (onlyIncludeBindingElementAtReferenceLocation) {
+                bindingElementPropertySymbol = isObjectBindingElementWithoutPropertyName(location.parent) ? getPropertySymbolFromBindingElement(checker, location.parent) : undefined;
+            } else {
+                bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol, checker);
+            }
             return bindingElementPropertySymbol && fromRoot(bindingElementPropertySymbol, EntryKind.SearchedPropertyFoundLocal);
         }
 
@@ -1603,6 +1608,13 @@ namespace ts.FindAllReferences.Core {
                     ? getPropertySymbolsFromBaseTypes(rootSymbol.parent, rootSymbol.name, checker, base => cbSymbol(sym, rootSymbol, base, kind))
                     : undefined));
         }
+
+        function getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol: Symbol, checker: TypeChecker): Symbol | undefined {
+            const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
+            if (bindingElement && isObjectBindingElementWithoutPropertyName(bindingElement)) {
+                return getPropertySymbolFromBindingElement(checker, bindingElement);
+            }
+        }
     }
 
     interface RelatedSymbol {
@@ -1612,6 +1624,7 @@ namespace ts.FindAllReferences.Core {
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
         const { checker } = state;
         return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
+            /*onlyIncludeBindingElementAtReferenceLocation*/ !state.options.isForRename || !!state.options.providePrefixAndSuffixTextForRename,
             (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => search.includes(baseSymbol || rootSymbol || sym)
                 // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
                 ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }

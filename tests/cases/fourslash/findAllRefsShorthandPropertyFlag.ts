@@ -53,4 +53,4 @@ const zReferenceGroup2: FourSlashInterface.ReferenceGroup = {
 // verify.renameLocations([z0], { ranges: [z0, { range: z1, suffixText: ": z" }], providePrefixAndSuffixTextForRename: true });
 // verify.renameLocations([z1, z2], { ranges: [{ range: z1, prefixText: "z: " }, z2], providePrefixAndSuffixTextForRename: true });
 
-verify.renameLocations([z0], { ranges: [z0, z1, z2], providePrefixAndSuffixTextForRename: false });
+verify.renameLocations([z2], { ranges: [z0, z1, z2], providePrefixAndSuffixTextForRename: false });
