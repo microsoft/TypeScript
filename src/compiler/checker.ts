@@ -6448,6 +6448,13 @@ namespace ts {
         }
 
         /**
+         * Gets the late-bound name for a computed property name.
+         */
+        function getLateBoundName(node: LateBoundName) {
+            return getLateBoundNameFromType(checkComputedPropertyName(node));
+        }
+
+        /**
          * Gets the symbolic name for a late-bound member from its type.
          */
         function getLateBoundNameFromType(type: LiteralType | UniqueESSymbolType): __String {
@@ -7354,7 +7361,7 @@ namespace ts {
         function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {
             const list = obj.properties as NodeArray<ObjectLiteralElementLike | JsxAttributeLike>;
             return list.some(property => {
-                const name = property.name && getTextOfPropertyName(property.name);
+                const name = property.name && !isComputedNonLiteralName(property.name) ? getTextOfPropertyName(property.name) : undefined;
                 const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
                 return !!expected && isLiteralType(expected) && !isTypeIdenticalTo(getTypeOfNode(property), expected);
             });
@@ -15059,7 +15066,10 @@ namespace ts {
         }
 
         function getTypeOfDestructuredProperty(type: Type, name: PropertyName) {
-            const text = getTextOfPropertyName(name);
+            const text = !isComputedNonLiteralName(name) ? getTextOfPropertyName(name) :
+                isLateBindableName(name) ? getLateBoundName(name) :
+                undefined;
+            if (text === undefined) return errorType;
             return getConstraintForLocation(getTypeOfPropertyOfType(type, text), name) ||
                 isNumericLiteralName(text) && getIndexTypeOfType(type, IndexKind.Number) ||
                 getIndexTypeOfType(type, IndexKind.String) ||
@@ -17191,11 +17201,9 @@ namespace ts {
             const parentDeclaration = declaration.parent.parent;
             const name = declaration.propertyName || declaration.name;
             const parentType = getContextualTypeForVariableLikeDeclaration(parentDeclaration);
-            if (parentType && !isBindingPattern(name)) {
+            if (parentType && !isBindingPattern(name) && !isComputedNonLiteralName(name)) {
                 const text = getTextOfPropertyName(name);
-                if (text !== undefined) {
-                    return getTypeOfPropertyOfType(parentType, text);
-                }
+                return getTypeOfPropertyOfType(parentType, text);
             }
         }
 
@@ -22201,8 +22209,8 @@ namespace ts {
         function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: NodeArray<ObjectLiteralElementLike>, rightIsThis = false) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = property.name;
-                const text = getTextOfPropertyName(name);
-                if (text) {
+                if (!isComputedNonLiteralName(name)) {
+                    const text = getTextOfPropertyName(name);
                     const prop = getPropertyOfType(objectLiteralType, text);
                     if (prop) {
                         markPropertyAsReferenced(prop, property, rightIsThis);
@@ -25524,14 +25532,12 @@ namespace ts {
                 const parent = node.parent.parent;
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || node.name;
-                if (!isBindingPattern(name)) {
+                if (!isBindingPattern(name) && !isComputedNonLiteralName(name)) {
                     const nameText = getTextOfPropertyName(name);
-                    if (nameText) {
-                        const property = getPropertyOfType(parentType!, nameText); // TODO: GH#18217
-                        if (property) {
-                            markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                            checkPropertyAccessibility(parent, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType!, property);
-                        }
+                    const property = getPropertyOfType(parentType!, nameText); // TODO: GH#18217
+                    if (property) {
+                        markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
+                        checkPropertyAccessibility(parent, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType!, property);
                     }
                 }
             }
