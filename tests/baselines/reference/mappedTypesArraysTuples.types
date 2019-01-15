@@ -68,6 +68,24 @@ type B = { b: string };
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
 >T40 : string | Box<string>[] | Boxified<A> | Box<A>[] | readonly Box<A>[] | [Box<A>, Box<B>]
 
+type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
+>ReadWrite : ReadWrite<T>
+
+type T50 = Readonly<string[]>;
+>T50 : readonly string[]
+
+type T51 = Readonly<[number, number]>;
+>T51 : readonly [number, number]
+
+type T52 = Partial<Readonly<string[]>>;
+>T52 : readonly (string | undefined)[]
+
+type T53 = Readonly<Partial<string[]>>;
+>T53 : readonly (string | undefined)[]
+
+type T54 = ReadWrite<Required<T53>>;
+>T54 : string[]
+
 declare function unboxify<T>(x: Boxified<T>): T;
 >unboxify : <T>(x: Boxified<T>) => T
 >x : Boxified<T>
