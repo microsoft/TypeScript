@@ -2780,7 +2780,7 @@ namespace ts.server {
             const project = scriptInfo.getDefaultProject();
             if (!project.languageServiceEnabled) {
                 return;
-            }       
+            }
 
             const info: OpenFileInfo = { checkJs: !!project.getSourceFile(scriptInfo.path)!.checkJsDirective };
             this.eventHandler({ eventName: OpenFileInfoTelemetryEvent, data: { info } });
