@@ -3592,14 +3592,15 @@ namespace ts {
 
                 function typeReferenceToTypeNode(type: TypeReference) {
                     const typeArguments: ReadonlyArray<Type> = type.typeArguments || emptyArray;
-                    if (type.target === globalArrayType) {
+                    if (type.target === globalArrayType || type.target === globalReadonlyArrayType) {
                         if (context.flags & NodeBuilderFlags.WriteArrayAsGenericType) {
                             const typeArgumentNode = typeToTypeNodeHelper(typeArguments[0], context);
-                            return createTypeReferenceNode("Array", [typeArgumentNode]);
+                            return createTypeReferenceNode(type.target === globalArrayType ? "Array" : "ReadonlyArray", [typeArgumentNode]);
                         }
 
                         const elementType = typeToTypeNodeHelper(typeArguments[0], context);
-                        return createArrayTypeNode(elementType);
+                        const arrayType = createArrayTypeNode(elementType);
+                        return type.target === globalArrayType ? arrayType : createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, arrayType);
                     }
                     else if (type.target.objectFlags & ObjectFlags.Tuple) {
                         if (typeArguments.length > 0) {
@@ -3613,11 +3614,12 @@ namespace ts {
                                         createOptionalTypeNode(tupleConstituentNodes[i]);
                                 }
                                 const tupleTypeNode = createTupleTypeNode(tupleConstituentNodes);
-                                return (<TupleType>type.target).readonly ? createTypeReferenceNode("Readonly", [tupleTypeNode]) : tupleTypeNode;
+                                return (<TupleType>type.target).readonly ? createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                             }
                         }
                         if (context.encounteredError || (context.flags & NodeBuilderFlags.AllowEmptyTuple)) {
-                            return createTupleTypeNode([]);
+                            const tupleTypeNode = createTupleTypeNode([]);
+                            return (<TupleType>type.target).readonly ? createTypeOperatorNode(SyntaxKind.ReadonlyKeyword, tupleTypeNode) : tupleTypeNode;
                         }
                         context.encounteredError = true;
                         return undefined!; // TODO: GH#18217
@@ -9030,9 +9032,13 @@ namespace ts {
         function getTypeFromArrayTypeNode(node: ArrayTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType));
+                links.resolvedType = createArrayType(getTypeFromTypeNode(node.elementType), isReadonlyTypeOperator(node.parent));
             }
             return links.resolvedType;
+        }
+
+        function isReadonlyTypeOperator(node: Node) {
+            return isTypeOperatorNode(node) && node.operator === SyntaxKind.ReadonlyKeyword;
         }
 
         // We represent tuple types as type references to synthesized generic interface types created by
@@ -9114,7 +9120,7 @@ namespace ts {
                     const type = getTypeFromTypeNode(n);
                     return n === restElement && getIndexTypeOfType(type, IndexKind.Number) || type;
                 });
-                links.resolvedType = createTupleType(elementTypes, minLength, !!restElement);
+                links.resolvedType = createTupleType(elementTypes, minLength, !!restElement, isReadonlyTypeOperator(node.parent));
             }
             return links.resolvedType;
         }
@@ -9666,6 +9672,9 @@ namespace ts {
                         links.resolvedType = node.type.kind === SyntaxKind.SymbolKeyword
                             ? getESSymbolLikeTypeForNode(walkUpParenthesizedTypes(node.parent))
                             : errorType;
+                        break;
+                    case SyntaxKind.ReadonlyKeyword:
+                        links.resolvedType = getTypeFromTypeNode(node.type);
                         break;
                 }
             }
@@ -30511,6 +30520,11 @@ namespace ts {
 
                     default:
                         return grammarErrorOnNode(node, Diagnostics.unique_symbol_types_are_not_allowed_here);
+                }
+            }
+            else if (node.operator === SyntaxKind.ReadonlyKeyword) {
+                if (node.type.kind !== SyntaxKind.ArrayType && node.type.kind !== SyntaxKind.TupleType) {
+                    return grammarErrorOnFirstToken(node, Diagnostics.readonly_type_modifier_is_only_permitted_on_array_and_typle_types, tokenToString(SyntaxKind.SymbolKeyword));
                 }
             }
         }

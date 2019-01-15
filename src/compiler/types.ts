@@ -1233,7 +1233,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
         type: TypeNode;
     }
 

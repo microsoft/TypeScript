@@ -1023,6 +1023,10 @@
         "category": "Error",
         "code": 1353
     },
+    "'readonly' type modifier is only permitted on array and typle types.": {
+        "category": "Error",
+        "code": 1354
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
