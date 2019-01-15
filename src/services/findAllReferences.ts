@@ -183,7 +183,7 @@ namespace ts.FindAllReferences {
         };
     }
 
-    export function entryToDocumentSpan(entry: Entry): DocumentSpan {
+    function entryToDocumentSpan(entry: Entry): DocumentSpan {
         if (entry.kind === EntryKind.Span) {
             return { textSpan: entry.textSpan, fileName: entry.fileName };
         }
@@ -1599,7 +1599,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         Debug.assert(isForRenamePopulateSearchSymbolSet);
-        // due to the above assert and the arguments to the caller,
+        // due to the above assert and the arguments at the uses of this function,
         // (onlyIncludeBindingElementAtReferenceLocation <=> !providePrefixAndSuffixTextForRename) holds
         const includeOriginalSymbolOfBindingElement = onlyIncludeBindingElementAtReferenceLocation;
 
