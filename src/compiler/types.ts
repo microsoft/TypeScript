@@ -5864,7 +5864,7 @@ namespace ts {
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
-        readonly usePrefixAndSuffixTextForRename?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */
