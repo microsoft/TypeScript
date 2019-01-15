@@ -5431,6 +5431,10 @@ namespace ts {
 
             // Handle variable, parameter or property
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
+                // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
+                if (symbol.flags & SymbolFlags.ValueModule) {
+                    return getTypeOfFuncClassEnumModule(symbol);
+                }
                 return errorType;
             }
             let type: Type | undefined;
@@ -5486,6 +5490,10 @@ namespace ts {
             }
 
             if (!popTypeResolution()) {
+                // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
+                if (symbol.flags & SymbolFlags.ValueModule) {
+                    return getTypeOfFuncClassEnumModule(symbol);
+                }
                 type = reportCircularityError(symbol);
             }
             return type;
@@ -11188,7 +11196,7 @@ namespace ts {
                 case SyntaxKind.ArrayLiteralExpression:
                     return elaborateArrayLiteral(node as ArrayLiteralExpression, source, target, relation);
                 case SyntaxKind.JsxAttributes:
-                    return elaborateJsxAttributes(node as JsxAttributes, source, target, relation);
+                    return elaborateJsxComponents(node as JsxAttributes, source, target, relation);
                 case SyntaxKind.ArrowFunction:
                     return elaborateArrowFunction(node as ArrowFunction, source, target, relation);
             }
@@ -11328,8 +11336,113 @@ namespace ts {
             }
         }
 
-        function elaborateJsxAttributes(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            return elaborateElementwise(generateJsxAttributes(node), source, target, relation);
+        function *generateJsxChildren(node: JsxElement, getInvalidTextDiagnostic: () => DiagnosticMessage): ElaborationIterator {
+            if (!length(node.children)) return;
+            let memberOffset = 0;
+            for (let i = 0; i < node.children.length; i++) {
+                const child = node.children[i];
+                const nameType = getLiteralType(i - memberOffset);
+                const elem = getElaborationElementForJsxChild(child, nameType, getInvalidTextDiagnostic);
+                if (elem) {
+                    yield elem;
+                }
+                else {
+                    memberOffset++;
+                }
+            }
+        }
+
+        function getElaborationElementForJsxChild(child: JsxChild, nameType: LiteralType, getInvalidTextDiagnostic: () => DiagnosticMessage) {
+            switch (child.kind) {
+                case SyntaxKind.JsxExpression:
+                    // child is of the type of the expression
+                    return { errorNode: child, innerExpression: child.expression, nameType };
+                case SyntaxKind.JsxText:
+                    if (child.containsOnlyWhiteSpaces) {
+                        break; // Whitespace only jsx text isn't real jsx text
+                    }
+                    // child is a string
+                    return { errorNode: child, innerExpression: undefined, nameType, errorMessage: getInvalidTextDiagnostic() };
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                case SyntaxKind.JsxFragment:
+                    // child is of type JSX.Element
+                    return { errorNode: child, innerExpression: child, nameType };
+                default:
+                    return Debug.assertNever(child, "Found invalid jsx child");
+            }
+        }
+
+        function elaborateJsxComponents(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation);
+            let invalidTextDiagnostic: DiagnosticMessage | undefined;
+            if (isJsxOpeningElement(node.parent) && isJsxElement(node.parent.parent)) {
+                const containingElement = node.parent.parent;
+                const childPropName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
+                const childrenPropName = childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName);
+                const childrenNameType = getLiteralType(childrenPropName);
+                const childrenTargetType = getIndexedAccessType(target, childrenNameType);
+                const validChildren = filter(containingElement.children, i => !isJsxText(i) || !i.containsOnlyWhiteSpaces);
+                if (!length(validChildren)) {
+                    return result;
+                }
+                const moreThanOneRealChildren = length(validChildren) > 1;
+                const arrayLikeTargetParts = filterType(childrenTargetType, isArrayOrTupleLikeType);
+                const nonArrayLikeTargetParts = filterType(childrenTargetType, t => !isArrayOrTupleLikeType(t));
+                if (moreThanOneRealChildren) {
+                    if (arrayLikeTargetParts !== neverType) {
+                        const realSource = createTupleType(checkJsxChildren(containingElement, CheckMode.Normal));
+                        result = elaborateElementwise(generateJsxChildren(containingElement, getInvalidTextualChildDiagnostic), realSource, arrayLikeTargetParts, relation) || result;
+                    }
+                    else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
+                        // arity mismatch
+                        result = true;
+                        error(
+                            containingElement.openingElement.tagName,
+                            Diagnostics.This_JSX_tag_s_0_prop_expects_a_single_child_of_type_1_but_multiple_children_were_provided,
+                            childrenPropName,
+                            typeToString(childrenTargetType)
+                        );
+                    }
+                }
+                else {
+                    if (nonArrayLikeTargetParts !== neverType) {
+                        const child = validChildren[0];
+                        const elem = getElaborationElementForJsxChild(child, childrenNameType, getInvalidTextualChildDiagnostic);
+                        if (elem) {
+                            result = elaborateElementwise(
+                                (function*() { yield elem; })(),
+                                source,
+                                target,
+                                relation
+                            ) || result;
+                        }
+                    }
+                    else if (!isTypeRelatedTo(getIndexedAccessType(source, childrenNameType), childrenTargetType, relation)) {
+                        // arity mismatch
+                        result = true;
+                        error(
+                            containingElement.openingElement.tagName,
+                            Diagnostics.This_JSX_tag_s_0_prop_expects_type_1_which_requires_multiple_children_but_only_a_single_child_was_provided,
+                            childrenPropName,
+                            typeToString(childrenTargetType)
+                        );
+                    }
+                }
+            }
+            return result;
+
+            function getInvalidTextualChildDiagnostic() {
+                if (!invalidTextDiagnostic) {
+                    const tagNameText = getTextOfNode(node.parent.tagName);
+                    const childPropName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
+                    const childrenPropName = childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName);
+                    const childrenTargetType = getIndexedAccessType(target, getLiteralType(childrenPropName));
+                    const diagnostic = Diagnostics._0_components_don_t_accept_text_as_child_elements_Text_in_JSX_has_the_type_string_but_the_expected_type_of_1_is_2;
+                    invalidTextDiagnostic = { ...diagnostic, key: "!!ALREADY FORMATTED!!", message: formatMessage(/*_dummy*/ undefined, diagnostic, tagNameText, childrenPropName, typeToString(childrenTargetType)) };
+                }
+                return invalidTextDiagnostic;
+            }
         }
 
         function *generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
@@ -11659,7 +11772,6 @@ namespace ts {
             if (s & TypeFlags.Undefined && (!strictNullChecks || t & (TypeFlags.Undefined | TypeFlags.Void))) return true;
             if (s & TypeFlags.Null && (!strictNullChecks || t & TypeFlags.Null)) return true;
             if (s & TypeFlags.Object && t & TypeFlags.NonPrimitive) return true;
-            if (s & TypeFlags.UniqueESSymbol || t & TypeFlags.UniqueESSymbol) return false;
             if (relation === assignableRelation || relation === comparableRelation) {
                 if (s & TypeFlags.Any) return true;
                 // Type number or any numeric literal type is assignable to any numeric enum type or any
@@ -13470,6 +13582,10 @@ namespace ts {
             return isTupleType(type) || !!getPropertyOfType(type, "0" as __String);
         }
 
+        function isArrayOrTupleLikeType(type: Type): boolean {
+            return isArrayLikeType(type) || isTupleLikeType(type);
+        }
+
         function getTupleElementType(type: Type, index: number) {
             const propType = getTypeOfPropertyOfType(type, "" + index as __String);
             if (propType) {
@@ -14773,6 +14889,9 @@ namespace ts {
                     return symbol !== unknownSymbol ? (isConstraintPosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
                 case SyntaxKind.ThisKeyword:
                     return "0";
+                case SyntaxKind.NonNullExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                    return getFlowCacheKey((<NonNullExpression | ParenthesizedExpression>node).expression);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const propName = getAccessedPropertyName(<AccessExpression>node);
@@ -14785,6 +14904,11 @@ namespace ts {
         }
 
         function isMatchingReference(source: Node, target: Node): boolean {
+            switch (target.kind) {
+                case SyntaxKind.ParenthesizedExpression:
+                case SyntaxKind.NonNullExpression:
+                    return isMatchingReference(source, (target as NonNullExpression | ParenthesizedExpression).expression);
+            }
             switch (source.kind) {
                 case SyntaxKind.Identifier:
                     return target.kind === SyntaxKind.Identifier && getResolvedSymbol(<Identifier>source) === getResolvedSymbol(<Identifier>target) ||
@@ -14794,6 +14918,9 @@ namespace ts {
                     return target.kind === SyntaxKind.ThisKeyword;
                 case SyntaxKind.SuperKeyword:
                     return target.kind === SyntaxKind.SuperKeyword;
+                case SyntaxKind.NonNullExpression:
+                case SyntaxKind.ParenthesizedExpression:
+                    return isMatchingReference((source as NonNullExpression | ParenthesizedExpression).expression, target);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     return isAccessExpression(target) &&
@@ -17474,11 +17601,23 @@ namespace ts {
             return node === conditional.whenTrue || node === conditional.whenFalse ? getContextualType(conditional) : undefined;
         }
 
-        function getContextualTypeForChildJsxExpression(node: JsxElement) {
+        function getContextualTypeForChildJsxExpression(node: JsxElement, child: JsxChild) {
             const attributesType = getApparentTypeOfContextualType(node.openingElement.tagName);
             // JSX expression is in children of JSX Element, we will look for an "children" atttribute (we get the name from JSX.ElementAttributesProperty)
             const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(node));
-            return attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "" ? getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName) : undefined;
+            if (!(attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "")) {
+                return undefined;
+            }
+            const childIndex = node.children.indexOf(child);
+            const childFieldType = getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName);
+            return childFieldType && mapType(childFieldType, t => {
+                if (isArrayLikeType(t)) {
+                    return getIndexedAccessType(t, getLiteralType(childIndex));
+                }
+                else {
+                    return t;
+                }
+            }, /*noReductions*/ true);
         }
 
         function getContextualTypeForJsxExpression(node: JsxExpression): Type | undefined {
@@ -17486,7 +17625,7 @@ namespace ts {
             return isJsxAttributeLike(exprParent)
                 ? getContextualType(node)
                 : isJsxElement(exprParent)
-                    ? getContextualTypeForChildJsxExpression(exprParent)
+                    ? getContextualTypeForChildJsxExpression(exprParent, node)
                     : undefined;
         }
 
@@ -24787,9 +24926,17 @@ namespace ts {
                         return;
                     }
                     if (!containsArgumentsReference(decl)) {
-                        error(node.name,
-                            Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
-                            idText(node.name.kind === SyntaxKind.QualifiedName ? node.name.right : node.name));
+                        if (isQualifiedName(node.name)) {
+                            error(node.name,
+                                Diagnostics.Qualified_name_0_is_not_allowed_without_a_leading_param_object_1,
+                                entityNameToString(node.name),
+                                entityNameToString(node.name.left));
+                        }
+                        else {
+                            error(node.name,
+                                Diagnostics.JSDoc_param_tag_has_name_0_but_there_is_no_parameter_with_that_name,
+                                idText(node.name));
+                        }
                     }
                     else if (findLast(getJSDocTags(decl), isJSDocParameterTag) === node &&
                         node.typeExpression && node.typeExpression.type &&
@@ -29996,10 +30143,6 @@ namespace ts {
                     }
                     if (!(parameter.flags & NodeFlags.Ambient)) { // Allow `...foo,` in ambient declarations; see GH#23070
                         checkGrammarForDisallowedTrailingComma(parameters, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
-                    }
-
-                    if (isBindingPattern(parameter.name)) {
-                        return grammarErrorOnNode(parameter.name, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
                     }
 
                     if (parameter.questionToken) {

@@ -888,7 +888,7 @@ namespace ts {
         }
 
         const isMissing = nodeIsMissing(errorNode);
-        const pos = isMissing
+        const pos = isMissing || isJsxText(node)
             ? errorNode.pos
             : skipTrivia(sourceFile.text, errorNode.pos);
 
@@ -7051,6 +7051,7 @@ namespace ts {
         };
     }
 
+    export function formatMessage(_dummy: any, message: DiagnosticMessage, ...args: (string | number | undefined)[]): string;
     export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
         let text = getLocaleSpecificMessage(message);
 
