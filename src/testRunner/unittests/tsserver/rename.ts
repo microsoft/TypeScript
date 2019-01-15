@@ -28,7 +28,7 @@ namespace ts.projectSystem {
             const session = createSession(host);
             openFilesForSession([aTs], session);
 
-            // rename without prefixText and suffixText enabled
+            // rename with prefixText and suffixText disabled
             const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
             assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
                 info: {

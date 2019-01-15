@@ -1357,13 +1357,6 @@ namespace ts {
             !bindingElement.propertyName;
     }
 
-    export function getObjectBindingElementWithoutPropertyNameOrUndefined(symbol: Symbol): BindingElement & { name: Identifier } | undefined {
-        const bindingElement = getDeclarationOfKind<BindingElement>(symbol, SyntaxKind.BindingElement);
-        if (bindingElement && isObjectBindingElementWithoutPropertyName(bindingElement)) {
-            return bindingElement as BindingElement & { name: Identifier };
-        }
-    }
-
     export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: ObjectBindingElementWithoutPropertyName): Symbol | undefined {
         const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
         return typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
