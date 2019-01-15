@@ -23602,23 +23602,32 @@ namespace ts {
                         some((<ClassDeclaration>node.parent).members, isInstancePropertyWithInitializer) ||
                         some(node.parameters, p => hasModifier(p, ModifierFlags.ParameterPropertyModifier));
 
-                    // Skip past any prologue directives to find the first statement
-                    // to ensure that it was a super call.
                     if (superCallShouldBeFirst) {
-                        const statements = node.body!.statements;
-                        let superCallStatement: ExpressionStatement | undefined;
-
-                        for (const statement of statements) {
-                            if (statement.kind === SyntaxKind.ExpressionStatement && isSuperCall((<ExpressionStatement>statement).expression)) {
-                                superCallStatement = <ExpressionStatement>statement;
-                                break;
-                            }
-                            if (!isPrologueDirective(statement) && nodeReferencesSuperOrThis(statement)) {
-                                break;
-                            }
+                        // Until we have better flow analysis, it is an error to place the super call within any kind of block or conditional
+                        // See GH #8277
+                        if (superCall.parent.parent !== node.body) {
+                            error(superCall, Diagnostics.A_super_call_must_be_a_root_level_statement_within_a_constructor_of_a_derived_class_that_contains_initialized_properties_or_has_parameter_properties);
                         }
-                        if (!superCallStatement) {
-                            error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_to_refer_to_super_or_this_when_a_derived_class_contains_initialized_properties_or_has_parameter_properties);
+                        // Skip past any prologue directives to check statements for referring to 'super' or 'this' before a super call
+                        else {
+                            const statements = node.body.statements;
+                            let superCallStatement: ExpressionStatement | undefined;
+
+                            for (const statement of statements) {
+                                if (isExpressionStatement(statement) && isSuperCall(statement.expression)) {
+                                    superCallStatement = statement;
+                                    break;
+                                }
+                                if (!isPrologueDirective(statement) && nodeReferencesSuperOrThis(statement)) {
+                                    break;
+                                }
+                            }
+
+                            // Until we have better flow analysis, it is an error to place the super call within any kind of block or conditional
+                            // See GH #8277
+                            if (superCallStatement === undefined) {
+                                error(node, Diagnostics.A_super_call_must_be_the_first_statement_in_the_constructor_to_refer_to_super_or_this_when_a_derived_class_contains_initialized_properties_or_has_parameter_properties);
+                            }
                         }
                     }
                 }

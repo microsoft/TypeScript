@@ -2541,6 +2541,10 @@
         "category": "Error",
         "code": 2744
     },
+    "A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.": {
+        "category": "Error",
+        "code": 2745
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

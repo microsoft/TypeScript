@@ -1,0 +1,124 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts ===
+class DerivedBasic extends Object {
+>DerivedBasic : DerivedBasic
+>Object : Object
+
+    prop = 1;
+>prop : number
+>1 : 1
+
+    constructor() {
+        super();
+>super() : void
+>super : ObjectConstructor
+    }
+}
+
+class DerivedInConditional extends Object {
+>DerivedInConditional : DerivedInConditional
+>Object : Object
+
+    prop = 1;
+>prop : number
+>1 : 1
+
+    constructor() {
+        Math.random()
+>Math.random()            ? super(1)            : super(0) : void
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+            ? super(1)
+>super(1) : void
+>super : ObjectConstructor
+>1 : 1
+
+            : super(0);
+>super(0) : void
+>super : ObjectConstructor
+>0 : 0
+    }
+}
+
+class DerivedInIf extends Object {
+>DerivedInIf : DerivedInIf
+>Object : Object
+
+    prop = 1;
+>prop : number
+>1 : 1
+
+    constructor() {
+        if (Math.random()) {
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+            super(1);
+>super(1) : void
+>super : ObjectConstructor
+>1 : 1
+        }
+        else {
+            super(0);
+>super(0) : void
+>super : ObjectConstructor
+>0 : 0
+        }
+    }
+}
+
+class DerivedInBlockWithProperties extends Object {
+>DerivedInBlockWithProperties : DerivedInBlockWithProperties
+>Object : Object
+
+    prop = 1;
+>prop : number
+>1 : 1
+
+    constructor(private paramProp = 2) {
+>paramProp : number
+>2 : 2
+        {
+            super();
+>super() : void
+>super : ObjectConstructor
+        }
+    }
+}
+
+class DerivedInConditionalWithProperties extends Object {
+>DerivedInConditionalWithProperties : DerivedInConditionalWithProperties
+>Object : Object
+
+    prop = 1;
+>prop : number
+>1 : 1
+
+    constructor(private paramProp = 2) {
+>paramProp : number
+>2 : 2
+
+        if (Math.random()) {
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+
+            super(1);
+>super(1) : void
+>super : ObjectConstructor
+>1 : 1
+
+        } else {
+            super(0);
+>super(0) : void
+>super : ObjectConstructor
+>0 : 0
+        }
+    }
+}
+

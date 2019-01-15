@@ -1,0 +1,63 @@
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(12,15): error TS2745: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(21,13): error TS2745: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(33,13): error TS2745: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.
+tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts(42,13): error TS2745: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.
+
+
+==== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperStatementPosition.ts (4 errors) ====
+    class DerivedBasic extends Object {
+        prop = 1;
+        constructor() {
+            super();
+        }
+    }
+    
+    class DerivedInConditional extends Object {
+        prop = 1;
+        constructor() {
+            Math.random()
+                ? super(1)
+                  ~~~~~~~~
+!!! error TS2745: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.
+                : super(0);
+        }
+    }
+    
+    class DerivedInIf extends Object {
+        prop = 1;
+        constructor() {
+            if (Math.random()) {
+                super(1);
+                ~~~~~~~~
+!!! error TS2745: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.
+            }
+            else {
+                super(0);
+            }
+        }
+    }
+    
+    class DerivedInBlockWithProperties extends Object {
+        prop = 1;
+        constructor(private paramProp = 2) {
+            {
+                super();
+                ~~~~~~~
+!!! error TS2745: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.
+            }
+        }
+    }
+    
+    class DerivedInConditionalWithProperties extends Object {
+        prop = 1;
+        constructor(private paramProp = 2) {
+            if (Math.random()) {
+                super(1);
+                ~~~~~~~~
+!!! error TS2745: A 'super' call must be a root-level statement within a constructor of a derived class that contains initialized properties or has parameter properties.
+            } else {
+                super(0);
+            }
+        }
+    }
+    
