@@ -2008,7 +2008,7 @@ namespace ts.server {
             const path = toNormalizedPath(uncheckedFileName);
             const info = this.getScriptInfoForNormalizedPath(path);
             if (info) return info;
-            const configProject = this.configuredProjects.get(uncheckedFileName);
+            const configProject = this.configuredProjects.get(this.toPath(uncheckedFileName));
             return configProject && configProject.getCompilerOptions().configFile;
         }
 

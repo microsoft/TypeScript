@@ -95,6 +95,39 @@ namespace ts {
             module: ModuleKind.ES2015,
             emitDecoratorMetadata: true,
             experimentalDecorators: true
-         });
+        });
+
+        emitsCorrectly("sourceMapExternalSourceFiles",
+            [
+                {
+                    file: "source.ts",
+                    // The text of length 'changed' is made to be on two lines so we know the line map change
+                    text: `\`multi
+                    line\`
+'change'`
+                },
+            ],
+            {
+                before: [
+                    context => node => visitNode(node, function visitor(node: Node): Node {
+                        if (isStringLiteral(node) && node.text === "change") {
+                            const text = "'changed'";
+                            const lineMap = computeLineStarts(text);
+                            setSourceMapRange(node, {
+                                pos: 0, end: text.length, source: {
+                                    text,
+                                    fileName: "another.html",
+                                    lineMap,
+                                    getLineAndCharacterOfPosition: pos => computeLineAndCharacterOfPosition(lineMap, pos)
+                                }
+                            });
+                            return node;
+                        }
+                        return visitEachChild(node, visitor, context);
+                    })
+                ]
+            },
+            { sourceMap: true }
+        );
     });
 }

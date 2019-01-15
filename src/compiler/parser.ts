@@ -7774,17 +7774,18 @@ namespace ts {
                     const libReferenceDirectives = context.libReferenceDirectives;
                     forEach(toArray(entryOrList), (arg: PragmaPseudoMap["reference"]) => {
                         // TODO: GH#18217
+                        const { types, lib, path } = arg!.arguments;
                         if (arg!.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
                         }
-                        else if (arg!.arguments.types) {
-                            typeReferenceDirectives.push({ pos: arg!.arguments.types!.pos, end: arg!.arguments.types!.end, fileName: arg!.arguments.types!.value });
+                        else if (types) {
+                            typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value });
                         }
-                        else if (arg!.arguments.lib) {
-                            libReferenceDirectives.push({ pos: arg!.arguments.lib!.pos, end: arg!.arguments.lib!.end, fileName: arg!.arguments.lib!.value });
+                        else if (lib) {
+                            libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value });
                         }
-                        else if (arg!.arguments.path) {
-                            referencedFiles.push({ pos: arg!.arguments.path!.pos, end: arg!.arguments.path!.end, fileName: arg!.arguments.path!.value });
+                        else if (path) {
+                            referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value });
                         }
                         else {
                             reportDiagnostic(arg!.range.pos, arg!.range.end - arg!.range.pos, Diagnostics.Invalid_reference_directive_syntax);

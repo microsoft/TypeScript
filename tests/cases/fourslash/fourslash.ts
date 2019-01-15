@@ -282,8 +282,8 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         }[]): void;
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range): void;
-        renameInfoFailed(message?: string): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
+        renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
 
         /** Verify the quick info available at the current marker. */

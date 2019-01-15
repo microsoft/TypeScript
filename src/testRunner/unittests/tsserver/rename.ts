@@ -7,8 +7,18 @@ namespace ts.projectSystem {
             const session = createSession(createServerHost([aTs, bTs]));
             openFilesForSession([bTs], session);
 
-            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
-            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+            const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
+                info: {
+                    canRename: false,
+                    localizedErrorMessage: "You cannot rename this element."
+                },
+                locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
+            });
+
+            session.getProjectService().setHostConfiguration({ preferences: { allowRenameOfImportPath: true } });
+            const response2 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response2, {
                 info: {
                     canRename: true,
                     fileToRename: aTs.path,

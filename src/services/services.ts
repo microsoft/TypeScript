@@ -2063,9 +2063,9 @@ namespace ts {
             }
         }
 
-        function getRenameInfo(fileName: string, position: number): RenameInfo {
+        function getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo {
             synchronizeHostData();
-            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position);
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, options);
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {

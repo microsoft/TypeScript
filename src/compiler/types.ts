@@ -3037,8 +3037,10 @@ namespace ts {
         /* @internal */ typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined; // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;
+        /* @internal */ signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;  // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
+        /* @internal */ indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): IndexSignatureDeclaration | undefined;  // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -3916,7 +3918,9 @@ namespace ts {
         aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
         /* @internal */ aliasTypeArgumentsContainsMarker?: boolean;   // Alias type arguments (if any)
         /* @internal */
-        wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
+        permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
+        /* @internal */
+        restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
     }
