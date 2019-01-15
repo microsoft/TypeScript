@@ -505,7 +505,7 @@ namespace ts.FindAllReferences.Core {
             searchForImportsOfExport(node, symbol, { exportingModuleSymbol: Debug.assertDefined(symbol.parent, "Expected export symbol to have a parent"), exportKind: ExportKind.Default }, state);
         }
         else {
-            const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, !!isForRenameWithPrefixAndSuffixText, !!options.implementations) : [symbol] });
+            const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, !!options.isForRename, !!options.providePrefixAndSuffixTextForRename, !!options.implementations) : [symbol] });
 
             // Try to get the smallest valid scope that we can limit our search to;
             // otherwise we'll need to search globally (i.e. include each file).
@@ -1520,9 +1520,9 @@ namespace ts.FindAllReferences.Core {
 
     // For certain symbol kinds, we need to include other symbols in the search set.
     // This is not needed when searching for re-exports.
-    function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRenameWithPrefixAndSuffixText: boolean, implementations: boolean): Symbol[] {
+    function populateSearchSymbolSet(symbol: Symbol, location: Node, checker: TypeChecker, isForRename: boolean, providePrefixAndSuffixText: boolean, implementations: boolean): Symbol[] {
         const result: Symbol[] = [];
-        forEachRelatedSymbol<void>(symbol, location, checker, isForRenameWithPrefixAndSuffixText, !isForRenameWithPrefixAndSuffixText,
+        forEachRelatedSymbol<void>(symbol, location, checker, isForRename, !(isForRename && providePrefixAndSuffixText),
             (sym, root, base) => { result.push(base || root || sym); },
             /*allowBaseTypes*/ () => !implementations);
         return result;
@@ -1588,9 +1588,20 @@ namespace ts.FindAllReferences.Core {
             let bindingElementPropertySymbol: Symbol | undefined;
             if (onlyIncludeBindingElementAtReferenceLocation) {
                 bindingElementPropertySymbol = isObjectBindingElementWithoutPropertyName(location.parent) ? getPropertySymbolFromBindingElement(checker, location.parent) : undefined;
-            } else {
+            }
+            else {
                 bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol, checker);
             }
+            return bindingElementPropertySymbol && fromRoot(bindingElementPropertySymbol, EntryKind.SearchedPropertyFoundLocal);
+        }
+
+        Debug.assert(isForRenamePopulateSearchSymbolSet);
+        // due to the above assert and the arguments to the caller,
+        // (onlyIncludeBindingElementAtReferenceLocation <=> !providePrefixAndSuffixTextForRename) holds
+        const includeOriginalSymbolOfBindingElement = onlyIncludeBindingElementAtReferenceLocation;
+
+        if (includeOriginalSymbolOfBindingElement) {
+            const bindingElementPropertySymbol = getPropertySymbolOfObjectBindingPatternWithoutPropertyName(symbol, checker);
             return bindingElementPropertySymbol && fromRoot(bindingElementPropertySymbol, EntryKind.SearchedPropertyFoundLocal);
         }
 
