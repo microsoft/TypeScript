@@ -6,23 +6,48 @@ namespace ts.codefix {
      * @param possiblyMissingSymbols The collection of symbols to filter and then get insertions for.
      * @returns Empty string iff there are no member insertions.
      */
-    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, checker: TypeChecker, preferences: UserPreferences, out: (node: ClassElement) => void): void {
+    export function createMissingMemberNodes(classDeclaration: ClassLikeDeclaration, possiblyMissingSymbols: ReadonlyArray<Symbol>, context: TypeConstructionContext, preferences: UserPreferences, out: (node: ClassElement) => void): void {
         const classMembers = classDeclaration.symbol.members!;
         for (const symbol of possiblyMissingSymbols) {
             if (!classMembers.has(symbol.escapedName)) {
-                addNewNodeForMemberSymbol(symbol, classDeclaration, checker, preferences, out);
+                addNewNodeForMemberSymbol(symbol, classDeclaration, context, preferences, out);
             }
         }
+    }
+
+    function getModuleSpecifierResolverHost(context: TypeConstructionContext): SymbolTracker["moduleResolverHost"] {
+        return {
+            directoryExists: context.host.directoryExists ? d => context.host.directoryExists!(d) : undefined,
+            fileExists: context.host.fileExists ? f => context.host.fileExists!(f) : undefined,
+            getCurrentDirectory: context.host.getCurrentDirectory ? () => context.host.getCurrentDirectory!() : undefined,
+            readFile: context.host.readFile ? f => context.host.readFile!(f) : undefined,
+            useCaseSensitiveFileNames: context.host.useCaseSensitiveFileNames ? () => context.host.useCaseSensitiveFileNames!() : undefined,
+            getSourceFiles: () => context.program.getSourceFiles(),
+            getCommonSourceDirectory: () => context.program.getCommonSourceDirectory(),
+        };
+    }
+
+    export function getNoopSymbolTrackerWithResolver(context: TypeConstructionContext): SymbolTracker {
+        return {
+            trackSymbol: noop,
+            moduleResolverHost: getModuleSpecifierResolverHost(context),
+        };
+    }
+
+    export interface TypeConstructionContext {
+        program: Program;
+        host: ModuleSpecifierResolutionHost;
     }
 
     /**
      * @returns Empty string iff there we can't figure out a representation for `symbol` in `enclosingDeclaration`.
      */
-    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, checker: TypeChecker, preferences: UserPreferences, out: (node: Node) => void): void {
+    function addNewNodeForMemberSymbol(symbol: Symbol, enclosingDeclaration: ClassLikeDeclaration, context: TypeConstructionContext, preferences: UserPreferences, out: (node: Node) => void): void {
         const declarations = symbol.getDeclarations();
         if (!(declarations && declarations.length)) {
             return undefined;
         }
+        const checker = context.program.getTypeChecker();
 
         const declaration = declarations[0];
         const name = getSynthesizedDeepClone(getNameOfDeclaration(declaration), /*includeTrivia*/ false) as PropertyName;
@@ -36,7 +61,7 @@ namespace ts.codefix {
             case SyntaxKind.SetAccessor:
             case SyntaxKind.PropertySignature:
             case SyntaxKind.PropertyDeclaration:
-                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration);
+                const typeNode = checker.typeToTypeNode(type, enclosingDeclaration, /*flags*/ undefined, getNoopSymbolTrackerWithResolver(context));
                 out(createProperty(
                     /*decorators*/undefined,
                     modifiers,
@@ -83,13 +108,13 @@ namespace ts.codefix {
         }
 
         function outputMethod(signature: Signature, modifiers: NodeArray<Modifier> | undefined, name: PropertyName, body?: Block): void {
-            const method = signatureToMethodDeclaration(checker, signature, enclosingDeclaration, modifiers, name, optional, body);
+            const method = signatureToMethodDeclaration(context, signature, enclosingDeclaration, modifiers, name, optional, body);
             if (method) out(method);
         }
     }
 
     function signatureToMethodDeclaration(
-        checker: TypeChecker,
+        context: TypeConstructionContext,
         signature: Signature,
         enclosingDeclaration: ClassLikeDeclaration,
         modifiers: NodeArray<Modifier> | undefined,
@@ -97,7 +122,8 @@ namespace ts.codefix {
         optional: boolean,
         body: Block | undefined,
     ): MethodDeclaration | undefined {
-        const signatureDeclaration = <MethodDeclaration>checker.signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType);
+        const program = context.program;
+        const signatureDeclaration = <MethodDeclaration>program.getTypeChecker().signatureToSignatureDeclaration(signature, SyntaxKind.MethodDeclaration, enclosingDeclaration, NodeBuilderFlags.NoTruncation | NodeBuilderFlags.SuppressAnyReturnType, getNoopSymbolTrackerWithResolver(context));
         if (!signatureDeclaration) {
             return undefined;
         }
@@ -117,18 +143,20 @@ namespace ts.codefix {
         inJs: boolean,
         makeStatic: boolean,
         preferences: UserPreferences,
-        body: boolean,
+        contextNode: Node,
     ): MethodDeclaration {
+        const body = !isInterfaceDeclaration(contextNode);
         const { typeArguments, arguments: args, parent } = call;
         const checker = context.program.getTypeChecker();
+        const tracker = getNoopSymbolTrackerWithResolver(context);
         const types = map(args, arg =>
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
-            checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg))));
+            checker.typeToTypeNode(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(arg)), contextNode, /*flags*/ undefined, tracker));
         const names = map(args, arg =>
             isIdentifier(arg) ? arg.text :
                 isPropertyAccessExpression(arg) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
-        const returnType = inJs ? undefined : contextualType && checker.typeToTypeNode(contextualType, call) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        const returnType = inJs ? undefined : contextualType && checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
@@ -248,5 +276,47 @@ namespace ts.codefix {
             return createToken(SyntaxKind.ProtectedKeyword);
         }
         return undefined;
+    }
+
+    export function setJsonCompilerOptionValue(
+        changeTracker: textChanges.ChangeTracker,
+        configFile: TsConfigSourceFile,
+        optionName: string,
+        optionValue: Expression,
+    ) {
+        const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
+        if (!tsconfigObjectLiteral) return undefined;
+
+        const compilerOptionsProperty = findJsonProperty(tsconfigObjectLiteral, "compilerOptions");
+        if (compilerOptionsProperty === undefined) {
+            changeTracker.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createJsonPropertyAssignment(
+                "compilerOptions",
+                createObjectLiteral([
+                    createJsonPropertyAssignment(optionName, optionValue),
+                ])));
+            return;
+        }
+
+        const compilerOptions = compilerOptionsProperty.initializer;
+        if (!isObjectLiteralExpression(compilerOptions)) {
+            return;
+        }
+
+        const optionProperty = findJsonProperty(compilerOptions, optionName);
+
+        if (optionProperty === undefined) {
+            changeTracker.insertNodeAtObjectStart(configFile, compilerOptions, createJsonPropertyAssignment(optionName, optionValue));
+        }
+        else {
+            changeTracker.replaceNode(configFile, optionProperty.initializer, optionValue);
+        }
+    }
+
+    export function createJsonPropertyAssignment(name: string, initializer: Expression) {
+        return createPropertyAssignment(createStringLiteral(name), initializer);
+    }
+
+    export function findJsonProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
+        return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
     }
 }

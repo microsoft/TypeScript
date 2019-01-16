@@ -12,9 +12,10 @@ tests/cases/conformance/jsx/file.tsx(26,40): error TS2322: Type 'string' is not 
 tests/cases/conformance/jsx/file.tsx(33,32): error TS2322: Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/jsx/file.tsx(34,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/jsx/file.tsx(35,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
+tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not assignable to type 'boolean'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (10 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (11 errors) ====
     import React = require('react')
     declare function OneThing(): JSX.Element;
     declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
@@ -82,4 +83,7 @@ tests/cases/conformance/jsx/file.tsx(35,29): error TS2322: Type 'string' is not 
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     const e4 = <TestingOptional y1="hello" y2={1000}>Hi</TestingOptional>
+                                ~~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:30:38: The expected type comes from property 'y1' which is declared here on type 'IntrinsicAttributes & { y1: boolean; y2?: number; y3: boolean; }'
     

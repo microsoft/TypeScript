@@ -472,3 +472,11 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
     var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
     assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
     
+    // Repros from #23843
+    
+    type Weird1 = (<U extends boolean>(a: U) => never) extends 
+        (<U extends true>(a: U) => never) ? never : never;
+    
+    type Weird2 = (<U extends boolean>(a: U) => U) extends 
+        (<U extends true>(a: U) => infer T) ? T : never;
+    
