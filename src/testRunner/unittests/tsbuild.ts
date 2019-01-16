@@ -581,7 +581,7 @@ export const b = new A();`);
             fs.writeFileSync(path, `${content}${additionalContent}`);
         }
 
-        // Strict
+        // Prologues
         function enableStrict(fs: vfs.FileSystem, path: string) {
             replaceFileContent(fs, path, `"strict": false`, `"strict": true`);
         }
@@ -592,6 +592,27 @@ export const b = new A();`);
         });
         verifyOutFileScenario("strict in one dependency", fs => {
             enableStrict(fs, "src/second/tsconfig.json");
+        });
+
+        function addPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
+            prependFileContent(fs, path, `${prologue}
+`);
+        }
+        verifyOutFileScenario("multiple prologues in all projects", fs => {
+            enableStrict(fs, "src/first/tsconfig.json");
+            addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`);
+            enableStrict(fs, "src/second/tsconfig.json");
+            addPrologue(fs, "src/second/second_part1.ts", `"myPrologue"`);
+            addPrologue(fs, "src/second/second_part2.ts", `"myPrologue2";`);
+            enableStrict(fs, "src/third/tsconfig.json");
+            addPrologue(fs, "src/third/third_part1.ts", `"myPrologue";`);
+            addPrologue(fs, "src/third/third_part1.ts", `"myPrologue3";`);
+        });
+        verifyOutFileScenario("multiple prologues in different projects", fs => {
+            enableStrict(fs, "src/first/tsconfig.json");
+            addPrologue(fs, "src/second/second_part1.ts", `"myPrologue"`);
+            addPrologue(fs, "src/second/second_part2.ts", `"myPrologue2";`);
+            enableStrict(fs, "src/third/tsconfig.json");
         });
 
         // Shebang
