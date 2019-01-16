@@ -87,8 +87,14 @@ namespace ts {
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
 
+        const globals = createSymbolTable();
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
+
+        const globalThisSymbol = createSymbol(SymbolFlags.ValueModule | SymbolFlags.NamespaceModule, "globalThis" as __String);
+        globalThisSymbol.exports = globals;
+        globalThisSymbol.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
+        (globalThisSymbol.valueDeclaration as Identifier).escapedText = "globalThis" as __String;
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
 
@@ -458,7 +464,6 @@ namespace ts {
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
-        const globals = createSymbolTable();
         interface DuplicateInfoForSymbol {
             readonly firstFileLocations: Node[];
             readonly secondFileLocations: Node[];
@@ -519,7 +524,6 @@ namespace ts {
         let deferredGlobalExcludeSymbol: Symbol;
         let deferredGlobalPickSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
-        let deferredGlobalThisSymbol: Symbol | undefined;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -722,6 +726,7 @@ namespace ts {
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
+        builtinGlobals.set(globalThisSymbol.escapedName, globalThisSymbol);
 
         const isNotOverloadAndNotAccessor = and(isNotOverload, isNotAccessor);
 
@@ -1502,9 +1507,6 @@ namespace ts {
                 }
 
                 if (!excludeGlobals) {
-                    if (name === "globalThis" as __String) {
-                        return getGlobalThisSymbol();
-                    }
                     result = lookup(globals, name, meaning);
                 }
             }
@@ -8980,16 +8982,6 @@ namespace ts {
             return symbol && <GenericType>getTypeOfGlobalSymbol(symbol, arity);
         }
 
-        function getGlobalThisSymbol() {
-            if (!deferredGlobalThisSymbol) {
-                const s = createSymbol(SymbolFlags.ValueModule | SymbolFlags.NamespaceModule, "globalThis" as __String);
-                s.exports = globals;
-                s.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
-                deferredGlobalThisSymbol = s;
-            }
-            return deferredGlobalThisSymbol;
-        }
-
         function getGlobalExtractSymbol(): Symbol {
             return deferredGlobalExtractSymbol || (deferredGlobalExtractSymbol = getGlobalSymbol("Extract" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
@@ -9632,7 +9624,7 @@ namespace ts {
         }
 
         function getLiteralTypeFromProperties(type: Type, include: TypeFlags) {
-            return getUnionType(map(getPropertiesOfType(type), t => getLiteralTypeFromProperty(t, include)));
+            return getUnionType(map(getPropertiesOfType(type), p => getLiteralTypeFromProperty(p, include)));
         }
 
         function getNonEnumNumberIndexInfo(type: Type) {
@@ -16709,7 +16701,7 @@ namespace ts {
             }
 
             const type = tryGetThisTypeAt(node, container);
-            const globalThisType = getTypeOfSymbol(getGlobalThisSymbol());
+            const globalThisType = getTypeOfSymbol(globalThisSymbol);
             if (noImplicitThis) {
                 if (type === globalThisType && capturedByArrowFunction) {
                     error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this);
@@ -16782,7 +16774,7 @@ namespace ts {
                     return fileSymbol && getTypeOfSymbol(fileSymbol);
                 }
                 else {
-                    return getTypeOfSymbol(getGlobalThisSymbol());
+                    return getTypeOfSymbol(globalThisSymbol);
                 }
             }
         }
@@ -19043,7 +19035,7 @@ namespace ts {
                     if (isJSLiteralType(leftType)) {
                         return anyType;
                     }
-                    if (leftType.symbol === getGlobalThisSymbol()) {
+                    if (leftType.symbol === globalThisSymbol) {
                         if (noImplicitAny) {
                             error(right, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(leftType));
                         }
