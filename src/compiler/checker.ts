@@ -9982,6 +9982,26 @@ namespace ts {
             if (checkType === wildcardType || extendsType === wildcardType) {
                 return wildcardType;
             }
+            // Simplifications for types of the form `T extends U ? U : never` and `T extends U ? never : T`.
+            const originalCheckType = getActualTypeVariable(root.checkType);
+            const trueType = instantiateType(root.trueType, mapper);
+            const falseType = instantiateType(root.falseType, mapper);
+            if (falseType.flags & TypeFlags.Never && getActualTypeVariable(root.trueType) === originalCheckType) {
+                if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+                    return getIntersectionType([trueType, extendsType]);
+                }
+                else if (getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
+                    return neverType;
+                }
+            }
+            else if (trueType.flags & TypeFlags.Never && getActualTypeVariable(root.falseType) === originalCheckType) {
+                if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+                    return neverType;
+                }
+                else if (getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
+                    return falseType; // TODO: Intersect negated `extends` type here
+                }
+            }
             const checkTypeInstantiable = maybeTypeOfKind(checkType, TypeFlags.Instantiable | TypeFlags.GenericMappedType);
             let combinedMapper: TypeMapper | undefined;
             if (root.inferTypeParameters) {
@@ -9999,18 +10019,18 @@ namespace ts {
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
             if (!checkTypeInstantiable && !maybeTypeOfKind(inferredExtendsType, TypeFlags.Instantiable | TypeFlags.GenericMappedType)) {
                 if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
-                    return instantiateType(root.trueType, mapper);
+                    return trueType;
                 }
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
+                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), falseType]);
                 }
                 // Return falseType for a definitely false extends check. We check an instantations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instatiations will be and we can just return the false branch type.
                 if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.falseType, mapper);
+                    return falseType;
                 }
                 // Return trueType for a definitely true extends check. We check instantiations of the two
                 // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
@@ -10628,7 +10648,11 @@ namespace ts {
         }
 
         function getRestrictiveTypeParameter(tp: TypeParameter) {
-            return !tp.constraint ? tp : tp.restrictiveInstantiation || (tp.restrictiveInstantiation = createTypeParameter(tp.symbol));
+            return tp.constraint === noConstraintType ? tp : tp.restrictiveInstantiation || (
+                tp.restrictiveInstantiation = createTypeParameter(tp.symbol),
+                (tp.restrictiveInstantiation as TypeParameter).constraint = unknownType,
+                tp.restrictiveInstantiation
+            );
         }
 
         function restrictiveMapper(type: Type) {
