@@ -1,0 +1,67 @@
+=== tests/cases/compiler/conditionalTypesSimplifyWhenTrivial.ts ===
+const fn1 = <Params>(
+>fn1 : Symbol(fn1, Decl(conditionalTypesSimplifyWhenTrivial.ts, 0, 5))
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 0, 13))
+
+    params: Pick<Params, Exclude<keyof Params, never>>,
+>params : Symbol(params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 0, 21))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 0, 13))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 0, 13))
+
+): Params => params;
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 0, 13))
+>params : Symbol(params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 0, 21))
+
+function fn2<T>(x: Exclude<T, never>) {
+>fn2 : Symbol(fn2, Decl(conditionalTypesSimplifyWhenTrivial.ts, 2, 20))
+>T : Symbol(T, Decl(conditionalTypesSimplifyWhenTrivial.ts, 4, 13))
+>x : Symbol(x, Decl(conditionalTypesSimplifyWhenTrivial.ts, 4, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypesSimplifyWhenTrivial.ts, 4, 13))
+
+    var y: T = x;
+>y : Symbol(y, Decl(conditionalTypesSimplifyWhenTrivial.ts, 5, 7))
+>T : Symbol(T, Decl(conditionalTypesSimplifyWhenTrivial.ts, 4, 13))
+>x : Symbol(x, Decl(conditionalTypesSimplifyWhenTrivial.ts, 4, 16))
+
+    x = y;
+>x : Symbol(x, Decl(conditionalTypesSimplifyWhenTrivial.ts, 4, 16))
+>y : Symbol(y, Decl(conditionalTypesSimplifyWhenTrivial.ts, 5, 7))
+}
+
+const fn3 = <Params>(
+>fn3 : Symbol(fn3, Decl(conditionalTypesSimplifyWhenTrivial.ts, 9, 5))
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 9, 13))
+
+    params: Pick<Params, Extract<keyof Params, keyof Params>>,
+>params : Symbol(params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 9, 21))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 9, 13))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 9, 13))
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 9, 13))
+
+): Params => params;
+>Params : Symbol(Params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 9, 13))
+>params : Symbol(params, Decl(conditionalTypesSimplifyWhenTrivial.ts, 9, 21))
+
+function fn4<T>(x: Extract<T, T>) {
+>fn4 : Symbol(fn4, Decl(conditionalTypesSimplifyWhenTrivial.ts, 11, 20))
+>T : Symbol(T, Decl(conditionalTypesSimplifyWhenTrivial.ts, 13, 13))
+>x : Symbol(x, Decl(conditionalTypesSimplifyWhenTrivial.ts, 13, 16))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(conditionalTypesSimplifyWhenTrivial.ts, 13, 13))
+>T : Symbol(T, Decl(conditionalTypesSimplifyWhenTrivial.ts, 13, 13))
+
+    var y: T = x;
+>y : Symbol(y, Decl(conditionalTypesSimplifyWhenTrivial.ts, 14, 7))
+>T : Symbol(T, Decl(conditionalTypesSimplifyWhenTrivial.ts, 13, 13))
+>x : Symbol(x, Decl(conditionalTypesSimplifyWhenTrivial.ts, 13, 16))
+
+    x = y;
+>x : Symbol(x, Decl(conditionalTypesSimplifyWhenTrivial.ts, 13, 16))
+>y : Symbol(y, Decl(conditionalTypesSimplifyWhenTrivial.ts, 14, 7))
+}
+
