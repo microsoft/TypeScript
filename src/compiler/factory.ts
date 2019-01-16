@@ -2648,6 +2648,9 @@ namespace ts {
             node.sourceMapPath = mapPathOrType;
             node.sourceMapText = map;
         }
+        const text = node.text;
+        node.pos = isShebangTrivia(text, 0) ? skipTrivia(text, 0, /*stopAfterLineBreak*/ true) : 0;
+        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
         return node;
     }
     export function createInputFiles(
