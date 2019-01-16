@@ -7402,15 +7402,19 @@ namespace ts {
             return baseConstraint && baseConstraint !== type ? baseConstraint : undefined;
         }
 
+        function getDefaultConstraintOfTrueBranchOfConditionalType(root: ConditionalRoot, combinedMapper: TypeMapper | undefined, mapper: TypeMapper | undefined) {
+            const rootTrueType = root.trueType;
+            const rootTrueConstraint = !(rootTrueType.flags & TypeFlags.Substitution)
+                ? rootTrueType
+                : instantiateType(((<SubstitutionType>rootTrueType).substitute), combinedMapper || mapper).flags & TypeFlags.AnyOrUnknown
+                    ? (<SubstitutionType>rootTrueType).typeVariable
+                    : getIntersectionType([(<SubstitutionType>rootTrueType).substitute, (<SubstitutionType>rootTrueType).typeVariable]);
+            return instantiateType(rootTrueConstraint, combinedMapper || mapper);
+        }
+
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
             if (!type.resolvedDefaultConstraint) {
-                const rootTrueType = type.root.trueType;
-                const rootTrueConstraint = !(rootTrueType.flags & TypeFlags.Substitution)
-                    ? rootTrueType
-                    : ((<SubstitutionType>rootTrueType).substitute).flags & TypeFlags.AnyOrUnknown
-                        ? (<SubstitutionType>rootTrueType).typeVariable
-                        : getIntersectionType([(<SubstitutionType>rootTrueType).substitute, (<SubstitutionType>rootTrueType).typeVariable]);
-                type.resolvedDefaultConstraint = getUnionType([instantiateType(rootTrueConstraint, type.combinedMapper || type.mapper), getFalseTypeFromConditionalType(type)]);
+                type.resolvedDefaultConstraint = getUnionType([getDefaultConstraintOfTrueBranchOfConditionalType(type.root, type.combinedMapper, type.mapper), getFalseTypeFromConditionalType(type)]);
             }
             return type.resolvedDefaultConstraint;
         }
@@ -9982,13 +9986,13 @@ namespace ts {
             if (checkType === wildcardType || extendsType === wildcardType) {
                 return wildcardType;
             }
-            // Simplifications for types of the form `T extends U ? U : never` and `T extends U ? never : T`.
+            // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
             const originalCheckType = getActualTypeVariable(root.checkType);
             const trueType = instantiateType(root.trueType, mapper);
             const falseType = instantiateType(root.falseType, mapper);
             if (falseType.flags & TypeFlags.Never && getActualTypeVariable(root.trueType) === originalCheckType) {
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
-                    return getIntersectionType([trueType, extendsType]);
+                    return getDefaultConstraintOfTrueBranchOfConditionalType(root, /*combinedMapper*/ undefined, mapper);
                 }
                 else if (getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
                     return neverType;
