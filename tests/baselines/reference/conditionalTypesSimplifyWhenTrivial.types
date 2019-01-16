@@ -103,3 +103,55 @@ function fn8<T>(x: ExtractWithDefault<T, T>) {
 >x : T
 >y : T
 }
+
+type TemplatedConditional<TCheck, TExtends, TTrue, TFalse> = TCheck extends TExtends ? TTrue : TFalse;
+>TemplatedConditional : TemplatedConditional<TCheck, TExtends, TTrue, TFalse>
+
+const fn9 = <Params>(
+>fn9 : <Params>(params: Pick<Params, keyof Params>) => Params
+><Params>(    params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>,): Params => params : <Params>(params: Pick<Params, keyof Params>) => Params
+
+    params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>,
+>params : Pick<Params, keyof Params>
+
+): Params => params;
+>params : Pick<Params, keyof Params>
+
+function fn10<T>(x: TemplatedConditional<T, never, never, T>) {
+>fn10 : <T>(x: T) => void
+>x : T
+
+    var y: T = x;
+>y : T
+>x : T
+
+    x = y;
+>x = y : T
+>x : T
+>y : T
+}
+
+const fn11 = <Params>(
+>fn11 : <Params>(params: Pick<Params, keyof Params>) => Params
+><Params>(    params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, keyof Params>) => Params
+
+    params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>,
+>params : Pick<Params, keyof Params>
+
+): Params => params;
+>params : Pick<Params, keyof Params>
+
+function fn12<T>(x: TemplatedConditional<T, T, T, never>) {
+>fn12 : <T>(x: T) => void
+>x : T
+
+    var y: T = x;
+>y : T
+>x : T
+
+    x = y;
+>x = y : T
+>x : T
+>y : T
+}
+

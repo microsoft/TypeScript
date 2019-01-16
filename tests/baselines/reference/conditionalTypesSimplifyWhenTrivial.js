@@ -41,6 +41,27 @@ function fn8<T>(x: ExtractWithDefault<T, T>) {
     x = y;
 }
 
+type TemplatedConditional<TCheck, TExtends, TTrue, TFalse> = TCheck extends TExtends ? TTrue : TFalse;
+
+const fn9 = <Params>(
+    params: Pick<Params, TemplatedConditional<keyof Params, never, never, keyof Params>>,
+): Params => params;
+
+function fn10<T>(x: TemplatedConditional<T, never, never, T>) {
+    var y: T = x;
+    x = y;
+}
+
+const fn11 = <Params>(
+    params: Pick<Params, TemplatedConditional<keyof Params, keyof Params, keyof Params, never>>,
+): Params => params;
+
+function fn12<T>(x: TemplatedConditional<T, T, T, never>) {
+    var y: T = x;
+    x = y;
+}
+
+
 //// [conditionalTypesSimplifyWhenTrivial.js]
 "use strict";
 var fn1 = function (params) { return params; };
@@ -60,6 +81,16 @@ function fn6(x) {
 }
 var fn7 = function (params) { return params; };
 function fn8(x) {
+    var y = x;
+    x = y;
+}
+var fn9 = function (params) { return params; };
+function fn10(x) {
+    var y = x;
+    x = y;
+}
+var fn11 = function (params) { return params; };
+function fn12(x) {
     var y = x;
     x = y;
 }
