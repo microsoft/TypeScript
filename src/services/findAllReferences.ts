@@ -489,8 +489,7 @@ namespace ts.FindAllReferences.Core {
 
     /** Core find-all-references algorithm for a normal symbol. */
     function getReferencedSymbolsForSymbol(originalSymbol: Symbol, node: Node | undefined, sourceFiles: ReadonlyArray<SourceFile>, sourceFilesSet: ReadonlyMap<true>, checker: TypeChecker, cancellationToken: CancellationToken, options: Options): SymbolAndEntries[] {
-        const isForRenameWithPrefixAndSuffixText = options.isForRename && options.providePrefixAndSuffixTextForRename;
-        const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText) || originalSymbol;
+        const symbol = node && skipPastExportOrImportSpecifierOrUnion(originalSymbol, node, checker, /*useLocalSymbolForExportSpecifier*/ !isForRenameWithPrefixAndSuffixText(options)) || originalSymbol;
 
         // Compute the meaning from the location and the symbol it references
         const searchMeaning = node ? getIntersectingMeaningFromDeclarations(node, symbol) : SemanticMeaning.All;
@@ -498,7 +497,7 @@ namespace ts.FindAllReferences.Core {
         const result: SymbolAndEntries[] = [];
         const state = new State(sourceFiles, sourceFilesSet, node ? getSpecialSearchKind(node) : SpecialSearchKind.None, checker, cancellationToken, searchMeaning, options, result);
 
-        const exportSpecifier = !isForRenameWithPrefixAndSuffixText ? undefined : find(symbol.declarations, isExportSpecifier);
+        const exportSpecifier = !isForRenameWithPrefixAndSuffixText(options) ? undefined : find(symbol.declarations, isExportSpecifier);
         if (exportSpecifier) {
             // When renaming at an export specifier, rename the export and not the thing being exported.
             getReferencesAtExportSpecifier(exportSpecifier.name, symbol, exportSpecifier, state.createSearch(node, originalSymbol, /*comingFrom*/ undefined), state, /*addReferencesHere*/ true, /*alwaysGetReferences*/ true);
@@ -1078,7 +1077,6 @@ namespace ts.FindAllReferences.Core {
         alwaysGetReferences?: boolean,
     ): void {
         Debug.assert(!alwaysGetReferences || !!state.options.providePrefixAndSuffixTextForRename, "If alwaysGetReferences is true, then prefix/suffix text must be enabled");
-        const isForRenameWithPrefixAndSuffixText = state.options.isForRename && state.options.providePrefixAndSuffixTextForRename;
 
         const { parent, propertyName, name } = exportSpecifier;
         const exportDeclaration = parent.parent;
@@ -1111,7 +1109,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
-        if (!isForRenameWithPrefixAndSuffixText || alwaysGetReferences) {
+        if (!isForRenameWithPrefixAndSuffixText(state.options) || alwaysGetReferences) {
             const exportKind = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.assertDefined(exportSpecifier.symbol);
             const exportInfo = Debug.assertDefined(getExportInfo(exportSymbol, exportKind, state.checker));
@@ -1119,7 +1117,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // At `export { x } from "foo"`, also search for the imported symbol `"foo".x`.
-        if (search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName && !isForRenameWithPrefixAndSuffixText) {
+        if (search.comingFrom !== ImportExport.Export && exportDeclaration.moduleSpecifier && !propertyName && !isForRenameWithPrefixAndSuffixText(state.options)) {
             const imported = state.checker.getExportSpecifierLocalTargetSymbol(exportSpecifier);
             if (imported) searchForImportedSymbol(imported, state);
         }
@@ -1154,7 +1152,7 @@ namespace ts.FindAllReferences.Core {
         const { symbol } = importOrExport;
 
         if (importOrExport.kind === ImportExport.Import) {
-            if (!(state.options.isForRename && state.options.providePrefixAndSuffixTextForRename)) {
+            if (!(isForRenameWithPrefixAndSuffixText(state.options))) {
                 searchForImportedSymbol(symbol, state);
             }
         }
@@ -1586,7 +1584,7 @@ namespace ts.FindAllReferences.Core {
         }
 
         // symbolAtLocation for a binding element is the local symbol. See if the search symbol is the property.
-        // Don't do this when populating search set for a rename when prefix and suffix text are available -- just rename the local.
+        // Don't do this when populating search set for a rename when prefix and suffix text will be provided -- just rename the local.
         if (!isForRenamePopulateSearchSymbolSet) {
             let bindingElementPropertySymbol: Symbol | undefined;
             if (onlyIncludeBindingElementAtReferenceLocation) {
@@ -1728,5 +1726,9 @@ namespace ts.FindAllReferences.Core {
         const res = mapDefined(lhsType && (lhsType.isUnionOrIntersection() ? lhsType.types : lhsType.symbol === symbol.parent ? undefined : [lhsType]), t =>
             t.symbol && t.symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface) ? t.symbol : undefined);
         return res.length === 0 ? undefined : res;
+    }
+
+    function isForRenameWithPrefixAndSuffixText(options: Options) {
+        return options.isForRename && options.providePrefixAndSuffixTextForRename;
     }
 }
