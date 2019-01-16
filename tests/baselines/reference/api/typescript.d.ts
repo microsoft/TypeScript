@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.2";
+    const versionMajorMinor = "3.3";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -3013,6 +3013,7 @@ declare namespace ts {
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     }
     /** Represents a bigint literal value without requiring bigint support */
     interface PseudoBigInt {
@@ -3132,7 +3133,6 @@ declare namespace ts {
     function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean;
     function createScanner(languageVersion: ScriptTarget, skipTrivia: boolean, languageVariant?: LanguageVariant, textInitial?: string, onError?: ErrorCallback, start?: number, length?: number): Scanner;
 }
-/** Non-internal stuff goes here */
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
     function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): SortedReadonlyArray<T>;
@@ -4707,8 +4707,8 @@ declare namespace ts {
         getNameOrDottedNameSpan(fileName: string, startPos: number, endPos: number): TextSpan | undefined;
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
-        getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> | undefined;
+        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ReadonlyArray<RenameLocation> | undefined;
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
         getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
@@ -4869,7 +4869,7 @@ declare namespace ts {
         message: string;
         position: number;
     }
-    class TextChange {
+    interface TextChange {
         span: TextSpan;
         newText: string;
     }
@@ -5150,6 +5150,9 @@ declare namespace ts {
     interface RenameInfoFailure {
         canRename: false;
         localizedErrorMessage: string;
+    }
+    interface RenameInfoOptions {
+        readonly allowRenameOfImportPath?: boolean;
     }
     interface SignatureHelpParameter {
         name: string;

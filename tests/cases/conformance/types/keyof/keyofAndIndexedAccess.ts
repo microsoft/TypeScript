@@ -486,10 +486,10 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 function updateIds<T extends Record<K, string>, K extends string>(
     obj: T,
     idFields: K[],
-    idMapping: { [oldId: string]: string }
+    idMapping: Partial<Record<T[K], T[K]>>
 ): Record<K, string> {
     for (const idField of idFields) {
-        const newId = idMapping[obj[idField]];
+        const newId: T[K] | undefined = idMapping[obj[idField]];
         if (newId) {
             obj[idField] = newId;
         }

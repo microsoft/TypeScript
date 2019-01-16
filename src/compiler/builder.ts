@@ -64,7 +64,9 @@ namespace ts {
         const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
-        if (!compilerOptions.outFile && !compilerOptions.out) {
+        // With --out or --outFile, any change affects all semantic diagnostics so no need to cache them
+        // With --isolatedModules, emitting changed file doesnt emit dependent files so we cant know of dependent files to retrieve errors so dont cache the errors
+        if (!compilerOptions.outFile && !compilerOptions.out && !compilerOptions.isolatedModules) {
             state.semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
         }
         state.changedFilesSet = createMap<true>();
@@ -76,7 +78,8 @@ namespace ts {
         if (useOldState) {
             // Verify the sanity of old state
             if (!oldState!.currentChangedFilePath) {
-                Debug.assert(!oldState!.affectedFiles && (!oldState!.currentAffectedFilesSignatures || !oldState!.currentAffectedFilesSignatures!.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
+                const affectedSignatures = oldState!.currentAffectedFilesSignatures;
+                Debug.assert(!oldState!.affectedFiles && (!affectedSignatures || !affectedSignatures.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
             }
             if (canCopySemanticDiagnostics) {
                 Debug.assert(!forEachKey(oldState!.changedFilesSet, path => oldState!.semanticDiagnosticsPerFile!.has(path)), "Semantic diagnostics shouldnt be available for changed files");
@@ -281,10 +284,19 @@ namespace ts {
         }
 
         // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        return !!forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
+        if (forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
             !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
             exportedModules.has(filePath) &&
             removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile)
+        )) {
+            return true;
+        }
+
+        // Remove diagnostics of files that import this file (without going to exports of referencing files)
+        return !!forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
+            referencesInFile.has(filePath) &&
+            !seenFileAndExportsOfFile.has(referencingFilePath) && // Not already removed diagnostic file
+            removeSemanticDiagnosticsOf(state, referencingFilePath as Path) // Dont add to seen since this is not yet done with the export removal
         );
     }
 
@@ -329,15 +341,19 @@ namespace ts {
      */
     function getSemanticDiagnosticsOfFile(state: BuilderProgramState, sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
         const path = sourceFile.path;
-        const cachedDiagnostics = state.semanticDiagnosticsPerFile!.get(path);
-        // Report the semantic diagnostics from the cache if we already have those diagnostics present
-        if (cachedDiagnostics) {
-            return cachedDiagnostics;
+        if (state.semanticDiagnosticsPerFile) {
+            const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
+            // Report the semantic diagnostics from the cache if we already have those diagnostics present
+            if (cachedDiagnostics) {
+                return cachedDiagnostics;
+            }
         }
 
         // Diagnostics werent cached, get them from program, and cache the result
         const diagnostics = state.program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        state.semanticDiagnosticsPerFile!.set(path, diagnostics);
+        if (state.semanticDiagnosticsPerFile) {
+            state.semanticDiagnosticsPerFile.set(path, diagnostics);
+        }
         return diagnostics;
     }
 

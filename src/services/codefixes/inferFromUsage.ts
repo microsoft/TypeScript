@@ -187,24 +187,10 @@ namespace ts.codefix {
         }
     }
 
-    function isApplicableFunctionForInference(declaration: FunctionLike): declaration is MethodDeclaration | FunctionDeclaration | ConstructorDeclaration {
-        switch (declaration.kind) {
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.Constructor:
-                return true;
-            case SyntaxKind.FunctionExpression:
-                const parent = declaration.parent;
-                return isVariableDeclaration(parent) && isIdentifier(parent.name) || !!declaration.name;
-        }
-        return false;
-    }
-
     function annotateParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterDeclaration: ParameterDeclaration, containingFunction: FunctionLike, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
-        if (!isIdentifier(parameterDeclaration.name) || !isApplicableFunctionForInference(containingFunction)) {
+        if (!isIdentifier(parameterDeclaration.name)) {
             return;
         }
-
         const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
             containingFunction.parameters.map<ParameterInference>(p => ({
                 declaration: p,
@@ -216,11 +202,14 @@ namespace ts.codefix {
             annotateJSDocParameters(changes, sourceFile, parameterInferences, program, host);
         }
         else {
+            const needParens = isArrowFunction(containingFunction) && !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
+            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), createToken(SyntaxKind.OpenParenToken));
             for (const { declaration, type } of parameterInferences) {
                 if (declaration && !declaration.type && !declaration.initializer) {
                     annotate(changes, sourceFile, declaration, type, program, host);
                 }
             }
+            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), createToken(SyntaxKind.CloseParenToken));
         }
     }
 
@@ -342,12 +331,13 @@ namespace ts.codefix {
         return InferFromReference.unifyFromContext(types, checker);
     }
 
-    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+    function inferTypeForParametersFromUsage(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
         let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
                 searchToken = findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile);
                 break;
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 const parent = containingFunction.parent;
                 searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
@@ -399,7 +389,7 @@ namespace ts.codefix {
             return inferFromContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLike, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
             const checker = program.getTypeChecker();
             if (references.length === 0) {
                 return undefined;
@@ -413,10 +403,9 @@ namespace ts.codefix {
                 cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
-            const isConstructor = declaration.kind === SyntaxKind.Constructor;
-            const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-            return callContexts && declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
-                const types: Type[] = [];
+            const callContexts = [...usageContext.constructContexts || [], ...usageContext.callContexts || []];
+            return declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
+                const types = [];
                 const isRest = isRestParameter(parameter);
                 let isOptional = false;
                 for (const callContext of callContexts) {
@@ -434,7 +423,8 @@ namespace ts.codefix {
                     }
                 }
                 if (isIdentifier(parameter.name)) {
-                    types.push(...inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken));
+                    const inferred = inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken);
+                    types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
                 }
                 const type = unifyFromContext(types, checker);
                 return {
