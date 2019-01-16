@@ -1208,7 +1208,7 @@ namespace ts {
 
         // SyntaxKind.UnparsedSource
         function emitUnparsedSource(unparsed: UnparsedSource) {
-            writer.rawWrite(unparsed.text);
+            writer.rawWrite(unparsed.text.substr(unparsed.pos));
         }
 
         //
@@ -3020,8 +3020,8 @@ namespace ts {
             }
         }
 
-        function emitShebangIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
-            if (isSourceFile(sourceFileOrBundle)) {
+        function emitShebangIfNeeded(sourceFileOrBundle: Bundle | SourceFile | UnparsedSource) {
+            if (isSourceFile(sourceFileOrBundle) || isUnparsedSource(sourceFileOrBundle)) {
                 const shebang = getShebang(sourceFileOrBundle.text);
                 if (shebang) {
                     writeComment(shebang);
@@ -3030,10 +3030,16 @@ namespace ts {
                 }
             }
             else {
+                for (const prepend of sourceFileOrBundle.prepends) {
+                    Debug.assertNode(prepend, isUnparsedSource);
+                    if (emitShebangIfNeeded(prepend as UnparsedSource)) {
+                        return true;
+                    }
+                }
                 for (const sourceFile of sourceFileOrBundle.sourceFiles) {
                     // Emit only the first encountered shebang
                     if (emitShebangIfNeeded(sourceFile)) {
-                        break;
+                        return true;
                     }
                 }
             }
@@ -4346,7 +4352,8 @@ namespace ts {
                         writer.getLine(),
                         writer.getColumn(),
                         parsed,
-                        node.sourceMapPath!);
+                        node.sourceMapPath!,
+                        node.pos && node.getLineAndCharacterOfPosition(node.pos).line);
                 }
                 pipelinePhase(hint, node);
             }

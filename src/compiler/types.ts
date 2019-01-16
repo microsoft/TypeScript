@@ -2777,6 +2777,9 @@ namespace ts {
         text: string;
         sourceMapPath?: string;
         sourceMapText?: string;
+        // Adding this to satisfy services, fix later
+        /*@internal*/
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -5528,7 +5531,7 @@ namespace ts {
         /**
          * Appends a source map.
          */
-        appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string): void;
+        appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string, startLine: number): void;
         /**
          * Gets the source map as a `RawSourceMap` object.
          */

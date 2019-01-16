@@ -140,7 +140,7 @@ namespace ts {
             exit();
         }
 
-        function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string) {
+        function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string, startLine: number) {
             Debug.assert(generatedLine >= pendingGeneratedLine, "generatedLine cannot backtrack");
             Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
             enter();
@@ -149,6 +149,9 @@ namespace ts {
             let nameIndexToNewNameIndexMap: number[] | undefined;
             const mappingIterator = decodeMappings(map.mappings);
             for (let { value: raw, done } = mappingIterator.next(); !done; { value: raw, done } = mappingIterator.next()) {
+                if (raw.generatedLine < startLine) {
+                    continue;
+                }
                 // Then reencode all the updated mappings into the overall map
                 let newSourceIndex: number | undefined;
                 let newSourceLine: number | undefined;
@@ -178,8 +181,9 @@ namespace ts {
                     }
                 }
 
-                const newGeneratedLine = raw.generatedLine + generatedLine;
-                const newGeneratedCharacter = raw.generatedLine === 0 ? raw.generatedCharacter + generatedCharacter : raw.generatedCharacter;
+                const rawGeneratedLine = raw.generatedLine - startLine;
+                const newGeneratedLine = rawGeneratedLine + generatedLine;
+                const newGeneratedCharacter = rawGeneratedLine === 0 ? raw.generatedCharacter + generatedCharacter : raw.generatedCharacter;
                 addMapping(newGeneratedLine, newGeneratedCharacter, newSourceIndex, newSourceLine, newSourceCharacter, newNameIndex);
             }
             exit();
