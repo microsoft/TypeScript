@@ -31,7 +31,9 @@ namespace ts.refactor.convertToNamedParameters {
         if (!func) return undefined;
 
         const paramTypeDeclaration = createParamTypeDeclaration(func);
-        return undefined;
+        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, paramTypeDeclaration));
+        // return undefined;
+        return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number): ValidFunctionDeclaration | undefined {
@@ -45,31 +47,36 @@ namespace ts.refactor.convertToNamedParameters {
         switch (func.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
-                if (func.name && func.parameters && func.parameters.length > minimumParameterLength) {
-                    return true;
-                }
-                break;
+            case SyntaxKind.Constructor:
+                return !!(func.name && isValidParameterNodeArray(func.parameters));
             default:
         }
         return false;
     }
 
+    function isValidParameterNodeArray(parameters: NodeArray<ParameterDeclaration>): boolean {
+        return parameters && parameters.length > minimumParameterLength && ts.every(parameters, isValidParameterDeclaration);
+    }
+
+    function isValidParameterDeclaration(paramDecl: ParameterDeclaration): paramDecl is ValidParameterDeclaration {
+        return !paramDecl.modifiers && !paramDecl.dotDotDotToken && isIdentifier(paramDecl.name) && !paramDecl.initializer;
+    }
+
     function createParamTypeDeclaration(func: ValidFunctionDeclaration): InterfaceDeclaration {
         const paramTypeName = getFunctionName(func);
-        const paramTypeMembers =
-            ts.map(func.parameters,
-                (paramDecl, _i) => createPropertySignatureFromParameterDeclaration(paramDecl));
+        const paramTypeMembers = ts.map(func.parameters, createPropertySignatureFromParameterDeclaration);
+
         return createInterfaceDeclaration(
             /* decorators */ undefined,
             /* modifiers */ undefined,
             createIdentifier(paramTypeName),
-            /* type parameters */ undefined,
-            /* heritage clauses */ undefined,
+            func.typeParameters,
+            /* heritageClauses */ undefined,
             createNodeArray(paramTypeMembers));
     }
 
     function getFunctionName(func: ValidFunctionDeclaration): string {
-        return entityNameToString(func.name) + paramTypeNamePostfix;
+        return declarationNameToString(func.name) + paramTypeNamePostfix;
     }
 
     function createPropertySignatureFromParameterDeclaration(paramDeclaration: ValidParameterDeclaration): PropertySignature {
@@ -81,8 +88,21 @@ namespace ts.refactor.convertToNamedParameters {
             paramDeclaration.initializer);
     }
 
-    interface ValidFunctionDeclaration extends FunctionDeclaration {
-        name: Identifier;
+    function createParameterObjectBindingPattern(parameters: NodeArray<ValidParameterDeclaration>, paramType: TypeNode): ParameterDeclaration {
+        const bindingElements = ts.map(parameters, param => createBindingElement(/* dotDotDotToken */ undefined, /* propertyName */ undefined, param.name));
+        const paramName = createObjectBindingPattern(bindingElements);
+
+        return createParameter(
+            /* decorators */ undefined,
+            /* modifiers */ undefined,
+            /* dotDotDotToken */ undefined,
+            paramName,
+            /* questionToken */ undefined,
+            paramType);
+    }
+
+    interface ValidFunctionDeclaration extends MethodDeclaration {
+        name: PropertyName;
         body?: FunctionBody;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
         parameters: NodeArray<ValidParameterDeclaration>;
@@ -90,5 +110,9 @@ namespace ts.refactor.convertToNamedParameters {
 
     interface ValidParameterDeclaration extends ParameterDeclaration {
         name: Identifier;
+        type: TypeNode;
+        dotDotDotToken: undefined;
+        modifiers: undefined;
+        initializer: undefined;
     }
 }
