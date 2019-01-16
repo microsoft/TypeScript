@@ -17,6 +17,7 @@ verify.completions({
     exact: [
         ...completion.globalsVars,
         "undefined",
+        "globalThis",
         {
             name: "foo",
             source: "/a/b/impl",

@@ -22,6 +22,7 @@ verify.completions({
     exact: [
         { name: "foo", text: "var foo: number", kind: "var", kindModifiers: "declare" },
         "undefined",
+        "globalThis",
         {
             name: "foo",
             source: "/a",

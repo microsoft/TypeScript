@@ -4545,6 +4545,7 @@ namespace FourSlashInterface {
             return [
                 ...globalTypeDecls,
                 ...plus,
+                { name: "globalThis", kind: "module" },
                 ...typeKeywords,
             ];
         }
@@ -4786,6 +4787,7 @@ namespace FourSlashInterface {
             ...plus,
             ...globalsVars,
             { name: "undefined", kind: "var" },
+            { name: "globalThis", kind: "module" },
             ...globalKeywordsInsideFunction,
         ];
 
@@ -4921,11 +4923,17 @@ namespace FourSlashInterface {
         export const globals: ReadonlyArray<ExpectedCompletionEntryObject> = [
             ...globalsVars,
             { name: "undefined", kind: "var" },
+            { name: "globalThis", kind: "module" },
             ...globalKeywords
         ];
 
         export function globalsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
-            return [...globalsVars, ...plus, { name: "undefined", kind: "var" }, ...globalKeywords];
+            return [
+                ...globalsVars,
+                ...plus,
+                { name: "undefined", kind: "var" },
+                { name: "globalThis", kind: "module" },
+                ...globalKeywords];
         }
     }
 

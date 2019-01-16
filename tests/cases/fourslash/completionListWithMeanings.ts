@@ -24,6 +24,7 @@ const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
     { name: "kk", text: "var kk: m3.point3" },
     { name: "zz", text: "var zz: point" },
     "undefined",
+    "globalThis",
     ...completion.statementKeywordsWithTypes,
 ];
 
@@ -31,6 +32,7 @@ const types: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
     { name: "m", text: "namespace m" },
     { name: "m3", text: "namespace m3" },
     { name: "point", text: "interface point" },
+    "globalThis",
     ...completion.typeKeywords,
 ];
 
