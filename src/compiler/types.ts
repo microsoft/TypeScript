@@ -1932,7 +1932,7 @@ namespace ts {
         expression?: Expression;
     }
 
-    export interface JsxText extends Node {
+    export interface JsxText extends LiteralLikeNode {
         kind: SyntaxKind.JsxText;
         containsOnlyWhiteSpaces: boolean;
         parent: JsxElement;

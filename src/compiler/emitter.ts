@@ -2589,7 +2589,7 @@ namespace ts {
         }
 
         function emitJsxText(node: JsxText) {
-            writer.writeLiteral(getTextOfNode(node, /*includeTrivia*/ true));
+            writer.writeLiteral(node.text);
         }
 
         function emitJsxClosingElementOrFragment(node: JsxClosingElement | JsxClosingFragment) {

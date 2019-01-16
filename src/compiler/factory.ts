@@ -2299,6 +2299,28 @@ namespace ts {
         return node;
     }
 
+    export function createJsxText(text: string, containsOnlyWhiteSpaces: boolean) {
+        const node = <JsxText>createNode(SyntaxKind.JsxText);
+        node.text = text;
+        node.containsOnlyWhiteSpaces = containsOnlyWhiteSpaces;
+        return node;
+    }
+
+    export function updateJsxText(node: JsxText, text: string, containsOnlyWhiteSpaces: boolean) {
+        return node.text !== text
+            || node.containsOnlyWhiteSpaces !== containsOnlyWhiteSpaces
+            ? updateNode(createJsxText(text, containsOnlyWhiteSpaces), node)
+            : node;
+    }
+
+    export function createJsxOpeningFragment() {
+        return <JsxOpeningFragment>createNode(SyntaxKind.JsxOpeningFragment);
+    }
+
+    export function createJsxJsxClosingFragment() {
+        return <JsxClosingFragment>createNode(SyntaxKind.JsxClosingFragment);
+    }
+
     export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
         return node.openingFragment !== openingFragment
             || node.children !== children

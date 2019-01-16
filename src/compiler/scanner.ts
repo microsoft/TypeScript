@@ -1994,6 +1994,7 @@ namespace ts {
                 pos++;
             }
 
+            tokenValue = text.substring(startPos, pos);
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
