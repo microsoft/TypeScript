@@ -9987,10 +9987,9 @@ namespace ts {
                 return wildcardType;
             }
             // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
-            const originalCheckType = getActualTypeVariable(root.checkType);
             const trueType = instantiateType(root.trueType, mapper);
             const falseType = instantiateType(root.falseType, mapper);
-            if (falseType.flags & TypeFlags.Never && getActualTypeVariable(root.trueType) === originalCheckType) {
+            if (falseType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(trueType), getActualTypeVariable(checkType))) {
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
                     return getDefaultConstraintOfTrueBranchOfConditionalType(root, /*combinedMapper*/ undefined, mapper);
                 }
@@ -9998,7 +9997,7 @@ namespace ts {
                     return neverType;
                 }
             }
-            else if (trueType.flags & TypeFlags.Never && getActualTypeVariable(root.falseType) === originalCheckType) {
+            else if (trueType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(falseType), getActualTypeVariable(checkType))) {
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
                     return neverType;
                 }
