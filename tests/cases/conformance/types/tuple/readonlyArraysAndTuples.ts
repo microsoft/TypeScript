@@ -1,4 +1,5 @@
 // @strict: true
+// @declaration: true
 
 type T10 = string[];
 type T11 = Array<string>;
