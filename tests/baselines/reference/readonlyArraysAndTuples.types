@@ -17,6 +17,15 @@ type T20 = [number, number];
 type T21 = readonly [number, number];
 >T21 : readonly [number, number]
 
+type T30 = readonly string;  // Error
+>T30 : string
+
+type T31<T> = readonly T;  // Error
+>T31 : T
+
+type T32 = readonly readonly string[];  // Error
+>T32 : readonly string[]
+
 function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
 >f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => void
 >ma : string[]
