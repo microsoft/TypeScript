@@ -85,6 +85,13 @@ const constInitToConstDeclAmbientWithTypeQuery: typeof constType = constType;
 >constType : unique symbol
 >constType : unique symbol
 
+// assignment from any
+// https://github.com/Microsoft/TypeScript/issues/29108
+const fromAny: unique symbol = {} as any;
+>fromAny : unique symbol
+>{} as any : any
+>{} : {}
+
 // function return inference
 function funcReturnConstCall() { return constCall; }
 >funcReturnConstCall : () => symbol

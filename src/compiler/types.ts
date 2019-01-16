@@ -3037,8 +3037,10 @@ namespace ts {
         /* @internal */ typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined; // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;
+        /* @internal */ signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;  // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
+        /* @internal */ indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): IndexSignatureDeclaration | undefined;  // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -3108,7 +3110,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
         /** Exclude accesses to private properties or methods with a `this` parameter that `type` doesn't satisfy. */
-        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean;
+        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         /** Follow a *single* alias to get the immediately aliased symbol. */
@@ -3677,15 +3679,17 @@ namespace ts {
         Readonly          = 1 << 3,         // Readonly transient symbol
         Partial           = 1 << 4,         // Synthetic property present in some but not all constituents
         HasNonUniformType = 1 << 5,         // Synthetic property with non-uniform type in constituents
-        ContainsPublic    = 1 << 6,         // Synthetic property with public constituent(s)
-        ContainsProtected = 1 << 7,         // Synthetic property with protected constituent(s)
-        ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
-        ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
-        Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
-        ReverseMapped     = 1 << 11,        // Property of reverse-inferred homomorphic mapped type
-        OptionalParameter = 1 << 12,        // Optional parameter
-        RestParameter     = 1 << 13,        // Rest parameter
-        Synthetic = SyntheticProperty | SyntheticMethod
+        HasLiteralType    = 1 << 6,         // Synthetic property with at least one literal type in constituents
+        ContainsPublic    = 1 << 7,         // Synthetic property with public constituent(s)
+        ContainsProtected = 1 << 8,         // Synthetic property with protected constituent(s)
+        ContainsPrivate   = 1 << 9,         // Synthetic property with private constituent(s)
+        ContainsStatic    = 1 << 10,        // Synthetic property with static constituent(s)
+        Late              = 1 << 11,        // Late-bound symbol for a computed property with a dynamic name
+        ReverseMapped     = 1 << 12,        // Property of reverse-inferred homomorphic mapped type
+        OptionalParameter = 1 << 13,        // Optional parameter
+        RestParameter     = 1 << 14,        // Rest parameter
+        Synthetic = SyntheticProperty | SyntheticMethod,
+        Discriminant = HasNonUniformType | HasLiteralType
     }
 
     /* @internal */
@@ -3914,7 +3918,9 @@ namespace ts {
         aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
         /* @internal */ aliasTypeArgumentsContainsMarker?: boolean;   // Alias type arguments (if any)
         /* @internal */
-        wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
+        permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
+        /* @internal */
+        restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
     }

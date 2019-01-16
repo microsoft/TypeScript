@@ -89,6 +89,7 @@
         "unittests/services/transpile.ts",
         "unittests/tscWatch/consoleClearing.ts",
         "unittests/tscWatch/emit.ts",
+        "unittests/tscWatch/emitAndErrorUpdates.ts",
         "unittests/tscWatch/programUpdates.ts",
         "unittests/tscWatch/resolutionCache.ts",
         "unittests/tscWatch/watchEnvironment.ts",

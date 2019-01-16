@@ -1070,92 +1070,6 @@ export default test;`;
             }
         });
 
-        it("updates errors when deep import file changes", () => {
-            const currentDirectory = "/user/username/projects/myproject";
-            const aFile: File = {
-                path: `${currentDirectory}/a.ts`,
-                content: `import {B} from './b';
-declare var console: any;
-let b = new B();
-console.log(b.c.d);`
-            };
-            const bFile: File = {
-                path: `${currentDirectory}/b.ts`,
-                content: `import {C} from './c';
-export class B
-{
-    c = new C();
-}`
-            };
-            const cFile: File = {
-                path: `${currentDirectory}/c.ts`,
-                content: `export class C
-{
-    d = 1;
-}`
-            };
-            const config: File = {
-                path: `${currentDirectory}/tsconfig.json`,
-                content: `{}`
-            };
-            const files = [aFile, bFile, cFile, config, libFile];
-            const host = createWatchedSystem(files, { currentDirectory });
-            const watch = createWatchOfConfigFile("tsconfig.json", host);
-            checkProgramActualFiles(watch(), [aFile.path, bFile.path, cFile.path, libFile.path]);
-            checkOutputErrorsInitial(host, emptyArray);
-            const modifiedTimeOfAJs = host.getModifiedTime(`${currentDirectory}/a.js`);
-            host.writeFile(cFile.path, cFile.content.replace("d", "d2"));
-            host.runQueuedTimeoutCallbacks();
-            checkOutputErrorsIncremental(host, [
-                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("d"), 1, Diagnostics.Property_0_does_not_exist_on_type_1, "d", "C")
-            ]);
-            // File a need not be rewritten
-            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
-        });
-
-        it("updates errors when deep import through declaration file changes", () => {
-            const currentDirectory = "/user/username/projects/myproject";
-            const aFile: File = {
-                path: `${currentDirectory}/a.ts`,
-                content: `import {B} from './b';
-declare var console: any;
-let b = new B();
-console.log(b.c.d);`
-            };
-            const bFile: File = {
-                path: `${currentDirectory}/b.d.ts`,
-                content: `import {C} from './c';
-export class B
-{
-    c: C;
-}`
-            };
-            const cFile: File = {
-                path: `${currentDirectory}/c.d.ts`,
-                content: `export class C
-{
-    d: number;
-}`
-            };
-            const config: File = {
-                path: `${currentDirectory}/tsconfig.json`,
-                content: `{}`
-            };
-            const files = [aFile, bFile, cFile, config, libFile];
-            const host = createWatchedSystem(files, { currentDirectory });
-            const watch = createWatchOfConfigFile("tsconfig.json", host);
-            checkProgramActualFiles(watch(), [aFile.path, bFile.path, cFile.path, libFile.path]);
-            checkOutputErrorsInitial(host, emptyArray);
-            const modifiedTimeOfAJs = host.getModifiedTime(`${currentDirectory}/a.js`);
-            host.writeFile(cFile.path, cFile.content.replace("d", "d2"));
-            host.runQueuedTimeoutCallbacks();
-            checkOutputErrorsIncremental(host, [
-                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("d"), 1, Diagnostics.Property_0_does_not_exist_on_type_1, "d", "C")
-            ]);
-            // File a need not be rewritten
-            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
-        });
-
         it("updates errors when strictNullChecks changes", () => {
             const currentDirectory = "/user/username/projects/myproject";
             const aFile: File = {
@@ -1226,98 +1140,6 @@ foo().hello`
             host.runQueuedTimeoutCallbacks();
             checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
             checkOutputErrorsIncremental(host, emptyArray);
-        });
-
-        describe("updates errors when file transitively exported file changes", () => {
-            const projectLocation = "/user/username/projects/myproject";
-            const config: File = {
-                path: `${projectLocation}/tsconfig.json`,
-                content: JSON.stringify({
-                    files: ["app.ts"],
-                    compilerOptions: { baseUrl: "." }
-                })
-            };
-            const app: File = {
-                path: `${projectLocation}/app.ts`,
-                content: `import { Data } from "lib2/public";
-export class App {
-    public constructor() {
-        new Data().test();
-    }
-}`
-            };
-            const lib2Public: File = {
-                path: `${projectLocation}/lib2/public.ts`,
-                content: `export * from "./data";`
-            };
-            const lib2Data: File = {
-                path: `${projectLocation}/lib2/data.ts`,
-                content: `import { ITest } from "lib1/public";
-export class Data {
-    public test() {
-        const result: ITest = {
-            title: "title"
-        }
-        return result;
-    }
-}`
-            };
-            const lib1Public: File = {
-                path: `${projectLocation}/lib1/public.ts`,
-                content: `export * from "./tools/public";`
-            };
-            const lib1ToolsPublic: File = {
-                path: `${projectLocation}/lib1/tools/public.ts`,
-                content: `export * from "./tools.interface";`
-            };
-            const lib1ToolsInterface: File = {
-                path: `${projectLocation}/lib1/tools/tools.interface.ts`,
-                content: `export interface ITest {
-    title: string;
-}`
-            };
-
-            function verifyTransitiveExports(filesWithoutConfig: ReadonlyArray<File>) {
-                const files = [config, ...filesWithoutConfig];
-                const host = createWatchedSystem(files, { currentDirectory: projectLocation });
-                const watch = createWatchOfConfigFile(config.path, host);
-                checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
-                checkOutputErrorsInitial(host, emptyArray);
-
-                host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
-                host.checkTimeoutQueueLengthAndRun(1);
-                checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
-                checkOutputErrorsIncremental(host, [
-                    "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
-                ]);
-
-            }
-            it("when there are no circular import and exports", () => {
-                verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
-            });
-
-            it("when there are circular import and exports", () => {
-                const lib2Data: File = {
-                    path: `${projectLocation}/lib2/data.ts`,
-                    content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";
-export class Data {
-    public dat?: Data2; public test() {
-        const result: ITest = {
-            title: "title"
-        }
-        return result;
-    }
-}`
-                };
-                const lib2Data2: File = {
-                    path: `${projectLocation}/lib2/data2.ts`,
-                    content: `import { Data } from "./data";
-export class Data2 {
-    public dat?: Data;
-}`
-                };
-                verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib2Data2, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
-            });
         });
 
         describe("updates errors in lib file", () => {
@@ -1459,7 +1281,59 @@ interface Document {
                 checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
             }
         });
+
+        it("reports errors correctly with isolatedModules", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `export const a: string = "";`
+            };
+            const bFile: File = {
+                path: `${currentDirectory}/b.ts`,
+                content: `import { a } from "./a";
+const b: string = a;`
+            };
+            const configFile: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        isolatedModules: true
+                    }
+                })
+            };
+
+            const files = [aFile, bFile, libFile, configFile];
+
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            verifyProgramFiles();
+            checkOutputErrorsInitial(host, emptyArray);
+            assert.equal(host.readFile(`${currentDirectory}/a.js`), `"use strict";
+exports.__esModule = true;
+exports.a = "";
+`, "Contents of a.js");
+            assert.equal(host.readFile(`${currentDirectory}/b.js`), `"use strict";
+exports.__esModule = true;
+var a_1 = require("./a");
+var b = a_1.a;
+`, "Contents of b.js");
+            const modifiedTime = host.getModifiedTime(`${currentDirectory}/b.js`);
+
+            host.writeFile(aFile.path, `export const a: number = 1`);
+            host.runQueuedTimeoutCallbacks();
+            verifyProgramFiles();
+            checkOutputErrorsIncremental(host, [
+                getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("b"), 1, Diagnostics.Type_0_is_not_assignable_to_type_1, "number", "string")
+            ]);
+            assert.equal(host.readFile(`${currentDirectory}/a.js`), `"use strict";
+exports.__esModule = true;
+exports.a = 1;
+`, "Contents of a.js");
+            assert.equal(host.getModifiedTime(`${currentDirectory}/b.js`), modifiedTime, "Timestamp of b.js");
+
+            function verifyProgramFiles() {
+                checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
+            }
+        });
     });
-
-
 }

@@ -103,6 +103,30 @@ namespace ts.projectSystem {
             assert.isFalse(proj3.languageServiceEnabled);
         });
 
+        it("should not crash when opening a file in a project with a disabled language service", () => {
+            const file1 = {
+                path: "/a/b/f1.js",
+                content: "let x =1;",
+                fileSize: 50 * 1024 * 1024
+            };
+            const file2 = {
+                path: "/a/b/f2.js",
+                content: "let x =1;",
+                fileSize: 100
+            };
+
+            const projName = "proj1";
+
+            const host = createServerHost([file1, file2]);
+            const projectService = createProjectService(host, { useSingleInferredProject: true }, { eventHandler: noop });
+
+            projectService.openExternalProject({ rootFiles: toExternalFiles([file1.path, file2.path]), options: {}, projectFileName: projName });
+            const proj1 = projectService.findProject(projName)!;
+            assert.isFalse(proj1.languageServiceEnabled);
+
+            assert.doesNotThrow(() => projectService.openClientFile(file2.path));
+        });
+
         describe("ignoreConfigFiles", () => {
             it("external project including config file", () => {
                 const file1 = {

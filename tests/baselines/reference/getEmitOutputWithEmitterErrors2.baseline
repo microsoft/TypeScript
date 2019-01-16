@@ -16,7 +16,7 @@ define(["require", "exports"], function (require, exports) {
 });
 
 FileName : /tests/cases/fourslash/inputFile.d.ts
-class C {
+declare class C {
 }
 export declare module M {
     var foo: C;
