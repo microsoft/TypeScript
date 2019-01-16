@@ -7836,7 +7836,7 @@
         <Str Cat="Text">
           <Val><![CDATA[The character set of the input files.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Girdi dosyalarının karakter kümesi.]]></Val>
+            <Val><![CDATA[Giriş dosyalarının karakter kümesi.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

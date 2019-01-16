@@ -56,3 +56,17 @@ const Child: SFC<Props> = ({
 >stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >props : Symbol(props, Decl(destructuringInitializerContextualTypeFromContext.ts, 16, 21))
 
+// Repro from #29189
+
+declare function f(g: (as: string[]) => void): void
+>f : Symbol(f, Decl(destructuringInitializerContextualTypeFromContext.ts, 18, 54))
+>g : Symbol(g, Decl(destructuringInitializerContextualTypeFromContext.ts, 22, 19))
+>as : Symbol(as, Decl(destructuringInitializerContextualTypeFromContext.ts, 22, 23))
+
+f(([_1, _2 = undefined]) => undefined)
+>f : Symbol(f, Decl(destructuringInitializerContextualTypeFromContext.ts, 18, 54))
+>_1 : Symbol(_1, Decl(destructuringInitializerContextualTypeFromContext.ts, 23, 4))
+>_2 : Symbol(_2, Decl(destructuringInitializerContextualTypeFromContext.ts, 23, 7))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
