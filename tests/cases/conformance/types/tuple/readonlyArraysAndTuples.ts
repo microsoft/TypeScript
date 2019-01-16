@@ -8,6 +8,10 @@ type T13 = ReadonlyArray<string>;
 type T20 = [number, number];
 type T21 = readonly [number, number];
 
+type T30 = readonly string;  // Error
+type T31<T> = readonly T;  // Error
+type T32 = readonly readonly string[];  // Error
+
 function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
     ma = ra;  // Error
     ma = mt;
