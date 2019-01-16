@@ -493,6 +493,18 @@ export const b = new A();`);
                     fs = undefined;
                 });
                 it(`Generates files matching the baseline`, () => {
+                    for (const mapFile of [
+                        "/src/first/bin/first-output.js.map",
+                        "/src/first/bin/first-output.d.ts.map",
+                        "/src/2/second-output.js.map",
+                        "/src/2/second-output.d.ts.map",
+                        "/src/third/thirdjs/output/third-output.js.map",
+                        "/src/third/thirdjs/output/third-output.d.ts.map"
+                    ]) {
+                        const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs!, mapFile);
+                        fs!.writeFileSync(`${mapFile}.baseline.txt`, text);
+                    }
+
                     const patch = fs!.diff();
                     // tslint:disable-next-line:no-null-keyword
                     Harness.Baseline.runBaseline(`outFile-${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
