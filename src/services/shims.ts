@@ -170,7 +170,7 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { fileName: string, textSpan: { start: number, length: number } }[]
          */
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename: boolean): string;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -838,9 +838,9 @@ namespace ts {
             );
         }
 
-        public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename: boolean): string {
+        public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string {
             return this.forwardJSONCall(
-                `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
+                `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments}, ${providePrefixAndSuffixTextForRename})`,
                 () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename)
             );
         }
