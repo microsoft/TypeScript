@@ -43,3 +43,16 @@ function f1(ma, ra, mt, rt) {
     rt = ra; // Error
     rt = mt;
 }
+
+
+//// [readonlyArraysAndTuples.d.ts]
+declare type T10 = string[];
+declare type T11 = Array<string>;
+declare type T12 = readonly string[];
+declare type T13 = ReadonlyArray<string>;
+declare type T20 = [number, number];
+declare type T21 = readonly [number, number];
+declare type T30 = readonly string;
+declare type T31<T> = readonly T;
+declare type T32 = readonly readonly string[];
+declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): void;
