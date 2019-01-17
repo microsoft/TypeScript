@@ -1682,7 +1682,8 @@ namespace ts.FindAllReferences.Core {
 
     function isImplementation(node: Node): boolean {
         return !!(node.flags & NodeFlags.Ambient)
-            || (isVariableLike(node) ? hasInitializer(node)
+            ? !(isInterfaceDeclaration(node) || isTypeAliasDeclaration(node))
+            : (isVariableLike(node) ? hasInitializer(node)
                 : isFunctionLikeDeclaration(node) ? !!node.body
                 : isClassLike(node) || isModuleOrEnumDeclaration(node));
     }
