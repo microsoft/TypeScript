@@ -23180,7 +23180,7 @@ namespace ts {
 
             // Only check rest parameter type if it's not a binding pattern. Since binding patterns are
             // not allowed in a rest parameter, we already have an error from checkGrammarParameterList.
-            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getTypeOfSymbol(node.symbol), anyArrayType)) {
+            if (node.dotDotDotToken && !isBindingPattern(node.name) && !isTypeAssignableTo(getTypeOfSymbol(node.symbol), anyReadonlyArrayType)) {
                 error(node, Diagnostics.A_rest_parameter_must_be_of_an_array_type);
             }
         }
