@@ -69,6 +69,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(146,1): er
   The 'this' types of each signature are incompatible.
     Type 'Base1' is not assignable to type 'Base2'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(148,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
+  The 'this' types of each signature are incompatible.
+    Type 'Base1' is not assignable to type 'Base2'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(154,16): error TS2679: A function that is called with the 'new' keyword cannot have a 'this' type that is 'void'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(158,17): error TS2681: A constructor cannot have a 'this' parameter.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(162,9): error TS2681: A constructor cannot have a 'this' parameter.
@@ -364,6 +366,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     d1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
     ~~~~~~~~~~~
 !!! error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
+!!! error TS2322:   The 'this' types of each signature are incompatible.
+!!! error TS2322:     Type 'Base1' is not assignable to type 'Base2'.
     
     ////// use this-type for construction with new ////
     function VoidThis(this: void) {

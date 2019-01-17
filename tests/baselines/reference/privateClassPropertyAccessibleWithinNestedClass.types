@@ -51,7 +51,7 @@ class C {
 >x : string
 
     private static foo() { return this.foo; }
->foo : () => typeof C.foo
+>foo : () => () => typeof C.foo
 >this.foo : () => typeof C.foo
 >this : typeof C
 >foo : () => typeof C.foo

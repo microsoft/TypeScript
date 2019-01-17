@@ -19198,6 +19198,9 @@ namespace ts {
                 }
                 propType = getConstraintForLocation(getTypeOfSymbol(prop), node);
             }
+            // Instantiate `this` in the property with the type of the thing being accessed - excepting `super` accesses where, despite
+            // the syntax, the `this` in the access will be the original one instead.
+            propType = left.kind !== SyntaxKind.SuperKeyword ? instantiateType(propType, t => t.isThisType ? leftType : t) : propType;
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.

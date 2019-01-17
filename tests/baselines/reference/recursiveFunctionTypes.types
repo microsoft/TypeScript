@@ -47,7 +47,7 @@ class C {
 >C : C
 
      static g(t: typeof C.g){ }
->g : (t: typeof C.g) => void
+>g : (t: (t: typeof C.g) => void) => void
 >t : (t: typeof C.g) => void
 >C.g : (t: typeof C.g) => void
 >C : typeof C
