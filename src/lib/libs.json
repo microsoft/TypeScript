@@ -43,13 +43,17 @@
         "es2016.full",
         "es2017.full",
         "es2018.full",
-        "esnext.full"
+        "esnext.full",
+        // bogus        
+        "es8",
+        "es9"
     ],
     "paths": {
         "dom.generated": "lib.dom.d.ts",
         "dom.iterable.generated": "lib.dom.iterable.d.ts",
         "webworker.generated": "lib.webworker.d.ts",
         "es5.full": "lib.d.ts",
+        "es9": "lib.foo.d.ts",
         "es2015.full": "lib.es6.d.ts"
     }
 }
