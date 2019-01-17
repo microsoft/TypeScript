@@ -4,8 +4,7 @@ namespace ts.refactor.convertToNamedParameters {
     const refactorDescription = "Convert to named parameters";
     const actionNameNamedParameters = "Convert to named parameters";
     const actionDescriptionNamedParameters = "Convert to named parameters";
-    const minimumParameterLength = 3;
-    const paramTypeNamePostfix = "Param";
+    const minimumParameterLength = 1;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
 
@@ -26,19 +25,21 @@ namespace ts.refactor.convertToNamedParameters {
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         Debug.assert(actionName === actionNameNamedParameters);
-        const { file, startPosition } = context;
+        const { file, startPosition, program, cancellationToken } = context;
         const func = getFunctionDeclarationAtPosition(file, startPosition);
-        if (!func) return undefined;
+        if (!func || !cancellationToken) return undefined;
 
-        const paramTypeDeclaration = createParamTypeDeclaration(func);
-        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, paramTypeDeclaration));
-        // return undefined;
+        const newParamDeclaration = createObjectParameter(func);
+        // const funcRefs = FindAllReferences.getReferenceEntriesForNode(-1, func.name, program, program.getSourceFiles(), cancellationToken);
+
+        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNodeRange(file, first(func.parameters), last(func.parameters), newParamDeclaration));
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number): ValidFunctionDeclaration | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const func = getContainingFunction(node);
+        // TODO: check range
         if (!func || !isValidFunctionDeclaration(func)) return undefined;
         return func;
     }
@@ -55,28 +56,18 @@ namespace ts.refactor.convertToNamedParameters {
     }
 
     function isValidParameterNodeArray(parameters: NodeArray<ParameterDeclaration>): boolean {
-        return parameters && parameters.length > minimumParameterLength && ts.every(parameters, isValidParameterDeclaration);
+        return parameters && parameters.length > minimumParameterLength && every(parameters, isValidParameterDeclaration);
     }
 
     function isValidParameterDeclaration(paramDecl: ParameterDeclaration): paramDecl is ValidParameterDeclaration {
         return !paramDecl.modifiers && !paramDecl.dotDotDotToken && isIdentifier(paramDecl.name) && !paramDecl.initializer;
     }
 
-    function createParamTypeDeclaration(func: ValidFunctionDeclaration): InterfaceDeclaration {
-        const paramTypeName = getFunctionName(func);
-        const paramTypeMembers = ts.map(func.parameters, createPropertySignatureFromParameterDeclaration);
-
-        return createInterfaceDeclaration(
-            /* decorators */ undefined,
-            /* modifiers */ undefined,
-            createIdentifier(paramTypeName),
-            func.typeParameters,
-            /* heritageClauses */ undefined,
-            createNodeArray(paramTypeMembers));
-    }
-
-    function getFunctionName(func: ValidFunctionDeclaration): string {
-        return declarationNameToString(func.name) + paramTypeNamePostfix;
+    function createParamTypeNode(func: ValidFunctionDeclaration): TypeLiteralNode {
+        const members = map(func.parameters, createPropertySignatureFromParameterDeclaration);
+        const typeNode = addEmitFlags(createTypeLiteralNode(members), EmitFlags.SingleLine);
+        // TODO: add emit flags on create function in factory
+        return typeNode;
     }
 
     function createPropertySignatureFromParameterDeclaration(paramDeclaration: ValidParameterDeclaration): PropertySignature {
@@ -88,16 +79,17 @@ namespace ts.refactor.convertToNamedParameters {
             paramDeclaration.initializer);
     }
 
-    function createParameterObjectBindingPattern(parameters: NodeArray<ValidParameterDeclaration>, paramType: TypeNode): ParameterDeclaration {
-        const bindingElements = ts.map(parameters, param => createBindingElement(/* dotDotDotToken */ undefined, /* propertyName */ undefined, param.name));
+    function createObjectParameter(func: ValidFunctionDeclaration): ParameterDeclaration {
+        const bindingElements = map(func.parameters, param => createBindingElement(/*dotDotDotToken*/ undefined, /*propertyName*/ undefined, getTextOfIdentifierOrLiteral(param.name)));
         const paramName = createObjectBindingPattern(bindingElements);
+        const paramType = createParamTypeNode(func);
 
         return createParameter(
-            /* decorators */ undefined,
-            /* modifiers */ undefined,
-            /* dotDotDotToken */ undefined,
+            /*decorators*/ undefined,
+            /*modifiers*/ undefined,
+            /*dotDotDotToken*/ undefined,
             paramName,
-            /* questionToken */ undefined,
+            /*questionToken*/ undefined,
             paramType);
     }
 
