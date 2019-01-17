@@ -516,11 +516,11 @@ namespace ts {
 
         const result = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
         result.getState = () => state;
-        result.backupCurrentState = () => {
+        result.backupState = () => {
             Debug.assert(backupState === undefined);
             backupState = cloneBuilderProgramState(state);
         };
-        result.useBackupState = () => {
+        result.restoreState = () => {
             state = Debug.assertDefined(backupState);
             backupState = undefined;
         };
@@ -715,8 +715,8 @@ namespace ts {
     export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: ReadonlyArray<Diagnostic>): BuilderProgram {
         return {
             getState: notImplemented,
-            backupCurrentState: noop,
-            useBackupState: noop,
+            backupState: noop,
+            restoreState: noop,
             getProgram,
             getProgramOrUndefined: () => state.program,
             releaseProgram: () => state.program = undefined,
@@ -766,9 +766,9 @@ namespace ts {
         /*@internal*/
         getState(): BuilderProgramState;
         /*@internal*/
-        backupCurrentState(): void;
+        backupState(): void;
         /*@internal*/
-        useBackupState(): void;
+        restoreState(): void;
         /**
          * Returns current program
          */
