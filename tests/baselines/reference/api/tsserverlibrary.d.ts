@@ -1778,7 +1778,7 @@ declare namespace ts {
     type ResolvedConfigFileName = string & {
         _isResolvedConfigFileName: never;
     };
-    type WriteFileCallback = (fileName: string, data: string, writeByteOrderMark: boolean, onError: ((message: string) => void) | undefined, sourceFiles?: ReadonlyArray<SourceFile>) => void;
+    type WriteFileCallback = (fileName: string, data: string, writeByteOrderMark: boolean, onError?: (message: string) => void, sourceFiles?: ReadonlyArray<SourceFile>) => void;
     class OperationCanceledException {
     }
     interface CancellationToken {
@@ -2689,7 +2689,6 @@ declare namespace ts {
         getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
@@ -4280,6 +4279,10 @@ declare namespace ts {
          */
         getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         /**
+         * Get the declaration diagnostics, for all source files if source file is not supplied
+         */
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
+        /**
          * Get all the dependencies of the file
          */
         getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
@@ -4365,13 +4368,11 @@ declare namespace ts {
         /** If provided, will be used to reset existing delayed compilation */
         clearTimeout?(timeoutId: any): void;
     }
-    interface WatchCompilerHost<T extends BuilderProgram> extends WatchHost {
+    interface ProgramHost<T extends BuilderProgram> {
         /**
          * Used to create the program when need for program creation or recreation detected
          */
         createProgram: CreateProgram<T>;
-        /** If provided, callback to invoke after every new program creation */
-        afterProgramCreate?(program: T): void;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         getCurrentDirectory(): string;
@@ -4404,6 +4405,10 @@ declare namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
+    }
+    interface WatchCompilerHost<T extends BuilderProgram> extends ProgramHost<T>, WatchHost {
+        /** If provided, callback to invoke after every new program creation */
+        afterProgramCreate?(program: T): void;
     }
     /**
      * Host to create watch with root files and options

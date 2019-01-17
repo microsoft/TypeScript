@@ -1387,6 +1387,18 @@ namespace ts {
         return result;
     }
 
+    export function copyProperties<T1 extends T2, T2>(first: T1, second: T2) {
+        for (const id in second) {
+            if (hasOwnProperty.call(second, id)) {
+                (first as any)[id] = second[id];
+            }
+        }
+    }
+
+    export function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
+        return fn ? fn.bind(obj) : undefined;
+    }
+
     export interface MultiMap<T> extends Map<T[]> {
         /**
          * Adds the value to an array of values associated with the key, and returns the array.
