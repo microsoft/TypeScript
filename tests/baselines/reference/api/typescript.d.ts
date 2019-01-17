@@ -1192,7 +1192,7 @@ declare namespace ts {
     }
     interface JsxText extends LiteralLikeNode {
         kind: SyntaxKind.JsxText;
-        containsOnlyWhiteSpaces: boolean;
+        containsOnlyTriviaWhiteSpaces: boolean;
         parent: JsxElement;
     }
     type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -3927,8 +3927,8 @@ declare namespace ts {
     function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
     function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
     function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
-    function createJsxText(text: string, containsOnlyWhiteSpaces: boolean): JsxText;
-    function updateJsxText(node: JsxText, text: string, containsOnlyWhiteSpaces: boolean): JsxText;
+    function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
+    function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
     function createJsxOpeningFragment(): JsxOpeningFragment;
     function createJsxJsxClosingFragment(): JsxClosingFragment;
     function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;

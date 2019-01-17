@@ -905,7 +905,7 @@ namespace ts {
     }
 
     function isWhiteSpaceOnlyJsxText(node: Node): boolean {
-        return isJsxText(node) && node.containsOnlyWhiteSpaces;
+        return isJsxText(node) && node.containsOnlyTriviaWhiteSpaces;
     }
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {

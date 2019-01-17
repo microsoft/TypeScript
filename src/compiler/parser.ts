@@ -4251,7 +4251,7 @@ namespace ts {
         function parseJsxText(): JsxText {
             const node = <JsxText>createNode(SyntaxKind.JsxText);
             node.text = scanner.getTokenValue();
-            node.containsOnlyWhiteSpaces = currentToken === SyntaxKind.JsxTextAllWhiteSpaces;
+            node.containsOnlyTriviaWhiteSpaces = currentToken === SyntaxKind.JsxTextAllWhiteSpaces;
             currentToken = scanner.scanJsxToken();
             return finishNode(node);
         }

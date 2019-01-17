@@ -2299,26 +2299,26 @@ namespace ts {
         return node;
     }
 
-    export function createJsxText(text: string, containsOnlyWhiteSpaces: boolean) {
-        const node = <JsxText>createNode(SyntaxKind.JsxText);
+    export function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
+        const node = <JsxText>createSynthesizedNode(SyntaxKind.JsxText);
         node.text = text;
-        node.containsOnlyWhiteSpaces = containsOnlyWhiteSpaces;
+        node.containsOnlyTriviaWhiteSpaces = !!containsOnlyTriviaWhiteSpaces;
         return node;
     }
 
-    export function updateJsxText(node: JsxText, text: string, containsOnlyWhiteSpaces: boolean) {
+    export function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
         return node.text !== text
-            || node.containsOnlyWhiteSpaces !== containsOnlyWhiteSpaces
-            ? updateNode(createJsxText(text, containsOnlyWhiteSpaces), node)
+            || node.containsOnlyTriviaWhiteSpaces !== containsOnlyTriviaWhiteSpaces
+            ? updateNode(createJsxText(text, containsOnlyTriviaWhiteSpaces), node)
             : node;
     }
 
     export function createJsxOpeningFragment() {
-        return <JsxOpeningFragment>createNode(SyntaxKind.JsxOpeningFragment);
+        return <JsxOpeningFragment>createSynthesizedNode(SyntaxKind.JsxOpeningFragment);
     }
 
     export function createJsxJsxClosingFragment() {
-        return <JsxClosingFragment>createNode(SyntaxKind.JsxClosingFragment);
+        return <JsxClosingFragment>createSynthesizedNode(SyntaxKind.JsxClosingFragment);
     }
 
     export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
