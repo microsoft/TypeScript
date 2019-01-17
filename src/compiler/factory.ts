@@ -2649,7 +2649,22 @@ namespace ts {
             node.sourceMapText = map;
         }
         const text = node.text;
-        node.pos = isShebangTrivia(text, 0) ? skipTrivia(text, 0, /*stopAfterLineBreak*/ true) : 0;
+        let pos = isShebangTrivia(text, 0) ? skipTrivia(text, 0, /*stopAfterLineBreak*/ true) : 0;
+        const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true, /*languageVariant*/ undefined, text, /*onError*/ undefined, pos);
+        let prologues: UnparsedPrologue[] | undefined;
+        while (scanner.scan()  === SyntaxKind.StringLiteral) {
+            const start = pos;
+            const prologueText = scanner.getTokenValue();
+            scanner.tryScan(() => scanner.scan() === SyntaxKind.SemicolonToken);
+            pos = skipTrivia(text, scanner.getTextPos(), /*stopAfterLineBreak*/ true);
+
+            const prologue = <UnparsedPrologue>createNode(SyntaxKind.UnparsedPrologue, start, pos);
+            prologue.parent = node;
+            prologue.text = prologueText;
+            (prologues || (prologues = [])).push(prologue);
+        }
+        node.pos = pos;
+        node.prologues = prologues || emptyArray;
         node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
         return node;
     }

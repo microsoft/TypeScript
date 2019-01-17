@@ -428,6 +428,7 @@ namespace ts {
 
         // Enum
         EnumMember,
+        UnparsedPrologue,
         // Top-level nodes
         SourceFile,
         Bundle,
@@ -2775,11 +2776,19 @@ namespace ts {
         kind: SyntaxKind.UnparsedSource;
         fileName?: string;
         text: string;
+        prologues: ReadonlyArray<UnparsedPrologue>;
         sourceMapPath?: string;
         sourceMapText?: string;
+        /*@internal*/ parsedSourceMap?: RawSourceMap | false | undefined;
         // Adding this to satisfy services, fix later
         /*@internal*/
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+    }
+
+    export interface UnparsedPrologue extends Node {
+        kind: SyntaxKind.UnparsedSource;
+        text: string;
+        parent: UnparsedSource;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -5531,7 +5540,7 @@ namespace ts {
         /**
          * Appends a source map.
          */
-        appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string, startLine: number): void;
+        appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter): void;
         /**
          * Gets the source map as a `RawSourceMap` object.
          */

@@ -727,6 +727,9 @@ namespace ts {
                     case SyntaxKind.UnparsedSource:
                         return emitUnparsedSource(<UnparsedSource>node);
 
+                    case SyntaxKind.UnparsedPrologue:
+                        return emitUnparsedPrologue(<UnparsedPrologue>node);
+
                     // Identifiers
                     case SyntaxKind.Identifier:
                         return emitIdentifier(<Identifier>node);
@@ -1209,6 +1212,11 @@ namespace ts {
         // SyntaxKind.UnparsedSource
         function emitUnparsedSource(unparsed: UnparsedSource) {
             writer.rawWrite(unparsed.text.substr(unparsed.pos));
+        }
+
+        // SyntaxKind.UnparsedPrologue
+        function emitUnparsedPrologue(unparsed: UnparsedPrologue) {
+            writer.rawWrite(unparsed.parent.text.substring(unparsed.pos, unparsed.end));
         }
 
         //
@@ -3005,6 +3013,17 @@ namespace ts {
             return statements.length;
         }
 
+        function emitUnparsedPrologues(prologues: ReadonlyArray<UnparsedPrologue>, seenPrologueDirectives: Map<true>) {
+            for (const prologue of prologues) {
+                if (!seenPrologueDirectives.has(prologue.text)) {
+                    emit(prologue);
+                    if (seenPrologueDirectives) {
+                        seenPrologueDirectives.set(prologue.text, true);
+                    }
+                }
+            }
+        }
+
         function emitPrologueDirectivesIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
             if (isSourceFile(sourceFileOrBundle)) {
                 setSourceFile(sourceFileOrBundle);
@@ -3012,6 +3031,9 @@ namespace ts {
             }
             else {
                 const seenPrologueDirectives = createMap<true>();
+                for (const prepend of sourceFileOrBundle.prepends) {
+                    emitUnparsedPrologues((prepend as UnparsedSource).prologues, seenPrologueDirectives);
+                }
                 for (const sourceFile of sourceFileOrBundle.sourceFiles) {
                     setSourceFile(sourceFile);
                     emitPrologueDirectives(sourceFile.statements, /*startWithNewLine*/ true, seenPrologueDirectives);
@@ -4343,17 +4365,38 @@ namespace ts {
 
         // Source Maps
 
+        function getParsedSourceMap(node: UnparsedSource) {
+            if (node.parsedSourceMap === undefined && node.sourceMapText !== undefined) {
+                node.parsedSourceMap = tryParseRawSourceMap(node.sourceMapText) || false;
+            }
+            return node.parsedSourceMap || undefined;
+        }
+
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, node);
-            if (isUnparsedSource(node) && node.sourceMapText !== undefined) {
-                const parsed = tryParseRawSourceMap(node.sourceMapText);
+            if (isUnparsedSource(node)) {
+                const parsed = getParsedSourceMap(node);
                 if (parsed) {
                     sourceMapGenerator!.appendSourceMap(
                         writer.getLine(),
                         writer.getColumn(),
                         parsed,
                         node.sourceMapPath!,
-                        node.pos && node.getLineAndCharacterOfPosition(node.pos).line);
+                        node.pos ? node.getLineAndCharacterOfPosition(node.pos) : undefined);
+                }
+                pipelinePhase(hint, node);
+            }
+            else if (isUnparsedPrologue(node)) {
+                const parsed = getParsedSourceMap(node.parent);
+                if (parsed) {
+                    sourceMapGenerator!.appendSourceMap(
+                        writer.getLine(),
+                        writer.getColumn(),
+                        parsed,
+                        node.parent.sourceMapPath!,
+                        node.parent.getLineAndCharacterOfPosition(node.pos),
+                        node.parent.getLineAndCharacterOfPosition(node.end)
+                    );
                 }
                 pipelinePhase(hint, node);
             }

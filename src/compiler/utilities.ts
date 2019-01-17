@@ -5979,6 +5979,10 @@ namespace ts {
         return node.kind === SyntaxKind.UnparsedSource;
     }
 
+    export function isUnparsedPrologue(node: Node): node is UnparsedPrologue {
+        return node.kind === SyntaxKind.UnparsedPrologue;
+    }
+
     // JSDoc
 
     export function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression {
