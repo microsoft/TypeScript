@@ -510,7 +510,12 @@ namespace ts.refactor {
             }
 
             const jsxNamespace = checker.getJsxNamespace(containsJsx);
+
+            // Strictly speaking, this could resolve to a symbol other than the JSX namespace.
+            // This will produce erroneous output (probably, an incorrectly copied import) but
+            // is expected to be very rare and easily reversible.
             const jsxNamespaceSymbol = checker.resolveName(jsxNamespace, containsJsx, SymbolFlags.Namespace, /*excludeGlobals*/ true);
+
             return !!jsxNamespaceSymbol && some(jsxNamespaceSymbol.declarations, isInImport)
                 ? jsxNamespaceSymbol
                 : undefined;
