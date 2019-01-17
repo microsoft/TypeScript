@@ -2827,7 +2827,7 @@ namespace ts {
         fileName: string,
         data: string,
         writeByteOrderMark: boolean,
-        onError: ((message: string) => void) | undefined,
+        onError?: (message: string) => void,
         sourceFiles?: ReadonlyArray<SourceFile>,
     ) => void;
 
@@ -5002,7 +5002,6 @@ namespace ts {
         getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
