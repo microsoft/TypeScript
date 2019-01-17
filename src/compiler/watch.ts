@@ -187,10 +187,10 @@ namespace ts {
         const onWatchStatusChange = reportWatchStatus || createWatchStatusReporter(system);
         return {
             onWatchStatusChange,
-            watchFile: system.watchFile ? ((path, callback, pollingInterval) => system.watchFile!(path, callback, pollingInterval)) : () => noopFileWatcher,
-            watchDirectory: system.watchDirectory ? ((path, callback, recursive) => system.watchDirectory!(path, callback, recursive)) : () => noopFileWatcher,
-            setTimeout: system.setTimeout ? ((callback, ms, ...args: any[]) => system.setTimeout!.call(system, callback, ms, ...args)) : noop,
-            clearTimeout: system.clearTimeout ? (timeoutId => system.clearTimeout!(timeoutId)) : noop
+            watchFile: maybeBind(system, system.watchFile) || (() => noopFileWatcher),
+            watchDirectory: maybeBind(system, system.watchDirectory) || (() => noopFileWatcher),
+            setTimeout: maybeBind(system, system.setTimeout) || noop,
+            clearTimeout: maybeBind(system, system.clearTimeout) || noop
         };
     }
 
@@ -217,6 +217,7 @@ namespace ts {
 
     export function createCompilerHostFromProgramHost(host: ProgramHost<any>, getCompilerOptions: () => CompilerOptions, directoryStructureHost: DirectoryStructureHost = host): CompilerHost {
         const useCaseSensitiveFileNames = host.useCaseSensitiveFileNames();
+        const hostGetNewLine = memoize(() => host.getNewLine());
         return {
             getSourceFile: (fileName, languageVersion, onError) => {
                 let text: string | undefined;
@@ -235,22 +236,22 @@ namespace ts {
 
                 return text !== undefined ? createSourceFile(fileName, text, languageVersion) : undefined;
             },
-            getDefaultLibLocation: host.getDefaultLibLocation && (() => host.getDefaultLibLocation!()),
+            getDefaultLibLocation: maybeBind(host, host.getDefaultLibLocation),
             getDefaultLibFileName: options => host.getDefaultLibFileName(options),
             writeFile,
             getCurrentDirectory: memoize(() => host.getCurrentDirectory()),
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
             getCanonicalFileName: createGetCanonicalFileName(useCaseSensitiveFileNames),
-            getNewLine: memoize(() => getNewLineCharacter(getCompilerOptions(), () => host.getNewLine())),
+            getNewLine: () => getNewLineCharacter(getCompilerOptions(), hostGetNewLine),
             fileExists: f => host.fileExists(f),
             readFile: f => host.readFile(f),
-            trace: host.trace && (s => host.trace!(s)),
-            directoryExists: directoryStructureHost.directoryExists && (path => directoryStructureHost.directoryExists!(path)),
-            getDirectories: (directoryStructureHost.getDirectories && ((path: string) => directoryStructureHost.getDirectories!(path)))!, // TODO: GH#18217
-            realpath: host.realpath && (s => host.realpath!(s)),
-            getEnvironmentVariable: host.getEnvironmentVariable ? (name => host.getEnvironmentVariable!(name)) : (() => ""),
-            createHash: host.createHash && (data => host.createHash!(data)),
-            readDirectory: (path, extensions, exclude, include, depth?) => directoryStructureHost.readDirectory!(path, extensions, exclude, include, depth),
+            trace: maybeBind(host, host.trace),
+            directoryExists: maybeBind(directoryStructureHost, directoryStructureHost.directoryExists),
+            getDirectories: maybeBind(directoryStructureHost, directoryStructureHost.getDirectories),
+            realpath: maybeBind(host, host.realpath),
+            getEnvironmentVariable: maybeBind(host, host.getEnvironmentVariable) || (() => ""),
+            createHash: maybeBind(host, host.createHash),
+            readDirectory: maybeBind(host, host.readDirectory),
         };
 
         function ensureDirectoriesExist(directoryPath: string) {
@@ -297,13 +298,13 @@ namespace ts {
             directoryExists: path => system.directoryExists(path),
             getDirectories: path => system.getDirectories(path),
             readDirectory: (path, extensions, exclude, include, depth) => system.readDirectory(path, extensions, exclude, include, depth),
-            realpath: system.realpath && (path => system.realpath!(path)),
-            getEnvironmentVariable: system.getEnvironmentVariable && (name => system.getEnvironmentVariable(name)),
+            realpath: maybeBind(system, system.realpath),
+            getEnvironmentVariable: maybeBind(system, system.getEnvironmentVariable),
             trace: s => system.write(s + system.newLine),
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
-            createHash: system.createHash && (s => system.createHash!(s)),
+            createHash: maybeBind(system, system.createHash),
             createProgram
         };
     }
@@ -758,7 +759,7 @@ namespace ts {
 
             // Create new source file if requested or the versions dont match
             if (!hostSourceFile || shouldCreateNewSourceFile || !isFilePresentOnHost(hostSourceFile) || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
-                const sourceFile = getNewSourceFile.call(compilerHost, fileName, languageVersion, onError);
+                const sourceFile = getNewSourceFile(fileName, languageVersion, onError);
                 if (hostSourceFile) {
                     if (shouldCreateNewSourceFile) {
                         hostSourceFile.version++;

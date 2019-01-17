@@ -2689,7 +2689,6 @@ declare namespace ts {
         getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;

@@ -717,22 +717,26 @@ namespace ts {
             getState: notImplemented,
             backupCurrentState: noop,
             useBackupState: noop,
-            getProgram: () => Debug.assertDefined(state.program),
+            getProgram,
             getProgramOrUndefined: () => state.program,
             releaseProgram: () => state.program = undefined,
             getCompilerOptions: () => state.compilerOptions,
-            getSourceFile: fileName => Debug.assertDefined(state.program).getSourceFile(fileName),
-            getSourceFiles: () => Debug.assertDefined(state.program).getSourceFiles(),
-            getOptionsDiagnostics: cancellationToken => Debug.assertDefined(state.program).getOptionsDiagnostics(cancellationToken),
-            getGlobalDiagnostics: cancellationToken => Debug.assertDefined(state.program).getGlobalDiagnostics(cancellationToken),
+            getSourceFile: fileName => getProgram().getSourceFile(fileName),
+            getSourceFiles: () => getProgram().getSourceFiles(),
+            getOptionsDiagnostics: cancellationToken => getProgram().getOptionsDiagnostics(cancellationToken),
+            getGlobalDiagnostics: cancellationToken => getProgram().getGlobalDiagnostics(cancellationToken),
             getConfigFileParsingDiagnostics: () => configFileParsingDiagnostics,
-            getSyntacticDiagnostics: (sourceFile, cancellationToken) => Debug.assertDefined(state.program).getSyntacticDiagnostics(sourceFile, cancellationToken),
-            getDeclarationDiagnostics: (sourceFile, cancellationToken) => Debug.assertDefined(state.program).getDeclarationDiagnostics(sourceFile, cancellationToken),
-            getSemanticDiagnostics: (sourceFile, cancellationToken) => Debug.assertDefined(state.program).getSemanticDiagnostics(sourceFile, cancellationToken),
-            emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) => Debug.assertDefined(state.program).emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
+            getSyntacticDiagnostics: (sourceFile, cancellationToken) => getProgram().getSyntacticDiagnostics(sourceFile, cancellationToken),
+            getDeclarationDiagnostics: (sourceFile, cancellationToken) => getProgram().getDeclarationDiagnostics(sourceFile, cancellationToken),
+            getSemanticDiagnostics: (sourceFile, cancellationToken) => getProgram().getSemanticDiagnostics(sourceFile, cancellationToken),
+            emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) => getProgram().emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
             getAllDependencies: notImplemented,
-            getCurrentDirectory: () => Debug.assertDefined(state.program).getCurrentDirectory()
+            getCurrentDirectory: () => getProgram().getCurrentDirectory()
         };
+
+        function getProgram() {
+            return Debug.assertDefined(state.program);
+        }
     }
 }
 

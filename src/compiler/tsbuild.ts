@@ -447,7 +447,7 @@ namespace ts {
         let nextProjectToBuild = 0;
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
-        const { watchFile, watchFilePath, watchDirectory } = createWatchFactory<ResolvedConfigFileName>(host, options);
+        const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(host, options);
 
         // Watches for the solution
         const allWatchedWildcardDirectories = createFileMap<Map<WildcardDirectoryWatcher>>(toPath);
@@ -593,12 +593,12 @@ namespace ts {
                         fileOrDirectory => {
                             const fileOrDirectoryPath = toPath(fileOrDirectory);
                             if (fileOrDirectoryPath !== toPath(dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, parsed.options)) {
-                                // writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
+                                writeLog(`Project: ${resolved} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
                                 return;
                             }
 
                             if (isOutputFile(fileOrDirectory, parsed)) {
-                                // writeLog(`${fileOrDirectory} is output file`);
+                                writeLog(`${fileOrDirectory} is output file`);
                                 return;
                             }
 
@@ -991,7 +991,7 @@ namespace ts {
             }
 
             if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
-                // Fake build
+                // Fake that files have been built by updating output file stamps
                 updateOutputTimestamps(proj);
                 return;
             }
