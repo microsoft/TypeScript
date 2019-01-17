@@ -7741,7 +7741,13 @@ namespace ts {
             result.containingType = containingType;
             if (!hasNonUniformValueDeclaration && firstValueDeclaration) {
                 result.valueDeclaration = firstValueDeclaration;
+
+                // Inherit information about parent type.
+                if (firstValueDeclaration.symbol.parent) {
+                    result.parent = firstValueDeclaration.symbol.parent;
+                }
             }
+
             result.declarations = declarations!;
             result.nameType = nameType;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
