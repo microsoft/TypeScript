@@ -1129,7 +1129,7 @@ namespace ts {
             }
 
             // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
-            program.backupCurrentState();
+            program.backupState();
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
             let declDiagnostics: Diagnostic[] | undefined;
@@ -1138,7 +1138,7 @@ namespace ts {
             emitFilesAndReportErrors(program, reportDeclarationDiagnostics, writeFileName, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
-                program.useBackupState();
+                program.restoreState();
                 return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
             }
 
