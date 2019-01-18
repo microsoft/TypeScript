@@ -1117,7 +1117,7 @@ namespace ts {
                 flowAfterCatch = currentFlow;
             }
             if (node.finallyBlock) {
-                // We add the nodes within the `try` block to te `finally`'s antecedents if there's no catch block
+                // We add the nodes within the `try` block to the `finally`'s antecedents if there's no catch block
                 // (If there is a `catch` block, it will have all these antecedents instead, and the `finally` will
                 // have the end of the `try` block and the end of the `catch` block)
                 if (!node.catchClause) {
