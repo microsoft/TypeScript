@@ -5386,8 +5386,8 @@ namespace ts {
             return type;
         }
 
-        function getBaseTypeVariableOfClass(symbol: Symbol) {
-            const baseConstructorType = getBaseConstructorTypeOfClass(getDeclaredTypeOfClassOrInterface(symbol));
+        function getBaseTypeVariableOfClass(symbol: Symbol, staticType?: Type) {
+            const baseConstructorType = getBaseConstructorTypeOfClass(getDeclaredTypeOfClassOrInterface(symbol), staticType);
             return baseConstructorType.flags & TypeFlags.TypeVariable ? baseConstructorType : undefined;
         }
 
@@ -5442,7 +5442,7 @@ namespace ts {
             }
             const type = createObjectType(ObjectFlags.Anonymous, symbol);
             if (symbol.flags & SymbolFlags.Class) {
-                const baseTypeVariable = getBaseTypeVariableOfClass(symbol);
+                const baseTypeVariable = getBaseTypeVariableOfClass(symbol, type);
                 return baseTypeVariable ? getIntersectionType([type, baseTypeVariable]) : type;
             }
             else {
@@ -5681,7 +5681,7 @@ namespace ts {
          * * anyType if the extends expression has type any, or
          * * an object type with at least one construct signature.
          */
-        function getBaseConstructorTypeOfClass(type: InterfaceType): Type {
+        function getBaseConstructorTypeOfClass(type: InterfaceType, staticType?: Type): Type {
             if (!type.resolvedBaseConstructorType) {
                 const decl = <ClassLikeDeclaration>type.symbol.valueDeclaration;
                 const extended = getEffectiveBaseTypeNode(decl);
@@ -5692,11 +5692,21 @@ namespace ts {
                 if (!pushTypeResolution(type, TypeSystemPropertyName.ResolvedBaseConstructorType)) {
                     return errorType;
                 }
-                const baseConstructorType = checkExpression(baseTypeNode.expression);
+                let baseConstructorType = checkExpression(baseTypeNode.expression);
                 if (extended && baseTypeNode !== extended) {
                     Debug.assert(!extended.typeArguments); // Because this is in a JS file, and baseTypeNode is in an @extends tag
                     checkExpression(extended.expression);
                 }
+
+                // An interface in this position defines the static members and
+                // construct signature of base type. In this case, using the
+                // this type in the interface definition refers to the static
+                // type of the derivative class.
+                if (baseConstructorType.symbol && baseConstructorType.symbol.flags &&
+                    !isThislessInterface(baseConstructorType.symbol) && staticType) {
+                    baseConstructorType = getTypeWithThisArgument(baseConstructorType, staticType);
+                }
+
                 if (baseConstructorType.flags & (TypeFlags.Object | TypeFlags.Intersection)) {
                     // Resolving the members of a class requires us to resolve the base class of that class.
                     // We force resolution here such that we catch circularities now.
