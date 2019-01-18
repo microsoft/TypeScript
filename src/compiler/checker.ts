@@ -22962,7 +22962,9 @@ namespace ts {
             context.contextualMapper = contextualMapper;
             const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
                 contextualMapper ? CheckMode.Inferential : CheckMode.Contextual;
-            const result = checkExpression(node, checkMode);
+            const type = checkExpression(node, checkMode);
+            const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
+                getRegularTypeOfLiteralType(type) : type;
             context.contextualType = saveContextualType;
             context.contextualMapper = saveContextualMapper;
             return result;
