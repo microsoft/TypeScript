@@ -8690,15 +8690,23 @@ namespace ts {
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.JSDocTypeReference)) {
                 return errorType;
             }
-            const valueType = getTypeOfSymbol(symbol);
-            const referenceType = valueType.symbol && valueType.symbol !== symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+            const staticType = getTypeOfSymbol(symbol);
+
+            // In the case of an assignment of a function expression (binary expressions, variable declarations, etc.), we will get the
+            // correct instance type for the symbol on the LHS by finding the type for RHS. For example if we want to get the type of the symbol `foo`:
+            //   var foo = function() {}
+            // We will find the static type of the assigned anonymous function.
+            const instanceType =
+                staticType.symbol &&
+                staticType.symbol !== symbol && // Make sure this is an assignment like expression by checking that symbol -> type -> symbol doesn't roundtrips.
+                getTypeReferenceTypeWorker(node, staticType.symbol, typeArguments); // Get the instance type of the RHS symbol.
             if (!popTypeResolution()) {
                 getSymbolLinks(symbol).resolvedJSDocType = errorType;
                 error(node, Diagnostics.JSDoc_type_0_circularly_references_itself, symbolToString(symbol));
                 return errorType;
             }
-            if (referenceType) {
-                return getSymbolLinks(symbol).resolvedJSDocType = referenceType;
+            if (instanceType) {
+                return getSymbolLinks(symbol).resolvedJSDocType = instanceType;
             }
         }
 
@@ -20949,12 +20957,6 @@ namespace ts {
                 links.inferredClassType = createAnonymousType(symbol, getMembersOfSymbol(symbol) || emptySymbols, emptyArray, emptyArray, /*stringIndexType*/ undefined, /*numberIndexType*/ undefined);
             }
             return links.inferredClassType;
-        }
-
-        function isInferredClassType(type: Type) {
-            return type.symbol
-                && getObjectFlags(type) & ObjectFlags.Anonymous
-                && getSymbolLinks(type.symbol).inferredClassType === type;
         }
 
         /**
