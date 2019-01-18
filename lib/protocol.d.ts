@@ -2279,6 +2279,8 @@ declare namespace ts.server.protocol {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
