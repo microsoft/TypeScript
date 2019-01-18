@@ -17715,10 +17715,26 @@ namespace ts {
             if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
                 const returnMapper = (<InferenceContext>getContextualMapper(node)).returnMapper;
                 if (returnMapper) {
-                    return mapType(contextualType, t => t.flags & TypeFlags.Instantiable ? instantiateType(t, returnMapper) : t);
+                    return instantiateInstantiableTypes(contextualType, returnMapper);
                 }
             }
             return contextualType;
+        }
+
+        // This function is similar to instantiateType, except (a) that it only instantiates types that
+        // are classified as instantiable (i.e. it doesn't instantiate object types), and (b) it performs
+        // no reductions on instantiated union types.
+        function instantiateInstantiableTypes(type: Type, mapper: TypeMapper): Type {
+            if (type.flags & TypeFlags.Instantiable) {
+                return instantiateType(type, mapper);
+            }
+            if (type.flags & TypeFlags.Union) {
+                getUnionType(map((<UnionType>type).types, t => instantiateInstantiableTypes(t, mapper)), UnionReduction.None);
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                getIntersectionType(map((<IntersectionType>type).types, t => instantiateInstantiableTypes(t, mapper)));
+            }
+            return type;
         }
 
         /**
@@ -22963,6 +22979,9 @@ namespace ts {
             const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
                 contextualMapper ? CheckMode.Inferential : CheckMode.Contextual;
             const type = checkExpression(node, checkMode);
+            // We strip literal freshness when an appropriate contextual type is present such that contextually typed
+            // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
+            // here would be to not mark contextually typed literals as fresh in the first place.
             const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
                 getRegularTypeOfLiteralType(type) : type;
             context.contextualType = saveContextualType;
