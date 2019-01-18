@@ -34,7 +34,7 @@ module.exports = minimist(process.argv.slice(2), {
         workers: process.env.workerCount || os.cpus().length,
         failed: false,
         keepFailed: false,
-        lkg: false,
+        lkg: true,
         dirty: false
     }
 });

@@ -14,77 +14,53 @@ const ts = require("../../lib/typescript");
 const del = require("del");
 const needsUpdate = require("./needsUpdate");
 const mkdirp = require("./mkdirp");
-const prettyTime = require("pretty-hrtime");
 const { reportDiagnostics } = require("./diagnostics");
-const { CountdownEvent, ManualResetEvent } = require("prex");
+const { CountdownEvent, ManualResetEvent, Semaphore } = require("prex");
 
 const workStartedEvent = new ManualResetEvent();
 const countdown = new CountdownEvent(0);
 
-class CompilationGulp extends gulp.Gulp {
-    /**
-     * @param {boolean} [verbose]
-     */
-    fork(verbose) {
-        const child = new ForkedGulp(this.tasks);
-        child.on("task_start", e => {
-            if (countdown.remainingCount === 0) {
-                countdown.reset(1);
-                workStartedEvent.set();
-                workStartedEvent.reset();
-            }
-            else {
-                countdown.add();
-            }
-            if (verbose) {
-                log('Starting', `'${chalk.cyan(e.task)}' ${chalk.gray(`(${countdown.remainingCount} remaining)`)}...`);
-            }
-        });
-        child.on("task_stop", e => {
-            countdown.signal();
-            if (verbose) {
-                log('Finished', `'${chalk.cyan(e.task)}' after ${chalk.magenta(prettyTime(/** @type {*}*/(e).hrDuration))} ${chalk.gray(`(${countdown.remainingCount} remaining)`)}`);
-            }
-        });
-        child.on("task_err", e => {
-            countdown.signal();
-            if (verbose) {
-                log(`'${chalk.cyan(e.task)}' ${chalk.red("errored after")} ${chalk.magenta(prettyTime(/** @type {*}*/(e).hrDuration))} ${chalk.gray(`(${countdown.remainingCount} remaining)`)}`);
-                log(e.err ? e.err.stack : e.message);
-            }
-        });
-        return child;
-    }
-
-    // @ts-ignore
-    start() {
-        throw new Error("Not supported, use fork.");
-    }
-}
-
-class ForkedGulp extends gulp.Gulp {
-    /**
-     * @param {gulp.Gulp["tasks"]} tasks
-     */
-    constructor(tasks) {
-        super();
-        this.tasks = tasks;
-    }
-
-    // Do not reset tasks
-    _resetAllTasks() {}
-    _resetSpecificTasks() {}
-    _resetTask() {}
-}
-
 // internal `Gulp` instance for compilation artifacts.
-const compilationGulp = new CompilationGulp();
+const compilationGulp = new gulp.Gulp();
 
 /** @type {Map<ResolvedProjectSpec, ProjectGraph>} */
 const projectGraphCache = new Map();
 
 /** @type {Map<string, { typescript: string, alias: string, paths: ResolvedPathOptions }>} */
 const typescriptAliasMap = new Map();
+
+// TODO: allow concurrent outer builds to be run in parallel
+const sem = new Semaphore(1);
+
+/**
+ * @param {string|string[]} taskName 
+ * @param {() => any} [cb] 
+ */
+function start(taskName, cb) {
+    return sem.wait().then(() => new Promise((resolve, reject) => {
+        compilationGulp.start(taskName, err => {
+            if (err) {
+                reject(err);
+            }
+            else if (cb) {
+                try {
+                    resolve(cb());
+                }
+                catch (e) {
+                    reject(err);
+                }
+            }
+            else {
+                resolve();
+            }
+        });
+    })).then(() => {
+        sem.release()
+    }, e => {
+        sem.release();
+        throw e;
+    });
+}
 
 /**
  * Defines a gulp orchestration for a TypeScript project, returning a callback that can be used to trigger compilation.
@@ -98,9 +74,7 @@ function createCompiler(projectSpec, options) {
     const projectGraph = getOrCreateProjectGraph(resolvedProjectSpec, resolvedOptions.paths);
     projectGraph.isRoot = true;
     const taskName = compileTaskName(ensureCompileTask(projectGraph, resolvedOptions), resolvedOptions.typescript);
-    return () => new Promise((resolve, reject) => compilationGulp
-        .fork(resolvedOptions.verbose)
-        .start(taskName, err => err ? reject(err) : resolve()));
+    return () => start(taskName);
 }
 exports.createCompiler = createCompiler;
 
@@ -139,9 +113,7 @@ function createCleaner(projectSpec, options) {
     const projectGraph = getOrCreateProjectGraph(resolvedProjectSpec, paths);
     projectGraph.isRoot = true;
     const taskName = cleanTaskName(ensureCleanTask(projectGraph));
-    return () => new Promise((resolve, reject) => compilationGulp
-        .fork()
-        .start(taskName, err => err ? reject(err) : resolve()));
+    return () => start(taskName);
 }
 exports.createCleaner = createCleaner;
 
@@ -811,7 +783,7 @@ function possiblyTriggerRecompilation(config, task) {
 function triggerRecompilation(task, config) {
     compilationGulp._resetTask(task);
     if (config.watchers && config.watchers.size) {
-        compilationGulp.fork().start(task.name, () => {
+        start(task.name, () => {
             /** @type {Set<string>} */
             const taskNames = new Set();
             /** @type {((err?: any) => void)[]} */
@@ -831,7 +803,7 @@ function triggerRecompilation(task, config) {
         });
     }
     else {
-        compilationGulp.fork(/*verbose*/ true).start(task.name);
+        start(task.name);
     }
 }
 
