@@ -69,6 +69,7 @@ namespace ts {
     export function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost {
         return createCompilerHostWorker(options, setParentNodes);
     }
+
     /*@internal*/
     // TODO(shkamat): update this after reworking ts build API
     export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
@@ -93,7 +94,6 @@ namespace ts {
                 }
                 text = "";
             }
-
             return text !== undefined ? createSourceFile(fileName, text, languageVersion, setParentNodes) : undefined;
         }
 
@@ -203,18 +203,25 @@ namespace ts {
         return compilerHost;
     }
 
+    interface CompilerHostLikeForCache {
+        fileExists(fileName: string): boolean;
+        readFile(fileName: string, encoding?: string): string | undefined;
+        directoryExists?(directory: string): boolean;
+        createDirectory?(directory: string): void;
+        writeFile?: WriteFileCallback;
+    }
+
     /*@internal*/
-    export function changeCompilerHostToUseCache(
-        host: CompilerHost,
+    export function changeCompilerHostLikeToUseCache(
+        host: CompilerHostLikeForCache,
         toPath: (fileName: string) => Path,
-        useCacheForSourceFile: boolean
+        getSourceFile?: CompilerHost["getSourceFile"]
     ) {
         const originalReadFile = host.readFile;
         const originalFileExists = host.fileExists;
         const originalDirectoryExists = host.directoryExists;
         const originalCreateDirectory = host.createDirectory;
         const originalWriteFile = host.writeFile;
-        const originalGetSourceFile = host.getSourceFile;
         const readFileCache = createMap<string | false>();
         const fileExistsCache = createMap<boolean>();
         const directoryExistsCache = createMap<boolean>();
@@ -242,19 +249,17 @@ namespace ts {
             return setReadFileCache(key, fileName);
         };
 
-        if (useCacheForSourceFile) {
-            host.getSourceFile = (fileName, languageVersion, onError, shouldCreateNewSourceFile) => {
-                const key = toPath(fileName);
-                const value = sourceFileCache.get(key);
-                if (value) return value;
+        const getSourceFileWithCache: CompilerHost["getSourceFile"] | undefined = getSourceFile ? (fileName, languageVersion, onError, shouldCreateNewSourceFile) => {
+            const key = toPath(fileName);
+            const value = sourceFileCache.get(key);
+            if (value) return value;
 
-                const sourceFile = originalGetSourceFile.call(host, fileName, languageVersion, onError, shouldCreateNewSourceFile);
-                if (sourceFile && (isDeclarationFileName(fileName) || fileExtensionIs(fileName, Extension.Json))) {
-                    sourceFileCache.set(key, sourceFile);
-                }
-                return sourceFile;
-            };
-        }
+            const sourceFile = getSourceFile(fileName, languageVersion, onError, shouldCreateNewSourceFile);
+            if (sourceFile && (isDeclarationFileName(fileName) || fileExtensionIs(fileName, Extension.Json))) {
+                sourceFileCache.set(key, sourceFile);
+            }
+            return sourceFile;
+        } : undefined;
 
         // fileExists for any kind of extension
         host.fileExists = fileName => {
@@ -265,23 +270,25 @@ namespace ts {
             fileExistsCache.set(key, !!newValue);
             return newValue;
         };
-        host.writeFile = (fileName, data, writeByteOrderMark, onError, sourceFiles) => {
-            const key = toPath(fileName);
-            fileExistsCache.delete(key);
+        if (originalWriteFile) {
+            host.writeFile = (fileName, data, writeByteOrderMark, onError, sourceFiles) => {
+                const key = toPath(fileName);
+                fileExistsCache.delete(key);
 
-            const value = readFileCache.get(key);
-            if (value && value !== data) {
-                readFileCache.delete(key);
-                sourceFileCache.delete(key);
-            }
-            else if (useCacheForSourceFile) {
-                const sourceFile = sourceFileCache.get(key);
-                if (sourceFile && sourceFile.text !== data) {
+                const value = readFileCache.get(key);
+                if (value && value !== data) {
+                    readFileCache.delete(key);
                     sourceFileCache.delete(key);
                 }
-            }
-            originalWriteFile.call(host, fileName, data, writeByteOrderMark, onError, sourceFiles);
-        };
+                else if (getSourceFileWithCache) {
+                    const sourceFile = sourceFileCache.get(key);
+                    if (sourceFile && sourceFile.text !== data) {
+                        sourceFileCache.delete(key);
+                    }
+                }
+                originalWriteFile.call(host, fileName, data, writeByteOrderMark, onError, sourceFiles);
+            };
+        }
 
         // directoryExists
         if (originalDirectoryExists && originalCreateDirectory) {
@@ -306,7 +313,7 @@ namespace ts {
             originalDirectoryExists,
             originalCreateDirectory,
             originalWriteFile,
-            originalGetSourceFile,
+            getSourceFileWithCache,
             readFileWithCache
         };
     }
@@ -735,7 +742,7 @@ namespace ts {
         performance.mark("beforeProgram");
 
         const host = createProgramOptions.host || createCompilerHost(options);
-        const configParsingHost = parseConfigHostFromCompilerHost(host);
+        const configParsingHost = parseConfigHostFromCompilerHostLike(host);
 
         let skipDefaultLib = options.noLib;
         const getDefaultLibraryFileName = memoize(() => host.getDefaultLibFileName(options));
@@ -3104,18 +3111,28 @@ namespace ts {
         }
     }
 
+    interface CompilerHostLike {
+        useCaseSensitiveFileNames(): boolean;
+        getCurrentDirectory(): string;
+        fileExists(fileName: string): boolean;
+        readFile(fileName: string): string | undefined;
+        readDirectory?(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
+        trace?(s: string): void;
+        onUnRecoverableConfigFileDiagnostic?: DiagnosticReporter;
+    }
+
     /* @internal */
-    export function parseConfigHostFromCompilerHost(host: CompilerHost): ParseConfigFileHost {
+    export function parseConfigHostFromCompilerHostLike(host: CompilerHostLike, directoryStructureHost: DirectoryStructureHost = host): ParseConfigFileHost {
         return {
-            fileExists: f => host.fileExists(f),
+            fileExists: f => directoryStructureHost.fileExists(f),
             readDirectory(root, extensions, excludes, includes, depth) {
-                Debug.assertDefined(host.readDirectory, "'CompilerHost.readDirectory' must be implemented to correctly process 'projectReferences'");
-                return host.readDirectory!(root, extensions, excludes, includes, depth);
+                Debug.assertDefined(directoryStructureHost.readDirectory, "'CompilerHost.readDirectory' must be implemented to correctly process 'projectReferences'");
+                return directoryStructureHost.readDirectory!(root, extensions, excludes, includes, depth);
             },
-            readFile: f => host.readFile(f),
+            readFile: f => directoryStructureHost.readFile(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
             getCurrentDirectory: () => host.getCurrentDirectory(),
-            onUnRecoverableConfigFileDiagnostic: () => undefined,
+            onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic || (() => undefined),
             trace: host.trace ? (s) => host.trace!(s) : undefined
         };
     }
