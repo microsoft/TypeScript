@@ -3,7 +3,7 @@ class C {
 >C : C
 
      static g(t: typeof C.g){ }
->g : (t: (t: typeof C.g) => void) => void
+>g : (t: typeof C.g) => void
 >t : (t: typeof C.g) => void
 >C.g : (t: typeof C.g) => void
 >C : typeof C

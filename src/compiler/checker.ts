@@ -6631,6 +6631,9 @@ namespace ts {
             else if (type.flags & TypeFlags.Intersection) {
                 return getIntersectionType(map((<IntersectionType>type).types, t => getTypeWithThisArgument(t, thisArgument, needApparentType)));
             }
+            else if (type.flags & TypeFlags.TypeParameter && thisArgument && (type as TypeParameter).isThisType) {
+                return getTypeWithThisArgument(createTypeReference(globalThisType, [type]), needApparentType ? instantiateType(thisArgument, createTypeMapper([type], [getApparentType(type)])) : thisArgument, needApparentType);
+            }
             return needApparentType ? getApparentType(type) : type;
         }
 
@@ -6685,6 +6688,23 @@ namespace ts {
         }
 
         function resolveTypeReferenceMembers(type: TypeReference): void {
+
+            if (type.target === globalThisType && type.typeArguments && type.typeArguments[0].flags & TypeFlags.TypeParameter &&
+                (type.typeArguments[0] as TypeParameter).isThisType && type.typeArguments[1]) {
+                if (type.typeArguments[1].flags & TypeFlags.StructuredType) {
+                    const instantiatedTarget = instantiateType(type.typeArguments[1], createTypeMapper([type.typeArguments[0]], [type.typeArguments[1]]));
+                    const props = getPropertiesOfType(instantiatedTarget);
+                    const calls = getSignaturesOfType(instantiatedTarget, SignatureKind.Call);
+                    const ctors = getSignaturesOfType(instantiatedTarget, SignatureKind.Construct);
+                    const strIndex = getIndexInfoOfType(instantiatedTarget, IndexKind.String);
+                    const numIndex = getIndexInfoOfType(instantiatedTarget, IndexKind.Number);
+                    setStructuredTypeMembers(type, createMapFromEntries(props.map(p => [p.escapedName, p]) as [string, Symbol][]) as SymbolTable, calls, ctors, strIndex, numIndex);
+                }
+                else {
+                    setStructuredTypeMembers(type, emptySymbols, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
+                }
+                return;
+            }
             const source = resolveDeclaredMembers(type.target);
             const typeParameters = concatenate(source.typeParameters!, [source.thisType!]);
             const typeArguments = type.typeArguments && type.typeArguments.length === typeParameters.length ?
@@ -19198,9 +19218,6 @@ namespace ts {
                 }
                 propType = getConstraintForLocation(getTypeOfSymbol(prop), node);
             }
-            // Instantiate `this` in the property with the type of the thing being accessed - excepting `super` accesses where, despite
-            // the syntax, the `this` in the access will be the original one instead.
-            propType = left.kind !== SyntaxKind.SuperKeyword ? instantiateType(propType, t => t.isThisType ? leftType : t) : propType;
             // Only compute control flow type if this is a property access expression that isn't an
             // assignment target, and the referenced property was declared as a variable, property,
             // accessor, or optional method.

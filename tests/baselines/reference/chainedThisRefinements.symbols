@@ -27,6 +27,28 @@ class Builder {
 >withFooBar : Symbol(Builder.withFooBar, Decl(chainedThisRefinements.ts, 7, 5))
 >T : Symbol(T, Decl(chainedThisRefinements.ts, 8, 15))
 
+        this.withFoo<T>().withBar<T>().foo;
+>this.withFoo<T>().withBar<T>().foo : Symbol(foo, Decl(chainedThisRefinements.ts, 3, 31))
+>this.withFoo<T>().withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>this.withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>this : Symbol(Builder, Decl(chainedThisRefinements.ts, 0, 0))
+>withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>T : Symbol(T, Decl(chainedThisRefinements.ts, 8, 15))
+>withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>T : Symbol(T, Decl(chainedThisRefinements.ts, 8, 15))
+>foo : Symbol(foo, Decl(chainedThisRefinements.ts, 3, 31))
+
+        this.withFoo<T>().withBar<T>().bar;
+>this.withFoo<T>().withBar<T>().bar : Symbol(bar, Decl(chainedThisRefinements.ts, 6, 31))
+>this.withFoo<T>().withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>this.withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>this : Symbol(Builder, Decl(chainedThisRefinements.ts, 0, 0))
+>withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>T : Symbol(T, Decl(chainedThisRefinements.ts, 8, 15))
+>withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>T : Symbol(T, Decl(chainedThisRefinements.ts, 8, 15))
+>bar : Symbol(bar, Decl(chainedThisRefinements.ts, 6, 31))
+
         return this.withFoo<T>().withBar<T>();
 >this.withFoo<T>().withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
 >this.withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
@@ -39,11 +61,51 @@ class Builder {
 }
 
 declare var f: {foo: number};
->f : Symbol(f, Decl(chainedThisRefinements.ts, 13, 11))
->foo : Symbol(foo, Decl(chainedThisRefinements.ts, 13, 16))
+>f : Symbol(f, Decl(chainedThisRefinements.ts, 15, 11))
+>foo : Symbol(foo, Decl(chainedThisRefinements.ts, 15, 16))
 
-f = new Builder().withFooBar<number>(); // should work
->f : Symbol(f, Decl(chainedThisRefinements.ts, 13, 11))
+new Builder().withFoo<number>().withBar<number>().foo;
+>new Builder().withFoo<number>().withBar<number>().foo : Symbol(foo, Decl(chainedThisRefinements.ts, 3, 31))
+>new Builder().withFoo<number>().withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>new Builder().withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>Builder : Symbol(Builder, Decl(chainedThisRefinements.ts, 0, 0))
+>withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>foo : Symbol(foo, Decl(chainedThisRefinements.ts, 3, 31))
+
+new Builder().withFoo<number>().withBar<number>().bar;
+>new Builder().withFoo<number>().withBar<number>().bar : Symbol(bar, Decl(chainedThisRefinements.ts, 6, 31))
+>new Builder().withFoo<number>().withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>new Builder().withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>Builder : Symbol(Builder, Decl(chainedThisRefinements.ts, 0, 0))
+>withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>bar : Symbol(bar, Decl(chainedThisRefinements.ts, 6, 31))
+
+f = new Builder().withFoo<number>().withBar<number>();
+>f : Symbol(f, Decl(chainedThisRefinements.ts, 15, 11))
+>new Builder().withFoo<number>().withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+>new Builder().withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>Builder : Symbol(Builder, Decl(chainedThisRefinements.ts, 0, 0))
+>withFoo : Symbol(Builder.withFoo, Decl(chainedThisRefinements.ts, 1, 30))
+>withBar : Symbol(Builder.withBar, Decl(chainedThisRefinements.ts, 4, 5))
+
+new Builder().withFooBar<number>().foo;
+>new Builder().withFooBar<number>().foo : Symbol(foo, Decl(chainedThisRefinements.ts, 3, 31))
+>new Builder().withFooBar : Symbol(Builder.withFooBar, Decl(chainedThisRefinements.ts, 7, 5))
+>Builder : Symbol(Builder, Decl(chainedThisRefinements.ts, 0, 0))
+>withFooBar : Symbol(Builder.withFooBar, Decl(chainedThisRefinements.ts, 7, 5))
+>foo : Symbol(foo, Decl(chainedThisRefinements.ts, 3, 31))
+
+new Builder().withFooBar<number>().bar;
+>new Builder().withFooBar<number>().bar : Symbol(bar, Decl(chainedThisRefinements.ts, 6, 31))
+>new Builder().withFooBar : Symbol(Builder.withFooBar, Decl(chainedThisRefinements.ts, 7, 5))
+>Builder : Symbol(Builder, Decl(chainedThisRefinements.ts, 0, 0))
+>withFooBar : Symbol(Builder.withFooBar, Decl(chainedThisRefinements.ts, 7, 5))
+>bar : Symbol(bar, Decl(chainedThisRefinements.ts, 6, 31))
+
+f = new Builder().withFooBar<number>();
+>f : Symbol(f, Decl(chainedThisRefinements.ts, 15, 11))
 >new Builder().withFooBar : Symbol(Builder.withFooBar, Decl(chainedThisRefinements.ts, 7, 5))
 >Builder : Symbol(Builder, Decl(chainedThisRefinements.ts, 0, 0))
 >withFooBar : Symbol(Builder.withFooBar, Decl(chainedThisRefinements.ts, 7, 5))
