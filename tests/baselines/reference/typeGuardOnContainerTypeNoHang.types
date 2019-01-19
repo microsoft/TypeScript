@@ -9,7 +9,7 @@ export namespace TypeGuards {
 
         return typeof(value) === 'object'
 >typeof(value) === 'object' : boolean
->typeof(value) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(value) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(value) : any
 >value : any
 >'object' : "object"

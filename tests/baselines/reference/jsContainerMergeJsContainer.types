@@ -5,19 +5,19 @@ const a = {};
 >{} : {}
 
 a.d = function() {};
->a.d = function() {} : { (): void; prototype: {}; }
->a.d : typeof a.d
+>a.d = function() {} : typeof d
+>a.d : typeof d
 >a : typeof a
->d : typeof a.d
->function() {} : { (): void; prototype: {}; }
+>d : typeof d
+>function() {} : typeof d
 
 === tests/cases/conformance/salsa/b.js ===
 a.d.prototype = {};
 >a.d.prototype = {} : {}
 >a.d.prototype : {}
->a.d : typeof a.d
+>a.d : typeof d
 >a : typeof a
->d : typeof a.d
+>d : typeof d
 >prototype : {}
 >{} : {}
 

@@ -19,7 +19,7 @@ const Target = {
     OK_I_GUESS: 2
 >OK_I_GUESS : Symbol(OK_I_GUESS, Decl(a.js, 5, 15))
 }
-/** @enum {number} */
+/** @enum number */
 const Second = {
 >Second : Symbol(Second, Decl(a.js, 10, 5))
 

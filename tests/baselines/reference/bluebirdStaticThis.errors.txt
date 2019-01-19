@@ -1,5 +1,5 @@
 tests/cases/compiler/bluebirdStaticThis.ts(5,22): error TS2420: Class 'Promise<R>' incorrectly implements interface 'Thenable<R>'.
-  Property 'then' is missing in type 'Promise<R>'.
+  Property 'then' is missing in type 'Promise<R>' but required in type 'Thenable<R>'.
 tests/cases/compiler/bluebirdStaticThis.ts(22,51): error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Resolver'.
 tests/cases/compiler/bluebirdStaticThis.ts(57,109): error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
 tests/cases/compiler/bluebirdStaticThis.ts(58,91): error TS2694: Namespace '"tests/cases/compiler/bluebirdStaticThis".Promise' has no exported member 'Inspection'.
@@ -15,7 +15,8 @@ tests/cases/compiler/bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"tes
     export declare class Promise<R> implements Promise.Thenable<R> {
                          ~~~~~~~
 !!! error TS2420: Class 'Promise<R>' incorrectly implements interface 'Thenable<R>'.
-!!! error TS2420:   Property 'then' is missing in type 'Promise<R>'.
+!!! error TS2420:   Property 'then' is missing in type 'Promise<R>' but required in type 'Thenable<R>'.
+!!! related TS2728 tests/cases/compiler/bluebirdStaticThis.ts:113:3: 'then' is declared here.
     	constructor(callback: (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void);
         static try<R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>;
         static try<R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>;

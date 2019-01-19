@@ -15,11 +15,15 @@
 ////    zap() { }
 ////    b/*3*/: any;
 ////}
-const allowedKeywordCount = verify.allowedClassElementKeywords.length;
+
 function verifyHasBar() {
-    verify.completionListContains("bar", "(method) IFoo.bar(): void", /*documentation*/ undefined, "method");
-    verify.completionListContainsClassElementKeywords();
-    verify.completionListCount(allowedKeywordCount + 1);
+    verify.completions({
+        exact: [
+            { name: "bar", text: "(method) IFoo.bar(): void", kind: "method" },
+            ...completion.classElementKeywords,
+        ],
+        isNewIdentifierLocation: true,
+    });
 }
 
 goTo.marker("1");

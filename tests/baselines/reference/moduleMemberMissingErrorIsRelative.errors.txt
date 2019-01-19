@@ -1,0 +1,9 @@
+tests/cases/compiler/folder/bar.ts(1,9): error TS2305: Module '"./foo"' has no exported member 'nosuch'.
+
+
+==== tests/cases/compiler/folder/foo.ts (0 errors) ====
+    export {};
+==== tests/cases/compiler/folder/bar.ts (1 errors) ====
+    import {nosuch} from './foo';
+            ~~~~~~
+!!! error TS2305: Module '"./foo"' has no exported member 'nosuch'.

@@ -307,8 +307,8 @@ namespace ts {
             if (!getRestIndicatorOfBindingOrAssignmentElement(element)) {
                 const propertyName = getPropertyNameOfBindingOrAssignmentElement(element)!;
                 if (flattenContext.level >= FlattenLevel.ObjectRest
-                    && !(element.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest))
-                    && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRest | TransformFlags.ContainsObjectRest))
+                    && !(element.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
+                    && !(getTargetOfBindingOrAssignmentElement(element)!.transformFlags & (TransformFlags.ContainsRestOrSpread | TransformFlags.ContainsObjectRestOrSpread))
                     && !isComputedPropertyName(propertyName)) {
                     bindingElements = append(bindingElements, element);
                 }
@@ -384,7 +384,7 @@ namespace ts {
             if (flattenContext.level >= FlattenLevel.ObjectRest) {
                 // If an array pattern contains an ObjectRest, we must cache the result so that we
                 // can perform the ObjectRest destructuring in a different declaration
-                if (element.transformFlags & TransformFlags.ContainsObjectRest) {
+                if (element.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                     const temp = createTempVariable(/*recordTempVariable*/ undefined);
                     if (flattenContext.hoistTempVariables) {
                         flattenContext.context.hoistVariableDeclaration(temp);

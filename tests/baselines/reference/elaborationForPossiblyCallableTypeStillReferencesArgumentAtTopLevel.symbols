@@ -1,0 +1,12 @@
+=== tests/cases/compiler/elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts ===
+declare var ohno: new () => number;
+>ohno : Symbol(ohno, Decl(elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts, 0, 11))
+
+declare function ff(t: number): void;
+>ff : Symbol(ff, Decl(elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts, 0, 35))
+>t : Symbol(t, Decl(elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts, 1, 20))
+
+ff(ohno)
+>ff : Symbol(ff, Decl(elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts, 0, 35))
+>ohno : Symbol(ohno, Decl(elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.ts, 0, 11))
+

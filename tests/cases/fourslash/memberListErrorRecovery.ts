@@ -5,6 +5,4 @@
 ////Foo./**/;
 /////*1*/var bar;
 
-goTo.marker();
-verify.completionListContains("fun");
-verify.not.errorExistsAfterMarker("1");
+verify.completions({ marker: "", includes: "fun" });

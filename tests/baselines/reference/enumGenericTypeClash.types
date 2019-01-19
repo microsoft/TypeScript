@@ -4,5 +4,5 @@ class X<A,B,C> { }
 
 enum X { MyVal }
 >X : X
->MyVal : X
+>MyVal : X.MyVal
 

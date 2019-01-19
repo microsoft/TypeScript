@@ -13,5 +13,7 @@
 //// /// <reference path=".//*2*/
 //// /// <reference path=".\/*3*/
 
-verify.completionsAt(["0", "2", "3"], ["f.ts"], { isNewIdentifierLocation: true });
-verify.completionsAt("1", [{ name: "f.ts", replacementSpan: test.ranges()[0] }], { isNewIdentifierLocation: true });
+verify.completions(
+    { marker: ["0", "2", "3"], exact: "f.ts", isNewIdentifierLocation: true },
+    { marker: "1", exact: { name: "f.ts", replacementSpan: test.ranges()[0] }, isNewIdentifierLocation: true },
+);

@@ -4,6 +4,7 @@ namespace ts.server {
     export const ActionSet: ActionSet = "action::set";
     export const ActionInvalidate: ActionInvalidate = "action::invalidate";
     export const ActionPackageInstalled: ActionPackageInstalled = "action::packageInstalled";
+    export const ActionValueInspected: ActionValueInspected = "action::valueInspected";
     export const EventTypesRegistry: EventTypesRegistry = "event::typesRegistry";
     export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInstallTypes";
     export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
@@ -33,7 +34,6 @@ namespace ts.server {
             : undefined;
     }
 
-    /*@internal*/
     export function nowString() {
         // E.g. "12:34:56.789"
         const d = new Date();

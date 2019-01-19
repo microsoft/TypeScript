@@ -433,3 +433,24 @@ const arr: Obj[] = langCodes.map(code => ({ code }))
 >{ code } : { code: "fr" | "en" | "es" | "it" | "nl"; }
 >code : "fr" | "en" | "es" | "it" | "nl"
 
+// Repro from #29081
+
+function test<T extends { a: string, b: string }>(obj: T): T {
+>test : <T extends { a: string; b: string; }>(obj: T) => T
+>a : string
+>b : string
+>obj : T
+
+    let { a, ...rest } = obj;
+>a : string
+>rest : Pick<T, Exclude<keyof T, "a">>
+>obj : T
+
+    return { a: 'hello', ...rest } as T;
+>{ a: 'hello', ...rest } as T : T
+>{ a: 'hello', ...rest } : { a: string; } & Pick<T, Exclude<keyof T, "a">>
+>a : string
+>'hello' : "hello"
+>rest : Pick<T, Exclude<keyof T, "a">>
+}
+

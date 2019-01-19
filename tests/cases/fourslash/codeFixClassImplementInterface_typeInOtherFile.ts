@@ -17,8 +17,8 @@ verify.codeFix({
     newFileContent:
 `import { I } from "./I";
 export class C implements I {
-    x: import("/I").J;
-    m(): import("/I").J {
+    x: import("./I").J;
+    m(): import("./I").J {
         throw new Error("Method not implemented.");
     }
 }`,

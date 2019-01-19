@@ -1,3 +1,5 @@
+declare function use(x: any): any;
+
 //==== let
 for (let x in {}) {
     (function() { return x});
@@ -53,6 +55,19 @@ for (let y = 0; y < 1; ++y) {
     let x = 1;
     (function() { return x + y});
     (() => x + y);
+}
+
+for (let y = (use(() => y), 0); y < 1; ++y) {
+}
+
+for (let y = 0; use(() => y), y < 1; ++y) {
+}
+
+for (let y = 0; y < 1; use(() => y), ++y) {
+}
+
+for (let y = (use(() => y), 0); use(() => y), y < 1; use(() => y), ++y) {
+    use(() => y);
 }
 
 //=========const

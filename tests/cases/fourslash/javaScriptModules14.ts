@@ -21,8 +21,4 @@
 //// var x = require('myMod');
 //// /**/;
 
-goTo.file('consumer.js');
-goTo.marker();
-
-verify.completionListContains('y');
-verify.not.completionListContains('invisible');
+verify.completions({ marker: "", includes: "y", excludes: "invisible" });

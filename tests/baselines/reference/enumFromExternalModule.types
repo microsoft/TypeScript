@@ -14,5 +14,5 @@ var x = f.Mode.Open;
 === tests/cases/compiler/enumFromExternalModule_0.ts ===
 export enum Mode { Open }
 >Mode : Mode
->Open : Mode
+>Open : Mode.Open
 

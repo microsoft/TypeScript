@@ -92,3 +92,157 @@ let x14: A & B & C & D & E;
 >D : Symbol(D, Decl(intersectionsAndEmptyObjects.ts, 15, 39))
 >E : Symbol(E, Decl(intersectionsAndEmptyObjects.ts, 17, 14))
 
+// Repro from #20225
+
+type Dictionary = { [name: string]: string };
+>Dictionary : Symbol(Dictionary, Decl(intersectionsAndEmptyObjects.ts, 24, 27))
+>name : Symbol(name, Decl(intersectionsAndEmptyObjects.ts, 28, 21))
+
+const intersectDictionaries = <F1 extends Dictionary, F2 extends Dictionary>(
+>intersectDictionaries : Symbol(intersectDictionaries, Decl(intersectionsAndEmptyObjects.ts, 30, 5))
+>F1 : Symbol(F1, Decl(intersectionsAndEmptyObjects.ts, 30, 31))
+>Dictionary : Symbol(Dictionary, Decl(intersectionsAndEmptyObjects.ts, 24, 27))
+>F2 : Symbol(F2, Decl(intersectionsAndEmptyObjects.ts, 30, 53))
+>Dictionary : Symbol(Dictionary, Decl(intersectionsAndEmptyObjects.ts, 24, 27))
+
+  d1: F1,
+>d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 30, 77))
+>F1 : Symbol(F1, Decl(intersectionsAndEmptyObjects.ts, 30, 31))
+
+  d2: F2,
+>d2 : Symbol(d2, Decl(intersectionsAndEmptyObjects.ts, 31, 9))
+>F2 : Symbol(F2, Decl(intersectionsAndEmptyObjects.ts, 30, 53))
+
+): F1 & F2 => Object.assign({}, d1, d2);
+>F1 : Symbol(F1, Decl(intersectionsAndEmptyObjects.ts, 30, 31))
+>F2 : Symbol(F2, Decl(intersectionsAndEmptyObjects.ts, 30, 53))
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 30, 77))
+>d2 : Symbol(d2, Decl(intersectionsAndEmptyObjects.ts, 31, 9))
+
+const testDictionary = <T extends Dictionary>(_value: T) => { };
+>testDictionary : Symbol(testDictionary, Decl(intersectionsAndEmptyObjects.ts, 35, 5))
+>T : Symbol(T, Decl(intersectionsAndEmptyObjects.ts, 35, 24))
+>Dictionary : Symbol(Dictionary, Decl(intersectionsAndEmptyObjects.ts, 24, 27))
+>_value : Symbol(_value, Decl(intersectionsAndEmptyObjects.ts, 35, 46))
+>T : Symbol(T, Decl(intersectionsAndEmptyObjects.ts, 35, 24))
+
+const d1 = {};
+>d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 37, 5))
+
+testDictionary(d1);
+>testDictionary : Symbol(testDictionary, Decl(intersectionsAndEmptyObjects.ts, 35, 5))
+>d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 37, 5))
+
+const d2 = intersectDictionaries(d1, d1);
+>d2 : Symbol(d2, Decl(intersectionsAndEmptyObjects.ts, 39, 5))
+>intersectDictionaries : Symbol(intersectDictionaries, Decl(intersectionsAndEmptyObjects.ts, 30, 5))
+>d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 37, 5))
+>d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 37, 5))
+
+testDictionary(d2);
+>testDictionary : Symbol(testDictionary, Decl(intersectionsAndEmptyObjects.ts, 35, 5))
+>d2 : Symbol(d2, Decl(intersectionsAndEmptyObjects.ts, 39, 5))
+
+const d3 = {
+>d3 : Symbol(d3, Decl(intersectionsAndEmptyObjects.ts, 42, 5))
+
+  s: '',
+>s : Symbol(s, Decl(intersectionsAndEmptyObjects.ts, 42, 12))
+
+};
+testDictionary(d3);
+>testDictionary : Symbol(testDictionary, Decl(intersectionsAndEmptyObjects.ts, 35, 5))
+>d3 : Symbol(d3, Decl(intersectionsAndEmptyObjects.ts, 42, 5))
+
+const d4 = intersectDictionaries(d1, d3);
+>d4 : Symbol(d4, Decl(intersectionsAndEmptyObjects.ts, 46, 5))
+>intersectDictionaries : Symbol(intersectDictionaries, Decl(intersectionsAndEmptyObjects.ts, 30, 5))
+>d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 37, 5))
+>d3 : Symbol(d3, Decl(intersectionsAndEmptyObjects.ts, 42, 5))
+
+testDictionary(d4);
+>testDictionary : Symbol(testDictionary, Decl(intersectionsAndEmptyObjects.ts, 35, 5))
+>d4 : Symbol(d4, Decl(intersectionsAndEmptyObjects.ts, 46, 5))
+
+const d5 = intersectDictionaries(d3, d1);
+>d5 : Symbol(d5, Decl(intersectionsAndEmptyObjects.ts, 48, 5))
+>intersectDictionaries : Symbol(intersectDictionaries, Decl(intersectionsAndEmptyObjects.ts, 30, 5))
+>d3 : Symbol(d3, Decl(intersectionsAndEmptyObjects.ts, 42, 5))
+>d1 : Symbol(d1, Decl(intersectionsAndEmptyObjects.ts, 37, 5))
+
+testDictionary(d5);
+>testDictionary : Symbol(testDictionary, Decl(intersectionsAndEmptyObjects.ts, 35, 5))
+>d5 : Symbol(d5, Decl(intersectionsAndEmptyObjects.ts, 48, 5))
+
+const d6 = intersectDictionaries(d3, d3);
+>d6 : Symbol(d6, Decl(intersectionsAndEmptyObjects.ts, 50, 5))
+>intersectDictionaries : Symbol(intersectDictionaries, Decl(intersectionsAndEmptyObjects.ts, 30, 5))
+>d3 : Symbol(d3, Decl(intersectionsAndEmptyObjects.ts, 42, 5))
+>d3 : Symbol(d3, Decl(intersectionsAndEmptyObjects.ts, 42, 5))
+
+testDictionary(d6);
+>testDictionary : Symbol(testDictionary, Decl(intersectionsAndEmptyObjects.ts, 35, 5))
+>d6 : Symbol(d6, Decl(intersectionsAndEmptyObjects.ts, 50, 5))
+
+// Repro from #27044
+
+type choices<IChoiceList extends {
+>choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
+>IChoiceList : Symbol(IChoiceList, Decl(intersectionsAndEmptyObjects.ts, 55, 13))
+
+    [key: string]: boolean;
+>key : Symbol(key, Decl(intersectionsAndEmptyObjects.ts, 56, 5))
+
+}> = IChoiceList & {
+>IChoiceList : Symbol(IChoiceList, Decl(intersectionsAndEmptyObjects.ts, 55, 13))
+
+    shoes:boolean;
+>shoes : Symbol(shoes, Decl(intersectionsAndEmptyObjects.ts, 57, 20))
+
+    food:boolean;
+>food : Symbol(food, Decl(intersectionsAndEmptyObjects.ts, 58, 18))
+
+};
+
+type IMyChoiceList = {
+>IMyChoiceList : Symbol(IMyChoiceList, Decl(intersectionsAndEmptyObjects.ts, 60, 2))
+
+    car: true
+>car : Symbol(car, Decl(intersectionsAndEmptyObjects.ts, 62, 22))
+
+};
+
+type IUnknownChoiceList = {};
+>IUnknownChoiceList : Symbol(IUnknownChoiceList, Decl(intersectionsAndEmptyObjects.ts, 64, 2))
+
+var defaultChoices: choices<{}>;
+>defaultChoices : Symbol(defaultChoices, Decl(intersectionsAndEmptyObjects.ts, 68, 3))
+>choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
+
+var defaultChoicesAndEmpty: choices<{} & {}>;
+>defaultChoicesAndEmpty : Symbol(defaultChoicesAndEmpty, Decl(intersectionsAndEmptyObjects.ts, 69, 3))
+>choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
+
+var myChoices: choices<IMyChoiceList>;
+>myChoices : Symbol(myChoices, Decl(intersectionsAndEmptyObjects.ts, 71, 3))
+>choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
+>IMyChoiceList : Symbol(IMyChoiceList, Decl(intersectionsAndEmptyObjects.ts, 60, 2))
+
+var myChoicesAndEmpty: choices<IMyChoiceList & {}>;
+>myChoicesAndEmpty : Symbol(myChoicesAndEmpty, Decl(intersectionsAndEmptyObjects.ts, 72, 3))
+>choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
+>IMyChoiceList : Symbol(IMyChoiceList, Decl(intersectionsAndEmptyObjects.ts, 60, 2))
+
+var unknownChoices: choices<IUnknownChoiceList>;
+>unknownChoices : Symbol(unknownChoices, Decl(intersectionsAndEmptyObjects.ts, 74, 3))
+>choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
+>IUnknownChoiceList : Symbol(IUnknownChoiceList, Decl(intersectionsAndEmptyObjects.ts, 64, 2))
+
+var unknownChoicesAndEmpty: choices<IUnknownChoiceList & {}>;
+>unknownChoicesAndEmpty : Symbol(unknownChoicesAndEmpty, Decl(intersectionsAndEmptyObjects.ts, 75, 3))
+>choices : Symbol(choices, Decl(intersectionsAndEmptyObjects.ts, 51, 19))
+>IUnknownChoiceList : Symbol(IUnknownChoiceList, Decl(intersectionsAndEmptyObjects.ts, 64, 2))
+

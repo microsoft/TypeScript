@@ -12,12 +12,15 @@
 ////    A: 0,
 ////}
 ////
-/////** @type {/**/E} */
-////const x = E.A;
+/////** @type {/*type*/E} */
+////const x = /*value*/E.A;
 
 verify.noErrors();
 
-verify.quickInfoAt("",
+verify.quickInfoAt("type",
+`enum E`,
+"Doc");
+verify.quickInfoAt("value",
 `enum E
 const E: {
     A: number;

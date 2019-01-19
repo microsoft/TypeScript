@@ -1,5 +1,5 @@
 namespace ts {
-    describe("JSDocParsing", () => {
+    describe("unittests:: JSDocParsing", () => {
         describe("TypeExpressions", () => {
             function parsesCorrectly(name: string, content: string) {
                 it(name, () => {

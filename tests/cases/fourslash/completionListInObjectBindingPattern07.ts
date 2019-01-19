@@ -12,8 +12,4 @@
 ////var foo: J;
 ////var { property1: { /**/ } } = foo;
 
-goTo.marker();
-verify.completionListContains("propertyOfI_1");
-verify.completionListContains("propertyOfI_2");
-verify.not.completionListContains("property2");
-verify.not.completionListAllowsNewIdentifier();
+verify.completions({ marker: "", exact: ["propertyOfI_1", "propertyOfI_2"] });

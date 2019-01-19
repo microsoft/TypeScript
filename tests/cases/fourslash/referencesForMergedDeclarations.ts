@@ -15,6 +15,6 @@
 ////[|Foo|].bind(this);
 
 const [type1, namespace1, value1, namespace2, type2, value2] = test.ranges();
-verify.singleReferenceGroup("interface Foo\nnamespace Foo\nfunction Foo(): void", [type1, type2]);
-verify.singleReferenceGroup("namespace Foo\nfunction Foo(): void", [namespace1, namespace2]);
+verify.singleReferenceGroup("interface Foo\nnamespace Foo", [type1, type2]);
+verify.singleReferenceGroup("namespace Foo", [namespace1, namespace2]);
 verify.singleReferenceGroup("namespace Foo\nfunction Foo(): void", [value1, value2]);

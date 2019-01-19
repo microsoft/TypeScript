@@ -1,9 +1,9 @@
 /// <reference path="fourslash.ts" />
 
 ////  
-////// whitespace below   
+////// 1 below   
 ////    
-////// whitespace above   
+////// 2 above   
 ////    
 ////let x;
 ////  
@@ -11,25 +11,25 @@
 ////  
 ////let y;
 ////  
-////// whitespace above again
+////// 3 above
 ////   
 ////while (true) {
 ////    while (true) {
 ////    }
 ////      
-////    // whitespace above   
+////    // 4 above   
 ////}
 ////  
-////// whitespace above again  
+////// 5 above  
 ////   
 ////   
 
 format.document();
 
 verify.currentFileContentIs(`
-// whitespace below   
+// 1 below   
 
-// whitespace above   
+// 2 above   
 
 let x;
 
@@ -37,15 +37,15 @@ let x;
 
 let y;
 
-// whitespace above again
+// 3 above
 
 while (true) {
     while (true) {
     }
 
-    // whitespace above   
+    // 4 above   
 }
 
-// whitespace above again  
+// 5 above  
 
 `);

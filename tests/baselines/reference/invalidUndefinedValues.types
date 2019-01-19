@@ -91,7 +91,7 @@ x = f;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 x = E;
 >x = E : typeof E

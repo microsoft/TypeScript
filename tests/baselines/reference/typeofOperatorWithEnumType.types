@@ -12,26 +12,26 @@ enum ENUM1 { A, B, "" };
 
 // enum type var
 var ResultIsString1 = typeof ENUM;
->ResultIsString1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof ENUM : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>ResultIsString1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM : typeof ENUM
 
 var ResultIsString2 = typeof ENUM1;
->ResultIsString2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof ENUM1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>ResultIsString2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM1 : typeof ENUM1
 
 // enum type expressions
 var ResultIsString3 = typeof ENUM1["A"];
->ResultIsString3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof ENUM1["A"] : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>ResultIsString3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM1["A"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM1["A"] : ENUM1.A
 >ENUM1 : typeof ENUM1
 >"A" : "A"
 
 var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
->ResultIsString4 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof (ENUM[0] + ENUM1["B"]) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>ResultIsString4 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (ENUM[0] + ENUM1["B"]) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(ENUM[0] + ENUM1["B"]) : string
 >ENUM[0] + ENUM1["B"] : string
 >ENUM[0] : string
@@ -43,16 +43,16 @@ var ResultIsString4 = typeof (ENUM[0] + ENUM1["B"]);
 
 // multiple typeof  operators
 var ResultIsString5 = typeof typeof ENUM;
->ResultIsString5 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof typeof ENUM : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof ENUM : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>ResultIsString5 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof typeof ENUM : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM : typeof ENUM
 
 var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1.B);
->ResultIsString6 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof typeof typeof (ENUM[0] + ENUM1.B) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof typeof (ENUM[0] + ENUM1.B) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof (ENUM[0] + ENUM1.B) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>ResultIsString6 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof typeof typeof (ENUM[0] + ENUM1.B) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof typeof (ENUM[0] + ENUM1.B) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (ENUM[0] + ENUM1.B) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(ENUM[0] + ENUM1.B) : string
 >ENUM[0] + ENUM1.B : string
 >ENUM[0] : string
@@ -64,22 +64,22 @@ var ResultIsString6 = typeof typeof typeof (ENUM[0] + ENUM1.B);
 
 // miss assignment operators
 typeof ENUM;
->typeof ENUM : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM : typeof ENUM
 
 typeof ENUM1;
->typeof ENUM1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM1 : typeof ENUM1
 
 typeof ENUM1["B"];
->typeof ENUM1["B"] : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM1["B"] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
 >"B" : "B"
 
 typeof ENUM, ENUM1;
 >typeof ENUM, ENUM1 : typeof ENUM1
->typeof ENUM : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM : typeof ENUM
 >ENUM1 : typeof ENUM1
 
@@ -89,11 +89,11 @@ enum z { };
 
 z: typeof ENUM;
 >z : any
->typeof ENUM : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM : typeof ENUM
 
 z: typeof ENUM1;
 >z : any
->typeof ENUM1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ENUM1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ENUM1 : typeof ENUM1
 

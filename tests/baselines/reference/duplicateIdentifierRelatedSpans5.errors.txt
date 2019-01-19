@@ -1,56 +1,56 @@
 [96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
 
-[30;47m3[0m         duplicate1: () => string;
-[30;47m [0m [91m        ~~~~~~~~~~[0m
+[7m3[0m         duplicate1: () => string;
+[7m [0m [91m        ~~~~~~~~~~[0m
 
   [96mtests/cases/compiler/file2.ts[0m:[93m4[0m:[93m9[0m
-    [30;47m4[0m         duplicate1(): number;
-    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    [7m4[0m         duplicate1(): number;
+    [7m [0m [96m        ~~~~~~~~~~[0m
     'duplicate1' was also declared here.
 [96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
 
-[30;47m4[0m         duplicate2: () => string;
-[30;47m [0m [91m        ~~~~~~~~~~[0m
+[7m4[0m         duplicate2: () => string;
+[7m [0m [91m        ~~~~~~~~~~[0m
 
   [96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m
-    [30;47m5[0m         duplicate2(): number;
-    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    [7m5[0m         duplicate2(): number;
+    [7m [0m [96m        ~~~~~~~~~~[0m
     'duplicate2' was also declared here.
 [96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
 
-[30;47m5[0m         duplicate3: () => string;
-[30;47m [0m [91m        ~~~~~~~~~~[0m
+[7m5[0m         duplicate3: () => string;
+[7m [0m [91m        ~~~~~~~~~~[0m
 
   [96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m
-    [30;47m6[0m         duplicate3(): number;
-    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    [7m6[0m         duplicate3(): number;
+    [7m [0m [96m        ~~~~~~~~~~[0m
     'duplicate3' was also declared here.
 [96mtests/cases/compiler/file2.ts[0m:[93m4[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate1'.
 
-[30;47m4[0m         duplicate1(): number;
-[30;47m [0m [91m        ~~~~~~~~~~[0m
+[7m4[0m         duplicate1(): number;
+[7m [0m [91m        ~~~~~~~~~~[0m
 
   [96mtests/cases/compiler/file1.ts[0m:[93m3[0m:[93m9[0m
-    [30;47m3[0m         duplicate1: () => string;
-    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    [7m3[0m         duplicate1: () => string;
+    [7m [0m [96m        ~~~~~~~~~~[0m
     'duplicate1' was also declared here.
 [96mtests/cases/compiler/file2.ts[0m:[93m5[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate2'.
 
-[30;47m5[0m         duplicate2(): number;
-[30;47m [0m [91m        ~~~~~~~~~~[0m
+[7m5[0m         duplicate2(): number;
+[7m [0m [91m        ~~~~~~~~~~[0m
 
   [96mtests/cases/compiler/file1.ts[0m:[93m4[0m:[93m9[0m
-    [30;47m4[0m         duplicate2: () => string;
-    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    [7m4[0m         duplicate2: () => string;
+    [7m [0m [96m        ~~~~~~~~~~[0m
     'duplicate2' was also declared here.
 [96mtests/cases/compiler/file2.ts[0m:[93m6[0m:[93m9[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'duplicate3'.
 
-[30;47m6[0m         duplicate3(): number;
-[30;47m [0m [91m        ~~~~~~~~~~[0m
+[7m6[0m         duplicate3(): number;
+[7m [0m [91m        ~~~~~~~~~~[0m
 
   [96mtests/cases/compiler/file1.ts[0m:[93m5[0m:[93m9[0m
-    [30;47m5[0m         duplicate3: () => string;
-    [30;47m [0m [96m        ~~~~~~~~~~[0m
+    [7m5[0m         duplicate3: () => string;
+    [7m [0m [96m        ~~~~~~~~~~[0m
     'duplicate3' was also declared here.
 
 
@@ -92,3 +92,5 @@
     }
     export {}
     
+Found 6 errors.
+

@@ -32,3 +32,13 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(12,11): error TS231
               ~~~~~~~~~~~~~~
 !!! error TS2313: Type parameter 'K' has a circular constraint.
     }
+    
+    // Repro from #27881
+    
+    export type Circular<T> = {[P in keyof T]: Circular<T>};
+    type tup = [number, number, number, number];
+    
+    function foo(arg: Circular<tup>): tup {
+      return arg;
+    }
+    

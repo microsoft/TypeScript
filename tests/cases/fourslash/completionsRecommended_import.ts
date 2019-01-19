@@ -18,21 +18,28 @@
 ////alpha.f(new al/*c0*/);
 ////alpha.f(new /*c1*/);
 
-goTo.eachMarker(["b0", "b1"], (_, idx) => {
-    verify.completionListContains(
-        { name: "Cls", source: "/a" },
-        idx === 0 ? "constructor Cls(): Cls" : "class Cls",
-        "",
-        "class",
-        undefined,
-        /*hasAction*/ true, {
-        includeExternalModuleExports: true,
-        isRecommended: true,
-        sourceDisplay: "./a",
-    });
+const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForModuleExports: true };
+const classEntry = (isConstructor: boolean): FourSlashInterface.ExpectedCompletionEntry => ({
+    name: "Cls",
+    source: "/a",
+    sourceDisplay: "./a",
+    kind: "class",
+    kindModifiers: "export",
+    text: isConstructor ? "constructor Cls(): Cls" : "class Cls",
+    hasAction: true,
+    isRecommended: true,
 });
-
-goTo.eachMarker(["c0", "c1"], (_, idx) => {
-    verify.completionListContains("alpha", "import alpha", "", "alias", undefined, undefined, { isRecommended: true })
-});
-
+verify.completions(
+    { marker: "b0", includes: classEntry(true), preferences },
+    { marker: "b1", includes: classEntry(false), preferences },
+    {
+        marker: ["c0", "c1"],
+        includes: {
+            name: "alpha",
+            text: "import alpha",
+            kind: "alias",
+            isRecommended: true,
+        },
+        preferences,
+    },
+);

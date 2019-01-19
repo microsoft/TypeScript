@@ -15,7 +15,4 @@
 ////    y = this.x./**/ // completion list here
 ////}
 
-
-goTo.marker();
-verify.completionListContains("foo");
-verify.completionListCount(1);
+verify.completions({ marker: "", exact: "foo" });

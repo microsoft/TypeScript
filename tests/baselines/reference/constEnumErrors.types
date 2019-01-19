@@ -3,7 +3,7 @@ const enum E {
 >E : E
 
     A
->A : E
+>A : E.A
 }
 
 module E {
@@ -41,7 +41,7 @@ const enum E2 {
 >E2 : E2
 
     A
->A : E2
+>A : E2.A
 }
 
 var y0 = E2[1]

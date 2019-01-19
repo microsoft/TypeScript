@@ -18,7 +18,8 @@ verify.moveToNewFile({
 `,
 
         "/src/newFile.ts":
-`1;`,
+`1;
+`,
 
         "/src/tsconfig.json":
 `{

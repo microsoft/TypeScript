@@ -11,8 +11,4 @@
 ////	};
 ////}
 
-goTo.marker("1");
-verify.completionListIsEmpty();
-
-goTo.marker("2");
-verify.completionListIsEmpty();
+verify.completions({ marker: test.markers(), exact: undefined });
