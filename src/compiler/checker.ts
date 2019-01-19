@@ -3788,7 +3788,7 @@ namespace ts {
                 context.approximateLength += (symbolName(propertySymbol).length + 1);
                 context.enclosingDeclaration = saveEnclosingDeclaration;
                 const optionalToken = propertySymbol.flags & SymbolFlags.Optional ? createToken(SyntaxKind.QuestionToken) : undefined;
-                if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length) {
+                if (propertySymbol.flags & (SymbolFlags.Function | SymbolFlags.Method) && !getPropertiesOfObjectType(propertyType).length && !isReadonlySymbol(propertySymbol)) {
                     const signatures = getSignaturesOfType(propertyType, SignatureKind.Call);
                     for (const signature of signatures) {
                         const methodDeclaration = <MethodSignature>signatureToSignatureDeclarationHelper(signature, SyntaxKind.MethodSignature, context);
@@ -4790,7 +4790,7 @@ namespace ts {
                 if (!isTypeAssignableTo(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), omitKeyType)
                     && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
                     && isSpreadableProperty(prop)) {
-                    members.set(prop.escapedName, getSpreadSymbol(prop));
+                    members.set(prop.escapedName, getSpreadSymbol(prop, /*readonly*/ false));
                 }
             }
             const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
@@ -10223,7 +10223,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, typeFlags: TypeFlags, objectFlags: ObjectFlags): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, typeFlags: TypeFlags, objectFlags: ObjectFlags, readonly: boolean): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -10237,10 +10237,10 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                return mapType(left, t => getSpreadType(t, right, symbol, typeFlags, objectFlags));
+                return mapType(left, t => getSpreadType(t, right, symbol, typeFlags, objectFlags, readonly));
             }
             if (right.flags & TypeFlags.Union) {
-                return mapType(right, t => getSpreadType(left, t, symbol, typeFlags, objectFlags));
+                return mapType(right, t => getSpreadType(left, t, symbol, typeFlags, objectFlags, readonly));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.BigIntLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
                 return left;
@@ -10257,7 +10257,7 @@ namespace ts {
                     const types = (<IntersectionType>left).types;
                     const lastLeft = types[types.length - 1];
                     if (isNonGenericObjectType(lastLeft) && isNonGenericObjectType(right)) {
-                        return getIntersectionType(concatenate(types.slice(0, types.length - 1), [getSpreadType(lastLeft, right, symbol, typeFlags, objectFlags)]));
+                        return getIntersectionType(concatenate(types.slice(0, types.length - 1), [getSpreadType(lastLeft, right, symbol, typeFlags, objectFlags, readonly)]));
                     }
                 }
                 return getIntersectionType([left, right]);
@@ -10282,7 +10282,7 @@ namespace ts {
                     skippedPrivateMembers.set(rightProp.escapedName, true);
                 }
                 else if (isSpreadableProperty(rightProp)) {
-                    members.set(rightProp.escapedName, getSpreadSymbol(rightProp));
+                    members.set(rightProp.escapedName, getSpreadSymbol(rightProp, readonly));
                 }
             }
 
@@ -10306,7 +10306,7 @@ namespace ts {
                     }
                 }
                 else {
-                    members.set(leftProp.escapedName, getSpreadSymbol(leftProp));
+                    members.set(leftProp.escapedName, getSpreadSymbol(leftProp, readonly));
                 }
             }
 
@@ -10315,8 +10315,8 @@ namespace ts {
                 members,
                 emptyArray,
                 emptyArray,
-                getNonReadonlyIndexSignature(stringIndexInfo),
-                getNonReadonlyIndexSignature(numberIndexInfo));
+                getIndexInfoWithReadonly(stringIndexInfo, readonly),
+                getIndexInfoWithReadonly(numberIndexInfo, readonly));
             spread.flags |= TypeFlags.ContainsObjectLiteral | typeFlags;
             spread.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsSpread | objectFlags;
             return spread;
@@ -10328,14 +10328,13 @@ namespace ts {
                 !prop.declarations.some(decl => isClassLike(decl.parent));
         }
 
-        function getSpreadSymbol(prop: Symbol) {
-            const isReadonly = isReadonlySymbol(prop);
+        function getSpreadSymbol(prop: Symbol, readonly: boolean) {
             const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
-            if (!isReadonly && !isSetonlyAccessor) {
+            if (!isSetonlyAccessor && readonly === isReadonlySymbol(prop)) {
                 return prop;
             }
             const flags = SymbolFlags.Property | (prop.flags & SymbolFlags.Optional);
-            const result = createSymbol(flags, prop.escapedName);
+            const result = createSymbol(flags, prop.escapedName, readonly ? CheckFlags.Readonly : 0);
             result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
             result.declarations = prop.declarations;
             result.nameType = prop.nameType;
@@ -10343,11 +10342,8 @@ namespace ts {
             return result;
         }
 
-        function getNonReadonlyIndexSignature(index: IndexInfo | undefined) {
-            if (index && index.isReadonly) {
-                return createIndexInfo(index.type, /*isReadonly*/ false, index.declaration);
-            }
-            return index;
+        function getIndexInfoWithReadonly(info: IndexInfo | undefined, readonly: boolean) {
+            return info && info.isReadonly !== readonly ? createIndexInfo(info.type, readonly, info.declaration) : info;
         }
 
         function createLiteralType(flags: TypeFlags, value: string | number | PseudoBigInt, symbol: Symbol | undefined) {
@@ -17623,7 +17619,7 @@ namespace ts {
                     return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
                 case SyntaxKind.AsExpression:
-                    return getTypeFromTypeNode((<AssertionExpression>parent).type);
+                    return isConstTypeReference((<AssertionExpression>parent).type) ? undefined : getTypeFromTypeNode((<AssertionExpression>parent).type);
                 case SyntaxKind.BinaryExpression:
                     return getContextualTypeForBinaryOperand(node);
                 case SyntaxKind.PropertyAssignment:
@@ -17909,6 +17905,7 @@ namespace ts {
             const elementTypes: Type[] = [];
             const inDestructuringPattern = isAssignmentTarget(node);
             const contextualType = getApparentTypeOfContextualType(node);
+            const inConstContext = isConstContext(node);
             for (let index = 0; index < elementCount; index++) {
                 const e = elements[index];
                 if (inDestructuringPattern && e.kind === SyntaxKind.SpreadElement) {
@@ -17951,7 +17948,7 @@ namespace ts {
                     type.pattern = node;
                     return type;
                 }
-                else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasRestElement, elementCount)) {
+                else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasRestElement, elementCount, inConstContext)) {
                     return tupleResult;
                 }
                 else if (forceTuple) {
@@ -17960,14 +17957,14 @@ namespace ts {
             }
             return createArrayType(elementTypes.length ?
                 getUnionType(elementTypes, UnionReduction.Subtype) :
-                strictNullChecks ? implicitNeverType : undefinedWideningType);
+                strictNullChecks ? implicitNeverType : undefinedWideningType, inConstContext);
         }
 
-        function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length) {
+        function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length, readonly = false) {
             // Infer a tuple type when the contextual type is or contains a tuple-like type
-            if (contextualType && forEachType(contextualType, isTupleLikeType)) {
+            if (readonly || (contextualType && forEachType(contextualType, isTupleLikeType))) {
                 const minLength = elementCount - (hasRestElement ? 1 : 0);
-                const pattern = contextualType.pattern;
+                const pattern = contextualType && contextualType.pattern;
                 // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
                 // tuple type with the corresponding binding or assignment element types to make the lengths equal.
                 if (!hasRestElement && pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
@@ -17985,7 +17982,7 @@ namespace ts {
                         }
                     }
                 }
-                return createTupleType(elementTypes, minLength, hasRestElement);
+                return createTupleType(elementTypes, minLength, hasRestElement, readonly);
             }
         }
 
@@ -18057,15 +18054,15 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getObjectLiteralIndexInfo(propertyNodes: NodeArray<ObjectLiteralElementLike>, offset: number, properties: Symbol[], kind: IndexKind): IndexInfo {
+        function getObjectLiteralIndexInfo(node: ObjectLiteralExpression, offset: number, properties: Symbol[], kind: IndexKind): IndexInfo {
             const propTypes: Type[] = [];
             for (let i = 0; i < properties.length; i++) {
-                if (kind === IndexKind.String || isNumericName(propertyNodes[i + offset].name!)) {
+                if (kind === IndexKind.String || isNumericName(node.properties[i + offset].name!)) {
                     propTypes.push(getTypeOfSymbol(properties[i]));
                 }
             }
             const unionType = propTypes.length ? getUnionType(propTypes, UnionReduction.Subtype) : undefinedType;
-            return createIndexInfo(unionType, /*isReadonly*/ false);
+            return createIndexInfo(unionType, isConstContext(node));
         }
 
         function getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
@@ -18093,6 +18090,8 @@ namespace ts {
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
                 (contextualType.pattern.kind === SyntaxKind.ObjectBindingPattern || contextualType.pattern.kind === SyntaxKind.ObjectLiteralExpression);
+            const inConstContext = isConstContext(node);
+            const checkFlags = inConstContext ? CheckFlags.Readonly : 0;
             const isInJavascript = isInJSFile(node) && !isInJsonFile(node);
             const enumTag = getJSDocEnumTag(node);
             const isJSObjectLiteral = !contextualType && isInJavascript && !enumTag;
@@ -18128,8 +18127,8 @@ namespace ts {
                     const nameType = computedNameType && computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique ?
                         <LiteralType | UniqueESSymbolType>computedNameType : undefined;
                     const prop = nameType ?
-                        createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late) :
-                        createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
+                        createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), checkFlags | CheckFlags.Late) :
+                        createSymbol(SymbolFlags.Property | member.flags, member.escapedName, checkFlags);
                     if (nameType) {
                         prop.nameType = nameType;
                     }
@@ -18173,7 +18172,7 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
+                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, ObjectFlags.FreshLiteral, inConstContext);
                         propertiesArray = [];
                         propertiesTable = createSymbolTable();
                         hasComputedStringProperty = false;
@@ -18185,7 +18184,7 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
+                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, ObjectFlags.FreshLiteral, inConstContext);
                     offset = i + 1;
                     continue;
                 }
@@ -18235,7 +18234,7 @@ namespace ts {
 
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
+                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, ObjectFlags.FreshLiteral, inConstContext);
                 }
                 return spread;
             }
@@ -18243,8 +18242,8 @@ namespace ts {
             return createObjectLiteralType();
 
             function createObjectLiteralType() {
-                const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
-                const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.Number) : undefined;
+                const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, IndexKind.String) : undefined;
+                const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, IndexKind.Number) : undefined;
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
                 result.flags |= TypeFlags.ContainsObjectLiteral | typeFlags & TypeFlags.PropagatingFlags;
                 result.objectFlags |= ObjectFlags.ObjectLiteral | freshObjectLiteralFlag;
@@ -18374,7 +18373,7 @@ namespace ts {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesTable.size > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, typeFlags, objectFlags);
+                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, typeFlags, objectFlags, /*readonly*/ false);
                         attributesTable = createSymbolTable();
                     }
                     const exprType = checkExpressionCached(attributeDecl.expression, checkMode);
@@ -18382,7 +18381,7 @@ namespace ts {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, attributes.symbol, typeFlags, objectFlags);
+                        spread = getSpreadType(spread, exprType, attributes.symbol, typeFlags, objectFlags, /*readonly*/ false);
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -18392,7 +18391,7 @@ namespace ts {
 
             if (!hasSpreadAnyType) {
                 if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, typeFlags, objectFlags);
+                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, typeFlags, objectFlags, /*readonly*/ false);
                 }
             }
 
@@ -18420,7 +18419,7 @@ namespace ts {
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
                     spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined),
-                        attributes.symbol, typeFlags, objectFlags);
+                        attributes.symbol, typeFlags, objectFlags, /*readonly*/ false);
 
                 }
             }
@@ -21107,7 +21106,7 @@ namespace ts {
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
                         const defaultContainingObject = createAnonymousType(anonymousSymbol, memberTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
                         anonymousSymbol.type = defaultContainingObject;
-                        synthType.syntheticType = isValidSpreadType(type) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*typeFLags*/ 0, /*objectFlags*/ 0) : defaultContainingObject;
+                        synthType.syntheticType = isValidSpreadType(type) ? getSpreadType(type, defaultContainingObject, anonymousSymbol, /*typeFLags*/ 0, /*objectFlags*/ 0, /*readonly*/ false) : defaultContainingObject;
                     }
                     else {
                         synthType.syntheticType = type;
@@ -21160,11 +21159,13 @@ namespace ts {
         }
 
         function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
-            const exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(checkExpression(expression, checkMode)));
-
+            let exprType = checkExpression(expression, checkMode);
+            if (isConstTypeReference(type)) {
+                return getRegularTypeOfLiteralType(exprType);
+            }
             checkSourceElement(type);
+            exprType = getRegularTypeOfObjectLiteral(getBaseTypeOfLiteralType(exprType));
             const targetType = getTypeFromTypeNode(type);
-
             if (produceDiagnostics && targetType !== errorType) {
                 const widenedType = getWidenedType(exprType);
                 if (!isTypeComparableTo(targetType, widenedType)) {
@@ -22884,12 +22885,20 @@ namespace ts {
             return false;
         }
 
+        function isConstContext(node: Expression): boolean {
+            const parent = node.parent;
+            return isAssertionExpression(parent) && isConstTypeReference(parent.type) ||
+                (isParenthesizedExpression(parent) || isArrayLiteralExpression(parent) || isSpreadElement(parent)) && isConstContext(parent) ||
+                (isPropertyAssignment(parent) || isShorthandPropertyAssignment(parent)) && isConstContext(parent.parent);
+        }
+
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
             if (arguments.length === 2) {
                 contextualType = getContextualType(node);
             }
             const type = checkExpression(node, checkMode, forceTuple);
-            return isTypeAssertion(node) ? type :
+            return isConstContext(node) ? getRegularTypeOfLiteralType(type) :
+                isTypeAssertion(node) ? type :
                 getWidenedLiteralLikeTypeForContextualType(type, contextualType);
         }
 
@@ -22953,7 +22962,7 @@ namespace ts {
                     return getReturnTypeOfSignature(signature);
                 }
             }
-            else if (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
+            else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
                 return getTypeFromTypeNode((<TypeAssertion>expr).type);
             }
             // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions

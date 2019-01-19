@@ -5606,6 +5606,11 @@ namespace ts {
         return node.kind === SyntaxKind.TypeAssertionExpression;
     }
 
+    export function isConstTypeReference(node: Node) {
+        return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
+            node.typeName.escapedText === "const" && !node.typeArguments;
+    }
+
     export function isParenthesizedExpression(node: Node): node is ParenthesizedExpression {
         return node.kind === SyntaxKind.ParenthesizedExpression;
     }
