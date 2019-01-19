@@ -8704,21 +8704,17 @@ namespace ts {
          * the type of this reference is just the type of the value we resolved to.
          */
         function getJSDocTypeReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
-            if (!pushTypeResolution(symbol, TypeSystemPropertyName.JSDocTypeReference)) {
-                return errorType;
-            }
-            const assignedType = getAssignedClassType(symbol);
-            const valueType = getTypeOfSymbol(symbol);
-            const referenceType = valueType.symbol && valueType.symbol !== symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
-            if (!popTypeResolution()) {
-                getSymbolLinks(symbol).resolvedJSDocType = errorType;
-                error(node, Diagnostics.JSDoc_type_0_circularly_references_itself, symbolToString(symbol));
-                return errorType;
-            }
-            if (referenceType || assignedType) {
-                // TODO: GH#18217 (should the `|| assignedType` be at a lower precedence?)
-                const type = (referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType)!;
-                return getSymbolLinks(symbol).resolvedJSDocType = type;
+            // In the case of an assignment of a function expression (binary expressions, variable declarations, etc.), we will get the
+            // correct instance type for the symbol on the LHS by finding the type for RHS. For example if we want to get the type of the symbol `foo`:
+            //   var foo = function() {}
+            // We will find the static type of the assigned anonymous function.
+            const staticType = getTypeOfSymbol(symbol);
+            const instanceType =
+                staticType.symbol &&
+                staticType.symbol !== symbol && // Make sure this is an assignment like expression by checking that symbol -> type -> symbol doesn't roundtrips.
+                getTypeReferenceTypeWorker(node, staticType.symbol, typeArguments); // Get the instance type of the RHS symbol.
+            if (instanceType) {
+                return getSymbolLinks(symbol).resolvedJSDocType = instanceType;
             }
         }
 
@@ -8739,8 +8735,11 @@ namespace ts {
 
             if (symbol.flags & SymbolFlags.Function &&
                 isJSDocTypeReference(node) &&
-                (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
-                return getInferredClassType(symbol);
+                isJSConstructor(symbol.valueDeclaration)) {
+                const resolved = resolveStructuredTypeMembers(<ObjectType>getTypeOfSymbol(symbol));
+                if (resolved.callSignatures.length === 1) {
+                    return getReturnTypeOfSignature(resolved.callSignatures[0]);
+                }
             }
         }
 
@@ -16877,7 +16876,7 @@ namespace ts {
                 else if (isInJS &&
                          (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
                          getJSDocClassTag(container)) {
-                    const classType = getJSClassType(container.symbol);
+                    const classType = getJSClassType(getMergedSymbol(container.symbol));
                     if (classType) {
                         return getFlowTypeOfReference(node, classType);
                     }
@@ -21057,7 +21056,7 @@ namespace ts {
 
                 // If the symbol of the node has members, treat it like a constructor.
                 const symbol = getSymbolOfNode(func);
-                return !!symbol && symbol.members !== undefined;
+                return !!symbol && (symbol.members !== undefined || symbol.exports !== undefined && symbol.exports.get("prototype" as __String) !== undefined);
             }
             return false;
         }
@@ -21076,10 +21075,6 @@ namespace ts {
                 inferred = getInferredClassType(symbol);
             }
             const assigned = getAssignedClassType(symbol);
-            const valueType = getTypeOfSymbol(symbol);
-            if (valueType.symbol && !isInferredClassType(valueType) && isJSConstructor(valueType.symbol.valueDeclaration)) {
-                inferred = getInferredClassType(valueType.symbol);
-            }
             return assigned && inferred ?
                 getIntersectionType([inferred, assigned]) :
                 assigned || inferred;
@@ -21119,12 +21114,6 @@ namespace ts {
             return links.inferredClassType;
         }
 
-        function isInferredClassType(type: Type) {
-            return type.symbol
-                && getObjectFlags(type) & ObjectFlags.Anonymous
-                && getSymbolLinks(type.symbol).inferredClassType === type;
-        }
-
         /**
          * Syntactically and semantically checks a call or new expression.
          * @param node The call/new expression to be checked.
@@ -21146,21 +21135,10 @@ namespace ts {
                     declaration.kind !== SyntaxKind.Constructor &&
                     declaration.kind !== SyntaxKind.ConstructSignature &&
                     declaration.kind !== SyntaxKind.ConstructorType &&
-                    !isJSDocConstructSignature(declaration)) {
+                    !isJSDocConstructSignature(declaration) &&
+                    !isJSConstructor(declaration)) {
 
-                    // When resolved signature is a call signature (and not a construct signature) the result type is any, unless
-                    // the declaring function had members created through 'x.prototype.y = expr' or 'this.y = expr' psuedodeclarations
-                    // in a JS file
-                    // Note:JS inferred classes might come from a variable declaration instead of a function declaration.
-                    // In this case, using getResolvedSymbol directly is required to avoid losing the members from the declaration.
-                    let funcSymbol = checkExpression(node.expression).symbol;
-                    if (!funcSymbol && node.expression.kind === SyntaxKind.Identifier) {
-                        funcSymbol = getResolvedSymbol(node.expression as Identifier);
-                    }
-                    const type = funcSymbol && getJSClassType(funcSymbol);
-                    if (type) {
-                        return signature.target ? instantiateType(type, signature.mapper) : type;
-                    }
+                    // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
