@@ -31,6 +31,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanNumericLiteral(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJSDocToken(): JsDocSyntaxKind;
         scan(): SyntaxKind;
@@ -874,6 +875,7 @@ namespace ts {
             scanJsxIdentifier,
             scanJsxAttributeValue,
             reScanJsxToken,
+            reScanNumericLiteral,
             scanJsxToken,
             scanJSDocToken,
             scan,
@@ -1937,6 +1939,16 @@ namespace ts {
         function reScanJsxToken(): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
             return token = scanJsxToken();
+        }
+
+        function reScanNumericLiteral(): SyntaxKind {
+            if ((token === SyntaxKind.MinusToken || token === SyntaxKind.PlusToken) && lookAhead(() => scan() === SyntaxKind.NumericLiteral && scan() !== SyntaxKind.ColonToken)) {
+                const lastTokenPos = tokenPos;
+                scan();
+                startPos = lastTokenPos;
+                return SyntaxKind.NumericLiteral;
+            }
+            return token;
         }
 
         function scanJsxToken(): JsxTokenSyntaxKind {

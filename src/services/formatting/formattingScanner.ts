@@ -19,6 +19,7 @@ namespace ts.formatting {
         RescanTemplateToken,
         RescanJsxIdentifier,
         RescanJsxText,
+        RescanNumericLiteral
     }
 
     export function getFormattingScanner<T>(text: string, languageVariant: LanguageVariant, startPos: number, endPos: number, cb: (scanner: FormattingScanner) => T): T {
@@ -116,6 +117,10 @@ namespace ts.formatting {
             return false;
         }
 
+        function shouldRescanNumericLiteral(node: Node): boolean {
+            return node.kind === SyntaxKind.NumericLiteral;
+        }
+
         function shouldRescanJsxText(node: Node): boolean {
             return node.kind === SyntaxKind.JsxText;
         }
@@ -149,7 +154,9 @@ namespace ts.formatting {
                             ? ScanAction.RescanJsxIdentifier
                             : shouldRescanJsxText(n)
                             ? ScanAction.RescanJsxText
-                            : ScanAction.Scan;
+                            : shouldRescanNumericLiteral(n)
+                                ? ScanAction.RescanNumericLiteral
+                                : ScanAction.Scan;
 
             if (lastTokenInfo && expectedScanAction === lastScanAction) {
                 // readTokenInfo was called before with the same expected scan action.
@@ -241,6 +248,8 @@ namespace ts.formatting {
                 case ScanAction.RescanJsxText:
                     lastScanAction = ScanAction.RescanJsxText;
                     return scanner.reScanJsxToken();
+                case ScanAction.RescanNumericLiteral:
+                    return scanner.reScanNumericLiteral();
                 case ScanAction.Scan:
                     break;
                 default:
