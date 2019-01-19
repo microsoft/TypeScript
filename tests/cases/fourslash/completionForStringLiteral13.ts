@@ -10,5 +10,4 @@
 ////var Promise: PromiseConstructor;
 ////Promise["/*1*/"];
 
-goTo.marker('1');
-verify.not.completionListContains("__@species");
+verify.completions({ marker: "1", exact: [] });

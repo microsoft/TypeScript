@@ -127,16 +127,14 @@ declare function f30<T, U extends ((x: T) => any)[]>(x: T, ...args: U): U;
 
 const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: number) => number]
 
-type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new(...args: infer U) => any) ? U : any[];
-
 type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
 type T02 = Parameters<(...args: [number, string, boolean]) => void>;
-type T03 = Parameters<new (x: number, y: string, z: boolean) => void>;
-type T04 = Parameters<new (...args: [number, string, boolean]) => void>;
+type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
+type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => void>;
 type T05<T> = Parameters<(...args: T[]) => void>;
-type T06<T> = Parameters<new (...args: []) => void>;
+type T06<T> = ConstructorParameters<new (...args: []) => void>;
 type T07<T extends any[]> = Parameters<(...args: T) => void>;
-type T08<T extends any[]> = Parameters<new (...args: T) => void>;
+type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
 type T09 = Parameters<Function>;
 
 type Record1 = {

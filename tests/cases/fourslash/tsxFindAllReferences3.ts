@@ -9,7 +9,7 @@
 //// }
 //// class MyClass {
 ////   props: {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}name|]?: string;
+////     [|{| "isDefinition": true |}name|]?: string;
 ////     size?: number;
 //// }
 ////

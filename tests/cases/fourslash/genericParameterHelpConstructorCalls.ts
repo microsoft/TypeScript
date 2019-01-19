@@ -14,8 +14,6 @@
 ////new testClass<IFoo,/*constructor5*/IFoo,IFoo>(null, null, null)
 
 verify.signatureHelp(
-    // TODO: GH#23631
-    /*
     {
         marker: "constructor1",
         text: "testClass<T extends IFoo, U, M extends IFoo>(a: T, b: U, c: M): testClass<T, U, M>",
@@ -27,8 +25,7 @@ verify.signatureHelp(
         parameterName: "U",
         parameterSpan: "U",
     },
-    */
-   { marker: "constructor3", parameterName: "T", parameterSpan: "T extends IFoo" },
-   { marker: "constructor4", parameterName: "M", parameterSpan: "M extends IFoo" },
-   { marker: "constructor5", parameterName: "U", parameterSpan: "U" },
+    { marker: "constructor3", parameterName: "T", parameterSpan: "T extends IFoo" },
+    { marker: "constructor4", parameterName: "M", parameterSpan: "M extends IFoo" },
+    { marker: "constructor5", parameterName: "U", parameterSpan: "U" },
 );

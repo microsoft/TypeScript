@@ -1,0 +1,45 @@
+=== tests/cases/conformance/types/thisType/inferThisType.ts ===
+declare function f<T>(g: (this: T) => void): T
+>f : Symbol(f, Decl(inferThisType.ts, 0, 0))
+>T : Symbol(T, Decl(inferThisType.ts, 0, 19))
+>g : Symbol(g, Decl(inferThisType.ts, 0, 22))
+>this : Symbol(this, Decl(inferThisType.ts, 0, 26))
+>T : Symbol(T, Decl(inferThisType.ts, 0, 19))
+>T : Symbol(T, Decl(inferThisType.ts, 0, 19))
+
+declare function h(this: number): void;
+>h : Symbol(h, Decl(inferThisType.ts, 0, 46))
+>this : Symbol(this, Decl(inferThisType.ts, 1, 19))
+
+f(h)
+>f : Symbol(f, Decl(inferThisType.ts, 0, 0))
+>h : Symbol(h, Decl(inferThisType.ts, 0, 46))
+
+// works with infer types as well
+type Check<T> = T extends (this: infer U, ...args: any[]) => any ? string : unknown;
+>Check : Symbol(Check, Decl(inferThisType.ts, 2, 4))
+>T : Symbol(T, Decl(inferThisType.ts, 5, 11))
+>T : Symbol(T, Decl(inferThisType.ts, 5, 11))
+>this : Symbol(this, Decl(inferThisType.ts, 5, 27))
+>U : Symbol(U, Decl(inferThisType.ts, 5, 38))
+>args : Symbol(args, Decl(inferThisType.ts, 5, 41))
+
+type r1 = Check<(this: number) => void>; // should be string
+>r1 : Symbol(r1, Decl(inferThisType.ts, 5, 84))
+>Check : Symbol(Check, Decl(inferThisType.ts, 2, 4))
+>this : Symbol(this, Decl(inferThisType.ts, 6, 17))
+
+type This<T>  = T extends (this: infer U, ...args: any[]) => any ? U : unknown;
+>This : Symbol(This, Decl(inferThisType.ts, 6, 40))
+>T : Symbol(T, Decl(inferThisType.ts, 8, 10))
+>T : Symbol(T, Decl(inferThisType.ts, 8, 10))
+>this : Symbol(this, Decl(inferThisType.ts, 8, 27))
+>U : Symbol(U, Decl(inferThisType.ts, 8, 38))
+>args : Symbol(args, Decl(inferThisType.ts, 8, 41))
+>U : Symbol(U, Decl(inferThisType.ts, 8, 38))
+
+type r2 = This<(this: number) => void>; // should be number
+>r2 : Symbol(r2, Decl(inferThisType.ts, 8, 79))
+>This : Symbol(This, Decl(inferThisType.ts, 6, 40))
+>this : Symbol(this, Decl(inferThisType.ts, 9, 16))
+

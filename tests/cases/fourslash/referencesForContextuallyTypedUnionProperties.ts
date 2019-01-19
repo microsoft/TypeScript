@@ -2,12 +2,12 @@
 
 ////interface A {
 ////    a: number;
-////    [|{| "isWriteAccess": true, "isDefinition": true |}common|]: string;
+////    [|{| "isDefinition": true |}common|]: string;
 ////}
 ////
 ////interface B {
 ////    b: number;
-////    [|{| "isWriteAccess": true, "isDefinition": true |}common|]: number;
+////    [|{| "isDefinition": true |}common|]: number;
 ////}
 ////
 ////// Assignment

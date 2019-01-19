@@ -1,0 +1,40 @@
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(17,14): error TS2493: Tuple type '[C, base]' of length '2' has no element at index '4'.
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(18,14): error TS2493: Tuple type '[C, D]' of length '2' has no element at index '4'.
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(19,14): error TS2493: Tuple type '[C1, D1]' of length '2' has no element at index '4'.
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(20,14): error TS2493: Tuple type '[base1, C1]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts(21,14): error TS2493: Tuple type '[C1, F]' of length '2' has no element at index '2'.
+
+
+==== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple2.ts (5 errors) ====
+    interface base { }
+    interface base1 { i }
+    class C implements base { c }
+    class D implements base { d }
+    class E implements base { e }
+    class F extends C { f }
+    
+    class C1 implements base1 { i = "foo"; c }
+    class D1 extends C1 { i = "bar"; d }
+    
+    var t1: [C, base];
+    var t2: [C, D];
+    var t3: [C1, D1];
+    var t4: [base1, C1];
+    var t5: [C1, F]
+    
+    var e11 = t1[4]; // base
+                 ~
+!!! error TS2493: Tuple type '[C, base]' of length '2' has no element at index '4'.
+    var e21 = t2[4]; // {}
+                 ~
+!!! error TS2493: Tuple type '[C, D]' of length '2' has no element at index '4'.
+    var e31 = t3[4]; // C1
+                 ~
+!!! error TS2493: Tuple type '[C1, D1]' of length '2' has no element at index '4'.
+    var e41 = t4[2]; // base1
+                 ~
+!!! error TS2493: Tuple type '[base1, C1]' of length '2' has no element at index '2'.
+    var e51 = t5[2]; // {}
+                 ~
+!!! error TS2493: Tuple type '[C1, F]' of length '2' has no element at index '2'.
+    

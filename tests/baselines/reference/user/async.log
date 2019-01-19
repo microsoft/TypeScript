@@ -51,7 +51,7 @@ node_modules/async/autoInject.js(160,28): error TS2695: Left side of comma opera
 node_modules/async/autoInject.js(164,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/autoInject.js(168,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/cargo.js(62,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/cargo.js(67,14): error TS2304: Cannot find name 'module'.
+node_modules/async/cargo.js(67,14): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 node_modules/async/cargo.js(67,20): error TS1005: '}' expected.
 node_modules/async/cargo.js(92,11): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/compose.js(8,37): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -92,8 +92,6 @@ node_modules/async/dist/async.js(31,29): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,30): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(257,56): error TS2339: Property 'Object' does not exist on type 'Window'.
 node_modules/async/dist/async.js(298,7): error TS2454: Variable 'unmasked' is used before being assigned.
-node_modules/async/dist/async.js(480,35): error TS2538: Type 'true' cannot be used as an index type.
-node_modules/async/dist/async.js(480,59): error TS2538: Type 'true' cannot be used as an index type.
 node_modules/async/dist/async.js(622,80): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(748,84): error TS2339: Property 'nodeType' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(754,49): error TS2339: Property 'process' does not exist on type 'false | Global'.
@@ -126,11 +124,10 @@ node_modules/async/dist/async.js(2116,20): error TS2345: Argument of type 'Funct
   Type 'Function' is not assignable to type 'number'.
 node_modules/async/dist/async.js(2274,21): error TS2554: Expected 0 arguments, but got 2.
 node_modules/async/dist/async.js(2425,20): error TS1005: '}' expected.
-node_modules/async/dist/async.js(2450,5): error TS2322: Type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }' is not assignable to type 'NodeModule'.
-  Property 'exports' is missing in type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }'.
+node_modules/async/dist/async.js(2450,5): error TS2740: Type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }' is missing the following properties from type 'NodeModule': exports, require, id, filename, and 4 more.
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'pop' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
 node_modules/async/dist/async.js(2663,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2682,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2707,31): error TS1005: ']' expected.
@@ -172,8 +169,7 @@ node_modules/async/dist/async.js(4160,19): error TS2339: Property '_tasks' does 
 node_modules/async/dist/async.js(4163,26): error TS2339: Property 'process' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(4167,14): error TS2339: Property 'unshift' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(4381,5): error TS2322: Type 'any[] | {}' is not assignable to type 'any[]'.
-  Type '{}' is not assignable to type 'any[]'.
-    Property 'length' is missing in type '{}'.
+  Type '{}' is missing the following properties from type 'any[]': length, pop, push, concat, and 28 more.
 node_modules/async/dist/async.js(4617,17): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(4617,17): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
@@ -523,8 +519,6 @@ node_modules/async/internal/filter.js(64,29): error TS2695: Left side of comma o
 node_modules/async/internal/filter.js(66,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/filter.js(72,19): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/filter.js(73,27): error TS2695: Left side of comma operator is unused and has no side effects.
-node_modules/async/internal/getIterator.js(8,35): error TS2538: Type 'true' cannot be used as an index type.
-node_modules/async/internal/getIterator.js(8,59): error TS2538: Type 'true' cannot be used as an index type.
 node_modules/async/internal/initialParams.js(9,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/iterator.js(41,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/internal/iterator.js(51,10): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -586,9 +580,11 @@ node_modules/async/priorityQueue.js(9,14): error TS2695: Left side of comma oper
 node_modules/async/priorityQueue.js(18,15): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/priorityQueue.js(23,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/priorityQueue.js(47,10): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/priorityQueue.js(86,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/priorityQueue.js(93,20): error TS1005: '}' expected.
 node_modules/async/queue.js(8,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/queue.js(9,11): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/queue.js(91,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/queue.js(97,20): error TS1005: '}' expected.
 node_modules/async/race.js(63,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/race.js(64,11): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -622,6 +618,7 @@ node_modules/async/retryable.js(12,18): error TS2695: Left side of comma operato
 node_modules/async/retryable.js(13,13): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retryable.js(18,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retryable.js(18,70): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/retryable.js(51,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/select.js(44,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/selectLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/selectSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.

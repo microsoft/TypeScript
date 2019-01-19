@@ -6,7 +6,7 @@ enum E {
 >E : E
 
     static
->static : E
+>static : E.static
 }
 
 const x1: E.static = E.static;

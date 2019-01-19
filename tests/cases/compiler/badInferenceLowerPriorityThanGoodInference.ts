@@ -1,3 +1,5 @@
+// Repro from #13118
+
 interface Foo<A> {
     a: A;
     b: (x: A) => void;
@@ -11,3 +13,10 @@ const result = canYouInferThis(() => ({
 }))
 
 result.BLAH;
+
+// Repro from #26629
+
+function goofus <ARGS extends any[]> (f: (...args: ARGS) => any ) {}
+
+goofus((a: string) => ({ dog() { return a; } }));
+goofus((a: string) => ({ dog: function() { return a; } }));

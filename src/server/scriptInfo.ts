@@ -6,7 +6,6 @@ namespace ts.server {
 
     /* @internal */
     export class TextStorage {
-        /*@internal*/
         version: ScriptInfoVersion;
 
         /**
@@ -27,17 +26,25 @@ namespace ts.server {
         private lineMap: number[] | undefined;
 
         /**
+         * When a large file is loaded, text will artificially be set to "".
+         * In order to be able to report correct telemetry, we store the actual
+         * file size in this case.  (In other cases where text === "", e.g.
+         * for mixed content or dynamic files, fileSize will be undefined.)
+         */
+        private fileSize: number | undefined;
+
+        /**
          * True if the text is for the file thats open in the editor
          */
-        public isOpen: boolean;
+        public isOpen = false;
         /**
          * True if the text present is the text from the file on the disk
          */
-        private ownFileText: boolean;
+        private ownFileText = false;
         /**
          * True when reloading contents of file from the disk is pending
          */
-        private pendingReloadFromDisk: boolean;
+        private pendingReloadFromDisk = false;
 
         constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath, initialVersion: ScriptInfoVersion | undefined, private readonly info: ScriptInfo) {
             this.version = initialVersion || { svc: 0, text: 0 };
@@ -57,10 +64,22 @@ namespace ts.server {
             this.switchToScriptVersionCache();
         }
 
+        private resetSourceMapInfo() {
+            this.info.sourceFileLike = undefined;
+            this.info.closeSourceMapFileWatcher();
+            this.info.sourceMapFilePath = undefined;
+            this.info.declarationInfoPath = undefined;
+            this.info.sourceInfos = undefined;
+            this.info.documentPositionMapper = undefined;
+        }
+
+        /** Public for testing */
         public useText(newText?: string) {
             this.svc = undefined;
             this.text = newText;
             this.lineMap = undefined;
+            this.fileSize = undefined;
+            this.resetSourceMapInfo();
             this.version.text++;
         }
 
@@ -69,13 +88,15 @@ namespace ts.server {
             this.ownFileText = false;
             this.text = undefined;
             this.lineMap = undefined;
+            this.fileSize = undefined;
+            this.resetSourceMapInfo();
         }
 
         /**
          * Set the contents as newText
          * returns true if text changed
          */
-        public reload(newText: string) {
+        public reload(newText: string): boolean {
             Debug.assert(newText !== undefined);
 
             // Reload always has fresh content
@@ -92,6 +113,8 @@ namespace ts.server {
                 this.ownFileText = false;
                 return true;
             }
+
+            return false;
         }
 
         /**
@@ -99,7 +122,9 @@ namespace ts.server {
          * returns true if text changed
          */
         public reloadWithFileText(tempFileName?: string) {
-            const reloaded = this.reload(this.getFileText(tempFileName));
+            const { text: newText, fileSize } = this.getFileTextAndSize(tempFileName);
+            const reloaded = this.reload(newText);
+            this.fileSize = fileSize; // NB: after reload since reload clears it
             this.ownFileText = !tempFileName || tempFileName === this.fileName;
             return reloaded;
         }
@@ -119,14 +144,31 @@ namespace ts.server {
             this.pendingReloadFromDisk = true;
         }
 
+        /**
+         * For telemetry purposes, we would like to be able to report the size of the file.
+         * However, we do not want telemetry to require extra file I/O so we report a size
+         * that may be stale (e.g. may not reflect change made on disk since the last reload).
+         * NB: Will read from disk if the file contents have never been loaded because
+         * telemetry falsely indicating size 0 would be counter-productive.
+         */
+        public getTelemetryFileSize(): number {
+            return !!this.fileSize
+                ? this.fileSize
+                : !!this.text // Check text before svc because its length is cheaper
+                    ? this.text.length // Could be wrong if this.pendingReloadFromDisk
+                    : !!this.svc
+                        ? this.svc.getSnapshot().getLength() // Could be wrong if this.pendingReloadFromDisk
+                        : this.getSnapshot().getLength(); // Should be strictly correct
+        }
+
         public getSnapshot(): IScriptSnapshot {
             return this.useScriptVersionCacheIfValidOrOpen()
                 ? this.svc!.getSnapshot()
                 : ScriptSnapshot.fromString(this.getOrLoadText());
         }
 
-        public getLineInfo(line: number): AbsolutePositionAndLineText {
-            return this.switchToScriptVersionCache().getLineInfo(line);
+        public getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
+            return this.switchToScriptVersionCache().getAbsolutePositionAndLineText(line);
         }
         /**
          *  @param line 0 based index
@@ -145,9 +187,9 @@ namespace ts.server {
          * @param line 1 based index
          * @param offset 1 based index
          */
-        lineOffsetToPosition(line: number, offset: number): number {
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
             if (!this.useScriptVersionCacheIfValidOrOpen()) {
-                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text);
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
             }
 
             // TODO: assert this offset is actually on the line
@@ -162,22 +204,22 @@ namespace ts.server {
             return this.svc!.positionToLineOffset(position);
         }
 
-        private getFileText(tempFileName?: string) {
+        private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
             let text: string;
             const fileName = tempFileName || this.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
             // Only non typescript files have size limitation
-            if (!hasTypeScriptFileExtension(this.fileName)) {
+            if (!hasTSFileExtension(this.fileName)) {
                 const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
                 if (fileSize > maxFileSize) {
                     Debug.assert(!!this.info.containingProjects.length);
                     const service = this.info.containingProjects[0].projectService;
                     service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
                     this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
-                    return "";
+                    return { text: "", fileSize };
                 }
             }
-            return getText();
+            return { text: getText() };
         }
 
         private switchToScriptVersionCache(): ScriptVersionCache {
@@ -215,6 +257,17 @@ namespace ts.server {
             Debug.assert(!this.svc, "ScriptVersionCache should not be set");
             return this.lineMap || (this.lineMap = computeLineStarts(this.getOrLoadText()));
         }
+
+        getLineInfo(): LineInfo {
+            if (this.svc) {
+                return {
+                    getLineCount: () => this.svc!.getLineCount(),
+                    getLineText: line => this.svc!.getAbsolutePositionAndLineText(line + 1).lineText!
+                };
+            }
+            const lineMap = this.getLineMap();
+            return getLineInfo(this.text!, lineMap);
+        }
     }
 
     /*@internal*/
@@ -228,13 +281,19 @@ namespace ts.server {
         sourceFile: SourceFile;
     }
 
+    /*@internal*/
+    export interface SourceMapFileWatcher {
+        watcher: FileWatcher;
+        sourceInfos?: Map<true>;
+    }
+
     export class ScriptInfo {
         /**
          * All projects that include this file
          */
         readonly containingProjects: Project[] = [];
         private formatSettings: FormatCodeSettings | undefined;
-        private preferences: UserPreferences | undefined;
+        private preferences: protocol.UserPreferences | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher | undefined;
@@ -248,7 +307,24 @@ namespace ts.server {
         private realpath: Path | undefined;
 
         /*@internal*/
-        cacheSourceFile: DocumentRegistrySourceFileCache;
+        cacheSourceFile: DocumentRegistrySourceFileCache | undefined;
+
+        /*@internal*/
+        mTime?: number;
+
+        /*@internal*/
+        sourceFileLike?: SourceFileLike;
+
+        /*@internal*/
+        sourceMapFilePath?: Path | SourceMapFileWatcher | false;
+
+        // Present on sourceMapFile info
+        /*@internal*/
+        declarationInfoPath?: Path;
+        /*@internal*/
+        sourceInfos?: Map<true>;
+        /*@internal*/
+        documentPositionMapper?: DocumentPositionMapper | false;
 
         constructor(
             private readonly host: ServerHost,
@@ -272,6 +348,11 @@ namespace ts.server {
         /*@internal*/
         getVersion() {
             return this.textStorage.version;
+        }
+
+        /*@internal*/
+        getTelemetryFileSize() {
+            return this.textStorage.getTelemetryFileSize();
         }
 
         /*@internal*/
@@ -333,7 +414,7 @@ namespace ts.server {
         }
 
         getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
-        getPreferences(): UserPreferences | undefined { return this.preferences; }
+        getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -432,10 +513,10 @@ namespace ts.server {
             }
         }
 
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void {
             if (formatSettings) {
                 if (!this.formatSettings) {
-                    this.formatSettings = getDefaultFormatCodeSettings(this.host);
+                    this.formatSettings = getDefaultFormatCodeSettings(this.host.newLine);
                     assign(this.formatSettings, formatSettings);
                 }
                 else {
@@ -482,8 +563,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getLineInfo(line: number): AbsolutePositionAndLineText {
-            return this.textStorage.getLineInfo(line);
+        getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
+            return this.textStorage.getAbsolutePositionAndLineText(line);
         }
 
         editContent(start: number, end: number, newText: string): void {
@@ -512,8 +593,12 @@ namespace ts.server {
          * @param line 1 based index
          * @param offset 1 based index
          */
-        lineOffsetToPosition(line: number, offset: number): number {
-            return this.textStorage.lineOffsetToPosition(line, offset);
+        lineOffsetToPosition(line: number, offset: number): number;
+        /*@internal*/
+        // tslint:disable-next-line:unified-signatures
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number;
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
+            return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
         }
 
         positionToLineOffset(position: number): protocol.Location {
@@ -522,6 +607,19 @@ namespace ts.server {
 
         public isJavaScript() {
             return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
+        }
+
+        /*@internal*/
+        getLineInfo(): LineInfo {
+            return this.textStorage.getLineInfo();
+        }
+
+        /*@internal*/
+        closeSourceMapFileWatcher() {
+            if (this.sourceMapFilePath && !isString(this.sourceMapFilePath)) {
+                closeFileWatcherOf(this.sourceMapFilePath);
+                this.sourceMapFilePath = undefined;
+            }
         }
     }
 }

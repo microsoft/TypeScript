@@ -6,7 +6,7 @@ namespace ts {
         newFileOrDirPath: string,
         host: LanguageServiceHost,
         formatContext: formatting.FormatContext,
-        preferences: UserPreferences,
+        _preferences: UserPreferences,
         sourceMapper: SourceMapper,
     ): ReadonlyArray<FileTextChanges> {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
@@ -14,8 +14,8 @@ namespace ts {
         const oldToNew = getPathUpdater(oldFileOrDirPath, newFileOrDirPath, getCanonicalFileName, sourceMapper);
         const newToOld = getPathUpdater(newFileOrDirPath, oldFileOrDirPath, getCanonicalFileName, sourceMapper);
         return textChanges.ChangeTracker.with({ host, formatContext }, changeTracker => {
-            updateTsconfigFiles(program, changeTracker, oldToNew, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
-            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName, preferences);
+            updateTsconfigFiles(program, changeTracker, oldToNew, oldFileOrDirPath, newFileOrDirPath, host.getCurrentDirectory(), useCaseSensitiveFileNames);
+            updateImports(program, changeTracker, oldToNew, newToOld, host, getCanonicalFileName);
         });
     }
 
@@ -25,7 +25,7 @@ namespace ts {
     export function getPathUpdater(oldFileOrDirPath: string, newFileOrDirPath: string, getCanonicalFileName: GetCanonicalFileName, sourceMapper: SourceMapper | undefined): PathUpdater {
         const canonicalOldPath = getCanonicalFileName(oldFileOrDirPath);
         return path => {
-            const originalPath = sourceMapper && sourceMapper.tryGetOriginalLocation({ fileName: path, position: 0 });
+            const originalPath = sourceMapper && sourceMapper.tryGetSourcePosition({ fileName: path, pos: 0 });
             const updatedPath = getUpdatedPath(originalPath ? originalPath.fileName : path);
             return originalPath
                 ? updatedPath === undefined ? undefined : makeCorrespondingRelativeChange(originalPath.fileName, updatedPath, path, getCanonicalFileName)
@@ -45,7 +45,7 @@ namespace ts {
         return combinePathsSafe(getDirectoryPath(a1), rel);
     }
 
-    function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
+    function updateTsconfigFiles(program: Program, changeTracker: textChanges.ChangeTracker, oldToNew: PathUpdater, oldFileOrDirPath: string, newFileOrDirPath: string, currentDirectory: string, useCaseSensitiveFileNames: boolean): void {
         const { configFile } = program.getCompilerOptions();
         if (!configFile) return;
         const configDir = getDirectoryPath(configFile.fileName);
@@ -63,7 +63,8 @@ namespace ts {
                         const includes = mapDefined(property.initializer.elements, e => isStringLiteral(e) ? e.text : undefined);
                         const matchers = getFileMatcherPatterns(configDir, /*excludes*/ [], includes, useCaseSensitiveFileNames, currentDirectory);
                         // If there isn't some include for this, add a new one.
-                        if (!getRegexFromPattern(Debug.assertDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
+                        if (getRegexFromPattern(Debug.assertDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(oldFileOrDirPath) &&
+                            !getRegexFromPattern(Debug.assertDefined(matchers.includeFilePattern), useCaseSensitiveFileNames).test(newFileOrDirPath)) {
                             changeTracker.insertNodeAfter(configFile, last(property.initializer.elements), createStringLiteral(relativePath(newFileOrDirPath)));
                         }
                     }
@@ -72,7 +73,7 @@ namespace ts {
                 case "compilerOptions":
                     forEachProperty(property.initializer, (property, propertyName) => {
                         const option = getOptionFromName(propertyName);
-                        if (option && (option.isFilePath || option.type === "list" && (option as CommandLineOptionOfListType).element.isFilePath)) {
+                        if (option && (option.isFilePath || option.type === "list" && option.element.isFilePath)) {
                             updatePaths(property);
                         }
                         else if (propertyName === "paths") {
@@ -122,7 +123,6 @@ namespace ts {
         newToOld: PathUpdater,
         host: LanguageServiceHost,
         getCanonicalFileName: GetCanonicalFileName,
-        preferences: UserPreferences,
     ): void {
         const allFiles = program.getSourceFiles();
         for (const sourceFile of allFiles) {
@@ -151,12 +151,12 @@ namespace ts {
                     const toImport = oldFromNew !== undefined
                         // If we're at the new location (file was already renamed), need to redo module resolution starting from the old location.
                         // TODO:GH#18217
-                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew, host)
+                        ? getSourceFileToImportFromResolved(resolveModuleName(importLiteral.text, oldImportFromPath, program.getCompilerOptions(), host as ModuleResolutionHost), oldToNew)
                         : getSourceFileToImport(importedModuleSymbol, importLiteral, sourceFile, program, host, oldToNew);
 
                     // Need an update if the imported file moved, or the importing file moved and was using a relative path.
                     return toImport !== undefined && (toImport.updated || (importingSourceFileMoved && pathIsRelative(importLiteral.text)))
-                        ? moduleSpecifiers.getModuleSpecifier(program.getCompilerOptions(), sourceFile, newImportFromPath, toImport.newFileName, host, allFiles, preferences, program.redirectTargetsMap)
+                        ? moduleSpecifiers.updateModuleSpecifier(program.getCompilerOptions(), newImportFromPath, toImport.newFileName, host, allFiles, program.redirectTargetsMap, importLiteral.text)
                         : undefined;
                 });
         }
@@ -192,25 +192,40 @@ namespace ts {
             const resolved = host.resolveModuleNames
                 ? host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName)
                 : program.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName);
-            return getSourceFileToImportFromResolved(resolved, oldToNew, host);
+            return getSourceFileToImportFromResolved(resolved, oldToNew);
         }
     }
 
-    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, host: LanguageServiceHost): ToImport | undefined {
-        return resolved && (
-            (resolved.resolvedModule && getIfExists(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfExists));
+    function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater): ToImport | undefined {
+        // Search through all locations looking for a moved file, and only then test already existing files.
+        // This is because if `a.ts` is compiled to `a.js` and `a.ts` is moved, we don't want to resolve anything to `a.js`, but to `a.ts`'s new location.
+        if (!resolved) return undefined;
 
-        function getIfExists(oldLocation: string): ToImport | undefined {
-            const newLocation = oldToNew(oldLocation);
+        // First try resolved module
+        if (resolved.resolvedModule) {
+            const result = tryChange(resolved.resolvedModule.resolvedFileName);
+            if (result) return result;
+        }
 
-            return host.fileExists!(oldLocation) || newLocation !== undefined && host.fileExists!(newLocation) // TODO: GH#18217
-                ? newLocation !== undefined ? { newFileName: newLocation, updated: true } : { newFileName: oldLocation, updated: false }
-                : undefined;
+        // Then failed lookups except package.json since we dont want to touch them (only included ts/js files)
+        const result = forEach(resolved.failedLookupLocations, tryChangeWithIgnoringPackageJson);
+        if (result) return result;
+
+        // If nothing changed, then result is resolved module file thats not updated
+        return resolved.resolvedModule && { newFileName: resolved.resolvedModule.resolvedFileName, updated: false };
+
+        function tryChangeWithIgnoringPackageJson(oldFileName: string) {
+            return !endsWith(oldFileName, "/package.json") ? tryChange(oldFileName) : undefined;
+        }
+
+        function tryChange(oldFileName: string) {
+            const newFileName = oldToNew(oldFileName);
+            return newFileName && { newFileName, updated: true };
         }
     }
 
     function updateImportsWorker(sourceFile: SourceFile, changeTracker: textChanges.ChangeTracker, updateRef: (refText: string) => string | undefined, updateImport: (importLiteral: StringLiteralLike) => string | undefined) {
-        for (const ref of sourceFile.referencedFiles) {
+        for (const ref of sourceFile.referencedFiles || emptyArray) { // TODO: GH#26162
             const updated = updateRef(ref.fileName);
             if (updated !== undefined && updated !== sourceFile.text.slice(ref.pos, ref.end)) changeTracker.replaceRangeWithText(sourceFile, ref, updated);
         }
@@ -222,7 +237,7 @@ namespace ts {
     }
 
     function createStringRange(node: StringLiteralLike, sourceFile: SourceFileLike): TextRange {
-        return createTextRange(node.getStart(sourceFile) + 1, node.end - 1);
+        return createRange(node.getStart(sourceFile) + 1, node.end - 1);
     }
 
     function forEachProperty(objectLiteral: Expression, cb: (property: PropertyAssignment, propertyName: string) => void) {

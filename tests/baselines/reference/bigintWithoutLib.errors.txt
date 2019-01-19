@@ -1,0 +1,191 @@
+tests/cases/compiler/bigintWithoutLib.ts(4,25): error TS2304: Cannot find name 'BigInt'.
+tests/cases/compiler/bigintWithoutLib.ts(5,13): error TS2304: Cannot find name 'BigInt'.
+tests/cases/compiler/bigintWithoutLib.ts(6,5): error TS2304: Cannot find name 'BigInt'.
+tests/cases/compiler/bigintWithoutLib.ts(7,13): error TS2304: Cannot find name 'BigInt'.
+tests/cases/compiler/bigintWithoutLib.ts(7,30): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(8,13): error TS2304: Cannot find name 'BigInt'.
+tests/cases/compiler/bigintWithoutLib.ts(8,31): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(9,1): error TS2322: Type 'Object' is not assignable to type 'bigint'.
+tests/cases/compiler/bigintWithoutLib.ts(11,13): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/bigintWithoutLib.ts(15,18): error TS2304: Cannot find name 'BigInt64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(15,38): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+tests/cases/compiler/bigintWithoutLib.ts(16,19): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+tests/cases/compiler/bigintWithoutLib.ts(17,19): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+tests/cases/compiler/bigintWithoutLib.ts(17,34): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(17,38): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(17,42): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(18,19): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+tests/cases/compiler/bigintWithoutLib.ts(19,19): error TS2304: Cannot find name 'BigInt64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(20,19): error TS2304: Cannot find name 'BigInt64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(21,19): error TS2304: Cannot find name 'BigInt64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(27,19): error TS2304: Cannot find name 'BigUint64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(27,40): error TS2304: Cannot find name 'BigUint64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(28,20): error TS2304: Cannot find name 'BigUint64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(29,20): error TS2304: Cannot find name 'BigUint64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(29,36): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(29,40): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(29,44): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(30,20): error TS2304: Cannot find name 'BigUint64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(31,20): error TS2304: Cannot find name 'BigUint64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(32,20): error TS2304: Cannot find name 'BigUint64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(33,20): error TS2304: Cannot find name 'BigUint64Array'.
+tests/cases/compiler/bigintWithoutLib.ts(40,10): error TS2339: Property 'setBigInt64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(40,26): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(41,10): error TS2339: Property 'setBigInt64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(41,26): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(42,10): error TS2339: Property 'setBigInt64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(43,10): error TS2339: Property 'setBigUint64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(43,26): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(44,10): error TS2339: Property 'setBigUint64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(44,26): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigintWithoutLib.ts(45,10): error TS2339: Property 'setBigUint64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(46,22): error TS2339: Property 'getBigInt64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(47,22): error TS2339: Property 'getBigInt64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(48,22): error TS2339: Property 'getBigUint64' does not exist on type 'DataView'.
+tests/cases/compiler/bigintWithoutLib.ts(49,22): error TS2339: Property 'getBigUint64' does not exist on type 'DataView'.
+
+
+==== tests/cases/compiler/bigintWithoutLib.ts (45 errors) ====
+    // Every line should error because these builtins are not declared
+    
+    // Test BigInt functions
+    let bigintVal: bigint = BigInt(123);
+                            ~~~~~~
+!!! error TS2304: Cannot find name 'BigInt'.
+    bigintVal = BigInt("456");
+                ~~~~~~
+!!! error TS2304: Cannot find name 'BigInt'.
+    new BigInt(123);
+        ~~~~~~
+!!! error TS2304: Cannot find name 'BigInt'.
+    bigintVal = BigInt.asIntN(8, 0xFFFFn);
+                ~~~~~~
+!!! error TS2304: Cannot find name 'BigInt'.
+                                 ~~~~~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+    bigintVal = BigInt.asUintN(8, 0xFFFFn);
+                ~~~~~~
+!!! error TS2304: Cannot find name 'BigInt'.
+                                  ~~~~~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+    bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
+    ~~~~~~~~~
+!!! error TS2322: Type 'Object' is not assignable to type 'bigint'.
+    let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
+    stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
+                ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 0 arguments, but got 1.
+    stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred as {}
+    
+    // Test BigInt64Array
+    let bigIntArray: BigInt64Array = new BigInt64Array();
+                     ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigInt64Array'.
+                                         ~~~~~~~~~~~~~
+!!! error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+!!! related TS2728 tests/cases/compiler/bigintWithoutLib.ts:15:5: 'bigIntArray' is declared here.
+    bigIntArray = new BigInt64Array(10);
+                      ~~~~~~~~~~~~~
+!!! error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+!!! related TS2728 tests/cases/compiler/bigintWithoutLib.ts:15:5: 'bigIntArray' is declared here.
+    bigIntArray = new BigInt64Array([1n, 2n, 3n]);
+                      ~~~~~~~~~~~~~
+!!! error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+!!! related TS2728 tests/cases/compiler/bigintWithoutLib.ts:15:5: 'bigIntArray' is declared here.
+                                     ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+                                         ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+                                             ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+    bigIntArray = new BigInt64Array([1, 2, 3]);
+                      ~~~~~~~~~~~~~
+!!! error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
+!!! related TS2728 tests/cases/compiler/bigintWithoutLib.ts:15:5: 'bigIntArray' is declared here.
+    bigIntArray = new BigInt64Array(new ArrayBuffer(80));
+                      ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigInt64Array'.
+    bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
+                      ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigInt64Array'.
+    bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
+                      ~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigInt64Array'.
+    let len: number = bigIntArray.length;
+    bigIntArray.length = 10;
+    let arrayBufferLike: ArrayBufferView = bigIntArray;
+    
+    // Test BigUint64Array
+    let bigUintArray: BigUint64Array = new BigUint64Array();
+                      ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigUint64Array'.
+                                           ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigUint64Array'.
+    bigUintArray = new BigUint64Array(10);
+                       ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigUint64Array'.
+    bigUintArray = new BigUint64Array([1n, 2n, 3n]);
+                       ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigUint64Array'.
+                                       ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+                                           ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+                                               ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+    bigUintArray = new BigUint64Array([1, 2, 3]);
+                       ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigUint64Array'.
+    bigUintArray = new BigUint64Array(new ArrayBuffer(80));
+                       ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigUint64Array'.
+    bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
+                       ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigUint64Array'.
+    bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
+                       ~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'BigUint64Array'.
+    len = bigIntArray.length;
+    bigIntArray.length = 10;
+    arrayBufferLike = bigIntArray;
+    
+    // Test added DataView methods
+    const dataView = new DataView(new ArrayBuffer(80));
+    dataView.setBigInt64(1, -1n);
+             ~~~~~~~~~~~
+!!! error TS2339: Property 'setBigInt64' does not exist on type 'DataView'.
+                             ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+    dataView.setBigInt64(1, -1n, true);
+             ~~~~~~~~~~~
+!!! error TS2339: Property 'setBigInt64' does not exist on type 'DataView'.
+                             ~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+    dataView.setBigInt64(1, -1);
+             ~~~~~~~~~~~
+!!! error TS2339: Property 'setBigInt64' does not exist on type 'DataView'.
+    dataView.setBigUint64(2, 123n);
+             ~~~~~~~~~~~~
+!!! error TS2339: Property 'setBigUint64' does not exist on type 'DataView'.
+                             ~~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+    dataView.setBigUint64(2, 123n, true);
+             ~~~~~~~~~~~~
+!!! error TS2339: Property 'setBigUint64' does not exist on type 'DataView'.
+                             ~~~~
+!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+    dataView.setBigUint64(2, 123);
+             ~~~~~~~~~~~~
+!!! error TS2339: Property 'setBigUint64' does not exist on type 'DataView'.
+    bigintVal = dataView.getBigInt64(1);
+                         ~~~~~~~~~~~
+!!! error TS2339: Property 'getBigInt64' does not exist on type 'DataView'.
+    bigintVal = dataView.getBigInt64(1, true);
+                         ~~~~~~~~~~~
+!!! error TS2339: Property 'getBigInt64' does not exist on type 'DataView'.
+    bigintVal = dataView.getBigUint64(2);
+                         ~~~~~~~~~~~~
+!!! error TS2339: Property 'getBigUint64' does not exist on type 'DataView'.
+    bigintVal = dataView.getBigUint64(2, true);
+                         ~~~~~~~~~~~~
+!!! error TS2339: Property 'getBigUint64' does not exist on type 'DataView'.

@@ -8,4 +8,4 @@
 
 goTo.marker();
 edit.insert('it');
-verify.completionListContains('items');
+verify.completions({ includes: "items" });

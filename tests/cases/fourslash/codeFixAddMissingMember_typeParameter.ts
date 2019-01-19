@@ -19,7 +19,7 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `interface I {
-    bar: any;
+    bar: number;
 }
 
 function f<T>(t: T): number {

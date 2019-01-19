@@ -1,12 +1,12 @@
 === tests/cases/conformance/salsa/a.js ===
 var variable = {};
->variable : { a: number; }
+>variable : typeof variable
 >{} : {}
 
 variable.a = 0;
 >variable.a = 0 : 0
 >variable.a : number
->variable : { a: number; }
+>variable : typeof variable
 >a : number
 >0 : 0
 
@@ -72,7 +72,7 @@ function getObj() {
 variable.a = 1;
 >variable.a = 1 : 1
 >variable.a : number
->variable : { a: number; }
+>variable : typeof variable
 >a : number
 >1 : 1
 

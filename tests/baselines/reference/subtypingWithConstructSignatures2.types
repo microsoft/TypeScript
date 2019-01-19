@@ -653,20 +653,20 @@ var r14arg2: new (x: { a: string; b: number }) => Object;
 >b : number
 
 var r14 = foo14(r14arg1); // any
->r14 : new (x: { a: string; b: number; }) => Object
->foo14(r14arg1) : new (x: { a: string; b: number; }) => Object
+>r14 : any
+>foo14(r14arg1) : any
 >foo14 : { (a: new (x: { a: string; b: number; }) => Object): new (x: { a: string; b: number; }) => Object; (a: any): any; }
 >r14arg1 : new <T>(x: { a: T; b: T; }) => T
 
 var r14a = [r14arg1, r14arg2];
->r14a : (new (x: { a: string; b: number; }) => Object)[]
->[r14arg1, r14arg2] : (new (x: { a: string; b: number; }) => Object)[]
+>r14a : ((new <T>(x: { a: T; b: T; }) => T) | (new (x: { a: string; b: number; }) => Object))[]
+>[r14arg1, r14arg2] : ((new <T>(x: { a: T; b: T; }) => T) | (new (x: { a: string; b: number; }) => Object))[]
 >r14arg1 : new <T>(x: { a: T; b: T; }) => T
 >r14arg2 : new (x: { a: string; b: number; }) => Object
 
 var r14b = [r14arg2, r14arg1];
->r14b : (new (x: { a: string; b: number; }) => Object)[]
->[r14arg2, r14arg1] : (new (x: { a: string; b: number; }) => Object)[]
+>r14b : ((new <T>(x: { a: T; b: T; }) => T) | (new (x: { a: string; b: number; }) => Object))[]
+>[r14arg2, r14arg1] : ((new <T>(x: { a: T; b: T; }) => T) | (new (x: { a: string; b: number; }) => Object))[]
 >r14arg2 : new (x: { a: string; b: number; }) => Object
 >r14arg1 : new <T>(x: { a: T; b: T; }) => T
 

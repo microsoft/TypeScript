@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {},
+    "files": [
+        "./file0.st",
+        "./file1.ts",
+        "./file2.ts"
+    ]
+}

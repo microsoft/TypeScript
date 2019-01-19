@@ -51,7 +51,7 @@ let k = new K();
 >new K() : K
 >K : typeof K
 
-let { priv } = k; // error 
+let { priv } = k; // error
 >priv : any
 >k : K
 
@@ -63,12 +63,20 @@ let { privateMethod } = k; // error
 >privateMethod : () => void
 >k : K
 
-let { priv: a, prot: b, privateMethod: f } = k; // error
+let { priv: a, prot: b, privateMethod: pm } = k; // error
 >priv : any
 >a : any
 >prot : any
 >b : any
 >privateMethod : any
->f : () => void
+>pm : () => void
 >k : K
+
+function f({ priv, prot, privateMethod }: K) {
+>f : ({ priv, prot, privateMethod }: K) => void
+>priv : any
+>prot : any
+>privateMethod : () => void
+
+}
 

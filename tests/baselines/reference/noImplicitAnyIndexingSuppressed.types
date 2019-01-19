@@ -3,7 +3,7 @@ enum MyEmusEnum {
 >MyEmusEnum : MyEmusEnum
 
     emu
->emu : MyEmusEnum
+>emu : MyEmusEnum.emu
 }
 
 // Should be okay; should be a string.
@@ -24,8 +24,8 @@ var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu]
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var strRepresentation3 = MyEmusEnum["monehh"];
->strRepresentation3 : any
->MyEmusEnum["monehh"] : any
+>strRepresentation3 : error
+>MyEmusEnum["monehh"] : error
 >MyEmusEnum : typeof MyEmusEnum
 >"monehh" : "monehh"
 
@@ -39,15 +39,15 @@ var strRepresentation4 = MyEmusEnum["emu"];
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var x = {}["hi"];
->x : any
->{}["hi"] : any
+>x : error
+>{}["hi"] : error
 >{} : {}
 >"hi" : "hi"
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var y = {}[10];
->y : any
->{}[10] : any
+>y : error
+>{}[10] : error
 >{} : {}
 >10 : 10
 
@@ -61,8 +61,8 @@ var emptyObj = {};
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var z1 = emptyObj[hi];
->z1 : any
->emptyObj[hi] : any
+>z1 : error
+>emptyObj[hi] : error
 >emptyObj : {}
 >hi : any
 

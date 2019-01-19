@@ -5,6 +5,4 @@
 ////}
 ////var x: typeof m1c./*1*/;
 
-goTo.marker('1');
-verify.completionListContains('C');
-verify.not.completionListContains('foo');
+verify.completions({ marker: "1", exact: "C" });

@@ -5,5 +5,4 @@
 ////    var foo: iFace = function (elem) { /**/ }
 ////}
 
-goTo.marker();
-verify.completionListContains("elem", "(parameter) elem: string");
+verify.completions({ marker: "", includes: { name: "elem", text: "(parameter) elem: string" } });

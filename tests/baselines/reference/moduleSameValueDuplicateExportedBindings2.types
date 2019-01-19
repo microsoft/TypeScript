@@ -4,7 +4,7 @@ No type information for this code.export * from "./c";
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/b.ts ===
 export {Animals} from "./c";
->Animals : typeof Animals
+>Animals : typeof import("tests/cases/compiler/c").Animals
 
 === tests/cases/compiler/c.ts ===
 export enum Animals {

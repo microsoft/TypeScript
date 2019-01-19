@@ -36,15 +36,12 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(56,11): error TS2322: Type '"a"' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(59,12): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(62,12): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(64,42): error TS2322: Type 'AsyncIterableIterator<any>' is not assignable to type 'IterableIterator<number>'.
-  Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>'.
-tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(67,42): error TS2322: Type 'AsyncIterableIterator<any>' is not assignable to type 'Iterable<number>'.
-  Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>'.
+tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(64,42): error TS2741: Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>' but required in type 'IterableIterator<number>'.
+tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(67,42): error TS2741: Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>' but required in type 'Iterable<number>'.
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(70,42): error TS2322: Type 'AsyncIterableIterator<any>' is not assignable to type 'Iterator<number>'.
   Types of property 'next' are incompatible.
     Type '(value?: any) => Promise<IteratorResult<any>>' is not assignable to type '(value?: any) => IteratorResult<number>'.
-      Type 'Promise<IteratorResult<any>>' is not assignable to type 'IteratorResult<number>'.
-        Property 'done' is missing in type 'Promise<IteratorResult<any>>'.
+      Type 'Promise<IteratorResult<any>>' is missing the following properties from type 'IteratorResult<number>': done, value
 tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(74,12): error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
 
 
@@ -172,14 +169,14 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
     }
     async function * explicitReturnType10(): IterableIterator<number> {
                                              ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'AsyncIterableIterator<any>' is not assignable to type 'IterableIterator<number>'.
-!!! error TS2322:   Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>'.
+!!! error TS2741: Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>' but required in type 'IterableIterator<number>'.
+!!! related TS2728 /.ts/lib.es2015.iterable.d.ts:47:5: '[Symbol.iterator]' is declared here.
         yield 1;
     }
     async function * explicitReturnType11(): Iterable<number> {
                                              ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'AsyncIterableIterator<any>' is not assignable to type 'Iterable<number>'.
-!!! error TS2322:   Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>'.
+!!! error TS2741: Property '[Symbol.iterator]' is missing in type 'AsyncIterableIterator<any>' but required in type 'Iterable<number>'.
+!!! related TS2728 /.ts/lib.es2015.iterable.d.ts:43:5: '[Symbol.iterator]' is declared here.
         yield 1;
     }
     async function * explicitReturnType12(): Iterator<number> {
@@ -187,8 +184,7 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
 !!! error TS2322: Type 'AsyncIterableIterator<any>' is not assignable to type 'Iterator<number>'.
 !!! error TS2322:   Types of property 'next' are incompatible.
 !!! error TS2322:     Type '(value?: any) => Promise<IteratorResult<any>>' is not assignable to type '(value?: any) => IteratorResult<number>'.
-!!! error TS2322:       Type 'Promise<IteratorResult<any>>' is not assignable to type 'IteratorResult<number>'.
-!!! error TS2322:         Property 'done' is missing in type 'Promise<IteratorResult<any>>'.
+!!! error TS2322:       Type 'Promise<IteratorResult<any>>' is missing the following properties from type 'IteratorResult<number>': done, value
         yield 1;
     }
     async function * yieldStar() {

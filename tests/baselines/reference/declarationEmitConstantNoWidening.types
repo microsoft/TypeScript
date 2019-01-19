@@ -1,0 +1,12 @@
+=== tests/cases/compiler/declarationEmitConstantNoWidening.ts ===
+export const FOO = 'FOO'; 
+>FOO : "FOO"
+>'FOO' : "FOO"
+
+export class Bar {
+>Bar : Bar
+
+    readonly type = FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
+>type : "FOO"
+>FOO : "FOO"
+}

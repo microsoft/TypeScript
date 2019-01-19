@@ -12,6 +12,4 @@
 ////    }
 ////}
 
-goTo.marker();
-verify.completionListContains("C1");
-verify.completionListContains("C2");
+verify.completions({ marker: "", exact: ["C1", "C2"] });

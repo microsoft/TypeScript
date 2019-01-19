@@ -2,7 +2,7 @@
 import a0, { a1, a1 as a2 } from "./a";
 >a0 : Symbol(a0, Decl(x.ts, 0, 6))
 >a1 : Symbol(a1, Decl(x.ts, 0, 12))
->a1 : Symbol(a2, Decl(x.ts, 0, 16))
+>a1 : Symbol(a1, Decl(a.d.ts, 2, 12))
 >a2 : Symbol(a2, Decl(x.ts, 0, 16))
 
 import * as b0 from "./b";

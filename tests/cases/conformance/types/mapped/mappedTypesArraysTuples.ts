@@ -85,3 +85,11 @@ declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
 function acceptMappedArray<T extends any[]>(arr: T) {
     acceptArray(mapArray(arr));
 }
+
+// Repro from #26163
+
+type Unconstrained<T> = ElementType<Mapped<T>>;
+type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolean
+
+type Constrained<T extends any[]> = ElementType<Mapped<T>>;
+type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean

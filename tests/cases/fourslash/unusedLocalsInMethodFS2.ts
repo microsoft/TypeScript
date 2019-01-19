@@ -9,4 +9,4 @@
 ////    }
 ////}
 
-verify.rangeAfterCodeFix("var  y;");
+verify.rangeAfterCodeFix("var  y;", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

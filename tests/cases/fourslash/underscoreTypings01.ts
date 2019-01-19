@@ -47,6 +47,4 @@ verify.quickInfos({
     12: "(parameter) x: any"
 });
 
-goTo.marker('13');
-verify.completionListContains('length');
-verify.not.completionListContains('toFixed');
+verify.completions({ marker: "13", includes: "length", excludes: "toFixed" });

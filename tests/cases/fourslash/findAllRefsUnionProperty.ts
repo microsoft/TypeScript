@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
 ////type T =
-////    | { [|{| "isWriteAccess": true, "isDefinition": true |}type|]: "a", [|{| "isWriteAccess": true, "isDefinition": true |}prop|]: number }
-////    | { [|{| "isWriteAccess": true, "isDefinition": true |}type|]: "b", [|{| "isWriteAccess": true, "isDefinition": true |}prop|]: string };
+////    | { [|{| "isDefinition": true |}type|]: "a", [|{| "isDefinition": true |}prop|]: number }
+////    | { [|{| "isDefinition": true |}type|]: "b", [|{| "isDefinition": true |}prop|]: string };
 ////const tt: T = {
 ////    [|{| "isWriteAccess": true, "isDefinition": true |}type|]: "a",
 ////    [|{| "isWriteAccess": true, "isDefinition": true |}prop|]: 0,

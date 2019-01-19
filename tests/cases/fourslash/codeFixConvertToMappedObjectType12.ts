@@ -9,4 +9,6 @@
 ////     readonly [prop: K]?: any;
 //// }
 
-verify.not.codeFixAvailable()
+verify.codeFixAvailable([
+    { "description": "Infer type of 'any' from usage" }
+])

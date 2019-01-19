@@ -50,7 +50,7 @@ function foo1(
 >"secondary" : "secondary"
 
         } = { primary: "SomeSkill", secondary: "someSkill" }
->{ primary: "SomeSkill", secondary: "someSkill" } : { primary?: string; secondary?: string; }
+>{ primary: "SomeSkill", secondary: "someSkill" } : { primary: string; secondary: string; }
 >primary : string
 >"SomeSkill" : "SomeSkill"
 >secondary : string
@@ -88,7 +88,7 @@ function foo2(
 >"secondary" : "secondary"
 
         } = { primary: "SomeSkill", secondary: "someSkill" }
->{ primary: "SomeSkill", secondary: "someSkill" } : { primary?: string; secondary?: string; }
+>{ primary: "SomeSkill", secondary: "someSkill" } : { primary: string; secondary: string; }
 >primary : string
 >"SomeSkill" : "SomeSkill"
 >secondary : string

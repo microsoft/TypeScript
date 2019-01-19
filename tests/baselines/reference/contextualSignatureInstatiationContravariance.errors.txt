@@ -1,0 +1,22 @@
+tests/cases/compiler/contextualSignatureInstatiationContravariance.ts(8,1): error TS2322: Type '<T extends Animal>(x: T, y: T) => void' is not assignable to type '(g: Giraffe, e: Elephant) => void'.
+  Types of parameters 'y' and 'e' are incompatible.
+    Property 'y' is missing in type 'Elephant' but required in type 'Giraffe'.
+
+
+==== tests/cases/compiler/contextualSignatureInstatiationContravariance.ts (1 errors) ====
+    interface Animal { x }
+    interface Giraffe extends Animal { y }
+    interface Elephant extends Animal { y2 }
+    
+    var f2: <T extends Animal>(x: T, y: T) => void;
+    
+    var g2: (g: Giraffe, e: Elephant) => void;
+    g2 = f2; // error because Giraffe and Elephant are disjoint types
+    ~~
+!!! error TS2322: Type '<T extends Animal>(x: T, y: T) => void' is not assignable to type '(g: Giraffe, e: Elephant) => void'.
+!!! error TS2322:   Types of parameters 'y' and 'e' are incompatible.
+!!! error TS2322:     Property 'y' is missing in type 'Elephant' but required in type 'Giraffe'.
+!!! related TS2728 tests/cases/compiler/contextualSignatureInstatiationContravariance.ts:2:36: 'y' is declared here.
+    
+    var h2: (g1: Giraffe, g2: Giraffe) => void;
+    h2 = f2; // valid because Giraffe satisfies the constraint. It is safe in the traditional contravariant fashion.

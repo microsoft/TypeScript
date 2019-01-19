@@ -1,15 +1,15 @@
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(30,14): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(31,14): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(34,22): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(34,42): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(40,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(41,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(44,22): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(44,42): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(50,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(51,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(54,22): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
-tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(54,42): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(60,14): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(61,14): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(64,22): error TS2339: Property 'prop' does not exist on type '(n: number) => string'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(64,42): error TS2339: Property 'm' does not exist on type '(n: number) => string'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(70,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(71,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(74,22): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoClass'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(74,42): error TS2339: Property 'm' does not exist on type 'typeof ExpandoClass'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(80,14): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(81,14): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(84,22): error TS2339: Property 'prop' does not exist on type 'typeof ExpandoExpr3'.
+tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(84,42): error TS2339: Property 'm' does not exist on type 'typeof ExpandoExpr3'.
 
 
 ==== tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts (12 errors) ====
@@ -25,17 +25,47 @@ tests/cases/conformance/salsa/typeFromPropertyAssignment29.ts(54,42): error TS23
     const ExpandoExpr = function (n: number) {
         return n.toString();
     }
-    ExpandoExpr.prop = 2
+    ExpandoExpr.prop = { x: 2 }
+    ExpandoExpr.prop = { y: "" }
     ExpandoExpr.m = function(n: number) {
         return n + 1;
     }
-    var n = ExpandoExpr.prop + ExpandoExpr.m(12) + ExpandoExpr(101).length
+    var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
     
     const ExpandoArrow = (n: number) => n.toString();
     ExpandoArrow.prop = 2
     ExpandoArrow.m = function(n: number) {
         return n + 1;
     
+    }
+    
+    function ExpandoNested(n: number) {
+        const nested = function (m: number) {
+            return n + m;
+        };
+        nested.total = n + 1_000_000;
+        return nested;
+    }
+    ExpandoNested.also = -1;
+    
+    function ExpandoMerge(n: number) {
+        return n * 100;
+    }
+    ExpandoMerge.p1 = 111
+    namespace ExpandoMerge {
+        export var p2 = 222;
+    }
+    namespace ExpandoMerge {
+        export var p3 = 333;
+    }
+    var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
+    
+    namespace Ns {
+        function ExpandoNamespace(): void {}
+        ExpandoNamespace.p6 = 42;
+        export function foo() {
+            return ExpandoNamespace;
+        }
     }
     
     // Should not work in Typescript -- must be const

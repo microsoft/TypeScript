@@ -16,14 +16,14 @@ interface Function {
 }
 
 var a = {}[0]; // Should be Foo
->a : any
->{}[0] : any
+>a : error
+>{}[0] : error
 >{} : {}
 >0 : 0
 
 var b = (() => { })[0]; // Should be Bar
->b : any
->(() => { })[0] : any
+>b : error
+>(() => { })[0] : error
 >(() => { }) : () => void
 >() => { } : () => void
 >0 : 0

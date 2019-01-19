@@ -180,9 +180,9 @@ interface I extends B {
 >x : Base[]
 >y : T
 
-    a14: new <T>(x: { a: T; b: T }) => T; // ok, best common type yields T = {} but that's satisfactory for this signature
->a14 : new <T>(x: { a: T; b: T; }) => T
->x : { a: T; b: T; }
+    a14: new <T, U>(x: { a: T; b: U }) => T; // ok
+>a14 : new <T, U>(x: { a: T; b: U; }) => T
+>x : { a: T; b: U; }
 >a : T
->b : T
+>b : U
 }

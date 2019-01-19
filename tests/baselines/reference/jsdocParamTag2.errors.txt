@@ -1,6 +1,6 @@
 tests/cases/conformance/jsdoc/0.js(56,20): error TS8024: JSDoc '@param' tag has name 'obj', but there is no parameter with that name.
-tests/cases/conformance/jsdoc/0.js(61,19): error TS2459: Type 'string' has no property 'a' and no string index signature.
-tests/cases/conformance/jsdoc/0.js(61,22): error TS2459: Type 'string' has no property 'b' and no string index signature.
+tests/cases/conformance/jsdoc/0.js(61,19): error TS2339: Property 'a' does not exist on type 'String'.
+tests/cases/conformance/jsdoc/0.js(61,22): error TS2339: Property 'b' does not exist on type 'String'.
 tests/cases/conformance/jsdoc/0.js(63,20): error TS8024: JSDoc '@param' tag has name 'y', but there is no parameter with that name.
 
 
@@ -69,9 +69,9 @@ tests/cases/conformance/jsdoc/0.js(63,20): error TS8024: JSDoc '@param' tag has 
      */
     function bad1(x, {a, b}) {}
                       ~
-!!! error TS2459: Type 'string' has no property 'a' and no string index signature.
+!!! error TS2339: Property 'a' does not exist on type 'String'.
                          ~
-!!! error TS2459: Type 'string' has no property 'b' and no string index signature.
+!!! error TS2339: Property 'b' does not exist on type 'String'.
     /**
      * @param {string} y - here, y's type gets ignored but obj's is fine
                        ~

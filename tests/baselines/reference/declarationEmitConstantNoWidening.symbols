@@ -1,0 +1,11 @@
+=== tests/cases/compiler/declarationEmitConstantNoWidening.ts ===
+export const FOO = 'FOO'; 
+>FOO : Symbol(FOO, Decl(declarationEmitConstantNoWidening.ts, 0, 12))
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(declarationEmitConstantNoWidening.ts, 0, 25))
+
+    readonly type = FOO; // Should be widening literal "FOO" - so either `typeof "FOO"` or = "FOO"
+>type : Symbol(Bar.type, Decl(declarationEmitConstantNoWidening.ts, 1, 18))
+>FOO : Symbol(FOO, Decl(declarationEmitConstantNoWidening.ts, 0, 12))
+}

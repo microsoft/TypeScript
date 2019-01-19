@@ -2,11 +2,11 @@
 // Repro from #8383
 
 class A {
-    prop: { a: string; };
+    prop!: { a: string; };
 }
 
 class B {
-    prop: { b: string; }
+    prop!: { b: string; }
 }
 
 function isA(x: any): x is A {
@@ -39,8 +39,27 @@ function f2(x: A | B) {
     }
 }
 
+// Repro from #28100
+
+class Foo1
+{
+    x: number;  // Error
+    constructor() {
+        if (this instanceof Boolean) {
+        }
+    }
+}
+
+class Foo2
+{
+    x: number;  // Error
+    constructor() {
+    }
+}
+
 
 //// [narrowingOfDottedNames.js]
+"use strict";
 // Repro from #8383
 var A = /** @class */ (function () {
     function A() {
@@ -78,3 +97,16 @@ function f2(x) {
         }
     }
 }
+// Repro from #28100
+var Foo1 = /** @class */ (function () {
+    function Foo1() {
+        if (this instanceof Boolean) {
+        }
+    }
+    return Foo1;
+}());
+var Foo2 = /** @class */ (function () {
+    function Foo2() {
+    }
+    return Foo2;
+}());

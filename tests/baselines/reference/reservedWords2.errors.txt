@@ -1,6 +1,6 @@
 tests/cases/compiler/reservedWords2.ts(1,8): error TS1109: Expression expected.
 tests/cases/compiler/reservedWords2.ts(1,14): error TS1005: '(' expected.
-tests/cases/compiler/reservedWords2.ts(1,16): error TS2304: Cannot find name 'require'.
+tests/cases/compiler/reservedWords2.ts(1,16): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 tests/cases/compiler/reservedWords2.ts(1,31): error TS1005: ')' expected.
 tests/cases/compiler/reservedWords2.ts(2,12): error TS2300: Duplicate identifier '(Missing)'.
 tests/cases/compiler/reservedWords2.ts(2,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
@@ -14,7 +14,7 @@ tests/cases/compiler/reservedWords2.ts(5,9): error TS2300: Duplicate identifier 
 tests/cases/compiler/reservedWords2.ts(5,9): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 tests/cases/compiler/reservedWords2.ts(5,10): error TS1003: Identifier expected.
 tests/cases/compiler/reservedWords2.ts(5,18): error TS1005: '=>' expected.
-tests/cases/compiler/reservedWords2.ts(6,1): error TS2304: Cannot find name 'module'.
+tests/cases/compiler/reservedWords2.ts(6,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 tests/cases/compiler/reservedWords2.ts(6,8): error TS1005: ';' expected.
 tests/cases/compiler/reservedWords2.ts(7,11): error TS2300: Duplicate identifier '(Missing)'.
 tests/cases/compiler/reservedWords2.ts(7,11): error TS1005: ':' expected.
@@ -39,7 +39,7 @@ tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
                  ~
 !!! error TS1005: '(' expected.
                    ~~~~~~~
-!!! error TS2304: Cannot find name 'require'.
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
                                   ~
 !!! error TS1005: ')' expected.
     import * as  while from "foo"
@@ -72,7 +72,7 @@ tests/cases/compiler/reservedWords2.ts(10,6): error TS1003: Identifier expected.
 !!! error TS1005: '=>' expected.
     module void {}
     ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
            ~~~~
 !!! error TS1005: ';' expected.
     var {while, return} = { while: 1, return: 2 };

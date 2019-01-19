@@ -9,13 +9,11 @@
 //// }
 //// myCtor.prototype.foo = function() { return 32 };
 //// myCtor.prototype.bar = function() { return '' };
-//// 
+////
 //// myCtor/*1*/
 
 goTo.marker('1');
 edit.insert('.');
 
 // Check members of the function
-verify.completionListContains('foo', undefined, undefined, 'warning');
-verify.completionListContains('bar', undefined, undefined, 'warning');
-verify.completionListContains('qua', undefined, undefined, 'warning');
+verify.completions({ includes: ["foo", "bar", "qua"].map(name => ({ name, kind: "warning" })) });

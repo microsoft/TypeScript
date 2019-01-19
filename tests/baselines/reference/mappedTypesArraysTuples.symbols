@@ -328,3 +328,27 @@ function acceptMappedArray<T extends any[]>(arr: T) {
 >arr : Symbol(arr, Decl(mappedTypesArraysTuples.ts, 81, 44))
 }
 
+// Repro from #26163
+
+type Unconstrained<T> = ElementType<Mapped<T>>;
+>Unconstrained : Symbol(Unconstrained, Decl(mappedTypesArraysTuples.ts, 83, 1))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 87, 19))
+>ElementType : Symbol(ElementType, Decl(mappedTypesArraysTuples.ts, 66, 1))
+>Mapped : Symbol(Mapped, Decl(mappedTypesArraysTuples.ts, 70, 59))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 87, 19))
+
+type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolean
+>T1 : Symbol(T1, Decl(mappedTypesArraysTuples.ts, 87, 47))
+>Unconstrained : Symbol(Unconstrained, Decl(mappedTypesArraysTuples.ts, 83, 1))
+
+type Constrained<T extends any[]> = ElementType<Mapped<T>>;
+>Constrained : Symbol(Constrained, Decl(mappedTypesArraysTuples.ts, 88, 51))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 90, 17))
+>ElementType : Symbol(ElementType, Decl(mappedTypesArraysTuples.ts, 66, 1))
+>Mapped : Symbol(Mapped, Decl(mappedTypesArraysTuples.ts, 70, 59))
+>T : Symbol(T, Decl(mappedTypesArraysTuples.ts, 90, 17))
+
+type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
+>T2 : Symbol(T2, Decl(mappedTypesArraysTuples.ts, 90, 59))
+>Constrained : Symbol(Constrained, Decl(mappedTypesArraysTuples.ts, 88, 51))
+

@@ -29,7 +29,7 @@ There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob
 * [Submit bugs](https://github.com/Microsoft/TypeScript/issues) and help us verify fixes as they are checked in.
 * Review the [source code changes](https://github.com/Microsoft/TypeScript/pulls).
 * Engage with other TypeScript users and developers on [StackOverflow](https://stackoverflow.com/questions/tagged/typescript). 
-* Join the [#typescript](https://twitter.com/#!/search/realtime/%23typescript) discussion on Twitter.
+* Join the [#typescript](https://twitter.com/search?q=%23TypeScript) discussion on Twitter.
 * [Contribute bug fixes](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md).
 * Read the language specification ([docx](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.docx?raw=true),
  [pdf](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.pdf?raw=true), [md](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)).
@@ -61,7 +61,7 @@ Change to the TypeScript directory:
 cd TypeScript
 ```
 
-Install Jake tools and dev dependencies:
+Install [Jake](http://jakejs.com/) tools and dev dependencies:
 
 ```bash
 npm install -g jake

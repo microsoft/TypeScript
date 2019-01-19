@@ -215,13 +215,13 @@ namespace ts.server {
     }
 
     class NodeTypingsInstaller implements ITypingsInstaller {
-        private installer: NodeChildProcess;
-        private projectService: ProjectService;
+        private installer!: NodeChildProcess;
+        private projectService!: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
-        private requestedRegistry: boolean;
+        private requestedRegistry = false;
         private typesRegistryCache: Map<MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
@@ -231,7 +231,8 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void } | undefined;
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
+        private inspectValuePromise: { resolve(value: ValueInfo): void } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -261,12 +262,17 @@ namespace ts.server {
         }
 
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
-            const rq: InstallPackageRequest = { kind: "installPackage", ...options };
-            this.send(rq);
+            this.send<InstallPackageRequest>({ kind: "installPackage", ...options });
             Debug.assert(this.packageInstalledPromise === undefined);
-            return new Promise((resolve, reject) => {
+            return new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
                 this.packageInstalledPromise = { resolve, reject };
             });
+        }
+
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
+            this.send<InspectValueRequest>({ kind: "inspectValue", options });
+            Debug.assert(this.inspectValuePromise === undefined);
+            return new Promise<ValueInfo>(resolve => { this.inspectValuePromise = { resolve }; });
         }
 
         attach(projectService: ProjectService) {
@@ -320,7 +326,7 @@ namespace ts.server {
             this.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        private send(rq: TypingInstallerRequestUnion): void {
+        private send<T extends TypingInstallerRequestUnion>(rq: T): void {
             this.installer.send(rq);
         }
 
@@ -353,7 +359,7 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | InspectValueResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
@@ -378,8 +384,11 @@ namespace ts.server {
                     this.event(response, "setTypings");
                     break;
                 }
-                case EventInitializationFailed:
-                    {
+                case ActionValueInspected:
+                    this.inspectValuePromise!.resolve(response.result);
+                    this.inspectValuePromise = undefined;
+                    break;
+                case EventInitializationFailed: {
                         const body: protocol.TypesInstallerInitializationFailedEventBody = {
                             message: response.message
                         };
@@ -387,8 +396,7 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case EventBeginInstallTypes:
-                    {
+                case EventBeginInstallTypes: {
                         const body: protocol.BeginInstallTypesEventBody = {
                             eventId: response.eventId,
                             packages: response.packagesToInstall,
@@ -397,8 +405,7 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case EventEndInstallTypes:
-                    {
+                case EventEndInstallTypes: {
                         if (this.telemetryEnabled) {
                             const body: protocol.TypingsInstalledTelemetryEventBody = {
                                 telemetryEventName: "typingsInstalled",
@@ -421,13 +428,11 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case ActionInvalidate:
-                    {
+                case ActionInvalidate: {
                         this.projectService.updateTypingsForProject(response);
                         break;
                     }
-                case ActionSet:
-                    {
+                case ActionSet: {
                         if (this.activeRequestCount > 0) {
                             this.activeRequestCount--;
                         }
@@ -510,6 +515,7 @@ namespace ts.server {
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
+                typesMapLocation,
             });
 
             this.eventPort = eventPort;
@@ -644,14 +650,18 @@ namespace ts.server {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
-        const logFileName = cmdLineLogFileName
+        const unsubstitutedLogFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
                 ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
                 : undefined;
 
+        const substitutedLogFileName = unsubstitutedLogFileName
+            ? unsubstitutedLogFileName.replace("PID", process.pid.toString())
+            : undefined;
+
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(logFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
+        return new Logger(substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -887,7 +897,7 @@ namespace ts.server {
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
         try {
-            return { module: require(resolveJavaScriptModule(moduleName, initialDir, sys)), error: undefined };
+            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
         }
         catch (error) {
             return { module: undefined, error };
@@ -920,7 +930,7 @@ namespace ts.server {
     setStackTraceLimit();
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {

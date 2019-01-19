@@ -9,22 +9,21 @@
 ////  */
 //// function foo() {}
 
-//// /** 
+//// /**
 ////  * @param {A.B.MyType} my2
 ////  */
 //// function a(my2) {
 ////     my2.yes./*1*/
 //// }
 
-//// /** 
+//// /**
 ////  * @param {MyType} my2
 ////  */
 //// function b(my2) {
 ////     my2.yes./*2*/
 //// }
 
-
-goTo.marker('1');
-verify.completionListContains('charAt');
-goTo.marker('2');
-verify.not.completionListContains('charAt');
+verify.completions(
+    { marker: "1", includes: "charAt" },
+    { marker: "2", excludes: "charAt" },
+);

@@ -29,12 +29,15 @@ tests/cases/compiler/weakType.ts(62,5): error TS2322: Type '{ properties: { wron
     doSomething(getDefaultSettings);
                 ~~~~~~~~~~~~~~~~~~
 !!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+!!! related TS6212 tests/cases/compiler/weakType.ts:15:13: Did you mean to call this expression?
     doSomething(() => ({ timeout: 1000 }));
                 ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2560: Value of type '() => { timeout: number; }' has no properties in common with type 'Settings'. Did you mean to call it?
+!!! related TS6212 tests/cases/compiler/weakType.ts:16:13: Did you mean to call this expression?
     doSomething(null as CtorOnly);
                 ~~~~~~~~~~~~~~~~
 !!! error TS2560: Value of type 'CtorOnly' has no properties in common with type 'Settings'. Did you mean to call it?
+!!! related TS6213 tests/cases/compiler/weakType.ts:17:13: Did you mean to use 'new' with this expression?
     doSomething(12);
                 ~~
 !!! error TS2559: Type '12' has no properties in common with type 'Settings'.

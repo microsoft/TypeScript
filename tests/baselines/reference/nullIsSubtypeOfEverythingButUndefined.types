@@ -219,7 +219,7 @@ var r12 = true ? null : c2;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 var r13 = true ? E : null;
 >r13 : typeof E

@@ -494,160 +494,149 @@ const c30 = f30(42, x => "" + x, x => x + 1);  // [(x: number) => string, (x: nu
 >x : Symbol(x, Decl(genericRestParameters1.ts, 124, 32))
 >x : Symbol(x, Decl(genericRestParameters1.ts, 124, 32))
 
-type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new(...args: infer U) => any) ? U : any[];
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->T : Symbol(T, Decl(genericRestParameters1.ts, 126, 16))
->Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->T : Symbol(T, Decl(genericRestParameters1.ts, 126, 16))
->args : Symbol(args, Decl(genericRestParameters1.ts, 126, 50))
->U : Symbol(U, Decl(genericRestParameters1.ts, 126, 64), Decl(genericRestParameters1.ts, 126, 97))
->args : Symbol(args, Decl(genericRestParameters1.ts, 126, 83))
->U : Symbol(U, Decl(genericRestParameters1.ts, 126, 64), Decl(genericRestParameters1.ts, 126, 97))
->U : Symbol(U, Decl(genericRestParameters1.ts, 126, 64), Decl(genericRestParameters1.ts, 126, 97))
-
 type T01 = Parameters<(x: number, y: string, z: boolean) => void>;
->T01 : Symbol(T01, Decl(genericRestParameters1.ts, 126, 121))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->x : Symbol(x, Decl(genericRestParameters1.ts, 128, 23))
->y : Symbol(y, Decl(genericRestParameters1.ts, 128, 33))
->z : Symbol(z, Decl(genericRestParameters1.ts, 128, 44))
+>T01 : Symbol(T01, Decl(genericRestParameters1.ts, 124, 45))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 126, 23))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 126, 33))
+>z : Symbol(z, Decl(genericRestParameters1.ts, 126, 44))
 
 type T02 = Parameters<(...args: [number, string, boolean]) => void>;
->T02 : Symbol(T02, Decl(genericRestParameters1.ts, 128, 66))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->args : Symbol(args, Decl(genericRestParameters1.ts, 129, 23))
+>T02 : Symbol(T02, Decl(genericRestParameters1.ts, 126, 66))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 127, 23))
 
-type T03 = Parameters<new (x: number, y: string, z: boolean) => void>;
->T03 : Symbol(T03, Decl(genericRestParameters1.ts, 129, 68))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->x : Symbol(x, Decl(genericRestParameters1.ts, 130, 27))
->y : Symbol(y, Decl(genericRestParameters1.ts, 130, 37))
->z : Symbol(z, Decl(genericRestParameters1.ts, 130, 48))
+type T03 = ConstructorParameters<new (x: number, y: string, z: boolean) => void>;
+>T03 : Symbol(T03, Decl(genericRestParameters1.ts, 127, 68))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(genericRestParameters1.ts, 128, 38))
+>y : Symbol(y, Decl(genericRestParameters1.ts, 128, 48))
+>z : Symbol(z, Decl(genericRestParameters1.ts, 128, 59))
 
-type T04 = Parameters<new (...args: [number, string, boolean]) => void>;
->T04 : Symbol(T04, Decl(genericRestParameters1.ts, 130, 70))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->args : Symbol(args, Decl(genericRestParameters1.ts, 131, 27))
+type T04 = ConstructorParameters<new (...args: [number, string, boolean]) => void>;
+>T04 : Symbol(T04, Decl(genericRestParameters1.ts, 128, 81))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 129, 38))
 
 type T05<T> = Parameters<(...args: T[]) => void>;
->T05 : Symbol(T05, Decl(genericRestParameters1.ts, 131, 72))
->T : Symbol(T, Decl(genericRestParameters1.ts, 132, 9))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->args : Symbol(args, Decl(genericRestParameters1.ts, 132, 26))
->T : Symbol(T, Decl(genericRestParameters1.ts, 132, 9))
+>T05 : Symbol(T05, Decl(genericRestParameters1.ts, 129, 83))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 130, 9))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 130, 26))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 130, 9))
 
-type T06<T> = Parameters<new (...args: []) => void>;
->T06 : Symbol(T06, Decl(genericRestParameters1.ts, 132, 49))
->T : Symbol(T, Decl(genericRestParameters1.ts, 133, 9))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->args : Symbol(args, Decl(genericRestParameters1.ts, 133, 30))
+type T06<T> = ConstructorParameters<new (...args: []) => void>;
+>T06 : Symbol(T06, Decl(genericRestParameters1.ts, 130, 49))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 131, 9))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 131, 41))
 
 type T07<T extends any[]> = Parameters<(...args: T) => void>;
->T07 : Symbol(T07, Decl(genericRestParameters1.ts, 133, 52))
->T : Symbol(T, Decl(genericRestParameters1.ts, 134, 9))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->args : Symbol(args, Decl(genericRestParameters1.ts, 134, 40))
->T : Symbol(T, Decl(genericRestParameters1.ts, 134, 9))
+>T07 : Symbol(T07, Decl(genericRestParameters1.ts, 131, 63))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 132, 9))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 132, 40))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 132, 9))
 
-type T08<T extends any[]> = Parameters<new (...args: T) => void>;
->T08 : Symbol(T08, Decl(genericRestParameters1.ts, 134, 61))
->T : Symbol(T, Decl(genericRestParameters1.ts, 135, 9))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
->args : Symbol(args, Decl(genericRestParameters1.ts, 135, 44))
->T : Symbol(T, Decl(genericRestParameters1.ts, 135, 9))
+type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
+>T08 : Symbol(T08, Decl(genericRestParameters1.ts, 132, 61))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 133, 9))
+>ConstructorParameters : Symbol(ConstructorParameters, Decl(lib.es5.d.ts, --, --))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 133, 55))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 133, 9))
 
 type T09 = Parameters<Function>;
->T09 : Symbol(T09, Decl(genericRestParameters1.ts, 135, 65))
->Parameters : Symbol(Parameters, Decl(genericRestParameters1.ts, 124, 45))
+>T09 : Symbol(T09, Decl(genericRestParameters1.ts, 133, 76))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
 >Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type Record1 = {
->Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 136, 32))
+>Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 134, 32))
 
   move: [number, 'left' | 'right'];
->move : Symbol(move, Decl(genericRestParameters1.ts, 138, 16))
+>move : Symbol(move, Decl(genericRestParameters1.ts, 136, 16))
 
   jump: [number, 'up' | 'down'];
->jump : Symbol(jump, Decl(genericRestParameters1.ts, 139, 35))
+>jump : Symbol(jump, Decl(genericRestParameters1.ts, 137, 35))
 
   stop: string;
->stop : Symbol(stop, Decl(genericRestParameters1.ts, 140, 32))
+>stop : Symbol(stop, Decl(genericRestParameters1.ts, 138, 32))
 
   done: [];
->done : Symbol(done, Decl(genericRestParameters1.ts, 141, 15))
+>done : Symbol(done, Decl(genericRestParameters1.ts, 139, 15))
 }
 
 type EventType<T> = {
->EventType : Symbol(EventType, Decl(genericRestParameters1.ts, 143, 1))
->T : Symbol(T, Decl(genericRestParameters1.ts, 145, 15))
+>EventType : Symbol(EventType, Decl(genericRestParameters1.ts, 141, 1))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
 
   emit<K extends keyof T = keyof T>(e: K, ...payload: T[K] extends any[] ? T[K] : [T[K]]): void; 
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
->K : Symbol(K, Decl(genericRestParameters1.ts, 146, 7))
->T : Symbol(T, Decl(genericRestParameters1.ts, 145, 15))
->T : Symbol(T, Decl(genericRestParameters1.ts, 145, 15))
->e : Symbol(e, Decl(genericRestParameters1.ts, 146, 36))
->K : Symbol(K, Decl(genericRestParameters1.ts, 146, 7))
->payload : Symbol(payload, Decl(genericRestParameters1.ts, 146, 41))
->T : Symbol(T, Decl(genericRestParameters1.ts, 145, 15))
->K : Symbol(K, Decl(genericRestParameters1.ts, 146, 7))
->T : Symbol(T, Decl(genericRestParameters1.ts, 145, 15))
->K : Symbol(K, Decl(genericRestParameters1.ts, 146, 7))
->T : Symbol(T, Decl(genericRestParameters1.ts, 145, 15))
->K : Symbol(K, Decl(genericRestParameters1.ts, 146, 7))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>e : Symbol(e, Decl(genericRestParameters1.ts, 144, 36))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+>payload : Symbol(payload, Decl(genericRestParameters1.ts, 144, 41))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
+>T : Symbol(T, Decl(genericRestParameters1.ts, 143, 15))
+>K : Symbol(K, Decl(genericRestParameters1.ts, 144, 7))
 }
 
 declare var events: EventType<Record1>;
->events : Symbol(events, Decl(genericRestParameters1.ts, 149, 11))
->EventType : Symbol(EventType, Decl(genericRestParameters1.ts, 143, 1))
->Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 136, 32))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>EventType : Symbol(EventType, Decl(genericRestParameters1.ts, 141, 1))
+>Record1 : Symbol(Record1, Decl(genericRestParameters1.ts, 134, 32))
 
 events.emit('move', 10, 'left');
->events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
->events : Symbol(events, Decl(genericRestParameters1.ts, 149, 11))
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
+>events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
 
 events.emit('jump', 20, 'up');
->events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
->events : Symbol(events, Decl(genericRestParameters1.ts, 149, 11))
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
+>events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
 
 events.emit('stop', 'Bye!');
->events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
->events : Symbol(events, Decl(genericRestParameters1.ts, 149, 11))
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
+>events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
 
 events.emit('done');
->events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
->events : Symbol(events, Decl(genericRestParameters1.ts, 149, 11))
->emit : Symbol(emit, Decl(genericRestParameters1.ts, 145, 21))
+>events.emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
+>events : Symbol(events, Decl(genericRestParameters1.ts, 147, 11))
+>emit : Symbol(emit, Decl(genericRestParameters1.ts, 143, 21))
 
 // Repro from #25871
 
 declare var ff1: (... args: any[]) => void;
->ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 157, 11))
->args : Symbol(args, Decl(genericRestParameters1.ts, 157, 18))
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 155, 11))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 155, 18))
 
 declare var ff2: () => void;
->ff2 : Symbol(ff2, Decl(genericRestParameters1.ts, 159, 11))
+>ff2 : Symbol(ff2, Decl(genericRestParameters1.ts, 157, 11))
 
 declare var ff3: (...args: []) => void;
->ff3 : Symbol(ff3, Decl(genericRestParameters1.ts, 160, 11))
->args : Symbol(args, Decl(genericRestParameters1.ts, 160, 18))
+>ff3 : Symbol(ff3, Decl(genericRestParameters1.ts, 158, 11))
+>args : Symbol(args, Decl(genericRestParameters1.ts, 158, 18))
 
 declare var ff4: (a: never) => void;
->ff4 : Symbol(ff4, Decl(genericRestParameters1.ts, 161, 11))
->a : Symbol(a, Decl(genericRestParameters1.ts, 161, 18))
+>ff4 : Symbol(ff4, Decl(genericRestParameters1.ts, 159, 11))
+>a : Symbol(a, Decl(genericRestParameters1.ts, 159, 18))
 
 ff1 = ff2;
->ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 157, 11))
->ff2 : Symbol(ff2, Decl(genericRestParameters1.ts, 159, 11))
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 155, 11))
+>ff2 : Symbol(ff2, Decl(genericRestParameters1.ts, 157, 11))
 
 ff1 = ff3;
->ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 157, 11))
->ff3 : Symbol(ff3, Decl(genericRestParameters1.ts, 160, 11))
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 155, 11))
+>ff3 : Symbol(ff3, Decl(genericRestParameters1.ts, 158, 11))
 
 ff1 = ff4;  // Error
->ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 157, 11))
->ff4 : Symbol(ff4, Decl(genericRestParameters1.ts, 161, 11))
+>ff1 : Symbol(ff1, Decl(genericRestParameters1.ts, 155, 11))
+>ff4 : Symbol(ff4, Decl(genericRestParameters1.ts, 159, 11))
 

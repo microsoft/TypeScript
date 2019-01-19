@@ -118,7 +118,7 @@ true ? exprString1 : exprBoolean1; // union
 typeof "123" == "string" ? exprBoolean1 : exprBoolean2;
 >typeof "123" == "string" ? exprBoolean1 : exprBoolean2 : boolean
 >typeof "123" == "string" : boolean
->typeof "123" : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof "123" : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >"123" : "123"
 >"string" : "string"
 >exprBoolean1 : boolean
@@ -260,7 +260,7 @@ var resultIsBoolean3 = typeof "123" == "string" ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean3 : boolean
 >typeof "123" == "string" ? exprBoolean1 : exprBoolean2 : boolean
 >typeof "123" == "string" : boolean
->typeof "123" : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof "123" : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >"123" : "123"
 >"string" : "string"
 >exprBoolean1 : boolean
@@ -297,7 +297,7 @@ var resultIsStringOrBoolean4 = typeof "123" === "string" ? exprString1 : exprBoo
 >resultIsStringOrBoolean4 : string | boolean
 >typeof "123" === "string" ? exprString1 : exprBoolean1 : string | boolean
 >typeof "123" === "string" : boolean
->typeof "123" : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof "123" : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >"123" : "123"
 >"string" : "string"
 >exprString1 : string

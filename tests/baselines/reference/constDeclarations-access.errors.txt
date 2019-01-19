@@ -1,4 +1,4 @@
-tests/cases/compiler/file2.ts(1,1): error TS2540: Cannot assign to 'x' because it is a constant or a read-only property.
+tests/cases/compiler/file2.ts(1,1): error TS2588: Cannot assign to 'x' because it is a constant.
 
 
 ==== tests/cases/compiler/file1.ts (0 errors) ====
@@ -7,4 +7,4 @@ tests/cases/compiler/file2.ts(1,1): error TS2540: Cannot assign to 'x' because i
 ==== tests/cases/compiler/file2.ts (1 errors) ====
     x++;
     ~
-!!! error TS2540: Cannot assign to 'x' because it is a constant or a read-only property.
+!!! error TS2588: Cannot assign to 'x' because it is a constant.
