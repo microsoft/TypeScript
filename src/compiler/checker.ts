@@ -17729,10 +17729,10 @@ namespace ts {
                 return instantiateType(type, mapper);
             }
             if (type.flags & TypeFlags.Union) {
-                getUnionType(map((<UnionType>type).types, t => instantiateInstantiableTypes(t, mapper)), UnionReduction.None);
+                return getUnionType(map((<UnionType>type).types, t => instantiateInstantiableTypes(t, mapper)), UnionReduction.None);
             }
             if (type.flags & TypeFlags.Intersection) {
-                getIntersectionType(map((<IntersectionType>type).types, t => instantiateInstantiableTypes(t, mapper)));
+                return getIntersectionType(map((<IntersectionType>type).types, t => instantiateInstantiableTypes(t, mapper)));
             }
             return type;
         }
