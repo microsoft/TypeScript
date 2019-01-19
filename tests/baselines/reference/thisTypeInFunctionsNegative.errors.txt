@@ -17,7 +17,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(68,1): err
   Types of property 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(69,1): error TS2684: The 'this' context of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
-  Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
+  Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' but required in type '{ y: number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(72,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(73,13): error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(74,1): error TS2554: Expected 1 arguments, but got 2.
@@ -35,12 +35,10 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(86,5): err
     Type 'void' is not assignable to type '{ y: number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(107,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
   The 'this' types of each signature are incompatible.
-    Type 'C' is not assignable to type 'D'.
-      Property 'x' is missing in type 'C'.
+    Type 'C' is missing the following properties from type 'D': x, explicitD
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(108,1): error TS2322: Type '(this: { x: number; }, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
   The 'this' types of each signature are incompatible.
-    Type '{ n: number; }' is not assignable to type '{ x: number; }'.
-      Property 'x' is missing in type '{ n: number; }'.
+    Property 'x' is missing in type '{ n: number; }' but required in type '{ x: number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(110,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
   The 'this' types of each signature are incompatible.
     Type 'C' is not assignable to type 'D'.
@@ -55,8 +53,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(113,1): er
     Type 'C' is not assignable to type 'D'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(114,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
   The 'this' types of each signature are incompatible.
-    Type '{ n: number; }' is not assignable to type 'D'.
-      Property 'x' is missing in type '{ n: number; }'.
+    Type '{ n: number; }' is missing the following properties from type 'D': x, explicitThis, explicitD
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(115,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(116,1): error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
   The 'this' types of each signature are incompatible.
@@ -67,8 +64,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(117,1): er
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(125,69): error TS2339: Property 'x' does not exist on type 'typeof Base1'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(145,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
   The 'this' types of each signature are incompatible.
-    Type 'Base1' is not assignable to type 'Base2'.
-      Property 'y' is missing in type 'Base1'.
+    Property 'y' is missing in type 'Base1' but required in type 'Base2'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(146,1): error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
   The 'this' types of each signature are incompatible.
     Type 'Base1' is not assignable to type 'Base2'.
@@ -188,6 +184,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     ok.f(); // not enough arguments
     ~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:46: An argument for 'x' was not provided.
     ok.f('wrong type');
          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
@@ -202,12 +199,14 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     wrongPropertyName.f(13);
     ~~~~~~~~~~~~~~~~~
 !!! error TS2684: The 'this' context of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
-!!! error TS2684:   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
+!!! error TS2684:   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' but required in type '{ y: number; }'.
+!!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56: 'y' is declared here.
     
     let c = new C();
     c.explicitC(); // not enough arguments
     ~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:9:24: An argument for 'm' was not provided.
     c.explicitC('wrong type');
                 ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
@@ -217,6 +216,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     c.explicitThis(); // not enough arguments
     ~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:3:30: An argument for 'm' was not provided.
     c.explicitThis('wrong type 2');
                    ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
@@ -226,6 +226,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     c.implicitThis(); // not enough arguments
     ~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:6:18: An argument for 'm' was not provided.
     c.implicitThis('wrong type 2');
                    ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
@@ -235,6 +236,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     c.explicitProperty(); // not enough arguments
     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:12:41: An argument for 'm' was not provided.
     c.explicitProperty('wrong type 3');
                        ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 3"' is not assignable to parameter of type 'number'.
@@ -272,14 +274,13 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     ~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
-!!! error TS2322:       Property 'x' is missing in type 'C'.
+!!! error TS2322:     Type 'C' is missing the following properties from type 'D': x, explicitD
     c.explicitProperty = explicitXProperty;
     ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: { x: number; }, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type '{ n: number; }' is not assignable to type '{ x: number; }'.
-!!! error TS2322:       Property 'x' is missing in type '{ n: number; }'.
+!!! error TS2322:     Property 'x' is missing in type '{ n: number; }' but required in type '{ x: number; }'.
+!!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:104:33: 'x' is declared here.
     
     c.explicitC = d.explicitD;
     ~~~~~~~~~~~
@@ -305,8 +306,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     ~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type '{ n: number; }' is not assignable to type 'D'.
-!!! error TS2322:       Property 'x' is missing in type '{ n: number; }'.
+!!! error TS2322:     Type '{ n: number; }' is missing the following properties from type 'D': x, explicitThis, explicitD
     c.explicitThis = d.explicitThis;
     ~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
@@ -353,8 +353,8 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     ~~~~~~~~~~~~~~
 !!! error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'Base1' is not assignable to type 'Base2'.
-!!! error TS2322:       Property 'y' is missing in type 'Base1'.
+!!! error TS2322:     Property 'y' is missing in type 'Base1' but required in type 'Base2'.
+!!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:131:5: 'y' is declared here.
     b1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
     ~~~~~~~~~~~
 !!! error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.

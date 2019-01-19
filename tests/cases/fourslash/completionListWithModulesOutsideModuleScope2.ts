@@ -1,4 +1,4 @@
-/// <reference path='fourslash.ts'/>
+/// <reference path="fourslash.ts"/>
 
 ////module mod1 {
 ////    var mod1var = 1;
@@ -231,76 +231,50 @@
 ////    x: /*objectLiteral*/
 ////}
 
-goTo.marker('extendedClass');
-
-verify.not.completionListContains('mod1');
-verify.not.completionListContains('mod2');
-verify.not.completionListContains('mod3');
-verify.not.completionListContains('shwvar', 'var shwvar: number');
-verify.not.completionListContains('shwfn', 'function shwfn(): void');
-verify.not.completionListContains('shwcls', 'class shwcls');
-verify.not.completionListContains('shwint', 'interface shwint');
-
-verify.not.completionListContains('mod2var');
-verify.not.completionListContains('mod2fn');
-verify.not.completionListContains('mod2cls');
-verify.not.completionListContains('mod2int');
-verify.not.completionListContains('mod2mod');
-verify.not.completionListContains('mod2evar');
-verify.not.completionListContains('mod2efn');
-verify.not.completionListContains('mod2ecls');
-verify.not.completionListContains('mod2eint');
-verify.not.completionListContains('mod2emod');
-verify.not.completionListContains('sfvar');
-verify.not.completionListContains('sffn');
-verify.not.completionListContains('scvar');
-verify.not.completionListContains('scfn');
-verify.completionListContains('scpfn');
-verify.completionListContains('scpvar');
-verify.not.completionListContains('scsvar');
-verify.not.completionListContains('scsfn');
-verify.not.completionListContains('sivar');
-verify.not.completionListContains('sifn');
-verify.not.completionListContains('mod1exvar');
-verify.not.completionListContains('mod2eexvar');
-
-function goToMarkerAndVerify(marker: string)
-{
-    goTo.marker(marker);
-
-    verify.completionListContains('mod1');
-    verify.completionListContains('mod2');
-    verify.completionListContains('mod3');
-    verify.completionListContains('shwvar', 'var shwvar: number');
-    verify.completionListContains('shwfn', 'function shwfn(): void');
-    verify.completionListContains('shwcls', 'class shwcls');
-    verify.not.completionListContains('shwint', 'interface shwint');
-
-    verify.not.completionListContains('mod2var');
-    verify.not.completionListContains('mod2fn');
-    verify.not.completionListContains('mod2cls');
-    verify.not.completionListContains('mod2int');
-    verify.not.completionListContains('mod2mod');
-    verify.not.completionListContains('mod2evar');
-    verify.not.completionListContains('mod2efn');
-    verify.not.completionListContains('mod2ecls');
-    verify.not.completionListContains('mod2eint');
-    verify.not.completionListContains('mod2emod');
-    verify.not.completionListContains('sfvar');
-    verify.not.completionListContains('sffn');
-    verify.not.completionListContains('scvar');
-    verify.not.completionListContains('scfn');
-    verify.not.completionListContains('scpfn');
-    verify.not.completionListContains('scpvar');
-    verify.not.completionListContains('scsvar');
-    verify.not.completionListContains('scsfn');
-    verify.not.completionListContains('sivar');
-    verify.not.completionListContains('sifn');
-    verify.not.completionListContains('mod1exvar');
-    verify.not.completionListContains('mod2eexvar');
-}
-
-goToMarkerAndVerify('objectLiteral');
-
-goTo.marker('localVar');
-verify.completionListContains('shwvar', '(local var) shwvar: string');
+verify.completions(
+    {
+        marker: "extendedClass",
+        exact: ["scpfn", "scpvar", ...completion.classElementKeywords],
+        isNewIdentifierLocation: true,
+    },
+    {
+        marker: "objectLiteral",
+        includes: [
+            "mod1",
+            "mod2",
+            "mod3",
+            { name: "shwvar", text: "var shwvar: number" },
+            { name: "shwfn", text: "function shwfn(): void" },
+            { name: "shwcls", text: "class shwcls" },
+        ],
+        excludes: [
+            "shwint",
+            "mod2var",
+            "mod2fn",
+            "mod2cls",
+            "mod2int",
+            "mod2mod",
+            "mod2evar",
+            "mod2efn",
+            "mod2ecls",
+            "mod2eint",
+            "mod2emod",
+            "sfvar",
+            "sffn",
+            "scvar",
+            "scfn",
+            "scpfn",
+            "scpvar",
+            "scsvar",
+            "scsfn",
+            "sivar",
+            "sifn",
+            "mod1exvar",
+            "mod2eexvar",
+        ]
+    },
+    {
+        marker: "localVar",
+        includes: { name: "shwvar", text: "(local var) shwvar: string" },
+    },
+);

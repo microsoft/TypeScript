@@ -1,38 +1,38 @@
 [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
 
-[30;47m1[0m /** @typedef {number} Foo */
-[30;47m [0m [91m                      ~~~[0m
+[7m1[0m /** @typedef {number} Foo */
+[7m [0m [91m                      ~~~[0m
 
   [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m
-    [30;47m1[0m class Foo { } // should error
-    [30;47m [0m [96m      ~~~[0m
+    [7m1[0m class Foo { } // should error
+    [7m [0m [96m      ~~~[0m
     'Foo' was also declared here.
 [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
 
-[30;47m2[0m class Bar {}
-[30;47m [0m [91m      ~~~[0m
+[7m2[0m class Bar {}
+[7m [0m [91m      ~~~[0m
 
   [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m
-    [30;47m2[0m const Bar = 3;
-    [30;47m [0m [96m      ~~~[0m
+    [7m2[0m const Bar = 3;
+    [7m [0m [96m      ~~~[0m
     'Bar' was also declared here.
 [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
 
-[30;47m1[0m class Foo { } // should error
-[30;47m [0m [91m      ~~~[0m
+[7m1[0m class Foo { } // should error
+[7m [0m [91m      ~~~[0m
 
   [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m1[0m:[93m23[0m
-    [30;47m1[0m /** @typedef {number} Foo */
-    [30;47m [0m [96m                      ~~~[0m
+    [7m1[0m /** @typedef {number} Foo */
+    [7m [0m [96m                      ~~~[0m
     'Foo' was also declared here.
 [96mtests/cases/conformance/jsdoc/mod2.js[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
 
-[30;47m2[0m const Bar = 3;
-[30;47m [0m [91m      ~~~[0m
+[7m2[0m const Bar = 3;
+[7m [0m [91m      ~~~[0m
 
   [96mtests/cases/conformance/jsdoc/mod1.js[0m:[93m2[0m:[93m7[0m
-    [30;47m2[0m class Bar {}
-    [30;47m [0m [96m      ~~~[0m
+    [7m2[0m class Bar {}
+    [7m [0m [96m      ~~~[0m
     'Bar' was also declared here.
 
 
@@ -56,3 +56,5 @@
 !!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
 !!! related TS6203 tests/cases/conformance/jsdoc/mod1.js:2:7: 'Bar' was also declared here.
     
+Found 4 errors.
+

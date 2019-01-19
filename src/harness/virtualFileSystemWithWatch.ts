@@ -4,6 +4,8 @@ namespace ts.TestFSWithWatch {
         content: `/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
 interface IArguments {}
 interface Number { toExponential: any; }
 interface Object {}
@@ -126,7 +128,7 @@ interface Array<T> {}`
         return s && isString((<FsSymLink>s).symLink);
     }
 
-    function invokeWatcherCallbacks<T>(callbacks: T[], invokeCallback: (cb: T) => void): void {
+    function invokeWatcherCallbacks<T>(callbacks: ReadonlyArray<T> | undefined, invokeCallback: (cb: T) => void): void {
         if (callbacks) {
             // The array copy is made to ensure that even if one of the callback removes the callbacks,
             // we dont miss any callbacks following it
@@ -187,9 +189,10 @@ interface Array<T> {}`
     }
 
     export function checkArray(caption: string, actual: ReadonlyArray<string>, expected: ReadonlyArray<string>) {
+        checkMapKeys(caption, arrayToMap(actual, identity), expected);
         assert.equal(actual.length, expected.length, `${caption}: incorrect actual number of files, expected:\r\n${expected.join("\r\n")}\r\ngot: ${actual.join("\r\n")}`);
         for (const f of expected) {
-            assert.equal(true, contains(actual, f), `${caption}: expected to find ${f} in ${actual}`);
+            assert.isTrue(contains(actual, f), `${caption}: expected to find ${f} in ${actual}`);
         }
     }
 
@@ -338,6 +341,7 @@ interface Array<T> {}`
         private readonly currentDirectory: string;
         private readonly dynamicPriorityWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
+        public require: ((initialPath: string, moduleName: string) => server.RequireResult) | undefined;
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -584,8 +588,8 @@ interface Array<T> {}`
             }
             this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             if (isFsFolder(fileOrDirectory)) {
-                this.invokeDirectoryWatcher(fileOrDirectory.fullPath, "");
-                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, "");
+                this.invokeDirectoryWatcher(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
+                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
             }
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
@@ -647,15 +651,15 @@ interface Array<T> {}`
 
         // For overriding the methods
         invokeWatchedDirectoriesCallback(folderFullPath: string, relativePath: string) {
-            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));
+            invokeWatcherCallbacks(this.watchedDirectories.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
         }
 
         invokeWatchedDirectoriesRecursiveCallback(folderFullPath: string, relativePath: string) {
-            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(folderFullPath))!, cb => this.directoryCallback(cb, relativePath));
+            invokeWatcherCallbacks(this.watchedDirectoriesRecursive.get(this.toPath(folderFullPath)), cb => this.directoryCallback(cb, relativePath));
         }
 
-        invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, useFileNameInCallback?: boolean) {
-            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath))!, ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
+        private invokeFileWatcher(fileFullPath: string, eventKind: FileWatcherEventKind, useFileNameInCallback?: boolean) {
+            invokeWatcherCallbacks(this.watchedFiles.get(this.toPath(fileFullPath)), ({ cb, fileName }) => cb(useFileNameInCallback ? fileName : fileFullPath, eventKind));
         }
 
         private getRelativePathToDirectory(directoryFullPath: string, fileFullPath: string) {
@@ -934,7 +938,12 @@ interface Array<T> {}`
             const folder = this.fs.get(base) as FsFolder;
             Debug.assert(isFsFolder(folder));
 
-            this.addFileOrFolderInFolder(folder, file);
+            if (!this.fs.has(file.path)) {
+                this.addFileOrFolderInFolder(folder, file);
+            }
+            else {
+                this.modifyFile(path, content);
+            }
         }
 
         write(message: string) {
@@ -979,5 +988,17 @@ interface Array<T> {}`
         getEnvironmentVariable(name: string) {
             return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
+    }
+
+    export const tsbuildProjectsLocation = "/user/username/projects";
+    export function getTsBuildProjectFilePath(project: string, file: string) {
+        return `${tsbuildProjectsLocation}/${project}/${file}`;
+    }
+
+    export function getTsBuildProjectFile(project: string, file: string): File {
+        return {
+            path: getTsBuildProjectFilePath(project, file),
+            content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
+        };
     }
 }

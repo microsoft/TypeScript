@@ -24,7 +24,7 @@ function attr(nameOrMap: any, value?: string): any {
 >nameOrMap && typeof nameOrMap === "object" : boolean
 >nameOrMap : any
 >typeof nameOrMap === "object" : boolean
->typeof nameOrMap : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof nameOrMap : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >nameOrMap : any
 >"object" : "object"
 

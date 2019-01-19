@@ -3,8 +3,7 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(10,30): error TS2322: Type
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(11,21): error TS2322: Type '{ tag: "A"; d20: number; }' is not assignable to type 'ADT'.
   Object literal may only specify known properties, and 'd20' does not exist in type '{ tag: "A"; a1: string; }'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(12,1): error TS2322: Type '{ tag: "D"; }' is not assignable to type 'ADT'.
-  Type '{ tag: "D"; }' is not assignable to type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
-    Property 'd20' is missing in type '{ tag: "D"; }'.
+  Property 'd20' is missing in type '{ tag: "D"; }' but required in type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(33,28): error TS2322: Type '{ tag: "A"; x: string; extra: number; }' is not assignable to type 'Ambiguous'.
   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(34,26): error TS2322: Type '{ tag: "A"; y: number; extra: number; }' is not assignable to type 'Ambiguous'.
@@ -14,9 +13,9 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(39,1): error TS2322: Type 
     Types of property 'tag' are incompatible.
       Type '"A"' is not assignable to type '"C"'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(40,1): error TS2322: Type '{ tag: "A"; z: true; }' is not assignable to type 'Ambiguous'.
-  Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "C"; }'.
+  Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "B"; z: boolean; }'.
     Types of property 'tag' are incompatible.
-      Type '"A"' is not assignable to type '"C"'.
+      Type '"A"' is not assignable to type '"B"'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(49,35): error TS2322: Type '{ a: 1; b: 1; first: string; second: string; }' is not assignable to type 'Overlapping'.
   Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
 tests/cases/compiler/excessPropertyCheckWithUnions.ts(50,35): error TS2322: Type '{ a: 1; b: 1; first: string; third: string; }' is not assignable to type 'Overlapping'.
@@ -49,8 +48,8 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2322: Type 
     wrong = { tag: "D" }
     ~~~~~
 !!! error TS2322: Type '{ tag: "D"; }' is not assignable to type 'ADT'.
-!!! error TS2322:   Type '{ tag: "D"; }' is not assignable to type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
-!!! error TS2322:     Property 'd20' is missing in type '{ tag: "D"; }'.
+!!! error TS2322:   Property 'd20' is missing in type '{ tag: "D"; }' but required in type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
+!!! related TS2728 tests/cases/compiler/excessPropertyCheckWithUnions.ts:6:5: 'd20' is declared here.
     
     type Ambiguous = {
         tag: "A",
@@ -92,9 +91,9 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2322: Type 
     amb = { tag: "A", z: true }
     ~~~
 !!! error TS2322: Type '{ tag: "A"; z: true; }' is not assignable to type 'Ambiguous'.
-!!! error TS2322:   Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "C"; }'.
+!!! error TS2322:   Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "B"; z: boolean; }'.
 !!! error TS2322:     Types of property 'tag' are incompatible.
-!!! error TS2322:       Type '"A"' is not assignable to type '"C"'.
+!!! error TS2322:       Type '"A"' is not assignable to type '"B"'.
     
     type Overlapping =
         | { a: 1, b: 1, first: string }

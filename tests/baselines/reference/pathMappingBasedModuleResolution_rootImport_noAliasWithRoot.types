@@ -1,0 +1,15 @@
+=== /root/a.ts ===
+import { foo } from "/foo";
+>foo : () => void
+
+import { bar } from "/bar";
+>bar : () => void
+
+=== /root/src/foo.ts ===
+export function foo() {}
+>foo : () => void
+
+=== /root/src/bar.js ===
+export function bar() {}
+>bar : () => void
+

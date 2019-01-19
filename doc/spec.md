@@ -286,7 +286,7 @@ function f(s) {
 }
 ```
 
-In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emiting JavaScript.
+In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emitting JavaScript.
 
 ## <a name="1.1"/>1.1 Ambient Declarations
 

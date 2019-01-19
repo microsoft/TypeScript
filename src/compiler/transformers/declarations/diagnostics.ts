@@ -389,6 +389,7 @@ namespace ts {
                     diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1;
                     break;
 
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     diagnosticMessage = Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
                     break;
@@ -410,6 +411,7 @@ namespace ts {
                     }
                     break;
 
+                case SyntaxKind.FunctionType:
                 case SyntaxKind.FunctionDeclaration:
                     diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
                     break;
@@ -434,7 +436,7 @@ namespace ts {
             // Heritage clause is written by user so it can always be named
             if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
                 // Class or Interface implemented/extended is inaccessible
-                diagnosticMessage = (node as ExpressionWithTypeArguments).parent.token === SyntaxKind.ImplementsKeyword ?
+                diagnosticMessage = isHeritageClause(node.parent) && node.parent.token === SyntaxKind.ImplementsKeyword ?
                     Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
                     Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
             }
@@ -446,7 +448,7 @@ namespace ts {
             return {
                 diagnosticMessage,
                 errorNode: node,
-                typeName: getNameOfDeclaration((node as ExpressionWithTypeArguments).parent.parent)
+                typeName: getNameOfDeclaration(node.parent.parent as Declaration)
             };
         }
 

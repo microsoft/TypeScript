@@ -50,9 +50,9 @@ tests/cases/conformance/fixSignatureCaching.ts(915,36): error TS2339: Property '
 tests/cases/conformance/fixSignatureCaching.ts(915,53): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(955,42): error TS2339: Property 'mobileGrade' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(964,57): error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(978,16): error TS2304: Cannot find name 'module'.
-tests/cases/conformance/fixSignatureCaching.ts(978,42): error TS2304: Cannot find name 'module'.
-tests/cases/conformance/fixSignatureCaching.ts(979,37): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/fixSignatureCaching.ts(978,16): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/conformance/fixSignatureCaching.ts(978,42): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/conformance/fixSignatureCaching.ts(979,37): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 tests/cases/conformance/fixSignatureCaching.ts(980,23): error TS2304: Cannot find name 'define'.
 tests/cases/conformance/fixSignatureCaching.ts(980,48): error TS2304: Cannot find name 'define'.
 tests/cases/conformance/fixSignatureCaching.ts(981,16): error TS2304: Cannot find name 'define'.
@@ -1143,12 +1143,12 @@ tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property '
     })((function (undefined) {
         if (typeof module !== 'undefined' && module.exports) {
                    ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
                                              ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
             return function (factory) { module.exports = factory(); };
                                         ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
         } else if (typeof define === 'function' && define.amd) {
                           ~~~~~~
 !!! error TS2304: Cannot find name 'define'.

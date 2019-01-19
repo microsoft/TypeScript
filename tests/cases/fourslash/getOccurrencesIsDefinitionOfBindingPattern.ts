@@ -3,8 +3,8 @@
 ////const z = [|x|];
 
 const [r0, r1, r2] = test.ranges();
-verify.referenceGroups([r0, r2], [
-    { definition: "const x: number", ranges: [r0, r2] },
-    { definition: "(property) x: number", ranges: [r1] },
-]);
-verify.referenceGroups(r1, [{ definition: "(property) x: number", ranges: [r0, r1, r2] }]);
+const local = { definition: "const x: number", ranges: [r0, r2] };
+const prop = { definition: "(property) x: number", ranges: [r1] };
+verify.referenceGroups(r0, [local, prop]);
+verify.referenceGroups(r1, [{ ...prop, ranges: [r0, r1] }]);
+verify.referenceGroups(r2, [local]);

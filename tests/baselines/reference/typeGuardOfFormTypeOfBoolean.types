@@ -42,7 +42,7 @@ var c: C;
 //  - when false, removes the primitive type from the type of x.
 if (typeof strOrBool === "boolean") {
 >typeof strOrBool === "boolean" : boolean
->typeof strOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrBool : string | boolean
 >"boolean" : "boolean"
 
@@ -59,7 +59,7 @@ else {
 }
 if (typeof numOrBool === "boolean") {
 >typeof numOrBool === "boolean" : boolean
->typeof numOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof numOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >numOrBool : number | boolean
 >"boolean" : "boolean"
 
@@ -76,7 +76,7 @@ else {
 }
 if (typeof strOrNumOrBool === "boolean") {
 >typeof strOrNumOrBool === "boolean" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"boolean" : "boolean"
 
@@ -93,7 +93,7 @@ else {
 }
 if (typeof boolOrC === "boolean") {
 >typeof boolOrC === "boolean" : boolean
->typeof boolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof boolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >boolOrC : boolean | C
 >"boolean" : "boolean"
 
@@ -111,7 +111,7 @@ else {
 
 if (typeof strOrNum === "boolean") {
 >typeof strOrNum === "boolean" : boolean
->typeof strOrNum : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNum : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNum : string | number
 >"boolean" : "boolean"
 
@@ -131,7 +131,7 @@ else {
 //  - when false, narrows the type of x by typeof x === s when true.
 if (typeof strOrBool !== "boolean") {
 >typeof strOrBool !== "boolean" : boolean
->typeof strOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrBool : string | boolean
 >"boolean" : "boolean"
 
@@ -148,7 +148,7 @@ else {
 }
 if (typeof numOrBool !== "boolean") {
 >typeof numOrBool !== "boolean" : boolean
->typeof numOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof numOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >numOrBool : number | boolean
 >"boolean" : "boolean"
 
@@ -165,7 +165,7 @@ else {
 }
 if (typeof strOrNumOrBool !== "boolean") {
 >typeof strOrNumOrBool !== "boolean" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"boolean" : "boolean"
 
@@ -182,7 +182,7 @@ else {
 }
 if (typeof boolOrC !== "boolean") {
 >typeof boolOrC !== "boolean" : boolean
->typeof boolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof boolOrC : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >boolOrC : boolean | C
 >"boolean" : "boolean"
 
@@ -200,7 +200,7 @@ else {
 
 if (typeof strOrNum !== "boolean") {
 >typeof strOrNum !== "boolean" : boolean
->typeof strOrNum : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNum : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNum : string | number
 >"boolean" : "boolean"
 

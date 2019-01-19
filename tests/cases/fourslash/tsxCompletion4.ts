@@ -10,5 +10,4 @@
 //// let bag = { x: 100, y: 200 };
 //// <div {.../**/
 
-goTo.marker();
-verify.completionListContains("bag");
+verify.completions({ marker: "", includes: "bag" });

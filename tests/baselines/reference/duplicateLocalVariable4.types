@@ -3,7 +3,7 @@ enum E{
 >E : E
 
 a
->a : E
+>a : E.a
 }
  
 var x = E;

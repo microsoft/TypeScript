@@ -33,7 +33,7 @@ module M {
 
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module 'react' {
->'react' : Symbol('react', Decl(react.d.ts, 0, 0))
+>'react' : Symbol("react", Decl(react.d.ts, 0, 0))
 
 	var x: any;
 >x : Symbol(x, Decl(react.d.ts, 1, 4))
@@ -52,7 +52,7 @@ declare module ReactRouter {
 >Thing : Symbol(Thing, Decl(react.d.ts, 6, 16))
 }
 declare module 'react-router' {
->'react-router' : Symbol('react-router', Decl(react.d.ts, 8, 1))
+>'react-router' : Symbol("react-router", Decl(react.d.ts, 8, 1))
 
 	export = ReactRouter;
 >ReactRouter : Symbol(ReactRouter, Decl(react.d.ts, 3, 1))

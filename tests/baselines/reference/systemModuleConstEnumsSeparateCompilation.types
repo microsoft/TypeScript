@@ -5,7 +5,7 @@ declare function use(a: any);
 
 const enum TopLevelConstEnum { X }
 >TopLevelConstEnum : TopLevelConstEnum
->X : TopLevelConstEnum
+>X : TopLevelConstEnum.X
 
 export function foo() {
 >foo : () => void
@@ -30,5 +30,5 @@ export function foo() {
 module M {
     export const enum NonTopLevelConstEnum { X }
 >NonTopLevelConstEnum : NonTopLevelConstEnum
->X : NonTopLevelConstEnum
+>X : NonTopLevelConstEnum.X
 }

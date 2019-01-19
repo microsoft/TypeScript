@@ -41,24 +41,27 @@ var y = {
 > : any
 
 var x = {
->x : { a: number[]; }
->{    a.b,    a["ss"],    a[1],} : { a: number[]; }
+>x : { a: any; (Missing): any; ["ss"]: any; [1]: any; }
+>{    a.b,    a["ss"],    a[1],} : { a: any; (Missing): any; ["ss"]: any; [1]: any; }
 
     a.b,
 >a : any
+> : any
 >.b : any
 > : any
 >b : any
 
     a["ss"],
 >a : any
->["ss"] : string[]
+>["ss"] : any
 >"ss" : "ss"
+> : any
 
     a[1],
 >a : any
->[1] : number[]
+>[1] : any
 >1 : 1
+> : any
 
 };
 

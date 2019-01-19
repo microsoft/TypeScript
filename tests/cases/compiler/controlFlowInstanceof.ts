@@ -1,5 +1,10 @@
 // @target: es6
+// @noEmit: true
+// @allowJs: true
+// @checkJs: true
+// @strictNullChecks: true
 
+// @Filename: controlFlowInstanceof.ts
 // Repros from #10167
 
 function f1(s: Set<string> | Set<number>) {
@@ -96,4 +101,23 @@ function goo(x: X) {
         x.y;
     }
     x;
+}
+
+// Repro from #27282
+
+declare const x: (() => void)|null;
+declare const ctor: Function;
+
+if (x instanceof ctor) {
+    x();
+}
+
+// Repro from #27550 (based on uglify code)
+// @Filename: uglify.js
+/** @constructor */
+function AtTop(val) { this.val = val }
+/** @type {*} */
+var v = 1;
+if (v instanceof AtTop) {
+    v.val
 }

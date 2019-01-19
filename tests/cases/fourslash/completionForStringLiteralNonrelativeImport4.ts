@@ -23,7 +23,7 @@
 ////
 
 verify.completions({
-    marker: test.markerNames(),
+    marker: test.markers(),
     exact: ["fake-module3", "fake-module2", "fake-module"],
     isNewIdentifierLocation: true,
 });
