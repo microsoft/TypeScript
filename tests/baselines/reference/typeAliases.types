@@ -161,7 +161,7 @@ type Meters = number
 
 enum E { x = 10 }
 >E : E
->x : E
+>x : E.x
 >10 : 10
 
 declare function f15(a: string): boolean;

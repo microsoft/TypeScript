@@ -15,6 +15,7 @@ M;`,
 
         "/O.ts":
 `import { N } from "./a";
-export import O = N;`,
+export import O = N;
+`,
     },
 });

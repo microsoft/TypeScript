@@ -53,14 +53,10 @@ namespace ts {
     }
 
     export function executeCommandLine(args: string[]): void {
-        if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
-            const result = performBuild(args.slice(1));
-            // undefined = in watch mode, do not exit
-            if (result !== undefined) {
-                return sys.exit(result);
-            }
-            else {
-                return;
+        if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
+            const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+            if (firstOption === "build" || firstOption === "b") {
+                return performBuild(args.slice(1));
             }
         }
 
@@ -136,6 +132,16 @@ namespace ts {
         const commandLineOptions = commandLine.options;
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+            if (commandLineOptions.showConfig) {
+                if (configParseResult.errors.length !== 0) {
+                    updateReportDiagnostic(configParseResult.options);
+                    configParseResult.errors.forEach(reportDiagnostic);
+                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
+                // tslint:disable-next-line:no-null-keyword
+                sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
+                return sys.exit(ExitStatus.Success);
+            }
             updateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();
@@ -146,6 +152,11 @@ namespace ts {
             }
         }
         else {
+            if (commandLineOptions.showConfig) {
+                // tslint:disable-next-line:no-null-keyword
+                sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(sys.getCurrentDirectory(), "tsconfig.json"), sys), null, 4) + sys.newLine);
+                return sys.exit(ExitStatus.Success);
+            }
             updateReportDiagnostic(commandLineOptions);
             if (isWatchSet(commandLineOptions)) {
                 reportWatchModeWithoutSysSupport();
@@ -164,148 +175,65 @@ namespace ts {
         }
     }
 
-    function performBuild(args: string[]): number | undefined {
-        const buildOpts: CommandLineOption[] = [
-            {
-                name: "help",
-                shortName: "h",
-                type: "boolean",
-                showInSimplifiedHelpView: true,
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Print_this_message,
-            },
-            {
-                name: "help",
-                shortName: "?",
-                type: "boolean"
-            },
-            {
-                name: "verbose",
-                shortName: "v",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Enable_verbose_logging,
-                type: "boolean"
-            },
-            {
-                name: "dry",
-                shortName: "d",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Show_what_would_be_built_or_deleted_if_specified_with_clean,
-                type: "boolean"
-            },
-            {
-                name: "force",
-                shortName: "f",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Build_all_projects_including_those_that_appear_to_be_up_to_date,
-                type: "boolean"
-            },
-            {
-                name: "clean",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Delete_the_outputs_of_all_projects,
-                type: "boolean"
-            },
-            {
-                name: "watch",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Watch_input_files,
-                type: "boolean"
-            },
-            {
-                name: "preserveWatchOutput",
-                type: "boolean",
-                category: Diagnostics.Command_line_Options,
-                description: Diagnostics.Whether_to_keep_outdated_console_output_in_watch_mode_instead_of_clearing_the_screen,
-            },
-        ];
-        let buildOptionNameMap: OptionNameMap | undefined;
-        const returnBuildOptionNameMap = () => (buildOptionNameMap || (buildOptionNameMap = createOptionNameMap(buildOpts)));
-
-        const buildOptions: BuildOptions = {};
-        const projects: string[] = [];
-        for (const arg of args) {
-            if (arg.charCodeAt(0) === CharacterCodes.minus) {
-                const opt = getOptionDeclarationFromName(returnBuildOptionNameMap, arg.slice(arg.charCodeAt(1) === CharacterCodes.minus ? 2 : 1), /*allowShort*/ true);
-                if (opt) {
-                    buildOptions[opt.name as keyof BuildOptions] = true;
-                }
-                else {
-                    reportDiagnostic(createCompilerDiagnostic(Diagnostics.Unknown_build_option_0, arg));
-                }
-            }
-            else {
-                // Not a flag, parse as filename
-                addProject(arg);
-            }
+    function performBuild(args: string[]) {
+        const { buildOptions, projects, errors } = parseBuildCommand(args);
+        if (errors.length > 0) {
+            errors.forEach(reportDiagnostic);
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         if (buildOptions.help) {
             printVersion();
             printHelp(buildOpts, "--build ");
-            return ExitStatus.Success;
+            return sys.exit(ExitStatus.Success);
         }
 
         // Update to pretty if host supports it
         updateReportDiagnostic();
+        if (projects.length === 0) {
+            printVersion();
+            printHelp(buildOpts, "--build ");
+            return sys.exit(ExitStatus.Success);
+        }
 
         if (!sys.getModifiedTime || !sys.setModifiedTime || (buildOptions.clean && !sys.deleteFile)) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
         if (buildOptions.watch) {
             reportWatchModeWithoutSysSupport();
         }
 
-        // Nonsensical combinations
-        if (buildOptions.clean && buildOptions.force) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "force"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (buildOptions.clean && buildOptions.verbose) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "verbose"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (buildOptions.clean && buildOptions.watch) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "clean", "watch"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
-        if (buildOptions.watch && buildOptions.dry) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Options_0_and_1_cannot_be_combined, "watch", "dry"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        }
+        const buildHost = buildOptions.watch ?
+            createSolutionBuilderWithWatchHost(sys, createEmitAndSemanticDiagnosticsBuilderProgram, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
+            createSolutionBuilderHost(sys, createAbstractBuilder, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
+        updateCreateProgram(buildHost);
+        buildHost.afterProgramEmitAndDiagnostics = (program: BuilderProgram) => reportStatistics(program.getProgram());
 
-        if (projects.length === 0) {
-            // tsc -b invoked with no extra arguments; act as if invoked with "tsc -b ."
-            addProject(".");
-        }
-
-        // TODO: change this to host if watch => watchHost otherwiue without wathc
-        const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()), projects, buildOptions);
+        const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         if (buildOptions.clean) {
-            return builder.cleanAllProjects();
+            return sys.exit(builder.cleanAllProjects());
         }
 
         if (buildOptions.watch) {
             builder.buildAllProjects();
-            builder.startWatching();
-            return undefined;
+            return (builder as SolutionBuilderWithWatch).startWatching();
         }
 
-        return builder.buildAllProjects();
+        return sys.exit(builder.buildAllProjects());
+    }
 
-        function addProject(projectSpecification: string) {
-            const fileName = resolvePath(sys.getCurrentDirectory(), projectSpecification);
-            const refPath = resolveProjectReferencePath(sys, { path: fileName });
-            if (!sys.fileExists(refPath)) {
-                return reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
-            }
-            projects.push(refPath);
-        }
+    function createReportErrorSummary(options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
+        return shouldBePretty(options) ?
+            errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine)) :
+            undefined;
     }
 
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const host = createCompilerHost(options);
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
         enableStatistics(options);
 
         const programOptions: CreateProgramOptions = {
@@ -316,20 +244,29 @@ namespace ts {
             configFileParsingDiagnostics
         };
         const program = createProgram(programOptions);
-        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
+        const exitStatus = emitFilesAndReportErrors(
+            program,
+            reportDiagnostic,
+            s => sys.write(s + sys.newLine),
+            createReportErrorSummary(options)
+        );
         reportStatistics(program);
         return sys.exit(exitStatus);
     }
 
-    function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
-        const compileUsingBuilder = watchCompilerHost.createProgram;
-        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics) => {
+    function updateCreateProgram<T extends BuilderProgram>(host: { createProgram: CreateProgram<T>; }) {
+        const compileUsingBuilder = host.createProgram;
+        host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
                 enableStatistics(options);
             }
-            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics);
+            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
+    }
+
+    function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
+        updateCreateProgram(watchCompilerHost);
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);

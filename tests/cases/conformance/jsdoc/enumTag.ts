@@ -11,7 +11,7 @@ const Target = {
     /** @type {number} */
     OK_I_GUESS: 2
 }
-/** @enum {number} */
+/** @enum number */
 const Second = {
     MISTAKE: "end",
     OK: 1,

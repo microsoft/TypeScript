@@ -215,7 +215,7 @@ namespace fakes {
 
         private _setParentNodes: boolean;
         private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
-        private _parseConfigHost: ParseConfigHost;
+        private _parseConfigHost: ParseConfigHost | undefined;
         private _newLine: string;
 
         constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {
@@ -375,7 +375,12 @@ namespace fakes {
         }
     }
 
-    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost {
+    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
+        createProgram = ts.createAbstractBuilder;
+        now() {
+            return new Date(this.sys.vfs.time());
+        }
+
         diagnostics: ts.Diagnostic[] = [];
 
         reportDiagnostic(diagnostic: ts.Diagnostic) {

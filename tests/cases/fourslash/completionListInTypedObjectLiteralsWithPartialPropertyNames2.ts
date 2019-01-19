@@ -8,7 +8,4 @@
 ////    /**/x1: 0,
 ////};
 
-goTo.marker();
-verify.completionListContains("x1");
-verify.completionListContains("y1");
-verify.completionListCount(2);
+verify.completions({ marker: "", exact: ["x1", "y1"] });

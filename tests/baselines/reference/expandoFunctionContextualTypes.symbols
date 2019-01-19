@@ -1,0 +1,34 @@
+=== tests/cases/compiler/expandoFunctionContextualTypes.ts ===
+interface MyComponentProps {
+>MyComponentProps : Symbol(MyComponentProps, Decl(expandoFunctionContextualTypes.ts, 0, 0))
+
+    color: "red" | "blue"
+>color : Symbol(MyComponentProps.color, Decl(expandoFunctionContextualTypes.ts, 0, 28))
+}
+
+interface StatelessComponent<P> {
+>StatelessComponent : Symbol(StatelessComponent, Decl(expandoFunctionContextualTypes.ts, 2, 1))
+>P : Symbol(P, Decl(expandoFunctionContextualTypes.ts, 4, 29))
+
+    (): any;
+    defaultProps?: Partial<P>;
+>defaultProps : Symbol(StatelessComponent.defaultProps, Decl(expandoFunctionContextualTypes.ts, 5, 12))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(expandoFunctionContextualTypes.ts, 4, 29))
+}
+
+const MyComponent: StatelessComponent<MyComponentProps> = () => null as any;
+>MyComponent : Symbol(MyComponent, Decl(expandoFunctionContextualTypes.ts, 9, 5), Decl(expandoFunctionContextualTypes.ts, 9, 76))
+>StatelessComponent : Symbol(StatelessComponent, Decl(expandoFunctionContextualTypes.ts, 2, 1))
+>MyComponentProps : Symbol(MyComponentProps, Decl(expandoFunctionContextualTypes.ts, 0, 0))
+
+MyComponent.defaultProps = {
+>MyComponent.defaultProps : Symbol(StatelessComponent.defaultProps, Decl(expandoFunctionContextualTypes.ts, 5, 12))
+>MyComponent : Symbol(MyComponent, Decl(expandoFunctionContextualTypes.ts, 9, 5), Decl(expandoFunctionContextualTypes.ts, 9, 76))
+>defaultProps : Symbol(StatelessComponent.defaultProps, Decl(expandoFunctionContextualTypes.ts, 5, 12))
+
+    color: "red"
+>color : Symbol(color, Decl(expandoFunctionContextualTypes.ts, 11, 28))
+
+};
+

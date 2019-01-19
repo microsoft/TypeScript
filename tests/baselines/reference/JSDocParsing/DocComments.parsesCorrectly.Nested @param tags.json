@@ -7,11 +7,6 @@
             "kind": "JSDocParameterTag",
             "pos": 6,
             "end": 64,
-            "atToken": {
-                "kind": "AtToken",
-                "pos": 6,
-                "end": 7
-            },
             "tagName": {
                 "kind": "Identifier",
                 "pos": 7,
@@ -30,12 +25,7 @@
                         {
                             "kind": "JSDocParameterTag",
                             "pos": 34,
-                            "end": 54,
-                            "atToken": {
-                                "kind": "AtToken",
-                                "pos": 34,
-                                "end": 35
-                            },
+                            "end": 64,
                             "tagName": {
                                 "kind": "Identifier",
                                 "pos": 35,

@@ -38,7 +38,8 @@ namespace ts.SignatureHelp {
             return undefined;
         }
 
-        const argumentInfo = getContainingArgumentInfo(startingToken, position, sourceFile, typeChecker);
+        const isManuallyInvoked = !!triggerReason && triggerReason.kind === "invoked";
+        const argumentInfo = getContainingArgumentInfo(startingToken, position, sourceFile, typeChecker, isManuallyInvoked);
         if (!argumentInfo) return undefined;
 
         cancellationToken.throwIfCancellationRequested();
@@ -50,7 +51,7 @@ namespace ts.SignatureHelp {
         if (!candidateInfo) {
             // We didn't have any sig help items produced by the TS compiler.  If this is a JS
             // file, then see if we can figure out anything better.
-            return isSourceFileJavaScript(sourceFile) ? createJavaScriptSignatureHelpItems(argumentInfo, program, cancellationToken) : undefined;
+            return isSourceFileJS(sourceFile) ? createJSSignatureHelpItems(argumentInfo, program, cancellationToken) : undefined;
         }
 
         return typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
@@ -115,7 +116,7 @@ namespace ts.SignatureHelp {
         }
     }
 
-    function createJavaScriptSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
+    function createJSSignatureHelpItems(argumentInfo: ArgumentListInfo, program: Program, cancellationToken: CancellationToken): SignatureHelpItems | undefined {
         if (argumentInfo.invocation.kind === InvocationKind.Contextual) return undefined;
         // See if we can find some symbol with the call expression name that has call signatures.
         const expression = getExpressionFromInvocation(argumentInfo.invocation);
@@ -450,8 +451,8 @@ namespace ts.SignatureHelp {
         return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
     }
 
-    function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
-        for (let n = node; !isBlock(n) && !isSourceFile(n); n = n.parent) {
+    function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker, isManuallyInvoked: boolean): ArgumentListInfo | undefined {
+        for (let n = node; isManuallyInvoked || (!isBlock(n) && !isSourceFile(n)); n = n.parent) {
             // If the node is not a subspan of its parent, this is a big problem.
             // There have been crashes that might be caused by this violation.
             Debug.assert(rangeContainsRange(n.parent, n), "Not a subspan", () => `Child: ${Debug.showSyntaxKind(n)}, parent: ${Debug.showSyntaxKind(n.parent)}`);
@@ -591,6 +592,6 @@ namespace ts.SignatureHelp {
             const param = checker.typeParameterToDeclaration(typeParameter, enclosingDeclaration)!;
             printer.writeNode(EmitHint.Unspecified, param, sourceFile, writer);
         });
-        return { name: typeParameter.symbol.name, documentation: emptyArray, displayParts, isOptional: false };
+        return { name: typeParameter.symbol.name, documentation: typeParameter.symbol.getDocumentationComment(checker), displayParts, isOptional: false };
     }
 }

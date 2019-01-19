@@ -6,14 +6,14 @@
 
 // property assignment
 var ns = {}
->ns : { x: { status: "done"; m(n: number): void; }; }
+>ns : typeof ns
 >{} : {}
 
 /** @type {DoneStatus} */
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 >ns.x : { status: "done"; m(n: number): void; }
->ns : { x: { status: "done"; m(n: number): void; }; }
+>ns : typeof ns
 >x : { status: "done"; m(n: number): void; }
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
@@ -29,7 +29,7 @@ ns.x = {
 ns.x = {
 >ns.x = {    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 >ns.x : { status: "done"; m(n: number): void; }
->ns : { x: { status: "done"; m(n: number): void; }; }
+>ns : typeof ns
 >x : { status: "done"; m(n: number): void; }
 >{    status: 'done',    m(n) { }} : { status: "done"; m(n: number): void; }
 
@@ -43,7 +43,7 @@ ns.x = {
 }
 ns.x
 >ns.x : { status: "done"; m(n: number): void; }
->ns : { x: { status: "done"; m(n: number): void; }; }
+>ns : typeof ns
 >x : { status: "done"; m(n: number): void; }
 
 

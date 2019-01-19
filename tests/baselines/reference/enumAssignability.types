@@ -3,11 +3,11 @@
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 enum F { B }
 >F : F
->B : F
+>B : F.B
 
 var e = E.A;
 >e : E

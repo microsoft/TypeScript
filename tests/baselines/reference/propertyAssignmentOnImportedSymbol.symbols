@@ -4,8 +4,10 @@ export var hurk = {}
 
 === tests/cases/conformance/salsa/bug24658.js ===
 import { hurk } from './mod1'
->hurk : Symbol(hurk, Decl(bug24658.js, 0, 8))
+>hurk : Symbol(hurk, Decl(bug24658.js, 0, 8), Decl(bug24658.js, 0, 29))
 
 hurk.expando = 4
->hurk : Symbol(hurk, Decl(bug24658.js, 0, 8))
+>hurk.expando : Symbol(hurk.expando, Decl(bug24658.js, 0, 29))
+>hurk : Symbol(hurk, Decl(bug24658.js, 0, 8), Decl(bug24658.js, 0, 29))
+>expando : Symbol(hurk.expando, Decl(bug24658.js, 0, 29))
 

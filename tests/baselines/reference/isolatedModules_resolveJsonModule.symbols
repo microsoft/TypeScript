@@ -1,0 +1,8 @@
+=== /a.ts ===
+import j = require("./j.json");
+>j : Symbol(j, Decl(a.ts, 0, 0))
+
+=== /j.json ===
+{}
+No type information for this code.
+No type information for this code.

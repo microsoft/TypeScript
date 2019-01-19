@@ -49,7 +49,7 @@ function C3() {
 
 };
 
-const c3_v1 = C3();
+const c3_v1 = C3(); // error: @class tag requires 'new'
 >c3_v1 : Symbol(c3_v1, Decl(index.js, 21, 5))
 >C3 : Symbol(C3, Decl(index.js, 14, 23))
 
@@ -68,7 +68,7 @@ var C4 = function () {
 
 };
 
-const c4_v1 = C4();
+const c4_v1 = C4(); // error: @class tag requires 'new'
 >c4_v1 : Symbol(c4_v1, Decl(index.js, 29, 5))
 >C4 : Symbol(C4, Decl(index.js, 25, 3))
 

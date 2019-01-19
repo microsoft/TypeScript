@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="zh-CN" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="CustomName1" Val="Custom 1" />
@@ -661,7 +661,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A rest parameter or binding pattern may not have a trailing comma.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[Rest 参数或绑定模式可能不具有尾随逗号。]]></Val>
+            <Val><![CDATA[Rest 参数或绑定模式不可带尾随逗号。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -1507,7 +1507,7 @@
         <Str Cat="Text">
           <Val><![CDATA[An index signature parameter type cannot be a type alias. Consider writing '[{0}: {1}]5D;: {2}' instead.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[索引签名参数类型不能为类型别名。请考虑改而编写“[{0}: {1}]5D;:{2}”。]]></Val>
+            <Val><![CDATA[索引签名参数类型不能为类型别名。请考虑改为编写“[{0}: {1}]5D;:{2}”。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5836,7 +5836,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Option '--resolveJsonModule' cannot be specified without 'node' module resolution strategy.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[没有 "node" 模块解析策略的情况下，无法指定选项 "-resolveJsonModule"。]]></Val>
+            <Val><![CDATA[在没有 "node" 模块解析策略的情况下，无法指定选项 "-resolveJsonModule"。]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

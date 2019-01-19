@@ -160,7 +160,7 @@ var q = M1.fn();
 // Ambient external module in the global module
 // Ambient external module with a string literal name that is a top level external module name
 declare module 'external1' {
->'external1' : Symbol('external1', Decl(ambientDeclarations.ts, 67, 16))
+>'external1' : Symbol("external1", Decl(ambientDeclarations.ts, 67, 16))
 
     var q;
 >q : Symbol(q, Decl(ambientDeclarations.ts, 72, 7))

@@ -185,20 +185,20 @@ namespace ts.codefix {
 
             const defaultInfo = getDefaultLikeExportInfo(moduleSymbol, checker, compilerOptions);
             if (defaultInfo && defaultInfo.name === symbolName && skipAlias(defaultInfo.symbol, checker) === exportedSymbol) {
-                result.push({ moduleSymbol, importKind: defaultInfo.kind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(defaultInfo.symbol) });
+                result.push({ moduleSymbol, importKind: defaultInfo.kind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(defaultInfo.symbol, checker) });
             }
 
             for (const exported of checker.getExportsOfModule(moduleSymbol)) {
                 if (exported.name === symbolName && skipAlias(exported, checker) === exportedSymbol) {
-                    result.push({ moduleSymbol, importKind: ImportKind.Named, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exported) });
+                    result.push({ moduleSymbol, importKind: ImportKind.Named, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exported, checker) });
                 }
             }
         });
         return result;
     }
 
-    function isTypeOnlySymbol(s: Symbol): boolean {
-        return !(s.flags & SymbolFlags.Value);
+    function isTypeOnlySymbol(s: Symbol, checker: TypeChecker): boolean {
+        return !(skipAlias(s, checker).flags & SymbolFlags.Value);
     }
 
     function getFixForImport(
@@ -267,7 +267,7 @@ namespace ts.codefix {
 
     function getExistingImportDeclarations({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }: SymbolExportInfo, checker: TypeChecker, sourceFile: SourceFile): ReadonlyArray<FixAddToExistingImportInfo> {
         // Can't use an es6 import for a type in JS.
-        return exportedSymbolIsTypeOnly && isSourceFileJavaScript(sourceFile) ? emptyArray : mapDefined<StringLiteralLike, FixAddToExistingImportInfo>(sourceFile.imports, moduleSpecifier => {
+        return exportedSymbolIsTypeOnly && isSourceFileJS(sourceFile) ? emptyArray : mapDefined<StringLiteralLike, FixAddToExistingImportInfo>(sourceFile.imports, moduleSpecifier => {
             const i = importFromModuleSpecifier(moduleSpecifier);
             return (i.kind === SyntaxKind.ImportDeclaration || i.kind === SyntaxKind.ImportEqualsDeclaration)
                 && checker.getSymbolAtLocation(moduleSpecifier) === moduleSymbol ? { declaration: i, importKind } : undefined;
@@ -282,15 +282,14 @@ namespace ts.codefix {
         host: LanguageServiceHost,
         preferences: UserPreferences,
     ): ReadonlyArray<FixAddNewImport | FixUseImportType> {
-        const isJs = isSourceFileJavaScript(sourceFile);
-        const choicesForEachExportingModule = flatMap<SymbolExportInfo, ReadonlyArray<FixAddNewImport | FixUseImportType>>(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) => {
-            const modulePathsGroups = moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap);
-            return modulePathsGroups.map(group => group.map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
+        const isJs = isSourceFileJS(sourceFile);
+        const choicesForEachExportingModule = flatMap(moduleSymbols, ({ moduleSymbol, importKind, exportedSymbolIsTypeOnly }) =>
+            moduleSpecifiers.getModuleSpecifiers(moduleSymbol, program.getCompilerOptions(), sourceFile, host, program.getSourceFiles(), preferences, program.redirectTargetsMap)
+            .map((moduleSpecifier): FixAddNewImport | FixUseImportType =>
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                 exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
-        });
-        // Sort to keep the shortest paths first, but keep [relativePath, importRelativeToBaseUrl] groups together
-        return flatten<FixAddNewImport | FixUseImportType>(choicesForEachExportingModule.sort((a, b) => first(a).moduleSpecifier.length - first(b).moduleSpecifier.length));
+        // Sort to keep the shortest paths first
+        return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
     }
 
     function getFixesForAddImport(
@@ -376,7 +375,7 @@ namespace ts.codefix {
         const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
             && symbolToken.parent.tagName === symbolToken
             && (isIntrinsicJsxName(symbolToken.text) || checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.All, /*excludeGlobals*/ false))
-            ? checker.getJsxNamespace()
+            ? checker.getJsxNamespace(sourceFile)
             : symbolToken.text;
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default);
@@ -399,7 +398,7 @@ namespace ts.codefix {
         // Maps symbol id to info for modules providing that symbol (original export + re-exports).
         const originalSymbolToExportInfos = createMultiMap<SymbolExportInfo>();
         function addSymbol(moduleSymbol: Symbol, exportedSymbol: Symbol, importKind: ImportKind): void {
-            originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol) });
+            originalSymbolToExportInfos.add(getUniqueSymbolId(exportedSymbol, checker).toString(), { moduleSymbol, importKind, exportedSymbolIsTypeOnly: isTypeOnlySymbol(exportedSymbol, checker) });
         }
         forEachExternalModuleToImportFrom(checker, sourceFile, program.getSourceFiles(), moduleSymbol => {
             cancellationToken.throwIfCancellationRequested();
@@ -425,7 +424,7 @@ namespace ts.codefix {
         if (!exported) return undefined;
         const { symbol, kind } = exported;
         const info = getDefaultExportInfoWorker(symbol, moduleSymbol, checker, compilerOptions);
-        return info && { symbol, symbolForMeaning: info.symbolForMeaning, name: info.name, kind };
+        return info && { symbol, kind, ...info };
     }
 
     function getDefaultLikeExportWorker(moduleSymbol: Symbol, checker: TypeChecker): { readonly symbol: Symbol, readonly kind: ImportKind.Default | ImportKind.Equals } | undefined {

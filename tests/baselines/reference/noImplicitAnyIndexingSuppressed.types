@@ -3,7 +3,7 @@ enum MyEmusEnum {
 >MyEmusEnum : MyEmusEnum
 
     emu
->emu : MyEmusEnum
+>emu : MyEmusEnum.emu
 }
 
 // Should be okay; should be a string.

@@ -6,7 +6,7 @@
 //// f ` qwerty ${ 123 } asdf ${   41234   }  zxcvb ${ g `/*1*/ /*2*/   /*3*/` }    `
 
 verify.signatureHelp({
-    marker: test.markerNames(),
+    marker: test.markers(),
     text: "g(templateStrings: any, x: any, y: any, z: any): string",
     argumentCount: 1,
     parameterCount: 4,

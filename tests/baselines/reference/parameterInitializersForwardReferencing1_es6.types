@@ -34,24 +34,24 @@ function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at 
 }
 
 function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
->f3 : (bar?: string, foo?: number) => string
->bar : string
->foo : string
+>f3 : (bar?: number, foo?: number) => number
+>bar : number
+>foo : number
 >foo : number
 >2 : 2
 
     return bar;
->bar : string
+>bar : number
 }
 
 function f4 (foo, bar = foo) {
->f4 : (foo: any, bar?: string) => string
+>f4 : (foo: any, bar?: any) => any
 >foo : any
->bar : string
->foo : string
+>bar : any
+>foo : any
 
     return bar
->bar : string
+>bar : any
 }
 
 function f5 (a = a) {
@@ -81,4 +81,20 @@ function f7({[foo]: bar}: any[]) {
 >foo : number
 >2 : 2
 }
+
+class Foo {
+>Foo : Foo
+
+    constructor(public x = 12, public y = x) {}
+>x : number
+>12 : 12
+>y : number
+>x : number
+}
+
+function f8(foo1: string, bar = foo1) { }
+>f8 : (foo1: string, bar?: string) => void
+>foo1 : string
+>bar : string
+>foo1 : string
 

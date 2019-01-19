@@ -9,9 +9,4 @@
 //// out.a./*2*/a
 //// out.a.a./*3*/a
 
-goTo.marker('1');
-verify.completionListCount(1);
-goTo.marker('2');
-verify.completionListCount(1);
-goTo.marker('3');
-verify.completionListCount(1);
+verify.completions({ marker: test.markers(), exact: "a" });

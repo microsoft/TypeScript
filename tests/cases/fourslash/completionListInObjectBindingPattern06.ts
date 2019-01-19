@@ -8,5 +8,4 @@
 ////var foo: I;
 ////var { property1, property2, /**/ } = foo;
 
-goTo.marker();
-verify.completionListIsEmpty();
+verify.completions({ marker: "", exact: undefined });

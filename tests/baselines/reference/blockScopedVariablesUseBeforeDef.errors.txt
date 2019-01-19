@@ -120,3 +120,4 @@ tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts(100,12): error TS2448: 
         }
         let x
     }
+    

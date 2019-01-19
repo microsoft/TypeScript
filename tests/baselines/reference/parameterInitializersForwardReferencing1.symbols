@@ -75,3 +75,18 @@ function f7({[foo]: bar}: any[]) {
 >foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 29, 7))
 }
 
+class Foo {
+>Foo : Symbol(Foo, Decl(parameterInitializersForwardReferencing1.ts, 30, 1))
+
+    constructor(public x = 12, public y = x) {}
+>x : Symbol(Foo.x, Decl(parameterInitializersForwardReferencing1.ts, 33, 16))
+>y : Symbol(Foo.y, Decl(parameterInitializersForwardReferencing1.ts, 33, 30))
+>x : Symbol(x, Decl(parameterInitializersForwardReferencing1.ts, 33, 16))
+}
+
+function f8(foo1: string, bar = foo1) { }
+>f8 : Symbol(f8, Decl(parameterInitializersForwardReferencing1.ts, 34, 1))
+>foo1 : Symbol(foo1, Decl(parameterInitializersForwardReferencing1.ts, 36, 12))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 36, 25))
+>foo1 : Symbol(foo1, Decl(parameterInitializersForwardReferencing1.ts, 36, 12))
+

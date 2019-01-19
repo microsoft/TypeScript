@@ -21,12 +21,11 @@ test.setTypesRegistry({
 goTo.marker();
 
 verify.codeFixAll({
-    fixId: "fixCannotFindModule",
+    fixId: "installTypesPackage",
     fixAllDescription: "Install all missing types packages",
+    newFileContent: {}, // no changes
     commands: [
         { packageName: "@types/abs", file: "/a.ts", type: "install package" },
         { packageName: "@types/zap", file: "/a.ts", type: "install package" },
     ],
-    newFileContent: `import * as abs from "abs";
-import * as zap from "zap";` // unchanged
 });

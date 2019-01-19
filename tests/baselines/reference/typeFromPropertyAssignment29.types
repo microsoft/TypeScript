@@ -144,7 +144,7 @@ ExpandoArrow.m = function(n: number) {
 }
 
 function ExpandoNested(n: number) {
->ExpandoNested : { (n: number): { (m: number): number; total: number; }; also: number; }
+>ExpandoNested : typeof ExpandoNested
 >n : number
 
     const nested = function (m: number) {
@@ -173,7 +173,7 @@ function ExpandoNested(n: number) {
 ExpandoNested.also = -1;
 >ExpandoNested.also = -1 : -1
 >ExpandoNested.also : number
->ExpandoNested : { (n: number): { (m: number): number; total: number; }; also: number; }
+>ExpandoNested : typeof ExpandoNested
 >also : number
 >-1 : -1
 >1 : 1

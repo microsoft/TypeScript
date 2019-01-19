@@ -1,24 +1,10 @@
-tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,19): error TS2345: Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'ReadonlyArray<[string, boolean]>'.
-  Types of property 'concat' are incompatible.
-    Type '{ (...items: ConcatArray<[string, number] | [string, true]>[]): ([string, number] | [string, true])[]; (...items: ([string, number] | [string, true] | ConcatArray<[string, number] | [string, true]>)[]): ([string, number] | [string, true])[]; }' is not assignable to type '{ (...items: ConcatArray<[string, boolean]>[]): [string, boolean][]; (...items: ([string, boolean] | ConcatArray<[string, boolean]>)[]): [string, boolean][]; }'.
-      Types of parameters 'items' and 'items' are incompatible.
-        Type 'ConcatArray<[string, boolean]>' is not assignable to type 'ConcatArray<[string, number] | [string, true]>'.
-          Type '[string, boolean]' is not assignable to type '[string, number] | [string, true]'.
-            Type '[string, boolean]' is not assignable to type '[string, number]'.
-              Type 'boolean' is not assignable to type 'number'.
+tests/cases/conformance/es6/for-ofStatements/for-of39.ts(1,37): error TS2322: Type 'number' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of39.ts (1 errors) ====
     var map = new Map([["", true], ["", 0]]);
-                      ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '([string, number] | [string, true])[]' is not assignable to parameter of type 'ReadonlyArray<[string, boolean]>'.
-!!! error TS2345:   Types of property 'concat' are incompatible.
-!!! error TS2345:     Type '{ (...items: ConcatArray<[string, number] | [string, true]>[]): ([string, number] | [string, true])[]; (...items: ([string, number] | [string, true] | ConcatArray<[string, number] | [string, true]>)[]): ([string, number] | [string, true])[]; }' is not assignable to type '{ (...items: ConcatArray<[string, boolean]>[]): [string, boolean][]; (...items: ([string, boolean] | ConcatArray<[string, boolean]>)[]): [string, boolean][]; }'.
-!!! error TS2345:       Types of parameters 'items' and 'items' are incompatible.
-!!! error TS2345:         Type 'ConcatArray<[string, boolean]>' is not assignable to type 'ConcatArray<[string, number] | [string, true]>'.
-!!! error TS2345:           Type '[string, boolean]' is not assignable to type '[string, number] | [string, true]'.
-!!! error TS2345:             Type '[string, boolean]' is not assignable to type '[string, number]'.
-!!! error TS2345:               Type 'boolean' is not assignable to type 'number'.
+                                        ~
+!!! error TS2322: Type 'number' is not assignable to type 'boolean'.
     for (var [k, v] of map) {
         k;
         v;

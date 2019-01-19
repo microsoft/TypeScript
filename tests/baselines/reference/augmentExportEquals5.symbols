@@ -16,12 +16,12 @@ declare module "express" {
 >"express" : Symbol("express", Decl(express.d.ts, 4, 1))
 
     function e(): e.Express;
->e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+>e : Symbol("tests/cases/compiler/express.d.ts", Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
 >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28))
 >Express : Symbol(Express, Decl(express.d.ts, 52, 9))
 
     namespace e {
->e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+>e : Symbol("tests/cases/compiler/express.d.ts", Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
 
         interface IRoute {
 >IRoute : Symbol(IRoute, Decl(express.d.ts, 8, 17))

@@ -6,5 +6,4 @@
 ////@
 ////testModule./**/
 
-goTo.marker();
-verify.completionListContains('foo', 'var testModule.foo: number');
+verify.completions({ marker: "", exact: { name: "foo", text: "var testModule.foo: number" } });

@@ -11,6 +11,6 @@ interface B {
 var a: A;
 var b: B;
 
-// Both ok
+// Both errors
 a = b;
 b = a;

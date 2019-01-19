@@ -41,17 +41,17 @@ Zet.prototype.add = function(v, o) {
 >u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
 }
 var z = new Zet(1)
->z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3))
+>z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3), Decl(templateTagWithNestedTypeLiteral.js, 18, 18))
 >Zet : Symbol(Zet, Decl(templateTagWithNestedTypeLiteral.js, 0, 0))
 
 z.t = 2
 >z.t : Symbol(Zet.t, Decl(templateTagWithNestedTypeLiteral.js, 6, 10))
->z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3))
+>z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3), Decl(templateTagWithNestedTypeLiteral.js, 18, 18))
 >t : Symbol(Zet.t, Decl(templateTagWithNestedTypeLiteral.js, 6, 10))
 
 z.u = false
 >z.u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
->z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3))
+>z : Symbol(z, Decl(templateTagWithNestedTypeLiteral.js, 18, 3), Decl(templateTagWithNestedTypeLiteral.js, 18, 18))
 >u : Symbol(Zet.u, Decl(templateTagWithNestedTypeLiteral.js, 4, 17), Decl(templateTagWithNestedTypeLiteral.js, 14, 36))
 
 // lookup in typedef should not crash the compiler, even when the type is unknown

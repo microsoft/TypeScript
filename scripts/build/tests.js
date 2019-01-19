@@ -8,6 +8,7 @@ const mkdirP = require("./mkdirp");
 const cmdLineOptions = require("./options");
 const exec = require("./exec");
 const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
+const { CancellationToken } = require("prex");
 const mochaJs = require.resolve("mocha/bin/_mocha");
 
 exports.localBaseline = "tests/baselines/local/";
@@ -21,9 +22,9 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
  * @param {boolean} watchMode
- * @param {InstanceType<typeof import("./cancellation").CancelToken>} [cancelToken]
+ * @param {import("prex").CancellationToken} [cancelToken]
  */
-async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken) {
+async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
     let testTimeout = cmdLineOptions.timeout;
     let tests = cmdLineOptions.tests;
     const lintFlag = cmdLineOptions.lint;
@@ -37,6 +38,7 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     const keepFailed = cmdLineOptions.keepFailed;
     if (!cmdLineOptions.dirty) {
         await cleanTestDirs();
+        cancelToken.throwIfCancellationRequested();
     }
 
     if (fs.existsSync(testConfigFile)) {

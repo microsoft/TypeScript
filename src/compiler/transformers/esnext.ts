@@ -28,6 +28,13 @@ namespace ts {
         let currentSourceFile: SourceFile;
         let taggedTemplateStringDeclarations: VariableDeclaration[];
 
+        /** Keeps track of property names accessed on super (`super.x`) within async functions. */
+        let capturedSuperProperties: UnderscoreEscapedMap<true>;
+        /** Whether the async function contains an element access on super (`super[x]`). */
+        let hasSuperElementAccess: boolean;
+        /** A set of node IDs for generated super accessors. */
+        const substitutedSuperAccessors: boolean[] = [];
+
         return chainBundle(transformSourceFile);
 
         function recordTaggedTemplateString(temp: Identifier) {
@@ -68,7 +75,6 @@ namespace ts {
             if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
                 return node;
             }
-
             switch (node.kind) {
                 case SyntaxKind.AwaitExpression:
                     return visitAwaitExpression(node as AwaitExpression);
@@ -114,6 +120,16 @@ namespace ts {
                     return visitCatchClause(node as CatchClause);
                 case SyntaxKind.TaggedTemplateExpression:
                     return visitTaggedTemplateExpression(node as TaggedTemplateExpression);
+                case SyntaxKind.PropertyAccessExpression:
+                    if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
+                        capturedSuperProperties.set(node.name.escapedText, true);
+                    }
+                    return visitEachChild(node, visitor, context);
+                case SyntaxKind.ElementAccessExpression:
+                    if (capturedSuperProperties && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
+                        hasSuperElementAccess = true;
+                    }
+                    return visitEachChild(node, visitor, context);
                 default:
                     return visitEachChild(node, visitor, context);
             }
@@ -223,7 +239,7 @@ namespace ts {
         }
 
         function visitObjectLiteralExpression(node: ObjectLiteralExpression): Expression {
-            if (node.transformFlags & TransformFlags.ContainsObjectSpread) {
+            if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 // spread elements emit like so:
                 // non-spread elements are chunked together into object literals, and then all are passed to __assign:
                 //     { a, ...o, b } => __assign({a}, o, {b});
@@ -263,7 +279,7 @@ namespace ts {
          * @param node A BinaryExpression node.
          */
         function visitBinaryExpression(node: BinaryExpression, noDestructuringValue: boolean): Expression {
-            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRest) {
+            if (isDestructuringAssignment(node) && node.left.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 return flattenDestructuringAssignment(
                     node,
                     visitor,
@@ -289,7 +305,7 @@ namespace ts {
          */
         function visitVariableDeclaration(node: VariableDeclaration): VisitResult<VariableDeclaration> {
             // If we are here it is because the name contains a binding pattern with a rest somewhere in it.
-            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRest) {
+            if (isBindingPattern(node.name) && node.name.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 return flattenDestructuringBinding(
                     node,
                     visitor,
@@ -320,7 +336,7 @@ namespace ts {
          * @param node A ForOfStatement.
          */
         function visitForOfStatement(node: ForOfStatement, outermostLabeledStatement: LabeledStatement | undefined): VisitResult<Statement> {
-            if (node.initializer.transformFlags & TransformFlags.ContainsObjectRest) {
+            if (node.initializer.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 node = transformForOfStatementWithObjectRest(node);
             }
             if (node.awaitModifier) {
@@ -512,7 +528,7 @@ namespace ts {
         }
 
         function visitParameter(node: ParameterDeclaration): ParameterDeclaration {
-            if (node.transformFlags & TransformFlags.ContainsObjectRest) {
+            if (node.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 // Binding patterns are converted into a generated name and are
                 // evaluated inside the function body.
                 return updateParameter(
@@ -688,41 +704,57 @@ namespace ts {
             const statementOffset = addPrologue(statements, node.body!.statements, /*ensureUseStrict*/ false, visitor);
             appendObjectRestAssignmentsIfNeeded(statements, node);
 
-            statements.push(
-                createReturn(
-                    createAsyncGeneratorHelper(
-                        context,
-                        createFunctionExpression(
-                            /*modifiers*/ undefined,
-                            createToken(SyntaxKind.AsteriskToken),
-                            node.name && getGeneratedNameForNode(node.name),
-                            /*typeParameters*/ undefined,
-                            /*parameters*/ [],
-                            /*type*/ undefined,
-                            updateBlock(
-                                node.body!,
-                                visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
-                            )
+            const savedCapturedSuperProperties = capturedSuperProperties;
+            const savedHasSuperElementAccess = hasSuperElementAccess;
+            capturedSuperProperties = createUnderscoreEscapedMap<true>();
+            hasSuperElementAccess = false;
+
+            const returnStatement = createReturn(
+                createAsyncGeneratorHelper(
+                    context,
+                    createFunctionExpression(
+                        /*modifiers*/ undefined,
+                        createToken(SyntaxKind.AsteriskToken),
+                        node.name && getGeneratedNameForNode(node.name),
+                        /*typeParameters*/ undefined,
+                        /*parameters*/ [],
+                        /*type*/ undefined,
+                        updateBlock(
+                            node.body!,
+                            visitLexicalEnvironment(node.body!.statements, visitor, context, statementOffset)
                         )
                     )
                 )
             );
 
+            // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
+            // This step isn't needed if we eventually transform this to ES5.
+            const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuperBinding | NodeCheckFlags.AsyncMethodWithSuper);
+
+            if (emitSuperHelpers) {
+                enableSubstitutionForAsyncMethodsWithSuper();
+                const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
+                substitutedSuperAccessors[getNodeId(variableStatement)] = true;
+                addStatementsAfterPrologue(statements, [variableStatement]);
+            }
+
+            statements.push(returnStatement);
+
             addStatementsAfterPrologue(statements, endLexicalEnvironment());
             const block = updateBlock(node.body!, statements);
 
-            // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
-            // This step isn't needed if we eventually transform this to ES5.
-            if (languageVersion >= ScriptTarget.ES2015) {
+            if (emitSuperHelpers && hasSuperElementAccess) {
                 if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                    enableSubstitutionForAsyncMethodsWithSuper();
                     addEmitHelper(block, advancedAsyncSuperHelper);
                 }
                 else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
-                    enableSubstitutionForAsyncMethodsWithSuper();
                     addEmitHelper(block, asyncSuperHelper);
                 }
             }
+
+            capturedSuperProperties = savedCapturedSuperProperties;
+            hasSuperElementAccess = savedHasSuperElementAccess;
+
             return block;
         }
 
@@ -749,7 +781,7 @@ namespace ts {
 
         function appendObjectRestAssignmentsIfNeeded(statements: Statement[] | undefined, node: FunctionLikeDeclaration): Statement[] | undefined {
             for (const parameter of node.parameters) {
-                if (parameter.transformFlags & TransformFlags.ContainsObjectRest) {
+                if (parameter.transformFlags & TransformFlags.ContainsObjectRestOrSpread) {
                     const temp = getGeneratedNameForNode(parameter);
                     const declarations = flattenDestructuringBinding(
                         parameter,
@@ -791,6 +823,8 @@ namespace ts {
                 context.enableEmitNotification(SyntaxKind.GetAccessor);
                 context.enableEmitNotification(SyntaxKind.SetAccessor);
                 context.enableEmitNotification(SyntaxKind.Constructor);
+                // We need to be notified when entering the generated accessor arrow functions.
+                context.enableEmitNotification(SyntaxKind.VariableStatement);
             }
         }
 
@@ -813,6 +847,14 @@ namespace ts {
                     enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
                     return;
                 }
+            }
+            // Disable substitution in the generated super accessor itself.
+            else if (enabledSubstitutions && substitutedSuperAccessors[getNodeId(node)]) {
+                const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
+                enclosingSuperContainerFlags = 0 as NodeCheckFlags;
+                previousOnEmitNode(hint, node, emitCallback);
+                enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
+                return;
             }
 
             previousOnEmitNode(hint, node, emitCallback);
@@ -846,8 +888,10 @@ namespace ts {
 
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                return createSuperAccessInAsyncMethod(
-                    createLiteral(idText(node.name)),
+                return setTextRange(
+                    createPropertyAccess(
+                        createFileLevelUniqueName("_super"),
+                        node.name),
                     node
                 );
             }
@@ -856,7 +900,7 @@ namespace ts {
 
         function substituteElementAccessExpression(node: ElementAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                return createSuperAccessInAsyncMethod(
+                return createSuperElementAccessInAsyncMethod(
                     node.argumentExpression,
                     node
                 );
@@ -891,12 +935,12 @@ namespace ts {
                 || kind === SyntaxKind.SetAccessor;
         }
 
-        function createSuperAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
+        function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
             if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
                 return setTextRange(
                     createPropertyAccess(
                         createCall(
-                            createIdentifier("_super"),
+                            createIdentifier("_superIndex"),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
                         ),
@@ -908,7 +952,7 @@ namespace ts {
             else {
                 return setTextRange(
                     createCall(
-                        createIdentifier("_super"),
+                        createIdentifier("_superIndex"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),

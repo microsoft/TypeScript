@@ -294,7 +294,7 @@ enum E {
 >E : E
 
     A
->A : E
+>A : E.A
 }
 E = undefined; // Error
 >E = undefined : undefined

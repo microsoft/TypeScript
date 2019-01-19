@@ -6,10 +6,10 @@ import c = require('./c.json');
 >c : (string | null)[]
 
 import d = require('./d.json');
->d : "dConfig"
+>d : string
 
 import e = require('./e.json');
->e : -10
+>e : number
 
 import f = require('./f.json');
 >f : number[]
@@ -64,14 +64,14 @@ const stringOrNumberOrNull: string | number | null = c[0];
 >0 : 0
 
 stringLiteral = d;
->stringLiteral = d : "dConfig"
+>stringLiteral = d : string
 >stringLiteral : string
->d : "dConfig"
+>d : string
 
 numberLiteral = e;
->numberLiteral = e : -10
+>numberLiteral = e : number
 >numberLiteral : number
->e : -10
+>e : number
 
 numberLiteral = f[0];
 >numberLiteral = f[0] : number

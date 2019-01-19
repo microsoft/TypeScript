@@ -31,6 +31,12 @@ function f7({[foo]: bar}: any[]) {
     let foo: number = 2;
 }
 
+class Foo {
+    constructor(public x = 12, public y = x) {}
+}
+
+function f8(foo1: string, bar = foo1) { }
+
 
 //// [parameterInitializersForwardReferencing1_es6.js]
 let foo = "";
@@ -57,3 +63,10 @@ function f6(async = async) {
 function f7({ [foo]: bar }) {
     let foo = 2;
 }
+class Foo {
+    constructor(x = 12, y = x) {
+        this.x = x;
+        this.y = y;
+    }
+}
+function f8(foo1, bar = foo1) { }

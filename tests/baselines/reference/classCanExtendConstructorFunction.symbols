@@ -107,15 +107,15 @@ class Sql extends Wagon {
     }
 }
 var db = new Sql();
->db : Symbol(db, Decl(first.js, 42, 3))
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 >Sql : Symbol(Sql, Decl(first.js, 18, 1))
 
 db.numberOxen = db.foonly
 >db.numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
->db : Symbol(db, Decl(first.js, 42, 3))
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 >numberOxen : Symbol(Wagon.numberOxen, Decl(first.js, 4, 28))
 >db.foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
->db : Symbol(db, Decl(first.js, 42, 3))
+>db : Symbol(db, Decl(first.js, 42, 3), Decl(first.js, 42, 19))
 >foonly : Symbol(Sql.foonly, Decl(first.js, 22, 16))
 
 // error, can't extend a TS constructor function
@@ -218,11 +218,20 @@ soup.flavour
 >soup : Symbol(soup, Decl(generic.js, 14, 3))
 >flavour : Symbol(Soup.flavour, Decl(generic.js, 4, 24))
 
-var chowder = new Chowder();
+var chowder = new Chowder({ claim: "ignorant" });
 >chowder : Symbol(chowder, Decl(generic.js, 16, 3))
 >Chowder : Symbol(Chowder, Decl(generic.js, 6, 1))
+>claim : Symbol(claim, Decl(generic.js, 16, 27))
 
 chowder.flavour.claim
 >chowder : Symbol(chowder, Decl(generic.js, 16, 3))
+
+var errorNoArgs = new Chowder();
+>errorNoArgs : Symbol(errorNoArgs, Decl(generic.js, 18, 3))
+>Chowder : Symbol(Chowder, Decl(generic.js, 6, 1))
+
+var errorArgType = new Chowder(0);
+>errorArgType : Symbol(errorArgType, Decl(generic.js, 19, 3))
+>Chowder : Symbol(Chowder, Decl(generic.js, 6, 1))
 
 

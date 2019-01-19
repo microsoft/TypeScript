@@ -279,7 +279,7 @@ function f13<T extends String>(x: any) { }
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 function f14(x: 'a');
 >f14 : { (x: "a"): any; (x: E): any; }

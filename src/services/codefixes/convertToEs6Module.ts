@@ -208,7 +208,7 @@ namespace ts.codefix {
                     return replacement[1];
                 }
                 else {
-                    changes.replaceRangeWithText(sourceFile, createTextRange(left.getStart(sourceFile), right.pos), "export default");
+                    changes.replaceRangeWithText(sourceFile, createRange(left.getStart(sourceFile), right.pos), "export default");
                     return true;
                 }
             }

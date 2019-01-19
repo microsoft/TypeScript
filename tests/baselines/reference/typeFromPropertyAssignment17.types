@@ -1,8 +1,8 @@
 === tests/cases/conformance/salsa/use.js ===
 /// <reference path='./types.d.ts'/>
 var mini = require('./minimatch')
->mini : { (): void; M: typeof M; filter: () => void; }
->require('./minimatch') : { (): void; M: typeof M; filter: () => void; }
+>mini : typeof minimatch
+>require('./minimatch') : typeof minimatch
 >require : any
 >'./minimatch' : "./minimatch"
 
@@ -10,7 +10,7 @@ mini.M.defaults()
 >mini.M.defaults() : any
 >mini.M.defaults : (def: any) => any
 >mini.M : typeof M
->mini : { (): void; M: typeof M; filter: () => void; }
+>mini : typeof minimatch
 >M : typeof M
 >defaults : (def: any) => any
 
@@ -18,7 +18,7 @@ var m = new mini.M()
 >m : M
 >new mini.M() : M
 >mini.M : typeof M
->mini : { (): void; M: typeof M; filter: () => void; }
+>mini : typeof minimatch
 >M : typeof M
 
 m.m()
@@ -30,7 +30,7 @@ m.m()
 mini.filter()
 >mini.filter() : void
 >mini.filter : () => void
->mini : { (): void; M: typeof M; filter: () => void; }
+>mini : typeof minimatch
 >filter : () => void
 
 === tests/cases/conformance/salsa/types.d.ts ===
@@ -43,23 +43,23 @@ declare var module: any;
 === tests/cases/conformance/salsa/minimatch.js ===
 /// <reference path='./types.d.ts'/>
 module.exports = minimatch
->module.exports = minimatch : { (): void; M: typeof M; filter: () => void; }
->module.exports : { (): void; M: typeof M; filter: () => void; }
->module : { "tests/cases/conformance/salsa/minimatch": { (): void; M: typeof M; filter: () => void; }; }
->exports : { (): void; M: typeof M; filter: () => void; }
->minimatch : { (): void; M: typeof M; filter: () => void; }
+>module.exports = minimatch : typeof minimatch
+>module.exports : typeof minimatch
+>module : { "tests/cases/conformance/salsa/minimatch": typeof minimatch; }
+>exports : typeof minimatch
+>minimatch : typeof minimatch
 
 minimatch.M = M
 >minimatch.M = M : typeof M
 >minimatch.M : typeof M
->minimatch : { (): void; M: typeof M; filter: () => void; }
+>minimatch : typeof minimatch
 >M : typeof M
 >M : typeof M
 
 minimatch.filter = filter
 >minimatch.filter = filter : () => void
 >minimatch.filter : () => void
->minimatch : { (): void; M: typeof M; filter: () => void; }
+>minimatch : typeof minimatch
 >filter : () => void
 >filter : () => void
 
@@ -68,10 +68,10 @@ function filter() {
 
     return minimatch()
 >minimatch() : void
->minimatch : { (): void; M: typeof M; filter: () => void; }
+>minimatch : typeof minimatch
 }
 function minimatch() {
->minimatch : { (): void; M: typeof M; filter: () => void; }
+>minimatch : typeof minimatch
 }
 M.defaults = function (def) {
 >M.defaults = function (def) {    return def} : (def: any) => any
