@@ -9104,7 +9104,7 @@ namespace ts {
         function createTupleType(elementTypes: ReadonlyArray<Type>, minLength = elementTypes.length, hasRestElement = false, readonly = false, associatedNames?: __String[]) {
             const arity = elementTypes.length;
             if (arity === 1 && hasRestElement) {
-                return createArrayType(elementTypes[0]);
+                return createArrayType(elementTypes[0], readonly);
             }
             const tupleType = getTupleTypeOfArity(arity, minLength, arity > 0 && hasRestElement, readonly, associatedNames);
             return elementTypes.length ? createTypeReference(tupleType, elementTypes) : tupleType;
@@ -21158,9 +21158,34 @@ namespace ts {
             return checkAssertionWorker(node, node.type, node.expression);
         }
 
+        function isValidConstAssertionArgument(node: Node): boolean {
+            switch (node.kind) {
+                case SyntaxKind.StringLiteral:
+                case SyntaxKind.NoSubstitutionTemplateLiteral:
+                case SyntaxKind.NumericLiteral:
+                case SyntaxKind.BigIntLiteral:
+                case SyntaxKind.TrueKeyword:
+                case SyntaxKind.FalseKeyword:
+                case SyntaxKind.ArrayLiteralExpression:
+                case SyntaxKind.ObjectLiteralExpression:
+                    return true;
+                case SyntaxKind.ParenthesizedExpression:
+                    return isValidConstAssertionArgument((<ParenthesizedExpression>node).expression);
+                case SyntaxKind.PrefixUnaryExpression:
+                    const op = (<PrefixUnaryExpression>node).operator;
+                    const arg = (<PrefixUnaryExpression>node).operand;
+                    return op === SyntaxKind.MinusToken && (arg.kind === SyntaxKind.NumericLiteral || arg.kind === SyntaxKind.BigIntLiteral) ||
+                        op === SyntaxKind.PlusToken && arg.kind === SyntaxKind.NumericLiteral;
+            }
+            return false;
+        }
+
         function checkAssertionWorker(errNode: Node, type: TypeNode, expression: UnaryExpression | Expression, checkMode?: CheckMode) {
             let exprType = checkExpression(expression, checkMode);
             if (isConstTypeReference(type)) {
+                if (!isValidConstAssertionArgument(expression)) {
+                    error(expression, Diagnostics.A_const_assertion_can_only_be_applied_to_a_string_number_boolean_array_or_object_literal);
+                }
                 return getRegularTypeOfLiteralType(exprType);
             }
             checkSourceElement(type);
