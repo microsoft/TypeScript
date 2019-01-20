@@ -17696,7 +17696,7 @@ namespace ts {
         function getApparentTypeOfContextualType(node: Expression): Type | undefined {
             const contextualType = instantiateContextualType(getContextualType(node), node);
             if (contextualType) {
-                const apparentType = mapType(contextualType, getApparentType);
+                const apparentType = mapType(contextualType, getApparentType, /*noReductions*/ true);
                 if (apparentType.flags & TypeFlags.Union) {
                     if (isObjectLiteralExpression(node)) {
                         return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
@@ -17709,7 +17709,7 @@ namespace ts {
             }
         }
 
-        // If the given contextual type constains instantiable types and if a mapper representing
+        // If the given contextual type contains instantiable types and if a mapper representing
         // return type inferences is available, instantiate those types using that mapper.
         function instantiateContextualType(contextualType: Type | undefined, node: Expression): Type | undefined {
             if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
@@ -17721,7 +17721,7 @@ namespace ts {
             return contextualType;
         }
 
-        // This function is similar to instantiateType, except (a) that it only instantiates types that
+        // This function is similar to instantiateType, except that (a) it only instantiates types that
         // are classified as instantiable (i.e. it doesn't instantiate object types), and (b) it performs
         // no reductions on instantiated union types.
         function instantiateInstantiableTypes(type: Type, mapper: TypeMapper): Type {
