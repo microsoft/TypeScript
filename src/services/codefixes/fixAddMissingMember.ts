@@ -113,6 +113,11 @@ namespace ts.codefix {
     }
     type Info = EnumInfo | ClassOrInterfaceInfo;
 
+    function isInNodeModulesDeclarationFile(node: Node) {
+        const sourceFile = getSourceFileOfNode(node);
+        return sourceFile.isDeclarationFile && startsWith(sourceFile.resolvedPath, "node_modules/") || sourceFile.resolvedPath.indexOf("/node_modules/") !== -1;
+    }
+
     function getInfo(tokenSourceFile: SourceFile, tokenPos: number, checker: TypeChecker): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
@@ -131,7 +136,7 @@ namespace ts.codefix {
 
         // Prefer to change the class instead of the interface if they are merged
         const classOrInterface = find(symbol.declarations, isClassLike) || find(symbol.declarations, isInterfaceDeclaration);
-        if (classOrInterface) {
+        if (classOrInterface && !isInNodeModulesDeclarationFile(classOrInterface)) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
             const declSourceFile = classOrInterface.getSourceFile();
             const inJs = isSourceFileJS(declSourceFile);
@@ -139,7 +144,7 @@ namespace ts.codefix {
             return { kind: InfoKind.ClassOrInterface, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
         }
         const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
-        if (enumDeclaration) {
+        if (enumDeclaration && !isInNodeModulesDeclarationFile(enumDeclaration)) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
         return undefined;
