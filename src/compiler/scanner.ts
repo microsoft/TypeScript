@@ -1258,16 +1258,17 @@ namespace ts {
                             return text.substring(start, pos);
                         }
 
-                        const escapedValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                        const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+                        const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
                         if (isTaggedTemplate) {
                             // '\u{Not Code Point' or '\u{CodePoint'
-                            if (!isCodePoint(Number(escapedValue)) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
+                            if (!isCodePoint(escapedValue) || text.charCodeAt(pos) !== CharacterCodes.closeBrace) {
                                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                                 return text.substring(start, pos);
                             }
                         }
                         tokenFlags |= TokenFlags.ExtendedUnicodeEscape;
-                        return scanExtendedUnicodeEscape(scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false));
+                        return scanExtendedUnicodeEscape(escapedValue);
                     }
 
                     // '\uDDDD'
@@ -1316,8 +1317,7 @@ namespace ts {
             }
         }
 
-        function scanExtendedUnicodeEscape(escapedValueString: string): string {
-            const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
+        function scanExtendedUnicodeEscape(escapedValue: number): string {
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
