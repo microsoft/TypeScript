@@ -26,7 +26,7 @@ if (!(typeof strOrNum === "string")) {
 >!(typeof strOrNum === "string") : boolean
 >(typeof strOrNum === "string") : boolean
 >typeof strOrNum === "string" : boolean
->typeof strOrNum : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNum : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNum : string | number
 >"string" : "string"
 
@@ -47,11 +47,11 @@ if (!(typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number"))
 >(typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number") : boolean
 >typeof strOrNumOrBool === "string" || typeof strOrNumOrBool === "number" : boolean
 >typeof strOrNumOrBool === "string" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"string" : "string"
 >typeof strOrNumOrBool === "number" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : number | boolean
 >"number" : "number"
 
@@ -72,13 +72,13 @@ if (!(typeof strOrNumOrBool !== "string") || !(typeof strOrNumOrBool !== "number
 >!(typeof strOrNumOrBool !== "string") : boolean
 >(typeof strOrNumOrBool !== "string") : boolean
 >typeof strOrNumOrBool !== "string" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"string" : "string"
 >!(typeof strOrNumOrBool !== "number") : boolean
 >(typeof strOrNumOrBool !== "number") : boolean
 >typeof strOrNumOrBool !== "number" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : number | boolean
 >"number" : "number"
 
@@ -99,11 +99,11 @@ if (!(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number"))
 >(typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number") : boolean
 >typeof strOrNumOrBool !== "string" && typeof strOrNumOrBool !== "number" : boolean
 >typeof strOrNumOrBool !== "string" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"string" : "string"
 >typeof strOrNumOrBool !== "number" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : number | boolean
 >"number" : "number"
 
@@ -124,13 +124,13 @@ if (!(typeof strOrNumOrBool === "string") && !(typeof strOrNumOrBool === "number
 >!(typeof strOrNumOrBool === "string") : boolean
 >(typeof strOrNumOrBool === "string") : boolean
 >typeof strOrNumOrBool === "string" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"string" : "string"
 >!(typeof strOrNumOrBool === "number") : boolean
 >(typeof strOrNumOrBool === "number") : boolean
 >typeof strOrNumOrBool === "number" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : number | boolean
 >"number" : "number"
 
@@ -151,7 +151,7 @@ if (!(typeof strOrNumOrBool === "string") && numOrBool !== strOrNumOrBool) {
 >!(typeof strOrNumOrBool === "string") : boolean
 >(typeof strOrNumOrBool === "string") : boolean
 >typeof strOrNumOrBool === "string" : boolean
->typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof strOrNumOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"string" : "string"
 >numOrBool !== strOrNumOrBool : boolean

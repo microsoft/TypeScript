@@ -8,7 +8,7 @@ async function f() {
 >0 : 0
 
     typeof await 0;
->typeof await 0 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof await 0 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >await 0 : 0
 >0 : 0
 
@@ -21,7 +21,7 @@ async function f() {
 >await void <string> typeof <number> void await 0 : undefined
 >void <string> typeof <number> void await 0 : undefined
 ><string> typeof <number> void await 0 : string
->typeof <number> void await 0 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof <number> void await 0 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 ><number> void await 0 : number
 >void await 0 : undefined
 >await 0 : 0

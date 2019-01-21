@@ -22,6 +22,18 @@
 
 const [r0, r1] = test.ranges();
 verify.completions(
-    { marker: "0", exact: ["a", "b", "dir"], isNewIdentifierLocation: true },
-    { marker: "1", exact: "x", isNewIdentifierLocation: true },
+    {
+        marker: "0",
+        exact: [
+            { name: "a", kind: "script", kindModifiers: ".ts" },
+            { name: "b", kind: "script", kindModifiers: ".ts" },
+            { name: "dir", kind: "directory" },
+        ],
+        isNewIdentifierLocation: true,
+    },
+    {
+        marker: "1",
+        exact: { name: "x", kind: "script", kindModifiers: ".ts" },
+        isNewIdentifierLocation: true,
+    },
 );

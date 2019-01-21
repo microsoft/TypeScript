@@ -164,6 +164,23 @@ class C1 {
     c: any;
 }
 
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+
+function f30<T, U extends unknown>(t: T, u: U) {
+    let x: {} = t;
+    let y: {} = u;
+}
+
+// Repro from #26796
+
+type Test1 = [unknown] extends [{}] ? true : false;  // false
+type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
+type Test2 = IsDefinitelyDefined<unknown>;  // false
+
+function oops<T extends unknown>(arg: T): {} {
+    return arg;  // Error
+}
+
 
 //// [unknownType1.js]
 "use strict";
@@ -276,3 +293,11 @@ var C1 = /** @class */ (function () {
     }
     return C1;
 }());
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+function f30(t, u) {
+    var x = t;
+    var y = u;
+}
+function oops(arg) {
+    return arg; // Error
+}

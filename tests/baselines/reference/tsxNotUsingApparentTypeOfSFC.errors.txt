@@ -1,7 +1,5 @@
-tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(14,14): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & P'.
-  Type '{}' is not assignable to type 'P'.
-tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
-  Type '{}' is not assignable to type 'Readonly<P>'.
+tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(14,14): error TS2322: Type '{}' is not assignable to type 'P'.
+tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2322: Type '{}' is not assignable to type 'Readonly<P>'.
 
 
 ==== tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx (2 errors) ====
@@ -20,12 +18,10 @@ tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2322: Type
         }
         let x = <MySFC />;  // should error
                  ~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & P'.
-!!! error TS2322:   Type '{}' is not assignable to type 'P'.
+!!! error TS2322: Type '{}' is not assignable to type 'P'.
         let y = <MyComponent />;  // should error
                  ~~~~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComponent> & Readonly<{ children?: ReactNode; }> & Readonly<P>'.
-!!! error TS2322:   Type '{}' is not assignable to type 'Readonly<P>'.
+!!! error TS2322: Type '{}' is not assignable to type 'Readonly<P>'.
     
         let z = <MySFC {...wrappedProps} /> // should work
         let q = <MyComponent {...wrappedProps} /> // should work

@@ -1,5 +1,5 @@
 namespace ts {
-    describe("customTransforms", () => {
+    describe("unittests:: customTransforms", () => {
         function emitsCorrectly(name: string, sources: { file: string, text: string }[], customTransformers: CustomTransformers, options: CompilerOptions = {}) {
             it(name, () => {
                 const roots = sources.map(source => createSourceFile(source.file, source.text, ScriptTarget.ES2015));
@@ -18,7 +18,7 @@ namespace ts {
                     writeFile: (fileName, text) => outputs.set(fileName, text),
                 };
 
-                const program = createProgram(arrayFrom(fileMap.keys()), options, host);
+                const program = createProgram(arrayFrom(fileMap.keys()), { newLine: NewLineKind.LineFeed, ...options }, host);
                 program.emit(/*targetSourceFile*/ undefined, host.writeFile, /*cancellationToken*/ undefined, /*emitOnlyDtsFiles*/ false, customTransformers);
                 let content = "";
                 for (const [file, text] of arrayFrom(outputs.entries())) {
@@ -95,6 +95,39 @@ namespace ts {
             module: ModuleKind.ES2015,
             emitDecoratorMetadata: true,
             experimentalDecorators: true
-         });
+        });
+
+        emitsCorrectly("sourceMapExternalSourceFiles",
+            [
+                {
+                    file: "source.ts",
+                    // The text of length 'changed' is made to be on two lines so we know the line map change
+                    text: `\`multi
+                    line\`
+'change'`
+                },
+            ],
+            {
+                before: [
+                    context => node => visitNode(node, function visitor(node: Node): Node {
+                        if (isStringLiteral(node) && node.text === "change") {
+                            const text = "'changed'";
+                            const lineMap = computeLineStarts(text);
+                            setSourceMapRange(node, {
+                                pos: 0, end: text.length, source: {
+                                    text,
+                                    fileName: "another.html",
+                                    lineMap,
+                                    getLineAndCharacterOfPosition: pos => computeLineAndCharacterOfPosition(lineMap, pos)
+                                }
+                            });
+                            return node;
+                        }
+                        return visitEachChild(node, visitor, context);
+                    })
+                ]
+            },
+            { sourceMap: true }
+        );
     });
 }

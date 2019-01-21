@@ -6,4 +6,4 @@
 ////function foo(a,b) { }
 ////foo(1,2)./**/
 
-verify.completions({ marker: "", includes: { name: "toExponential", kind: "method" } });
+verify.completions({ marker: "", includes: { name: "toExponential", kind: "method", kindModifiers: "declare" } });

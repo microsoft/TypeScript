@@ -18,6 +18,14 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "foo", source: "n", sourceDisplay: "n", text: "const N.foo: number", kind: "const", hasAction: true },
+    includes: {
+        name: "foo",
+        source: "n",
+        sourceDisplay: "n",
+        text: "const N.foo: number",
+        kind: "const",
+        kindModifiers: "export,declare",
+        hasAction: true,
+    },
     preferences: { includeCompletionsForModuleExports: true },
 });

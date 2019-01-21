@@ -28,12 +28,10 @@ var assert: typeof _chai.assert = _chai.assert;
     };
 }
 
-var global: NodeJS.Global = Function("return this").call(undefined);
+var global: NodeJS.Global = Function("return this").call(undefined); // tslint:disable-line:function-constructor
 
 declare var window: {};
-declare var XMLHttpRequest: {
-    new(): XMLHttpRequest;
-};
+declare var XMLHttpRequest: new() => XMLHttpRequest;
 interface XMLHttpRequest {
     readonly readyState: number;
     readonly responseText: string;
@@ -1325,6 +1323,9 @@ namespace Harness {
                 const [, content] = value;
                 outputLines += content;
             }
+            if (pretty) {
+                outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), IO.newLine());
+            }
             return outputLines;
         }
 
@@ -1643,6 +1644,7 @@ namespace Harness {
                 else {
                     sourceMapCode = "";
                     result.maps.forEach(sourceMap => {
+                        if (sourceMapCode) sourceMapCode += "\r\n";
                         sourceMapCode += fileOutput(sourceMap, harnessSettings);
                     });
                 }
@@ -1668,6 +1670,9 @@ namespace Harness {
 
             let jsCode = "";
             result.js.forEach(file => {
+                if (jsCode.length && jsCode.charCodeAt(jsCode.length - 1) !== ts.CharacterCodes.lineFeed) {
+                    jsCode += "\r\n";
+                }
                 jsCode += fileOutput(file, harnessSettings);
             });
 

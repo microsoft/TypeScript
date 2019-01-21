@@ -1,0 +1,176 @@
+=== tests/cases/compiler/parseBigInt.ts ===
+// All bases should allow "n" suffix
+const bin = 0b101, binBig = 0b101n; // 5, 5n
+>bin : Symbol(bin, Decl(parseBigInt.ts, 1, 5))
+>binBig : Symbol(binBig, Decl(parseBigInt.ts, 1, 18))
+
+const oct = 0o567, octBig = 0o567n; // 375, 375n
+>oct : Symbol(oct, Decl(parseBigInt.ts, 2, 5))
+>octBig : Symbol(octBig, Decl(parseBigInt.ts, 2, 18))
+
+const hex = 0xC0B, hexBig = 0xC0Bn; // 3083, 3083n
+>hex : Symbol(hex, Decl(parseBigInt.ts, 3, 5))
+>hexBig : Symbol(hexBig, Decl(parseBigInt.ts, 3, 18))
+
+const dec = 123,   decBig = 123n;
+>dec : Symbol(dec, Decl(parseBigInt.ts, 4, 5))
+>decBig : Symbol(decBig, Decl(parseBigInt.ts, 4, 16))
+
+// Test literals whose values overflow a 53-bit integer
+// These should be represented exactly in the emitted JS
+const largeBin = 0b10101010101010101010101010101010101010101010101010101010101n; // 384307168202282325n
+>largeBin : Symbol(largeBin, Decl(parseBigInt.ts, 8, 5))
+
+const largeOct = 0o123456712345671234567n; // 1505852261029722487n
+>largeOct : Symbol(largeOct, Decl(parseBigInt.ts, 9, 5))
+
+const largeDec = 12345678091234567890n;
+>largeDec : Symbol(largeDec, Decl(parseBigInt.ts, 10, 5))
+
+const largeHex = 0x1234567890abcdefn; // 1311768467294899695n
+>largeHex : Symbol(largeHex, Decl(parseBigInt.ts, 11, 5))
+
+// Test literals with separators
+const separatedBin = 0b010_10_1n; // 21n
+>separatedBin : Symbol(separatedBin, Decl(parseBigInt.ts, 14, 5))
+
+const separatedOct = 0o1234_567n; // 342391n
+>separatedOct : Symbol(separatedOct, Decl(parseBigInt.ts, 15, 5))
+
+const separatedDec = 123_456_789n;
+>separatedDec : Symbol(separatedDec, Decl(parseBigInt.ts, 16, 5))
+
+const separatedHex = 0x0_abcdefn; // 11259375n
+>separatedHex : Symbol(separatedHex, Decl(parseBigInt.ts, 17, 5))
+
+// Test parsing literals of different bit sizes
+// to ensure that parsePseudoBigInt() allocates enough space
+const zero         = 0b0n;
+>zero : Symbol(zero, Decl(parseBigInt.ts, 21, 5))
+
+const oneBit       = 0b1n;
+>oneBit : Symbol(oneBit, Decl(parseBigInt.ts, 22, 5))
+
+const twoBit       = 0b11n; // 3n
+>twoBit : Symbol(twoBit, Decl(parseBigInt.ts, 23, 5))
+
+const threeBit     = 0b111n; // 7n
+>threeBit : Symbol(threeBit, Decl(parseBigInt.ts, 24, 5))
+
+const fourBit      = 0b1111n; // 15n
+>fourBit : Symbol(fourBit, Decl(parseBigInt.ts, 25, 5))
+
+const fiveBit      = 0b11111n; // 31n
+>fiveBit : Symbol(fiveBit, Decl(parseBigInt.ts, 26, 5))
+
+const sixBit       = 0b111111n; // 63n
+>sixBit : Symbol(sixBit, Decl(parseBigInt.ts, 27, 5))
+
+const sevenBit     = 0b1111111n; // 127n
+>sevenBit : Symbol(sevenBit, Decl(parseBigInt.ts, 28, 5))
+
+const eightBit     = 0b11111111n; // 255n
+>eightBit : Symbol(eightBit, Decl(parseBigInt.ts, 29, 5))
+
+const nineBit      = 0b111111111n; // 511n
+>nineBit : Symbol(nineBit, Decl(parseBigInt.ts, 30, 5))
+
+const tenBit       = 0b1111111111n; // 1023n
+>tenBit : Symbol(tenBit, Decl(parseBigInt.ts, 31, 5))
+
+const elevenBit    = 0b11111111111n; // 2047n
+>elevenBit : Symbol(elevenBit, Decl(parseBigInt.ts, 32, 5))
+
+const twelveBit    = 0b111111111111n; // 4095n
+>twelveBit : Symbol(twelveBit, Decl(parseBigInt.ts, 33, 5))
+
+const thirteenBit  = 0b1111111111111n; // 8191n
+>thirteenBit : Symbol(thirteenBit, Decl(parseBigInt.ts, 34, 5))
+
+const fourteenBit  = 0b11111111111111n; // 16383n
+>fourteenBit : Symbol(fourteenBit, Decl(parseBigInt.ts, 35, 5))
+
+const fifteenBit   = 0b111111111111111n; // 32767n
+>fifteenBit : Symbol(fifteenBit, Decl(parseBigInt.ts, 36, 5))
+
+const sixteenBit   = 0b1111111111111111n; // 65535n
+>sixteenBit : Symbol(sixteenBit, Decl(parseBigInt.ts, 37, 5))
+
+const seventeenBit = 0b11111111111111111n; // 131071n
+>seventeenBit : Symbol(seventeenBit, Decl(parseBigInt.ts, 38, 5))
+
+// Test negative literals
+const neg = -123n;
+>neg : Symbol(neg, Decl(parseBigInt.ts, 41, 5))
+
+const negHex: -16n = -0x10n;
+>negHex : Symbol(negHex, Decl(parseBigInt.ts, 42, 5))
+
+// Test normalization of bigints -- all of these should succeed
+const negZero: 0n = -0n;
+>negZero : Symbol(negZero, Decl(parseBigInt.ts, 45, 5))
+
+const baseChange: 255n = 0xFFn;
+>baseChange : Symbol(baseChange, Decl(parseBigInt.ts, 46, 5))
+
+const leadingZeros: 0xFFn = 0x000000FFn;
+>leadingZeros : Symbol(leadingZeros, Decl(parseBigInt.ts, 47, 5))
+
+// Plus not allowed on literals
+const unaryPlus = +123n;
+>unaryPlus : Symbol(unaryPlus, Decl(parseBigInt.ts, 50, 5))
+
+const unaryPlusHex = +0x123n;
+>unaryPlusHex : Symbol(unaryPlusHex, Decl(parseBigInt.ts, 51, 5))
+
+// Parsing errors
+// In separate blocks because they each declare an "n" variable
+{ const legacyOct = 0123n; }
+>legacyOct : Symbol(legacyOct, Decl(parseBigInt.ts, 55, 7))
+>n : Symbol(n, Decl(parseBigInt.ts, 55, 24))
+
+{ const scientific = 1e2n; }
+>scientific : Symbol(scientific, Decl(parseBigInt.ts, 56, 7))
+
+{ const decimal = 4.1n; }
+>decimal : Symbol(decimal, Decl(parseBigInt.ts, 57, 7))
+
+{ const leadingDecimal = .1n; }
+>leadingDecimal : Symbol(leadingDecimal, Decl(parseBigInt.ts, 58, 7))
+
+const emptyBinary = 0bn; // should error but infer 0n
+>emptyBinary : Symbol(emptyBinary, Decl(parseBigInt.ts, 59, 5))
+
+const emptyOct = 0on; // should error but infer 0n
+>emptyOct : Symbol(emptyOct, Decl(parseBigInt.ts, 60, 5))
+
+const emptyHex = 0xn; // should error but infer 0n
+>emptyHex : Symbol(emptyHex, Decl(parseBigInt.ts, 61, 5))
+
+const leadingSeparator = _123n;
+>leadingSeparator : Symbol(leadingSeparator, Decl(parseBigInt.ts, 62, 5))
+
+const trailingSeparator = 123_n;
+>trailingSeparator : Symbol(trailingSeparator, Decl(parseBigInt.ts, 63, 5))
+
+const doubleSeparator = 123_456__789n;
+>doubleSeparator : Symbol(doubleSeparator, Decl(parseBigInt.ts, 64, 5))
+
+// Using literals as types
+const oneTwoOrThree = (x: 1n | 2n | 3n): bigint => x ** 2n;
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+>x : Symbol(x, Decl(parseBigInt.ts, 67, 23))
+>x : Symbol(x, Decl(parseBigInt.ts, 67, 23))
+
+oneTwoOrThree(0n); oneTwoOrThree(1n); oneTwoOrThree(2n); oneTwoOrThree(3n);
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+
+oneTwoOrThree(0);  oneTwoOrThree(1);  oneTwoOrThree(2);  oneTwoOrThree(3);
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+>oneTwoOrThree : Symbol(oneTwoOrThree, Decl(parseBigInt.ts, 67, 5))
+

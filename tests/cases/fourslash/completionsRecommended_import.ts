@@ -24,6 +24,7 @@ const classEntry = (isConstructor: boolean): FourSlashInterface.ExpectedCompleti
     source: "/a",
     sourceDisplay: "./a",
     kind: "class",
+    kindModifiers: "export",
     text: isConstructor ? "constructor Cls(): Cls" : "class Cls",
     hasAction: true,
     isRecommended: true,

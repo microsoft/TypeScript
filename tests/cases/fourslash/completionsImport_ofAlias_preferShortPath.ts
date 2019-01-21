@@ -20,7 +20,7 @@ verify.completions({
     marker: "",
     exact: [
         "undefined",
-        { name: "foo", source: "/foo/lib/foo", sourceDisplay: "./foo", text: "const foo: 0", kind: "const", hasAction: true },
+        { name: "foo", source: "/foo/lib/foo", sourceDisplay: "./foo", text: "const foo: 0", kind: "const", kindModifiers: "export", hasAction: true },
         ...completion.statementKeywordsWithTypes,
     ],
     preferences: { includeCompletionsForModuleExports: true },

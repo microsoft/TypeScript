@@ -26,10 +26,10 @@ const values: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = 
 const typeMembers: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
     { name: "NumberLike", kind: "type" },
     { name: "People", kind: "type" },
-    { name: "O", kind: "module" },
+    { name: "O", kind: "module", kindModifiers: "export" },
 ];
 function warnings(entries: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> {
-    return entries.map(e => ({ ...e, kind: "warning" }));
+    return entries.map(e => ({ ...e, kind: "warning", kindModifiers: undefined }));
 }
 
 verify.completions(

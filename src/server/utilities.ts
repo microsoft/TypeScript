@@ -208,14 +208,23 @@ namespace ts.server {
 
     const indentStr = "\n    ";
 
-    /* @internal */
     export function indent(str: string): string {
         return indentStr + str.replace(/\n/g, indentStr);
     }
 
     /** Put stringified JSON on the next line, indented. */
-    /* @internal */
     export function stringifyIndented(json: {}): string {
         return indentStr + JSON.stringify(json);
+    }
+}
+
+/* @internal */
+namespace ts {
+    // Additional tsserver specific watch information
+    export const enum WatchType {
+        ClosedScriptInfo = "Closed Script info",
+        ConfigFileForInferredRoot = "Config file for the inferred project root",
+        NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them",
+        MissingSourceMapFile = "Missing source map file",
     }
 }

@@ -36,7 +36,7 @@ function main(): void {
                     console.error("Unexpected XML file structure. Expected to find result.LCX.$.TgtCul.");
                     process.exit(1);
                 }
-                const outputDirectoryName = getPreferedLocaleName(result.LCX.$.TgtCul);
+                const outputDirectoryName = getPreferedLocaleName(result.LCX.$.TgtCul).toLowerCase();
                 if (!outputDirectoryName) {
                     console.error(`Invalid output locale name for '${result.LCX.$.TgtCul}'.`);
                     process.exit(1);

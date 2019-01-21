@@ -18,8 +18,8 @@
 
 goTo.marker('str');
 edit.insert('.');
-verify.completions({ includes: { name: "substr", kind: "method" } });
+verify.completions({ includes: { name: "substr", kind: "method", kindModifiers: "declare" } });
 
 goTo.marker('num');
 edit.insert('.');
-verify.completions({ includes: { name: "toFixed", kind: "method" } });
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

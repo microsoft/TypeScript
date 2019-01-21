@@ -1,6 +1,0 @@
-error TS6046: Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'
-
-
-!!! error TS6046: Argument for '--module' option must be:  'none', 'commonjs', 'amd', 'system', 'umd', 'es6', 'es2015'
-==== file.ts (0 errors) ====
-    

@@ -23,6 +23,7 @@ verify.completions({
         sourceDisplay: "./a",
         text: "const foo: 0",
         kind: "const",
+        kindModifiers: "export",
         hasAction: true,
     },
     preferences: { includeCompletionsForModuleExports: true },

@@ -6,4 +6,4 @@
 ////var v;
 ////v./**/
 
-verify.completions({ marker: "", includes: { name: "valueOf", kind: "method" } });
+verify.completions({ marker: "", includes: { name: "valueOf", kind: "method", kindModifiers: "declare" } });

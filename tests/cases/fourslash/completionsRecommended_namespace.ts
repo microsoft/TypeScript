@@ -23,10 +23,22 @@
 ////alpha.f(new /*c1*/);
 
 verify.completions(
-    { marker: ["a0", "a1"], includes: { name: "Name", text: "namespace Name", kind: "module", isRecommended: true } },
+    {
+        marker: ["a0", "a1"],
+        includes: { name: "Name", text: "namespace Name", kind: "module", kindModifiers: "export", isRecommended: true },
+    },
     {
         marker: ["b0", "b1"],
-        includes: { name: "Name", source: "/a", sourceDisplay: "./a", text: "namespace Name", kind: "module", hasAction: true, isRecommended: true, },
+        includes: {
+            name: "Name",
+            source: "/a",
+            sourceDisplay: "./a",
+            text: "namespace Name",
+            kind: "module",
+            kindModifiers: "export",
+            hasAction: true,
+            isRecommended: true,
+        },
         preferences: { includeCompletionsForModuleExports: true },
     },
     { marker: ["c0", "c1"], includes: { name: "alpha", text: "import alpha", kind: "alias", isRecommended: true } },

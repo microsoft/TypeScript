@@ -5,7 +5,7 @@
 ////     public b: number;
 ////     constructor () {
 ////         this.a = 1; // convert
-////         this.a++; // convert
+////         this["a"]++; // convert
 ////         ++this.a; // convert
 ////         if (Math.random()) {
 ////             this.a = 2; // convert
@@ -29,7 +29,7 @@ edit.applyRefactor({
     public b: number;
     constructor () {
         this._a = 1; // convert
-        this._a++; // convert
+        this["_a"]++; // convert
         ++this._a; // convert
         if (Math.random()) {
             this._a = 2; // convert

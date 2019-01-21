@@ -17,7 +17,15 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "M", source: "m", sourceDisplay: "m", text: "class M", kind: "class", hasAction: true },
+    includes: {
+        name: "M",
+        source: "m",
+        sourceDisplay: "m",
+        text: "class M",
+        kind: "class",
+        kindModifiers: "export,declare",
+        hasAction: true,
+    },
     preferences: { includeCompletionsForModuleExports: true },
 });
 verify.applyCodeActionFromCompletion("", {

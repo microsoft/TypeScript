@@ -341,6 +341,7 @@ interface Array<T> {}`
         private readonly currentDirectory: string;
         private readonly dynamicPriorityWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
+        public require: ((initialPath: string, moduleName: string) => server.RequireResult) | undefined;
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
@@ -587,8 +588,8 @@ interface Array<T> {}`
             }
             this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             if (isFsFolder(fileOrDirectory)) {
-                this.invokeDirectoryWatcher(fileOrDirectory.fullPath, "");
-                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, "");
+                this.invokeDirectoryWatcher(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
+                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
             }
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
@@ -987,5 +988,17 @@ interface Array<T> {}`
         getEnvironmentVariable(name: string) {
             return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
+    }
+
+    export const tsbuildProjectsLocation = "/user/username/projects";
+    export function getTsBuildProjectFilePath(project: string, file: string) {
+        return `${tsbuildProjectsLocation}/${project}/${file}`;
+    }
+
+    export function getTsBuildProjectFile(project: string, file: string): File {
+        return {
+            path: getTsBuildProjectFilePath(project, file),
+            content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
+        };
     }
 }

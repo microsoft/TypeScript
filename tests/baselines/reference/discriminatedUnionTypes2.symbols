@@ -225,3 +225,51 @@ function f20<Data>(carrier: DataCarrier<Data>) {
     }
 }
 
+// Repro from #28935
+
+type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]: string };
+>Foo : Symbol(Foo, Decl(discriminatedUnionTypes2.ts, 71, 1))
+>tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 75, 23))
+>tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 39))
+>y : Symbol(y, Decl(discriminatedUnionTypes2.ts, 75, 51))
+>x : Symbol(x, Decl(discriminatedUnionTypes2.ts, 75, 69))
+
+function f30(foo: Foo) {
+>f30 : Symbol(f30, Decl(discriminatedUnionTypes2.ts, 75, 90))
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 77, 13))
+>Foo : Symbol(Foo, Decl(discriminatedUnionTypes2.ts, 71, 1))
+
+    if (foo.tag) {
+>foo.tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12), Decl(discriminatedUnionTypes2.ts, 75, 39))
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 77, 13))
+>tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12), Decl(discriminatedUnionTypes2.ts, 75, 39))
+
+        foo;
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 77, 13))
+    }
+    else {
+        foo;
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 77, 13))
+    }
+}
+
+function f31(foo: Foo) {
+>f31 : Symbol(f31, Decl(discriminatedUnionTypes2.ts, 84, 1))
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 86, 13))
+>Foo : Symbol(Foo, Decl(discriminatedUnionTypes2.ts, 71, 1))
+
+    if (foo.tag === true) {
+>foo.tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12), Decl(discriminatedUnionTypes2.ts, 75, 39))
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 86, 13))
+>tag : Symbol(tag, Decl(discriminatedUnionTypes2.ts, 75, 12), Decl(discriminatedUnionTypes2.ts, 75, 39))
+
+        foo;
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 86, 13))
+    }
+    else {
+        foo;
+>foo : Symbol(foo, Decl(discriminatedUnionTypes2.ts, 86, 13))
+    }
+}
+
