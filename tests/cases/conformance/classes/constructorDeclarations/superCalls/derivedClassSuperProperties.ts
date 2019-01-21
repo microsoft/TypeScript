@@ -1,4 +1,7 @@
+// @experimentaldecorators: true
 // @target: ES5
+
+declare const decorate: any;
 
 class Base {
     constructor(a?) { }
@@ -82,6 +85,40 @@ class DerivedWithArrowFunctionParameter extends Base {
     prop = true;
     constructor() {
         const lambda = (param = this) => {};
+        super();
+    }
+}
+
+class DerivedWithDecoratorOnClass extends Base {
+    prop = true;
+    constructor() {
+        @decorate(this)
+        class InnerClass { }
+
+        super();
+    }
+}
+
+class DerivedWithDecoratorOnClassMethod extends Base {
+    prop = true;
+    constructor() {
+        class InnerClass {
+            @decorate(this)
+            innerMethod() { }
+        }
+
+        super();
+    }
+}
+
+class DerivedWithDecoratorOnClassProperty extends Base {
+    prop = true;
+    constructor() {
+        class InnerClass {
+            @decorate(this)
+            innerProp = true;
+        }
+
         super();
     }
 }

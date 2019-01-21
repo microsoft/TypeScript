@@ -1,4 +1,6 @@
 //// [derivedClassSuperProperties.ts]
+declare const decorate: any;
+
 class Base {
     constructor(a?) { }
 
@@ -81,6 +83,40 @@ class DerivedWithArrowFunctionParameter extends Base {
     prop = true;
     constructor() {
         const lambda = (param = this) => {};
+        super();
+    }
+}
+
+class DerivedWithDecoratorOnClass extends Base {
+    prop = true;
+    constructor() {
+        @decorate(this)
+        class InnerClass { }
+
+        super();
+    }
+}
+
+class DerivedWithDecoratorOnClassMethod extends Base {
+    prop = true;
+    constructor() {
+        class InnerClass {
+            @decorate(this)
+            innerMethod() { }
+        }
+
+        super();
+    }
+}
+
+class DerivedWithDecoratorOnClassProperty extends Base {
+    prop = true;
+    constructor() {
+        class InnerClass {
+            @decorate(this)
+            innerProp = true;
+        }
+
         super();
     }
 }
@@ -297,6 +333,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var Base = /** @class */ (function () {
     function Base(a) {
     }
@@ -410,6 +452,62 @@ var DerivedWithArrowFunctionParameter = /** @class */ (function (_super) {
         return _this;
     }
     return DerivedWithArrowFunctionParameter;
+}(Base));
+var DerivedWithDecoratorOnClass = /** @class */ (function (_super) {
+    __extends(DerivedWithDecoratorOnClass, _super);
+    function DerivedWithDecoratorOnClass() {
+        var _this = this;
+        _this.prop = true;
+        var InnerClass = /** @class */ (function () {
+            function InnerClass() {
+            }
+            InnerClass = __decorate([
+                decorate(this)
+            ], InnerClass);
+            return InnerClass;
+        }());
+        _this = _super.call(this) || this;
+        return _this;
+    }
+    return DerivedWithDecoratorOnClass;
+}(Base));
+var DerivedWithDecoratorOnClassMethod = /** @class */ (function (_super) {
+    __extends(DerivedWithDecoratorOnClassMethod, _super);
+    function DerivedWithDecoratorOnClassMethod() {
+        var _this = this;
+        _this.prop = true;
+        var InnerClass = /** @class */ (function () {
+            function InnerClass() {
+            }
+            InnerClass.prototype.innerMethod = function () { };
+            __decorate([
+                decorate(this)
+            ], InnerClass.prototype, "innerMethod", null);
+            return InnerClass;
+        }());
+        _this = _super.call(this) || this;
+        return _this;
+    }
+    return DerivedWithDecoratorOnClassMethod;
+}(Base));
+var DerivedWithDecoratorOnClassProperty = /** @class */ (function (_super) {
+    __extends(DerivedWithDecoratorOnClassProperty, _super);
+    function DerivedWithDecoratorOnClassProperty() {
+        var _this = this;
+        _this.prop = true;
+        var InnerClass = /** @class */ (function () {
+            function InnerClass() {
+                this.innerProp = true;
+            }
+            __decorate([
+                decorate(this)
+            ], InnerClass.prototype, "innerProp", void 0);
+            return InnerClass;
+        }());
+        _this = _super.call(this) || this;
+        return _this;
+    }
+    return DerivedWithDecoratorOnClassProperty;
 }(Base));
 var DerivedWithFunctionDeclaration = /** @class */ (function (_super) {
     __extends(DerivedWithFunctionDeclaration, _super);

@@ -1,4 +1,7 @@
 === tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperProperties.ts ===
+declare const decorate: any;
+>decorate : any
+
 class Base {
 >Base : Base
 
@@ -221,6 +224,84 @@ class DerivedWithArrowFunctionParameter extends Base {
 >(param = this) => {} : (param?: this) => void
 >param : this
 >this : this
+
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithDecoratorOnClass extends Base {
+>DerivedWithDecoratorOnClass : DerivedWithDecoratorOnClass
+>Base : Base
+
+    prop = true;
+>prop : boolean
+>true : true
+
+    constructor() {
+        @decorate(this)
+>decorate(this) : any
+>decorate : any
+>this : this
+
+        class InnerClass { }
+>InnerClass : InnerClass
+
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithDecoratorOnClassMethod extends Base {
+>DerivedWithDecoratorOnClassMethod : DerivedWithDecoratorOnClassMethod
+>Base : Base
+
+    prop = true;
+>prop : boolean
+>true : true
+
+    constructor() {
+        class InnerClass {
+>InnerClass : InnerClass
+
+            @decorate(this)
+>decorate(this) : any
+>decorate : any
+>this : this
+
+            innerMethod() { }
+>innerMethod : () => void
+        }
+
+        super();
+>super() : void
+>super : typeof Base
+    }
+}
+
+class DerivedWithDecoratorOnClassProperty extends Base {
+>DerivedWithDecoratorOnClassProperty : DerivedWithDecoratorOnClassProperty
+>Base : Base
+
+    prop = true;
+>prop : boolean
+>true : true
+
+    constructor() {
+        class InnerClass {
+>InnerClass : InnerClass
+
+            @decorate(this)
+>decorate(this) : any
+>decorate : any
+>this : this
+
+            innerProp = true;
+>innerProp : boolean
+>true : true
+        }
 
         super();
 >super() : void
