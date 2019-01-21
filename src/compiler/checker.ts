@@ -23757,7 +23757,7 @@ namespace ts {
                                     superCallStatement = statement;
                                     break;
                                 }
-                                if (!isPrologueDirective(statement) && nodeReferencesSuperOrThis(statement)) {
+                                if (!isPrologueDirective(statement) && nodeImmediatelyReferencesSuperOrThis(statement)) {
                                     break;
                                 }
                             }
@@ -23776,16 +23776,16 @@ namespace ts {
             }
         }
 
-        function nodeReferencesSuperOrThis(node: Statement): boolean {
+        function nodeImmediatelyReferencesSuperOrThis(node: Statement): boolean {
             if (node.kind === SyntaxKind.SuperKeyword || node.kind === SyntaxKind.ThisKeyword) {
                 return true;
             }
 
-            if (isNewThisScope(node)) {
+            if (isNewOrDelayedThisScope(node)) {
                 return false;
             }
 
-            return !!forEachChild(node, nodeReferencesSuperOrThis);
+            return !!forEachChild(node, nodeImmediatelyReferencesSuperOrThis);
         }
 
         function checkAccessorDeclaration(node: AccessorDeclaration) {

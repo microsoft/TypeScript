@@ -6262,8 +6262,11 @@ namespace ts {
      * @returns Whether a node or its children refer to a different `this` than its parent.
      * @internal
      */
-    export function isNewThisScope(node: Node): boolean {
+    export function isNewOrDelayedThisScope(node: Node): boolean {
         switch (node.kind) {
+            // Arrow functions use the same scope, but may do so in a "delayed" manner
+            // For example, `const getThis = () => this` may be before a super() call in a derived constructor
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.PropertyDeclaration:
