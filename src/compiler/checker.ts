@@ -5702,8 +5702,9 @@ namespace ts {
                 // construct signature of base type. In this case, using the
                 // this type in the interface definition refers to the static
                 // type of the derivative class.
-                if (baseConstructorType.symbol && baseConstructorType.symbol.flags &&
-                    !isThislessInterface(baseConstructorType.symbol) && staticType) {
+                if (baseConstructorType.symbol && staticType &&
+                    (baseConstructorType.symbol.flags & SymbolFlags.Interface) &&
+                    !isThislessInterface(baseConstructorType.symbol)) {
                     baseConstructorType = getTypeWithThisArgument(baseConstructorType, staticType);
                 }
 
