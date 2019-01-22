@@ -93,16 +93,36 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
+    function containingThis(node: Node): boolean {
+        let containsThis = false;
+        node.forEachChild(function checkThis(child) {
+
+            if (isThis(child)) {
+                containsThis = true;
+                return;
+            }
+
+            forEachChild(child, checkThis);
+        });
+
+        return containsThis;
+    }
+
     function getFunctionInfo(file: SourceFile, startPosition: number, program: Program): FunctionInfo | undefined {
         const token = getTokenAtPosition(file, startPosition);
 
         const arrowFunc = getArrowFunctionFromVariableDeclaration(token.parent);
-        if (arrowFunc) return { selectedVariableDeclaration: true, func: arrowFunc };
+        if (arrowFunc && !containingThis(arrowFunc.body)) return { selectedVariableDeclaration: true, func: arrowFunc };
 
         const maybeFunc = getContainingFunction(token);
         const typeChecker = program.getTypeChecker();
 
-        if (maybeFunc && (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) && !rangeContainsRange(maybeFunc.body, token)) {
+        if (
+            maybeFunc &&
+            (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) &&
+            !rangeContainsRange(maybeFunc.body, token) &&
+            !containingThis(maybeFunc.body)
+        ) {
             if ((isFunctionExpression(maybeFunc) && maybeFunc.name && FindAllReferences.Core.isSymbolReferencedInFile(maybeFunc.name, typeChecker, file))) return undefined;
             return { selectedVariableDeclaration: false, func: maybeFunc };
         }

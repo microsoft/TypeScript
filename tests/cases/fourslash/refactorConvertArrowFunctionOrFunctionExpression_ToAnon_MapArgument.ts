@@ -8,6 +8,6 @@ edit.applyRefactor({
     actionName: "Convert to anonymous function",
     actionDescription: "Convert to anonymous function",
     newContent: `[9,8,7].map(function(n) {
-    return n + 418;
-});`,
+        return n + 418;
+    });`,
 });
