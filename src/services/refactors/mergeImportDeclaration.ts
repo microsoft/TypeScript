@@ -2,9 +2,9 @@
 namespace ts.refactor.mergeImportDeclaration {
     const refactorName = "Merge duplicate import declaration";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ApplicableRefactorInfo[] | undefined {
+        getAvailableActions(context): ApplicableRefactorInfo[] {
             const i = getImportToMerge(context);
-            if (!i) return undefined;
+            if (!i) return [];
             const description = Diagnostics.Merge_duplicate_import_declaration.message;
 
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
