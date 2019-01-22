@@ -341,7 +341,7 @@ interface Array<T> {}`
         private readonly currentDirectory: string;
         private readonly dynamicPriorityWatchFile: HostWatchFile | undefined;
         private readonly customRecursiveWatchDirectory: HostWatchDirectory | undefined;
-        public require: (initialPath: string, moduleName: string) => server.RequireResult;
+        public require: ((initialPath: string, moduleName: string) => server.RequireResult) | undefined;
 
         constructor(public withSafeList: boolean, public useCaseSensitiveFileNames: boolean, executingFilePath: string, currentDirectory: string, fileOrFolderorSymLinkList: ReadonlyArray<FileOrFolderOrSymLink>, public readonly newLine = "\n", public readonly useWindowsStylePath?: boolean, private readonly environmentVariables?: Map<string>) {
             this.getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);

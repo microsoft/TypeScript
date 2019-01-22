@@ -247,19 +247,9 @@ namespace ts.Completions.StringCompletions {
         const scriptPath = sourceFile.path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
-        const extensionOptions = getExtensionOptions(compilerOptions);
-        if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
-            if (compilerOptions.rootDirs) {
-                return getCompletionEntriesForDirectoryFragmentWithRootDirs(
-                    compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
-            }
-            else {
-                return getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, scriptPath);
-            }
-        }
-        else {
-            return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
-        }
+        return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && (isRootedDiskPath(literalValue) || isUrl(literalValue))
+            ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath)
+            : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
     }
 
     interface ExtensionOptions {
@@ -269,6 +259,17 @@ namespace ts.Completions.StringCompletions {
     function getExtensionOptions(compilerOptions: CompilerOptions, includeExtensions = false): ExtensionOptions {
         return { extensions: getSupportedExtensionsForModuleResolution(compilerOptions), includeExtensions };
     }
+    function getCompletionEntriesForRelativeModules(literalValue: string, scriptDirectory: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, scriptPath: Path) {
+        const extensionOptions = getExtensionOptions(compilerOptions);
+        if (compilerOptions.rootDirs) {
+            return getCompletionEntriesForDirectoryFragmentWithRootDirs(
+                compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
+        }
+        else {
+            return getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, scriptPath);
+        }
+    }
+
     function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): ReadonlyArray<Extension> {
         const extensions = getSupportedExtensions(compilerOptions);
         return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
@@ -280,33 +281,26 @@ namespace ts.Completions.StringCompletions {
      * Takes a script path and returns paths for all potential folders that could be merged with its
      * containing folder via the "rootDirs" compiler option
      */
-    function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptPath: string, ignoreCase: boolean): string[] {
+    function getBaseDirectoriesFromRootDirs(rootDirs: string[], basePath: string, scriptDirectory: string, ignoreCase: boolean): ReadonlyArray<string> {
         // Make all paths absolute/normalized if they are not already
         rootDirs = rootDirs.map(rootDirectory => normalizePath(isRootedDiskPath(rootDirectory) ? rootDirectory : combinePaths(basePath, rootDirectory)));
 
         // Determine the path to the directory containing the script relative to the root directory it is contained within
         const relativeDirectory = firstDefined(rootDirs, rootDirectory =>
-            containsPath(rootDirectory, scriptPath, basePath, ignoreCase) ? scriptPath.substr(rootDirectory.length) : undefined)!; // TODO: GH#18217
+            containsPath(rootDirectory, scriptDirectory, basePath, ignoreCase) ? scriptDirectory.substr(rootDirectory.length) : undefined)!; // TODO: GH#18217
 
         // Now find a path for each potential directory that is to be merged with the one containing the script
         return deduplicate<string>(
-            rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)),
+            [...rootDirs.map(rootDirectory => combinePaths(rootDirectory, relativeDirectory)), scriptDirectory],
             equateStringsCaseSensitive,
             compareStringsCaseSensitive);
     }
 
-    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensionOptions: ExtensionOptions, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude?: string): NameAndKind[] {
+    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptDirectory: string, extensionOptions: ExtensionOptions, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude: string): ReadonlyArray<NameAndKind> {
         const basePath = compilerOptions.project || host.getCurrentDirectory();
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
-        const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptPath, ignoreCase);
-
-        const result: NameAndKind[] = [];
-
-        for (const baseDirectory of baseDirectories) {
-            getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, exclude, result);
-        }
-
-        return result;
+        const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptDirectory, ignoreCase);
+        return flatMap(baseDirectories, baseDirectory => getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, exclude));
     }
 
     /**

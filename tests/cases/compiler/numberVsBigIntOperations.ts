@@ -1,4 +1,3 @@
-// @experimentalBigInt: true
 // @target: esnext
 
 // Cannot mix bigints and numbers

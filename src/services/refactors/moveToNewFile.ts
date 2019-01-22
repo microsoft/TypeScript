@@ -460,6 +460,12 @@ namespace ts.refactor {
         const oldImportsNeededByNewFile = new SymbolSet();
         const newFileImportsFromOldFile = new SymbolSet();
 
+        const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
+        const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
+        if (jsxNamespaceSymbol) { // Might not exist (e.g. in non-compiling code)
+            oldImportsNeededByNewFile.add(jsxNamespaceSymbol);
+        }
+
         for (const statement of toMove) {
             forEachTopLevelDeclaration(statement, decl => {
                 movedSymbols.add(Debug.assertDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol));
@@ -485,6 +491,11 @@ namespace ts.refactor {
         for (const statement of oldFile.statements) {
             if (contains(toMove, statement)) continue;
 
+            // jsxNamespaceSymbol will only be set iff it is in oldImportsNeededByNewFile.
+            if (jsxNamespaceSymbol && !!(statement.transformFlags & TransformFlags.ContainsJsx)) {
+                unusedImportsFromOldFile.delete(jsxNamespaceSymbol);
+            }
+
             forEachReference(statement, checker, symbol => {
                 if (movedSymbols.has(symbol)) oldFileImportsFromNewFile.add(symbol);
                 unusedImportsFromOldFile.delete(symbol);
@@ -492,6 +503,23 @@ namespace ts.refactor {
         }
 
         return { movedSymbols, newFileImportsFromOldFile, oldFileImportsFromNewFile, oldImportsNeededByNewFile, unusedImportsFromOldFile };
+
+        function getJsxNamespaceSymbol(containsJsx: Node | undefined) {
+            if (containsJsx === undefined) {
+                return undefined;
+            }
+
+            const jsxNamespace = checker.getJsxNamespace(containsJsx);
+
+            // Strictly speaking, this could resolve to a symbol other than the JSX namespace.
+            // This will produce erroneous output (probably, an incorrectly copied import) but
+            // is expected to be very rare and easily reversible.
+            const jsxNamespaceSymbol = checker.resolveName(jsxNamespace, containsJsx, SymbolFlags.Namespace, /*excludeGlobals*/ true);
+
+            return !!jsxNamespaceSymbol && some(jsxNamespaceSymbol.declarations, isInImport)
+                ? jsxNamespaceSymbol
+                : undefined;
+        }
     }
 
     // Below should all be utilities
@@ -512,7 +540,7 @@ namespace ts.refactor {
     }
     function isVariableDeclarationInImport(decl: VariableDeclaration) {
         return isSourceFile(decl.parent.parent.parent) &&
-            decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
+            !!decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
     }
 
     function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {

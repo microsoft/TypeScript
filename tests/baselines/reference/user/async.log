@@ -124,11 +124,10 @@ node_modules/async/dist/async.js(2116,20): error TS2345: Argument of type 'Funct
   Type 'Function' is not assignable to type 'number'.
 node_modules/async/dist/async.js(2274,21): error TS2554: Expected 0 arguments, but got 2.
 node_modules/async/dist/async.js(2425,20): error TS1005: '}' expected.
-node_modules/async/dist/async.js(2450,5): error TS2322: Type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }' is not assignable to type 'NodeModule'.
-  Property 'exports' is missing in type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }'.
+node_modules/async/dist/async.js(2450,5): error TS2740: Type '{ _tasks: DLL; concurrency: any; payload: any; saturated: () => void; unsaturated: () => void; buffer: number; empty: () => void; drain: () => void; error: () => void; started: boolean; paused: boolean; push: (data: any, callback: any) => void; ... 9 more ...; resume: () => void; }' is missing the following properties from type 'NodeModule': exports, require, id, filename, and 4 more.
 node_modules/async/dist/async.js(2521,9): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2564,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'pop' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
 node_modules/async/dist/async.js(2663,16): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/async/dist/async.js(2682,31): error TS1005: ']' expected.
 node_modules/async/dist/async.js(2707,31): error TS1005: ']' expected.
@@ -170,8 +169,7 @@ node_modules/async/dist/async.js(4160,19): error TS2339: Property '_tasks' does 
 node_modules/async/dist/async.js(4163,26): error TS2339: Property 'process' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(4167,14): error TS2339: Property 'unshift' does not exist on type 'NodeModule'.
 node_modules/async/dist/async.js(4381,5): error TS2322: Type 'any[] | {}' is not assignable to type 'any[]'.
-  Type '{}' is not assignable to type 'any[]'.
-    Property 'length' is missing in type '{}'.
+  Type '{}' is missing the following properties from type 'any[]': length, pop, push, concat, and 28 more.
 node_modules/async/dist/async.js(4617,17): error TS2532: Object is possibly 'undefined'.
 node_modules/async/dist/async.js(4617,17): error TS2684: The 'this' context of type 'Function | undefined' is not assignable to method's 'this' of type 'Function'.
   Type 'undefined' is not assignable to type 'Function'.
