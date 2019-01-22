@@ -967,4 +967,8 @@ namespace ts.server {
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
+
+    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+        ts.sys.tryEnableSourceMapsForHost();
+    }
 }
