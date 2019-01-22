@@ -968,6 +968,10 @@ namespace ts.server {
     // Start listening
     ioSession.listen();
 
+    if (Debug.isDebugging) {
+        Debug.enableDebugInfo();
+    }
+
     if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
         ts.sys.tryEnableSourceMapsForHost();
     }
