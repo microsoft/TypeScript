@@ -3,13 +3,14 @@
 // @allowJs: true
 
 // @Filename: /a.js
-////export const x = 0;
-////export class C {}
-/////** @typedef {number} T */
+//// export const x = 0;
+//// export class C {}
+//// /** @typedef {number} T */
 
 // @Filename: /b.js
-/////** @type {/*0*/} */
-/////** @type {/*1*/} */
+//// export const m = 0;
+//// /** @type {/*0*/} */
+//// /** @type {/*1*/} */
 
 verify.completions({
     marker: ["0", "1"],
@@ -43,6 +44,7 @@ verify.applyCodeActionFromCompletion("0", {
     newFileContent:
 `import { C } from "./a";
 
+export const m = 0;
 /** @type {} */
 /** @type {} */`,
 });
@@ -55,6 +57,7 @@ verify.applyCodeActionFromCompletion("1", {
     newFileContent:
 `import { C } from "./a";
 
+export const m = 0;
 /** @type {} */
 /** @type {import("./a").} */`,
 });

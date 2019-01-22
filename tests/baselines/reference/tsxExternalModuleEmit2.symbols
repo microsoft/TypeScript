@@ -1,6 +1,6 @@
 === tests/cases/conformance/jsx/modules.d.ts ===
 declare module 'mod' {
->'mod' : Symbol('mod', Decl(modules.d.ts, 0, 0))
+>'mod' : Symbol("mod", Decl(modules.d.ts, 0, 0))
 
   var y: any;
 >y : Symbol(y, Decl(modules.d.ts, 1, 5))

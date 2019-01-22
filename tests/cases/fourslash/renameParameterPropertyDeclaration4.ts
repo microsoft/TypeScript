@@ -6,4 +6,5 @@
 ////     }
 //// }
 
-verify.rangesAreRenameLocations();
+const [r0, r1] = test.ranges();
+verify.renameLocations([r0, r1], [{ range: r0, prefixText: "protectedParam: " }, r1]);

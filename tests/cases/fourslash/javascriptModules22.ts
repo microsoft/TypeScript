@@ -19,14 +19,13 @@
 //// import def, {sausages} from "./mod2"
 //// a./**/
 
-goTo.marker();
-verify.completionListContains('toString');
+verify.completions({ marker: "", includes: "toString" });
 
 edit.backspace(2);
 edit.insert("def.");
-verify.completionListContains("name");
+verify.completions({ includes: "name" });
 
 edit.insert("name;\nsausages.");
-verify.completionListContains("eggs");
+verify.completions({ includes: "eggs" });
 edit.insert("eggs;");
 verify.noErrors();

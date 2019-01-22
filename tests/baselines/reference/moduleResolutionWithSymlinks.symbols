@@ -53,6 +53,6 @@ import {MyClass} from "library-a";
 >MyClass : Symbol(MyClass, Decl(index.ts, 0, 8))
 
 export { MyClass as MyClass2 }
->MyClass : Symbol(MyClass2, Decl(index.ts, 1, 8))
+>MyClass : Symbol(MyClass, Decl(index.ts, 0, 8))
 >MyClass2 : Symbol(MyClass2, Decl(index.ts, 1, 8))
 

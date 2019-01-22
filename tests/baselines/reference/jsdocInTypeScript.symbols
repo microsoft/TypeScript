@@ -83,3 +83,16 @@ const obj = { foo: (a, b) => a + b };
 >a : Symbol(a, Decl(jsdocInTypeScript.ts, 47, 20))
 >b : Symbol(b, Decl(jsdocInTypeScript.ts, 47, 22))
 
+/** @enum {string} */
+var E = {};
+>E : Symbol(E, Decl(jsdocInTypeScript.ts, 50, 3))
+
+E[""];
+>E : Symbol(E, Decl(jsdocInTypeScript.ts, 50, 3))
+
+// make sure import types in JSDoc are not resolved
+/** @type {import("should-not-be-resolved").Type} */
+var v = import(String());
+>v : Symbol(v, Decl(jsdocInTypeScript.ts, 55, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --) ... and 1 more)
+

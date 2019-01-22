@@ -5,6 +5,9 @@ declare const asyncIterable: AsyncIterable<number>;
 declare const iterable: Iterable<number>;
 >iterable : Iterable<number>
 
+declare const iterableOfPromise: Iterable<Promise<number>>;
+>iterableOfPromise : Iterable<Promise<number>>
+
 async function f1() {
 >f1 : () => Promise<void>
 
@@ -19,6 +22,10 @@ async function f1() {
 >x : number
 >iterable : Iterable<number>
     }
+    for await (const x of iterableOfPromise) {
+>x : number
+>iterableOfPromise : Iterable<Promise<number>>
+    }
     for await (y of asyncIterable) {
 >y : number
 >asyncIterable : AsyncIterable<number>
@@ -26,6 +33,10 @@ async function f1() {
     for await (y of iterable) {
 >y : number
 >iterable : Iterable<number>
+    }
+    for await (y of iterableOfPromise) {
+>y : number
+>iterableOfPromise : Iterable<Promise<number>>
     }
 }
 async function * f2() {
@@ -42,6 +53,10 @@ async function * f2() {
 >x : number
 >iterable : Iterable<number>
     }
+    for await (const x of iterableOfPromise) {
+>x : number
+>iterableOfPromise : Iterable<Promise<number>>
+    }
     for await (y of asyncIterable) {
 >y : number
 >asyncIterable : AsyncIterable<number>
@@ -49,5 +64,9 @@ async function * f2() {
     for await (y of iterable) {
 >y : number
 >iterable : Iterable<number>
+    }
+    for await (y of iterableOfPromise) {
+>y : number
+>iterableOfPromise : Iterable<Promise<number>>
     }
 }

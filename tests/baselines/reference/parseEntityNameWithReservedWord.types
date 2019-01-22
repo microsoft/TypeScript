@@ -1,7 +1,7 @@
 === tests/cases/compiler/parseEntityNameWithReservedWord.ts ===
 enum Bool { false }
 >Bool : Bool
->false : Bool
+>false : Bool.false
 
 const x: Bool.false = Bool.false;
 >x : Bool

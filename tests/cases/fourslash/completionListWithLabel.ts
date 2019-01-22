@@ -13,32 +13,8 @@
 ////    break; /*8*/
 ////}
 
-goTo.marker("1");
-verify.completionListContains("label");
-
-goTo.marker("2");
-verify.completionListContains("label");
-verify.not.completionListContains("testlabel");
-
-goTo.marker("3");
-verify.completionListContains("label");
-verify.completionListContains("testlabel");
-
-goTo.marker("4");
-verify.completionListContains("label");
-verify.completionListContains("testlabel");
-
-goTo.marker("5");
-verify.completionListContains("testlabel");
-verify.completionListContains("label");
-
-goTo.marker("6");
-verify.completionListContains("testlabel");
-verify.completionListContains("label");
-
-goTo.marker("7");
-verify.completionListContains("label");
-verify.not.completionListContains("testlabel");
-
-goTo.marker("8");
-verify.not.completionListContains("label");
+verify.completions(
+    { marker: ["1", "2", "7"], exact: "label" },
+    { marker: ["3", "4", "5", "6"], exact: ["testlabel", "label"] },
+    { marker: "8", excludes: ["label"] },
+);

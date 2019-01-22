@@ -8,10 +8,16 @@
 ////};
 /////**/
 
-goTo.marker();
-verify.completionListContains("AnalyserNode", /*text*/ undefined, /*documentation*/ undefined, "var");
-verify.completionEntryDetailIs("AnalyserNode", `interface AnalyserNode
+verify.completions({
+    marker: "",
+    includes: {
+        name: "AnalyserNode",
+        text:
+`interface AnalyserNode
 var AnalyserNode: {
     new (): AnalyserNode;
     prototype: AnalyserNode;
-}`, /*documentation*/ undefined, "var")
+}`,
+        kind: "var",
+    },
+});

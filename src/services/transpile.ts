@@ -48,6 +48,7 @@ namespace ts {
         options.paths = undefined;
         options.rootDirs = undefined;
         options.declaration = undefined;
+        options.composite = undefined;
         options.declarationDir = undefined;
         options.out = undefined;
         options.outFile = undefined;

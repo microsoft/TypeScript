@@ -10,7 +10,7 @@
 ////     /**
 ////      * @param {string} foo A value.
 ////      * @returns {number} Another value
-////      * @mytag 
+////      * @mytag
 ////      */
 ////     method4(foo) { return 3; }
 //// }
@@ -21,45 +21,21 @@
 /////*globalValue*/
 ////x./*valueMember*/
 
-interface VerifyCompletionsInJsDoc {
-    verifyValueOrType(symbol: string, kind: string): void;
-    verifyValue(symbol: string, kind: string): void;
-    verifyValueMember(symbol: string, kind: string): void;
+function getCompletions(nonWarnings: ReadonlyArray<string>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> {
+    const withKinds: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
+        { name: "Foo", kind: "class" },
+        { name: "x", kind: "var" },
+        { name: "property1", kind: "property" },
+        { name: "method3", kind: "method" },
+        { name: "method4", kind: "method" },
+        { name: "foo", kind: "warning" },
+    ];
+    for (const name of nonWarnings) ts.Debug.assert(withKinds.some(entry => entry.name === name));
+    return withKinds.map(entry => nonWarnings.includes(entry.name) ? entry : ({ name: entry.name, kind: "warning" }));
 }
 
-function verifyCompletionsInJsDocType(marker: string, { verifyValueOrType, verifyValue, verifyValueMember }: VerifyCompletionsInJsDoc) {
-    goTo.marker(marker);
-
-    verifyValueOrType("Foo", "class");
-
-    verifyValue("x", "var");
-
-    verifyValueMember("property1", "property");
-    verifyValueMember("method3", "method");
-    verifyValueMember("method4", "method");
-    verifyValueMember("foo", "warning");
-}
-
-function verifySymbolPresentWithKind(symbol: string, kind: string) {
-    return verify.completionListContains(symbol, /*text*/ undefined, /*documentation*/ undefined, kind);
-}
-
-function verifySymbolPresentWithWarning(symbol: string) {
-    return verifySymbolPresentWithKind(symbol, "warning");
-}
-
-verifyCompletionsInJsDocType("type", {
-    verifyValueOrType: verifySymbolPresentWithKind,
-    verifyValue: verifySymbolPresentWithWarning,
-    verifyValueMember: verifySymbolPresentWithWarning,
-});
-verifyCompletionsInJsDocType("globalValue", {
-    verifyValueOrType: verifySymbolPresentWithKind,
-    verifyValue: verifySymbolPresentWithKind,
-    verifyValueMember: verifySymbolPresentWithWarning,
-});
-verifyCompletionsInJsDocType("valueMember", {
-    verifyValueOrType: verifySymbolPresentWithWarning,
-    verifyValue: verifySymbolPresentWithWarning,
-    verifyValueMember: verifySymbolPresentWithKind,
-});
+verify.completions(
+    { marker: "type", includes: getCompletions(["Foo"]) },
+    { marker: "globalValue", includes: getCompletions(["Foo", "x"]) },
+    { marker: "valueMember", includes: getCompletions(["property1", "method3", "method4", "foo"]) },
+);

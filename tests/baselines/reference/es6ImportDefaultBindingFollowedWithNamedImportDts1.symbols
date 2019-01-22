@@ -23,7 +23,6 @@ export var x2 = new defaultBinding2();
 
 import defaultBinding3, { a as b } from "./server";
 >defaultBinding3 : Symbol(defaultBinding3, Decl(client.ts, 4, 6))
->a : Symbol(b, Decl(client.ts, 4, 25))
 >b : Symbol(b, Decl(client.ts, 4, 25))
 
 export var x3 = new defaultBinding3();
@@ -33,7 +32,6 @@ export var x3 = new defaultBinding3();
 import defaultBinding4, { x, a as y } from "./server";
 >defaultBinding4 : Symbol(defaultBinding4, Decl(client.ts, 6, 6))
 >x : Symbol(x, Decl(client.ts, 6, 25))
->a : Symbol(y, Decl(client.ts, 6, 28))
 >y : Symbol(y, Decl(client.ts, 6, 28))
 
 export var x4 = new defaultBinding4();
@@ -42,7 +40,6 @@ export var x4 = new defaultBinding4();
 
 import defaultBinding5, { x as z,  } from "./server";
 >defaultBinding5 : Symbol(defaultBinding5, Decl(client.ts, 8, 6))
->x : Symbol(z, Decl(client.ts, 8, 25))
 >z : Symbol(z, Decl(client.ts, 8, 25))
 
 export var x5 = new defaultBinding5();

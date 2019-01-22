@@ -938,7 +938,7 @@
   "Type_of_iterated_elements_of_a_yield_Asterisk_operand_must_either_be_a_valid_promise_or_must_not_con_1322": "Der Typ iterierter Elemente eines \"yield*\"-Operanden muss entweder eine gültige Zusage sein oder darf keinen aufrufbaren \"then\"-Member enthalten.",
   "Type_of_yield_operand_in_an_async_generator_must_either_be_a_valid_promise_or_must_not_contain_a_cal_1321": "Der Typ eines \"yield\"-Operanden in einem asynchronen Generator muss entweder eine gültige Zusage sein oder darf keinen aufrufbaren \"then\"-Member enthalten.",
   "Type_parameter_0_has_a_circular_constraint_2313": "Der Typparameter \"{0}\" weist eine zirkuläre Einschränkung auf.",
-  "Type_parameter_0_has_a_circular_default_2716": "Der Typparameter \"{0}\" weist einen zirkulären Standard auf.",
+  "Type_parameter_0_has_a_circular_default_2716": "Der Typparameter \"{0}\" besitzt einen zirkulären Standardwert.",
   "Type_parameter_0_of_call_signature_from_exported_interface_has_or_is_using_private_name_1_4008": "Der Typparameter \"{0}\" der Aufrufsignatur aus der exportierten Schnittstelle besitzt oder verwendet den privaten Namen \"{1}\".",
   "Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1_4006": "Der Typparameter \"{0}\" der Konstruktorsignatur aus der exportierten Schnittstelle besitzt oder verwendet den privaten Namen \"{1}\".",
   "Type_parameter_0_of_exported_class_has_or_is_using_private_name_1_4002": "Der Typparameter \"{0}\" der exportierten Klasse besitzt oder verwendet den privaten Namen \"{1}\".",

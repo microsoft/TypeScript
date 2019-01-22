@@ -148,36 +148,38 @@ function f19() {
     var x = ([a, b] = [1, 2]);
 }
 
-function f20() {
+function f20(v: [number, number, number]) {
     var x: number;
     var y: number;
     var z: number;
-    var a: number[];
-    var a3: any[];
-    var [...a] = [1, 2, 3];
-    var [x, ...a] = [1, 2, 3];
-    var [x, y, ...a] = [1, 2, 3];
-    var [x, y, z, ...a3] = [1, 2, 3];
-    [...a] = [1, 2, 3];
-    [x, ...a] = [1, 2, 3];
-    [x, y, ...a] = [1, 2, 3];
-    [x, y, z, ...a3] = [1, 2, 3];
+    var a0: [];
+    var a1: [number];
+    var a2: [number, number];
+    var a3: [number, number, number];
+    var [...a3] = v;
+    var [x, ...a2] = v;
+    var [x, y, ...a1] = v;
+    var [x, y, z, ...a0] = v;
+    [...a3] = v;
+    [x, ...a2] = v;
+    [x, y, ...a1] = v;
+    [x, y, z, ...a0] = v;
 }
 
-function f21() {
+function f21(v: [number, string, boolean]) {
     var x: number;
     var y: string;
     var z: boolean;
-    var a0: (number | string | boolean)[];
-    var a1: (string | boolean)[];
-    var a2: boolean[];
-    var a3: any[];
-    var [...a0] = [1, "hello", true];
-    var [x, ...a1] = [1, "hello", true];
-    var [x, y, ...a2] = [1, "hello", true];
-    var [x, y, z, ...a3] = [1, "hello", true];
-    [...a0] = [1, "hello", true];
-    [x, ...a1] = [1, "hello", true];
-    [x, y, ...a2] = [1, "hello", true];
-    [x, y, z, ...a3] = [1, "hello", true];
+    var a0: [number, string, boolean];
+    var a1: [string, boolean];
+    var a2: [boolean];
+    var a3: [];
+    var [...a0] = v;
+    var [x, ...a1] = v;
+    var [x, y, ...a2] = v;
+    var [x, y, z, ...a3] = v;
+    [...a0] = v;
+    [x, ...a1] = v;
+    [x, y, ...a2] = v;
+    [x, y, z, ...a3] = v;
 }

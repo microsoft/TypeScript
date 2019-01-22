@@ -1,0 +1,16 @@
+/foo/tsconfig.json(2,26): error TS5069: Option 'declarationDir' cannot be specified without specifying option 'declaration' or option 'composite'.
+
+
+==== /foo/tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": { "declarationDir": "out" }
+                             ~~~~~~~~~~~~~~~~
+!!! error TS5069: Option 'declarationDir' cannot be specified without specifying option 'declaration' or option 'composite'.
+    }
+    
+==== /foo/test.ts (0 errors) ====
+    interface Foo {
+        x: number;
+    }
+    export default Foo;
+    

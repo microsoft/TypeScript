@@ -101,7 +101,7 @@ export enum E {
 >E : E
 
     A
->A : E
+>A : E.A
 }
 export var r10: typeof E;
 >r10 : typeof E

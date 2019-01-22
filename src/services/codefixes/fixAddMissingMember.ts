@@ -4,6 +4,9 @@ namespace ts.codefix {
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1.code,
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
+        Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2.code,
+        Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2.code,
+        Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more.code
     ];
     const fixId = "addMissingMember";
     registerCodeFix({
@@ -20,7 +23,7 @@ namespace ts.codefix {
             const { parentDeclaration, declSourceFile, inJs, makeStatic, token, call } = info;
             const methodCodeAction = call && getActionForMethodDeclaration(context, declSourceFile, parentDeclaration, token, call, makeStatic, inJs, context.preferences);
             const addMember = inJs && !isInterfaceDeclaration(parentDeclaration) ?
-                singleElementArray(getActionsForAddMissingMemberInJavaScriptFile(context, declSourceFile, parentDeclaration, token.text, makeStatic)) :
+                singleElementArray(getActionsForAddMissingMemberInJavascriptFile(context, declSourceFile, parentDeclaration, token.text, makeStatic)) :
                 getActionsForAddMissingMemberInTypeScriptFile(context, declSourceFile, parentDeclaration, token, makeStatic);
             return concatenate(singleElementArray(methodCodeAction), addMember);
         },
@@ -131,7 +134,7 @@ namespace ts.codefix {
         if (classOrInterface) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
             const declSourceFile = classOrInterface.getSourceFile();
-            const inJs = isSourceFileJavaScript(declSourceFile);
+            const inJs = isSourceFileJS(declSourceFile);
             const call = tryCast(parent.parent, isCallExpression);
             return { kind: InfoKind.ClassOrInterface, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
         }
@@ -142,7 +145,7 @@ namespace ts.codefix {
         return undefined;
     }
 
-    function getActionsForAddMissingMemberInJavaScriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {
+    function getActionsForAddMissingMemberInJavascriptFile(context: CodeFixContext, declSourceFile: SourceFile, classDeclaration: ClassLikeDeclaration, tokenName: string, makeStatic: boolean): CodeFixAction | undefined {
         const changes = textChanges.ChangeTracker.with(context, t => addMissingMemberInJs(t, declSourceFile, classDeclaration, tokenName, makeStatic));
         return changes.length === 0 ? undefined
             : createCodeFixAction(fixName, changes, [makeStatic ? Diagnostics.Initialize_static_property_0 : Diagnostics.Initialize_property_0_in_the_constructor, tokenName], fixId, Diagnostics.Add_all_missing_members);
@@ -184,6 +187,10 @@ namespace ts.codefix {
             const otherExpression = token.parent === binaryExpression.left ? binaryExpression.right : binaryExpression.left;
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
+        }
+        else {
+            const contextualType = checker.getContextualType(token.parent as Expression);
+            typeNode = contextualType ? checker.typeToTypeNode(contextualType) : undefined;
         }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
@@ -268,7 +275,7 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, !isInterfaceDeclaration(typeDecl));
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, typeDecl);
         const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
 
         if (containingMethodDeclaration && containingMethodDeclaration.parent === typeDecl) {

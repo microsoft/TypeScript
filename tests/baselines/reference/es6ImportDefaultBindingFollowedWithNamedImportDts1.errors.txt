@@ -1,9 +1,9 @@
-tests/cases/compiler/client.ts(3,27): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
-tests/cases/compiler/client.ts(5,27): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
-tests/cases/compiler/client.ts(7,27): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'x'.
-tests/cases/compiler/client.ts(7,30): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
-tests/cases/compiler/client.ts(9,27): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'x'.
-tests/cases/compiler/client.ts(11,27): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'm'.
+tests/cases/compiler/client.ts(3,27): error TS2305: Module '"./server"' has no exported member 'a'.
+tests/cases/compiler/client.ts(5,27): error TS2305: Module '"./server"' has no exported member 'a'.
+tests/cases/compiler/client.ts(7,27): error TS2305: Module '"./server"' has no exported member 'x'.
+tests/cases/compiler/client.ts(7,30): error TS2305: Module '"./server"' has no exported member 'a'.
+tests/cases/compiler/client.ts(9,27): error TS2305: Module '"./server"' has no exported member 'x'.
+tests/cases/compiler/client.ts(11,27): error TS2305: Module '"./server"' has no exported member 'm'.
 
 
 ==== tests/cases/compiler/server.ts (0 errors) ====
@@ -15,23 +15,23 @@ tests/cases/compiler/client.ts(11,27): error TS2305: Module '"tests/cases/compil
     export var x1 = new defaultBinding1();
     import defaultBinding2, { a } from "./server";
                               ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+!!! error TS2305: Module '"./server"' has no exported member 'a'.
     export var x2 = new defaultBinding2();
     import defaultBinding3, { a as b } from "./server";
                               ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+!!! error TS2305: Module '"./server"' has no exported member 'a'.
     export var x3 = new defaultBinding3();
     import defaultBinding4, { x, a as y } from "./server";
                               ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'x'.
+!!! error TS2305: Module '"./server"' has no exported member 'x'.
                                  ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+!!! error TS2305: Module '"./server"' has no exported member 'a'.
     export var x4 = new defaultBinding4();
     import defaultBinding5, { x as z,  } from "./server";
                               ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'x'.
+!!! error TS2305: Module '"./server"' has no exported member 'x'.
     export var x5 = new defaultBinding5();
     import defaultBinding6, { m,  } from "./server";
                               ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'm'.
+!!! error TS2305: Module '"./server"' has no exported member 'm'.
     export var x6 = new defaultBinding6();
