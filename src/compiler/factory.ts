@@ -2629,6 +2629,71 @@ namespace ts {
         return node;
     }
 
+    interface UnscopedEmitHelpersWithLines {
+        helper: UnscopedEmitHelpers;
+        lines: ReadonlyArray<string>;
+    }
+
+    let allUnscopedEmitHelpers: ReadonlyArray<UnscopedEmitHelpersWithLines> | undefined;
+    function getAllUnscopedEmitHelpers() {
+        return allUnscopedEmitHelpers ||
+            (allUnscopedEmitHelpers = [
+                getUnscopedEmitHelperWithLines(valuesHelper),
+                getUnscopedEmitHelperWithLines(readHelper),
+                getUnscopedEmitHelperWithLines(spreadHelper),
+                getUnscopedEmitHelperWithLines(restHelper),
+                getUnscopedEmitHelperWithLines(decorateHelper),
+                getUnscopedEmitHelperWithLines(metadataHelper),
+                getUnscopedEmitHelperWithLines(paramHelper),
+                getUnscopedEmitHelperWithLines(awaiterHelper),
+                getUnscopedEmitHelperWithLines(assignHelper),
+                getUnscopedEmitHelperWithLines(awaitHelper),
+                getUnscopedEmitHelperWithLines(asyncGeneratorHelper),
+                getUnscopedEmitHelperWithLines(asyncDelegator),
+                getUnscopedEmitHelperWithLines(asyncValues),
+                getUnscopedEmitHelperWithLines(extendsHelper),
+                getUnscopedEmitHelperWithLines(templateObjectHelper),
+                getUnscopedEmitHelperWithLines(generatorHelper),
+                getUnscopedEmitHelperWithLines(importStarHelper),
+                getUnscopedEmitHelperWithLines(importDefaultHelper)
+            ]);
+    }
+
+    function getUnscopedEmitHelperWithLines(helper: UnscopedEmitHelpers): UnscopedEmitHelpersWithLines {
+        const helperLines = helper.text.split(/\r\n?|\n/g);
+        const indentation = guessIndentation(helperLines);
+        const lines: string[] = [];
+        for (const lineText of helperLines) {
+            const line = indentation ? lineText.slice(indentation) : lineText;
+            if (line.length) {
+                lines.push(line);
+            }
+        }
+        return { helper, lines };
+    }
+
+    function tryGetUnscopedEmitHelper(text: string, pos: number) {
+        const allHelpers = getAllUnscopedEmitHelpers();
+        if (pos >= text.length) return undefined;
+        for (const { helper, lines } of allHelpers) {
+            let newPos = pos;
+            for (const line of lines) {
+                const startIndex = text.indexOf(line, newPos);
+                if (startIndex !== newPos) {
+                    newPos = -1;
+                    break;
+                }
+                newPos = skipTrivia(text, newPos + line.length, /*stopAfterLineBreak*/ true);
+            }
+
+            // Found match
+            if (newPos !== -1) {
+                return { helper, newPos };
+            }
+        }
+        return undefined;
+    }
+
     export function createUnparsedSourceFile(text: string): UnparsedSource;
     export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
@@ -2649,7 +2714,11 @@ namespace ts {
             node.sourceMapText = map;
         }
         const text = node.text;
+
+        // Shebang
         let pos = isShebangTrivia(text, 0) ? skipTrivia(text, 0, /*stopAfterLineBreak*/ true) : 0;
+
+        // Prologue
         const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true, /*languageVariant*/ undefined, text, /*onError*/ undefined, pos);
         let prologues: UnparsedPrologue[] | undefined;
         while (scanner.scan()  === SyntaxKind.StringLiteral) {
@@ -2663,8 +2732,20 @@ namespace ts {
             prologue.text = prologueText;
             (prologues || (prologues = [])).push(prologue);
         }
+
+        // Helpers
+        let helpers: UnscopedEmitHelpers[] | undefined;
+        while (true) {
+            const helperInfo = tryGetUnscopedEmitHelper(text, pos);
+            if (!helperInfo) break;
+            pos = helperInfo.newPos;
+            (helpers || (helpers = [])).push(helperInfo.helper);
+        }
+
+        // Rest of the text
         node.pos = pos;
         node.prologues = prologues || emptyArray;
+        node.helpers = helpers;
         node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
         return node;
     }
@@ -3390,7 +3471,7 @@ namespace ts {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
-    const valuesHelper: EmitHelper = {
+    export const valuesHelper: UnscopedEmitHelpers = {
         name: "typescript:values",
         scoped: false,
         text: `
@@ -3418,7 +3499,7 @@ namespace ts {
         );
     }
 
-    const readHelper: EmitHelper = {
+    export const readHelper: UnscopedEmitHelpers = {
         name: "typescript:read",
         scoped: false,
         text: `
@@ -3454,7 +3535,7 @@ namespace ts {
         );
     }
 
-    const spreadHelper: EmitHelper = {
+    export const spreadHelper: UnscopedEmitHelpers = {
         name: "typescript:spread",
         scoped: false,
         text: `

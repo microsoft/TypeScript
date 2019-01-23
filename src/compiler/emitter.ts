@@ -1136,16 +1136,16 @@ namespace ts {
             if (bundle && moduleKind === ModuleKind.None) {
                 return;
             }
-
-            const numNodes = bundle ? bundle.sourceFiles.length : 1;
+            const numPrepends = bundle ? bundle.prepends.length : 0;
+            const numNodes = bundle ? bundle.sourceFiles.length + numPrepends : 1;
             for (let i = 0; i < numNodes; i++) {
-                const currentNode = bundle ? bundle.sourceFiles[i] : node;
-                const sourceFile = isSourceFile(currentNode) ? currentNode : currentSourceFile!;
-                const shouldSkip = printerOptions.noEmitHelpers || getExternalHelpersModuleName(sourceFile) !== undefined;
-                const shouldBundle = isSourceFile(currentNode) && !isOwnFileEmit;
-                const helpers = getEmitHelpers(currentNode);
+                const currentNode = bundle ? i < numPrepends ? bundle.prepends[i] : bundle.sourceFiles[i - numPrepends] : node;
+                const sourceFile = isSourceFile(currentNode) ? currentNode : isUnparsedSource(currentNode) ? undefined : currentSourceFile!;
+                const shouldSkip = printerOptions.noEmitHelpers || (!!sourceFile && getExternalHelpersModuleName(sourceFile) !== undefined);
+                const shouldBundle = (isSourceFile(currentNode) || isUnparsedSource(currentNode)) && !isOwnFileEmit;
+                const helpers = isUnparsedSource(currentNode) ? currentNode.helpers : getSortedEmitHelpers(currentNode);
                 if (helpers) {
-                    for (const helper of stableSort(helpers, compareEmitHelpers)) {
+                    for (const helper of helpers) {
                         if (!helper.scoped) {
                             // Skip the helper if it can be skipped and the noEmitHelpers compiler
                             // option is set, or if it can be imported and the importHelpers compiler
@@ -1179,6 +1179,11 @@ namespace ts {
             }
 
             return helpersEmitted;
+        }
+
+        function getSortedEmitHelpers(node: Node) {
+            const helpers = getEmitHelpers(node);
+            return helpers && stableSort(helpers, compareEmitHelpers);
         }
 
         //

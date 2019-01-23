@@ -2777,6 +2777,7 @@ namespace ts {
         fileName?: string;
         text: string;
         prologues: ReadonlyArray<UnparsedPrologue>;
+        helpers: ReadonlyArray<UnscopedEmitHelpers> | undefined;
         sourceMapPath?: string;
         sourceMapText?: string;
         /*@internal*/ parsedSourceMap?: RawSourceMap | false | undefined;
@@ -5187,6 +5188,11 @@ namespace ts {
         readonly scoped: boolean;                                       // Indicates whether the helper MUST be emitted in the current scope.
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);  // ES3-compatible raw script text, or a function yielding such a string
         readonly priority?: number;                                     // Helpers with a higher priority are emitted earlier than other helpers on the node.
+    }
+
+    export interface UnscopedEmitHelpers extends EmitHelper {
+        readonly scoped: false;                                         // Indicates whether the helper MUST be emitted in the current scope.
+        readonly text: string;                                          // ES3-compatible raw script text, or a function yielding such a string
     }
 
     /* @internal */
