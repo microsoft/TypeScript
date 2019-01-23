@@ -3918,6 +3918,27 @@ declare namespace ts {
     function updateExportSpecifier(node: ExportSpecifier, propertyName: Identifier | undefined, name: Identifier): ExportSpecifier;
     function createExternalModuleReference(expression: Expression): ExternalModuleReference;
     function updateExternalModuleReference(node: ExternalModuleReference, expression: Expression): ExternalModuleReference;
+    function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression;
+    function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocTypeTag;
+    function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
+    function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag;
+    function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined): JSDoc;
+    function createJSDocUnknownTag(): JSDocUnknownTag;
+    function createJSDocAugmentsTag(tagName: string, classExpression: ExpressionWithTypeArguments & {
+        expression: Identifier | PropertyAccessEntityNameExpression;
+    }, comment?: string): JSDocAugmentsTag;
+    function createJSDocClassTag(tagName: string): JSDocClassTag;
+    function createJSDocEnumTag(tagName: string, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;
+    function createJSDocThisTag(tagName: string, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag;
+    function createJSDocTemplateTag(tagName: string, typeParameters: NodeArray<TypeParameterDeclaration>, constraint?: JSDocTypeExpression, comment?: string): JSDocTemplateTag;
+    function createJSDocTypedefTag(tagName: string, fullName?: JSDocNamespaceDeclaration | Identifier, name?: Identifier, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral, comment?: string): JSDocTypedefTag;
+    function createJSDocCallbackTag(tagName: string, typeExpression: JSDocSignature, fullName?: JSDocNamespaceDeclaration | Identifier, name?: Identifier, comment?: string): JSDocCallbackTag;
+    function createJSDocSignature(parameters: ReadonlyArray<JSDocParameterTag>, type?: JSDocReturnTag, typeParameters?: ReadonlyArray<JSDocTemplateTag>): JSDocSignature;
+    function createJSDocPropertyLikeTag<T extends JSDocPropertyLikeTag>(kind: T["kind"], tagName: Identifier, name: EntityName, isNameFirst: boolean, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): T;
+    function createJSDocPropertyTag(tagName: Identifier, name: EntityName, isNameFirst: boolean, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocPropertyTag;
+    function createJSDocParameterTag(tagName: Identifier, name: EntityName, isNameFirst: boolean, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag;
+    function createJSDocTypeLiteral(jsDocPropertyTags?: ReadonlyArray<JSDocPropertyLikeTag>, isArrayType?: boolean): JSDocTypeLiteral;
+    function appendJSDocToContainer(node: JSDocContainer, jsdoc: JSDoc): JSDocContainer;
     function createJsxElement(openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement): JsxElement;
     function updateJsxElement(node: JsxElement, openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement): JsxElement;
     function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes): JsxSelfClosingElement;
