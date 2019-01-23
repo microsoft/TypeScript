@@ -38,6 +38,7 @@
 ////    "files": ["/src/index.ts", "typings/global.d.ts"]
 ////}
 
+// GH#29533
 // TODO:: this should be var THREE: typeof import instead of module name as var but thats existing issue and repros with quickInfo too.
 verify.singleReferenceGroup(`module "/node_modules/@types/three/index"
 var "/node_modules/@types/three/index": typeof import("/node_modules/@types/three/index")`);

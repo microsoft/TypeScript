@@ -422,6 +422,9 @@ namespace ts.FindAllReferences.Core {
         return mergeReferences(program, moduleReferences, getReferencedSymbolsForSymbol(symbol, /*node*/ undefined, sourceFiles, sourceFilesSet, checker, cancellationToken, options));
     }
 
+    /**
+     * Merges the references by sorting them (by file index in sourceFiles and their location in it) that point to same definition symbol
+     */
     function mergeReferences(program: Program, ...referencesToMerge: (SymbolAndEntries[] | undefined)[]): SymbolAndEntries[] | undefined {
         let result: SymbolAndEntries[] | undefined;
         for (const references of referencesToMerge) {
