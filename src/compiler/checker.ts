@@ -378,6 +378,7 @@ namespace ts {
         const intersectionTypes = createMap<IntersectionType>();
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
+        const conditionalTypes = createMap<Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -9989,21 +9990,30 @@ namespace ts {
             // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
             const trueType = instantiateType(root.trueType, mapper);
             const falseType = instantiateType(root.falseType, mapper);
+            const instantiationId = `${root.isDistributive ? "d" : ""}${getTypeId(checkType)}>${getTypeId(extendsType)}?${getTypeId(trueType)}:${getTypeId(falseType)}`;
+            let result = conditionalTypes.get(instantiationId);
+            if (result) {
+                return result;
+            }
             if (falseType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(trueType), getActualTypeVariable(checkType))) {
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
-                    return getDefaultConstraintOfTrueBranchOfConditionalType(root, /*combinedMapper*/ undefined, mapper);
+                    result = getDefaultConstraintOfTrueBranchOfConditionalType(root, /*combinedMapper*/ undefined, mapper);
                 }
                 else if (getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
-                    return neverType;
+                    result = neverType;
                 }
             }
             else if (trueType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(falseType), getActualTypeVariable(checkType))) {
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
-                    return neverType;
+                    result = neverType;
                 }
                 else if (getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
-                    return falseType; // TODO: Intersect negated `extends` type here
+                    result = falseType; // TODO: Intersect negated `extends` type here
                 }
+            }
+            if (result) {
+                conditionalTypes.set(instantiationId, result);
+                return result;
             }
             const checkTypeInstantiable = maybeTypeOfKind(checkType, TypeFlags.Instantiable | TypeFlags.GenericMappedType);
             let combinedMapper: TypeMapper | undefined;
@@ -10022,17 +10032,21 @@ namespace ts {
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
             if (!checkTypeInstantiable && !maybeTypeOfKind(inferredExtendsType, TypeFlags.Instantiable | TypeFlags.GenericMappedType)) {
                 if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
+                    conditionalTypes.set(instantiationId, trueType);
                     return trueType;
                 }
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), falseType]);
+                    result = getUnionType([instantiateType(root.trueType, combinedMapper || mapper), falseType]);
+                    conditionalTypes.set(instantiationId, result);
+                    return result;
                 }
                 // Return falseType for a definitely false extends check. We check an instantations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instatiations will be and we can just return the false branch type.
                 if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
+                    conditionalTypes.set(instantiationId, falseType);
                     return falseType;
                 }
                 // Return trueType for a definitely true extends check. We check instantiations of the two
@@ -10041,19 +10055,26 @@ namespace ts {
                 //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                 // doesn't immediately resolve to 'string' instead of being deferred.
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
+                    result = instantiateType(root.trueType, combinedMapper || mapper);
+                    conditionalTypes.set(instantiationId, result);
+                    return result;
                 }
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
             const erasedCheckType = getActualTypeVariable(checkType);
-            const result = <ConditionalType>createType(TypeFlags.Conditional);
-            result.root = root;
-            result.checkType = erasedCheckType;
-            result.extendsType = extendsType;
-            result.mapper = mapper;
-            result.combinedMapper = combinedMapper;
+            result = <ConditionalType>createType(TypeFlags.Conditional);
+            (result as ConditionalType).root = root;
+            (result as ConditionalType).checkType = erasedCheckType;
+            (result as ConditionalType).extendsType = extendsType;
+            (result as ConditionalType).mapper = mapper;
+            (result as ConditionalType).combinedMapper = combinedMapper;
+            if (!combinedMapper) {
+                (result as ConditionalType).resolvedTrueType = trueType;
+                (result as ConditionalType).resolvedFalseType = falseType;
+            }
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
+            conditionalTypes.set(instantiationId, result);
             return result;
         }
 
