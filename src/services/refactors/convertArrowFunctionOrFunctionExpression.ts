@@ -102,7 +102,9 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                 return;
             }
 
-            forEachChild(child, checkThis);
+            if (!isClassLike(child) && !isFunctionDeclaration(child) && !isFunctionExpression(child)) {
+                forEachChild(child, checkThis);
+            }
         });
 
         return containsThis;
