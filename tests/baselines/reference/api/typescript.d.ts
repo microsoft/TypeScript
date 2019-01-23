@@ -1741,6 +1741,7 @@ declare namespace ts {
         fileName?: string;
         text: string;
         prologues: ReadonlyArray<UnparsedPrologue>;
+        helpers: ReadonlyArray<UnscopedEmitHelpers> | undefined;
         sourceMapPath?: string;
         sourceMapText?: string;
     }
@@ -2755,6 +2756,10 @@ declare namespace ts {
         readonly scoped: boolean;
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
+    }
+    interface UnscopedEmitHelpers extends EmitHelper {
+        readonly scoped: false;
+        readonly text: string;
     }
     type EmitHelperUniqueNameCallback = (name: string) => string;
     enum EmitHint {
