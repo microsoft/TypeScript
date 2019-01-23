@@ -9996,7 +9996,7 @@ namespace ts {
                 return result;
             }
             if (falseType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(trueType), getActualTypeVariable(checkType))) {
-                if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+                if (checkType.flags & TypeFlags.Any || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
                     result = getDefaultConstraintOfTrueBranchOfConditionalType(root, /*combinedMapper*/ undefined, mapper);
                 }
                 else if (getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
@@ -10004,10 +10004,10 @@ namespace ts {
                 }
             }
             else if (trueType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(falseType), getActualTypeVariable(checkType))) {
-                if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+                if (!(checkType.flags & TypeFlags.Any) && isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
                     result = neverType;
                 }
-                else if (getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
+                else if (checkType.flags & TypeFlags.Any || getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
                     result = falseType; // TODO: Intersect negated `extends` type here
                 }
             }

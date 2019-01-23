@@ -60,3 +60,6 @@ function fn12<T>(x: TemplatedConditional<T, T, T, never>) {
     var y: T = x;
     x = y;
 }
+
+declare var z: any;
+const zee = z!!!; // since x is `any`, `x extends null | undefined` should be both true and false - and thus yield `any` 

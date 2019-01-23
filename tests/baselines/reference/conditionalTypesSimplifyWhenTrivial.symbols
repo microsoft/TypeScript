@@ -236,3 +236,10 @@ function fn12<T>(x: TemplatedConditional<T, T, T, never>) {
 >y : Symbol(y, Decl(conditionalTypesSimplifyWhenTrivial.ts, 58, 7))
 }
 
+declare var z: any;
+>z : Symbol(z, Decl(conditionalTypesSimplifyWhenTrivial.ts, 62, 11))
+
+const zee = z!!!; // since x is `any`, `x extends null | undefined` should be both true and false - and thus yield `any` 
+>zee : Symbol(zee, Decl(conditionalTypesSimplifyWhenTrivial.ts, 63, 5))
+>z : Symbol(z, Decl(conditionalTypesSimplifyWhenTrivial.ts, 62, 11))
+
