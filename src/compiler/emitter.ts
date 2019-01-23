@@ -3613,7 +3613,7 @@ namespace ts {
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 return getTextOfNode((<StringLiteral>node).textSourceNode!, includeTrivia);
             }
-            else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
+            else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || (!node.parent && !isJsxText(node)))) {
                 return node.text;
             }
 
