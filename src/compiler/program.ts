@@ -1457,7 +1457,11 @@ namespace ts {
                     if (!out) continue;
 
                     const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
-                    const node = createInputFiles(path => host.readFile(path), jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath);
+                    const node = createInputFiles(fileName => {
+                        const path = toPath(fileName);
+                        const sourceFile = getSourceFileByPath(path);
+                        return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
+                    }, jsFilePath! , sourceMapFilePath, declarationFilePath! , declarationMapPath);
                     nodes.push(node);
                 }
             }

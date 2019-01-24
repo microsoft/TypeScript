@@ -495,36 +495,35 @@ export const b = new A();`);
                 Harness.Baseline.runBaseline("outfile-concat.js", patch ? vfs.formatPatch(patch) : null);
             });
             it("verify readFile calls", () => {
-                const expectedMap = createMap<number>();
-                // Configs
-                expectedMap.set("/src/third/tsconfig.json", 1);
-                expectedMap.set("/src/second/tsconfig.json", 1);
-                expectedMap.set("/src/first/tsconfig.json", 1);
+                const expected = [
+                    // Configs
+                    "/src/third/tsconfig.json",
+                    "/src/second/tsconfig.json",
+                    "/src/first/tsconfig.json",
 
-                // Source files
-                expectedMap.set("/src/third/third_part1.ts", 1);
-                expectedMap.set("/src/second/second_part1.ts", 1);
-                expectedMap.set("/src/second/second_part2.ts", 1);
-                expectedMap.set("/src/first/first_PART1.ts", 1);
-                expectedMap.set("/src/first/first_part2.ts", 1);
-                expectedMap.set("/src/first/first_part3.ts", 1);
+                    // Source files
+                    "/src/third/third_part1.ts",
+                    "/src/second/second_part1.ts",
+                    "/src/second/second_part2.ts",
+                    "/src/first/first_PART1.ts",
+                    "/src/first/first_part2.ts",
+                    "/src/first/first_part3.ts",
 
-                // outputs
-                expectedMap.set("/src/first/bin/first-output.js", 1);
-                expectedMap.set("/src/first/bin/first-output.js.map", 1);
-                // 1 for reading source File, 1 for emit
-                expectedMap.set("/src/first/bin/first-output.d.ts", 2);
-                expectedMap.set("/src/first/bin/first-output.d.ts.map", 1);
-                expectedMap.set("/src/2/second-output.js", 1);
-                expectedMap.set("/src/2/second-output.js.map", 1);
-                // 1 for reading source File, 1 for emit
-                expectedMap.set("/src/2/second-output.d.ts", 2);
-                expectedMap.set("/src/2/second-output.d.ts.map", 1);
+                    // outputs
+                    "/src/first/bin/first-output.js",
+                    "/src/first/bin/first-output.js.map",
+                    "/src/first/bin/first-output.d.ts",
+                    "/src/first/bin/first-output.d.ts.map",
+                    "/src/2/second-output.js",
+                    "/src/2/second-output.js.map",
+                    "/src/2/second-output.d.ts",
+                    "/src/2/second-output.d.ts.map"
+                ];
 
-                assert.equal(actualReadFileMap.size, expectedMap.size, `Expected: ${JSON.stringify(arrayFrom(expectedMap.entries()))} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
-                actualReadFileMap.forEach((value, key) => {
-                    const expected = expectedMap.get(key);
-                    assert.equal(value, expected, `Expected: ${JSON.stringify(arrayFrom(expectedMap.entries()))} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                assert.equal(actualReadFileMap.size, expected.length, `Expected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                expected.forEach(expectedValue => {
+                    const actual = actualReadFileMap.get(expectedValue);
+                    assert.equal(actual, 1, `Mismatch in read file call number for: ${expectedValue}\nExpected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
                 });
             });
         });
