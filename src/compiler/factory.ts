@@ -2632,7 +2632,7 @@ namespace ts {
     export function createUnparsedSourceFile(text: string): UnparsedSource;
     export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string | "js" | "dts", map?: string): UnparsedSource {
+    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, map?: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
         if (!isString(textOrInputFiles)) {
             Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
