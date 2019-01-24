@@ -1,16 +1,16 @@
-interface Generator extends Iterator<any> { }
+interface Generator<T> extends IterableIterator<T> { }
 
-interface GeneratorFunction {
+interface GeneratorFunction<T> {
     /**
      * Creates a new Generator object.
      * @param args A list of arguments the function accepts.
      */
-    new (...args: any[]): Generator;
+    new (...args: any[]): Generator<T>;
     /**
      * Creates a new Generator object.
      * @param args A list of arguments the function accepts.
      */
-    (...args: any[]): Generator;
+    (...args: any[]): Generator<T>;
     /**
      * The length of the arguments.
      */
@@ -22,20 +22,20 @@ interface GeneratorFunction {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: Generator;
+    readonly prototype: Generator<T>;
 }
 
-interface GeneratorFunctionConstructor {
+interface GeneratorFunctionConstructor<T> {
     /**
      * Creates a new Generator function.
      * @param args A list of arguments the function accepts.
      */
-    new (...args: string[]): GeneratorFunction;
+    new (...args: string[]): GeneratorFunction<T>;
     /**
      * Creates a new Generator function.
      * @param args A list of arguments the function accepts.
      */
-    (...args: string[]): GeneratorFunction;
+    (...args: string[]): GeneratorFunction<T>;
     /**
      * The length of the arguments.
      */
@@ -47,5 +47,5 @@ interface GeneratorFunctionConstructor {
     /**
      * A reference to the prototype.
      */
-    readonly prototype: GeneratorFunction;
+    readonly prototype: GeneratorFunction<T>;
 }
