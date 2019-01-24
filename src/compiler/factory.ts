@@ -2699,9 +2699,9 @@ namespace ts {
             node.declarationMapPath = declarationMapPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
-                javascriptMapText: { get() { return textGetter(javascriptMapPath); } },
+                javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
                 declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
-                declarationMapText: { get() { return textGetter(declarationMapPath); } }
+                declarationMapText: { get() { return textGetter(declarationMapPath); } } // TODO:: if there is inline sourceMap in dtsFile, use that
             });
         }
         else {
