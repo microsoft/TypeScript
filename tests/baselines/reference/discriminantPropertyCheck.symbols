@@ -377,3 +377,75 @@ u.b && u.a && f(u.a, u.b);
 >u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
 >b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
 
+// Repro from #29496
+
+declare function never(value: never): never;
+>never : Symbol(never, Decl(discriminantPropertyCheck.ts, 120, 26))
+>value : Symbol(value, Decl(discriminantPropertyCheck.ts, 124, 23))
+
+const enum BarEnum {
+>BarEnum : Symbol(BarEnum, Decl(discriminantPropertyCheck.ts, 124, 44))
+
+    bar1 = 1,
+>bar1 : Symbol(BarEnum.bar1, Decl(discriminantPropertyCheck.ts, 126, 20))
+
+    bar2 = 2,
+>bar2 : Symbol(BarEnum.bar2, Decl(discriminantPropertyCheck.ts, 127, 13))
+}
+
+type UnionOfBar = TypeBar1 | TypeBar2;
+>UnionOfBar : Symbol(UnionOfBar, Decl(discriminantPropertyCheck.ts, 129, 1))
+>TypeBar1 : Symbol(TypeBar1, Decl(discriminantPropertyCheck.ts, 131, 38))
+>TypeBar2 : Symbol(TypeBar2, Decl(discriminantPropertyCheck.ts, 132, 39))
+
+type TypeBar1 = { type: BarEnum.bar1 };
+>TypeBar1 : Symbol(TypeBar1, Decl(discriminantPropertyCheck.ts, 131, 38))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 132, 17))
+>BarEnum : Symbol(BarEnum, Decl(discriminantPropertyCheck.ts, 124, 44))
+>bar1 : Symbol(BarEnum.bar1, Decl(discriminantPropertyCheck.ts, 126, 20))
+
+type TypeBar2 = { type: BarEnum.bar2 };
+>TypeBar2 : Symbol(TypeBar2, Decl(discriminantPropertyCheck.ts, 132, 39))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 133, 17))
+>BarEnum : Symbol(BarEnum, Decl(discriminantPropertyCheck.ts, 124, 44))
+>bar2 : Symbol(BarEnum.bar2, Decl(discriminantPropertyCheck.ts, 127, 13))
+
+function func3(value: Partial<UnionOfBar>) {
+>func3 : Symbol(func3, Decl(discriminantPropertyCheck.ts, 133, 39))
+>value : Symbol(value, Decl(discriminantPropertyCheck.ts, 135, 15))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>UnionOfBar : Symbol(UnionOfBar, Decl(discriminantPropertyCheck.ts, 129, 1))
+
+    if (value.type !== undefined) {
+>value.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 132, 17), Decl(discriminantPropertyCheck.ts, 133, 17))
+>value : Symbol(value, Decl(discriminantPropertyCheck.ts, 135, 15))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 132, 17), Decl(discriminantPropertyCheck.ts, 133, 17))
+>undefined : Symbol(undefined)
+
+        switch (value.type) {
+>value.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 132, 17), Decl(discriminantPropertyCheck.ts, 133, 17))
+>value : Symbol(value, Decl(discriminantPropertyCheck.ts, 135, 15))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 132, 17), Decl(discriminantPropertyCheck.ts, 133, 17))
+
+            case BarEnum.bar1:
+>BarEnum.bar1 : Symbol(BarEnum.bar1, Decl(discriminantPropertyCheck.ts, 126, 20))
+>BarEnum : Symbol(BarEnum, Decl(discriminantPropertyCheck.ts, 124, 44))
+>bar1 : Symbol(BarEnum.bar1, Decl(discriminantPropertyCheck.ts, 126, 20))
+
+                break;
+            case BarEnum.bar2:
+>BarEnum.bar2 : Symbol(BarEnum.bar2, Decl(discriminantPropertyCheck.ts, 127, 13))
+>BarEnum : Symbol(BarEnum, Decl(discriminantPropertyCheck.ts, 124, 44))
+>bar2 : Symbol(BarEnum.bar2, Decl(discriminantPropertyCheck.ts, 127, 13))
+
+                break;
+            default:
+                never(value.type);
+>never : Symbol(never, Decl(discriminantPropertyCheck.ts, 120, 26))
+>value.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 132, 17), Decl(discriminantPropertyCheck.ts, 133, 17))
+>value : Symbol(value, Decl(discriminantPropertyCheck.ts, 135, 15))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 132, 17), Decl(discriminantPropertyCheck.ts, 133, 17))
+        }
+    }
+}
+
