@@ -6534,7 +6534,7 @@ namespace ts {
                         // If we have an existing early-bound member, combine its declarations so that we can
                         // report an error at each declaration.
                         const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
-                        const name = (<LiteralType>type).value || declarationNameToString(decl.name);
+                        const name = !(type.flags & TypeFlags.UniqueESSymbol) && unescapeLeadingUnderscores(memberName) || declarationNameToString(decl.name);
                         forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Property_0_was_also_declared_here, name));
                         error(decl.name || decl, Diagnostics.Duplicate_property_0, name);
                         lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late);
