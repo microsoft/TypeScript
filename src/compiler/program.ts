@@ -1456,14 +1456,8 @@ namespace ts {
                     // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
                     if (!out) continue;
 
-                    const dtsFilename = changeExtension(out, ".d.ts");
-                    const js = host.readFile(out) || `/* Input file ${out} was missing */\r\n`;
-                    const jsMapPath = out + ".map"; // TODO: try to read sourceMappingUrl comment from the file
-                    const jsMap = host.readFile(jsMapPath);
-                    const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const dtsMapPath = dtsFilename + ".map";
-                    const dtsMap = host.readFile(dtsMapPath);
-                    const node = createInputFiles(js, dts, jsMap && jsMapPath, jsMap, dtsMap && dtsMapPath, dtsMap);
+                    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
+                    const node = createInputFiles(path => host.readFile(path), jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath);
                     nodes.push(node);
                 }
             }

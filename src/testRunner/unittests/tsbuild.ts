@@ -510,16 +510,16 @@ export const b = new A();`);
                 expectedMap.set("/src/first/first_part3.ts", 1);
 
                 // outputs
-                expectedMap.set("/src/first/bin/first-output.js", 2);
-                expectedMap.set("/src/first/bin/first-output.js.map", 2);
-                // 1 for reading source File, 2 for forEachEmittedFiles (verifying compiler Options and actual emit)when prepend array is created
-                expectedMap.set("/src/first/bin/first-output.d.ts", 3);
-                expectedMap.set("/src/first/bin/first-output.d.ts.map", 2);
-                expectedMap.set("/src/2/second-output.js", 2);
-                expectedMap.set("/src/2/second-output.js.map", 2);
-                // 1 for reading source File, 2 for forEachEmittedFiles (verifying compiler Options and actual emit)when prepend array is created
-                expectedMap.set("/src/2/second-output.d.ts", 3);
-                expectedMap.set("/src/2/second-output.d.ts.map", 2);
+                expectedMap.set("/src/first/bin/first-output.js", 1);
+                expectedMap.set("/src/first/bin/first-output.js.map", 1);
+                // 1 for reading source File, 1 for emit
+                expectedMap.set("/src/first/bin/first-output.d.ts", 2);
+                expectedMap.set("/src/first/bin/first-output.d.ts.map", 1);
+                expectedMap.set("/src/2/second-output.js", 1);
+                expectedMap.set("/src/2/second-output.js.map", 1);
+                // 1 for reading source File, 1 for emit
+                expectedMap.set("/src/2/second-output.d.ts", 2);
+                expectedMap.set("/src/2/second-output.d.ts.map", 1);
 
                 assert.equal(actualReadFileMap.size, expectedMap.size, `Expected: ${JSON.stringify(arrayFrom(expectedMap.entries()))} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
                 actualReadFileMap.forEach((value, key) => {
