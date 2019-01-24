@@ -3,6 +3,16 @@ declare function clearTimeout(handle: any): void;
 
 namespace ts {
     /**
+     * djb2 hashing algorithm
+     * http://www.cse.yorku.ca/~oz/hash.html
+     */
+    /* @internal */
+    export function generateDjb2Hash(data: string): string {
+        const chars = data.split("").map(str => str.charCodeAt(0));
+        return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+    }
+
+    /**
      * Set a high stack trace limit to provide more information in case of an error.
      * Called for command-line and server use cases.
      * Not called if TypeScript is used as a library.
@@ -1113,15 +1123,6 @@ namespace ts {
                 catch (e) {
                     return;
                 }
-            }
-
-            /**
-             * djb2 hashing algorithm
-             * http://www.cse.yorku.ca/~oz/hash.html
-             */
-            function generateDjb2Hash(data: string): string {
-                const chars = data.split("").map(str => str.charCodeAt(0));
-                return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
             }
 
             function createMD5HashUsingNativeCrypto(data: string): string {

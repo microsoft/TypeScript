@@ -85,7 +85,7 @@ namespace ts {
 
         // We shouldn't have any errors about invalid tsconfig files in these tests
         assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-        const file = parseJsonConfigFileContent(config, parseConfigHostFromCompilerHost(host), getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
+        const file = parseJsonConfigFileContent(config, parseConfigHostFromCompilerHostLike(host), getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
         file.options.configFilePath = entryPointConfigFileName;
         const prog = createProgram({
             rootNames: file.fileNames,
