@@ -469,11 +469,20 @@ export const b = new A();`);
 
         describe("unittests:: tsbuild - baseline sectioned sourcemaps", () => {
             let fs: vfs.FileSystem | undefined;
+            const actualReadFileMap = createMap<number>();
             before(() => {
                 fs = outFileFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
                 host.clearDiagnostics();
+                const originalReadFile = host.readFile;
+                host.readFile = path => {
+                    // Dont record libs
+                    if (path.startsWith("/src/")) {
+                        actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
+                    }
+                    return originalReadFile.call(host, path);
+                };
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(/*none*/);
             });
@@ -484,6 +493,39 @@ export const b = new A();`);
                 const patch = fs!.diff();
                 // tslint:disable-next-line:no-null-keyword
                 Harness.Baseline.runBaseline("outfile-concat.js", patch ? vfs.formatPatch(patch) : null);
+            });
+            it("verify readFile calls", () => {
+                const expectedMap = createMap<number>();
+                // Configs
+                expectedMap.set("/src/third/tsconfig.json", 1);
+                expectedMap.set("/src/second/tsconfig.json", 1);
+                expectedMap.set("/src/first/tsconfig.json", 1);
+
+                // Source files
+                expectedMap.set("/src/third/third_part1.ts", 1);
+                expectedMap.set("/src/second/second_part1.ts", 1);
+                expectedMap.set("/src/second/second_part2.ts", 1);
+                expectedMap.set("/src/first/first_PART1.ts", 1);
+                expectedMap.set("/src/first/first_part2.ts", 1);
+                expectedMap.set("/src/first/first_part3.ts", 1);
+
+                // outputs
+                expectedMap.set("/src/first/bin/first-output.js", 2);
+                expectedMap.set("/src/first/bin/first-output.js.map", 2);
+                // 1 for reading source File, 2 for forEachEmittedFiles (verifying compiler Options and actual emit)when prepend array is created
+                expectedMap.set("/src/first/bin/first-output.d.ts", 3);
+                expectedMap.set("/src/first/bin/first-output.d.ts.map", 2);
+                expectedMap.set("/src/2/second-output.js", 2);
+                expectedMap.set("/src/2/second-output.js.map", 2);
+                // 1 for reading source File, 2 for forEachEmittedFiles (verifying compiler Options and actual emit)when prepend array is created
+                expectedMap.set("/src/2/second-output.d.ts", 3);
+                expectedMap.set("/src/2/second-output.d.ts.map", 2);
+
+                assert.equal(actualReadFileMap.size, expectedMap.size, `Expected: ${JSON.stringify(arrayFrom(expectedMap.entries()))} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                actualReadFileMap.forEach((value, key) => {
+                    const expected = expectedMap.get(key);
+                    assert.equal(value, expected, `Expected: ${JSON.stringify(arrayFrom(expectedMap.entries()))} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                });
             });
         });
 
