@@ -4862,17 +4862,8 @@ namespace ts {
         function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
             const pattern = declaration.parent;
             let parentType = getTypeForBindingElementParent(pattern.parent);
-            // If parent has the unknown (error) type, then so does this binding element
-            if (parentType === errorType) {
-                return errorType;
-            }
-            // If no type was specified or inferred for parent,
-            // infer from the initializer of the binding element if one is present.
-            // Otherwise, go with the undefined type of the parent.
-            if (!parentType) {
-                return declaration.initializer ? checkDeclarationInitializer(declaration) : parentType;
-            }
-            if (isTypeAny(parentType)) {
+            // If no type or an any type was inferred for parent, infer that for the binding element
+            if (!parentType || isTypeAny(parentType)) {
                 return parentType;
             }
             // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
@@ -5041,8 +5032,11 @@ namespace ts {
                 }
             }
 
-            // Use the type of the initializer expression if one is present
-            if (declaration.initializer) {
+            const isParameterOfContextuallyTypedFunction = declaration.kind === SyntaxKind.Parameter && getContextualType(<Expression>declaration.parent);
+
+            // Use the type of the initializer expression if one is present and the declaration is
+            // not a parameter of a contextually typed function
+            if (declaration.initializer && !isParameterOfContextuallyTypedFunction) {
                 const type = checkDeclarationInitializer(declaration);
                 return addOptionality(type, isOptional);
             }
@@ -5053,8 +5047,9 @@ namespace ts {
                 return trueType;
             }
 
-            // If the declaration specifies a binding pattern, use the type implied by the binding pattern
-            if (isBindingPattern(declaration.name)) {
+            // If the declaration specifies a binding pattern and is not a parameter of a contextually
+            // typed function, use the type implied by the binding pattern
+            if (isBindingPattern(declaration.name) && !isParameterOfContextuallyTypedFunction) {
                 return getTypeFromBindingPattern(declaration.name, /*includePatternInType*/ false, /*reportErrors*/ true);
             }
 
@@ -25638,13 +25633,13 @@ namespace ts {
                 const parent = node.parent.parent;
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || node.name;
-                if (!isBindingPattern(name)) {
+                if (parentType && !isBindingPattern(name)) {
                     const nameText = getTextOfPropertyName(name);
                     if (nameText) {
-                        const property = getPropertyOfType(parentType!, nameText); // TODO: GH#18217
+                        const property = getPropertyOfType(parentType, nameText);
                         if (property) {
                             markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                            checkPropertyAccessibility(parent, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType!, property);
+                            checkPropertyAccessibility(parent, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType, property);
                         }
                     }
                 }
