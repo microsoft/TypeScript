@@ -3923,11 +3923,8 @@ declare namespace ts {
     function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag;
     function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag;
     function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined): JSDoc;
-    function createJSDocUnknownTag(): JSDocUnknownTag;
-    function createJSDocAugmentsTag(tagName: string, classExpression: ExpressionWithTypeArguments & {
-        expression: Identifier | PropertyAccessEntityNameExpression;
-    }, comment?: string): JSDocAugmentsTag;
-    function createJSDocClassTag(tagName: string): JSDocClassTag;
+    function createJSDocAugmentsTag(tagName: string, classExpression: JSDocAugmentsTag["class"], comment?: string): JSDocAugmentsTag;
+    function createJSDocClassTag(tagName: string, comment?: string): JSDocClassTag;
     function createJSDocEnumTag(tagName: string, typeExpression?: JSDocTypeExpression, comment?: string): JSDocEnumTag;
     function createJSDocThisTag(tagName: string, typeExpression?: JSDocTypeExpression, comment?: string): JSDocThisTag;
     function createJSDocTemplateTag(tagName: string, typeParameters: NodeArray<TypeParameterDeclaration>, constraint?: JSDocTypeExpression, comment?: string): JSDocTemplateTag;

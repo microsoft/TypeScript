@@ -2181,6 +2181,19 @@ namespace ts {
 
     // JSDoc
 
+    function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string, comment?: string): T {
+        const node = createSynthesizedNode(kind) as T;
+        node.tagName = createIdentifier(tagName);
+        node.comment = comment;
+        return node;
+    }
+
+    function createJSDocTagWithTypeExpression<T extends JSDocTag & { typeExpression?: TypeNode }>(kind: T["kind"], tagName: string, typeExpression?: TypeNode, comment?: string) {
+        const node = createJSDocTag<T>(kind, tagName, comment);
+        node.typeExpression = typeExpression;
+        return node;
+    }
+
     export function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
         const node = createSynthesizedNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
         node.type = type;
@@ -2188,25 +2201,17 @@ namespace ts {
     }
 
     export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocTypeTag {
-        const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
-        tag.typeExpression = typeExpression;
-        tag.comment = comment;
-        return tag;
+        return createJSDocTagWithTypeExpression<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type", typeExpression, comment);
     }
 
     export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
-        const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
-        tag.typeExpression = typeExpression;
-        tag.comment = comment;
-        return tag;
+        return createJSDocTagWithTypeExpression<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns", typeExpression, comment);
     }
 
     export function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
-        const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param");
-        tag.typeExpression = typeExpression;
+        const tag = createJSDocTagWithTypeExpression<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param", typeExpression, comment);
         tag.name = name;
         tag.isBracketed = isBracketed;
-        tag.comment = comment;
         return tag;
     }
 
@@ -2217,64 +2222,42 @@ namespace ts {
         return node;
     }
 
-    function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
-        const node = createSynthesizedNode(kind) as T;
-        node.tagName = createIdentifier(tagName);
-        return node;
-    }
-
-    export function createJSDocUnknownTag() {
-        return createSynthesizedNode(SyntaxKind.JSDocTag) as JSDocUnknownTag;
-    }
-
-    export function createJSDocAugmentsTag(tagName: string, classExpression: ExpressionWithTypeArguments & { expression: Identifier | PropertyAccessEntityNameExpression }, comment?: string) {
-        const node = createJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName);
+    export function createJSDocAugmentsTag(tagName: string, classExpression: JSDocAugmentsTag["class"], comment?: string) {
+        const node = createJSDocTag<JSDocAugmentsTag>(SyntaxKind.JSDocAugmentsTag, tagName, comment);
         node.class = classExpression;
-        node.comment = comment;
         return node;
     }
 
-    export function createJSDocClassTag(tagName: string) {
-        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, tagName);
+    export function createJSDocClassTag(tagName: string, comment?: string) {
+        return createJSDocTag<JSDocClassTag>(SyntaxKind.JSDocClassTag, tagName, comment);
     }
 
     export function createJSDocEnumTag(tagName: string, typeExpression?: JSDocTypeExpression, comment?: string) {
-        const node = createJSDocTag<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName);
-        node.typeExpression = typeExpression;
-        node.comment = comment;
-        return node;
+        return createJSDocTagWithTypeExpression<JSDocEnumTag>(SyntaxKind.JSDocEnumTag, tagName, typeExpression, comment);
     }
 
     export function createJSDocThisTag(tagName: string, typeExpression?: JSDocTypeExpression, comment?: string) {
-        const node = createJSDocTag<JSDocThisTag>(SyntaxKind.JSDocThisTag, tagName);
-        node.typeExpression = typeExpression;
-        node.comment = comment;
-        return node;
+        return createJSDocTagWithTypeExpression<JSDocThisTag>(SyntaxKind.JSDocThisTag, tagName, typeExpression, comment);
     }
 
     export function createJSDocTemplateTag(tagName: string, typeParameters: NodeArray<TypeParameterDeclaration>, constraint?: JSDocTypeExpression, comment?: string) {
-        const node = createJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName);
+        const node = createJSDocTag<JSDocTemplateTag>(SyntaxKind.JSDocTemplateTag, tagName, comment);
         node.constraint = constraint;
         node.typeParameters = typeParameters;
-        node.comment = comment;
         return node;
     }
 
     export function createJSDocTypedefTag(tagName: string, fullName?: JSDocNamespaceDeclaration | Identifier, name?: Identifier, typeExpression?: JSDocTypeExpression | JSDocTypeLiteral, comment?: string) {
-        const node = createJSDocTag<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName);
+        const node = createJSDocTagWithTypeExpression<JSDocTypedefTag>(SyntaxKind.JSDocTypedefTag, tagName, typeExpression, comment);
         node.fullName = fullName;
         node.name = name;
-        node.typeExpression = typeExpression;
-        node.comment = comment;
         return node;
     }
 
     export function createJSDocCallbackTag(tagName: string, typeExpression: JSDocSignature, fullName?: JSDocNamespaceDeclaration | Identifier, name?: Identifier, comment?: string) {
-        const node = createJSDocTag<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName);
-        node.typeExpression = typeExpression;
+        const node = createJSDocTagWithTypeExpression<JSDocCallbackTag>(SyntaxKind.JSDocCallbackTag, tagName, typeExpression, comment);
         node.fullName = fullName;
         node.name = name;
-        node.comment = comment;
         return node;
     }
 
