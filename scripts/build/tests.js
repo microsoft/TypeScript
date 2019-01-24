@@ -165,7 +165,7 @@ exports.cleanTestDirs = cleanTestDirs;
 function writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, timeout, keepFailed) {
     const testConfigContents = JSON.stringify({
         test: tests ? [tests] : undefined,
-        runner: runners ? runners.split(",") : undefined,
+        runners: runners ? runners.split(",") : undefined,
         light,
         workerCount,
         stackTraceLimit,

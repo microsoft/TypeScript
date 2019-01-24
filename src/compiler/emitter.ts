@@ -2561,6 +2561,7 @@ namespace ts {
         function emitJsxSelfClosingElement(node: JsxSelfClosingElement) {
             writePunctuation("<");
             emitJsxTagName(node.tagName);
+            emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emit(node.attributes);
             writePunctuation("/>");
@@ -2577,6 +2578,7 @@ namespace ts {
 
             if (isJsxOpeningElement(node)) {
                 emitJsxTagName(node.tagName);
+                emitTypeArguments(node, node.typeArguments);
                 if (node.attributes.properties && node.attributes.properties.length > 0) {
                     writeSpace();
                 }
@@ -4370,10 +4372,10 @@ namespace ts {
         }
 
         /**
-         * Skips trivia such as comments and white-space that can optionally overriden by the source map source
+         * Skips trivia such as comments and white-space that can be optionally overridden by the source-map source
          */
         function skipSourceTrivia(source: SourceMapSource, pos: number): number {
-            return source.skipTrivia ? source.skipTrivia(pos) : skipTrivia(sourceMapSource.text, pos);
+            return source.skipTrivia ? source.skipTrivia(pos) : skipTrivia(source.text, pos);
         }
 
         /**
@@ -4389,7 +4391,7 @@ namespace ts {
                 return;
             }
 
-            const { line: sourceLine, character: sourceCharacter } = getLineAndCharacterOfPosition(currentSourceFile!, pos);
+            const { line: sourceLine, character: sourceCharacter } = getLineAndCharacterOfPosition(sourceMapSource, pos);
             sourceMapGenerator!.addMapping(
                 writer.getLine(),
                 writer.getColumn(),

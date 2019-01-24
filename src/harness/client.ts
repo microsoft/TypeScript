@@ -384,7 +384,8 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+        getRenameInfo(fileName: string, position: number, _options?: RenameInfoOptions, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+            // Not passing along 'options' because server should already have those from the 'configure' command
             const args: protocol.RenameRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), findInStrings, findInComments };
 
             const request = this.processRequest<protocol.RenameRequest>(CommandNames.Rename, args);
@@ -428,7 +429,7 @@ namespace ts.server {
                 this.lastRenameEntry.inputs.position !== position ||
                 this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
                 this.lastRenameEntry.inputs.findInComments !== findInComments) {
-                this.getRenameInfo(fileName, position, findInStrings, findInComments);
+                this.getRenameInfo(fileName, position, { allowRenameOfImportPath: true }, findInStrings, findInComments);
             }
 
             return this.lastRenameEntry!.locations;
