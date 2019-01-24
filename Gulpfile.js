@@ -274,7 +274,7 @@ gulp.task(
 // Generate Markdown spec
 const specMd = "doc/spec.md";
 gulp.task(specMd, /*help*/ false, [word2mdJs], () =>
-    exec("cscript", ["//nologo", word2mdJs, path.resolve(specMd), path.resolve("doc/TypeScript Language Specification.docx")]));
+    exec("cscript", ["//nologo", word2mdJs, path.resolve("doc/TypeScript Language Specification.docx"), path.resolve(specMd)]));
 
 gulp.task(
     "generate-spec",
@@ -595,7 +595,7 @@ gulp.task(
                         project.waitForWorkToStart().then(() => {
                             source.cancel();
                         });
-                    
+
                         if (cmdLineOptions.tests || cmdLineOptions.failed) {
                             await runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, source.token);
                         }

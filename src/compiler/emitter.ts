@@ -4377,10 +4377,10 @@ namespace ts {
         }
 
         /**
-         * Skips trivia such as comments and white-space that can optionally overriden by the source map source
+         * Skips trivia such as comments and white-space that can be optionally overridden by the source-map source
          */
         function skipSourceTrivia(source: SourceMapSource, pos: number): number {
-            return source.skipTrivia ? source.skipTrivia(pos) : skipTrivia(sourceMapSource.text, pos);
+            return source.skipTrivia ? source.skipTrivia(pos) : skipTrivia(source.text, pos);
         }
 
         /**
