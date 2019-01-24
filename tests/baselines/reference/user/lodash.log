@@ -79,7 +79,6 @@ node_modules/lodash/_baseWrapperValue.js(18,21): error TS2339: Property 'value' 
 node_modules/lodash/_cloneArrayBuffer.js(11,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: any, isDeep?: boolean | undefined) => any'.
 node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer": (buffer: any, isDeep?: boolean | undefined) => any; }'.
-node_modules/lodash/_cloneBuffer.js(20,12): error TS2587: JSDoc type 'Buffer' circularly references itself.
 node_modules/lodash/_cloneBuffer.js(22,14): error TS2577: Return type annotation circularly references itself.
 node_modules/lodash/_cloneBuffer.js(24,22): error TS2502: 'buffer' is referenced directly or indirectly in its own type annotation.
 node_modules/lodash/_copySymbols.js(13,29): error TS2554: Expected 0 arguments, but got 1.
