@@ -122,6 +122,34 @@ u.a && u.b && f(u.a, u.b);
 
 u.b && u.a && f(u.a, u.b);
 
+// Repro from #29012
+
+type Additive = '+' | '-';
+type Multiplicative = '*' | '/';
+
+interface AdditiveObj {
+    key: Additive
+}
+
+interface MultiplicativeObj {
+    key: Multiplicative
+}
+
+type Obj = AdditiveObj | MultiplicativeObj
+
+export function foo(obj: Obj) {
+    switch (obj.key) {
+        case '+': {
+            onlyPlus(obj.key);
+            return;
+        }
+    }
+}
+
+function onlyPlus(arg: '+') {
+  return arg;
+}
+
 // Repro from #29496
 
 declare function never(value: never): never;
