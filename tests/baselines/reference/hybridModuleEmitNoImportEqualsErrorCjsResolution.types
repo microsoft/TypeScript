@@ -1,0 +1,40 @@
+=== tests/cases/compiler/importer.ts ===
+import f = require("cjsyexporter");
+>f : () => void
+
+f();
+>f() : void
+>f : () => void
+
+import {x, y} from "./esmyexporter";
+>x : 0
+>y : 0
+
+void x;
+>void x : undefined
+>x : 0
+
+void y;
+>void y : undefined
+>y : 0
+
+=== tests/cases/compiler/node_modules/cjsyexporter/index.d.ts ===
+declare function f(): void;
+>f : () => void
+
+export = f;
+>f : () => void
+
+=== tests/cases/compiler/esmyexporter.ts ===
+const x = 0;
+>x : 0
+>0 : 0
+
+const y = 0;
+>y : 0
+>0 : 0
+
+export {x, y}
+>x : 0
+>y : 0
+

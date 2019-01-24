@@ -614,7 +614,7 @@ namespace ts {
         else {
             let moduleResolution = compilerOptions.moduleResolution;
             if (moduleResolution === undefined) {
-                moduleResolution = getEmitModuleKind(compilerOptions) === ModuleKind.CommonJS ? ModuleResolutionKind.NodeJs : ModuleResolutionKind.Classic;
+                moduleResolution = getEmitModuleResolutionKind(compilerOptions);
                 if (traceEnabled) {
                     trace(host, Diagnostics.Module_resolution_kind_is_not_specified_using_0, ModuleResolutionKind[moduleResolution]);
                 }
