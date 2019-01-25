@@ -1,10 +1,8 @@
-error TS2318: Cannot find global type 'IterableIterator'.
 tests/cases/compiler/capturedParametersInInitializers1.ts(16,20): error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
 tests/cases/compiler/capturedParametersInInitializers1.ts(20,26): error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
 tests/cases/compiler/capturedParametersInInitializers1.ts(36,21): error TS2373: Initializer of parameter 'y' cannot reference identifier 'z' declared after it.
 
 
-!!! error TS2318: Cannot find global type 'IterableIterator'.
 ==== tests/cases/compiler/capturedParametersInInitializers1.ts (3 errors) ====
     // ok - usage is deferred
     function foo1(y = class {c = x}, x = 1) {
