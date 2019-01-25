@@ -215,6 +215,11 @@ const tsserverProject = "src/tsserver/tsconfig.json";
 const tsserverJs = "built/local/tsserver.js";
 gulp.task(tsserverJs, /*help*/ false, useCompilerDeps, () => project.compile(tsserverProject, { typescript: useCompiler }));
 
+gulp.task(
+    "tsserver",
+    "Builds the language server",
+    [tsserverJs]);
+
 const watchGuardProject = "src/watchGuard/tsconfig.json";
 const watchGuardJs = "built/local/watchGuard.js";
 gulp.task(watchGuardJs, /*help*/ false, useCompilerDeps, () => project.compile(watchGuardProject, { typescript: useCompiler }));
