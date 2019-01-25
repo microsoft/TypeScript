@@ -3218,7 +3218,7 @@ namespace ts {
             return result;
         }
 
-        function getRelationTypeName(left: Type, right: Type): [string, string] {
+        function getTypeNamesForErrorDisplay(left: Type, right: Type): [string, string] {
             let leftStr = typeToString(left);
             let rightStr = typeToString(right);
             if (leftStr === rightStr) {
@@ -11912,7 +11912,7 @@ namespace ts {
             }
 
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
-                const [ sourceType, targetType ] = getRelationTypeName(source, target);
+                const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
 
                 if (!message) {
                     if (relation === comparableRelation) {
@@ -22807,7 +22807,7 @@ namespace ts {
             }
 
             function reportOperatorError() {
-                const [ leftStr, rightStr ] = getRelationTypeName(leftType, rightType);
+                const [leftStr, rightStr] = getTypeNamesForErrorDisplay(leftType, rightType);
                 const errNode = errorNode || operatorToken;
                 if (!tryGiveBetterPrimaryError(errNode, leftStr, rightStr)) {
                     error(
