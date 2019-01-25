@@ -138,7 +138,7 @@ gulp.task(typescriptServicesProject, /*help*/ false, () => {
         compilerOptions: {
             "removeComments": false,
             "stripInternal": true,
-            "declarationMap": false,
+            "declaration": true,
             "outFile": "typescriptServices.out.js" // must align with same task in jakefile. We fix this name below.
         }
     });
