@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.2";
+    export const versionMajorMinor = "3.3";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -112,13 +112,13 @@ namespace ts {
     }
 
     // The global Map object. This may not be available, so we must test for it.
-    declare const Map: { new <T>(): Map<T> } | undefined;
+    declare const Map: (new <T>() => Map<T>) | undefined;
     // Internet Explorer's Map doesn't support iteration, so don't use it.
     // tslint:disable-next-line no-in-operator variable-name
     export const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
-    function shimMap(): { new <T>(): Map<T> } {
+    function shimMap(): new <T>() => Map<T> {
 
         class MapIterator<T, U extends (string | T | [string, T])> {
             private data: MapLike<T>;
@@ -1268,9 +1268,9 @@ namespace ts {
     }
 
     /** Shims `Array.from`. */
-    export function arrayFrom<T, U>(iterator: Iterator<T>, map: (t: T) => U): U[];
-    export function arrayFrom<T>(iterator: Iterator<T>): T[];
-    export function arrayFrom(iterator: Iterator<any>, map?: (t: any) => any): any[] {
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
+    export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
         const result: any[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(map ? map(value) : value);
@@ -1385,6 +1385,18 @@ namespace ts {
         }
 
         return result;
+    }
+
+    export function copyProperties<T1 extends T2, T2>(first: T1, second: T2) {
+        for (const id in second) {
+            if (hasOwnProperty.call(second, id)) {
+                (first as any)[id] = second[id];
+            }
+        }
+    }
+
+    export function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
+        return fn ? fn.bind(obj) : undefined;
     }
 
     export interface MultiMap<T> extends Map<T[]> {
@@ -2165,6 +2177,10 @@ namespace ts {
     }
 
     export function fill<T>(length: number, cb: (index: number) => T): T[] {
-        return new Array(length).fill(0).map((_, i) => cb(i));
+        const result = Array<T>(length);
+        for (let i = 0; i < length; i++) {
+            result[i] = cb(i);
+        }
+        return result;
     }
 }

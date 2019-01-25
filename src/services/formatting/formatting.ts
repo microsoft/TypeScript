@@ -1106,10 +1106,7 @@ namespace ts.formatting {
          * Trimming will be done for lines after the previous range
          */
         function trimTrailingWhitespacesForRemainingRange() {
-            if (!previousRange) {
-                return;
-            }
-            const startPosition = previousRange.end;
+            const startPosition = previousRange ? previousRange.end : originalRange.pos;
 
             const startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;

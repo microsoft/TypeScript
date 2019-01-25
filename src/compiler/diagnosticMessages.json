@@ -1007,9 +1007,17 @@
         "category": "Message",
         "code": 1350
     },
-    "Experimental support for BigInt is a feature that is subject to change in a future release. Set the 'experimentalBigInt' option to remove this warning.": {
+    "An identifier or keyword cannot immediately follow a numeric literal.": {
         "category": "Error",
         "code": 1351
+    },
+    "A bigint literal cannot use exponential notation.": {
+        "category": "Error",
+        "code": 1352
+    },
+    "A bigint literal must be an integer.": {
+        "category": "Error",
+        "code": 1353
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1060,7 +1068,7 @@
         "category": "Error",
         "code": 2311
     },
-    "An interface may only extend a class or another interface.": {
+    "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2312
     },
@@ -1488,7 +1496,7 @@
         "category": "Error",
         "code": 2420
     },
-    "A class may only implement another class or interface.": {
+    "A class can only implement an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2422
     },
@@ -1632,14 +1640,6 @@
         "category": "Error",
         "code": 2458
     },
-    "Type '{0}' has no property '{1}' and no string index signature.": {
-        "category": "Error",
-        "code": 2459
-    },
-    "Type '{0}' has no property '{1}'.": {
-        "category": "Error",
-        "code": 2460
-    },
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
@@ -1692,7 +1692,7 @@
         "category": "Error",
         "code": 2473
     },
-    "In 'const' enum declarations member initializer must be constant expression.": {
+    "const enum member initializers can only contain literal values and other computed enum values.": {
         "category": "Error",
         "code": 2474
     },
@@ -1756,7 +1756,7 @@
         "category": "Error",
         "code": 2492
     },
-    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
+    "Tuple type '{0}' of length '{1}' has no element at index '{2}'.": {
         "category": "Error",
         "code": 2493
     },
@@ -1772,7 +1772,7 @@
         "category": "Error",
         "code": 2496
     },
-    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "This module can only be referenced with ECMAScript imports/exports by turning on the '{0}' flag and referencing its default export.": {
         "category": "Error",
         "code": 2497
     },
@@ -1820,7 +1820,7 @@
         "category": "Error",
         "code": 2508
     },
-    "Base constructor return type '{0}' is not a class or interface type.": {
+    "Base constructor return type '{0}' is not an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2509
     },
@@ -1944,7 +1944,7 @@
         "category": "Error",
         "code": 2539
     },
-    "Cannot assign to '{0}' because it is a constant or a read-only property.": {
+    "Cannot assign to '{0}' because it is a read-only property.": {
         "category": "Error",
         "code": 2540
     },
@@ -2052,10 +2052,6 @@
         "category": "Error",
         "code": 2567
     },
-    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
-        "category": "Error",
-        "code": 2568
-    },
     "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
         "category": "Error",
         "code": 2569
@@ -2123,6 +2119,10 @@
     "JSDoc type '{0}' circularly references itself.": {
         "category": "Error",
         "code": 2587
+    },
+    "Cannot assign to '{0}' because it is a constant.": {
+        "category": "Error",
+        "code": 2588
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2429,7 +2429,7 @@
         "category": "Error",
         "code": 2717
     },
-    "Duplicate declaration '{0}'.": {
+    "Duplicate property '{0}'.": {
         "category": "Error",
         "code": 2718
     },
@@ -2489,6 +2489,10 @@
         "category": "Error",
         "code": 2732
     },
+    "Property '{0}' was also declared here.": {
+        "category": "Error",
+        "code": 2733
+    },
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
         "code": 2734
@@ -2501,7 +2505,7 @@
         "category": "Error",
         "code": 2736
     },
-    "BigInt literals are not available when targetting lower than ESNext.": {
+    "BigInt literals are not available when targeting lower than ESNext.": {
         "category": "Error",
         "code": 2737
     },
@@ -2509,9 +2513,45 @@
         "category": "Message",
         "code": 2738
     },
-    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+    "Type '{0}' is missing the following properties from type '{1}': {2}": {
         "category": "Error",
         "code": 2739
+    },
+    "Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.": {
+        "category": "Error",
+        "code": 2740
+    },
+    "Property '{0}' is missing in type '{1}' but required in type '{2}'.": {
+        "category": "Error",
+        "code": 2741
+    },
+    "The inferred type of '{0}' cannot be named without a reference to '{1}'. This is likely not portable. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2742
+    },
+    "No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.": {
+        "category": "Error",
+        "code": 2743
+    },
+    "Type parameter defaults can only reference previously declared type parameters.": {
+        "category": "Error",
+        "code": 2744
+    },
+    "This JSX tag's '{0}' prop expects type '{1}' which requires multiple children, but only a single child was provided.": {
+        "category": "Error",
+        "code": 2745
+    },
+    "This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.": {
+        "category": "Error",
+        "code": 2746
+    },
+    "'{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.": {
+        "category": "Error",
+        "code": 2747
+    },
+    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 2748
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3921,7 +3961,7 @@
         "category": "Error",
         "code": 6370
     },
-    "Enables experimental support for ESNext BigInt literals.": {
+    "Updating unchanged output timestamps of project '{0}'...": {
         "category": "Message",
         "code": 6371
     },
@@ -3966,6 +4006,10 @@
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7013
+    },
+    "Function type, which lacks return-type annotation, implicitly has an '{0}' return type.": {
+        "category": "Error",
+        "code": 7014
     },
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
@@ -4109,6 +4153,10 @@
         "category": "Suggestion",
         "code": 7050
     },
+    "Parameter has a name but no type. Did you mean '{0}: {1}'?": {
+        "category": "Error",
+        "code": 7051
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
@@ -4233,6 +4281,10 @@
     "You cannot rename a module via a global import.": {
         "category": "Error",
         "code": 8031
+    },
+    "Qualified name '{0}' is not allowed without a leading '@param {object} {1}'.": {
+        "category": "Error",
+        "code": 8032
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -4492,6 +4544,10 @@
         "category": "Message",
         "code": 90033
     },
+    "Add parameter name": {
+        "category": "Message",
+        "code": 90034
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -4732,7 +4788,6 @@
         "category": "Message",
         "code": 95062
     },
-
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4764,5 +4819,21 @@
     "Add 'unknown' to all conversions of non-overlapping types": {
         "category": "Message",
         "code": 95070
+    },
+    "Add missing 'new' operator to call": {
+        "category": "Message",
+        "code": 95071
+    },
+    "Add missing 'new' operator to all calls": {
+        "category": "Message",
+        "code": 95072
+    },
+    "Add names to all parameters without names": {
+        "category": "Message",
+        "code": 95073
+    },
+    "Enable the 'experimentalDecorators' option in your configuration file": {
+        "category": "Message",
+        "code": 95074
     }
 }

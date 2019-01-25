@@ -1,11 +1,10 @@
 tests/cases/compiler/bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
 tests/cases/compiler/bigintWithLib.ts(16,33): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
-  Type 'number[]' is not assignable to type 'SharedArrayBuffer'.
-    Property 'byteLength' is missing in type 'number[]'.
-tests/cases/compiler/bigintWithLib.ts(21,13): error TS2540: Cannot assign to 'length' because it is a constant or a read-only property.
+  Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
+tests/cases/compiler/bigintWithLib.ts(21,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
 tests/cases/compiler/bigintWithLib.ts(28,35): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
   Type 'number[]' is not assignable to type 'SharedArrayBuffer'.
-tests/cases/compiler/bigintWithLib.ts(33,13): error TS2540: Cannot assign to 'length' because it is a constant or a read-only property.
+tests/cases/compiler/bigintWithLib.ts(33,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
 tests/cases/compiler/bigintWithLib.ts(40,25): error TS2345: Argument of type '-1' is not assignable to parameter of type 'bigint'.
 tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '123' is not assignable to parameter of type 'bigint'.
 
@@ -31,15 +30,14 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     bigIntArray = new BigInt64Array([1, 2, 3]); // should error
                                     ~~~~~~~~~
 !!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
-!!! error TS2345:   Type 'number[]' is not assignable to type 'SharedArrayBuffer'.
-!!! error TS2345:     Property 'byteLength' is missing in type 'number[]'.
+!!! error TS2345:   Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
     bigIntArray = new BigInt64Array(new ArrayBuffer(80));
     bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
     bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
     let len: number = bigIntArray.length;
     bigIntArray.length = 10; // should error
                 ~~~~~~
-!!! error TS2540: Cannot assign to 'length' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'length' because it is a read-only property.
     let arrayBufferLike: ArrayBufferView = bigIntArray;
     
     // Test BigUint64Array
@@ -56,7 +54,7 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     len = bigIntArray.length;
     bigIntArray.length = 10; // should error
                 ~~~~~~
-!!! error TS2540: Cannot assign to 'length' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'length' because it is a read-only property.
     arrayBufferLike = bigIntArray;
     
     // Test added DataView methods

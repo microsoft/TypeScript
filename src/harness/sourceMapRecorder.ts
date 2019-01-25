@@ -69,7 +69,7 @@ namespace Harness.SourceMapRecorder {
             SourceMapDecoder.initializeSourceMapDecoding(sourceMapData);
             sourceMapRecorder.WriteLine("===================================================================");
             sourceMapRecorder.WriteLine("JsFile: " + sourceMapData.sourceMap.file);
-            sourceMapRecorder.WriteLine("mapUrl: " + ts.tryGetSourceMappingURL(jsFile.text, jsLineMap));
+            sourceMapRecorder.WriteLine("mapUrl: " + ts.tryGetSourceMappingURL(ts.getLineInfo(jsFile.text, jsLineMap)));
             sourceMapRecorder.WriteLine("sourceRoot: " + sourceMapData.sourceMap.sourceRoot);
             sourceMapRecorder.WriteLine("sources: " + sourceMapData.sourceMap.sources);
             if (sourceMapData.sourceMap.sourcesContent) {

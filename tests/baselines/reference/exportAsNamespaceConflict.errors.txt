@@ -1,0 +1,13 @@
+/a.d.ts(2,10): error TS2708: Cannot use namespace 'N' as a value.
+/a.d.ts(3,1): error TS2303: Circular definition of import alias 'N'.
+
+
+==== /a.d.ts (2 errors) ====
+    declare global { namespace N {} }
+    export = N;
+             ~
+!!! error TS2708: Cannot use namespace 'N' as a value.
+    export as namespace N;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2303: Circular definition of import alias 'N'.
+    

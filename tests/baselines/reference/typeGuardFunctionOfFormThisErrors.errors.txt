@@ -1,11 +1,9 @@
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(23,1): error TS2322: Type '() => this is LeadGuard' is not assignable to type '() => this is FollowerGuard'.
   Type predicate 'this is LeadGuard' is not assignable to 'this is FollowerGuard'.
-    Type 'LeadGuard' is not assignable to type 'FollowerGuard'.
-      Property 'follow' is missing in type 'LeadGuard'.
+    Property 'follow' is missing in type 'LeadGuard' but required in type 'FollowerGuard'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(24,1): error TS2322: Type '() => this is FollowerGuard' is not assignable to type '() => this is LeadGuard'.
   Type predicate 'this is FollowerGuard' is not assignable to 'this is LeadGuard'.
-    Type 'FollowerGuard' is not assignable to type 'LeadGuard'.
-      Property 'lead' is missing in type 'FollowerGuard'.
+    Property 'lead' is missing in type 'FollowerGuard' but required in type 'LeadGuard'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts(26,1): error TS2322: Type '() => this is LeadGuard' is not assignable to type '() => this is FollowerGuard'.
   Type predicate 'this is LeadGuard' is not assignable to 'this is FollowerGuard'.
     Type 'LeadGuard' is not assignable to type 'FollowerGuard'.
@@ -44,14 +42,14 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors
     ~~~~~~~~~~~~
 !!! error TS2322: Type '() => this is LeadGuard' is not assignable to type '() => this is FollowerGuard'.
 !!! error TS2322:   Type predicate 'this is LeadGuard' is not assignable to 'this is FollowerGuard'.
-!!! error TS2322:     Type 'LeadGuard' is not assignable to type 'FollowerGuard'.
-!!! error TS2322:       Property 'follow' is missing in type 'LeadGuard'.
+!!! error TS2322:     Property 'follow' is missing in type 'LeadGuard' but required in type 'FollowerGuard'.
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts:15:5: 'follow' is declared here.
     b.isLeader = b.isFollower;
     ~~~~~~~~~~
 !!! error TS2322: Type '() => this is FollowerGuard' is not assignable to type '() => this is LeadGuard'.
 !!! error TS2322:   Type predicate 'this is FollowerGuard' is not assignable to 'this is LeadGuard'.
-!!! error TS2322:     Type 'FollowerGuard' is not assignable to type 'LeadGuard'.
-!!! error TS2322:       Property 'lead' is missing in type 'FollowerGuard'.
+!!! error TS2322:     Property 'lead' is missing in type 'FollowerGuard' but required in type 'LeadGuard'.
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionOfFormThisErrors.ts:11:5: 'lead' is declared here.
     
     a.isFollower = a.isLeader;
     ~~~~~~~~~~~~

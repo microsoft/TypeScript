@@ -1745,6 +1745,9 @@ namespace ts {
     export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
+    /* @internal */
+    export type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
+
     export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
@@ -2614,6 +2617,8 @@ namespace ts {
     export interface SourceFileLike {
         readonly text: string;
         lineMap?: ReadonlyArray<number>;
+        /* @internal */
+        getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
     }
 
 
@@ -2756,9 +2761,11 @@ namespace ts {
 
     export interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
+        javascriptPath?: string;
         javascriptText: string;
         javascriptMapPath?: string;
         javascriptMapText?: string;
+        declarationPath?: string;
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
@@ -2766,6 +2773,7 @@ namespace ts {
 
     export interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
+        fileName?: string;
         text: string;
         sourceMapPath?: string;
         sourceMapText?: string;
@@ -2822,7 +2830,7 @@ namespace ts {
         fileName: string,
         data: string,
         writeByteOrderMark: boolean,
-        onError: ((message: string) => void) | undefined,
+        onError?: (message: string) => void,
         sourceFiles?: ReadonlyArray<SourceFile>,
     ) => void;
 
@@ -3032,8 +3040,10 @@ namespace ts {
         /* @internal */ typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): TypeNode | undefined; // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;
+        /* @internal */ signatureToSignatureDeclaration(signature: Signature, kind: SyntaxKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): SignatureDeclaration & {typeArguments?: NodeArray<TypeNode>} | undefined;  // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): IndexSignatureDeclaration | undefined;
+        /* @internal */ indexInfoToIndexSignatureDeclaration(indexInfo: IndexInfo, kind: IndexKind, enclosingDeclaration?: Node, flags?: NodeBuilderFlags, tracker?: SymbolTracker): IndexSignatureDeclaration | undefined;  // tslint:disable-line unified-signatures
         /** Note that the resulting nodes cannot be checked. */
         symbolToEntityName(symbol: Symbol, meaning: SymbolFlags, enclosingDeclaration?: Node, flags?: NodeBuilderFlags): EntityName | undefined;
         /** Note that the resulting nodes cannot be checked. */
@@ -3103,7 +3113,7 @@ namespace ts {
         getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined;
         isValidPropertyAccess(node: PropertyAccessExpression | QualifiedName | ImportTypeNode, propertyName: string): boolean;
         /** Exclude accesses to private properties or methods with a `this` parameter that `type` doesn't satisfy. */
-        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean;
+        /* @internal */ isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean;
         /** Follow all aliases to get the original symbol. */
         getAliasedSymbol(symbol: Symbol): Symbol;
         /** Follow a *single* alias to get the immediately aliased symbol. */
@@ -3141,6 +3151,7 @@ namespace ts {
         /* @internal */ getNeverType(): Type;
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
+        /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
         /* @internal */ createPromiseType(type: Type): Type;
 
         /* @internal */ createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): Type;
@@ -3261,15 +3272,17 @@ namespace ts {
         AllowUniqueESSymbolType                 = 1 << 20,
         AllowEmptyIndexInfoType                 = 1 << 21,
 
-        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple | AllowEmptyIndexInfoType,
+        // Errors (cont.)
+        AllowNodeModulesRelativePaths           = 1 << 26,
+        /* @internal */ DoNotIncludeSymbolChain = 1 << 27,    // Skip looking up and printing an accessible symbol chain
+
+        IgnoreErrors = AllowThisInObjectLiteral | AllowQualifedNameInPlaceOfIdentifier | AllowAnonymousIdentifier | AllowEmptyUnionOrIntersection | AllowEmptyTuple | AllowEmptyIndexInfoType | AllowNodeModulesRelativePaths,
 
         // State
         InObjectTypeLiteral                     = 1 << 22,
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
         InReverseMappedType                     = 1 << 25,
-
-        /* @internal */ DoNotIncludeSymbolChain                 = 1 << 26,    // Skip looking up and printing an accessible symbol chain
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -3650,6 +3663,8 @@ namespace ts {
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
         specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
+        extendedContainers?: Symbol[];      // Containers (other than the parent) which this symbol is aliased in
+        extendedContainersByFile?: Map<Symbol[]>;      // Containers (other than the parent) which this symbol is aliased in
         variances?: Variance[];             // Alias symbol type argument variance cache
     }
 
@@ -3667,15 +3682,17 @@ namespace ts {
         Readonly          = 1 << 3,         // Readonly transient symbol
         Partial           = 1 << 4,         // Synthetic property present in some but not all constituents
         HasNonUniformType = 1 << 5,         // Synthetic property with non-uniform type in constituents
-        ContainsPublic    = 1 << 6,         // Synthetic property with public constituent(s)
-        ContainsProtected = 1 << 7,         // Synthetic property with protected constituent(s)
-        ContainsPrivate   = 1 << 8,         // Synthetic property with private constituent(s)
-        ContainsStatic    = 1 << 9,         // Synthetic property with static constituent(s)
-        Late              = 1 << 10,        // Late-bound symbol for a computed property with a dynamic name
-        ReverseMapped     = 1 << 11,        // Property of reverse-inferred homomorphic mapped type
-        OptionalParameter = 1 << 12,        // Optional parameter
-        RestParameter     = 1 << 13,        // Rest parameter
-        Synthetic = SyntheticProperty | SyntheticMethod
+        HasLiteralType    = 1 << 6,         // Synthetic property with at least one literal type in constituents
+        ContainsPublic    = 1 << 7,         // Synthetic property with public constituent(s)
+        ContainsProtected = 1 << 8,         // Synthetic property with protected constituent(s)
+        ContainsPrivate   = 1 << 9,         // Synthetic property with private constituent(s)
+        ContainsStatic    = 1 << 10,        // Synthetic property with static constituent(s)
+        Late              = 1 << 11,        // Late-bound symbol for a computed property with a dynamic name
+        ReverseMapped     = 1 << 12,        // Property of reverse-inferred homomorphic mapped type
+        OptionalParameter = 1 << 13,        // Optional parameter
+        RestParameter     = 1 << 14,        // Rest parameter
+        Synthetic = SyntheticProperty | SyntheticMethod,
+        Discriminant = HasNonUniformType | HasLiteralType
     }
 
     /* @internal */
@@ -3904,7 +3921,9 @@ namespace ts {
         aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
         /* @internal */ aliasTypeArgumentsContainsMarker?: boolean;   // Alias type arguments (if any)
         /* @internal */
-        wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
+        permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
+        /* @internal */
+        restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
     }
@@ -4495,7 +4514,6 @@ namespace ts {
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
-        experimentalBigInt?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
@@ -4987,7 +5005,6 @@ namespace ts {
         getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
@@ -5010,6 +5027,9 @@ namespace ts {
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
+
+        // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesnt use compilerHost as base
+        /*@internal*/createDirectory?(directory: string): void;
     }
 
     /* @internal */
@@ -5521,9 +5541,9 @@ namespace ts {
 
     /* @internal */
     export interface DocumentPositionMapperHost {
-        getSourceFileLike(path: Path): SourceFileLike | undefined;
+        getSourceFileLike(fileName: string): SourceFileLike | undefined;
         getCanonicalFileName(path: string): string;
-        log?(text: string): void;
+        log(text: string): void;
     }
 
     /**
@@ -5577,6 +5597,7 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
+        reportLikelyUnsafeImportRequiredError?(specifier: string): void;
         moduleResolverHost?: ModuleSpecifierResolutionHost & { getSourceFiles(): ReadonlyArray<SourceFile>, getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
@@ -5845,6 +5866,7 @@ namespace ts {
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

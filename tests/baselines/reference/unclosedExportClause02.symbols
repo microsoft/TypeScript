@@ -17,7 +17,6 @@ export { from
 
 === tests/cases/compiler/t4.ts ===
 export { x as a from
->x : Symbol(a, Decl(t4.ts, 0, 8))
 >a : Symbol(a, Decl(t4.ts, 0, 8))
 >from : Symbol(from, Decl(t4.ts, 0, 15))
 
@@ -25,7 +24,6 @@ export { x as a from
 
 === tests/cases/compiler/t5.ts ===
 export { x as a, from
->x : Symbol(a, Decl(t5.ts, 0, 8))
 >a : Symbol(a, Decl(t5.ts, 0, 8))
 >from : Symbol(from, Decl(t5.ts, 0, 16))
 

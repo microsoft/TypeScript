@@ -26,6 +26,7 @@ namespace ts {
     }
     export interface ValueInfoObject extends ValueInfoBase {
         readonly kind: ValueKind.Object;
+        readonly hasNontrivialPrototype: boolean;
         readonly members: ReadonlyArray<ValueInfo>;
     }
 
@@ -39,18 +40,18 @@ namespace ts {
 
     type Recurser = <T>(obj: unknown, name: string, cbOk: () => T, cbFail: (isCircularReference: boolean, keyStack: ReadonlyArray<string>) => T) => T;
     function getRecurser(): Recurser {
-        const seen = new Set<unknown>();
+        const seen: unknown[] = [];
         const nameStack: string[] = [];
         return (obj, name, cbOk, cbFail) => {
-            if (seen.has(obj) || nameStack.length > 4) {
-                return cbFail(seen.has(obj), nameStack);
+            if (seen.indexOf(obj) !== -1 || nameStack.length > 4) {
+                return cbFail(seen.indexOf(obj) !== -1, nameStack);
             }
 
-            seen.add(obj);
+            seen.push(obj);
             nameStack.push(name);
             const res = cbOk();
             nameStack.pop();
-            seen.delete(obj);
+            seen.pop();
             return res;
         };
     }
@@ -63,7 +64,9 @@ namespace ts {
                     const builtin = getBuiltinType(name, value as object, recurser);
                     if (builtin !== undefined) return builtin;
                     const entries = getEntriesOfObject(value as object);
-                    return { kind: ValueKind.Object, name, members: flatMap(entries, ({ key, value }) => getValueInfo(key, value, recurser)) };
+                    const hasNontrivialPrototype = Object.getPrototypeOf(value) !== Object.prototype;
+                    const members = flatMap(entries, ({ key, value }) => getValueInfo(key, value, recurser));
+                    return { kind: ValueKind.Object, name, hasNontrivialPrototype, members };
                 }
                 return { kind: ValueKind.Const, name, typeName: isNullOrUndefined(value) ? "any" : typeof value };
             },
@@ -101,8 +104,8 @@ namespace ts {
             key === "constructor" ? undefined : getValueInfo(key, value, recurser));
     }
 
-    const ignoredProperties: ReadonlySet<string> = new Set(["arguments", "caller", "constructor", "eval", "super_"]);
-    const reservedFunctionProperties: ReadonlySet<string> = new Set(Object.getOwnPropertyNames(noop));
+    const ignoredProperties: ReadonlyArray<string> = ["arguments", "caller", "constructor", "eval", "super_"];
+    const reservedFunctionProperties: ReadonlyArray<string> = Object.getOwnPropertyNames(noop);
     interface ObjectEntry { readonly key: string; readonly value: unknown; }
     function getEntriesOfObject(obj: object): ReadonlyArray<ObjectEntry> {
         const seen = createMap<true>();
@@ -111,8 +114,8 @@ namespace ts {
         while (!isNullOrUndefined(chain) && chain !== Object.prototype && chain !== Function.prototype) {
             for (const key of Object.getOwnPropertyNames(chain)) {
                 if (!isJsPrivate(key) &&
-                    !ignoredProperties.has(key) &&
-                    (typeof obj !== "function" || !reservedFunctionProperties.has(key)) &&
+                    ignoredProperties.indexOf(key) === -1 &&
+                    (typeof obj !== "function" || reservedFunctionProperties.indexOf(key) === -1) &&
                     // Don't add property from a higher prototype if it already exists in a lower one
                     addToSeen(seen, key)) {
                     const value = safeGetPropertyOfObject(chain, key);
@@ -145,7 +148,7 @@ namespace ts {
     }
 
     export function isJsPrivate(name: string): boolean {
-        return name.startsWith("_");
+        return startsWith(name, "_");
     }
 
     function tryRequire(fileNameToRequire: string): unknown {

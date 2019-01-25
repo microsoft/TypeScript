@@ -23,10 +23,10 @@ node_modules/uglify-js/lib/compress.js(1411,38): error TS2339: Property 'parent'
 node_modules/uglify-js/lib/compress.js(1519,27): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1551,26): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(1652,49): error TS2345: Argument of type 'number[]' is not assignable to parameter of type '[number, number, ...never[]]'.
-  Property '0' is missing in type 'number[]'.
+  Type 'number[]' is missing the following properties from type '[number, number, ...never[]]': 0, 1
 node_modules/uglify-js/lib/compress.js(1975,44): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(2013,53): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[number, number, ...never[]]'.
-  Property '0' is missing in type 'any[]'.
+  Type 'any[]' is missing the following properties from type '[number, number, ...never[]]': 0, 1
 node_modules/uglify-js/lib/compress.js(2161,19): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3214,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3227,33): error TS2322: Type '"f"' is not assignable to type 'boolean'.
@@ -37,14 +37,14 @@ node_modules/uglify-js/lib/compress.js(3464,62): error TS2554: Expected 0 argume
 node_modules/uglify-js/lib/compress.js(3690,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(3711,24): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(3721,28): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(3880,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'defs' must be of type 'Dictionary & { set: (key: any, val: any) => Dictionary & any; add: (key: any, val: any) => Dictionary & any; get: (key: any) => any; del: (key: any) => Dictionary & any; has: (key: any) => boolean; ... 4 more ...; toObject: () => any; }', but here has type 'any'.
+node_modules/uglify-js/lib/compress.js(3880,21): error TS2403: Subsequent variable declarations must have the same type.  Variable 'defs' must be of type 'Dictionary & { set: (key: any, val: any) => Dictionary & { set: ...; add: (key: any, val: any) => Dictionary & { set: ...; add: ...; get: (key: any) => any; del: (key: any) => Dictionary & { set: ...; ... 8 more ...; toObject: () => any; }; ... 5 more ...; toObject: () => any; }; ... 7 more ...; toObject: () => any;...', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(3932,17): error TS2447: The '|=' operator is not allowed for boolean types. Consider using '||' instead.
 node_modules/uglify-js/lib/compress.js(3988,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(4097,18): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(4396,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'body' must be of type 'any[]', but here has type 'any'.
 node_modules/uglify-js/lib/compress.js(4480,22): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(4672,57): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[RegExp, (string | undefined)?]'.
-  Property '0' is missing in type 'any[]'.
+  Property '0' is missing in type 'any[]' but required in type '[RegExp, (string | undefined)?]'.
 node_modules/uglify-js/lib/compress.js(4830,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/compress.js(4837,25): error TS2403: Subsequent variable declarations must have the same type.  Variable 'code' must be of type 'string', but here has type '{ get: () => string; toString: () => string; indent: () => void; indentation: () => number; current_width: () => number; should_break: () => boolean; has_parens: () => boolean; newline: () => void; print: (str: any) => void; ... 24 more ...; parent: (n: any) => any; }'.
 node_modules/uglify-js/lib/compress.js(4841,36): error TS2532: Object is possibly 'undefined'.
