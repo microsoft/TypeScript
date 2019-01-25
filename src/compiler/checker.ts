@@ -5685,17 +5685,21 @@ namespace ts {
         }
 
         function reportCircularityError(symbol: Symbol) {
+            const declaration = <VariableLikeDeclaration>symbol.valueDeclaration;
             // Check if variable has type annotation that circularly references the variable itself
-            if (getEffectiveTypeAnnotationNode(<VariableLikeDeclaration>symbol.valueDeclaration)) {
+            if (getEffectiveTypeAnnotationNode(declaration)) {
                 error(symbol.valueDeclaration, Diagnostics._0_is_referenced_directly_or_indirectly_in_its_own_type_annotation,
                     symbolToString(symbol));
                 return errorType;
             }
-            // Otherwise variable has initializer that circularly references the variable itself
-            if (noImplicitAny) {
+            // Check if variable has initializer that circularly references the variable itself
+            if (noImplicitAny && (<HasInitializer>declaration).initializer) {
                 error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
                     symbolToString(symbol));
             }
+            // Circularities could also result from parameters in function expressions that end up
+            // having themselves as contextual types following type argument inference. In those cases
+            // we have already reported an implicit any error so we don't report anything here.
             return anyType;
         }
 
