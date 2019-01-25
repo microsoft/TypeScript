@@ -1,11 +1,9 @@
-tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(8,27): error TS7022: '{ foo = 42 }' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(8,29): error TS7031: Binding element 'foo' implicitly has an 'any' type.
 tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(14,27): error TS7006: Parameter 'foo' implicitly has an 'any' type.
-tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(27,40): error TS7022: '{ foo = 42 }' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(27,42): error TS7031: Binding element 'foo' implicitly has an 'any' type.
 
 
-==== tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts (5 errors) ====
+==== tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts (3 errors) ====
     declare function id1<T>(input: T): T;
     declare function id2<T extends (x: any) => any>(input: T): T;
     declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
@@ -14,8 +12,6 @@ tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(27,42): erro
     
     const f10 = function ({ foo = 42 }) { return foo };
     const f11 = id1(function ({ foo = 42 }) { return foo });  // Implicit any error
-                              ~~~~~~~~~~~~
-!!! error TS7022: '{ foo = 42 }' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
                                 ~~~
 !!! error TS7031: Binding element 'foo' implicitly has an 'any' type.
     const f12 = id2(function ({ foo = 42 }) { return foo });
@@ -39,8 +35,6 @@ tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts(27,42): erro
     
     const newGetFoo = id(getFoo);
     const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
-                                           ~~~~~~~~~~~~
-!!! error TS7022: '{ foo = 42 }' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
                                              ~~~
 !!! error TS7031: Binding element 'foo' implicitly has an 'any' type.
       return foo;
