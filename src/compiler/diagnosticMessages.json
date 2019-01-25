@@ -1776,7 +1776,7 @@
         "category": "Error",
         "code": 2496
     },
-    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "This module can only be referenced with ECMAScript imports/exports by turning on the '{0}' flag and referencing its default export.": {
         "category": "Error",
         "code": 2497
     },
@@ -2536,6 +2536,10 @@
     "No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.": {
         "category": "Error",
         "code": 2743
+    },
+    "Type parameter defaults can only reference previously declared type parameters.": {
+        "category": "Error",
+        "code": 2744
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

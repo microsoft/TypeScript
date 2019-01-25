@@ -6,7 +6,7 @@ function /*[#|*/f/*|]*/() {
 }
 function res({ status, trailer }){
     console.log(status);
-} 
+}
 
 // ==ASYNC FUNCTION::Convert to async function==
 
@@ -17,4 +17,4 @@ async function f() {
 }
 function res({ status, trailer }){
     console.log(status);
-} 
+}

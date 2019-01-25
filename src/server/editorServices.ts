@@ -1277,7 +1277,8 @@ namespace ts.server {
         private setConfigFileExistenceByNewConfiguredProject(project: ConfiguredProject) {
             const configFileExistenceInfo = this.getConfigFileExistenceInfo(project);
             if (configFileExistenceInfo) {
-                Debug.assert(configFileExistenceInfo.exists);
+                // The existance might not be set if the file watcher is not invoked by the time config project is created by external project
+                configFileExistenceInfo.exists = true;
                 // close existing watcher
                 if (configFileExistenceInfo.configFileWatcherForRootOfInferredProject) {
                     const configFileName = project.getConfigFilePath();
@@ -2007,7 +2008,7 @@ namespace ts.server {
             const path = toNormalizedPath(uncheckedFileName);
             const info = this.getScriptInfoForNormalizedPath(path);
             if (info) return info;
-            const configProject = this.configuredProjects.get(uncheckedFileName);
+            const configProject = this.configuredProjects.get(this.toPath(uncheckedFileName));
             return configProject && configProject.getCompilerOptions().configFile;
         }
 
