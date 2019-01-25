@@ -24,7 +24,7 @@ namespace ts.codefix {
         readonly moduleSpecifier: Expression;
     }
     function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
-        const name = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const name = getTokenAtPosition(sourceFile, pos);
         if (!isIdentifier(name)) return undefined; // bad input
         const { parent } = name;
         if (isImportEqualsDeclaration(parent) && isExternalModuleReference(parent.moduleReference)) {

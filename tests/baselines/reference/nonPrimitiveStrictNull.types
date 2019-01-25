@@ -59,7 +59,7 @@ a = e; // ok
 
 if (typeof b !== 'object') {
 >typeof b !== 'object' : boolean
->typeof b : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >b : object | null
 >'object' : "object"
 
@@ -72,7 +72,7 @@ if (typeof b !== 'object') {
 
 if (typeof b === 'object') {
 >typeof b === 'object' : boolean
->typeof b : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >b : object | null
 >'object' : "object"
 
@@ -84,7 +84,7 @@ if (typeof b === 'object') {
 
 if (typeof d === 'object') {
 >typeof d === 'object' : boolean
->typeof d : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof d : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >d : object | null | undefined
 >'object' : "object"
 
@@ -147,7 +147,7 @@ if (d === null) {
 
 if (typeof d === 'undefined') {
 >typeof d === 'undefined' : boolean
->typeof d : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof d : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >d : object | null | undefined
 >'undefined' : "undefined"
 
@@ -166,31 +166,22 @@ if (typeof d === 'undefined') {
 }
 
 interface Proxy<T extends object> {}
->Proxy : Proxy<T>
->T : T
 
 var x: Proxy<number>; // error
 >x : Proxy<number>
->Proxy : Proxy<T>
 
 var y: Proxy<null>; // error
 >y : Proxy<null>
->Proxy : Proxy<T>
 >null : null
 
 var z: Proxy<undefined>; // error
 >z : Proxy<undefined>
->Proxy : Proxy<T>
 
 interface Blah {
->Blah : Blah
-
   foo: number;
 >foo : number
 }
 
 var u: Proxy<Blah>; // ok
 >u : Proxy<Blah>
->Proxy : Proxy<T>
->Blah : Blah
 

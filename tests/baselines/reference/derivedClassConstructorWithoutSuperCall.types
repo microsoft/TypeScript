@@ -18,18 +18,14 @@ class Derived extends Base {
 
 class Base2<T> {
 >Base2 : Base2<T>
->T : T
 
     x: T;
 >x : T
->T : T
 }
 
 class Derived2<T> extends Base2<T> {
 >Derived2 : Derived2<T>
->T : T
 >Base2 : Base2<T>
->T : T
 
     constructor() { // error for no super call (nested scopes don't count)
         var r2 = () => super(); // error for misplaced super call (nested function)
@@ -42,9 +38,7 @@ class Derived2<T> extends Base2<T> {
 
 class Derived3<T> extends Base2<T> {
 >Derived3 : Derived3<T>
->T : T
 >Base2 : Base2<T>
->T : T
 
     constructor() { // error
         var r = function () { super() } // error
@@ -57,9 +51,7 @@ class Derived3<T> extends Base2<T> {
 
 class Derived4<T> extends Base2<T> {
 >Derived4 : Derived4<T>
->T : T
 >Base2 : Base2<T>
->T : T
 
     constructor() {
         var r = super(); // ok

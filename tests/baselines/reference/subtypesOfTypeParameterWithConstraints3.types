@@ -3,16 +3,9 @@
 
 function f<T extends U, U, V>(t: T, u: U, v: V) {
 >f : <T extends U, U, V>(t: T, u: U, v: V) => void
->T : T
->U : U
->U : U
->V : V
 >t : T
->T : T
 >u : U
->U : U
 >v : V
->V : V
 
     // ok
     var r = true ? t : u;

@@ -16,17 +16,13 @@ class Foo {
     }
     [x: string]: Object;
 >x : string
->Object : Object
 }
 
 interface I extends Foo {
->I : I
->Foo : Foo
 }
 
 var i: I;
 >i : I
->I : I
 
 var r1 = i.x;
 >r1 : string
@@ -49,7 +45,6 @@ var r3 = i.Z;
 
 var f: Foo = i;
 >f : Foo
->Foo : Foo
 >i : I
 
 i = f;

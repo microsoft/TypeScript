@@ -69,7 +69,12 @@ const proc = spawn(process.execPath, args, {
 proc.on('exit', (code, signal) => {
     process.on('exit', () => {
         if (grepFile) {
-            fs.unlinkSync(grepFile);
+            try {
+                fs.unlinkSync(grepFile);
+            }
+            catch (e) {
+                if (e.code !== "ENOENT") throw e;
+            }
         }
 
         if (signal) {

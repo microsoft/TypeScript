@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializer.ts ===
 interface Show {
->Show : Show
-
     show: (x: number) => string;
 >show : (x: number) => string
 >x : number
@@ -15,7 +13,6 @@ function f({ show = v => v.toString() }: Show) {}
 >v.toString : (radix?: number) => string
 >v : number
 >toString : (radix?: number) => string
->Show : Show
 
 function f2({ "show": showRename = v => v.toString() }: Show) {}
 >f2 : ({ "show": showRename }: Show) => void
@@ -26,7 +23,6 @@ function f2({ "show": showRename = v => v.toString() }: Show) {}
 >v.toString : (radix?: number) => string
 >v : number
 >toString : (radix?: number) => string
->Show : Show
 
 function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >f3 : ({ ["show"]: showRename }: Show) => void
@@ -38,14 +34,10 @@ function f3({ ["show"]: showRename = v => v.toString() }: Show) {}
 >v.toString : (radix?: number) => string
 >v : number
 >toString : (radix?: number) => string
->Show : Show
 
 interface Nested {
->Nested : Nested
-
     nested: Show
 >nested : Show
->Show : Show
 }
 function ff({ nested = { show: v => v.toString() } }: Nested) {}
 >ff : ({ nested }: Nested) => void
@@ -58,11 +50,8 @@ function ff({ nested = { show: v => v.toString() } }: Nested) {}
 >v.toString : (radix?: number) => string
 >v : number
 >toString : (radix?: number) => string
->Nested : Nested
 
 interface Tuples {
->Tuples : Tuples
-
     prop: [string, number];
 >prop : [string, number]
 }
@@ -72,11 +61,8 @@ function g({ prop = ["hello", 1234] }: Tuples) {}
 >["hello", 1234] : [string, number]
 >"hello" : "hello"
 >1234 : 1234
->Tuples : Tuples
 
 interface StringUnion {
->StringUnion : StringUnion
-
     prop: "foo" | "bar";
 >prop : "foo" | "bar"
 }
@@ -84,11 +70,8 @@ function h({ prop = "foo" }: StringUnion) {}
 >h : ({ prop }: StringUnion) => void
 >prop : "foo" | "bar"
 >"foo" : "foo"
->StringUnion : StringUnion
 
 interface StringIdentity {
->StringIdentity : StringIdentity
-
     stringIdentity(s: string): string;
 >stringIdentity : (s: string) => string
 >s : string
@@ -99,7 +82,6 @@ let { stringIdentity: id = arg => arg }: StringIdentity = { stringIdentity: x =>
 >arg => arg : (arg: string) => string
 >arg : string
 >arg : string
->StringIdentity : StringIdentity
 >{ stringIdentity: x => x} : { stringIdentity: (x: string) => string; }
 >stringIdentity : (x: string) => string
 >x => x : (x: string) => string

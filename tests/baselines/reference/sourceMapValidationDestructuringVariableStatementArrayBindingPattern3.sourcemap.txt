@@ -821,18 +821,24 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 ---
 >>>function getRobotB() {
 1->
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^
+4 >                  ^->
 1->
   >
   >
+2 >function 
+3 >         getRobotB
 1->Emitted(37, 1) Source(50, 1) + SourceIndex(0)
+2 >Emitted(37, 10) Source(50, 10) + SourceIndex(0)
+3 >Emitted(37, 19) Source(50, 19) + SourceIndex(0)
 ---
 >>>    return robotB;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^^
 4 >                 ^
-1->function getRobotB() {
+1->() {
   >    
 2 >    return 
 3 >           robotB
@@ -854,18 +860,24 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern3
 ---
 >>>function getMultiRobotB() {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^
+4 >                       ^->
 1->
   >
   >
+2 >function 
+3 >         getMultiRobotB
 1->Emitted(40, 1) Source(54, 1) + SourceIndex(0)
+2 >Emitted(40, 10) Source(54, 10) + SourceIndex(0)
+3 >Emitted(40, 24) Source(54, 24) + SourceIndex(0)
 ---
 >>>    return multiRobotB;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^^^^^^^
 4 >                      ^
-1->function getMultiRobotB() {
+1->() {
   >    
 2 >    return 
 3 >           multiRobotB

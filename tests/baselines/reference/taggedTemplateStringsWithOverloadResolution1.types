@@ -2,25 +2,21 @@
 function foo(strs: TemplateStringsArray): number;
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 
 function foo(strs: TemplateStringsArray, x: number): string;
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >x : number
 
 function foo(strs: TemplateStringsArray, x: number, y: number): boolean;
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >x : number
 >y : number
 
 function foo(strs: TemplateStringsArray, x: number, y: string): {};
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >x : number
 >y : string
 

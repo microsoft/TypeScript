@@ -1,0 +1,29 @@
+=== tests/cases/compiler/declarationEmitEnumReadonlyProperty.ts ===
+enum E {
+>E : Symbol(E, Decl(declarationEmitEnumReadonlyProperty.ts, 0, 0))
+
+    A = 'a',
+>A : Symbol(E.A, Decl(declarationEmitEnumReadonlyProperty.ts, 0, 8))
+
+    B = 'b'
+>B : Symbol(E.B, Decl(declarationEmitEnumReadonlyProperty.ts, 1, 12))
+}
+
+class C {
+>C : Symbol(C, Decl(declarationEmitEnumReadonlyProperty.ts, 3, 1))
+
+    readonly type = E.A;
+>type : Symbol(C.type, Decl(declarationEmitEnumReadonlyProperty.ts, 5, 9))
+>E.A : Symbol(E.A, Decl(declarationEmitEnumReadonlyProperty.ts, 0, 8))
+>E : Symbol(E, Decl(declarationEmitEnumReadonlyProperty.ts, 0, 0))
+>A : Symbol(E.A, Decl(declarationEmitEnumReadonlyProperty.ts, 0, 8))
+}
+
+let x: E.A = new C().type;
+>x : Symbol(x, Decl(declarationEmitEnumReadonlyProperty.ts, 9, 3))
+>E : Symbol(E, Decl(declarationEmitEnumReadonlyProperty.ts, 0, 0))
+>A : Symbol(E.A, Decl(declarationEmitEnumReadonlyProperty.ts, 0, 8))
+>new C().type : Symbol(C.type, Decl(declarationEmitEnumReadonlyProperty.ts, 5, 9))
+>C : Symbol(C, Decl(declarationEmitEnumReadonlyProperty.ts, 3, 1))
+>type : Symbol(C.type, Decl(declarationEmitEnumReadonlyProperty.ts, 5, 9))
+

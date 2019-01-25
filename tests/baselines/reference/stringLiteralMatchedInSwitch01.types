@@ -4,12 +4,9 @@ type S = "a" | "b";
 
 type T = S[] | S;
 >T : T
->S : S
->S : S
 
 var foo: T;
 >foo : T
->T : T
 
 switch (foo) {
 >foo : T
@@ -29,7 +26,6 @@ switch (foo) {
 >(foo as S[]) : S[]
 >foo as S[] : S[]
 >foo : S[]
->S : S
 >0 : 0
 
         break;

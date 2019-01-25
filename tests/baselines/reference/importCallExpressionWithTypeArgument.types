@@ -10,7 +10,6 @@ export function foo() { return "foo"; }
 var p1 = import<Promise<any>>("./0");  // error
 >p1 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
 >import<Promise<any>>("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
->Promise : Promise<T>
 >"./0" : "./0"
 
 var p2 = import<>("./0");  // error

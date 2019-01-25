@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/templates/taggedTemplateWithConstructableTag02.ts ===
 interface I {
->I : I
-
     new (...args: any[]): string;
 >args : any[]
 
@@ -9,7 +7,6 @@ interface I {
 }
 var tag: I;
 >tag : I
->I : I
 
 tag `Hello world!`;
 >tag `Hello world!` : any

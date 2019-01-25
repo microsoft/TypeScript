@@ -1,40 +1,23 @@
 === tests/cases/conformance/expressions/contextualTyping/parenthesizedContexualTyping1.ts ===
 function fun<T>(g: (x: T) => T, x: T): T;
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
 function fun<T>(g: (x: T) => T, h: (y: T) => T, x: T): T;
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >h : (y: T) => T
 >y : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
 function fun<T>(g: (x: T) => T, x: T): T {
 >fun : { <T>(g: (x: T) => T, x: T): T; <T>(g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
     return g(x);
 >g(x) : T
@@ -206,9 +189,9 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->x => x : (x: any) => any
->x : any
->x : any
+>x => x : (x: number) => number
+>x : number
+>x : number
 >10 : 10
 
 var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10);
@@ -234,11 +217,11 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->((x => x)) : (x: any) => any
->(x => x) : (x: any) => any
->x => x : (x: any) => any
->x : any
->x : any
+>((x => x)) : (x: number) => number
+>(x => x) : (x: number) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
 >10 : 10
 
 var lambda1: (x: number) => number = x => x;
@@ -265,7 +248,6 @@ type ObjType = { x: (p: number) => string; y: (p: string) => number };
 
 var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 >obj1 : ObjType
->ObjType : ObjType
 >{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
 >x : (x: number) => any
 >x => (x, undefined) : (x: number) => any
@@ -284,7 +266,6 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 
 var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 >obj2 : ObjType
->ObjType : ObjType
 >({ x: x => (x, undefined), y: y => (y, undefined) }) : { x: (x: number) => any; y: (y: string) => any; }
 >{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
 >x : (x: number) => any

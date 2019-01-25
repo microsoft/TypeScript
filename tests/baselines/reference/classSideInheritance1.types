@@ -19,11 +19,9 @@ class C2 extends A {}
 
 var a: A;
 >a : A
->A : A
 
 var c: C2;
 >c : C2
->C2 : C2
 
 a.bar(); // static off an instance - should be an error
 >a.bar() : any

@@ -15,12 +15,10 @@ function f3(x: { (...args): void }) { }
 
 function f4<T extends (...args) => void>() { }
 >f4 : <T extends (...args: any[]) => void>() => void
->T : T
 >args : any[]
 
 function f5<T extends { (...args): void }>() { }
 >f5 : <T extends (...args: any[]) => void>() => void
->T : T
 >args : any[]
 
 var f6 = () => { return [<any>10]; }

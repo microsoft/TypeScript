@@ -1,26 +1,19 @@
 === tests/cases/compiler/objectLiteralIndexers.ts ===
 interface A {
->A : A
-
     x: number;
 >x : number
 }
 
 interface B extends A {
->B : B
->A : A
-
     y: string;
 >y : string
 }
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
 var c: any;
 >c : any
@@ -28,9 +21,7 @@ var c: any;
 var o1: { [s: string]: A;[n: number]: B; } = { x: a, 0: b }; // string indexer is A, number indexer is B
 >o1 : { [s: string]: A; [n: number]: B; }
 >s : string
->A : A
 >n : number
->B : B
 >{ x: a, 0: b } : { x: A; 0: B; }
 >x : A
 >a : A

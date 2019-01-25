@@ -1,7 +1,5 @@
-tests/cases/compiler/keyofIsLiteralContexualType.ts(5,9): error TS2322: Type '("a" | "b" | "c")[]' is not assignable to type '(keyof T)[]'.
-  Type '"a" | "b" | "c"' is not assignable to type 'keyof T'.
-    Type '"c"' is not assignable to type 'keyof T'.
-      Type '"c"' is not assignable to type '"a" | "b"'.
+tests/cases/compiler/keyofIsLiteralContexualType.ts(5,37): error TS2322: Type '"c"' is not assignable to type 'keyof T'.
+  Type '"c"' is not assignable to type '"a" | "b"'.
 tests/cases/compiler/keyofIsLiteralContexualType.ts(13,11): error TS2339: Property 'b' does not exist on type 'Pick<{ a: number; b: number; c: number; }, "a" | "c">'.
 
 
@@ -11,11 +9,9 @@ tests/cases/compiler/keyofIsLiteralContexualType.ts(13,11): error TS2339: Proper
     function foo<T extends { a: string, b: string }>() {
         let a: (keyof T)[] = ["a", "b"];
         let b: (keyof T)[] = ["a", "b", "c"];
-            ~
-!!! error TS2322: Type '("a" | "b" | "c")[]' is not assignable to type '(keyof T)[]'.
-!!! error TS2322:   Type '"a" | "b" | "c"' is not assignable to type 'keyof T'.
-!!! error TS2322:     Type '"c"' is not assignable to type 'keyof T'.
-!!! error TS2322:       Type '"c"' is not assignable to type '"a" | "b"'.
+                                        ~~~
+!!! error TS2322: Type '"c"' is not assignable to type 'keyof T'.
+!!! error TS2322:   Type '"c"' is not assignable to type '"a" | "b"'.
     }
     
     // Repro from #12455

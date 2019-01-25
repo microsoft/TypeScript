@@ -4,7 +4,6 @@ declare var a: boolean;
 
 declare var p: Promise<boolean>;
 >p : Promise<boolean>
->Promise : Promise<T>
 
 declare function before(): void;
 >before : () => void
@@ -14,7 +13,6 @@ declare function after(): void;
 
 async function func(): Promise<void> {
 >func : () => Promise<void>
->Promise : Promise<T>
 
     before();
 >before() : void

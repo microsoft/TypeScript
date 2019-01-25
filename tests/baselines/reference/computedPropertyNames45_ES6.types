@@ -25,11 +25,9 @@ class D extends C {
     // No error when the indexer is in a class more derived than the computed property
     [s: string]: Foo2;
 >s : string
->Foo2 : Foo2
 
     set ["set1"](p: Foo) { }
 >["set1"] : Foo
 >"set1" : "set1"
 >p : Foo
->Foo : Foo
 }

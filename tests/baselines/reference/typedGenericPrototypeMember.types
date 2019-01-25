@@ -1,12 +1,10 @@
 === tests/cases/compiler/typedGenericPrototypeMember.ts ===
 class List<T> {
 >List : List<T>
->T : T
 
    add(item: T) { }
 >add : (item: T) => void
 >item : T
->T : T
 }
 
 List.prototype.add("abc"); // Valid because T is instantiated to any

@@ -265,10 +265,7 @@ d1.pos.b;
 
 declare function f<T>(...items: T[]): T;
 >f : <T>(...items: T[]) => T
->T : T
 >items : T[]
->T : T
->T : T
 
 declare let data: { a: 1, b: "abc", c: true };
 >data : { a: 1; b: "abc"; c: true; }

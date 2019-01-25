@@ -228,3 +228,152 @@ function foo6(x: Item) {
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
+
+// Repro from #27493
+
+enum Types { Str = 1, Num = 2 }
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
+>Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
+
+type Instance = StrType | NumType;
+>Instance : Symbol(Instance, Decl(discriminantPropertyCheck.ts, 70, 31))
+>StrType : Symbol(StrType, Decl(discriminantPropertyCheck.ts, 72, 34))
+>NumType : Symbol(NumType, Decl(discriminantPropertyCheck.ts, 78, 1))
+
+interface StrType {
+>StrType : Symbol(StrType, Decl(discriminantPropertyCheck.ts, 72, 34))
+
+    type: Types.Str;
+>type : Symbol(StrType.type, Decl(discriminantPropertyCheck.ts, 74, 19))
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
+
+    value: string;
+>value : Symbol(StrType.value, Decl(discriminantPropertyCheck.ts, 75, 20))
+
+    length: number;
+>length : Symbol(StrType.length, Decl(discriminantPropertyCheck.ts, 76, 18))
+}
+
+interface NumType {
+>NumType : Symbol(NumType, Decl(discriminantPropertyCheck.ts, 78, 1))
+
+    type: Types.Num;
+>type : Symbol(NumType.type, Decl(discriminantPropertyCheck.ts, 80, 19))
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
+
+    value: number;
+>value : Symbol(NumType.value, Decl(discriminantPropertyCheck.ts, 81, 20))
+}
+
+function func2(inst: Instance) {
+>func2 : Symbol(func2, Decl(discriminantPropertyCheck.ts, 83, 1))
+>inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
+>Instance : Symbol(Instance, Decl(discriminantPropertyCheck.ts, 70, 31))
+
+    while (true) {
+        switch (inst.type) {
+>inst.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 74, 19), Decl(discriminantPropertyCheck.ts, 80, 19))
+>inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 74, 19), Decl(discriminantPropertyCheck.ts, 80, 19))
+
+            case Types.Str: {
+>Types.Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
+
+                inst.value.length;
+>inst.value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>inst.value : Symbol(StrType.value, Decl(discriminantPropertyCheck.ts, 75, 20))
+>inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
+>value : Symbol(StrType.value, Decl(discriminantPropertyCheck.ts, 75, 20))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+                break;
+            }
+            case Types.Num: {
+>Types.Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
+
+                inst.value.toExponential;
+>inst.value.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>inst.value : Symbol(NumType.value, Decl(discriminantPropertyCheck.ts, 81, 20))
+>inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
+>value : Symbol(NumType.value, Decl(discriminantPropertyCheck.ts, 81, 20))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+                break;
+            }
+        }
+    }
+}
+
+// Repro from #29106
+
+const f = (_a: string, _b: string): void => {};
+>f : Symbol(f, Decl(discriminantPropertyCheck.ts, 102, 5))
+>_a : Symbol(_a, Decl(discriminantPropertyCheck.ts, 102, 11))
+>_b : Symbol(_b, Decl(discriminantPropertyCheck.ts, 102, 22))
+
+interface A {
+>A : Symbol(A, Decl(discriminantPropertyCheck.ts, 102, 47))
+
+  a?: string;
+>a : Symbol(A.a, Decl(discriminantPropertyCheck.ts, 104, 13))
+
+  b?: string;
+>b : Symbol(A.b, Decl(discriminantPropertyCheck.ts, 105, 13))
+}
+
+interface B {
+>B : Symbol(B, Decl(discriminantPropertyCheck.ts, 107, 1))
+
+  a: string;
+>a : Symbol(B.a, Decl(discriminantPropertyCheck.ts, 109, 13))
+
+  b: string;
+>b : Symbol(B.b, Decl(discriminantPropertyCheck.ts, 110, 12))
+}
+
+type U = A | B;
+>U : Symbol(U, Decl(discriminantPropertyCheck.ts, 112, 1))
+>A : Symbol(A, Decl(discriminantPropertyCheck.ts, 102, 47))
+>B : Symbol(B, Decl(discriminantPropertyCheck.ts, 107, 1))
+
+const u: U = {} as any;
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>U : Symbol(U, Decl(discriminantPropertyCheck.ts, 112, 1))
+
+u.a && u.b && f(u.a, u.b);
+>u.a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u.b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>f : Symbol(f, Decl(discriminantPropertyCheck.ts, 102, 5))
+>u.a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u.b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+
+u.b && u.a && f(u.a, u.b);
+>u.b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u.a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>f : Symbol(f, Decl(discriminantPropertyCheck.ts, 102, 5))
+>u.a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>a : Symbol(a, Decl(discriminantPropertyCheck.ts, 104, 13), Decl(discriminantPropertyCheck.ts, 109, 13))
+>u.b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+>u : Symbol(u, Decl(discriminantPropertyCheck.ts, 116, 5))
+>b : Symbol(b, Decl(discriminantPropertyCheck.ts, 105, 13), Decl(discriminantPropertyCheck.ts, 110, 12))
+

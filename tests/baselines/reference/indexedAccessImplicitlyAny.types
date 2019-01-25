@@ -1,11 +1,9 @@
 === tests/cases/compiler/indexedAccessImplicitlyAny.ts ===
 interface I { foof: number };
->I : I
 >foof : number
 
 declare const i: I;
 >i : I
->I : I
 
 i.foo;
 >i.foo : any

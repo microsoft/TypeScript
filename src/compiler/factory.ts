@@ -68,12 +68,15 @@ namespace ts {
     /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral; // tslint:disable-line unified-signatures
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
     export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
-    export function createLiteral(value: number): NumericLiteral;
+    export function createLiteral(value: number | PseudoBigInt): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
-    export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote?: boolean): PrimaryExpression {
+    export function createLiteral(value: string | number | PseudoBigInt | boolean): PrimaryExpression;
+    export function createLiteral(value: string | number | PseudoBigInt | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote?: boolean): PrimaryExpression {
         if (typeof value === "number") {
             return createNumericLiteral(value + "");
+        }
+        if (typeof value === "object" && "base10Value" in value) { // PseudoBigInt
+            return createBigIntLiteral(pseudoBigIntToString(value) + "n");
         }
         if (typeof value === "boolean") {
             return value ? createTrue() : createFalse();
@@ -90,6 +93,12 @@ namespace ts {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
         node.numericLiteralFlags = 0;
+        return node;
+    }
+
+    export function createBigIntLiteral(value: string): BigIntLiteral {
+        const node = <BigIntLiteral>createSynthesizedNode(SyntaxKind.BigIntLiteral);
+        node.text = value;
         return node;
     }
 
@@ -235,7 +244,7 @@ namespace ts {
 
     // Modifiers
 
-    export function createModifier<T extends Modifier["kind"]>(kind: T) {
+    export function createModifier<T extends Modifier["kind"]>(kind: T): Token<T> {
         return createToken(kind);
     }
 
@@ -272,10 +281,9 @@ namespace ts {
     }
 
     function parenthesizeForComputedName(expression: Expression): Expression {
-        return (isBinaryExpression(expression) && expression.operatorToken.kind === SyntaxKind.CommaToken) ||
-            expression.kind === SyntaxKind.CommaListExpression ?
-            createParen(expression) :
-            expression;
+        return isCommaSequence(expression)
+            ? createParen(expression)
+            : expression;
     }
 
     export function createComputedPropertyName(expression: Expression) {
@@ -1059,7 +1067,7 @@ namespace ts {
             : node;
     }
 
-    export function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    /** @deprecated */ export function createTaggedTemplate(tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
     export function createTaggedTemplate(tag: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     /** @internal */
     export function createTaggedTemplate(tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral | undefined, template?: TemplateLiteral): TaggedTemplateExpression;
@@ -1077,7 +1085,7 @@ namespace ts {
         return node;
     }
 
-    export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
+    /** @deprecated */ export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, template: TemplateLiteral): TaggedTemplateExpression;
     export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArguments: ReadonlyArray<TypeNode> | undefined, template: TemplateLiteral): TaggedTemplateExpression;
     export function updateTaggedTemplate(node: TaggedTemplateExpression, tag: Expression, typeArgumentsOrTemplate: ReadonlyArray<TypeNode> | TemplateLiteral | undefined, template?: TemplateLiteral) {
         return node.tag !== tag
@@ -1169,14 +1177,6 @@ namespace ts {
         node.body = parenthesizeConciseBody(body);
         return node;
     }
-
-    /* @deprecated */ export function updateArrowFunction(
-        node: ArrowFunction,
-        modifiers: ReadonlyArray<Modifier> | undefined,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
-        type: TypeNode | undefined,
-        body: ConciseBody): ArrowFunction;
     export function updateArrowFunction(
         node: ArrowFunction,
         modifiers: ReadonlyArray<Modifier> | undefined,
@@ -1184,28 +1184,8 @@ namespace ts {
         parameters: ReadonlyArray<ParameterDeclaration>,
         type: TypeNode | undefined,
         equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>,
-        body: ConciseBody): ArrowFunction;
-    export function updateArrowFunction(
-        node: ArrowFunction,
-        modifiers: ReadonlyArray<Modifier> | undefined,
-        typeParameters: ReadonlyArray<TypeParameterDeclaration> | undefined,
-        parameters: ReadonlyArray<ParameterDeclaration>,
-        type: TypeNode | undefined,
-        equalsGreaterThanTokenOrBody: Token<SyntaxKind.EqualsGreaterThanToken> | ConciseBody,
-        bodyOrUndefined?: ConciseBody,
+        body: ConciseBody
     ): ArrowFunction {
-        let equalsGreaterThanToken: Token<SyntaxKind.EqualsGreaterThanToken>;
-        let body: ConciseBody;
-        if (bodyOrUndefined === undefined) {
-            equalsGreaterThanToken = node.equalsGreaterThanToken;
-            body = cast(equalsGreaterThanTokenOrBody, isConciseBody);
-        }
-        else {
-            equalsGreaterThanToken = cast(equalsGreaterThanTokenOrBody, (n): n is Token<SyntaxKind.EqualsGreaterThanToken> =>
-                n.kind === SyntaxKind.EqualsGreaterThanToken);
-            body = bodyOrUndefined;
-        }
-
         return node.modifiers !== modifiers
             || node.typeParameters !== typeParameters
             || node.parameters !== parameters
@@ -1307,7 +1287,7 @@ namespace ts {
             : node;
     }
 
-    export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
+    /** @deprecated */ export function createConditional(condition: Expression, whenTrue: Expression, whenFalse: Expression): ConditionalExpression;
     export function createConditional(condition: Expression, questionToken: QuestionToken, whenTrue: Expression, colonToken: ColonToken, whenFalse: Expression): ConditionalExpression;
     export function createConditional(condition: Expression, questionTokenOrWhenTrue: QuestionToken | Expression, whenTrueOrWhenFalse: Expression, colonToken?: ColonToken, whenFalse?: Expression) {
         const node = <ConditionalExpression>createSynthesizedNode(SyntaxKind.ConditionalExpression);
@@ -1318,26 +1298,14 @@ namespace ts {
         node.whenFalse = parenthesizeSubexpressionOfConditionalExpression(whenFalse ? whenFalse : whenTrueOrWhenFalse);
         return node;
     }
-
-    /* @deprecated */ export function updateConditional(
-        node: ConditionalExpression,
-        condition: Expression,
-        whenTrue: Expression,
-        whenFalse: Expression): ConditionalExpression;
     export function updateConditional(
         node: ConditionalExpression,
         condition: Expression,
         questionToken: Token<SyntaxKind.QuestionToken>,
         whenTrue: Expression,
         colonToken: Token<SyntaxKind.ColonToken>,
-        whenFalse: Expression): ConditionalExpression;
-    export function updateConditional(node: ConditionalExpression, condition: Expression, ...args: any[]) {
-        if (args.length === 2) {
-            const [whenTrue, whenFalse] = args;
-            return updateConditional(node, condition, node.questionToken, whenTrue, node.colonToken, whenFalse);
-        }
-        Debug.assert(args.length === 4);
-        const [questionToken, whenTrue, colonToken, whenFalse] = args;
+        whenFalse: Expression
+    ): ConditionalExpression {
         return node.condition !== condition
             || node.questionToken !== questionToken
             || node.whenTrue !== whenTrue
@@ -1531,13 +1499,6 @@ namespace ts {
         return block;
     }
 
-    /* @internal */
-    export function createExpressionStatement(expression: Expression): ExpressionStatement {
-        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
-        node.expression = expression;
-        return node;
-    }
-
     export function updateBlock(node: Block, statements: ReadonlyArray<Statement>) {
         return node.statements !== statements
             ? updateNode(createBlock(statements, node.multiLine), node)
@@ -1563,15 +1524,22 @@ namespace ts {
         return <EmptyStatement>createSynthesizedNode(SyntaxKind.EmptyStatement);
     }
 
-    export function createStatement(expression: Expression) {
-        return createExpressionStatement(parenthesizeExpressionForExpressionStatement(expression));
+    export function createExpressionStatement(expression: Expression): ExpressionStatement {
+        const node = <ExpressionStatement>createSynthesizedNode(SyntaxKind.ExpressionStatement);
+        node.expression = parenthesizeExpressionForExpressionStatement(expression);
+        return node;
     }
 
-    export function updateStatement(node: ExpressionStatement, expression: Expression) {
+    export function updateExpressionStatement(node: ExpressionStatement, expression: Expression) {
         return node.expression !== expression
-            ? updateNode(createStatement(expression), node)
+            ? updateNode(createExpressionStatement(expression), node)
             : node;
     }
+
+    /** @deprecated Use `createExpressionStatement` instead.  */
+    export const createStatement = createExpressionStatement;
+    /** @deprecated Use `updateExpressionStatement` instead.  */
+    export const updateStatement = updateExpressionStatement;
 
     export function createIf(expression: Expression, thenStatement: Statement, elseStatement?: Statement) {
         const node = <IfStatement>createSynthesizedNode(SyntaxKind.IfStatement);
@@ -2211,6 +2179,56 @@ namespace ts {
             : node;
     }
 
+    // JSDoc
+
+    /* @internal */
+    export function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
+        const node = createSynthesizedNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
+        node.type = type;
+        return node;
+    }
+
+    /* @internal */
+    export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocTypeTag {
+        const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
+        tag.typeExpression = typeExpression;
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
+    export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
+        const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
+        tag.typeExpression = typeExpression;
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
+    export function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
+        const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param");
+        tag.typeExpression = typeExpression;
+        tag.name = name;
+        tag.isBracketed = isBracketed;
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
+    export function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
+        const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
+        node.comment = comment;
+        node.tags = tags;
+        return node;
+    }
+
+    /* @internal */
+    function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
+        const node = createSynthesizedNode(kind) as T;
+        node.tagName = createIdentifier(tagName);
+        return node;
+    }
+
     // JSX
 
     export function createJsxElement(openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement) {
@@ -2232,7 +2250,7 @@ namespace ts {
     export function createJsxSelfClosingElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
         const node = <JsxSelfClosingElement>createSynthesizedNode(SyntaxKind.JsxSelfClosingElement);
         node.tagName = tagName;
-        node.typeArguments = typeArguments && createNodeArray(typeArguments);
+        node.typeArguments = asNodeArray(typeArguments);
         node.attributes = attributes;
         return node;
     }
@@ -2248,7 +2266,7 @@ namespace ts {
     export function createJsxOpeningElement(tagName: JsxTagNameExpression, typeArguments: ReadonlyArray<TypeNode> | undefined, attributes: JsxAttributes) {
         const node = <JsxOpeningElement>createSynthesizedNode(SyntaxKind.JsxOpeningElement);
         node.tagName = tagName;
-        node.typeArguments = typeArguments && createNodeArray(typeArguments);
+        node.typeArguments = asNodeArray(typeArguments);
         node.attributes = attributes;
         return node;
     }
@@ -3457,6 +3475,7 @@ namespace ts {
                 return cacheIdentifiers;
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
                 return false;
             case SyntaxKind.ArrayLiteralExpression:
@@ -3935,6 +3954,20 @@ namespace ts {
         return statementOffset;
     }
 
+    export function findUseStrictPrologue(statements: ReadonlyArray<Statement>): Statement | undefined {
+        for (const statement of statements) {
+            if (isPrologueDirective(statement)) {
+                if (isUseStrictPrologue(statement)) {
+                    return statement;
+                }
+            }
+            else {
+                break;
+            }
+        }
+        return undefined;
+    }
+
     export function startsWithUseStrict(statements: ReadonlyArray<Statement>) {
         const firstStatement = firstOrUndefined(statements);
         return firstStatement !== undefined
@@ -3948,18 +3981,7 @@ namespace ts {
      * @param statements An array of statements
      */
     export function ensureUseStrict(statements: NodeArray<Statement>): NodeArray<Statement> {
-        let foundUseStrict = false;
-        for (const statement of statements) {
-            if (isPrologueDirective(statement)) {
-                if (isUseStrictPrologue(statement as ExpressionStatement)) {
-                    foundUseStrict = true;
-                    break;
-                }
-            }
-            else {
-                break;
-            }
-        }
+        const foundUseStrict = findUseStrictPrologue(statements);
 
         if (!foundUseStrict) {
             return setTextRange(
@@ -4025,6 +4047,11 @@ namespace ts {
         const binaryOperatorPrecedence = getOperatorPrecedence(SyntaxKind.BinaryExpression, binaryOperator);
         const binaryOperatorAssociativity = getOperatorAssociativity(SyntaxKind.BinaryExpression, binaryOperator);
         const emittedOperand = skipPartiallyEmittedExpressions(operand);
+        if (!isLeftSideOfBinary && operand.kind === SyntaxKind.ArrowFunction && binaryOperatorPrecedence > 4) {
+            // We need to parenthesize arrow functions on the right side to avoid it being
+            // parsed as parenthesized expression: `a && (() => {})`
+            return true;
+        }
         const operandPrecedence = getExpressionPrecedence(emittedOperand);
         switch (compareValues(operandPrecedence, binaryOperatorPrecedence)) {
             case Comparison.LessThan:
@@ -4166,8 +4193,7 @@ namespace ts {
         // so in case when comma expression is introduced as a part of previous transformations
         // if should be wrapped in parens since comma operator has the lowest precedence
         const emittedExpression = skipPartiallyEmittedExpressions(e);
-        return emittedExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>emittedExpression).operatorToken.kind === SyntaxKind.CommaToken ||
-            emittedExpression.kind === SyntaxKind.CommaListExpression
+        return isCommaSequence(emittedExpression)
             ? createParen(e)
             : e;
     }
@@ -4185,12 +4211,15 @@ namespace ts {
      */
     export function parenthesizeDefaultExpression(e: Expression) {
         const check = skipPartiallyEmittedExpressions(e);
-        return (check.kind === SyntaxKind.ClassExpression ||
-            check.kind === SyntaxKind.FunctionExpression ||
-            check.kind === SyntaxKind.CommaListExpression ||
-            isBinaryExpression(check) && check.operatorToken.kind === SyntaxKind.CommaToken)
-            ? createParen(e)
-            : e;
+        let needsParens = isCommaSequence(check);
+        if (!needsParens) {
+            switch (getLeftmostExpression(check, /*stopAtCallExpression*/ false).kind) {
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.FunctionExpression:
+                    needsParens = true;
+            }
+        }
+        return needsParens ? createParen(e) : e;
     }
 
     /**
@@ -4355,18 +4384,21 @@ namespace ts {
                     node = (<ConditionalExpression>node).condition;
                     continue;
 
+                case SyntaxKind.TaggedTemplateExpression:
+                    node = (<TaggedTemplateExpression>node).tag;
+                    continue;
+
                 case SyntaxKind.CallExpression:
                     if (stopAtCallExpressions) {
                         return node;
                     }
                     // falls through
+                case SyntaxKind.AsExpression:
                 case SyntaxKind.ElementAccessExpression:
                 case SyntaxKind.PropertyAccessExpression:
-                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression>node).expression;
-                    continue;
-
+                case SyntaxKind.NonNullExpression:
                 case SyntaxKind.PartiallyEmittedExpression:
-                    node = (<PartiallyEmittedExpression>node).expression;
+                    node = (<CallExpression | PropertyAccessExpression | ElementAccessExpression | AsExpression | NonNullExpression | PartiallyEmittedExpression>node).expression;
                     continue;
             }
 
@@ -4376,11 +4408,16 @@ namespace ts {
     }
 
     export function parenthesizeConciseBody(body: ConciseBody): ConciseBody {
-        if (!isBlock(body) && getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression) {
+        if (!isBlock(body) && (isCommaSequence(body) || getLeftmostExpression(body, /*stopAtCallExpressions*/ false).kind === SyntaxKind.ObjectLiteralExpression)) {
             return setTextRange(createParen(body), body);
         }
 
         return body;
+    }
+
+    export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
+        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.CommaToken ||
+            node.kind === SyntaxKind.CommaListExpression;
     }
 
     export const enum OuterExpressionKinds {
@@ -4735,7 +4772,7 @@ namespace ts {
     /**
      * Gets the property name of a BindingOrAssignmentElement
      */
-    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement) {
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -4778,6 +4815,12 @@ namespace ts {
         }
 
         Debug.fail("Invalid property name for binding element.");
+    }
+
+    function isStringOrNumericLiteral(node: Node): node is StringLiteral | NumericLiteral {
+        const kind = node.kind;
+        return kind === SyntaxKind.StringLiteral
+            || kind === SyntaxKind.NumericLiteral;
     }
 
     /**

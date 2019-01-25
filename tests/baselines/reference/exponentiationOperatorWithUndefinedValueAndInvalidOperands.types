@@ -10,7 +10,6 @@ var b: string;
 
 var c: Object;
 >c : Object
->Object : Object
 
 // operator **
 var r1a1 = undefined ** a;

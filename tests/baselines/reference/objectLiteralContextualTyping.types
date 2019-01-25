@@ -5,8 +5,6 @@
 //      the string index type of the contextual type, if any.
 
 interface Item {
->Item : Item
-
     name: string;
 >name : string
 
@@ -17,7 +15,6 @@ interface Item {
 declare function foo(item: Item): string;
 >foo : { (item: Item): string; (item: any): number; }
 >item : Item
->Item : Item
 
 declare function foo(item: any): number;
 >foo : { (item: Item): string; (item: any): number; }
@@ -73,11 +70,8 @@ var w: number;
 
 declare function bar<T>(param: { x?: T }): T;
 >bar : <T>(param: { x?: T; }) => T
->T : T
 >param : { x?: T; }
 >x : T
->T : T
->T : T
 
 var b = bar({});
 >b : {}

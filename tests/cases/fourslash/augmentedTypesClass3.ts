@@ -8,6 +8,4 @@ verify.quickInfos({
     1: "class c5b\nnamespace c5b",
     2: "class c5b\nnamespace c5b"
 });
-
-goTo.marker('3');
-verify.completionListContains("c5b", "class c5b\nnamespace c5b");
+verify.completions({ marker: "3", includes: { name: "c5b", text: "class c5b\nnamespace c5b" }})

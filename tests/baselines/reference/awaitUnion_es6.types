@@ -4,20 +4,15 @@ declare let a: number | string;
 
 declare let b: PromiseLike<number> | PromiseLike<string>;
 >b : PromiseLike<number> | PromiseLike<string>
->PromiseLike : PromiseLike<T>
->PromiseLike : PromiseLike<T>
 
 declare let c: PromiseLike<number | string>;
 >c : PromiseLike<string | number>
->PromiseLike : PromiseLike<T>
 
 declare let d: number | PromiseLike<string>;
 >d : number | PromiseLike<string>
->PromiseLike : PromiseLike<T>
 
 declare let e: number | PromiseLike<number | string>;
 >e : number | PromiseLike<string | number>
->PromiseLike : PromiseLike<T>
 
 async function f() {
 >f : () => Promise<void>

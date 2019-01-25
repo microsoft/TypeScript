@@ -7,21 +7,16 @@ class Foo {
 }
 
 interface I extends Foo {
->I : I
->Foo : Foo
-
     y: number;
 >y : number
 }
 
 class Bar implements I { // error
 >Bar : Bar
->I : I
 }
 
 class Bar2 implements I { // error
 >Bar2 : Bar2
->I : I
 
     y: number;
 >y : number
@@ -29,7 +24,6 @@ class Bar2 implements I { // error
 
 class Bar3 implements I { // error
 >Bar3 : Bar3
->I : I
 
     x: string;
 >x : string
@@ -40,7 +34,6 @@ class Bar3 implements I { // error
 
 class Bar4 implements I { // error
 >Bar4 : Bar4
->I : I
 
     private x: string;
 >x : string

@@ -6,5 +6,4 @@
 ////var i: Iterator<string, number>;
 ////i/**/
 
-goTo.marker();
-verify.completionListContains('i', 'var i: Iterator<string, number>');
+verify.completions({ marker: "", includes: { name: "i", text: "var i: Iterator<string, number>" } });

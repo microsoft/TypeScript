@@ -5,15 +5,10 @@ import React = require('react');
 const decorator4 = function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {
 >decorator4 : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
 >function <T extends { x: number }>(Component: React.StatelessComponent<T>): React.StatelessComponent<T> {    return (props) => <Component {...props} y={"blah"} ></Component>} : <T extends { x: number; }>(Component: React.StatelessComponent<T>) => React.StatelessComponent<T>
->T : T
 >x : number
 >Component : React.StatelessComponent<T>
 >React : any
->StatelessComponent : React.StatelessComponent<P>
->T : T
 >React : any
->StatelessComponent : React.StatelessComponent<P>
->T : T
 
     return (props) => <Component {...props} y={"blah"} ></Component>
 >(props) => <Component {...props} y={"blah"} ></Component> : (props: T & { children?: React.ReactNode; }) => JSX.Element

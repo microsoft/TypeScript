@@ -5,6 +5,9 @@
 ////    "include": ["dir"],
 ////}
 
+// @Filename: /src/dir/a.ts
+////
+
 verify.getEditsForFileRename({
     oldPath: "/src/dir/a.ts",
     newPath: "/src/dir/b.ts",

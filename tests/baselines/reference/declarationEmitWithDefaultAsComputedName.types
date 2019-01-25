@@ -1,26 +1,18 @@
 === tests/cases/compiler/other.ts ===
 type Experiment<Name> = {
 >Experiment : Experiment<Name>
->Name : Name
 
     name: Name;
 >name : Name
->Name : Name
 
 };
 declare const createExperiment: <Name extends string>(
 >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>
->Name : Name
 
     options: Experiment<Name>
 >options : Experiment<Name>
->Experiment : Experiment<Name>
->Name : Name
 
 ) => Experiment<Name>;
->Experiment : Experiment<Name>
->Name : Name
-
 export default createExperiment({
 >createExperiment({    name: "foo"}) : Experiment<"foo">
 >createExperiment : <Name extends string>(options: Experiment<Name>) => Experiment<Name>

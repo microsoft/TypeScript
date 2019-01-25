@@ -1,57 +1,31 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatIndirectlyInheritsFromItself.ts ===
 interface Base extends Derived2 { // error
->Base : Base
->Derived2 : Derived2
-
     x: string;
 >x : string
 }
 
 interface Derived extends Base {
->Derived : Derived
->Base : Base
-
     y: string;
 >y : string
 }
 
 interface Derived2 extends Derived {
->Derived2 : Derived2
->Derived : Derived
-
     z: string;
 >z : string
 }
 
 module Generic {
->Generic : any
-
     interface Base<T> extends Derived2<T> { // error
->Base : Base<T>
->T : T
->Derived2 : Derived2<T>
->T : T
-
         x: string;
 >x : string
     }
 
     interface Derived<T> extends Base<T> {
->Derived : Derived<T>
->T : T
->Base : Base<T>
->T : T
-
         y: string;
 >y : string
     }
 
     interface Derived2<T> extends Derived<T> {
->Derived2 : Derived2<T>
->T : T
->Derived : Derived<T>
->T : T
-
         z: string;
 >z : string
     }

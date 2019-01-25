@@ -21,7 +21,6 @@ export module m1 {
 
         export var v2: c1;
 >v2 : c1
->c1 : c1
     }
 
     module m1_M2_private {
@@ -43,7 +42,6 @@ export module m1 {
 
         export var v2: c1;
 >v2 : c1
->c1 : c1
     }
 
     //export declare module "m1_M3_public" {
@@ -229,7 +227,6 @@ module m2 {
 
         export var v2: c1;
 >v2 : c1
->c1 : c1
     }
 
     module m2_M2_private {
@@ -251,7 +248,6 @@ module m2 {
 
         export var v2: c1;
 >v2 : c1
->c1 : c1
     }
 
     //export declare module "m2_M3_public" {
@@ -435,7 +431,6 @@ export module glo_M1_public {
 
     export var v2: c1;
 >v2 : c1
->c1 : c1
 }
 
 //export declare module "glo_M2_public" {
@@ -465,7 +460,6 @@ export module glo_M3_private {
 
     export var v2: c1;
 >v2 : c1
->c1 : c1
 }
 
 //export declare module "glo_M4_private" {

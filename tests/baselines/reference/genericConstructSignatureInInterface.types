@@ -1,16 +1,11 @@
 === tests/cases/compiler/genericConstructSignatureInInterface.ts ===
 interface C {
->C : C
-
     new <T>(x: T);
->T : T
 >x : T
->T : T
 }
 
 var v: C;
 >v : C
->C : C
 
 var r = new v<number>(1);
 >r : any

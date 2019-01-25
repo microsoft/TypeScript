@@ -7,6 +7,10 @@
 ////    /**/
 ////}
 
-goTo.marker('');
-verify.completionListContains("__proto__", '(local var) __proto__: string');
-verify.completionListContains("___proto__", 'var ___proto__: number');
+verify.completions({
+    marker: "",
+    includes: [
+        { name: "__proto__", text: "(local var) __proto__: string" },
+        { name: "___proto__", text: "var ___proto__: number" },
+    ],
+});

@@ -25,11 +25,11 @@ declare var module: any;
 /// <reference path='./types.d.ts'/>
 exports = module.exports = C
 >exports = module.exports = C : typeof C
->exports : typeof import("tests/cases/conformance/salsa/semver")
+>exports : typeof C
 >module.exports = C : typeof C
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof C
+>module : { "tests/cases/conformance/salsa/semver": typeof C; }
+>exports : typeof C
 >C : typeof C
 
 C.f = n => n + 1

@@ -4,7 +4,6 @@ class c {
 }
 class g<T> {
 >g : g<T>
->T : T
 }
 module m {
 >m : typeof m
@@ -21,51 +20,41 @@ var x: {
     // Call signatures
     (a: number): c;
 >a : number
->c : c
 
     (a: string): g<string>;
 >a : string
->g : g<T>
 
     // Construct signatures
     new (a: number): c;
 >a : number
->c : c
 
     new (a: string): m.c;
 >a : string
 >m : any
->c : m.c
 
     // Indexers
     [n: number]: c;
 >n : number
->c : c
 
     [n: string]: c;
 >n : string
->c : c
 
     // Properties
     a: c;
 >a : c
->c : c
 
     b: g<string>;
 >b : g<string>
->g : g<T>
 
     // methods
     m1(): g<number>;
 >m1 : () => g<number>
->g : g<T>
 
     m2(a: string, b?: number, ...c: c[]): string;
 >m2 : (a: string, b?: number, ...c: c[]) => string
 >a : string
 >b : number
 >c : c[]
->c : c
 
 };
 
@@ -80,5 +69,4 @@ var z: new (a: string) => m.c;
 >z : new (a: string) => m.c
 >a : string
 >m : any
->c : m.c
 

@@ -3,8 +3,6 @@ declare module "foo" {
 >"foo" : typeof import("foo")
 
     interface Point {
->Point : Point
-
         x: number;
 >x : number
 

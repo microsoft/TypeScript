@@ -25,7 +25,7 @@ namespace ts.codefix {
 
     interface Info { readonly indexSignature: IndexSignatureDeclaration; readonly container: FixableDeclaration; }
     function getInfo(sourceFile: SourceFile, pos: number): Info | undefined {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         const indexSignature = cast(token.parent.parent, isIndexSignatureDeclaration);
         if (isClassDeclaration(indexSignature.parent)) return undefined;
         const container = isInterfaceDeclaration(indexSignature.parent) ? indexSignature.parent : cast(indexSignature.parent.parent, isTypeAliasDeclaration);

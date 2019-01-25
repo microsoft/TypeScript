@@ -13,9 +13,7 @@ class C { c; }
 
 class X<T> { x: T; }
 >X : X<T>
->T : T
 >x : T
->T : T
 
 class X1 { x: string; }
 >X1 : X1
@@ -28,16 +26,10 @@ class X2 { x: string; }
 function f(a: X1): A;
 >f : { (a: X1): A; <T>(a: X<T>): B; }
 >a : X1
->X1 : X1
->A : A
 
 function f<T>(a: X<T>): B;
 >f : { (a: X1): A; <T>(a: X<T>): B; }
->T : T
 >a : X<T>
->X : X<T>
->T : T
->B : B
 
 function f(a): any {
 >f : { (a: X1): A; <T>(a: X<T>): B; }
@@ -46,7 +38,6 @@ function f(a): any {
 
 var xs: X<string>;
 >xs : X<string>
->X : X<T>
 
 var t3 = f(xs);
 >t3 : A
@@ -56,5 +47,4 @@ var t3 = f(xs);
 
 var t3: A; // should not error
 >t3 : A
->A : A
 

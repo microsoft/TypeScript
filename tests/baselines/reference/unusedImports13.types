@@ -3,8 +3,8 @@ import React = require("react");
 >React : typeof React
 
 export const FooComponent = <div></div>
->FooComponent : any
-><div></div> : any
+>FooComponent : error
+><div></div> : error
 >div : any
 >div : any
 
@@ -20,15 +20,12 @@ declare namespace React {
 
     function createClass<P, S>(spec);
 >createClass : <P, S>(spec: any) => any
->P : P
->S : S
 >spec : any
 }
 declare global {
 >global : any
 
     namespace JSX {
->JSX : any
     }
 }
 

@@ -19,7 +19,6 @@ var d: void;
 
 var e: E;
 >e : E
->E : E
 
 // operator <
 var ra1 = a < a;

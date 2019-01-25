@@ -1,168 +1,99 @@
 === tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_externalModule.ts ===
 export module publicModule {
->publicModule : any
-
     export interface publicInterfaceInPublicModule {
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
     }
 
     interface privateInterfaceInPublicModule {
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
     }
 
     interface privateInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
->privateInterfaceImplementingPublicInterfaceInModule : privateInterfaceImplementingPublicInterfaceInModule
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
     }
     interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
->privateInterfaceImplementingPrivateInterfaceInModule : privateInterfaceImplementingPrivateInterfaceInModule
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
     }
     export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
->publicInterfaceImplementingPublicInterfaceInModule : publicInterfaceImplementingPublicInterfaceInModule
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
     }
     export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule { // Should error
->publicInterfaceImplementingPrivateInterfaceInModule : publicInterfaceImplementingPrivateInterfaceInModule
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
     }
 
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
->privateInterfaceImplementingFromPrivateModuleInterface : privateInterfaceImplementingFromPrivateModuleInterface
->privateModule.publicInterfaceInPrivateModule : any
 >privateModule : any
->publicInterfaceInPrivateModule : privateModule.publicInterfaceInPrivateModule
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
->publicInterfaceImplementingFromPrivateModuleInterface : publicInterfaceImplementingFromPrivateModuleInterface
->privateModule.publicInterfaceInPrivateModule : any
 >privateModule : any
->publicInterfaceInPrivateModule : privateModule.publicInterfaceInPrivateModule
     }
 
     export interface publicInterfaceImplementingPrivateAndPublicInterface extends privateInterfaceInPublicModule, publicInterfaceInPublicModule { // Should error
->publicInterfaceImplementingPrivateAndPublicInterface : publicInterfaceImplementingPrivateAndPublicInterface
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
     }
 }
 
 module privateModule {
->privateModule : any
-
     export interface publicInterfaceInPrivateModule {
->publicInterfaceInPrivateModule : publicInterfaceInPrivateModule
 
     }
 
     interface privateInterfaceInPrivateModule {
->privateInterfaceInPrivateModule : privateInterfaceInPrivateModule
     }
 
     interface privateInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPrivateModule {
->privateInterfaceImplementingPublicInterfaceInModule : privateInterfaceImplementingPublicInterfaceInModule
->publicInterfaceInPrivateModule : publicInterfaceInPrivateModule
     }
     interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPrivateModule {
->privateInterfaceImplementingPrivateInterfaceInModule : privateInterfaceImplementingPrivateInterfaceInModule
->privateInterfaceInPrivateModule : privateInterfaceInPrivateModule
     }
     export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPrivateModule {
->publicInterfaceImplementingPublicInterfaceInModule : publicInterfaceImplementingPublicInterfaceInModule
->publicInterfaceInPrivateModule : publicInterfaceInPrivateModule
     }
     export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPrivateModule {
->publicInterfaceImplementingPrivateInterfaceInModule : publicInterfaceImplementingPrivateInterfaceInModule
->privateInterfaceInPrivateModule : privateInterfaceInPrivateModule
     }
 
     interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
->privateInterfaceImplementingFromPrivateModuleInterface : privateInterfaceImplementingFromPrivateModuleInterface
->privateModule.publicInterfaceInPrivateModule : any
 >privateModule : any
->publicInterfaceInPrivateModule : publicInterfaceInPrivateModule
     }
     export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
->publicInterfaceImplementingFromPrivateModuleInterface : publicInterfaceImplementingFromPrivateModuleInterface
->privateModule.publicInterfaceInPrivateModule : any
 >privateModule : any
->publicInterfaceInPrivateModule : publicInterfaceInPrivateModule
     }
 }
 
 export interface publicInterface {
->publicInterface : publicInterface
 
 }
 
 interface privateInterface {
->privateInterface : privateInterface
 }
 
 interface privateInterfaceImplementingPublicInterface extends publicInterface {
->privateInterfaceImplementingPublicInterface : privateInterfaceImplementingPublicInterface
->publicInterface : publicInterface
 }
 interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterface {
->privateInterfaceImplementingPrivateInterfaceInModule : privateInterfaceImplementingPrivateInterfaceInModule
->privateInterface : privateInterface
 }
 export interface publicInterfaceImplementingPublicInterface extends publicInterface {
->publicInterfaceImplementingPublicInterface : publicInterfaceImplementingPublicInterface
->publicInterface : publicInterface
 }
 export interface publicInterfaceImplementingPrivateInterface extends privateInterface { // Should error
->publicInterfaceImplementingPrivateInterface : publicInterfaceImplementingPrivateInterface
->privateInterface : privateInterface
 }
 
 interface privateInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule {
->privateInterfaceImplementingFromPrivateModuleInterface : privateInterfaceImplementingFromPrivateModuleInterface
->privateModule.publicInterfaceInPrivateModule : any
 >privateModule : any
->publicInterfaceInPrivateModule : privateModule.publicInterfaceInPrivateModule
 }
 export interface publicInterfaceImplementingFromPrivateModuleInterface extends privateModule.publicInterfaceInPrivateModule { // Should error
->publicInterfaceImplementingFromPrivateModuleInterface : publicInterfaceImplementingFromPrivateModuleInterface
->privateModule.publicInterfaceInPrivateModule : any
 >privateModule : any
->publicInterfaceInPrivateModule : privateModule.publicInterfaceInPrivateModule
 }
 
 === tests/cases/compiler/privacyInterfaceExtendsClauseDeclFile_GlobalFile.ts ===
 module publicModuleInGlobal {
->publicModuleInGlobal : any
-
-    export interface publicInterfaceInPublicModule {
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
-    }
-
-    interface privateInterfaceInPublicModule {
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
-    }
-
-    interface privateInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
->privateInterfaceImplementingPublicInterfaceInModule : privateInterfaceImplementingPublicInterfaceInModule
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
-    }
-    interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
->privateInterfaceImplementingPrivateInterfaceInModule : privateInterfaceImplementingPrivateInterfaceInModule
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
-    }
-    export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
->publicInterfaceImplementingPublicInterfaceInModule : publicInterfaceImplementingPublicInterfaceInModule
->publicInterfaceInPublicModule : publicInterfaceInPublicModule
-    }
-    export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule { // Should error
->publicInterfaceImplementingPrivateInterfaceInModule : publicInterfaceImplementingPrivateInterfaceInModule
->privateInterfaceInPublicModule : privateInterfaceInPublicModule
-    }
-}
-interface publicInterfaceInGlobal {
->publicInterfaceInGlobal : publicInterfaceInGlobal
-}
-interface publicInterfaceImplementingPublicInterfaceInGlobal extends publicInterfaceInGlobal {
->publicInterfaceImplementingPublicInterfaceInGlobal : publicInterfaceImplementingPublicInterfaceInGlobal
->publicInterfaceInGlobal : publicInterfaceInGlobal
-}
-
+No type information for this code.    export interface publicInterfaceInPublicModule {
+No type information for this code.    }
+No type information for this code.
+No type information for this code.    interface privateInterfaceInPublicModule {
+No type information for this code.    }
+No type information for this code.
+No type information for this code.    interface privateInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+No type information for this code.    }
+No type information for this code.    interface privateInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule {
+No type information for this code.    }
+No type information for this code.    export interface publicInterfaceImplementingPublicInterfaceInModule extends publicInterfaceInPublicModule {
+No type information for this code.    }
+No type information for this code.    export interface publicInterfaceImplementingPrivateInterfaceInModule extends privateInterfaceInPublicModule { // Should error
+No type information for this code.    }
+No type information for this code.}
+No type information for this code.interface publicInterfaceInGlobal {
+No type information for this code.}
+No type information for this code.interface publicInterfaceImplementingPublicInterfaceInGlobal extends publicInterfaceInGlobal {
+No type information for this code.}
+No type information for this code.
+No type information for this code.

@@ -3,7 +3,7 @@ enum Position2 {
 >Position2 : Position2
 
     IgnoreRulesSpecific = 0
->IgnoreRulesSpecific : Position2
+>IgnoreRulesSpecific : Position2.IgnoreRulesSpecific
 >0 : 0
 }
 var x = IgnoreRulesSpecific. // error

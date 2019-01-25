@@ -11,7 +11,7 @@
 ////     interface ElementAttributesProperty { props; }
 //// }
 //// interface OptionPropBag {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}propx|]: number
+////     [|{| "isDefinition": true |}propx|]: number
 ////     propString: string
 ////     optional?: boolean
 //// }

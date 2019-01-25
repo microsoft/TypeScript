@@ -1,20 +1,12 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType6_ES6.ts ===
 interface I<T> {
->I : I<T>
->T : T
-
     [s: string]: T;
 >s : string
->T : T
 }
 
 declare function foo<T>(obj: I<T>): T
 >foo : <T>(obj: I<T>) => T
->T : T
 >obj : I<T>
->I : I<T>
->T : T
->T : T
 
 foo({
 >foo({    p: "",    0: () => { },    ["hi" + "bye"]: true,    [0 + 1]: 0,    [+"hi"]: [0]}) : string | number | boolean | (() => void) | number[]

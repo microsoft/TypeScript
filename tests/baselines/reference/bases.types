@@ -1,7 +1,5 @@
 === tests/cases/compiler/bases.ts ===
 interface I {
->I : I
-
     x;
 >x : any
 }
@@ -21,7 +19,6 @@ class B {
 class C extends B implements I {
 >C : C
 >B : B
->I : I
 
     constructor() {
         this.x: any;

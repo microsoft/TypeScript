@@ -7,7 +7,6 @@ export var x: c.b.m2.c1;
 >c : any
 >b : any
 >m2 : any
->c1 : c.b.m2.c1
 
 === tests/cases/compiler/declFileExportImportChain2_a.ts ===
 module m1 {

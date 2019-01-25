@@ -7,7 +7,6 @@ import {Observable} from "Observable";
 import "Map";
 let x: Observable;
 >x : Observable
->Observable : Observable
 
 x.foo().x;
 >x.foo().x : number
@@ -43,11 +42,8 @@ declare module "Map" {
 >"Observable" : typeof import("Observable")
 
         interface Observable {
->Observable : Observable
-
             foo(): Cls;
 >foo : () => Cls
->Cls : Cls
         }
     }
 }

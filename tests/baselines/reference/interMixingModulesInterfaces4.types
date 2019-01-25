@@ -14,8 +14,6 @@ module A {
     }
 
     interface B {
->B : B
-
         name: string;
 >name : string
 

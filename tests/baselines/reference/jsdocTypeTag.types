@@ -134,11 +134,9 @@ var a: any[];
 
 var P: Promise<any>;
 >P : Promise<any>
->Promise : Promise<T>
 
 var p: Promise<any>;
 >p : Promise<any>
->Promise : Promise<T>
 
 var nullable: number | null;
 >nullable : number | null
@@ -152,7 +150,6 @@ var obj: any;
 
 var Func: Function;
 >Func : Function
->Function : Function
 
 var f: (s: string) => number;
 >f : (s: string) => number

@@ -4,7 +4,6 @@ import { Constructor } from "@loopback/context";
 
 export type ControllerClass = Constructor<any>;
 >ControllerClass : Constructor<any>
->Constructor : Constructor<T>
 
 === tests/cases/compiler/monorepo/core/src/usage.ts ===
 import { ControllerClass } from './application';
@@ -14,21 +13,18 @@ import { BindingKey } from '@loopback/context';
 >BindingKey : typeof BindingKey
 
 export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(null as any); // line in question
->CONTROLLER_CLASS : BindingKey<import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>>
->BindingKey.create<ControllerClass>(null as any) : BindingKey<import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>>
->BindingKey.create : <T extends import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>>(ctor: T) => BindingKey<T>
+>CONTROLLER_CLASS : BindingKey<import("tests/cases/compiler/monorepo/context/index").Constructor<any>>
+>BindingKey.create<ControllerClass>(null as any) : BindingKey<import("tests/cases/compiler/monorepo/context/index").Constructor<any>>
+>BindingKey.create : <T extends import("tests/cases/compiler/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
 >BindingKey : typeof BindingKey
->create : <T extends import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>>(ctor: T) => BindingKey<T>
->ControllerClass : import("tests/cases/compiler/monorepo/context/src/value-promise").Constructor<any>
+>create : <T extends import("tests/cases/compiler/monorepo/context/index").Constructor<any>>(ctor: T) => BindingKey<T>
 >null as any : any
 >null : null
 
 === tests/cases/compiler/monorepo/context/src/value-promise.ts ===
 export type Constructor<T> = (...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
->T : T
 
 === tests/cases/compiler/monorepo/context/src/bindingkey.ts ===
 import { Constructor } from "@loopback/context"
@@ -36,23 +32,17 @@ import { Constructor } from "@loopback/context"
 
 export class BindingKey<T> {
 >BindingKey : BindingKey<T>
->T : T
 
   readonly __type: T;
 >__type : T
->T : T
 
   static create<T extends Constructor<any>>(ctor: T) {
 >create : <T extends Constructor<any>>(ctor: T) => BindingKey<T>
->T : T
->Constructor : Constructor<T>
 >ctor : T
->T : T
 
     return new BindingKey<T>();
 >new BindingKey<T>() : BindingKey<T>
 >BindingKey : typeof BindingKey
->T : T
   }
 }
 

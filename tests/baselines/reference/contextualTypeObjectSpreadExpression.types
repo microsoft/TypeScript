@@ -1,13 +1,10 @@
 === tests/cases/compiler/contextualTypeObjectSpreadExpression.ts ===
 interface I {
->I : I
-
     a: "a";
 >a : "a"
 }
 let i: I;
 >i : I
->I : I
 
 i = { ...{ a: "a" } };
 >i = { ...{ a: "a" } } : { a: "a"; }

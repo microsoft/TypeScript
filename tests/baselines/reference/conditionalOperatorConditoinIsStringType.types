@@ -17,7 +17,6 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Object
->Object : Object
 
 var exprAny2: any;
 >exprAny2 : any
@@ -33,7 +32,6 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Object
->Object : Object
 
 //Cond is a string type variable
 condString ? exprAny1 : exprAny2;
@@ -123,7 +121,7 @@ var array = ["1", "2", "3"];
 
 typeof condString ? exprAny1 : exprAny2;
 >typeof condString ? exprAny1 : exprAny2 : any
->typeof condString : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof condString : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >condString : string
 >exprAny1 : any
 >exprAny2 : any
@@ -254,7 +252,7 @@ var resultIsStringOrBoolean2 = "hello" ? exprString1 : exprBoolean1; // union
 var resultIsAny3 = typeof condString ? exprAny1 : exprAny2;
 >resultIsAny3 : any
 >typeof condString ? exprAny1 : exprAny2 : any
->typeof condString : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof condString : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >condString : string
 >exprAny1 : any
 >exprAny2 : any
@@ -297,7 +295,7 @@ var resultIsObject3 = array[1] ? exprIsObject1 : exprIsObject2;
 var resultIsStringOrBoolean3 = typeof condString ? exprString1 : exprBoolean1; // union
 >resultIsStringOrBoolean3 : string | boolean
 >typeof condString ? exprString1 : exprBoolean1 : string | boolean
->typeof condString : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof condString : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >condString : string
 >exprString1 : string
 >exprBoolean1 : boolean

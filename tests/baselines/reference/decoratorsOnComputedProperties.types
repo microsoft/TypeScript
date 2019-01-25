@@ -3,7 +3,6 @@ function x(o: object, k: PropertyKey) { }
 >x : (o: object, k: string | number | symbol) => void
 >o : object
 >k : string | number | symbol
->PropertyKey : string | number | symbol
 
 let i = 0;
 >i : number

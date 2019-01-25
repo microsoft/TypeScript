@@ -129,16 +129,7 @@ var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >"string" : "string"
 
 interface myArray extends Array<Number> { }
->myArray : myArray
->Array : T[]
->Number : Number
-
 interface myArray2 extends Array<Number|String> { }
->myArray2 : myArray2
->Array : T[]
->Number : Number
->String : String
-
 var d0 = [1, true, ...temp, ];  // has type (string|number|boolean)[]
 >d0 : (string | number | boolean)[]
 >[1, true, ...temp, ] : (string | number | boolean)[]
@@ -161,14 +152,12 @@ var d2: number[] = [...temp1];
 
 var d3: myArray = [...temp1];
 >d3 : myArray
->myArray : myArray
 >[...temp1] : number[]
 >...temp1 : number
 >temp1 : number[]
 
 var d4: myArray2 = [...temp, ...temp1];
 >d4 : myArray2
->myArray2 : myArray2
 >[...temp, ...temp1] : (string | number)[]
 >...temp : string
 >temp : string[]

@@ -3,13 +3,9 @@
 
 function foo<T, U>(arg: { cb: new(t: T) => U }) {
 >foo : <T, U>(arg: { cb: new (t: T) => U; }) => U
->T : T
->U : U
 >arg : { cb: new (t: T) => U; }
 >cb : new (t: T) => U
 >t : T
->T : T
->U : U
 
     return new arg.cb(null);
 >new arg.cb(null) : U
@@ -22,9 +18,7 @@ function foo<T, U>(arg: { cb: new(t: T) => U }) {
 var arg: { cb: new<T>(x: T) => string };
 >arg : { cb: new <T>(x: T) => string; }
 >cb : new <T>(x: T) => string
->T : T
 >x : T
->T : T
 
 var r = foo(arg); // {}
 >r : string
@@ -36,11 +30,8 @@ var r = foo(arg); // {}
 var arg2: { cb: new <T>(x: T, y: T) => string };
 >arg2 : { cb: new <T>(x: T, y: T) => string; }
 >cb : new <T>(x: T, y: T) => string
->T : T
 >x : T
->T : T
 >y : T
->T : T
 
 var r2 = foo(arg2); // error
 >r2 : any
@@ -62,15 +53,10 @@ var r3 = foo(arg3); // error
 
 function foo2<T, U>(arg: { cb: new(t: T, t2: T) => U }) {
 >foo2 : <T, U>(arg: { cb: new (t: T, t2: T) => U; }) => U
->T : T
->U : U
 >arg : { cb: new (t: T, t2: T) => U; }
 >cb : new (t: T, t2: T) => U
 >t : T
->T : T
 >t2 : T
->T : T
->U : U
 
     return new arg.cb(null, null);
 >new arg.cb(null, null) : U

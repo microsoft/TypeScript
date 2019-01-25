@@ -42,9 +42,7 @@ class FooIterator {
 
 var a: Bar, b: Bar;
 >a : Bar
->Bar : Bar
 >b : Bar
->Bar : Bar
 
 [a, b] = new FooIterator;
 >[a, b] = new FooIterator : FooIterator

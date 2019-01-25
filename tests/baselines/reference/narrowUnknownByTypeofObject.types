@@ -1,0 +1,16 @@
+=== tests/cases/compiler/narrowUnknownByTypeofObject.ts ===
+function foo(x: unknown) {
+>foo : (x: unknown) => void
+>x : unknown
+
+    if (typeof x === "object") {
+>typeof x === "object" : boolean
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+>"object" : "object"
+
+        x
+>x : object | null
+    }
+}
+

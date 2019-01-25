@@ -16,7 +16,6 @@ class A1 {
 
     public e: Object;
 >e : Object
->Object : Object
 
     public fn(a: string): string {
 >fn : (a: string) => string
@@ -43,7 +42,6 @@ class B1 {
 
     public e: Object;
 >e : Object
->Object : Object
 
     public fn(b: string): string {
 >fn : (b: string) => string
@@ -77,96 +75,72 @@ class B2 extends Base { }
 >Base : Base
 
 interface A3 { f(a: number): string; }
->A3 : A3
 >f : (a: number) => string
 >a : number
 
 interface B3 { f(a: number): string; }
->B3 : B3
 >f : (a: number) => string
 >a : number
 
 interface A4 { new (a: string): A1; }
->A4 : A4
 >a : string
->A1 : A1
 
 interface B4 { new (a: string): B1; }
->B4 : B4
 >a : string
->B1 : B1
 
 interface A5 { [x: number]: number; }
->A5 : A5
 >x : number
 
 interface B5 { [x: number]: number; }
->B5 : B5
 >x : number
 
 interface A6 { [x: string]: string; }
->A6 : A6
 >x : string
 
 interface B6 { [x: string]: string; }
->B6 : B6
 >x : string
 
 var a1: A1;
 >a1 : A1
->A1 : A1
 
 var a2: A2;
 >a2 : A2
->A2 : A2
 
 var a3: A3;
 >a3 : A3
->A3 : A3
 
 var a4: A4;
 >a4 : A4
->A4 : A4
 
 var a5: A5;
 >a5 : A5
->A5 : A5
 
 var a6: A6;
 >a6 : A6
->A6 : A6
 
 var b1: B1;
 >b1 : B1
->B1 : B1
 
 var b2: B2;
 >b2 : B2
->B2 : B2
 
 var b3: B3;
 >b3 : B3
->B3 : B3
 
 var b4: B4;
 >b4 : B4
->B4 : B4
 
 var b5: B5;
 >b5 : B5
->B5 : B5
 
 var b6: B6;
 >b6 : B6
->B6 : B6
 
 var base1: Base;
 >base1 : Base
->Base : Base
 
 var base2: Base;
 >base2 : Base
->Base : Base
 
 // operator <
 var r1a1 = a1 < b1;

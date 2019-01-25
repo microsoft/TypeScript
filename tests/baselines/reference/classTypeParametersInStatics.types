@@ -5,37 +5,26 @@ module Editor {
 
     export class List<T> {
 >List : List<T>
->T : T
 
         public next: List<T>;
 >next : List<T>
->List : List<T>
->T : T
 
         public prev: List<T>;
 >prev : List<T>
->List : List<T>
->T : T
 
         constructor(public isHead: boolean, public data: T) {
 >isHead : boolean
 >data : T
->T : T
         
         }
 
         public static MakeHead(): List<T> { // should error
 >MakeHead : () => List<any>
->List : List<T>
->T : No type information available!
 
             var entry: List<T> = new List<T>(true, null);
 >entry : List<any>
->List : List<T>
->T : No type information available!
 >new List<T>(true, null) : List<any>
 >List : typeof List
->T : No type information available!
 >true : true
 >null : null
 
@@ -59,17 +48,11 @@ module Editor {
 
         public static MakeHead2<T>(): List<T> { // should not error
 >MakeHead2 : <T>() => List<T>
->T : T
->List : List<T>
->T : T
 
             var entry: List<T> = new List<T>(true, null);
 >entry : List<T>
->List : List<T>
->T : T
 >new List<T>(true, null) : List<T>
 >List : typeof List
->T : T
 >true : true
 >null : null
 
@@ -93,17 +76,11 @@ module Editor {
 
         public static MakeHead3<U>(): List<U> { // should not error
 >MakeHead3 : <U>() => List<U>
->U : U
->List : List<T>
->U : U
 
             var entry: List<U> = new List<U>(true, null);
 >entry : List<U>
->List : List<T>
->U : U
 >new List<U>(true, null) : List<U>
 >List : typeof List
->U : U
 >true : true
 >null : null
 

@@ -5,7 +5,6 @@ import * as ff from './foo';
 
 let y: Foo; // OK in type position
 >y : ff
->Foo : ff
 
 y.foo();
 >y.foo() : number
@@ -16,7 +15,6 @@ y.foo();
 let z: Foo.SubThing; // OK in ns position
 >z : ff.SubThing
 >Foo : any
->SubThing : ff.SubThing
 
 let x: any = Foo; // Not OK in value position
 >x : any
@@ -30,10 +28,7 @@ declare class Thing {
 >foo : () => number
 }
 declare namespace Thing {
->Thing : typeof Thing
-
 	interface SubThing { }
->SubThing : SubThing
 }
 export = Thing;
 >Thing : Thing

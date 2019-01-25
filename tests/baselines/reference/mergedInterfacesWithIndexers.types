@@ -2,16 +2,12 @@
 // indexers should behave like other members when merging interface declarations
 
 interface A {
->A : A
-
     [x: number]: string;
 >x : number
 }
 
 
 interface A {
->A : A
-
     [x: string]: { length: number };
 >x : string
 >length : number
@@ -19,7 +15,6 @@ interface A {
 
 var a: A;
 >a : A
->A : A
 
 var r = a[1];
 >r : string

@@ -1,4 +1,4 @@
 var foo = function () {
-    //// comment!
+    /*comment*/
     return void 0;
 };

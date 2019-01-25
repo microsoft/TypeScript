@@ -1,7 +1,6 @@
 === tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember2.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     x = this;
 >x : this
@@ -15,7 +14,6 @@ class C<T> {
     }
     constructor(x: T) {
 >x : T
->T : T
 
         var t = this;
 >t : this
@@ -53,12 +51,10 @@ class C<T> {
 
     z: T;
 >z : T
->T : T
 }
 
 var c: C<string>;
 >c : C<string>
->C : C<T>
 
 // all ok
 var r = c.x;

@@ -20,11 +20,9 @@ class A {
 
     foo: Base;
 >foo : Base
->Base : Base
 
     bar: Base;
 >bar : Base
->Base : Base
 }
 
 class B extends A {
@@ -33,7 +31,6 @@ class B extends A {
 
     foo: Derived; // ok
 >foo : Derived
->Derived : Derived
 
     bar: string; // error
 >bar : string
@@ -44,11 +41,9 @@ class A2 {
 
     1: Base; 
 >1 : Base
->Base : Base
 
     2.0: Base;
 >2.0 : Base
->Base : Base
 }
 
 class B2 extends A2 {
@@ -57,7 +52,6 @@ class B2 extends A2 {
 
     1: Derived; // ok
 >1 : Derived
->Derived : Derived
 
     2: string; // error
 >2 : string
@@ -68,11 +62,9 @@ class A3 {
 
     '1': Base;
 >'1' : Base
->Base : Base
 
     '2.0': Base;
 >'2.0' : Base
->Base : Base
 }
 
 class B3 extends A3 {
@@ -81,7 +73,6 @@ class B3 extends A3 {
 
     '1': Derived; // ok
 >'1' : Derived
->Derived : Derived
 
     '2.0': string; // error
 >'2.0' : string
@@ -95,11 +86,9 @@ module TwoLevels {
 
         foo: Base;
 >foo : Base
->Base : Base
 
         bar: Base;
 >bar : Base
->Base : Base
     }
 
     class B extends A {
@@ -108,7 +97,6 @@ module TwoLevels {
 
         foo: Derived2; // ok
 >foo : Derived2
->Derived2 : Derived2
 
         bar: string; // error
 >bar : string
@@ -119,11 +107,9 @@ module TwoLevels {
 
         1: Base;
 >1 : Base
->Base : Base
 
         2.0: Base;
 >2.0 : Base
->Base : Base
     }
 
     class B2 extends A2 {
@@ -132,7 +118,6 @@ module TwoLevels {
 
         1: Derived2; // ok
 >1 : Derived2
->Derived2 : Derived2
 
         2: string; // error
 >2 : string
@@ -143,11 +128,9 @@ module TwoLevels {
 
         '1': Base;
 >'1' : Base
->Base : Base
 
         '2.0': Base;
 >'2.0' : Base
->Base : Base
     }
 
     class B3 extends A3 {
@@ -156,7 +139,6 @@ module TwoLevels {
 
         '1': Derived2; // ok
 >'1' : Derived2
->Derived2 : Derived2
 
         '2.0': string; // error
 >'2.0' : string

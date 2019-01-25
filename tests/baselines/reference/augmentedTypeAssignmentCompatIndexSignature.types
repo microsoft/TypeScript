@@ -1,26 +1,18 @@
 === tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts ===
 interface Foo { a }
->Foo : Foo
 >a : any
 
 interface Bar { b }
->Bar : Bar
 >b : any
 
 interface Object {
->Object : Object
-
     [n: number]: Foo;
 >n : number
->Foo : Foo
 }
 
 interface Function {
->Function : Function
-
     [n: number]: Bar;
 >n : number
->Bar : Bar
 }
 
 var o = {};
@@ -36,7 +28,6 @@ var v1: {
 
     [n: number]: Foo
 >n : number
->Foo : Foo
 
 } = o; // Should be allowed
 >o : {}
@@ -46,7 +37,6 @@ var v2: {
 
     [n: number]: Bar
 >n : number
->Bar : Bar
 
 } = f; // Should be allowed
 >f : () => void

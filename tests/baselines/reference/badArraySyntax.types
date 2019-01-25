@@ -9,7 +9,6 @@ class Z {
 
 var a1: Z[] = [];
 >a1 : Z[]
->Z : Z
 >[] : undefined[]
 
 var a2 = new Z[];
@@ -28,7 +27,6 @@ var a3 = new Z[]();
 
 var a4: Z[] = new Z[];
 >a4 : Z[]
->Z : Z
 >new Z[] : any
 >Z[] : any
 >Z : typeof Z
@@ -36,7 +34,6 @@ var a4: Z[] = new Z[];
 
 var a5: Z[] = new Z[]();
 >a5 : Z[]
->Z : Z
 >new Z[]() : any
 >Z[] : any
 >Z : typeof Z
@@ -44,7 +41,6 @@ var a5: Z[] = new Z[]();
 
 var a6: Z[][] = new   Z     [      ]   [  ];
 >a6 : Z[][]
->Z : Z
 >new   Z     [      ]   [  ] : any
 >Z     [      ]   [  ] : any
 >Z     [      ] : any

@@ -72,5 +72,4 @@ var l: X.Y.Z.Line;
 >X : any
 >Y : any
 >Z : any
->Line : X.Y.Z.Line
 

@@ -28,19 +28,14 @@ function f2({ a, b }: { a: number, b: number } = { a: 0, b: 0 }) {
 // Repro from #8681
 
 interface Type { t: void }
->Type : Type
 >t : void
 
 interface QueryMetadata { q: void }
->QueryMetadata : QueryMetadata
 >q : void
 
 interface QueryMetadataFactory {
->QueryMetadataFactory : QueryMetadataFactory
-
     (selector: Type | string, {descendants, read}?: {
 >selector : string | Type
->Type : Type
 >descendants : boolean | undefined
 >read : any
 
@@ -51,11 +46,8 @@ interface QueryMetadataFactory {
 >read : any
 
     }): ParameterDecorator;
->ParameterDecorator : ParameterDecorator
-
     new (selector: Type | string, {descendants, read}?: {
 >selector : string | Type
->Type : Type
 >descendants : boolean | undefined
 >read : any
 
@@ -66,6 +58,5 @@ interface QueryMetadataFactory {
 >read : any
 
     }): QueryMetadata;
->QueryMetadata : QueryMetadata
 }
 

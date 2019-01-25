@@ -4,9 +4,6 @@ type T = { x : number }
 >x : number
 
 export interface I {
->I : I
-
     f: T;   
 >f : T
->T : T
 }

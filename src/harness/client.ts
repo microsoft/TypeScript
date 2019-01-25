@@ -3,12 +3,15 @@ namespace ts.server {
         writeMessage(message: string): void;
     }
 
-    interface RenameEntry extends RenameInfo {
-        fileName: string;
-        position: number;
-        locations: RenameLocation[];
-        findInStrings: boolean;
-        findInComments: boolean;
+    interface RenameEntry {
+        readonly renameInfo: RenameInfo;
+        readonly inputs: {
+            readonly fileName: string;
+            readonly position: number;
+            readonly findInStrings: boolean;
+            readonly findInComments: boolean;
+        };
+        readonly locations: RenameLocation[];
     }
 
     /* @internal */
@@ -34,7 +37,7 @@ namespace ts.server {
         private sequence = 0;
         private lineMaps: Map<number[]> = createMap<number[]>();
         private messages: string[] = [];
-        private lastRenameEntry: RenameEntry;
+        private lastRenameEntry: RenameEntry | undefined;
 
         constructor(private host: SessionClientHost) {
         }
@@ -73,7 +76,7 @@ namespace ts.server {
             return { span: this.decodeSpan(codeEdit, fileName), newText: codeEdit.newText };
         }
 
-        private processRequest<T extends protocol.Request>(command: string, args?: T["arguments"]): T {
+        private processRequest<T extends protocol.Request>(command: string, args: T["arguments"]): T {
             const request: protocol.Request = {
                 seq: this.sequence,
                 type: "request",
@@ -224,9 +227,9 @@ namespace ts.server {
                 containerName: entry.containerName || "",
                 containerKind: entry.containerKind || ScriptElementKind.unknown,
                 kind: entry.kind,
-                kindModifiers: entry.kindModifiers!, // TODO: GH#18217
-                matchKind: entry.matchKind!, // TODO: GH#18217
-                isCaseSensitive: entry.isCaseSensitive!, // TODO: GH#18217
+                kindModifiers: entry.kindModifiers || "",
+                matchKind: entry.matchKind as keyof typeof PatternMatchKind,
+                isCaseSensitive: entry.isCaseSensitive,
                 fileName: entry.file,
                 textSpan: this.decodeSpan(entry),
             }));
@@ -278,9 +281,10 @@ namespace ts.server {
 
             const request = this.processRequest<protocol.DefinitionRequest>(CommandNames.DefinitionAndBoundSpan, args);
             const response = this.processResponse<protocol.DefinitionInfoAndBoundSpanReponse>(request);
+            const body = Debug.assertDefined(response.body); // TODO: GH#18217
 
             return {
-                definitions: response.body!.definitions.map(entry => ({ // TODO: GH#18217
+                definitions: body.definitions.map(entry => ({
                     containerKind: ScriptElementKind.unknown,
                     containerName: "",
                     fileName: entry.file,
@@ -288,7 +292,7 @@ namespace ts.server {
                     kind: ScriptElementKind.unknown,
                     name: ""
                 })),
-                textSpan: this.decodeSpan(response.body!.textSpan, request.arguments.file)
+                textSpan: this.decodeSpan(body.textSpan, request.arguments.file)
             };
         }
 
@@ -341,8 +345,10 @@ namespace ts.server {
             }));
         }
 
-        getEmitOutput(_fileName: string): EmitOutput {
-            return notImplemented();
+        getEmitOutput(file: string): EmitOutput {
+            const request = this.processRequest<protocol.EmitOutputRequest>(protocol.CommandTypes.EmitOutput, { file });
+            const response = this.processResponse<protocol.EmitOutputResponse>(request);
+            return response.body;
         }
 
         getSyntacticDiagnostics(file: string): DiagnosticWithLocation[] {
@@ -378,7 +384,8 @@ namespace ts.server {
             return notImplemented();
         }
 
-        getRenameInfo(fileName: string, position: number, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+        getRenameInfo(fileName: string, position: number, _options?: RenameInfoOptions, findInStrings?: boolean, findInComments?: boolean): RenameInfo {
+            // Not passing along 'options' because server should already have those from the 'configure' command
             const args: protocol.RenameRequestArgs = { ...this.createFileLocationRequestArgs(fileName, position), findInStrings, findInComments };
 
             const request = this.processRequest<protocol.RenameRequest>(CommandNames.Rename, args);
@@ -387,37 +394,45 @@ namespace ts.server {
             const locations: RenameLocation[] = [];
             for (const entry of body.locs) {
                 const fileName = entry.file;
-                for (const loc of entry.locs) {
-                    locations.push({ textSpan: this.decodeSpan(loc, fileName), fileName });
+                for (const { start, end, ...prefixSuffixText } of entry.locs) {
+                    locations.push({ textSpan: this.decodeSpan({ start, end }, fileName), fileName, ...prefixSuffixText });
                 }
             }
 
-            return this.lastRenameEntry = {
-                canRename: body.info.canRename,
-                displayName: body.info.displayName,
-                fullDisplayName: body.info.fullDisplayName,
-                kind: body.info.kind,
-                kindModifiers: body.info.kindModifiers,
-                localizedErrorMessage: body.info.localizedErrorMessage,
-                triggerSpan: createTextSpanFromBounds(position, position),
-                fileName,
-                position,
-                findInStrings: !!findInStrings,
-                findInComments: !!findInComments,
+            const renameInfo = body.info.canRename
+                ? identity<RenameInfoSuccess>({
+                    canRename: body.info.canRename,
+                    fileToRename: body.info.fileToRename,
+                    displayName: body.info.displayName,
+                    fullDisplayName: body.info.fullDisplayName,
+                    kind: body.info.kind,
+                    kindModifiers: body.info.kindModifiers,
+                    triggerSpan: createTextSpanFromBounds(position, position),
+                })
+                : identity<RenameInfoFailure>({ canRename: false, localizedErrorMessage: body.info.localizedErrorMessage });
+            this.lastRenameEntry = {
+                renameInfo,
+                inputs: {
+                    fileName,
+                    position,
+                    findInStrings: !!findInStrings,
+                    findInComments: !!findInComments,
+                },
                 locations,
             };
+            return renameInfo;
         }
 
         findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] {
             if (!this.lastRenameEntry ||
-                this.lastRenameEntry.fileName !== fileName ||
-                this.lastRenameEntry.position !== position ||
-                this.lastRenameEntry.findInStrings !== findInStrings ||
-                this.lastRenameEntry.findInComments !== findInComments) {
-                this.getRenameInfo(fileName, position, findInStrings, findInComments);
+                this.lastRenameEntry.inputs.fileName !== fileName ||
+                this.lastRenameEntry.inputs.position !== position ||
+                this.lastRenameEntry.inputs.findInStrings !== findInStrings ||
+                this.lastRenameEntry.inputs.findInComments !== findInComments) {
+                this.getRenameInfo(fileName, position, { allowRenameOfImportPath: true }, findInStrings, findInComments);
             }
 
-            return this.lastRenameEntry.locations;
+            return this.lastRenameEntry!.locations;
         }
 
         private decodeNavigationBarItems(items: protocol.NavigationBarItem[] | undefined, fileName: string, lineMap: number[]): NavigationBarItem[] {
@@ -680,6 +695,10 @@ namespace ts.server {
             return response.body!.map(entry => this.decodeSpan(entry, fileName)); // TODO: GH#18217
         }
 
+        configurePlugin(pluginName: string, configuration: any): void {
+            this.processRequest<protocol.ConfigurePluginRequest>("configurePlugin", { pluginName, configuration });
+        }
+
         getIndentationAtPosition(_fileName: string, _position: number, _options: EditorOptions): number {
             return notImplemented();
         }
@@ -714,6 +733,10 @@ namespace ts.server {
 
         cleanupSemanticCache(): void {
             throw new Error("cleanupSemanticCache is not available through the server layer.");
+        }
+
+        getSourceMapper(): never {
+            return notImplemented();
         }
 
         dispose(): void {

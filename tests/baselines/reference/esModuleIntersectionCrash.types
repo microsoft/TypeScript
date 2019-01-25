@@ -5,19 +5,13 @@ export = modObj;
 declare const modObj: modObj.A & modObj.B;
 >modObj : modObj.A & modObj.B
 >modObj : any
->A : modObj.A
 >modObj : any
->B : modObj.B
 
 declare namespace modObj {
->modObj : A & B
-
     interface A { (): void; a: string; }
->A : A
 >a : string
 
     interface B { (x: string): void; b: string; }
->B : B
 >x : string
 >b : string
 }

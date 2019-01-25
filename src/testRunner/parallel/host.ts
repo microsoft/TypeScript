@@ -20,6 +20,7 @@ namespace Harness.Parallel.Host {
         // tslint:disable-next-line:variable-name
         const FailedTestReporter = require(path.resolve(__dirname, "../../scripts/failed-tests")) as typeof import("../../../scripts/failed-tests");
 
+        const perfdataFileNameFragment = ".parallelperf";
         const perfData = readSavedPerfData(configOption);
         const newTasks: Task[] = [];
         let tasks: Task[] = [];
@@ -27,9 +28,9 @@ namespace Harness.Parallel.Host {
         let totalCost = 0;
 
         class RemoteSuite extends Mocha.Suite {
-            suites: RemoteSuite[];
+            suites!: RemoteSuite[];
             suiteMap = ts.createMap<RemoteSuite>();
-            tests: RemoteTest[];
+            tests!: RemoteTest[];
             constructor(title: string) {
                 super(title);
                 this.pending = false;
@@ -174,8 +175,6 @@ namespace Harness.Parallel.Host {
                 return type && !this._options.noColors ? color(type, text) : text;
             }
         }
-
-        const perfdataFileNameFragment = ".parallelperf";
 
         function perfdataFileName(target?: string) {
             return `${perfdataFileNameFragment}${target ? `.${target}` : ""}.json`;

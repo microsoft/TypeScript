@@ -5,7 +5,6 @@ var v: { bar(): void, baz }
 >baz : any
 
 interface Foo { bar(): void, baz }
->Foo : Foo
 >bar : () => void
 >baz : any
 

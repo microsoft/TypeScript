@@ -3,75 +3,43 @@
 
 function foo<T>(x: T = null) { return x; } // ok
 >foo : <T>(x?: T) => T
->T : T
 >x : T
->T : T
 >null : null
 >x : T
 
 function foo2<T>(x: T = undefined) { return x; } // ok
 >foo2 : <T>(x?: T) => T
->T : T
 >x : T
->T : T
 >undefined : undefined
 >x : T
 
 function foo3<T extends Number>(x: T = 1) { } // error
 >foo3 : <T extends Number>(x?: T) => void
->T : T
->Number : Number
 >x : T
->T : T
 >1 : 1
 
 function foo4<T, U extends T>(x: T, y: U = x) { } // error
 >foo4 : <T, U extends T>(x: T, y?: U) => void
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : U
->U : U
 >x : T
 
 function foo5<T, U extends T>(x: U, y: T = x) { } // ok
 >foo5 : <T, U extends T>(x: U, y?: T) => void
->T : T
->U : U
->T : T
 >x : U
->U : U
 >y : T
->T : T
 >x : U
 
 function foo6<T, U extends T, V extends U>(x: T, y: U, z: V = y) { } // error
 >foo6 : <T, U extends T, V extends U>(x: T, y: U, z?: V) => void
->T : T
->U : U
->T : T
->V : V
->U : U
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
 >y : U
 
 function foo7<T, U extends T, V extends U>(x: V, y: U = x) { } // should be ok
 >foo7 : <T, U extends T, V extends U>(x: V, y?: U) => void
->T : T
->U : U
->T : T
->V : V
->U : U
 >x : V
->V : V
 >y : U
->U : U
 >x : V
 

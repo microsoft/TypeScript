@@ -1,7 +1,5 @@
 === tests/cases/compiler/multiCallOverloads.ts ===
 interface ICallback {
->ICallback : ICallback
-
     (x?: string):void;
 >x : string
 }
@@ -9,17 +7,14 @@ interface ICallback {
 function load(f: ICallback) {}
 >load : (f: ICallback) => void
 >f : ICallback
->ICallback : ICallback
 
 var f1: ICallback = function(z?) {}
 >f1 : ICallback
->ICallback : ICallback
 >function(z?) {} : (z?: string) => void
 >z : string
 
 var f2: ICallback = function(z?) {}
 >f2 : ICallback
->ICallback : ICallback
 >function(z?) {} : (z?: string) => void
 >z : string
 

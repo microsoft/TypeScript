@@ -4,9 +4,9 @@ namespace ts.refactor {
     const actionNameDefaultToNamed = "Convert default export to named export";
     const actionNameNamedToDefault = "Convert named export to default export";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ApplicableRefactorInfo[] | undefined {
+        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
             const info = getInfo(context);
-            if (!info) return undefined;
+            if (!info) return emptyArray;
             const description = info.wasDefault ? Diagnostics.Convert_default_export_to_named_export.message : Diagnostics.Convert_named_export_to_default_export.message;
             const actionName = info.wasDefault ? actionNameDefaultToNamed : actionNameNamedToDefault;
             return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
@@ -30,7 +30,7 @@ namespace ts.refactor {
     function getInfo(context: RefactorContext): Info | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
-        const token = getTokenAtPosition(file, span.start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(file, span.start);
         const exportNode = getParentNodeInSpan(token, file, span);
         if (!exportNode || (!isSourceFile(exportNode.parent) && !(isModuleBlock(exportNode.parent) && isAmbientModule(exportNode.parent.parent)))) {
             return undefined;
@@ -78,7 +78,7 @@ namespace ts.refactor {
 
     function changeExport(exportingSourceFile: SourceFile, { wasDefault, exportNode, exportName }: Info, changes: textChanges.ChangeTracker, checker: TypeChecker): void {
         if (wasDefault) {
-            changes.deleteNode(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword)));
+            changes.delete(exportingSourceFile, Debug.assertDefined(findModifier(exportNode, SyntaxKind.DefaultKeyword)));
         }
         else {
             const exportKeyword = Debug.assertDefined(findModifier(exportNode, SyntaxKind.ExportKeyword));
@@ -155,7 +155,7 @@ namespace ts.refactor {
                 }
                 else {
                     // `import foo, { bar } from "./a"` --> `import { bar, foo } from "./a";`
-                    changes.deleteNode(importingSourceFile, ref);
+                    changes.delete(importingSourceFile, ref);
                     changes.insertNodeAtEndOfList(importingSourceFile, namedBindings.elements, spec);
                 }
                 break;
@@ -166,38 +166,35 @@ namespace ts.refactor {
     }
 
     function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: Identifier, changes: textChanges.ChangeTracker): void {
-        const { parent } = ref;
+        const parent = ref.parent as PropertyAccessExpression | ImportSpecifier | ExportSpecifier;
         switch (parent.kind) {
             case SyntaxKind.PropertyAccessExpression:
                 // `a.foo` --> `a.default`
                 changes.replaceNode(importingSourceFile, ref, createIdentifier("default"));
                 break;
-            case SyntaxKind.ImportSpecifier:
-            case SyntaxKind.ExportSpecifier: {
-                const spec = parent as ImportSpecifier | ExportSpecifier;
-                if (spec.kind === SyntaxKind.ImportSpecifier) {
-                    // `import { foo } from "./a";` --> `import foo from "./a";`
-                    // `import { foo as bar } from "./a";` --> `import bar from "./a";`
-                    const defaultImport = createIdentifier(spec.name.text);
-                    if (spec.parent.elements.length === 1) {
-                        changes.replaceNode(importingSourceFile, spec.parent, defaultImport);
-                    }
-                    else {
-                        changes.deleteNodeInList(importingSourceFile, spec);
-                        changes.insertNodeBefore(importingSourceFile, spec.parent, defaultImport);
-                    }
+            case SyntaxKind.ImportSpecifier: {
+                // `import { foo } from "./a";` --> `import foo from "./a";`
+                // `import { foo as bar } from "./a";` --> `import bar from "./a";`
+                const defaultImport = createIdentifier(parent.name.text);
+                if (parent.parent.elements.length === 1) {
+                    changes.replaceNode(importingSourceFile, parent.parent, defaultImport);
                 }
                 else {
-                    // `export { foo } from "./a";` --> `export { default as foo } from "./a";`
-                    // `export { foo as bar } from "./a";` --> `export { default as bar } from "./a";`
-                    // `export { foo as default } from "./a";` --> `export { default } from "./a";`
-                    // (Because `export foo from "./a";` isn't valid syntax.)
-                    changes.replaceNode(importingSourceFile, spec, makeExportSpecifier("default", spec.name.text));
+                    changes.delete(importingSourceFile, parent);
+                    changes.insertNodeBefore(importingSourceFile, parent.parent, defaultImport);
                 }
                 break;
             }
+            case SyntaxKind.ExportSpecifier: {
+                // `export { foo } from "./a";` --> `export { default as foo } from "./a";`
+                // `export { foo as bar } from "./a";` --> `export { default as bar } from "./a";`
+                // `export { foo as default } from "./a";` --> `export { default } from "./a";`
+                // (Because `export foo from "./a";` isn't valid syntax.)
+                changes.replaceNode(importingSourceFile, parent, makeExportSpecifier("default", parent.name.text));
+                break;
+            }
             default:
-                Debug.failBadSyntaxKind(parent);
+                Debug.assertNever(parent);
         }
 
     }

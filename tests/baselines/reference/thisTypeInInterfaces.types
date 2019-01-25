@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/thisType/thisTypeInInterfaces.ts ===
 interface I1 {
->I1 : I1
-
     x: this;
 >x : this
 
@@ -11,8 +9,6 @@ interface I1 {
 }
 
 interface I2 {
->I2 : I2
-
     (x: this): this;
 >x : this
 
@@ -24,20 +20,14 @@ interface I2 {
 }
 
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     x: T;
 >x : T
->T : T
 
     y: this;
 >y : this
 }
 
 interface I3 {
->I3 : I3
-
     a: this[];
 >a : this[]
 
@@ -46,11 +36,9 @@ interface I3 {
 
     c: this | Date;
 >c : this | Date
->Date : Date
 
     d: this & Date;
 >d : this & Date
->Date : Date
 
     e: (((this)));
 >e : this
@@ -65,15 +53,12 @@ interface I3 {
 
     h: Foo<this>;
 >h : Foo<this>
->Foo : Foo<T>
 
     i: Foo<this | (() => this)>;
 >i : Foo<this | (() => this)>
->Foo : Foo<T>
 
     j: (x: any) => x is this;
 >j : (x: any) => x is this
->x : any
 >x : any
 }
 

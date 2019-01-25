@@ -1,5 +1,5 @@
 tests/cases/compiler/staticMemberExportAccess.ts(14,35): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/staticMemberExportAccess.ts(17,18): error TS2339: Property 'bar' does not exist on type 'Sammy'.
+tests/cases/compiler/staticMemberExportAccess.ts(17,18): error TS2576: Property 'bar' is a static member of type 'Sammy'
 tests/cases/compiler/staticMemberExportAccess.ts(18,18): error TS2339: Property 'x' does not exist on type 'Sammy'.
 
 
@@ -24,7 +24,7 @@ tests/cases/compiler/staticMemberExportAccess.ts(18,18): error TS2339: Property 
     var r2 = $.sammy.foo();
     var r3 = $.sammy.bar(); // error
                      ~~~
-!!! error TS2339: Property 'bar' does not exist on type 'Sammy'.
+!!! error TS2576: Property 'bar' is a static member of type 'Sammy'
     var r4 = $.sammy.x; // error
                      ~
 !!! error TS2339: Property 'x' does not exist on type 'Sammy'.

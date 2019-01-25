@@ -17,6 +17,5 @@ namespace Validation {
 
         public x: c1;
 >x : c1
->c1 : c1
     }
 }

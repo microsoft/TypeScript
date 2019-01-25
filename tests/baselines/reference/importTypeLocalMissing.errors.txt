@@ -1,7 +1,7 @@
-tests/cases/conformance/types/import/usage.ts(1,17): error TS2307: Cannot find module './fo'.
-tests/cases/conformance/types/import/usage.ts(2,15): error TS2307: Cannot find module './fo2'.
+tests/cases/conformance/types/import/usage.ts(1,24): error TS2307: Cannot find module './fo'.
+tests/cases/conformance/types/import/usage.ts(2,22): error TS2307: Cannot find module './fo2'.
 tests/cases/conformance/types/import/usage.ts(3,36): error TS2694: Namespace '"tests/cases/conformance/types/import/foo2".Bar' has no exported member 'Q'.
-tests/cases/conformance/types/import/usage.ts(10,18): error TS2307: Cannot find module './fo2'.
+tests/cases/conformance/types/import/usage.ts(10,32): error TS2307: Cannot find module './fo2'.
 
 
 ==== tests/cases/conformance/types/import/foo.ts (0 errors) ====
@@ -34,10 +34,10 @@ tests/cases/conformance/types/import/usage.ts(10,18): error TS2307: Cannot find 
     
 ==== tests/cases/conformance/types/import/usage.ts (4 errors) ====
     export const x: import("./fo") = { x: 0, y: 0 };
-                    ~~~~~~~~~~~~~~
+                           ~~~~~~
 !!! error TS2307: Cannot find module './fo'.
     export let y: import("./fo2").Bar.I = { a: "", b: 0 };
-                  ~~~~~~~~~~~~~~~~~~~~~
+                         ~~~~~~~
 !!! error TS2307: Cannot find module './fo2'.
     export let z: import("./foo2").Bar.Q = { a: "", b: 0 };
                                        ~
@@ -49,7 +49,7 @@ tests/cases/conformance/types/import/usage.ts(10,18): error TS2307: Cannot find 
     }
     
     export let shim: typeof import("./fo2") = {
-                     ~~~~~~~~~~~~~~~~~~~~~~
+                                   ~~~~~~~
 !!! error TS2307: Cannot find module './fo2'.
         Bar: Bar2
     };

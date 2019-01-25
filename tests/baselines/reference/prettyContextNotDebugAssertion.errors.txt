@@ -1,7 +1,7 @@
 [96mtests/cases/compiler/index.ts[0m:[93m2[0m:[93m1[0m - [91merror[0m[90m TS1005: [0m'}' expected.
 
-[30;47m2[0m 
-[30;47m [0m [91m[0m
+[7m2[0m 
+[7m [0m [91m[0m
 
 
 ==== tests/cases/compiler/index.ts (1 errors) ====
@@ -9,3 +9,5 @@
     
     
 !!! error TS1005: '}' expected.
+Found 1 error.
+

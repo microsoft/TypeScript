@@ -22,7 +22,6 @@ var insufficient;
 === tests/cases/conformance/jsdoc/test.ts ===
 declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
 >actually : { t: { a: number; }; u: undefined; v: { c: 1; d: 1; }; w: number; x: string; }
->Everything : { t: T; u: U; v: V; w: W; x: X; }
 >a : number
 >c : 1
 >d : 1

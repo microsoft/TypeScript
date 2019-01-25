@@ -1,14 +1,11 @@
 === tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts ===
 interface I {
->I : I
-
     id: number;
 >id : number
 }
 
 class C implements I {
 >C : C
->I : I
 
     id: number;
 >id : number
@@ -16,22 +13,15 @@ class C implements I {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T
->T : T
 
     recurse: D<T>;
 >recurse : D<T>
->D : D<T>
->T : T
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
->D : D<T>
->D : D<T>
->T : T
 }
 
 function F(x: string): number { return 42; }
@@ -94,7 +84,6 @@ var aString: string = 9.9;
 
 var aDate: Date = 9.9;
 >aDate : Date
->Date : Date
 >9.9 : 9.9
 
 var aVoid: void = 9.9;
@@ -103,25 +92,21 @@ var aVoid: void = 9.9;
 
 var anInterface: I = new D();
 >anInterface : I
->I : I
 >new D() : D<{}>
 >D : typeof D
 
 var aClass: C = new D();
 >aClass : C
->C : C
 >new D() : D<{}>
 >D : typeof D
 
 var aGenericClass: D<string> = new C();
 >aGenericClass : D<string>
->D : D<T>
 >new C() : C
 >C : typeof C
 
 var anObjectLiteral: I = { id: 'a string' };
 >anObjectLiteral : I
->I : I
 >{ id: 'a string' } : { id: string; }
 >id : string
 >'a string' : "a string"
@@ -157,7 +142,6 @@ var aModule: typeof M = N;
 var aClassInModule: M.A = new N.A();
 >aClassInModule : M.A
 >M : any
->A : M.A
 >new N.A() : N.A
 >N.A : typeof N.A
 >N : typeof N

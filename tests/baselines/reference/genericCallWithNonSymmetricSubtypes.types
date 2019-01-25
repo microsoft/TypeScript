@@ -4,15 +4,11 @@
 
 function foo<T>(x: T, y: T) {
 >foo : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
 
     var r: T;
 >r : T
->T : T
 
     return r;
 >r : T
@@ -95,7 +91,6 @@ var r6 = foo(y, x); // { x?: number; };
 var s1: (x: Object) => string;
 >s1 : (x: Object) => string
 >x : Object
->Object : Object
 
 var s2: (x: string) => string;
 >s2 : (x: string) => string

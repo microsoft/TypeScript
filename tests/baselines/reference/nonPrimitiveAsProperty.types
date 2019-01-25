@@ -1,14 +1,11 @@
 === tests/cases/conformance/types/nonPrimitive/nonPrimitiveAsProperty.ts ===
 interface WithNonPrimitive {
->WithNonPrimitive : WithNonPrimitive
-
     foo: object
 >foo : object
 }
 
 var a: WithNonPrimitive = { foo: {bar: "bar"} };
 >a : WithNonPrimitive
->WithNonPrimitive : WithNonPrimitive
 >{ foo: {bar: "bar"} } : { foo: { bar: string; }; }
 >foo : { bar: string; }
 >{bar: "bar"} : { bar: string; }
@@ -17,7 +14,6 @@ var a: WithNonPrimitive = { foo: {bar: "bar"} };
 
 var b: WithNonPrimitive = {foo: "bar"}; // expect error
 >b : WithNonPrimitive
->WithNonPrimitive : WithNonPrimitive
 >{foo: "bar"} : { foo: string; }
 >foo : string
 >"bar" : "bar"

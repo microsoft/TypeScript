@@ -16,6 +16,9 @@
 ////    "exclude": ["old"],
 ////}
 
+// @Filename: /src/old/someFile.ts
+////
+
 verify.getEditsForFileRename({
     oldPath: "/src/old",
     newPath: "/src/new",

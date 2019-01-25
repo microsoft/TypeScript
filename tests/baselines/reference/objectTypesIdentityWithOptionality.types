@@ -17,16 +17,12 @@ class B {
 
 class C<T> {
 >C : C<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 }
 
 interface I {
->I : I
-
     foo?: string;
 >foo : string
 }
@@ -44,12 +40,10 @@ var b = { foo: '' };
 function foo2(x: I);
 >foo2 : { (x: I): any; (x: I): any; }
 >x : I
->I : I
 
 function foo2(x: I); // error
 >foo2 : { (x: I): any; (x: I): any; }
 >x : I
->I : I
 
 function foo2(x: any) { }
 >foo2 : { (x: I): any; (x: I): any; }
@@ -72,12 +66,10 @@ function foo3(x: any) { }
 function foo6(x: A);
 >foo6 : { (x: A): any; (x: I): any; }
 >x : A
->A : A
 
 function foo6(x: I); // ok
 >foo6 : { (x: A): any; (x: I): any; }
 >x : I
->I : I
 
 function foo6(x: any) { }
 >foo6 : { (x: A): any; (x: I): any; }
@@ -86,7 +78,6 @@ function foo6(x: any) { }
 function foo7(x: A);
 >foo7 : { (x: A): any; (x: { foo?: string; }): any; }
 >x : A
->A : A
 
 function foo7(x: typeof a); // ok
 >foo7 : { (x: A): any; (x: { foo?: string; }): any; }
@@ -100,12 +91,10 @@ function foo7(x: any) { }
 function foo8(x: B);
 >foo8 : { (x: B): any; (x: I): any; }
 >x : B
->B : B
 
 function foo8(x: I); // ok
 >foo8 : { (x: B): any; (x: I): any; }
 >x : I
->I : I
 
 function foo8(x: any) { }
 >foo8 : { (x: B): any; (x: I): any; }
@@ -114,7 +103,6 @@ function foo8(x: any) { }
 function foo10(x: B);
 >foo10 : { (x: B): any; (x: { foo?: string; }): any; }
 >x : B
->B : B
 
 function foo10(x: typeof a); // ok
 >foo10 : { (x: B): any; (x: { foo?: string; }): any; }
@@ -128,12 +116,10 @@ function foo10(x: any) { }
 function foo12(x: I);
 >foo12 : { (x: I): any; (x: C<string>): any; }
 >x : I
->I : I
 
 function foo12(x: C<string>); // ok
 >foo12 : { (x: I): any; (x: C<string>): any; }
 >x : C<string>
->C : C<T>
 
 function foo12(x: any) { }
 >foo12 : { (x: I): any; (x: C<string>): any; }
@@ -142,7 +128,6 @@ function foo12(x: any) { }
 function foo13(x: I);
 >foo13 : { (x: I): any; (x: { foo?: string; }): any; }
 >x : I
->I : I
 
 function foo13(x: typeof a); // error
 >foo13 : { (x: I): any; (x: { foo?: string; }): any; }
@@ -156,7 +141,6 @@ function foo13(x: any) { }
 function foo14(x: I);
 >foo14 : { (x: I): any; (x: { foo: string; }): any; }
 >x : I
->I : I
 
 function foo14(x: typeof b); // ok
 >foo14 : { (x: I): any; (x: { foo: string; }): any; }

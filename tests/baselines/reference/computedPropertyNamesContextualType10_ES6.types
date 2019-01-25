@@ -1,14 +1,11 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType10_ES6.ts ===
 interface I {
->I : I
-
     [s: number]: boolean;
 >s : number
 }
 
 var o: I = {
 >o : I
->I : I
 >{    [+"foo"]: "",    [+"bar"]: 0} : { [x: number]: string | number; }
 
     [+"foo"]: "",

@@ -1,0 +1,51 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration8.ts ===
+// explicit type annotation should cause `method` to have type 'x' | 'y'
+// both inside and outside `test`.
+function test({
+>test : Symbol(test, Decl(destructuringParameterDeclaration8.ts, 0, 0))
+
+    method = 'z',
+>method : Symbol(method, Decl(destructuringParameterDeclaration8.ts, 2, 15))
+
+    nested: { p = 'c' }
+>nested : Symbol(nested, Decl(destructuringParameterDeclaration8.ts, 6, 23))
+>p : Symbol(p, Decl(destructuringParameterDeclaration8.ts, 4, 13))
+
+}: {
+    method?: 'x' | 'y',
+>method : Symbol(method, Decl(destructuringParameterDeclaration8.ts, 5, 4))
+
+    nested?: { p: 'a' | 'b' }
+>nested : Symbol(nested, Decl(destructuringParameterDeclaration8.ts, 6, 23))
+>p : Symbol(p, Decl(destructuringParameterDeclaration8.ts, 7, 14))
+
+})
+{
+    method
+>method : Symbol(method, Decl(destructuringParameterDeclaration8.ts, 2, 15))
+
+    p
+>p : Symbol(p, Decl(destructuringParameterDeclaration8.ts, 4, 13))
+}
+
+test({});
+>test : Symbol(test, Decl(destructuringParameterDeclaration8.ts, 0, 0))
+
+test({ method: 'x', nested: { p: 'a' } })
+>test : Symbol(test, Decl(destructuringParameterDeclaration8.ts, 0, 0))
+>method : Symbol(method, Decl(destructuringParameterDeclaration8.ts, 15, 6))
+>nested : Symbol(nested, Decl(destructuringParameterDeclaration8.ts, 15, 19))
+>p : Symbol(p, Decl(destructuringParameterDeclaration8.ts, 15, 29))
+
+test({ method: 'z', nested: { p: 'b' } })
+>test : Symbol(test, Decl(destructuringParameterDeclaration8.ts, 0, 0))
+>method : Symbol(method, Decl(destructuringParameterDeclaration8.ts, 16, 6))
+>nested : Symbol(nested, Decl(destructuringParameterDeclaration8.ts, 16, 19))
+>p : Symbol(p, Decl(destructuringParameterDeclaration8.ts, 16, 29))
+
+test({ method: 'one', nested: { p: 'a' } })
+>test : Symbol(test, Decl(destructuringParameterDeclaration8.ts, 0, 0))
+>method : Symbol(method, Decl(destructuringParameterDeclaration8.ts, 17, 6))
+>nested : Symbol(nested, Decl(destructuringParameterDeclaration8.ts, 17, 21))
+>p : Symbol(p, Decl(destructuringParameterDeclaration8.ts, 17, 31))
+

@@ -8,8 +8,6 @@ class Foo {}
 === tests/cases/compiler/index.ts ===
 import {} from "./module";
 export interface Bar {
->Bar : Bar
-
     x: string
 >x : string
 }

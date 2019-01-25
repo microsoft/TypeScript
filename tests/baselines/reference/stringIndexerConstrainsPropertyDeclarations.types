@@ -2,9 +2,6 @@
 // String indexer types constrain the types of named properties in their containing type
 
 interface MyString extends String {
->MyString : MyString
->String : String
-
     foo: number;
 >foo : number
 }
@@ -46,7 +43,6 @@ class C {
 
     f: MyString; // error
 >f : MyString
->MyString : MyString
 
     get X() { // ok
 >X : string
@@ -83,8 +79,6 @@ class C {
 }
 
 interface I {
->I : I
-
     [x: string]: string;
 >x : string
 
@@ -124,7 +118,6 @@ interface I {
 
     f: MyString; // error
 >f : MyString
->MyString : MyString
 }
 
 var a: {
@@ -169,7 +162,6 @@ var a: {
 
     f: MyString; // error
 >f : MyString
->MyString : MyString
 }
 
 // error
@@ -217,7 +209,6 @@ var b: { [x: string]: string; } = {
     f: <MyString>null, 
 >f : MyString
 ><MyString>null : MyString
->MyString : MyString
 >null : null
 
     get X() { 

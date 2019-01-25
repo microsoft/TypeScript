@@ -1,5 +1,5 @@
 tests/cases/compiler/thisInOuterClassBody.ts(5,16): error TS2334: 'this' cannot be referenced in a static property initializer.
-tests/cases/compiler/thisInOuterClassBody.ts(12,22): error TS2339: Property 'y' does not exist on type 'Foo'.
+tests/cases/compiler/thisInOuterClassBody.ts(12,22): error TS2576: Property 'y' is a static member of type 'Foo'
 tests/cases/compiler/thisInOuterClassBody.ts(18,22): error TS2339: Property 'x' does not exist on type 'typeof Foo'.
 
 
@@ -19,7 +19,7 @@ tests/cases/compiler/thisInOuterClassBody.ts(18,22): error TS2339: Property 'x' 
             var f = () => this.x; // 'this' should be type 'Foo' as well
             var p = this.y;
                          ~
-!!! error TS2339: Property 'y' does not exist on type 'Foo'.
+!!! error TS2576: Property 'y' is a static member of type 'Foo'
             return this;
         }
     

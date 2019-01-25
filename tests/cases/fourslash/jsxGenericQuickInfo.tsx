@@ -18,5 +18,5 @@
 //// var c = <Component items={[0, 1, 2]} render/*2*/Item={it/*3*/em => item.toFixed()}
 verify.quickInfoAt("0", "(property) Props<number>.renderItem: (item: number) => string");
 verify.quickInfoAt("1", "(parameter) item: number");
-verify.quickInfoAt("2", "(JSX attribute) renderItem: (item: number) => string");
+verify.quickInfoAt("2", "(JSX attribute) Props<number>.renderItem: (item: number) => string");
 verify.quickInfoAt("3", "(parameter) item: number");

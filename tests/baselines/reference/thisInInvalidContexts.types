@@ -63,9 +63,7 @@ module M {
 //'this' as a type argument
 function genericFunc<T>(x: T) { }
 >genericFunc : <T>(x: T) => void
->T : T
 >x : T
->T : T
 
 genericFunc<this>(undefined);  // Should be an error
 >genericFunc<this>(undefined) : void

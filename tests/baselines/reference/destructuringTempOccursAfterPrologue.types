@@ -6,6 +6,9 @@ function test(p: any) {
     'use strict';
 >'use strict' : "use strict"
 
+    'use strong';
+>'use strong' : "use strong"
+
     p = { prop: p } = p;
 >p = { prop: p } = p : any
 >p : any

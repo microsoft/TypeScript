@@ -9,7 +9,6 @@ class M extends q<string> { }
 
 var m: M;
 >m : M
->M : M
 
 var r: string = m.foo;
 >r : string
@@ -23,7 +22,5 @@ export = T;
 
 class T<X> { foo: X; }
 >T : T<X>
->X : X
 >foo : X
->X : X
 

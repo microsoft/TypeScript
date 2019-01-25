@@ -4,7 +4,6 @@ import Chunk = require('./mod1')
 
 declare var c: Chunk;
 >c : Chunk
->Chunk : Chunk
 
 c.chunk;
 >c.chunk : number

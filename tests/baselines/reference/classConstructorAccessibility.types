@@ -43,29 +43,23 @@ module Generic {
 
     class C<T> {
 >C : C<T>
->T : T
 
         public constructor(public x: T) { }
 >x : T
->T : T
     }
 
     class D<T> {
 >D : D<T>
->T : T
 
         private constructor(public x: T) { }
 >x : T
->T : T
     }
 
     class E<T> {
 >E : E<T>
->T : T
 
         protected constructor(public x: T) { }
 >x : T
->T : T
     }
 
     var c = new C(1);

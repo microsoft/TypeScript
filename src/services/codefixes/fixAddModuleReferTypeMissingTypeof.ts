@@ -2,7 +2,8 @@
 namespace ts.codefix {
     const fixIdAddMissingTypeof = "fixAddModuleReferTypeMissingTypeof";
     const fixId = fixIdAddMissingTypeof;
-    const errorCodes = [Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here.code];
+    const errorCodes = [Diagnostics.Module_0_does_not_refer_to_a_type_but_is_used_as_a_type_here_Did_you_mean_typeof_import_0.code];
+
     registerCodeFix({
         errorCodes,
         getCodeActions: context => {
@@ -17,7 +18,7 @@ namespace ts.codefix {
     });
 
     function getImportTypeNode(sourceFile: SourceFile, pos: number): ImportTypeNode {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         Debug.assert(token.kind === SyntaxKind.ImportKeyword);
         Debug.assert(token.parent.kind === SyntaxKind.ImportType);
         return <ImportTypeNode>token.parent;

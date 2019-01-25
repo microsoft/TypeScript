@@ -1,35 +1,27 @@
 === tests/cases/compiler/functionOverloads44.ts ===
 interface Animal { animal }
->Animal : Animal
 >animal : any
 
 interface Dog extends Animal { dog }
->Dog : Dog
->Animal : Animal
 >dog : any
 
 interface Cat extends Animal { cat }
->Cat : Cat
->Animal : Animal
 >cat : any
 
 function foo1(bar: { a:number }[]): Dog;
 >foo1 : { (bar: { a: number; }[]): Dog; (bar: { a: string; }[]): Animal; }
 >bar : { a: number; }[]
 >a : number
->Dog : Dog
 
 function foo1(bar: { a:string }[]): Animal;
 >foo1 : { (bar: { a: number; }[]): Dog; (bar: { a: string; }[]): Animal; }
 >bar : { a: string; }[]
 >a : string
->Animal : Animal
 
 function foo1([x]: { a:number | string }[]): Dog {
 >foo1 : { (bar: { a: number; }[]): Dog; (bar: { a: string; }[]): Animal; }
 >x : { a: string | number; }
 >a : string | number
->Dog : Dog
 
     return undefined;
 >undefined : undefined
@@ -39,20 +31,16 @@ function foo2(bar: { a:number }[]): Cat;
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
 >bar : { a: number; }[]
 >a : number
->Cat : Cat
 
 function foo2(bar: { a:string }[]): Cat | Dog;
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
 >bar : { a: string; }[]
 >a : string
->Cat : Cat
->Dog : Dog
 
 function foo2([x]: { a:number | string }[]): Cat {
 >foo2 : { (bar: { a: number; }[]): Cat; (bar: { a: string; }[]): Dog | Cat; }
 >x : { a: string | number; }
 >a : string | number
->Cat : Cat
 
     return undefined;
 >undefined : undefined

@@ -3,5 +3,4 @@ var v = { *<T>() { } }
 >v : { (Missing)<T>(): IterableIterator<any>; }
 >{ *<T>() { } } : { (Missing)<T>(): IterableIterator<any>; }
 > : <T>() => IterableIterator<any>
->T : T
 

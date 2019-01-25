@@ -52,7 +52,6 @@ class E {
 
 class F<T> {
 >F : F<T>
->T : T
 
     a = this.x; // ok
 >a : T
@@ -66,5 +65,4 @@ class F<T> {
 
     constructor(public x: T) { }
 >x : T
->T : T
 }

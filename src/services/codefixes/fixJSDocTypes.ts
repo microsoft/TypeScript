@@ -44,7 +44,7 @@ namespace ts.codefix {
     }
 
     function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, readonly type: Type } | undefined {
-        const decl = findAncestor(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false), isTypeContainer);
+        const decl = findAncestor(getTokenAtPosition(sourceFile, pos), isTypeContainer);
         const typeNode = decl && decl.type;
         return typeNode && { typeNode, type: checker.getTypeFromTypeNode(typeNode) };
     }

@@ -54,8 +54,6 @@ x[4].toExponential();
 >toExponential : (fractionDigits?: number) => string
 
 interface A {
->A : A
-
     1:number;
 >1 : number
 
@@ -73,7 +71,6 @@ interface A {
 
 let y:A;
 >y : A
->A : A
 
 y[1].toExponential();
 >y[1].toExponential() : string
@@ -127,7 +124,6 @@ class C {
 
 let z:C;
 >z : C
->C : C
 
 z[1].toExponential();
 >z[1].toExponential() : string

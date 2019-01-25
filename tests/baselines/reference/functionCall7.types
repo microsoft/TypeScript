@@ -8,7 +8,6 @@ function foo(a:m1.c1){ a.a = 1; };
 >foo : (a: m1.c1) => void
 >a : m1.c1
 >m1 : any
->c1 : m1.c1
 >a.a = 1 : 1
 >a.a : any
 >a : m1.c1

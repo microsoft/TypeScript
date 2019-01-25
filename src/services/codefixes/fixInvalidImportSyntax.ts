@@ -40,7 +40,7 @@ namespace ts.codefix {
     function getActionsForUsageOfInvalidImport(context: CodeFixContext): CodeFixAction[] | undefined {
         const sourceFile = context.sourceFile;
         const targetKind = Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures.code === context.errorCode ? SyntaxKind.CallExpression : SyntaxKind.NewExpression;
-        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
+        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.kind === targetKind && a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length)) as CallExpression | NewExpression;
         if (!node) {
             return [];
         }
@@ -69,7 +69,7 @@ namespace ts.codefix {
 
     function getActionsForInvalidImportLocation(context: CodeFixContext): CodeFixAction[] | undefined {
         const sourceFile = context.sourceFile;
-        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start, /*includeJsDocComment*/ false), a => a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length));
+        const node = findAncestor(getTokenAtPosition(sourceFile, context.span.start), a => a.getStart() === context.span.start && a.getEnd() === (context.span.start + context.span.length));
         if (!node) {
             return [];
         }
@@ -77,7 +77,7 @@ namespace ts.codefix {
     }
 
     function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): CodeFixAction[] | undefined {
-        const type = context.program.getTypeChecker().getTypeAtLocation(expr)!; // TODO: GH#18217
+        const type = context.program.getTypeChecker().getTypeAtLocation(expr);
         if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
             return [];
         }

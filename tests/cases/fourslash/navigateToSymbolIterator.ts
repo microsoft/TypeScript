@@ -1,7 +1,12 @@
 /// <reference path="fourslash.ts" />
 
 ////class C {
-////    [Symbol.iterator]() {}
+////    [|[Symbol.iterator]() {}|]
 ////}
 
-verify.navigationItemsListContains("iterator", "method", "iterator", "exact", undefined, "C");
+verify.navigateTo({
+    pattern: "iterator",
+    expected: [
+        { name: "iterator", kind: "method", range: test.ranges()[0], containerName: "C", containerKind: "class" },
+    ],
+});

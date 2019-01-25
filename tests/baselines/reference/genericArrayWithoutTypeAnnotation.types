@@ -1,7 +1,5 @@
 === tests/cases/compiler/genericArrayWithoutTypeAnnotation.ts ===
 interface IFoo<T>{
->IFoo : IFoo<T>
->T : T
 }
 class Bar {
 >Bar : Bar
@@ -9,7 +7,6 @@ class Bar {
     public getBar(foo: IFoo[]) {
 >getBar : (foo: any[]) => void
 >foo : any[]
->IFoo : IFoo<T>
     }
 }
 

@@ -4,7 +4,6 @@ class a {
 
     static x: a;
 >x : a
->a : a
 }
 
 class b extends a {
@@ -13,5 +12,4 @@ class b extends a {
 
     static x: b;
 >x : b
->b : b
 }

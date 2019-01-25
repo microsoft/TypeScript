@@ -9,7 +9,6 @@ class MainModule {
     // public static SubModule: SubModule;
     public SubModule: SubModule;
 >SubModule : SubModule
->SubModule : SubModule
 
     constructor() { }
 }

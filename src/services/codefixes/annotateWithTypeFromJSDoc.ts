@@ -18,7 +18,7 @@ namespace ts.codefix {
     });
 
     function getDeclaration(file: SourceFile, pos: number): DeclarationWithType | undefined {
-        const name = getTokenAtPosition(file, pos, /*includeJsDocComment*/ false);
+        const name = getTokenAtPosition(file, pos);
         // For an arrow function with no name, 'name' lands on the first parameter.
         return tryCast(isParameter(name.parent) ? name.parent.parent : name.parent, parameterShouldGetTypeFromJSDoc);
     }

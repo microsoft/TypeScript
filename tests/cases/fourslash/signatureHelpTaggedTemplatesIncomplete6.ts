@@ -6,7 +6,7 @@
 //// f `   ${  123 } ${/*1*/  }   `
 
 verify.signatureHelp({
-    marker: test.markerNames(),
+    marker: test.markers(),
     text: "f(templateStrings: any, x: any, y: any, z: any): number",
     argumentCount: 3,
     parameterCount: 4,

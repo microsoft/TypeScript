@@ -2,7 +2,6 @@
 declare function expect(spy: Function): void;
 >expect : { (spy: Function): void; (element: string): void; }
 >spy : Function
->Function : Function
 
 declare module "mod" {
 >"mod" : typeof import("mod")

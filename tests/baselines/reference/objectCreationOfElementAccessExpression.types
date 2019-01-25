@@ -166,7 +166,6 @@ var foods = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate 
 
 var foods2: MonsterFood[] = new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)];
 >foods2 : MonsterFood[]
->MonsterFood : MonsterFood
 >new PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
 >PetFood[new IceCream('Mint chocolate chip') , Cookie('Chocolate chip', false) , new Cookie('Peanut butter', true)] : any
 >PetFood : typeof PetFood

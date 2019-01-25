@@ -4,9 +4,9 @@ namespace ts.refactor {
     const actionNameNamespaceToNamed = "Convert namespace import to named imports";
     const actionNameNamedToNamespace = "Convert named imports to namespace import";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ApplicableRefactorInfo[] | undefined {
+        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
             const i = getImportToConvert(context);
-            if (!i) return undefined;
+            if (!i) return emptyArray;
             const description = i.kind === SyntaxKind.NamespaceImport ? Diagnostics.Convert_namespace_import_to_named_imports.message : Diagnostics.Convert_named_imports_to_namespace_import.message;
             const actionName = i.kind === SyntaxKind.NamespaceImport ? actionNameNamespaceToNamed : actionNameNamedToNamespace;
             return [{ name: refactorName, description, actions: [{ name: actionName, description }] }];
@@ -22,7 +22,7 @@ namespace ts.refactor {
     function getImportToConvert(context: RefactorContext): NamedImportBindings | undefined {
         const { file } = context;
         const span = getRefactorContextSpan(context);
-        const token = getTokenAtPosition(file, span.start, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(file, span.start);
         const importDecl = getParentNodeInSpan(token, file, span);
         if (!importDecl || !isImportDeclaration(importDecl)) return undefined;
         const { importClause } = importDecl;

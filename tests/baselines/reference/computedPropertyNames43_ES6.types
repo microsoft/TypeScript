@@ -13,7 +13,6 @@ class C {
 
     [s: string]: Foo2;
 >s : string
->Foo2 : Foo2
 }
 
 class D extends C {
@@ -31,5 +30,4 @@ class D extends C {
 >["set1"] : Foo2
 >"set1" : "set1"
 >p : Foo2
->Foo2 : Foo2
 }

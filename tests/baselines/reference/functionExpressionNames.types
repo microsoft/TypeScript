@@ -21,8 +21,8 @@ var e = new exports.E();
 >E : typeof E
 
 var o = {
->o : { [x: string]: any; C: typeof C; }
->{    C: function () {        this.c = 'nested object'    }} : { [x: string]: any; C: typeof C; }
+>o : { C: typeof C; }
+>{    C: function () {        this.c = 'nested object'    }} : { C: typeof C; }
 
     C: function () {
 >C : typeof C
@@ -31,7 +31,7 @@ var o = {
         this.c = 'nested object'
 >this.c = 'nested object' : "nested object"
 >this.c : any
->this : { [x: string]: any; C: typeof C; }
+>this : { C: typeof C; }
 >c : any
 >'nested object' : "nested object"
     }
@@ -40,7 +40,7 @@ var og = new o.C();
 >og : C
 >new o.C() : C
 >o.C : typeof C
->o : { [x: string]: any; C: typeof C; }
+>o : { C: typeof C; }
 >C : typeof C
 
 var V = function () {

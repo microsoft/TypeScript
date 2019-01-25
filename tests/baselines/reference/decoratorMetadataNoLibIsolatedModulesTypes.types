@@ -7,6 +7,5 @@ export class B {
 
     member: Map<string, number>;
 >member : any
->Map : No type information available!
 }
 

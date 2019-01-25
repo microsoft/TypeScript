@@ -4,7 +4,6 @@ class XEvent {}
 
 var p: XEvent = XEvent.prototype;
 >p : XEvent
->XEvent : XEvent
 >XEvent.prototype : XEvent
 >XEvent : typeof XEvent
 >prototype : XEvent
@@ -12,6 +11,5 @@ var p: XEvent = XEvent.prototype;
 var x: {prototype: XEvent} = XEvent;
 >x : { prototype: XEvent; }
 >prototype : XEvent
->XEvent : XEvent
 >XEvent : typeof XEvent
 

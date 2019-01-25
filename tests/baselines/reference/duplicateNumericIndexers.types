@@ -2,8 +2,6 @@
 // it is an error to have duplicate index signatures of the same kind in a type
 
 interface Number {
->Number : Number
-
     [x: number]: string;
 >x : number
 
@@ -12,8 +10,6 @@ interface Number {
 }
 
 interface String {
->String : String
-
     [x: number]: string;
 >x : number
 
@@ -22,16 +18,11 @@ interface String {
 }
 
 interface Array<T> {
->Array : T[]
->T : T
+    [x: number]: T;
+>x : number
 
     [x: number]: T;
 >x : number
->T : T
-
-    [x: number]: T;
->x : number
->T : T
 }
 
 class C {
@@ -45,8 +36,6 @@ class C {
 }
 
 interface I {
->I : I
-
     [x: number]: string;
 >x : number
 

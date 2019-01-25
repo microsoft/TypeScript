@@ -1,19 +1,11 @@
 === tests/cases/conformance/jsx/inline/renderer.d.ts ===
 export namespace dom {
->dom : () => JSX.Element
-
     namespace JSX {
->JSX : any
-
         interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
             [e: string]: {};
 >e : string
         }
         interface Element {
->Element : Element
-
             __domBrand: void;
 >__domBrand : void
 
@@ -22,24 +14,17 @@ export namespace dom {
 
                 children?: Element[];
 >children : Element[]
->Element : Element
 
             };
         }
         interface ElementClass extends Element {
->ElementClass : ElementClass
->Element : Element
-
             render(): Element;
 >render : () => Element
->Element : Element
         }
         interface ElementAttributesProperty { props: any; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : any
 
         interface ElementChildrenAttribute { children: any; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : any
     }
 }
@@ -47,24 +32,15 @@ export function dom(): dom.JSX.Element;
 >dom : () => dom.JSX.Element
 >dom : any
 >JSX : any
->Element : dom.JSX.Element
 
 === tests/cases/conformance/jsx/inline/renderer2.d.ts ===
 export namespace predom {
->predom : () => JSX.Element
-
     namespace JSX {
->JSX : any
-
         interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
             [e: string]: {};
 >e : string
         }
         interface Element {
->Element : Element
-
             __predomBrand: void;
 >__predomBrand : void
 
@@ -73,24 +49,17 @@ export namespace predom {
 
                 children?: Element[];
 >children : Element[]
->Element : Element
 
             };
         }
         interface ElementClass extends Element {
->ElementClass : ElementClass
->Element : Element
-
             render(): Element;
 >render : () => Element
->Element : Element
         }
         interface ElementAttributesProperty { props: any; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : any
 
         interface ElementChildrenAttribute { children: any; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : any
     }
 }
@@ -98,7 +67,6 @@ export function predom(): predom.JSX.Element;
 >predom : () => predom.JSX.Element
 >predom : any
 >JSX : any
->Element : predom.JSX.Element
 
 === tests/cases/conformance/jsx/inline/component.tsx ===
 /** @jsx predom */
@@ -114,7 +82,6 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 >children : predom.JSX.Element[]
 >predom : any
 >JSX : any
->Element : predom.JSX.Element
 ><p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p> : predom.JSX.Element
 >p : any
 >props.x : number
@@ -139,11 +106,9 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 
 export class MyClass implements predom.JSX.Element {
 >MyClass : MyClass
->predom.JSX.Element : any
 >predom.JSX : any
 >predom : () => predom.JSX.Element
 >JSX : any
->Element : predom.JSX.Element
 
     __predomBrand!: void;
 >__predomBrand : void
@@ -155,7 +120,6 @@ export class MyClass implements predom.JSX.Element {
 >children : predom.JSX.Element[]
 >predom : any
 >JSX : any
->Element : predom.JSX.Element
 
     render() {
 >render : () => predom.JSX.Element
@@ -256,7 +220,6 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 >children : dom.JSX.Element[]
 >dom : any
 >JSX : any
->Element : dom.JSX.Element
 ><p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p> : dom.JSX.Element
 >p : any
 >props.x : number
@@ -279,11 +242,9 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 
 class DOMClass implements dom.JSX.Element {
 >DOMClass : DOMClass
->dom.JSX.Element : any
 >dom.JSX : any
 >dom : () => dom.JSX.Element
 >JSX : any
->Element : dom.JSX.Element
 
     __domBrand!: void;
 >__domBrand : void
@@ -295,7 +256,6 @@ class DOMClass implements dom.JSX.Element {
 >children : dom.JSX.Element[]
 >dom : any
 >JSX : any
->Element : dom.JSX.Element
 
     render() {
 >render : () => dom.JSX.Element

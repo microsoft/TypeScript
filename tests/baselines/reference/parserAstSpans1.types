@@ -1,8 +1,6 @@
 === tests/cases/conformance/parser/ecmascript5/parserAstSpans1.ts ===
 /** i1 is interface with properties*/
 interface i1 {
->i1 : i1
-
     /** i1_p1*/
     i1_p1: number;
 >i1_p1 : number
@@ -44,7 +42,6 @@ interface i1 {
 }
 class c1 implements i1 {
 >c1 : c1
->i1 : i1
 
     public i1_p1: number;
 >i1_p1 : number
@@ -90,7 +87,6 @@ class c1 implements i1 {
 }
 var i1_i: i1;
 >i1_i : i1
->i1 : i1
 
 i1_i.i1_f1();
 >i1_i.i1_f1() : void
@@ -463,8 +459,6 @@ var c4_i = new c4(10);
 >10 : 10
 
 interface i2 {
->i2 : i2
-
     /** i2_p1*/
     i2_p1: number;
 >i2_p1 : number
@@ -508,9 +502,6 @@ interface i2 {
 >nc_l1 : () => void
 }
 interface i3 extends i2 {
->i3 : i3
->i2 : i2
-
     /** i3 p1*/
     p1: number;
 >p1 : number
@@ -534,11 +525,9 @@ interface i3 extends i2 {
 }
 var i2_i: i2;
 >i2_i : i2
->i2 : i2
 
 var i3_i: i3;
 >i3_i : i3
->i3 : i3
 
 i2_i.i2_f1();
 >i2_i.i2_f1() : void

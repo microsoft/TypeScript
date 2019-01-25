@@ -7,7 +7,6 @@ var iterableWithOptionalIterator: {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->Iterator : Iterator<T>
 
 };
 

@@ -9,7 +9,7 @@ declare var module: { exports: any};
 /** @typedef {{ type: "b", y: 1 }} B */
 /** @typedef {A | B} Both */
 module.exports = C
->module.exports : Symbol(exports, Decl(commonjs.d.ts, 0, 21))
+>module.exports : Symbol("tests/cases/conformance/jsdoc/mod1", Decl(mod1.js, 0, 0))
 >module : Symbol(export=, Decl(mod1.js, 0, 0))
 >exports : Symbol(export=, Decl(mod1.js, 0, 0))
 >C : Symbol(C, Decl(mod1.js, 4, 18))

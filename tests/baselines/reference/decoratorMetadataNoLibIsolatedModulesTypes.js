@@ -23,7 +23,7 @@ var B = /** @class */ (function () {
     var _a;
     __decorate([
         Decorate,
-        __metadata("design:type", typeof (_a = typeof Map !== "undefined" && Map) === "function" && _a || Object)
+        __metadata("design:type", typeof (_a = typeof Map !== "undefined" && Map) === "function" ? _a : Object)
     ], B.prototype, "member");
     return B;
 }());

@@ -1,28 +1,19 @@
 === tests/cases/compiler/nestedFreshLiteral.ts ===
 interface CSSProps  {
->CSSProps : CSSProps
-
   color?: string
 >color : string | undefined
 }
 interface NestedCSSProps {
->NestedCSSProps : NestedCSSProps
-
   nested?: NestedSelector
 >nested : NestedSelector | undefined
->NestedSelector : NestedSelector
 }
 interface NestedSelector  {
->NestedSelector : NestedSelector
-
   prop: CSSProps;
 >prop : CSSProps
->CSSProps : CSSProps
 }
 
 let stylen: NestedCSSProps = {
 >stylen : NestedCSSProps
->NestedCSSProps : NestedCSSProps
 >{  nested: { prop: { colour: 'red' } }} : { nested: { prop: { colour: string; }; }; }
 
   nested: { prop: { colour: 'red' } }

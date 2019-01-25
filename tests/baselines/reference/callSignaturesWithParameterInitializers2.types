@@ -37,7 +37,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 c.foo();
 >c.foo() : any

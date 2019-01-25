@@ -12,12 +12,8 @@ declare global {
 >global : any
 
     interface Array<T> {
->Array : T[]
->T : T
-
         getA(): A;
 >getA : () => A
->A : A
     }
 }
 

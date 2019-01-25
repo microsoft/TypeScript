@@ -31,25 +31,17 @@ var c2 = new C(1); // ok
 
 class Base2<T,U> {
 >Base2 : Base2<T, U>
->T : T
->U : U
 
     constructor(x: T) { }
 >x : T
->T : T
 }
 
 class D<T,U> extends Base2<T,U> {
 >D : D<T, U>
->T : T
->U : U
 >Base2 : Base2<T, U>
->T : T
->U : U
 
     foo: U;
 >foo : U
->U : U
 }
 
 var r2 = D;
@@ -70,13 +62,10 @@ var d2 = new D(1); // ok
 // specialized base class
 class D2<T, U> extends Base2<string, number> {
 >D2 : D2<T, U>
->T : T
->U : U
 >Base2 : Base2<string, number>
 
     foo: U;
 >foo : U
->U : U
 }
 
 var r3 = D2;

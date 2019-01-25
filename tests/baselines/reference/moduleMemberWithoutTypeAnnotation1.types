@@ -8,7 +8,6 @@ module TypeScript.Parser {
 
         public currentNode(): SyntaxNode {
 >currentNode : () => SyntaxNode
->SyntaxNode : SyntaxNode
 
             return null;
 >null : null
@@ -20,10 +19,7 @@ module TypeScript {
 >TypeScript : typeof TypeScript
 
     export interface ISyntaxElement { };
->ISyntaxElement : ISyntaxElement
-
     export interface ISyntaxToken { };
->ISyntaxToken : ISyntaxToken
 
     export class PositionedElement {
 >PositionedElement : PositionedElement
@@ -31,7 +27,6 @@ module TypeScript {
         public childIndex(child: ISyntaxElement) {
 >childIndex : (child: ISyntaxElement) => void
 >child : ISyntaxElement
->ISyntaxElement : ISyntaxElement
 
             return Syntax.childIndex();
 >Syntax.childIndex() : void
@@ -46,9 +41,7 @@ module TypeScript {
 
         constructor(parent: PositionedElement, token: ISyntaxToken, fullStart: number) {
 >parent : PositionedElement
->PositionedElement : PositionedElement
 >token : ISyntaxToken
->ISyntaxToken : ISyntaxToken
 >fullStart : number
         }
     }
@@ -65,7 +58,6 @@ module TypeScript {
 >position : number
 >includeSkippedTokens : boolean
 >false : false
->PositionedToken : PositionedToken
 
             var positionedToken = this.findTokenInternal(null, position, 0);
 >positionedToken : any
@@ -101,12 +93,10 @@ module TypeScript.Syntax {
 
     export class VariableWidthTokenWithTrailingTrivia implements ISyntaxToken {
 >VariableWidthTokenWithTrailingTrivia : VariableWidthTokenWithTrailingTrivia
->ISyntaxToken : ISyntaxToken
 
         private findTokenInternal(parent: PositionedElement, position: number, fullStart: number) {
 >findTokenInternal : (parent: PositionedElement, position: number, fullStart: number) => PositionedToken
 >parent : PositionedElement
->PositionedElement : PositionedElement
 >position : number
 >fullStart : number
 

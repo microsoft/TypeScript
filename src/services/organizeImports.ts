@@ -28,12 +28,12 @@ namespace ts.OrganizeImports {
         organizeImportsWorker(topLevelExportDecls, coalesceExports);
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
-            const ambientModuleBody = getModuleBlock(ambientModule as ModuleDeclaration)!; // TODO: GH#18217
+            if (!ambientModule.body) { continue; }
 
-            const ambientModuleImportDecls = ambientModuleBody.statements.filter(isImportDeclaration);
+            const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
             organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
 
-            const ambientModuleExportDecls = ambientModuleBody.statements.filter(isExportDeclaration);
+            const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
             organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
         }
 
@@ -63,10 +63,7 @@ namespace ts.OrganizeImports {
 
             // Delete or replace the first import.
             if (newImportDecls.length === 0) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[0], {
-                    useNonAdjustedStartPosition: true, // Leave header comment in place
-                    useNonAdjustedEndPosition: false,
-                });
+                changeTracker.delete(sourceFile, oldImportDecls[0]);
             }
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
@@ -79,19 +76,14 @@ namespace ts.OrganizeImports {
 
             // Delete any subsequent imports.
             for (let i = 1; i < oldImportDecls.length; i++) {
-                changeTracker.deleteNode(sourceFile, oldImportDecls[i]);
+                changeTracker.delete(sourceFile, oldImportDecls[i]);
             }
         }
     }
 
-    function getModuleBlock(moduleDecl: ModuleDeclaration): ModuleBlock | undefined {
-        const body = moduleDecl.body;
-        return body && !isIdentifier(body) ? (isModuleBlock(body) ? body : getModuleBlock(body)) : undefined;
-    }
-
     function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
         const typeChecker = program.getTypeChecker();
-        const jsxNamespace = typeChecker.getJsxNamespace();
+        const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
 
         const usedImports: ImportDeclaration[] = [];
@@ -149,7 +141,7 @@ namespace ts.OrganizeImports {
             : undefined;
     }
 
-    /* @internal */ // Internal for testing
+    // Internal for testing
     /**
      * @param importGroup a list of ImportDeclarations, all with the same module name.
      */
@@ -269,7 +261,7 @@ namespace ts.OrganizeImports {
         }
     }
 
-    /* @internal */ // Internal for testing
+    // Internal for testing
     /**
      * @param exportGroup a list of ExportDeclarations, all with the same module name.
      */

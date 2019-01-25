@@ -1,5 +1,4 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts(4,17): error TS2322: Type 'IterableIterator<number>' is not assignable to type 'WeirdIter'.
-  Property 'hello' is missing in type 'IterableIterator<number>'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts(4,17): error TS2741: Property 'hello' is missing in type 'IterableIterator<number>' but required in type 'WeirdIter'.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts (1 errors) ====
@@ -8,5 +7,5 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts(4,17): error
     }
     function* g1(): WeirdIter { }
                     ~~~~~~~~~
-!!! error TS2322: Type 'IterableIterator<number>' is not assignable to type 'WeirdIter'.
-!!! error TS2322:   Property 'hello' is missing in type 'IterableIterator<number>'.
+!!! error TS2741: Property 'hello' is missing in type 'IterableIterator<number>' but required in type 'WeirdIter'.
+!!! related TS2728 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts:2:5: 'hello' is declared here.

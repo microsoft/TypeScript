@@ -55,17 +55,23 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPatternDefaultValues2.
 ---
 >>>function getRobot() {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^
+4 >                 ^^->
 1 >
   >
+2 >function 
+3 >         getRobot
 1 >Emitted(3, 1) Source(8, 1) + SourceIndex(0)
+2 >Emitted(3, 10) Source(8, 10) + SourceIndex(0)
+3 >Emitted(3, 18) Source(8, 18) + SourceIndex(0)
 ---
 >>>    return robotA;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^^
 4 >                 ^
-1->function getRobot() {
+1->() {
   >    
 2 >    return 
 3 >           robotA
@@ -179,17 +185,23 @@ sourceFile:sourceMapValidationDestructuringForArrayBindingPatternDefaultValues2.
 ---
 >>>function getMultiRobot() {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^
+4 >                      ^^->
 1 >
   >
+2 >function 
+3 >         getMultiRobot
 1 >Emitted(8, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(8, 10) Source(14, 10) + SourceIndex(0)
+3 >Emitted(8, 23) Source(14, 23) + SourceIndex(0)
 ---
 >>>    return multiRobotA;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^^^^^^^
 4 >                      ^
-1->function getMultiRobot() {
+1->() {
   >    
 2 >    return 
 3 >           multiRobotA

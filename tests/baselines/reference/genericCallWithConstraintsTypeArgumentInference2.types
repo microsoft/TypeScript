@@ -3,15 +3,10 @@
 
 function foo<T, U extends T>(t: T) {
 >foo : <T, U extends T>(t: T) => U
->T : T
->U : U
->T : T
 >t : T
->T : T
 
     var u: U;
 >u : U
->U : U
 
     return u;
 >u : U
@@ -40,16 +35,12 @@ var r4 = foo<Date, Date>(1); // error
 >r4 : any
 >foo<Date, Date>(1) : any
 >foo : <T, U extends T>(t: T) => U
->Date : Date
->Date : Date
 >1 : 1
 
 var r5 = foo<Date, Date>(new Date()); // no error
 >r5 : Date
 >foo<Date, Date>(new Date()) : Date
 >foo : <T, U extends T>(t: T) => U
->Date : Date
->Date : Date
 >new Date() : Date
 >Date : DateConstructor
 

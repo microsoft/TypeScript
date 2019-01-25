@@ -1,16 +1,9 @@
 === tests/cases/compiler/unusedTypeParameterInInterface2.ts ===
 interface int<T, U, V> {
->int : int<T, U, V>
->T : T
->U : U
->V : V
-
     f1(a: T): string;
 >f1 : (a: T) => string
 >a : T
->T : T
 
     c: V;
 >c : V
->V : V
 }

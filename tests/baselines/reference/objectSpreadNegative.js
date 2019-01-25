@@ -58,32 +58,6 @@ let obj: object = { a: 123 };
 let spreadObj = { ...obj };
 spreadObj.a; // error 'a' is not in {}
 
-// generics
-function f<T, U>(t: T, u: U) {
-    return { ...t, ...u, id: 'id' };
-}
-function override<U>(initial: U, override: U): U {
-    return { ...initial, ...override };
-}
-let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
-    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
-let overlap: { id: string, a: number, b: string } =
-    f({ a: 1 }, { a: 2, b: 'extra' })
-let overlapConflict: { id:string, a: string } =
-    f({ a: 1 }, { a: 'mismatch' })
-let overwriteId: { id: string, a: number, c: number, d: string } =
-    f({ a: 1, id: true }, { c: 1, d: 'no' })
-
-// excess property checks
-type A = { a: string, b: string };
-type Extra = { a: string, b: string, extra: string };
-const extra1: A = { a: "a", b: "b", extra: "extra" };
-const extra2 = { a: "a", b: "b", extra: "extra" };
-const a1: A = { ...extra1 }; // error spans should be here
-const a2: A = { ...extra2 }; // not on the symbol declarations above
-const extra3: Extra = { a: "a", b: "b", extra: "extra" };
-const a3: A = { ...extra3 }; // same here
-
 
 //// [objectSpreadNegative.js]
 var __assign = (this && this.__assign) || function () {
@@ -156,20 +130,3 @@ spreadC.m(); // error 'm' is not in '{ ... c }'
 var obj = { a: 123 };
 var spreadObj = __assign({}, obj);
 spreadObj.a; // error 'a' is not in {}
-// generics
-function f(t, u) {
-    return __assign({}, t, u, { id: 'id' });
-}
-function override(initial, override) {
-    return __assign({}, initial, override);
-}
-var exclusive = f({ a: 1, b: 'yes' }, { c: 'no', d: false });
-var overlap = f({ a: 1 }, { a: 2, b: 'extra' });
-var overlapConflict = f({ a: 1 }, { a: 'mismatch' });
-var overwriteId = f({ a: 1, id: true }, { c: 1, d: 'no' });
-var extra1 = { a: "a", b: "b", extra: "extra" };
-var extra2 = { a: "a", b: "b", extra: "extra" };
-var a1 = __assign({}, extra1); // error spans should be here
-var a2 = __assign({}, extra2); // not on the symbol declarations above
-var extra3 = { a: "a", b: "b", extra: "extra" };
-var a3 = __assign({}, extra3); // same here

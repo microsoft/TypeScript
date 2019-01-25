@@ -1,7 +1,7 @@
 === tests/cases/conformance/externalModules/err1.d.ts ===
 // Illegal, can't be in script file
 export as namespace Foo;
->Foo : No type information available!
+>Foo : any
 
 === tests/cases/conformance/externalModules/err2.d.ts ===
 // Illegal, can't be in external ambient module
@@ -9,7 +9,7 @@ declare module "Foo" {
 >"Foo" : typeof import("Foo")
 
 	export as namespace Bar;
->Bar : No type information available!
+>Bar : any
 }
 
 === tests/cases/conformance/externalModules/err3.d.ts ===
@@ -35,7 +35,7 @@ export namespace B {
 >B : typeof B
 
 	export as namespace C1;
->C1 : No type information available!
+>C1 : any
 }
 
 === tests/cases/conformance/externalModules/err5.ts ===
@@ -44,6 +44,6 @@ export var v;
 >v : any
 
 export as namespace C2;
->C2 : No type information available!
+>C2 : any
 
 

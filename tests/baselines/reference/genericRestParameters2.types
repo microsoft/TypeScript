@@ -384,10 +384,7 @@ f13(42, "hello", true, ...t4, false, ...t3);
 
 declare const f20: <T extends unknown[]>(...args: T) => T;
 >f20 : <T extends unknown[]>(...args: T) => T
->T : T
 >args : T
->T : T
->T : T
 
 f20(...t1);
 >f20(...t1) : [number, string, ...boolean[]]
@@ -419,82 +416,53 @@ f20(42, "hello", ...t2, true);
 >t2 : [string, ...boolean[]]
 >true : true
 
-type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new(...args: infer U) => any) ? U : any[];
->Parameters : Parameters<T>
->T : T
->Function : Function
->T : T
->args : U
->U : U
->args : U
->U : U
->U : U
-
 type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
 >T01 : [number, string, ...boolean[]]
->Parameters : Parameters<T>
 >x : number
 >y : string
 >z : boolean[]
 
 type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
 >T02 : [number, string, ...boolean[]]
->Parameters : Parameters<T>
 >args : [number, string, ...boolean[]]
 
-type T03 = Parameters<new (x: number, y: string, ...z: boolean[]) => void>;
+type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
 >T03 : [number, string, ...boolean[]]
->Parameters : Parameters<T>
 >x : number
 >y : string
 >z : boolean[]
 
-type T04 = Parameters<new (...args: [number, string, ...boolean[]]) => void>;
+type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
 >T04 : [number, string, ...boolean[]]
->Parameters : Parameters<T>
 >args : [number, string, ...boolean[]]
 
 type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
 >T05 : Parameters<(x: string, ...args: T) => void>
->T : T
->Parameters : Parameters<T>
 >x : string
 >args : T
->T : T
 
 type T06 = T05<[number, ...boolean[]]>;
 >T06 : [string, number, ...boolean[]]
->T05 : Parameters<(x: string, ...args: T) => void>
 
 type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];
 >P1 : P1<T>
->T : T
->Function : Function
->T : T
 >head : A
->A : A
 >tail : B
->B : B
 >head : A
->A : A
 >tail : B
->B : B
 
 type T10 = P1<(x: number, y: string, ...z: boolean[]) => void>;
 >T10 : { head: number; tail: [string, ...boolean[]]; }
->P1 : P1<T>
 >x : number
 >y : string
 >z : boolean[]
 
 type T11 = P1<(...z: number[]) => void>;
 >T11 : { head: number; tail: number[]; }
->P1 : P1<T>
 >z : number[]
 
 type T12 = P1<(x: number, y: number) => void>;
 >T12 : { head: number; tail: [number]; }
->P1 : P1<T>
 >x : number
 >y : number
 

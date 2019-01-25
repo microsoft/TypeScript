@@ -1,4 +1,8 @@
 === tests/cases/compiler/capturedLetConstInLoop1.ts ===
+declare function use(x: any): any;
+>use : (x: any) => any
+>x : any
+
 //==== let
 for (let x in {}) {
 >x : string
@@ -214,6 +218,84 @@ for (let y = 0; y < 1; ++y) {
 >y : number
 }
 
+for (let y = (use(() => y), 0); y < 1; ++y) {
+>y : number
+>(use(() => y), 0) : 0
+>use(() => y), 0 : 0
+>use(() => y) : any
+>use : (x: any) => any
+>() => y : () => number
+>y : number
+>0 : 0
+>y < 1 : boolean
+>y : number
+>1 : 1
+>++y : number
+>y : number
+}
+
+for (let y = 0; use(() => y), y < 1; ++y) {
+>y : number
+>0 : 0
+>use(() => y), y < 1 : boolean
+>use(() => y) : any
+>use : (x: any) => any
+>() => y : () => number
+>y : number
+>y < 1 : boolean
+>y : number
+>1 : 1
+>++y : number
+>y : number
+}
+
+for (let y = 0; y < 1; use(() => y), ++y) {
+>y : number
+>0 : 0
+>y < 1 : boolean
+>y : number
+>1 : 1
+>use(() => y), ++y : number
+>use(() => y) : any
+>use : (x: any) => any
+>() => y : () => number
+>y : number
+>++y : number
+>y : number
+}
+
+for (let y = (use(() => y), 0); use(() => y), y < 1; use(() => y), ++y) {
+>y : number
+>(use(() => y), 0) : 0
+>use(() => y), 0 : 0
+>use(() => y) : any
+>use : (x: any) => any
+>() => y : () => number
+>y : number
+>0 : 0
+>use(() => y), y < 1 : boolean
+>use(() => y) : any
+>use : (x: any) => any
+>() => y : () => number
+>y : number
+>y < 1 : boolean
+>y : number
+>1 : 1
+>use(() => y), ++y : number
+>use(() => y) : any
+>use : (x: any) => any
+>() => y : () => number
+>y : number
+>++y : number
+>y : number
+
+    use(() => y);
+>use(() => y) : any
+>use : (x: any) => any
+>() => y : () => number
+>y : number
+}
+
 //=========const
 for (const x in {}) {
 >x : string
@@ -425,4 +507,36 @@ for (const y = 0; y < 1;) {
 >x + y : number
 >x : 1
 >y : 0
+}
+
+// https://github.com/Microsoft/TypeScript/issues/20594
+declare const sobj: { [x: string]: any };
+>sobj : { [x: string]: any; }
+>x : string
+
+for (let sx in sobj) {
+>sx : string
+>sobj : { [x: string]: any; }
+
+    (() => sobj[sx]);
+>(() => sobj[sx]) : () => any
+>() => sobj[sx] : () => any
+>sobj[sx] : any
+>sobj : { [x: string]: any; }
+>sx : string
+}
+declare const iobj: { [x: number]: any };
+>iobj : { [x: number]: any; }
+>x : number
+
+for (let ix in iobj) {
+>ix : string
+>iobj : { [x: number]: any; }
+
+    (() => iobj[ix]);
+>(() => iobj[ix]) : () => any
+>() => iobj[ix] : () => any
+>iobj[ix] : any
+>iobj : { [x: number]: any; }
+>ix : string
 }

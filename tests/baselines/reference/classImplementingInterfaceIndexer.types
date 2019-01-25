@@ -1,14 +1,11 @@
 === tests/cases/compiler/classImplementingInterfaceIndexer.ts ===
 interface I {
->I : I
-
     [index: string]: { prop }
 >index : string
 >prop : any
 }
 class A implements I {
 >A : A
->I : I
 
     [index: string]: { prop }
 >index : string

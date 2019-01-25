@@ -3,32 +3,22 @@
 
 class List<T> {
 >List : List<T>
->T : T
 
     data: T;
 >data : T
->T : T
 
     next: List<List<T>>;
 >next : List<List<T>>
->List : List<T>
->List : List<T>
->T : T
 }
 
 class MyList<T> {
 >MyList : MyList<T>
->T : T
 
     data: T;
 >data : T
->T : T
 
     next: MyList<MyList<T>>;
 >next : MyList<MyList<T>>
->MyList : MyList<T>
->MyList : MyList<T>
->T : T
 }
 
 var list1 = new List<number>();
@@ -75,13 +65,11 @@ var rList1 = new List<List<number>>();
 >rList1 : List<List<number>>
 >new List<List<number>>() : List<List<number>>
 >List : typeof List
->List : List<T>
 
 var rMyList1 = new List<MyList<number>>();
 >rMyList1 : List<MyList<number>>
 >new List<MyList<number>>() : List<MyList<number>>
 >List : typeof List
->MyList : MyList<T>
 
 rList1 = rMyList1; // error, not nominally equal
 >rList1 = rMyList1 : List<MyList<number>>
@@ -90,14 +78,8 @@ rList1 = rMyList1; // error, not nominally equal
 
 function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
 >foo : <T extends List<number>, U extends MyList<number>>(t: T, u: U) => void
->T : T
->List : List<T>
->U : U
->MyList : MyList<T>
 >t : T
->T : T
 >u : U
->U : U
 
     t = u; // error
 >t = u : U
@@ -111,11 +93,9 @@ function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
 
     var a: List<number>;
 >a : List<number>
->List : List<T>
 
     var b: MyList<number>;
 >b : MyList<number>
->MyList : MyList<T>
 
     a = t; // ok
 >a = t : T
@@ -140,14 +120,8 @@ function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
 
 function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
 >foo2 : <T extends U, U extends MyList<number>>(t: T, u: U) => void
->T : T
->U : U
->U : U
->MyList : MyList<T>
 >t : T
->T : T
 >u : U
->U : U
 
     t = u; // error
 >t = u : U
@@ -161,11 +135,9 @@ function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
 
     var a: List<number>;
 >a : List<number>
->List : List<T>
 
     var b: MyList<number>;
 >b : MyList<number>
->MyList : MyList<T>
 
     a = t; // error
 >a = t : T

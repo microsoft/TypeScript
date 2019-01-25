@@ -3,17 +3,11 @@ export = Foo;
 >Foo : Foo<T>
 
 interface Foo<T> {
->Foo : Foo<T>
->T : T
 }
 
 function Foo<T>(array: T[]): Foo<T> {
 >Foo : typeof Foo
->T : T
 >array : T[]
->T : T
->Foo : Foo<T>
->T : T
 
     return undefined;
 >undefined : undefined

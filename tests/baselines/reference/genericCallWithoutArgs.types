@@ -1,12 +1,8 @@
 === tests/cases/compiler/genericCallWithoutArgs.ts ===
 function f<X, Y>(x: X, y: Y) {
 >f : <X, Y>(x: X, y: Y) => void
->X : X
->Y : Y
 >x : X
->X : X
 >y : Y
->Y : Y
 }
 
 f<number,string>.

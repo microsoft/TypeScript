@@ -7,8 +7,8 @@ for (var key in a) {
 >a : object
 
     var value = a[key];
->value : any
->a[key] : any
+>value : error
+>a[key] : error
 >a : object
 >key : string
 }

@@ -2,8 +2,6 @@
 // call signatures in derived types must have the same or fewer optional parameters as the target for assignment
 
 interface Base { 
->Base : Base
-
     a: (...args: number[]) => number;
 >a : (...args: number[]) => number
 >args : number[]

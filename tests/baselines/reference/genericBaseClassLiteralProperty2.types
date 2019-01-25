@@ -4,13 +4,10 @@ class CollectionItem2 { }
 
 class BaseCollection2<TItem extends CollectionItem2> {
 >BaseCollection2 : BaseCollection2<TItem>
->TItem : TItem
->CollectionItem2 : CollectionItem2
 
     _itemsByKey: { [key: string]: TItem; };
 >_itemsByKey : { [key: string]: TItem; }
 >key : string
->TItem : TItem
 
     constructor() {
         this._itemsByKey = {};
@@ -25,12 +22,10 @@ class BaseCollection2<TItem extends CollectionItem2> {
 class DataView2 extends BaseCollection2<CollectionItem2> {
 >DataView2 : DataView2
 >BaseCollection2 : BaseCollection2<CollectionItem2>
->CollectionItem2 : CollectionItem2
 
     fillItems(item: CollectionItem2) {
 >fillItems : (item: CollectionItem2) => void
 >item : CollectionItem2
->CollectionItem2 : CollectionItem2
 
         this._itemsByKey['dummy'] = item;
 >this._itemsByKey['dummy'] = item : CollectionItem2

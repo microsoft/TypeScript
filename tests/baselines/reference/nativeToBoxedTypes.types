@@ -46,7 +46,6 @@ var sym: symbol;
 
 var Sym: Symbol;
 >Sym : Symbol
->Symbol : Symbol
 
 sym = Sym;
 >sym = Sym : Symbol

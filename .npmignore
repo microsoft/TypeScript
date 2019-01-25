@@ -19,8 +19,10 @@ Jakefile.js
 .circleci
 .vscode/
 .parallelperf.json
+.mailmap
 test.config
 package-lock.json
 yarn.lock
 .github/
 CONTRIBUTING.md
+TEST-results.xml

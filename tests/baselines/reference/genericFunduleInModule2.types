@@ -4,9 +4,7 @@ module A {
 
     export function B<T>(x: T) { return x; }
 >B : typeof B
->T : T
 >x : T
->T : T
 >x : T
 }
 
@@ -25,7 +23,6 @@ module A {
 var b: A.B;
 >b : any
 >A : any
->B : No type information available!
 
 A.B(1);
 >A.B(1) : 1

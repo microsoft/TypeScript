@@ -1,0 +1,33 @@
+=== tests/cases/conformance/declarationEmit/main.ts ===
+import { fa } from "ext";
+>fa : () => import("ext").A
+
+import { fb } from "ext/other";
+>fb : () => import("ext/other").B
+
+export const va = fa();
+>va : import("ext").A
+>fa() : import("ext").A
+>fa : () => import("ext").A
+
+export const vb = fb();
+>vb : import("ext/other").B
+>fb() : import("ext/other").B
+>fb : () => import("ext/other").B
+
+=== tests/cases/conformance/declarationEmit/node_modules/ext/ts3.1/index.d.ts ===
+declare module "ext" {
+>"ext" : typeof import("ext")
+
+    export interface A {}
+    export function fa(): A;
+>fa : () => A
+}
+declare module "ext/other" {
+>"ext/other" : typeof import("ext/other")
+
+    export interface B {}
+    export function fb(): B;
+>fb : () => B
+}
+

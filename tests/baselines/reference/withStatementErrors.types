@@ -40,10 +40,8 @@ with (ooo.eee.oo.ah_ah.ting.tang.walla.walla) { // error
 >C : any
     
     interface I {} // error
->I : any
     
     module M {} // error
->M : any
         
 }
 

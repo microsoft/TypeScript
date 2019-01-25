@@ -30,7 +30,6 @@ class C {
     static get [<String>""]() { }
 >[<String>""] : void
 ><String>"" : String
->String : String
 >"" : ""
 
     static set [id.toString()](v) { }

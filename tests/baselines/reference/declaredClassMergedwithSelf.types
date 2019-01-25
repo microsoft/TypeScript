@@ -9,7 +9,6 @@ declare class C2 {}
 >C2 : C2
 
 interface C2 {}
->C2 : C2
 
 declare class C2 {}
 >C2 : C2

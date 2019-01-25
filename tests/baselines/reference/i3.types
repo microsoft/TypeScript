@@ -1,6 +1,5 @@
 === tests/cases/compiler/i3.ts ===
 interface I3 { one?: number; }; 
->I3 : I3
 >one : number
 
 var x: {one: number};
@@ -9,7 +8,6 @@ var x: {one: number};
 
 var i: I3;
 >i : I3
->I3 : I3
 
 i = x;
 >i = x : { one: number; }

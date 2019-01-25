@@ -1,4 +1,5 @@
 // @ts-check
+const gulp = require("./gulp");
 const del = require("del");
 const fs = require("fs");
 const os = require("os");
@@ -6,13 +7,9 @@ const path = require("path");
 const mkdirP = require("./mkdirp");
 const cmdLineOptions = require("./options");
 const exec = require("./exec");
-const runSequence = require("run-sequence");
-const finished = require("./finished");
 const log = require("fancy-log"); // was `require("gulp-util").log (see https://github.com/gulpjs/gulp-util)
-
-const nodeModulesPathPrefix = path.resolve("./node_modules/.bin/");
-const isWin = /^win/.test(process.platform);
-const mocha = path.join(nodeModulesPathPrefix, "mocha") + (isWin ? ".cmd" : "");
+const { CancellationToken } = require("prex");
+const mochaJs = require.resolve("mocha/bin/_mocha");
 
 exports.localBaseline = "tests/baselines/local/";
 exports.refBaseline = "tests/baselines/reference/";
@@ -24,8 +21,10 @@ exports.localTest262Baseline = "internal/baselines/test262/local";
  * @param {string} runJs
  * @param {string} defaultReporter
  * @param {boolean} runInParallel
+ * @param {boolean} watchMode
+ * @param {import("prex").CancellationToken} [cancelToken]
  */
-function runConsoleTests(runJs, defaultReporter, runInParallel) {
+async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode, cancelToken = CancellationToken.none) {
     let testTimeout = cmdLineOptions.timeout;
     let tests = cmdLineOptions.tests;
     const lintFlag = cmdLineOptions.lint;
@@ -36,112 +35,117 @@ function runConsoleTests(runJs, defaultReporter, runInParallel) {
     const stackTraceLimit = cmdLineOptions.stackTraceLimit;
     const testConfigFile = "test.config";
     const failed = cmdLineOptions.failed;
-    const keepFailed = cmdLineOptions.keepFailed || failed;
-    return cleanTestDirs()
-        .then(() => {
-            if (fs.existsSync(testConfigFile)) {
-                fs.unlinkSync(testConfigFile);
-            }
-
-            let workerCount, taskConfigsFolder;
-            if (runInParallel) {
-                // generate name to store task configuration files
-                const prefix = os.tmpdir() + "/ts-tests";
-                let i = 1;
-                do {
-                    taskConfigsFolder = prefix + i;
-                    i++;
-                } while (fs.existsSync(taskConfigsFolder));
-                fs.mkdirSync(taskConfigsFolder);
-
-                workerCount = cmdLineOptions.workers;
-            }
-
-            if (tests && tests.toLocaleLowerCase() === "rwc") {
-                testTimeout = 400000;
-            }
-
-            if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed) {
-                writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
-            }
-
-            const colors = cmdLineOptions.colors;
-            const reporter = cmdLineOptions.reporter || defaultReporter;
-
-            /** @type {string} */
-            let host = "node";
-            
-            /** @type {string[]} */
-            let args = [];
-
-            // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
-            // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
-            if (!runInParallel) {
-                args.push("-R", "scripts/failed-tests");
-                args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
-                if (tests) {
-                    args.push("-g", `"${tests}"`);
-                }
-                if (colors) {
-                    args.push("--colors");
-                }
-                else {
-                    args.push("--no-colors");
-                }
-                if (inspect) {
-                    args.unshift("--inspect-brk");
-                }
-                else if (debug) {
-                    args.unshift("--debug-brk");
-                }
-                else {
-                    args.push("-t", "" + testTimeout);
-                }
-                args.push(runJs);
-                host = mocha;
-            }
-            else {
-                // run task to load all tests and partition them between workers
-                host = "node";
-                args.push(runJs);
-            }
-            setNodeEnvToDevelopment();
-            if (failed) {
-                return exec(host, ["scripts/run-failed-tests.js"].concat(args));
-            }
-            else {
-                return exec(host, args);
-            }
-        })
-        .then(({ exitCode }) => {
-            if (exitCode !== 0) return finish(undefined, exitCode);
-            if (lintFlag) return finished(runSequence("lint")).then(() => finish(), finish);
-            return finish();
-        }, finish);
-
-    /**
-     * @param {any=} error
-     * @param {number=} errorStatus
-     */
-    function finish(error, errorStatus) {
-        restoreSavedNodeEnv();
-        return deleteTestConfig()
-            .then(deleteTemporaryProjectOutput)
-            .then(() => {
-                if (error !== undefined || errorStatus !== undefined) {
-                    process.exit(typeof errorStatus === "number" ? errorStatus : 2);
-                }
-            });
+    const keepFailed = cmdLineOptions.keepFailed;
+    if (!cmdLineOptions.dirty) {
+        await cleanTestDirs();
+        cancelToken.throwIfCancellationRequested();
     }
 
-    function deleteTestConfig() {
-        return del("test.config");
+    if (fs.existsSync(testConfigFile)) {
+        fs.unlinkSync(testConfigFile);
+    }
+
+    let workerCount, taskConfigsFolder;
+    if (runInParallel) {
+        // generate name to store task configuration files
+        const prefix = os.tmpdir() + "/ts-tests";
+        let i = 1;
+        do {
+            taskConfigsFolder = prefix + i;
+            i++;
+        } while (fs.existsSync(taskConfigsFolder));
+        fs.mkdirSync(taskConfigsFolder);
+
+        workerCount = cmdLineOptions.workers;
+    }
+
+    if (tests && tests.toLocaleLowerCase() === "rwc") {
+        testTimeout = 400000;
+    }
+
+    if (tests || runners || light || testTimeout || taskConfigsFolder || keepFailed) {
+        writeTestConfigFile(tests, runners, light, taskConfigsFolder, workerCount, stackTraceLimit, testTimeout, keepFailed);
+    }
+
+    const colors = cmdLineOptions.colors;
+    const reporter = cmdLineOptions.reporter || defaultReporter;
+
+    /** @type {string[]} */
+    let args = [];
+
+    // timeout normally isn"t necessary but Travis-CI has been timing out on compiler baselines occasionally
+    // default timeout is 2sec which really should be enough, but maybe we just need a small amount longer
+    if (!runInParallel) {
+        args.push(failed ? "scripts/run-failed-tests.js" : mochaJs);
+        args.push("-R", "scripts/failed-tests");
+        args.push("-O", '"reporter=' + reporter + (keepFailed ? ",keepFailed=true" : "") + '"');
+        if (tests) {
+            args.push("-g", `"${tests}"`);
+        }
+        if (colors) {
+            args.push("--colors");
+        }
+        else {
+            args.push("--no-colors");
+        }
+        if (inspect) {
+            args.unshift("--inspect-brk");
+        }
+        else if (debug) {
+            args.unshift("--debug-brk");
+        }
+        else {
+            args.push("-t", "" + testTimeout);
+        }
+        args.push(runJs);
+    }
+    else {
+        // run task to load all tests and partition them between workers
+        args.push(runJs);
+    }
+
+    /** @type {number | undefined} */
+    let errorStatus;
+
+    /** @type {Error | undefined} */
+    let error;
+
+    try {
+        setNodeEnvToDevelopment();
+        const { exitCode } = await exec("node", args, { cancelToken });
+        if (exitCode !== 0) {
+            errorStatus = exitCode;
+            error = new Error(`Process exited with status code ${errorStatus}.`);
+        }
+        else if (lintFlag) {
+            await new Promise((resolve, reject) => gulp.start(["lint"], error => error ? reject(error) : resolve()));
+        }
+    }
+    catch (e) {
+        errorStatus = undefined;
+        error = e;
+    }
+    finally {
+        restoreSavedNodeEnv();
+    }
+
+    await del("test.config");
+    await deleteTemporaryProjectOutput();
+
+    if (error !== undefined) {
+        if (watchMode) {
+            throw error;
+        }
+        else {
+            log.error(error);
+            process.exit(typeof errorStatus === "number" ? errorStatus : 2);
+        }
     }
 }
 exports.runConsoleTests = runConsoleTests;
 
 function cleanTestDirs() {
-    return del([exports.localBaseline, exports.localRwcBaseline,])
+    return del([exports.localBaseline, exports.localRwcBaseline])
         .then(() => mkdirP(exports.localRwcBaseline))
         .then(() => mkdirP(exports.localBaseline));
 }

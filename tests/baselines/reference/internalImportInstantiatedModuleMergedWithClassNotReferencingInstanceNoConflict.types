@@ -9,7 +9,6 @@ module A {
 >A : typeof A
 
     export interface X { s: string }
->X : X
 >s : string
 
     export var a = 10;
@@ -18,8 +17,6 @@ module A {
 }
 
 module B {
->B : any
-
     import Y = A;
 >Y : typeof Y
 >A : Y

@@ -343,10 +343,10 @@ namespace ts {
     export interface WatchDirectoryHost {
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
     }
-    export type WatchFile<X, Y> = (host: WatchFileHost, file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, detailInfo1?: X, detailInfo2?: Y) => FileWatcher;
+    export type WatchFile<X, Y> = (host: WatchFileHost, file: string, callback: FileWatcherCallback, pollingInterval: PollingInterval, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
     export type FilePathWatcherCallback = (fileName: string, eventKind: FileWatcherEventKind, filePath: Path) => void;
-    export type WatchFilePath<X, Y> = (host: WatchFileHost, file: string, callback: FilePathWatcherCallback, pollingInterval: PollingInterval, path: Path, detailInfo1?: X, detailInfo2?: Y) => FileWatcher;
-    export type WatchDirectory<X, Y> = (host: WatchDirectoryHost, directory: string, callback: DirectoryWatcherCallback, flags: WatchDirectoryFlags, detailInfo1?: X, detailInfo2?: Y) => FileWatcher;
+    export type WatchFilePath<X, Y> = (host: WatchFileHost, file: string, callback: FilePathWatcherCallback, pollingInterval: PollingInterval, path: Path, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
+    export type WatchDirectory<X, Y> = (host: WatchDirectoryHost, directory: string, callback: DirectoryWatcherCallback, flags: WatchDirectoryFlags, detailInfo1: X, detailInfo2?: Y) => FileWatcher;
 
     export interface WatchFactory<X, Y> {
         watchFile: WatchFile<X, Y>;
@@ -398,7 +398,7 @@ namespace ts {
             case WatchLogLevel.TriggerOnly:
                 return createFileWatcherWithTriggerLogging;
             case WatchLogLevel.Verbose:
-                return createFileWatcherWithLogging;
+                return addWatch === <any>watchDirectory ? createDirectoryWatcherWithLogging : createFileWatcherWithLogging;
         }
     }
 
@@ -413,9 +413,28 @@ namespace ts {
         };
     }
 
+    function createDirectoryWatcherWithLogging<H, T, U, V, X, Y>(host: H, file: string, cb: WatchCallback<U, V>, flags: T, passThrough: V | undefined, detailInfo1: X | undefined, detailInfo2: Y | undefined, addWatch: AddWatch<H, T, U, undefined>, log: (s: string) => void, watchCaption: string, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined): FileWatcher {
+        const watchInfo = `${watchCaption}:: Added:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+        log(watchInfo);
+        const start = timestamp();
+        const watcher = createFileWatcherWithTriggerLogging(host, file, cb, flags, passThrough, detailInfo1, detailInfo2, addWatch, log, watchCaption, getDetailWatchInfo);
+        const elapsed = timestamp() - start;
+        log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
+        return {
+            close: () => {
+                const watchInfo = `${watchCaption}:: Close:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+                log(watchInfo);
+                const start = timestamp();
+                watcher.close();
+                const elapsed = timestamp() - start;
+                log(`Elapsed:: ${elapsed}ms ${watchInfo}`);
+            }
+        };
+    }
+
     function createFileWatcherWithTriggerLogging<H, T, U, V, X, Y>(host: H, file: string, cb: WatchCallback<U, V>, flags: T, passThrough: V | undefined, detailInfo1: X | undefined, detailInfo2: Y | undefined, addWatch: AddWatch<H, T, U, undefined>, log: (s: string) => void, watchCaption: string, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined): FileWatcher {
         return addWatch(host, file, (fileName, cbOptional) => {
-            const triggerredInfo = `${watchCaption}:: Triggered with ${fileName}${cbOptional !== undefined ? cbOptional : ""}:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
+            const triggerredInfo = `${watchCaption}:: Triggered with ${fileName} ${cbOptional !== undefined ? cbOptional : ""}:: ${getWatchInfo(file, flags, detailInfo1, detailInfo2, getDetailWatchInfo)}`;
             log(triggerredInfo);
             const start = timestamp();
             cb(fileName, cbOptional, passThrough);
@@ -425,7 +444,7 @@ namespace ts {
     }
 
     function getWatchInfo<T, X, Y>(file: string, flags: T, detailInfo1: X, detailInfo2: Y | undefined, getDetailWatchInfo: GetDetailWatchInfo<X, Y> | undefined) {
-        return `WatchInfo: ${file} ${flags} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo1}`;
+        return `WatchInfo: ${file} ${flags} ${getDetailWatchInfo ? getDetailWatchInfo(detailInfo1, detailInfo2) : detailInfo2 === undefined ? detailInfo1 : `${detailInfo1} ${detailInfo2}`}`;
     }
 
     export function closeFileWatcherOf<T extends { watcher: FileWatcher; }>(objWithWatcher: T) {

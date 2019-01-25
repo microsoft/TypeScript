@@ -24,7 +24,7 @@ x(
 // come comment
 // some other comment
 
-// @anohter
+// @another
 
 x();
 >x : Symbol(x, Decl(a.js, 0, 3))

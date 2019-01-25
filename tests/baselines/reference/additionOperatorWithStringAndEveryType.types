@@ -19,14 +19,12 @@ var d: string;
 
 var e: Object;
 >e : Object
->Object : Object
 
 var f: void;
 >f : void
 
 var g: E;
 >g : E
->E : E
 
 var x: string;
 >x : string

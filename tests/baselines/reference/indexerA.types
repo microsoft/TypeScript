@@ -11,12 +11,10 @@ class JQuery {
 
     [n:number]:JQueryElement
 >n : number
->JQueryElement : JQueryElement
 }
 
 var jq:JQuery={ 0: { id : "a" }, 1: { id : "b" } };
 >jq : JQuery
->JQuery : JQuery
 >{ 0: { id : "a" }, 1: { id : "b" } } : { 0: { id: string; }; 1: { id: string; }; }
 >0 : { id: string; }
 >{ id : "a" } : { id: string; }

@@ -1,21 +1,15 @@
 === tests/cases/conformance/es6/destructuring/destructuringInFunctionType.ts ===
 interface a { a }
->a : a
 >a : any
 
 interface b { b }
->b : b
 >b : any
 
 interface c { c }
->c : c
 >c : any
 
 type T1 = ([a, b, c]);
 >T1 : [a, b, c]
->a : a
->b : b
->c : c
 
 type F1 = ([a, b, c]) => void;
 >F1 : F1
@@ -34,9 +28,7 @@ type F2 = ({ a }) => void;
 type T3 = ([{ a: b }, { b: a }]);
 >T3 : [{ a: b; }, { b: a; }]
 >a : b
->b : b
 >b : a
->a : a
 
 type F3 = ([{ a: b }, { b: a }]) => void;
 >F3 : F3
@@ -48,8 +40,6 @@ type F3 = ([{ a: b }, { b: a }]) => void;
 type T4 = ([{ a: [b, c] }]);
 >T4 : [{ a: [b, c]; }]
 >a : [b, c]
->b : b
->c : c
 
 type F4 = ([{ a: [b, c] }]) => void;
 >F4 : F4

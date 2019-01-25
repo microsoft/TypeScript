@@ -1,5 +1,5 @@
 namespace ts {
-    describe("TransformAPI", () => {
+    describe("unittests:: TransformAPI", () => {
         function replaceUndefinedWithVoid0(context: TransformationContext) {
             const previousOnSubstituteNode = context.onSubstituteNode;
             context.enableSubstitution(SyntaxKind.Identifier);
@@ -40,6 +40,16 @@ namespace ts {
             return (file: SourceFile) => file;
         }
 
+        function replaceIdentifiersNamedOldNameWithNewName2(context: TransformationContext) {
+            const visitor: Visitor = (node) => {
+                if (isIdentifier(node) && node.text === "oldName") {
+                    return createIdentifier("newName");
+                }
+                return visitEachChild(node, visitor, context);
+            };
+            return (node: SourceFile) => visitNode(node, visitor);
+        }
+
         function transformSourceFile(sourceText: string, transformers: TransformerFactory<SourceFile>[]) {
             const transformed = transform(createSourceFile("source.ts", sourceText, ScriptTarget.ES2015), transformers);
             const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed }, {
@@ -53,7 +63,7 @@ namespace ts {
 
         function testBaseline(testName: string, test: () => string) {
             it(testName, () => {
-                Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, test);
+                Harness.Baseline.runBaseline(`transformApi/transformsCorrectly.${testName}.js`, test());
             });
         }
 
@@ -77,6 +87,18 @@ namespace ts {
                 },
                 compilerOptions: {
                     newLine: NewLineKind.CarriageReturnLineFeed
+                }
+            }).outputText;
+        });
+
+        testBaseline("issue27854", () => {
+            return transpileModule(`oldName<{ a: string; }>\` ... \`;`, {
+                transformers: {
+                    before: [replaceIdentifiersNamedOldNameWithNewName2]
+                },
+                compilerOptions: {
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                    target: ScriptTarget.Latest
                 }
             }).outputText;
         });
@@ -268,33 +290,115 @@ namespace ts {
             return fs.readFileSync("/.src/index.d.ts").toString();
         }
 
+        function addSyntheticComment(nodeFilter: (node: Node) => boolean) {
+            return (context: TransformationContext) => {
+                return (sourceFile: SourceFile): SourceFile => {
+                    return visitNode(sourceFile, rootTransform, isSourceFile);
+                };
+                function rootTransform<T extends Node>(node: T): VisitResult<T> {
+                    if (nodeFilter(node)) {
+                        setEmitFlags(node, EmitFlags.NoLeadingComments);
+                        setSyntheticLeadingComments(node, [{ kind: SyntaxKind.MultiLineCommentTrivia, text: "comment", pos: -1, end: -1, hasTrailingNewLine: true }]);
+                    }
+                    return visitEachChild(node, rootTransform, context);
+                }
+            };
+        }
+
         // https://github.com/Microsoft/TypeScript/issues/24096
         testBaseline("transformAddCommentToArrowReturnValue", () => {
             return transpileModule(`const foo = () =>
     void 0
 `, {
                 transformers: {
-                    before: [addSyntheticComment],
+                    before: [addSyntheticComment(isVoidExpression)],
                 },
                 compilerOptions: {
                     target: ScriptTarget.ES5,
                     newLine: NewLineKind.CarriageReturnLineFeed,
                 }
             }).outputText;
+        });
 
-            function addSyntheticComment(context: TransformationContext) {
-                return (sourceFile: SourceFile): SourceFile => {
-                    return visitNode(sourceFile, rootTransform, isSourceFile);
-                };
-                function rootTransform<T extends Node>(node: T): VisitResult<T> {
-                    if (isVoidExpression(node)) {
-                        setEmitFlags(node, EmitFlags.NoLeadingComments);
-                        setSyntheticLeadingComments(node, [{ kind: SyntaxKind.SingleLineCommentTrivia, text: "// comment!", pos: -1, end: -1, hasTrailingNewLine: true }]);
-                        return node;
-                    }
-                    return visitEachChild(node, rootTransform, context);
-                }
-            }
+        // https://github.com/Microsoft/TypeScript/issues/17594
+        testBaseline("transformAddCommentToExportedVar", () => {
+            return transpileModule(`export const exportedDirectly = 1;
+const exportedSeparately = 2;
+export {exportedSeparately};
+`, {
+                        transformers: {
+                            before: [addSyntheticComment(isVariableStatement)],
+                        },
+                        compilerOptions: {
+                            target: ScriptTarget.ES5,
+                            newLine: NewLineKind.CarriageReturnLineFeed,
+                        }
+                    }).outputText;
+        });
+
+        // https://github.com/Microsoft/TypeScript/issues/17594
+        testBaseline("transformAddCommentToImport", () => {
+            return transpileModule(`
+// Previous comment on import.
+import {Value} from 'somewhere';
+import * as X from 'somewhere';
+// Previous comment on export.
+export { /* specifier comment */ X, Y} from 'somewhere';
+export * from 'somewhere';
+export {Value};
+`, {
+                        transformers: {
+                            before: [addSyntheticComment(n => isImportDeclaration(n) || isExportDeclaration(n) || isImportSpecifier(n) || isExportSpecifier(n))],
+                        },
+                        compilerOptions: {
+                            target: ScriptTarget.ES5,
+                            newLine: NewLineKind.CarriageReturnLineFeed,
+                        }
+                    }).outputText;
+        });
+
+        // https://github.com/Microsoft/TypeScript/issues/17594
+        testBaseline("transformAddCommentToProperties", () => {
+            return transpileModule(`
+// class comment.
+class Clazz {
+    // original comment 1.
+    static staticProp: number = 1;
+    // original comment 2.
+    instanceProp: number = 2;
+    // original comment 3.
+    constructor(readonly field = 1) {}
+}
+`, {
+                        transformers: {
+                            before: [addSyntheticComment(n => isPropertyDeclaration(n) || isParameterPropertyDeclaration(n) || isClassDeclaration(n) || isConstructorDeclaration(n))],
+                        },
+                        compilerOptions: {
+                            target: ScriptTarget.ES2015,
+                            newLine: NewLineKind.CarriageReturnLineFeed,
+                        }
+                    }).outputText;
+        });
+
+        testBaseline("transformAddCommentToNamespace", () => {
+            return transpileModule(`
+// namespace comment.
+namespace Foo {
+    export const x = 1;
+}
+// another comment.
+namespace Foo {
+    export const y = 1;
+}
+`, {
+                        transformers: {
+                            before: [addSyntheticComment(n => isModuleDeclaration(n))],
+                        },
+                        compilerOptions: {
+                            target: ScriptTarget.ES2015,
+                            newLine: NewLineKind.CarriageReturnLineFeed,
+                        }
+                    }).outputText;
         });
     });
 }

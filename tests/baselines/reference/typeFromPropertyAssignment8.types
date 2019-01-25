@@ -1,20 +1,20 @@
 === tests/cases/conformance/salsa/a.js ===
 var my = my || {};
 >my : typeof my
->my || {} : typeof my | { [x: string]: any; }
+>my || {} : typeof my | {}
 >my : typeof my
->{} : { [x: string]: any; }
+>{} : {}
 
 my.app = my.app || {};
 >my.app = my.app || {} : typeof my.app
 >my.app : typeof my.app
 >my : typeof my
 >app : typeof my.app
->my.app || {} : { [x: string]: any; }
+>my.app || {} : {}
 >my.app : typeof my.app
 >my : typeof my
 >app : typeof my.app
->{} : { [x: string]: any; }
+>{} : {}
 
 my.app.Application = (function () {
 >my.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void
@@ -49,21 +49,21 @@ my.app.Application()
 var min = window.min || {};
 >min : typeof min
 >window.min || {} : any
->window.min : any
+>window.min : error
 >window : Window
 >min : any
->{} : { [x: string]: any; }
+>{} : {}
 
 min.app = min.app || {};
 >min.app = min.app || {} : typeof min.app
 >min.app : typeof min.app
 >min : typeof min
 >app : typeof min.app
->min.app || {} : { [x: string]: any; }
+>min.app || {} : {}
 >min.app : typeof min.app
 >min : typeof min
 >app : typeof min.app
->{} : { [x: string]: any; }
+>{} : {}
 
 min.app.Application = (function () {
 >min.app.Application = (function () {var Application = function () {    //...};return Application;})() : () => void

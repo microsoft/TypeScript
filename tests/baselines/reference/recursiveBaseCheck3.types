@@ -1,15 +1,11 @@
 === tests/cases/compiler/recursiveBaseCheck3.ts ===
 class A<T> extends C<T> { }
 >A : A<T>
->T : T
 >C : typeof C
->T : T
 
 class C<T> extends A<T> { }
 >C : C<T>
->T : T
 >A : typeof A
->T : T
 
 (new C).blah;
 >(new C).blah : any

@@ -8,7 +8,20 @@ import * as fooSub from "foo/sub";
 import * as barSub from "bar/sub";
 >barSub : any
 
+import * as scopeFoo from "@scope/foo";
+>scopeFoo : typeof scopeFoo
+
+import * as scopeFooSub from "@scope/foo/sub";
+>scopeFooSub : any
+
+import * as scopeBarSub from "@scope/bar/sub";
+>scopeBarSub : any
+
 === /node_modules/@types/foo/index.d.ts ===
+export const foo: number;
+>foo : number
+
+=== /node_modules/@types/scope__foo/index.d.ts ===
 export const foo: number;
 >foo : number
 

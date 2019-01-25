@@ -1,0 +1,31 @@
+=== tests/cases/conformance/salsa/file1.js ===
+var N = {};
+>N : typeof N
+>{} : {}
+
+N.commands = {};
+>N.commands = {} : typeof N.commands
+>N.commands : typeof N.commands
+>N : typeof N
+>commands : typeof N.commands
+>{} : {}
+
+=== tests/cases/conformance/salsa/file2.js ===
+N.commands.a = 111;
+>N.commands.a = 111 : 111
+>N.commands.a : number
+>N.commands : typeof N.commands
+>N : typeof N
+>commands : typeof N.commands
+>a : number
+>111 : 111
+
+N.commands.b = function () { };
+>N.commands.b = function () { } : () => void
+>N.commands.b : () => void
+>N.commands : typeof N.commands
+>N : typeof N
+>commands : typeof N.commands
+>b : () => void
+>function () { } : () => void
+

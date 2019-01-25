@@ -88,23 +88,29 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 ---
 >>>function foo1(_a) {
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
-2 >function foo1(
-  >    
-3 >              {
+2 >function 
+3 >         foo1
+4 >             (
+  >                 
+5 >              {
   >                      skills: {
   >                          primary: primaryA = "primary",
   >                          secondary: secondaryA = "secondary"
   >                      } = { primary: "SomeSkill", secondary: "someSkill" }
   >                  }: Robot = robotA
 1 >Emitted(2, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(2, 15) Source(14, 5) + SourceIndex(0)
-3 >Emitted(2, 17) Source(19, 22) + SourceIndex(0)
+2 >Emitted(2, 10) Source(13, 10) + SourceIndex(0)
+3 >Emitted(2, 14) Source(13, 14) + SourceIndex(0)
+4 >Emitted(2, 15) Source(14, 5) + SourceIndex(0)
+5 >Emitted(2, 17) Source(19, 22) + SourceIndex(0)
 ---
 >>>    var _b = (_a === void 0 ? robotA : _a).skills, _c = _b === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _b, _d = _c.primary, primaryA = _d === void 0 ? "primary" : _d, _e = _c.secondary, secondaryA = _e === void 0 ? "secondary" : _e;
 1->^^^^^^^^
@@ -192,14 +198,18 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 ---
 >>>function foo2(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >function foo2(
-  >    
-3 >              {
+2 >function 
+3 >         foo2
+4 >             (
+  >                 
+5 >              {
   >                      name: nameC = "name",
   >                      skills: {
   >                          primary: primaryB = "primary",
@@ -207,8 +217,10 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
   >                      } = { primary: "SomeSkill", secondary: "someSkill" }
   >                  }: Robot = robotA
 1->Emitted(6, 1) Source(22, 1) + SourceIndex(0)
-2 >Emitted(6, 15) Source(23, 5) + SourceIndex(0)
-3 >Emitted(6, 17) Source(29, 22) + SourceIndex(0)
+2 >Emitted(6, 10) Source(22, 10) + SourceIndex(0)
+3 >Emitted(6, 14) Source(22, 14) + SourceIndex(0)
+4 >Emitted(6, 15) Source(23, 5) + SourceIndex(0)
+5 >Emitted(6, 17) Source(29, 22) + SourceIndex(0)
 ---
 >>>    var _b = _a === void 0 ? robotA : _a, _c = _b.name, nameC = _c === void 0 ? "name" : _c, _d = _b.skills, _e = _d === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _d, _f = _e.primary, primaryB = _f === void 0 ? "primary" : _f, _g = _e.secondary, secondaryB = _g === void 0 ? "secondary" : _g;
 1->^^^^^^^^
@@ -321,16 +333,22 @@ sourceFile:sourceMapValidationDestructuringParameterNestedObjectBindingPatternDe
 ---
 >>>function foo3(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >function foo3(
-3 >              { skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA
+2 >function 
+3 >         foo3
+4 >             (
+5 >              { skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Robot = robotA
 1->Emitted(10, 1) Source(32, 1) + SourceIndex(0)
-2 >Emitted(10, 15) Source(32, 15) + SourceIndex(0)
-3 >Emitted(10, 17) Source(32, 93) + SourceIndex(0)
+2 >Emitted(10, 10) Source(32, 10) + SourceIndex(0)
+3 >Emitted(10, 14) Source(32, 14) + SourceIndex(0)
+4 >Emitted(10, 15) Source(32, 15) + SourceIndex(0)
+5 >Emitted(10, 17) Source(32, 93) + SourceIndex(0)
 ---
 >>>    var _b = (_a === void 0 ? robotA : _a).skills, skills = _b === void 0 ? { primary: "SomeSkill", secondary: "someSkill" } : _b;
 1->^^^^^^^^

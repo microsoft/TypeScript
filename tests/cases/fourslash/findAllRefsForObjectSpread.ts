@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
-////interface A1 { readonly [|{| "isWriteAccess": true, "isDefinition": true |}a|]: string };
-////interface A2 { [|{| "isWriteAccess": true, "isDefinition": true |}a|]?: number };
+////interface A1 { readonly [|{| "isDefinition": true |}a|]: string };
+////interface A2 { [|{| "isDefinition": true |}a|]?: number };
 ////let a1: A1;
 ////let a2: A2;
 ////let a12 = { ...a1, ...a2 };

@@ -1,8 +1,8 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// interface interface1 extends interface1 {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|](): void;   // r0
-////    [|{| "isWriteAccess": true, "isDefinition": true |}propName|]: string;  // r1
+////    [|{| "isDefinition": true |}doStuff|](): void;   // r0
+////    [|{| "isDefinition": true |}propName|]: string;  // r1
 //// }
 ////
 //// var v: interface1;

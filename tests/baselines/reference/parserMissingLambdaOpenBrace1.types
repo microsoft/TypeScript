@@ -5,10 +5,6 @@ class C {
     where(filter: Iterator<T, boolean>): Query<T> {
 >where : (filter: any) => any
 >filter : any
->Iterator : No type information available!
->T : No type information available!
->Query : No type information available!
->T : No type information available!
 
         return fromDoWhile(test =>
 >fromDoWhile(test =>            var index = 0;            return this.doWhile((item, i) => filter(item, i) ? test(item, index++) : true);        }) : any

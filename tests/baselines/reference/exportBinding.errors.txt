@@ -9,6 +9,7 @@ tests/cases/conformance/es6/modules/exportVars.ts(3,16): error TS2454: Variable 
     export default x;
                    ~
 !!! error TS2448: Block-scoped variable 'x' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/modules/exportConsts.ts:5:7: 'x' is declared here.
                    ~
 !!! error TS2454: Variable 'x' is used before being assigned.
     

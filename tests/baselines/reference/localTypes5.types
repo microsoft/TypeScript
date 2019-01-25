@@ -1,32 +1,26 @@
 === tests/cases/conformance/types/localTypes/localTypes5.ts ===
 function foo<A>() {
 >foo : <A>() => X.m<number, boolean>.(Anonymous function)<Date>.Y<string>
->A : A
 
     class X {
 >X : X
 
         m<B, C>() {
 >m : <B, C>() => (Anonymous function)<Date>.Y<string>
->B : B
->C : C
 
             return (function <D>() {
 >(function <D>() {                class Y<E> {                }                return new Y<string>();            })<Date>() : (Anonymous function)<Date>.Y<string>
 >(function <D>() {                class Y<E> {                }                return new Y<string>();            }) : <D>() => Y<string>
 >function <D>() {                class Y<E> {                }                return new Y<string>();            } : <D>() => Y<string>
->D : D
 
                 class Y<E> {
 >Y : Y<E>
->E : E
                 }
                 return new Y<string>();
 >new Y<string>() : Y<string>
 >Y : typeof Y
 
             })<Date>();
->Date : Date
         }
     }
     var x = new X();

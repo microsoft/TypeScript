@@ -1,5 +1,5 @@
-tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(174,13): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(174,13): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
 
 
 ==== tests/cases/compiler/capturedLetConstInLoop5_ES6.ts (2 errors) ====
@@ -178,7 +178,7 @@ tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2365: Opera
             (() => x + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
                 return;
             }
         }
@@ -235,7 +235,7 @@ tests/cases/compiler/capturedLetConstInLoop5_ES6.ts(229,13): error TS2365: Opera
             (() => x + y + v);
             if (x == 1) {
                 ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
                 return;
             }
         }

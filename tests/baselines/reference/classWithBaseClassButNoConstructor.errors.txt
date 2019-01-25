@@ -17,6 +17,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseCl
     var c = new C(); // error
             ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts:2:17: An argument for 'x' was not provided.
     var c2 = new C(1); // ok
     
     class Base2<T,U> {
@@ -31,6 +32,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseCl
     var d = new D(); // error
             ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts:14:17: An argument for 'x' was not provided.
     var d2 = new D(1); // ok
     
     // specialized base class
@@ -42,6 +44,7 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseCl
     var d3 = new D(); // error
              ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts:14:17: An argument for 'x' was not provided.
     var d4 = new D(1); // ok
     
     class D3 extends Base2<string, number> {
@@ -52,4 +55,5 @@ tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseCl
     var d5 = new D(); // error
              ~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/classes/members/constructorFunctionTypes/classWithBaseClassButNoConstructor.ts:14:17: An argument for 'x' was not provided.
     var d6 = new D(1); // ok

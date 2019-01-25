@@ -6,14 +6,12 @@ declare var console : { log(arg: string): void };
 
 function dec(): Function {
 >dec : () => Function
->Function : Function
 
     return function (target: any, propKey: string, descr: PropertyDescriptor): void {
 >function (target: any, propKey: string, descr: PropertyDescriptor): void {        console.log(target[propKey]);        //logs undefined        //propKey has three underscores as prefix, but the method has only two underscores    } : (target: any, propKey: string, descr: PropertyDescriptor) => void
 >target : any
 >propKey : string
 >descr : PropertyDescriptor
->PropertyDescriptor : PropertyDescriptor
 
         console.log(target[propKey]);
 >console.log(target[propKey]) : void

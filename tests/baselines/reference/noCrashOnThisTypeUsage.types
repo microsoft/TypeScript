@@ -1,10 +1,7 @@
 === tests/cases/compiler/noCrashOnThisTypeUsage.ts ===
 interface IListenable {
->IListenable : IListenable
-
     changeListeners: Function[] | null
 >changeListeners : Function[] | null
->Function : Function
 >null : null
 
     observe(handler: (change: any, oldValue?: any) => void, fireImmediately?: boolean): void
@@ -17,26 +14,20 @@ interface IListenable {
 
 function notifyListeners<T>(listenable: IListenable, change: T) {
 >notifyListeners : <T>(listenable: IListenable, change: T) => void
->T : T
 >listenable : IListenable
->IListenable : IListenable
 >change : T
->T : T
 }
 
 export class ObservableValue<T> {
 >ObservableValue : ObservableValue<T>
->T : T
 
     constructor(
         public value: T
 >value : T
->T : T
 
     ) {
         const newValue: T = value;
 >newValue : T
->T : T
 >value : T
 
         const oldValue: any = null;
@@ -67,7 +58,6 @@ export class ObservableValue<T> {
     }
     changeListeners: Function[] | null = [];
 >changeListeners : Function[] | null
->Function : Function
 >null : null
 >[] : never[]
 

@@ -103,6 +103,7 @@ function foo14() {
     let x
 }
 
+
 //// [blockScopedVariablesUseBeforeDef.js]
 function foo0() {
     var a = x;

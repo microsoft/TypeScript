@@ -1,7 +1,6 @@
 === tests/cases/conformance/es6/moduleExportsUmd/a.ts ===
 var decorator: ClassDecorator;
 >decorator : ClassDecorator
->ClassDecorator : ClassDecorator
 
 @decorator
 >decorator : ClassDecorator
@@ -12,7 +11,6 @@ export default class Foo {}
 === tests/cases/conformance/es6/moduleExportsUmd/b.ts ===
 var decorator: ClassDecorator;
 >decorator : ClassDecorator
->ClassDecorator : ClassDecorator
 
 @decorator
 >decorator : ClassDecorator

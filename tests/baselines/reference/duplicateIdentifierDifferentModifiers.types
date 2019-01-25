@@ -1,11 +1,9 @@
 === tests/cases/compiler/duplicateIdentifierDifferentModifiers.ts ===
 // Not OK
 interface B { x; }
->B : B
 >x : any
 
 interface B { x?; }
->B : B
 >x : any
 
 // OK
@@ -17,8 +15,6 @@ class A {
 }
 
 interface A {
->A : A
-
   y: string;
 >y : string
 }
@@ -32,8 +28,6 @@ class C {
 }
 
 interface C {
->C : C
-
   y: string;
 >y : string
 }

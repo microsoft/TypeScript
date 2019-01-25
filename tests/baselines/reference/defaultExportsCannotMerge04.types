@@ -11,9 +11,7 @@ namespace Foo {
 }
 
 interface Foo {
->Foo : Foo
 }
 
 export interface Foo {
->Foo : import("tests/cases/conformance/es6/modules/defaultExportsCannotMerge04").Foo
 }

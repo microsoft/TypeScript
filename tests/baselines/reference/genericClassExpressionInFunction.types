@@ -1,42 +1,33 @@
 === tests/cases/conformance/classes/classExpressions/genericClassExpressionInFunction.ts ===
 class A<T> {
 >A : A<T>
->T : T
 
     genericVar: T
 >genericVar : T
->T : T
 }
 function B1<U>() {
 >B1 : <U>() => typeof (Anonymous class)
->U : U
 
     // class expression can use T
     return class extends A<U> { }
 >class extends A<U> { } : typeof (Anonymous class)
 >A : A<U>
->U : U
 }
 class B2<V> {
 >B2 : B2<V>
->V : V
 
     anon = class extends A<V> { }
 >anon : typeof (Anonymous class)
 >class extends A<V> { } : typeof (Anonymous class)
 >A : A<V>
->V : V
 }
 function B3<W>() {
 >B3 : <W>() => typeof Inner
->W : W
 
     return class Inner<TInner> extends A<W> { }
 >class Inner<TInner> extends A<W> { } : typeof Inner
 >Inner : typeof Inner
->TInner : TInner
 >A : A<W>
->W : W
 }
 // extends can call B
 class K extends B1<number>() {

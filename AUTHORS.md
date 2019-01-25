@@ -74,7 +74,9 @@ TypeScript is authored by:
 * Dafrok Zhang
 * Dahan Gong
 * Dan Corder
+* Dan Freeman 
 * Dan Quirk
+* Daniel Gooss
 * Daniel Hollocher
 * Daniel Król 
 * Daniel Lehenbauer
@@ -82,7 +84,9 @@ TypeScript is authored by:
 * David Kmenta
 * David Li
 * David Sheldrick 
+* David Sherret 
 * David Souther
+* David Staheli 
 * Denis Nedelyaev
 * Derek P Sifford 
 * Dhruv Rajvanshi 
@@ -96,6 +100,7 @@ TypeScript is authored by:
 * @e-cloud
 * Ecole Keine
 * Elisée Maurer
+* Elizabeth Dinella 
 * Emilio García-Pumarino
 * Eric Grube 
 * Eric Tsang
@@ -161,6 +166,7 @@ TypeScript is authored by:
 * Joel Day 
 * Joey Wilson
 * Johannes Rieken
+* John Doe 
 * John Vilk
 * Jonathan Bond-Caron
 * Jonathan Park
@@ -184,7 +190,9 @@ TypeScript is authored by:
 * Keith Mashinter
 * Ken Howard
 * Kenji Imamula
+* Kerem Kat
 * Kevin Donnelly 
+* Kevin Gibbons 
 * Kevin Lang 
 * Khải 
 * Kitson Kelly 
@@ -201,10 +209,13 @@ TypeScript is authored by:
 * Manish Giri
 * Marin Marinov
 * Marius Schulz 
+* Markus Johnsson 
 * Martin Hiller 
+* Martin Probst 
 * Martin Vseticka
 * Martyn Janes 
 * Masahiro Wakame
+* Mateusz Burzyński 
 * Matt Bierner 
 * Matt McCutchen
 * Matt Mitchell 
@@ -223,10 +234,10 @@ TypeScript is authored by:
 * Mohamed Hegazy
 * Mohsen Azimi 
 * Myles Megyesi 
-* Natalie Coley
 * Nathan Shively-Sanders
 * Nathan Yee
 * Nicolas Henry
+* Nicu Micleușanu
 * @nieltg
 * Nima Zahedi
 * Noah Chen 
@@ -248,6 +259,7 @@ TypeScript is authored by:
 * Peter Burns
 * Philip Bulley
 * Philippe Voinov 
+* Pi Lanningham 
 * Piero Cangianiello
 * @piloopin
 * Prayag Verma
@@ -270,6 +282,7 @@ TypeScript is authored by:
 * Rowan Wyborn
 * Ryan Cavanaugh
 * Ryohei Ikegami
+* Sam Bostock 
 * Sam El-Husseini 
 * Sarangan Rajamanickam
 * Sean Barag 
@@ -290,6 +303,7 @@ TypeScript is authored by:
 * Stas Vilchik 
 * Stephan Ginthör 
 * Steve Lucco
+* @styfle
 * Sudheesh Singanamalla 
 * Sébastien Arod
 * @T18970237136
@@ -316,8 +330,10 @@ TypeScript is authored by:
 * Vidar Tonaas Fauske
 * Viktor Zozulyak
 * Vilic Vane
+* Vimal Raghubir 
 * Vladimir Kurchatkin 
 * Vladimir Matveev
+* Vyacheslav Pukhanov 
 * Wenlu Wang 
 * Wesley Wigham
 * William Orr 

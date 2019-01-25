@@ -1,0 +1,19 @@
+=== tests/cases/compiler/destructuringTuple.ts ===
+declare var tuple: [boolean, number, ...string[]];
+>tuple : Symbol(tuple, Decl(destructuringTuple.ts, 0, 11))
+
+const [a, b, c, ...rest] = tuple;
+>a : Symbol(a, Decl(destructuringTuple.ts, 2, 7))
+>b : Symbol(b, Decl(destructuringTuple.ts, 2, 9))
+>c : Symbol(c, Decl(destructuringTuple.ts, 2, 12))
+>rest : Symbol(rest, Decl(destructuringTuple.ts, 2, 15))
+>tuple : Symbol(tuple, Decl(destructuringTuple.ts, 0, 11))
+
+declare var receiver: typeof tuple;
+>receiver : Symbol(receiver, Decl(destructuringTuple.ts, 4, 11))
+>tuple : Symbol(tuple, Decl(destructuringTuple.ts, 0, 11))
+
+[...receiver] = tuple;
+>receiver : Symbol(receiver, Decl(destructuringTuple.ts, 4, 11))
+>tuple : Symbol(tuple, Decl(destructuringTuple.ts, 0, 11))
+

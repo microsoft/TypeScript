@@ -58,17 +58,23 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 ---
 >>>function foo1(_a) {
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
-2 >function foo1(
-3 >              [, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]
+2 >function 
+3 >         foo1
+4 >             (
+5 >              [, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "skill2"]]
 1 >Emitted(2, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
-3 >Emitted(2, 17) Source(7, 89) + SourceIndex(0)
+2 >Emitted(2, 10) Source(7, 10) + SourceIndex(0)
+3 >Emitted(2, 14) Source(7, 14) + SourceIndex(0)
+4 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
+5 >Emitted(2, 17) Source(7, 89) + SourceIndex(0)
 ---
 >>>    var _b = _a === void 0 ? ["name", ["skill1", "skill2"]] : _a, _c = _b[1], skillA = _c === void 0 ? ["noSkill", "noSkill"] : _c;
 1->^^^^^^^^
@@ -129,17 +135,23 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 ---
 >>>function foo2(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
-2 >function foo2(
-3 >              [nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]
+2 >function 
+3 >         foo2
+4 >             (
+5 >              [nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]
 1->Emitted(6, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
-3 >Emitted(6, 17) Source(11, 74) + SourceIndex(0)
+2 >Emitted(6, 10) Source(11, 10) + SourceIndex(0)
+3 >Emitted(6, 14) Source(11, 14) + SourceIndex(0)
+4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
+5 >Emitted(6, 17) Source(11, 74) + SourceIndex(0)
 ---
 >>>    var _b = (_a === void 0 ? ["name", ["skill1", "skill2"]] : _a)[0], nameMB = _b === void 0 ? "noName" : _b;
 1->^^^^^^^^
@@ -194,20 +206,26 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPatternDefaultV
 ---
 >>>function foo3(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
-2 >function foo3(
-3 >              [nameMA = "noName", [
+2 >function 
+3 >         foo3
+4 >             (
+5 >              [nameMA = "noName", [
   >                  primarySkillA = "primary",
   >                  secondarySkillA = "secondary"
   >              ] = ["noSkill", "noSkill"]]: Robot
 1->Emitted(10, 1) Source(15, 1) + SourceIndex(0)
-2 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
-3 >Emitted(10, 17) Source(18, 35) + SourceIndex(0)
+2 >Emitted(10, 10) Source(15, 10) + SourceIndex(0)
+3 >Emitted(10, 14) Source(15, 14) + SourceIndex(0)
+4 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
+5 >Emitted(10, 17) Source(18, 35) + SourceIndex(0)
 ---
 >>>    var _b = _a[0], nameMA = _b === void 0 ? "noName" : _b, _c = _a[1], _d = _c === void 0 ? ["noSkill", "noSkill"] : _c, _e = _d[0], primarySkillA = _e === void 0 ? "primary" : _e, _f = _d[1], secondarySkillA = _f === void 0 ? "secondary" : _f;
 1->^^^^^^^^

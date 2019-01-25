@@ -12,11 +12,9 @@ var myCars3 = new Array({});
 
 var myCars4: Array; // error
 >myCars4 : any
->Array : T[]
 
 var myCars5: Array<any>[];
 >myCars5 : any[][]
->Array : T[]
  
 myCars = myCars3;
 >myCars = myCars3 : {}[]

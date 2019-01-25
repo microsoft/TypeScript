@@ -1,7 +1,6 @@
 === tests/cases/compiler/emptyTypeArgumentListWithNew.ts ===
 class foo<T> { }
 >foo : foo<T>
->T : T
 
 new foo<>();
 >new foo<>() : any

@@ -1,14 +1,11 @@
 === tests/cases/conformance/statements/VariableStatements/everyTypeWithInitializer.ts ===
 interface I {
->I : I
-
     id: number;
 >id : number
 }
 
 class C implements I {
 >C : C
->I : I
 
     id: number;
 >id : number
@@ -16,22 +13,15 @@ class C implements I {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T
->T : T
 
     recurse: D<T>;
 >recurse : D<T>
->D : D<T>
->T : T
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
->D : D<T>
->D : D<T>
->T : T
 }
 
 function F(x: string): number { return 42; }

@@ -33,9 +33,9 @@ class Derived extends Base {
 // Arrow function as function argument
 window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
->window.setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>window.setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 >window : Window
->setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 >() => null : () => any
 >null : null
 >100 : 100
@@ -136,9 +136,9 @@ module M2 {
     // Arrow function as function argument
     window.setTimeout(() => null, 100);
 >window.setTimeout(() => null, 100) : number
->window.setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>window.setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 >window : Window
->setTimeout : { (handler: (...args: any[]) => void, timeout: number): number; (handler: any, timeout?: any, ...args: any[]): number; }
+>setTimeout : (handler: TimerHandler, timeout?: number, ...arguments: any[]) => number
 >() => null : () => any
 >null : null
 >100 : 100
@@ -207,34 +207,24 @@ module M2 {
 var generic1 = <T>(n: T) => [n];
 >generic1 : <T>(n: T) => T[]
 ><T>(n: T) => [n] : <T>(n: T) => T[]
->T : T
 >n : T
->T : T
 >[n] : T[]
 >n : T
 
 var generic1: { <T>(n: T): T[] }; // Incorrect error, Bug 829597
 >generic1 : <T>(n: T) => T[]
->T : T
 >n : T
->T : T
->T : T
 
 var generic2 = <T>(n: T) => { return [n]; };
 >generic2 : <T>(n: T) => T[]
 ><T>(n: T) => { return [n]; } : <T>(n: T) => T[]
->T : T
 >n : T
->T : T
 >[n] : T[]
 >n : T
 
 var generic2: { <T>(n: T): T[] };
 >generic2 : <T>(n: T) => T[]
->T : T
 >n : T
->T : T
->T : T
 
 // <Identifier> ((ParamList) => { ... } ) is a type assertion to an arrow function
 var asserted1 = <any>((n) => [n]);

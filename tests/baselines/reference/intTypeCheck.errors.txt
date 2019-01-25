@@ -1,14 +1,11 @@
 tests/cases/compiler/intTypeCheck.ts(35,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/intTypeCheck.ts(71,6): error TS2304: Cannot find name 'p'.
 tests/cases/compiler/intTypeCheck.ts(85,5): error TS2386: Overload signatures must all be optional or required.
-tests/cases/compiler/intTypeCheck.ts(99,5): error TS2322: Type 'Object' is not assignable to type 'i1'.
-  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-    Property 'p' is missing in type 'Object'.
+tests/cases/compiler/intTypeCheck.ts(99,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+  Type 'Object' is missing the following properties from type 'i1': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(100,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(101,5): error TS2322: Type 'Base' is not assignable to type 'i1'.
-  Property 'p' is missing in type 'Base'.
-tests/cases/compiler/intTypeCheck.ts(103,5): error TS2322: Type '() => void' is not assignable to type 'i1'.
-  Property 'p' is missing in type '() => void'.
+tests/cases/compiler/intTypeCheck.ts(101,5): error TS2739: Type 'Base' is missing the following properties from type 'i1': p, p3, p6
+tests/cases/compiler/intTypeCheck.ts(103,5): error TS2739: Type '() => void' is missing the following properties from type 'i1': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(106,5): error TS2322: Type 'boolean' is not assignable to type 'i1'.
 tests/cases/compiler/intTypeCheck.ts(106,20): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(106,21): error TS2693: 'i1' only refers to a type, but is being used as a value here.
@@ -43,16 +40,12 @@ tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(149,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(154,5): error TS2322: Type '{}' is not assignable to type 'i5'.
-  Property 'p' is missing in type '{}'.
-tests/cases/compiler/intTypeCheck.ts(155,5): error TS2322: Type 'Object' is not assignable to type 'i5'.
-  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-    Property 'p' is missing in type 'Object'.
+tests/cases/compiler/intTypeCheck.ts(154,5): error TS2739: Type '{}' is missing the following properties from type 'i5': p, p3, p6
+tests/cases/compiler/intTypeCheck.ts(155,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+  Type 'Object' is missing the following properties from type 'i5': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(156,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/intTypeCheck.ts(157,5): error TS2322: Type 'Base' is not assignable to type 'i5'.
-  Property 'p' is missing in type 'Base'.
-tests/cases/compiler/intTypeCheck.ts(159,5): error TS2322: Type '() => void' is not assignable to type 'i5'.
-  Property 'p' is missing in type '() => void'.
+tests/cases/compiler/intTypeCheck.ts(157,5): error TS2739: Type 'Base' is missing the following properties from type 'i5': p, p3, p6
+tests/cases/compiler/intTypeCheck.ts(159,5): error TS2739: Type '() => void' is missing the following properties from type 'i5': p, p3, p6
 tests/cases/compiler/intTypeCheck.ts(162,5): error TS2322: Type 'boolean' is not assignable to type 'i5'.
 tests/cases/compiler/intTypeCheck.ts(162,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(162,22): error TS2693: 'i5' only refers to a type, but is being used as a value here.
@@ -76,7 +69,7 @@ tests/cases/compiler/intTypeCheck.ts(182,5): error TS2322: Type '{}' is not assi
 tests/cases/compiler/intTypeCheck.ts(183,5): error TS2322: Type 'Object' is not assignable to type 'i7'.
   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
     Type 'Object' provides no match for the signature 'new (): any'.
-tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Type 'Base' cannot be converted to type 'i7'.
+tests/cases/compiler/intTypeCheck.ts(185,17): error TS2352: Conversion of type 'Base' to type 'i7' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'Base' provides no match for the signature 'new (): any'.
 tests/cases/compiler/intTypeCheck.ts(187,5): error TS2322: Type '() => void' is not assignable to type 'i7'.
   Type '() => void' provides no match for the signature 'new (): any'.
@@ -198,21 +191,18 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     };
     var obj2: i1 = new Object();
         ~~~~
-!!! error TS2322: Type 'Object' is not assignable to type 'i1'.
-!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-!!! error TS2322:     Property 'p' is missing in type 'Object'.
+!!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2696:   Type 'Object' is missing the following properties from type 'i1': p, p3, p6
     var obj3: i1 = new obj0;
                    ~~~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     var obj4: i1 = new Base;
         ~~~~
-!!! error TS2322: Type 'Base' is not assignable to type 'i1'.
-!!! error TS2322:   Property 'p' is missing in type 'Base'.
+!!! error TS2739: Type 'Base' is missing the following properties from type 'i1': p, p3, p6
     var obj5: i1 = null;
     var obj6: i1 = function () { };
         ~~~~
-!!! error TS2322: Type '() => void' is not assignable to type 'i1'.
-!!! error TS2322:   Property 'p' is missing in type '() => void'.
+!!! error TS2739: Type '() => void' is missing the following properties from type 'i1': p, p3, p6
     //var obj7: i1 = function foo() { };
     var obj8: i1 = <i1> anyVar;
     var obj9: i1 = new <i1> anyVar;
@@ -324,25 +314,21 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj44: i5;
     var obj45: i5 = {};
         ~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'i5'.
-!!! error TS2322:   Property 'p' is missing in type '{}'.
+!!! error TS2739: Type '{}' is missing the following properties from type 'i5': p, p3, p6
     var obj46: i5 = new Object();
         ~~~~~
-!!! error TS2322: Type 'Object' is not assignable to type 'i5'.
-!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-!!! error TS2322:     Property 'p' is missing in type 'Object'.
+!!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2696:   Type 'Object' is missing the following properties from type 'i5': p, p3, p6
     var obj47: i5 = new obj44;
                     ~~~~~~~~~
 !!! error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
     var obj48: i5 = new Base;
         ~~~~~
-!!! error TS2322: Type 'Base' is not assignable to type 'i5'.
-!!! error TS2322:   Property 'p' is missing in type 'Base'.
+!!! error TS2739: Type 'Base' is missing the following properties from type 'i5': p, p3, p6
     var obj49: i5 = null;
     var obj50: i5 = function () { };
         ~~~~~
-!!! error TS2322: Type '() => void' is not assignable to type 'i5'.
-!!! error TS2322:   Property 'p' is missing in type '() => void'.
+!!! error TS2739: Type '() => void' is missing the following properties from type 'i5': p, p3, p6
     //var obj51: i5 = function foo() { };
     var obj52: i5 = <i5> anyVar;
     var obj53: i5 = new <i5> anyVar;
@@ -408,7 +394,7 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj69: i7 = new obj66;
     var obj70: i7 = <i7>new Base;
                     ~~~~~~~~~~~~
-!!! error TS2352: Type 'Base' cannot be converted to type 'i7'.
+!!! error TS2352: Conversion of type 'Base' to type 'i7' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type 'Base' provides no match for the signature 'new (): any'.
     var obj71: i7 = null;
     var obj72: i7 = function () { };

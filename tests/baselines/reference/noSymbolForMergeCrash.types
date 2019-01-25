@@ -1,11 +1,8 @@
 === tests/cases/compiler/initial.ts ===
 interface A { }
->A : A
-
-namespace A {}
->A : any
-
-=== tests/cases/compiler/final.ts ===
+No type information for this code.namespace A {}
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/final.ts ===
 type A = {}
 >A : {}
 

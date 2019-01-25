@@ -1,9 +1,7 @@
 === tests/cases/conformance/jsdoc/t.d.ts ===
 type A<T extends string> = { a: T }
 >A : A<T>
->T : T
 >a : T
->T : T
 
 === tests/cases/conformance/jsdoc/test.js ===
 /** Also should error for jsdoc typedefs

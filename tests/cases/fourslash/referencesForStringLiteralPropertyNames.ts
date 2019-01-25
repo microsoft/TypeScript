@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    public "[|{| "isWriteAccess": true, "isDefinition": true |}ss|]": any;
+////    public "[|{| "isDefinition": true |}ss|]": any;
 ////}
 ////
 ////var x: Foo;

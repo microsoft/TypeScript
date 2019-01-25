@@ -4,9 +4,10 @@ function test(p: any) {
 >p : Symbol(p, Decl(destructuringTempOccursAfterPrologue.ts, 0, 14))
 
     'use strict';
+    'use strong';
     p = { prop: p } = p;
 >p : Symbol(p, Decl(destructuringTempOccursAfterPrologue.ts, 0, 14))
->prop : Symbol(prop, Decl(destructuringTempOccursAfterPrologue.ts, 2, 9))
+>prop : Symbol(prop, Decl(destructuringTempOccursAfterPrologue.ts, 3, 9))
 >p : Symbol(p, Decl(destructuringTempOccursAfterPrologue.ts, 0, 14))
 >p : Symbol(p, Decl(destructuringTempOccursAfterPrologue.ts, 0, 14))
 }

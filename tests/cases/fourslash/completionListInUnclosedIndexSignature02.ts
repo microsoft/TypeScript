@@ -5,9 +5,6 @@
 ////    [foo: /*1*/
 ////}
 
-goTo.marker("1");
-verify.completionListContains("C");
-verify.not.completionListContains("foo"); // ideally this shouldn't show up for a type
+verify.completions({ marker: "1", includes: "C", excludes: "foo" });
 edit.insert("typeof ");
-verify.completionListContains("C");
-verify.completionListContains("foo");
+verify.completions({ includes: ["C", "foo"] });

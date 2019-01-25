@@ -13,7 +13,7 @@ namespace ts.codefix {
     });
 
     function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         const decorator = findAncestor(token, isDecorator)!;
         Debug.assert(!!decorator, "Expected position to be owned by a decorator.");
         const replacement = createCall(decorator.expression, /*typeArguments*/ undefined, /*argumentsArray*/ undefined);

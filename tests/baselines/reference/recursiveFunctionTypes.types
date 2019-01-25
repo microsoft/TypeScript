@@ -34,12 +34,8 @@ function g2(): typeof f2 { }
 >f2 : () => () => typeof f2
 
 interface I<T> { }
->I : I<T>
->T : T
-
 function f3(): I<typeof f3> { return f3; }
 >f3 : () => I<typeof f3>
->I : I<T>
 >f3 : () => I<typeof f3>
 >f3 : () => I<typeof f3>
 

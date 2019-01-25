@@ -1,28 +1,17 @@
 === tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments2.ts ===
 export interface SomethingTaggable {
->SomethingTaggable : SomethingTaggable
-
     <T>(t: TemplateStringsArray, ...args: T[]): SomethingNewable;
->T : T
 >t : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >args : T[]
->T : T
->SomethingNewable : SomethingNewable
 }
 
 export interface SomethingNewable {
->SomethingNewable : SomethingNewable
-
     new <T>(...args: T[]): any;
->T : T
 >args : T[]
->T : T
 }
 
 declare const tag: SomethingTaggable;
 >tag : SomethingTaggable
->SomethingTaggable : SomethingTaggable
 
 const a = new tag `${100} ${200}`<string>("hello", "world");
 >a : any
@@ -89,24 +78,16 @@ const e = new tag<number>
 
 class SomeBase<A, B, C> {
 >SomeBase : SomeBase<A, B, C>
->A : A
->B : B
->C : C
 
     a!: A; b!: B; c!: C;
 >a : A
->A : A
 >b : B
->B : B
 >c : C
->C : C
 }
 
 class SomeDerived<T> extends SomeBase<number, string, T> {
 >SomeDerived : SomeDerived<T>
->T : T
 >SomeBase : SomeBase<number, string, T>
->T : T
 
     constructor() {
         super<number, string, T> `hello world`;
@@ -114,7 +95,6 @@ class SomeDerived<T> extends SomeBase<number, string, T> {
 >super : any
 >super : SomeBase<number, string, T>
 > : any
->T : T
 >`hello world` : "hello world"
     }
 }

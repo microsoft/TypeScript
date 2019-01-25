@@ -6,41 +6,27 @@ enum E { v1, v2 };
 
 function f<T extends { b: string }>(p1: T, p2: T[]) {
 >f : <T extends { b: string; }>(p1: T, p2: T[]) => void
->T : T
 >b : string
 >p1 : T
->T : T
 >p2 : T[]
->T : T
 
     var t: T;
 >t : T
->T : T
 
     var i: T["b"];
 >i : T["b"]
->T : T
 
     var k: keyof T;
 >k : keyof T
->T : T
 
     var mapped_generic: {[P in keyof T]: T[P]};
 >mapped_generic : { [P in keyof T]: T[P]; }
->P : P
->T : T
->T : T
->P : P
 
     var mapped: {[P in "b"]: T[P]};
 >mapped : { b: T["b"]; }
->P : P
->T : T
->P : P
 
     var union_generic: T | { a: number };
 >union_generic : T | { a: number; }
->T : T
 >a : number
 
     var union_primitive: { a: number } | number;
@@ -49,7 +35,6 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var intersection_generic: T & { a: number };
 >intersection_generic : T & { a: number; }
->T : T
 >a : number
 
     var intersection_primitive: { a: number } & string;
@@ -70,7 +55,6 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var e: E;
 >e : E
->E : E
 
     var u: undefined;
 >u : undefined
@@ -83,19 +67,19 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : any
 
     var {...r1} = p1;   // Error, generic type paramterre
->r1 : any
+>r1 : T
 >p1 : T
 
     var {...r2} = p2;   // OK
->r2 : { [n: number]: T; length: number; toString(): string; toLocaleString(): string; push(...items: T[]): number; pop(): T; concat(...items: ConcatArray<T>[]): T[]; concat(...items: (T | ConcatArray<T>)[]): T[]; join(separator?: string): string; reverse(): T[]; shift(): T; slice(start?: number, end?: number): T[]; sort(compareFn?: (a: T, b: T) => number): T[]; splice(start: number, deleteCount?: number): T[]; splice(start: number, deleteCount: number, ...items: T[]): T[]; unshift(...items: T[]): number; indexOf(searchElement: T, fromIndex?: number): number; lastIndexOf(searchElement: T, fromIndex?: number): number; every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean; some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean; forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; filter<S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; filter(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[]; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
+>r2 : { [n: number]: T; length: number; toString(): string; toLocaleString(): string; pop(): T; push(...items: T[]): number; concat(...items: ConcatArray<T>[]): T[]; concat(...items: (T | ConcatArray<T>)[]): T[]; join(separator?: string): string; reverse(): T[]; shift(): T; slice(start?: number, end?: number): T[]; sort(compareFn?: (a: T, b: T) => number): T[]; splice(start: number, deleteCount?: number): T[]; splice(start: number, deleteCount: number, ...items: T[]): T[]; unshift(...items: T[]): number; indexOf(searchElement: T, fromIndex?: number): number; lastIndexOf(searchElement: T, fromIndex?: number): number; every(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean; some(callbackfn: (value: T, index: number, array: T[]) => boolean, thisArg?: any): boolean; forEach(callbackfn: (value: T, index: number, array: T[]) => void, thisArg?: any): void; map<U>(callbackfn: (value: T, index: number, array: T[]) => U, thisArg?: any): U[]; filter<S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; filter(callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[]; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduce(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduce<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T): T; reduceRight(callbackfn: (previousValue: T, currentValue: T, currentIndex: number, array: T[]) => T, initialValue: T): T; reduceRight<U>(callbackfn: (previousValue: U, currentValue: T, currentIndex: number, array: T[]) => U, initialValue: U): U; }
 >p2 : T[]
 
     var {...r3} = t;   // Error, generic type paramter
->r3 : any
+>r3 : T
 >t : T
 
     var {...r4} = i;   // Error, index access
->r4 : any
+>r4 : T["b"]
 >i : T["b"]
 
     var {...r5} = k;   // Error, index
@@ -103,7 +87,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >k : keyof T
 
     var {...r6} = mapped_generic; // Error, generic mapped object type
->r6 : any
+>r6 : { [P in keyof T]: T[P]; }
 >mapped_generic : { [P in keyof T]: T[P]; }
 
     var {...r7} = mapped;  // OK, non-generic mapped type
@@ -111,7 +95,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >mapped : { b: T["b"]; }
 
     var {...r8} = union_generic;  // Error, union with generic type parameter
->r8 : any
+>r8 : T | { a: number; }
 >union_generic : T | { a: number; }
 
     var {...r9} = union_primitive;  // Error, union with generic type parameter
@@ -119,7 +103,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >union_primitive : number | { a: number; }
 
     var {...r10} = intersection_generic;  // Error, intersection with generic type parameter
->r10 : any
+>r10 : T & { a: number; }
 >intersection_generic : T & { a: number; }
 
     var {...r11} = intersection_primitive;  // Error, intersection with generic type parameter

@@ -3,33 +3,26 @@ namespace Validation {
 >Validation : typeof Validation
 
     interface i1 {
->i1 : i1
 
     }
 
     export interface i2 {
->i2 : i2
 
     }
 
     interface i3 extends i1 {
->i3 : i3
->i1 : i1
 
     }
 
     export class c1 implements i3 {
 >c1 : c1
->i3 : i3
 
     }
 
     interface i4 {
->i4 : i4
 
     }
 
     export let c2:i4;
 >c2 : i4
->i4 : i4
 }

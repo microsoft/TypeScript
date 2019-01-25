@@ -6,6 +6,7 @@
 ////}
 
 verify.codeFix({
+    index: 1,
     description: "Prefix 'p1' with an underscore",
     newFileContent:
 `class C1 {

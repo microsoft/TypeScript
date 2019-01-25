@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/Symbols/symbolType16.ts ===
 interface Symbol {
->Symbol : Symbol
-
     newSymbolProp: number;
 >newSymbolProp : number
 }

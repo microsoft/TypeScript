@@ -27,11 +27,8 @@ var xs = [(x: A) => { }, (x: B) => { }, (x: C) => { }];
 >[(x: A) => { }, (x: B) => { }, (x: C) => { }] : ((x: A) => void)[]
 >(x: A) => { } : (x: A) => void
 >x : A
->A : A
 >(x: B) => { } : (x: B) => void
 >x : B
->B : B
 >(x: C) => { } : (x: C) => void
 >x : C
->C : C
 

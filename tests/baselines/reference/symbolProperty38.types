@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty38.ts ===
 interface I {
->I : I
-
     [Symbol.isConcatSpreadable]: string;
 >[Symbol.isConcatSpreadable] : string
 >Symbol.isConcatSpreadable : symbol
@@ -9,8 +7,6 @@ interface I {
 >isConcatSpreadable : symbol
 }
 interface I {
->I : I
-
     [Symbol.isConcatSpreadable]: string;
 >[Symbol.isConcatSpreadable] : string
 >Symbol.isConcatSpreadable : symbol

@@ -23,13 +23,11 @@ export class TestRunner {
     public addTest(test: TestCase) {
 >addTest : (test: TestCase) => void
 >test : TestCase
->TestCase : TestCase
     }
 }
 
 export var tests: TestRunner = (function () {
 >tests : TestRunner
->TestRunner : TestRunner
 >(function () {    var testRunner = new TestRunner();    testRunner.addTest(new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        }));    return testRunner;})() : TestRunner
 >(function () {    var testRunner = new TestRunner();    testRunner.addTest(new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        }));    return testRunner;}) : () => TestRunner
 >function () {    var testRunner = new TestRunner();    testRunner.addTest(new TestCase("Check UTF8 encoding",        function () {            var fb: any;            fb.writeUtf8Bom();            var chars = [0x0054];            for (var i in chars) {                fb.writeUtf8CodePoint(chars[i]);            }            fb.index = 0;            var bytes = [];            for (var i = 0; i < 14; i++) {                bytes.push(fb.readByte());            }            var expected = [0xEF];            return TestRunner.arrayCompare(bytes, expected);        }));    return testRunner;} : () => TestRunner

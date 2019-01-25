@@ -15,7 +15,6 @@ declare module M {
     export function Function(...args: string[]): Function;
 >Function : { (...args: any[]): any; (...args: string[]): Function; }
 >args : string[]
->Function : Function
 }
 
 

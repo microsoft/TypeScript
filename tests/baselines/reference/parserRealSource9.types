@@ -12,18 +12,14 @@ module TypeScript {
 
         constructor (public checker: TypeChecker) { }
 >checker : any
->TypeChecker : No type information available!
 
         public resolveBaseTypeLinks(typeLinks: TypeLink[], scope: SymbolScope) {
 >resolveBaseTypeLinks : (typeLinks: any[], scope: any) => any[]
 >typeLinks : any[]
->TypeLink : No type information available!
 >scope : any
->SymbolScope : No type information available!
 
             var extendsList: Type[] = null;
 >extendsList : any[]
->Type : No type information available!
 >null : null
 
             if (typeLinks) {
@@ -123,9 +119,7 @@ module TypeScript {
         public resolveBases(scope: SymbolScope, type: Type) {
 >resolveBases : (scope: any, type: any) => void
 >scope : any
->SymbolScope : No type information available!
 >type : any
->Type : No type information available!
 
             type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope);
 >type.extendsList = this.resolveBaseTypeLinks(type.extendsTypeLinks, scope) : any[]
@@ -350,11 +344,8 @@ module TypeScript {
         public resolveSignatureGroup(signatureGroup: SignatureGroup, scope: SymbolScope, instanceType: Type) {
 >resolveSignatureGroup : (signatureGroup: any, scope: any, instanceType: any) => void
 >signatureGroup : any
->SignatureGroup : No type information available!
 >scope : any
->SymbolScope : No type information available!
 >instanceType : any
->Type : No type information available!
 
             var supplyVar = !(signatureGroup.hasImplementation);
 >supplyVar : boolean
@@ -451,7 +442,6 @@ module TypeScript {
                     var lastParam = <ParameterSymbol>signature.parameters[paramLen - 1];
 >lastParam : any
 ><ParameterSymbol>signature.parameters[paramLen - 1] : any
->ParameterSymbol : No type information available!
 >signature.parameters[paramLen - 1] : any
 >signature.parameters : any
 >signature : any
@@ -523,11 +513,8 @@ module TypeScript {
         public bindType(scope: SymbolScope, type: Type, instanceType: Type): void {
 >bindType : (scope: any, type: any, instanceType: any) => void
 >scope : any
->SymbolScope : No type information available!
 >type : any
->Type : No type information available!
 >instanceType : any
->Type : No type information available!
 
             if (instanceType) {
 >instanceType : any
@@ -637,7 +624,6 @@ module TypeScript {
 >checker : any
 >currentModDecl : any
 ><ModuleDeclaration>type.symbol.declAST : any
->ModuleDeclaration : No type information available!
 >type.symbol.declAST : any
 >type.symbol : any
 >type : any
@@ -807,9 +793,7 @@ module TypeScript {
         public bindSymbol(scope: SymbolScope, symbol: Symbol) {
 >bindSymbol : (scope: any, symbol: Symbol) => void
 >scope : any
->SymbolScope : No type information available!
 >symbol : Symbol
->Symbol : Symbol
 
             if (!symbol.bound) {
 >!symbol.bound : boolean
@@ -896,7 +880,6 @@ module TypeScript {
                         var typeSymbol = <TypeSymbol>symbol;
 >typeSymbol : any
 ><TypeSymbol>symbol : any
->TypeSymbol : No type information available!
 >symbol : Symbol
 
                         typeSymbol.flags |= SymbolFlags.Bound;
@@ -940,7 +923,6 @@ module TypeScript {
 >(<Identifier>typeSymbol.aliasLink.alias).text : any
 >(<Identifier>typeSymbol.aliasLink.alias) : any
 ><Identifier>typeSymbol.aliasLink.alias : any
->Identifier : No type information available!
 >typeSymbol.aliasLink.alias : any
 >typeSymbol.aliasLink : any
 >typeSymbol : any
@@ -1074,7 +1056,6 @@ module TypeScript {
 >(<FieldSymbol>symbol).field : any
 >(<FieldSymbol>symbol) : any
 ><FieldSymbol>symbol : any
->FieldSymbol : No type information available!
 >symbol : Symbol
 >field : any
 >typeLink : any
@@ -1102,7 +1083,6 @@ module TypeScript {
 >(<ParameterSymbol>symbol).parameter : any
 >(<ParameterSymbol>symbol) : any
 ><ParameterSymbol>symbol : any
->ParameterSymbol : No type information available!
 >symbol : Symbol
 >parameter : any
 >typeLink : any
@@ -1132,9 +1112,7 @@ module TypeScript {
         public bind(scope: SymbolScope, table: IHashTable) {
 >bind : (scope: any, table: any) => void
 >scope : any
->SymbolScope : No type information available!
 >table : any
->IHashTable : No type information available!
 
             table.map(
 >table.map(                (key, sym, binder) => {                    binder.bindSymbol(scope, sym);                },                this) : any

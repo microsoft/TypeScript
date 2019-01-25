@@ -2,7 +2,6 @@
 declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
 >isFooError : (x: any) => x is { type: "foo"; dontPanic(): any; }
 >x : any
->x : any
 >type : "foo"
 >dontPanic : () => any
 

@@ -81,7 +81,10 @@ namespace N {
     var x;
 }
 
-    
+for (let x: y) {
+    z(x);
+}
+
 
 //// [unusedLocalsAndParameters.js]
 "use strict";
@@ -166,3 +169,5 @@ var N;
 (function (N) {
     var x;
 })(N || (N = {}));
+for (var x = void 0, z = (void 0).z; (x); )
+    ;

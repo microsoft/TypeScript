@@ -13,7 +13,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 var r1 = c[1];
 >r1 : number
@@ -40,8 +39,6 @@ var r4 = c['1.1'];
 >'1.1' : "1.1"
 
 interface I {
->I : I
-
     1: number;
 >1 : number
 
@@ -51,7 +48,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 var r1 = i[1];
 >r1 : number

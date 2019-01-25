@@ -24,7 +24,6 @@ var c = x<C>(x);
 >c : any
 >x<C>(x) : any
 >x : any
->C : C
 >x : any
 
 var d = x<any>(x);

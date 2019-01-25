@@ -13,7 +13,6 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Object
->Object : Object
 
 var resultIsString: string;
 >resultIsString : string

@@ -387,3 +387,26 @@ declare const o0Test: ExpectType<{}, O0Props>;
 >ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
 >O0Props : Symbol(O0Props, Decl(indexingTypesWithNever.ts, 102, 33))
 
+// Repro from #23005
+
+type Example<T extends Record<'a', string>> = T['a'];
+>Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 112, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 112, 13))
+
+type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
+>Res1 : Symbol(Res1, Decl(indexingTypesWithNever.ts, 112, 53))
+>Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 114, 21))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 114, 34))
+
+type Res2 = Example<{ a: "x" }>;  // "x"
+>Res2 : Symbol(Res2, Decl(indexingTypesWithNever.ts, 114, 45))
+>Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 115, 21))
+
+type Res3 = Example<never>;  // never 
+>Res3 : Symbol(Res3, Decl(indexingTypesWithNever.ts, 115, 32))
+>Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
+

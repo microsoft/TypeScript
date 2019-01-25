@@ -5,18 +5,18 @@ const webpack = function (){
 >function (){} : { (): void; WebpackOptionsDefaulter: number; }
 }
 exports = module.exports = webpack;
->exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
->exports : typeof import("tests/cases/conformance/salsa/bug24754")
->module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; }
->module.exports : any
->module : any
->exports : any
+>exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>module.exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>module : { "tests/cases/conformance/salsa/bug24754": { (): void; WebpackOptionsDefaulter: number; version: number; }; }
+>exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
 >webpack : { (): void; WebpackOptionsDefaulter: number; }
 
 exports.version = 1001;
 >exports.version = 1001 : 1001
 >exports.version : number
->exports : typeof import("tests/cases/conformance/salsa/bug24754")
+>exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
 >version : number
 >1001 : 1001
 

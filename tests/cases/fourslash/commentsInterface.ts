@@ -7,7 +7,7 @@
 ////interface nc_/*3*/i1 {
 ////}
 ////var nc_/*4*/i1_i: nc_i1;
-/////** this is interface 2 with memebers*/
+/////** this is interface 2 with members*/
 ////interface i/*5*/2 {
 ////    /** this is x*/
 ////    x: number;
@@ -73,19 +73,25 @@ verify.quickInfos({
     2: "var i1_i: i1",
     3: "interface nc_i1",
     4: "var nc_i1_i: nc_i1",
-    5: ["interface i2", "this is interface 2 with memebers"],
+    5: ["interface i2", "this is interface 2 with members"],
     6: "var i2_i: i2",
     7: "var i2_i_x: number"
 });
 
-goTo.marker('8');
-verify.quickInfoIs("(property) i2.x: number", "this is x");
-verify.completionListContains("x", "(property) i2.x: number", "this is x");
-verify.completionListContains("foo", "(property) i2.foo: (b: number) => string", "this is foo");
-verify.completionListContains("nc_x", "(property) i2.nc_x: number", "");
-verify.completionListContains("nc_foo", "(property) i2.nc_foo: (b: number) => string", "");
-verify.completionListContains("fnfoo", "(method) i2.fnfoo(b: number): string", "this is fnfoo");
-verify.completionListContains("nc_fnfoo", "(method) i2.nc_fnfoo(b: number): string", "");
+verify.quickInfoAt("8", "(property) i2.x: number", "this is x");
+verify.completions({
+    marker: "8",
+    exact: [
+        { name: "x", text: "(property) i2.x: number", documentation: "this is x" },
+        { name: "foo", text: "(property) i2.foo: (b: number) => string", documentation: "this is foo" },
+        { name: "nc_x", text: "(property) i2.nc_x: number" },
+        { name: "nc_foo", text: "(property) i2.nc_foo: (b: number) => string" },
+        { name: "fnfoo", text: "(method) i2.fnfoo(b: number): string", documentation: "this is fnfoo" },
+        { name: "nc_fnfoo", text: "(method) i2.nc_fnfoo(b: number): string" },
+        ...completion.functionMembersWithPrototype,
+    ],
+    isNewIdentifierLocation: true,
+});
 
 verify.quickInfos({
     9: "var i2_i_foo: (b: number) => string",
@@ -96,7 +102,7 @@ verify.quickInfos({
 verify.signatureHelp({ marker: "12", docComment: "", parameterDocComment: "param help" });
 
 verify.quickInfos({
-    "12q": "(property) i2.foo: (b: number) => string",
+    "12q": ["(property) i2.foo: (b: number) => string", "this is foo"],
 
     13: "var i2_i_i2_si: number",
     "13q": "var i2_i: i2",
@@ -148,54 +154,64 @@ verify.quickInfos({
 verify.signatureHelp({ marker: "33", docComment: "" });
 verify.quickInfoAt("33q", "(method) i2.nc_fnfoo(b: number): string");
 
-goTo.marker('34');
-verify.not.completionListContains("i1", "interface i1", "this is interface 1");
-verify.completionListContains("i1_i", "var i1_i: i1", "");
-verify.not.completionListContains("nc_i1", "interface nc_i1", "");
-verify.completionListContains("nc_i1_i", "var nc_i1_i: nc_i1", "");
-verify.not.completionListContains("i2", "interface i2", "this is interface 2 with memebers");
-verify.completionListContains("i2_i", "var i2_i: i2", "");
-verify.completionListContains("i2_i_x", "var i2_i_x: number", "");
-verify.completionListContains("i2_i_foo", "var i2_i_foo: (b: number) => string", "");
-verify.completionListContains("i2_i_foo_r", "var i2_i_foo_r: string", "");
-verify.completionListContains("i2_i_i2_si", "var i2_i_i2_si: number", "");
-verify.completionListContains("i2_i_i2_ii", "var i2_i_i2_ii: number", "");
-verify.completionListContains("i2_i_n", "var i2_i_n: any", "");
-verify.completionListContains("i2_i_nc_x", "var i2_i_nc_x: number", "");
-verify.completionListContains("i2_i_nc_foo", "var i2_i_nc_foo: (b: number) => string", "");
-verify.completionListContains("i2_i_nc_foo_r", "var i2_i_nc_foo_r: string", "");
-verify.completionListContains("i2_i_r", "var i2_i_r: number", "");
-verify.completionListContains("i2_i_fnfoo", "var i2_i_fnfoo: (b: number) => string", "");
-verify.completionListContains("i2_i_fnfoo_r", "var i2_i_fnfoo_r: string", "");
-verify.completionListContains("i2_i_nc_fnfoo", "var i2_i_nc_fnfoo: (b: number) => string", "");
-verify.completionListContains("i2_i_nc_fnfoo_r", "var i2_i_nc_fnfoo_r: string", "");
-
-goTo.marker('34i');
-verify.completionListContains("i1", "interface i1", "this is interface 1");
-verify.completionListContains("nc_i1", "interface nc_i1", "");
-verify.completionListContains("i2", "interface i2", "this is interface 2 with memebers");
-
-goTo.marker('36');
-verify.completionListContains("a", "(parameter) a: number", "i3_i a");
+verify.completions(
+    {
+        marker: "34",
+        includes: [
+            { name: "i1_i", text: "var i1_i: i1" },
+            { name: "nc_i1_i", text: "var nc_i1_i: nc_i1", documentation: "" },
+            { name: "i2_i", text: "var i2_i: i2" },
+            { name: "i2_i_x", text: "var i2_i_x: number" },
+            { name: "i2_i_foo", text: "var i2_i_foo: (b: number) => string" },
+            { name: "i2_i_foo_r", text: "var i2_i_foo_r: string" },
+            { name: "i2_i_i2_si", text: "var i2_i_i2_si: number" },
+            { name: "i2_i_i2_ii", text: "var i2_i_i2_ii: number" },
+            { name: "i2_i_n", text: "var i2_i_n: any" },
+            { name: "i2_i_nc_x", text: "var i2_i_nc_x: number" },
+            { name: "i2_i_nc_foo", text: "var i2_i_nc_foo: (b: number) => string" },
+            { name: "i2_i_nc_foo_r", text: "var i2_i_nc_foo_r: string" },
+            { name: "i2_i_r", text: "var i2_i_r: number" },
+            { name: "i2_i_fnfoo", text: "var i2_i_fnfoo: (b: number) => string" },
+            { name: "i2_i_fnfoo_r", text: "var i2_i_fnfoo_r: string" },
+            { name: "i2_i_nc_fnfoo", text: "var i2_i_nc_fnfoo: (b: number) => string" },
+            { name: "i2_i_nc_fnfoo_r", text: "var i2_i_nc_fnfoo_r: string" },
+        ],
+        excludes: ["i1", "nc_i1", "i2"],
+    },
+    {
+        marker: "34i",
+        includes: [
+            { name: "i1", text: "interface i1", documentation: "this is interface 1" },
+            { name: "nc_i1", text: "interface nc_i1" },
+            { name: "i2", text: "interface i2", documentation: "this is interface 2 with members" },
+        ],
+    },
+    {
+        marker: "36", includes: { name: "a", text: "(parameter) a: number", documentation: "i3_i a" },
+    }
+);
 
 verify.quickInfoAt("40q", "var i3_i: i3");
-goTo.marker('40');
-verify.not.completionListContains("i3", "interface i3", "");
-verify.completionListContains("i3_i", "var i3_i: i3", "");
+verify.completions({ marker: "40", includes: { name: "i3_i", text: "var i3_i: i3" }, excludes: "i3" });
 
 goTo.marker('41');
 verify.quickInfoIs("(method) i3.f(a: number): string", "Function i3 f");
-verify.completionListContains("f", "(method) i3.f(a: number): string", "Function i3 f");
-verify.completionListContains("l", "(property) i3.l: (b: number) => string", "");
-verify.completionListContains("x", "(property) i3.x: number", "Comment i3 x");
-verify.completionListContains("nc_f", "(method) i3.nc_f(a: number): string", "");
-verify.completionListContains("nc_l", "(property) i3.nc_l: (b: number) => string", "");
-verify.completionListContains("nc_x", "(property) i3.nc_x: number", "");
+verify.completions({
+    marker: "41",
+    exact: [
+        { name: "x", text: "(property) i3.x: number", documentation: "Comment i3 x" },
+        { name: "f", text: "(method) i3.f(a: number): string", documentation: "Function i3 f" },
+        { name: "l", text: "(property) i3.l: (b: number) => string", documentation: "i3 l" },
+        { name: "nc_x", text: "(property) i3.nc_x: number" },
+        { name: "nc_f", text: "(method) i3.nc_f(a: number): string" },
+        { name: "nc_l", text: "(property) i3.nc_l: (b: number) => string" },
+    ],
+});
 
 verify.signatureHelp({ marker: "42", docComment: "Function i3 f", parameterDocComment: "number parameter" });
 
 verify.signatureHelp({ marker: "43", docComment: "", parameterDocComment: "comment i3 l b" });
-verify.quickInfoAt("43q", "(property) i3.l: (b: number) => string");
+verify.quickInfoAt("43q", "(property) i3.l: (b: number) => string", "i3 l");
 
 verify.signatureHelp({ marker: "44", docComment: "" });
 verify.quickInfoAt("44q", "(method) i3.nc_f(a: number): string");

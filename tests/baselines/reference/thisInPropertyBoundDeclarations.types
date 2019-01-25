@@ -7,13 +7,11 @@ class Bug {
 
     private static func: Function[] = [
 >func : Function[]
->Function : Function
 >[     (that: Bug, name: string) => {         that.foo(name);     }    ] : ((that: Bug, name: string) => void)[]
 
      (that: Bug, name: string) => {
 >(that: Bug, name: string) => {         that.foo(name);     } : (that: Bug, name: string) => void
 >that : Bug
->Bug : Bug
 >name : string
 
          that.foo(name);

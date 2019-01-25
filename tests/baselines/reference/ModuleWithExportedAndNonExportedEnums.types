@@ -17,7 +17,6 @@ module A {
 var a: A.Color = A.Color.Red;
 >a : A.Color
 >A : any
->Color : A.Color
 >A.Color.Red : A.Color.Red
 >A.Color : typeof A.Color
 >A : typeof A

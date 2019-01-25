@@ -13,7 +13,6 @@ module m {
     // Directly using names from this module
     function foo1(): private1 {
 >foo1 : () => private1
->private1 : private1
 
         return;
     }
@@ -27,7 +26,6 @@ module m {
 
     export function foo3(): private1 {
 >foo3 : () => private1
->private1 : private1
 
         return;
     }
@@ -41,7 +39,6 @@ module m {
 
     function foo11(): public1 {
 >foo11 : () => public1
->public1 : public1
 
         return;
     }
@@ -55,7 +52,6 @@ module m {
 
     export function foo13(): public1 {
 >foo13 : () => public1
->public1 : public1
 
         return;
     }
@@ -78,7 +74,6 @@ module m {
     function foo111(): m2.public2 {
 >foo111 : () => m2.public2
 >m2 : any
->public2 : m2.public2
 
         return;
     }
@@ -95,7 +90,6 @@ module m {
     export function foo113(): m2.public2 {
 >foo113 : () => m2.public2
 >m2 : any
->public2 : m2.public2
 
         return;
     }

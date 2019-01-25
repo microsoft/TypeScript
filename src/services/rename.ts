@@ -1,25 +1,14 @@
 /* @internal */
 namespace ts.Rename {
-    export function getRenameInfo(typeChecker: TypeChecker, defaultLibFileName: string, getCanonicalFileName: GetCanonicalFileName, sourceFile: SourceFile, position: number): RenameInfo {
-        const getCanonicalDefaultLibName = memoize(() => getCanonicalFileName(normalizePath(defaultLibFileName)));
+    export function getRenameInfo(program: Program, sourceFile: SourceFile, position: number, options?: RenameInfoOptions): RenameInfo {
         const node = getTouchingPropertyName(sourceFile, position);
         const renameInfo = node && nodeIsEligibleForRename(node)
-            ? getRenameInfoForNode(node, typeChecker, sourceFile, isDefinedInLibraryFile)
+            ? getRenameInfoForNode(node, program.getTypeChecker(), sourceFile, declaration => program.isSourceFileDefaultLibrary(declaration.getSourceFile()), options)
             : undefined;
         return renameInfo || getRenameInfoError(Diagnostics.You_cannot_rename_this_element);
-
-        function isDefinedInLibraryFile(declaration: Node) {
-            if (!defaultLibFileName) {
-                return false;
-            }
-
-            const sourceFile = declaration.getSourceFile();
-            const canonicalName = getCanonicalFileName(normalizePath(sourceFile.fileName));
-            return canonicalName === getCanonicalDefaultLibName();
-        }
     }
 
-    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean): RenameInfo | undefined {
+    function getRenameInfoForNode(node: Node, typeChecker: TypeChecker, sourceFile: SourceFile, isDefinedInLibraryFile: (declaration: Node) => boolean, options?: RenameInfoOptions): RenameInfo | undefined {
         const symbol = typeChecker.getSymbolAtLocation(node);
         if (!symbol) return;
         // Only allow a symbol to be renamed if it actually has at least one declaration.
@@ -36,11 +25,12 @@ namespace ts.Rename {
             return undefined;
         }
 
-        // Can't rename a module name.
-        if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) return undefined;
+        if (isStringLiteralLike(node) && tryGetImportFromModuleSpecifier(node)) {
+            return options && options.allowRenameOfImportPath ? getRenameInfoForModule(node, sourceFile, symbol) : undefined;
+        }
 
         const kind = SymbolDisplay.getSymbolKind(typeChecker, symbol, node);
-        const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteral(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
+        const specifierName = (isImportOrExportSpecifierName(node) || isStringOrNumericLiteralLike(node) && node.parent.kind === SyntaxKind.ComputedPropertyName)
             ? stripQuotes(getTextOfIdentifierOrLiteral(node))
             : undefined;
         const displayName = specifierName || typeChecker.symbolToString(symbol);
@@ -48,29 +38,44 @@ namespace ts.Rename {
         return getRenameInfoSuccess(displayName, fullDisplayName, kind, SymbolDisplay.getSymbolModifiers(symbol), node, sourceFile);
     }
 
-    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
+    function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
+        if (!isExternalModuleNameRelative(node.text)) {
+            return getRenameInfoError(Diagnostics.You_cannot_rename_a_module_via_a_global_import);
+        }
+
+        const moduleSourceFile = find(moduleSymbol.declarations, isSourceFile);
+        if (!moduleSourceFile) return undefined;
+        const withoutIndex = endsWith(node.text, "/index") || endsWith(node.text, "/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
+        const name = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;
+        const kind = withoutIndex === undefined ? ScriptElementKind.moduleElement : ScriptElementKind.directory;
+        const indexAfterLastSlash = node.text.lastIndexOf("/") + 1;
+        // Span should only be the last component of the path. + 1 to account for the quote character.
+        const triggerSpan = createTextSpan(node.getStart(sourceFile) + 1 + indexAfterLastSlash, node.text.length - indexAfterLastSlash);
         return {
             canRename: true,
+            fileToRename: name,
+            kind,
+            displayName: name,
+            fullDisplayName: name,
+            kindModifiers: ScriptElementKindModifier.none,
+            triggerSpan,
+        };
+    }
+
+    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfoSuccess {
+        return {
+            canRename: true,
+            fileToRename: undefined,
             kind,
             displayName,
-            localizedErrorMessage: undefined,
             fullDisplayName,
             kindModifiers,
             triggerSpan: createTriggerSpanForNode(node, sourceFile)
         };
     }
 
-    function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfo {
-        // TODO: GH#18217
-        return {
-            canRename: false,
-            localizedErrorMessage: getLocaleSpecificMessage(diagnostic),
-            displayName: undefined!,
-            fullDisplayName: undefined!,
-            kind: undefined!,
-            kindModifiers: undefined!,
-            triggerSpan: undefined!
-        };
+    function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfoFailure {
+        return { canRename: false, localizedErrorMessage: getLocaleSpecificMessage(diagnostic) };
     }
 
     function createTriggerSpanForNode(node: Node, sourceFile: SourceFile) {

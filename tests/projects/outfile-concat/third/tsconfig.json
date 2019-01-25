@@ -7,7 +7,8 @@
     "sourceMap": true,
     "declarationMap": true,
     "declaration": true,
-    "outFile": "./thirdjs/output/third-output.js"
+    "outFile": "./thirdjs/output/third-output.js",
+    "skipDefaultLibCheck": true
   },
   "files": [
     "third_part1.ts"

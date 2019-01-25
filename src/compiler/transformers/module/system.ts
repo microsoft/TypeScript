@@ -103,7 +103,7 @@ namespace ts {
                     node,
                     setTextRange(
                         createNodeArray([
-                            createStatement(
+                            createExpressionStatement(
                                 createCall(
                                     createPropertyAccess(createIdentifier("System"), "register"),
                                 /*typeArguments*/ undefined,
@@ -257,7 +257,7 @@ namespace ts {
             // We emit hoisted variables early to align roughly with our previous emit output.
             // Two key differences in this approach are:
             // - Temporary variables will appear at the top rather than at the bottom of the file
-            prependStatements(statements, endLexicalEnvironment());
+            addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
             const exportStarFunction = addExportStarIfNeeded(statements)!; // TODO: GH#18217
             const moduleObject = createObjectLiteral([
@@ -428,7 +428,7 @@ namespace ts {
                             setEmitFlags(
                                 createIf(
                                     condition,
-                                    createStatement(
+                                    createExpressionStatement(
                                         createAssignment(
                                             createElementAccess(exports, n),
                                             createElementAccess(m, n)
@@ -439,7 +439,7 @@ namespace ts {
                             )
                         ])
                     ),
-                    createStatement(
+                    createExpressionStatement(
                         createCall(
                             exportFunction,
                             /*typeArguments*/ undefined,
@@ -478,7 +478,7 @@ namespace ts {
                             Debug.assert(importVariableName !== undefined);
                             // save import into the local
                             statements.push(
-                                createStatement(
+                                createExpressionStatement(
                                     createAssignment(importVariableName, parameterName)
                                 )
                             );
@@ -509,7 +509,7 @@ namespace ts {
                                 }
 
                                 statements.push(
-                                    createStatement(
+                                    createExpressionStatement(
                                         createCall(
                                             exportFunction,
                                             /*typeArguments*/ undefined,
@@ -525,7 +525,7 @@ namespace ts {
                                 //
                                 //  exportStar(foo_1_1);
                                 statements.push(
-                                    createStatement(
+                                    createExpressionStatement(
                                         createCall(
                                             exportStarFunction,
                                             /*typeArguments*/ undefined,
@@ -703,7 +703,7 @@ namespace ts {
             // Rewrite the class declaration into an assignment of a class expression.
             statements = append(statements,
                 setTextRange(
-                    createStatement(
+                    createExpressionStatement(
                         createAssignment(
                             name,
                             setTextRange(
@@ -759,7 +759,7 @@ namespace ts {
 
             let statements: Statement[] | undefined;
             if (expressions) {
-                statements = append(statements, setTextRange(createStatement(inlineExpressions(expressions)), node));
+                statements = append(statements, setTextRange(createExpressionStatement(inlineExpressions(expressions)), node));
             }
 
             if (isMarkedDeclaration) {
@@ -1116,7 +1116,7 @@ namespace ts {
          * @param allowComments An optional value indicating whether to emit comments for the statement.
          */
         function createExportStatement(name: Identifier | StringLiteral, value: Expression, allowComments?: boolean) {
-            const statement = createStatement(createExportExpression(name, value));
+            const statement = createExpressionStatement(createExportExpression(name, value));
             startOnNewLine(statement);
             if (!allowComments) {
                 setEmitFlags(statement, EmitFlags.NoComments);

@@ -31,14 +31,11 @@ enum E { A = 0, B = E.A }
 >A : E
 
 interface I { x: I };
->I : I
 >x : I
->I : I
 
 type T = { x: T };
 >T : T
 >x : T
->T : T
 
 namespace N { N; }
 >N : typeof N
@@ -48,9 +45,6 @@ namespace N { N; }
 // Previously `T` was considered unused due to merging with the property,
 // back when all non-blocks were checked for recursion.
 export interface A<T> { T: T }
->A : A<T>
->T : T
->T : T
 >T : T
 
 class P { private m() { this.m; } }

@@ -13,7 +13,6 @@ function createGuid() {
     return "21EC2020-3AEA-4069-A2DD-08002B30309D" as Guid;
 >"21EC2020-3AEA-4069-A2DD-08002B30309D" as Guid : Guid
 >"21EC2020-3AEA-4069-A2DD-08002B30309D" : "21EC2020-3AEA-4069-A2DD-08002B30309D"
->Guid : Guid
 }
 
 function createSerialNo() {
@@ -22,7 +21,6 @@ function createSerialNo() {
     return 12345 as SerialNo;
 >12345 as SerialNo : SerialNo
 >12345 : 12345
->SerialNo : SerialNo
 }
 
 let map1: { [x: string]: number } = {};

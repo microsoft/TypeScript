@@ -1,17 +1,12 @@
 === tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts ===
 interface IHandler {
->IHandler : IHandler
-
     (e): boolean;
 >e : any
 }
 
 interface IHandlerMap {
->IHandlerMap : IHandlerMap
-
     [type: string]: IHandler;
 >type : string
->IHandler : IHandler
 }
 
 class Foo {
@@ -24,7 +19,6 @@ class Foo {
 function Biz(map: IHandlerMap) { }
 >Biz : (map: IHandlerMap) => void
 >map : IHandlerMap
->IHandlerMap : IHandlerMap
 
 Biz(new Foo());
 >Biz(new Foo()) : void

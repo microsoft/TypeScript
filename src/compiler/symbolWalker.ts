@@ -9,7 +9,7 @@ namespace ts {
         getTypeOfSymbol: (sym: Symbol) => Type,
         getResolvedSymbol: (node: Node) => Symbol,
         getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type | undefined,
-        getConstraintFromTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
+        getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
         getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier) {
 
         return getSymbolWalker;
@@ -93,7 +93,7 @@ namespace ts {
             }
 
             function visitTypeParameter(type: TypeParameter): void {
-                visitType(getConstraintFromTypeParameter(type));
+                visitType(getConstraintOfTypeParameter(type));
             }
 
             function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
@@ -171,8 +171,8 @@ namespace ts {
                 }
                 const t = getTypeOfSymbol(symbol);
                 visitType(t); // Should handle members on classes and such
-                if (symbol.flags & SymbolFlags.HasExports) {
-                    symbol.exports!.forEach(visitSymbol);
+                if (symbol.exports) {
+                    symbol.exports.forEach(visitSymbol);
                 }
                 forEach(symbol.declarations, d => {
                     // Type queries are too far resolved when we just visit the symbol's type

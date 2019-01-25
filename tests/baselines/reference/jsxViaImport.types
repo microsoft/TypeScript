@@ -20,10 +20,7 @@ class TestComponent extends React.Component<any, {}> {
 
 === tests/cases/compiler/component.d.ts ===
 declare module JSX {
->JSX : any
-
   interface ElementAttributesProperty { props; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : any
 }
 declare module React {
@@ -31,8 +28,6 @@ declare module React {
 
   class Component<T, U> { }
 >Component : Component<T, U>
->T : T
->U : U
 }
 declare module "BaseComponent" {
 >"BaseComponent" : typeof import("BaseComponent")
@@ -40,7 +35,6 @@ declare module "BaseComponent" {
     var base: React.Component<any, {}>;
 >base : React.Component<any, {}>
 >React : any
->Component : React.Component<T, U>
 
     export = base;
 >base : React.Component<any, {}>

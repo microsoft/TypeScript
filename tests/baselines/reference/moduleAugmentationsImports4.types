@@ -9,7 +9,6 @@ import "E";
 
 let a: A;
 >a : A
->A : A
 
 let b = a.getB().x.toFixed();
 >b : string
@@ -67,11 +66,8 @@ declare module "D" {
 >"a" : typeof import("tests/cases/compiler/a")
 
         interface A {
->A : A
-
             getB(): B;
 >getB : () => B
->B : B
         }
     }
 }
@@ -91,11 +87,8 @@ declare module "E" {
 >"a" : typeof import("tests/cases/compiler/a")
 
         interface A {
->A : A
-
             getCls(): Cls;
 >getCls : () => Cls
->Cls : Cls
         }
     }
 }

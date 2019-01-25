@@ -13,7 +13,6 @@ class C {
 
     [s: string]: () => Foo2;
 >s : string
->Foo2 : Foo2
 
     // Computed properties
     [""]() { return new Foo }

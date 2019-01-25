@@ -1,7 +1,5 @@
-tests/cases/compiler/chainedAssignment1.ts(21,1): error TS2322: Type 'Z' is not assignable to type 'X'.
-  Property 'a' is missing in type 'Z'.
-tests/cases/compiler/chainedAssignment1.ts(21,6): error TS2322: Type 'Z' is not assignable to type 'Y'.
-  Property 'a' is missing in type 'Z'.
+tests/cases/compiler/chainedAssignment1.ts(21,1): error TS2741: Property 'a' is missing in type 'Z' but required in type 'X'.
+tests/cases/compiler/chainedAssignment1.ts(21,6): error TS2739: Type 'Z' is missing the following properties from type 'Y': a, b
 tests/cases/compiler/chainedAssignment1.ts(22,1): error TS2322: Type 'Z' is not assignable to type 'Y'.
 
 
@@ -28,11 +26,10 @@ tests/cases/compiler/chainedAssignment1.ts(22,1): error TS2322: Type 'Z' is not 
     var c3 = new Z();
     c1 = c2 = c3; // a bug made this not report the same error as below
     ~~
-!!! error TS2322: Type 'Z' is not assignable to type 'X'.
-!!! error TS2322:   Property 'a' is missing in type 'Z'.
+!!! error TS2741: Property 'a' is missing in type 'Z' but required in type 'X'.
+!!! related TS2728 tests/cases/compiler/chainedAssignment1.ts:3:5: 'a' is declared here.
          ~~
-!!! error TS2322: Type 'Z' is not assignable to type 'Y'.
-!!! error TS2322:   Property 'a' is missing in type 'Z'.
+!!! error TS2739: Type 'Z' is missing the following properties from type 'Y': a, b
     c2 = c3; // Error TS111: Cannot convert Z to Y
     ~~
 !!! error TS2322: Type 'Z' is not assignable to type 'Y'.

@@ -1,8 +1,6 @@
 === tests/cases/compiler/contextualExpressionTypecheckingDoesntBlowStack.ts ===
 // repro for: https://github.com/Microsoft/TypeScript/issues/23661
 export interface IValidationError {
->IValidationError : IValidationError
-
     message: string;
 >message : string
 }
@@ -13,12 +11,10 @@ export default class Operation {
     validateParameters(parameterValues: any) : IValidationError[] | null {
 >validateParameters : (parameterValues: any) => IValidationError[] | null
 >parameterValues : any
->IValidationError : IValidationError
 >null : null
 
         let result: IValidationError[] | null = null;
 >result : IValidationError[] | null
->IValidationError : IValidationError
 >null : null
 >null : null
 

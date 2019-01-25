@@ -18,7 +18,6 @@ export module M {
 >g : () => void
 
         export interface I { }
->I : I
     }
 
     export import a = M.f;
@@ -57,7 +56,6 @@ export module M.P {
 >g : () => void
 
         export interface I { }
->I : I
     }
     export import im = M.P.f;
 >im : () => void
@@ -115,32 +113,20 @@ export module M.Q {
 >g : () => void
 
         export interface I { }
->I : I
     }
     export interface b extends M.b { } // ok
->b : b
->M.b : any
 >M : typeof M
->b : M.C
 
     export interface I extends M.c.I { } // ok
->I : I
->M.c.I : any
 >M.c : typeof M.N
 >M : typeof M
 >c : typeof M.N
->I : M.c.I
 
     export module c {
->c : any
-
         export interface I extends M.c.I { } // ok
->I : I
->M.c.I : any
 >M.c : typeof M.N
 >M : typeof M
 >c : typeof M.N
->I : M.c.I
     }
 }
 === tests/cases/compiler/declarationEmit_nameConflicts_1.ts ===

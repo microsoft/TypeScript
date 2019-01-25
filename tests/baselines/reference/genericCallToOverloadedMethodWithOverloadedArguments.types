@@ -3,29 +3,18 @@ module m1 {
 >m1 : typeof m1
 
     interface Promise<T> {
->Promise : Promise<T>
->T : T
-
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U>(cb: (x: T) => Promise<U>) => Promise<U>
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : (n: number) => Promise<number>
 >n : number
->Promise : Promise<T>
 
     var numPromise: Promise<number>;
 >numPromise : Promise<number>
->Promise : Promise<T>
 
     var newPromise = numPromise.then(testFunction);
 >newPromise : Promise<number>
@@ -42,34 +31,22 @@ module m2 {
 >m2 : typeof m2
 
     interface Promise<T> {
->Promise : Promise<T>
->T : T
-
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U>(cb: (x: T) => Promise<U>) => Promise<U>
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >n : number
->Promise : Promise<T>
 
     declare function testFunction(s: string): Promise<string>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >s : string
->Promise : Promise<T>
 
     var numPromise: Promise<number>;
 >numPromise : Promise<number>
->Promise : Promise<T>
 
     var newPromise = numPromise.then(testFunction);
 >newPromise : any
@@ -86,44 +63,25 @@ module m3 {
 >m3 : typeof m3
 
     interface Promise<T> {
->Promise : Promise<T>
->T : T
-
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
 >error : (error: any) => Promise<U>
 >error : any
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : (n: number) => Promise<number>
 >n : number
->Promise : Promise<T>
 
     var numPromise: Promise<number>;
 >numPromise : Promise<number>
->Promise : Promise<T>
 
     var newPromise = numPromise.then(testFunction);
 >newPromise : Promise<number>
@@ -140,49 +98,29 @@ module m4 {
 >m4 : typeof m4
 
     interface Promise<T> {
->Promise : Promise<T>
->T : T
-
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
 >error : (error: any) => Promise<U>
 >error : any
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >n : number
->Promise : Promise<T>
 
     declare function testFunction(s: string): Promise<string>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >s : string
->Promise : Promise<T>
 
     var numPromise: Promise<number>;
 >numPromise : Promise<number>
->Promise : Promise<T>
 
     var newPromise = numPromise.then(testFunction);
 >newPromise : any
@@ -199,65 +137,38 @@ module m5 {
 >m5 : typeof m5
 
     interface Promise<T> {
->Promise : Promise<T>
->T : T
-
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
 >error : (error: any) => Promise<U>
 >error : any
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => U, progress?: (preservation: any) => void): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
 >error : (error: any) => U
 >error : any
->U : U
 >progress : (preservation: any) => void
 >preservation : any
->Promise : Promise<T>
->U : U
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >n : number
->Promise : Promise<T>
 
     declare function testFunction(s: string): Promise<string>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; }
 >s : string
->Promise : Promise<T>
 
     var numPromise: Promise<number>;
 >numPromise : Promise<number>
->Promise : Promise<T>
 
     var newPromise = numPromise.then(testFunction);
 >newPromise : any
@@ -274,54 +185,33 @@ module m6 {
 >m6 : typeof m6
 
     interface Promise<T> {
->Promise : Promise<T>
->T : T
-
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
 
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
 >then : { <U>(cb: (x: T) => Promise<U>): Promise<U>; <U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
 >error : (error: any) => Promise<U>
 >error : any
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
     }
 
     declare function testFunction(n: number): Promise<number>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }
 >n : number
->Promise : Promise<T>
 
     declare function testFunction(s: string): Promise<string>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }
 >s : string
->Promise : Promise<T>
 
     declare function testFunction(b: boolean): Promise<boolean>;
 >testFunction : { (n: number): Promise<number>; (s: string): Promise<string>; (b: boolean): Promise<boolean>; }
 >b : boolean
->Promise : Promise<T>
 
     var numPromise: Promise<number>;
 >numPromise : Promise<number>
->Promise : Promise<T>
 
     var newPromise = numPromise.then(testFunction);
 >newPromise : any

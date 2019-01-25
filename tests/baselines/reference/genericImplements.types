@@ -8,26 +8,17 @@ class B { b; };
 >b : any
 
 interface I {
->I : I
-
     f<T extends A>(): T;
 >f : <T extends A>() => T
->T : T
->A : A
->T : T
 
 } // { f: () => { a; } }
 
 // OK
 class X implements I {  
 >X : X
->I : I
 
     f<T extends B>(): T { return undefined; }
 >f : <T extends B>() => T
->T : T
->B : B
->T : T
 >undefined : undefined
 
 } // { f: () => { b; } }
@@ -35,13 +26,9 @@ class X implements I {
 // OK
 class Y implements I {
 >Y : Y
->I : I
 
     f<T extends A>(): T { return undefined; }
 >f : <T extends A>() => T
->T : T
->A : A
->T : T
 >undefined : undefined
 
 } // { f: () => { a; } }
@@ -49,12 +36,9 @@ class Y implements I {
 // OK
 class Z implements I {
 >Z : Z
->I : I
 
     f<T>(): T { return undefined; }
 >f : <T>() => T
->T : T
->T : T
 >undefined : undefined
 
 } // { f: <T>() => T } 

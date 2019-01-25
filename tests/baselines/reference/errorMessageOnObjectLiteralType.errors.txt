@@ -13,3 +13,4 @@ tests/cases/compiler/errorMessageOnObjectLiteralType.ts(6,8): error TS2551: Prop
     Object.getOwnPropertyNamess(null);
            ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2551: Property 'getOwnPropertyNamess' does not exist on type 'ObjectConstructor'. Did you mean 'getOwnPropertyNames'?
+!!! related TS2728 /.ts/lib.es5.d.ts:179:5: 'getOwnPropertyNames' is declared here.

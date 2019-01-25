@@ -53,11 +53,12 @@ namespace compiler {
         public readonly js: ReadonlyMap<string, documents.TextDocument>;
         public readonly dts: ReadonlyMap<string, documents.TextDocument>;
         public readonly maps: ReadonlyMap<string, documents.TextDocument>;
+        public symlinks?: vfs.FileSet; // Location to store original symlinks so they may be used in both original and declaration file compilations
 
         private _inputs: documents.TextDocument[] = [];
         private _inputsAndOutputs: collections.SortedMap<string, CompilationOutput>;
 
-        constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ts.Diagnostic[]) {
+        constructor(host: fakes.CompilerHost, options: ts.CompilerOptions, program: ts.Program | undefined, result: ts.EmitResult | undefined, diagnostics: ReadonlyArray<ts.Diagnostic>) {
             this.host = host;
             this.program = program;
             this.result = result;
@@ -182,8 +183,9 @@ namespace compiler {
         }
 
         public getSourceMapRecord(): string | undefined {
-            if (this.result!.sourceMaps && this.result!.sourceMaps!.length > 0) {
-                return Harness.SourceMapRecorder.getSourceMapRecord(this.result!.sourceMaps!, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
+            const maps = this.result!.sourceMaps;
+            if (maps && maps.length > 0) {
+                return Harness.SourceMapRecorder.getSourceMapRecord(maps, this.program!, Array.from(this.js.values()).filter(d => !ts.fileExtensionIs(d.file, ts.Extension.Json)), Array.from(this.dts.values()));
             }
         }
 

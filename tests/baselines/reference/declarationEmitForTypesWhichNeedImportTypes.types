@@ -1,10 +1,8 @@
 === tests/cases/compiler/b.ts ===
 export interface Named {}
->Named : Named
 
 export function createNamed(): Named {
 >createNamed : () => Named
->Named : Named
 
   return {};
 >{} : {}

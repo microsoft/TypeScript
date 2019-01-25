@@ -7,7 +7,7 @@ tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(10,1):
 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(14,1): error TS2322: Type 'I' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(17,1): error TS2322: Type 'typeof M' is not assignable to type 'void'.
 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(20,5): error TS2322: Type 'T' is not assignable to type 'void'.
-tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(22,1): error TS2322: Type '<T>(a: T) => void' is not assignable to type 'void'.
+tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(22,5): error TS2322: Type '<T>(a: T) => void' is not assignable to type 'void'.
 
 
 ==== tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts (10 errors) ====
@@ -51,5 +51,6 @@ tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(22,1):
 !!! error TS2322: Type 'T' is not assignable to type 'void'.
     }
     x = f;
-    ~
+        ~
 !!! error TS2322: Type '<T>(a: T) => void' is not assignable to type 'void'.
+!!! related TS6212 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:22:5: Did you mean to call this expression?

@@ -7,5 +7,7 @@
 
 verify.codeFix({
     description: "Remove import from 'mod'",
-    newFileContent: " // trailing trivia",
+    newFileContent:
+`// leading trivia
+ // trailing trivia`,
 });

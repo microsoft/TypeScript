@@ -4,11 +4,9 @@ module M1 {
 
     export class A<T> {
 >A : A<T>
->T : T
 
         constructor(a: T) {
 >a : T
->T : T
         }
     }
 }

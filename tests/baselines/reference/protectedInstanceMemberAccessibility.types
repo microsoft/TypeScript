@@ -75,7 +75,6 @@ class B extends A {
 
         var a: A;
 >a : A
->A : A
 
         var a1 = a.x;    // error
 >a1 : string
@@ -104,7 +103,6 @@ class B extends A {
 
         var b: B;
 >b : B
->B : B
 
         var b1 = b.x;
 >b1 : string
@@ -133,7 +131,6 @@ class B extends A {
 
         var c: C;
 >c : C
->C : C
 
         var c1 = c.x;    // error
 >c1 : string

@@ -1,0 +1,35 @@
+//// [tests/cases/compiler/enumDeclarationEmitInitializerHasImport.ts] ////
+
+//// [provider.ts]
+export enum Enum {
+    Value1,
+    Value2,
+}
+//// [consumer.ts]
+import provider = require('./provider');
+
+export const value = provider.Enum.Value1;
+
+//// [provider.js]
+"use strict";
+exports.__esModule = true;
+var Enum;
+(function (Enum) {
+    Enum[Enum["Value1"] = 0] = "Value1";
+    Enum[Enum["Value2"] = 1] = "Value2";
+})(Enum = exports.Enum || (exports.Enum = {}));
+//// [consumer.js]
+"use strict";
+exports.__esModule = true;
+var provider = require("./provider");
+exports.value = provider.Enum.Value1;
+
+
+//// [provider.d.ts]
+export declare enum Enum {
+    Value1 = 0,
+    Value2 = 1
+}
+//// [consumer.d.ts]
+import provider = require('./provider');
+export declare const value = provider.Enum.Value1;

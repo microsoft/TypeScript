@@ -3,8 +3,6 @@ module M {
 >M : typeof M
 
     export interface I {
->I : I
-
 	z;
 >z : any
     }
@@ -19,7 +17,6 @@ module M {
 	f(x:I) {
 >f : (x: I) => void
 >x : I
->I : I
 
 	    x.e;  // e not found
 >x.e : any
@@ -45,7 +42,6 @@ module M {
 >f : (x: I) => void
 >f : (x: I) => void
 ><I>({}) : I
->I : I
 >({}) : {}
 >{} : {}
     }

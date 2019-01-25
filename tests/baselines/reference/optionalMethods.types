@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/namedTypes/optionalMethods.ts ===
 interface Foo {
->Foo : Foo
-
     a: number;
 >a : number
 
@@ -18,7 +16,6 @@ interface Foo {
 function test1(x: Foo) {
 >test1 : (x: Foo) => void
 >x : Foo
->Foo : Foo
 
     x.a;
 >x.a : number
@@ -109,7 +106,6 @@ class Bar {
 function test2(x: Bar) {
 >test2 : (x: Bar) => void
 >x : Bar
->Bar : Bar
 
     x.a;
 >x.a : number

@@ -19,7 +19,6 @@ export module ImportingModule {
 
         constructor(private referred: ReferredTo) { }
 >referred : ReferredTo
->ReferredTo : ReferredTo
     }
 }
 === tests/cases/compiler/file1.ts ===

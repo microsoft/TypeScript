@@ -14,7 +14,6 @@ export module Database {
 >id : number
 >P : any
 >Models : any
->Person : P.Models.Person
 
 	        return new P.Models.Person("Rock");
 >new P.Models.Person("Rock") : P.Models.Person

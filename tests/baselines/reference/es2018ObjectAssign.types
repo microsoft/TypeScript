@@ -12,7 +12,6 @@ const test = Object.assign({}, { test: true });
 
 declare const p: Promise<number>;
 >p : Promise<number>
->Promise : Promise<T>
 
 p.finally();
 >p.finally() : Promise<number>

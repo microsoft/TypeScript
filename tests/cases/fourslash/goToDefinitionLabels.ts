@@ -12,7 +12,7 @@
 verify.goToDefinition({
     1: "label1Definition",
     2: "label2Definition",
-    // labels accross function boundaries
+    // labels across function boundaries
     3: "label1Definition",
     // undefined label
     4: []

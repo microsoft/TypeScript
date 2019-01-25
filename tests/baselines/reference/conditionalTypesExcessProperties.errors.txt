@@ -1,0 +1,24 @@
+tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(8,5): error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
+  Type '{ test: string; arg: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(9,5): error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
+  Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+
+
+==== tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts (2 errors) ====
+    type Something<T> = { test: string } &  (T extends object ? {
+        arg: T
+    } : {
+        arg?: undefined
+        });
+    
+    function testFunc2<A extends object>(a: A, sa: Something<A>) {
+        sa = { test: 'hi', arg: a }; // not excess (but currently still not assignable)
+        ~~
+!!! error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
+!!! error TS2322:   Type '{ test: string; arg: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+        sa = { test: 'bye', arg: a, arr: a } // excess
+        ~~
+!!! error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
+!!! error TS2322:   Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+    }
+    

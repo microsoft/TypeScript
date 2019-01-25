@@ -21,7 +21,7 @@ namespace ts.codefix {
 
     interface Info { readonly statement: VariableStatement; readonly name: Identifier; readonly required: StringLiteralLike; }
     function getInfo(sourceFile: SourceFile, pos: number): Info {
-        const { parent } = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const { parent } = getTokenAtPosition(sourceFile, pos);
         if (!isRequireCall(parent, /*checkArgumentIsStringLiteralLike*/ true)) throw Debug.failBadSyntaxKind(parent);
         const decl = cast(parent.parent, isVariableDeclaration);
         return { statement: cast(decl.parent.parent, isVariableStatement), name: cast(decl.name, isIdentifier), required: parent.arguments[0] };

@@ -7,7 +7,6 @@ module A {
 
         export function createB(): B {
 >createB : () => B
->B : B
 
             return null;
 >null : null
@@ -15,8 +14,6 @@ module A {
     }
 
     export interface B {
->B : B
-
         name: string;
 >name : string
 
@@ -28,6 +25,5 @@ module A {
 var x: A.B = null;
 >x : A.B
 >A : any
->B : A.B
 >null : null
 

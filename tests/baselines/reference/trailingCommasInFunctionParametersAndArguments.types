@@ -59,8 +59,6 @@ class X {
 >value : any
 }
 interface Y {
->Y : Y
-
     new(x,);
 >x : any
 

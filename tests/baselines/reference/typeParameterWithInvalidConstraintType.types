@@ -1,15 +1,12 @@
 === tests/cases/compiler/typeParameterWithInvalidConstraintType.ts ===
 class A<T extends T> {
 >A : A<T>
->T : T
->T : T
 
     foo() {
 >foo : () => void
 
         var x: T;
 >x : T
->T : T
 
         var a = x.foo();
 >a : any
