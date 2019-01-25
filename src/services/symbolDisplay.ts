@@ -534,7 +534,7 @@ namespace ts.SymbolDisplay {
             tags = tagsFromAlias;
         }
 
-        return { displayParts, documentation, symbolKind, tags: tags! };
+        return { displayParts, documentation, symbolKind, tags: tags!.length === 0 ? undefined : tags };
 
         function getPrinter() {
             if (!printer) {

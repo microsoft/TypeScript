@@ -15,26 +15,9 @@
 ////    /*5*/
 //// }
 
-goTo.marker("0");
-verify.not.completionListContains("myClass", "class myClass", /*documentation*/ undefined, "class");
-verify.not.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");
-
-goTo.marker("1");
-verify.completionListContains("myClass", "class myClass", /*documentation*/ undefined, "class");
-verify.not.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");
-
-goTo.marker("2");
-verify.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");
-verify.not.completionListContains("myClass", "class myClass", /*documentation*/ undefined, "class");
-
-goTo.marker("3");
-verify.not.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");
-verify.not.completionListContains("myClass", "class myClass", /*documentation*/ undefined, "class");
-
-goTo.marker("4");
-verify.completionListContains("myClass", "class myClass", /*documentation*/ undefined, "class");
-verify.not.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");
-
-goTo.marker("5");
-verify.not.completionListContains("myClass", "class myClass", /*documentation*/ undefined, "class");
-verify.not.completionListContains("myClass", "(local class) myClass", /*documentation*/ undefined, "local class");
+verify.completions(
+    { marker: "0", excludes: "myClass", isNewIdentifierLocation: true },
+    { marker: ["1", "4"], includes: { name: "myClass", text: "class myClass", kind: "class" } },
+    { marker: "2", includes: { name: "myClass", text: "(local class) myClass", kind: "local class" } },
+    { marker: ["3", "5"], excludes: "myClass", isNewIdentifierLocation: true },
+);

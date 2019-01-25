@@ -2,5 +2,4 @@
 
 ////import./**/
 
-goTo.marker("");
-verify.completionListContains("meta");
+verify.completions({ marker: "", exact: "meta" });

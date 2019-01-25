@@ -21,40 +21,13 @@
 ////
 ////interface TestInterface implements Module./*TypeReferenceInImplementsList*/ { }
 
-function getVerify(isTypeLocation: boolean) {
-    return {
-        verifyValue: isTypeLocation ? verify.not : verify,
-        verifyType: isTypeLocation ? verify : verify.not,
-        verifyValueOrType: verify,
-        verifyNotValueOrType: verify.not,
-    };
-}
-
-function verifyModuleMembers(marker: string, isTypeLocation: boolean) {
-    goTo.marker(marker);
-
-    const { verifyValue, verifyType, verifyValueOrType, verifyNotValueOrType } = getVerify(isTypeLocation);
-
-    verifyValue.completionListContains("exportedVariable");
-    verifyValue.completionListContains("exportedFunction");
-    verifyValue.completionListContains("exportedModule");
-
-    verifyValueOrType.completionListContains("exportedClass");
-
-    // Include type declarations
-    verifyType.completionListContains("exportedInterface");
-
-    // No inner declarations
-    verifyNotValueOrType.completionListContains("innerVariable");
-    verifyNotValueOrType.completionListContains("innerFunction");
-    verifyNotValueOrType.completionListContains("innerClass");
-    verifyNotValueOrType.completionListContains("innerModule");
-    verifyNotValueOrType.completionListContains("innerInterface");
-
-    verifyNotValueOrType.completionListContains("exportedInnerModuleVariable");
-}
-
-verifyModuleMembers("ValueReference", /*isTypeLocation*/ false);
-verifyModuleMembers("TypeReference", /*isTypeLocation*/ true);
-verifyModuleMembers("TypeReferenceInExtendsList", /*isTypeLocation*/ false);
-verifyModuleMembers("TypeReferenceInImplementsList", /*isTypeLocation*/ true);
+verify.completions(
+    {
+        marker: ["ValueReference", "TypeReferenceInExtendsList"],
+        exact: ["exportedFunction", "exportedVariable", "exportedClass", "exportedModule"],
+    },
+    {
+        marker: ["TypeReference", "TypeReferenceInImplementsList"],
+        exact: ["exportedClass", "exportedInterface"],
+    },
+);

@@ -59,7 +59,7 @@ let [nameMC2, [primarySkillC, secondarySkillC]] = ["roomba", ["vaccum", "mopping
 >"mopping" : "mopping"
 
 let [...multiRobotAInfo] = multiRobotA;
->multiRobotAInfo : (string | [string, string])[]
+>multiRobotAInfo : [string, [string, string]]
 >multiRobotA : [string, [string, string]]
 
 if (nameMB == nameMA) {

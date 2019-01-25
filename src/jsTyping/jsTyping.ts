@@ -24,13 +24,11 @@ namespace ts.JsTyping {
         version: Version;
     }
 
-    /* @internal */
     export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
         const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
         return availableVersion.compareTo(cachedTyping.version) <= 0;
     }
 
-    /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
         "assert",
         "async_hooks",
@@ -70,7 +68,6 @@ namespace ts.JsTyping {
         "zlib"
     ];
 
-    /* @internal */
     export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
 
     /**
@@ -122,7 +119,7 @@ namespace ts.JsTyping {
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
             const path = normalizePath(fileName);
-            if (hasJavascriptFileExtension(path)) {
+            if (hasJSFileExtension(path)) {
                 return path;
             }
         });
@@ -218,7 +215,7 @@ namespace ts.JsTyping {
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
             const fromFileNames = mapDefined(fileNames, j => {
-                if (!hasJavascriptFileExtension(j)) return undefined;
+                if (!hasJSFileExtension(j)) return undefined;
 
                 const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
                 const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);

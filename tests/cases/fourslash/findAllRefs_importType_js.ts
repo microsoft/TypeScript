@@ -4,7 +4,7 @@
 // @checkJs: true
 
 // @Filename: /a.js
-////module.exports = class [|{| "isWriteAccess": true, "isDefinition": true |}C|] {};
+////[|module|].exports = class [|{| "isWriteAccess": true, "isDefinition": true |}C|] {};
 ////module.exports.[|{| "isWriteAccess": true, "isDefinition": true |}D|] = class [|{| "isWriteAccess": true, "isDefinition": true |}D|] {};
 
 // @Filename: /b.js
@@ -17,7 +17,8 @@ verify.noErrors();
 
 // TODO: GH#24025
 
-const [r0, r1, r2, r3, r4, r5] = test.ranges();
+const [rModule, r0, r1, r2, r3, r4, r5] = test.ranges();
+verify.referenceGroups(rModule, [{ definition: 'module "/a"', ranges: [r3, r4, rModule] }]);
 verify.referenceGroups(r0, [
     { definition: "(local class) C", ranges: [r0] },
     // TODO: This definition is really ugly
@@ -31,7 +32,7 @@ verify.referenceGroups(r2, [
     { definition: "class D\n(property) D: typeof D", ranges: [r5] },
 ]);
 verify.referenceGroups([r3, r4], [
-    { definition: 'module "/a"', ranges: [r4] },
+    { definition: 'module "/a"', ranges: [r4, rModule] },
     { definition: "(local class) C", ranges: [r0] },
     { definition: "(alias) (local class) export=\nimport export=", ranges: [r3] },
 ]);

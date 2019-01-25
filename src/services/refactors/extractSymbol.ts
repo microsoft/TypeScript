@@ -7,18 +7,18 @@ namespace ts.refactor.extractSymbol {
      * Compute the associated code actions
      * Exported for tests.
      */
-    export function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+    export function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
-            return undefined;
+            return emptyArray;
         }
 
         const extractions = getPossibleExtractions(targetRange, context);
         if (extractions === undefined) {
             // No extractions possible
-            return undefined;
+            return emptyArray;
         }
 
         const functionActions: RefactorActionInfo[] = [];
@@ -82,7 +82,7 @@ namespace ts.refactor.extractSymbol {
             });
         }
 
-        return infos.length ? infos : undefined;
+        return infos.length ? infos : emptyArray;
     }
 
     /* Exported for tests */
@@ -449,8 +449,7 @@ namespace ts.refactor.extractSymbol {
                     case SyntaxKind.ThisKeyword:
                         rangeFacts |= RangeFacts.UsesThis;
                         break;
-                    case SyntaxKind.LabeledStatement:
-                        {
+                    case SyntaxKind.LabeledStatement: {
                             const label = (<LabeledStatement>node).label;
                             (seenLabels || (seenLabels = [])).push(label.escapedText);
                             forEachChild(node, visit);
@@ -458,8 +457,7 @@ namespace ts.refactor.extractSymbol {
                             break;
                         }
                     case SyntaxKind.BreakStatement:
-                    case SyntaxKind.ContinueStatement:
-                        {
+                    case SyntaxKind.ContinueStatement: {
                             const label = (<BreakStatement | ContinueStatement>node).label;
                             if (label) {
                                 if (!contains(seenLabels, label.escapedText)) {
@@ -677,7 +675,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
-                return `method '${scope.name.getText()}`;
+                return `method '${scope.name.getText()}'`;
             case SyntaxKind.GetAccessor:
                 return `'get ${scope.name.getText()}'`;
             case SyntaxKind.SetAccessor:

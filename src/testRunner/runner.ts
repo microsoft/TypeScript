@@ -138,7 +138,6 @@ function handleTestConfig() {
                     case "compiler":
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
-                        runners.push(new project.ProjectRunner());
                         break;
                     case "conformance":
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));

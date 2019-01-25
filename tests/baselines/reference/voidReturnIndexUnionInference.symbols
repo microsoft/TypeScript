@@ -1,0 +1,68 @@
+=== tests/cases/compiler/voidReturnIndexUnionInference.ts ===
+// repro from https://github.com/Microsoft/TypeScript/issues/25274
+export function safeInvoke<A1, R>(
+>safeInvoke : Symbol(safeInvoke, Decl(voidReturnIndexUnionInference.ts, 0, 0))
+>A1 : Symbol(A1, Decl(voidReturnIndexUnionInference.ts, 1, 27))
+>R : Symbol(R, Decl(voidReturnIndexUnionInference.ts, 1, 30))
+
+    func: ((arg1: A1) => R) | null | undefined,
+>func : Symbol(func, Decl(voidReturnIndexUnionInference.ts, 1, 34))
+>arg1 : Symbol(arg1, Decl(voidReturnIndexUnionInference.ts, 2, 12))
+>A1 : Symbol(A1, Decl(voidReturnIndexUnionInference.ts, 1, 27))
+>R : Symbol(R, Decl(voidReturnIndexUnionInference.ts, 1, 30))
+
+    arg1: A1
+>arg1 : Symbol(arg1, Decl(voidReturnIndexUnionInference.ts, 2, 47))
+>A1 : Symbol(A1, Decl(voidReturnIndexUnionInference.ts, 1, 27))
+
+): R | undefined {
+>R : Symbol(R, Decl(voidReturnIndexUnionInference.ts, 1, 30))
+
+    if (func) {
+>func : Symbol(func, Decl(voidReturnIndexUnionInference.ts, 1, 34))
+
+        return func(arg1);
+>func : Symbol(func, Decl(voidReturnIndexUnionInference.ts, 1, 34))
+>arg1 : Symbol(arg1, Decl(voidReturnIndexUnionInference.ts, 2, 47))
+
+    } else {
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}
+
+interface Props {
+>Props : Symbol(Props, Decl(voidReturnIndexUnionInference.ts, 10, 1))
+
+    onFoo?(value: string): boolean;
+>onFoo : Symbol(Props.onFoo, Decl(voidReturnIndexUnionInference.ts, 12, 17))
+>value : Symbol(value, Decl(voidReturnIndexUnionInference.ts, 13, 11))
+
+    onBar?(value: string): void;
+>onBar : Symbol(Props.onBar, Decl(voidReturnIndexUnionInference.ts, 13, 35))
+>value : Symbol(value, Decl(voidReturnIndexUnionInference.ts, 14, 11))
+}
+
+function bad<P extends Props>(props: Readonly<P>) {
+>bad : Symbol(bad, Decl(voidReturnIndexUnionInference.ts, 15, 1))
+>P : Symbol(P, Decl(voidReturnIndexUnionInference.ts, 17, 13))
+>Props : Symbol(Props, Decl(voidReturnIndexUnionInference.ts, 10, 1))
+>props : Symbol(props, Decl(voidReturnIndexUnionInference.ts, 17, 30))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(voidReturnIndexUnionInference.ts, 17, 13))
+
+    safeInvoke(props.onFoo, "blah");
+>safeInvoke : Symbol(safeInvoke, Decl(voidReturnIndexUnionInference.ts, 0, 0))
+>props.onFoo : Symbol(onFoo, Decl(voidReturnIndexUnionInference.ts, 12, 17))
+>props : Symbol(props, Decl(voidReturnIndexUnionInference.ts, 17, 30))
+>onFoo : Symbol(onFoo, Decl(voidReturnIndexUnionInference.ts, 12, 17))
+
+    // ERROR HERE!!!
+    // Type R in signature of safeInvoke incorrectly inferred as {} instead of void!
+    safeInvoke(props.onBar, "blah");
+>safeInvoke : Symbol(safeInvoke, Decl(voidReturnIndexUnionInference.ts, 0, 0))
+>props.onBar : Symbol(onBar, Decl(voidReturnIndexUnionInference.ts, 13, 35))
+>props : Symbol(props, Decl(voidReturnIndexUnionInference.ts, 17, 30))
+>onBar : Symbol(onBar, Decl(voidReturnIndexUnionInference.ts, 13, 35))
+}
+

@@ -6,5 +6,5 @@
 
 verify.completions({
     marker: "",
-    exact: ["T", "false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown"],
+    exact: ["T", ...completion.typeKeywords],
 });

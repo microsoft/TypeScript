@@ -229,3 +229,46 @@ function goo(x: X) {
     x;
 >x : Symbol(x, Decl(controlFlowInstanceof.ts, 90, 13))
 }
+
+// Repro from #27282
+
+declare const x: (() => void)|null;
+>x : Symbol(x, Decl(controlFlowInstanceof.ts, 100, 13))
+
+declare const ctor: Function;
+>ctor : Symbol(ctor, Decl(controlFlowInstanceof.ts, 101, 13))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+if (x instanceof ctor) {
+>x : Symbol(x, Decl(controlFlowInstanceof.ts, 100, 13))
+>ctor : Symbol(ctor, Decl(controlFlowInstanceof.ts, 101, 13))
+
+    x();
+>x : Symbol(x, Decl(controlFlowInstanceof.ts, 100, 13))
+}
+
+// Repro from #27550 (based on uglify code)
+=== tests/cases/compiler/uglify.js ===
+/** @constructor */
+function AtTop(val) { this.val = val }
+>AtTop : Symbol(AtTop, Decl(uglify.js, 0, 0))
+>val : Symbol(val, Decl(uglify.js, 1, 15))
+>this.val : Symbol(AtTop.val, Decl(uglify.js, 1, 21))
+>this : Symbol(AtTop, Decl(uglify.js, 0, 0))
+>val : Symbol(AtTop.val, Decl(uglify.js, 1, 21))
+>val : Symbol(val, Decl(uglify.js, 1, 15))
+
+/** @type {*} */
+var v = 1;
+>v : Symbol(v, Decl(uglify.js, 3, 3))
+
+if (v instanceof AtTop) {
+>v : Symbol(v, Decl(uglify.js, 3, 3))
+>AtTop : Symbol(AtTop, Decl(uglify.js, 0, 0))
+
+    v.val
+>v.val : Symbol(AtTop.val, Decl(uglify.js, 1, 21))
+>v : Symbol(v, Decl(uglify.js, 3, 3))
+>val : Symbol(AtTop.val, Decl(uglify.js, 1, 21))
+}
+

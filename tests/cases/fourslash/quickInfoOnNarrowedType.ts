@@ -4,7 +4,7 @@
 
 ////function foo(strOrNum: string | number) {
 ////    if (typeof /*1*/strOrNum === "number") {
-////        return /*2*/strOrNum; 
+////        return /*2*/strOrNum;
 ////    }
 ////    else {
 ////        return /*3*/strOrNum.length;
@@ -18,26 +18,19 @@
 ////   /*6*/s;
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs('(parameter) strOrNum: string | number');
-verify.completionListContains("strOrNum", "(parameter) strOrNum: string | number");
+verify.quickInfos({
+    1: "(parameter) strOrNum: string | number",
+    2: "(parameter) strOrNum: number",
+    3: "(parameter) strOrNum: string",
+    4: "let s: string | undefined",
+    5: "let s: string | undefined",
+    6: "let s: string",
+});
 
-goTo.marker('2');
-verify.quickInfoIs('(parameter) strOrNum: number');
-verify.completionListContains("strOrNum", "(parameter) strOrNum: number");
-
-goTo.marker('3');
-verify.quickInfoIs('(parameter) strOrNum: string');
-verify.completionListContains("strOrNum", "(parameter) strOrNum: string");
-
-goTo.marker('4');
-verify.quickInfoIs('let s: string | undefined');
-verify.completionListContains("s", "let s: string | undefined");
-
-goTo.marker('5');
-verify.quickInfoIs('let s: string | undefined');
-verify.completionListContains("s", "let s: string | undefined");
-
-goTo.marker('6');
-verify.quickInfoIs('let s: string');
-verify.completionListContains("s", "let s: string");
+verify.completions(
+    { marker: "1", includes: { name: "strOrNum", text: "(parameter) strOrNum: string | number" } },
+    { marker: "2", includes: { name: "strOrNum", text: "(parameter) strOrNum: number" } },
+    { marker: "3", includes: { name: "strOrNum", text: "(parameter) strOrNum: string" } },
+    { marker: ["4", "5"], includes: { name: "s", text: "let s: string | undefined" } },
+    { marker: "6", includes: { name: "s", text: "let s: string" } },
+);

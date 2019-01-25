@@ -1,6 +1,6 @@
 tests/cases/compiler/duplicateLocalVariable2.ts(27,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
 tests/cases/compiler/duplicateLocalVariable2.ts(27,29): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
-tests/cases/compiler/duplicateLocalVariable2.ts(27,37): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/duplicateLocalVariable2.ts(27,37): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
 ==== tests/cases/compiler/duplicateLocalVariable2.ts (3 errors) ====
@@ -36,7 +36,7 @@ tests/cases/compiler/duplicateLocalVariable2.ts(27,37): error TS2356: An arithme
                                 ~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
                                         ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
                     bytes.push(fb.readByte());
                 }
                 var expected = [0xEF];

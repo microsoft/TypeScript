@@ -26,7 +26,7 @@ edit.backspace();
 // Verify the type of the instance property
 goTo.marker('2');
 edit.insert('.');
-verify.completions({ includes: { name: "toFixed", kind: "method" } });
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });
 
 goTo.marker('3');
 edit.insert('.');

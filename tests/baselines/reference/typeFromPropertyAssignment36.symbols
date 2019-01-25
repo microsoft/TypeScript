@@ -1,0 +1,178 @@
+=== tests/cases/conformance/salsa/typeFromPropertyAssignment36.ts ===
+function f(b: boolean) {
+>f : Symbol(f, Decl(typeFromPropertyAssignment36.ts, 0, 0))
+>b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
+
+    function d() {
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+    }
+    d.e = 12
+>d.e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
+
+    d.e
+>d.e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 2, 5))
+
+    if (b) {
+>b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
+
+        d.q = false
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+    }
+    // error d.q might not be assigned
+    d.q
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+
+    if (b) {
+>b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
+
+        d.q = false
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+    }
+    else {
+        d.q = true
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+    }
+    d.q
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 6, 12), Decl(typeFromPropertyAssignment36.ts, 11, 12), Decl(typeFromPropertyAssignment36.ts, 14, 10))
+
+    if (b) {
+>b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
+
+        d.r = 1
+>d.r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
+    }
+    else {
+        d.r = 2
+>d.r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
+    }
+    d.r
+>d.r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 18, 12), Decl(typeFromPropertyAssignment36.ts, 21, 10))
+
+    if (b) {
+>b : Symbol(b, Decl(typeFromPropertyAssignment36.ts, 0, 11))
+
+        d.s = 'hi'
+>d.s : Symbol(d.s, Decl(typeFromPropertyAssignment36.ts, 25, 12))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+>s : Symbol(d.s, Decl(typeFromPropertyAssignment36.ts, 25, 12))
+    }
+    return d
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 0, 24))
+}
+// OK to access possibly-unassigned properties outside the initialising scope
+var test = f(true).s
+>test : Symbol(test, Decl(typeFromPropertyAssignment36.ts, 31, 3))
+>f(true).s : Symbol(d.s, Decl(typeFromPropertyAssignment36.ts, 25, 12))
+>f : Symbol(f, Decl(typeFromPropertyAssignment36.ts, 0, 0))
+>s : Symbol(d.s, Decl(typeFromPropertyAssignment36.ts, 25, 12))
+
+function d() {
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+}
+d.e = 12
+>d.e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
+
+d.e
+>d.e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>e : Symbol(d.e, Decl(typeFromPropertyAssignment36.ts, 34, 1))
+
+if (!!false) {
+    d.q = false
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+}
+d.q
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+
+if (!!false) {
+    d.q = false
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+}
+else {
+    d.q = true
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+}
+d.q
+>d.q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>q : Symbol(d.q, Decl(typeFromPropertyAssignment36.ts, 38, 14), Decl(typeFromPropertyAssignment36.ts, 42, 14), Decl(typeFromPropertyAssignment36.ts, 45, 6))
+
+if (!!false) {
+    d.r = 1
+>d.r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
+}
+else {
+    d.r = 2
+>d.r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
+}
+d.r
+>d.r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
+>d : Symbol(d, Decl(typeFromPropertyAssignment36.ts, 31, 20), Decl(typeFromPropertyAssignment36.ts, 34, 1))
+>r : Symbol(d.r, Decl(typeFromPropertyAssignment36.ts, 49, 14), Decl(typeFromPropertyAssignment36.ts, 52, 6))
+
+// test function expressions too
+const g = function() {
+>g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
+}
+if (!!false) {
+    g.expando = 1
+>g.expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
+>g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
+>expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
+}
+g.expando // error
+>g.expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
+>g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
+>expando : Symbol(g.expando, Decl(typeFromPropertyAssignment36.ts, 60, 14))
+
+if (!!false) {
+    g.both = 'hi'
+>g.both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
+>g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
+>both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
+}
+else {
+    g.both = 0
+>g.both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
+>g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
+>both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
+}
+g.both
+>g.both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
+>g : Symbol(g, Decl(typeFromPropertyAssignment36.ts, 58, 5))
+>both : Symbol(g.both, Decl(typeFromPropertyAssignment36.ts, 65, 14), Decl(typeFromPropertyAssignment36.ts, 68, 6))
+

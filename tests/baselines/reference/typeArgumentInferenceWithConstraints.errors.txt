@@ -1,8 +1,7 @@
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(11,17): error TS2344: Type '{}' does not satisfy the constraint 'number'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(16,23): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(17,23): error TS2344: Type '{}' does not satisfy the constraint 'number'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(33,15): error TS2345: Argument of type '() => string' is not assignable to parameter of type '() => Window'.
-  Type 'string' is not assignable to type 'Window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(33,21): error TS2322: Type 'string' is not assignable to type 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(35,15): error TS2344: Type 'number' does not satisfy the constraint 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts(41,35): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
@@ -61,9 +60,9 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
     function someGenerics3<T extends Window>(producer: () => T) { }
     someGenerics3(() => ''); // Error
-                  ~~~~~~~~
-!!! error TS2345: Argument of type '() => string' is not assignable to parameter of type '() => Window'.
-!!! error TS2345:   Type 'string' is not assignable to type 'Window'.
+                        ~~
+!!! error TS2322: Type 'string' is not assignable to type 'Window'.
+!!! related TS6502 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:32:52: The expected type comes from the return type of this signature.
     someGenerics3<Window>(() => undefined);
     someGenerics3<number>(() => 3); // Error
                   ~~~~~~

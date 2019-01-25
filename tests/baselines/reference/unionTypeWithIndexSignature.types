@@ -96,7 +96,7 @@ num[0] = 1
 
 num['0'] = 'ok'
 >num['0'] = 'ok' : "ok"
->num['0'] : number
+>num['0'] : string | number
 >num : Num
 >'0' : "0"
 >'ok' : "ok"
