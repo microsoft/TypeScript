@@ -10636,7 +10636,11 @@ namespace ts {
         }
 
         function getRestrictiveTypeParameter(tp: TypeParameter) {
-            return !tp.constraint ? tp : tp.restrictiveInstantiation || (tp.restrictiveInstantiation = createTypeParameter(tp.symbol));
+            return tp.constraint === unknownType ? tp : tp.restrictiveInstantiation || (
+                tp.restrictiveInstantiation = createTypeParameter(tp.symbol),
+                (tp.restrictiveInstantiation as TypeParameter).constraint = unknownType,
+                tp.restrictiveInstantiation
+            );
         }
 
         function restrictiveMapper(type: Type) {
