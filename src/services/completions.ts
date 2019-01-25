@@ -104,7 +104,7 @@ namespace ts.Completions {
             getJSCompletionEntries(sourceFile, location!.pos, uniqueNames, compilerOptions.target!, entries); // TODO: GH#18217
         }
         else {
-            if ((!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
+            if (!isNewIdentifierLocation && (!symbols || symbols.length === 0) && keywordFilters === KeywordCompletionFilters.None) {
                 return undefined;
             }
 
@@ -913,7 +913,7 @@ namespace ts.Completions {
             }
             else {
                 for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression>node.parent, type, symbol)) {
+                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression | QualifiedName>node.parent, type, symbol)) {
                         addPropertySymbol(symbol);
                     }
                 }

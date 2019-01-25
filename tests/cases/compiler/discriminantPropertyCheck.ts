@@ -99,3 +99,25 @@ function func2(inst: Instance) {
         }
     }
 }
+
+// Repro from #29106
+
+const f = (_a: string, _b: string): void => {};
+
+interface A {
+  a?: string;
+  b?: string;
+}
+
+interface B {
+  a: string;
+  b: string;
+}
+
+type U = A | B;
+
+const u: U = {} as any;
+
+u.a && u.b && f(u.a, u.b);
+
+u.b && u.a && f(u.a, u.b);

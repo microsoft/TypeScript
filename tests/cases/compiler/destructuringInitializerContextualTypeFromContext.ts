@@ -1,3 +1,5 @@
+// @strict: true
+
 interface SFC<P = {}> {
     (props: P & { children?: any }): any | null;
 }
@@ -17,3 +19,8 @@ const Child: SFC<Props> = ({
     name = "Artemis",
     ...props
 }) => `name: ${name} props: ${JSON.stringify(props)}`;
+
+// Repro from #29189
+
+declare function f(g: (as: string[]) => void): void
+f(([_1, _2 = undefined]) => undefined)
