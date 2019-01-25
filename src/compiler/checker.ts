@@ -26317,8 +26317,8 @@ namespace ts {
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
                 const needCheckInitializer = node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
-                const needCheckWinendType = node.name.elements.length === 0;
-                if (needCheckInitializer || needCheckWinendType) {
+                const needCheckWidenedType = node.name.elements.length === 0;
+                if (needCheckInitializer || needCheckWidenedType) {
                     // Don't validate for-in initializer as it is already an error
                     const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                     if (needCheckInitializer) {
@@ -26332,7 +26332,7 @@ namespace ts {
                         checkParameterInitializer(node);
                     }
                     // check the binding pattern with empty elements
-                    if (needCheckWinendType) {
+                    if (needCheckWidenedType) {
                         if (isArrayBindingPattern(node.name)) {
                             checkIteratedTypeOrElementType(widenedType, node, /* allowStringInput */ false, /* allowAsyncIterables */ false);
                         }
