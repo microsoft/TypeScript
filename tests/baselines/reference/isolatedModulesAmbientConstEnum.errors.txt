@@ -6,3 +6,4 @@ tests/cases/compiler/file1.ts(2,16): error TS2748: Cannot access ambient const e
     export var y = E.X;
                    ~
 !!! error TS2748: Cannot access ambient const enums when the '--isolatedModules' flag is provided.
+    
