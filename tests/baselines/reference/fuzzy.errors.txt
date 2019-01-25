@@ -1,9 +1,9 @@
 tests/cases/compiler/fuzzy.ts(13,18): error TS2420: Class 'C' incorrectly implements interface 'I'.
-  Property 'alsoWorks' is missing in type 'C'.
+  Property 'alsoWorks' is missing in type 'C' but required in type 'I'.
 tests/cases/compiler/fuzzy.ts(21,34): error TS2322: Type 'this' is not assignable to type 'I'.
   Type 'C' is not assignable to type 'I'.
 tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Conversion of type '{ oneI: this; }' to type 'R' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Property 'anything' is missing in type '{ oneI: this; }'.
+  Property 'anything' is missing in type '{ oneI: this; }' but required in type 'R'.
 
 
 ==== tests/cases/compiler/fuzzy.ts (3 errors) ====
@@ -22,7 +22,8 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Conversion of type '{ oneI: 
         export class C implements I {
                      ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'I'.
-!!! error TS2420:   Property 'alsoWorks' is missing in type 'C'.
+!!! error TS2420:   Property 'alsoWorks' is missing in type 'C' but required in type 'I'.
+!!! related TS2728 tests/cases/compiler/fuzzy.ts:4:9: 'alsoWorks' is declared here.
             constructor(public x:number) {
             }
             works():R {
@@ -41,7 +42,8 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2352: Conversion of type '{ oneI: 
                 return <R>({ oneI: this });
                        ~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '{ oneI: this; }' to type 'R' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'anything' is missing in type '{ oneI: this; }'.
+!!! error TS2352:   Property 'anything' is missing in type '{ oneI: this; }' but required in type 'R'.
+!!! related TS2728 tests/cases/compiler/fuzzy.ts:9:9: 'anything' is declared here.
             }
         }
     }

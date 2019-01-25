@@ -187,23 +187,10 @@ namespace ts.codefix {
         }
     }
 
-    function isApplicableFunctionForInference(declaration: FunctionLike): declaration is MethodDeclaration | FunctionDeclaration | ConstructorDeclaration {
-        switch (declaration.kind) {
-            case SyntaxKind.FunctionDeclaration:
-            case SyntaxKind.MethodDeclaration:
-            case SyntaxKind.Constructor:
-                return true;
-            case SyntaxKind.FunctionExpression:
-                return !!declaration.name;
-        }
-        return false;
-    }
-
     function annotateParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterDeclaration: ParameterDeclaration, containingFunction: FunctionLike, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
-        if (!isIdentifier(parameterDeclaration.name) || !isApplicableFunctionForInference(containingFunction)) {
+        if (!isIdentifier(parameterDeclaration.name)) {
             return;
         }
-
         const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
             containingFunction.parameters.map<ParameterInference>(p => ({
                 declaration: p,
@@ -215,11 +202,14 @@ namespace ts.codefix {
             annotateJSDocParameters(changes, sourceFile, parameterInferences, program, host);
         }
         else {
+            const needParens = isArrowFunction(containingFunction) && !findChildOfKind(containingFunction, SyntaxKind.OpenParenToken, sourceFile);
+            if (needParens) changes.insertNodeBefore(sourceFile, first(containingFunction.parameters), createToken(SyntaxKind.OpenParenToken));
             for (const { declaration, type } of parameterInferences) {
                 if (declaration && !declaration.type && !declaration.initializer) {
                     annotate(changes, sourceFile, declaration, type, program, host);
                 }
             }
+            if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), createToken(SyntaxKind.CloseParenToken));
         }
     }
 
@@ -335,22 +325,32 @@ namespace ts.codefix {
     }
 
     function inferTypeForVariableFromUsage(token: Identifier, program: Program, cancellationToken: CancellationToken): Type {
-        return InferFromReference.inferTypeFromReferences(getReferences(token, program, cancellationToken), program.getTypeChecker(), cancellationToken);
+        const references = getReferences(token, program, cancellationToken);
+        const checker = program.getTypeChecker();
+        const types = InferFromReference.inferTypesFromReferences(references, checker, cancellationToken);
+        return InferFromReference.unifyFromContext(types, checker);
     }
 
-    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+    function inferTypeForParametersFromUsage(containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+        let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
+                searchToken = findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile);
+                break;
+            case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
+                const parent = containingFunction.parent;
+                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
+                    parent.name :
+                    containingFunction.name;
+                break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
-                const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
-                const searchToken = isConstructor ?
-                    findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile) :
-                    containingFunction.name;
-                if (searchToken) {
-                    return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program.getTypeChecker(), cancellationToken);
-                }
+                searchToken = containingFunction.name;
+                break;
+        }
+        if (searchToken) {
+            return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program, cancellationToken);
         }
     }
 
@@ -369,7 +369,9 @@ namespace ts.codefix {
         interface UsageContext {
             isNumber?: boolean;
             isString?: boolean;
+            /** Used ambiguously, eg x + ___ or object[___]; results in string | number if no other evidence exists */
             isNumberOrString?: boolean;
+
             candidateTypes?: Type[];
             properties?: UnderscoreEscapedMap<UsageContext>;
             callContexts?: CallContext[];
@@ -378,20 +380,20 @@ namespace ts.codefix {
             stringIndexContext?: UsageContext;
         }
 
-        export function inferTypeFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type {
+        export function inferTypesFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type[] {
             const usageContext: UsageContext = {};
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
-            return getTypeFromUsageContext(usageContext, checker) || checker.getAnyType();
+            return inferFromContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLike, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+            const checker = program.getTypeChecker();
             if (references.length === 0) {
                 return undefined;
             }
-
             if (!declaration.parameters) {
                 return undefined;
             }
@@ -401,19 +403,17 @@ namespace ts.codefix {
                 cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
-            const isConstructor = declaration.kind === SyntaxKind.Constructor;
-            const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-            return callContexts && declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
-                const types: Type[] = [];
+            const callContexts = [...usageContext.constructContexts || [], ...usageContext.callContexts || []];
+            return declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
+                const types = [];
                 const isRest = isRestParameter(parameter);
                 let isOptional = false;
                 for (const callContext of callContexts) {
                     if (callContext.argumentTypes.length <= parameterIndex) {
                         isOptional = isInJSFile(declaration);
-                        continue;
+                        types.push(checker.getUndefinedType());
                     }
-
-                    if (isRest) {
+                    else if (isRest) {
                         for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
                             types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                         }
@@ -422,10 +422,11 @@ namespace ts.codefix {
                         types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
                     }
                 }
-                if (!types.length) {
-                    return { declaration: parameter, type: checker.getAnyType() };
+                if (isIdentifier(parameter.name)) {
+                    const inferred = inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken);
+                    types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
                 }
-                const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
+                const type = unifyFromContext(types, checker);
                 return {
                     type: isRest ? checker.createArrayType(type) : type,
                     isOptional: isOptional && !isRest,
@@ -660,29 +661,120 @@ namespace ts.codefix {
             }
         }
 
-        function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type | undefined {
-            if (usageContext.isNumberOrString && !usageContext.isNumber && !usageContext.isString) {
-                return checker.getUnionType([checker.getNumberType(), checker.getStringType()]);
+        interface Priority {
+            high: (t: Type) => boolean;
+            low: (t: Type) => boolean;
+        }
+
+        function removeLowPriorityInferences(inferences: ReadonlyArray<Type>, priorities: Priority[]): Type[] {
+            const toRemove: ((t: Type) => boolean)[] = [];
+            for (const i of inferences) {
+                for (const { high, low } of priorities) {
+                    if (high(i)) {
+                        Debug.assert(!low(i));
+                        toRemove.push(low);
+                    }
+                }
             }
-            else if (usageContext.isNumber) {
-                return checker.getNumberType();
+            return inferences.filter(i => toRemove.every(f => !f(i)));
+        }
+
+        export function unifyFromContext(inferences: ReadonlyArray<Type>, checker: TypeChecker, fallback = checker.getAnyType()): Type {
+            if (!inferences.length) return fallback;
+
+            // 1. string or number individually override string | number
+            // 2. non-any, non-void overrides any or void
+            // 3. non-nullable, non-any, non-void, non-anonymous overrides anonymous types
+            const stringNumber = checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
+            const priorities: Priority[] = [
+                {
+                    high: t => t === checker.getStringType() || t === checker.getNumberType(),
+                    low: t => t === stringNumber
+                },
+                {
+                    high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Void)),
+                    low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
+                },
+                {
+                    high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(t) & ObjectFlags.Anonymous),
+                    low: t => !!(checker.getObjectFlags(t) & ObjectFlags.Anonymous)
+                }];
+            let good = removeLowPriorityInferences(inferences, priorities);
+            const anons = good.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
+            if (anons.length) {
+                good = good.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
+                good.push(unifyAnonymousTypes(anons, checker));
             }
-            else if (usageContext.isString) {
-                return checker.getStringType();
+            return checker.getWidenedType(checker.getUnionType(good));
+        }
+
+        function unifyAnonymousTypes(anons: AnonymousType[], checker: TypeChecker) {
+            if (anons.length === 1) {
+                return anons[0];
             }
-            else if (usageContext.candidateTypes) {
-                return checker.getWidenedType(checker.getUnionType(usageContext.candidateTypes.map(t => checker.getBaseTypeOfLiteralType(t)), UnionReduction.Subtype));
+            const calls = [];
+            const constructs = [];
+            const stringIndices = [];
+            const numberIndices = [];
+            let stringIndexReadonly = false;
+            let numberIndexReadonly = false;
+            const props = createMultiMap<Type>();
+            for (const anon of anons) {
+                for (const p of checker.getPropertiesOfType(anon)) {
+                    props.add(p.name, checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration));
+                }
+                calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
+                constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
+                if (anon.stringIndexInfo) {
+                    stringIndices.push(anon.stringIndexInfo.type);
+                    stringIndexReadonly = stringIndexReadonly || anon.stringIndexInfo.isReadonly;
+                }
+                if (anon.numberIndexInfo) {
+                    numberIndices.push(anon.numberIndexInfo.type);
+                    numberIndexReadonly = numberIndexReadonly || anon.numberIndexInfo.isReadonly;
+                }
             }
-            else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
+            const members = mapEntries(props, (name, types) => {
+                const isOptional = types.length < anons.length ? SymbolFlags.Optional : 0;
+                const s = checker.createSymbol(SymbolFlags.Property | isOptional, name as __String);
+                s.type = checker.getUnionType(types);
+                return [name, s];
+            });
+            return checker.createAnonymousType(
+                anons[0].symbol,
+                members as UnderscoreEscapedMap<TransientSymbol>,
+                calls,
+                constructs,
+                stringIndices.length ? checker.createIndexInfo(checker.getUnionType(stringIndices), stringIndexReadonly) : undefined,
+                numberIndices.length ? checker.createIndexInfo(checker.getUnionType(numberIndices), numberIndexReadonly) : undefined);
+        }
+
+        function inferFromContext(usageContext: UsageContext, checker: TypeChecker) {
+            const types = [];
+
+            if (usageContext.isNumber) {
+                types.push(checker.getNumberType());
+            }
+            if (usageContext.isString) {
+                types.push(checker.getStringType());
+            }
+            if (usageContext.isNumberOrString) {
+                types.push(checker.getUnionType([checker.getStringType(), checker.getNumberType()]));
+            }
+
+            types.push(...(usageContext.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
+
+            if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
                 const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!; // TODO: GH#18217
                 const types = paramType.getCallSignatures().map(c => c.getReturnType());
-                return checker.createPromiseType(types.length ? checker.getUnionType(types, UnionReduction.Subtype) : checker.getAnyType());
+                types.push(checker.createPromiseType(types.length ? checker.getUnionType(types, UnionReduction.Subtype) : checker.getAnyType()));
             }
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
-                return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!);
+                types.push(checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!));
             }
-            else if (usageContext.numberIndexContext) {
-                return checker.createArrayType(recur(usageContext.numberIndexContext));
+
+            if (usageContext.numberIndexContext) {
+                types.push(checker.createArrayType(recur(usageContext.numberIndexContext)));
             }
             else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.stringIndexContext) {
                 const members = createUnderscoreEscapedMap<Symbol>();
@@ -714,14 +806,12 @@ namespace ts.codefix {
                     stringIndexInfo = checker.createIndexInfo(recur(usageContext.stringIndexContext), /*isReadonly*/ false);
                 }
 
-                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
+                types.push(checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined)); // TODO: GH#18217
             }
-            else {
-                return undefined;
-            }
+            return types;
 
             function recur(innerContext: UsageContext): Type {
-                return getTypeFromUsageContext(innerContext, checker) || checker.getAnyType();
+                return unifyFromContext(inferFromContext(innerContext, checker), checker);
             }
         }
 
@@ -754,7 +844,7 @@ namespace ts.codefix {
                 symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                 parameters.push(symbol);
             }
-            const returnType = getTypeFromUsageContext(callContext.returnType, checker) || checker.getVoidType();
+            const returnType = unifyFromContext(inferFromContext(callContext.returnType, checker), checker, checker.getVoidType());
             // TODO: GH#18217
             return checker.createSignature(/*declaration*/ undefined!, /*typeParameters*/ undefined, /*thisParameter*/ undefined, parameters, returnType, /*typePredicate*/ undefined, callContext.argumentTypes.length, /*hasRestParameter*/ false, /*hasLiteralTypes*/ false);
         }

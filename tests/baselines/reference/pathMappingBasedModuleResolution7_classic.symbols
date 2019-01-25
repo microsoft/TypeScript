@@ -29,7 +29,7 @@ import {b} from "templates/module2";
 >b : Symbol(b, Decl(file2.ts, 1, 8))
 
 import {x as c} from "../file3";
->x : Symbol(c, Decl(file2.ts, 2, 8))
+>x : Symbol(c, Decl(file3.d.ts, 0, 10))
 >c : Symbol(c, Decl(file2.ts, 2, 8))
 
 export let x = a + b + c;

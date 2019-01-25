@@ -71,6 +71,10 @@ namespace ts {
         nonRecursive?: boolean;
     }
 
+    export function isPathInNodeModulesStartingWithDot(path: Path) {
+        return stringContains(path, "/node_modules/.");
+    }
+
     export const maxNumberOfFilesToIterateForInvalidation = 256;
 
     type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
@@ -248,6 +252,7 @@ namespace ts {
             perDirectoryCacheWithRedirects: CacheWithRedirects<Map<T>>,
             loader: (name: string, containingFile: string, options: CompilerOptions, host: ModuleResolutionHost, redirectedReference?: ResolvedProjectReference) => T,
             getResolutionWithResolvedFileName: GetResolutionWithResolvedFileName<T, R>,
+            shouldRetryResolution: (t: T) => boolean,
             reusedNames: ReadonlyArray<string> | undefined,
             logChanges: boolean): (R | undefined)[] {
 
@@ -260,7 +265,7 @@ namespace ts {
                 perDirectoryResolution = createMap();
                 perDirectoryCache.set(dirPath, perDirectoryResolution);
             }
-            const resolvedModules: R[] = [];
+            const resolvedModules: (R | undefined)[] = [];
             const compilerOptions = resolutionHost.getCompilationSettings();
             const hasInvalidatedNonRelativeUnresolvedImport = logChanges && isFileWithInvalidatedNonRelativeUnresolvedImports(path);
 
@@ -278,7 +283,7 @@ namespace ts {
                 if (!seenNamesInFile.has(name) &&
                     allFilesHaveInvalidatedResolution || unmatchedRedirects || !resolution || resolution.isInvalidated ||
                     // If the name is unresolved import that was invalidated, recalculate
-                    (hasInvalidatedNonRelativeUnresolvedImport && !isExternalModuleNameRelative(name) && !getResolutionWithResolvedFileName(resolution))) {
+                    (hasInvalidatedNonRelativeUnresolvedImport && !isExternalModuleNameRelative(name) && shouldRetryResolution(resolution))) {
                     const existingResolution = resolution;
                     const resolutionInDirectory = perDirectoryResolution.get(name);
                     if (resolutionInDirectory) {
@@ -302,7 +307,7 @@ namespace ts {
                 }
                 Debug.assert(resolution !== undefined && !resolution.isInvalidated);
                 seenNamesInFile.set(name, true);
-                resolvedModules.push(getResolutionWithResolvedFileName(resolution)!); // TODO: GH#18217
+                resolvedModules.push(getResolutionWithResolvedFileName(resolution));
             }
 
             // Stop watching and remove the unused name
@@ -339,6 +344,7 @@ namespace ts {
                 typeDirectiveNames, containingFile, redirectedReference,
                 resolvedTypeReferenceDirectives, perDirectoryResolvedTypeReferenceDirectives,
                 resolveTypeReferenceDirective, getResolvedTypeReferenceDirective,
+                /*shouldRetryResolution*/ resolution => resolution.resolvedTypeReferenceDirective === undefined,
                 /*reusedNames*/ undefined, /*logChanges*/ false
             );
         }
@@ -348,6 +354,7 @@ namespace ts {
                 moduleNames, containingFile, redirectedReference,
                 resolvedModuleNames, perDirectoryResolvedModuleNames,
                 resolveModuleName, getResolvedModule,
+                /*shouldRetryResolution*/ resolution => !resolution.resolvedModule || !resolutionExtensionIsTSOrJson(resolution.resolvedModule.extension),
                 reusedNames, logChangesWhenResolvingModule
             );
         }
@@ -688,6 +695,9 @@ namespace ts {
                 isChangedFailedLookupLocation = location => isInDirectoryPath(fileOrDirectoryPath, resolutionHost.toPath(location));
             }
             else {
+                // If something to do with folder/file starting with "." in node_modules folder, skip it
+                if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return false;
+
                 // Some file or directory in the watching directory is created
                 // Return early if it does not have any of the watching extension or not the custom failed lookup path
                 const dirOfFileOrDirectory = getDirectoryPath(fileOrDirectoryPath);

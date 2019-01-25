@@ -174,11 +174,6 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
-        refactor(options: {
-            name: string;
-            actionName: string;
-            refactors: any[];
-        }): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
@@ -231,7 +226,7 @@ declare namespace FourSlashInterface {
          * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<ReferenceGroup>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
@@ -287,8 +282,8 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         }[]): void;
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range): void;
-        renameInfoFailed(message?: string): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
+        renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
 
         /** Verify the quick info available at the current marker. */
@@ -487,6 +482,10 @@ declare namespace FourSlashInterface {
         };
     }
 
+    interface ReferenceGroup {
+        readonly definition: ReferencesDefinition;
+        readonly ranges: ReadonlyArray<Range>;
+    }
     type ReferencesDefinition = string | {
         text: string;
         range: Range;
@@ -514,7 +513,7 @@ declare namespace FourSlashInterface {
         readonly isGlobalCompletion?: boolean;
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
-        readonly excludes?: ArrayOrSingle<string | { name: string, source: string }>;
+        readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: UserPreferences;
         readonly triggerCharacter?: string;
     }
@@ -634,7 +633,8 @@ declare namespace FourSlashInterface {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
         readonly ranges: ReadonlyArray<RenameLocationOptions>;
-    }
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
 }
 declare function verifyOperationIsCancelled(f: any): void;
@@ -648,23 +648,24 @@ declare var format: FourSlashInterface.format;
 declare var cancellation: FourSlashInterface.cancellation;
 declare var classification: typeof FourSlashInterface.classification;
 declare namespace completion {
-    export const globals: ReadonlyArray<string>;
-    export const globalKeywords: ReadonlyArray<string>;
-    export const insideMethodKeywords: ReadonlyArray<string>;
-    export const globalKeywordsPlusUndefined: ReadonlyArray<string>;
-    export const globalsVars: ReadonlyArray<string>;
-    export function globalsInsideFunction(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export const keywordsWithUndefined: ReadonlyArray<string>;
-    export const keywords: ReadonlyArray<string>;
-    export const typeKeywords: ReadonlyArray<string>;
-    export const globalTypes: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export const classElementKeywords: ReadonlyArray<string>;
-    export const constructorParameterKeywords: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export const functionMembers: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export const stringMembers: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export const functionMembersWithPrototype: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
-    export const statementKeywordsWithTypes: ReadonlyArray<string>;
-    export const statementKeywords: ReadonlyArray<string>;
+    type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
+    export const globals: ReadonlyArray<Entry>;
+    export const globalKeywords: ReadonlyArray<Entry>;
+    export const insideMethodKeywords: ReadonlyArray<Entry>;
+    export const globalKeywordsPlusUndefined: ReadonlyArray<Entry>;
+    export const globalsVars: ReadonlyArray<Entry>;
+    export function globalsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
+    export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export const keywordsWithUndefined: ReadonlyArray<Entry>;
+    export const keywords: ReadonlyArray<Entry>;
+    export const typeKeywords: ReadonlyArray<Entry>;
+    export const globalTypes: ReadonlyArray<Entry>;
+    export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export const classElementKeywords: ReadonlyArray<Entry>;
+    export const constructorParameterKeywords: ReadonlyArray<Entry>;
+    export const functionMembers: ReadonlyArray<Entry>;
+    export const stringMembers: ReadonlyArray<Entry>;
+    export const functionMembersWithPrototype: ReadonlyArray<Entry>;
+    export const statementKeywordsWithTypes: ReadonlyArray<Entry>;
+    export const statementKeywords: ReadonlyArray<Entry>;
 }

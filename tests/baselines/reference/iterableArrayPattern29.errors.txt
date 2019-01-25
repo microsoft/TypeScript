@@ -1,12 +1,9 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern29.ts(1,33): error TS2501: A rest element cannot contain a binding pattern.
 tests/cases/conformance/es6/destructuring/iterableArrayPattern29.ts(2,21): error TS2345: Argument of type '[string, boolean]' is not assignable to parameter of type '[string, number]'.
   Type 'boolean' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/es6/destructuring/iterableArrayPattern29.ts (2 errors) ====
+==== tests/cases/conformance/es6/destructuring/iterableArrayPattern29.ts (1 errors) ====
     function takeFirstTwoEntries(...[[k1, v1], [k2, v2]]: [string, number][]) { }
-                                    ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2501: A rest element cannot contain a binding pattern.
     takeFirstTwoEntries(...new Map([["", true], ["hello", true]]));
                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[string, boolean]' is not assignable to parameter of type '[string, number]'.

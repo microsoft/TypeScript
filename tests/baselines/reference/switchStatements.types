@@ -60,11 +60,11 @@ switch (x) {
 >'a' : "a"
 
     case typeof x:
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : any
 
     case typeof M:
->typeof M : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof M : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >M : typeof M
 
     case M.fn(1):

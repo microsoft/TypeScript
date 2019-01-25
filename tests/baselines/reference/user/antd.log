@@ -1,0 +1,13 @@
+Exit Code: 1
+Standard output:
+node_modules/antd/lib/tree-select/interface.d.ts(26,18): error TS2430: Interface 'TreeSelectProps' incorrectly extends interface 'AbstractSelectProps'.
+  Types of property 'getPopupContainer' are incompatible.
+    Type '((triggerNode: Element) => HTMLElement) | undefined' is not assignable to type '((triggerNode?: Element | undefined) => HTMLElement) | undefined'.
+      Type '(triggerNode: Element) => HTMLElement' is not assignable to type '(triggerNode?: Element | undefined) => HTMLElement'.
+        Types of parameters 'triggerNode' and 'triggerNode' are incompatible.
+          Type 'Element | undefined' is not assignable to type 'Element'.
+            Type 'undefined' is not assignable to type 'Element'.
+
+
+
+Standard error:
