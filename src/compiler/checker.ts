@@ -5280,17 +5280,18 @@ namespace ts {
             let objectFlags = ObjectFlags.ObjectLiteral;
             forEach(pattern.elements, e => {
                 const name = e.propertyName || <Identifier>e.name;
-                if (isComputedNonLiteralName(name)) {
-                    // do not include computed properties in the implied type
-                    objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
-                    return;
-                }
                 if (e.dotDotDotToken) {
                     stringIndexInfo = createIndexInfo(anyType, /*isReadonly*/ false);
                     return;
                 }
 
-                const text = getTextOfPropertyName(name);
+                const exprType = getLiteralTypeFromPropertyName(name);
+                if (!isTypeUsableAsPropertyName(exprType)) {
+                    // do not include computed properties in the implied type
+                    objectFlags |= ObjectFlags.ObjectLiteralPatternWithComputedProperties;
+                    return;
+                }
+                const text = getPropertyNameFromType(exprType);
                 const flags = SymbolFlags.Property | (e.initializer ? SymbolFlags.Optional : 0);
                 const symbol = createSymbol(flags, text);
                 symbol.type = getTypeFromBindingElement(e, includePatternInType, reportErrors);
@@ -6399,9 +6400,9 @@ namespace ts {
         }
 
         /**
-         * Indicates whether a type can be used as a late-bound name.
+         * Indicates whether a type can be used as a property name.
          */
-        function isTypeUsableAsLateBoundName(type: Type): type is LiteralType | UniqueESSymbolType {
+        function isTypeUsableAsPropertyName(type: Type): type is StringLiteralType | NumberLiteralType | UniqueESSymbolType {
             return !!(type.flags & TypeFlags.StringOrNumberLiteralOrUnique);
         }
 
@@ -6416,7 +6417,7 @@ namespace ts {
         function isLateBindableName(node: DeclarationName): node is LateBoundName {
             return isComputedPropertyName(node)
                 && isEntityNameExpression(node.expression)
-                && isTypeUsableAsLateBoundName(checkComputedPropertyName(node));
+                && isTypeUsableAsPropertyName(checkComputedPropertyName(node));
         }
 
         function isLateBoundName(name: __String): boolean {
@@ -6448,11 +6449,11 @@ namespace ts {
         }
 
         /**
-         * Gets the symbolic name for a late-bound member from its type.
+         * Gets the symbolic name for a member from its type.
          */
-        function getLateBoundNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
+        function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
             if (type.flags & TypeFlags.UniqueESSymbol) {
-                return `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
+                return (<UniqueESSymbolType>type).escapedName;
             }
             if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                 return escapeLeadingUnderscores("" + (<StringLiteralType | NumberLiteralType>type).value);
@@ -6518,8 +6519,8 @@ namespace ts {
                 // fall back to the early-bound name of this member.
                 links.resolvedSymbol = decl.symbol;
                 const type = checkComputedPropertyName(decl.name);
-                if (isTypeUsableAsLateBoundName(type)) {
-                    const memberName = getLateBoundNameFromType(type);
+                if (isTypeUsableAsPropertyName(type)) {
+                    const memberName = getPropertyNameFromType(type);
                     const symbolFlags = decl.symbol.flags;
 
                     // Get or add a late-bound symbol for the member. This allows us to merge late-bound accessor declarations.
@@ -7168,8 +7169,8 @@ namespace ts {
                 const propType = instantiateType(templateType, templateMapper);
                 // If the current iteration type constituent is a string literal type, create a property.
                 // Otherwise, for type string create a string index signature.
-                if (t.flags & TypeFlags.StringOrNumberLiteralOrUnique) {
-                    const propName = getLateBoundNameFromType(t as LiteralType);
+                if (isTypeUsableAsPropertyName(t)) {
+                    const propName = getPropertyNameFromType(t);
                     const modifiersProp = getPropertyOfType(modifiersType, propName);
                     const isOptional = !!(templateModifiers & MappedTypeModifiers.IncludeOptional ||
                         !(templateModifiers & MappedTypeModifiers.ExcludeOptional) && modifiersProp && modifiersProp.flags & SymbolFlags.Optional);
@@ -7354,7 +7355,8 @@ namespace ts {
         function isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean {
             const list = obj.properties as NodeArray<ObjectLiteralElementLike | JsxAttributeLike>;
             return list.some(property => {
-                const name = property.name && getTextOfPropertyName(property.name);
+                const nameType = property.name && getLiteralTypeFromPropertyName(property.name);
+                const name = nameType && isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
                 const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
                 return !!expected && isLiteralType(expected) && !isTypeIdenticalTo(getTypeOfNode(property), expected);
             });
@@ -9722,8 +9724,8 @@ namespace ts {
 
         function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, cacheSymbol: boolean, missingType: Type) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
-            const propName = isTypeUsableAsLateBoundName(indexType) ?
-                getLateBoundNameFromType(indexType) :
+            const propName = isTypeUsableAsPropertyName(indexType) ?
+                getPropertyNameFromType(indexType) :
                 accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
                     getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
                     accessNode && isPropertyName(accessNode) ?
@@ -10413,6 +10415,7 @@ namespace ts {
         function createUniqueESSymbolType(symbol: Symbol) {
             const type = <UniqueESSymbolType>createType(TypeFlags.UniqueESSymbol);
             type.symbol = symbol;
+            type.escapedName = `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
             return type;
         }
 
@@ -11300,7 +11303,7 @@ namespace ts {
                         }
                         if (resultObj.error) {
                             const reportedDiag = resultObj.error;
-                            const propertyName = isTypeUsableAsLateBoundName(nameType) ? getLateBoundNameFromType(nameType) : undefined;
+                            const propertyName = isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
                             const targetProp = propertyName !== undefined ? getPropertyOfType(target, propertyName) : undefined;
 
                             let issuedElaboration = false;
@@ -15172,7 +15175,9 @@ namespace ts {
         }
 
         function getTypeOfDestructuredProperty(type: Type, name: PropertyName) {
-            const text = getTextOfPropertyName(name);
+            const nameType = getLiteralTypeFromPropertyName(name);
+            if (!isTypeUsableAsPropertyName(nameType)) return errorType;
+            const text = getPropertyNameFromType(nameType);
             return getConstraintForLocation(getTypeOfPropertyOfType(type, text), name) ||
                 isNumericLiteralName(text) && getIndexTypeOfType(type, IndexKind.Number) ||
                 getIndexTypeOfType(type, IndexKind.String) ||
@@ -17304,9 +17309,10 @@ namespace ts {
             const parentDeclaration = declaration.parent.parent;
             const name = declaration.propertyName || declaration.name;
             const parentType = getContextualTypeForVariableLikeDeclaration(parentDeclaration);
-            if (parentType && !isBindingPattern(name)) {
-                const text = getTextOfPropertyName(name);
-                if (text !== undefined) {
+            if (parentType && !isBindingPattern(name) && !isComputedNonLiteralName(name)) {
+                const nameType = getLiteralTypeFromPropertyName(name);
+                if (isTypeUsableAsPropertyName(nameType)) {
+                    const text = getPropertyNameFromType(nameType);
                     return getTypeOfPropertyOfType(parentType, text);
                 }
             }
@@ -18263,10 +18269,9 @@ namespace ts {
                         }
                     }
                     typeFlags |= type.flags;
-                    const nameType = computedNameType && computedNameType.flags & TypeFlags.StringOrNumberLiteralOrUnique ?
-                        <LiteralType | UniqueESSymbolType>computedNameType : undefined;
+                    const nameType = computedNameType && isTypeUsableAsPropertyName(computedNameType) ? computedNameType : undefined;
                     const prop = nameType ?
-                        createSymbol(SymbolFlags.Property | member.flags, getLateBoundNameFromType(nameType), CheckFlags.Late) :
+                        createSymbol(SymbolFlags.Property | member.flags, getPropertyNameFromType(nameType), CheckFlags.Late) :
                         createSymbol(SymbolFlags.Property | member.flags, member.escapedName);
                     if (nameType) {
                         prop.nameType = nameType;
@@ -22315,15 +22320,15 @@ namespace ts {
         function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: NodeArray<ObjectLiteralElementLike>, rightIsThis = false) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = property.name;
-                const text = getTextOfPropertyName(name);
-                if (text) {
+                const exprType = getLiteralTypeFromPropertyName(name);
+                if (isTypeUsableAsPropertyName(exprType)) {
+                    const text = getPropertyNameFromType(exprType);
                     const prop = getPropertyOfType(objectLiteralType, text);
                     if (prop) {
                         markPropertyAsReferenced(prop, property, rightIsThis);
                         checkPropertyAccessibility(property, /*isSuper*/ false, objectLiteralType, prop);
                     }
                 }
-                const exprType = getLiteralTypeFromPropertyName(name);
                 const elementType = getIndexedAccessType(objectLiteralType, exprType, name);
                 const type = getFlowTypeOfDestructuring(property, elementType);
                 return checkDestructuringAssignment(property.kind === SyntaxKind.ShorthandPropertyAssignment ? property : property.initializer, type);
@@ -25638,13 +25643,14 @@ namespace ts {
                 const parent = node.parent.parent;
                 const parentType = getTypeForBindingElementParent(parent);
                 const name = node.propertyName || node.name;
-                if (!isBindingPattern(name)) {
-                    const nameText = getTextOfPropertyName(name);
-                    if (nameText) {
-                        const property = getPropertyOfType(parentType!, nameText); // TODO: GH#18217
+                if (!isBindingPattern(name) && parentType) {
+                    const exprType = getLiteralTypeFromPropertyName(name);
+                    if (isTypeUsableAsPropertyName(exprType)) {
+                        const nameText = getPropertyNameFromType(exprType);
+                        const property = getPropertyOfType(parentType, nameText);
                         if (property) {
                             markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                            checkPropertyAccessibility(parent, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType!, property);
+                            checkPropertyAccessibility(parent, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType, property);
                         }
                     }
                 }
