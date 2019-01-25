@@ -1350,8 +1350,8 @@ namespace ts {
          *                                          part of a constructor declaration with a
          *                                          synthesized call to `super`
          */
-        function shouldAddRestParameter(node: ParameterDeclaration | undefined, inConstructorWithSynthesizedSuper: boolean) {
-            return node && node.dotDotDotToken && node.name.kind === SyntaxKind.Identifier && !inConstructorWithSynthesizedSuper;
+        function shouldAddRestParameter(node: ParameterDeclaration | undefined, inConstructorWithSynthesizedSuper: boolean): node is ParameterDeclaration {
+            return !!(node && node.dotDotDotToken && !inConstructorWithSynthesizedSuper);
         }
 
         /**
@@ -1370,11 +1370,11 @@ namespace ts {
             }
 
             // `declarationName` is the name of the local declaration for the parameter.
-            const declarationName = getMutableClone(<Identifier>parameter!.name);
+            const declarationName = parameter.name.kind === SyntaxKind.Identifier ? getMutableClone(parameter.name) : createTempVariable(/*recordTempVariable*/ undefined);
             setEmitFlags(declarationName, EmitFlags.NoSourceMap);
 
             // `expressionName` is the name of the parameter used in expressions.
-            const expressionName = getSynthesizedClone(<Identifier>parameter!.name);
+            const expressionName = parameter.name.kind === SyntaxKind.Identifier ? getSynthesizedClone(parameter.name) : declarationName;
             const restIndex = node.parameters.length - 1;
             const temp = createLoopVariable();
 
@@ -1439,6 +1439,24 @@ namespace ts {
             setEmitFlags(forStatement, EmitFlags.CustomPrologue);
             startOnNewLine(forStatement);
             statements.push(forStatement);
+
+            if (parameter.name.kind !== SyntaxKind.Identifier) {
+                // do the actual destructuring of the rest parameter if necessary
+                statements.push(
+                    setEmitFlags(
+                        setTextRange(
+                            createVariableStatement(
+                                /*modifiers*/ undefined,
+                                createVariableDeclarationList(
+                                    flattenDestructuringBinding(parameter, visitor, context, FlattenLevel.All, expressionName),
+                                )
+                            ),
+                            parameter
+                        ),
+                        EmitFlags.CustomPrologue
+                    )
+                );
+            }
         }
 
         /**

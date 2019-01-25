@@ -375,7 +375,12 @@ namespace fakes {
         }
     }
 
-    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost {
+    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
+        createProgram = ts.createAbstractBuilder;
+        now() {
+            return new Date(this.sys.vfs.time());
+        }
+
         diagnostics: ts.Diagnostic[] = [];
 
         reportDiagnostic(diagnostic: ts.Diagnostic) {
