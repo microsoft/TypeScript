@@ -824,7 +824,8 @@ declare class secondsecond_part1 { }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 /// <reference path="../../tripleRef.d.ts" />
-/// <reference path="../tripleRef.d.ts" />
+/// <reference path="../../../first/tripleRef.d.ts" />
+/// <reference path="../../../second/tripleRef.d.ts" />
 interface TheFirst {
     none: any;
 }
@@ -835,7 +836,6 @@ interface NoJsForHereEither {
 declare const first_part2Const: firstfirst_part2;
 declare function f(): string;
 //# sourceMappingURL=first-output.d.ts.map
-/// <reference path="../second/tripleRef.d.ts" />
 declare const second_part1Const: secondsecond_part1;
 declare namespace N {
 }
@@ -850,7 +850,7 @@ declare var c: C;
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../third_part1.ts","../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts"],"names":[],"mappings":";;ACAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACPD,QAAA,MAAM,gBAAgB,kBAAyB,CAAC;ACDhD,iBAAS,CAAC,WAET;;;ACDD,QAAA,MAAM,iBAAiB,oBAA2B,CAAC;AACnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACZD,cAAM,CAAC;IACH,WAAW;CAGd;;ALHD,QAAA,MAAM,gBAAgB,kBAAyB,CAAC;AAChD,QAAA,IAAI,CAAC,GAAU,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../third_part1.ts","../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts"],"names":[],"mappings":";;;ACAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACPD,QAAA,MAAM,gBAAgB,kBAAyB,CAAC;ACDhD,iBAAS,CAAC,WAET;;ACDD,QAAA,MAAM,iBAAiB,oBAA2B,CAAC;AACnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACZD,cAAM,CAAC;IACH,WAAW;CAGd;;ALHD,QAAA,MAAM,gBAAgB,kBAAyB,CAAC;AAChD,QAAA,IAAI,CAAC,GAAU,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -864,7 +864,8 @@ emittedFile:/src/third/thirdjs/output/third-output.d.ts
 sourceFile:../../../first/first_PART1.ts
 -------------------------------------------------------------------
 >>>/// <reference path="../../tripleRef.d.ts" />
->>>/// <reference path="../tripleRef.d.ts" />
+>>>/// <reference path="../../../first/tripleRef.d.ts" />
+>>>/// <reference path="../../../second/tripleRef.d.ts" />
 >>>interface TheFirst {
 1 >
 2 >^^^^^^^^^^
@@ -872,9 +873,9 @@ sourceFile:../../../first/first_PART1.ts
 1 >
 2 >interface 
 3 >          TheFirst
-1 >Emitted(3, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(3, 11) Source(1, 11) + SourceIndex(1)
-3 >Emitted(3, 19) Source(1, 19) + SourceIndex(1)
+1 >Emitted(4, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(4, 11) Source(1, 11) + SourceIndex(1)
+3 >Emitted(4, 19) Source(1, 19) + SourceIndex(1)
 ---
 >>>    none: any;
 1 >^^^^
@@ -888,18 +889,18 @@ sourceFile:../../../first/first_PART1.ts
 3 >        : 
 4 >          any
 5 >             ;
-1 >Emitted(4, 5) Source(2, 5) + SourceIndex(1)
-2 >Emitted(4, 9) Source(2, 9) + SourceIndex(1)
-3 >Emitted(4, 11) Source(2, 11) + SourceIndex(1)
-4 >Emitted(4, 14) Source(2, 14) + SourceIndex(1)
-5 >Emitted(4, 15) Source(2, 15) + SourceIndex(1)
+1 >Emitted(5, 5) Source(2, 5) + SourceIndex(1)
+2 >Emitted(5, 9) Source(2, 9) + SourceIndex(1)
+3 >Emitted(5, 11) Source(2, 11) + SourceIndex(1)
+4 >Emitted(5, 14) Source(2, 14) + SourceIndex(1)
+5 >Emitted(5, 15) Source(2, 15) + SourceIndex(1)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(5, 2) Source(3, 2) + SourceIndex(1)
+1 >Emitted(6, 2) Source(3, 2) + SourceIndex(1)
 ---
 >>>declare const s = "Hello, world";
 1->
@@ -916,12 +917,12 @@ sourceFile:../../../first/first_PART1.ts
 4 >              s
 5 >                = "Hello, world"
 6 >                                ;
-1->Emitted(6, 1) Source(5, 1) + SourceIndex(1)
-2 >Emitted(6, 9) Source(5, 1) + SourceIndex(1)
-3 >Emitted(6, 15) Source(5, 7) + SourceIndex(1)
-4 >Emitted(6, 16) Source(5, 8) + SourceIndex(1)
-5 >Emitted(6, 33) Source(5, 25) + SourceIndex(1)
-6 >Emitted(6, 34) Source(5, 26) + SourceIndex(1)
+1->Emitted(7, 1) Source(5, 1) + SourceIndex(1)
+2 >Emitted(7, 9) Source(5, 1) + SourceIndex(1)
+3 >Emitted(7, 15) Source(5, 7) + SourceIndex(1)
+4 >Emitted(7, 16) Source(5, 8) + SourceIndex(1)
+5 >Emitted(7, 33) Source(5, 25) + SourceIndex(1)
+6 >Emitted(7, 34) Source(5, 26) + SourceIndex(1)
 ---
 >>>interface NoJsForHereEither {
 1 >
@@ -932,9 +933,9 @@ sourceFile:../../../first/first_PART1.ts
   >
 2 >interface 
 3 >          NoJsForHereEither
-1 >Emitted(7, 1) Source(7, 1) + SourceIndex(1)
-2 >Emitted(7, 11) Source(7, 11) + SourceIndex(1)
-3 >Emitted(7, 28) Source(7, 28) + SourceIndex(1)
+1 >Emitted(8, 1) Source(7, 1) + SourceIndex(1)
+2 >Emitted(8, 11) Source(7, 11) + SourceIndex(1)
+3 >Emitted(8, 28) Source(7, 28) + SourceIndex(1)
 ---
 >>>    none: any;
 1 >^^^^
@@ -948,18 +949,18 @@ sourceFile:../../../first/first_PART1.ts
 3 >        : 
 4 >          any
 5 >             ;
-1 >Emitted(8, 5) Source(8, 5) + SourceIndex(1)
-2 >Emitted(8, 9) Source(8, 9) + SourceIndex(1)
-3 >Emitted(8, 11) Source(8, 11) + SourceIndex(1)
-4 >Emitted(8, 14) Source(8, 14) + SourceIndex(1)
-5 >Emitted(8, 15) Source(8, 15) + SourceIndex(1)
+1 >Emitted(9, 5) Source(8, 5) + SourceIndex(1)
+2 >Emitted(9, 9) Source(8, 9) + SourceIndex(1)
+3 >Emitted(9, 11) Source(8, 11) + SourceIndex(1)
+4 >Emitted(9, 14) Source(8, 14) + SourceIndex(1)
+5 >Emitted(9, 15) Source(8, 15) + SourceIndex(1)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(9, 2) Source(9, 2) + SourceIndex(1)
+1 >Emitted(10, 2) Source(9, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -979,12 +980,12 @@ sourceFile:../../../first/first_part2.ts
 4 >              first_part2Const
 5 >                               = new firstfirst_part2()
 6 >                                                ;
-1->Emitted(10, 1) Source(2, 1) + SourceIndex(2)
-2 >Emitted(10, 9) Source(2, 1) + SourceIndex(2)
-3 >Emitted(10, 15) Source(2, 7) + SourceIndex(2)
-4 >Emitted(10, 31) Source(2, 23) + SourceIndex(2)
-5 >Emitted(10, 49) Source(2, 48) + SourceIndex(2)
-6 >Emitted(10, 50) Source(2, 49) + SourceIndex(2)
+1->Emitted(11, 1) Source(2, 1) + SourceIndex(2)
+2 >Emitted(11, 9) Source(2, 1) + SourceIndex(2)
+3 >Emitted(11, 15) Source(2, 7) + SourceIndex(2)
+4 >Emitted(11, 31) Source(2, 23) + SourceIndex(2)
+5 >Emitted(11, 49) Source(2, 48) + SourceIndex(2)
+6 >Emitted(11, 50) Source(2, 49) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1002,17 +1003,16 @@ sourceFile:../../../first/first_part3.ts
 4 >                  () {
   >                      return "JS does hoists";
   >                  }
-1 >Emitted(11, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(11, 18) Source(1, 10) + SourceIndex(3)
-3 >Emitted(11, 19) Source(1, 11) + SourceIndex(3)
-4 >Emitted(11, 30) Source(3, 2) + SourceIndex(3)
+1 >Emitted(12, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(12, 18) Source(1, 10) + SourceIndex(3)
+3 >Emitted(12, 19) Source(1, 11) + SourceIndex(3)
+4 >Emitted(12, 30) Source(3, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
 sourceFile:../../../second/second_part1.ts
 -------------------------------------------------------------------
 >>>//# sourceMappingURL=first-output.d.ts.map
->>>/// <reference path="../second/tripleRef.d.ts" />
 >>>declare const second_part1Const: secondsecond_part1;
 1->
 2 >^^^^^^^^

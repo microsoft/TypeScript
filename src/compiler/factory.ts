@@ -2701,7 +2701,7 @@ namespace ts {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
         if (!isString(textOrInputFiles)) {
             Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
-            node.fileName = mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath;
+            node.fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
             node.sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
             Object.defineProperties(node, {
                 text: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptText : textOrInputFiles.declarationText; } },
@@ -2709,11 +2709,13 @@ namespace ts {
             });
         }
         else {
+            node.fileName = "";
             node.text = textOrInputFiles;
             node.sourceMapPath = mapPathOrType;
             node.sourceMapText = map;
         }
         const text = node.text;
+        node.languageVersion = ScriptTarget.Latest;
 
         // Shebang
         let pos = isShebangTrivia(text, 0) ? skipTrivia(text, 0, /*stopAfterLineBreak*/ true) : 0;
@@ -2742,8 +2744,12 @@ namespace ts {
             (helpers || (helpers = [])).push(helperInfo.helper);
         }
 
+        // triple slash directives
+        const newPos = processCommentPragmas(node as {} as PragmaContext, text);
+        processPragmasIntoFields(node as {} as PragmaContext, noop);
+
         // Rest of the text
-        node.pos = pos;
+        node.pos = newPos > pos ? newPos : pos;
         node.prologues = prologues || emptyArray;
         node.helpers = helpers;
         node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
