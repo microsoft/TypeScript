@@ -469,11 +469,20 @@ export const b = new A();`);
 
         describe("unittests:: tsbuild - baseline sectioned sourcemaps", () => {
             let fs: vfs.FileSystem | undefined;
+            const actualReadFileMap = createMap<number>();
             before(() => {
                 fs = outFileFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
                 host.clearDiagnostics();
+                const originalReadFile = host.readFile;
+                host.readFile = path => {
+                    // Dont record libs
+                    if (path.startsWith("/src/")) {
+                        actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
+                    }
+                    return originalReadFile.call(host, path);
+                };
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(/*none*/);
             });
@@ -484,6 +493,38 @@ export const b = new A();`);
                 const patch = fs!.diff();
                 // tslint:disable-next-line:no-null-keyword
                 Harness.Baseline.runBaseline("outfile-concat.js", patch ? vfs.formatPatch(patch) : null);
+            });
+            it("verify readFile calls", () => {
+                const expected = [
+                    // Configs
+                    "/src/third/tsconfig.json",
+                    "/src/second/tsconfig.json",
+                    "/src/first/tsconfig.json",
+
+                    // Source files
+                    "/src/third/third_part1.ts",
+                    "/src/second/second_part1.ts",
+                    "/src/second/second_part2.ts",
+                    "/src/first/first_PART1.ts",
+                    "/src/first/first_part2.ts",
+                    "/src/first/first_part3.ts",
+
+                    // outputs
+                    "/src/first/bin/first-output.js",
+                    "/src/first/bin/first-output.js.map",
+                    "/src/first/bin/first-output.d.ts",
+                    "/src/first/bin/first-output.d.ts.map",
+                    "/src/2/second-output.js",
+                    "/src/2/second-output.js.map",
+                    "/src/2/second-output.d.ts",
+                    "/src/2/second-output.d.ts.map"
+                ];
+
+                assert.equal(actualReadFileMap.size, expected.length, `Expected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                expected.forEach(expectedValue => {
+                    const actual = actualReadFileMap.get(expectedValue);
+                    assert.equal(actual, 1, `Mismatch in read file call number for: ${expectedValue}\nExpected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                });
             });
         });
 
