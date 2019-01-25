@@ -4949,6 +4949,12 @@ namespace ts {
             return strictNullChecks && optional ? getOptionalType(type) : type;
         }
 
+        function isParameterOfContextuallyTypedFunction(node: Declaration) {
+            return node.kind === SyntaxKind.Parameter &&
+                (node.parent.kind === SyntaxKind.FunctionExpression || node.parent.kind === SyntaxKind.ArrowFunction) &&
+                !!getContextualType(<Expression>node.parent);
+        }
+
         // Return the inferred type for a variable, parameter, or property declaration
         function getTypeForVariableLikeDeclaration(declaration: ParameterDeclaration | PropertyDeclaration | PropertySignature | VariableDeclaration | BindingElement, includeOptionality: boolean): Type | undefined {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
@@ -5032,11 +5038,9 @@ namespace ts {
                 }
             }
 
-            const isParameterOfContextuallyTypedFunction = declaration.kind === SyntaxKind.Parameter && getContextualType(<Expression>declaration.parent);
-
             // Use the type of the initializer expression if one is present and the declaration is
             // not a parameter of a contextually typed function
-            if (declaration.initializer && !isParameterOfContextuallyTypedFunction) {
+            if (declaration.initializer && !isParameterOfContextuallyTypedFunction(declaration)) {
                 const type = checkDeclarationInitializer(declaration);
                 return addOptionality(type, isOptional);
             }
@@ -5049,7 +5053,7 @@ namespace ts {
 
             // If the declaration specifies a binding pattern and is not a parameter of a contextually
             // typed function, use the type implied by the binding pattern
-            if (isBindingPattern(declaration.name) && !isParameterOfContextuallyTypedFunction) {
+            if (isBindingPattern(declaration.name) && !isParameterOfContextuallyTypedFunction(declaration)) {
                 return getTypeFromBindingPattern(declaration.name, /*includePatternInType*/ false, /*reportErrors*/ true);
             }
 
@@ -5693,7 +5697,7 @@ namespace ts {
                 return errorType;
             }
             // Check if variable has initializer that circularly references the variable itself
-            if (noImplicitAny && (<HasInitializer>declaration).initializer) {
+            if (noImplicitAny && (declaration.kind !== SyntaxKind.Parameter || (<HasInitializer>declaration).initializer)) {
                 error(symbol.valueDeclaration, Diagnostics._0_implicitly_has_type_any_because_it_does_not_have_a_type_annotation_and_is_referenced_directly_or_indirectly_in_its_own_initializer,
                     symbolToString(symbol));
             }
