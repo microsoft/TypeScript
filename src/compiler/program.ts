@@ -2051,7 +2051,7 @@ namespace ts {
                 // NOTE: this only makes sense for case-insensitive file systems, and only on files which are not redirected
 
                 // default to true
-                const forceCasing = options.forceConsistentCasingInFileNames || options.forceConsistentCasingInFileNames === null || options.forceConsistentCasingInFileNames === undefined;
+                const forceCasing = options.forceConsistentCasingInFileNames || options.forceConsistentCasingInFileNames === undefined;
 
                 if (file && forceCasing) {
                     let inputName = fileName;
