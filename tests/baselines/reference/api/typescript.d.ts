@@ -1738,10 +1738,15 @@ declare namespace ts {
     }
     interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
-        fileName?: string;
+        fileName: string;
         text: string;
+        languageVersion: ScriptTarget;
         prologues: ReadonlyArray<UnparsedPrologue>;
         helpers: ReadonlyArray<UnscopedEmitHelpers> | undefined;
+        referencedFiles: FileReference[];
+        typeReferenceDirectives: FileReference[];
+        libReferenceDirectives: FileReference[];
+        hasNoDefaultLib?: boolean;
         sourceMapPath?: string;
         sourceMapText?: string;
     }

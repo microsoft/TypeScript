@@ -207,7 +207,11 @@ namespace ts {
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
-                        return createUnparsedSourceFile(prepend, "dts");
+                        const sourceFile = createUnparsedSourceFile(prepend, "dts");
+                        hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
+                        collectReferences(sourceFile, refs);
+                        collectLibs(sourceFile, libs);
+                        return sourceFile;
                     }
                 }));
                 bundle.syntheticFileReferences = [];
@@ -311,8 +315,8 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile, ret: Map<SourceFile>) {
-            if (noResolve || isSourceFileJS(sourceFile)) return ret;
+        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<SourceFile>) {
+            if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = tryResolveScriptReference(host, sourceFile, f);
                 if (elem) {
@@ -322,7 +326,7 @@ namespace ts {
             return ret;
         }
 
-        function collectLibs(sourceFile: SourceFile, ret: Map<boolean>) {
+        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<boolean>) {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {
