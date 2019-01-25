@@ -100,6 +100,8 @@ namespace ts {
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
     }
 
+    let flowNodeCreated: <T extends FlowNode>(node: T) => T = identity;
+
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
@@ -530,6 +532,7 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
             if (containerFlags & ContainerFlags.IsControlFlowContainer) {
+                const saveFlowNodeCreated = flowNodeCreated;
                 const saveCurrentFlow = currentFlow;
                 const saveBreakTarget = currentBreakTarget;
                 const saveContinueTarget = currentContinueTarget;
@@ -553,6 +556,7 @@ namespace ts {
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
                 hasExplicitReturn = false;
+                flowNodeCreated = identity;
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
@@ -579,6 +583,7 @@ namespace ts {
                 currentReturnTarget = saveReturnTarget;
                 activeLabels = saveActiveLabels;
                 hasExplicitReturn = saveHasExplicitReturn;
+                flowNodeCreated = saveFlowNodeCreated;
             }
             else if (containerFlags & ContainerFlags.IsInterface) {
                 seenThisKeyword = false;
@@ -858,7 +863,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return { flags, expression, antecedent };
+            return flowNodeCreated({ flags, expression, antecedent });
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
@@ -866,17 +871,17 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return { flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent };
+            return flowNodeCreated({ flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent });
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return { flags: FlowFlags.Assignment, antecedent, node };
+            return flowNodeCreated({ flags: FlowFlags.Assignment, antecedent, node });
         }
 
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            const res: FlowArrayMutation = { flags: FlowFlags.ArrayMutation, antecedent, node };
+            const res: FlowArrayMutation = flowNodeCreated({ flags: FlowFlags.ArrayMutation, antecedent, node });
             return res;
         }
 
@@ -1080,8 +1085,16 @@ namespace ts {
         function bindTryStatement(node: TryStatement): void {
             const preFinallyLabel = createBranchLabel();
             const preTryFlow = currentFlow;
-            // TODO: Every statement in try block is potentially an exit point!
+            const tryPriors: FlowNode[] = [];
+            const oldFlowNodeCreated = flowNodeCreated;
+            // We hook the creation of all flow nodes within the `try` scope and store them so we can add _all_ of them
+            // as possible antecedents of the start of the `catch` or `finally` blocks.
+            // Don't bother intercepting the call if there's no finally or catch block that needs the information
+            if (node.catchClause || node.finallyBlock) {
+                flowNodeCreated = node => (tryPriors.push(node), node);
+            }
             bind(node.tryBlock);
+            flowNodeCreated = oldFlowNodeCreated;
             addAntecedent(preFinallyLabel, currentFlow);
 
             const flowAfterTry = currentFlow;
@@ -1089,12 +1102,32 @@ namespace ts {
 
             if (node.catchClause) {
                 currentFlow = preTryFlow;
+                if (tryPriors.length) {
+                    const preCatchFlow = createBranchLabel();
+                    addAntecedent(preCatchFlow, currentFlow);
+                    for (const p of tryPriors) {
+                        addAntecedent(preCatchFlow, p);
+                    }
+                    currentFlow = finishFlowLabel(preCatchFlow);
+                }
+
                 bind(node.catchClause);
                 addAntecedent(preFinallyLabel, currentFlow);
 
                 flowAfterCatch = currentFlow;
             }
             if (node.finallyBlock) {
+                // We add the nodes within the `try` block to the `finally`'s antecedents if there's no catch block
+                // (If there is a `catch` block, it will have all these antecedents instead, and the `finally` will
+                // have the end of the `try` block and the end of the `catch` block)
+                if (!node.catchClause) {
+                    if (tryPriors.length) {
+                        for (const p of tryPriors) {
+                            addAntecedent(preFinallyLabel, p);
+                        }
+                    }
+                }
+
                 // in finally flow is combined from pre-try/flow from try/flow from catch
                 // pre-flow is necessary to make sure that finally is reachable even if finally flows in both try and finally blocks are unreachable
 
@@ -1142,7 +1175,7 @@ namespace ts {
                     }
                 }
                 if (!(currentFlow.flags & FlowFlags.Unreachable)) {
-                    const afterFinallyFlow: AfterFinallyFlow = { flags: FlowFlags.AfterFinally, antecedent: currentFlow };
+                    const afterFinallyFlow: AfterFinallyFlow = flowNodeCreated({ flags: FlowFlags.AfterFinally, antecedent: currentFlow });
                     preFinallyFlow.lock = afterFinallyFlow;
                     currentFlow = afterFinallyFlow;
                 }

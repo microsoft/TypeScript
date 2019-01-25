@@ -4861,7 +4861,7 @@ namespace ts {
 
         function getLiteralPropertyNameText(name: PropertyName) {
             const type = getLiteralTypeFromPropertyName(name);
-            return type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral) ? "" + (<LiteralType>type).value : undefined;
+            return type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral) ? "" + (<StringLiteralType | NumberLiteralType>type).value : undefined;
         }
 
         /** Return the inferred type for a binding element */
@@ -6456,12 +6456,12 @@ namespace ts {
         /**
          * Gets the symbolic name for a late-bound member from its type.
          */
-        function getLateBoundNameFromType(type: LiteralType | UniqueESSymbolType): __String {
+        function getLateBoundNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
             if (type.flags & TypeFlags.UniqueESSymbol) {
                 return `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
             }
             if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
-                return escapeLeadingUnderscores("" + (<LiteralType>type).value);
+                return escapeLeadingUnderscores("" + (<StringLiteralType | NumberLiteralType>type).value);
             }
             return Debug.fail();
         }
@@ -6540,9 +6540,9 @@ namespace ts {
                         // If we have an existing early-bound member, combine its declarations so that we can
                         // report an error at each declaration.
                         const declarations = earlySymbol ? concatenate(earlySymbol.declarations, lateSymbol.declarations) : lateSymbol.declarations;
-                        const name = declarationNameToString(decl.name);
-                        forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Duplicate_declaration_0, name));
-                        error(decl.name || decl, Diagnostics.Duplicate_declaration_0, name);
+                        const name = !(type.flags & TypeFlags.UniqueESSymbol) && unescapeLeadingUnderscores(memberName) || declarationNameToString(decl.name);
+                        forEach(declarations, declaration => error(getNameOfDeclaration(declaration) || declaration, Diagnostics.Property_0_was_also_declared_here, name));
+                        error(decl.name || decl, Diagnostics.Duplicate_property_0, name);
                         lateSymbol = createSymbol(SymbolFlags.None, memberName, CheckFlags.Late);
                     }
                     lateSymbol.nameType = type;
@@ -8710,21 +8710,17 @@ namespace ts {
          * the type of this reference is just the type of the value we resolved to.
          */
         function getJSDocTypeReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
-            if (!pushTypeResolution(symbol, TypeSystemPropertyName.JSDocTypeReference)) {
-                return errorType;
-            }
-            const assignedType = getAssignedClassType(symbol);
-            const valueType = getTypeOfSymbol(symbol);
-            const referenceType = valueType.symbol && valueType.symbol !== symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
-            if (!popTypeResolution()) {
-                getSymbolLinks(symbol).resolvedJSDocType = errorType;
-                error(node, Diagnostics.JSDoc_type_0_circularly_references_itself, symbolToString(symbol));
-                return errorType;
-            }
-            if (referenceType || assignedType) {
-                // TODO: GH#18217 (should the `|| assignedType` be at a lower precedence?)
-                const type = (referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType)!;
-                return getSymbolLinks(symbol).resolvedJSDocType = type;
+            // In the case of an assignment of a function expression (binary expressions, variable declarations, etc.), we will get the
+            // correct instance type for the symbol on the LHS by finding the type for RHS. For example if we want to get the type of the symbol `foo`:
+            //   var foo = function() {}
+            // We will find the static type of the assigned anonymous function.
+            const staticType = getTypeOfSymbol(symbol);
+            const instanceType =
+                staticType.symbol &&
+                staticType.symbol !== symbol && // Make sure this is an assignment like expression by checking that symbol -> type -> symbol doesn't roundtrips.
+                getTypeReferenceTypeWorker(node, staticType.symbol, typeArguments); // Get the instance type of the RHS symbol.
+            if (instanceType) {
+                return getSymbolLinks(symbol).resolvedJSDocType = instanceType;
             }
         }
 
@@ -8745,8 +8741,11 @@ namespace ts {
 
             if (symbol.flags & SymbolFlags.Function &&
                 isJSDocTypeReference(node) &&
-                (symbol.members || getJSDocClassTag(symbol.valueDeclaration))) {
-                return getInferredClassType(symbol);
+                isJSConstructor(symbol.valueDeclaration)) {
+                const resolved = resolveStructuredTypeMembers(<ObjectType>getTypeOfSymbol(symbol));
+                if (resolved.callSignatures.length === 1) {
+                    return getReturnTypeOfSignature(resolved.callSignatures[0]);
+                }
             }
         }
 
@@ -9821,7 +9820,7 @@ namespace ts {
             if (accessNode) {
                 const indexNode = getIndexNodeForAccessExpression(accessNode);
                 if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
-                    error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, "" + (<LiteralType>indexType).value, typeToString(objectType));
+                    error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, "" + (<StringLiteralType | NumberLiteralType>indexType).value, typeToString(objectType));
                 }
                 else if (indexType.flags & (TypeFlags.String | TypeFlags.Number)) {
                     error(indexNode, Diagnostics.Type_0_has_no_matching_index_signature_for_type_1, typeToString(objectType), typeToString(indexType));
@@ -11766,11 +11765,11 @@ namespace ts {
             if (s & TypeFlags.StringLike && t & TypeFlags.String) return true;
             if (s & TypeFlags.StringLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.StringLiteral && !(t & TypeFlags.EnumLiteral) &&
-                (<LiteralType>source).value === (<LiteralType>target).value) return true;
+                (<StringLiteralType>source).value === (<StringLiteralType>target).value) return true;
             if (s & TypeFlags.NumberLike && t & TypeFlags.Number) return true;
             if (s & TypeFlags.NumberLiteral && s & TypeFlags.EnumLiteral &&
                 t & TypeFlags.NumberLiteral && !(t & TypeFlags.EnumLiteral) &&
-                (<LiteralType>source).value === (<LiteralType>target).value) return true;
+                (<NumberLiteralType>source).value === (<NumberLiteralType>target).value) return true;
             if (s & TypeFlags.BigIntLike && t & TypeFlags.BigInt) return true;
             if (s & TypeFlags.BooleanLike && t & TypeFlags.Boolean) return true;
             if (s & TypeFlags.ESSymbolLike && t & TypeFlags.ESSymbol) return true;
@@ -13694,8 +13693,8 @@ namespace ts {
         // no flags for all other types (including non-falsy literal types).
         function getFalsyFlags(type: Type): TypeFlags {
             return type.flags & TypeFlags.Union ? getFalsyFlagsOfTypes((<UnionType>type).types) :
-                type.flags & TypeFlags.StringLiteral ? (<LiteralType>type).value === "" ? TypeFlags.StringLiteral : 0 :
-                type.flags & TypeFlags.NumberLiteral ? (<LiteralType>type).value === 0 ? TypeFlags.NumberLiteral : 0 :
+                type.flags & TypeFlags.StringLiteral ? (<StringLiteralType>type).value === "" ? TypeFlags.StringLiteral : 0 :
+                type.flags & TypeFlags.NumberLiteral ? (<NumberLiteralType>type).value === 0 ? TypeFlags.NumberLiteral : 0 :
                 type.flags & TypeFlags.BigIntLiteral ? isZeroBigInt(<BigIntLiteralType>type) ? TypeFlags.BigIntLiteral : 0 :
                 type.flags & TypeFlags.BooleanLiteral ? (type === falseType || type === regularFalseType) ? TypeFlags.BooleanLiteral : 0 :
                 type.flags & TypeFlags.PossiblyFalsy;
@@ -13718,8 +13717,8 @@ namespace ts {
                 type === regularFalseType ||
                 type === falseType ||
                 type.flags & (TypeFlags.Void | TypeFlags.Undefined | TypeFlags.Null) ||
-                type.flags & TypeFlags.StringLiteral && (<LiteralType>type).value === "" ||
-                type.flags & TypeFlags.NumberLiteral && (<LiteralType>type).value === 0 ||
+                type.flags & TypeFlags.StringLiteral && (<StringLiteralType>type).value === "" ||
+                type.flags & TypeFlags.NumberLiteral && (<NumberLiteralType>type).value === 0 ||
                 type.flags & TypeFlags.BigIntLiteral && isZeroBigInt(<BigIntLiteralType>type) ? type :
                 neverType;
         }
@@ -15107,7 +15106,7 @@ namespace ts {
                 return strictNullChecks ? TypeFacts.StringStrictFacts : TypeFacts.StringFacts;
             }
             if (flags & TypeFlags.StringLiteral) {
-                const isEmpty = (<LiteralType>type).value === "";
+                const isEmpty = (<StringLiteralType>type).value === "";
                 return strictNullChecks ?
                     isEmpty ? TypeFacts.EmptyStringStrictFacts : TypeFacts.NonEmptyStringStrictFacts :
                     isEmpty ? TypeFacts.EmptyStringFacts : TypeFacts.NonEmptyStringFacts;
@@ -15116,7 +15115,7 @@ namespace ts {
                 return strictNullChecks ? TypeFacts.NumberStrictFacts : TypeFacts.NumberFacts;
             }
             if (flags & TypeFlags.NumberLiteral) {
-                const isZero = (<LiteralType>type).value === 0;
+                const isZero = (<NumberLiteralType>type).value === 0;
                 return strictNullChecks ?
                     isZero ? TypeFacts.ZeroNumberStrictFacts : TypeFacts.NonZeroNumberStrictFacts :
                     isZero ? TypeFacts.ZeroNumberFacts : TypeFacts.NonZeroNumberFacts;
@@ -15787,9 +15786,6 @@ namespace ts {
 
             function getTypeAtSwitchClause(flow: FlowSwitchClause): FlowType {
                 const expr = flow.switchStatement.expression;
-                if (containsMatchingReferenceDiscriminant(reference, expr)) {
-                    return declaredType;
-                }
                 const flowType = getTypeAtFlowNode(flow.antecedent);
                 let type = getTypeFromFlowType(flowType);
                 if (isMatchingReference(reference, expr)) {
@@ -15803,6 +15799,9 @@ namespace ts {
                 }
                 else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr as TypeOfExpression).expression)) {
                     type = narrowBySwitchOnTypeOf(type, flow.switchStatement, flow.clauseStart, flow.clauseEnd);
+                }
+                else if (containsMatchingReferenceDiscriminant(reference, expr)) {
+                    type = declaredType;
                 }
                 return createFlowType(type, isIncomplete(flowType));
             }
@@ -16885,7 +16884,7 @@ namespace ts {
                 else if (isInJS &&
                          (container.kind === SyntaxKind.FunctionExpression || container.kind === SyntaxKind.FunctionDeclaration) &&
                          getJSDocClassTag(container)) {
-                    const classType = getJSClassType(container.symbol);
+                    const classType = getJSClassType(getMergedSymbol(container.symbol));
                     if (classType) {
                         return getFlowTypeOfReference(node, classType);
                     }
@@ -21081,7 +21080,7 @@ namespace ts {
 
                 // If the symbol of the node has members, treat it like a constructor.
                 const symbol = getSymbolOfNode(func);
-                return !!symbol && symbol.members !== undefined;
+                return !!symbol && (symbol.members !== undefined || symbol.exports !== undefined && symbol.exports.get("prototype" as __String) !== undefined);
             }
             return false;
         }
@@ -21100,10 +21099,6 @@ namespace ts {
                 inferred = getInferredClassType(symbol);
             }
             const assigned = getAssignedClassType(symbol);
-            const valueType = getTypeOfSymbol(symbol);
-            if (valueType.symbol && !isInferredClassType(valueType) && isJSConstructor(valueType.symbol.valueDeclaration)) {
-                inferred = getInferredClassType(valueType.symbol);
-            }
             return assigned && inferred ?
                 getIntersectionType([inferred, assigned]) :
                 assigned || inferred;
@@ -21143,12 +21138,6 @@ namespace ts {
             return links.inferredClassType;
         }
 
-        function isInferredClassType(type: Type) {
-            return type.symbol
-                && getObjectFlags(type) & ObjectFlags.Anonymous
-                && getSymbolLinks(type.symbol).inferredClassType === type;
-        }
-
         /**
          * Syntactically and semantically checks a call or new expression.
          * @param node The call/new expression to be checked.
@@ -21170,21 +21159,10 @@ namespace ts {
                     declaration.kind !== SyntaxKind.Constructor &&
                     declaration.kind !== SyntaxKind.ConstructSignature &&
                     declaration.kind !== SyntaxKind.ConstructorType &&
-                    !isJSDocConstructSignature(declaration)) {
+                    !isJSDocConstructSignature(declaration) &&
+                    !isJSConstructor(declaration)) {
 
-                    // When resolved signature is a call signature (and not a construct signature) the result type is any, unless
-                    // the declaring function had members created through 'x.prototype.y = expr' or 'this.y = expr' psuedodeclarations
-                    // in a JS file
-                    // Note:JS inferred classes might come from a variable declaration instead of a function declaration.
-                    // In this case, using getResolvedSymbol directly is required to avoid losing the members from the declaration.
-                    let funcSymbol = checkExpression(node.expression).symbol;
-                    if (!funcSymbol && node.expression.kind === SyntaxKind.Identifier) {
-                        funcSymbol = getResolvedSymbol(node.expression as Identifier);
-                    }
-                    const type = funcSymbol && getJSClassType(funcSymbol);
-                    if (type) {
-                        return signature.target ? instantiateType(type, signature.mapper) : type;
-                    }
+                    // When resolved signature is a call signature (and not a construct signature) the result type is any
                     if (noImplicitAny) {
                         error(node, Diagnostics.new_expression_whose_target_lacks_a_construct_signature_implicitly_has_an_any_type);
                     }
@@ -22340,7 +22318,7 @@ namespace ts {
             if (!(isTypeComparableTo(leftType, stringType) || isTypeAssignableToKind(leftType, TypeFlags.NumberLike | TypeFlags.ESSymbolLike))) {
                 error(left, Diagnostics.The_left_hand_side_of_an_in_expression_must_be_of_type_any_string_number_or_symbol);
             }
-            if (!isTypeAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive)) {
+            if (!allTypesAssignableToKind(rightType, TypeFlags.NonPrimitive | TypeFlags.InstantiableNonPrimitive)) {
                 error(right, Diagnostics.The_right_hand_side_of_an_in_expression_must_be_of_type_any_an_object_type_or_a_type_parameter);
             }
             return booleanType;
@@ -31224,7 +31202,7 @@ namespace ts {
             if (nodeArguments.length !== 1) {
                 return grammarErrorOnNode(node, Diagnostics.Dynamic_import_must_have_one_specifier_as_an_argument);
             }
-
+            checkGrammarForDisallowedTrailingComma(nodeArguments);
             // see: parseArgumentOrArrayLiteralElement...we use this function which parse arguments of callExpression to parse specifier for dynamic import.
             // parseArgumentOrArrayLiteralElement allows spread element to be in an argument list which is not allowed as specifier in dynamic import.
             if (isSpreadElement(nodeArguments[0])) {
