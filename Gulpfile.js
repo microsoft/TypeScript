@@ -542,7 +542,7 @@ const watchLocalPatterns = [
 gulp.task(
     "watch-local",
     "Watches for changes to projects in src/ (but does not execute tests).",
-    () => gulp.watch(watchLocalPatterns, "local"));
+    () => gulp.watch(watchLocalPatterns, ["local"]));
 
 const watchPatterns = [
     "src/tsconfig-base.json",
