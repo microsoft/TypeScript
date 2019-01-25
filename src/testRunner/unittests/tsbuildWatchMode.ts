@@ -2,16 +2,35 @@ namespace ts.tscWatch {
     import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
     import getFilePathInProject = TestFSWithWatch.getTsBuildProjectFilePath;
     import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;
+    type TsBuildWatchSystem = WatchedSystem & { writtenFiles: Map<true>; };
+
+    function createTsBuildWatchSystem(fileOrFolderList: ReadonlyArray<TestFSWithWatch.FileOrFolderOrSymLink>, params?: TestFSWithWatch.TestServerHostCreationParameters) {
+        const host = createWatchedSystem(fileOrFolderList, params) as TsBuildWatchSystem;
+        const originalWriteFile = host.writeFile;
+        host.writtenFiles = createMap<true>();
+        host.writeFile = (fileName, content) => {
+            originalWriteFile.call(host, fileName, content);
+            const path = host.toFullPath(fileName);
+            host.writtenFiles.set(path, true);
+        };
+        return host;
+    }
+
     export function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderWithWatchHost(system);
         return ts.createSolutionBuilder(host, rootNames, defaultOptions || { watch: true });
     }
 
-    function createSolutionBuilderWithWatch(host: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
+    function createSolutionBuilderWithWatch(host: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
         const solutionBuilder = createSolutionBuilder(host, rootNames, defaultOptions);
         solutionBuilder.buildAllProjects();
         solutionBuilder.startWatching();
         return solutionBuilder;
+    }
+
+    type OutputFileStamp = [string, Date | undefined, boolean];
+    function transformOutputToOutputFileStamp(f: string, host: TsBuildWatchSystem): OutputFileStamp {
+        return [f, host.getModifiedTime(f), host.writtenFiles.has(host.toFullPath(f))] as OutputFileStamp;
     }
 
     describe("unittests:: tsbuild-watch program updates", () => {
@@ -61,12 +80,11 @@ namespace ts.tscWatch {
             return [`${file}.js`, `${file}.d.ts`];
         }
 
-        type OutputFileStamp = [string, Date | undefined];
-        function getOutputStamps(host: WatchedSystem, subProject: SubProject, baseFileNameWithoutExtension: string): OutputFileStamp[] {
-            return getOutputFileNames(subProject, baseFileNameWithoutExtension).map(f => [f, host.getModifiedTime(f)] as OutputFileStamp);
+        function getOutputStamps(host: TsBuildWatchSystem, subProject: SubProject, baseFileNameWithoutExtension: string): OutputFileStamp[] {
+            return getOutputFileNames(subProject, baseFileNameWithoutExtension).map(f => transformOutputToOutputFileStamp(f, host));
         }
 
-        function getOutputFileStamps(host: WatchedSystem, additionalFiles?: ReadonlyArray<[SubProject, string]>): OutputFileStamp[] {
+        function getOutputFileStamps(host: TsBuildWatchSystem, additionalFiles?: ReadonlyArray<[SubProject, string]>): OutputFileStamp[] {
             const result = [
                 ...getOutputStamps(host, SubProject.core, "anotherModule"),
                 ...getOutputStamps(host, SubProject.core, "index"),
@@ -76,18 +94,21 @@ namespace ts.tscWatch {
             if (additionalFiles) {
                 additionalFiles.forEach(([subProject, baseFileNameWithoutExtension]) => result.push(...getOutputStamps(host, subProject, baseFileNameWithoutExtension)));
             }
+            host.writtenFiles.clear();
             return result;
         }
 
-        function verifyChangedFiles(actualStamps: OutputFileStamp[], oldTimeStamps: OutputFileStamp[], changedFiles: string[]) {
+        function verifyChangedFiles(actualStamps: OutputFileStamp[], oldTimeStamps: OutputFileStamp[], changedFiles: ReadonlyArray<string>, modifiedTimeStampFiles: ReadonlyArray<string>) {
             for (let i = 0; i < oldTimeStamps.length; i++) {
                 const actual = actualStamps[i];
                 const old = oldTimeStamps[i];
-                if (contains(changedFiles, actual[0])) {
-                    assert.isTrue((actual[1] || 0) > (old[1] || 0), `${actual[0]} expected to written`);
+                const expectedIsChanged = contains(changedFiles, actual[0]);
+                assert.equal(actual[2], contains(changedFiles, actual[0]), `Expected ${actual[0]} to be written.`);
+                if (expectedIsChanged || contains(modifiedTimeStampFiles, actual[0])) {
+                    assert.isTrue((actual[1] || 0) > (old[1] || 0), `${actual[0]} file expected to have newer modified time because it is expected to ${expectedIsChanged ? "be changed" : "have modified time stamp"}`);
                 }
                 else {
-                    assert.equal(actual[1], old[1], `${actual[0]} expected to not change`);
+                    assert.equal(actual[1], old[1], `${actual[0]} expected to not change or have timestamp modified.`);
                 }
             }
         }
@@ -101,7 +122,7 @@ namespace ts.tscWatch {
         const testProjectExpectedWatchedDirectoriesRecursive = [projectPath(SubProject.core), projectPath(SubProject.logic)];
 
         function createSolutionInWatchMode(allFiles: ReadonlyArray<File>, defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
-            const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
+            const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], defaultOptions);
             verifyWatches(host);
             checkOutputErrorsInitial(host, emptyArray, disableConsoleClears);
@@ -112,7 +133,7 @@ namespace ts.tscWatch {
             return host;
         }
 
-        function verifyWatches(host: WatchedSystem) {
+        function verifyWatches(host: TsBuildWatchSystem) {
             checkWatchedFiles(host, testProjectExpectedWatchedFiles);
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
@@ -134,30 +155,50 @@ namespace ts.tscWatch {
                     const host = createSolutionInWatchMode(allFiles);
                     return { host, verifyChangeWithFile, verifyChangeAfterTimeout, verifyWatches };
 
-                    function verifyChangeWithFile(fileName: string, content: string) {
+                    function verifyChangeWithFile(fileName: string, content: string, local?: boolean) {
                         const outputFileStamps = getOutputFileStamps(host, additionalFiles);
                         host.writeFile(fileName, content);
-                        verifyChangeAfterTimeout(outputFileStamps);
+                        verifyChangeAfterTimeout(outputFileStamps, local);
                     }
 
-                    function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[]) {
+                    function verifyChangeAfterTimeout(outputFileStamps: OutputFileStamp[], local?: boolean) {
                         host.checkTimeoutQueueLengthAndRun(1); // Builds core
                         const changedCore = getOutputFileStamps(host, additionalFiles);
-                        verifyChangedFiles(changedCore, outputFileStamps, [
-                            ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
-                            ...getOutputFileNames(SubProject.core, "index"),
-                            ...(additionalFiles ? getOutputFileNames(SubProject.core, newFileWithoutExtension) : emptyArray)
-                        ]);
-                        host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                        verifyChangedFiles(
+                            changedCore,
+                            outputFileStamps,
+                            additionalFiles ?
+                                getOutputFileNames(SubProject.core, newFileWithoutExtension) :
+                                getOutputFileNames(SubProject.core, "index"), // Written files are new file or core index file thats changed
+                            [
+                                ...getOutputFileNames(SubProject.core, "anotherModule"),
+                                ...(additionalFiles ? getOutputFileNames(SubProject.core, "index") : emptyArray)
+                            ]
+                        );
+                        host.checkTimeoutQueueLengthAndRun(1); // Builds logic or updates timestamps
                         const changedLogic = getOutputFileStamps(host, additionalFiles);
-                        verifyChangedFiles(changedLogic, changedCore, [
-                            ...getOutputFileNames(SubProject.logic, "index") // Again these need not be written
-                        ]);
+                        verifyChangedFiles(
+                            changedLogic,
+                            changedCore,
+                            additionalFiles || local ?
+                                emptyArray :
+                                getOutputFileNames(SubProject.logic, "index"),
+                            additionalFiles || local ?
+                                getOutputFileNames(SubProject.logic, "index") :
+                                emptyArray
+                        );
                         host.checkTimeoutQueueLengthAndRun(1); // Builds tests
                         const changedTests = getOutputFileStamps(host, additionalFiles);
-                        verifyChangedFiles(changedTests, changedLogic, [
-                            ...getOutputFileNames(SubProject.tests, "index") // Again these need not be written
-                        ]);
+                        verifyChangedFiles(
+                            changedTests,
+                            changedLogic,
+                            additionalFiles || local ?
+                                emptyArray :
+                                getOutputFileNames(SubProject.tests, "index"),
+                            additionalFiles || local ?
+                                getOutputFileNames(SubProject.tests, "index") :
+                                emptyArray
+                        );
                         host.checkTimeoutQueueLength(0);
                         checkOutputErrorsIncremental(host, emptyArray);
                         verifyWatches();
@@ -193,19 +234,9 @@ export class someClass2 { }`);
                 });
 
                 it("non local change does not start build of referencing projects", () => {
-                    const host = createSolutionInWatchMode(allFiles);
-                    const outputFileStamps = getOutputFileStamps(host);
-                    host.writeFile(core[1].path, `${core[1].content}
-function foo() { }`);
-                    host.checkTimeoutQueueLengthAndRun(1); // Builds core
-                    const changedCore = getOutputFileStamps(host);
-                    verifyChangedFiles(changedCore, outputFileStamps, [
-                        ...getOutputFileNames(SubProject.core, "anotherModule"), // This should not be written really
-                        ...getOutputFileNames(SubProject.core, "index"),
-                    ]);
-                    host.checkTimeoutQueueLength(0);
-                    checkOutputErrorsIncremental(host, emptyArray);
-                    verifyWatches(host);
+                    const { verifyChangeWithFile } = createSolutionInWatchModeToVerifyChanges();
+                    verifyChangeWithFile(core[1].path, `${core[1].content}
+function foo() { }`, /*local*/ true);
                 });
 
                 it("builds when new file is added, and its subsequent updates", () => {
@@ -242,7 +273,7 @@ export class someClass2 { }`);
 
         it("watches config files that are not present", () => {
             const allFiles = [libFile, ...core, logic[1], ...tests];
-            const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
+            const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
             checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path.toLowerCase())); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
@@ -268,14 +299,10 @@ export class someClass2 { }`);
             host.writeFile(logic[0].path, logic[0].content);
             host.checkTimeoutQueueLengthAndRun(1); // Builds logic
             const changedLogic = getOutputFileStamps(host);
-            verifyChangedFiles(changedLogic, initial, [
-                ...getOutputFileNames(SubProject.logic, "index")
-            ]);
+            verifyChangedFiles(changedLogic, initial, getOutputFileNames(SubProject.logic, "index"), emptyArray);
             host.checkTimeoutQueueLengthAndRun(1); // Builds tests
             const changedTests = getOutputFileStamps(host);
-            verifyChangedFiles(changedTests, changedLogic, [
-                ...getOutputFileNames(SubProject.tests, "index")
-            ]);
+            verifyChangedFiles(changedTests, changedLogic, getOutputFileNames(SubProject.tests, "index"), emptyArray);
             host.checkTimeoutQueueLength(0);
             checkOutputErrorsIncremental(host, emptyArray);
             verifyWatches(host);
@@ -305,7 +332,7 @@ export class someClass2 { }`);
             };
 
             const projectFiles = [coreTsConfig, coreIndex, logicTsConfig, logicIndex];
-            const host = createWatchedSystem([libFile, ...projectFiles], { currentDirectory: projectsLocation });
+            const host = createTsBuildWatchSystem([libFile, ...projectFiles], { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.logic}`]);
             verifyWatches();
             checkOutputErrorsInitial(host, emptyArray);
@@ -318,6 +345,7 @@ export class someClass2 { }`);
             verifyChangeInCore(`${coreIndex.content}
 function myFunc() { return 10; }`);
 
+            // TODO:: local change does not build logic.js because builder doesnt find any changes in input files to generate output
             // Make local change to function bar
             verifyChangeInCore(`${coreIndex.content}
 function myFunc() { return 100; }`);
@@ -328,14 +356,20 @@ function myFunc() { return 100; }`);
 
                 host.checkTimeoutQueueLengthAndRun(1); // Builds core
                 const changedCore = getOutputFileStamps();
-                verifyChangedFiles(changedCore, outputFileStamps, [
-                    ...getOutputFileNames(SubProject.core, "index")
-                ]);
+                verifyChangedFiles(
+                    changedCore,
+                    outputFileStamps,
+                    getOutputFileNames(SubProject.core, "index"),
+                    emptyArray
+                );
                 host.checkTimeoutQueueLengthAndRun(1); // Builds logic
                 const changedLogic = getOutputFileStamps();
-                verifyChangedFiles(changedLogic, changedCore, [
-                    ...getOutputFileNames(SubProject.logic, "index")
-                ]);
+                verifyChangedFiles(
+                    changedLogic,
+                    changedCore,
+                    getOutputFileNames(SubProject.logic, "index"),
+                    emptyArray
+                );
                 host.checkTimeoutQueueLength(0);
                 checkOutputErrorsIncremental(host, emptyArray);
                 verifyWatches();
@@ -346,6 +380,7 @@ function myFunc() { return 100; }`);
                     ...getOutputStamps(host, SubProject.core, "index"),
                     ...getOutputStamps(host, SubProject.logic, "index"),
                 ];
+                host.writtenFiles.clear();
                 return result;
             }
 
@@ -389,7 +424,7 @@ createSomeObject().message;`
             };
 
             const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
-            const host = createWatchedSystem(files, { currentDirectory: `${projectsLocation}/${project}` });
+            const host = createTsBuildWatchSystem(files, { currentDirectory: `${projectsLocation}/${project}` });
             createSolutionBuilderWithWatch(host, ["App"]);
             checkOutputErrorsInitial(host, emptyArray);
 
@@ -418,7 +453,7 @@ let y: string = 10;`);
 
                 host.checkTimeoutQueueLengthAndRun(1); // Builds logic
                 const changedLogic = getOutputFileStamps(host);
-                verifyChangedFiles(changedLogic, outputFileStamps, emptyArray);
+                verifyChangedFiles(changedLogic, outputFileStamps, emptyArray, emptyArray);
                 host.checkTimeoutQueueLength(0);
                 checkOutputErrorsIncremental(host, [
                     `sample1/logic/index.ts(8,5): error TS2322: Type '10' is not assignable to type 'string'.\n`
@@ -429,7 +464,7 @@ let x: string = 10;`);
 
                 host.checkTimeoutQueueLengthAndRun(1); // Builds core
                 const changedCore = getOutputFileStamps(host);
-                verifyChangedFiles(changedCore, changedLogic, emptyArray);
+                verifyChangedFiles(changedCore, changedLogic, emptyArray, emptyArray);
                 host.checkTimeoutQueueLength(0);
                 checkOutputErrorsIncremental(host, [
                     `sample1/core/index.ts(5,5): error TS2322: Type '10' is not assignable to type 'string'.\n`,
@@ -444,11 +479,118 @@ let x: string = 10;`);
             it("when preserveWatchOutput is passed on command line", () => {
                 verifyIncrementalErrors({ preserveWatchOutput: true, watch: true }, /*disabledConsoleClear*/ true);
             });
+
+            describe("when declaration emit errors are present", () => {
+                const solution = "solution";
+                const subProject = "app";
+                const subProjectLocation = `${projectsLocation}/${solution}/${subProject}`;
+                const fileWithError: File = {
+                    path: `${subProjectLocation}/fileWithError.ts`,
+                    content: `export var myClassWithError = class {
+        tags() { }
+        private p = 12
+    };`
+                };
+                const fileWithFixedError: File = {
+                    path: fileWithError.path,
+                    content: fileWithError.content.replace("private p = 12", "")
+                };
+                const fileWithoutError: File = {
+                    path: `${subProjectLocation}/fileWithoutError.ts`,
+                    content: `export class myClass { }`
+                };
+                const tsconfig: File = {
+                    path: `${subProjectLocation}/tsconfig.json`,
+                    content: JSON.stringify({ compilerOptions: { composite: true } })
+                };
+                const expectedDtsEmitErrors = [
+                    `${subProject}/fileWithError.ts(1,12): error TS4094: Property 'p' of exported class expression may not be private or protected.\n`
+                ];
+                const outputs = [
+                    changeExtension(fileWithError.path, Extension.Js),
+                    changeExtension(fileWithError.path, Extension.Dts),
+                    changeExtension(fileWithoutError.path, Extension.Js),
+                    changeExtension(fileWithoutError.path, Extension.Dts)
+                ];
+
+                function verifyDtsErrors(host: TsBuildWatchSystem, isIncremental: boolean, expectedErrors: ReadonlyArray<string>) {
+                    (isIncremental ? checkOutputErrorsIncremental : checkOutputErrorsInitial)(host, expectedErrors);
+                    outputs.forEach(f => assert.equal(host.fileExists(f), !expectedErrors.length, `Expected file ${f} to ${!expectedErrors.length ? "exist" : "not exist"}`));
+                }
+
+                function createSolutionWithWatch(withFixedError?: true) {
+                    const files = [libFile, withFixedError ? fileWithFixedError : fileWithError, fileWithoutError, tsconfig];
+                    const host = createTsBuildWatchSystem(files, { currentDirectory: `${projectsLocation}/${solution}` });
+                    createSolutionBuilderWithWatch(host, [subProject]);
+                    verifyDtsErrors(host, /*isIncremental*/ false, withFixedError ? emptyArray : expectedDtsEmitErrors);
+                    return host;
+                }
+
+                function incrementalBuild(host: TsBuildWatchSystem) {
+                    host.checkTimeoutQueueLengthAndRun(1); // Build the app
+                    host.checkTimeoutQueueLength(0);
+                }
+
+                function fixError(host: TsBuildWatchSystem) {
+                    // Fix error
+                    host.writeFile(fileWithError.path, fileWithFixedError.content);
+                    host.writtenFiles.clear();
+                    incrementalBuild(host);
+                    verifyDtsErrors(host, /*isIncremental*/ true, emptyArray);
+                }
+
+                it("when fixing error files all files are emitted", () => {
+                    const host = createSolutionWithWatch();
+                    fixError(host);
+                });
+
+                it("when file with no error changes, declaration errors are reported", () => {
+                    const host = createSolutionWithWatch();
+                    host.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
+                    incrementalBuild(host);
+                    verifyDtsErrors(host, /*isIncremental*/ true, expectedDtsEmitErrors);
+                });
+
+                describe("when reporting errors on introducing error", () => {
+                    function createSolutionWithIncrementalError() {
+                        const host = createSolutionWithWatch(/*withFixedError*/ true);
+                        host.writeFile(fileWithError.path, fileWithError.content);
+                        host.writtenFiles.clear();
+
+                        incrementalBuild(host);
+                        checkOutputErrorsIncremental(host, expectedDtsEmitErrors);
+                        assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
+                        return host;
+                    }
+
+                    function verifyWrittenFile(host: TsBuildWatchSystem, f: string) {
+                        assert.isTrue(host.writtenFiles.has(host.toFullPath(f)), `Expected to write ${f}: ${arrayFrom(host.writtenFiles.keys())}`);
+                    }
+
+                    it("when fixing errors only changed file is emitted", () => {
+                        const host = createSolutionWithIncrementalError();
+                        fixError(host);
+                        assert.equal(host.writtenFiles.size, 2, `Expected to write only changed files: ${arrayFrom(host.writtenFiles.keys())}`);
+                        verifyWrittenFile(host, outputs[0]);
+                        verifyWrittenFile(host, outputs[1]);
+                    });
+
+                    it("when file with no error changes, declaration errors are reported", () => {
+                        const host = createSolutionWithIncrementalError();
+                        host.writeFile(fileWithoutError.path, fileWithoutError.content.replace(/myClass/g, "myClass2"));
+                        host.writtenFiles.clear();
+
+                        incrementalBuild(host);
+                        checkOutputErrorsIncremental(host, expectedDtsEmitErrors);
+                        assert.equal(host.writtenFiles.size, 0, `Expected not to write any files: ${arrayFrom(host.writtenFiles.keys())}`);
+                    });
+                });
+            });
         });
 
         describe("tsc-watch and tsserver works with project references", () => {
             describe("invoking when references are already built", () => {
-                function verifyWatchesOfProject(host: WatchedSystem, expectedWatchedFiles: ReadonlyArray<string>, expectedWatchedDirectoriesRecursive: ReadonlyArray<string>, expectedWatchedDirectories?: ReadonlyArray<string>) {
+                function verifyWatchesOfProject(host: TsBuildWatchSystem, expectedWatchedFiles: ReadonlyArray<string>, expectedWatchedDirectoriesRecursive: ReadonlyArray<string>, expectedWatchedDirectories?: ReadonlyArray<string>) {
                     checkWatchedFilesDetailed(host, expectedWatchedFiles, 1);
                     checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories || emptyArray, 1, /*recursive*/ false);
                     checkWatchedDirectoriesDetailed(host, expectedWatchedDirectoriesRecursive, 1, /*recursive*/ true);
@@ -457,9 +599,9 @@ let x: string = 10;`);
                 function createSolutionOfProject(allFiles: ReadonlyArray<File>,
                     currentDirectory: string,
                     solutionBuilderconfig: string,
-                    getOutputFileStamps: (host: WatchedSystem) => ReadonlyArray<OutputFileStamp>) {
+                    getOutputFileStamps: (host: TsBuildWatchSystem) => ReadonlyArray<OutputFileStamp>) {
                     // Build the composite project
-                    const host = createWatchedSystem(allFiles, { currentDirectory });
+                    const host = createTsBuildWatchSystem(allFiles, { currentDirectory });
                     const solutionBuilder = createSolutionBuilder(host, [solutionBuilderconfig], {});
                     solutionBuilder.buildAllProjects();
                     const outputFileStamps = getOutputFileStamps(host);
@@ -474,7 +616,7 @@ let x: string = 10;`);
                     currentDirectory: string,
                     solutionBuilderconfig: string,
                     watchConfig: string,
-                    getOutputFileStamps: (host: WatchedSystem) => ReadonlyArray<OutputFileStamp>) {
+                    getOutputFileStamps: (host: TsBuildWatchSystem) => ReadonlyArray<OutputFileStamp>) {
                     // Build the composite project
                     const { host, solutionBuilder } = createSolutionOfProject(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
 
@@ -489,7 +631,7 @@ let x: string = 10;`);
                     currentDirectory: string,
                     solutionBuilderconfig: string,
                     openFileName: string,
-                    getOutputFileStamps: (host: WatchedSystem) => ReadonlyArray<OutputFileStamp>) {
+                    getOutputFileStamps: (host: TsBuildWatchSystem) => ReadonlyArray<OutputFileStamp>) {
                     // Build the composite project
                     const { host, solutionBuilder } = createSolutionOfProject(allFiles, currentDirectory, solutionBuilderconfig, getOutputFileStamps);
 
@@ -525,12 +667,12 @@ let x: string = 10;`);
                         return createSolutionAndServiceOfProject(allFiles, projectsLocation, `${project}/${SubProject.tests}`, tests[1].path, getOutputFileStamps);
                     }
 
-                    function verifyWatches(host: WatchedSystem, withTsserver?: boolean) {
+                    function verifyWatches(host: TsBuildWatchSystem, withTsserver?: boolean) {
                         verifyWatchesOfProject(host, withTsserver ? expectedWatchedFiles.filter(f => f !== tests[1].path.toLowerCase()) : expectedWatchedFiles, expectedWatchedDirectoriesRecursive);
                     }
 
                     function verifyScenario(
-                        edit: (host: WatchedSystem, solutionBuilder: SolutionBuilder) => void,
+                        edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder) => void,
                         expectedFilesAfterEdit: ReadonlyArray<string>
                     ) {
                         it("with tsc-watch", () => {
@@ -633,7 +775,7 @@ export function gfoo() {
                     }
 
                     function verifyWatchState(
-                        host: WatchedSystem,
+                        host: TsBuildWatchSystem,
                         watch: Watch,
                         expectedProgramFiles: ReadonlyArray<string>,
                         expectedWatchedFiles: ReadonlyArray<string>,
@@ -720,20 +862,20 @@ export function gfoo() {
                             return createSolutionAndServiceOfProject(allFiles, getProjectPath(project), configToBuild, cTs.path, getOutputFileStamps);
                         }
 
-                        function getOutputFileStamps(host: WatchedSystem) {
-                            return expectedFiles.map(file => [file, host.getModifiedTime(file)] as OutputFileStamp);
+                        function getOutputFileStamps(host: TsBuildWatchSystem) {
+                            return expectedFiles.map(file => transformOutputToOutputFileStamp(file, host));
                         }
 
-                        function verifyProgram(host: WatchedSystem, watch: Watch) {
+                        function verifyProgram(host: TsBuildWatchSystem, watch: Watch) {
                             verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, defaultDependencies, expectedWatchedDirectories);
                         }
 
-                        function verifyProject(host: WatchedSystem, service: projectSystem.TestProjectService, orphanInfos?: ReadonlyArray<string>) {
+                        function verifyProject(host: TsBuildWatchSystem, service: projectSystem.TestProjectService, orphanInfos?: ReadonlyArray<string>) {
                             verifyServerState(host, service, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, orphanInfos);
                         }
 
                         function verifyServerState(
-                            host: WatchedSystem,
+                            host: TsBuildWatchSystem,
                             service: projectSystem.TestProjectService,
                             expectedProgramFiles: ReadonlyArray<string>,
                             expectedWatchedFiles: ReadonlyArray<string>,
@@ -753,13 +895,13 @@ export function gfoo() {
                         }
 
                         function verifyScenario(
-                            edit: (host: WatchedSystem, solutionBuilder: SolutionBuilder) => void,
+                            edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder) => void,
                             expectedEditErrors: ReadonlyArray<string>,
                             expectedProgramFiles: ReadonlyArray<string>,
                             expectedWatchedFiles: ReadonlyArray<string>,
                             expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
                             dependencies: ReadonlyArray<[string, ReadonlyArray<string>]>,
-                            revert?: (host: WatchedSystem) => void,
+                            revert?: (host: TsBuildWatchSystem) => void,
                             orphanInfosAfterEdit?: ReadonlyArray<string>,
                             orphanInfosAfterRevert?: ReadonlyArray<string>) {
                             it("with tsc-watch", () => {
@@ -978,8 +1120,8 @@ export function gfoo() {
                                 [refs.path, [refs.path]],
                                 [cTsFile.path, [cTsFile.path, refs.path, bDts]]
                             ];
-                            function getOutputFileStamps(host: WatchedSystem) {
-                                return expectedFiles.map(file => [file, host.getModifiedTime(file)] as OutputFileStamp);
+                            function getOutputFileStamps(host: TsBuildWatchSystem) {
+                                return expectedFiles.map(file => transformOutputToOutputFileStamp(file, host));
                             }
                             const { host, watch } = createSolutionAndWatchModeOfProject(allFiles, getProjectPath(project), "tsconfig.c.json", "tsconfig.c.json", getOutputFileStamps);
                             verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, defaultDependencies);
