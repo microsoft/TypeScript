@@ -4530,6 +4530,7 @@ namespace ts {
         /*@internal*/listFiles?: boolean;
         locale?: string;
         mapRoot?: string;
+        maxInstantiationDepth?: number;
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;

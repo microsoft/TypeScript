@@ -83,6 +83,7 @@ namespace ts {
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
         const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
+        const maxInstantiationDepth = compilerOptions.maxInstantiationDepth || 50;
 
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
@@ -10939,10 +10940,12 @@ namespace ts {
             if (!type || !mapper || mapper === identityMapper) {
                 return type;
             }
-            if (instantiationDepth === 50) {
-                // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
+            if (instantiationDepth === maxInstantiationDepth) {
+                // We have reached too many recursive type instantiations and there is a very high likelyhood we're dealing
                 // with a combination of infinite generic types that perpetually generate new type identities. We stop
                 // the recursion here by yielding the error type.
+                // If stopping is undesirable, consider simplfying the type
+                // or increasing maxInstantiationDepth.
                 return errorType;
             }
             instantiationDepth++;

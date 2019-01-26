@@ -769,6 +769,11 @@ namespace ts {
             description: Diagnostics.Disallow_inconsistently_cased_references_to_the_same_file
         },
         {
+            name: "maxInstantiationDepth",
+            type: "number",
+            category: Diagnostics.Advanced_Options,
+        },
+        {
             name: "maxNodeModuleJsDepth",
             type: "number",
             affectsModuleResolution: true,
