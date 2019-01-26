@@ -2466,6 +2466,7 @@ declare namespace ts {
         lib?: string[];
         locale?: string;
         mapRoot?: string;
+        maxInstantiationDepth?: number;
         maxNodeModuleJsDepth?: number;
         module?: ModuleKind;
         moduleResolution?: ModuleResolutionKind;
