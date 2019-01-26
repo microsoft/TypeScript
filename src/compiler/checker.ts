@@ -11149,7 +11149,7 @@ namespace ts {
         }
 
         function instantiateIndexInfo(info: IndexInfo, mapper: TypeMapper): IndexInfo {
-            return createIndexInfo(info.indexType, instantiateType(info.type, mapper), info.isReadonly, info.declaration);
+            return createIndexInfo(instantiateType(info.indexType, mapper), instantiateType(info.type, mapper), info.isReadonly, info.declaration);
         }
 
         function instantiateIndexInfos(infos: IndexInfo[] | undefined, mapper: TypeMapper): IndexInfo[] | undefined {
