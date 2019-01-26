@@ -2761,9 +2761,11 @@ namespace ts {
 
     export interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
+        javascriptPath?: string;
         javascriptText: string;
         javascriptMapPath?: string;
         javascriptMapText?: string;
+        declarationPath?: string;
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
@@ -2771,6 +2773,7 @@ namespace ts {
 
     export interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
+        fileName?: string;
         text: string;
         sourceMapPath?: string;
         sourceMapText?: string;
@@ -2827,7 +2830,7 @@ namespace ts {
         fileName: string,
         data: string,
         writeByteOrderMark: boolean,
-        onError: ((message: string) => void) | undefined,
+        onError?: (message: string) => void,
         sourceFiles?: ReadonlyArray<SourceFile>,
     ) => void;
 
@@ -3952,6 +3955,7 @@ namespace ts {
     // Unique symbol types (TypeFlags.UniqueESSymbol)
     export interface UniqueESSymbolType extends Type {
         symbol: Symbol;
+        escapedName: __String;
     }
 
     export interface StringLiteralType extends LiteralType {
@@ -5003,7 +5007,6 @@ namespace ts {
         getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
