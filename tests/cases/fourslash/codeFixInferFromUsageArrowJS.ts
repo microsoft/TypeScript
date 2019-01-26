@@ -6,13 +6,22 @@
 // @Filename: test.js
 
 ////const foo = x => x.y + 1;
+////class C {
+////    m = x => x.y + 1;
+////}
 
-verify.codeFix({
-  description: "Infer parameter types from usage",
-  index: 0,
+verify.codeFixAll({
+  fixId: "inferFromUsage",
+  fixAllDescription: "Infer all types from usage",
   newFileContent:
 `/**
  * @param {{ y: number; }} x
  */
-const foo = x => x.y + 1;`,
+const foo = x => x.y + 1;
+class C {
+    /**
+     * @param {{ y: number; }} x
+     */
+    m = x => x.y + 1;
+}`,
 });

@@ -340,9 +340,7 @@ namespace ts.textChanges {
         }
 
         public insertJsdocCommentBefore(sourceFile: SourceFile, node: HasJSDoc, tag: JSDoc): void {
-            const fnStart = node.kind === SyntaxKind.ArrowFunction
-                ? node.parent.parent.getStart(sourceFile)
-                : node.getStart(sourceFile);
+            const fnStart = node.getStart(sourceFile);
             if (node.jsDoc) {
                 for (const jsdoc of node.jsDoc) {
                     this.deleteRange(sourceFile, {
