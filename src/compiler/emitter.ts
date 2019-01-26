@@ -45,7 +45,7 @@ namespace ts {
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        const bundleInfoPath = options.references && jsFilePath ? (removeFileExtension(jsFilePath) + infoExtension) : undefined;
+        const bundleInfoPath = options.composite && jsFilePath ? (removeFileExtension(jsFilePath) + infoExtension) : undefined;
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
     }
 
@@ -72,13 +72,6 @@ namespace ts {
 
     function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
         return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
-    }
-
-    function createDefaultBundleInfo(): BundleInfo {
-        return {
-            originalOffset: -1,
-            totalLength: -1
-        };
     }
 
     // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
@@ -114,7 +107,7 @@ namespace ts {
         const newLine = getNewLineCharacter(compilerOptions, () => host.getNewLine());
         const writer = createTextWriter(newLine);
         const { enter, exit } = performance.createTimer("printTime", "beforePrint", "afterPrint");
-        let bundleInfo: BundleInfo = createDefaultBundleInfo();
+        let bundleInfo: BundleInfo | undefined;
         let emitSkipped = false;
         let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
 
@@ -133,8 +126,13 @@ namespace ts {
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
-            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, bundleInfoPath);
-            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
+            if (bundleInfoPath && !emitOnlyDtsFiles) bundleInfo = { js: [], dts: [] };
+            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, bundleInfo && bundleInfo.js);
+            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, bundleInfo && bundleInfo.dts);
+            // Write bundled offset information if applicable
+            if (!emitOnlyDtsFiles && !emitSkipped && bundleInfoPath) {
+                writeFile(host, emitterDiagnostics, bundleInfoPath, JSON.stringify(bundleInfo, undefined, 2), /*writeByteOrderMark*/ false);
+            }
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -157,7 +155,7 @@ namespace ts {
             }
         }
 
-        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, bundleInfoPath: string | undefined) {
+        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, fileBundleInfo: FileBundleInfo | undefined) {
             if (emitOnlyDtsFiles || !jsFilePath) {
                 return;
             }
@@ -193,13 +191,13 @@ namespace ts {
             });
 
             Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleInfoPath, printer, compilerOptions);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], fileBundleInfo, printer, compilerOptions);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
         }
 
-        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined) {
+        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined, fileBundleInfo: FileBundleInfo | undefined) {
             if (!(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
                 return;
             }
@@ -243,7 +241,7 @@ namespace ts {
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
-                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, {
+                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], fileBundleInfo, declarationPrinter, {
                     sourceMap: compilerOptions.declarationMap,
                     sourceRoot: compilerOptions.sourceRoot,
                     mapRoot: compilerOptions.mapRoot,
@@ -272,7 +270,7 @@ namespace ts {
             forEachChild(node, collectLinkedAliases);
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleInfoPath: string | undefined, printer: Printer, mapOptions: SourceMapOptions) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, fileBundleInfo: FileBundleInfo | undefined, printer: Printer, mapOptions: SourceMapOptions) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
@@ -288,7 +286,7 @@ namespace ts {
             }
 
             if (bundle) {
-                printer.writeBundle(bundle, bundleInfo, writer, sourceMapGenerator);
+                printer.writeBundle(bundle, fileBundleInfo, writer, sourceMapGenerator);
             }
             else {
                 printer.writeFile(sourceFile!, writer, sourceMapGenerator);
@@ -327,16 +325,8 @@ namespace ts {
             // Write the output file
             writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles);
 
-            // Write bundled offset information if applicable
-            if (bundleInfoPath) {
-                bundleInfo.totalLength = writer.getTextPos();
-                writeFile(host, emitterDiagnostics, bundleInfoPath, JSON.stringify(bundleInfo, undefined, 2), /*writeByteOrderMark*/ false);
-            }
-
             // Reset state
             writer.clear();
-
-            bundleInfo = createDefaultBundleInfo();
         }
 
         interface SourceMapOptions {
@@ -449,6 +439,7 @@ namespace ts {
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
         let write = writeBase;
         let isOwnFileEmit: boolean;
+        let fileBundleInfo: FileBundleInfo | undefined;
 
         // Source Maps
         let sourceMapsDisabled = true;
@@ -546,8 +537,13 @@ namespace ts {
             writer = previousWriter;
         }
 
-        function writeBundle(bundle: Bundle, bundleInfo: BundleInfo | undefined, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
+        function getTextPosWithWriteLine() {
+            return writer.getTextPosWithWriteLine ? writer.getTextPosWithWriteLine() : writer.getTextPos();
+        }
+
+        function writeBundle(bundle: Bundle, bundleInfo: FileBundleInfo | undefined, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = false;
+            fileBundleInfo = bundleInfo;
             const previousWriter = writer;
             setWriter(output, sourceMapGenerator);
             emitShebangIfNeeded(bundle);
@@ -555,18 +551,17 @@ namespace ts {
             emitHelpers(bundle);
             emitSyntheticTripleSlashReferencesIfNeeded(bundle);
 
+            const pos = getTextPosWithWriteLine();
             for (const prepend of bundle.prepends) {
                 writeLine();
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
             }
 
-            if (bundleInfo) {
-                bundleInfo.originalOffset = writer.getTextPos();
-            }
-
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
+            if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
+
             reset();
             writer = previousWriter;
         }
@@ -581,6 +576,7 @@ namespace ts {
 
         function writeFile(sourceFile: SourceFile, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = true;
+            fileBundleInfo = undefined;
             const previousWriter = writer;
             setWriter(output, sourceMapGenerator);
             emitShebangIfNeeded(sourceFile);
@@ -638,6 +634,7 @@ namespace ts {
             currentSourceFile = undefined!;
             currentLineMap = undefined!;
             detachedCommentsInfo = undefined;
+            fileBundleInfo = undefined;
             setWriter(/*output*/ undefined, /*_sourceMapGenerator*/ undefined);
         }
 
@@ -1166,13 +1163,14 @@ namespace ts {
                             // Skip the helper if it is scoped and we are emitting bundled helpers
                             continue;
                         }
-
+                        const pos = getTextPosWithWriteLine();
                         if (typeof helper.text === "string") {
                             writeLines(helper.text);
                         }
                         else {
                             writeLines(helper.text(makeFileLevelOptimisticUniqueName));
                         }
+                        if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.EmitHelpers, name: helper.name });
                         helpersEmitted = true;
                     }
                 }
@@ -2307,7 +2305,7 @@ namespace ts {
 
         function emitBlockFunctionBodyWorker(body: Block, emitBlockFunctionBodyOnSingleLine?: boolean) {
             // Emit all the prologue directives (like "use strict").
-            const statementOffset = emitPrologueDirectives(body.statements, /*startWithNewLine*/ true);
+            const statementOffset = emitPrologueDirectives(body.statements);
             const pos = writer.getTextPos();
             emitHelpers(body);
             if (statementOffset === 0 && pos === writer.getTextPos() && emitBlockFunctionBodyOnSingleLine) {
@@ -2937,7 +2935,9 @@ namespace ts {
 
         function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>, libs: ReadonlyArray<FileReference>) {
             if (hasNoDefaultLib) {
+                const pos = writer.getTextPos();
                 writeComment(`/// <reference no-default-lib="true"/>`);
+                if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.NoDefaultLib });
                 writeLine();
             }
             if (currentSourceFile && currentSourceFile.moduleName) {
@@ -2956,15 +2956,21 @@ namespace ts {
                 }
             }
             for (const directive of files) {
+                const pos = writer.getTextPos();
                 writeComment(`/// <reference path="${directive.fileName}" />`);
+                if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Reference, fileName: directive.fileName });
                 writeLine();
             }
             for (const directive of types) {
+                const pos = writer.getTextPos();
                 writeComment(`/// <reference types="${directive.fileName}" />`);
+                if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, fileName: directive.fileName });
                 writeLine();
             }
             for (const directive of libs) {
+                const pos = writer.getTextPos();
                 writeComment(`/// <reference lib="${directive.fileName}" />`);
+                if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Lib, fileName: directive.fileName });
                 writeLine();
             }
         }
@@ -2994,16 +3000,21 @@ namespace ts {
          * Emits any prologue directives at the start of a Statement list, returning the
          * number of prologue directives written to the output.
          */
-        function emitPrologueDirectives(statements: ReadonlyArray<Node>, startWithNewLine?: boolean, seenPrologueDirectives?: Map<true>): number {
+        function emitPrologueDirectives(statements: ReadonlyArray<Node>, sourceFile?: SourceFile, seenPrologueDirectives?: Map<true>): number {
+            let needsToSetSourceFile = !!sourceFile;
             for (let i = 0; i < statements.length; i++) {
                 const statement = statements[i];
                 if (isPrologueDirective(statement)) {
                     const shouldEmitPrologueDirective = seenPrologueDirectives ? !seenPrologueDirectives.has(statement.expression.text) : true;
                     if (shouldEmitPrologueDirective) {
-                        if (startWithNewLine || i > 0) {
-                            writeLine();
+                        if (needsToSetSourceFile) {
+                            needsToSetSourceFile = false;
+                            setSourceFile(sourceFile!);
                         }
+                        writeLine();
+                        const pos = writer.getTextPos();
                         emit(statement);
+                        if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, text: statement.expression.text });
                         if (seenPrologueDirectives) {
                             seenPrologueDirectives.set(statement.expression.text, true);
                         }
@@ -3021,7 +3032,10 @@ namespace ts {
         function emitUnparsedPrologues(prologues: ReadonlyArray<UnparsedPrologue>, seenPrologueDirectives: Map<true>) {
             for (const prologue of prologues) {
                 if (!seenPrologueDirectives.has(prologue.text)) {
+                    writeLine();
+                    const pos = writer.getTextPos();
                     emit(prologue);
+                    if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, text: prologue.text });
                     if (seenPrologueDirectives) {
                         seenPrologueDirectives.set(prologue.text, true);
                     }
@@ -3031,8 +3045,7 @@ namespace ts {
 
         function emitPrologueDirectivesIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
             if (isSourceFile(sourceFileOrBundle)) {
-                setSourceFile(sourceFileOrBundle);
-                emitPrologueDirectives(sourceFileOrBundle.statements);
+                emitPrologueDirectives(sourceFileOrBundle.statements, sourceFileOrBundle);
             }
             else {
                 const seenPrologueDirectives = createMap<true>();
@@ -3040,8 +3053,7 @@ namespace ts {
                     emitUnparsedPrologues((prepend as UnparsedSource).prologues, seenPrologueDirectives);
                 }
                 for (const sourceFile of sourceFileOrBundle.sourceFiles) {
-                    setSourceFile(sourceFile);
-                    emitPrologueDirectives(sourceFile.statements, /*startWithNewLine*/ true, seenPrologueDirectives);
+                    emitPrologueDirectives(sourceFile.statements, sourceFile, seenPrologueDirectives);
                 }
                 setSourceFile(undefined);
             }
@@ -3500,7 +3512,6 @@ namespace ts {
                 if (line.length) {
                     writeLine();
                     write(line);
-                    writer.rawWrite(newLine);
                 }
             }
         }

@@ -527,16 +527,17 @@ export const b = new A();`);
                         // Additional source Files
                         ...(additionalSourceFiles || emptyArray),
 
-
                         // outputs
                         "/src/first/bin/first-output.js",
                         "/src/first/bin/first-output.js.map",
                         "/src/first/bin/first-output.d.ts",
                         "/src/first/bin/first-output.d.ts.map",
+                        "/src/first/bin/first-output.tsbundleinfo",
                         "/src/2/second-output.js",
                         "/src/2/second-output.js.map",
                         "/src/2/second-output.d.ts",
-                        "/src/2/second-output.d.ts.map"
+                        "/src/2/second-output.d.ts.map",
+                        "/src/2/second-output.tsbundleinfo",
                     ];
 
                     assert.equal(actualReadFileMap.size, expected.length, `Expected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);

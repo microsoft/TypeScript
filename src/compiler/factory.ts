@@ -2629,69 +2629,28 @@ namespace ts {
         return node;
     }
 
-    interface UnscopedEmitHelpersWithLines {
-        helper: UnscopedEmitHelpers;
-        lines: ReadonlyArray<string>;
-    }
-
-    let allUnscopedEmitHelpers: ReadonlyArray<UnscopedEmitHelpersWithLines> | undefined;
+    let allUnscopedEmitHelpers: ReadonlyMap<UnscopedEmitHelpers> | undefined;
     function getAllUnscopedEmitHelpers() {
-        return allUnscopedEmitHelpers ||
-            (allUnscopedEmitHelpers = [
-                getUnscopedEmitHelperWithLines(valuesHelper),
-                getUnscopedEmitHelperWithLines(readHelper),
-                getUnscopedEmitHelperWithLines(spreadHelper),
-                getUnscopedEmitHelperWithLines(restHelper),
-                getUnscopedEmitHelperWithLines(decorateHelper),
-                getUnscopedEmitHelperWithLines(metadataHelper),
-                getUnscopedEmitHelperWithLines(paramHelper),
-                getUnscopedEmitHelperWithLines(awaiterHelper),
-                getUnscopedEmitHelperWithLines(assignHelper),
-                getUnscopedEmitHelperWithLines(awaitHelper),
-                getUnscopedEmitHelperWithLines(asyncGeneratorHelper),
-                getUnscopedEmitHelperWithLines(asyncDelegator),
-                getUnscopedEmitHelperWithLines(asyncValues),
-                getUnscopedEmitHelperWithLines(extendsHelper),
-                getUnscopedEmitHelperWithLines(templateObjectHelper),
-                getUnscopedEmitHelperWithLines(generatorHelper),
-                getUnscopedEmitHelperWithLines(importStarHelper),
-                getUnscopedEmitHelperWithLines(importDefaultHelper)
-            ]);
-    }
-
-    function getUnscopedEmitHelperWithLines(helper: UnscopedEmitHelpers): UnscopedEmitHelpersWithLines {
-        const helperLines = helper.text.split(/\r\n?|\n/g);
-        const indentation = guessIndentation(helperLines);
-        const lines: string[] = [];
-        for (const lineText of helperLines) {
-            const line = indentation ? lineText.slice(indentation) : lineText;
-            if (line.length) {
-                lines.push(line);
-            }
-        }
-        return { helper, lines };
-    }
-
-    function tryGetUnscopedEmitHelper(text: string, pos: number) {
-        const allHelpers = getAllUnscopedEmitHelpers();
-        if (pos >= text.length) return undefined;
-        for (const { helper, lines } of allHelpers) {
-            let newPos = pos;
-            for (const line of lines) {
-                const startIndex = text.indexOf(line, newPos);
-                if (startIndex !== newPos) {
-                    newPos = -1;
-                    break;
-                }
-                newPos = skipTrivia(text, newPos + line.length, /*stopAfterLineBreak*/ true);
-            }
-
-            // Found match
-            if (newPos !== -1) {
-                return { helper, newPos };
-            }
-        }
-        return undefined;
+        return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
+            valuesHelper,
+            readHelper,
+            spreadHelper,
+            restHelper,
+            decorateHelper,
+            metadataHelper,
+            paramHelper,
+            awaiterHelper,
+            assignHelper,
+            awaitHelper,
+            asyncGeneratorHelper,
+            asyncDelegator,
+            asyncValues,
+            extendsHelper,
+            templateObjectHelper,
+            generatorHelper,
+            importStarHelper,
+            importDefaultHelper
+        ], helper => helper.name));
     }
 
     export function createUnparsedSourceFile(text: string): UnparsedSource;
@@ -2699,6 +2658,12 @@ namespace ts {
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, map?: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
+        node.pos = 0;
+        let prologues: UnparsedPrologue[] | undefined;
+        let helpers: UnscopedEmitHelpers[] | undefined;
+        let referencedFiles: FileReference[] | undefined;
+        let typeReferenceDirectives: string[] | undefined;
+        let libReferenceDirectives: FileReference[] | undefined;
         if (!isString(textOrInputFiles)) {
             Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
             node.fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
@@ -2707,6 +2672,41 @@ namespace ts {
                 text: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptText : textOrInputFiles.declarationText; } },
                 sourceMapText: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText; } },
             });
+
+            const sections = textOrInputFiles.bundleInfo ? mapPathOrType === "js" ? textOrInputFiles.bundleInfo.js : textOrInputFiles.bundleInfo.dts : undefined;
+            if (sections) {
+                for (const section of sections) {
+                    switch (section.kind) {
+                        case BundleFileSectionKind.Prologue:
+                            const unparsedPrologue = <UnparsedPrologue>createNode(SyntaxKind.UnparsedPrologue, section.pos, section.end);
+                            unparsedPrologue.parent = node;
+                            unparsedPrologue.text = section.text;
+                            (prologues || (prologues = [])).push(unparsedPrologue);
+                            break;
+                        case BundleFileSectionKind.EmitHelpers:
+                            (helpers || (helpers = [])).push(getAllUnscopedEmitHelpers().get(section.name)!);
+                            break;
+                        case BundleFileSectionKind.NoDefaultLib:
+                            node.hasNoDefaultLib = true;
+                            break;
+                        case BundleFileSectionKind.Reference:
+                            (referencedFiles || (referencedFiles = [])).push({ pos: -1, end: -1, fileName: section.fileName });
+                            break;
+                        case BundleFileSectionKind.Type:
+                            (typeReferenceDirectives || (typeReferenceDirectives = [])).push(section.fileName);
+                            break;
+                        case BundleFileSectionKind.Lib:
+                            (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.fileName });
+                            break;
+                        case BundleFileSectionKind.Text:
+                            // For now just set node.pos to this
+                            node.pos = section.pos;
+                            break;
+                        default:
+                            Debug.assertNever(section);
+                    }
+                }
+            }
         }
         else {
             node.fileName = "";
@@ -2714,47 +2714,16 @@ namespace ts {
             node.sourceMapPath = mapPathOrType;
             node.sourceMapText = map;
         }
-        const text = node.text;
-        node.languageVersion = ScriptTarget.Latest;
-
-        // Shebang
-        let pos = isShebangTrivia(text, 0) ? skipTrivia(text, 0, /*stopAfterLineBreak*/ true) : 0;
-
-        // Prologue
-        const scanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ true, /*languageVariant*/ undefined, text, /*onError*/ undefined, pos);
-        let prologues: UnparsedPrologue[] | undefined;
-        while (scanner.scan()  === SyntaxKind.StringLiteral) {
-            const start = pos;
-            const prologueText = scanner.getTokenValue();
-            scanner.tryScan(() => scanner.scan() === SyntaxKind.SemicolonToken);
-            pos = skipTrivia(text, scanner.getTextPos(), /*stopAfterLineBreak*/ true);
-
-            const prologue = <UnparsedPrologue>createNode(SyntaxKind.UnparsedPrologue, start, pos);
-            prologue.parent = node;
-            prologue.text = prologueText;
-            (prologues || (prologues = [])).push(prologue);
-        }
-
-        // Helpers
-        let helpers: UnscopedEmitHelpers[] | undefined;
-        while (true) {
-            const helperInfo = tryGetUnscopedEmitHelper(text, pos);
-            if (!helperInfo) break;
-            pos = helperInfo.newPos;
-            (helpers || (helpers = [])).push(helperInfo.helper);
-        }
-
-        // triple slash directives
-        const newPos = processCommentPragmas(node as {} as PragmaContext, text);
-        processPragmasIntoFields(node as {} as PragmaContext, noop);
-
-        // Rest of the text
-        node.pos = newPos > pos ? newPos : pos;
         node.prologues = prologues || emptyArray;
         node.helpers = helpers;
+        node.referencedFiles = referencedFiles || emptyArray;
+        node.typeReferenceDirectives = typeReferenceDirectives;
+        node.libReferenceDirectives = libReferenceDirectives || emptyArray;
+
         node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
         return node;
     }
+
     export function createInputFiles(
         javascriptText: string,
         declarationText: string
@@ -2765,6 +2734,7 @@ namespace ts {
         javascriptMapPath: string | undefined,
         declarationPath: string,
         declarationMapPath: string | undefined,
+        bundleInfoPath: string | undefined
     ): InputFiles;
     export function createInputFiles(
         javascriptText: string,
@@ -2780,7 +2750,7 @@ namespace ts {
         javascriptMapPath?: string,
         javascriptMapTextOrDeclarationPath?: string,
         declarationMapPath?: string,
-        declarationMapText?: string
+        declarationMapTextOrBundleInfoPath?: string
     ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
         if (!isString(javascriptTextOrReadFileText)) {
@@ -2798,15 +2768,21 @@ namespace ts {
                 const result = textGetter(path);
                 return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
             };
+            const jsonGetter = (path: string | undefined) => {
+                const result = textGetter(path);
+                return result !== undefined ? JSON.parse(result) as BundleInfo : undefined;
+            };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
             node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
             node.declarationMapPath = declarationMapPath;
+            node.bundleInfoPath = declarationMapTextOrBundleInfoPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
                 declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
-                declarationMapText: { get() { return textGetter(declarationMapPath); } } // TODO:: if there is inline sourceMap in dtsFile, use that
+                declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
+                bundleInfo: { get() { return jsonGetter(declarationMapTextOrBundleInfoPath); } }
             });
         }
         else {
@@ -2815,7 +2791,7 @@ namespace ts {
             node.javascriptMapText = javascriptMapTextOrDeclarationPath;
             node.declarationText = declarationTextOrJavascriptPath;
             node.declarationMapPath = declarationMapPath;
-            node.declarationMapText = declarationMapText;
+            node.declarationMapText = declarationMapTextOrBundleInfoPath;
         }
         return node;
     }

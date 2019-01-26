@@ -61,7 +61,7 @@ namespace ts {
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[] | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: ReadonlyArray<string> | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -210,6 +210,7 @@ namespace ts {
                         const sourceFile = createUnparsedSourceFile(prepend, "dts");
                         hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
                         collectReferences(sourceFile, refs);
+                        recordTypeReferenceDirectivesIfNecessary(sourceFile.typeReferenceDirectives);
                         collectLibs(sourceFile, libs);
                         return sourceFile;
                     }

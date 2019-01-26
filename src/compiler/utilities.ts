@@ -3200,6 +3200,10 @@ namespace ts {
             }
         }
 
+        function getTextPosWithWriteLine() {
+            return lineStart ? output.length : (output.length + newLine.length);
+        }
+
         reset();
 
         return {
@@ -3229,7 +3233,8 @@ namespace ts {
             writeStringLiteral: write,
             writeSymbol: (s, _) => write(s),
             writeTrailingSemicolon: write,
-            writeComment: write
+            writeComment: write,
+            getTextPosWithWriteLine
         };
     }
 

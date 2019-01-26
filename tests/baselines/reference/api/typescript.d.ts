@@ -1735,17 +1735,17 @@ declare namespace ts {
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
+        bundleInfoPath?: string;
     }
     interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
         fileName: string;
         text: string;
-        languageVersion: ScriptTarget;
         prologues: ReadonlyArray<UnparsedPrologue>;
         helpers: ReadonlyArray<UnscopedEmitHelpers> | undefined;
-        referencedFiles: FileReference[];
-        typeReferenceDirectives: FileReference[];
-        libReferenceDirectives: FileReference[];
+        referencedFiles: ReadonlyArray<FileReference>;
+        typeReferenceDirectives: ReadonlyArray<string> | undefined;
+        libReferenceDirectives: ReadonlyArray<FileReference>;
         hasNoDefaultLib?: boolean;
         sourceMapPath?: string;
         sourceMapText?: string;
@@ -4003,7 +4003,7 @@ declare namespace ts {
     function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
-    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined): InputFiles;
+    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, bundleInfoPath: string | undefined): InputFiles;
     function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
     function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>): CallExpression;

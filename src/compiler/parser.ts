@@ -7721,7 +7721,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function processCommentPragmas(context: PragmaContext, sourceText: string) {
+    export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
         const triviaScanner = createScanner(context.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
         const pragmas: PragmaPseudoMapEntry[] = [];
 
@@ -7758,7 +7758,6 @@ namespace ts {
             }
             context.pragmas.set(pragma!.name, pragma!.args);
         }
-        return triviaScanner.getStartPos();
     }
 
     type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;

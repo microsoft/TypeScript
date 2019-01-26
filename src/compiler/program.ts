@@ -1456,12 +1456,12 @@ namespace ts {
                     // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
                     if (!out) continue;
 
-                    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
+                    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
                     const node = createInputFiles(fileName => {
                         const path = toPath(fileName);
                         const sourceFile = getSourceFileByPath(path);
                         return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
-                    }, jsFilePath! , sourceMapFilePath, declarationFilePath! , declarationMapPath);
+                    }, jsFilePath! , sourceMapFilePath, declarationFilePath! , declarationMapPath, bundleInfoPath);
                     nodes.push(node);
                 }
             }

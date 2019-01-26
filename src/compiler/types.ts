@@ -2770,18 +2770,19 @@ namespace ts {
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
+        bundleInfoPath?: string;
+        /*@internal*/ bundleInfo?: BundleInfo;
     }
 
     export interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
         fileName: string;
         text: string;
-        languageVersion: ScriptTarget;
         prologues: ReadonlyArray<UnparsedPrologue>;
         helpers: ReadonlyArray<UnscopedEmitHelpers> | undefined;
-        referencedFiles: FileReference[];
-        typeReferenceDirectives: FileReference[];
-        libReferenceDirectives: FileReference[];
+        referencedFiles: ReadonlyArray<FileReference>;
+        typeReferenceDirectives: ReadonlyArray<string> | undefined;
+        libReferenceDirectives: ReadonlyArray<FileReference>;
         hasNoDefaultLib?: boolean;
         sourceMapPath?: string;
         sourceMapText?: string;
@@ -5425,23 +5426,64 @@ namespace ts {
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T> | undefined, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
-        /*@internal*/ writeBundle(bundle: Bundle, info: BundleInfo | undefined, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
+        /*@internal*/ writeBundle(bundle: Bundle, info: FileBundleInfo | undefined, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
     }
 
-    /**
-     * When a bundle contains prepended content, we store a file on disk indicating where the non-prepended
-     * content of that file starts. On a subsequent build where there are no upstream .d.ts changes, we
-     * read the bundle info file and the original .js file to quickly re-use portion of the file
-     * that didn't originate in prepended content.
-     */
+    /*@internal*/
+    export const enum BundleFileSectionKind {
+        Prologue = "prologue",
+        EmitHelpers = "emitHelpers",
+        NoDefaultLib = "no-default-lib",
+        Reference = "reference",
+        Type = "type",
+        Lib = "lib",
+        Text = "text",
+        // internal comments?
+    }
+
+    /*@internal*/
+    export interface BundleFileSectionBase extends TextRange {
+        kind: BundleFileSectionKind;
+    }
+
+    /*@internal*/
+    export interface BundleFilePrologue extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.Prologue;
+        text: string;
+    }
+
+    /*@internal*/
+    export interface BundleFileEmitHelpers extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.EmitHelpers;
+        name: string;
+    }
+
+    /*@internal*/
+    export interface BundleFileHasNoDefaultLib extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.NoDefaultLib;
+    }
+
+    /*@internal*/
+    export interface BundleFileReference extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.Reference | BundleFileSectionKind.Type | BundleFileSectionKind.Lib;
+        fileName: string;
+    }
+
+    /*@internal*/
+    export interface BundleFileText extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.Text;
+    }
+
+    /*@internal*/
+    export type BundleFileSection = BundleFilePrologue | BundleFileEmitHelpers |
+        BundleFileHasNoDefaultLib | BundleFileReference | BundleFileText;
+
+    /*@internal*/
+    export type FileBundleInfo = BundleFileSection[];
     /* @internal */
     export interface BundleInfo {
-        // The offset (in characters, i.e. suitable for .substr) at which the
-        // non-prepended portion of the emitted file starts.
-        originalOffset: number;
-        // The total length of this bundle. Used to ensure we're pulling from
-        // the same source as we originally wrote.
-        totalLength: number;
+        js?: FileBundleInfo;
+        dts?: FileBundleInfo;
     }
 
     export interface PrintHandlers {
@@ -5597,6 +5639,7 @@ namespace ts {
         getColumn(): number;
         getIndent(): number;
         isAtStartOfLine(): boolean;
+        getTextPosWithWriteLine?(): number;
     }
 
     export interface GetEffectiveTypeRootsHost {
