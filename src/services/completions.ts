@@ -367,7 +367,9 @@ namespace ts.Completions {
     }
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
-        return origin && originIsExport(origin) && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
+        return origin && originIsExport(origin) && (
+            (origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default) ||
+            (symbol.escapedName === InternalSymbolName.ExportEquals))
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
                 || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)

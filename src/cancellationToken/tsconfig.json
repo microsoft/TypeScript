@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig-base",
+    "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "outDir": "../../built/local/",
         "rootDir": ".",

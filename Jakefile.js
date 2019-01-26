@@ -361,7 +361,7 @@ file(ConfigFileFor.tsserverLibrary, [], function () {
         compilerOptions: {
             "removeComments": false,
             "stripInternal": true,
-            "declarationMap": false,
+            "declaration": true,
             "outFile": "tsserverlibrary.out.js"
         }
     })
