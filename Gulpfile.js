@@ -138,7 +138,7 @@ gulp.task(typescriptServicesProject, /*help*/ false, () => {
         compilerOptions: {
             "removeComments": false,
             "stripInternal": true,
-            "declarationMap": false,
+            "declaration": true,
             "outFile": "typescriptServices.out.js" // must align with same task in jakefile. We fix this name below.
         }
     });
@@ -215,6 +215,11 @@ const tsserverProject = "src/tsserver/tsconfig.json";
 const tsserverJs = "built/local/tsserver.js";
 gulp.task(tsserverJs, /*help*/ false, useCompilerDeps, () => project.compile(tsserverProject, { typescript: useCompiler }));
 
+gulp.task(
+    "tsserver",
+    "Builds the language server",
+    [tsserverJs]);
+
 const watchGuardProject = "src/watchGuard/tsconfig.json";
 const watchGuardJs = "built/local/watchGuard.js";
 gulp.task(watchGuardJs, /*help*/ false, useCompilerDeps, () => project.compile(watchGuardProject, { typescript: useCompiler }));
@@ -274,7 +279,7 @@ gulp.task(
 // Generate Markdown spec
 const specMd = "doc/spec.md";
 gulp.task(specMd, /*help*/ false, [word2mdJs], () =>
-    exec("cscript", ["//nologo", word2mdJs, path.resolve(specMd), path.resolve("doc/TypeScript Language Specification.docx")]));
+    exec("cscript", ["//nologo", word2mdJs, path.resolve("doc/TypeScript Language Specification.docx"), path.resolve(specMd)]));
 
 gulp.task(
     "generate-spec",
@@ -542,7 +547,7 @@ const watchLocalPatterns = [
 gulp.task(
     "watch-local",
     "Watches for changes to projects in src/ (but does not execute tests).",
-    () => gulp.watch(watchLocalPatterns, "local"));
+    () => gulp.watch(watchLocalPatterns, ["local"]));
 
 const watchPatterns = [
     "src/tsconfig-base.json",
@@ -595,7 +600,7 @@ gulp.task(
                         project.waitForWorkToStart().then(() => {
                             source.cancel();
                         });
-                    
+
                         if (cmdLineOptions.tests || cmdLineOptions.failed) {
                             await runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, source.token);
                         }
