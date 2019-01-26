@@ -11,5 +11,6 @@
 
 verify.completions({
     marker: "",
+    isNewIdentifierLocation: true,
     includes: [{ name: "bar", text: "(property) bar: any" }, { name: "foo", text: "(method) foo(bar: any): any" }],
 });

@@ -62,9 +62,9 @@ lib/Page.js(936,3): error TS2322: Type '{ width: number; height: number; }' is n
 lib/Page.js(937,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(938,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/TaskQueue.js(7,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-lib/externs.d.ts(3,29): error TS2497: Module '"/puppeteer/puppeteer/lib/Target"' resolves to a non-module entity and cannot be imported using this construct.
-lib/externs.d.ts(5,32): error TS2497: Module '"/puppeteer/puppeteer/lib/TaskQueue"' resolves to a non-module entity and cannot be imported using this construct.
-lib/externs.d.ts(9,37): error TS2497: Module '"/puppeteer/puppeteer/lib/ElementHandle"' resolves to a non-module entity and cannot be imported using this construct.
+lib/externs.d.ts(3,29): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
+lib/externs.d.ts(5,32): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
+lib/externs.d.ts(9,37): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'allowSyntheticDefaultImports' flag and referencing its default export.
 lib/externs.d.ts(16,26): error TS2503: Cannot find namespace 'Protocol'.
 lib/externs.d.ts(16,69): error TS2503: Cannot find namespace 'Protocol'.
 lib/externs.d.ts(17,28): error TS2503: Cannot find namespace 'Protocol'.

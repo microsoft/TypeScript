@@ -101,7 +101,7 @@ namespace ts {
         function transformBundle(node: Bundle) {
             return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
                 if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend.javascriptText, prepend.javascriptMapPath, prepend.javascriptMapText);
+                    return createUnparsedSourceFile(prepend, "js");
                 }
                 return prepend;
             }));
@@ -1898,6 +1898,7 @@ namespace ts {
                         case SyntaxKind.StringLiteral:
                             return createIdentifier("String");
 
+                        case SyntaxKind.PrefixUnaryExpression:
                         case SyntaxKind.NumericLiteral:
                             return createIdentifier("Number");
 

@@ -400,3 +400,25 @@ const arr: Obj[] = langCodes.map(code => ({ code }))
 >code : Symbol(code, Decl(literalTypeWidening.ts, 128, 33))
 >code : Symbol(code, Decl(literalTypeWidening.ts, 128, 43))
 
+// Repro from #29081
+
+function test<T extends { a: string, b: string }>(obj: T): T {
+>test : Symbol(test, Decl(literalTypeWidening.ts, 128, 52))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 132, 14))
+>a : Symbol(a, Decl(literalTypeWidening.ts, 132, 25))
+>b : Symbol(b, Decl(literalTypeWidening.ts, 132, 36))
+>obj : Symbol(obj, Decl(literalTypeWidening.ts, 132, 50))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 132, 14))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 132, 14))
+
+    let { a, ...rest } = obj;
+>a : Symbol(a, Decl(literalTypeWidening.ts, 133, 9))
+>rest : Symbol(rest, Decl(literalTypeWidening.ts, 133, 12))
+>obj : Symbol(obj, Decl(literalTypeWidening.ts, 132, 50))
+
+    return { a: 'hello', ...rest } as T;
+>a : Symbol(a, Decl(literalTypeWidening.ts, 134, 12))
+>rest : Symbol(rest, Decl(literalTypeWidening.ts, 133, 12))
+>T : Symbol(T, Decl(literalTypeWidening.ts, 132, 14))
+}
+

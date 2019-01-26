@@ -47,6 +47,16 @@ In general, things we find useful when reviewing suggestions are:
 
 # Instructions for Contributing Code
 
+## Tips
+
+### Faster clones
+
+The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
+
+### Using local builds
+
+Run `gulp build` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
+
 ## Contributing bug fixes
 
 TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved ("Milestone == Community") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you've submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
@@ -82,19 +92,26 @@ Your pull request should:
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Contributing `lib.d.ts` fixes
- 
-The library sources are in: [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib)
 
-Library files in `built/local/` are updated by running
-```Shell
+There are three relevant locations to be aware of when it comes to TypeScript's library declaration files:
+
+* `src/lib`: the location of the sources themselves.
+* `lib`: the location of the last-known-good (LKG) versions of the files which are updated periodically.
+* `built/local`: the build output location, including where `src/lib` files will be copied to.
+
+Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib). **Most** of these files can be updated by hand, with the exception of any generated files (see below).
+
+Library files in `built/local/` are updated automatically by running the standard build task:
+
+```sh
 jake
 ```
 
-The files in `lib/` are used to bootstrap compilation and usually do not need to be updated.
+The files in `lib/` are used to bootstrap compilation and usually **should not** be updated unless publishing a new version or updating the LKG.
 
-#### `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts`
+### Modifying generated library files
 
-These two files represent the DOM typings and are auto-generated. To make any modifications to them, please submit a PR to  https://github.com/Microsoft/TSJS-lib-generator
+The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
 
 ## Running the Tests
 
