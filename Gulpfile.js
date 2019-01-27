@@ -138,7 +138,7 @@ gulp.task(typescriptServicesProject, /*help*/ false, () => {
         compilerOptions: {
             "removeComments": false,
             "stripInternal": true,
-            "declarationMap": false,
+            "declaration": true,
             "outFile": "typescriptServices.out.js" // must align with same task in jakefile. We fix this name below.
         }
     });
@@ -215,6 +215,11 @@ const tsserverProject = "src/tsserver/tsconfig.json";
 const tsserverJs = "built/local/tsserver.js";
 gulp.task(tsserverJs, /*help*/ false, useCompilerDeps, () => project.compile(tsserverProject, { typescript: useCompiler }));
 
+gulp.task(
+    "tsserver",
+    "Builds the language server",
+    [tsserverJs]);
+
 const watchGuardProject = "src/watchGuard/tsconfig.json";
 const watchGuardJs = "built/local/watchGuard.js";
 gulp.task(watchGuardJs, /*help*/ false, useCompilerDeps, () => project.compile(watchGuardProject, { typescript: useCompiler }));
@@ -274,7 +279,7 @@ gulp.task(
 // Generate Markdown spec
 const specMd = "doc/spec.md";
 gulp.task(specMd, /*help*/ false, [word2mdJs], () =>
-    exec("cscript", ["//nologo", word2mdJs, path.resolve(specMd), path.resolve("doc/TypeScript Language Specification.docx")]));
+    exec("cscript", ["//nologo", word2mdJs, path.resolve("doc/TypeScript Language Specification.docx"), path.resolve(specMd)]));
 
 gulp.task(
     "generate-spec",
@@ -489,28 +494,27 @@ gulp.task(
     ["local"]);
 
 gulp.task(
-    "watch-diagnostics",
-    /*help*/ false,
-    [processDiagnosticMessagesJs],
-    () => gulp.watch([diagnosticMessagesJson], [diagnosticInformationMapTs, builtGeneratedDiagnosticMessagesJson]));
-
-gulp.task(
     "watch-lib",
     /*help*/ false,
     () => gulp.watch(["src/lib/**/*"], ["lib"]));
 
+const watchTscPatterns = [
+    "src/tsconfig-base.json",
+    "src/lib/**/*",
+    "src/compiler/**/*",
+    "src/tsc/**/*",
+];
 gulp.task(
     "watch-tsc",
     /*help*/ false,
-    ["watch-diagnostics", "watch-lib"].concat(useCompilerDeps),
-    () => project.watch(tscProject, { typescript: useCompiler }));
+    useCompilerDeps,
+    () => gulp.watch(watchTscPatterns, ["tsc"]));
 
 const watchServicesPatterns = [
     "src/compiler/**/*",
     "src/jsTypings/**/*",
     "src/services/**/*"
 ];
-
 gulp.task(
     "watch-services",
     /*help*/ false,
@@ -522,39 +526,49 @@ const watchLsslPatterns = [
     "src/server/**/*",
     "src/tsserver/tsconfig.json"
 ];
-
 gulp.task(
     "watch-lssl",
     /*help*/ false,
     () => gulp.watch(watchLsslPatterns, ["lssl"]));
 
-gulp.task(
-    "watch-server",
-    /*help*/ false,
-    ["watch-diagnostics", "watch-lib"].concat(useCompilerDeps),
-    () => project.watch(tsserverProject, { typescript: useCompiler }));
-
-gulp.task(
-    "watch-runner",
-    /*help*/ false,
-    useCompilerDeps,
-    () => project.watch(testRunnerProject, { typescript: useCompiler }));
-
+const watchLocalPatterns = [
+    "src/tsconfig-base.json",
+    "src/lib/**/*",
+    "src/compiler/**/*",
+    "src/tsc/**/*",
+    "src/services/**/*",
+    "src/jsTyping/**/*",
+    "src/server/**/*",
+    "src/tsserver/**/*",
+    "src/typingsInstallerCore/**/*",
+    "src/harness/**/*",
+    "src/testRunner/**/*",
+];
 gulp.task(
     "watch-local",
     "Watches for changes to projects in src/ (but does not execute tests).",
-    ["watch-lib", "watch-tsc", "watch-services", "watch-server", "watch-runner", "watch-lssl"]);
+    () => gulp.watch(watchLocalPatterns, ["local"]));
 
+const watchPatterns = [
+    "src/tsconfig-base.json",
+    "src/lib/**/*",
+    "src/compiler/**/*",
+    "src/services/**/*",
+    "src/jsTyping/**/*",
+    "src/server/**/*",
+    "src/tsserver/**/*",
+    "src/typingsInstallerCore/**/*",
+    "src/harness/**/*",
+    "src/testRunner/**/*",
+];
 gulp.task(
     "watch",
     "Watches for changes to the build inputs for built/local/run.js, then runs tests.",
-    ["build-rules", "watch-runner", "watch-services", "watch-lssl"],
+    ["build-rules"],
     () => {
         const sem = new Semaphore(1);
 
-        gulp.watch([runJs, typescriptDts, tsserverlibraryDts], () => {
-            runTests();
-        });
+        gulp.watch(watchPatterns, () => { runTests(); });
 
         // NOTE: gulp.watch is far too slow when watching tests/cases/**/* as it first enumerates *every* file
         const testFilePattern = /(\.ts|[\\/]tsconfig\.json)$/;
@@ -586,7 +600,7 @@ gulp.task(
                         project.waitForWorkToStart().then(() => {
                             source.cancel();
                         });
-                    
+
                         if (cmdLineOptions.tests || cmdLineOptions.failed) {
                             await runConsoleTests(runJs, "mocha-fivemat-progress-reporter", /*runInParallel*/ false, /*watchMode*/ true, source.token);
                         }

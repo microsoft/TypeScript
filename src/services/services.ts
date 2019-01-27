@@ -1549,7 +1549,7 @@ namespace ts {
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
 
-        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] | undefined {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position);
@@ -1559,7 +1559,8 @@ namespace ts {
                     ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
             }
             else {
-                return getReferencesWorker(node, position, { findInStrings, findInComments, isForRename: true }, FindAllReferences.toRenameLocation);
+                return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, isForRename: true },
+                    (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false));
             }
         }
 
@@ -2062,9 +2063,9 @@ namespace ts {
             }
         }
 
-        function getRenameInfo(fileName: string, position: number): RenameInfo {
+        function getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo {
             synchronizeHostData();
-            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position);
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, options);
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {

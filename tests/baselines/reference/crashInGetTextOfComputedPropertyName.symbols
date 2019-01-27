@@ -1,0 +1,71 @@
+=== tests/cases/compiler/crashInGetTextOfComputedPropertyName.ts ===
+// https://github.com/Microsoft/TypeScript/issues/29006
+export interface A { type: 'a' }
+>A : Symbol(A, Decl(crashInGetTextOfComputedPropertyName.ts, 0, 0))
+>type : Symbol(A.type, Decl(crashInGetTextOfComputedPropertyName.ts, 1, 20))
+
+export interface B { type: 'b' }
+>B : Symbol(B, Decl(crashInGetTextOfComputedPropertyName.ts, 1, 32))
+>type : Symbol(B.type, Decl(crashInGetTextOfComputedPropertyName.ts, 2, 20))
+
+export type AB = A | B
+>AB : Symbol(AB, Decl(crashInGetTextOfComputedPropertyName.ts, 2, 32))
+>A : Symbol(A, Decl(crashInGetTextOfComputedPropertyName.ts, 0, 0))
+>B : Symbol(B, Decl(crashInGetTextOfComputedPropertyName.ts, 1, 32))
+
+const itemId = 'some-id'
+>itemId : Symbol(itemId, Decl(crashInGetTextOfComputedPropertyName.ts, 5, 5))
+
+// --- test on first level ---
+const items: { [id: string]: AB } = {}
+>items : Symbol(items, Decl(crashInGetTextOfComputedPropertyName.ts, 8, 5))
+>id : Symbol(id, Decl(crashInGetTextOfComputedPropertyName.ts, 8, 16))
+>AB : Symbol(AB, Decl(crashInGetTextOfComputedPropertyName.ts, 2, 32))
+
+const { [itemId]: itemOk1 } = items
+>itemId : Symbol(itemId, Decl(crashInGetTextOfComputedPropertyName.ts, 5, 5))
+>itemOk1 : Symbol(itemOk1, Decl(crashInGetTextOfComputedPropertyName.ts, 9, 7))
+>items : Symbol(items, Decl(crashInGetTextOfComputedPropertyName.ts, 8, 5))
+
+typeof itemOk1 // pass
+>itemOk1 : Symbol(itemOk1, Decl(crashInGetTextOfComputedPropertyName.ts, 9, 7))
+
+// --- test on second level ---
+interface ObjWithItems {
+>ObjWithItems : Symbol(ObjWithItems, Decl(crashInGetTextOfComputedPropertyName.ts, 10, 14))
+
+    items: {[s: string]: AB}
+>items : Symbol(ObjWithItems.items, Decl(crashInGetTextOfComputedPropertyName.ts, 13, 24))
+>s : Symbol(s, Decl(crashInGetTextOfComputedPropertyName.ts, 14, 13))
+>AB : Symbol(AB, Decl(crashInGetTextOfComputedPropertyName.ts, 2, 32))
+}
+const objWithItems: ObjWithItems = { items: {}}
+>objWithItems : Symbol(objWithItems, Decl(crashInGetTextOfComputedPropertyName.ts, 16, 5))
+>ObjWithItems : Symbol(ObjWithItems, Decl(crashInGetTextOfComputedPropertyName.ts, 10, 14))
+>items : Symbol(items, Decl(crashInGetTextOfComputedPropertyName.ts, 16, 36))
+
+const itemOk2 = objWithItems.items[itemId]
+>itemOk2 : Symbol(itemOk2, Decl(crashInGetTextOfComputedPropertyName.ts, 18, 5))
+>objWithItems.items : Symbol(ObjWithItems.items, Decl(crashInGetTextOfComputedPropertyName.ts, 13, 24))
+>objWithItems : Symbol(objWithItems, Decl(crashInGetTextOfComputedPropertyName.ts, 16, 5))
+>items : Symbol(ObjWithItems.items, Decl(crashInGetTextOfComputedPropertyName.ts, 13, 24))
+>itemId : Symbol(itemId, Decl(crashInGetTextOfComputedPropertyName.ts, 5, 5))
+
+typeof itemOk2 // pass
+>itemOk2 : Symbol(itemOk2, Decl(crashInGetTextOfComputedPropertyName.ts, 18, 5))
+
+const {
+    items: { [itemId]: itemWithTSError } = {} /*happens when default value is provided*/
+>items : Symbol(ObjWithItems.items, Decl(crashInGetTextOfComputedPropertyName.ts, 13, 24))
+>itemId : Symbol(itemId, Decl(crashInGetTextOfComputedPropertyName.ts, 5, 5))
+>itemWithTSError : Symbol(itemWithTSError, Decl(crashInGetTextOfComputedPropertyName.ts, 22, 12))
+
+} = objWithItems
+>objWithItems : Symbol(objWithItems, Decl(crashInGetTextOfComputedPropertyName.ts, 16, 5))
+
+// in order to re-produce the error, uncomment next line:
+typeof itemWithTSError // :(
+>itemWithTSError : Symbol(itemWithTSError, Decl(crashInGetTextOfComputedPropertyName.ts, 22, 12))
+
+// will result in:
+// Error from compilation: TypeError: Cannot read property 'charCodeAt' of undefined  TypeError: Cannot read property 'charCodeAt' of undefined
