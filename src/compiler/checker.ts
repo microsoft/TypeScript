@@ -20187,8 +20187,12 @@ namespace ts {
                 argCount--;
             }
 
-            let diagnostic: DiagnosticWithLocation;
+            let spanArray: NodeArray<Node>;
             let related: DiagnosticWithLocation | undefined;
+
+            const error = hasRestParameter || hasSpreadArgument ? hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
+                hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                Diagnostics.Expected_0_arguments_but_got_1_or_more : Diagnostics.Expected_0_arguments_but_got_1;
 
             if (closestSignature && getMinArgumentCount(closestSignature) > argCount && closestSignature.declaration) {
                 const paramDecl = closestSignature.declaration.parameters[closestSignature.thisParameter ? argCount + 1 : argCount];
@@ -20203,25 +20207,30 @@ namespace ts {
             if (min < argCount && argCount < max) {
                 return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
+
+            if(!hasSpreadArgument && argCount < min) {
+                const diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
+                return related ? addRelatedInfo(diagnostic, related) : diagnostic;
+            }
+
             if (hasRestParameter || hasSpreadArgument) {
-                const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
-                    hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
-                    Diagnostics.Expected_0_arguments_but_got_1_or_more;
-                diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
+                spanArray = createNodeArray(args);
                 if (hasSpreadArgument && argCount) {
-                    const nextArgument = args[getSpreadArgumentIndex(args) + 1] || undefined;
-                    diagnostic.start = nextArgument ? nextArgument.pos : args[getSpreadArgumentIndex(args)].end;
+                    const nextArg = elementAt(args, getSpreadArgumentIndex(args) + 1) || undefined;
+                    spanArray = createNodeArray(args.slice(max > argCount && nextArg ? args.indexOf(nextArg) : max))
                 }
             }
             else {
-                diagnostic = createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
+                spanArray = createNodeArray(args.slice(max));
             }
-            if (argCount > max && args[max].pos !== args[argCount - 1].end) {
-               diagnostic.start = args[max].pos;
+
+            spanArray.pos = first(spanArray).pos;
+            spanArray.end = last(spanArray).end;
+            if(spanArray.end === spanArray.pos) {
+                spanArray.end ++
             }
-            if (argCount > max || (hasSpreadArgument && argCount)) {
-               diagnostic.length = args[args.length - 1].end - diagnostic.start;
-            }
+            const diagnostic = createDiagnosticForNodeArray(
+                getSourceFileOfNode(node), spanArray, error, paramRange, argCount)
             return related ? addRelatedInfo(diagnostic, related) : diagnostic;
         }
 
