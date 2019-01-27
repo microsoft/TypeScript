@@ -167,7 +167,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
+            assert.equal(errorResult[0].code, Diagnostics.Comparison_of_expressions_of_types_0_and_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_one_of_the_expressions_to_unknown_first.code);
         });
 
         it("should report semantic errors for configured js project with '// @ts-check' and skipLibCheck=true", () => {
@@ -194,7 +194,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
+            assert.equal(errorResult[0].code, Diagnostics.Comparison_of_expressions_of_types_0_and_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_one_of_the_expressions_to_unknown_first.code);
         });
 
         it("should report semantic errors for configured js project with checkJs=true and skipLibCheck=true", () => {
@@ -223,7 +223,7 @@ namespace ts.projectSystem {
             );
             const errorResult = <protocol.Diagnostic[]>session.executeCommand(getErrRequest).response;
             assert.isTrue(errorResult.length === 1);
-            assert.equal(errorResult[0].code, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap.code);
+            assert.equal(errorResult[0].code, Diagnostics.Comparison_of_expressions_of_types_0_and_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_one_of_the_expressions_to_unknown_first.code);
         });
     });
 }
