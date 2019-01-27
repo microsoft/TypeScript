@@ -1,4 +1,4 @@
-tests/cases/compiler/infinitelyExpandingTypes1.ts(21,1): error TS2367: This condition will always return 'false' since the types 'List<number>' and 'List<string>' have no overlap.
+tests/cases/compiler/infinitelyExpandingTypes1.ts(21,1): error TS2367: Comparison of expressions of types 'List<number>' and 'List<string>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
 
 
 ==== tests/cases/compiler/infinitelyExpandingTypes1.ts (1 errors) ====
@@ -24,6 +24,6 @@ tests/cases/compiler/infinitelyExpandingTypes1.ts(21,1): error TS2367: This cond
     
     l == l2; // should error;
     ~~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'List<number>' and 'List<string>' have no overlap.
+!!! error TS2367: Comparison of expressions of types 'List<number>' and 'List<string>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
     
     l == l; // should not error

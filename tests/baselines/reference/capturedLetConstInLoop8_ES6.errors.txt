@@ -1,19 +1,19 @@
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(73,21): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(76,21): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(79,21): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(82,21): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(86,21): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(89,21): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(92,21): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(95,21): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(98,21): error TS2367: This condition will always return 'false' since the types '0' and '3' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(102,17): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(105,17): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(108,17): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(111,17): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(114,17): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(117,17): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
-tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(120,17): error TS2367: This condition will always return 'false' since the types '0' and '3' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(73,21): error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(76,21): error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(79,21): error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(82,21): error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(86,21): error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(89,21): error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(92,21): error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(95,21): error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(98,21): error TS2367: Comparison of expressions of types '0' and '3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(102,17): error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(105,17): error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(108,17): error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(111,17): error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(114,17): error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(117,17): error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
+tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(120,17): error TS2367: Comparison of expressions of types '0' and '3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
 
 
 ==== tests/cases/compiler/capturedLetConstInLoop8_ES6.ts (16 errors) ====
@@ -91,84 +91,84 @@ tests/cases/compiler/capturedLetConstInLoop8_ES6.ts(120,17): error TS2367: This 
                     (() => x + y);
                     if (y == 1) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         break;
                     }
                     if (y == 1) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         break l1;
                     }
                     if (y == 1) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         break ll1;
                     }
                     if (y == 1) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         continue l0;
                     }
     
                     if (x == 2) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         continue;
                     }
                     if (x == 2) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         continue l1;
                     }
                     if (x == 2) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         continue ll1;
                     }
                     if (x == 2) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         return "123"
                     }
                     if (x == 3) {
                         ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '3' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                         return;
                     }
                 }
                 if (x == 1) {
                     ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                     break;
                 }
                 if (x == 1) {
                     ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '1' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                     break l1;
                 }
                 if (x == 2) {
                     ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                     continue;
                 }
                 if (x == 2) {
                     ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                     continue l1;
                 }
                 if (x == 2) {
                     ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                     continue l0;
                 }
                 if (x == 2) {
                     ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '2' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                     return "456";
                 }
                 if (x == 3) {
                     ~~~~~~
-!!! error TS2367: This condition will always return 'false' since the types '0' and '3' have no overlap.
+!!! error TS2367: Comparison of expressions of types '0' and '3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.
                     return;
                 }
             }
