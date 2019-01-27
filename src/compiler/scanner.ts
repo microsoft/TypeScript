@@ -664,9 +664,6 @@ namespace ts {
         let collecting = trailing;
         let accumulator = initial;
         if (pos === 0) {
-            if (collecting) {
-                return accumulator;
-            }
             collecting = true;
             const shebang = getShebang(text);
             if (shebang) {
