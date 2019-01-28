@@ -1,0 +1,21 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesNoAccessibilityModifiers.ts(4,12): error TS18009: Accessibility modifiers cannot be used with private names.
+tests/cases/conformance/classes/members/privateNames/privateNamesNoAccessibilityModifiers.ts(5,13): error TS18009: Accessibility modifiers cannot be used with private names.
+tests/cases/conformance/classes/members/privateNames/privateNamesNoAccessibilityModifiers.ts(6,15): error TS18009: Accessibility modifiers cannot be used with private names.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesNoAccessibilityModifiers.ts (3 errors) ====
+    // @target es6
+    
+    class A {
+        public #foo = 3;         // Error
+               ~~~~
+!!! error TS18009: Accessibility modifiers cannot be used with private names.
+        private #bar = 3;        // Error
+                ~~~~
+!!! error TS18009: Accessibility modifiers cannot be used with private names.
+        protected #baz = 3;      // Error
+                  ~~~~
+!!! error TS18009: Accessibility modifiers cannot be used with private names.
+        readonly #qux = 3;       // OK
+    }
+    

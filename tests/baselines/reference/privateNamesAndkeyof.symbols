@@ -1,0 +1,20 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts ===
+// @target es6
+
+class A {
+>A : Symbol(A, Decl(privateNamesAndkeyof.ts, 0, 0))
+
+    #foo = 3;
+>#foo : Symbol(A.#foo, Decl(privateNamesAndkeyof.ts, 2, 9))
+
+    bar = 3;
+>bar : Symbol(A.bar, Decl(privateNamesAndkeyof.ts, 3, 13))
+
+    baz = 3;
+>baz : Symbol(A.baz, Decl(privateNamesAndkeyof.ts, 4, 12))
+}
+
+type T = keyof A     // should not include '#foo'
+>T : Symbol(T, Decl(privateNamesAndkeyof.ts, 6, 1))
+>A : Symbol(A, Decl(privateNamesAndkeyof.ts, 0, 0))
+

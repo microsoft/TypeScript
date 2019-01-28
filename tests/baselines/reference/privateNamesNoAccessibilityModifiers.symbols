@@ -1,0 +1,19 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesNoAccessibilityModifiers.ts ===
+// @target es6
+
+class A {
+>A : Symbol(A, Decl(privateNamesNoAccessibilityModifiers.ts, 0, 0))
+
+    public #foo = 3;         // Error
+>#foo : Symbol(A.#foo, Decl(privateNamesNoAccessibilityModifiers.ts, 2, 9))
+
+    private #bar = 3;        // Error
+>#bar : Symbol(A.#bar, Decl(privateNamesNoAccessibilityModifiers.ts, 3, 20))
+
+    protected #baz = 3;      // Error
+>#baz : Symbol(A.#baz, Decl(privateNamesNoAccessibilityModifiers.ts, 4, 21))
+
+    readonly #qux = 3;       // OK
+>#qux : Symbol(A.#qux, Decl(privateNamesNoAccessibilityModifiers.ts, 5, 23))
+}
+

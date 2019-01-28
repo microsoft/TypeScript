@@ -1,0 +1,38 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNamesAndStaticFields.ts ===
+// @target es6
+
+class A {
+>A : A
+
+    static #foo: number;
+>#foo : number
+
+    constructor () {
+        A.#foo = 3;
+>A.#foo = 3 : 3
+>A.#foo : number
+>A : typeof A
+>3 : 3
+    }
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    static #foo: string;
+>#foo : string
+
+    constructor () {
+        super();
+>super() : void
+>super : typeof A
+
+        B.#foo = "some string";
+>B.#foo = "some string" : "some string"
+>B.#foo : string
+>B : typeof B
+>"some string" : "some string"
+    }
+}
+

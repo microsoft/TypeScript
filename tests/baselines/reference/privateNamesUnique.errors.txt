@@ -1,0 +1,20 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesUnique.ts(11,7): error TS2322: Type 'B' is not assignable to type 'A'.
+  Property '#foo' is missing in type 'B'. While type 'B' has a private member with the same spelling, its declaration and accessibility are distinct.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesUnique.ts (1 errors) ====
+    // @target es6
+    
+    class A {
+        #foo: number;
+    }
+    
+    class B {
+        #foo: number;
+    }
+    
+    const b: A = new B();     // Error: Property #foo is missing
+          ~
+!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322:   Property '#foo' is missing in type 'B'. While type 'B' has a private member with the same spelling, its declaration and accessibility are distinct.
+    

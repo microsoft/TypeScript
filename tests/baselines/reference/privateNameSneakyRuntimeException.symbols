@@ -1,0 +1,39 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameSneakyRuntimeException.ts ===
+// @target es6
+
+function createClass () {
+>createClass : Symbol(createClass, Decl(privateNameSneakyRuntimeException.ts, 0, 0))
+
+    return class {
+        #foo = 3;
+>#foo : Symbol((Anonymous class).#foo, Decl(privateNameSneakyRuntimeException.ts, 3, 18))
+
+        equals(other: any) {
+>equals : Symbol((Anonymous class).equals, Decl(privateNameSneakyRuntimeException.ts, 4, 17))
+>other : Symbol(other, Decl(privateNameSneakyRuntimeException.ts, 5, 15))
+
+            return this.#foo = other.#foo;
+>this.#foo : Symbol((Anonymous class).#foo, Decl(privateNameSneakyRuntimeException.ts, 3, 18))
+>this : Symbol((Anonymous class), Decl(privateNameSneakyRuntimeException.ts, 3, 10))
+>other : Symbol(other, Decl(privateNameSneakyRuntimeException.ts, 5, 15))
+        }
+    };
+}
+
+const a = new (createClass())();
+>a : Symbol(a, Decl(privateNameSneakyRuntimeException.ts, 11, 5))
+>createClass : Symbol(createClass, Decl(privateNameSneakyRuntimeException.ts, 0, 0))
+
+const b = new (createClass())();
+>b : Symbol(b, Decl(privateNameSneakyRuntimeException.ts, 12, 5))
+>createClass : Symbol(createClass, Decl(privateNameSneakyRuntimeException.ts, 0, 0))
+
+console.log(a.equals(b));     // OK at compile time but will be a runtime error
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a.equals : Symbol((Anonymous class).equals, Decl(privateNameSneakyRuntimeException.ts, 4, 17))
+>a : Symbol(a, Decl(privateNameSneakyRuntimeException.ts, 11, 5))
+>equals : Symbol((Anonymous class).equals, Decl(privateNameSneakyRuntimeException.ts, 4, 17))
+>b : Symbol(b, Decl(privateNameSneakyRuntimeException.ts, 12, 5))
+

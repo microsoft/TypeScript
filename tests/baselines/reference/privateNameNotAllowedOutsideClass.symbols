@@ -1,0 +1,5 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts ===
+// @target es6
+No type information for this code.
+No type information for this code.const #foo = 3;
+No type information for this code.

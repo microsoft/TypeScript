@@ -1,0 +1,15 @@
+tests/cases/conformance/classes/members/privateNames/privateNamesNoDelete.ts(6,16): error TS18010: The operand of a delete operator cannot be a private name.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNamesNoDelete.ts (1 errors) ====
+    // @target es6
+    
+    class A {
+        #v = 1;
+        constructor() {
+            delete this.#v; // Error: The operand of a delete operator cannot be a private name.
+                   ~~~~~~~
+!!! error TS18010: The operand of a delete operator cannot be a private name.
+        }
+    }
+    

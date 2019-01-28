@@ -1,0 +1,12 @@
+tests/cases/conformance/classes/members/privateNames/privateNameConstructorReserved.ts(4,5): error TS1811: '#constructor' is a reserved word.
+
+
+==== tests/cases/conformance/classes/members/privateNames/privateNameConstructorReserved.ts (1 errors) ====
+    // @target es6
+    
+    class A {
+        #constructor() {}      // Error: `#constructor` is a reserved word.
+        ~~~~~~~~~~~~
+!!! error TS1811: '#constructor' is a reserved word.
+    }
+    
