@@ -1,17 +1,17 @@
 /// <reference path='fourslash.ts' />
 
-////function f(/*a*/a: number, b: string/*b*/): string {
-////    return b;
+////function foo<T, S>(/*a*/t: T, s: S/*b*/) {
+////        return s;
 ////}
-////f(4, "b");
+////foo("a", "b");
 
 goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Convert to named parameters",
     actionName: "Convert to named parameters",
     actionDescription: "Convert to named parameters",
-    newContent: `function f({ a, b }: { a: number; b: string; }): string {
-    return b;
+    newContent: `function foo<T, S>({ t, s }: { t: T; s: S; }) {
+        return s;
 }
-f({ a: 4, b: "b" });`
+foo({ t: "a", s: "b" });`
 });
