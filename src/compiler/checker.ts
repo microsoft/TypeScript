@@ -9258,7 +9258,7 @@ namespace ts {
             return false;
         }
 
-        function removeSubtypes(types: Type[]): boolean {
+        function removeSubtypes(types: Type[], primitivesOnly: boolean): boolean {
             const len = types.length;
             if (len === 0 || isSetOfLiteralsFromSameEnum(types)) {
                 return true;
@@ -9273,9 +9273,11 @@ namespace ts {
                         if (count === 10000) {
                             // After 10000 subtype checks we estimate the remaining amount of work by assuming the
                             // same ratio of checks to removals. If the estimated number of remaining type checks is
-                            // greater than 1000000 we deem the union type too complex to represent.
+                            // greater than an upper limit we deem the union type too complex to represent. The
+                            // upper limit is 25M for unions of primitives only, and 1M otherwise. This for example
+                            // caps union types at 5000 unique literal types and 1000 unique object types.
                             const estimatedCount = (count / (len - i)) * len;
-                            if (estimatedCount > 1000000) {
+                            if (estimatedCount > (primitivesOnly ? 25000000 : 1000000)) {
                                 error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
                                 return false;
                             }
@@ -9338,7 +9340,7 @@ namespace ts {
                         }
                         break;
                     case UnionReduction.Subtype:
-                        if (!removeSubtypes(typeSet)) {
+                        if (!removeSubtypes(typeSet, !(includes & TypeFlags.StructuredOrInstantiable))) {
                             return errorType;
                         }
                         break;
