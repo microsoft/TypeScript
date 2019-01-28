@@ -9,30 +9,30 @@ function foo0(x) {
 >x : any
 
     for (let x of []) {
->x : any
+>x : undefined
 >[] : undefined[]
 
         var v = x;
->v : any
->x : any
+>v : undefined
+>x : undefined
 
         (function() { return x + v });
 >(function() { return x + v }) : () => any
 >function() { return x + v } : () => any
 >x + v : any
->x : any
->v : any
+>x : undefined
+>v : undefined
 
         (() => x + v);
 >(() => x + v) : () => any
 >() => x + v : () => any
 >x + v : any
->x : any
->v : any
+>x : undefined
+>v : undefined
 
         if (x == 1) {
 >x == 1 : boolean
->x : any
+>x : undefined
 >1 : 1
 
             return;
@@ -42,7 +42,7 @@ function foo0(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : any
+>v : undefined
 }
 
 function foo00(x) {
@@ -484,30 +484,30 @@ function foo0_c(x) {
 >x : any
 
     for (const x of []) {
->x : any
+>x : undefined
 >[] : undefined[]
 
         var v = x;
->v : any
->x : any
+>v : undefined
+>x : undefined
 
         (function() { return x + v });
 >(function() { return x + v }) : () => any
 >function() { return x + v } : () => any
 >x + v : any
->x : any
->v : any
+>x : undefined
+>v : undefined
 
         (() => x + v);
 >(() => x + v) : () => any
 >() => x + v : () => any
 >x + v : any
->x : any
->v : any
+>x : undefined
+>v : undefined
 
         if (x == 1) {
 >x == 1 : boolean
->x : any
+>x : undefined
 >1 : 1
 
             return;
@@ -517,7 +517,7 @@ function foo0_c(x) {
     use(v);
 >use(v) : any
 >use : (a: any) => any
->v : any
+>v : undefined
 }
 
 function foo00_c(x) {

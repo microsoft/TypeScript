@@ -122,8 +122,8 @@ var r7 = d2[''];
 >'' : ""
 
 var r8 = d2[1];
->r8 : Date
->d2[1] : Date
+>r8 : Object & Date
+>d2[1] : Object & Date
 >d2 : Derived2
 >1 : 1
 

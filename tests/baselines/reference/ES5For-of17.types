@@ -1,10 +1,10 @@
 === tests/cases/conformance/statements/for-ofStatements/ES5For-of17.ts ===
 for (let v of []) {
->v : any
+>v : undefined
 >[] : undefined[]
 
     v;
->v : any
+>v : undefined
 
     for (let v of [v]) {
 >v : any

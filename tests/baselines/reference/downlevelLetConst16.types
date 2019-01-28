@@ -620,13 +620,13 @@ function foo7() {
 >foo7 : () => void
 
     for (let x of []) {
->x : any
+>x : undefined
 >[] : undefined[]
 
         use(x);
 >use(x) : any
 >use : (a: any) => any
->x : any
+>x : undefined
     }
     use(x);
 >use(x) : any
@@ -675,13 +675,13 @@ function foo10() {
 >foo10 : () => void
 
     for (const x of []) {
->x : any
+>x : undefined
 >[] : undefined[]
 
         use(x);
 >use(x) : any
 >use : (a: any) => any
->x : any
+>x : undefined
     }
     use(x);
 >use(x) : any

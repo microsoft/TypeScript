@@ -87,8 +87,8 @@ var i2_i_i2_si = i2_i["hello"];
 >"hello" : "hello"
 
 var i2_i_i2_ii = i2_i[30];
->i2_i_i2_ii : number
->i2_i[30] : number
+>i2_i_i2_ii : any
+>i2_i[30] : any
 >i2_i : i2
 >30 : 30
 

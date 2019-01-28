@@ -61,15 +61,16 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(164,5)
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(166,5): error TS2322: Type 'H' is not assignable to type 'I'.
   'S3' and 'S3.A' index signatures are incompatible.
     Type 'string' is not assignable to type '"a"'.
-tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(167,5): error TS2322: Type 'J' is not assignable to type 'I'.
-  'S3' and 'S3.A' index signatures are incompatible.
-    Type 'string' is not assignable to type '"a"'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(171,5): error TS2322: Type 'H' is not assignable to type 'J'.
   'S3' and 'S3.A' index signatures are incompatible.
     Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(172,5): error TS2322: Type 'I' is not assignable to type 'J'.
   'S3' and 'S3.A' index signatures are incompatible.
-    Type 'string' is not assignable to type 'never'.
+    Type '"a"' is not assignable to type 'never'.
+tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(173,5): error TS2322: Type 'K' is not assignable to type 'J'.
+  Index signature is missing in type 'K'.
+tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(174,5): error TS2322: Type 'L' is not assignable to type 'J'.
+  Index signature is missing in type 'L'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(176,5): error TS2322: Type 'H' is not assignable to type 'K'.
   Type 'H' is missing the following properties from type '{ a: string; b: string; c: string; }': b, c
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(177,5): error TS2322: Type 'I' is not assignable to type 'H'.
@@ -87,7 +88,7 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(183,5)
   Type 'J' is missing the following properties from type '{ a: string; b: string; c: string; }': a, b, c
 
 
-==== tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts (42 errors) ====
+==== tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts (43 errors) ====
     interface A {
         [x: "a" | "b" | "c"]: string;
     }
@@ -352,10 +353,6 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(183,5)
 !!! error TS2322:   'S3' and 'S3.A' index signatures are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type '"a"'.
         i = j;
-        ~
-!!! error TS2322: Type 'J' is not assignable to type 'I'.
-!!! error TS2322:   'S3' and 'S3.A' index signatures are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type '"a"'.
         i = k;
         i = l;
     
@@ -368,9 +365,15 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(183,5)
         ~
 !!! error TS2322: Type 'I' is not assignable to type 'J'.
 !!! error TS2322:   'S3' and 'S3.A' index signatures are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'never'.
+!!! error TS2322:     Type '"a"' is not assignable to type 'never'.
         j = k;
+        ~
+!!! error TS2322: Type 'K' is not assignable to type 'J'.
+!!! error TS2322:   Index signature is missing in type 'K'.
         j = l;
+        ~
+!!! error TS2322: Type 'L' is not assignable to type 'J'.
+!!! error TS2322:   Index signature is missing in type 'L'.
     
         k = h;
         ~

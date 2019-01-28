@@ -1,0 +1,11 @@
+=== tests/cases/compiler/classWithIndexAllowsNonNumericNames.ts ===
+class Obs {
+>Obs : Obs
+
+  [idx: number]: string;
+>idx : number
+
+  private _field: number;
+>_field : number
+}
+

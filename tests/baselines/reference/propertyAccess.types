@@ -351,26 +351,26 @@ var vv: any;
 
 // Bracket notation property access using enum value on type with numeric index signature and string index signature
 var ww = bothIndex[Compass.East];
->ww : B
->bothIndex[Compass.East] : B
+>ww : A & B
+>bothIndex[Compass.East] : A & B
 >bothIndex : { [n: string]: A; [m: number]: B; }
 >Compass.East : Compass.East
 >Compass : typeof Compass
 >East : Compass.East
 
 var ww: B;
->ww : B
+>ww : A & B
 
 // Bracket notation property access using value of type 'any' on type with numeric index signature and string index signature
 var xx = bothIndex[<any>null];
->xx : B
->bothIndex[<any>null] : B
+>xx : A & B
+>bothIndex[<any>null] : A & B
 >bothIndex : { [n: string]: A; [m: number]: B; }
 ><any>null : any
 >null : null
 
 var xx: B;
->xx : B
+>xx : A & B
 
 // Bracket notation property access using string value on type with numeric index signature and string index signature
 var yy = bothIndex['foo'];
@@ -418,11 +418,11 @@ var x2: Compass;
 >x2 : Compass
 
 var x3 = bothIndex[stringOrNumber];
->x3 : A | B
->bothIndex[stringOrNumber] : A | B
+>x3 : A | (A & B)
+>bothIndex[stringOrNumber] : A | (A & B)
 >bothIndex : { [n: string]: A; [m: number]: B; }
 >stringOrNumber : string | number
 
 var x3: A;
->x3 : A | B
+>x3 : A | (A & B)
 

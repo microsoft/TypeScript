@@ -136,7 +136,7 @@ declare var i2_i_x: number;
 declare var i2_i_foo: (b: number) => string;
 declare var i2_i_foo_r: string;
 declare var i2_i_i2_si: any;
-declare var i2_i_i2_ii: number;
+declare var i2_i_i2_ii: any;
 declare var i2_i_n: any;
 declare var i2_i_nc_x: number;
 declare var i2_i_nc_foo: (b: number) => string;

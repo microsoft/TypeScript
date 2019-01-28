@@ -17,14 +17,14 @@ var a: A;
 >a : A
 
 var r = a[1];
->r : string
->a[1] : string
+>r : string & { length: number; }
+>a[1] : string & { length: number; }
 >a : A
 >1 : 1
 
 var r2 = a['1'];
->r2 : string
->a['1'] : string
+>r2 : string & { length: number; }
+>a['1'] : string & { length: number; }
 >a : A
 >'1' : "1"
 

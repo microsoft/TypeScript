@@ -3,7 +3,7 @@ import * as _ from "./a";
 >_ : typeof _
 
 for (const _ of []) { }
->_ : any
+>_ : undefined
 >[] : undefined[]
 
 for (const _ in []) { }
@@ -17,7 +17,7 @@ namespace _ns {
 >_ : any
 
     for (const _ of []) { }
->_ : any
+>_ : undefined
 >[] : undefined[]
 
     for (const _ in []) { }

@@ -19,7 +19,7 @@ function foo3([...r] = {}) {
 
 function foo4([...r] = []) {
 >foo4 : ([...r]?: any[]) => void
->r : any[]
+>r : undefined[]
 >[] : undefined[]
 }
 

@@ -1,0 +1,13 @@
+tests/cases/conformance/statements/for-ofStatements/ES5For-of16.ts(5,9): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES5For-of16.ts (1 errors) ====
+    for (let v of []) {
+        v;
+        for (let v of []) {
+            var x = v;
+            v++;
+            ~
+!!! error TS2532: Object is possibly 'undefined'.
+        }
+    }

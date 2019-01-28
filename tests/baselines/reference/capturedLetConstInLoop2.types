@@ -5,7 +5,7 @@ function foo0(x) {
 >x : any
 
     for (let x of []) {
->x : any
+>x : undefined
 >[] : undefined[]
 
         let a = arguments.length;
@@ -18,14 +18,14 @@ function foo0(x) {
 >(function() { return x + a }) : () => any
 >function() { return x + a } : () => any
 >x + a : any
->x : any
+>x : undefined
 >a : number
 
         (() => x + a);
 >(() => x + a) : () => any
 >() => x + a : () => any
 >x + a : any
->x : any
+>x : undefined
 >a : number
     }
 }
@@ -368,7 +368,7 @@ function foo0_c(x) {
 >x : any
 
     for (const x of []) {
->x : any
+>x : undefined
 >[] : undefined[]
 
         const a = arguments.length;
@@ -381,14 +381,14 @@ function foo0_c(x) {
 >(function() { return x + a }) : () => any
 >function() { return x + a } : () => any
 >x + a : any
->x : any
+>x : undefined
 >a : number
 
         (() => x + a);
 >(() => x + a) : () => any
 >() => x + a : () => any
 >x + a : any
->x : any
+>x : undefined
 >a : number
     }
 }

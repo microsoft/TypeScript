@@ -1,0 +1,11 @@
+tests/cases/compiler/nestedLoopWithOnlyInnerLetCaptured.ts(4,20): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/compiler/nestedLoopWithOnlyInnerLetCaptured.ts (1 errors) ====
+    declare let doSomething;
+    
+    for (let a1 of [])
+        for (let a2 of a1.someArray)
+                       ~~
+!!! error TS2532: Object is possibly 'undefined'.
+            doSomething(() => a2);

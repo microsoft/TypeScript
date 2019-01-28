@@ -1,29 +1,29 @@
 === tests/cases/compiler/capturedLetConstInLoop6.ts ===
 // ====let
 for (let x of []) {
->x : any
+>x : undefined
 >[] : undefined[]
 
     (function() { return x});
->(function() { return x}) : () => any
->function() { return x} : () => any
->x : any
+>(function() { return x}) : () => undefined
+>function() { return x} : () => undefined
+>x : undefined
 
     (() => x);
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => undefined
+>() => x : () => undefined
+>x : undefined
 
     if (x == 1) {
 >x == 1 : boolean
->x : any
+>x : undefined
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : any
+>x : undefined
 >2 : 2
 
         continue;
@@ -366,29 +366,29 @@ for (let y = 0; y < 1; ++y) {
 // ====const
 
 for (const x of []) {
->x : any
+>x : undefined
 >[] : undefined[]
 
     (function() { return x});
->(function() { return x}) : () => any
->function() { return x} : () => any
->x : any
+>(function() { return x}) : () => undefined
+>function() { return x} : () => undefined
+>x : undefined
 
     (() => x);
->(() => x) : () => any
->() => x : () => any
->x : any
+>(() => x) : () => undefined
+>() => x : () => undefined
+>x : undefined
 
     if (x == 1) {
 >x == 1 : boolean
->x : any
+>x : undefined
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : any
+>x : undefined
 >2 : 2
 
         continue;

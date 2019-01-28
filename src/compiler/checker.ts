@@ -131,7 +131,7 @@ namespace ts {
             getPropertiesOfType,
             getPropertyOfType: (type, name) => getPropertyOfType(type, escapeLeadingUnderscores(name)),
             getTypeOfPropertyOfType: (type, name) => getTypeOfPropertyOfType(type, escapeLeadingUnderscores(name)),
-            getIndexInfosOfType: (type, indexType?) => indexType ? getApplicableIndexInfosOfIndexOnType(type, indexType) : getIndexInfosOfType(type),
+            getIndexInfosOfType: (type, indexType?) => indexType ? getResultingIndexInfosOfIndexOnType(type, indexType) : getIndexInfosOfType(type),
             getSignaturesOfType,
             getIndexTypeOfType: (type, indexType) => getResultingTypeOfIndexOnType(type, indexType),
             getBaseTypes,
@@ -7778,11 +7778,11 @@ namespace ts {
                     }
                     else if (isUnion) {
                         const index = !isLateBoundName(name) && (
-                            getResultingIndexInfoOfIndexOnType(type, getLiteralType(isNumericLiteralName(name) ? +name : "" + name))
+                            getResultingIndexInfosOfIndexOnType(type, getLiteralType(isNumericLiteralName(name) ? +name : "" + name))
                         );
                         if (index) {
-                            checkFlags |= index.isReadonly ? CheckFlags.Readonly : 0;
-                            indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : index.type);
+                            checkFlags |= some(index, i => i.isReadonly) ? CheckFlags.Readonly : 0;
+                            indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : getIntersectionType(map(index, i => i.type)));
                         }
                         else {
                             checkFlags |= CheckFlags.Partial;
@@ -7928,18 +7928,18 @@ namespace ts {
         }
 
         // TODO (weswigham): Ensure all callers handle unions of `type` _before_ calling this
-        function getResultingIndexInfoOfIndexOnType(type: Type, indexType: Type): IndexInfo | undefined {
+        function getResultingIndexInfosOfIndexOnType(type: Type, indexType: Type): IndexInfo[] | undefined {
             return resolveIndexOnIndexInfos(indexType, getIndexInfosOfType(type));
         }
 
-        function getApplicableIndexInfosOfIndexOnType(type: Type, indexType: Type, returnPartialSuccess?: boolean): IndexInfo[] | undefined {
+        function getApplicableIndexInfosOfIndexOnType(type: Type, indexType: Type, returnPartialSuccess?: boolean): IndexInfo[][] | undefined {
             if (!(indexType.flags & TypeFlags.Union)) {
-                const result = getResultingIndexInfoOfIndexOnType(type, indexType);
+                const result = getResultingIndexInfosOfIndexOnType(type, indexType);
                 return result && [result];
             }
-            let resultList: IndexInfo[] | undefined;
+            let resultList: IndexInfo[][] | undefined;
             for (const nameType of (indexType as UnionType).types) {
-                const result = getResultingIndexInfoOfIndexOnType(type, nameType);
+                const result = getResultingIndexInfosOfIndexOnType(type, nameType);
                 if (!result && !returnPartialSuccess) {
                     return;
                 }
@@ -7952,7 +7952,7 @@ namespace ts {
 
         function getResultingTypeOfIndexOnType(type: Type, indexType: Type, returnPartialSuccess?: boolean): Type | undefined {
             const resultInfos = getApplicableIndexInfosOfIndexOnType(type, indexType, returnPartialSuccess);
-            return resultInfos && getUnionType(map(resultInfos, i => i.type));
+            return resultInfos && getUnionType(map(resultInfos, applicableInfos => getIntersectionType(map(applicableInfos, i => i.type))));
         }
 
         function getImplicitIndexTypeOfType(type: Type, targetIndexType: Type): Type | undefined {
@@ -8512,7 +8512,7 @@ namespace ts {
          * Given a single type and a list of index infos, if that type is applicable to one or more of them,
          * returns the index info to which it is the most applicable
          */
-        function resolveIndexOnIndexInfos(indexType: Type, infos: IndexInfo[] | undefined): IndexInfo | undefined {
+        function resolveIndexOnIndexInfos(indexType: Type, infos: IndexInfo[] | undefined): IndexInfo[] | undefined {
             Debug.assert(!(indexType.flags & TypeFlags.Union));
             if (indexType.flags & TypeFlags.StringLiteral) {
                 // Prioritize equivalent numeric representation over the string one, since the "number"s in this case _are_ just a subdomain of the strings
@@ -8522,20 +8522,7 @@ namespace ts {
             }
             const applicable = filter(infos, info => isTypeIndexAccessAssignableTo(indexType, info.indexType));
             if (!length(applicable)) return;
-            // OK, now for the hard part - ranking the derivedness of an index signature!
-            let candidate = applicable![0];
-            let filteredCandidateIndexType = filterType(candidate.indexType, c => isTypeIndexAccessAssignableTo(indexType, c));
-            for (const info of applicable!) {
-                if (info === candidate) continue;
-                const filteredInfoIndexType = filterType(info.indexType, c => isTypeIndexAccessAssignableTo(indexType, c));
-                // The identity check is here so that in situations where multiple index signatures with the same index type are present
-                // (which is usually an error), we'll align with older behavior and use the type from the first signature we encountered
-                if (!isTypeIdenticalTo(filteredInfoIndexType, filteredCandidateIndexType) && isTypeIndexAccessAssignableTo(filteredInfoIndexType, filteredCandidateIndexType)) {
-                    candidate = info;
-                    filteredCandidateIndexType = filteredInfoIndexType;
-                }
-            }
-            return candidate;
+            return applicable;
         }
 
         function createIndexInfo(indexType: Type, type: Type, isReadonly: boolean, declaration?: IndexSignatureDeclaration): IndexInfo {
@@ -9752,8 +9739,8 @@ namespace ts {
             });
         }
 
-        function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags) {
-            if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
+        function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags, retainNonpublicNames?: boolean) {
+            if (retainNonpublicNames || !(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getLateBoundSymbol(prop).nameType;
                 if (!type && !isKnownSymbol(prop)) {
                     if (prop.escapedName === InternalSymbolName.Default) {
@@ -9907,16 +9894,16 @@ namespace ts {
                 if (objectType.flags & (TypeFlags.Any | TypeFlags.Never)) {
                     return objectType;
                 }
-                const indexInfo = getResultingIndexInfoOfIndexOnType(objectType, indexType);
+                const indexInfo = getResultingIndexInfosOfIndexOnType(objectType, indexType);
                 if (indexInfo) {
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number | TypeFlags.ESSymbol)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                     }
-                    else if (accessExpression && indexInfo.isReadonly && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression))) {
+                    else if (accessExpression && every(indexInfo, i => i.isReadonly) && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression))) {
                         error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
                     }
-                    return indexInfo.type;
+                    return getIntersectionType(map(indexInfo, i => i.type));
                 }
                 if (indexType.flags & TypeFlags.Never) {
                     return neverType;
@@ -9929,7 +9916,7 @@ namespace ts {
                         if (propName !== undefined && typeHasStaticProperty(propName, objectType)) {
                             error(accessExpression, Diagnostics.Property_0_is_a_static_member_of_type_1, propName as string, typeToString(objectType));
                         }
-                        else if (getResultingIndexInfoOfIndexOnType(objectType, numberType)) {
+                        else if (getResultingIndexInfosOfIndexOnType(objectType, numberType)) {
                             error(accessExpression.argumentExpression, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
                         }
                         else {
@@ -11462,10 +11449,11 @@ namespace ts {
 
                             let issuedElaboration = false;
                             if (!targetProp) {
-                                const indexInfo = getResultingIndexInfoOfIndexOnType(target, nameType);
-                                if (indexInfo && indexInfo.declaration && !getSourceFileOfNode(indexInfo.declaration).hasNoDefaultLib) {
+                                const indexInfo = getResultingIndexInfosOfIndexOnType(target, nameType);
+                                const elaboratableInfo = indexInfo && find(indexInfo, i => !!(i.declaration && !getSourceFileOfNode(i.declaration).hasNoDefaultLib));
+                                if (elaboratableInfo) {
                                     issuedElaboration = true;
-                                    addRelatedInfo(reportedDiag, createDiagnosticForNode(indexInfo.declaration, Diagnostics.The_expected_type_comes_from_this_index_signature));
+                                    addRelatedInfo(reportedDiag, createDiagnosticForNode(elaboratableInfo.declaration!, Diagnostics.The_expected_type_comes_from_this_index_signature));
                                 }
                             }
 
@@ -11634,7 +11622,7 @@ namespace ts {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
                 if (isSpreadAssignment(prop)) continue;
-                const type = getLiteralTypeFromProperty(getSymbolOfNode(prop), TypeFlags.StringOrNumberLiteralOrUnique);
+                const type = getLiteralTypeFromProperty(getSymbolOfNode(prop), TypeFlags.StringOrNumberLiteralOrUnique, /*retainNonPublicNames*/ true);
                 if (!type || (type.flags & TypeFlags.Never)) {
                     continue;
                 }
@@ -13222,7 +13210,7 @@ namespace ts {
                     if (isIgnoredJsxProperty(source, prop, /*targetMemberType*/ undefined)) {
                         continue;
                     }
-                    const nameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique);
+                    const nameType = getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique, /*retainNonPublicNames*/ true);
                     if (nameType.flags & TypeFlags.Never) continue;
                     const targetType = getResultingTypeOfIndexOnType(target, nameType);
                     if (targetType) {
@@ -13336,11 +13324,17 @@ namespace ts {
                     if (!result) {
                         if (reportErrors) {
                             const sourceInfos = getApplicableIndexInfosOfIndexOnType(source, targetInfo.indexType, sourceHasInferableIndex);
-                            for (const info of sourceInfos!) {
-                                if (!isRelatedTo(info.type, targetInfo.type)) {
-                                    const sourceType = typeToString(info.indexType);
-                                    const targetType = typeToString(targetInfo.indexType);
-                                    reportError(sourceType === targetType ? Diagnostics._0_index_signatures_are_incompatible : Diagnostics._0_and_1_index_signatures_are_incompatible, sourceType, targetType);
+                            for (const applicableInfos of sourceInfos!) {
+                                const applicableType = getIntersectionType(map(applicableInfos, i => i.type));
+                                if (!isRelatedTo(applicableType, targetInfo.type)) {
+                                    for (const info of applicableInfos) {
+                                        if (!isRelatedTo(info.type, targetInfo.type)) {
+                                            const sourceType = typeToString(info.indexType);
+                                            const targetType = typeToString(targetInfo.indexType);
+                                            reportError(sourceType === targetType ? Diagnostics._0_index_signatures_are_incompatible : Diagnostics._0_and_1_index_signatures_are_incompatible, sourceType, targetType);
+                                            break;
+                                        }
+                                    }
                                     break;
                                 }
                             }
@@ -16172,7 +16166,7 @@ namespace ts {
             }
 
             function isTypePresencePossible(type: Type, propName: __String, assumeTrue: boolean) {
-                if (getResultingIndexInfoOfIndexOnType(type, stringType)) {
+                if (getResultingIndexInfosOfIndexOnType(type, stringType)) {
                     return true;
                 }
                 const prop = getPropertyOfType(type, propName);
@@ -18516,7 +18510,7 @@ namespace ts {
                             prop.flags |= impliedProp.flags & SymbolFlags.Optional;
                         }
 
-                        else if (!compilerOptions.suppressExcessPropertyErrors && !getResultingIndexInfoOfIndexOnType(contextualType!, nameType || stringType)) {
+                        else if (!compilerOptions.suppressExcessPropertyErrors && !getResultingIndexInfosOfIndexOnType(contextualType!, nameType || stringType)) {
                             error(memberDecl.name, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                 symbolToString(member), typeToString(contextualType!));
                         }
@@ -18873,7 +18867,7 @@ namespace ts {
                     }
 
                     // Intrinsic string indexer case
-                    const indexSignatureType = getResultingIndexInfoOfIndexOnType(intrinsicElementsType, stringType);
+                    const indexSignatureType = getResultingIndexInfosOfIndexOnType(intrinsicElementsType, stringType);
                     if (indexSignatureType) {
                         links.jsxFlags |= JsxFlags.IntrinsicIndexedElement;
                         return links.resolvedSymbol = intrinsicElementsType.symbol;
@@ -19058,7 +19052,7 @@ namespace ts {
                     return links.resolvedJsxElementAttributesType = getTypeOfSymbol(symbol);
                 }
                 else if (links.jsxFlags & JsxFlags.IntrinsicIndexedElement) {
-                    return links.resolvedJsxElementAttributesType = resolveIndexOnIndexInfos(stringType, getIndexInfosOfSymbol(symbol))!.type;
+                    return links.resolvedJsxElementAttributesType = getResultingTypeOfIndexOnType(getTypeOfSymbol(symbol), stringType) || errorType;
                 }
                 else {
                     return links.resolvedJsxElementAttributesType = errorType;
@@ -19152,7 +19146,7 @@ namespace ts {
         function isKnownProperty(targetType: Type, nameType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
             if (targetType.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(targetType as ObjectType);
-                if (getResultingIndexInfoOfIndexOnType(resolved, nameType) ||
+                if (getResultingIndexInfosOfIndexOnType(resolved, nameType) ||
                     getPropertyOfObjectType(targetType, name) ||
                     isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
@@ -19400,8 +19394,9 @@ namespace ts {
                 markAliasReferenced(parentSymbol, node);
             }
             if (!prop) {
-                const indexInfo = getResultingIndexInfoOfIndexOnType(apparentType, getLiteralType(unescapeLeadingUnderscores(right.escapedText)));
-                if (!(indexInfo && indexInfo.type)) {
+                const propNameType = getLiteralType(unescapeLeadingUnderscores(right.escapedText));
+                const indexType = getResultingTypeOfIndexOnType(apparentType, propNameType);
+                if (!indexType) {
                     if (isJSLiteralType(leftType)) {
                         return anyType;
                     }
@@ -19410,10 +19405,10 @@ namespace ts {
                     }
                     return errorType;
                 }
-                if (indexInfo.isReadonly && (isAssignmentTarget(node) || isDeleteTarget(node))) {
+                if ((isAssignmentTarget(node) || isDeleteTarget(node)) && some(getApplicableIndexInfosOfIndexOnType(apparentType, propNameType), indexes => some(indexes, i => i.isReadonly))) {
                     error(node, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(apparentType));
                 }
-                propType = indexInfo.type;
+                propType = indexType;
             }
             else {
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
@@ -19725,7 +19720,7 @@ namespace ts {
          * Return true if the given type is considered to have numeric property names.
          */
         function hasNumericPropertyNames(type: Type) {
-            return getResultingIndexInfoOfIndexOnType(type, numberType) && !getResultingIndexInfoOfIndexOnType(type, stringType);
+            return getResultingIndexInfosOfIndexOnType(type, numberType) && !getResultingIndexInfosOfIndexOnType(type, stringType);
         }
 
         /**
@@ -26742,7 +26737,7 @@ namespace ts {
                     if (isKnownSymbol(prop)) {
                         return;
                     }
-                    checkIndexConstraintForProperty(prop, getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), propType, type, declaredIndexers);
+                    checkIndexConstraintForProperty(prop, getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique, /*retainNonpublicNames*/ true), propType, type, declaredIndexers);
                 });
 
                 const classDeclaration = type.symbol.valueDeclaration;
@@ -26805,11 +26800,13 @@ namespace ts {
                 containingType: Type,
                 indexDeclarations: Declaration[] | undefined
             ): void {
-                const indexInfos = getIndexInfosOfType(containingType);
-                const resolvedInfo = resolveIndexOnIndexInfos(propName, indexInfos);
-                if (!resolvedInfo || isTypeAssignableTo(propertyType, resolvedInfo.type)) {
+                const resolvedType = getResultingTypeOfIndexOnType(containingType, propName);
+                if (!resolvedType || isTypeAssignableTo(propertyType, resolvedType)) {
                     return; // No errors
                 }
+                const indexInfos = getIndexInfosOfType(containingType);
+                // TODO: Involve all index signatures constraining the property in the error
+                const resolvedInfo = first(resolveIndexOnIndexInfos(propName, indexInfos)!);
                 const indexDeclaration = contains(indexDeclarations, resolvedInfo.declaration) ? resolvedInfo.declaration : undefined;
 
                 const propDeclaration = prop.valueDeclaration;
@@ -26842,7 +26839,7 @@ namespace ts {
                         symbolToString(prop),
                         typeToString(propertyType),
                         typeToString(resolvedInfo.indexType),
-                        typeToString(resolvedInfo.type)
+                        typeToString(resolvedType)
                     );
                 }
             }

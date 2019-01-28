@@ -226,8 +226,8 @@ var r7 = d2[''];
 >'' : ""
 
 var r8 = d2[1];
->r8 : { foo: string; bar: string; }
->d2[1] : { foo: string; bar: string; }
+>r8 : { foo: string; } & { foo: string; bar: string; }
+>d2[1] : { foo: string; } & { foo: string; bar: string; }
 >d2 : Derived2
 >1 : 1
 
