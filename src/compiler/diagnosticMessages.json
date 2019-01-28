@@ -2132,6 +2132,14 @@
         "category": "Error",
         "code": 2588
     },
+    "Type instantiation is excessively deep and possibly infinite.": {
+        "category": "Error",
+        "code": 2589
+    },
+    "Expression produces a union type that is too complex to represent.": {
+        "category": "Error",
+        "code": 2590
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600

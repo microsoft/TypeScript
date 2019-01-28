@@ -67,6 +67,7 @@ namespace ts {
         let enumCount = 0;
         let instantiationDepth = 0;
         let constraintDepth = 0;
+        let currentNode: Node | undefined;
 
         const emptySymbols = createSymbolTable();
         const identityMapper: (type: Type) => Type = identity;
@@ -7525,6 +7526,7 @@ namespace ts {
                         // very high likelyhood we're dealing with an infinite generic type that perpetually generates
                         // new type identities as we descend into it. We stop the recursion here and mark this type
                         // and the outer types as having circular constraints.
+                        error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                         nonTerminating = true;
                         return t.immediateBaseConstraint = noConstraintType;
                     }
@@ -9240,18 +9242,6 @@ namespace ts {
             return includes;
         }
 
-        function isSubtypeOfAny(source: Type, targets: ReadonlyArray<Type>): boolean {
-            for (const target of targets) {
-                if (source !== target && isTypeSubtypeOf(source, target) && (
-                    !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
-                    !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
-                    isTypeDerivedFrom(source, target))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         function isSetOfLiteralsFromSameEnum(types: ReadonlyArray<Type>): boolean {
             const first = types[0];
             if (first.flags & TypeFlags.EnumLiteral) {
@@ -9268,17 +9258,40 @@ namespace ts {
             return false;
         }
 
-        function removeSubtypes(types: Type[]) {
-            if (types.length === 0 || isSetOfLiteralsFromSameEnum(types)) {
-                return;
+        function removeSubtypes(types: Type[]): boolean {
+            const len = types.length;
+            if (len === 0 || isSetOfLiteralsFromSameEnum(types)) {
+                return true;
             }
-            let i = types.length;
+            let i = len;
+            let count = 0;
             while (i > 0) {
                 i--;
-                if (isSubtypeOfAny(types[i], types)) {
-                    orderedRemoveItemAt(types, i);
+                const source = types[i];
+                for (const target of types) {
+                    if (source !== target) {
+                        if (count === 10000) {
+                            // After 10000 subtype checks we estimate the remaining amount of work by assuming the
+                            // same ratio of checks to removals. If the estimated number of remaining type checks is
+                            // greater than 1000000 we deem the union type too complex to represent.
+                            const estimatedCount = (count / (len - i)) * len;
+                            if (estimatedCount > 1000000) {
+                                error(currentNode, Diagnostics.Expression_produces_a_union_type_that_is_too_complex_to_represent);
+                                return false;
+                            }
+                        }
+                        count++;
+                        if (isTypeSubtypeOf(source, target) && (
+                            !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
+                            !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
+                            isTypeDerivedFrom(source, target))) {
+                            orderedRemoveItemAt(types, i);
+                            break;
+                        }
+                    }
                 }
             }
+            return true;
         }
 
         function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags) {
@@ -9325,7 +9338,9 @@ namespace ts {
                         }
                         break;
                     case UnionReduction.Subtype:
-                        removeSubtypes(typeSet);
+                        if (!removeSubtypes(typeSet)) {
+                            return errorType;
+                        }
                         break;
                 }
                 if (typeSet.length === 0) {
@@ -10957,6 +10972,7 @@ namespace ts {
                 // We have reached 50 recursive type instantiations and there is a very high likelyhood we're dealing
                 // with a combination of infinite generic types that perpetually generate new type identities. We stop
                 // the recursion here by yielding the error type.
+                error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
                 return errorType;
             }
             instantiationDepth++;
@@ -23063,7 +23079,7 @@ namespace ts {
             return instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
         }
 
-        function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration, type: Type, checkMode?: CheckMode) {
+        function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration | QualifiedName, type: Type, checkMode?: CheckMode) {
             if (checkMode === CheckMode.Inferential) {
                 const signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
@@ -23133,15 +23149,10 @@ namespace ts {
         // have the wildcard function type; this form of type check is used during overload resolution to exclude
         // contextually typed function and arrow expressions in the initial phase.
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
-            let type: Type;
-            if (node.kind === SyntaxKind.QualifiedName) {
-                type = checkQualifiedName(<QualifiedName>node);
-            }
-            else {
-                const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
-                type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
-            }
-
+            const saveCurrentNode = currentNode;
+            currentNode = node;
+            const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
+            const type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
             if (isConstEnumObjectType(type)) {
                 // enum object type for const enums are only permitted in:
                 // - 'left' in property access
@@ -23157,6 +23168,7 @@ namespace ts {
                     error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
                 }
             }
+            currentNode = saveCurrentNode;
             return type;
         }
 
@@ -23168,7 +23180,7 @@ namespace ts {
             return checkExpression(node.expression, checkMode);
         }
 
-        function checkExpressionWorker(node: Expression, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
+        function checkExpressionWorker(node: Expression | QualifiedName, checkMode: CheckMode | undefined, forceTuple?: boolean): Type {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     return checkIdentifier(<Identifier>node);
@@ -23201,6 +23213,8 @@ namespace ts {
                     return checkObjectLiteral(<ObjectLiteralExpression>node, checkMode);
                 case SyntaxKind.PropertyAccessExpression:
                     return checkPropertyAccessExpression(<PropertyAccessExpression>node);
+                case SyntaxKind.QualifiedName:
+                    return checkQualifiedName(<QualifiedName>node);
                 case SyntaxKind.ElementAccessExpression:
                     return checkIndexedAccess(<ElementAccessExpression>node);
                 case SyntaxKind.CallExpression:
@@ -27882,10 +27896,15 @@ namespace ts {
         }
 
         function checkSourceElement(node: Node | undefined): void {
-            if (!node) {
-                return;
+            if (node) {
+                const saveCurrentNode = currentNode;
+                currentNode = node;
+                checkSourceElementWorker(node);
+                currentNode = saveCurrentNode;
             }
+        }
 
+        function checkSourceElementWorker(node: Node): void {
             if (isInJSFile(node)) {
                 forEach((node as JSDocContainer).jsDoc, ({ tags }) => forEach(tags, checkSourceElement));
             }
@@ -28143,32 +28162,36 @@ namespace ts {
 
         function checkDeferredNodes(context: SourceFile) {
             const links = getNodeLinks(context);
-            if (!links.deferredNodes) {
-                return;
+            if (links.deferredNodes) {
+                links.deferredNodes.forEach(checkDeferredNode);
             }
-            links.deferredNodes.forEach(node => {
-                switch (node.kind) {
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                        checkFunctionExpressionOrObjectLiteralMethodDeferred(<FunctionExpression>node);
-                        break;
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        checkAccessorDeclaration(<AccessorDeclaration>node);
-                        break;
-                    case SyntaxKind.ClassExpression:
-                        checkClassExpressionDeferred(<ClassExpression>node);
-                        break;
-                    case SyntaxKind.JsxSelfClosingElement:
-                        checkJsxSelfClosingElementDeferred(<JsxSelfClosingElement>node);
-                        break;
-                    case SyntaxKind.JsxElement:
-                        checkJsxElementDeferred(<JsxElement>node);
-                        break;
-                }
-            });
+        }
+
+        function checkDeferredNode(node: Node) {
+            const saveCurrentNode = currentNode;
+            currentNode = node;
+            switch (node.kind) {
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                    checkFunctionExpressionOrObjectLiteralMethodDeferred(<FunctionExpression>node);
+                    break;
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    checkAccessorDeclaration(<AccessorDeclaration>node);
+                    break;
+                case SyntaxKind.ClassExpression:
+                    checkClassExpressionDeferred(<ClassExpression>node);
+                    break;
+                case SyntaxKind.JsxSelfClosingElement:
+                    checkJsxSelfClosingElementDeferred(<JsxSelfClosingElement>node);
+                    break;
+                case SyntaxKind.JsxElement:
+                    checkJsxElementDeferred(<JsxElement>node);
+                    break;
+            }
+            currentNode = saveCurrentNode;
         }
 
         function checkSourceFile(node: SourceFile) {
