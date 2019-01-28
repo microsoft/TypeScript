@@ -20208,7 +20208,7 @@ namespace ts {
                 return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
 
-            if(!hasSpreadArgument && argCount < min) {
+            if (!hasSpreadArgument && argCount < min) {
                 const diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
                 return related ? addRelatedInfo(diagnostic, related) : diagnostic;
             }
@@ -20217,7 +20217,7 @@ namespace ts {
                 spanArray = createNodeArray(args);
                 if (hasSpreadArgument && argCount) {
                     const nextArg = elementAt(args, getSpreadArgumentIndex(args) + 1) || undefined;
-                    spanArray = createNodeArray(args.slice(max > argCount && nextArg ? args.indexOf(nextArg) : max))
+                    spanArray = createNodeArray(args.slice(max > argCount && nextArg ? args.indexOf(nextArg) : max));
                 }
             }
             else {
@@ -20226,11 +20226,11 @@ namespace ts {
 
             spanArray.pos = first(spanArray).pos;
             spanArray.end = last(spanArray).end;
-            if(spanArray.end === spanArray.pos) {
-                spanArray.end ++
+            if (spanArray.end === spanArray.pos) {
+                spanArray.end++;
             }
             const diagnostic = createDiagnosticForNodeArray(
-                getSourceFileOfNode(node), spanArray, error, paramRange, argCount)
+                getSourceFileOfNode(node), spanArray, error, paramRange, argCount);
             return related ? addRelatedInfo(diagnostic, related) : diagnostic;
         }
 
