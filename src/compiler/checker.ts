@@ -13287,11 +13287,8 @@ namespace ts {
         }
 
         function getVariances(type: GenericType): Variance[] {
-            if (!strictFunctionTypes) {
-                return emptyArray;
-            }
-            if (type === globalArrayType || type === globalReadonlyArrayType) {
-                // Arrays are known to be covariant, no need to spend time computing this (emptyArray implies covariance for all parameters)
+            // Arrays and tuples are known to be covariant, no need to spend time computing this (emptyArray implies covariance for all parameters)
+            if (!strictFunctionTypes || type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
                 return emptyArray;
             }
             return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference);
