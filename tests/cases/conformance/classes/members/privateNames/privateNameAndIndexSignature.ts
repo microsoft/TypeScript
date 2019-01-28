@@ -1,3 +1,6 @@
+// @strict: true
+// @target es6
+
 class A {
     [k: string]: any;
     constructor(message: string) {

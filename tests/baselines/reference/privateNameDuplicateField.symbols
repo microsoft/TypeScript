@@ -1,0 +1,13 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts ===
+// @target es6
+
+class A {
+>A : Symbol(A, Decl(privateNameDuplicateField.ts, 0, 0))
+
+    #foo = "foo";
+>#foo : Symbol(A.#foo, Decl(privateNameDuplicateField.ts, 2, 9), Decl(privateNameDuplicateField.ts, 3, 17))
+
+    #foo = "foo";
+>#foo : Symbol(A.#foo, Decl(privateNameDuplicateField.ts, 2, 9), Decl(privateNameDuplicateField.ts, 3, 17))
+}
+

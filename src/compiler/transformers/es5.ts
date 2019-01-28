@@ -82,7 +82,10 @@ namespace ts {
          * @param node A PropertyAccessExpression
          */
         function substitutePropertyAccessExpression(node: PropertyAccessExpression): Expression {
-            const literalName = trySubstituteReservedName(cast(node.name, isIdentifier));
+            if (isPrivateName(node.name)) {
+                return node;
+            }
+            const literalName = trySubstituteReservedName(node.name);
             if (literalName) {
                 return setTextRange(createElementAccess(node.expression, literalName), node);
             }

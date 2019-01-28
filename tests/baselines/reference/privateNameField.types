@@ -1,4 +1,6 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameField.ts ===
+// @target es6
+
 class A {
 >A : A
 
@@ -10,9 +12,8 @@ class A {
 
         this.#name = name;
 >this.#name = name : string
->this.#name : any
+>this.#name : string
 >this : this
->#name : any
 >name : string
     }
 }

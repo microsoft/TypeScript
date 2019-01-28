@@ -1584,6 +1584,10 @@ namespace ts {
     export function nodeCanBeDecorated(node: ClassElement, parent: Node): boolean;
     export function nodeCanBeDecorated(node: Node, parent: Node, grandparent: Node): boolean;
     export function nodeCanBeDecorated(node: Node, parent?: Node, grandparent?: Node): boolean {
+        // private names cannot be used with decorators yet
+        if (isNamedDeclaration(node) && isPrivateName(node.name)) {
+            return false;
+        }
         switch (node.kind) {
             case SyntaxKind.ClassDeclaration:
                 // classes are valid targets
@@ -2964,8 +2968,16 @@ namespace ts {
         }
     }
 
+    export function getPropertyNameForUniqueESSymbol(symbol: Symbol): __String {
+        return `__@${getSymbolId(symbol)}@${symbol.escapedName}` as __String;
+    }
+
     export function getPropertyNameForKnownSymbolName(symbolName: string): __String {
         return "__@" + symbolName as __String;
+    }
+
+    export function getPropertyNameForPrivateNameDescription(containingClassSymbol: Symbol, description: __String): __String {
+        return `__#${getSymbolId(containingClassSymbol)}@${description}` as __String;
     }
 
     export function isKnownSymbol(symbol: Symbol): boolean {

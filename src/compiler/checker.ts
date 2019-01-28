@@ -365,6 +365,7 @@ namespace ts {
             getDeclaredTypeOfSymbol,
             getPropertiesOfType,
             getPropertyOfType: (type, name) => getPropertyOfType(type, escapeLeadingUnderscores(name)),
+            getPropertyForPrivateName,
             getTypeOfPropertyOfType: (type, name) => getTypeOfPropertyOfType(type, escapeLeadingUnderscores(name)),
             getIndexInfoOfType,
             getSignaturesOfType,
@@ -1880,8 +1881,8 @@ namespace ts {
             }
         }
 
-        function diagnosticName(nameArg: __String | Identifier) {
-            return isString(nameArg) ? unescapeLeadingUnderscores(nameArg as __String) : declarationNameToString(nameArg as Identifier);
+        function diagnosticName(nameArg: __String | Identifier | PrivateName) {
+            return isString(nameArg) ? unescapeLeadingUnderscores(nameArg as __String) : declarationNameToString(nameArg as Identifier | PrivateName);
         }
 
         function isTypeParameterSymbolDeclaredInContainer(symbol: Symbol, container: Node) {
@@ -3184,15 +3185,16 @@ namespace ts {
             return type;
         }
 
-        // A reserved member name starts with two underscores, but the third character cannot be an underscore
-        // or the @ symbol. A third underscore indicates an escaped form of an identifier that started
+        // A reserved member name starts with two underscores, but the third character cannot be an underscore,
+        // @, or #. A third underscore indicates an escaped form of an identifer that started
         // with at least two underscores. The @ character indicates that the name is denoted by a well known ES
-        // Symbol instance.
+        // Symbol instance and the # indicates that the name is a PrivateName.
         function isReservedMemberName(name: __String) {
             return (name as string).charCodeAt(0) === CharacterCodes._ &&
                 (name as string).charCodeAt(1) === CharacterCodes._ &&
                 (name as string).charCodeAt(2) !== CharacterCodes._ &&
-                (name as string).charCodeAt(2) !== CharacterCodes.at;
+                (name as string).charCodeAt(2) !== CharacterCodes.at &&
+                (name as string).charCodeAt(2) !== CharacterCodes.hash;
         }
 
         function getNamedMembers(members: SymbolTable): Symbol[] {
@@ -8460,7 +8462,7 @@ namespace ts {
          */
         function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
             if (type.flags & TypeFlags.UniqueESSymbol) {
-                return (<UniqueESSymbolType>type).escapedName;
+                return getPropertyNameForUniqueESSymbol(type.symbol);
             }
             if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                 return escapeLeadingUnderscores("" + (<StringLiteralType | NumberLiteralType>type).value);
@@ -11843,6 +11845,9 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyName(name: PropertyName) {
+            if (isPrivateName(name)) {
+                return neverType;
+            }
             return isIdentifier(name) ? getLiteralType(unescapeLeadingUnderscores(name.escapedText)) :
                 getRegularTypeOfLiteralType(isComputedPropertyName(name) ? checkComputedPropertyName(name) : checkExpression(name));
         }
@@ -15877,6 +15882,7 @@ namespace ts {
             }
 
             function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, excludedProperties: UnderscoreEscapedMap<true> | undefined, isIntersectionConstituent: boolean): Ternary {
+
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target, excludedProperties);
                 }
@@ -15884,34 +15890,58 @@ namespace ts {
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false);
                 if (unmatchedProperty) {
                     if (reportErrors) {
-                        const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false));
                         let shouldSkipElaboration = false;
-                        if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
-                            headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
-                            shouldSkipElaboration = true; // Retain top-level error for interface implementing issues, otherwise omit it
-                        }
-                        if (props.length === 1) {
-                            const propName = symbolToString(unmatchedProperty);
-                            reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
-                            if (length(unmatchedProperty.declarations)) {
-                                associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations[0], Diagnostics._0_is_declared_here, propName));
+                        let hasReported = false;
+                        if (
+                            unmatchedProperty.valueDeclaration
+                            && isNamedDeclaration(unmatchedProperty.valueDeclaration)
+                            && isPrivateName(unmatchedProperty.valueDeclaration.name)
+                            && isClassDeclaration(source.symbol.valueDeclaration)
+                        ) {
+                            const privateNameDescription = unmatchedProperty.valueDeclaration.name.escapedText;
+                            const symbolTableKey = getPropertyNameForPrivateNameDescription(source.symbol, privateNameDescription);
+                            if (symbolTableKey && !!getPropertyOfType(source, symbolTableKey)) {
+                                reportError(
+                                    Diagnostics.Property_0_is_missing_in_type_1_While_type_1_has_a_private_member_with_the_same_spelling_its_declaration_and_accessibility_are_distinct,
+                                    diagnosticName(privateNameDescription),
+                                    diagnosticName(source.symbol.valueDeclaration.name || ("(anonymous)" as __String))
+                                );
+                                hasReported = true;
                             }
                             if (shouldSkipElaboration && errorInfo) {
                                 overrideNextErrorInfo++;
                             }
                         }
-                        else if (tryElaborateArrayLikeErrors(source, target, /*reportErrors*/ false)) {
-                            if (props.length > 5) { // arbitrary cutoff for too-long list form
-                                reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                        if (!hasReported) {
+                            const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false));
+                            let shouldSkipElaboration = false;
+                            if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
+                                headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
+                                shouldSkipElaboration = true; // Retain top-level error for interface implementing issues, otherwise omit it
                             }
-                            else {
-                                reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
+                            if (props.length === 1) {
+                                const propName = symbolToString(unmatchedProperty);
+                                reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
+                                if (length(unmatchedProperty.declarations)) {
+                                    associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations[0], Diagnostics._0_is_declared_here, propName));
+                                }
+                                if (shouldSkipElaboration && errorInfo) {
+                                    overrideNextErrorInfo++;
+                                }
                             }
-                            if (shouldSkipElaboration && errorInfo) {
-                                overrideNextErrorInfo++;
+                            else if (tryElaborateArrayLikeErrors(source, target, /*reportErrors*/ false)) {
+                                if (props.length > 5) { // arbitrary cutoff for too-long list form
+                                    reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                                }
+                                else {
+                                    reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
+                                }
+                                if (shouldSkipElaboration && errorInfo) {
+                                    overrideNextErrorInfo++;
+                                }
                             }
+                            // ELSE: No array like or unmatched property error - just issue top level error (errorInfo = undefined)
                         }
-                        // ELSE: No array like or unmatched property error - just issue top level error (errorInfo = undefined)
                     }
                     return Ternary.False;
                 }
@@ -23030,6 +23060,48 @@ namespace ts {
             return isCallOrNewExpression(node.parent) && node.parent.expression === node;
         }
 
+        function getPropertyForPrivateName(apparentType: Type, leftType: Type, right: PrivateName, errorNode: Node | undefined): Symbol | undefined {
+            let classWithShadowedPrivateName;
+            let container = getContainingClass(right);
+            while (container) {
+                const symbolTableKey = getPropertyNameForPrivateNameDescription(container.symbol, right.escapedText);
+                if (symbolTableKey) {
+                    const prop = getPropertyOfType(apparentType, symbolTableKey);
+                    if (prop) {
+                        if (classWithShadowedPrivateName) {
+                            if (errorNode) {
+                                error(
+                                    errorNode,
+                                    Diagnostics.This_usage_of_0_refers_to_the_private_member_declared_in_its_enclosing_class_While_type_1_has_a_private_member_with_the_same_spelling_its_declaration_and_accessibility_are_distinct,
+                                    diagnosticName(right),
+                                    diagnosticName(classWithShadowedPrivateName.name || ("(anonymous)" as __String))
+                                );
+                            }
+                            return undefined;
+                        }
+                        return prop;
+                    }
+                    else {
+                        classWithShadowedPrivateName = container;
+                    }
+                }
+                container = getContainingClass(container);
+            }
+            // If this isn't a case of shadowing, and the lhs has a property with the same
+            // private name description, then there is a privacy violation
+            if (leftType.symbol.members) {
+                const symbolTableKey = getPropertyNameForPrivateNameDescription(leftType.symbol, right.escapedText);
+                const prop = getPropertyOfType(apparentType, symbolTableKey);
+                if (prop) {
+                    if (errorNode) {
+                        error(right, Diagnostics.Property_0_is_not_accessible_outside_class_1_because_it_has_a_private_name, symbolToString(prop), typeToString(getDeclaringClass(prop)!));
+                    }
+                }
+            }
+            // not found
+            return undefined;
+        }
+
         function checkPropertyAccessExpressionOrQualifiedName(node: PropertyAccessExpression | QualifiedName, left: Expression | QualifiedName, leftType: Type, right: Identifier | PrivateName) {
             const parentSymbol = getNodeLinks(left).resolvedSymbol;
             const assignmentKind = getAssignmentTargetKind(node);
@@ -23040,7 +23112,7 @@ namespace ts {
                 }
                 return apparentType;
             }
-            const prop = getPropertyOfType(apparentType, right.escapedText);
+            const prop = isPrivateName(right) ? getPropertyForPrivateName(apparentType, leftType, right, /* errorNode */ right) : getPropertyOfType(apparentType, right.escapedText);
             if (isIdentifier(left) && parentSymbol && !(prop && isConstEnumOrConstEnumOnlyModule(prop))) {
                 markAliasReferenced(parentSymbol, node);
             }
@@ -26425,6 +26497,9 @@ namespace ts {
             if (expr.kind !== SyntaxKind.PropertyAccessExpression && expr.kind !== SyntaxKind.ElementAccessExpression) {
                 error(expr, Diagnostics.The_operand_of_a_delete_operator_must_be_a_property_reference);
                 return booleanType;
+            }
+            if (expr.kind === SyntaxKind.PropertyAccessExpression && isPrivateName((expr as PropertyAccessExpression).name)) {
+                error(expr, Diagnostics.The_operand_of_a_delete_operator_cannot_be_a_private_name);
             }
             const links = getNodeLinks(expr);
             const symbol = getExportSymbolOfValueSymbolIfExported(links.resolvedSymbol);
@@ -35146,6 +35221,9 @@ namespace ts {
             else if (node.kind === SyntaxKind.Parameter && (flags & ModifierFlags.ParameterPropertyModifier) && (<ParameterDeclaration>node).dotDotDotToken) {
                 return grammarErrorOnNode(node, Diagnostics.A_parameter_property_cannot_be_declared_using_a_rest_parameter);
             }
+            else if (isNamedDeclaration(node) && (flags & ModifierFlags.AccessibilityModifier) && node.name.kind === SyntaxKind.PrivateName) {
+                return grammarErrorOnNode(node, Diagnostics.Accessibility_modifiers_cannot_be_used_with_private_names);
+            }
             if (flags & ModifierFlags.Async) {
                 return checkGrammarAsyncModifier(node, lastAsync!);
             }
@@ -35549,6 +35627,10 @@ namespace ts {
                     // having objectAssignmentInitializer is only valid in ObjectAssignmentPattern
                     // outside of destructuring it is a syntax error
                     return grammarErrorOnNode(prop.equalsToken!, Diagnostics.can_only_be_used_in_an_object_literal_property_inside_a_destructuring_assignment);
+                }
+
+                if (name.kind === SyntaxKind.PrivateName) {
+                    return grammarErrorOnNode(name, Diagnostics.Private_names_are_not_allowed_outside_class_bodies);
                 }
 
                 // Modifiers are never allowed on properties except for 'async' on a method declaration
