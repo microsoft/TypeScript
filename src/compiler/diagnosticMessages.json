@@ -2056,10 +2056,6 @@
         "category": "Error",
         "code": 2567
     },
-    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
-        "category": "Error",
-        "code": 2568
-    },
     "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
         "category": "Error",
         "code": 2569
@@ -2437,7 +2433,7 @@
         "category": "Error",
         "code": 2717
     },
-    "Duplicate declaration '{0}'.": {
+    "Duplicate property '{0}'.": {
         "category": "Error",
         "code": 2718
     },
@@ -2496,6 +2492,10 @@
     "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
         "category": "Error",
         "code": 2732
+    },
+    "Property '{0}' was also declared here.": {
+        "category": "Error",
+        "code": 2733
     },
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
