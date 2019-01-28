@@ -241,7 +241,7 @@ namespace ts {
         host.readFile = fileName => {
             const key = toPath(fileName);
             const value = readFileCache.get(key);
-            if (value !== undefined) return value; // could be .d.ts from output
+            if (value !== undefined) return value || undefined; // could be .d.ts from output
             if (!fileExtensionIs(fileName, Extension.Json)) {
                 return originalReadFile.call(host, fileName);
             }
