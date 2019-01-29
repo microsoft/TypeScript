@@ -37,11 +37,11 @@ var A = /** @class */ (function () {
     }
     __decorate([
         someDec,
-        __metadata("design:type", Object)
+        __metadata("design:type", Array)
     ], A.prototype, "j");
     __decorate([
         someDec,
-        __metadata("design:type", Object)
+        __metadata("design:type", Array)
     ], A.prototype, "k");
     return A;
 }());
