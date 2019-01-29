@@ -1934,6 +1934,12 @@ namespace ts {
                 case SyntaxKind.ConditionalType:
                     return serializeTypeList([(<ConditionalTypeNode>node).trueType, (<ConditionalTypeNode>node).falseType]);
 
+                case SyntaxKind.TypeOperator:
+                    if ((<TypeOperatorNode>node).operator === SyntaxKind.ReadonlyKeyword) {
+                        return serializeTypeNode((<TypeOperatorNode>node).type);
+                    }
+                    break;
+
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
