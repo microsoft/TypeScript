@@ -25,13 +25,13 @@ type T12 = Required<string[]>;
 >T12 : string[]
 
 type T13 = Boxified<ReadonlyArray<string>>;
->T13 : ReadonlyArray<Box<string>>
+>T13 : readonly Box<string>[]
 
 type T14 = Partial<ReadonlyArray<string>>;
->T14 : ReadonlyArray<string | undefined>
+>T14 : readonly (string | undefined)[]
 
 type T15 = Required<ReadonlyArray<string>>;
->T15 : ReadonlyArray<string>
+>T15 : readonly string[]
 
 type T20 = Boxified<(string | undefined)[]>;
 >T20 : Box<string | undefined>[]
@@ -43,13 +43,13 @@ type T22 = Required<(string | undefined)[]>;
 >T22 : string[]
 
 type T23 = Boxified<ReadonlyArray<string | undefined>>;
->T23 : ReadonlyArray<Box<string | undefined>>
+>T23 : readonly Box<string | undefined>[]
 
 type T24 = Partial<ReadonlyArray<string | undefined>>;
->T24 : ReadonlyArray<string | undefined>
+>T24 : readonly (string | undefined)[]
 
 type T25 = Required<ReadonlyArray<string | undefined>>;
->T25 : ReadonlyArray<string>
+>T25 : readonly string[]
 
 type T30 = Boxified<Partial<string[]>>;
 >T30 : Box<string | undefined>[]
@@ -66,7 +66,25 @@ type B = { b: string };
 >b : string
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
->T40 : string | Box<string>[] | Boxified<A> | Box<A>[] | ReadonlyArray<Box<A>> | [Box<A>, Box<B>]
+>T40 : string | Box<string>[] | Boxified<A> | Box<A>[] | readonly Box<A>[] | [Box<A>, Box<B>]
+
+type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
+>ReadWrite : ReadWrite<T>
+
+type T50 = Readonly<string[]>;
+>T50 : readonly string[]
+
+type T51 = Readonly<[number, number]>;
+>T51 : readonly [number, number]
+
+type T52 = Partial<Readonly<string[]>>;
+>T52 : readonly (string | undefined)[]
+
+type T53 = Readonly<Partial<string[]>>;
+>T53 : readonly (string | undefined)[]
+
+type T54 = ReadWrite<Required<T53>>;
+>T54 : string[]
 
 declare function unboxify<T>(x: Boxified<T>): T;
 >unboxify : <T>(x: Boxified<T>) => T
