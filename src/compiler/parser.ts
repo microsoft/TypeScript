@@ -1093,6 +1093,10 @@ namespace ts {
             return currentToken = scanner.reScanTemplateToken();
         }
 
+        function reScanLessThanToken(): SyntaxKind {
+            return currentToken = scanner.reScanLessThanToken();
+        }
+
         function scanJsxIdentifier(): SyntaxKind {
             return currentToken = scanner.scanJsxIdentifier();
         }
@@ -2276,7 +2280,7 @@ namespace ts {
         function parseTypeReference(): TypeReferenceNode {
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
-            if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.LessThanToken) {
+            if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
             return finishNode(node);
@@ -4523,7 +4527,8 @@ namespace ts {
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
-                if (token() === SyntaxKind.LessThanToken) {
+                // handle 'foo<<T>()'
+                if (token() === SyntaxKind.LessThanToken || token() === SyntaxKind.LessThanLessThanToken) {
                     // See if this is the start of a generic invocation.  If so, consume it and
                     // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
                     // part of an arithmetic expression.  Break out so we consume it higher in the
@@ -4565,9 +4570,10 @@ namespace ts {
         }
 
         function parseTypeArgumentsInExpression() {
-            if (!parseOptional(SyntaxKind.LessThanToken)) {
+            if (reScanLessThanToken() !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
+            nextToken();
 
             const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
             if (!parseExpected(SyntaxKind.GreaterThanToken)) {

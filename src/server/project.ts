@@ -428,7 +428,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
-                WatchType.FailedLookupLocation,
+                WatchType.FailedLookupLocations,
                 this
             );
         }
@@ -989,7 +989,7 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.Medium,
-                WatchType.MissingFilePath,
+                WatchType.MissingFile,
                 this
             );
             return fileWatcher;

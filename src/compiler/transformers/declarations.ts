@@ -207,7 +207,7 @@ namespace ts {
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
-                        return createUnparsedSourceFile(prepend.declarationText, prepend.declarationMapPath, prepend.declarationMapText);
+                        return createUnparsedSourceFile(prepend, "dts");
                     }
                 }));
                 bundle.syntheticFileReferences = [];
