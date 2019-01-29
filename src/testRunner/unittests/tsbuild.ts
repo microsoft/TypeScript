@@ -621,6 +621,42 @@ export const b = new A();`);
             builder.cleanAllProjects();
         });
 
+        it("unittests:: tsbuild - outFile:: verify tsbundleInfo presence or absence does not result in new build", () => {
+            const fs = outFileFs.shadow();
+            const expectedOutputs = [
+                ...outputFiles[0],
+                ...outputFiles[1],
+                ...outputFiles[2]
+            ];
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(
+                Diagnostics.Projects_in_this_build_Colon_0,
+                Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
+                Diagnostics.Building_project_0,
+                Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
+                Diagnostics.Building_project_0,
+                Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist,
+                Diagnostics.Building_project_0
+            );
+            // Verify they exist
+            for (const output of expectedOutputs) {
+                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
+            // Delete bundle info
+            host.clearDiagnostics();
+            host.deleteFile(last(outputFiles[0]));
+            builder.resetBuildContext();
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(
+                Diagnostics.Projects_in_this_build_Colon_0,
+                Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
+                Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
+                Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2,
+            );
+        });
+
         function replaceFileContent(fs: vfs.FileSystem, path: string, searchValue: string, replaceValue: string) {
             const content = fs.readFileSync(path, "utf8");
             fs.writeFileSync(path, content.replace(searchValue, replaceValue));

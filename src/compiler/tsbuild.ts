@@ -289,7 +289,7 @@ namespace ts {
         return outputs;
     }
 
-    function getOutFileOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
+    function getOutFileOutputs(project: ParsedCommandLine, ignoreBundleInfo?: boolean): ReadonlyArray<string> {
         Debug.assert(!!project.options.outFile || !!project.options.out, "outFile must be set");
         const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false);
 
@@ -299,7 +299,7 @@ namespace ts {
         addOutput(sourceMapFilePath);
         addOutput(declarationFilePath);
         addOutput(declarationMapPath);
-        addOutput(bundleInfoPath);
+        if (!ignoreBundleInfo) addOutput(bundleInfoPath);
         return outputs || emptyArray;
     }
 
@@ -711,7 +711,8 @@ namespace ts {
             }
 
             // Collect the expected outputs of this project
-            const outputs = getAllProjectOutputs(project);
+            // Do not use presence or absence of bundleInfo to determine status of build
+            const outputs = getAllProjectOutputs(project, /*ignoreBundleInfo*/ true);
 
             if (outputs.length === 0) {
                 return {
@@ -1392,9 +1393,9 @@ namespace ts {
         return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
     }
 
-    export function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
+    export function getAllProjectOutputs(project: ParsedCommandLine, ignoreBundleInfo?: true): ReadonlyArray<string> {
         if (project.options.outFile || project.options.out) {
-            return getOutFileOutputs(project);
+            return getOutFileOutputs(project, ignoreBundleInfo);
         }
         else {
             const outputs: string[] = [];
