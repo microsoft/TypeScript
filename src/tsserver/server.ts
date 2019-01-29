@@ -215,13 +215,13 @@ namespace ts.server {
     }
 
     class NodeTypingsInstaller implements ITypingsInstaller {
-        private installer: NodeChildProcess;
-        private projectService: ProjectService;
+        private installer!: NodeChildProcess;
+        private projectService!: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
-        private requestedRegistry: boolean;
+        private requestedRegistry = false;
         private typesRegistryCache: Map<MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request
@@ -388,8 +388,7 @@ namespace ts.server {
                     this.inspectValuePromise!.resolve(response.result);
                     this.inspectValuePromise = undefined;
                     break;
-                case EventInitializationFailed:
-                    {
+                case EventInitializationFailed: {
                         const body: protocol.TypesInstallerInitializationFailedEventBody = {
                             message: response.message
                         };
@@ -397,8 +396,7 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case EventBeginInstallTypes:
-                    {
+                case EventBeginInstallTypes: {
                         const body: protocol.BeginInstallTypesEventBody = {
                             eventId: response.eventId,
                             packages: response.packagesToInstall,
@@ -407,8 +405,7 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case EventEndInstallTypes:
-                    {
+                case EventEndInstallTypes: {
                         if (this.telemetryEnabled) {
                             const body: protocol.TypingsInstalledTelemetryEventBody = {
                                 telemetryEventName: "typingsInstalled",
@@ -431,13 +428,11 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case ActionInvalidate:
-                    {
+                case ActionInvalidate: {
                         this.projectService.updateTypingsForProject(response);
                         break;
                     }
-                case ActionSet:
-                    {
+                case ActionSet: {
                         if (this.activeRequestCount > 0) {
                             this.activeRequestCount--;
                         }
@@ -972,4 +967,12 @@ namespace ts.server {
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
+
+    if (Debug.isDebugging) {
+        Debug.enableDebugInfo();
+    }
+
+    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+        ts.sys.tryEnableSourceMapsForHost();
+    }
 }

@@ -31,13 +31,8 @@
 ////     }
 //// }
 
-goTo.marker("1");
-verify.completionListContains("extraContents");
-goTo.marker("2");
-verify.completionListContains("broken");
-goTo.marker("3");
-verify.completionListContains("extraContents");
-goTo.marker("4");
-verify.completionListContains("spoiled");
-goTo.marker("5");
-verify.completionListContains("extraContents");
+verify.completions(
+    { marker: ["1", "3", "5"], exact: ["contents", "isSundries", "isSupplies", "isPackedTight", "extraContents"] },
+    { marker: "2", exact: "broken" },
+    { marker: "4", exact: "spoiled" },
+);

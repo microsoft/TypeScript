@@ -1,5 +1,4 @@
-tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,32): error TS2322: Type 'Base' is not assignable to type 'Derived'.
-  Property 'toBase' is missing in type 'Base'.
+tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,32): error TS2741: Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
 
 
 ==== tests/cases/compiler/fixingTypeParametersRepeatedly2.ts (1 errors) ====
@@ -15,8 +14,8 @@ tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,32): error TS2322: Ty
     declare function foo<T>(x: T, func: (p: T) => T): T;
     var result = foo(derived, d => d.toBase());
                                    ~~~~~~~~~~
-!!! error TS2322: Type 'Base' is not assignable to type 'Derived'.
-!!! error TS2322:   Property 'toBase' is missing in type 'Base'.
+!!! error TS2741: Property 'toBase' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:5:5: 'toBase' is declared here.
 !!! related TS6502 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:10:37: The expected type comes from the return type of this signature.
     
     // bar should type check just like foo.

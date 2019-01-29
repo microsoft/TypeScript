@@ -1,11 +1,9 @@
 // @ts-check
 const browserify = require("browserify");
-const Vinyl = require("./vinyl");
+const Vinyl = require("vinyl");
 const { Transform } = require("stream");
 const { streamFromFile } = require("./utils");
 const { replaceContents } = require("./sourcemaps");
-
-module.exports = browserifyFile;
 
 /**
  * @param {import("browserify").Options} [opts]
@@ -32,3 +30,4 @@ function browserifyFile(opts) {
         }
     });
 }
+exports.browserify = browserifyFile;

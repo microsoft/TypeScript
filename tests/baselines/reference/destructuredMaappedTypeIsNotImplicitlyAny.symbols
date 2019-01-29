@@ -1,0 +1,24 @@
+=== tests/cases/compiler/destructuredMaappedTypeIsNotImplicitlyAny.ts ===
+function foo<T extends string>(key: T, obj: { [_ in T]: number }) {
+>foo : Symbol(foo, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 0))
+>T : Symbol(T, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 13))
+>key : Symbol(key, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 31))
+>T : Symbol(T, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 13))
+>obj : Symbol(obj, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 38))
+>_ : Symbol(_, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 47))
+>T : Symbol(T, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 13))
+
+    const { [key]: bar } = obj; // Element implicitly has an 'any' type because type '{ [_ in T]: number; }' has no index signature.
+>key : Symbol(key, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 31))
+>bar : Symbol(bar, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 1, 11))
+>obj : Symbol(obj, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 38))
+
+    bar; // bar : any
+>bar : Symbol(bar, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 1, 11))
+
+    // Note: this does work:
+    const lorem = obj[key];
+>lorem : Symbol(lorem, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 5, 9))
+>obj : Symbol(obj, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 38))
+>key : Symbol(key, Decl(destructuredMaappedTypeIsNotImplicitlyAny.ts, 0, 31))
+}

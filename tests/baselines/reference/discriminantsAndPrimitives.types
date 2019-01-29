@@ -23,7 +23,7 @@ function f1(x: Foo | Bar | string) {
 
     if (typeof x !== 'string') {
 >typeof x !== 'string' : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | Foo | Bar
 >'string' : "string"
 
@@ -49,7 +49,7 @@ function f2(x: Foo | Bar | string | undefined) {
 
     if (typeof x === "object") {
 >typeof x === "object" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | Foo | Bar | undefined
 >"object" : "object"
 
@@ -78,7 +78,7 @@ function f3(x: Foo | Bar | string | null) {
 >x && typeof x !== "string" : boolean | "" | null
 >x : string | Foo | Bar | null
 >typeof x !== "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | Foo | Bar
 >"string" : "string"
 
@@ -107,7 +107,7 @@ function f4(x: Foo | Bar | string | number | null) {
 >x && typeof x === "object" : boolean | "" | 0 | null
 >x : string | number | Foo | Bar | null
 >typeof x === "object" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | Foo | Bar
 >"object" : "object"
 

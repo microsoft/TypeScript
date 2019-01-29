@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts {
+    const visitedNestedConvertibleFunctions = createMap<true>();
+
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
@@ -13,6 +15,7 @@ namespace ts {
 
         const isJsFile = isSourceFileJS(sourceFile);
 
+        visitedNestedConvertibleFunctions.clear();
         check(sourceFile);
 
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
@@ -82,7 +85,7 @@ namespace ts {
             switch (statement.kind) {
                 case SyntaxKind.VariableStatement:
                     return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                        isRequireCall(propertyAccessLeftHandSide(decl.initializer!), /*checkArgumentIsStringLiteralLike*/ true)); // TODO: GH#18217
+                        !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
                 case SyntaxKind.ExpressionStatement: {
                     const { expression } = statement as ExpressionStatement;
                     if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
@@ -113,59 +116,44 @@ namespace ts {
         }
     }
 
-    function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
-
-        if (isAsyncFunction(node) || !node.body) {
-            return;
+    function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
+        // need to check function before checking map so that deeper levels of nested callbacks are checked
+        if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
+            diags.push(createDiagnosticForNode(
+                !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
+                Diagnostics.This_may_be_converted_to_an_async_function));
         }
+    }
 
+    function isConvertibleFunction(node: FunctionLikeDeclaration, checker: TypeChecker) {
+        return !isAsyncFunction(node) &&
+            node.body &&
+            isBlock(node.body) &&
+            hasReturnStatementWithPromiseHandler(node.body) &&
+            returnsPromise(node, checker);
+    }
+
+    function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
         const functionType = checker.getTypeAtLocation(node);
-
         const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
         const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
-
-        if (!returnType || !checker.getPromisedTypeOfPromise(returnType)) {
-            return;
-        }
-
-        // collect all the return statements
-        // check that a property access expression exists in there and that it is a handler
-        const returnStatements = getReturnStatementsWithPromiseHandlers(node);
-        if (returnStatements.length > 0) {
-            diags.push(createDiagnosticForNode(!node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
-        }
+        return !!returnType && !!checker.getPromisedTypeOfPromise(returnType);
     }
 
     function getErrorNodeFromCommonJsIndicator(commonJsModuleIndicator: Node): Node {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    /** @internal */
-    export function getReturnStatementsWithPromiseHandlers(node: Node): ReturnStatement[] {
-        const returnStatements: ReturnStatement[] = [];
-        if (isFunctionLike(node)) {
-            forEachChild(node, visit);
-        }
-        else {
-            visit(node);
-        }
+    function hasReturnStatementWithPromiseHandler(body: Block): boolean {
+        return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
+    }
 
-        function visit(child: Node) {
-            if (isFunctionLike(child)) {
-                return;
-            }
-
-            if (isReturnStatement(child) && child.expression && isFixablePromiseHandler(child.expression)) {
-                returnStatements.push(child);
-            }
-
-            forEachChild(child, visit);
-        }
-        return returnStatements;
+    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement {
+        return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
     }
 
     // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
-    function isFixablePromiseHandler(node: Node): boolean {
+    export function isFixablePromiseHandler(node: Node): boolean {
         // ensure outermost call exists and is a promise handler
         if (!isPromiseHandler(node) || !node.arguments.every(isFixablePromiseArgument)) {
             return false;
@@ -189,14 +177,20 @@ namespace ts {
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
     function isFixablePromiseArgument(arg: Expression): boolean {
         switch (arg.kind) {
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.Identifier: // identifier includes undefined
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+                visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
+                /* falls through */
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.Identifier: // identifier includes undefined
                 return true;
             default:
                 return false;
         }
+    }
+
+    function getKeyFromNode(exp: FunctionLikeDeclaration) {
+        return `${exp.pos.toString()}:${exp.end.toString()}`;
     }
 }

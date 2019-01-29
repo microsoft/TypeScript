@@ -1,0 +1,36 @@
+=== tests/cases/compiler/reactReadonlyHOCAssignabilityReal.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(reactReadonlyHOCAssignabilityReal.tsx, 1, 6))
+
+function myHigherOrderComponent<P>(Inner: React.ComponentClass<P & {name: string}>): React.ComponentClass<P> {
+>myHigherOrderComponent : Symbol(myHigherOrderComponent, Decl(reactReadonlyHOCAssignabilityReal.tsx, 1, 31))
+>P : Symbol(P, Decl(reactReadonlyHOCAssignabilityReal.tsx, 3, 32))
+>Inner : Symbol(Inner, Decl(reactReadonlyHOCAssignabilityReal.tsx, 3, 35))
+>React : Symbol(React, Decl(reactReadonlyHOCAssignabilityReal.tsx, 1, 6))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
+>P : Symbol(P, Decl(reactReadonlyHOCAssignabilityReal.tsx, 3, 32))
+>name : Symbol(name, Decl(reactReadonlyHOCAssignabilityReal.tsx, 3, 68))
+>React : Symbol(React, Decl(reactReadonlyHOCAssignabilityReal.tsx, 1, 6))
+>ComponentClass : Symbol(React.ComponentClass, Decl(react16.d.ts, 421, 9))
+>P : Symbol(P, Decl(reactReadonlyHOCAssignabilityReal.tsx, 3, 32))
+
+    return class OuterComponent extends React.Component<P> {
+>OuterComponent : Symbol(OuterComponent, Decl(reactReadonlyHOCAssignabilityReal.tsx, 4, 10))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(reactReadonlyHOCAssignabilityReal.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>P : Symbol(P, Decl(reactReadonlyHOCAssignabilityReal.tsx, 3, 32))
+
+        render() {
+>render : Symbol(OuterComponent.render, Decl(reactReadonlyHOCAssignabilityReal.tsx, 4, 60))
+
+            return <Inner {...this.props} name="Matt"/>;
+>Inner : Symbol(Inner, Decl(reactReadonlyHOCAssignabilityReal.tsx, 3, 35))
+>this.props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>this : Symbol(OuterComponent, Decl(reactReadonlyHOCAssignabilityReal.tsx, 4, 10))
+>props : Symbol(React.Component.props, Decl(react16.d.ts, 367, 32))
+>name : Symbol(name, Decl(reactReadonlyHOCAssignabilityReal.tsx, 6, 41))
+        }
+    };
+}

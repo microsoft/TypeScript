@@ -10,7 +10,7 @@ let x: number|string|E|V;
 
 if (typeof x === "number") {
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | E | V
 >"number" : "number"
 
@@ -24,7 +24,7 @@ else {
 
 if (typeof x !== "number") {
 >typeof x !== "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | E | V
 >"number" : "number"
 

@@ -22,7 +22,7 @@ class D {
         return typeof data === "string" ? data : data.join(" ");
 >typeof data === "string" ? data : data.join(" ") : string
 >typeof data === "string" : boolean
->typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | string[]
 >"string" : "string"
 >data : string
@@ -39,7 +39,7 @@ class D {
         return typeof this.data === "string" ? this.data : this.data.join(" ");
 >typeof this.data === "string" ? this.data : this.data.join(" ") : string
 >typeof this.data === "string" : boolean
->typeof this.data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.data : string | string[]
 >this : this
 >data : string | string[]
@@ -81,7 +81,7 @@ var o: {
 if (typeof o.prop1 === "string" && o.prop1.toLowerCase()) {}
 >typeof o.prop1 === "string" && o.prop1.toLowerCase() : string
 >typeof o.prop1 === "string" : boolean
->typeof o.prop1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof o.prop1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >o.prop1 : string | number
 >o : { prop1: string | number; prop2: string | boolean; }
 >prop1 : string | number
@@ -102,7 +102,7 @@ var prop1 = o.prop1;
 if (typeof prop1 === "string" && prop1.toLocaleLowerCase()) { }
 >typeof prop1 === "string" && prop1.toLocaleLowerCase() : string
 >typeof prop1 === "string" : boolean
->typeof prop1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof prop1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >prop1 : string | number
 >"string" : "string"
 >prop1.toLocaleLowerCase() : string

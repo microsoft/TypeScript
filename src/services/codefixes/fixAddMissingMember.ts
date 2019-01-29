@@ -4,6 +4,9 @@ namespace ts.codefix {
     const errorCodes = [
         Diagnostics.Property_0_does_not_exist_on_type_1.code,
         Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2.code,
+        Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2.code,
+        Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2.code,
+        Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more.code
     ];
     const fixId = "addMissingMember";
     registerCodeFix({
@@ -185,6 +188,10 @@ namespace ts.codefix {
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
         }
+        else {
+            const contextualType = checker.getContextualType(token.parent as Expression);
+            typeNode = contextualType ? checker.typeToTypeNode(contextualType) : undefined;
+        }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
@@ -268,7 +275,7 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, !isInterfaceDeclaration(typeDecl));
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, typeDecl);
         const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
 
         if (containingMethodDeclaration && containingMethodDeclaration.parent === typeDecl) {

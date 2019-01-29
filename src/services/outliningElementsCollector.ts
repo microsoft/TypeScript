@@ -37,6 +37,10 @@ namespace ts.OutliningElementsCollector {
                 addOutliningForLeadingCommentsForNode(n, sourceFile, cancellationToken, out);
             }
 
+            if (isFunctionExpressionAssignedToVariable(n)) {
+                addOutliningForLeadingCommentsForNode(n.parent.parent.parent, sourceFile, cancellationToken, out);
+            }
+
             const span = getOutliningSpanForNode(n, sourceFile);
             if (span) out.push(span);
 
@@ -53,6 +57,14 @@ namespace ts.OutliningElementsCollector {
                 n.forEachChild(visitNonImportNode);
             }
             depthRemaining++;
+        }
+
+        function isFunctionExpressionAssignedToVariable(n: Node) {
+            if (!isFunctionExpression(n) && !isArrowFunction(n)) {
+                return false;
+            }
+            const ancestor = findAncestor(n, isVariableStatement);
+            return !!ancestor && getSingleInitializerOfVariableStatementOrPropertyDeclaration(ancestor) === n;
         }
     }
 
@@ -175,6 +187,7 @@ namespace ts.OutliningElementsCollector {
             case SyntaxKind.ModuleBlock:
                 return spanForNode(n.parent);
             case SyntaxKind.ClassDeclaration:
+            case SyntaxKind.ClassExpression:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.EnumDeclaration:
             case SyntaxKind.CaseBlock:
@@ -206,10 +219,10 @@ namespace ts.OutliningElementsCollector {
         }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
-            // If the block has no leading keywords and is inside an array literal,
+            // If the block has no leading keywords and is inside an array literal or call expression,
             // we only want to collapse the span of the block.
             // Otherwise, the collapsed section will include the end of the previous line.
-            return spanForNode(node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent), open);
+            return spanForNode(node, /*autoCollapse*/ false, /*useFullStart*/ !isArrayLiteralExpression(node.parent) && !isCallExpression(node.parent), open);
         }
 
         function spanForNode(hintSpanNode: Node, autoCollapse = false, useFullStart = true, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {

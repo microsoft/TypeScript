@@ -9,6 +9,4 @@
 //// }
 //// <div one={1} /**//>;
 
-goTo.marker();
-verify.completionListContains('two');
-verify.not.completionListContains('one');
+verify.completions({ marker: "", exact: "two" });

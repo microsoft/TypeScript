@@ -10,5 +10,4 @@
 //// import {Thing} from './exporter';
 //// var x1 = <div></**/
 
-goTo.marker();
-verify.completionListContains('Thing');
+verify.completions({ marker: "", includes: "Thing" });

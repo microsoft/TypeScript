@@ -7,10 +7,7 @@
 ////let x: N./*type*/;
 ////N./*value*/;
 
-goTo.marker("type");
-verify.completionListContains("T");
-verify.not.completionListContains("m");
-
-goTo.marker("value");
-verify.not.completionListContains("T");
-verify.completionListContains("m");
+verify.completions(
+    { marker: "type", exact: "T" },
+    { marker: "value", exact: "m" },
+);

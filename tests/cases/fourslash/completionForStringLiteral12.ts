@@ -5,6 +5,4 @@
 ////function foo(x: string) {}
 ////foo("/**/")
 
-goTo.marker();
-verify.completionListContains("bla");
-verify.completionListCount(1);
+verify.completions({ marker: "", exact: "bla" });

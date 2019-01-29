@@ -8,10 +8,8 @@ const path = require("path");
 const fold = require("travis-fold");
 const ts = require("./lib/typescript");
 const del = require("del");
-const getDirSize = require("./scripts/build/getDirSize");
+const { getDirSize, needsUpdate, flatten } = require("./scripts/build/utils");
 const { base64VLQFormatEncode } = require("./scripts/build/sourcemaps");
-const needsUpdate = require("./scripts/build/needsUpdate");
-const { flatten } = require("./scripts/build/project");
 
 // add node_modules to path so we don't need global modules, prefer the modules by adding them first
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
@@ -23,8 +21,6 @@ else if (process.env.PATH !== undefined) {
 }
 
 const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
-
-const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"];
 
 const defaultTestTimeout = 40000;
 
@@ -147,14 +143,14 @@ task(TaskNames.local, [
 task("default", [TaskNames.local]);
 
 const RunTestsPrereqs = [TaskNames.lib, Paths.servicesDefinitionFile, Paths.typescriptDefinitionFile, Paths.tsserverLibraryDefinitionFile];
-desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... i[nspect]=true.");
 task(TaskNames.runtestsParallel, RunTestsPrereqs, function () {
     tsbuild([ConfigFileFor.runjs], true, () => {
         runConsoleTests("min", /*parallel*/ true);
     });
 }, { async: true });
 
-desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... i[nspect]=true.");
 task(TaskNames.runtests, RunTestsPrereqs, function () {
     tsbuild([ConfigFileFor.runjs], true, () => {
         runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
@@ -363,7 +359,7 @@ file(ConfigFileFor.tsserverLibrary, [], function () {
         compilerOptions: {
             "removeComments": false,
             "stripInternal": true,
-            "declarationMap": false,
+            "declaration": true,
             "outFile": "tsserverlibrary.out.js"
         }
     })
@@ -520,7 +516,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     let testTimeout = process.env.timeout || defaultTestTimeout;
-    const debug = process.env.debug || process.env["debug-brk"] || process.env.d;
     const inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     const runners = process.env.runners || process.env.runner || process.env.ru;
     const tests = process.env.test || process.env.tests || process.env.t;
@@ -709,19 +704,6 @@ const Travis = {
         console.log("travis_time:end:" + marker.id + ":start=" + toNs(marker.stamp) + ",finish=" + toNs(total) + ",duration=" + toNs(diff) + "\r");
     }
 };
-
-function buildLocalizedTargets() {
-    /**
-     * The localization target produces the two following transformations:
-     *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
-     *       convert localized resources into a .json file the compiler can understand
-     *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
-     *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
-     */
-    const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
-        .map(f => path.join(Paths.builtLocal,f))
-        .concat(path.dirname(Paths.generatedLCGFile));
-}
 
 function toNs(diff) {
     return diff[0] * 1e9 + diff[1];

@@ -21,6 +21,7 @@ module n {
 
         m.x  // error
 >m : Symbol(m, Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 8, 20))
+> : Symbol((Missing), Decl(objectLiteralShorthandPropertiesErrorWithModule.ts, 9, 9))
 
     };
 }

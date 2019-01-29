@@ -3,6 +3,16 @@ declare function clearTimeout(handle: any): void;
 
 namespace ts {
     /**
+     * djb2 hashing algorithm
+     * http://www.cse.yorku.ca/~oz/hash.html
+     */
+    /* @internal */
+    export function generateDjb2Hash(data: string): string {
+        const chars = data.split("").map(str => str.charCodeAt(0));
+        return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+    }
+
+    /**
      * Set a high stack trace limit to provide more information in case of an error.
      * Called for command-line and server use cases.
      * Not called if TypeScript is used as a library.
@@ -34,23 +44,6 @@ namespace ts {
         High = 2000,
         Medium = 500,
         Low = 250
-    }
-
-    function getPriorityValues(highPriorityValue: number): [number, number, number] {
-        const mediumPriorityValue = highPriorityValue * 2;
-        const lowPriorityValue = mediumPriorityValue * 4;
-        return [highPriorityValue, mediumPriorityValue, lowPriorityValue];
-    }
-
-    function pollingInterval(watchPriority: PollingInterval): number {
-        return pollingIntervalsForPriority[watchPriority];
-    }
-
-    const pollingIntervalsForPriority = getPriorityValues(250);
-
-    /* @internal */
-    export function watchFileUsingPriorityPollingInterval(host: System, fileName: string, callback: FileWatcherCallback, watchPriority: PollingInterval): FileWatcher {
-        return host.watchFile!(fileName, callback, pollingInterval(watchPriority));
     }
 
     /* @internal */
@@ -796,11 +789,10 @@ namespace ts {
                         dirName,
                         (_eventName: string, relativeFileName) => {
                             // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                            const fileName = !isString(relativeFileName)
-                                ? undefined! // TODO: GH#18217
-                                : getNormalizedAbsolutePath(relativeFileName, dirName);
+                            if (!isString(relativeFileName)) { return; }
+                            const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
                             // Some applications save a working file via rename operations
-                            const callbacks = fileWatcherCallbacks.get(toCanonicalName(fileName));
+                            const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
                             if (callbacks) {
                                 for (const fileCallback of callbacks) {
                                     fileCallback(fileName, FileWatcherEventKind.Changed);
@@ -847,7 +839,7 @@ namespace ts {
                 }
             }
 
-            type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string) => void;
+            type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined) => void;
 
             function createFileWatcherCallback(callback: FsWatchCallback): FileWatcherCallback {
                 return (_fileName, eventKind) => callback(eventKind === FileWatcherEventKind.Changed ? "change" : "rename", "");
@@ -1131,15 +1123,6 @@ namespace ts {
                 catch (e) {
                     return;
                 }
-            }
-
-            /**
-             * djb2 hashing algorithm
-             * http://www.cse.yorku.ca/~oz/hash.html
-             */
-            function generateDjb2Hash(data: string): string {
-                const chars = data.split("").map(str => str.charCodeAt(0));
-                return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
             }
 
             function createMD5HashUsingNativeCrypto(data: string): string {
