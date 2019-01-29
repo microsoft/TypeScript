@@ -234,39 +234,46 @@ namespace ts {
                 // Update a timestamp in the middle project
                 tick();
                 touch(fs, "/src/logic/index.ts");
+                const originalWriteFile = fs.writeFileSync;
+                const writtenFiles = createMap<true>();
+                fs.writeFileSync = (path, data, encoding) => {
+                    writtenFiles.set(path, true);
+                    originalWriteFile.call(fs, path, data, encoding);
+                };
                 // Because we haven't reset the build context, the builder should assume there's nothing to do right now
                 const status = builder.getUpToDateStatusOfFile(builder.resolveProjectName("/src/logic"));
                 assert.equal(status.type, UpToDateStatusType.UpToDate, "Project should be assumed to be up-to-date");
+                verifyInvalidation(/*expectedToWriteTests*/ false);
 
                 // Rebuild this project
-                tick();
-                builder.invalidateProject("/src/logic");
-                builder.buildInvalidatedProject();
-                // The file should be updated
-                assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
-                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
-
-                // Does not build tests or core because there is no change in declaration file
-                tick();
-                builder.buildInvalidatedProject();
-                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
-                assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
-
-                // Rebuild this project
-                tick();
                 fs.writeFileSync("/src/logic/index.ts", `${fs.readFileSync("/src/logic/index.ts")}
 export class cNew {}`);
-                builder.invalidateProject("/src/logic");
-                builder.buildInvalidatedProject();
-                // The file should be updated
-                assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
-                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
+                verifyInvalidation(/*expectedToWriteTests*/ true);
 
-                // Build downstream projects should update 'tests', but not 'core'
-                tick();
-                builder.buildInvalidatedProject();
-                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
-                assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
+                function verifyInvalidation(expectedToWriteTests: boolean) {
+                    // Rebuild this project
+                    tick();
+                    builder.invalidateProject("/src/logic");
+                    builder.buildInvalidatedProject();
+                    // The file should be updated
+                    assert.isTrue(writtenFiles.has("/src/logic/index.js"), "JS file should have been rebuilt");
+                    assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
+                    assert.isFalse(writtenFiles.has("/src/tests/index.js"), "Downstream JS file should *not* have been rebuilt");
+                    assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
+                    writtenFiles.clear();
+
+                    // Build downstream projects should update 'tests', but not 'core'
+                    tick();
+                    builder.buildInvalidatedProject();
+                    if (expectedToWriteTests) {
+                        assert.isTrue(writtenFiles.has("/src/tests/index.js"), "Downstream JS file should have been rebuilt");
+                    }
+                    else {
+                        assert.equal(writtenFiles.size, 0, "Should not write any new files");
+                    }
+                    assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have new timestamp");
+                    assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
+                }
             });
         });
 
@@ -462,11 +469,20 @@ export const b = new A();`);
 
         describe("unittests:: tsbuild - baseline sectioned sourcemaps", () => {
             let fs: vfs.FileSystem | undefined;
+            const actualReadFileMap = createMap<number>();
             before(() => {
                 fs = outFileFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
                 host.clearDiagnostics();
+                const originalReadFile = host.readFile;
+                host.readFile = path => {
+                    // Dont record libs
+                    if (path.startsWith("/src/")) {
+                        actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
+                    }
+                    return originalReadFile.call(host, path);
+                };
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(/*none*/);
             });
@@ -477,6 +493,38 @@ export const b = new A();`);
                 const patch = fs!.diff();
                 // tslint:disable-next-line:no-null-keyword
                 Harness.Baseline.runBaseline("outfile-concat.js", patch ? vfs.formatPatch(patch) : null);
+            });
+            it("verify readFile calls", () => {
+                const expected = [
+                    // Configs
+                    "/src/third/tsconfig.json",
+                    "/src/second/tsconfig.json",
+                    "/src/first/tsconfig.json",
+
+                    // Source files
+                    "/src/third/third_part1.ts",
+                    "/src/second/second_part1.ts",
+                    "/src/second/second_part2.ts",
+                    "/src/first/first_PART1.ts",
+                    "/src/first/first_part2.ts",
+                    "/src/first/first_part3.ts",
+
+                    // outputs
+                    "/src/first/bin/first-output.js",
+                    "/src/first/bin/first-output.js.map",
+                    "/src/first/bin/first-output.d.ts",
+                    "/src/first/bin/first-output.d.ts.map",
+                    "/src/2/second-output.js",
+                    "/src/2/second-output.js.map",
+                    "/src/2/second-output.d.ts",
+                    "/src/2/second-output.d.ts.map"
+                ];
+
+                assert.equal(actualReadFileMap.size, expected.length, `Expected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                expected.forEach(expectedValue => {
+                    const actual = actualReadFileMap.get(expectedValue);
+                    assert.equal(actual, 1, `Mismatch in read file call number for: ${expectedValue}\nExpected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                });
             });
         });
 
