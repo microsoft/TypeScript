@@ -1023,6 +1023,10 @@
         "category": "Error",
         "code": 1353
     },
+    "'readonly' type modifier is only permitted on array and tuple types.": {
+        "category": "Error",
+        "code": 1354
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2127,6 +2131,14 @@
     "Cannot assign to '{0}' because it is a constant.": {
         "category": "Error",
         "code": 2588
+    },
+    "Type instantiation is excessively deep and possibly infinite.": {
+        "category": "Error",
+        "code": 2589
+    },
+    "Expression produces a union type that is too complex to represent.": {
+        "category": "Error",
+        "code": 2590
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
