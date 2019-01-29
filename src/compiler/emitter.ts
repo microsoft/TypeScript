@@ -4392,8 +4392,8 @@ namespace ts {
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, node);
             if (isUnparsedSource(node)) {
                 const parsed = getParsedSourceMap(node);
-                if (parsed) {
-                    sourceMapGenerator!.appendSourceMap(
+                if (parsed && sourceMapGenerator) {
+                    sourceMapGenerator.appendSourceMap(
                         writer.getLine(),
                         writer.getColumn(),
                         parsed,
@@ -4404,8 +4404,8 @@ namespace ts {
             }
             else if (isUnparsedPrologue(node)) {
                 const parsed = getParsedSourceMap(node.parent);
-                if (parsed) {
-                    sourceMapGenerator!.appendSourceMap(
+                if (parsed && sourceMapGenerator) {
+                    sourceMapGenerator.appendSourceMap(
                         writer.getLine(),
                         writer.getColumn(),
                         parsed,
