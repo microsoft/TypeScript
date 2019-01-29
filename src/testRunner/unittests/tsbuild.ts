@@ -466,6 +466,28 @@ export const b = new A();`);
 
     export namespace OutFile {
         const outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
+        const outputFiles: [ReadonlyArray<string>, ReadonlyArray<string>, ReadonlyArray<string>] = [
+            [
+                "/src/first/bin/first-output.js",
+                "/src/first/bin/first-output.js.map",
+                "/src/first/bin/first-output.d.ts",
+                "/src/first/bin/first-output.d.ts.map",
+                "/src/first/bin/first-output.tsbundleinfo"
+            ],
+            [
+                "/src/2/second-output.js",
+                "/src/2/second-output.js.map",
+                "/src/2/second-output.d.ts",
+                "/src/2/second-output.d.ts.map",
+                "/src/2/second-output.tsbundleinfo"
+            ],
+            [
+                "/src/third/thirdjs/output/third-output.js",
+                "/src/third/thirdjs/output/third-output.js.map",
+                "/src/third/thirdjs/output/third-output.d.ts",
+                "/src/third/thirdjs/output/third-output.d.ts.map"
+            ]
+        ];
 
         function verifyOutFileScenario(scenario: string, modifyFs: (fs: vfs.FileSystem) => void | ReadonlyArray<string>) {
             describe(`unittests:: tsbuild - outFile:: ${scenario}`, () => {
@@ -528,16 +550,8 @@ export const b = new A();`);
                         ...(additionalSourceFiles || emptyArray),
 
                         // outputs
-                        "/src/first/bin/first-output.js",
-                        "/src/first/bin/first-output.js.map",
-                        "/src/first/bin/first-output.d.ts",
-                        "/src/first/bin/first-output.d.ts.map",
-                        "/src/first/bin/first-output.tsbundleinfo",
-                        "/src/2/second-output.js",
-                        "/src/2/second-output.js.map",
-                        "/src/2/second-output.d.ts",
-                        "/src/2/second-output.d.ts.map",
-                        "/src/2/second-output.tsbundleinfo",
+                        ...outputFiles[0],
+                        ...outputFiles[1]
                     ];
 
                     assert.equal(actualReadFileMap.size, expected.length, `Expected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
@@ -565,6 +579,31 @@ export const b = new A();`);
             builder.buildAllProjects();
             host.assertDiagnosticMessages(/*none*/);
             assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "Second build timestamp is correct");
+        });
+
+        it("unittests:: tsbuild - outFile:: clean projects", () => {
+            const fs = outFileFs.shadow();
+            const expectedOutputs = [
+                ...outputFiles[0],
+                ...outputFiles[1],
+                ...outputFiles[2]
+            ];
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(/*none*/);
+            // Verify they exist
+            for (const output of expectedOutputs) {
+                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
+            builder.cleanAllProjects();
+            host.assertDiagnosticMessages(/*none*/);
+            // Verify they are gone
+            for (const output of expectedOutputs) {
+                assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
+            }
+            // Subsequent clean shouldn't throw / etc
+            builder.cleanAllProjects();
         });
 
         function replaceFileContent(fs: vfs.FileSystem, path: string, searchValue: string, replaceValue: string) {

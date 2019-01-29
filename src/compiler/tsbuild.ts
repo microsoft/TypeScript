@@ -290,23 +290,17 @@ namespace ts {
     }
 
     function getOutFileOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
-        const out = project.options.outFile || project.options.out;
-        if (!out) {
-            return Debug.fail("outFile must be set");
-        }
-        const outputs: string[] = [];
-        outputs.push(out);
-        if (project.options.sourceMap) {
-            outputs.push(`${out}.map`);
-        }
-        if (getEmitDeclarations(project.options)) {
-            const dts = changeExtension(out, Extension.Dts);
-            outputs.push(dts);
-            if (project.options.declarationMap) {
-                outputs.push(`${dts}.map`);
-            }
-        }
-        return outputs;
+        Debug.assert(!!project.options.outFile || !!project.options.out, "outFile must be set");
+        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false);
+
+        let outputs: string[] | undefined = [];
+        const addOutput = (path: string | undefined) => path && (outputs || (outputs = [])).push(path);
+        addOutput(jsFilePath);
+        addOutput(sourceMapFilePath);
+        addOutput(declarationFilePath);
+        addOutput(declarationMapPath);
+        addOutput(bundleInfoPath);
+        return outputs || emptyArray;
     }
 
     function rootDirOfOptions(opts: CompilerOptions, configFileName: string) {
