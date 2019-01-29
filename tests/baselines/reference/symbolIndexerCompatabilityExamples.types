@@ -198,7 +198,7 @@ class SimpleMapMap2<K extends PropertyKey, V> {
 >SimpleMapMap2 : SimpleMapMap2<K, V>
 
     private o: { [k: PropertyKey]: V } = {};
->o : { [k: string | number | symbol]: V; }
+>o : { [x: string | number | symbol]: V; }
 >k : string | number | symbol
 >{} : {}
 
@@ -209,9 +209,9 @@ class SimpleMapMap2<K extends PropertyKey, V> {
         return k in this.o;
 >k in this.o : boolean
 >k : K
->this.o : { [k: string | number | symbol]: V; }
+>this.o : { [x: string | number | symbol]: V; }
 >this : this
->o : { [k: string | number | symbol]: V; }
+>o : { [x: string | number | symbol]: V; }
     }
 
     public get(k: K): V {
@@ -219,10 +219,10 @@ class SimpleMapMap2<K extends PropertyKey, V> {
 >k : K
 
         return this.o[k];
->this.o[k] : { [k: string | number | symbol]: V; }[K]
->this.o : { [k: string | number | symbol]: V; }
+>this.o[k] : { [x: string | number | symbol]: V; }[K]
+>this.o : { [x: string | number | symbol]: V; }
 >this : this
->o : { [k: string | number | symbol]: V; }
+>o : { [x: string | number | symbol]: V; }
 >k : K
     }
 
@@ -233,10 +233,10 @@ class SimpleMapMap2<K extends PropertyKey, V> {
 
         this.o[k] = v;
 >this.o[k] = v : V
->this.o[k] : { [k: string | number | symbol]: V; }[K]
->this.o : { [k: string | number | symbol]: V; }
+>this.o[k] : { [x: string | number | symbol]: V; }[K]
+>this.o : { [x: string | number | symbol]: V; }
 >this : this
->o : { [k: string | number | symbol]: V; }
+>o : { [x: string | number | symbol]: V; }
 >k : K
 >v : V
     }
@@ -248,15 +248,15 @@ class SimpleMapMap2<K extends PropertyKey, V> {
         if (k in this.o) {
 >k in this.o : boolean
 >k : K
->this.o : { [k: string | number | symbol]: V; }
+>this.o : { [x: string | number | symbol]: V; }
 >this : this
->o : { [k: string | number | symbol]: V; }
+>o : { [x: string | number | symbol]: V; }
 
             return this.o[k];
->this.o[k] : { [k: string | number | symbol]: V; }[K]
->this.o : { [k: string | number | symbol]: V; }
+>this.o[k] : { [x: string | number | symbol]: V; }[K]
+>this.o : { [x: string | number | symbol]: V; }
 >this : this
->o : { [k: string | number | symbol]: V; }
+>o : { [x: string | number | symbol]: V; }
 >k : K
         }
         const res = new SimpleMapMap2<K, V>();
@@ -266,10 +266,10 @@ class SimpleMapMap2<K extends PropertyKey, V> {
 
         this.o[k] = res as any as V;
 >this.o[k] = res as any as V : V
->this.o[k] : { [k: string | number | symbol]: V; }[K]
->this.o : { [k: string | number | symbol]: V; }
+>this.o[k] : { [x: string | number | symbol]: V; }[K]
+>this.o : { [x: string | number | symbol]: V; }
 >this : this
->o : { [k: string | number | symbol]: V; }
+>o : { [x: string | number | symbol]: V; }
 >k : K
 >res as any as V : V
 >res as any : any
@@ -286,9 +286,9 @@ class SimpleMapMap2<K extends PropertyKey, V> {
 
         this.o = {};
 >this.o = {} : {}
->this.o : { [k: string | number | symbol]: V; }
+>this.o : { [x: string | number | symbol]: V; }
 >this : this
->o : { [k: string | number | symbol]: V; }
+>o : { [x: string | number | symbol]: V; }
 >{} : {}
     }
 }

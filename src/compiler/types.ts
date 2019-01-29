@@ -3017,7 +3017,7 @@ namespace ts {
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
         /* @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
-        getIndexInfosOfType(type: Type, indexType?: Type): IndexInfo[] | undefined;
+        getIndexInfosOfType(type: Type, indexType?: Type): ReadonlyArray<IndexInfo> | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
         getIndexTypeOfType(type: Type, indexType: Type): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];
@@ -4001,7 +4001,7 @@ namespace ts {
         /* @internal */ properties?: Symbol[];             // Properties
         /* @internal */ callSignatures?: ReadonlyArray<Signature>;      // Call signatures of type
         /* @internal */ constructSignatures?: ReadonlyArray<Signature>; // Construct signatures of type
-        /* @internal */ indexInfos?: IndexInfo[];          // Index infos
+        /* @internal */ indexInfos?: ReadonlyArray<IndexInfo>;          // Index infos
     }
 
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
@@ -4133,6 +4133,7 @@ namespace ts {
         properties: Symbol[];             // Properties
         callSignatures: ReadonlyArray<Signature>;      // Call signatures of type
         constructSignatures: ReadonlyArray<Signature>; // Construct signatures of type
+        indexKeysConstrainedInstantiation?: Type;
     }
 
     /* @internal */

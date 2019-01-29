@@ -56,35 +56,35 @@ expectColInfo(x[UserInterfaceElement.InactiveTitleBar]);
 >UserInterfaceElement : typeof UserInterfaceElement
 >InactiveTitleBar : UserInterfaceElement.InactiveTitleBar
 
-// errors
 expectColInfo(x[0]);
 >expectColInfo(x[0]) : void
 >expectColInfo : (x: ColorInfo) => void
->x[0] : any
+>x[0] : ColorInfo
 >x : UserInterfaceColors
 >0 : 0
 
 expectColInfo(x[1]);
 >expectColInfo(x[1]) : void
 >expectColInfo : (x: ColorInfo) => void
->x[1] : any
+>x[1] : ColorInfo
 >x : UserInterfaceColors
 >1 : 1
 
 expectColInfo(x["0"]);
 >expectColInfo(x["0"]) : void
 >expectColInfo : (x: ColorInfo) => void
->x["0"] : any
+>x["0"] : ColorInfo
 >x : UserInterfaceColors
 >"0" : "0"
 
 expectColInfo(x["1"]);
 >expectColInfo(x["1"]) : void
 >expectColInfo : (x: ColorInfo) => void
->x["1"] : any
+>x["1"] : ColorInfo
 >x : UserInterfaceColors
 >"1" : "1"
 
+// errors
 expectColInfo(x[0 as number]);
 >expectColInfo(x[0 as number]) : void
 >expectColInfo : (x: ColorInfo) => void
@@ -106,5 +106,98 @@ expectColInfo(x[12]);
 >expectColInfo : (x: ColorInfo) => void
 >x[12] : any
 >x : UserInterfaceColors
+>12 : 12
+
+export interface UserInterfaceColors2 {
+    [index: UserInterfaceElement2]: ColorInfo;
+>index : UserInterfaceElement2
+}
+export enum UserInterfaceElement2 {
+>UserInterfaceElement2 : UserInterfaceElement2
+
+    ActiveTitleBar = "Active",
+>ActiveTitleBar : UserInterfaceElement2.ActiveTitleBar
+>"Active" : "Active"
+
+    InactiveTitleBar = "Inactive",
+>InactiveTitleBar : UserInterfaceElement2.InactiveTitleBar
+>"Inactive" : "Inactive"
+}
+
+const x2: UserInterfaceColors2 = null as any;
+>x2 : UserInterfaceColors2
+>null as any : any
+>null : null
+
+
+// correct uses
+expectColInfo(x2[UserInterfaceElement2.ActiveTitleBar]);
+>expectColInfo(x2[UserInterfaceElement2.ActiveTitleBar]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2[UserInterfaceElement2.ActiveTitleBar] : ColorInfo
+>x2 : UserInterfaceColors2
+>UserInterfaceElement2.ActiveTitleBar : UserInterfaceElement2.ActiveTitleBar
+>UserInterfaceElement2 : typeof UserInterfaceElement2
+>ActiveTitleBar : UserInterfaceElement2.ActiveTitleBar
+
+expectColInfo(x2[UserInterfaceElement2.InactiveTitleBar]);
+>expectColInfo(x2[UserInterfaceElement2.InactiveTitleBar]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2[UserInterfaceElement2.InactiveTitleBar] : ColorInfo
+>x2 : UserInterfaceColors2
+>UserInterfaceElement2.InactiveTitleBar : UserInterfaceElement2.InactiveTitleBar
+>UserInterfaceElement2 : typeof UserInterfaceElement2
+>InactiveTitleBar : UserInterfaceElement2.InactiveTitleBar
+
+// errors
+expectColInfo(x2[0]);
+>expectColInfo(x2[0]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2[0] : any
+>x2 : UserInterfaceColors2
+>0 : 0
+
+expectColInfo(x2[1]);
+>expectColInfo(x2[1]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2[1] : any
+>x2 : UserInterfaceColors2
+>1 : 1
+
+expectColInfo(x2["0"]);
+>expectColInfo(x2["0"]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2["0"] : any
+>x2 : UserInterfaceColors2
+>"0" : "0"
+
+expectColInfo(x2["1"]);
+>expectColInfo(x2["1"]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2["1"] : any
+>x2 : UserInterfaceColors2
+>"1" : "1"
+
+expectColInfo(x2[0 as number]);
+>expectColInfo(x2[0 as number]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2[0 as number] : any
+>x2 : UserInterfaceColors2
+>0 as number : number
+>0 : 0
+
+expectColInfo(x2["0" as string]);
+>expectColInfo(x2["0" as string]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2["0" as string] : any
+>x2 : UserInterfaceColors2
+>"0" as string : string
+>"0" : "0"
+
+expectColInfo(x2[12]);
+>expectColInfo(x2[12]) : void
+>expectColInfo : (x: ColorInfo) => void
+>x2[12] : any
+>x2 : UserInterfaceColors2
 >12 : 12
 

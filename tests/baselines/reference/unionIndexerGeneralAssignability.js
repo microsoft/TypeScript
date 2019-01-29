@@ -30,12 +30,12 @@ function f1<
     let s: SubA = {};
     s[k1]; // valid
     s = a;
-    s = b; // error: doesn't provide `"b"`
-    s = ab; // error: doesn't provide `"b"`
+    s = b; // error: doesn't provide `"a"`
+    s = ab; // error: doesn't provide `"a"`
 
     a = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
-    b = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
-    ab = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    b = s; // error: might not provide any of `"b"`, `"c"`, or `"d"`
+    ab = s; // error: might not provide any of `"b"`, or `"c"`
 
     interface SubB {
         [x: K2]: string;
@@ -49,8 +49,8 @@ function f1<
     s2 = s;
 
     a = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
-    b = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
-    ab = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    b = s2; // error: might not provide any of `"b"`, `"c"`, or `"d"`
+    ab = s2; // error: might not provide any of b"`, or `"c"`
     s = s2; // error: might not provide any of the keys of K1
 }
 
@@ -156,33 +156,31 @@ interface J {
 type K = {[K in S3]: string} & {[S3.A]: "a"};
 type L = {[K in S3]: string} & {[x: S3.A]: "a"};
 
-// TODO: reconcile union signatures with properties?
-// Properties don't technically retain their enuminess, this may even be expected for string enums, if _very_ subtle
 function f4(h: H, i: I, j: J, k: K, l: L) {
-    h = i;
-    h = j;
-    h = k;
-    h = l;
+    h = i; // ok
+    h = j; // ok (never is a subtype of "a")
+    h = k; // ok
+    h = l; // ok
 
-    i = h;
-    i = j;
-    i = k;
-    i = l;
+    i = h; // ok
+    i = j; // ok (never is a subtype of "a")
+    i = k; // ok
+    i = l; // ok
 
-    j = h;
-    j = i;
-    j = k;
-    j = l;
+    j = h; // not ok
+    j = i; // not ok 
+    j = k; // not ok
+    j = l; // not ok
 
-    k = h;
-    h = i;
-    k = j;
-    k = l;
+    k = h; // ok
+    k = i; // ok
+    k = j; // ok (never is a subtype of "a")
+    k = l; // ok
 
-    l = h;
-    l = i;
-    l = j;
-    l = k;
+    l = h; // ok
+    l = i; // ok
+    l = j; // ok (never is a subtype of "a")
+    l = k; // ok
 }
 
 
@@ -197,11 +195,11 @@ function f1(a, b, ab, k1, k2) {
     var s = {};
     s[k1]; // valid
     s = a;
-    s = b; // error: doesn't provide `"b"`
-    s = ab; // error: doesn't provide `"b"`
+    s = b; // error: doesn't provide `"a"`
+    s = ab; // error: doesn't provide `"a"`
     a = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
-    b = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
-    ab = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    b = s; // error: might not provide any of `"b"`, `"c"`, or `"d"`
+    ab = s; // error: might not provide any of `"b"`, or `"c"`
     var s2 = {};
     s2[k2]; // valid
     s2[k1]; // invalid
@@ -210,8 +208,8 @@ function f1(a, b, ab, k1, k2) {
     s2 = ab; // error: doesn't provide `"b"`
     s2 = s;
     a = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
-    b = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
-    ab = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    b = s2; // error: might not provide any of `"b"`, `"c"`, or `"d"`
+    ab = s2; // error: might not provide any of b"`, or `"c"`
     s = s2; // error: might not provide any of the keys of K1
 }
 function f2(c, d, e) {
@@ -262,27 +260,25 @@ var S3;
     S3["B"] = "b";
     S3["C"] = "c";
 })(S3 || (S3 = {}));
-// TODO: reconcile union signatures with properties?
-// Properties don't technically retain their enuminess, this may even be expected for string enums, if _very_ subtle
 function f4(h, i, j, k, l) {
-    h = i;
-    h = j;
-    h = k;
-    h = l;
-    i = h;
-    i = j;
-    i = k;
-    i = l;
-    j = h;
-    j = i;
-    j = k;
-    j = l;
-    k = h;
-    h = i;
-    k = j;
-    k = l;
-    l = h;
-    l = i;
-    l = j;
-    l = k;
+    h = i; // ok
+    h = j; // ok (never is a subtype of "a")
+    h = k; // ok
+    h = l; // ok
+    i = h; // ok
+    i = j; // ok (never is a subtype of "a")
+    i = k; // ok
+    i = l; // ok
+    j = h; // not ok
+    j = i; // not ok 
+    j = k; // not ok
+    j = l; // not ok
+    k = h; // ok
+    k = i; // ok
+    k = j; // ok (never is a subtype of "a")
+    k = l; // ok
+    l = h; // ok
+    l = i; // ok
+    l = j; // ok (never is a subtype of "a")
+    l = k; // ok
 }

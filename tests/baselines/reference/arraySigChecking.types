@@ -18,7 +18,7 @@ declare module M {
     }
 
     var foo: { [index: any]; }; // expect an error here
->foo : { [index: any]: any; }
+>foo : { [index: string]: any; }
 >index : any
 }
 

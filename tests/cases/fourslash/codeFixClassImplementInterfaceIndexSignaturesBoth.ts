@@ -17,7 +17,6 @@ verify.codeFix({
 }
 
 class C implements I {
-    [x: number]: I;
-    [y: string]: I;
+    [x: string | number]: I;
 }`,
 });

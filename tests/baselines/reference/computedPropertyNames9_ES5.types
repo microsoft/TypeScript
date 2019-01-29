@@ -16,8 +16,8 @@ function f(x): any { }
 >x : any
 
 var v = {
->v : { [x: string]: number; [x: number]: number; }
->{    [f("")]: 0,    [f(0)]: 0,    [f(true)]: 0} : { [x: string]: number; [x: number]: number; }
+>v : { [x: string | number]: number; }
+>{    [f("")]: 0,    [f(0)]: 0,    [f(true)]: 0} : { [x: string | number]: number; }
 
     [f("")]: 0,
 >[f("")] : number

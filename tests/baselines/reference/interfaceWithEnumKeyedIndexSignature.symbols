@@ -56,23 +56,27 @@ expectColInfo(x[UserInterfaceElement.InactiveTitleBar]);
 >UserInterfaceElement : Symbol(UserInterfaceElement, Decl(interfaceWithEnumKeyedIndexSignature.ts, 8, 1))
 >InactiveTitleBar : Symbol(UserInterfaceElement.InactiveTitleBar, Decl(interfaceWithEnumKeyedIndexSignature.ts, 10, 23))
 
-// errors
 expectColInfo(x[0]);
 >expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
 >x : Symbol(x, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 5))
+>0 : Symbol(0)
 
 expectColInfo(x[1]);
 >expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
 >x : Symbol(x, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 5))
+>1 : Symbol(1)
 
 expectColInfo(x["0"]);
 >expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
 >x : Symbol(x, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 5))
+>"0" : Symbol(0)
 
 expectColInfo(x["1"]);
 >expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
 >x : Symbol(x, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 5))
+>"1" : Symbol(1)
 
+// errors
 expectColInfo(x[0 as number]);
 >expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
 >x : Symbol(x, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 5))
@@ -84,4 +88,71 @@ expectColInfo(x["0" as string]);
 expectColInfo(x[12]);
 >expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
 >x : Symbol(x, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 5))
+
+export interface UserInterfaceColors2 {
+>UserInterfaceColors2 : Symbol(UserInterfaceColors2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 29, 21))
+
+    [index: UserInterfaceElement2]: ColorInfo;
+>index : Symbol(index, Decl(interfaceWithEnumKeyedIndexSignature.ts, 32, 5))
+>UserInterfaceElement2 : Symbol(UserInterfaceElement2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 33, 1))
+>ColorInfo : Symbol(ColorInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 2, 1))
+}
+export enum UserInterfaceElement2 {
+>UserInterfaceElement2 : Symbol(UserInterfaceElement2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 33, 1))
+
+    ActiveTitleBar = "Active",
+>ActiveTitleBar : Symbol(UserInterfaceElement2.ActiveTitleBar, Decl(interfaceWithEnumKeyedIndexSignature.ts, 34, 35))
+
+    InactiveTitleBar = "Inactive",
+>InactiveTitleBar : Symbol(UserInterfaceElement2.InactiveTitleBar, Decl(interfaceWithEnumKeyedIndexSignature.ts, 35, 30))
+}
+
+const x2: UserInterfaceColors2 = null as any;
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+>UserInterfaceColors2 : Symbol(UserInterfaceColors2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 29, 21))
+
+
+// correct uses
+expectColInfo(x2[UserInterfaceElement2.ActiveTitleBar]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+>UserInterfaceElement2.ActiveTitleBar : Symbol(UserInterfaceElement2.ActiveTitleBar, Decl(interfaceWithEnumKeyedIndexSignature.ts, 34, 35))
+>UserInterfaceElement2 : Symbol(UserInterfaceElement2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 33, 1))
+>ActiveTitleBar : Symbol(UserInterfaceElement2.ActiveTitleBar, Decl(interfaceWithEnumKeyedIndexSignature.ts, 34, 35))
+
+expectColInfo(x2[UserInterfaceElement2.InactiveTitleBar]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+>UserInterfaceElement2.InactiveTitleBar : Symbol(UserInterfaceElement2.InactiveTitleBar, Decl(interfaceWithEnumKeyedIndexSignature.ts, 35, 30))
+>UserInterfaceElement2 : Symbol(UserInterfaceElement2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 33, 1))
+>InactiveTitleBar : Symbol(UserInterfaceElement2.InactiveTitleBar, Decl(interfaceWithEnumKeyedIndexSignature.ts, 35, 30))
+
+// errors
+expectColInfo(x2[0]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+
+expectColInfo(x2[1]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+
+expectColInfo(x2["0"]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+
+expectColInfo(x2["1"]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+
+expectColInfo(x2[0 as number]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+
+expectColInfo(x2["0" as string]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
+
+expectColInfo(x2[12]);
+>expectColInfo : Symbol(expectColInfo, Decl(interfaceWithEnumKeyedIndexSignature.ts, 14, 43))
+>x2 : Symbol(x2, Decl(interfaceWithEnumKeyedIndexSignature.ts, 39, 5))
 

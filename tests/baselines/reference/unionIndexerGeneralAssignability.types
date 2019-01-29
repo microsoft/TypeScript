@@ -74,12 +74,12 @@ function f1<
 >s : SubA
 >a : A
 
-    s = b; // error: doesn't provide `"b"`
+    s = b; // error: doesn't provide `"a"`
 >s = b : B
 >s : SubA
 >b : B
 
-    s = ab; // error: doesn't provide `"b"`
+    s = ab; // error: doesn't provide `"a"`
 >s = ab : AB
 >s : SubA
 >ab : AB
@@ -89,12 +89,12 @@ function f1<
 >a : A
 >s : SubA
 
-    b = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    b = s; // error: might not provide any of `"b"`, `"c"`, or `"d"`
 >b = s : SubA
 >b : B
 >s : SubA
 
-    ab = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    ab = s; // error: might not provide any of `"b"`, or `"c"`
 >ab = s : SubA
 >ab : AB
 >s : SubA
@@ -142,12 +142,12 @@ function f1<
 >a : A
 >s2 : SubB
 
-    b = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    b = s2; // error: might not provide any of `"b"`, `"c"`, or `"d"`
 >b = s2 : SubB
 >b : B
 >s2 : SubB
 
-    ab = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    ab = s2; // error: might not provide any of b"`, or `"c"`
 >ab = s2 : SubB
 >ab : AB
 >s2 : SubB
@@ -431,8 +431,6 @@ type L = {[K in S3]: string} & {[x: S3.A]: "a"};
 >x : S3.A
 >S3 : any
 
-// TODO: reconcile union signatures with properties?
-// Properties don't technically retain their enuminess, this may even be expected for string enums, if _very_ subtle
 function f4(h: H, i: I, j: J, k: K, l: L) {
 >f4 : (h: H, i: I, j: J, k: K, l: L) => void
 >h : H
@@ -441,102 +439,102 @@ function f4(h: H, i: I, j: J, k: K, l: L) {
 >k : K
 >l : L
 
-    h = i;
+    h = i; // ok
 >h = i : I
 >h : H
 >i : I
 
-    h = j;
+    h = j; // ok (never is a subtype of "a")
 >h = j : J
 >h : H
 >j : J
 
-    h = k;
+    h = k; // ok
 >h = k : K
 >h : H
 >k : K
 
-    h = l;
+    h = l; // ok
 >h = l : L
 >h : H
 >l : L
 
-    i = h;
+    i = h; // ok
 >i = h : H
 >i : I
 >h : H
 
-    i = j;
+    i = j; // ok (never is a subtype of "a")
 >i = j : J
 >i : I
 >j : J
 
-    i = k;
+    i = k; // ok
 >i = k : K
 >i : I
 >k : K
 
-    i = l;
+    i = l; // ok
 >i = l : L
 >i : I
 >l : L
 
-    j = h;
+    j = h; // not ok
 >j = h : H
 >j : J
 >h : H
 
-    j = i;
+    j = i; // not ok 
 >j = i : I
 >j : J
 >i : I
 
-    j = k;
+    j = k; // not ok
 >j = k : K
 >j : J
 >k : K
 
-    j = l;
+    j = l; // not ok
 >j = l : L
 >j : J
 >l : L
 
-    k = h;
+    k = h; // ok
 >k = h : H
 >k : K
 >h : H
 
-    h = i;
->h = i : I
->h : H
+    k = i; // ok
+>k = i : I
+>k : K
 >i : I
 
-    k = j;
+    k = j; // ok (never is a subtype of "a")
 >k = j : J
 >k : K
 >j : J
 
-    k = l;
+    k = l; // ok
 >k = l : L
 >k : K
 >l : L
 
-    l = h;
+    l = h; // ok
 >l = h : H
 >l : L
 >h : H
 
-    l = i;
+    l = i; // ok
 >l = i : I
 >l : L
 >i : I
 
-    l = j;
+    l = j; // ok (never is a subtype of "a")
 >l = j : J
 >l : L
 >j : J
 
-    l = k;
+    l = k; // ok
 >l = k : K
 >l : L
 >k : K

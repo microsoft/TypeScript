@@ -1,13 +1,16 @@
-tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(24,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
-tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(25,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
-tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(26,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
-tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(27,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
 tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(28,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
 tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(29,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
 tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(30,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
+tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(48,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(49,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(50,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(51,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(52,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(53,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(54,15): error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
 
 
-==== tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts (7 errors) ====
+==== tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts (10 errors) ====
     export interface UserInterfaceColors {
         [index: UserInterfaceElement]: ColorInfo;
     }
@@ -29,20 +32,12 @@ tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(30
     // correct uses
     expectColInfo(x[UserInterfaceElement.ActiveTitleBar]);
     expectColInfo(x[UserInterfaceElement.InactiveTitleBar]);
+    expectColInfo(x[0]);
+    expectColInfo(x[1]);
+    expectColInfo(x["0"]);
+    expectColInfo(x["1"]);
     
     // errors
-    expectColInfo(x[0]);
-                  ~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
-    expectColInfo(x[1]);
-                  ~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
-    expectColInfo(x["0"]);
-                  ~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
-    expectColInfo(x["1"]);
-                  ~~~~~~
-!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
     expectColInfo(x[0 as number]);
                   ~~~~~~~~~~~~~~
 !!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
@@ -52,4 +47,42 @@ tests/cases/conformance/types/members/interfaceWithEnumKeyedIndexSignature.ts(30
     expectColInfo(x[12]);
                   ~~~~~
 !!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors' has no index signature.
+    
+    export interface UserInterfaceColors2 {
+        [index: UserInterfaceElement2]: ColorInfo;
+    }
+    export enum UserInterfaceElement2 {
+        ActiveTitleBar = "Active",
+        InactiveTitleBar = "Inactive",
+    }
+    
+    const x2: UserInterfaceColors2 = null as any;
+    
+    
+    // correct uses
+    expectColInfo(x2[UserInterfaceElement2.ActiveTitleBar]);
+    expectColInfo(x2[UserInterfaceElement2.InactiveTitleBar]);
+    
+    // errors
+    expectColInfo(x2[0]);
+                  ~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+    expectColInfo(x2[1]);
+                  ~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+    expectColInfo(x2["0"]);
+                  ~~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+    expectColInfo(x2["1"]);
+                  ~~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+    expectColInfo(x2[0 as number]);
+                  ~~~~~~~~~~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+    expectColInfo(x2["0" as string]);
+                  ~~~~~~~~~~~~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
+    expectColInfo(x2[12]);
+                  ~~~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type 'UserInterfaceColors2' has no index signature.
     

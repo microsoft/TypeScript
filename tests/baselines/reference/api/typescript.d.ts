@@ -1869,7 +1869,7 @@ declare namespace ts {
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
-        getIndexInfosOfType(type: Type, indexType?: Type): IndexInfo[] | undefined;
+        getIndexInfosOfType(type: Type, indexType?: Type): ReadonlyArray<IndexInfo> | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): ReadonlyArray<Signature>;
         getIndexTypeOfType(type: Type, indexType: Type): Type | undefined;
         getBaseTypes(type: InterfaceType): BaseType[];

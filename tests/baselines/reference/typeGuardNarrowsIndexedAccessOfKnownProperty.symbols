@@ -65,7 +65,7 @@ function area(s: Shape): number {
 
     switch(s['dash-ok']) {
 >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
->'dash-ok' : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 9, 19))
+>'dash-ok' : Symbol("dash-ok", Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 9, 19))
 
         case "square": return s['square-size'] * s['square-size'];
 >s : Symbol(s, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 23, 14))
@@ -103,7 +103,7 @@ function subarea(s: Subshape): number {
 >"sub" : Symbol(sub, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 15, 10))
 >under : Symbol(under, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 16, 14))
 >"shape" : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))
->"dash-ok" : Symbol(["dash-ok"], Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 9, 19))
+>"dash-ok" : Symbol("dash-ok", Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 0, 18), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 4, 22), Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 9, 19))
 
         case "square": return s[0].sub.under.shape["square-size"] * s[0].sub.under.shape["square-size"];
 >s[0].sub.under.shape : Symbol(shape, Decl(typeGuardNarrowsIndexedAccessOfKnownProperty.ts, 17, 20))

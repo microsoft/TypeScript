@@ -85,11 +85,11 @@ function f1<
 >s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
 >a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
 
-    s = b; // error: doesn't provide `"b"`
+    s = b; // error: doesn't provide `"a"`
 >s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
 >b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
 
-    s = ab; // error: doesn't provide `"b"`
+    s = ab; // error: doesn't provide `"a"`
 >s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
 >ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
 
@@ -97,11 +97,11 @@ function f1<
 >a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
 >s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
 
-    b = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    b = s; // error: might not provide any of `"b"`, `"c"`, or `"d"`
 >b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
 >s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
 
-    ab = s; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    ab = s; // error: might not provide any of `"b"`, or `"c"`
 >ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
 >s : Symbol(s, Decl(unionIndexerGeneralAssignability.ts, 28, 7))
 
@@ -144,11 +144,11 @@ function f1<
 >a : Symbol(a, Decl(unionIndexerGeneralAssignability.ts, 15, 2))
 >s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
 
-    b = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    b = s2; // error: might not provide any of `"b"`, `"c"`, or `"d"`
 >b : Symbol(b, Decl(unionIndexerGeneralAssignability.ts, 15, 7))
 >s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
 
-    ab = s2; // error: might not provide any of `"a"`, `"b"`, or `"c"`
+    ab = s2; // error: might not provide any of b"`, or `"c"`
 >ab : Symbol(ab, Decl(unionIndexerGeneralAssignability.ts, 15, 13))
 >s2 : Symbol(s2, Decl(unionIndexerGeneralAssignability.ts, 41, 7))
 
@@ -439,99 +439,97 @@ type L = {[K in S3]: string} & {[x: S3.A]: "a"};
 >S3 : Symbol(S3, Decl(unionIndexerGeneralAssignability.ts, 131, 1))
 >A : Symbol(S3.A, Decl(unionIndexerGeneralAssignability.ts, 133, 9))
 
-// TODO: reconcile union signatures with properties?
-// Properties don't technically retain their enuminess, this may even be expected for string enums, if _very_ subtle
 function f4(h: H, i: I, j: J, k: K, l: L) {
 >f4 : Symbol(f4, Decl(unionIndexerGeneralAssignability.ts, 155, 48))
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
 >H : Symbol(H, Decl(unionIndexerGeneralAssignability.ts, 137, 1))
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
 >I : Symbol(I, Decl(unionIndexerGeneralAssignability.ts, 142, 1))
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
 >J : Symbol(J, Decl(unionIndexerGeneralAssignability.ts, 147, 1))
->k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
 >K : Symbol(K, Decl(unionIndexerGeneralAssignability.ts, 152, 1))
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
 >L : Symbol(L, Decl(unionIndexerGeneralAssignability.ts, 154, 45))
 
-    h = i;
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+    h = i; // ok
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
 
-    h = j;
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+    h = j; // ok (never is a subtype of "a")
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
 
-    h = k;
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
->k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+    h = k; // ok
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
 
-    h = l;
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+    h = l; // ok
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
 
-    i = h;
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+    i = h; // ok
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
 
-    i = j;
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+    i = j; // ok (never is a subtype of "a")
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
 
-    i = k;
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
->k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+    i = k; // ok
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
 
-    i = l;
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+    i = l; // ok
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
 
-    j = h;
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+    j = h; // not ok
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
 
-    j = i;
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+    j = i; // not ok 
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
 
-    j = k;
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
->k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+    j = k; // not ok
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
 
-    j = l;
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+    j = l; // not ok
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
 
-    k = h;
->k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+    k = h; // ok
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
 
-    h = i;
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+    k = i; // ok
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
 
-    k = j;
->k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+    k = j; // ok (never is a subtype of "a")
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
 
-    k = l;
->k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
+    k = l; // ok
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
 
-    l = h;
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
->h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 159, 12))
+    l = h; // ok
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
+>h : Symbol(h, Decl(unionIndexerGeneralAssignability.ts, 157, 12))
 
-    l = i;
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
->i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 159, 17))
+    l = i; // ok
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
+>i : Symbol(i, Decl(unionIndexerGeneralAssignability.ts, 157, 17))
 
-    l = j;
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
->j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 159, 23))
+    l = j; // ok (never is a subtype of "a")
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
+>j : Symbol(j, Decl(unionIndexerGeneralAssignability.ts, 157, 23))
 
-    l = k;
->l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 159, 35))
->k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 159, 29))
+    l = k; // ok
+>l : Symbol(l, Decl(unionIndexerGeneralAssignability.ts, 157, 35))
+>k : Symbol(k, Decl(unionIndexerGeneralAssignability.ts, 157, 29))
 }
 

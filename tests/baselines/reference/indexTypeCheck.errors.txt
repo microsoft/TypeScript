@@ -4,7 +4,7 @@ tests/cases/compiler/indexTypeCheck.ts(17,2): error TS2413: 'number' index type 
   Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/indexTypeCheck.ts(22,2): error TS2413: 'number' index type 'Orange' is not assignable to 'string' index type 'Yellow'.
   Type 'Orange' is not assignable to type 'Yellow'.
-    'string' index signatures are incompatible.
+    'string' and 'string | number' index signatures are incompatible.
       Type 'string' is not assignable to type 'Red'.
 tests/cases/compiler/indexTypeCheck.ts(27,2): error TS2413: 'number' index type 'number' is not assignable to 'string' index type 'string'.
   Type 'number' is not assignable to type 'string'.
@@ -49,7 +49,7 @@ tests/cases/compiler/indexTypeCheck.ts(51,8): error TS2538: Type 'Blue' cannot b
     	~~~~~~~~~~~~~~~~~~~
 !!! error TS2413: 'number' index type 'Orange' is not assignable to 'string' index type 'Yellow'.
 !!! error TS2413:   Type 'Orange' is not assignable to type 'Yellow'.
-!!! error TS2413:     'string' index signatures are incompatible.
+!!! error TS2413:     'string' and 'string | number' index signatures are incompatible.
 !!! error TS2413:       Type 'string' is not assignable to type 'Red'.
     	[s:string]: Yellow; // ok
     }
