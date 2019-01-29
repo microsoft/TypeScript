@@ -3500,7 +3500,6 @@ namespace ts {
                 if (line.length) {
                     writeLine();
                     write(line);
-                    writer.rawWrite(newLine);
                 }
             }
         }
