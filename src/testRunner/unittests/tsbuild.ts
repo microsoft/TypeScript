@@ -489,8 +489,8 @@ export const b = new A();`);
             ]
         ];
 
-        function verifyOutFileScenario(scenario: string, modifyFs: (fs: vfs.FileSystem) => void | ReadonlyArray<string>) {
-            describe(`unittests:: tsbuild - outFile:: ${scenario}`, () => {
+        function verifyOutFileScenarioWorker(scenario: string, modifyFs: (fs: vfs.FileSystem) => void | ReadonlyArray<string>, withoutBundleInfo: boolean) {
+            describe(`unittests:: tsbuild - outFile:: ${scenario}${withoutBundleInfo ? " without bundleInfo" : ""}`, () => {
                 let fs: vfs.FileSystem | undefined;
                 const actualReadFileMap = createMap<number>();
                 let additionalSourceFiles: ReadonlyArray<string> | void;
@@ -506,8 +506,18 @@ export const b = new A();`);
                         if (path.startsWith("/src/")) {
                             actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
                         }
+                        if (withoutBundleInfo && fileExtensionIs(path, infoExtension)) {
+                            return undefined;
+                        }
                         return originalReadFile.call(host, path);
                     };
+                    if (withoutBundleInfo) {
+                        const originalWriteFile = host.writeFile;
+                        host.writeFile = (fileName, content, writeByteOrder) => {
+                            return !fileExtensionIs(fileName, infoExtension) &&
+                                originalWriteFile.call(host, fileName, content, writeByteOrder);
+                        };
+                    }
                     builder.buildAllProjects();
                     host.assertDiagnosticMessages(/*none*/);
                 });
@@ -529,7 +539,7 @@ export const b = new A();`);
 
                     const patch = fs!.diff();
                     // tslint:disable-next-line:no-null-keyword
-                    Harness.Baseline.runBaseline(`outFile-${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
+                    Harness.Baseline.runBaseline(`outFile-${scenario.split(" ").join("-")}${withoutBundleInfo ? "-no-bundleInfo" : ""}.js`, patch ? vfs.formatPatch(patch) : null);
                 });
                 it("verify readFile calls", () => {
                     const expected = [
@@ -561,6 +571,11 @@ export const b = new A();`);
                     });
                 });
             });
+        }
+
+        function verifyOutFileScenario(scenario: string, modifyFs: (fs: vfs.FileSystem) => void | ReadonlyArray<string>) {
+            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBundleInfo*/ false);
+            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBundleInfo*/ true);
         }
 
         verifyOutFileScenario("baseline sectioned sourcemaps", noop);

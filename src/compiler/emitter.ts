@@ -1,5 +1,6 @@
 namespace ts {
-    const infoExtension = ".tsbundleinfo";
+    /*@internal*/
+    export const infoExtension = ".tsbundleinfo";
     const brackets = createBracketsMap();
     const syntheticParent: TextRange = { pos: -1, end: -1 };
 
