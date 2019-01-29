@@ -129,5 +129,67 @@ namespace ts.projectSystem {
                 ],
             });
         });
+
+        it("rename behavior is based on file of rename initiation", () => {
+            const aTs: File = { path: "/a.ts", content: "const x = 1; export { x };" };
+            const bTs: File = { path: "/b.ts", content: `import { x } from "./a"; const y = x + 1;` };
+            const host = createServerHost([aTs, bTs]);
+            const session = createSession(host);
+            openFilesForSession([aTs, bTs], session);
+
+            // rename from file with prefixText and suffixText enabled
+            session.getProjectService().setHostConfiguration({ file: "/a.ts", formatOptions: {}, preferences: { providePrefixAndSuffixTextForRename: true } });
+            const response1 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response1, {
+                info: {
+                    canRename: true,
+                    fileToRename: undefined,
+                    displayName: "x",
+                    fullDisplayName: "x",
+                    kind: ScriptElementKind.constElement,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
+                },
+                locs: [
+                    {
+                        file: aTs.path,
+                        locs: [
+                            protocolRenameSpanFromSubstring(aTs.content, "x"),
+                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 2 }, { suffixText: " as x" }),
+                        ],
+                    },
+                ],
+            });
+
+            // rename from file with prefixText and suffixText disabled
+            const response2 = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, "x"));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response2, {
+                info: {
+                    canRename: true,
+                    fileToRename: undefined,
+                    displayName: "x",
+                    fullDisplayName: "x",
+                    kind: ScriptElementKind.alias,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    triggerSpan: protocolTextSpanFromSubstring(bTs.content, "x"),
+                },
+                locs: [
+                    {
+                        file: bTs.path,
+                        locs: [
+                            protocolRenameSpanFromSubstring(bTs.content, "x"),
+                            protocolRenameSpanFromSubstring(bTs.content, "x", { index: 1 })
+                        ]
+                    },
+                    {
+                        file: aTs.path,
+                        locs: [
+                            protocolRenameSpanFromSubstring(aTs.content, "x"),
+                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 2 }),
+                        ],
+                    },
+                ],
+            });
+        });
     });
 }
