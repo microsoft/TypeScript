@@ -164,13 +164,13 @@ namespace ts {
          * Returns a JSON-encoded value of the type:
          * { canRename: boolean, localizedErrorMessage: string, displayName: string, fullDisplayName: string, kind: string, kindModifiers: string, triggerSpan: { start; length } }
          */
-        getRenameInfo(fileName: string, position: number): string;
+        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string;
 
         /**
          * Returns a JSON-encoded value of the type:
          * { fileName: string, textSpan: { start: number, length: number } }[]
          */
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string;
 
         /**
          * Returns a JSON-encoded value of the type:
@@ -831,17 +831,17 @@ namespace ts {
             );
         }
 
-        public getRenameInfo(fileName: string, position: number): string {
+        public getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): string {
             return this.forwardJSONCall(
                 `getRenameInfo('${fileName}', ${position})`,
-                () => this.languageService.getRenameInfo(fileName, position)
+                () => this.languageService.getRenameInfo(fileName, position, options)
             );
         }
 
-        public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): string {
+        public findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): string {
             return this.forwardJSONCall(
-                `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments})`,
-                () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments)
+                `findRenameLocations('${fileName}', ${position}, ${findInStrings}, ${findInComments}, ${providePrefixAndSuffixTextForRename})`,
+                () => this.languageService.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename)
             );
         }
 

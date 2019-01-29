@@ -4,18 +4,18 @@ var Outer = {};
 >{} : {}
 
 Outer.Inner = function () {}
->Outer.Inner = function () {} : { (): void; prototype: { x: number; m(): void; }; }
->Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
+>Outer.Inner = function () {} : typeof Inner
+>Outer.Inner : typeof Inner
 >Outer : typeof Outer
->Inner : { (): void; prototype: { x: number; m(): void; }; }
->function () {} : { (): void; prototype: { x: number; m(): void; }; }
+>Inner : typeof Inner
+>function () {} : typeof Inner
 
 Outer.Inner.prototype = {
 >Outer.Inner.prototype = {    x: 1,    m() { }} : { x: number; m(): void; }
 >Outer.Inner.prototype : { x: number; m(): void; }
->Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
+>Outer.Inner : typeof Inner
 >Outer : typeof Outer
->Inner : { (): void; prototype: { x: number; m(): void; }; }
+>Inner : typeof Inner
 >prototype : { x: number; m(): void; }
 >{    x: 1,    m() { }} : { x: number; m(): void; }
 
@@ -45,9 +45,9 @@ inner.m()
 var inno = new Outer.Inner()
 >inno : { x: number; m(): void; }
 >new Outer.Inner() : { x: number; m(): void; }
->Outer.Inner : { (): void; prototype: { x: number; m(): void; }; }
+>Outer.Inner : typeof Inner
 >Outer : typeof Outer
->Inner : { (): void; prototype: { x: number; m(): void; }; }
+>Inner : typeof Inner
 
 inno.x
 >inno.x : number
