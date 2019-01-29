@@ -91,7 +91,7 @@ namespace ts {
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
 
-        const globalThisSymbol = createSymbol(SymbolFlags.ValueModule | SymbolFlags.NamespaceModule, "globalThis" as __String);
+        const globalThisSymbol = createSymbol(SymbolFlags.ValueModule | SymbolFlags.NamespaceModule, "globalThis" as __String, CheckFlags.Readonly);
         globalThisSymbol.exports = globals;
         globalThisSymbol.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
         (globalThisSymbol.valueDeclaration as Identifier).escapedText = "globalThis" as __String;
