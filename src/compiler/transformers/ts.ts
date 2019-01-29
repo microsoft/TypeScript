@@ -1941,7 +1941,6 @@ namespace ts {
                     break;
 
                 case SyntaxKind.TypeQuery:
-                case SyntaxKind.TypeOperator:
                 case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:
