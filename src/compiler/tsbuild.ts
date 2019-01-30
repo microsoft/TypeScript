@@ -67,6 +67,12 @@ namespace ts {
          * This means we can Pseudo-build (just touch timestamps), as if we had actually built this project.
          */
         UpToDateWithUpstreamTypes,
+        /**
+         * The project appears out of date because its upstream inputs are newer than its outputs,
+         * but all of its outputs are actually newer than the previous identical outputs of its (.d.ts) inputs.
+         * This means we can Pseudo-build (just manipulate outputs), as if we had actually built this project.
+         */
+        OutOfDateWithPrepend,
         OutputMissing,
         OutOfDateWithSelf,
         OutOfDateWithUpstream,
@@ -83,6 +89,7 @@ namespace ts {
     export type UpToDateStatus =
         | Status.Unbuildable
         | Status.UpToDate
+        | Status.OutOfDateWithPrepend
         | Status.OutputMissing
         | Status.OutOfDateWithSelf
         | Status.OutOfDateWithUpstream
@@ -120,6 +127,15 @@ namespace ts {
             newestOutputFileTime?: Date;
             newestOutputFileName?: string;
             oldestOutputFileName: string;
+        }
+
+        /**
+         * The project is up to date with respect to its inputs except for prepend output changed (no declaration file change in prepend).
+         */
+        export interface OutOfDateWithPrepend {
+            type: UpToDateStatusType.OutOfDateWithPrepend;
+            outOfDateOutputFileName: string;
+            newerProjectName: string;
         }
 
         /**
@@ -842,7 +858,7 @@ namespace ts {
 
             if (usesPrepend && pseudoUpToDate) {
                 return {
-                    type: UpToDateStatusType.OutOfDateWithUpstream,
+                    type: UpToDateStatusType.OutOfDateWithPrepend,
                     outOfDateOutputFileName: oldestOutputFileName,
                     newerProjectName: upstreamChangedProject!
                 };
@@ -991,6 +1007,12 @@ namespace ts {
                 return;
             }
 
+            //if (status.type === UpToDateStatusType.OutOfDateWithPrepend) {
+            //    // Fake that files have been built by manipulating prepend and existing output
+            //    //updateOutputTimestamps(proj);
+            //    return;
+            //}
+
             const buildResult = buildSingleProject(resolved);
             if (buildResult & BuildResultFlags.AnyErrors) return;
 
@@ -1007,17 +1029,26 @@ namespace ts {
                     // If declaration output is changed, build the project
                     // otherwise mark the project UpToDateWithUpstreamTypes so it updates output time stamps
                     const status = projectStatus.getValue(project);
-                    if (prepend || !(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
-                        if (status && (status.type === UpToDateStatusType.UpToDate || status.type === UpToDateStatusType.UpToDateWithUpstreamTypes)) {
+                    if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
+                        if (status && (status.type === UpToDateStatusType.UpToDate || status.type === UpToDateStatusType.UpToDateWithUpstreamTypes || status.type === UpToDateStatusType.OutOfDateWithPrepend)) {
                             projectStatus.setValue(project, {
                                 type: UpToDateStatusType.OutOfDateWithUpstream,
-                                outOfDateOutputFileName: status.oldestOutputFileName,
+                                outOfDateOutputFileName: status.type === UpToDateStatusType.OutOfDateWithPrepend ? status.outOfDateOutputFileName : status.oldestOutputFileName,
                                 newerProjectName: resolved
                             });
                         }
                     }
                     else if (status && status.type === UpToDateStatusType.UpToDate) {
-                        status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
+                        if (prepend) {
+                            projectStatus.setValue(project, {
+                                type: UpToDateStatusType.OutOfDateWithPrepend,
+                                outOfDateOutputFileName: status.oldestOutputFileName,
+                                newerProjectName: resolved
+                            });
+                        }
+                        else {
+                            status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
+                        }
                     }
                     addProjToQueue(project);
                 }
@@ -1323,6 +1354,13 @@ namespace ts {
                     continue;
                 }
 
+                //if (status.type === UpToDateStatusType.OutOfDateWithPrepend && !options.force) {
+                //    reportAndStoreErrors(next, errors);
+                //    // Fake that files have been built by manipulating prepend and existing output
+                //    // updateOutputTimestamps(proj);
+                //    continue;
+                //}
+
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
                     reportAndStoreErrors(next, errors);
                     if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
@@ -1445,6 +1483,10 @@ namespace ts {
                 }
                 // Don't report anything for "up to date because it was already built" -- too verbose
                 break;
+            case UpToDateStatusType.OutOfDateWithPrepend:
+                return formatMessage(Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed,
+                    relName(configFileName),
+                    relName(status.newerProjectName));
             case UpToDateStatusType.UpToDateWithUpstreamTypes:
                 return formatMessage(Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies,
                     relName(configFileName));

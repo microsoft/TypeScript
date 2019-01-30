@@ -676,7 +676,7 @@ export const b = new A();`);
                         [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/first/tsconfig.json", "src/first/bin/first-output.js", "src/first/first_PART1.ts"],
                         [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
                         [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/second/tsconfig.json", "src/second/second_part1.ts", "src/2/second-output.js"],
-                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/third/tsconfig.json", "src/third/thirdjs/output/third-output.js", "src/first"],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed, "src/third/tsconfig.json", "src/first"],
                         [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
                     );
                 });

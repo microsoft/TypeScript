@@ -3904,7 +3904,6 @@
         "category": "Message",
         "code": 6353
     },
-
     "Project '{0}' is up to date with .d.ts files from its dependencies": {
         "category": "Message",
         "code": 6354
@@ -3976,6 +3975,14 @@
     "Updating unchanged output timestamps of project '{0}'...": {
         "category": "Message",
         "code": 6371
+    },
+    "Project '{0}' is out of date because output to prepend from its dependency '{1}' has changed": {
+        "category": "Message",
+        "code": 6372
+    },
+    "Updating output of project '{0}'...": {
+        "category": "Message",
+        "code": 6373
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
