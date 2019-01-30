@@ -7,6 +7,7 @@
 ////}
 ////var foo = new Foo();
 ////foo['bar']("a", "b");
+////foo.bar("a", "b");
 
 goTo.select("a", "b");
 edit.applyRefactor({
@@ -19,5 +20,6 @@ edit.applyRefactor({
     }
 }
 var foo = new Foo();
-foo['bar']({ t: "a", s: "b" });`
+foo['bar']({ t: "a", s: "b" });
+foo.bar({ t: "a", s: "b" });`
 });

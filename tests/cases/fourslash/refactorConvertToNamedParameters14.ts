@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////const c = class {
-////    constructor(/*a*/a: number, b = { x: 1 }/*b*/) {}
+////    constructor(/*a*/a: number, b = { x: 1 }/*b*/) { }
 ////}
 ////var x = new c(2);
 
@@ -11,7 +11,7 @@ edit.applyRefactor({
     actionName: "Convert to named parameters",
     actionDescription: "Convert to named parameters",
     newContent: `const c = class {
-    constructor({ a, b = { x: 1 } }: { a: number; b?: { x: number; }; }) {}
+    constructor({ a, b = { x: 1 } }: { a: number; b?: { x: number; }; }) { }
 }
 var x = new c({ a: 2 });`
 });

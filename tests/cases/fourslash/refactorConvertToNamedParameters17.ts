@@ -11,7 +11,7 @@ edit.applyRefactor({
     actionName: "Convert to named parameters",
     actionDescription: "Convert to named parameters",
     newContent: `function foo<T, S>({ t, s }: { t: T; s: S; }) {
-        return s;
+    return s;
 }
 foo({ t: "a", s: "b" });`
 });
