@@ -266,14 +266,24 @@ namespace ts {
     const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\s*$/;
     const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
 
+    export interface LineInfo {
+        getLineCount(): number;
+        getLineText(line: number): string;
+    }
+
+    export function getLineInfo(text: string, lineStarts: ReadonlyArray<number>): LineInfo {
+        return {
+            getLineCount: () => lineStarts.length,
+            getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1])
+        };
+    }
+
     /**
      * Tries to find the sourceMappingURL comment at the end of a file.
-     * @param text The source text of the file.
-     * @param lineStarts The line starts of the file.
      */
-    export function tryGetSourceMappingURL(text: string, lineStarts: ReadonlyArray<number> = computeLineStarts(text)) {
-        for (let index = lineStarts.length - 1; index >= 0; index--) {
-            const line = text.substring(lineStarts[index], lineStarts[index + 1]);
+    export function tryGetSourceMappingURL(lineInfo: LineInfo) {
+        for (let index = lineInfo.getLineCount() - 1; index >= 0; index--) {
+            const line = lineInfo.getLineText(index);
             const comment = sourceMapCommentRegExp.exec(line);
             if (comment) {
                 return comment[1];
@@ -573,7 +583,10 @@ namespace ts {
     }
 
     function compareSourcePositions(left: SourceMappedPosition, right: SourceMappedPosition) {
-        return compareValues(left.sourceIndex, right.sourceIndex);
+        // Compares sourcePosition without comparing sourceIndex
+        // since the mappings are grouped by sourceIndex
+        Debug.assert(left.sourceIndex === right.sourceIndex);
+        return compareValues(left.sourcePosition, right.sourcePosition);
     }
 
     function compareGeneratedPositions(left: MappedPosition, right: MappedPosition) {
@@ -592,11 +605,9 @@ namespace ts {
         const mapDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot ? getNormalizedAbsolutePath(map.sourceRoot, mapDirectory) : mapDirectory;
         const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
-        const generatedCanonicalFilePath = host.getCanonicalFileName(generatedAbsoluteFilePath) as Path;
-        const generatedFile = host.getSourceFileLike(generatedCanonicalFilePath);
+        const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-        const sourceFileCanonicalPaths = sourceFileAbsolutePaths.map(source => host.getCanonicalFileName(source) as Path);
-        const sourceToSourceIndexMap = createMapFromEntries(sourceFileCanonicalPaths.map((source, i) => [source, i] as [string, number]));
+        const sourceToSourceIndexMap = createMapFromEntries(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i] as [string, number]));
         let decodedMappings: ReadonlyArray<MappedPosition> | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
         let sourceMappings: ReadonlyArray<SortedReadonlyArray<SourceMappedPosition>> | undefined;
@@ -608,16 +619,15 @@ namespace ts {
 
         function processMapping(mapping: Mapping): MappedPosition {
             const generatedPosition = generatedFile !== undefined
-                ? getPositionOfLineAndCharacterWithEdits(generatedFile, mapping.generatedLine, mapping.generatedCharacter)
+                ? getPositionOfLineAndCharacter(generatedFile, mapping.generatedLine, mapping.generatedCharacter, /*allowEdits*/ true)
                 : -1;
             let source: string | undefined;
             let sourcePosition: number | undefined;
             if (isSourceMapping(mapping)) {
-                const sourceFilePath = sourceFileCanonicalPaths[mapping.sourceIndex];
-                const sourceFile = host.getSourceFileLike(sourceFilePath);
+                const sourceFile = host.getSourceFileLike(sourceFileAbsolutePaths[mapping.sourceIndex]);
                 source = map.sources[mapping.sourceIndex];
                 sourcePosition = sourceFile !== undefined
-                    ? getPositionOfLineAndCharacterWithEdits(sourceFile, mapping.sourceLine, mapping.sourceCharacter)
+                    ? getPositionOfLineAndCharacter(sourceFile, mapping.sourceLine, mapping.sourceCharacter, /*allowEdits*/ true)
                     : -1;
             }
             return {

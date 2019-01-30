@@ -1,0 +1,295 @@
+=== tests/cases/conformance/types/unknown/unknownType2.ts ===
+type isUnknown<T> = unknown extends T ? true : false;
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>T : Symbol(T, Decl(unknownType2.ts, 0, 15))
+>T : Symbol(T, Decl(unknownType2.ts, 0, 15))
+
+type isTrue<T extends true> = T;
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>T : Symbol(T, Decl(unknownType2.ts, 1, 12))
+>T : Symbol(T, Decl(unknownType2.ts, 1, 12))
+
+type SomeResponse = 'yes' | 'no' | 'idk';
+>SomeResponse : Symbol(SomeResponse, Decl(unknownType2.ts, 1, 32))
+
+let validate: (x: unknown) => SomeResponse = x => (x === 'yes' || x === 'no') ? x : 'idk'; // No error
+>validate : Symbol(validate, Decl(unknownType2.ts, 4, 3))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 15))
+>SomeResponse : Symbol(SomeResponse, Decl(unknownType2.ts, 1, 32))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 44))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 44))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 44))
+>x : Symbol(x, Decl(unknownType2.ts, 4, 44))
+
+const u: unknown = undefined;
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>undefined : Symbol(undefined)
+
+declare const symb: unique symbol;
+>symb : Symbol(symb, Decl(unknownType2.ts, 8, 13))
+
+if (u === 5) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    const y = u.toString(10);
+>y : Symbol(y, Decl(unknownType2.ts, 11, 9))
+>u.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+if (u === true || u === false) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    const someBool: boolean = u;
+>someBool : Symbol(someBool, Decl(unknownType2.ts, 15, 9))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === undefined) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>undefined : Symbol(undefined)
+
+    const undef: undefined = u;
+>undef : Symbol(undef, Decl(unknownType2.ts, 19, 9))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === null) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    const someNull: null = u;
+>someNull : Symbol(someNull, Decl(unknownType2.ts, 23, 9))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === symb) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>symb : Symbol(symb, Decl(unknownType2.ts, 8, 13))
+
+    const symbolAlias: typeof symb = u;
+>symbolAlias : Symbol(symbolAlias, Decl(unknownType2.ts, 27, 9))
+>symb : Symbol(symb, Decl(unknownType2.ts, 8, 13))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (!(u === 42)) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    type A = isTrue<isUnknown<typeof u>>
+>A : Symbol(A, Decl(unknownType2.ts, 30, 18))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u !== 42) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    type B = isTrue<isUnknown<typeof u>>
+>B : Symbol(B, Decl(unknownType2.ts, 34, 15))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u == 42) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    type C = isTrue<isUnknown<typeof u>>
+>C : Symbol(C, Decl(unknownType2.ts, 38, 14))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u == true) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+
+    type D = isTrue<isUnknown<typeof u>>
+>D : Symbol(D, Decl(unknownType2.ts, 42, 16))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u == Object) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    type E = isTrue<isUnknown<typeof u>>
+>E : Symbol(E, Decl(unknownType2.ts, 46, 18))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+declare const aString: string;
+>aString : Symbol(aString, Decl(unknownType2.ts, 50, 13))
+
+declare const aBoolean: boolean;
+>aBoolean : Symbol(aBoolean, Decl(unknownType2.ts, 51, 13))
+
+declare const aNumber: number;
+>aNumber : Symbol(aNumber, Decl(unknownType2.ts, 52, 13))
+
+declare const anObject: object;
+>anObject : Symbol(anObject, Decl(unknownType2.ts, 53, 13))
+
+declare const anObjectLiteral: { x: number };
+>anObjectLiteral : Symbol(anObjectLiteral, Decl(unknownType2.ts, 54, 13))
+>x : Symbol(x, Decl(unknownType2.ts, 54, 32))
+
+declare const aUnion: { x: number } | { y: string };
+>aUnion : Symbol(aUnion, Decl(unknownType2.ts, 55, 13))
+>x : Symbol(x, Decl(unknownType2.ts, 55, 23))
+>y : Symbol(y, Decl(unknownType2.ts, 55, 39))
+
+declare const anIntersection: { x: number } & { y: string };
+>anIntersection : Symbol(anIntersection, Decl(unknownType2.ts, 56, 13))
+>x : Symbol(x, Decl(unknownType2.ts, 56, 31))
+>y : Symbol(y, Decl(unknownType2.ts, 56, 47))
+
+declare const aFunction: () => number;
+>aFunction : Symbol(aFunction, Decl(unknownType2.ts, 57, 13))
+
+if (u === aString) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>aString : Symbol(aString, Decl(unknownType2.ts, 50, 13))
+
+    let uString: string = u;
+>uString : Symbol(uString, Decl(unknownType2.ts, 60, 7))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === aBoolean) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>aBoolean : Symbol(aBoolean, Decl(unknownType2.ts, 51, 13))
+
+    let uString: boolean = u;
+>uString : Symbol(uString, Decl(unknownType2.ts, 64, 7))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === aNumber) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>aNumber : Symbol(aNumber, Decl(unknownType2.ts, 52, 13))
+
+    let uNumber: number = u;
+>uNumber : Symbol(uNumber, Decl(unknownType2.ts, 68, 7))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === anObject) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>anObject : Symbol(anObject, Decl(unknownType2.ts, 53, 13))
+
+    let uObject: object = u;
+>uObject : Symbol(uObject, Decl(unknownType2.ts, 72, 7))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === anObjectLiteral) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>anObjectLiteral : Symbol(anObjectLiteral, Decl(unknownType2.ts, 54, 13))
+
+    let uObjectLiteral: object = u;
+>uObjectLiteral : Symbol(uObjectLiteral, Decl(unknownType2.ts, 76, 7))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === aUnion) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>aUnion : Symbol(aUnion, Decl(unknownType2.ts, 55, 13))
+
+    type unionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+>unionDoesNotNarrow : Symbol(unionDoesNotNarrow, Decl(unknownType2.ts, 79, 19))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === anIntersection) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>anIntersection : Symbol(anIntersection, Decl(unknownType2.ts, 56, 13))
+
+    type intersectionDoesNotNarrow = isTrue<isUnknown<typeof u>>
+>intersectionDoesNotNarrow : Symbol(intersectionDoesNotNarrow, Decl(unknownType2.ts, 83, 27))
+>isTrue : Symbol(isTrue, Decl(unknownType2.ts, 0, 53))
+>isUnknown : Symbol(isUnknown, Decl(unknownType2.ts, 0, 0))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if (u === aFunction) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>aFunction : Symbol(aFunction, Decl(unknownType2.ts, 57, 13))
+
+    let uFunction: object = u;
+>uFunction : Symbol(uFunction, Decl(unknownType2.ts, 88, 7))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+enum NumberEnum {
+>NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 89, 1))
+
+    A,
+>A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 91, 17))
+
+    B,
+>B : Symbol(NumberEnum.B, Decl(unknownType2.ts, 92, 6))
+
+    C
+>C : Symbol(NumberEnum.C, Decl(unknownType2.ts, 93, 6))
+}
+
+enum StringEnum {
+>StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 95, 1))
+
+    A = "A",
+>A : Symbol(StringEnum.A, Decl(unknownType2.ts, 97, 17))
+
+    B = "B",
+>B : Symbol(StringEnum.B, Decl(unknownType2.ts, 98, 12))
+
+    C = "C"
+>C : Symbol(StringEnum.C, Decl(unknownType2.ts, 99, 12))
+}
+
+if (u === NumberEnum || u === StringEnum) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 89, 1))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 95, 1))
+
+    let enumObj: object = u;
+>enumObj : Symbol(enumObj, Decl(unknownType2.ts, 104, 7))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if(u === NumberEnum.A) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>NumberEnum.A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 91, 17))
+>NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 89, 1))
+>A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 91, 17))
+
+    let a: NumberEnum.A = u
+>a : Symbol(a, Decl(unknownType2.ts, 108, 7))
+>NumberEnum : Symbol(NumberEnum, Decl(unknownType2.ts, 89, 1))
+>A : Symbol(NumberEnum.A, Decl(unknownType2.ts, 91, 17))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+
+if(u === StringEnum.B) {
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+>StringEnum.B : Symbol(StringEnum.B, Decl(unknownType2.ts, 98, 12))
+>StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 95, 1))
+>B : Symbol(StringEnum.B, Decl(unknownType2.ts, 98, 12))
+
+    let b: StringEnum.B = u
+>b : Symbol(b, Decl(unknownType2.ts, 112, 7))
+>StringEnum : Symbol(StringEnum, Decl(unknownType2.ts, 95, 1))
+>B : Symbol(StringEnum.B, Decl(unknownType2.ts, 98, 12))
+>u : Symbol(u, Decl(unknownType2.ts, 6, 5))
+}
+

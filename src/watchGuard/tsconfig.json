@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig-base",
+    "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "removeComments": true,
         "outFile": "../../built/local/watchGuard.js",

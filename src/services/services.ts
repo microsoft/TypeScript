@@ -602,8 +602,8 @@ namespace ts {
             return getLineStarts(this);
         }
 
-        public getPositionOfLineAndCharacter(line: number, character: number): number {
-            return getPositionOfLineAndCharacter(this, line, character);
+        public getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number {
+            return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text, allowEdits);
         }
 
         public getLineEndOfPosition(pos: number): number {
@@ -1139,7 +1139,16 @@ namespace ts {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-        const sourceMapper = getSourceMapper(useCaseSensitiveFileNames, currentDirectory, log, host, () => program);
+        const sourceMapper = getSourceMapper({
+            useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
+            getCurrentDirectory: () => currentDirectory,
+            getProgram,
+            fileExists: host.fileExists && (f => host.fileExists!(f)),
+            readFile: host.readFile && ((f, encoding) => host.readFile!(f, encoding)),
+            getDocumentPositionMapper: host.getDocumentPositionMapper && ((generatedFileName, sourceFileName) => host.getDocumentPositionMapper!(generatedFileName, sourceFileName)),
+            getSourceFileLike: host.getSourceFileLike && (f => host.getSourceFileLike!(f)),
+            log
+        });
 
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
@@ -1203,15 +1212,7 @@ namespace ts {
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists,
-                readFile(fileName) {
-                    // stub missing host functionality
-                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    const entry = hostCache && hostCache.getEntryByPath(path);
-                    if (entry) {
-                        return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
-                    }
-                    return host.readFile && host.readFile(fileName);
-                },
+                readFile,
                 realpath: host.realpath && (path => host.realpath!(path)),
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
@@ -1270,6 +1271,16 @@ namespace ts {
                 return entry ?
                     !isString(entry) :
                     (!!host.fileExists && host.fileExists(fileName));
+            }
+
+            function readFile(fileName: string) {
+                // stub missing host functionality
+                const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                const entry = hostCache && hostCache.getEntryByPath(path);
+                if (entry) {
+                    return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
+                }
+                return host.readFile && host.readFile(fileName);
             }
 
             // Release any files we have acquired in the old program but are
@@ -1538,7 +1549,7 @@ namespace ts {
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
 
-        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] | undefined {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position);
@@ -1548,7 +1559,8 @@ namespace ts {
                     ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
             }
             else {
-                return getReferencesWorker(node, position, { findInStrings, findInComments, isForRename: true }, FindAllReferences.toRenameLocation);
+                return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, isForRename: true },
+                    (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false));
             }
         }
 
@@ -2051,9 +2063,9 @@ namespace ts {
             }
         }
 
-        function getRenameInfo(fileName: string, position: number): RenameInfo {
+        function getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo {
             synchronizeHostData();
-            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position);
+            return Rename.getRenameInfo(program, getValidSourceFile(fileName), position, options);
         }
 
         function getRefactorContext(file: SourceFile, positionOrRange: number | TextRange, preferences: UserPreferences, formatOptions?: FormatCodeSettings): RefactorContext {

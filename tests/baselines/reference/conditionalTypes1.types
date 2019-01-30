@@ -1054,3 +1054,21 @@ assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
 >c : string
 >'213123' : "213123"
 
+// Repros from #23843
+
+type Weird1 = (<U extends boolean>(a: U) => never) extends 
+>Weird1 : never
+>a : U
+
+    (<U extends true>(a: U) => never) ? never : never;
+>true : true
+>a : U
+
+type Weird2 = (<U extends boolean>(a: U) => U) extends 
+>Weird2 : boolean
+>a : U
+
+    (<U extends true>(a: U) => infer T) ? T : never;
+>true : true
+>a : U
+

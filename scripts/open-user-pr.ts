@@ -1,3 +1,5 @@
+/// <reference lib="esnext.asynciterable" />
+// Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
 import cp = require("child_process");
 import Octokit = require("@octokit/rest");
 
@@ -35,7 +37,7 @@ gh.authenticate({
     type: "token",
     token: process.argv[2]
 });
-gh.pullRequests.create({
+gh.pulls.create({
     owner: process.env.TARGET_FORK,
     repo: "TypeScript",
     maintainer_can_modify: true,
@@ -50,7 +52,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
 }).then(r => {
     const num = r.data.number;
     console.log(`Pull request ${num} created.`);
-    return gh.pullRequests.createReviewRequest({
+    return gh.pulls.createReviewRequest({
         owner: process.env.TARGET_FORK,
         repo: "TypeScript",
         number: num,

@@ -375,7 +375,21 @@ namespace fakes {
         }
     }
 
-    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost {
+    export type ExpectedDiagnostic = [ts.DiagnosticMessage, ...(string | number)[]];
+    function expectedDiagnosticToText([message, ...args]: ExpectedDiagnostic) {
+        let text = ts.getLocaleSpecificMessage(message);
+        if (args.length) {
+            text = ts.formatStringFromArgs(text, args);
+        }
+        return text;
+    }
+
+    export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
+        createProgram = ts.createAbstractBuilder;
+        now() {
+            return new Date(this.sys.vfs.time());
+        }
+
         diagnostics: ts.Diagnostic[] = [];
 
         reportDiagnostic(diagnostic: ts.Diagnostic) {
@@ -390,16 +404,10 @@ namespace fakes {
             this.diagnostics.length = 0;
         }
 
-        assertDiagnosticMessages(...expected: ts.DiagnosticMessage[]) {
-            const actual = this.diagnostics.slice();
-            if (actual.length !== expected.length) {
-                assert.fail<any>(actual, expected, `Diagnostic arrays did not match - got\r\n${actual.map(a => "  " + a.messageText).join("\r\n")}\r\nexpected\r\n${expected.map(e => "  " + e.message).join("\r\n")}`);
-            }
-            for (let i = 0; i < actual.length; i++) {
-                if (actual[i].code !== expected[i].code) {
-                    assert.fail(actual[i].messageText, expected[i].message, `Mismatched error code - expected diagnostic ${i} "${actual[i].messageText}" to match ${expected[i].message}`);
-                }
-            }
+        assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
+            const actual = this.diagnostics.slice().map(d => d.messageText as string);
+            const expected = expectedDiagnostics.map(expectedDiagnosticToText);
+            assert.deepEqual(actual, expected, "Diagnostic arrays did not match");
         }
 
         printDiagnostics(header = "== Diagnostics ==") {
