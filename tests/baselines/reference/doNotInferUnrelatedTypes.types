@@ -1,8 +1,8 @@
 === tests/cases/compiler/doNotInferUnrelatedTypes.ts ===
 // #16709
 declare function dearray<T>(ara: ReadonlyArray<T>): T;
->dearray : <T>(ara: ReadonlyArray<T>) => T
->ara : ReadonlyArray<T>
+>dearray : <T>(ara: readonly T[]) => T
+>ara : readonly T[]
 
 type LiteralType = "foo" | "bar";
 >LiteralType : LiteralType
@@ -13,6 +13,6 @@ declare var alt: Array<LiteralType>;
 let foo: LiteralType = dearray(alt);
 >foo : LiteralType
 >dearray(alt) : LiteralType
->dearray : <T>(ara: ReadonlyArray<T>) => T
+>dearray : <T>(ara: readonly T[]) => T
 >alt : LiteralType[]
 

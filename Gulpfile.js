@@ -232,7 +232,7 @@ task("watch-tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
 }
 
-task("min", series(lkgPreBuild, buildTsc, buildServer));
+task("min", series(lkgPreBuild, parallel(buildTsc, buildServer)));
 task("min").description = "Builds only tsc and tsserver";
 task("min").flags = {
     "   --built": "Compile using the built version of the compiler."
