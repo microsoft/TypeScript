@@ -1,3 +1,27 @@
+//// [/src/2/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 336,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 49,
+      "kind": "reference",
+      "fileName": "../second/tripleRef.d.ts"
+    },
+    {
+      "pos": 51,
+      "end": 205,
+      "kind": "text"
+    }
+  ]
+}
+
 //// [/src/2/second-output.d.ts]
 /// <reference path="../second/tripleRef.d.ts" />
 declare const second_part1Const: secondsecond_part1;
@@ -437,25 +461,25 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.tsbundleinfo]
+//// [/src/first/bin/.tsbuildinfo]
 {
   "js": [
     {
       "pos": 0,
-      "end": 336,
+      "end": 158,
       "kind": "text"
     }
   ],
   "dts": [
     {
       "pos": 0,
-      "end": 49,
+      "end": 42,
       "kind": "reference",
-      "fileName": "../second/tripleRef.d.ts"
+      "fileName": "../tripleRef.d.ts"
     },
     {
-      "pos": 51,
-      "end": 205,
+      "pos": 44,
+      "end": 252,
       "kind": "text"
     }
   ]
@@ -818,30 +842,6 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 158,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 42,
-      "kind": "reference",
-      "fileName": "../tripleRef.d.ts"
-    },
-    {
-      "pos": 44,
-      "end": 252,
-      "kind": "text"
-    }
-  ]
-}
-
 //// [/src/first/first_part2.ts]
 ///<reference path="./tripleRef.d.ts"/>
 const first_part2Const = new firstfirst_part2();
@@ -869,6 +869,42 @@ namespace N {
 
 //// [/src/second/tripleRef.d.ts]
 declare class secondsecond_part1 { }
+
+//// [/src/third/thirdjs/output/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 663,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 45,
+      "kind": "reference",
+      "fileName": "../../tripleRef.d.ts"
+    },
+    {
+      "pos": 47,
+      "end": 101,
+      "kind": "reference",
+      "fileName": "../../../first/tripleRef.d.ts"
+    },
+    {
+      "pos": 103,
+      "end": 158,
+      "kind": "reference",
+      "fileName": "../../../second/tripleRef.d.ts"
+    },
+    {
+      "pos": 160,
+      "end": 681,
+      "kind": "text"
+    }
+  ]
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 /// <reference path="../../tripleRef.d.ts" />
@@ -1778,42 +1814,6 @@ sourceFile:../../third_part1.ts
 6 >Emitted(28, 17) Source(4, 17) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
-
-//// [/src/third/thirdjs/output/third-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 663,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 45,
-      "kind": "reference",
-      "fileName": "../../tripleRef.d.ts"
-    },
-    {
-      "pos": 47,
-      "end": 101,
-      "kind": "reference",
-      "fileName": "../../../first/tripleRef.d.ts"
-    },
-    {
-      "pos": 103,
-      "end": 158,
-      "kind": "reference",
-      "fileName": "../../../second/tripleRef.d.ts"
-    },
-    {
-      "pos": 160,
-      "end": 681,
-      "kind": "text"
-    }
-  ]
-}
 
 //// [/src/third/third_part1.ts]
 ///<reference path="./tripleRef.d.ts"/>

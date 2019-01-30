@@ -472,14 +472,14 @@ export const b = new A();`);
                 "/src/first/bin/first-output.js.map",
                 "/src/first/bin/first-output.d.ts",
                 "/src/first/bin/first-output.d.ts.map",
-                "/src/first/bin/first-output.tsbundleinfo"
+                "/src/first/bin/.tsbuildinfo"
             ],
             [
                 "/src/2/second-output.js",
                 "/src/2/second-output.js.map",
                 "/src/2/second-output.d.ts",
                 "/src/2/second-output.d.ts.map",
-                "/src/2/second-output.tsbundleinfo"
+                "/src/2/.tsbuildinfo"
             ],
             [
                 "/src/third/thirdjs/output/third-output.js",
@@ -489,8 +489,8 @@ export const b = new A();`);
             ]
         ];
 
-        function verifyOutFileScenarioWorker(scenario: string, modifyFs: (fs: vfs.FileSystem) => void | ReadonlyArray<string>, withoutBundleInfo: boolean) {
-            describe(`unittests:: tsbuild - outFile:: ${scenario}${withoutBundleInfo ? " without bundleInfo" : ""}`, () => {
+        function verifyOutFileScenarioWorker(scenario: string, modifyFs: (fs: vfs.FileSystem) => void | ReadonlyArray<string>, withoutBuildInfo: boolean) {
+            describe(`unittests:: tsbuild - outFile:: ${scenario}${withoutBuildInfo ? " without build info" : ""}`, () => {
                 let fs: vfs.FileSystem | undefined;
                 const actualReadFileMap = createMap<number>();
                 let additionalSourceFiles: ReadonlyArray<string> | void;
@@ -506,12 +506,12 @@ export const b = new A();`);
                         if (path.startsWith("/src/")) {
                             actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
                         }
-                        if (withoutBundleInfo && getBaseFileName(path) === infoFile) {
+                        if (withoutBuildInfo && getBaseFileName(path) === infoFile) {
                             return undefined;
                         }
                         return originalReadFile.call(host, path);
                     };
-                    if (withoutBundleInfo) {
+                    if (withoutBuildInfo) {
                         const originalWriteFile = host.writeFile;
                         host.writeFile = (fileName, content, writeByteOrder) => {
                             return getBaseFileName(fileName) !== infoFile &&
@@ -539,7 +539,7 @@ export const b = new A();`);
 
                     const patch = fs!.diff();
                     // tslint:disable-next-line:no-null-keyword
-                    Harness.Baseline.runBaseline(`outFile-${scenario.split(" ").join("-")}${withoutBundleInfo ? "-no-bundleInfo" : ""}.js`, patch ? vfs.formatPatch(patch) : null);
+                    Harness.Baseline.runBaseline(`outFile-${scenario.split(" ").join("-")}${withoutBuildInfo ? "-no-buildInfo" : ""}.js`, patch ? vfs.formatPatch(patch) : null);
                 });
                 it("verify readFile calls", () => {
                     const expected = [
@@ -574,8 +574,8 @@ export const b = new A();`);
         }
 
         function verifyOutFileScenario(scenario: string, modifyFs: (fs: vfs.FileSystem) => void | ReadonlyArray<string>) {
-            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBundleInfo*/ false);
-            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBundleInfo*/ true);
+            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBuildInfo*/ false);
+            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBuildInfo*/ true);
         }
 
         verifyOutFileScenario("baseline sectioned sourcemaps", noop);
@@ -621,7 +621,7 @@ export const b = new A();`);
             builder.cleanAllProjects();
         });
 
-        it("unittests:: tsbuild - outFile:: verify tsbundleInfo presence or absence does not result in new build", () => {
+        it("unittests:: tsbuild - outFile:: verify buildInfo presence or absence does not result in new build", () => {
             const fs = outFileFs.shadow();
             const expectedOutputs = [
                 ...outputFiles[0],

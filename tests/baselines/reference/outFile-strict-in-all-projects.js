@@ -1,3 +1,27 @@
+//// [/src/2/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 13,
+      "kind": "prologue",
+      "text": "use strict"
+    },
+    {
+      "pos": 15,
+      "end": 300,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 100,
+      "kind": "text"
+    }
+  ]
+}
+
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }
@@ -385,7 +409,7 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.tsbundleinfo]
+//// [/src/first/bin/.tsbuildinfo]
 {
   "js": [
     {
@@ -396,14 +420,14 @@ sourceFile:../second/second_part2.ts
     },
     {
       "pos": 15,
-      "end": 300,
+      "end": 125,
       "kind": "text"
     }
   ],
   "dts": [
     {
       "pos": 0,
-      "end": 100,
+      "end": 157,
       "kind": "text"
     }
   ]
@@ -711,30 +735,6 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "text": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 125,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 157,
-      "kind": "text"
-    }
-  ]
-}
-
 //// [/src/first/tsconfig.json]
 {
   "compilerOptions": {
@@ -774,6 +774,30 @@ sourceFile:../first_part3.ts
   ]
 }
 
+
+//// [/src/third/thirdjs/output/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 13,
+      "kind": "prologue",
+      "text": "use strict"
+    },
+    {
+      "pos": 15,
+      "end": 531,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 365,
+      "kind": "text"
+    }
+  ]
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -1520,30 +1544,6 @@ sourceFile:../../third_part1.ts
 6 >Emitted(26, 17) Source(2, 17) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
-
-//// [/src/third/thirdjs/output/third-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "text": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 531,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 365,
-      "kind": "text"
-    }
-  ]
-}
 
 //// [/src/third/tsconfig.json]
 {

@@ -1,3 +1,39 @@
+//// [/src/2/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 597,
+      "kind": "emitHelpers",
+      "name": "typescript:extends"
+    },
+    {
+      "pos": 599,
+      "end": 1103,
+      "kind": "emitHelpers",
+      "name": "typescript:read"
+    },
+    {
+      "pos": 1105,
+      "end": 1275,
+      "kind": "emitHelpers",
+      "name": "typescript:spread"
+    },
+    {
+      "pos": 1277,
+      "end": 2080,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 238,
+      "kind": "text"
+    }
+  ]
+}
+
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }
@@ -749,7 +785,7 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.tsbundleinfo]
+//// [/src/first/bin/.tsbuildinfo]
 {
   "js": [
     {
@@ -772,14 +808,14 @@ sourceFile:../second/second_part2.ts
     },
     {
       "pos": 1277,
-      "end": 2080,
+      "end": 1893,
       "kind": "text"
     }
   ],
   "dts": [
     {
       "pos": 0,
-      "end": 238,
+      "end": 290,
       "kind": "text"
     }
   ]
@@ -1454,42 +1490,6 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 597,
-      "kind": "emitHelpers",
-      "name": "typescript:extends"
-    },
-    {
-      "pos": 599,
-      "end": 1103,
-      "kind": "emitHelpers",
-      "name": "typescript:read"
-    },
-    {
-      "pos": 1105,
-      "end": 1275,
-      "kind": "emitHelpers",
-      "name": "typescript:spread"
-    },
-    {
-      "pos": 1277,
-      "end": 1893,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 290,
-      "kind": "text"
-    }
-  ]
-}
-
 //// [/src/first/first_part2.ts]
 console.log(f());
 
@@ -1570,6 +1570,42 @@ secondsecond_part2Spread(...[10, 20, 30]);
   ]
 }
 
+
+//// [/src/third/thirdjs/output/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 597,
+      "kind": "emitHelpers",
+      "name": "typescript:extends"
+    },
+    {
+      "pos": 599,
+      "end": 1103,
+      "kind": "emitHelpers",
+      "name": "typescript:read"
+    },
+    {
+      "pos": 1105,
+      "end": 1275,
+      "kind": "emitHelpers",
+      "name": "typescript:spread"
+    },
+    {
+      "pos": 1277,
+      "end": 3323,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 769,
+      "kind": "text"
+    }
+  ]
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -3282,42 +3318,6 @@ sourceFile:../../third_part1.ts
 11>Emitted(115, 62) Source(7, 41) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
-
-//// [/src/third/thirdjs/output/third-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 597,
-      "kind": "emitHelpers",
-      "name": "typescript:extends"
-    },
-    {
-      "pos": 599,
-      "end": 1103,
-      "kind": "emitHelpers",
-      "name": "typescript:read"
-    },
-    {
-      "pos": 1105,
-      "end": 1275,
-      "kind": "emitHelpers",
-      "name": "typescript:spread"
-    },
-    {
-      "pos": 1277,
-      "end": 3323,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 769,
-      "kind": "text"
-    }
-  ]
-}
 
 //// [/src/third/third_part1.ts]
 var c = new C();

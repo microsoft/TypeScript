@@ -289,9 +289,9 @@ namespace ts {
         return outputs;
     }
 
-    function getOutFileOutputs(project: ParsedCommandLine, ignoreBundleInfo?: boolean): ReadonlyArray<string> {
+    function getOutFileOutputs(project: ParsedCommandLine, ignoreBuildInfo?: boolean): ReadonlyArray<string> {
         Debug.assert(!!project.options.outFile || !!project.options.out, "outFile must be set");
-        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false);
+        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false);
 
         let outputs: string[] | undefined = [];
         const addOutput = (path: string | undefined) => path && (outputs || (outputs = [])).push(path);
@@ -299,7 +299,7 @@ namespace ts {
         addOutput(sourceMapFilePath);
         addOutput(declarationFilePath);
         addOutput(declarationMapPath);
-        if (!ignoreBundleInfo) addOutput(bundleInfoPath);
+        if (!ignoreBuildInfo) addOutput(buildInfoPath);
         return outputs || emptyArray;
     }
 
@@ -711,8 +711,8 @@ namespace ts {
             }
 
             // Collect the expected outputs of this project
-            // Do not use presence or absence of bundleInfo to determine status of build
-            const outputs = getAllProjectOutputs(project, /*ignoreBundleInfo*/ true);
+            // Do not use presence or absence of buildInfo to determine status of build
+            const outputs = getAllProjectOutputs(project, /*ignoreBuildInfo*/ true);
 
             if (outputs.length === 0) {
                 return {
@@ -1393,9 +1393,9 @@ namespace ts {
         return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
     }
 
-    export function getAllProjectOutputs(project: ParsedCommandLine, ignoreBundleInfo?: true): ReadonlyArray<string> {
+    export function getAllProjectOutputs(project: ParsedCommandLine, ignoreBuildInfo?: true): ReadonlyArray<string> {
         if (project.options.outFile || project.options.out) {
-            return getOutFileOutputs(project, ignoreBundleInfo);
+            return getOutFileOutputs(project, ignoreBuildInfo);
         }
         else {
             const outputs: string[] = [];

@@ -1,3 +1,21 @@
+//// [/src/2/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 35,
+      "end": 320,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 35,
+      "end": 135,
+      "kind": "text"
+    }
+  ]
+}
+
 //// [/src/2/second-output.d.ts]
 #!someshebang second second_part1
 declare namespace N {
@@ -389,19 +407,19 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.tsbundleinfo]
+//// [/src/first/bin/.tsbuildinfo]
 {
   "js": [
     {
-      "pos": 35,
-      "end": 320,
+      "pos": 33,
+      "end": 143,
       "kind": "text"
     }
   ],
   "dts": [
     {
-      "pos": 35,
-      "end": 135,
+      "pos": 33,
+      "end": 190,
       "kind": "text"
     }
   ]
@@ -714,24 +732,6 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 33,
-      "end": 143,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 33,
-      "end": 190,
-      "kind": "text"
-    }
-  ]
-}
-
 //// [/src/first/first_PART1.ts]
 #!someshebang first first_PART1
 interface TheFirst {
@@ -766,6 +766,24 @@ namespace N {
     f();
 }
 
+
+//// [/src/third/thirdjs/output/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 33,
+      "end": 549,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 33,
+      "end": 398,
+      "kind": "text"
+    }
+  ]
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 #!someshebang first first_PART1
@@ -1521,24 +1539,6 @@ sourceFile:../../third_part1.ts
 6 >Emitted(26, 17) Source(3, 17) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
-
-//// [/src/third/thirdjs/output/third-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 33,
-      "end": 549,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 33,
-      "end": 398,
-      "kind": "text"
-    }
-  ]
-}
 
 //// [/src/third/third_part1.ts]
 #!someshebang third third_part1

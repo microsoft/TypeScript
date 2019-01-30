@@ -1,3 +1,21 @@
+//// [/src/2/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 285,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 100,
+      "kind": "text"
+    }
+  ]
+}
+
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }
@@ -383,19 +401,19 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.tsbundleinfo]
+//// [/src/first/bin/.tsbuildinfo]
 {
   "js": [
     {
       "pos": 0,
-      "end": 285,
+      "end": 110,
       "kind": "text"
     }
   ],
   "dts": [
     {
       "pos": 0,
-      "end": 100,
+      "end": 157,
       "kind": "text"
     }
   ]
@@ -701,19 +719,19 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.tsbundleinfo]
+//// [/src/third/thirdjs/output/.tsbuildinfo]
 {
   "js": [
     {
       "pos": 0,
-      "end": 110,
+      "end": 516,
       "kind": "text"
     }
   ],
   "dts": [
     {
       "pos": 0,
-      "end": 157,
+      "end": 365,
       "kind": "text"
     }
   ]
@@ -1462,22 +1480,4 @@ sourceFile:../../third_part1.ts
 6 >Emitted(25, 17) Source(2, 17) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
-
-//// [/src/third/thirdjs/output/third-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 516,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 365,
-      "kind": "text"
-    }
-  ]
-}
 

@@ -2673,7 +2673,7 @@ namespace ts {
                 sourceMapText: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText; } },
             });
 
-            const sections = textOrInputFiles.bundleInfo ? mapPathOrType === "js" ? textOrInputFiles.bundleInfo.js : textOrInputFiles.bundleInfo.dts : undefined;
+            const sections = textOrInputFiles.buildInfo ? mapPathOrType === "js" ? textOrInputFiles.buildInfo.js : textOrInputFiles.buildInfo.dts : undefined;
             if (sections) {
                 for (const section of sections) {
                     switch (section.kind) {
@@ -2734,7 +2734,7 @@ namespace ts {
         javascriptMapPath: string | undefined,
         declarationPath: string,
         declarationMapPath: string | undefined,
-        bundleInfoPath: string | undefined
+        buildInfoPath: string | undefined
     ): InputFiles;
     export function createInputFiles(
         javascriptText: string,
@@ -2750,7 +2750,7 @@ namespace ts {
         javascriptMapPath?: string,
         javascriptMapTextOrDeclarationPath?: string,
         declarationMapPath?: string,
-        declarationMapTextOrBundleInfoPath?: string
+        declarationMapTextOrBuildInfoPath?: string
     ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
         if (!isString(javascriptTextOrReadFileText)) {
@@ -2770,19 +2770,19 @@ namespace ts {
             };
             const jsonGetter = (path: string | undefined) => {
                 const result = textGetter(path);
-                return result !== undefined ? JSON.parse(result) as BundleInfo : undefined;
+                return result !== undefined ? JSON.parse(result) as BuildInfo : undefined;
             };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
             node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
             node.declarationMapPath = declarationMapPath;
-            node.bundleInfoPath = declarationMapTextOrBundleInfoPath;
+            node.buildInfoPath = declarationMapTextOrBuildInfoPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
                 declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
                 declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
-                bundleInfo: { get() { return jsonGetter(declarationMapTextOrBundleInfoPath); } }
+                buildInfo: { get() { return jsonGetter(declarationMapTextOrBuildInfoPath); } }
             });
         }
         else {
@@ -2791,7 +2791,7 @@ namespace ts {
             node.javascriptMapText = javascriptMapTextOrDeclarationPath;
             node.declarationText = declarationTextOrJavascriptPath;
             node.declarationMapPath = declarationMapPath;
-            node.declarationMapText = declarationMapTextOrBundleInfoPath;
+            node.declarationMapText = declarationMapTextOrBuildInfoPath;
         }
         return node;
     }

@@ -1,3 +1,39 @@
+//// [/src/2/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 13,
+      "kind": "prologue",
+      "text": "use strict"
+    },
+    {
+      "pos": 15,
+      "end": 28,
+      "kind": "prologue",
+      "text": "myPrologue"
+    },
+    {
+      "pos": 30,
+      "end": 44,
+      "kind": "prologue",
+      "text": "myPrologue2"
+    },
+    {
+      "pos": 46,
+      "end": 331,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 100,
+      "kind": "text"
+    }
+  ]
+}
+
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }
@@ -422,7 +458,7 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/2/second-output.tsbundleinfo]
+//// [/src/first/bin/.tsbuildinfo]
 {
   "js": [
     {
@@ -439,20 +475,14 @@ sourceFile:../second/second_part2.ts
     },
     {
       "pos": 30,
-      "end": 44,
-      "kind": "prologue",
-      "text": "myPrologue2"
-    },
-    {
-      "pos": 46,
-      "end": 331,
+      "end": 140,
       "kind": "text"
     }
   ],
   "dts": [
     {
       "pos": 0,
-      "end": 100,
+      "end": 157,
       "kind": "text"
     }
   ]
@@ -775,36 +805,6 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/bin/first-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "text": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 28,
-      "kind": "prologue",
-      "text": "myPrologue"
-    },
-    {
-      "pos": 30,
-      "end": 140,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 157,
-      "kind": "text"
-    }
-  ]
-}
-
 //// [/src/first/first_PART1.ts]
 "myPrologue"
 interface TheFirst {
@@ -883,6 +883,48 @@ class C {
   ]
 }
 
+
+//// [/src/third/thirdjs/output/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 13,
+      "kind": "prologue",
+      "text": "use strict"
+    },
+    {
+      "pos": 15,
+      "end": 28,
+      "kind": "prologue",
+      "text": "myPrologue"
+    },
+    {
+      "pos": 30,
+      "end": 44,
+      "kind": "prologue",
+      "text": "myPrologue2"
+    },
+    {
+      "pos": 46,
+      "end": 60,
+      "kind": "prologue",
+      "text": "myPrologue3"
+    },
+    {
+      "pos": 62,
+      "end": 578,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 365,
+      "kind": "text"
+    }
+  ]
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -1690,48 +1732,6 @@ sourceFile:../../third_part1.ts
 6 >Emitted(29, 17) Source(4, 17) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=third-output.js.map
-
-//// [/src/third/thirdjs/output/third-output.tsbundleinfo]
-{
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "text": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 28,
-      "kind": "prologue",
-      "text": "myPrologue"
-    },
-    {
-      "pos": 30,
-      "end": 44,
-      "kind": "prologue",
-      "text": "myPrologue2"
-    },
-    {
-      "pos": 46,
-      "end": 60,
-      "kind": "prologue",
-      "text": "myPrologue3"
-    },
-    {
-      "pos": 62,
-      "end": 578,
-      "kind": "text"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 365,
-      "kind": "text"
-    }
-  ]
-}
 
 //// [/src/third/third_part1.ts]
 "myPrologue3";

@@ -2770,8 +2770,8 @@ namespace ts {
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
-        bundleInfoPath?: string;
-        /*@internal*/ bundleInfo?: BundleInfo;
+        buildInfoPath?: string;
+        /*@internal*/ buildInfo?: BuildInfo;
     }
 
     export interface UnparsedSource extends Node {
@@ -5428,7 +5428,7 @@ namespace ts {
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T> | undefined, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
-        /*@internal*/ writeBundle(bundle: Bundle, info: FileBundleInfo | undefined, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
+        /*@internal*/ writeBundle(bundle: Bundle, bundleFileInfo: BundleFileInfo | undefined, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
     }
 
     /*@internal*/
@@ -5481,11 +5481,11 @@ namespace ts {
         BundleFileHasNoDefaultLib | BundleFileReference | BundleFileText;
 
     /*@internal*/
-    export type FileBundleInfo = BundleFileSection[];
+    export type BundleFileInfo = BundleFileSection[];
     /* @internal */
-    export interface BundleInfo {
-        js?: FileBundleInfo;
-        dts?: FileBundleInfo;
+    export interface BuildInfo {
+        js?: BundleFileInfo;
+        dts?: BundleFileInfo;
     }
 
     export interface PrintHandlers {

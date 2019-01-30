@@ -46,8 +46,8 @@ namespace ts {
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        const bundleInfoPath = options.composite && jsFilePath ? combinePaths(getDirectoryPath(jsFilePath), infoFile) : undefined;
-        return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
+        const buildInfoPath = options.composite && jsFilePath ? combinePaths(getDirectoryPath(jsFilePath), infoFile) : undefined;
+        return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
     }
 
     /*@internal*/
@@ -67,7 +67,7 @@ namespace ts {
             const isJs = isSourceFileJS(sourceFile);
             const declarationFilePath = ((forceDtsPaths || getEmitDeclarations(options)) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
             const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath: undefined };
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath: undefined };
         }
     }
 
@@ -108,7 +108,7 @@ namespace ts {
         const newLine = getNewLineCharacter(compilerOptions, () => host.getNewLine());
         const writer = createTextWriter(newLine);
         const { enter, exit } = performance.createTimer("printTime", "beforePrint", "afterPrint");
-        let bundleInfo: BundleInfo | undefined;
+        let buildInfo: BuildInfo | undefined;
         let emitSkipped = false;
         let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
 
@@ -126,13 +126,13 @@ namespace ts {
             exportedModulesFromDeclarationEmit
         };
 
-        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
-            if (bundleInfoPath && !emitOnlyDtsFiles) bundleInfo = { js: [], dts: [] };
-            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, bundleInfo && bundleInfo.js);
-            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, bundleInfo && bundleInfo.dts);
+        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
+            if (buildInfoPath && !emitOnlyDtsFiles) buildInfo = { js: [], dts: [] };
+            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, buildInfo && buildInfo.js);
+            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, buildInfo && buildInfo.dts);
             // Write bundled offset information if applicable
-            if (!emitOnlyDtsFiles && !emitSkipped && bundleInfoPath) {
-                writeFile(host, emitterDiagnostics, bundleInfoPath, JSON.stringify(bundleInfo, undefined, 2), /*writeByteOrderMark*/ false);
+            if (!emitOnlyDtsFiles && !emitSkipped && buildInfoPath) {
+                writeFile(host, emitterDiagnostics, buildInfoPath, JSON.stringify(buildInfo, undefined, 2), /*writeByteOrderMark*/ false);
             }
 
             if (!emitSkipped && emittedFilesList) {
@@ -143,8 +143,8 @@ namespace ts {
                     if (sourceMapFilePath) {
                         emittedFilesList.push(sourceMapFilePath);
                     }
-                    if (bundleInfoPath) {
-                        emittedFilesList.push(bundleInfoPath);
+                    if (buildInfoPath) {
+                        emittedFilesList.push(buildInfoPath);
                     }
                 }
                 if (declarationFilePath) {
@@ -156,7 +156,7 @@ namespace ts {
             }
         }
 
-        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, fileBundleInfo: FileBundleInfo | undefined) {
+        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, bundleFileInfo: BundleFileInfo | undefined) {
             if (emitOnlyDtsFiles || !jsFilePath) {
                 return;
             }
@@ -192,13 +192,13 @@ namespace ts {
             });
 
             Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], fileBundleInfo, printer, compilerOptions);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleFileInfo, printer, compilerOptions);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
         }
 
-        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined, fileBundleInfo: FileBundleInfo | undefined) {
+        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined, bundleFileInfo: BundleFileInfo | undefined) {
             if (!(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
                 return;
             }
@@ -242,7 +242,7 @@ namespace ts {
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
-                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], fileBundleInfo, declarationPrinter, {
+                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], bundleFileInfo, declarationPrinter, {
                     sourceMap: compilerOptions.declarationMap,
                     sourceRoot: compilerOptions.sourceRoot,
                     mapRoot: compilerOptions.mapRoot,
@@ -271,7 +271,7 @@ namespace ts {
             forEachChild(node, collectLinkedAliases);
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, fileBundleInfo: FileBundleInfo | undefined, printer: Printer, mapOptions: SourceMapOptions) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleFileInfo: BundleFileInfo | undefined, printer: Printer, mapOptions: SourceMapOptions) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
@@ -287,7 +287,7 @@ namespace ts {
             }
 
             if (bundle) {
-                printer.writeBundle(bundle, fileBundleInfo, writer, sourceMapGenerator);
+                printer.writeBundle(bundle, bundleFileInfo, writer, sourceMapGenerator);
             }
             else {
                 printer.writeFile(sourceFile!, writer, sourceMapGenerator);
@@ -440,7 +440,7 @@ namespace ts {
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
         let write = writeBase;
         let isOwnFileEmit: boolean;
-        let fileBundleInfo: FileBundleInfo | undefined;
+        let bundleFileInfo: BundleFileInfo | undefined;
 
         // Source Maps
         let sourceMapsDisabled = true;
@@ -542,9 +542,9 @@ namespace ts {
             return writer.getTextPosWithWriteLine ? writer.getTextPosWithWriteLine() : writer.getTextPos();
         }
 
-        function writeBundle(bundle: Bundle, bundleInfo: FileBundleInfo | undefined, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
+        function writeBundle(bundle: Bundle, bundleInfo: BundleFileInfo | undefined, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = false;
-            fileBundleInfo = bundleInfo;
+            bundleFileInfo = bundleInfo;
             const previousWriter = writer;
             setWriter(output, sourceMapGenerator);
             emitShebangIfNeeded(bundle);
@@ -561,7 +561,7 @@ namespace ts {
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
-            if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
+            if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
 
             reset();
             writer = previousWriter;
@@ -577,7 +577,7 @@ namespace ts {
 
         function writeFile(sourceFile: SourceFile, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = true;
-            fileBundleInfo = undefined;
+            bundleFileInfo = undefined;
             const previousWriter = writer;
             setWriter(output, sourceMapGenerator);
             emitShebangIfNeeded(sourceFile);
@@ -635,7 +635,7 @@ namespace ts {
             currentSourceFile = undefined!;
             currentLineMap = undefined!;
             detachedCommentsInfo = undefined;
-            fileBundleInfo = undefined;
+            bundleFileInfo = undefined;
             setWriter(/*output*/ undefined, /*_sourceMapGenerator*/ undefined);
         }
 
@@ -1171,7 +1171,7 @@ namespace ts {
                         else {
                             writeLines(helper.text(makeFileLevelOptimisticUniqueName));
                         }
-                        if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.EmitHelpers, name: helper.name });
+                        if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.EmitHelpers, name: helper.name });
                         helpersEmitted = true;
                     }
                 }
@@ -2938,7 +2938,7 @@ namespace ts {
             if (hasNoDefaultLib) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference no-default-lib="true"/>`);
-                if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.NoDefaultLib });
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.NoDefaultLib });
                 writeLine();
             }
             if (currentSourceFile && currentSourceFile.moduleName) {
@@ -2959,19 +2959,19 @@ namespace ts {
             for (const directive of files) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference path="${directive.fileName}" />`);
-                if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Reference, fileName: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Reference, fileName: directive.fileName });
                 writeLine();
             }
             for (const directive of types) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference types="${directive.fileName}" />`);
-                if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, fileName: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, fileName: directive.fileName });
                 writeLine();
             }
             for (const directive of libs) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference lib="${directive.fileName}" />`);
-                if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Lib, fileName: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Lib, fileName: directive.fileName });
                 writeLine();
             }
         }
@@ -3015,7 +3015,7 @@ namespace ts {
                         writeLine();
                         const pos = writer.getTextPos();
                         emit(statement);
-                        if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, text: statement.expression.text });
+                        if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, text: statement.expression.text });
                         if (seenPrologueDirectives) {
                             seenPrologueDirectives.set(statement.expression.text, true);
                         }
@@ -3036,7 +3036,7 @@ namespace ts {
                     writeLine();
                     const pos = writer.getTextPos();
                     emit(prologue);
-                    if (fileBundleInfo) fileBundleInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, text: prologue.text });
+                    if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, text: prologue.text });
                     if (seenPrologueDirectives) {
                         seenPrologueDirectives.set(prologue.text, true);
                     }
