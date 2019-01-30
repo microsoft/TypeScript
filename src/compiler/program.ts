@@ -230,18 +230,18 @@ namespace ts {
         const readFileWithCache = (fileName: string): string | undefined => {
             const key = toPath(fileName);
             const value = readFileCache.get(key);
-            if (value !== undefined) return value || undefined;
+            if (value !== undefined) return value !== false ? value : undefined;
             return setReadFileCache(key, fileName);
         };
         const setReadFileCache = (key: Path, fileName: string) => {
             const newValue = originalReadFile.call(host, fileName);
-            readFileCache.set(key, newValue || false);
+            readFileCache.set(key, newValue !== undefined ? newValue : false);
             return newValue;
         };
         host.readFile = fileName => {
             const key = toPath(fileName);
             const value = readFileCache.get(key);
-            if (value !== undefined) return value || undefined; // could be .d.ts from output
+            if (value !== undefined) return value !== false ? value : undefined; // could be .d.ts from output
             if (!fileExtensionIs(fileName, Extension.Json)) {
                 return originalReadFile.call(host, fileName);
             }
