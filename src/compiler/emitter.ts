@@ -1,6 +1,6 @@
 namespace ts {
     /*@internal*/
-    export const infoExtension = ".tsbundleinfo";
+    export const infoFile = ".tsbuildinfo";
     const brackets = createBracketsMap();
     const syntheticParent: TextRange = { pos: -1, end: -1 };
 
@@ -46,7 +46,7 @@ namespace ts {
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        const bundleInfoPath = options.composite && jsFilePath ? (removeFileExtension(jsFilePath) + infoExtension) : undefined;
+        const bundleInfoPath = options.composite && jsFilePath ? combinePaths(getDirectoryPath(jsFilePath), infoFile) : undefined;
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
     }
 

@@ -506,7 +506,7 @@ export const b = new A();`);
                         if (path.startsWith("/src/")) {
                             actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
                         }
-                        if (withoutBundleInfo && fileExtensionIs(path, infoExtension)) {
+                        if (withoutBundleInfo && getBaseFileName(path) === infoFile) {
                             return undefined;
                         }
                         return originalReadFile.call(host, path);
@@ -514,7 +514,7 @@ export const b = new A();`);
                     if (withoutBundleInfo) {
                         const originalWriteFile = host.writeFile;
                         host.writeFile = (fileName, content, writeByteOrder) => {
-                            return !fileExtensionIs(fileName, infoExtension) &&
+                            return getBaseFileName(fileName) !== infoFile &&
                                 originalWriteFile.call(host, fileName, content, writeByteOrder);
                         };
                     }
