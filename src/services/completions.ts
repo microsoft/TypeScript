@@ -1022,7 +1022,7 @@ namespace ts.Completions {
             isInSnippetScope = isSnippetScope(scopeNode);
 
             const isTypeOnly = isTypeOnlyCompletion();
-            const symbolMeanings = (isTypeOnly ? SymbolFlags.None : SymbolFlags.Value) | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias;
+            const symbolMeanings = ( !isSourceFileJS(sourceFile) ? SymbolFlags.None : SymbolFlags.Value) | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = Debug.assertEachDefined(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings), "getSymbolsInScope() should all be defined");
 
