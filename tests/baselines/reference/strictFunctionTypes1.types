@@ -97,13 +97,13 @@ const x11 = f3(never, fo, fx);  // "def"
 // Repro from #21112
 
 declare function foo<T>(a: ReadonlyArray<T>): T;
->foo : <T>(a: ReadonlyArray<T>) => T
->a : ReadonlyArray<T>
+>foo : <T>(a: readonly T[]) => T
+>a : readonly T[]
 
 let x = foo([]);  // never
 >x : never
 >foo([]) : never
->foo : <T>(a: ReadonlyArray<T>) => T
+>foo : <T>(a: readonly T[]) => T
 >[] : never[]
 
 // Modified repros from #26127
