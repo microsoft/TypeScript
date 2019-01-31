@@ -904,7 +904,7 @@ namespace ts.server {
 
         getPreferences(file: NormalizedPath): protocol.UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
-            return info && info.getPreferences() || this.hostConfiguration.preferences;
+            return { ...this.hostConfiguration.preferences, ...info && info.getPreferences() };
         }
 
         getHostFormatCodeOptions(): FormatCodeSettings {
