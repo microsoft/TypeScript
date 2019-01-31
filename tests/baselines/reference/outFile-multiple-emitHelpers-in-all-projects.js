@@ -5,19 +5,19 @@
       "pos": 0,
       "end": 597,
       "kind": "emitHelpers",
-      "name": "typescript:extends"
+      "data": "typescript:extends"
     },
     {
       "pos": 599,
       "end": 1103,
       "kind": "emitHelpers",
-      "name": "typescript:read"
+      "data": "typescript:read"
     },
     {
       "pos": 1105,
       "end": 1275,
       "kind": "emitHelpers",
-      "name": "typescript:spread"
+      "data": "typescript:spread"
     },
     {
       "pos": 1277,
@@ -802,19 +802,19 @@ sourceFile:../second/second_part2.ts
       "pos": 0,
       "end": 597,
       "kind": "emitHelpers",
-      "name": "typescript:extends"
+      "data": "typescript:extends"
     },
     {
       "pos": 599,
       "end": 1103,
       "kind": "emitHelpers",
-      "name": "typescript:read"
+      "data": "typescript:read"
     },
     {
       "pos": 1105,
       "end": 1275,
       "kind": "emitHelpers",
-      "name": "typescript:spread"
+      "data": "typescript:spread"
     },
     {
       "pos": 1277,
@@ -1598,31 +1598,31 @@ secondsecond_part2Spread(...[10, 20, 30]);
       "pos": 0,
       "end": 597,
       "kind": "emitHelpers",
-      "name": "typescript:extends"
+      "data": "typescript:extends"
     },
     {
       "pos": 599,
       "end": 1103,
       "kind": "emitHelpers",
-      "name": "typescript:read"
+      "data": "typescript:read"
     },
     {
       "pos": 1105,
       "end": 1275,
       "kind": "emitHelpers",
-      "name": "typescript:spread"
+      "data": "typescript:spread"
     },
     {
       "pos": 1277,
       "end": 1933,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.js"
+      "data": "/src/first/bin/first-output.js"
     },
     {
       "pos": 1935,
       "end": 2779,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.js"
+      "data": "/src/2/second-output.js"
     },
     {
       "pos": 2781,
@@ -1640,13 +1640,13 @@ secondsecond_part2Spread(...[10, 20, 30]);
       "pos": 0,
       "end": 332,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.d.ts"
+      "data": "/src/first/bin/first-output.d.ts"
     },
     {
       "pos": 334,
       "end": 615,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.d.ts"
+      "data": "/src/2/second-output.d.ts"
     },
     {
       "pos": 617,

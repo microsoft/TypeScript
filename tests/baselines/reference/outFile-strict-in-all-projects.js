@@ -5,7 +5,7 @@
       "pos": 0,
       "end": 13,
       "kind": "prologue",
-      "text": "use strict"
+      "data": "use strict"
     },
     {
       "pos": 15,
@@ -426,7 +426,7 @@ sourceFile:../second/second_part2.ts
       "pos": 0,
       "end": 13,
       "kind": "prologue",
-      "text": "use strict"
+      "data": "use strict"
     },
     {
       "pos": 15,
@@ -802,19 +802,19 @@ sourceFile:../first_part3.ts
       "pos": 0,
       "end": 13,
       "kind": "prologue",
-      "text": "use strict"
+      "data": "use strict"
     },
     {
       "pos": 15,
       "end": 165,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.js"
+      "data": "/src/first/bin/first-output.js"
     },
     {
       "pos": 167,
       "end": 493,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.js"
+      "data": "/src/2/second-output.js"
     },
     {
       "pos": 495,
@@ -832,13 +832,13 @@ sourceFile:../first_part3.ts
       "pos": 0,
       "end": 199,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.d.ts"
+      "data": "/src/first/bin/first-output.d.ts"
     },
     {
       "pos": 201,
       "end": 344,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.d.ts"
+      "data": "/src/2/second-output.d.ts"
     },
     {
       "pos": 346,

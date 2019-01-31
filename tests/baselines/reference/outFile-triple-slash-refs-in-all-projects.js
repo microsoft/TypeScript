@@ -17,7 +17,7 @@
       "pos": 0,
       "end": 49,
       "kind": "reference",
-      "fileName": "../second/tripleRef.d.ts"
+      "data": "../second/tripleRef.d.ts"
     },
     {
       "pos": 51,
@@ -490,7 +490,7 @@ sourceFile:../second/second_part2.ts
       "pos": 0,
       "end": 42,
       "kind": "reference",
-      "fileName": "../tripleRef.d.ts"
+      "data": "../tripleRef.d.ts"
     },
     {
       "pos": 44,
@@ -897,13 +897,13 @@ declare class secondsecond_part1 { }
       "pos": 0,
       "end": 198,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.js"
+      "data": "/src/first/bin/first-output.js"
     },
     {
       "pos": 200,
       "end": 577,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.js"
+      "data": "/src/2/second-output.js"
     },
     {
       "pos": 579,
@@ -921,31 +921,31 @@ declare class secondsecond_part1 { }
       "pos": 0,
       "end": 45,
       "kind": "reference",
-      "fileName": "../../tripleRef.d.ts"
+      "data": "../../tripleRef.d.ts"
     },
     {
       "pos": 47,
       "end": 101,
       "kind": "reference",
-      "fileName": "../../../first/tripleRef.d.ts"
+      "data": "../../../first/tripleRef.d.ts"
     },
     {
       "pos": 103,
       "end": 158,
       "kind": "reference",
-      "fileName": "../../../second/tripleRef.d.ts"
+      "data": "../../../second/tripleRef.d.ts"
     },
     {
       "pos": 160,
       "end": 410,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.d.ts"
+      "data": "/src/first/bin/first-output.d.ts"
     },
     {
       "pos": 412,
       "end": 609,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.d.ts"
+      "data": "/src/2/second-output.d.ts"
     },
     {
       "pos": 611,

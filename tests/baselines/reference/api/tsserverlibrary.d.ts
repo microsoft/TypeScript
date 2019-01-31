@@ -356,40 +356,43 @@ declare namespace ts {
         SpreadAssignment = 277,
         EnumMember = 278,
         UnparsedPrologue = 279,
-        SourceFile = 280,
-        Bundle = 281,
-        UnparsedSource = 282,
-        InputFiles = 283,
-        JSDocTypeExpression = 284,
-        JSDocAllType = 285,
-        JSDocUnknownType = 286,
-        JSDocNullableType = 287,
-        JSDocNonNullableType = 288,
-        JSDocOptionalType = 289,
-        JSDocFunctionType = 290,
-        JSDocVariadicType = 291,
-        JSDocComment = 292,
-        JSDocTypeLiteral = 293,
-        JSDocSignature = 294,
-        JSDocTag = 295,
-        JSDocAugmentsTag = 296,
-        JSDocClassTag = 297,
-        JSDocCallbackTag = 298,
-        JSDocEnumTag = 299,
-        JSDocParameterTag = 300,
-        JSDocReturnTag = 301,
-        JSDocThisTag = 302,
-        JSDocTypeTag = 303,
-        JSDocTemplateTag = 304,
-        JSDocTypedefTag = 305,
-        JSDocPropertyTag = 306,
-        SyntaxList = 307,
-        NotEmittedStatement = 308,
-        PartiallyEmittedExpression = 309,
-        CommaListExpression = 310,
-        MergeDeclarationMarker = 311,
-        EndOfDeclarationMarker = 312,
-        Count = 313,
+        UnparsedPrependText = 280,
+        UnparsedText = 281,
+        UnparsedSourceMapUrl = 282,
+        SourceFile = 283,
+        Bundle = 284,
+        UnparsedSource = 285,
+        InputFiles = 286,
+        JSDocTypeExpression = 287,
+        JSDocAllType = 288,
+        JSDocUnknownType = 289,
+        JSDocNullableType = 290,
+        JSDocNonNullableType = 291,
+        JSDocOptionalType = 292,
+        JSDocFunctionType = 293,
+        JSDocVariadicType = 294,
+        JSDocComment = 295,
+        JSDocTypeLiteral = 296,
+        JSDocSignature = 297,
+        JSDocTag = 298,
+        JSDocAugmentsTag = 299,
+        JSDocClassTag = 300,
+        JSDocCallbackTag = 301,
+        JSDocEnumTag = 302,
+        JSDocParameterTag = 303,
+        JSDocReturnTag = 304,
+        JSDocThisTag = 305,
+        JSDocTypeTag = 306,
+        JSDocTemplateTag = 307,
+        JSDocTypedefTag = 308,
+        JSDocPropertyTag = 309,
+        SyntaxList = 310,
+        NotEmittedStatement = 311,
+        PartiallyEmittedExpression = 312,
+        CommaListExpression = 313,
+        MergeDeclarationMarker = 314,
+        EndOfDeclarationMarker = 315,
+        Count = 316,
         FirstAssignment = 59,
         LastAssignment = 71,
         FirstCompoundAssignment = 60,
@@ -415,10 +418,10 @@ declare namespace ts {
         FirstBinaryOperator = 28,
         LastBinaryOperator = 71,
         FirstNode = 148,
-        FirstJSDocNode = 284,
-        LastJSDocNode = 306,
-        FirstJSDocTagNode = 295,
-        LastJSDocTagNode = 306
+        FirstJSDocNode = 287,
+        LastJSDocNode = 309,
+        FirstJSDocTagNode = 298,
+        LastJSDocTagNode = 309
     }
     enum NodeFlags {
         None = 0,
@@ -1749,10 +1752,31 @@ declare namespace ts {
         hasNoDefaultLib?: boolean;
         sourceMapPath?: string;
         sourceMapText?: string;
+        texts: ReadonlyArray<UnparsedSourceText>;
     }
-    interface UnparsedPrologue extends Node {
+    type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl;
+    type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
+    interface UnparsedSection extends Node {
+        kind: SyntaxKind;
+        data?: string;
+        parent: UnparsedSource;
+    }
+    interface UnparsedPrologue extends UnparsedSection {
         kind: SyntaxKind.UnparsedPrologue;
-        text: string;
+        data: string;
+        parent: UnparsedSource;
+    }
+    interface UnparsedPrependText extends UnparsedSection {
+        kind: SyntaxKind.UnparsedPrependText;
+        data: string;
+        parent: UnparsedSource;
+    }
+    interface UnparsedText extends UnparsedSection {
+        kind: SyntaxKind.UnparsedText;
+        parent: UnparsedSource;
+    }
+    interface UnparsedSourceMapUrl extends UnparsedSection {
+        kind: SyntaxKind.UnparsedSourceMapUrl;
         parent: UnparsedSource;
     }
     interface JsonSourceFile extends SourceFile {
@@ -3466,7 +3490,7 @@ declare namespace ts {
     function isSourceFile(node: Node): node is SourceFile;
     function isBundle(node: Node): node is Bundle;
     function isUnparsedSource(node: Node): node is UnparsedSource;
-    function isUnparsedPrologue(node: Node): node is UnparsedPrologue;
+    function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
     function isJSDocAllType(node: JSDocAllType): node is JSDocAllType;
     function isJSDocUnknownType(node: Node): node is JSDocUnknownType;

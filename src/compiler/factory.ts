@@ -2678,35 +2678,27 @@ namespace ts {
                 for (const section of sections) {
                     switch (section.kind) {
                         case BundleFileSectionKind.Prologue:
-                            const unparsedPrologue = <UnparsedPrologue>createUnparsedNode(SyntaxKind.UnparsedPrologue, section.pos, section.end, node);
-                            unparsedPrologue.text = section.text;
-                            (prologues || (prologues = [])).push(unparsedPrologue);
+                            (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
                             break;
                         case BundleFileSectionKind.EmitHelpers:
-                            (helpers || (helpers = [])).push(getAllUnscopedEmitHelpers().get(section.name)!);
+                            (helpers || (helpers = [])).push(getAllUnscopedEmitHelpers().get(section.data)!);
                             break;
                         case BundleFileSectionKind.NoDefaultLib:
                             node.hasNoDefaultLib = true;
                             break;
                         case BundleFileSectionKind.Reference:
-                            (referencedFiles || (referencedFiles = [])).push({ pos: -1, end: -1, fileName: section.fileName });
+                            (referencedFiles || (referencedFiles = [])).push({ pos: -1, end: -1, fileName: section.data });
                             break;
                         case BundleFileSectionKind.Type:
-                            (typeReferenceDirectives || (typeReferenceDirectives = [])).push(section.fileName);
+                            (typeReferenceDirectives || (typeReferenceDirectives = [])).push(section.data);
                             break;
                         case BundleFileSectionKind.Lib:
-                            (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.fileName });
+                            (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.data });
                             break;
                         case BundleFileSectionKind.Prepend:
-                            const unparsedPrependText = <UnparsedPrependText>createUnparsedNode(SyntaxKind.UnparsedPrependText, section.pos, section.end, node);
-                            unparsedPrependText.fileName = section.fileName;
-                            (texts || (texts = [])).push(unparsedPrependText);
-                            break;
                         case BundleFileSectionKind.Text:
-                            (texts || (texts = [])).push(<UnparsedText>createUnparsedNode(SyntaxKind.UnparsedText, section.pos, section.end, node));
-                            break;
                         case BundleFileSectionKind.SourceMapUrl:
-                            (texts || (texts = [])).push(<UnparsedSourceMapUrl>createUnparsedNode(SyntaxKind.UnparsedSourceMapUrl, section.pos, section.end, node));
+                            (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedSourceText);
                             break;
                         default:
                             Debug.assertNever(section);
@@ -2725,14 +2717,34 @@ namespace ts {
         node.referencedFiles = referencedFiles || emptyArray;
         node.typeReferenceDirectives = typeReferenceDirectives;
         node.libReferenceDirectives = libReferenceDirectives || emptyArray;
-        node.texts = texts || [<UnparsedText>createUnparsedNode(SyntaxKind.UnparsedText, 0, node.text.length, node)];
+        node.texts = texts || [<UnparsedText>createUnparsedNode({ kind: BundleFileSectionKind.Text, pos: 0, end: node.text.length }, node)];
         node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
         return node;
     }
 
-    function createUnparsedNode(kind: UnparsedNode["kind"], pos: number, end: number, parent: UnparsedSource) {
-        const node = createNode(kind, pos, end) as UnparsedNode;
+    function mapBundleFileSectionKindToSyntaxKind(kind: BundleFileSectionKind): SyntaxKind {
+        switch (kind) {
+            case BundleFileSectionKind.Prologue: return SyntaxKind.UnparsedPrologue;
+            case BundleFileSectionKind.Prepend: return SyntaxKind.UnparsedPrependText;
+            case BundleFileSectionKind.Text: return SyntaxKind.UnparsedText;
+            case BundleFileSectionKind.SourceMapUrl: return SyntaxKind.UnparsedSourceMapUrl;
+
+            case BundleFileSectionKind.EmitHelpers:
+            case BundleFileSectionKind.NoDefaultLib:
+            case BundleFileSectionKind.Reference:
+            case BundleFileSectionKind.Type:
+            case BundleFileSectionKind.Lib:
+                return Debug.fail(`BundleFileSectionKind: ${kind} not yet mapped to SyntaxKind`);
+
+            default:
+                return Debug.assertNever(kind);
+        }
+    }
+
+    function createUnparsedNode(section: BundleFileSection, parent: UnparsedSource): UnparsedNode {
+        const node = createNode(mapBundleFileSectionKindToSyntaxKind(section.kind), section.pos, section.end) as UnparsedNode;
         node.parent = parent;
+        node.data = section.data;
         return node;
     }
 

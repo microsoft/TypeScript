@@ -5,7 +5,7 @@
       "pos": 0,
       "end": 597,
       "kind": "emitHelpers",
-      "name": "typescript:extends"
+      "data": "typescript:extends"
     },
     {
       "pos": 599,
@@ -615,7 +615,7 @@ sourceFile:../second/second_part2.ts
       "pos": 0,
       "end": 597,
       "kind": "emitHelpers",
-      "name": "typescript:extends"
+      "data": "typescript:extends"
     },
     {
       "pos": 599,
@@ -1167,19 +1167,19 @@ class second2 extends second1 { }
       "pos": 0,
       "end": 597,
       "kind": "emitHelpers",
-      "name": "typescript:extends"
+      "data": "typescript:extends"
     },
     {
       "pos": 599,
       "end": 1043,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.js"
+      "data": "/src/first/bin/first-output.js"
     },
     {
       "pos": 1045,
       "end": 1673,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.js"
+      "data": "/src/2/second-output.js"
     },
     {
       "pos": 1675,
@@ -1197,13 +1197,13 @@ class second2 extends second1 { }
       "pos": 0,
       "end": 268,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.d.ts"
+      "data": "/src/first/bin/first-output.d.ts"
     },
     {
       "pos": 270,
       "end": 485,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.d.ts"
+      "data": "/src/2/second-output.d.ts"
     },
     {
       "pos": 487,

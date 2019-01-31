@@ -2801,24 +2801,30 @@ namespace ts {
     export type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl;
     export type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
 
-    export interface UnparsedPrologue extends Node {
+    export interface UnparsedSection extends Node {
+        kind: SyntaxKind;
+        data?: string;
+        parent: UnparsedSource;
+    }
+
+    export interface UnparsedPrologue extends UnparsedSection {
         kind: SyntaxKind.UnparsedPrologue;
-        text: string;
+        data: string;
         parent: UnparsedSource;
     }
 
-    export interface UnparsedPrependText extends Node {
+    export interface UnparsedPrependText extends UnparsedSection {
         kind: SyntaxKind.UnparsedPrependText;
-        fileName: string;
+        data: string;
         parent: UnparsedSource;
     }
 
-    export interface UnparsedText extends Node {
+    export interface UnparsedText extends UnparsedSection {
         kind: SyntaxKind.UnparsedText;
         parent: UnparsedSource;
     }
 
-    export interface UnparsedSourceMapUrl extends Node {
+    export interface UnparsedSourceMapUrl extends UnparsedSection {
         kind: SyntaxKind.UnparsedSourceMapUrl;
         parent: UnparsedSource;
     }
@@ -5474,18 +5480,19 @@ namespace ts {
     /*@internal*/
     export interface BundleFileSectionBase extends TextRange {
         kind: BundleFileSectionKind;
+        data?: string;
     }
 
     /*@internal*/
     export interface BundleFilePrologue extends BundleFileSectionBase {
         kind: BundleFileSectionKind.Prologue;
-        text: string;
+        data: string;
     }
 
     /*@internal*/
     export interface BundleFileEmitHelpers extends BundleFileSectionBase {
         kind: BundleFileSectionKind.EmitHelpers;
-        name: string;
+        data: string;
     }
 
     /*@internal*/
@@ -5496,13 +5503,13 @@ namespace ts {
     /*@internal*/
     export interface BundleFileReference extends BundleFileSectionBase {
         kind: BundleFileSectionKind.Reference | BundleFileSectionKind.Type | BundleFileSectionKind.Lib;
-        fileName: string;
+        data: string;
     }
 
     /*@internal*/
     export interface BundleFilePrepend extends BundleFileSectionBase {
         kind: BundleFileSectionKind.Prepend;
-        fileName: string;
+        data: string;
     }
 
     /*@internal*/

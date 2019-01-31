@@ -5,19 +5,19 @@
       "pos": 0,
       "end": 13,
       "kind": "prologue",
-      "text": "use strict"
+      "data": "use strict"
     },
     {
       "pos": 15,
       "end": 28,
       "kind": "prologue",
-      "text": "myPrologue"
+      "data": "myPrologue"
     },
     {
       "pos": 30,
       "end": 44,
       "kind": "prologue",
-      "text": "myPrologue2"
+      "data": "myPrologue2"
     },
     {
       "pos": 46,
@@ -475,13 +475,13 @@ sourceFile:../second/second_part2.ts
       "pos": 0,
       "end": 13,
       "kind": "prologue",
-      "text": "use strict"
+      "data": "use strict"
     },
     {
       "pos": 15,
       "end": 28,
       "kind": "prologue",
-      "text": "myPrologue"
+      "data": "myPrologue"
     },
     {
       "pos": 30,
@@ -911,37 +911,37 @@ class C {
       "pos": 0,
       "end": 13,
       "kind": "prologue",
-      "text": "use strict"
+      "data": "use strict"
     },
     {
       "pos": 15,
       "end": 28,
       "kind": "prologue",
-      "text": "myPrologue"
+      "data": "myPrologue"
     },
     {
       "pos": 30,
       "end": 44,
       "kind": "prologue",
-      "text": "myPrologue2"
+      "data": "myPrologue2"
     },
     {
       "pos": 46,
       "end": 60,
       "kind": "prologue",
-      "text": "myPrologue3"
+      "data": "myPrologue3"
     },
     {
       "pos": 62,
       "end": 212,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.js"
+      "data": "/src/first/bin/first-output.js"
     },
     {
       "pos": 214,
       "end": 540,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.js"
+      "data": "/src/2/second-output.js"
     },
     {
       "pos": 542,
@@ -959,13 +959,13 @@ class C {
       "pos": 0,
       "end": 199,
       "kind": "prepend",
-      "fileName": "/src/first/bin/first-output.d.ts"
+      "data": "/src/first/bin/first-output.d.ts"
     },
     {
       "pos": 201,
       "end": 344,
       "kind": "prepend",
-      "fileName": "/src/2/second-output.d.ts"
+      "data": "/src/2/second-output.d.ts"
     },
     {
       "pos": 346,

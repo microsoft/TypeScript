@@ -562,7 +562,7 @@ namespace ts {
                 writeLine();
                 const pos = getTextPosWithWriteLine();
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, fileName: (prepend as UnparsedSource).fileName });
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName });
             }
 
             const pos = getTextPosWithWriteLine();
@@ -1182,7 +1182,7 @@ namespace ts {
                         else {
                             writeLines(helper.text(makeFileLevelOptimisticUniqueName));
                         }
-                        if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.EmitHelpers, name: helper.name });
+                        if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.EmitHelpers, data: helper.name });
                         helpersEmitted = true;
                     }
                 }
@@ -2974,19 +2974,19 @@ namespace ts {
             for (const directive of files) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference path="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Reference, fileName: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Reference, data: directive.fileName });
                 writeLine();
             }
             for (const directive of types) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference types="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, fileName: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, data: directive.fileName });
                 writeLine();
             }
             for (const directive of libs) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference lib="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Lib, fileName: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Lib, data: directive.fileName });
                 writeLine();
             }
         }
@@ -3030,7 +3030,7 @@ namespace ts {
                         writeLine();
                         const pos = writer.getTextPos();
                         emit(statement);
-                        if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, text: statement.expression.text });
+                        if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: statement.expression.text });
                         if (seenPrologueDirectives) {
                             seenPrologueDirectives.set(statement.expression.text, true);
                         }
@@ -3047,13 +3047,13 @@ namespace ts {
 
         function emitUnparsedPrologues(prologues: ReadonlyArray<UnparsedPrologue>, seenPrologueDirectives: Map<true>) {
             for (const prologue of prologues) {
-                if (!seenPrologueDirectives.has(prologue.text)) {
+                if (!seenPrologueDirectives.has(prologue.data)) {
                     writeLine();
                     const pos = writer.getTextPos();
                     emit(prologue);
-                    if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, text: prologue.text });
+                    if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: prologue.data });
                     if (seenPrologueDirectives) {
-                        seenPrologueDirectives.set(prologue.text, true);
+                        seenPrologueDirectives.set(prologue.data, true);
                     }
                 }
             }
