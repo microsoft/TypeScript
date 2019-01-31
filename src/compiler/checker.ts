@@ -6318,7 +6318,7 @@ namespace ts {
             return false;
         }
 
-        /** A type parameter is thisless if its contraint is thisless, or if it has no constraint. */
+        /** A type parameter is thisless if its constraint is thisless, or if it has no constraint. */
         function isThislessTypeParameter(node: TypeParameterDeclaration) {
             const constraint = getEffectiveConstraintOfTypeParameter(node);
             return !constraint || isThislessType(constraint);
@@ -10041,10 +10041,10 @@ namespace ts {
                 if (checkType.flags & TypeFlags.Any) {
                     return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), instantiateType(root.falseType, mapper)]);
                 }
-                // Return falseType for a definitely false extends check. We check an instantations of the two
+                // Return falseType for a definitely false extends check. We check an instantiations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
-                // then no instatiations will be and we can just return the false branch type.
+                // then no instantiations will be and we can just return the false branch type.
                 if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
                     return instantiateType(root.falseType, mapper);
                 }
@@ -14501,7 +14501,7 @@ namespace ts {
                             // that is _too good_ in projects with complicated constraints (eg, fp-ts). In such cases, if we did not limit ourselves
                             // here, we might produce more valid inferences for types, causing us to do more checks and perform more instantiations
                             // (in addition to the extra stack depth here) which, in turn, can push the already close process over its limit.
-                            // TL;DR: If we ever become generally more memory efficienct (or our resource budget ever increases), we should just
+                            // TL;DR: If we ever become generally more memory efficient (or our resource budget ever increases), we should just
                             // remove this `allowComplexConstraintInference` flag.
                             allowComplexConstraintInference = false;
                             return inferFromTypes(apparentSource, target);
@@ -18938,7 +18938,7 @@ namespace ts {
                 // if jsx emit was not react as there wont be error being emitted
                 reactSym.isReferenced = SymbolFlags.All;
 
-                // If react symbol is alias, mark it as refereced
+                // If react symbol is alias, mark it as referenced
                 if (reactSym.flags & SymbolFlags.Alias && !isConstEnumOrConstEnumOnlyModule(resolveAlias(reactSym))) {
                     markAliasSymbolAsReferenced(reactSym);
                 }
@@ -28330,7 +28330,7 @@ namespace ts {
             throwIfNonDiagnosticsProducing();
             if (sourceFile) {
                 // Some global diagnostics are deferred until they are needed and
-                // may not be reported in the firt call to getGlobalDiagnostics.
+                // may not be reported in the first call to getGlobalDiagnostics.
                 // We should catch these changes and report them.
                 const previousGlobalDiagnostics = diagnostics.getGlobalDiagnostics();
                 const previousGlobalDiagnosticsSize = previousGlobalDiagnostics.length;
