@@ -632,6 +632,8 @@ export const b = new A();`);
 
             verifyOutFileScenario("baseline sectioned sourcemaps", noop);
 
+            verifyOutFileScenario("when final project is not composite but uses project references", fs => replaceFileContent(fs, "/src/third/tsconfig.json", `"composite": true,`, ""));
+
             describe("downstream prepend projects always get rebuilt", () => {
                 function verify(modifyFs: (fs: vfs.FileSystem) => void, ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
                     const fs = outFileFs.shadow();
