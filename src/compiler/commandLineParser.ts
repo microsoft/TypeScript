@@ -1935,7 +1935,7 @@ namespace ts {
 
     function directoryOfCombinedPath(fileName: string, basePath: string) {
         // Use the `getNormalizedAbsolutePath` function to avoid canonicalizing the path, as it must remain noncanonical
-        // until consistient casing errors are reported
+        // until consistent casing errors are reported
         return getDirectoryPath(getNormalizedAbsolutePath(fileName, basePath));
     }
 
