@@ -1,0 +1,60 @@
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(9,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple types.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(10,15): error TS1354: 'readonly' type modifier is only permitted on array and tuple types.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(11,12): error TS1354: 'readonly' type modifier is only permitted on array and tuple types.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(14,5): error TS2740: Type 'readonly string[]' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 3 more.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(16,5): error TS2740: Type 'readonly [string, string]' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 3 more.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(20,5): error TS2739: Type 'string[]' is missing the following properties from type '[string, string]': 0, 1
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(21,5): error TS2740: Type 'readonly string[]' is missing the following properties from type '[string, string]': 0, 1, pop, push, and 5 more.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(22,5): error TS2740: Type 'readonly [string, string]' is missing the following properties from type '[string, string]': pop, push, reverse, shift, and 3 more.
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(23,5): error TS2739: Type 'string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
+tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts(24,5): error TS2739: Type 'readonly string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
+
+
+==== tests/cases/conformance/types/tuple/readonlyArraysAndTuples.ts (10 errors) ====
+    type T10 = string[];
+    type T11 = Array<string>;
+    type T12 = readonly string[];
+    type T13 = ReadonlyArray<string>;
+    
+    type T20 = [number, number];
+    type T21 = readonly [number, number];
+    
+    type T30 = readonly string;  // Error
+               ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple types.
+    type T31<T> = readonly T;  // Error
+                  ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple types.
+    type T32 = readonly readonly string[];  // Error
+               ~~~~~~~~
+!!! error TS1354: 'readonly' type modifier is only permitted on array and tuple types.
+    
+    function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
+        ma = ra;  // Error
+        ~~
+!!! error TS2740: Type 'readonly string[]' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 3 more.
+        ma = mt;
+        ma = rt;  // Error
+        ~~
+!!! error TS2740: Type 'readonly [string, string]' is missing the following properties from type 'string[]': pop, push, reverse, shift, and 3 more.
+        ra = ma;
+        ra = mt;
+        ra = rt;
+        mt = ma;  // Error
+        ~~
+!!! error TS2739: Type 'string[]' is missing the following properties from type '[string, string]': 0, 1
+        mt = ra;  // Error
+        ~~
+!!! error TS2740: Type 'readonly string[]' is missing the following properties from type '[string, string]': 0, 1, pop, push, and 5 more.
+        mt = rt;  // Error
+        ~~
+!!! error TS2740: Type 'readonly [string, string]' is missing the following properties from type '[string, string]': pop, push, reverse, shift, and 3 more.
+        rt = ma;  // Error
+        ~~
+!!! error TS2739: Type 'string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
+        rt = ra;  // Error
+        ~~
+!!! error TS2739: Type 'readonly string[]' is missing the following properties from type 'readonly [string, string]': 0, 1
+        rt = mt;
+    }
+    

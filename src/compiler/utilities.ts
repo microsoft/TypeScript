@@ -778,7 +778,8 @@ namespace ts {
             case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
-                return isStringOrNumericLiteralLike(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
+                if (isStringOrNumericLiteralLike(name.expression)) return escapeLeadingUnderscores(name.expression.text);
+                return Debug.fail("Text of property name cannot be read from non-literal-valued ComputedPropertyNames");
             default:
                 return Debug.assertNever(name);
         }
@@ -5604,6 +5605,11 @@ namespace ts {
 
     export function isTypeAssertion(node: Node): node is TypeAssertion {
         return node.kind === SyntaxKind.TypeAssertionExpression;
+    }
+
+    export function isConstTypeReference(node: Node) {
+        return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
+            node.typeName.escapedText === "const" && !node.typeArguments;
     }
 
     export function isParenthesizedExpression(node: Node): node is ParenthesizedExpression {

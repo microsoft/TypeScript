@@ -8,10 +8,8 @@ const path = require("path");
 const fold = require("travis-fold");
 const ts = require("./lib/typescript");
 const del = require("del");
-const getDirSize = require("./scripts/build/getDirSize");
+const { getDirSize, needsUpdate, flatten } = require("./scripts/build/utils");
 const { base64VLQFormatEncode } = require("./scripts/build/sourcemaps");
-const needsUpdate = require("./scripts/build/needsUpdate");
-const { flatten } = require("./scripts/build/project");
 
 // add node_modules to path so we don't need global modules, prefer the modules by adding them first
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
@@ -361,7 +359,7 @@ file(ConfigFileFor.tsserverLibrary, [], function () {
         compilerOptions: {
             "removeComments": false,
             "stripInternal": true,
-            "declarationMap": false,
+            "declaration": true,
             "outFile": "tsserverlibrary.out.js"
         }
     })

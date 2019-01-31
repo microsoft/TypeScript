@@ -230,18 +230,18 @@ namespace ts {
         const readFileWithCache = (fileName: string): string | undefined => {
             const key = toPath(fileName);
             const value = readFileCache.get(key);
-            if (value !== undefined) return value || undefined;
+            if (value !== undefined) return value !== false ? value : undefined;
             return setReadFileCache(key, fileName);
         };
         const setReadFileCache = (key: Path, fileName: string) => {
             const newValue = originalReadFile.call(host, fileName);
-            readFileCache.set(key, newValue || false);
+            readFileCache.set(key, newValue !== undefined ? newValue : false);
             return newValue;
         };
         host.readFile = fileName => {
             const key = toPath(fileName);
             const value = readFileCache.get(key);
-            if (value !== undefined) return value; // could be .d.ts from output
+            if (value !== undefined) return value !== false ? value : undefined; // could be .d.ts from output
             if (!fileExtensionIs(fileName, Extension.Json)) {
                 return originalReadFile.call(host, fileName);
             }
@@ -1456,14 +1456,12 @@ namespace ts {
                     // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
                     if (!out) continue;
 
-                    const dtsFilename = changeExtension(out, ".d.ts");
-                    const js = host.readFile(out) || `/* Input file ${out} was missing */\r\n`;
-                    const jsMapPath = out + ".map"; // TODO: try to read sourceMappingUrl comment from the file
-                    const jsMap = host.readFile(jsMapPath);
-                    const dts = host.readFile(dtsFilename) || `/* Input file ${dtsFilename} was missing */\r\n`;
-                    const dtsMapPath = dtsFilename + ".map";
-                    const dtsMap = host.readFile(dtsMapPath);
-                    const node = createInputFiles(js, dts, jsMap && jsMapPath, jsMap, dtsMap && dtsMapPath, dtsMap);
+                    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
+                    const node = createInputFiles(fileName => {
+                        const path = toPath(fileName);
+                        const sourceFile = getSourceFileByPath(path);
+                        return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
+                    }, jsFilePath! , sourceMapFilePath, declarationFilePath! , declarationMapPath);
                     nodes.push(node);
                 }
             }
