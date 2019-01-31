@@ -41,6 +41,7 @@ namespace ts.FindAllReferences {
         readonly implementations?: boolean;
         /**
          * True to opt in for enhanced renaming of shorthand properties and import/export specifiers.
+         * The options controls the behavior for the whole rename operation; it cannot be changed on a per-file basis.
          * Default is false for backwards compatibility.
          */
         readonly providePrefixAndSuffixTextForRename?: boolean;
