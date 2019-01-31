@@ -525,7 +525,8 @@ export const b = new A();`);
                     "/src/third/thirdjs/output/third-output.js",
                     "/src/third/thirdjs/output/third-output.js.map",
                     "/src/third/thirdjs/output/third-output.d.ts",
-                    "/src/third/thirdjs/output/third-output.d.ts.map"
+                    "/src/third/thirdjs/output/third-output.d.ts.map",
+                    "/src/third/thirdjs/output/.tsbuildinfo"
                 ]
             ];
 

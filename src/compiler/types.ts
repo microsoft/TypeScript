@@ -5276,6 +5276,7 @@ namespace ts {
         isEmitBlocked(emitFileName: string): boolean;
 
         getPrependNodes(): ReadonlyArray<InputFiles>;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
 
         writeFile: WriteFileCallback;
     }

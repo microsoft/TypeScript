@@ -307,7 +307,7 @@ namespace ts {
 
     function getOutFileOutputs(project: ParsedCommandLine, ignoreBuildInfo?: boolean): ReadonlyArray<string> {
         Debug.assert(!!project.options.outFile || !!project.options.out, "outFile must be set");
-        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false);
+        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false, project.projectReferences);
 
         let outputs: string[] | undefined = [];
         const addOutput = (path: string | undefined) => path && (outputs || (outputs = [])).push(path);

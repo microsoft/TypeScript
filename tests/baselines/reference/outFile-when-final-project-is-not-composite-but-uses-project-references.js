@@ -719,6 +719,24 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
+//// [/src/third/thirdjs/output/.tsbuildinfo]
+{
+  "js": [
+    {
+      "pos": 0,
+      "end": 516,
+      "kind": "text"
+    }
+  ],
+  "dts": [
+    {
+      "pos": 0,
+      "end": 365,
+      "kind": "text"
+    }
+  ]
+}
+
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
     none: any;

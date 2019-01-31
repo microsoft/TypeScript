@@ -1407,6 +1407,7 @@ namespace ts {
         function getEmitHost(writeFileCallback?: WriteFileCallback): EmitHost {
             return {
                 getPrependNodes,
+                getProjectReferences,
                 getCanonicalFileName,
                 getCommonSourceDirectory: program.getCommonSourceDirectory,
                 getCompilerOptions: program.getCompilerOptions,
@@ -1456,7 +1457,7 @@ namespace ts {
                     // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
                     if (!out) continue;
 
-                    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true);
+                    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true, resolvedRefOpts.projectReferences);
                     const node = createInputFiles(fileName => {
                         const path = toPath(fileName);
                         const sourceFile = getSourceFileByPath(path);

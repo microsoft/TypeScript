@@ -39,14 +39,18 @@ namespace ts {
         }
     }
 
+    function hasPrependReference(projectReferences: ReadonlyArray<ProjectReference> | undefined) {
+        return projectReferences && forEach(projectReferences, ref => ref.prepend);
+    }
+
     /*@internal*/
-    export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
+    export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean, projectReferences: ReadonlyArray<ProjectReference> | undefined): EmitFileNames {
         const outPath = options.outFile || options.out!;
         const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        const buildInfoPath = options.composite && jsFilePath ? combinePaths(getDirectoryPath(jsFilePath), infoFile) : undefined;
+        const buildInfoPath = jsFilePath && (options.composite || hasPrependReference(projectReferences)) ? combinePaths(getDirectoryPath(jsFilePath), infoFile) : undefined;
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
     }
 
@@ -54,7 +58,7 @@ namespace ts {
     export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean): EmitFileNames {
         const options = host.getCompilerOptions();
         if (sourceFile.kind === SyntaxKind.Bundle) {
-            return getOutputPathsForBundle(options, forceDtsPaths);
+            return getOutputPathsForBundle(options, forceDtsPaths, host.getProjectReferences());
         }
         else {
             const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
