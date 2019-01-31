@@ -14112,7 +14112,9 @@ namespace ts {
             function mapper(t: Type): Type {
                 for (let i = 0; i < inferences.length; i++) {
                     if (t === inferences[i].typeParameter) {
-                        inferences[i].isFixed = true;
+                        if (!(context.flags & InferenceFlags.NoFixing)) {
+                            inferences[i].isFixed = true;
+                        }
                         return getInferredType(context, i);
                     }
                 }
@@ -14788,7 +14790,7 @@ namespace ts {
             return getWidenedType(unwidenedType);
         }
 
-        function getInferredType(context: InferenceContext, index: number, ignoreConstraints = false): Type {
+        function getInferredType(context: InferenceContext, index: number): Type {
             const inference = context.inferences[index];
             let inferredType = inference.inferredType;
             if (!inferredType) {
@@ -14836,14 +14838,14 @@ namespace ts {
 
                 inference.inferredType = inferredType;
 
-                if (!ignoreConstraints) {
-                    const constraint = getConstraintOfTypeParameter(inference.typeParameter);
-                    if (constraint) {
-                        const instantiatedConstraint = instantiateType(constraint, context);
-                        if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
-                            inference.inferredType = inferredType = instantiatedConstraint;
-                        }
+                const constraint = getConstraintOfTypeParameter(inference.typeParameter);
+                if (constraint) {
+                    context.flags |= InferenceFlags.NoFixing;
+                    const instantiatedConstraint = instantiateType(constraint, context);
+                    if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
+                        inference.inferredType = inferredType = instantiatedConstraint;
                     }
+                    context.flags &= ~InferenceFlags.NoFixing;
                 }
             }
 
@@ -14854,10 +14856,10 @@ namespace ts {
             return isInJavaScriptFile ? anyType : emptyObjectType;
         }
 
-        function getInferredTypes(context: InferenceContext, ignoreConstraints = false): Type[] {
+        function getInferredTypes(context: InferenceContext): Type[] {
             const result: Type[] = [];
             for (let i = 0; i < context.inferences.length; i++) {
-                result.push(getInferredType(context, i, ignoreConstraints));
+                result.push(getInferredType(context, i));
             }
             return result;
         }
@@ -19927,10 +19929,7 @@ namespace ts {
                 inferTypes(context.inferences, spreadType, restType);
             }
 
-            // If we are excluding context sensitive arguments we know there is another round of type inference
-            // coming, so we omit constraint checking. Otherwise, when a type parameter's constraint is self-
-            // referential, checking the constraint would cause inferences to be fixed prematurely.
-            return getInferredTypes(context, !!excludeArgument);
+            return getInferredTypes(context);
         }
 
         function getArrayifiedType(type: Type) {
