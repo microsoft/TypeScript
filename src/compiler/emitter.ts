@@ -732,7 +732,9 @@ namespace ts {
                         return emitUnparsedSource(<UnparsedSource>node);
 
                     case SyntaxKind.UnparsedPrologue:
-                        return emitUnparsedPrologue(<UnparsedPrologue>node);
+                    case SyntaxKind.UnparsedPrependText:
+                    case SyntaxKind.UnparsedText:
+                        return emitUnparsedNode(<UnparsedNode>node);
 
                     // Identifiers
                     case SyntaxKind.Identifier:
@@ -1221,11 +1223,15 @@ namespace ts {
 
         // SyntaxKind.UnparsedSource
         function emitUnparsedSource(unparsed: UnparsedSource) {
-            writer.rawWrite(unparsed.text.substr(unparsed.pos));
+            for (const text of unparsed.texts) {
+                emit(text);
+            }
         }
 
         // SyntaxKind.UnparsedPrologue
-        function emitUnparsedPrologue(unparsed: UnparsedPrologue) {
+        // SyntaxKind.UnparsedPrependText
+        // SyntaxKind.UnparsedText
+        function emitUnparsedNode(unparsed: UnparsedNode) {
             writer.rawWrite(unparsed.parent.text.substring(unparsed.pos, unparsed.end));
         }
 
@@ -4398,18 +4404,9 @@ namespace ts {
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, node);
             if (isUnparsedSource(node)) {
-                const parsed = getParsedSourceMap(node);
-                if (parsed && sourceMapGenerator) {
-                    sourceMapGenerator.appendSourceMap(
-                        writer.getLine(),
-                        writer.getColumn(),
-                        parsed,
-                        node.sourceMapPath!,
-                        node.pos ? node.getLineAndCharacterOfPosition(node.pos) : undefined);
-                }
                 pipelinePhase(hint, node);
             }
-            else if (isUnparsedPrologue(node)) {
+            else if (isUnparsedNode(node)) {
                 const parsed = getParsedSourceMap(node.parent);
                 if (parsed && sourceMapGenerator) {
                     sourceMapGenerator.appendSourceMap(

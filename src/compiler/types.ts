@@ -428,7 +428,11 @@ namespace ts {
 
         // Enum
         EnumMember,
+        // Unparsed
         UnparsedPrologue,
+        UnparsedPrependText,
+        UnparsedText,
+
         // Top-level nodes
         SourceFile,
         Bundle,
@@ -2786,15 +2790,30 @@ namespace ts {
         hasNoDefaultLib?: boolean;
         sourceMapPath?: string;
         sourceMapText?: string;
+        texts: ReadonlyArray<UnparsedSourceText>;
         /*@internal*/ parsedSourceMap?: RawSourceMap | false | undefined;
         // Adding this to satisfy services, fix later
         /*@internal*/
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
+    export type UnparsedSourceText = UnparsedPrependText | UnparsedText;
+    export type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
+
     export interface UnparsedPrologue extends Node {
         kind: SyntaxKind.UnparsedPrologue;
         text: string;
+        parent: UnparsedSource;
+    }
+
+    export interface UnparsedPrependText extends Node {
+        kind: SyntaxKind.UnparsedPrependText;
+        fileName: string;
+        parent: UnparsedSource;
+    }
+
+    export interface UnparsedText extends Node {
+        kind: SyntaxKind.UnparsedText;
         parent: UnparsedSource;
     }
 
