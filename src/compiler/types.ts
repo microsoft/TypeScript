@@ -432,6 +432,7 @@ namespace ts {
         UnparsedPrologue,
         UnparsedPrependText,
         UnparsedText,
+        UnparsedSourceMapUrl,
 
         // Top-level nodes
         SourceFile,
@@ -2797,7 +2798,7 @@ namespace ts {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
-    export type UnparsedSourceText = UnparsedPrependText | UnparsedText;
+    export type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl;
     export type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
 
     export interface UnparsedPrologue extends Node {
@@ -2814,6 +2815,11 @@ namespace ts {
 
     export interface UnparsedText extends Node {
         kind: SyntaxKind.UnparsedText;
+        parent: UnparsedSource;
+    }
+
+    export interface UnparsedSourceMapUrl extends Node {
+        kind: SyntaxKind.UnparsedSourceMapUrl;
         parent: UnparsedSource;
     }
 
@@ -5461,6 +5467,7 @@ namespace ts {
         Lib = "lib",
         Prepend = "prepend",
         Text = "text",
+        SourceMapUrl = "sourceMapUrl",
         // internal comments?
     }
 
@@ -5504,8 +5511,14 @@ namespace ts {
     }
 
     /*@internal*/
+    export interface BundleFileSourceMapUrl extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.SourceMapUrl;
+    }
+
+    /*@internal*/
     export type BundleFileSection = BundleFilePrologue | BundleFileEmitHelpers |
-        BundleFileHasNoDefaultLib | BundleFileReference | BundleFilePrepend | BundleFileText;
+        BundleFileHasNoDefaultLib | BundleFileReference | BundleFilePrepend |
+        BundleFileText | BundleFileSourceMapUrl;
 
     /*@internal*/
     export type BundleFileInfo = BundleFileSection[];

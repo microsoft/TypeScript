@@ -314,7 +314,9 @@ namespace ts {
 
                 if (sourceMappingURL) {
                     if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
+                    const pos = writer.getTextPos();
                     writer.writeComment(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Tools can sometimes see this line as a source mapping url comment
+                    if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.SourceMapUrl });
                 }
 
                 // Write the source map
@@ -734,6 +736,7 @@ namespace ts {
                     case SyntaxKind.UnparsedPrologue:
                     case SyntaxKind.UnparsedPrependText:
                     case SyntaxKind.UnparsedText:
+                    case SyntaxKind.UnparsedSourceMapUrl:
                         return emitUnparsedNode(<UnparsedNode>node);
 
                     // Identifiers

@@ -2705,6 +2705,9 @@ namespace ts {
                         case BundleFileSectionKind.Text:
                             (texts || (texts = [])).push(<UnparsedText>createUnparsedNode(SyntaxKind.UnparsedText, section.pos, section.end, node));
                             break;
+                        case BundleFileSectionKind.SourceMapUrl:
+                            (texts || (texts = [])).push(<UnparsedSourceMapUrl>createUnparsedNode(SyntaxKind.UnparsedSourceMapUrl, section.pos, section.end, node));
+                            break;
                         default:
                             Debug.assertNever(section);
                     }
@@ -2728,7 +2731,7 @@ namespace ts {
     }
 
     function createUnparsedNode(kind: UnparsedNode["kind"], pos: number, end: number, parent: UnparsedSource) {
-        const node = <UnparsedNode>createNode(kind, pos, end);
+        const node = createNode(kind, pos, end) as UnparsedNode;
         node.parent = parent;
         return node;
     }

@@ -5988,7 +5988,8 @@ namespace ts {
     export function isUnparsedNode(node: Node): node is UnparsedNode {
         return node.kind === SyntaxKind.UnparsedPrologue ||
             node.kind === SyntaxKind.UnparsedPrependText ||
-            node.kind === SyntaxKind.UnparsedText;
+            node.kind === SyntaxKind.UnparsedText ||
+            node.kind === SyntaxKind.UnparsedSourceMapUrl;
     }
 
     // JSDoc
