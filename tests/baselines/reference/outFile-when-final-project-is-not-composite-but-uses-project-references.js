@@ -724,6 +724,18 @@ sourceFile:../first_part3.ts
   "js": [
     {
       "pos": 0,
+      "end": 150,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.js"
+    },
+    {
+      "pos": 152,
+      "end": 478,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.js"
+    },
+    {
+      "pos": 480,
       "end": 516,
       "kind": "text"
     }
@@ -731,6 +743,18 @@ sourceFile:../first_part3.ts
   "dts": [
     {
       "pos": 0,
+      "end": 199,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.d.ts"
+    },
+    {
+      "pos": 201,
+      "end": 344,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.d.ts"
+    },
+    {
+      "pos": 346,
       "end": 365,
       "kind": "text"
     }

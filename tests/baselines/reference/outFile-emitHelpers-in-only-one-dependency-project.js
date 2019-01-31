@@ -943,6 +943,18 @@ class second2 extends second1 { }
     },
     {
       "pos": 599,
+      "end": 749,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.js"
+    },
+    {
+      "pos": 751,
+      "end": 1379,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.js"
+    },
+    {
+      "pos": 1381,
       "end": 1417,
       "kind": "text"
     }
@@ -950,6 +962,18 @@ class second2 extends second1 { }
   "dts": [
     {
       "pos": 0,
+      "end": 199,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.d.ts"
+    },
+    {
+      "pos": 201,
+      "end": 416,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.d.ts"
+    },
+    {
+      "pos": 418,
       "end": 437,
       "kind": "text"
     }

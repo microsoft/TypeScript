@@ -556,12 +556,14 @@ namespace ts {
             emitHelpers(bundle);
             emitSyntheticTripleSlashReferencesIfNeeded(bundle);
 
-            const pos = getTextPosWithWriteLine();
             for (const prepend of bundle.prepends) {
                 writeLine();
+                const pos = getTextPosWithWriteLine();
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
+                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, fileName: (prepend as UnparsedSource).fileName });
             }
 
+            const pos = getTextPosWithWriteLine();
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }

@@ -803,6 +803,18 @@ declare class secondsecond_part1 { }
   "js": [
     {
       "pos": 0,
+      "end": 150,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.js"
+    },
+    {
+      "pos": 152,
+      "end": 529,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.js"
+    },
+    {
+      "pos": 531,
       "end": 567,
       "kind": "text"
     }
@@ -816,6 +828,18 @@ declare class secondsecond_part1 { }
     },
     {
       "pos": 57,
+      "end": 256,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.d.ts"
+    },
+    {
+      "pos": 258,
+      "end": 455,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.d.ts"
+    },
+    {
+      "pos": 457,
       "end": 476,
       "kind": "text"
     }

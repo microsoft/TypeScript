@@ -913,6 +913,18 @@ class C {
     },
     {
       "pos": 62,
+      "end": 212,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.js"
+    },
+    {
+      "pos": 214,
+      "end": 540,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.js"
+    },
+    {
+      "pos": 542,
       "end": 578,
       "kind": "text"
     }
@@ -920,6 +932,18 @@ class C {
   "dts": [
     {
       "pos": 0,
+      "end": 199,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.d.ts"
+    },
+    {
+      "pos": 201,
+      "end": 344,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.d.ts"
+    },
+    {
+      "pos": 346,
       "end": 365,
       "kind": "text"
     }

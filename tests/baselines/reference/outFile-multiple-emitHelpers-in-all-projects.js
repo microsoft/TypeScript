@@ -1594,6 +1594,18 @@ secondsecond_part2Spread(...[10, 20, 30]);
     },
     {
       "pos": 1277,
+      "end": 1933,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.js"
+    },
+    {
+      "pos": 1935,
+      "end": 2779,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.js"
+    },
+    {
+      "pos": 2781,
       "end": 3323,
       "kind": "text"
     }
@@ -1601,6 +1613,18 @@ secondsecond_part2Spread(...[10, 20, 30]);
   "dts": [
     {
       "pos": 0,
+      "end": 332,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.d.ts"
+    },
+    {
+      "pos": 334,
+      "end": 615,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.d.ts"
+    },
+    {
+      "pos": 617,
       "end": 769,
       "kind": "text"
     }

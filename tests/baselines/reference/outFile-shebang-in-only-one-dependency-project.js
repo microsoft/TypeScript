@@ -745,6 +745,18 @@ namespace N {
   "js": [
     {
       "pos": 35,
+      "end": 185,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.js"
+    },
+    {
+      "pos": 187,
+      "end": 513,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.js"
+    },
+    {
+      "pos": 515,
       "end": 551,
       "kind": "text"
     }
@@ -752,6 +764,18 @@ namespace N {
   "dts": [
     {
       "pos": 35,
+      "end": 234,
+      "kind": "prepend",
+      "fileName": "/src/first/bin/first-output.d.ts"
+    },
+    {
+      "pos": 236,
+      "end": 379,
+      "kind": "prepend",
+      "fileName": "/src/2/second-output.d.ts"
+    },
+    {
+      "pos": 381,
       "end": 400,
       "kind": "text"
     }

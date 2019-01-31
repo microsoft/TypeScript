@@ -5440,6 +5440,7 @@ namespace ts {
         Reference = "reference",
         Type = "type",
         Lib = "lib",
+        Prepend = "prepend",
         Text = "text",
         // internal comments?
     }
@@ -5473,13 +5474,19 @@ namespace ts {
     }
 
     /*@internal*/
+    export interface BundleFilePrepend extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.Prepend;
+        fileName: string;
+    }
+
+    /*@internal*/
     export interface BundleFileText extends BundleFileSectionBase {
         kind: BundleFileSectionKind.Text;
     }
 
     /*@internal*/
     export type BundleFileSection = BundleFilePrologue | BundleFileEmitHelpers |
-        BundleFileHasNoDefaultLib | BundleFileReference | BundleFileText;
+        BundleFileHasNoDefaultLib | BundleFileReference | BundleFilePrepend | BundleFileText;
 
     /*@internal*/
     export type BundleFileInfo = BundleFileSection[];

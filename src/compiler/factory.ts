@@ -2675,6 +2675,7 @@ namespace ts {
 
             const sections = textOrInputFiles.buildInfo ? mapPathOrType === "js" ? textOrInputFiles.buildInfo.js : textOrInputFiles.buildInfo.dts : undefined;
             if (sections) {
+                let setPos = false;
                 for (const section of sections) {
                     switch (section.kind) {
                         case BundleFileSectionKind.Prologue:
@@ -2698,9 +2699,13 @@ namespace ts {
                         case BundleFileSectionKind.Lib:
                             (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.fileName });
                             break;
+                        case BundleFileSectionKind.Prepend:
                         case BundleFileSectionKind.Text:
-                            // For now just set node.pos to this
-                            node.pos = section.pos;
+                            if (!setPos) {
+                                // For now just set node.pos to this
+                                node.pos = section.pos;
+                                setPos = true;
+                            }
                             break;
                         default:
                             Debug.assertNever(section);
