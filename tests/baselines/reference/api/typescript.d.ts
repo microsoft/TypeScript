@@ -1751,7 +1751,7 @@ declare namespace ts {
         sourceMapText?: string;
     }
     interface UnparsedPrologue extends Node {
-        kind: SyntaxKind.UnparsedSource;
+        kind: SyntaxKind.UnparsedPrologue;
         text: string;
         parent: UnparsedSource;
     }
