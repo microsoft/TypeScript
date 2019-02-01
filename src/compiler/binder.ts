@@ -550,7 +550,7 @@ namespace ts {
                     }
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
-                // we use the return control flow graph in strict property intialization checks.
+                // we use the return control flow graph in strict property initialization checks.
                 currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
@@ -3445,7 +3445,7 @@ namespace ts {
             // If a FunctionDeclaration is generator function and is the body of a
             // transformed async function, then this node can be transformed to a
             // down-level generator.
-            // Currently we do not support transforming any other generator fucntions
+            // Currently we do not support transforming any other generator functions
             // down level.
             if (node.asteriskToken) {
                 transformFlags |= TransformFlags.AssertGenerator;
