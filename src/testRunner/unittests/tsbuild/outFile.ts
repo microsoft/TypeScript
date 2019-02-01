@@ -2,19 +2,10 @@
 namespace ts {
     describe("unittests:: tsbuild:: outFile::", () => {
         let outFileFs: vfs.FileSystem;
-        const enum ext {
-            js,
-            jsmap,
-            dts,
-            dtsmap,
-            buildinfo
-        }
-        const enum project {
-            first,
-            second,
-            third
-        }
+        const enum ext { js, jsmap, dts, dtsmap, buildinfo }
+        const enum project { first, second, third }
         type OutputFile = [string, string, string, string, string];
+        function relName(path: string) { return path.slice(1); }
         const outputFiles: [OutputFile, OutputFile, OutputFile] = [
             [
                 "/src/first/bin/first-output.js",
@@ -38,6 +29,34 @@ namespace ts {
                 "/src/third/thirdjs/output/.tsbuildinfo"
             ]
         ];
+        const relOutputFiles = outputFiles.map(v => v.map(relName)) as [OutputFile, OutputFile, OutputFile];
+        type Sources = [string, ReadonlyArray<string>];
+        const enum source { config, ts }
+        const enum part { one, two, three }
+        const sources: [Sources, Sources, Sources] = [
+            [
+                "/src/first/tsconfig.json",
+                [
+                    "/src/first/first_PART1.ts",
+                    "/src/first/first_part2.ts",
+                    "/src/first/first_part3.ts"
+                ]
+            ],
+            [
+                "/src/second/tsconfig.json",
+                [
+                    "/src/second/second_part1.ts",
+                    "/src/second/second_part2.ts"
+                ]
+            ],
+            [
+                "/src/third/tsconfig.json",
+                [
+                    "/src/third/third_part1.ts"
+                ]
+            ]
+        ];
+        const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as [Sources, Sources, Sources];
         const { time, tick } = getTime();
         before(() => {
             outFileFs = loadProjectFromDisk("tests/projects/outfile-concat", time);
@@ -122,13 +141,13 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                 let firstBuildTime: number;
                 before(() => {
                     const result = build(outFileFs.shadow(), modifyFs, withoutBuildInfo,
-                        getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
-                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/first/tsconfig.json", "src/first/bin/first-output.js"],
-                        [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
-                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/second/tsconfig.json", "src/2/second-output.js"],
-                        [Diagnostics.Building_project_0, "/src/second/tsconfig.json"],
-                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/third/tsconfig.json", "src/third/thirdjs/output/third-output.js"],
-                        [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.js]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.second][source.config], relOutputFiles[project.second][ext.js]],
+                        [Diagnostics.Building_project_0, sources[project.second][source.config]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], relOutputFiles[project.third][ext.js]],
+                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
                     );
                     ({ fs, actualReadFileMap } = result);
                     firstBuildTime = time();
@@ -144,17 +163,14 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                     it("verify readFile calls", () => {
                         verifyReadFileCalls(actualReadFileMap, [
                             // Configs
-                            "/src/third/tsconfig.json",
-                            "/src/second/tsconfig.json",
-                            "/src/first/tsconfig.json",
+                            sources[project.first][source.config],
+                            sources[project.second][source.config],
+                            sources[project.third][source.config],
 
                             // Source files
-                            "/src/third/third_part1.ts",
-                            "/src/second/second_part1.ts",
-                            "/src/second/second_part2.ts",
-                            "/src/first/first_PART1.ts",
-                            "/src/first/first_part2.ts",
-                            "/src/first/first_part3.ts",
+                            ...sources[project.first][source.ts],
+                            ...sources[project.second][source.ts],
+                            ...sources[project.third][source.ts],
 
                             // Additional source Files
                             ...(additionalSourceFiles || emptyArray),
@@ -171,12 +187,12 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                         let newFs: vfs.FileSystem;
                         let actualReadFileMap: Map<number>;
                         before(() => {
-                            assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, firstBuildTime, "First build timestamp is correct");
+                            assert.equal(fs.statSync(outputFiles[project.third][ext.js]).mtimeMs, firstBuildTime, "First build timestamp is correct");
                             tick();
                             newFs = fs.shadow();
                             tick();
                             ({ actualReadFileMap } = build(newFs, incrementalModifyFs, withoutBuildInfo, ...incrementalExpectedDiagnostics));
-                            assert.equal(newFs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "Second build timestamp is correct");
+                            assert.equal(newFs.statSync(outputFiles[project.third][ext.js]).mtimeMs, time(), "Second build timestamp is correct");
                         });
                         after(() => {
                             newFs = undefined!;
@@ -195,15 +211,13 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                     "incremental declaration changes",
                     [
                         // Configs
-                        "/src/third/tsconfig.json",
-                        "/src/second/tsconfig.json",
-                        "/src/first/tsconfig.json",
+                        sources[project.first][source.config],
+                        sources[project.second][source.config],
+                        sources[project.third][source.config],
 
                         // Source files
-                        "/src/third/third_part1.ts",
-                        "/src/first/first_PART1.ts",
-                        "/src/first/first_part2.ts",
-                        "/src/first/first_part3.ts",
+                        ...sources[project.first][source.ts],
+                        ...sources[project.third][source.ts],
 
                         // Additional source Files
                         ...(additionalSourceFiles || emptyArray),
@@ -213,14 +227,14 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                         ...outputFiles[project.second],
                         outputFiles[project.third][ext.dts],
                     ],
-                    fs => replaceText(fs, "src/first/first_PART1.ts", "Hello", "Hola"),
+                    fs => replaceText(fs, relSources[project.first][source.ts][part.one], "Hello", "Hola"),
                     [
-                        getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
-                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/first/tsconfig.json", "src/first/bin/first-output.js", "src/first/first_PART1.ts"],
-                        [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
-                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/second/tsconfig.json", "src/second/second_part1.ts", "src/2/second-output.js"],
-                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/third/tsconfig.json", "src/third/thirdjs/output/third-output.js", "src/first"],
-                        [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/first"],
+                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
                     ],
                     outputFiles[project.first][ext.dts] // dts changes so once read old content, and once new (to emit third)
                 );
@@ -229,15 +243,13 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                     "incremental declaration doesnt change",
                     [
                         // Configs
-                        "/src/third/tsconfig.json",
-                        "/src/second/tsconfig.json",
-                        "/src/first/tsconfig.json",
+                        sources[project.first][source.config],
+                        sources[project.second][source.config],
+                        sources[project.third][source.config],
 
                         // Source files
-                        "/src/third/third_part1.ts",
-                        "/src/first/first_PART1.ts",
-                        "/src/first/first_part2.ts",
-                        "/src/first/first_part3.ts",
+                        ...sources[project.first][source.ts],
+                        ...sources[project.third][source.ts],
 
                         // Additional source Files
                         ...(additionalSourceFiles || emptyArray),
@@ -247,14 +259,14 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                         ...outputFiles[project.second],
                         outputFiles[project.third][ext.dts],
                     ],
-                    fs => appendFileContent(fs, "src/first/first_PART1.ts", "console.log(s);"),
+                    fs => appendFileContent(fs, relSources[project.first][source.ts][part.one], "console.log(s);"),
                     [
-                        getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
-                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/first/tsconfig.json", "src/first/bin/first-output.js", "src/first/first_PART1.ts"],
-                        [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
-                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/second/tsconfig.json", "src/second/second_part1.ts", "src/2/second-output.js"],
-                        [Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed, "src/third/tsconfig.json", "src/first"],
-                        [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
                     ]
                 );
 
@@ -263,15 +275,13 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                         "incremental headers change",
                         [
                             // Configs
-                            "/src/third/tsconfig.json",
-                            "/src/second/tsconfig.json",
-                            "/src/first/tsconfig.json",
+                            sources[project.first][source.config],
+                            sources[project.second][source.config],
+                            sources[project.third][source.config],
 
                             // Source files
-                            "/src/third/third_part1.ts",
-                            "/src/first/first_PART1.ts",
-                            "/src/first/first_part2.ts",
-                            "/src/first/first_part3.ts",
+                            ...sources[project.first][source.ts],
+                            ...sources[project.third][source.ts],
 
                             // Additional source Files
                             ...(additionalSourceFiles || emptyArray),
@@ -283,12 +293,12 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                         ],
                         fs => modifyAgainFs(fs),
                         [
-                            getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/first/tsconfig.json", "src/first/bin/first-output.js", "src/first/first_PART1.ts"],
-                            [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
-                            [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/second/tsconfig.json", "src/second/second_part1.ts", "src/2/second-output.js"],
-                            [Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed, "src/third/tsconfig.json", "src/first"],
-                            [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
+                            getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                            [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                            [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                            [Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                            [Diagnostics.Building_project_0, sources[project.third][source.config]]
                         ]
                     );
                 }
@@ -321,13 +331,13 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
             const builder = createSolutionBuilder(host);
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
-                getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/first/tsconfig.json", "src/first/bin/first-output.js"],
-                [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/second/tsconfig.json", "src/2/second-output.js"],
-                [Diagnostics.Building_project_0, "/src/second/tsconfig.json"],
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/third/tsconfig.json", "src/third/thirdjs/output/third-output.js"],
-                [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
+                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.js]],
+                [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.second][source.config], relOutputFiles[project.second][ext.js]],
+                [Diagnostics.Building_project_0, sources[project.second][source.config]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], relOutputFiles[project.third][ext.js]],
+                [Diagnostics.Building_project_0, sources[project.third][source.config]]
             );
             // Verify they exist
             for (const output of expectedOutputs) {
@@ -355,13 +365,13 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
             const builder = createSolutionBuilder(host);
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
-                getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/first/tsconfig.json", "src/first/bin/first-output.js"],
-                [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/second/tsconfig.json", "src/2/second-output.js"],
-                [Diagnostics.Building_project_0, "/src/second/tsconfig.json"],
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/third/tsconfig.json", "src/third/thirdjs/output/third-output.js"],
-                [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
+                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.js]],
+                [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.second][source.config], relOutputFiles[project.second][ext.js]],
+                [Diagnostics.Building_project_0, sources[project.second][source.config]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], relOutputFiles[project.third][ext.js]],
+                [Diagnostics.Building_project_0, sources[project.third][source.config]]
             );
             // Verify they exist
             for (const output of expectedOutputs) {
@@ -373,10 +383,10 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
             builder.resetBuildContext();
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
-                getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
-                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/first/tsconfig.json", "src/first/first_PART1.ts", "src/first/bin/first-output.js"],
-                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/second/tsconfig.json", "src/second/second_part1.ts", "src/2/second-output.js"],
-                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/third/tsconfig.json", "src/third/third_part1.ts", "src/third/thirdjs/output/third-output.js"],
+                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.first][source.config], relSources[project.first][source.ts][part.one], relOutputFiles[project.first][ext.js]],
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.third][source.config], relSources[project.third][source.ts][part.one], relOutputFiles[project.third][ext.js]],
             );
         });
 
@@ -403,17 +413,17 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
         verifyOutFileScenario({
             scenario: "strict in all projects",
             modifyFs: fs => {
-                enableStrict(fs, "src/first/tsconfig.json");
-                enableStrict(fs, "src/second/tsconfig.json");
-                enableStrict(fs, "src/third/tsconfig.json");
+                enableStrict(fs, sources[project.first][source.config]);
+                enableStrict(fs, sources[project.second][source.config]);
+                enableStrict(fs, sources[project.third][source.config]);
             },
-            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`)
+            modifyAgainFs: fs => addPrologue(fs, relSources[project.first][source.ts][part.one], `"myPrologue"`)
         });
 
         verifyOutFileScenario({
             scenario: "strict in one dependency",
             modifyFs: fs => {
-                enableStrict(fs, "src/second/tsconfig.json");
+                enableStrict(fs, sources[project.second][source.config]);
             },
             modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`)
         });
@@ -426,27 +436,27 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
         verifyOutFileScenario({
             scenario: "multiple prologues in all projects",
             modifyFs: fs => {
-                enableStrict(fs, "src/first/tsconfig.json");
-                addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`);
-                enableStrict(fs, "src/second/tsconfig.json");
-                addPrologue(fs, "src/second/second_part1.ts", `"myPrologue"`);
-                addPrologue(fs, "src/second/second_part2.ts", `"myPrologue2";`);
-                enableStrict(fs, "src/third/tsconfig.json");
-                addPrologue(fs, "src/third/third_part1.ts", `"myPrologue";`);
-                addPrologue(fs, "src/third/third_part1.ts", `"myPrologue3";`);
+                enableStrict(fs, sources[project.first][source.config]);
+                addPrologue(fs, sources[project.first][source.ts][part.one], `"myPrologue"`);
+                enableStrict(fs, sources[project.second][source.config]);
+                addPrologue(fs, sources[project.second][source.ts][part.one], `"myPrologue"`);
+                addPrologue(fs, sources[project.second][source.ts][part.two], `"myPrologue2";`);
+                enableStrict(fs, sources[project.third][source.config]);
+                addPrologue(fs, sources[project.third][source.ts][part.one], `"myPrologue";`);
+                addPrologue(fs, sources[project.third][source.ts][part.one], `"myPrologue3";`);
             },
-            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue5"`)
+            modifyAgainFs: fs => addPrologue(fs, relSources[project.first][source.ts][part.one], `"myPrologue5"`)
         });
 
         verifyOutFileScenario({
             scenario: "multiple prologues in different projects",
             modifyFs: fs => {
-                enableStrict(fs, "src/first/tsconfig.json");
-                addPrologue(fs, "src/second/second_part1.ts", `"myPrologue"`);
-                addPrologue(fs, "src/second/second_part2.ts", `"myPrologue2";`);
-                enableStrict(fs, "src/third/tsconfig.json");
+                enableStrict(fs, sources[project.first][source.config]);
+                addPrologue(fs, sources[project.second][source.ts][part.one], `"myPrologue"`);
+                addPrologue(fs, sources[project.second][source.ts][part.two], `"myPrologue2";`);
+                enableStrict(fs, sources[project.third][source.config]);
             },
-            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue5"`)
+            modifyAgainFs: fs => addPrologue(fs, sources[project.first][source.ts][part.one], `"myPrologue5"`)
         });
 
         // Shebang
