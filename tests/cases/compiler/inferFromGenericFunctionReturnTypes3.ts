@@ -172,3 +172,13 @@ const f1: F = () => {
         }
     ]);
 };
+
+// Breaking change repros from #29478
+
+declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
+let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
+
+enum State { A, B }
+type Foo = { state: State }
+declare function bar<T>(f: () => T[]): T[];
+let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
