@@ -9273,9 +9273,9 @@ namespace ts {
                 const source = types[i];
                 for (const target of types) {
                     if (source !== target) {
-                        if (count === 10000) {
-                            // After 10000 subtype checks we estimate the remaining amount of work by assuming the
-                            // same ratio of checks to removals. If the estimated number of remaining type checks is
+                        if (count === 100000) {
+                            // After 100000 subtype checks we estimate the remaining amount of work by assuming the
+                            // same ratio of checks per element. If the estimated number of remaining type checks is
                             // greater than an upper limit we deem the union type too complex to represent. The
                             // upper limit is 25M for unions of primitives only, and 1M otherwise. This for example
                             // caps union types at 5000 unique literal types and 1000 unique object types.
