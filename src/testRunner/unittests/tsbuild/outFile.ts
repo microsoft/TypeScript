@@ -115,51 +115,75 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
             });
         }
 
-        function verifyOutFileScenarioWorker(
-            scenario: string,
-            modifyFs: (fs: vfs.FileSystem) => void,
-            withoutBuildInfo: boolean,
-            additionalSourceFiles?: ReadonlyArray<string>) {
-
+        function verifyOutFileScenarioWorker(scenario: string, modifyFs: (fs: vfs.FileSystem) => void, withoutBuildInfo: boolean, modifyAgainFs?: (fs: vfs.FileSystem) => void, additionalSourceFiles?: ReadonlyArray<string>) {
             describe(`${scenario}${withoutBuildInfo ? " without build info" : ""}`, () => {
-                function verifyWorker(
-                    subScenario: string,
-                    expectedReadFiles: ReadonlyArray<string>,
-                    incrementalModifyFs?: (fs: vfs.FileSystem) => void,
-                    incrementalExpectedDiagnostics?: ReadonlyArray<fakes.ExpectedDiagnostic>,
-                    fileWithTwoReadCalls?: string) {
+                let fs: vfs.FileSystem;
+                let actualReadFileMap: Map<number>;
+                let firstBuildTime: number;
+                before(() => {
+                    const result = build(outFileFs.shadow(), modifyFs, withoutBuildInfo,
+                        getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/first/tsconfig.json", "src/first/bin/first-output.js"],
+                        [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/second/tsconfig.json", "src/2/second-output.js"],
+                        [Diagnostics.Building_project_0, "/src/second/tsconfig.json"],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/third/tsconfig.json", "src/third/thirdjs/output/third-output.js"],
+                        [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
+                    );
+                    ({ fs, actualReadFileMap } = result);
+                    firstBuildTime = time();
+                });
+                after(() => {
+                    fs = undefined!;
+                    actualReadFileMap = undefined!;
+                });
+                describe("initialBuild", () => {
+                    it(`Generates files matching the baseline`, () => {
+                        generateBaseline(fs, scenario, "initial Build", withoutBuildInfo, outFileFs);
+                    });
+                    it("verify readFile calls", () => {
+                        verifyReadFileCalls(actualReadFileMap, [
+                            // Configs
+                            "/src/third/tsconfig.json",
+                            "/src/second/tsconfig.json",
+                            "/src/first/tsconfig.json",
+
+                            // Source files
+                            "/src/third/third_part1.ts",
+                            "/src/second/second_part1.ts",
+                            "/src/second/second_part2.ts",
+                            "/src/first/first_PART1.ts",
+                            "/src/first/first_part2.ts",
+                            "/src/first/first_part3.ts",
+
+                            // Additional source Files
+                            ...(additionalSourceFiles || emptyArray),
+
+                            // outputs
+                            ...outputFiles[project.first],
+                            ...outputFiles[project.second]
+                        ]);
+                    });
+                });
+
+                function incrementalBuild(subScenario: string, expectedReadFiles: ReadonlyArray<string>, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic>, fileWithTwoReadCalls?: string) {
                     describe(subScenario, () => {
-                        let fs: vfs.FileSystem;
+                        let newFs: vfs.FileSystem;
                         let actualReadFileMap: Map<number>;
-                        let baseFs: vfs.FileSystem | undefined;
                         before(() => {
-                            const result = build(outFileFs.shadow(), modifyFs, withoutBuildInfo,
-                                getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
-                                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/first/tsconfig.json", "src/first/bin/first-output.js"],
-                                [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
-                                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/second/tsconfig.json", "src/2/second-output.js"],
-                                [Diagnostics.Building_project_0, "/src/second/tsconfig.json"],
-                                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/third/tsconfig.json", "src/third/thirdjs/output/third-output.js"],
-                                [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
-                            );
-                            ({ fs, actualReadFileMap } = result);
-                            if (incrementalModifyFs) {
-                                assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "First build timestamp is correct");
-                                tick();
-                                baseFs = fs;
-                                fs = baseFs.shadow();
-                                tick();
-                                ({ actualReadFileMap } = build(fs, incrementalModifyFs, withoutBuildInfo, ...incrementalExpectedDiagnostics!));
-                                assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "Second build timestamp is correct");
-                            }
+                            assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, firstBuildTime, "First build timestamp is correct");
+                            tick();
+                            newFs = fs.shadow();
+                            tick();
+                            ({ actualReadFileMap } = build(newFs, incrementalModifyFs, withoutBuildInfo, ...incrementalExpectedDiagnostics));
+                            assert.equal(newFs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "Second build timestamp is correct");
                         });
                         after(() => {
-                            fs = undefined!;
+                            newFs = undefined!;
                             actualReadFileMap = undefined!;
-                            baseFs = undefined;
                         });
                         it(`Generates files matching the baseline`, () => {
-                            generateBaseline(fs, scenario, subScenario, withoutBuildInfo, baseFs);
+                            generateBaseline(newFs, scenario, subScenario, withoutBuildInfo, fs);
                         });
                         it("verify readFile calls", () => {
                             verifyReadFileCalls(actualReadFileMap, expectedReadFiles, fileWithTwoReadCalls);
@@ -167,29 +191,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                     });
                 }
 
-                verifyWorker("initial Build", [
-                    // Configs
-                    "/src/third/tsconfig.json",
-                    "/src/second/tsconfig.json",
-                    "/src/first/tsconfig.json",
-
-                    // Source files
-                    "/src/third/third_part1.ts",
-                    "/src/second/second_part1.ts",
-                    "/src/second/second_part2.ts",
-                    "/src/first/first_PART1.ts",
-                    "/src/first/first_part2.ts",
-                    "/src/first/first_part3.ts",
-
-                    // Additional source Files
-                    ...(additionalSourceFiles || emptyArray),
-
-                    // outputs
-                    ...outputFiles[project.first],
-                    ...outputFiles[project.second]
-                ]);
-
-                verifyWorker(
+                incrementalBuild(
                     "incremental declaration changes",
                     [
                         // Configs
@@ -223,7 +225,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                     outputFiles[project.first][ext.dts] // dts changes so once read old content, and once new (to emit third)
                 );
 
-                verifyWorker(
+                incrementalBuild(
                     "incremental declaration doesnt change",
                     [
                         // Configs
@@ -255,17 +257,58 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                         [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
                     ]
                 );
+
+                if (modifyAgainFs) {
+                    incrementalBuild(
+                        "incremental headers change",
+                        [
+                            // Configs
+                            "/src/third/tsconfig.json",
+                            "/src/second/tsconfig.json",
+                            "/src/first/tsconfig.json",
+
+                            // Source files
+                            "/src/third/third_part1.ts",
+                            "/src/first/first_PART1.ts",
+                            "/src/first/first_part2.ts",
+                            "/src/first/first_part3.ts",
+
+                            // Additional source Files
+                            ...(additionalSourceFiles || emptyArray),
+
+                            // outputs
+                            ...outputFiles[project.first],
+                            ...outputFiles[project.second],
+                            outputFiles[project.third][ext.dts],
+                        ],
+                        fs => modifyAgainFs(fs),
+                        [
+                            getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
+                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/first/tsconfig.json", "src/first/bin/first-output.js", "src/first/first_PART1.ts"],
+                            [Diagnostics.Building_project_0, "/src/first/tsconfig.json"],
+                            [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/second/tsconfig.json", "src/second/second_part1.ts", "src/2/second-output.js"],
+                            [Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed, "src/third/tsconfig.json", "src/first"],
+                            [Diagnostics.Building_project_0, "/src/third/tsconfig.json"]
+                        ]
+                    );
+                }
             });
         }
 
-        function verifyOutFileScenario(scenario: string, modifyFs: (fs: vfs.FileSystem) => void, additionalSourceFiles?: ReadonlyArray<string>) {
-            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBuildInfo*/ false, additionalSourceFiles);
-            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBuildInfo*/ true, additionalSourceFiles);
+        function verifyOutFileScenario({ scenario, modifyFs, modifyAgainFs, additionalSourceFiles }: { scenario: string; modifyFs: (fs: vfs.FileSystem) => void; modifyAgainFs?: (fs: vfs.FileSystem) => void; additionalSourceFiles?: ReadonlyArray<string>; }) {
+            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBuildInfo*/ false, modifyAgainFs, additionalSourceFiles);
+            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBuildInfo*/ true, modifyAgainFs, additionalSourceFiles);
         }
 
-        verifyOutFileScenario("baseline sectioned sourcemaps", noop);
+        verifyOutFileScenario({
+            scenario: "baseline sectioned sourcemaps",
+            modifyFs: noop
+        });
 
-        verifyOutFileScenario("when final project is not composite but uses project references", fs => replaceFileContent(fs, "/src/third/tsconfig.json", `"composite": true,`, ""));
+        verifyOutFileScenario({
+            scenario: "when final project is not composite but uses project references",
+            modifyFs: fs => replaceFileContent(fs, "/src/third/tsconfig.json", `"composite": true,`, "")
+        });
 
         it("clean projects", () => {
             const fs = outFileFs.shadow();
@@ -356,34 +399,54 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
         function enableStrict(fs: vfs.FileSystem, path: string) {
             replaceFileContent(fs, path, `"strict": false`, `"strict": true`);
         }
-        verifyOutFileScenario("strict in all projects", fs => {
-            enableStrict(fs, "src/first/tsconfig.json");
-            enableStrict(fs, "src/second/tsconfig.json");
-            enableStrict(fs, "src/third/tsconfig.json");
+
+        verifyOutFileScenario({
+            scenario: "strict in all projects",
+            modifyFs: fs => {
+                enableStrict(fs, "src/first/tsconfig.json");
+                enableStrict(fs, "src/second/tsconfig.json");
+                enableStrict(fs, "src/third/tsconfig.json");
+            },
+            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`)
         });
-        verifyOutFileScenario("strict in one dependency", fs => {
-            enableStrict(fs, "src/second/tsconfig.json");
+
+        verifyOutFileScenario({
+            scenario: "strict in one dependency",
+            modifyFs: fs => {
+                enableStrict(fs, "src/second/tsconfig.json");
+            },
+            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`)
         });
 
         function addPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
             prependFileContent(fs, path, `${prologue}
 `);
         }
-        verifyOutFileScenario("multiple prologues in all projects", fs => {
-            enableStrict(fs, "src/first/tsconfig.json");
-            addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`);
-            enableStrict(fs, "src/second/tsconfig.json");
-            addPrologue(fs, "src/second/second_part1.ts", `"myPrologue"`);
-            addPrologue(fs, "src/second/second_part2.ts", `"myPrologue2";`);
-            enableStrict(fs, "src/third/tsconfig.json");
-            addPrologue(fs, "src/third/third_part1.ts", `"myPrologue";`);
-            addPrologue(fs, "src/third/third_part1.ts", `"myPrologue3";`);
+
+        verifyOutFileScenario({
+            scenario: "multiple prologues in all projects",
+            modifyFs: fs => {
+                enableStrict(fs, "src/first/tsconfig.json");
+                addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`);
+                enableStrict(fs, "src/second/tsconfig.json");
+                addPrologue(fs, "src/second/second_part1.ts", `"myPrologue"`);
+                addPrologue(fs, "src/second/second_part2.ts", `"myPrologue2";`);
+                enableStrict(fs, "src/third/tsconfig.json");
+                addPrologue(fs, "src/third/third_part1.ts", `"myPrologue";`);
+                addPrologue(fs, "src/third/third_part1.ts", `"myPrologue3";`);
+            },
+            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue5"`)
         });
-        verifyOutFileScenario("multiple prologues in different projects", fs => {
-            enableStrict(fs, "src/first/tsconfig.json");
-            addPrologue(fs, "src/second/second_part1.ts", `"myPrologue"`);
-            addPrologue(fs, "src/second/second_part2.ts", `"myPrologue2";`);
-            enableStrict(fs, "src/third/tsconfig.json");
+
+        verifyOutFileScenario({
+            scenario: "multiple prologues in different projects",
+            modifyFs: fs => {
+                enableStrict(fs, "src/first/tsconfig.json");
+                addPrologue(fs, "src/second/second_part1.ts", `"myPrologue"`);
+                addPrologue(fs, "src/second/second_part2.ts", `"myPrologue2";`);
+                enableStrict(fs, "src/third/tsconfig.json");
+            },
+            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue5"`)
         });
 
         // Shebang
@@ -391,14 +454,29 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
             prependFileContent(fs, `src/${project}/${file}.ts`, `#!someshebang ${project} ${file}
 `);
         }
-        verifyOutFileScenario("shebang in all projects", fs => {
-            addShebang(fs, "first", "first_PART1");
-            addShebang(fs, "first", "first_part2");
-            addShebang(fs, "second", "second_part1");
-            addShebang(fs, "third", "third_part1");
+
+//        function removeShebang(fs: vfs.FileSystem, project: string, file: string) {
+//            replaceFileContent(fs, `src/${project}/${file}.ts`, `#!someshebang ${project} ${file}
+//`, "");
+//        }
+
+        verifyOutFileScenario({
+            scenario: "shebang in all projects",
+            modifyFs: fs => {
+                addShebang(fs, "first", "first_PART1");
+                addShebang(fs, "first", "first_part2");
+                addShebang(fs, "second", "second_part1");
+                addShebang(fs, "third", "third_part1");
+            },
+            //modifyAgainFs: fs => removeShebang(fs, "first", "first_PART1")
         });
-        verifyOutFileScenario("shebang in only one dependency project", fs => {
-            addShebang(fs, "second", "second_part1");
+
+        verifyOutFileScenario({
+            scenario: "shebang in only one dependency project",
+            modifyFs: fs => {
+                addShebang(fs, "second", "second_part1");
+            },
+            //modifyAgainFs: fs => addShebang(fs, "first", "first_PART1")
         });
 
         // emitHelpers
@@ -407,14 +485,25 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
 class ${project}1 { }
 class ${project}2 extends ${project}1 { }`);
         }
-        verifyOutFileScenario("emitHelpers in all projects", fs => {
-            addExtendsClause(fs, "first", "first_part2");
-            addExtendsClause(fs, "second", "second_part1");
-            addExtendsClause(fs, "third", "third_part1");
+
+        verifyOutFileScenario({
+            scenario: "emitHelpers in all projects",
+            modifyFs: fs => {
+                addExtendsClause(fs, "first", "first_part2");
+                addExtendsClause(fs, "second", "second_part1");
+                addExtendsClause(fs, "third", "third_part1");
+            },
+            //modifyAgainFs: fs => addSpread(fs, "first", "first_PART1")
         });
-        verifyOutFileScenario("emitHelpers in only one dependency project", fs => {
-            addExtendsClause(fs, "second", "second_part1");
+
+        verifyOutFileScenario({
+            scenario: "emitHelpers in only one dependency project",
+            modifyFs: fs => {
+                addExtendsClause(fs, "second", "second_part1");
+            },
+            //modifyAgainFs: fs => addSpread(fs, "first", "first_PART1")
         });
+
         function addSpread(fs: vfs.FileSystem, project: string, file: string) {
             const path = `src/${project}/${file}.ts`;
             const content = fs.readFileSync(path, "utf8");
@@ -425,35 +514,60 @@ ${project}${file}Spread(...[10, 20, 30]);`);
             replaceFileContent(fs, `src/${project}/tsconfig.json`, `"strict": false,`, `"strict": false,
     "downlevelIteration": true,`);
         }
-        verifyOutFileScenario("multiple emitHelpers in all projects", fs => {
-            addExtendsClause(fs, "first", "first_part2");
-            addSpread(fs, "first", "first_part3");
-            addExtendsClause(fs, "second", "second_part1");
-            addSpread(fs, "second", "second_part2");
-            addExtendsClause(fs, "third", "third_part1");
-            addSpread(fs, "third", "third_part1");
+
+        verifyOutFileScenario({
+            scenario: "multiple emitHelpers in all projects",
+            modifyFs: fs => {
+                addExtendsClause(fs, "first", "first_part2");
+                addSpread(fs, "first", "first_part3");
+                addExtendsClause(fs, "second", "second_part1");
+                addSpread(fs, "second", "second_part2");
+                addExtendsClause(fs, "third", "third_part1");
+                addSpread(fs, "third", "third_part1");
+            },
+            //modifyAgainFs: fs => addSpread(fs, "first", "first_PART1")
         });
-        verifyOutFileScenario("multiple emitHelpers in different projects", fs => {
-            addSpread(fs, "first", "first_part3");
-            addExtendsClause(fs, "second", "second_part1");
-            addSpread(fs, "third", "third_part1");
+
+        verifyOutFileScenario({
+            scenario: "multiple emitHelpers in different projects",
+            modifyFs: fs => {
+                addSpread(fs, "first", "first_part3");
+                addExtendsClause(fs, "second", "second_part1");
+                addSpread(fs, "third", "third_part1");
+            },
+            //modifyAgainFs: fs => addSpread(fs, "first", "first_PART1")
         });
 
         // triple slash refs
         function getTripleSlashRef(project: string) {
             return `/src/${project}/tripleRef.d.ts`;
         }
+
         function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
             fs.writeFileSync(getTripleSlashRef(project), `declare class ${project}${file} { }`);
             prependFileContent(fs, `src/${project}/${file}.ts`, `///<reference path="./tripleRef.d.ts"/>
 const ${file}Const = new ${project}${file}();
 `);
         }
-        verifyOutFileScenario("triple slash refs in all projects", fs => {
-            addTripleSlashRef(fs, "first", "first_part2");
-            addTripleSlashRef(fs, "second", "second_part1");
-            addTripleSlashRef(fs, "third", "third_part1");
-        }, [getTripleSlashRef("first"), getTripleSlashRef("second"), getTripleSlashRef("third")]);
-        verifyOutFileScenario("triple slash refs in one project", fs => addTripleSlashRef(fs, "second", "second_part1"), [getTripleSlashRef("second")]);
+
+        verifyOutFileScenario({
+            scenario: "triple slash refs in all projects",
+            modifyFs: fs => {
+                addTripleSlashRef(fs, "first", "first_part2");
+                addTripleSlashRef(fs, "second", "second_part1");
+                addTripleSlashRef(fs, "third", "third_part1");
+            },
+            additionalSourceFiles: [
+                getTripleSlashRef("first"), getTripleSlashRef("second"), getTripleSlashRef("third")
+            ]
+        });
+
+        verifyOutFileScenario({
+            scenario: "triple slash refs in one project",
+            modifyFs: fs => addTripleSlashRef(fs, "second", "second_part1"),
+            additionalSourceFiles: [
+                getTripleSlashRef("second")
+            ]
+        });
     });
 }
