@@ -131,7 +131,7 @@ namespace ts {
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
-            if (buildInfoPath && !emitOnlyDtsFiles) buildInfo = { js: [], dts: [] };
+            if (buildInfoPath && !emitOnlyDtsFiles) buildInfo = { js: [], dts: [], commonSourceDirectory: host.getCommonSourceDirectory() };
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, buildInfo && buildInfo.js);
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, buildInfo && buildInfo.dts);
             // Write bundled offset information if applicable

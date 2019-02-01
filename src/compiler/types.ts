@@ -5531,8 +5531,9 @@ namespace ts {
     export type BundleFileInfo = BundleFileSection[];
     /* @internal */
     export interface BuildInfo {
-        js?: BundleFileInfo;
-        dts?: BundleFileInfo;
+        js: BundleFileInfo;
+        dts: BundleFileInfo;
+        commonSourceDirectory: string;
     }
 
     export interface PrintHandlers {

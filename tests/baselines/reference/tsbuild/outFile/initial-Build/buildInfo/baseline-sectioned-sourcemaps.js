@@ -23,7 +23,8 @@
       "end": 143,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/second/"
 }
 
 //// [/src/2/second-output.d.ts]
@@ -436,7 +437,8 @@ sourceFile:../second/second_part2.ts
       "end": 199,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/first/"
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -788,7 +790,8 @@ sourceFile:../first_part3.ts
       "end": 407,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/third/"
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]

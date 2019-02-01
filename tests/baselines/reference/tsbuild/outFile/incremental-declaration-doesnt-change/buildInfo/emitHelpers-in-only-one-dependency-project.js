@@ -23,7 +23,8 @@
       "end": 250,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/first/"
 }
 
 //// [/src/first/bin/first-output.js]
@@ -298,7 +299,8 @@ function forfirstfirst_PART1Rest() { }console.log(s);
       "end": 511,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/third/"
 }
 
 //// [/src/third/thirdjs/output/third-output.js]

@@ -2673,8 +2673,8 @@ namespace ts {
                 sourceMapText: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText; } },
             });
 
-            const sections = textOrInputFiles.buildInfo ? mapPathOrType === "js" ? textOrInputFiles.buildInfo.js : textOrInputFiles.buildInfo.dts : undefined;
-            if (sections) {
+            if (textOrInputFiles.buildInfo) {
+                const sections = mapPathOrType === "js" ? textOrInputFiles.buildInfo.js : textOrInputFiles.buildInfo.dts;
                 for (const section of sections) {
                     switch (section.kind) {
                         case BundleFileSectionKind.Prologue:
@@ -2777,6 +2777,14 @@ namespace ts {
         declarationMapTextOrBuildInfoPath?: string
     ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
+        let buildInfo: BuildInfo | false;
+        const getBuildInfo = (getText: () => string | undefined) => {
+            if (buildInfo === undefined) {
+                const result = getText();
+                buildInfo = result !== undefined ? JSON.parse(result) as BuildInfo : false;
+            }
+            return buildInfo || undefined;
+        };
         if (!isString(javascriptTextOrReadFileText)) {
             const cache = createMap<string | false>();
             const textGetter = (path: string | undefined) => {
@@ -2792,10 +2800,6 @@ namespace ts {
                 const result = textGetter(path);
                 return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
             };
-            const jsonGetter = (path: string | undefined) => {
-                const result = textGetter(path);
-                return result !== undefined ? JSON.parse(result) as BuildInfo : undefined;
-            };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
             node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
@@ -2806,7 +2810,7 @@ namespace ts {
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
                 declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
                 declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
-                buildInfo: { get() { return jsonGetter(declarationMapTextOrBuildInfoPath); } }
+                buildInfo: { get() { return getBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
             });
         }
         else {

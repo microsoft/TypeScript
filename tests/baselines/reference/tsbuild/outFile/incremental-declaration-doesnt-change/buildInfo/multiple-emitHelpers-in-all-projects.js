@@ -41,7 +41,8 @@
       "end": 314,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/first/"
 }
 
 //// [/src/first/bin/first-output.js]
@@ -524,7 +525,8 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
       "end": 756,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/third/"
 }
 
 //// [/src/third/thirdjs/output/third-output.js]

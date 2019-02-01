@@ -29,7 +29,8 @@
       "end": 199,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/first/"
 }
 
 //// [/src/first/bin/first-output.d.ts.map]
@@ -412,7 +413,8 @@ console.log(s);
       "end": 407,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/third/"
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]

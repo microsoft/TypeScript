@@ -35,7 +35,8 @@
       "end": 314,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/first/"
 }
 
 //// [/src/first/bin/first-output.d.ts.map]
@@ -616,7 +617,8 @@ function forfirstfirst_PART1Rest() { }
       "end": 756,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/third/"
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]

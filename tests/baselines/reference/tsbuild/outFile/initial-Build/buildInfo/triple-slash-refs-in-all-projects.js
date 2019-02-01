@@ -29,7 +29,8 @@
       "end": 248,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/second/"
 }
 
 //// [/src/2/second-output.d.ts]
@@ -502,7 +503,8 @@ sourceFile:../second/second_part2.ts
       "end": 294,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/first/"
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -957,7 +959,8 @@ declare class secondsecond_part1 { }
       "end": 723,
       "kind": "sourceMapUrl"
     }
-  ]
+  ],
+  "commonSourceDirectory": "/src/third/"
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
