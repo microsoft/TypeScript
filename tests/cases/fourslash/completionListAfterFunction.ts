@@ -12,14 +12,9 @@
 ////// inside the function
 ////function f4(d: number) { /*4*/}
 
-goTo.marker("1");
-verify.not.completionListContains("a");
-
-goTo.marker("2");
-verify.completionListContains("b");
-
-goTo.marker("3");
-verify.not.completionListContains("c");
-
-goTo.marker("4");
-verify.completionListContains("d");
+verify.completions(
+    { marker: "1", excludes: "a" },
+    { marker: "2", includes: "b" },
+    { marker: "3", excludes: "c" },
+    { marker: "4", includes: "d" },
+);

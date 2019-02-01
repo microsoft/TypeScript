@@ -4,8 +4,7 @@
 ////module testModule {
 ////    export var foo = 1;
 ////}
-////@ 
+////@
 ////testModule./**/
 
-goTo.marker();
-verify.completionListContains("foo");
+verify.completions({ marker: "", exact: "foo" });

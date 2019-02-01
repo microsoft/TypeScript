@@ -10,6 +10,4 @@
 //// class MyComp { props: { ONE: string; TWO: number } }
 //// var x = <MyComp /**//>;
 
-goTo.marker();
-verify.completionListContains('ONE');
-verify.completionListContains('TWO');
+verify.completions({ marker: "", exact: ["ONE", "TWO"] });

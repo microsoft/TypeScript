@@ -1,0 +1,28 @@
+tests/cases/compiler/r/entry.ts(3,14): error TS2742: The inferred type of 'x' cannot be named without a reference to 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
+
+
+==== tests/cases/compiler/r/node_modules/foo/node_modules/nested/index.d.ts (0 errors) ====
+    export interface NestedProps {}
+==== tests/cases/compiler/r/node_modules/foo/other/index.d.ts (0 errors) ====
+    export interface OtherIndexProps {}
+==== tests/cases/compiler/r/node_modules/foo/other.d.ts (0 errors) ====
+    export interface OtherProps {}
+==== tests/cases/compiler/r/node_modules/foo/index.d.ts (0 errors) ====
+    import { OtherProps } from "./other";
+    import { OtherIndexProps } from "./other/index";
+    import { NestedProps } from "nested";
+    export interface SomeProps {}
+    
+    export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
+==== tests/cases/compiler/node_modules/root/index.d.ts (0 errors) ====
+    export interface RootProps {}
+    
+    export function bar(): RootProps;
+==== tests/cases/compiler/r/entry.ts (1 errors) ====
+    import { foo } from "foo";
+    import { bar } from "root";
+    export const x = foo();
+                 ~
+!!! error TS2742: The inferred type of 'x' cannot be named without a reference to 'foo/node_modules/nested'. This is likely not portable. A type annotation is necessary.
+    export const y = bar();
+    

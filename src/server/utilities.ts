@@ -206,32 +206,25 @@ namespace ts.server {
         }
     }
 
-    export function toSortedArray(arr: string[]): SortedArray<string>;
-    export function toSortedArray<T>(arr: T[], comparer: Comparer<T>): SortedArray<T>;
-    export function toSortedArray<T>(arr: T[], comparer?: Comparer<T>): SortedArray<T> {
-        arr.sort(comparer);
-        return arr as SortedArray<T>;
-    }
-
-    export function toDeduplicatedSortedArray(arr: string[]): SortedArray<string> {
-        arr.sort();
-        filterMutate(arr, isNonDuplicateInSortedArray);
-        return arr as SortedArray<string>;
-    }
-    function isNonDuplicateInSortedArray<T>(value: T, index: number, array: T[]) {
-        return index === 0 || value !== array[index - 1];
-    }
-
     const indentStr = "\n    ";
 
-    /* @internal */
     export function indent(str: string): string {
         return indentStr + str.replace(/\n/g, indentStr);
     }
 
     /** Put stringified JSON on the next line, indented. */
-    /* @internal */
     export function stringifyIndented(json: {}): string {
         return indentStr + JSON.stringify(json);
+    }
+}
+
+/* @internal */
+namespace ts {
+    // Additional tsserver specific watch information
+    export const enum WatchType {
+        ClosedScriptInfo = "Closed Script info",
+        ConfigFileForInferredRoot = "Config file for the inferred project root",
+        NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them",
+        MissingSourceMapFile = "Missing source map file",
     }
 }

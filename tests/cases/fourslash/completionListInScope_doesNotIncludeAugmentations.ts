@@ -9,5 +9,4 @@
 ////
 /////**/
 
-goTo.marker();
-verify.not.completionListContains("a");
+verify.completions({ marker: "", excludes: "a" });

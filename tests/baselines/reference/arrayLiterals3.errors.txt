@@ -1,15 +1,12 @@
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
-  Property '0' is missing in type '[]'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(10,5): error TS2739: Type '[]' is missing the following properties from type '[any, any, any]': 0, 1, 2
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,38): error TS2322: Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,48): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(11,51): error TS2322: Type 'true' is not assignable to type 'number'.
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(17,5): error TS2322: Type '[number, number, string, boolean]' is not assignable to type '[number, number]'.
   Types of property 'length' are incompatible.
     Type '4' is not assignable to type '2'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(32,5): error TS2322: Type '(number[] | string[])[]' is not assignable to type 'tup'.
-  Property '0' is missing in type '(number[] | string[])[]'.
-tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(33,5): error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
-  Property '0' is missing in type 'number[]'.
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(32,5): error TS2739: Type '(number[] | string[])[]' is missing the following properties from type 'tup': 0, 1
+tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(33,5): error TS2739: Type 'number[]' is missing the following properties from type '[number, number, number]': 0, 1, 2
 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
   Types of property 'pop' are incompatible.
     Type '() => string | number' is not assignable to type '() => Number'.
@@ -29,8 +26,7 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     
     var a0: [any, any, any] = [];                             // Error
         ~~
-!!! error TS2322: Type '[]' is not assignable to type '[any, any, any]'.
-!!! error TS2322:   Property '0' is missing in type '[]'.
+!!! error TS2739: Type '[]' is missing the following properties from type '[any, any, any]': 0, 1, 2
     var a1: [boolean, string, number] = ["string", 1, true];  // Error
                                          ~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.
@@ -64,12 +60,10 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
     interface myArray2 extends Array<Number|String> { }
     var c0: tup = [...temp2];                         // Error
         ~~
-!!! error TS2322: Type '(number[] | string[])[]' is not assignable to type 'tup'.
-!!! error TS2322:   Property '0' is missing in type '(number[] | string[])[]'.
+!!! error TS2739: Type '(number[] | string[])[]' is missing the following properties from type 'tup': 0, 1
     var c1: [number, number, number] = [...temp1];    // Error cannot assign number[] to [number, number, number]
         ~~
-!!! error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
-!!! error TS2322:   Property '0' is missing in type 'number[]'.
+!!! error TS2739: Type 'number[]' is missing the following properties from type '[number, number, number]': 0, 1, 2
     var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]
         ~~
 !!! error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.

@@ -32,8 +32,4 @@
 ////import * as c from "./C";
 ////var x = c.Inner./**/
 
-goTo.marker();
-verify.completionListContains("varVar");
-verify.completionListContains("letVar");
-verify.completionListContains("constVar");
-verify.not.completionListContains("__export");
+verify.completions({ marker: "", exact: ["varVar", "letVar", "constVar"] });

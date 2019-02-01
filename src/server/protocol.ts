@@ -129,6 +129,7 @@ namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         /* @internal */
         GetEditsForFileRenameFull = "getEditsForFileRename-full",
+        ConfigurePlugin = "configurePlugin"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -220,6 +221,11 @@ namespace ts.server.protocol {
          * Contains message body if success === true.
          */
         body?: any;
+
+        /**
+         * Contains extra information that plugin can include to be passed on
+         */
+        metadata?: unknown;
     }
 
     /**
@@ -1023,7 +1029,7 @@ namespace ts.server.protocol {
         /**
          * The file locations referencing the symbol.
          */
-        refs: ReferencesResponseItem[];
+        refs: ReadonlyArray<ReferencesResponseItem>;
 
         /**
          * The name of the symbol.
@@ -1373,6 +1379,16 @@ namespace ts.server.protocol {
      * no body field is required.
      */
     export interface ConfigureResponse extends Response {
+    }
+
+    export interface ConfigurePluginRequestArguments {
+        pluginName: string;
+        configuration: any;
+    }
+
+    export interface ConfigurePluginRequest extends Request {
+        command: CommandTypes.ConfigurePlugin;
+        arguments: ConfigurePluginRequestArguments;
     }
 
     /**
@@ -2390,6 +2406,7 @@ namespace ts.server.protocol {
      */
     export interface DiagnosticEvent extends Event {
         body?: DiagnosticEventBody;
+        event: DiagnosticEventKind;
     }
 
     export interface ConfigFileDiagnosticEventBody {
@@ -2508,6 +2525,10 @@ namespace ts.server.protocol {
          */
         maxFileSize: number;
     }
+
+    /*@internal*/
+    export type AnyEvent = RequestCompletedEvent | DiagnosticEvent | ConfigFileDiagnosticEvent | ProjectLanguageServiceStateEvent | TelemetryEvent |
+        ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | SurveyReadyEvent | LargeFileReferencedEvent;
 
     /**
      * Arguments for reload request.
@@ -2884,6 +2905,8 @@ namespace ts.server.protocol {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
         readonly lazyConfiguredProjectsFromExternalProject?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly allowRenameOfImportPath?: boolean;
     }
 
     export interface CompilerOptions {

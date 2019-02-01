@@ -14,6 +14,6 @@ function f() {
 >arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 3, 13))
 
         return () => arguments;
->arguments : Symbol(arguments)
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments15_ES6.ts, 3, 13))
     }
 }

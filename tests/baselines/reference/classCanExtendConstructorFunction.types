@@ -269,8 +269,8 @@ soup.flavour
 >flavour : number
 
 var chowder = new Chowder({ claim: "ignorant" });
->chowder : any
->new Chowder({ claim: "ignorant" }) : any
+>chowder : Chowder
+>new Chowder({ claim: "ignorant" }) : Chowder
 >Chowder : typeof Chowder
 >{ claim: "ignorant" } : { claim: "ignorant"; }
 >claim : "ignorant"
@@ -279,7 +279,7 @@ var chowder = new Chowder({ claim: "ignorant" });
 chowder.flavour.claim
 >chowder.flavour.claim : any
 >chowder.flavour : any
->chowder : any
+>chowder : Chowder
 >flavour : any
 >claim : any
 

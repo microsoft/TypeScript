@@ -1,6 +1,5 @@
 tests/cases/conformance/jsdoc/functions.js(65,14): error TS2345: Argument of type 'typeof E' is not assignable to parameter of type 'new (arg1: number) => { length: number; }'.
-  Type 'E' is not assignable to type '{ length: number; }'.
-    Property 'length' is missing in type 'E'.
+  Property 'length' is missing in type 'E' but required in type '{ length: number; }'.
 
 
 ==== tests/cases/conformance/jsdoc/functions.js (1 errors) ====
@@ -71,6 +70,6 @@ tests/cases/conformance/jsdoc/functions.js(65,14): error TS2345: Argument of typ
     var y3 = id2(E);
                  ~
 !!! error TS2345: Argument of type 'typeof E' is not assignable to parameter of type 'new (arg1: number) => { length: number; }'.
-!!! error TS2345:   Type 'E' is not assignable to type '{ length: number; }'.
-!!! error TS2345:     Property 'length' is missing in type 'E'.
+!!! error TS2345:   Property 'length' is missing in type 'E' but required in type '{ length: number; }'.
+!!! related TS2728 tests/cases/conformance/jsdoc/functions.js:12:28: 'length' is declared here.
     

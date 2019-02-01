@@ -47,3 +47,5 @@
         duplicate8(): number;
     }
     
+Found 2 errors.
+

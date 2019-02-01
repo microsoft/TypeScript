@@ -6,11 +6,9 @@
 
 goTo.marker('1');
 edit.insert('.');
-verify.completionListContains('trim');
-verify.completionListCount(21);
+verify.completions({ exact: completion.stringMembers });
 edit.insert('});'); // need the following lines to not have parse errors in order for completion list to appear
 
 goTo.marker('2');
 edit.insert('.');
-verify.completionListContains('trim');
-verify.completionListCount(21);
+verify.completions({ exact: completion.stringMembers });

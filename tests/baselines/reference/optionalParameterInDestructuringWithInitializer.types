@@ -167,7 +167,7 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
 >b : number
 >c : number
 >6 : 6
->{b: 4, c: 5} : { b: number; c?: number; }
+>{b: 4, c: 5} : { b: number; c: number; }
 >b : number
 >4 : 4
 >c : number

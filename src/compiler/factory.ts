@@ -68,12 +68,15 @@ namespace ts {
     /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral; // tslint:disable-line unified-signatures
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
     export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
-    export function createLiteral(value: number): NumericLiteral;
+    export function createLiteral(value: number | PseudoBigInt): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
-    export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote?: boolean): PrimaryExpression {
+    export function createLiteral(value: string | number | PseudoBigInt | boolean): PrimaryExpression;
+    export function createLiteral(value: string | number | PseudoBigInt | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote?: boolean): PrimaryExpression {
         if (typeof value === "number") {
             return createNumericLiteral(value + "");
+        }
+        if (typeof value === "object" && "base10Value" in value) { // PseudoBigInt
+            return createBigIntLiteral(pseudoBigIntToString(value) + "n");
         }
         if (typeof value === "boolean") {
             return value ? createTrue() : createFalse();
@@ -90,6 +93,12 @@ namespace ts {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
         node.numericLiteralFlags = 0;
+        return node;
+    }
+
+    export function createBigIntLiteral(value: string): BigIntLiteral {
+        const node = <BigIntLiteral>createSynthesizedNode(SyntaxKind.BigIntLiteral);
+        node.text = value;
         return node;
     }
 
@@ -867,8 +876,8 @@ namespace ts {
     }
 
     export function createTypeOperatorNode(type: TypeNode): TypeOperatorNode;
-    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword, type: TypeNode): TypeOperatorNode;
-    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | TypeNode, type?: TypeNode) {
+    export function createTypeOperatorNode(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword, type: TypeNode): TypeOperatorNode;
+    export function createTypeOperatorNode(operatorOrType: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword | TypeNode, type?: TypeNode) {
         const node = createSynthesizedNode(SyntaxKind.TypeOperator) as TypeOperatorNode;
         node.operator = typeof operatorOrType === "number" ? operatorOrType : SyntaxKind.KeyOfKeyword;
         node.type = parenthesizeElementTypeMember(typeof operatorOrType === "number" ? type! : operatorOrType);
@@ -2216,7 +2225,6 @@ namespace ts {
     /* @internal */
     function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
         const node = createSynthesizedNode(kind) as T;
-        node.atToken = createToken(SyntaxKind.AtToken);
         node.tagName = createIdentifier(tagName);
         return node;
     }
@@ -2622,41 +2630,88 @@ namespace ts {
     }
 
     export function createUnparsedSourceFile(text: string): UnparsedSource;
+    export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-    export function createUnparsedSourceFile(text: string, mapPath?: string, map?: string): UnparsedSource {
+    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, map?: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
-        node.text = text;
-        node.sourceMapPath = mapPath;
-        node.sourceMapText = map;
+        if (!isString(textOrInputFiles)) {
+            Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
+            node.fileName = mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath;
+            node.sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
+            Object.defineProperties(node, {
+                text: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptText : textOrInputFiles.declarationText; } },
+                sourceMapText: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText; } },
+            });
+        }
+        else {
+            node.text = textOrInputFiles;
+            node.sourceMapPath = mapPathOrType;
+            node.sourceMapText = map;
+        }
         return node;
     }
     export function createInputFiles(
-        javascript: string,
-        declaration: string
+        javascriptText: string,
+        declarationText: string
     ): InputFiles;
     export function createInputFiles(
-        javascript: string,
-        declaration: string,
+        readFileText: (path: string) => string | undefined,
+        javascriptPath: string,
+        javascriptMapPath: string | undefined,
+        declarationPath: string,
+        declarationMapPath: string | undefined,
+    ): InputFiles;
+    export function createInputFiles(
+        javascriptText: string,
+        declarationText: string,
         javascriptMapPath: string | undefined,
         javascriptMapText: string | undefined,
         declarationMapPath: string | undefined,
         declarationMapText: string | undefined
     ): InputFiles;
     export function createInputFiles(
-        javascript: string,
-        declaration: string,
+        javascriptTextOrReadFileText: string | ((path: string) => string | undefined),
+        declarationTextOrJavascriptPath: string,
         javascriptMapPath?: string,
-        javascriptMapText?: string,
+        javascriptMapTextOrDeclarationPath?: string,
         declarationMapPath?: string,
         declarationMapText?: string
     ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
-        node.javascriptText = javascript;
-        node.javascriptMapPath = javascriptMapPath;
-        node.javascriptMapText = javascriptMapText;
-        node.declarationText = declaration;
-        node.declarationMapPath = declarationMapPath;
-        node.declarationMapText = declarationMapText;
+        if (!isString(javascriptTextOrReadFileText)) {
+            const cache = createMap<string | false>();
+            const textGetter = (path: string | undefined) => {
+                if (path === undefined) return undefined;
+                let value = cache.get(path);
+                if (value === undefined) {
+                    value = javascriptTextOrReadFileText(path);
+                    cache.set(path, value !== undefined ? value : false);
+                }
+                return value !== false ? value as string : undefined;
+            };
+            const definedTextGetter = (path: string) => {
+                const result = textGetter(path);
+                return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
+            };
+            node.javascriptPath = declarationTextOrJavascriptPath;
+            node.javascriptMapPath = javascriptMapPath;
+            node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
+            node.declarationMapPath = declarationMapPath;
+            Object.defineProperties(node, {
+                javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
+                javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
+                declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
+                declarationMapText: { get() { return textGetter(declarationMapPath); } } // TODO:: if there is inline sourceMap in dtsFile, use that
+            });
+        }
+        else {
+            node.javascriptText = javascriptTextOrReadFileText;
+            node.javascriptMapPath = javascriptMapPath;
+            node.javascriptMapText = javascriptMapTextOrDeclarationPath;
+            node.declarationText = declarationTextOrJavascriptPath;
+            node.declarationMapPath = declarationMapPath;
+            node.declarationMapText = declarationMapText;
+        }
         return node;
     }
 
@@ -2819,7 +2874,7 @@ namespace ts {
                     return node.emitNode = { annotatedNodes: [node] } as EmitNode;
                 }
 
-                const sourceFile = getSourceFileOfNode(node);
+                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node)));
                 getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
             }
 
@@ -3467,6 +3522,7 @@ namespace ts {
                 return cacheIdentifiers;
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
                 return false;
             case SyntaxKind.ArrayLiteralExpression:
