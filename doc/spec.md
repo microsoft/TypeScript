@@ -3715,7 +3715,7 @@ the array literal initializer expression is contextually typed by the implied ty
 
 ## <a name="5.3"/>5.3 Let and Const Declarations
 
-Let and const declarations are exended to include optional type annotations.
+Let and const declarations are extended to include optional type annotations.
 
 &emsp;&emsp;*LexicalBinding:*  *( Modified )*  
 &emsp;&emsp;&emsp;*SimpleLexicalBinding*  
