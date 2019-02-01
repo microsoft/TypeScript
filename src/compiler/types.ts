@@ -4370,6 +4370,7 @@ namespace ts {
         inferences: InferenceInfo[];                  // Inferences made for each type parameter
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
+        returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
     }
 
     /* @internal */

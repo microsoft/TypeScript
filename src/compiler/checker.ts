@@ -14636,18 +14636,18 @@ namespace ts {
             }
 
             function inferFromProperties(source: Type, target: Type) {
-                if (isTupleType(source)) {
+                if (isArrayType(source) || isTupleType(source)) {
                     if (isTupleType(target)) {
-                        const sourceLength = getLengthOfTupleType(source);
+                        const sourceLength = isTupleType(source) ? getLengthOfTupleType(source) : 0;
                         const targetLength = getLengthOfTupleType(target);
-                        const sourceRestType = getRestTypeOfTupleType(source);
+                        const sourceRestType = isTupleType(source) ? getRestTypeOfTupleType(source) : getElementTypeOfArrayType(source);
                         const targetRestType = getRestTypeOfTupleType(target);
                         const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
                         for (let i = 0; i < fixedLength; i++) {
-                            inferFromTypes(i < sourceLength ? source.typeArguments![i] : sourceRestType!, target.typeArguments![i]);
+                            inferFromTypes(i < sourceLength ? (<TypeReference>source).typeArguments![i] : sourceRestType!, target.typeArguments![i]);
                         }
                         if (targetRestType) {
-                            const types = fixedLength < sourceLength ? source.typeArguments!.slice(fixedLength, sourceLength) : [];
+                            const types = fixedLength < sourceLength ? (<TypeReference>source).typeArguments!.slice(fixedLength, sourceLength) : [];
                             if (sourceRestType) {
                                 types.push(sourceRestType);
                             }
@@ -17759,17 +17759,47 @@ namespace ts {
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getApparentTypeOfContextualType(node: Expression): Type | undefined {
-            let contextualType = getContextualType(node);
-            contextualType = contextualType && mapType(contextualType, getApparentType);
-            if (contextualType && contextualType.flags & TypeFlags.Union) {
-                if (isObjectLiteralExpression(node)) {
-                    return discriminateContextualTypeByObjectMembers(node, contextualType as UnionType);
+            const contextualType = instantiateContextualType(getContextualType(node), node);
+            if (contextualType) {
+                const apparentType = mapType(contextualType, getApparentType, /*noReductions*/ true);
+                if (apparentType.flags & TypeFlags.Union) {
+                    if (isObjectLiteralExpression(node)) {
+                        return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
+                    }
+                    else if (isJsxAttributes(node)) {
+                        return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
+                    }
                 }
-                else if (isJsxAttributes(node)) {
-                    return discriminateContextualTypeByJSXAttributes(node, contextualType as UnionType);
+                return apparentType;
+            }
+        }
+
+        // If the given contextual type contains instantiable types and if a mapper representing
+        // return type inferences is available, instantiate those types using that mapper.
+        function instantiateContextualType(contextualType: Type | undefined, node: Expression): Type | undefined {
+            if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
+                const returnMapper = (<InferenceContext>getContextualMapper(node)).returnMapper;
+                if (returnMapper) {
+                    return instantiateInstantiableTypes(contextualType, returnMapper);
                 }
             }
             return contextualType;
+        }
+
+        // This function is similar to instantiateType, except that (a) it only instantiates types that
+        // are classified as instantiable (i.e. it doesn't instantiate object types), and (b) it performs
+        // no reductions on instantiated union types.
+        function instantiateInstantiableTypes(type: Type, mapper: TypeMapper): Type {
+            if (type.flags & TypeFlags.Instantiable) {
+                return instantiateType(type, mapper);
+            }
+            if (type.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>type).types, t => instantiateInstantiableTypes(t, mapper)), UnionReduction.None);
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((<IntersectionType>type).types, t => instantiateInstantiableTypes(t, mapper)));
+            }
+            return type;
         }
 
         /**
@@ -19910,6 +19940,9 @@ namespace ts {
                     const inferenceTargetType = getReturnTypeOfSignature(signature);
                      // Inferences made from return types have lower priority than all other inferences.
                     inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
+                    // Create a type mapper for instantiating generic contextual types using the inferences made
+                    // from the return type.
+                    context.returnMapper = cloneTypeMapper(context);
                 }
             }
 
@@ -23020,7 +23053,12 @@ namespace ts {
             context.contextualMapper = contextualMapper;
             const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
                 contextualMapper ? CheckMode.Inferential : CheckMode.Contextual;
-            const result = checkExpression(node, checkMode);
+            const type = checkExpression(node, checkMode);
+            // We strip literal freshness when an appropriate contextual type is present such that contextually typed
+            // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
+            // here would be to not mark contextually typed literals as fresh in the first place.
+            const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
+                getRegularTypeOfLiteralType(type) : type;
             context.contextualType = saveContextualType;
             context.contextualMapper = saveContextualMapper;
             return result;
@@ -23104,13 +23142,10 @@ namespace ts {
         }
 
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
-            if (arguments.length === 2) {
-                contextualType = getContextualType(node);
-            }
             const type = checkExpression(node, checkMode, forceTuple);
             return isConstContext(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
-                getWidenedLiteralLikeTypeForContextualType(type, contextualType);
+                getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
