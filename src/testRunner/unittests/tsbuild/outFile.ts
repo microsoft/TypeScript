@@ -80,7 +80,7 @@ namespace ts {
             return { fs, actualReadFileMap, host, builder };
         }
 
-        function generateBaseline(fs: vfs.FileSystem, scenario: string, subScenario: string, withoutBuildInfo: boolean) {
+        function generateSourceMapBaselineFiles(fs: vfs.FileSystem) {
             for (const mapFile of [
                 outputFiles[project.first][ext.jsmap],
                 outputFiles[project.first][ext.dtsmap],
@@ -92,8 +92,11 @@ namespace ts {
                 const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
                 fs.writeFileSync(`${mapFile}.baseline.txt`, text);
             }
+        }
 
-            const patch = fs.diff();
+        function generateBaseline(fs: vfs.FileSystem, scenario: string, subScenario: string, withoutBuildInfo: boolean, baseFs?: vfs.FileSystem) {
+            generateSourceMapBaselineFiles(fs);
+            const patch = fs.diff(baseFs || outFileFs);
             // tslint:disable-next-line:no-null-keyword
             Harness.Baseline.runBaseline(`tsbuild/outFile/${subScenario.split(" ").join("-")}/${withoutBuildInfo ? "no-" : ""}buildInfo/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
         }
@@ -113,6 +116,7 @@ namespace ts {
                     describe(subScenario, () => {
                         let fs: vfs.FileSystem;
                         let actualReadFileMap: Map<number>;
+                        let baseFs: vfs.FileSystem | undefined;
                         before(() => {
                             const result = build(outFileFs.shadow(), modifyFs, withoutBuildInfo,
                                 getExpectedDiagnosticForProjectsInBuild("src/first/tsconfig.json", "src/second/tsconfig.json", "src/third/tsconfig.json"),
@@ -127,6 +131,9 @@ namespace ts {
                             if (incrementalModifyFs) {
                                 assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "First build timestamp is correct");
                                 tick();
+                                generateSourceMapBaselineFiles(fs);
+                                baseFs = fs.makeReadonly();
+                                fs = baseFs.shadow();
                                 const expectedDiagnostics = incrementalModifyFs(fs);
                                 tick();
                                 ({ actualReadFileMap } = build(fs, noop, withoutBuildInfo, ...expectedDiagnostics));
@@ -136,9 +143,10 @@ namespace ts {
                         after(() => {
                             fs = undefined!;
                             actualReadFileMap = undefined!;
+                            baseFs = undefined;
                         });
                         it(`Generates files matching the baseline`, () => {
-                            generateBaseline(fs, scenario, subScenario, withoutBuildInfo);
+                            generateBaseline(fs, scenario, subScenario, withoutBuildInfo, baseFs);
                         });
                         it("verify readFile calls", () => {
                             TestFSWithWatch.verifyMapSize("readFileCalls", actualReadFileMap, expectedReadFiles);
