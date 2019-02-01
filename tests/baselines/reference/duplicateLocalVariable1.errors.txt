@@ -3,7 +3,7 @@ tests/cases/compiler/duplicateLocalVariable1.ts(1,11): error TS1146: Declaration
 tests/cases/compiler/duplicateLocalVariable1.ts(1,13): error TS2304: Cannot find name 'commonjs'.
 tests/cases/compiler/duplicateLocalVariable1.ts(186,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'string', but here has type 'number'.
 tests/cases/compiler/duplicateLocalVariable1.ts(186,29): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
-tests/cases/compiler/duplicateLocalVariable1.ts(186,37): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/duplicateLocalVariable1.ts(186,37): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 
 
 ==== tests/cases/compiler/duplicateLocalVariable1.ts (6 errors) ====
@@ -204,7 +204,7 @@ tests/cases/compiler/duplicateLocalVariable1.ts(186,37): error TS2356: An arithm
                                 ~~~~~~
 !!! error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
                                         ~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
                     bytes.push(fb.readByte());
                 }
                 var expected = [0xEF, 0xBB, 0xBF, 0x54, 0xC3, 0xA8, 0xE1, 0xB4, 0xA3, 0xE2, 0x80, 0xA0, 0x0D, 0x0A];

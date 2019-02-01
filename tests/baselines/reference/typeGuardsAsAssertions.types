@@ -96,7 +96,7 @@ function foo1() {
 >x : string | number | boolean
 >typeof x === "string" ? x.slice() : "abc" : string
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 >x.slice() : string
@@ -130,7 +130,7 @@ function foo2() {
 
         if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -189,7 +189,7 @@ function f2() {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : undefined
 >"string" : "string"
 
@@ -232,7 +232,7 @@ function f4() {
 
     if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : undefined
 >"boolean" : "boolean"
 
@@ -250,11 +250,11 @@ function f5(x: string | number) {
     if (typeof x === "string" && typeof x === "number") {
 >typeof x === "string" && typeof x === "number" : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string
 >"number" : "number"
 

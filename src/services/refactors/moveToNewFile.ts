@@ -2,8 +2,8 @@
 namespace ts.refactor {
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ApplicableRefactorInfo[] | undefined {
-            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return undefined;
+        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return emptyArray;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
@@ -460,6 +460,12 @@ namespace ts.refactor {
         const oldImportsNeededByNewFile = new SymbolSet();
         const newFileImportsFromOldFile = new SymbolSet();
 
+        const containsJsx = find(toMove, statement => !!(statement.transformFlags & TransformFlags.ContainsJsx));
+        const jsxNamespaceSymbol = getJsxNamespaceSymbol(containsJsx);
+        if (jsxNamespaceSymbol) { // Might not exist (e.g. in non-compiling code)
+            oldImportsNeededByNewFile.add(jsxNamespaceSymbol);
+        }
+
         for (const statement of toMove) {
             forEachTopLevelDeclaration(statement, decl => {
                 movedSymbols.add(Debug.assertDefined(isExpressionStatement(decl) ? checker.getSymbolAtLocation(decl.expression.left) : decl.symbol));
@@ -485,6 +491,11 @@ namespace ts.refactor {
         for (const statement of oldFile.statements) {
             if (contains(toMove, statement)) continue;
 
+            // jsxNamespaceSymbol will only be set iff it is in oldImportsNeededByNewFile.
+            if (jsxNamespaceSymbol && !!(statement.transformFlags & TransformFlags.ContainsJsx)) {
+                unusedImportsFromOldFile.delete(jsxNamespaceSymbol);
+            }
+
             forEachReference(statement, checker, symbol => {
                 if (movedSymbols.has(symbol)) oldFileImportsFromNewFile.add(symbol);
                 unusedImportsFromOldFile.delete(symbol);
@@ -492,6 +503,23 @@ namespace ts.refactor {
         }
 
         return { movedSymbols, newFileImportsFromOldFile, oldFileImportsFromNewFile, oldImportsNeededByNewFile, unusedImportsFromOldFile };
+
+        function getJsxNamespaceSymbol(containsJsx: Node | undefined) {
+            if (containsJsx === undefined) {
+                return undefined;
+            }
+
+            const jsxNamespace = checker.getJsxNamespace(containsJsx);
+
+            // Strictly speaking, this could resolve to a symbol other than the JSX namespace.
+            // This will produce erroneous output (probably, an incorrectly copied import) but
+            // is expected to be very rare and easily reversible.
+            const jsxNamespaceSymbol = checker.resolveName(jsxNamespace, containsJsx, SymbolFlags.Namespace, /*excludeGlobals*/ true);
+
+            return !!jsxNamespaceSymbol && some(jsxNamespaceSymbol.declarations, isInImport)
+                ? jsxNamespaceSymbol
+                : undefined;
+        }
     }
 
     // Below should all be utilities
@@ -512,7 +540,7 @@ namespace ts.refactor {
     }
     function isVariableDeclarationInImport(decl: VariableDeclaration) {
         return isSourceFile(decl.parent.parent.parent) &&
-            decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
+            !!decl.initializer && isRequireCall(decl.initializer, /*checkArgumentIsStringLiteralLike*/ true);
     }
 
     function filterImport(i: SupportedImport, moduleSpecifier: StringLiteralLike, keep: (name: Identifier) => boolean): SupportedImportStatement | undefined {
@@ -612,7 +640,7 @@ namespace ts.refactor {
         | ImportEqualsDeclaration;
     type TopLevelDeclarationStatement = NonVariableTopLevelDeclaration | VariableStatement;
     interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
-    type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration;
+    type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
     function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
         return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
     }
@@ -653,7 +681,7 @@ namespace ts.refactor {
                 return cb(statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ImportEqualsDeclaration);
 
             case SyntaxKind.VariableStatement:
-                return forEach((statement as VariableStatement).declarationList.declarations as ReadonlyArray<TopLevelVariableDeclaration>, cb);
+                return firstDefined((statement as VariableStatement).declarationList.declarations, decl => forEachTopLevelDeclarationInBindingName(decl.name, cb));
 
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
@@ -663,13 +691,32 @@ namespace ts.refactor {
             }
         }
     }
+    function forEachTopLevelDeclarationInBindingName<T>(name: BindingName, cb: (node: TopLevelDeclaration) => T): T | undefined {
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+                return cb(cast(name.parent, (x): x is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(x) || isBindingElement(x)));
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ObjectBindingPattern:
+                return firstDefined(name.elements, em => isOmittedExpression(em) ? undefined : forEachTopLevelDeclarationInBindingName(em.name, cb));
+            default:
+                return Debug.assertNever(name);
+        }
+    }
 
     function nameOfTopLevelDeclaration(d: TopLevelDeclaration): Identifier | undefined {
-        return d.kind === SyntaxKind.ExpressionStatement ? d.expression.left.name : tryCast(d.name, isIdentifier);
+        return isExpressionStatement(d) ? d.expression.left.name : tryCast(d.name, isIdentifier);
     }
 
     function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLevelDeclarationStatement {
-        return isVariableDeclaration(d) ? d.parent.parent : d;
+        switch (d.kind) {
+            case SyntaxKind.VariableDeclaration:
+                return d.parent.parent;
+            case SyntaxKind.BindingElement:
+                return getTopLevelDeclarationStatement(
+                    cast(d.parent.parent, (p): p is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(p) || isBindingElement(p)));
+            default:
+                return d;
+        }
     }
 
     function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, changes: textChanges.ChangeTracker, useEs6Exports: boolean): void {

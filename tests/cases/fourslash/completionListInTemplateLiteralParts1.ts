@@ -4,4 +4,7 @@
 ////
 /////*6*/`asdasd${/*7*/ 2 + 1.1 /*8*/} 12312 {
 
-goTo.eachMarker(() => verify.completionListItemsCountIsGreaterThan(0));
+verify.completions(
+    { marker: ["1", "7"], exact: completion.globals, isNewIdentifierLocation: true },
+    { marker: ["2", "3", "4", "5", "6", "8"], exact: completion.globals },
+);

@@ -1,10 +1,8 @@
 tests/cases/compiler/typeofInternalModules.ts(15,16): error TS2708: Cannot use namespace 'importUninst' as a value.
 tests/cases/compiler/typeofInternalModules.ts(17,9): error TS2709: Cannot use namespace 'Outer' as a type.
-tests/cases/compiler/typeofInternalModules.ts(19,1): error TS2322: Type 'typeof Outer' is not assignable to type 'typeof instantiated'.
-  Property 'C' is missing in type 'typeof Outer'.
+tests/cases/compiler/typeofInternalModules.ts(19,1): error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
 tests/cases/compiler/typeofInternalModules.ts(21,16): error TS2708: Cannot use namespace 'importUninst' as a value.
-tests/cases/compiler/typeofInternalModules.ts(23,1): error TS2322: Type 'typeof instantiated' is not assignable to type 'typeof Outer'.
-  Property 'instantiated' is missing in type 'typeof instantiated'.
+tests/cases/compiler/typeofInternalModules.ts(23,1): error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
 
 
 ==== tests/cases/compiler/typeofInternalModules.ts (5 errors) ====
@@ -32,8 +30,8 @@ tests/cases/compiler/typeofInternalModules.ts(23,1): error TS2322: Type 'typeof 
     var x5: typeof importInst;
     x5 = Outer;
     ~~
-!!! error TS2322: Type 'typeof Outer' is not assignable to type 'typeof instantiated'.
-!!! error TS2322:   Property 'C' is missing in type 'typeof Outer'.
+!!! error TS2741: Property 'C' is missing in type 'typeof Outer' but required in type 'typeof instantiated'.
+!!! related TS2728 tests/cases/compiler/typeofInternalModules.ts:3:22: 'C' is declared here.
     x5 = Outer.instantiated;
     var x6: typeof importUninst;
                    ~~~~~~~~~~~~
@@ -41,6 +39,6 @@ tests/cases/compiler/typeofInternalModules.ts(23,1): error TS2322: Type 'typeof 
     var x7: typeof Outer = Outer;
     x7 = importInst;
     ~~
-!!! error TS2322: Type 'typeof instantiated' is not assignable to type 'typeof Outer'.
-!!! error TS2322:   Property 'instantiated' is missing in type 'typeof instantiated'.
+!!! error TS2741: Property 'instantiated' is missing in type 'typeof instantiated' but required in type 'typeof Outer'.
+!!! related TS2728 tests/cases/compiler/typeofInternalModules.ts:2:19: 'instantiated' is declared here.
     

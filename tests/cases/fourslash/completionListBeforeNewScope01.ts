@@ -6,6 +6,4 @@
 ////    let party = Math.random() < 0.99;
 ////}
 
-goTo.marker("1");
-verify.not.completionListContains("param");
-verify.not.completionListContains("party");
+verify.completions({ marker: "1", excludes: ["param", "party"] });

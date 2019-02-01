@@ -289,7 +289,7 @@ namespace ts.codefix {
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                 exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
         // Sort to keep the shortest paths first
-        return choicesForEachExportingModule.sort((a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
+        return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
     }
 
     function getFixesForAddImport(
@@ -375,7 +375,7 @@ namespace ts.codefix {
         const symbolName = isJsxOpeningLikeElement(symbolToken.parent)
             && symbolToken.parent.tagName === symbolToken
             && (isIntrinsicJsxName(symbolToken.text) || checker.resolveName(symbolToken.text, symbolToken, SymbolFlags.All, /*excludeGlobals*/ false))
-            ? checker.getJsxNamespace()
+            ? checker.getJsxNamespace(sourceFile)
             : symbolToken.text;
         // "default" is a keyword and not a legal identifier for the import, so we don't expect it here
         Debug.assert(symbolName !== InternalSymbolName.Default);

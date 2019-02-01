@@ -2,9 +2,9 @@
 const f = Object.freeze(function foo(a: number, b: string) { return false; });
 >f : (a: number, b: string) => false
 >Object.freeze(function foo(a: number, b: string) { return false; }) : (a: number, b: string) => false
->Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >function foo(a: number, b: string) { return false; } : (a: number, b: string) => false
 >foo : (a: number, b: string) => false
 >a : number
@@ -26,9 +26,9 @@ class C { constructor(a: number) { } }
 const c = Object.freeze(C);
 >c : typeof C
 >Object.freeze(C) : typeof C
->Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >C : typeof C
 
 new c(1);
@@ -37,11 +37,11 @@ new c(1);
 >1 : 1
 
 const a = Object.freeze([1, 2, 3]);
->a : ReadonlyArray<number>
->Object.freeze([1, 2, 3]) : ReadonlyArray<number>
->Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>a : readonly number[]
+>Object.freeze([1, 2, 3]) : readonly number[]
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
@@ -50,21 +50,21 @@ const a = Object.freeze([1, 2, 3]);
 a[0] = a[2].toString();
 >a[0] = a[2].toString() : string
 >a[0] : number
->a : ReadonlyArray<number>
+>a : readonly number[]
 >0 : 0
 >a[2].toString() : string
 >a[2].toString : (radix?: number) => string
 >a[2] : number
->a : ReadonlyArray<number>
+>a : readonly number[]
 >2 : 2
 >toString : (radix?: number) => string
 
 const o = Object.freeze({ a: 1, b: "string" });
 >o : Readonly<{ a: number; b: string; }>
 >Object.freeze({ a: 1, b: "string" }) : Readonly<{ a: number; b: string; }>
->Object.freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>Object.freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >Object : ObjectConstructor
->freeze : { <T>(a: T[]): ReadonlyArray<T>; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
+>freeze : { <T>(a: T[]): readonly T[]; <T extends Function>(f: T): T; <T>(o: T): Readonly<T>; }
 >{ a: 1, b: "string" } : { a: number; b: string; }
 >a : number
 >1 : 1

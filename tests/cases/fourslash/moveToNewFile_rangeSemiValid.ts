@@ -13,6 +13,7 @@ verify.moveToNewFile({
 const y = 0;`,
 
         "/x.ts":
-`const x = 0;`,
+`const x = 0;
+`,
     },
 });

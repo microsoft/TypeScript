@@ -5,6 +5,4 @@
 ////    [foo: string]: { x: typeof /*1*/
 ////}
 
-goTo.marker("1");
-verify.completionListContains("foo");
-verify.completionListContains("C");
+verify.completions({ marker: "1", includes: ["foo", "C"] });

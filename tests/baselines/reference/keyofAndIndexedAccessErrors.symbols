@@ -486,3 +486,39 @@ function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
 >k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
 }
 
+// Repro from #28839
+
+function f30<T, K extends keyof T>() {
+>f30 : Symbol(f30, Decl(keyofAndIndexedAccessErrors.ts, 142, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 146, 13))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 146, 15))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 146, 13))
+
+    let x: Partial<Record<keyof T, string>>[K] = "hello";
+>x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 147, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 146, 13))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 146, 15))
+}
+
+function f31<T, K extends keyof T>() {
+>f31 : Symbol(f31, Decl(keyofAndIndexedAccessErrors.ts, 148, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 150, 13))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 150, 15))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 150, 13))
+
+    let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
+>x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 151, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 150, 13))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 150, 15))
+}
+

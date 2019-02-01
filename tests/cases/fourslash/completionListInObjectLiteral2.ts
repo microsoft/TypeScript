@@ -12,7 +12,7 @@
 
 ////class Foo {
 ////    public telemetryService: TelemetryService;   // If telemetry service is of type 'any' (i.e. uncomment below line), the drop-down list works
-////    public telemetryService2; 
+////    public telemetryService2;
 ////    private test() {
 ////        var onComplete = (searchResult: SearchResult) => {
 ////            var hasResults = !searchResult.isEmpty();  // Drop-down list on searchResult fine here
@@ -23,12 +23,4 @@
 ////    }
 ////}
 
-goTo.marker('1');
-verify.completionListContains('count');
-verify.completionListContains('isEmpty');
-verify.completionListContains('fileCount');
-
-goTo.marker('2');
-verify.completionListContains('count');
-verify.completionListContains('isEmpty');
-verify.completionListContains('fileCount');
+verify.completions({ marker: test.markers(), exact: ["count", "isEmpty", "fileCount"] });

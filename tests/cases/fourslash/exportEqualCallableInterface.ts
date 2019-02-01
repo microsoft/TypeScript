@@ -13,7 +13,7 @@
 ////var t2: test;
 ////t2./**/
 
-goTo.marker();
-verify.completionListContains('apply');
-verify.completionListContains('arguments');
-verify.completionListContains('foo');
+verify.completions({
+    marker: "",
+    exact: ["foo", ...completion.functionMembersWithPrototype],
+});

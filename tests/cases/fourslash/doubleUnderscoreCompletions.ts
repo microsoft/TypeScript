@@ -8,5 +8,11 @@
 //// var instance = new MyObject();
 //// instance./*1*/
 
-goTo.marker("1");
-verify.completionListContains("__property", "(property) MyObject.__property: number");
+verify.completions({
+    marker: "1",
+    exact: [
+        { name: "__property", text: "(property) MyObject.__property: number" },
+        "MyObject",
+        "instance",
+    ],
+});

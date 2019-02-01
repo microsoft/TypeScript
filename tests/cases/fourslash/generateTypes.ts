@@ -5,15 +5,54 @@
 verify.generateTypes(
 {
     value: 0,
+    global: true,
+    output: "declare const example: number;\n",
+},
+{
+    value: { x: 0, f() {} },
+    global: true,
+    output:
+`declare namespace example {
+    function f(): void;
+    const x: number;
+}
+`,
+},
+{
+    value: { "*": 10, "default": true, "with": 10, "  ": 3 },
+    global: true,
+    output:
+`declare const example: {
+    "  ": number;
+    "*": number;
+    default: boolean;
+    with: number;
+};
+`,
+},
+{
+    value: { "*": 10, f() {} },
+    global: true,
+    output:
+`declare namespace example {
+    function f(): void;
+}
+`,
+},
+
+{
+    value: 0,
     output:
 `export = example;
-declare const example: number;`,
+declare const example: number;
+`,
 },
 {
     value: (x, y) => x + y,
     output:
 `export = example;
-declare function example(x: any, y: any): void;`,
+declare function example(x: any, y: any): void;
+`,
 },
 {
     // non-arrow functions have different toString(), so important to test
@@ -25,46 +64,53 @@ declare function example(x: any, y: any): void;`,
     },
     output:
 `export = example;
-declare function example(x: any, y: any): any;`,
+declare function example(x: any, y: any): any;
+`,
 },
 {
     value: function(x) { arguments; },
     output:
 `export = example;
-declare function example(x: any, ...args: any[]): void;`,
+declare function example(x: any, ...args: any[]): void;
+`,
 },
 
 {
     value: ({ default() {} }),
     output:
-`export default function _default(): void;`,
+`export default function _default(): void;
+`,
 },
 
 {
     value: ({ default: class {} }),
     output:
 `export default class _default {
-}`,
+}
+`,
 },
 
 {
     value: new Date(),
     output:
 `export = example;
-declare const example: Date;`,
+declare const example: Date;
+`,
 },
 
 {
     value: [0],
     output:
 `export = example;
-declare const example: number[];`,
+declare const example: number[];
+`,
 },
 {
     value: [() => 0, () => ""],
     output:
 `export = example;
-declare const example: Function[];`,
+declare const example: Function[];
+`,
 },
 {
     value: (() => {
@@ -74,7 +120,8 @@ declare const example: Function[];`,
     })(),
     output:
 `export = example;
-declare const example: any[];`,
+declare const example: any[];
+`,
 },
 {
     value: (() => {
@@ -104,6 +151,7 @@ export namespace ns2 {
     function fn(x: any): void;
 }
 // Circular reference from example
-export const self: any;`,
+export const self: any;
+`,
 },
 );

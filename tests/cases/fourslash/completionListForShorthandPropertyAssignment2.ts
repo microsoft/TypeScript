@@ -2,6 +2,4 @@
 
 //// var person: {name:string; id: number} = { n/**/
 
-goTo.marker();
-verify.completionListContains('name');
-verify.completionListContains('id');
+verify.completions({ marker: "", exact: ["name", "id"] });

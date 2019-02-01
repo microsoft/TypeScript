@@ -19,11 +19,9 @@
 //// v.x./*3*/;
 //// v.x.V./*4*/;
 
-goTo.marker("1");
-verify.completionListContains("toExponential");
-goTo.marker("2");
-verify.completionListContains("toLowerCase");
-goTo.marker("3");
-verify.completionListContains("V");
-goTo.marker("4");
-verify.completionListContains("toLowerCase");
+verify.completions(
+    { marker: "1", includes: "toExponential" },
+    { marker: "2", includes: "toLowerCase" },
+    { marker: "3", exact: ["V", "ref1", "ref2", "require", "v", "x"] },
+    { marker: "4", includes: "toLowerCase" },
+);

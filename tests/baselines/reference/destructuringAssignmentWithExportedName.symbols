@@ -47,8 +47,8 @@ export { nonexportedFoo };
 >nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 23, 8))
 
 export { exportedFoo as foo, nonexportedFoo as nfoo };
->exportedFoo : Symbol(foo, Decl(destructuringAssignmentWithExportedName.ts, 24, 8))
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
 >foo : Symbol(foo, Decl(destructuringAssignmentWithExportedName.ts, 24, 8))
->nonexportedFoo : Symbol(nfoo, Decl(destructuringAssignmentWithExportedName.ts, 24, 28))
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
 >nfoo : Symbol(nfoo, Decl(destructuringAssignmentWithExportedName.ts, 24, 28))
 

@@ -1,0 +1,54 @@
+=== tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx ===
+/// <reference path="react16.d.ts" />
+
+import React from 'react';
+>React : typeof React
+
+function test<P>(wrappedProps: P) {
+>test : <P>(wrappedProps: P) => void
+>wrappedProps : P
+
+    let MySFC = function(props: P) {
+>MySFC : (props: P) => JSX.Element
+>function(props: P) {        return <>hello</>;    } : (props: P) => JSX.Element
+>props : P
+
+        return <>hello</>;
+><>hello</> : JSX.Element
+
+    };
+    class MyComponent extends React.Component<P> {
+>MyComponent : MyComponent
+>React.Component : React.Component<P, {}, any>
+>React : typeof React
+>Component : typeof React.Component
+
+        render() {
+>render : () => JSX.Element
+
+            return <>hello</>;
+><>hello</> : JSX.Element
+        }
+    }
+    let x = <MySFC />;  // should error
+>x : JSX.Element
+><MySFC /> : JSX.Element
+>MySFC : (props: P) => JSX.Element
+
+    let y = <MyComponent />;  // should error
+>y : JSX.Element
+><MyComponent /> : JSX.Element
+>MyComponent : typeof MyComponent
+
+    let z = <MySFC {...wrappedProps} /> // should work
+>z : JSX.Element
+><MySFC {...wrappedProps} /> : JSX.Element
+>MySFC : (props: P) => JSX.Element
+>wrappedProps : P
+
+    let q = <MyComponent {...wrappedProps} /> // should work
+>q : JSX.Element
+><MyComponent {...wrappedProps} /> : JSX.Element
+>MyComponent : typeof MyComponent
+>wrappedProps : P
+}

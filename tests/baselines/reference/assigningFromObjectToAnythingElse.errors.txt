@@ -1,11 +1,9 @@
-tests/cases/compiler/assigningFromObjectToAnythingElse.ts(3,1): error TS2322: Type 'Object' is not assignable to type 'RegExp'.
-  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-    Property 'exec' is missing in type 'Object'.
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(3,1): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+  Type 'Object' is missing the following properties from type 'RegExp': exec, test, source, global, and 4 more.
 tests/cases/compiler/assigningFromObjectToAnythingElse.ts(5,31): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/compiler/assigningFromObjectToAnythingElse.ts(6,31): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2322: Type 'Object' is not assignable to type 'Error'.
-  The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-    Property 'name' is missing in type 'Object'.
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+  Type 'Object' is missing the following properties from type 'Error': name, message
 
 
 ==== tests/cases/compiler/assigningFromObjectToAnythingElse.ts (4 errors) ====
@@ -13,9 +11,8 @@ tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2322: Ty
     var y: RegExp;
     y = x;
     ~
-!!! error TS2322: Type 'Object' is not assignable to type 'RegExp'.
-!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-!!! error TS2322:     Property 'exec' is missing in type 'Object'.
+!!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2696:   Type 'Object' is missing the following properties from type 'RegExp': exec, test, source, global, and 4 more.
     
     var a: String = Object.create<Object>("");
                                   ~~~~~~
@@ -26,7 +23,6 @@ tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2322: Ty
     
     var w: Error = new Object();
         ~
-!!! error TS2322: Type 'Object' is not assignable to type 'Error'.
-!!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
-!!! error TS2322:     Property 'name' is missing in type 'Object'.
+!!! error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! error TS2696:   Type 'Object' is missing the following properties from type 'Error': name, message
     
