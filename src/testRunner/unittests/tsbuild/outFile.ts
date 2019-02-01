@@ -455,11 +455,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
 `);
         }
 
-//        function removeShebang(fs: vfs.FileSystem, project: string, file: string) {
-//            replaceFileContent(fs, `src/${project}/${file}.ts`, `#!someshebang ${project} ${file}
-//`, "");
-//        }
-
+        // changes declaration because its emitted in .d.ts file
         verifyOutFileScenario({
             scenario: "shebang in all projects",
             modifyFs: fs => {
@@ -468,7 +464,6 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                 addShebang(fs, "second", "second_part1");
                 addShebang(fs, "third", "third_part1");
             },
-            //modifyAgainFs: fs => removeShebang(fs, "first", "first_PART1")
         });
 
         verifyOutFileScenario({
@@ -476,32 +471,52 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
             modifyFs: fs => {
                 addShebang(fs, "second", "second_part1");
             },
-            //modifyAgainFs: fs => addShebang(fs, "first", "first_PART1")
         });
 
         // emitHelpers
-        function addExtendsClause(fs: vfs.FileSystem, project: string, file: string) {
-            appendFileContent(fs, `src/${project}/${file}.ts`, `
-class ${project}1 { }
-class ${project}2 extends ${project}1 { }`);
+        function restContent(project: string, file: string) {
+            return `function for${project}${file}Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}`;
+        }
+
+        function nonrestContent(project: string, file: string) {
+            return `function for${project}${file}Rest() { }`;
+        }
+
+        function addRest(fs: vfs.FileSystem, project: string, file: string) {
+            appendFileContent(fs, `src/${project}/${file}.ts`, restContent(project, file));
+        }
+
+        function removeRest(fs: vfs.FileSystem, project: string, file: string) {
+            replaceFileContent(fs, `src/${project}/${file}.ts`, restContent(project, file), nonrestContent(project, file));
+        }
+
+        function addStubFoo(fs: vfs.FileSystem, project: string, file: string) {
+            appendFileContent(fs, `src/${project}/${file}.ts`, nonrestContent(project, file));
+        }
+
+        function changeStubToRest(fs: vfs.FileSystem, project: string, file: string) {
+            replaceFileContent(fs, `src/${project}/${file}.ts`, nonrestContent(project, file), restContent(project, file));
         }
 
         verifyOutFileScenario({
             scenario: "emitHelpers in all projects",
             modifyFs: fs => {
-                addExtendsClause(fs, "first", "first_part2");
-                addExtendsClause(fs, "second", "second_part1");
-                addExtendsClause(fs, "third", "third_part1");
+                addRest(fs, "first", "first_PART1");
+                addRest(fs, "second", "second_part1");
+                addRest(fs, "third", "third_part1");
             },
-            //modifyAgainFs: fs => addSpread(fs, "first", "first_PART1")
+            modifyAgainFs: fs => removeRest(fs, "first", "first_PART1")
         });
 
         verifyOutFileScenario({
             scenario: "emitHelpers in only one dependency project",
             modifyFs: fs => {
-                addExtendsClause(fs, "second", "second_part1");
+                addStubFoo(fs, "first", "first_PART1");
+                addRest(fs, "second", "second_part1");
             },
-            //modifyAgainFs: fs => addSpread(fs, "first", "first_PART1")
+            modifyAgainFs: fs => changeStubToRest(fs, "first", "first_PART1")
         });
 
         function addSpread(fs: vfs.FileSystem, project: string, file: string) {
@@ -518,27 +533,28 @@ ${project}${file}Spread(...[10, 20, 30]);`);
         verifyOutFileScenario({
             scenario: "multiple emitHelpers in all projects",
             modifyFs: fs => {
-                addExtendsClause(fs, "first", "first_part2");
+                addRest(fs, "first", "first_PART1");
                 addSpread(fs, "first", "first_part3");
-                addExtendsClause(fs, "second", "second_part1");
+                addRest(fs, "second", "second_part1");
                 addSpread(fs, "second", "second_part2");
-                addExtendsClause(fs, "third", "third_part1");
+                addRest(fs, "third", "third_part1");
                 addSpread(fs, "third", "third_part1");
             },
-            //modifyAgainFs: fs => addSpread(fs, "first", "first_PART1")
+            modifyAgainFs: fs => removeRest(fs, "first", "first_PART1")
         });
 
         verifyOutFileScenario({
             scenario: "multiple emitHelpers in different projects",
             modifyFs: fs => {
-                addSpread(fs, "first", "first_part3");
-                addExtendsClause(fs, "second", "second_part1");
-                addSpread(fs, "third", "third_part1");
+                addRest(fs, "first", "first_PART1");
+                addSpread(fs, "second", "second_part1");
+                addRest(fs, "third", "third_part1");
             },
-            //modifyAgainFs: fs => addSpread(fs, "first", "first_PART1")
+            modifyAgainFs: fs => removeRest(fs, "first", "first_PART1")
         });
 
         // triple slash refs
+        // changes declaration because its emitted in .d.ts file
         function getTripleSlashRef(project: string) {
             return `/src/${project}/tripleRef.d.ts`;
         }

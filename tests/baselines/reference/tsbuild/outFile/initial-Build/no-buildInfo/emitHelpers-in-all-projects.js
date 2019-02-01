@@ -3,17 +3,14 @@ declare namespace N {
 }
 declare namespace N {
 }
-declare class second1 {
-}
-declare class second2 extends second1 {
-}
+declare function forsecondsecond_part1Rest(): void;
 declare class C {
     doSomething(): void;
 }
 //# sourceMappingURL=second-output.d.ts.map
 
 //// [/src/2/second-output.d.ts.map]
-{"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAAI;AACjB,cAAM,OAAQ,SAAQ,OAAO;CAAI;ACbjC,cAAM,CAAC;IACH,WAAW;CAGd"}
+{"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd"}
 
 //// [/src/2/second-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -66,7 +63,7 @@ sourceFile:../second/second_part1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -76,64 +73,38 @@ sourceFile:../second/second_part1.ts
   >}
 1 >Emitted(4, 2) Source(11, 2) + SourceIndex(0)
 ---
->>>declare class second1 {
+>>>declare function forsecondsecond_part1Rest(): void;
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^^
-1->
-  >
-  >
-2 >class 
-3 >              second1
-1->Emitted(5, 1) Source(13, 1) + SourceIndex(0)
-2 >Emitted(5, 15) Source(13, 7) + SourceIndex(0)
-3 >Emitted(5, 22) Source(13, 14) + SourceIndex(0)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(6, 2) Source(13, 18) + SourceIndex(0)
----
->>>declare class second2 extends second1 {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^^
-4 >                     ^^^^^^^^^
-5 >                              ^^^^^^^
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                          ^^^^^^^^^
 1->
   >
-2 >class 
-3 >              second2 
-4 >                     extends 
-5 >                              second1
-1->Emitted(7, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(7, 15) Source(14, 7) + SourceIndex(0)
-3 >Emitted(7, 22) Source(14, 15) + SourceIndex(0)
-4 >Emitted(7, 31) Source(14, 23) + SourceIndex(0)
-5 >Emitted(7, 38) Source(14, 30) + SourceIndex(0)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(8, 2) Source(14, 34) + SourceIndex(0)
+2 >function 
+3 >                 forsecondsecond_part1Rest
+4 >                                          () {
+  >                                          const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+  >                                          }
+1->Emitted(5, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(5, 18) Source(12, 10) + SourceIndex(0)
+3 >Emitted(5, 43) Source(12, 35) + SourceIndex(0)
+4 >Emitted(5, 52) Source(14, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/2/second-output.d.ts
 sourceFile:../second/second_part2.ts
 -------------------------------------------------------------------
 >>>declare class C {
-1->
+1 >
 2 >^^^^^^^^^^^^^^
 3 >              ^
 4 >               ^^^^^^^^^^->
-1->
+1 >
 2 >class 
 3 >              C
-1->Emitted(9, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(9, 15) Source(1, 7) + SourceIndex(1)
-3 >Emitted(9, 16) Source(1, 8) + SourceIndex(1)
+1 >Emitted(6, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(6, 15) Source(1, 7) + SourceIndex(1)
+3 >Emitted(6, 16) Source(1, 8) + SourceIndex(1)
 ---
 >>>    doSomething(): void;
 1->^^^^
@@ -141,8 +112,8 @@ sourceFile:../second/second_part2.ts
 1-> {
   >    
 2 >    doSomething
-1->Emitted(10, 5) Source(2, 5) + SourceIndex(1)
-2 >Emitted(10, 16) Source(2, 16) + SourceIndex(1)
+1->Emitted(7, 5) Source(2, 5) + SourceIndex(1)
+2 >Emitted(7, 16) Source(2, 16) + SourceIndex(1)
 ---
 >>>}
 1 >^
@@ -151,24 +122,20 @@ sourceFile:../second/second_part2.ts
   >        console.log("something got done");
   >    }
   >}
-1 >Emitted(11, 2) Source(5, 2) + SourceIndex(1)
+1 >Emitted(8, 2) Source(5, 2) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=second-output.d.ts.map
 
 //// [/src/2/second-output.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 var N;
 (function (N) {
     function f() {
@@ -176,18 +143,9 @@ var N;
     }
     f();
 })(N || (N = {}));
-var second1 = (function () {
-    function second1() {
-    }
-    return second1;
-}());
-var second2 = (function (_super) {
-    __extends(second2, _super);
-    function second2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return second2;
-}(second1));
+function forsecondsecond_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
 var C = (function () {
     function C() {
     }
@@ -199,7 +157,7 @@ var C = (function () {
 //# sourceMappingURL=second-output.js.map
 
 //// [/src/2/second-output.js.map]
-{"version":3,"file":"second-output.js","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":";;;;;;;;;;;;;AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED;IAAA;IAAgB,CAAC;IAAD,cAAC;AAAD,CAAC,AAAjB,IAAiB;AACjB;IAAsB,2BAAO;IAA7B;;IAAgC,CAAC;IAAD,cAAC;AAAD,CAAC,AAAjC,CAAsB,OAAO,GAAI;ACbjC;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
+{"version":3,"file":"second-output.js","sourceRoot":"","sources":["../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":";;;;;;;;;AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
 //// [/src/2/second-output.js.map.baseline.txt]
 ===================================================================
@@ -212,19 +170,15 @@ sources: ../second/second_part1.ts,../second/second_part2.ts
 emittedFile:/src/2/second-output.js
 sourceFile:../second/second_part1.ts
 -------------------------------------------------------------------
->>>var __extends = (this && this.__extends) || (function () {
->>>    var extendStatics = function (d, b) {
->>>        extendStatics = Object.setPrototypeOf ||
->>>            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
->>>            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
->>>        return extendStatics(d, b);
->>>    };
->>>    return function (d, b) {
->>>        extendStatics(d, b);
->>>        function __() { this.constructor = d; }
->>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
->>>    };
->>>})();
+>>>var __rest = (this && this.__rest) || function (s, e) {
+>>>    var t = {};
+>>>    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+>>>        t[p] = s[p];
+>>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+>>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+>>>            t[p[i]] = s[p[i]];
+>>>    return t;
+>>>};
 >>>var N;
 1 >
 2 >^^^^
@@ -245,10 +199,10 @@ sourceFile:../second/second_part1.ts
   >     
   >         f();
   >     }
-1 >Emitted(14, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(14, 5) Source(5, 11) + SourceIndex(0)
-3 >Emitted(14, 6) Source(5, 12) + SourceIndex(0)
-4 >Emitted(14, 7) Source(11, 2) + SourceIndex(0)
+1 >Emitted(10, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(10, 5) Source(5, 11) + SourceIndex(0)
+3 >Emitted(10, 6) Source(5, 12) + SourceIndex(0)
+4 >Emitted(10, 7) Source(11, 2) + SourceIndex(0)
 ---
 >>>(function (N) {
 1->
@@ -258,9 +212,9 @@ sourceFile:../second/second_part1.ts
 1->
 2 >namespace 
 3 >           N
-1->Emitted(15, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(15, 12) Source(5, 11) + SourceIndex(0)
-3 >Emitted(15, 13) Source(5, 12) + SourceIndex(0)
+1->Emitted(11, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(11, 12) Source(5, 11) + SourceIndex(0)
+3 >Emitted(11, 13) Source(5, 12) + SourceIndex(0)
 ---
 >>>    function f() {
 1->^^^^
@@ -271,9 +225,9 @@ sourceFile:../second/second_part1.ts
   >    
 2 >    function 
 3 >             f
-1->Emitted(16, 5) Source(6, 5) + SourceIndex(0)
-2 >Emitted(16, 14) Source(6, 14) + SourceIndex(0)
-3 >Emitted(16, 15) Source(6, 15) + SourceIndex(0)
+1->Emitted(12, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(12, 14) Source(6, 14) + SourceIndex(0)
+3 >Emitted(12, 15) Source(6, 15) + SourceIndex(0)
 ---
 >>>        console.log('testing');
 1->^^^^^^^^
@@ -293,14 +247,14 @@ sourceFile:../second/second_part1.ts
 6 >                    'testing'
 7 >                             )
 8 >                              ;
-1->Emitted(17, 9) Source(7, 9) + SourceIndex(0)
-2 >Emitted(17, 16) Source(7, 16) + SourceIndex(0)
-3 >Emitted(17, 17) Source(7, 17) + SourceIndex(0)
-4 >Emitted(17, 20) Source(7, 20) + SourceIndex(0)
-5 >Emitted(17, 21) Source(7, 21) + SourceIndex(0)
-6 >Emitted(17, 30) Source(7, 30) + SourceIndex(0)
-7 >Emitted(17, 31) Source(7, 31) + SourceIndex(0)
-8 >Emitted(17, 32) Source(7, 32) + SourceIndex(0)
+1->Emitted(13, 9) Source(7, 9) + SourceIndex(0)
+2 >Emitted(13, 16) Source(7, 16) + SourceIndex(0)
+3 >Emitted(13, 17) Source(7, 17) + SourceIndex(0)
+4 >Emitted(13, 20) Source(7, 20) + SourceIndex(0)
+5 >Emitted(13, 21) Source(7, 21) + SourceIndex(0)
+6 >Emitted(13, 30) Source(7, 30) + SourceIndex(0)
+7 >Emitted(13, 31) Source(7, 31) + SourceIndex(0)
+8 >Emitted(13, 32) Source(7, 32) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^
@@ -309,8 +263,8 @@ sourceFile:../second/second_part1.ts
 1 >
   >    
 2 >    }
-1 >Emitted(18, 5) Source(8, 5) + SourceIndex(0)
-2 >Emitted(18, 6) Source(8, 6) + SourceIndex(0)
+1 >Emitted(14, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(14, 6) Source(8, 6) + SourceIndex(0)
 ---
 >>>    f();
 1->^^^^
@@ -324,10 +278,10 @@ sourceFile:../second/second_part1.ts
 2 >    f
 3 >     ()
 4 >       ;
-1->Emitted(19, 5) Source(10, 5) + SourceIndex(0)
-2 >Emitted(19, 6) Source(10, 6) + SourceIndex(0)
-3 >Emitted(19, 8) Source(10, 8) + SourceIndex(0)
-4 >Emitted(19, 9) Source(10, 9) + SourceIndex(0)
+1->Emitted(15, 5) Source(10, 5) + SourceIndex(0)
+2 >Emitted(15, 6) Source(10, 6) + SourceIndex(0)
+3 >Emitted(15, 8) Source(10, 8) + SourceIndex(0)
+4 >Emitted(15, 9) Source(10, 9) + SourceIndex(0)
 ---
 >>>})(N || (N = {}));
 1->
@@ -337,7 +291,7 @@ sourceFile:../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -352,119 +306,63 @@ sourceFile:../second/second_part1.ts
   >          
   >              f();
   >          }
-1->Emitted(20, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(20, 2) Source(11, 2) + SourceIndex(0)
-3 >Emitted(20, 4) Source(5, 11) + SourceIndex(0)
-4 >Emitted(20, 5) Source(5, 12) + SourceIndex(0)
-5 >Emitted(20, 10) Source(5, 11) + SourceIndex(0)
-6 >Emitted(20, 11) Source(5, 12) + SourceIndex(0)
-7 >Emitted(20, 19) Source(11, 2) + SourceIndex(0)
+1->Emitted(16, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(16, 2) Source(11, 2) + SourceIndex(0)
+3 >Emitted(16, 4) Source(5, 11) + SourceIndex(0)
+4 >Emitted(16, 5) Source(5, 12) + SourceIndex(0)
+5 >Emitted(16, 10) Source(5, 11) + SourceIndex(0)
+6 >Emitted(16, 11) Source(5, 12) + SourceIndex(0)
+7 >Emitted(16, 19) Source(11, 2) + SourceIndex(0)
 ---
->>>var second1 = (function () {
+>>>function forsecondsecond_part1Rest() {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
+2 >function 
+3 >         forsecondsecond_part1Rest
+1->Emitted(17, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(17, 10) Source(12, 10) + SourceIndex(0)
+3 >Emitted(17, 35) Source(12, 35) + SourceIndex(0)
+---
+>>>    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                     ^^
+5 >                                       ^^^^^^^^
+6 >                                               ^^
+7 >                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^
+1->() {
   >
-1->Emitted(21, 1) Source(13, 1) + SourceIndex(0)
+2 >    const 
+3 >        { b, ...rest } = { a: 10, b: 30, yy: 30 }
+4 >                                     
+5 >                                       b
+6 >                                               , 
+7 >                                                 ...rest } = { a: 10, b: 30, yy: 30 }
+8 >                                                                         ;
+1->Emitted(18, 5) Source(13, 1) + SourceIndex(0)
+2 >Emitted(18, 9) Source(13, 7) + SourceIndex(0)
+3 >Emitted(18, 38) Source(13, 48) + SourceIndex(0)
+4 >Emitted(18, 40) Source(13, 9) + SourceIndex(0)
+5 >Emitted(18, 48) Source(13, 10) + SourceIndex(0)
+6 >Emitted(18, 50) Source(13, 12) + SourceIndex(0)
+7 >Emitted(18, 74) Source(13, 48) + SourceIndex(0)
+8 >Emitted(18, 75) Source(13, 49) + SourceIndex(0)
 ---
->>>    function second1() {
-1->^^^^
-2 >    ^^->
-1->
-1->Emitted(22, 5) Source(13, 1) + SourceIndex(0)
----
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^^->
-1->class second1 { 
-2 >    }
-1->Emitted(23, 5) Source(13, 17) + SourceIndex(0)
-2 >Emitted(23, 6) Source(13, 18) + SourceIndex(0)
----
->>>    return second1;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(24, 5) Source(13, 17) + SourceIndex(0)
-2 >Emitted(24, 19) Source(13, 18) + SourceIndex(0)
----
->>>}());
+>>>}
 1 >
 2 >^
-3 > 
-4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >}
-3 > 
-4 > class second1 { }
-1 >Emitted(25, 1) Source(13, 17) + SourceIndex(0)
-2 >Emitted(25, 2) Source(13, 18) + SourceIndex(0)
-3 >Emitted(25, 2) Source(13, 1) + SourceIndex(0)
-4 >Emitted(25, 6) Source(13, 18) + SourceIndex(0)
----
->>>var second2 = (function (_super) {
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
   >
-1->Emitted(26, 1) Source(14, 1) + SourceIndex(0)
----
->>>    __extends(second2, _super);
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->class second2 extends 
-2 >    second1
-1->Emitted(27, 5) Source(14, 23) + SourceIndex(0)
-2 >Emitted(27, 32) Source(14, 30) + SourceIndex(0)
----
->>>    function second2() {
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-1 >Emitted(28, 5) Source(14, 1) + SourceIndex(0)
----
->>>        return _super !== null && _super.apply(this, arguments) || this;
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^^->
-1->class second2 extends second1 { 
-2 >    }
-1->Emitted(30, 5) Source(14, 33) + SourceIndex(0)
-2 >Emitted(30, 6) Source(14, 34) + SourceIndex(0)
----
->>>    return second2;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(31, 5) Source(14, 33) + SourceIndex(0)
-2 >Emitted(31, 19) Source(14, 34) + SourceIndex(0)
----
->>>}(second1));
-1 >
-2 >^
-3 > 
-4 > ^
-5 >  ^^^^^^^
-6 >         ^^^
-7 >            ^^^^^^^^^^^->
-1 >
 2 >}
-3 > 
-4 > class second2 extends 
-5 >  second1
-6 >          { }
-1 >Emitted(32, 1) Source(14, 33) + SourceIndex(0)
-2 >Emitted(32, 2) Source(14, 34) + SourceIndex(0)
-3 >Emitted(32, 2) Source(14, 1) + SourceIndex(0)
-4 >Emitted(32, 3) Source(14, 23) + SourceIndex(0)
-5 >Emitted(32, 10) Source(14, 30) + SourceIndex(0)
-6 >Emitted(32, 13) Source(14, 34) + SourceIndex(0)
+1 >Emitted(19, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(19, 2) Source(14, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/2/second-output.js
@@ -474,13 +372,13 @@ sourceFile:../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^^^^^^->
 1->
-1->Emitted(33, 1) Source(1, 1) + SourceIndex(1)
+1->Emitted(20, 1) Source(1, 1) + SourceIndex(1)
 ---
 >>>    function C() {
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(34, 5) Source(1, 1) + SourceIndex(1)
+1->Emitted(21, 5) Source(1, 1) + SourceIndex(1)
 ---
 >>>    }
 1->^^^^
@@ -492,8 +390,8 @@ sourceFile:../second/second_part2.ts
   >    }
   >
 2 >    }
-1->Emitted(35, 5) Source(5, 1) + SourceIndex(1)
-2 >Emitted(35, 6) Source(5, 2) + SourceIndex(1)
+1->Emitted(22, 5) Source(5, 1) + SourceIndex(1)
+2 >Emitted(22, 6) Source(5, 2) + SourceIndex(1)
 ---
 >>>    C.prototype.doSomething = function () {
 1->^^^^
@@ -503,9 +401,9 @@ sourceFile:../second/second_part2.ts
 1->
 2 >    doSomething
 3 >                           
-1->Emitted(36, 5) Source(2, 5) + SourceIndex(1)
-2 >Emitted(36, 28) Source(2, 16) + SourceIndex(1)
-3 >Emitted(36, 31) Source(2, 5) + SourceIndex(1)
+1->Emitted(23, 5) Source(2, 5) + SourceIndex(1)
+2 >Emitted(23, 28) Source(2, 16) + SourceIndex(1)
+3 >Emitted(23, 31) Source(2, 5) + SourceIndex(1)
 ---
 >>>        console.log("something got done");
 1->^^^^^^^^
@@ -525,14 +423,14 @@ sourceFile:../second/second_part2.ts
 6 >                    "something got done"
 7 >                                        )
 8 >                                         ;
-1->Emitted(37, 9) Source(3, 9) + SourceIndex(1)
-2 >Emitted(37, 16) Source(3, 16) + SourceIndex(1)
-3 >Emitted(37, 17) Source(3, 17) + SourceIndex(1)
-4 >Emitted(37, 20) Source(3, 20) + SourceIndex(1)
-5 >Emitted(37, 21) Source(3, 21) + SourceIndex(1)
-6 >Emitted(37, 41) Source(3, 41) + SourceIndex(1)
-7 >Emitted(37, 42) Source(3, 42) + SourceIndex(1)
-8 >Emitted(37, 43) Source(3, 43) + SourceIndex(1)
+1->Emitted(24, 9) Source(3, 9) + SourceIndex(1)
+2 >Emitted(24, 16) Source(3, 16) + SourceIndex(1)
+3 >Emitted(24, 17) Source(3, 17) + SourceIndex(1)
+4 >Emitted(24, 20) Source(3, 20) + SourceIndex(1)
+5 >Emitted(24, 21) Source(3, 21) + SourceIndex(1)
+6 >Emitted(24, 41) Source(3, 41) + SourceIndex(1)
+7 >Emitted(24, 42) Source(3, 42) + SourceIndex(1)
+8 >Emitted(24, 43) Source(3, 43) + SourceIndex(1)
 ---
 >>>    };
 1 >^^^^
@@ -541,8 +439,8 @@ sourceFile:../second/second_part2.ts
 1 >
   >    
 2 >    }
-1 >Emitted(38, 5) Source(4, 5) + SourceIndex(1)
-2 >Emitted(38, 6) Source(4, 6) + SourceIndex(1)
+1 >Emitted(25, 5) Source(4, 5) + SourceIndex(1)
+2 >Emitted(25, 6) Source(4, 6) + SourceIndex(1)
 ---
 >>>    return C;
 1->^^^^
@@ -550,8 +448,8 @@ sourceFile:../second/second_part2.ts
 1->
   >
 2 >    }
-1->Emitted(39, 5) Source(5, 1) + SourceIndex(1)
-2 >Emitted(39, 13) Source(5, 2) + SourceIndex(1)
+1->Emitted(26, 5) Source(5, 1) + SourceIndex(1)
+2 >Emitted(26, 13) Source(5, 2) + SourceIndex(1)
 ---
 >>>}());
 1 >
@@ -567,10 +465,10 @@ sourceFile:../second/second_part2.ts
   >         console.log("something got done");
   >     }
   > }
-1 >Emitted(40, 1) Source(5, 1) + SourceIndex(1)
-2 >Emitted(40, 2) Source(5, 2) + SourceIndex(1)
-3 >Emitted(40, 2) Source(1, 1) + SourceIndex(1)
-4 >Emitted(40, 6) Source(5, 2) + SourceIndex(1)
+1 >Emitted(27, 1) Source(5, 1) + SourceIndex(1)
+2 >Emitted(27, 2) Source(5, 2) + SourceIndex(1)
+3 >Emitted(27, 2) Source(1, 1) + SourceIndex(1)
+4 >Emitted(27, 6) Source(5, 2) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
@@ -582,15 +480,12 @@ declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
 }
-declare class first1 {
-}
-declare class first2 extends first1 {
-}
+declare function forfirstfirst_PART1Rest(): void;
 declare function f(): string;
 //# sourceMappingURL=first-output.d.ts.map
 
 //// [/src/first/bin/first-output.d.ts.map]
-{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACND,cAAM,MAAM;CAAI;AAChB,cAAM,MAAO,SAAQ,MAAM;CAAI;ACH/B,iBAAS,CAAC,WAET"}
+{"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;AEbD,iBAAS,CAAC,WAET"}
 
 //// [/src/first/bin/first-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -694,117 +589,76 @@ sourceFile:../first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
 ---
--------------------------------------------------------------------
-emittedFile:/src/first/bin/first-output.d.ts
-sourceFile:../first_part2.ts
--------------------------------------------------------------------
->>>declare class first1 {
+>>>declare function forfirstfirst_PART1Rest(): void;
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^
-1->console.log(f());
-  >
-  >
-2 >class 
-3 >              first1
-1->Emitted(8, 1) Source(3, 1) + SourceIndex(1)
-2 >Emitted(8, 15) Source(3, 7) + SourceIndex(1)
-3 >Emitted(8, 21) Source(3, 13) + SourceIndex(1)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(9, 2) Source(3, 17) + SourceIndex(1)
----
->>>declare class first2 extends first1 {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^
-4 >                    ^^^^^^^^^
-5 >                             ^^^^^^
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                        ^^^^^^^^^
 1->
   >
-2 >class 
-3 >              first2 
-4 >                    extends 
-5 >                             first1
-1->Emitted(10, 1) Source(4, 1) + SourceIndex(1)
-2 >Emitted(10, 15) Source(4, 7) + SourceIndex(1)
-3 >Emitted(10, 21) Source(4, 14) + SourceIndex(1)
-4 >Emitted(10, 30) Source(4, 22) + SourceIndex(1)
-5 >Emitted(10, 36) Source(4, 28) + SourceIndex(1)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(11, 2) Source(4, 32) + SourceIndex(1)
+  >console.log(s);
+  >
+2 >function 
+3 >                 forfirstfirst_PART1Rest
+4 >                                        () {
+  >                                        const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+  >                                        }
+1->Emitted(8, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(8, 18) Source(12, 10) + SourceIndex(0)
+3 >Emitted(8, 41) Source(12, 33) + SourceIndex(0)
+4 >Emitted(8, 50) Source(14, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.d.ts
 sourceFile:../first_part3.ts
 -------------------------------------------------------------------
 >>>declare function f(): string;
-1->
+1 >
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^
 4 >                  ^^^^^^^^^^^
 5 >                             ^^^^^^^^^^^^->
-1->
+1 >
 2 >function 
 3 >                 f
 4 >                  () {
   >                      return "JS does hoists";
   >                  }
-1->Emitted(12, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(12, 18) Source(1, 10) + SourceIndex(2)
-3 >Emitted(12, 19) Source(1, 11) + SourceIndex(2)
-4 >Emitted(12, 30) Source(3, 2) + SourceIndex(2)
+1 >Emitted(9, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(9, 18) Source(1, 10) + SourceIndex(2)
+3 >Emitted(9, 19) Source(1, 11) + SourceIndex(2)
+4 >Emitted(9, 30) Source(3, 2) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.d.ts.map
 
 //// [/src/first/bin/first-output.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 var s = "Hello, world";
 console.log(s);
+function forfirstfirst_PART1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
 console.log(f());
-var first1 = (function () {
-    function first1() {
-    }
-    return first1;
-}());
-var first2 = (function (_super) {
-    __extends(first2, _super);
-    function first2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return first2;
-}(first1));
 function f() {
     return "JS does hoists";
 }
 //# sourceMappingURL=first-output.js.map
 
 //// [/src/first/bin/first-output.js.map]
-{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;AAEjB;IAAA;IAAe,CAAC;IAAD,aAAC;AAAD,CAAC,AAAhB,IAAgB;AAChB;IAAqB,0BAAM;IAA3B;;IAA8B,CAAC;IAAD,aAAC;AAAD,CAAC,AAA/B,CAAqB,MAAM,GAAI;ACH/B,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"first-output.js","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":";;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
 //// [/src/first/bin/first-output.js.map.baseline.txt]
 ===================================================================
@@ -817,19 +671,15 @@ sources: ../first_PART1.ts,../first_part2.ts,../first_part3.ts
 emittedFile:/src/first/bin/first-output.js
 sourceFile:../first_PART1.ts
 -------------------------------------------------------------------
->>>var __extends = (this && this.__extends) || (function () {
->>>    var extendStatics = function (d, b) {
->>>        extendStatics = Object.setPrototypeOf ||
->>>            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
->>>            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
->>>        return extendStatics(d, b);
->>>    };
->>>    return function (d, b) {
->>>        extendStatics(d, b);
->>>        function __() { this.constructor = d; }
->>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
->>>    };
->>>})();
+>>>var __rest = (this && this.__rest) || function (s, e) {
+>>>    var t = {};
+>>>    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+>>>        t[p] = s[p];
+>>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+>>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+>>>            t[p[i]] = s[p[i]];
+>>>    return t;
+>>>};
 >>>var s = "Hello, world";
 1 >
 2 >^^^^
@@ -847,12 +697,12 @@ sourceFile:../first_PART1.ts
 4 >      = 
 5 >        "Hello, world"
 6 >                      ;
-1 >Emitted(14, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(14, 5) Source(5, 7) + SourceIndex(0)
-3 >Emitted(14, 6) Source(5, 8) + SourceIndex(0)
-4 >Emitted(14, 9) Source(5, 11) + SourceIndex(0)
-5 >Emitted(14, 23) Source(5, 25) + SourceIndex(0)
-6 >Emitted(14, 24) Source(5, 26) + SourceIndex(0)
+1 >Emitted(10, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(10, 5) Source(5, 7) + SourceIndex(0)
+3 >Emitted(10, 6) Source(5, 8) + SourceIndex(0)
+4 >Emitted(10, 9) Source(5, 11) + SourceIndex(0)
+5 >Emitted(10, 23) Source(5, 25) + SourceIndex(0)
+6 >Emitted(10, 24) Source(5, 26) + SourceIndex(0)
 ---
 >>>console.log(s);
 1 >
@@ -863,7 +713,7 @@ sourceFile:../first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -878,14 +728,64 @@ sourceFile:../first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1 >Emitted(15, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(15, 8) Source(11, 8) + SourceIndex(0)
-3 >Emitted(15, 9) Source(11, 9) + SourceIndex(0)
-4 >Emitted(15, 12) Source(11, 12) + SourceIndex(0)
-5 >Emitted(15, 13) Source(11, 13) + SourceIndex(0)
-6 >Emitted(15, 14) Source(11, 14) + SourceIndex(0)
-7 >Emitted(15, 15) Source(11, 15) + SourceIndex(0)
-8 >Emitted(15, 16) Source(11, 16) + SourceIndex(0)
+1 >Emitted(11, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(11, 8) Source(11, 8) + SourceIndex(0)
+3 >Emitted(11, 9) Source(11, 9) + SourceIndex(0)
+4 >Emitted(11, 12) Source(11, 12) + SourceIndex(0)
+5 >Emitted(11, 13) Source(11, 13) + SourceIndex(0)
+6 >Emitted(11, 14) Source(11, 14) + SourceIndex(0)
+7 >Emitted(11, 15) Source(11, 15) + SourceIndex(0)
+8 >Emitted(11, 16) Source(11, 16) + SourceIndex(0)
+---
+>>>function forfirstfirst_PART1Rest() {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >function 
+3 >         forfirstfirst_PART1Rest
+1->Emitted(12, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(12, 10) Source(12, 10) + SourceIndex(0)
+3 >Emitted(12, 33) Source(12, 33) + SourceIndex(0)
+---
+>>>    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                     ^^
+5 >                                       ^^^^^^^^
+6 >                                               ^^
+7 >                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^
+1->() {
+  >
+2 >    const 
+3 >        { b, ...rest } = { a: 10, b: 30, yy: 30 }
+4 >                                     
+5 >                                       b
+6 >                                               , 
+7 >                                                 ...rest } = { a: 10, b: 30, yy: 30 }
+8 >                                                                         ;
+1->Emitted(13, 5) Source(13, 1) + SourceIndex(0)
+2 >Emitted(13, 9) Source(13, 7) + SourceIndex(0)
+3 >Emitted(13, 38) Source(13, 48) + SourceIndex(0)
+4 >Emitted(13, 40) Source(13, 9) + SourceIndex(0)
+5 >Emitted(13, 48) Source(13, 10) + SourceIndex(0)
+6 >Emitted(13, 50) Source(13, 12) + SourceIndex(0)
+7 >Emitted(13, 74) Source(13, 48) + SourceIndex(0)
+8 >Emitted(13, 75) Source(13, 49) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(14, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(14, 2) Source(14, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
@@ -901,7 +801,6 @@ sourceFile:../first_part2.ts
 7 >             ^^
 8 >               ^
 9 >                ^
-10>                 ^^^^^^^^^^^->
 1->
 2 >console
 3 >       .
@@ -911,137 +810,31 @@ sourceFile:../first_part2.ts
 7 >             ()
 8 >               )
 9 >                ;
-1->Emitted(16, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(16, 8) Source(1, 8) + SourceIndex(1)
-3 >Emitted(16, 9) Source(1, 9) + SourceIndex(1)
-4 >Emitted(16, 12) Source(1, 12) + SourceIndex(1)
-5 >Emitted(16, 13) Source(1, 13) + SourceIndex(1)
-6 >Emitted(16, 14) Source(1, 14) + SourceIndex(1)
-7 >Emitted(16, 16) Source(1, 16) + SourceIndex(1)
-8 >Emitted(16, 17) Source(1, 17) + SourceIndex(1)
-9 >Emitted(16, 18) Source(1, 18) + SourceIndex(1)
----
->>>var first1 = (function () {
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
-  >
-  >
-1->Emitted(17, 1) Source(3, 1) + SourceIndex(1)
----
->>>    function first1() {
-1->^^^^
-2 >    ^^->
-1->
-1->Emitted(18, 5) Source(3, 1) + SourceIndex(1)
----
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^->
-1->class first1 { 
-2 >    }
-1->Emitted(19, 5) Source(3, 16) + SourceIndex(1)
-2 >Emitted(19, 6) Source(3, 17) + SourceIndex(1)
----
->>>    return first1;
-1->^^^^
-2 >    ^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(20, 5) Source(3, 16) + SourceIndex(1)
-2 >Emitted(20, 18) Source(3, 17) + SourceIndex(1)
----
->>>}());
-1 >
-2 >^
-3 > 
-4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-2 >}
-3 > 
-4 > class first1 { }
-1 >Emitted(21, 1) Source(3, 16) + SourceIndex(1)
-2 >Emitted(21, 2) Source(3, 17) + SourceIndex(1)
-3 >Emitted(21, 2) Source(3, 1) + SourceIndex(1)
-4 >Emitted(21, 6) Source(3, 17) + SourceIndex(1)
----
->>>var first2 = (function (_super) {
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
-  >
-1->Emitted(22, 1) Source(4, 1) + SourceIndex(1)
----
->>>    __extends(first2, _super);
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->class first2 extends 
-2 >    first1
-1->Emitted(23, 5) Source(4, 22) + SourceIndex(1)
-2 >Emitted(23, 31) Source(4, 28) + SourceIndex(1)
----
->>>    function first2() {
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-1 >Emitted(24, 5) Source(4, 1) + SourceIndex(1)
----
->>>        return _super !== null && _super.apply(this, arguments) || this;
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^->
-1->class first2 extends first1 { 
-2 >    }
-1->Emitted(26, 5) Source(4, 31) + SourceIndex(1)
-2 >Emitted(26, 6) Source(4, 32) + SourceIndex(1)
----
->>>    return first2;
-1->^^^^
-2 >    ^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(27, 5) Source(4, 31) + SourceIndex(1)
-2 >Emitted(27, 18) Source(4, 32) + SourceIndex(1)
----
->>>}(first1));
-1 >
-2 >^
-3 > 
-4 > ^
-5 >  ^^^^^^
-6 >        ^^^
-7 >           ^^^^->
-1 >
-2 >}
-3 > 
-4 > class first2 extends 
-5 >  first1
-6 >         { }
-1 >Emitted(28, 1) Source(4, 31) + SourceIndex(1)
-2 >Emitted(28, 2) Source(4, 32) + SourceIndex(1)
-3 >Emitted(28, 2) Source(4, 1) + SourceIndex(1)
-4 >Emitted(28, 3) Source(4, 22) + SourceIndex(1)
-5 >Emitted(28, 9) Source(4, 28) + SourceIndex(1)
-6 >Emitted(28, 12) Source(4, 32) + SourceIndex(1)
+1->Emitted(15, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(15, 8) Source(1, 8) + SourceIndex(1)
+3 >Emitted(15, 9) Source(1, 9) + SourceIndex(1)
+4 >Emitted(15, 12) Source(1, 12) + SourceIndex(1)
+5 >Emitted(15, 13) Source(1, 13) + SourceIndex(1)
+6 >Emitted(15, 14) Source(1, 14) + SourceIndex(1)
+7 >Emitted(15, 16) Source(1, 16) + SourceIndex(1)
+8 >Emitted(15, 17) Source(1, 17) + SourceIndex(1)
+9 >Emitted(15, 18) Source(1, 18) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/first/bin/first-output.js
 sourceFile:../first_part3.ts
 -------------------------------------------------------------------
 >>>function f() {
-1->
+1 >
 2 >^^^^^^^^^
 3 >         ^
 4 >          ^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
 2 >function 
 3 >         f
-1->Emitted(29, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(29, 10) Source(1, 10) + SourceIndex(2)
-3 >Emitted(29, 11) Source(1, 11) + SourceIndex(2)
+1 >Emitted(16, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(16, 10) Source(1, 10) + SourceIndex(2)
+3 >Emitted(16, 11) Source(1, 11) + SourceIndex(2)
 ---
 >>>    return "JS does hoists";
 1->^^^^
@@ -1053,10 +846,10 @@ sourceFile:../first_part3.ts
 2 >    return 
 3 >           "JS does hoists"
 4 >                           ;
-1->Emitted(30, 5) Source(2, 5) + SourceIndex(2)
-2 >Emitted(30, 12) Source(2, 12) + SourceIndex(2)
-3 >Emitted(30, 28) Source(2, 28) + SourceIndex(2)
-4 >Emitted(30, 29) Source(2, 29) + SourceIndex(2)
+1->Emitted(17, 5) Source(2, 5) + SourceIndex(2)
+2 >Emitted(17, 12) Source(2, 12) + SourceIndex(2)
+3 >Emitted(17, 28) Source(2, 28) + SourceIndex(2)
+4 >Emitted(17, 29) Source(2, 29) + SourceIndex(2)
 ---
 >>>}
 1 >
@@ -1065,16 +858,26 @@ sourceFile:../first_part3.ts
 1 >
   >
 2 >}
-1 >Emitted(31, 1) Source(3, 1) + SourceIndex(2)
-2 >Emitted(31, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(18, 1) Source(3, 1) + SourceIndex(2)
+2 >Emitted(18, 2) Source(3, 2) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
-//// [/src/first/first_part2.ts]
-console.log(f());
+//// [/src/first/first_PART1.ts]
+interface TheFirst {
+    none: any;
+}
 
-class first1 { }
-class first2 extends first1 { }
+const s = "Hello, world";
+
+interface NoJsForHereEither {
+    none: any;
+}
+
+console.log(s);
+function forfirstfirst_PART1Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}
 
 //// [/src/second/second_part1.ts]
 namespace N {
@@ -1088,9 +891,9 @@ namespace N {
 
     f();
 }
-
-class second1 { }
-class second2 extends second1 { }
+function forsecondsecond_part1Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -1100,40 +903,31 @@ declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
 }
-declare class first1 {
-}
-declare class first2 extends first1 {
-}
+declare function forfirstfirst_PART1Rest(): void;
 declare function f(): string;
 //# sourceMappingURL=first-output.d.ts.map
 declare namespace N {
 }
 declare namespace N {
 }
-declare class second1 {
-}
-declare class second2 extends second1 {
-}
+declare function forsecondsecond_part1Rest(): void;
 declare class C {
     doSomething(): void;
 }
 //# sourceMappingURL=second-output.d.ts.map
 declare var c: C;
-declare class third1 {
-}
-declare class third2 extends third1 {
-}
+declare function forthirdthird_part1Rest(): void;
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACND,cAAM,MAAM;CAAI;AAChB,cAAM,MAAO,SAAQ,MAAM;CAAI;ACH/B,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAAI;AACjB,cAAM,OAAQ,SAAQ,OAAO;CAAI;ACbjC,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC;AAGhB,cAAM,MAAM;CAAI;AAChB,cAAM,MAAO,SAAQ,MAAM;CAAI"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAE/B;ACbD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
 JsFile: third-output.d.ts
 mapUrl: third-output.d.ts.map
 sourceRoot: 
-sources: ../../../first/first_PART1.ts,../../../first/first_part2.ts,../../../first/first_part3.ts,../../../second/second_part1.ts,../../../second/second_part2.ts,../../third_part1.ts
+sources: ../../../first/first_PART1.ts,../../../first/first_part3.ts,../../../second/second_part1.ts,../../../second/second_part2.ts,../../third_part1.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1230,78 +1024,50 @@ sourceFile:../../../first/first_PART1.ts
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
 1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
 ---
--------------------------------------------------------------------
-emittedFile:/src/third/thirdjs/output/third-output.d.ts
-sourceFile:../../../first/first_part2.ts
--------------------------------------------------------------------
->>>declare class first1 {
+>>>declare function forfirstfirst_PART1Rest(): void;
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^
-1->console.log(f());
-  >
-  >
-2 >class 
-3 >              first1
-1->Emitted(8, 1) Source(3, 1) + SourceIndex(1)
-2 >Emitted(8, 15) Source(3, 7) + SourceIndex(1)
-3 >Emitted(8, 21) Source(3, 13) + SourceIndex(1)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(9, 2) Source(3, 17) + SourceIndex(1)
----
->>>declare class first2 extends first1 {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^
-4 >                    ^^^^^^^^^
-5 >                             ^^^^^^
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                        ^^^^^^^^^
 1->
   >
-2 >class 
-3 >              first2 
-4 >                    extends 
-5 >                             first1
-1->Emitted(10, 1) Source(4, 1) + SourceIndex(1)
-2 >Emitted(10, 15) Source(4, 7) + SourceIndex(1)
-3 >Emitted(10, 21) Source(4, 14) + SourceIndex(1)
-4 >Emitted(10, 30) Source(4, 22) + SourceIndex(1)
-5 >Emitted(10, 36) Source(4, 28) + SourceIndex(1)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(11, 2) Source(4, 32) + SourceIndex(1)
+  >console.log(s);
+  >
+2 >function 
+3 >                 forfirstfirst_PART1Rest
+4 >                                        () {
+  >                                        const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+  >                                        }
+1->Emitted(8, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(8, 18) Source(12, 10) + SourceIndex(0)
+3 >Emitted(8, 41) Source(12, 33) + SourceIndex(0)
+4 >Emitted(8, 50) Source(14, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
 sourceFile:../../../first/first_part3.ts
 -------------------------------------------------------------------
 >>>declare function f(): string;
-1->
+1 >
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^
 4 >                  ^^^^^^^^^^^
 5 >                             ^^^^^^^^^^^^^^->
-1->
+1 >
 2 >function 
 3 >                 f
 4 >                  () {
   >                      return "JS does hoists";
   >                  }
-1->Emitted(12, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(12, 18) Source(1, 10) + SourceIndex(2)
-3 >Emitted(12, 19) Source(1, 11) + SourceIndex(2)
-4 >Emitted(12, 30) Source(3, 2) + SourceIndex(2)
+1 >Emitted(9, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(9, 18) Source(1, 10) + SourceIndex(1)
+3 >Emitted(9, 19) Source(1, 11) + SourceIndex(1)
+4 >Emitted(9, 30) Source(3, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1317,10 +1083,10 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(14, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(14, 19) Source(1, 11) + SourceIndex(3)
-3 >Emitted(14, 20) Source(1, 12) + SourceIndex(3)
-4 >Emitted(14, 21) Source(1, 13) + SourceIndex(3)
+1->Emitted(11, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(11, 19) Source(1, 11) + SourceIndex(2)
+3 >Emitted(11, 20) Source(1, 12) + SourceIndex(2)
+4 >Emitted(11, 21) Source(1, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -1328,7 +1094,7 @@ sourceFile:../../../second/second_part1.ts
 1 >{
   >    // Comment text
   >}
-1 >Emitted(15, 2) Source(3, 2) + SourceIndex(3)
+1 >Emitted(12, 2) Source(3, 2) + SourceIndex(2)
 ---
 >>>declare namespace N {
 1->
@@ -1341,14 +1107,14 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(16, 1) Source(5, 1) + SourceIndex(3)
-2 >Emitted(16, 19) Source(5, 11) + SourceIndex(3)
-3 >Emitted(16, 20) Source(5, 12) + SourceIndex(3)
-4 >Emitted(16, 21) Source(5, 13) + SourceIndex(3)
+1->Emitted(13, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(13, 19) Source(5, 11) + SourceIndex(2)
+3 >Emitted(13, 20) Source(5, 12) + SourceIndex(2)
+4 >Emitted(13, 21) Source(5, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >{
   >    function f() {
   >        console.log('testing');
@@ -1356,66 +1122,40 @@ sourceFile:../../../second/second_part1.ts
   >
   >    f();
   >}
-1 >Emitted(17, 2) Source(11, 2) + SourceIndex(3)
+1 >Emitted(14, 2) Source(11, 2) + SourceIndex(2)
 ---
->>>declare class second1 {
+>>>declare function forsecondsecond_part1Rest(): void;
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^^
-1->
-  >
-  >
-2 >class 
-3 >              second1
-1->Emitted(18, 1) Source(13, 1) + SourceIndex(3)
-2 >Emitted(18, 15) Source(13, 7) + SourceIndex(3)
-3 >Emitted(18, 22) Source(13, 14) + SourceIndex(3)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(19, 2) Source(13, 18) + SourceIndex(3)
----
->>>declare class second2 extends second1 {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^^
-4 >                     ^^^^^^^^^
-5 >                              ^^^^^^^
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                          ^^^^^^^^^
 1->
   >
-2 >class 
-3 >              second2 
-4 >                     extends 
-5 >                              second1
-1->Emitted(20, 1) Source(14, 1) + SourceIndex(3)
-2 >Emitted(20, 15) Source(14, 7) + SourceIndex(3)
-3 >Emitted(20, 22) Source(14, 15) + SourceIndex(3)
-4 >Emitted(20, 31) Source(14, 23) + SourceIndex(3)
-5 >Emitted(20, 38) Source(14, 30) + SourceIndex(3)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(21, 2) Source(14, 34) + SourceIndex(3)
+2 >function 
+3 >                 forsecondsecond_part1Rest
+4 >                                          () {
+  >                                          const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+  >                                          }
+1->Emitted(15, 1) Source(12, 1) + SourceIndex(2)
+2 >Emitted(15, 18) Source(12, 10) + SourceIndex(2)
+3 >Emitted(15, 43) Source(12, 35) + SourceIndex(2)
+4 >Emitted(15, 52) Source(14, 2) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
 sourceFile:../../../second/second_part2.ts
 -------------------------------------------------------------------
 >>>declare class C {
-1->
+1 >
 2 >^^^^^^^^^^^^^^
 3 >              ^
 4 >               ^^^^^^^^^^->
-1->
+1 >
 2 >class 
 3 >              C
-1->Emitted(22, 1) Source(1, 1) + SourceIndex(4)
-2 >Emitted(22, 15) Source(1, 7) + SourceIndex(4)
-3 >Emitted(22, 16) Source(1, 8) + SourceIndex(4)
+1 >Emitted(16, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(16, 15) Source(1, 7) + SourceIndex(3)
+3 >Emitted(16, 16) Source(1, 8) + SourceIndex(3)
 ---
 >>>    doSomething(): void;
 1->^^^^
@@ -1423,8 +1163,8 @@ sourceFile:../../../second/second_part2.ts
 1-> {
   >    
 2 >    doSomething
-1->Emitted(23, 5) Source(2, 5) + SourceIndex(4)
-2 >Emitted(23, 16) Source(2, 16) + SourceIndex(4)
+1->Emitted(17, 5) Source(2, 5) + SourceIndex(3)
+2 >Emitted(17, 16) Source(2, 16) + SourceIndex(3)
 ---
 >>>}
 1 >^
@@ -1433,7 +1173,7 @@ sourceFile:../../../second/second_part2.ts
   >        console.log("something got done");
   >    }
   >}
-1 >Emitted(24, 2) Source(5, 2) + SourceIndex(4)
+1 >Emitted(18, 2) Source(5, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1447,125 +1187,78 @@ sourceFile:../../third_part1.ts
 4 >            ^
 5 >             ^^^
 6 >                ^
-7 >                 ^^^^^^->
+7 >                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
 2 >
 3 >        var 
 4 >            c
 5 >              = new C()
 6 >                ;
-1->Emitted(26, 1) Source(1, 1) + SourceIndex(5)
-2 >Emitted(26, 9) Source(1, 1) + SourceIndex(5)
-3 >Emitted(26, 13) Source(1, 5) + SourceIndex(5)
-4 >Emitted(26, 14) Source(1, 6) + SourceIndex(5)
-5 >Emitted(26, 17) Source(1, 16) + SourceIndex(5)
-6 >Emitted(26, 18) Source(1, 17) + SourceIndex(5)
+1->Emitted(20, 1) Source(1, 1) + SourceIndex(4)
+2 >Emitted(20, 9) Source(1, 1) + SourceIndex(4)
+3 >Emitted(20, 13) Source(1, 5) + SourceIndex(4)
+4 >Emitted(20, 14) Source(1, 6) + SourceIndex(4)
+5 >Emitted(20, 17) Source(1, 16) + SourceIndex(4)
+6 >Emitted(20, 18) Source(1, 17) + SourceIndex(4)
 ---
->>>declare class third1 {
+>>>declare function forthirdthird_part1Rest(): void;
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^
+2 >^^^^^^^^^^^^^^^^^
+3 >                 ^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                        ^^^^^^^^^
 1->
   >c.doSomething();
   >
-  >
-2 >class 
-3 >              third1
-1->Emitted(27, 1) Source(4, 1) + SourceIndex(5)
-2 >Emitted(27, 15) Source(4, 7) + SourceIndex(5)
-3 >Emitted(27, 21) Source(4, 13) + SourceIndex(5)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(28, 2) Source(4, 17) + SourceIndex(5)
----
->>>declare class third2 extends third1 {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^
-4 >                    ^^^^^^^^^
-5 >                             ^^^^^^
-1->
-  >
-2 >class 
-3 >              third2 
-4 >                    extends 
-5 >                             third1
-1->Emitted(29, 1) Source(5, 1) + SourceIndex(5)
-2 >Emitted(29, 15) Source(5, 7) + SourceIndex(5)
-3 >Emitted(29, 21) Source(5, 14) + SourceIndex(5)
-4 >Emitted(29, 30) Source(5, 22) + SourceIndex(5)
-5 >Emitted(29, 36) Source(5, 28) + SourceIndex(5)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(30, 2) Source(5, 32) + SourceIndex(5)
+2 >function 
+3 >                 forthirdthird_part1Rest
+4 >                                        () {
+  >                                        const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+  >                                        }
+1->Emitted(21, 1) Source(3, 1) + SourceIndex(4)
+2 >Emitted(21, 18) Source(3, 10) + SourceIndex(4)
+3 >Emitted(21, 41) Source(3, 33) + SourceIndex(4)
+4 >Emitted(21, 50) Source(5, 2) + SourceIndex(4)
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.js]
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 var s = "Hello, world";
 console.log(s);
+function forfirstfirst_PART1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
 console.log(f());
-var first1 = (function () {
-    function first1() {
-    }
-    return first1;
-}());
-var first2 = (function (_super) {
-    __extends(first2, _super);
-    function first2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return first2;
-}(first1));
 function f() {
     return "JS does hoists";
 }
 //# sourceMappingURL=first-output.js.map
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
 var N;
 (function (N) {
     function f() {
@@ -1573,18 +1266,9 @@ var N;
     }
     f();
 })(N || (N = {}));
-var second1 = (function () {
-    function second1() {
-    }
-    return second1;
-}());
-var second2 = (function (_super) {
-    __extends(second2, _super);
-    function second2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return second2;
-}(second1));
+function forsecondsecond_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
 var C = (function () {
     function C() {
     }
@@ -1596,22 +1280,13 @@ var C = (function () {
 //# sourceMappingURL=second-output.js.map
 var c = new C();
 c.doSomething();
-var third1 = (function () {
-    function third1() {
-    }
-    return third1;
-}());
-var third2 = (function (_super) {
-    __extends(third2, _super);
-    function third2() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return third2;
-}(third1));
+function forthirdthird_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;AAEjB;IAAA;IAAe,CAAC;IAAD,aAAC;AAAD,CAAC,AAAhB,IAAgB;AAChB;IAAqB,0BAAM;IAA3B;;IAA8B,CAAC;IAAD,aAAC;AAAD,CAAC,AAA/B,CAAqB,MAAM,GAAI;ACH/B,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;;;;;;;;;;;;;;;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AAED;IAAA;IAAgB,CAAC;IAAD,cAAC;AAAD,CAAC,AAAjB,IAAiB;AACjB;IAAsB,2BAAO;IAA7B;;IAAgC,CAAC;IAAD,cAAC;AAAD,CAAC,AAAjC,CAAsB,OAAO,GAAI;ACbjC;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAEhB;IAAA;IAAe,CAAC;IAAD,aAAC;AAAD,CAAC,AAAhB,IAAgB;AAChB;IAAqB,0BAAM;IAA3B;;IAA8B,CAAC;IAAD,aAAC;AAAD,CAAC,AAA/B,CAAqB,MAAM,GAAI"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AACf,SAAS,uBAAuB;IAChC,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;AAChD,CAAC;ACbD,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;;;;;;;;;;;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AACD,SAAS,yBAAyB;IAClC,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;AAChD,CAAC;ACbD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC;AAChB,SAAS,uBAAuB;IAChC,IAAM,6BAAyC,EAAvC,QAAC,EAAE,wBAAoC,CAAC;AAChD,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -1624,32 +1299,24 @@ sources: ../../../first/first_PART1.ts,../../../first/first_part2.ts,../../../fi
 emittedFile:/src/third/thirdjs/output/third-output.js
 sourceFile:../../../first/first_PART1.ts
 -------------------------------------------------------------------
->>>var __extends = (this && this.__extends) || (function () {
->>>    var extendStatics = function (d, b) {
->>>        extendStatics = Object.setPrototypeOf ||
->>>            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
->>>            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
->>>        return extendStatics(d, b);
->>>    };
->>>    return function (d, b) {
->>>        extendStatics(d, b);
->>>        function __() { this.constructor = d; }
->>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
->>>    };
->>>})();
->>>var __extends = (this && this.__extends) || (function () {
->>>    var extendStatics = function (d, b) {
->>>        extendStatics = Object.setPrototypeOf ||
->>>            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
->>>            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
->>>        return extendStatics(d, b);
->>>    };
->>>    return function (d, b) {
->>>        extendStatics(d, b);
->>>        function __() { this.constructor = d; }
->>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
->>>    };
->>>})();
+>>>var __rest = (this && this.__rest) || function (s, e) {
+>>>    var t = {};
+>>>    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+>>>        t[p] = s[p];
+>>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+>>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+>>>            t[p[i]] = s[p[i]];
+>>>    return t;
+>>>};
+>>>var __rest = (this && this.__rest) || function (s, e) {
+>>>    var t = {};
+>>>    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+>>>        t[p] = s[p];
+>>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+>>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+>>>            t[p[i]] = s[p[i]];
+>>>    return t;
+>>>};
 >>>var s = "Hello, world";
 1 >
 2 >^^^^
@@ -1667,12 +1334,12 @@ sourceFile:../../../first/first_PART1.ts
 4 >      = 
 5 >        "Hello, world"
 6 >                      ;
-1 >Emitted(27, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(27, 5) Source(5, 7) + SourceIndex(0)
-3 >Emitted(27, 6) Source(5, 8) + SourceIndex(0)
-4 >Emitted(27, 9) Source(5, 11) + SourceIndex(0)
-5 >Emitted(27, 23) Source(5, 25) + SourceIndex(0)
-6 >Emitted(27, 24) Source(5, 26) + SourceIndex(0)
+1 >Emitted(19, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(19, 5) Source(5, 7) + SourceIndex(0)
+3 >Emitted(19, 6) Source(5, 8) + SourceIndex(0)
+4 >Emitted(19, 9) Source(5, 11) + SourceIndex(0)
+5 >Emitted(19, 23) Source(5, 25) + SourceIndex(0)
+6 >Emitted(19, 24) Source(5, 26) + SourceIndex(0)
 ---
 >>>console.log(s);
 1 >
@@ -1683,7 +1350,7 @@ sourceFile:../../../first/first_PART1.ts
 6 >            ^
 7 >             ^
 8 >              ^
-9 >               ^^^->
+9 >               ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >interface NoJsForHereEither {
@@ -1698,14 +1365,64 @@ sourceFile:../../../first/first_PART1.ts
 6 >            s
 7 >             )
 8 >              ;
-1 >Emitted(28, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(28, 8) Source(11, 8) + SourceIndex(0)
-3 >Emitted(28, 9) Source(11, 9) + SourceIndex(0)
-4 >Emitted(28, 12) Source(11, 12) + SourceIndex(0)
-5 >Emitted(28, 13) Source(11, 13) + SourceIndex(0)
-6 >Emitted(28, 14) Source(11, 14) + SourceIndex(0)
-7 >Emitted(28, 15) Source(11, 15) + SourceIndex(0)
-8 >Emitted(28, 16) Source(11, 16) + SourceIndex(0)
+1 >Emitted(20, 1) Source(11, 1) + SourceIndex(0)
+2 >Emitted(20, 8) Source(11, 8) + SourceIndex(0)
+3 >Emitted(20, 9) Source(11, 9) + SourceIndex(0)
+4 >Emitted(20, 12) Source(11, 12) + SourceIndex(0)
+5 >Emitted(20, 13) Source(11, 13) + SourceIndex(0)
+6 >Emitted(20, 14) Source(11, 14) + SourceIndex(0)
+7 >Emitted(20, 15) Source(11, 15) + SourceIndex(0)
+8 >Emitted(20, 16) Source(11, 16) + SourceIndex(0)
+---
+>>>function forfirstfirst_PART1Rest() {
+1->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1->
+  >
+2 >function 
+3 >         forfirstfirst_PART1Rest
+1->Emitted(21, 1) Source(12, 1) + SourceIndex(0)
+2 >Emitted(21, 10) Source(12, 10) + SourceIndex(0)
+3 >Emitted(21, 33) Source(12, 33) + SourceIndex(0)
+---
+>>>    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                     ^^
+5 >                                       ^^^^^^^^
+6 >                                               ^^
+7 >                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^
+1->() {
+  >
+2 >    const 
+3 >        { b, ...rest } = { a: 10, b: 30, yy: 30 }
+4 >                                     
+5 >                                       b
+6 >                                               , 
+7 >                                                 ...rest } = { a: 10, b: 30, yy: 30 }
+8 >                                                                         ;
+1->Emitted(22, 5) Source(13, 1) + SourceIndex(0)
+2 >Emitted(22, 9) Source(13, 7) + SourceIndex(0)
+3 >Emitted(22, 38) Source(13, 48) + SourceIndex(0)
+4 >Emitted(22, 40) Source(13, 9) + SourceIndex(0)
+5 >Emitted(22, 48) Source(13, 10) + SourceIndex(0)
+6 >Emitted(22, 50) Source(13, 12) + SourceIndex(0)
+7 >Emitted(22, 74) Source(13, 48) + SourceIndex(0)
+8 >Emitted(22, 75) Source(13, 49) + SourceIndex(0)
+---
+>>>}
+1 >
+2 >^
+3 > ^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >}
+1 >Emitted(23, 1) Source(14, 1) + SourceIndex(0)
+2 >Emitted(23, 2) Source(14, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -1721,7 +1438,6 @@ sourceFile:../../../first/first_part2.ts
 7 >             ^^
 8 >               ^
 9 >                ^
-10>                 ^^^^^^^^^^^->
 1->
 2 >console
 3 >       .
@@ -1731,137 +1447,31 @@ sourceFile:../../../first/first_part2.ts
 7 >             ()
 8 >               )
 9 >                ;
-1->Emitted(29, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(29, 8) Source(1, 8) + SourceIndex(1)
-3 >Emitted(29, 9) Source(1, 9) + SourceIndex(1)
-4 >Emitted(29, 12) Source(1, 12) + SourceIndex(1)
-5 >Emitted(29, 13) Source(1, 13) + SourceIndex(1)
-6 >Emitted(29, 14) Source(1, 14) + SourceIndex(1)
-7 >Emitted(29, 16) Source(1, 16) + SourceIndex(1)
-8 >Emitted(29, 17) Source(1, 17) + SourceIndex(1)
-9 >Emitted(29, 18) Source(1, 18) + SourceIndex(1)
----
->>>var first1 = (function () {
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
-  >
-  >
-1->Emitted(30, 1) Source(3, 1) + SourceIndex(1)
----
->>>    function first1() {
-1->^^^^
-2 >    ^^->
-1->
-1->Emitted(31, 5) Source(3, 1) + SourceIndex(1)
----
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^->
-1->class first1 { 
-2 >    }
-1->Emitted(32, 5) Source(3, 16) + SourceIndex(1)
-2 >Emitted(32, 6) Source(3, 17) + SourceIndex(1)
----
->>>    return first1;
-1->^^^^
-2 >    ^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(33, 5) Source(3, 16) + SourceIndex(1)
-2 >Emitted(33, 18) Source(3, 17) + SourceIndex(1)
----
->>>}());
-1 >
-2 >^
-3 > 
-4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-2 >}
-3 > 
-4 > class first1 { }
-1 >Emitted(34, 1) Source(3, 16) + SourceIndex(1)
-2 >Emitted(34, 2) Source(3, 17) + SourceIndex(1)
-3 >Emitted(34, 2) Source(3, 1) + SourceIndex(1)
-4 >Emitted(34, 6) Source(3, 17) + SourceIndex(1)
----
->>>var first2 = (function (_super) {
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
-  >
-1->Emitted(35, 1) Source(4, 1) + SourceIndex(1)
----
->>>    __extends(first2, _super);
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->class first2 extends 
-2 >    first1
-1->Emitted(36, 5) Source(4, 22) + SourceIndex(1)
-2 >Emitted(36, 31) Source(4, 28) + SourceIndex(1)
----
->>>    function first2() {
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-1 >Emitted(37, 5) Source(4, 1) + SourceIndex(1)
----
->>>        return _super !== null && _super.apply(this, arguments) || this;
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^->
-1->class first2 extends first1 { 
-2 >    }
-1->Emitted(39, 5) Source(4, 31) + SourceIndex(1)
-2 >Emitted(39, 6) Source(4, 32) + SourceIndex(1)
----
->>>    return first2;
-1->^^^^
-2 >    ^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(40, 5) Source(4, 31) + SourceIndex(1)
-2 >Emitted(40, 18) Source(4, 32) + SourceIndex(1)
----
->>>}(first1));
-1 >
-2 >^
-3 > 
-4 > ^
-5 >  ^^^^^^
-6 >        ^^^
-7 >           ^^^^->
-1 >
-2 >}
-3 > 
-4 > class first2 extends 
-5 >  first1
-6 >         { }
-1 >Emitted(41, 1) Source(4, 31) + SourceIndex(1)
-2 >Emitted(41, 2) Source(4, 32) + SourceIndex(1)
-3 >Emitted(41, 2) Source(4, 1) + SourceIndex(1)
-4 >Emitted(41, 3) Source(4, 22) + SourceIndex(1)
-5 >Emitted(41, 9) Source(4, 28) + SourceIndex(1)
-6 >Emitted(41, 12) Source(4, 32) + SourceIndex(1)
+1->Emitted(24, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(24, 8) Source(1, 8) + SourceIndex(1)
+3 >Emitted(24, 9) Source(1, 9) + SourceIndex(1)
+4 >Emitted(24, 12) Source(1, 12) + SourceIndex(1)
+5 >Emitted(24, 13) Source(1, 13) + SourceIndex(1)
+6 >Emitted(24, 14) Source(1, 14) + SourceIndex(1)
+7 >Emitted(24, 16) Source(1, 16) + SourceIndex(1)
+8 >Emitted(24, 17) Source(1, 17) + SourceIndex(1)
+9 >Emitted(24, 18) Source(1, 18) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
 sourceFile:../../../first/first_part3.ts
 -------------------------------------------------------------------
 >>>function f() {
-1->
+1 >
 2 >^^^^^^^^^
 3 >         ^
 4 >          ^^^^^^^^^^^^^^^^^^^->
-1->
+1 >
 2 >function 
 3 >         f
-1->Emitted(42, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(42, 10) Source(1, 10) + SourceIndex(2)
-3 >Emitted(42, 11) Source(1, 11) + SourceIndex(2)
+1 >Emitted(25, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(25, 10) Source(1, 10) + SourceIndex(2)
+3 >Emitted(25, 11) Source(1, 11) + SourceIndex(2)
 ---
 >>>    return "JS does hoists";
 1->^^^^
@@ -1873,10 +1483,10 @@ sourceFile:../../../first/first_part3.ts
 2 >    return 
 3 >           "JS does hoists"
 4 >                           ;
-1->Emitted(43, 5) Source(2, 5) + SourceIndex(2)
-2 >Emitted(43, 12) Source(2, 12) + SourceIndex(2)
-3 >Emitted(43, 28) Source(2, 28) + SourceIndex(2)
-4 >Emitted(43, 29) Source(2, 29) + SourceIndex(2)
+1->Emitted(26, 5) Source(2, 5) + SourceIndex(2)
+2 >Emitted(26, 12) Source(2, 12) + SourceIndex(2)
+3 >Emitted(26, 28) Source(2, 28) + SourceIndex(2)
+4 >Emitted(26, 29) Source(2, 29) + SourceIndex(2)
 ---
 >>>}
 1 >
@@ -1885,27 +1495,23 @@ sourceFile:../../../first/first_part3.ts
 1 >
   >
 2 >}
-1 >Emitted(44, 1) Source(3, 1) + SourceIndex(2)
-2 >Emitted(44, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(27, 1) Source(3, 1) + SourceIndex(2)
+2 >Emitted(27, 2) Source(3, 2) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
 sourceFile:../../../second/second_part1.ts
 -------------------------------------------------------------------
 >>>//# sourceMappingURL=first-output.js.map
->>>var __extends = (this && this.__extends) || (function () {
->>>    var extendStatics = function (d, b) {
->>>        extendStatics = Object.setPrototypeOf ||
->>>            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
->>>            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
->>>        return extendStatics(d, b);
->>>    };
->>>    return function (d, b) {
->>>        extendStatics(d, b);
->>>        function __() { this.constructor = d; }
->>>        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
->>>    };
->>>})();
+>>>var __rest = (this && this.__rest) || function (s, e) {
+>>>    var t = {};
+>>>    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+>>>        t[p] = s[p];
+>>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+>>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+>>>            t[p[i]] = s[p[i]];
+>>>    return t;
+>>>};
 >>>var N;
 1->
 2 >^^^^
@@ -1926,10 +1532,10 @@ sourceFile:../../../second/second_part1.ts
   >     
   >         f();
   >     }
-1->Emitted(59, 1) Source(5, 1) + SourceIndex(3)
-2 >Emitted(59, 5) Source(5, 11) + SourceIndex(3)
-3 >Emitted(59, 6) Source(5, 12) + SourceIndex(3)
-4 >Emitted(59, 7) Source(11, 2) + SourceIndex(3)
+1->Emitted(38, 1) Source(5, 1) + SourceIndex(3)
+2 >Emitted(38, 5) Source(5, 11) + SourceIndex(3)
+3 >Emitted(38, 6) Source(5, 12) + SourceIndex(3)
+4 >Emitted(38, 7) Source(11, 2) + SourceIndex(3)
 ---
 >>>(function (N) {
 1->
@@ -1939,9 +1545,9 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >namespace 
 3 >           N
-1->Emitted(60, 1) Source(5, 1) + SourceIndex(3)
-2 >Emitted(60, 12) Source(5, 11) + SourceIndex(3)
-3 >Emitted(60, 13) Source(5, 12) + SourceIndex(3)
+1->Emitted(39, 1) Source(5, 1) + SourceIndex(3)
+2 >Emitted(39, 12) Source(5, 11) + SourceIndex(3)
+3 >Emitted(39, 13) Source(5, 12) + SourceIndex(3)
 ---
 >>>    function f() {
 1->^^^^
@@ -1952,9 +1558,9 @@ sourceFile:../../../second/second_part1.ts
   >    
 2 >    function 
 3 >             f
-1->Emitted(61, 5) Source(6, 5) + SourceIndex(3)
-2 >Emitted(61, 14) Source(6, 14) + SourceIndex(3)
-3 >Emitted(61, 15) Source(6, 15) + SourceIndex(3)
+1->Emitted(40, 5) Source(6, 5) + SourceIndex(3)
+2 >Emitted(40, 14) Source(6, 14) + SourceIndex(3)
+3 >Emitted(40, 15) Source(6, 15) + SourceIndex(3)
 ---
 >>>        console.log('testing');
 1->^^^^^^^^
@@ -1974,14 +1580,14 @@ sourceFile:../../../second/second_part1.ts
 6 >                    'testing'
 7 >                             )
 8 >                              ;
-1->Emitted(62, 9) Source(7, 9) + SourceIndex(3)
-2 >Emitted(62, 16) Source(7, 16) + SourceIndex(3)
-3 >Emitted(62, 17) Source(7, 17) + SourceIndex(3)
-4 >Emitted(62, 20) Source(7, 20) + SourceIndex(3)
-5 >Emitted(62, 21) Source(7, 21) + SourceIndex(3)
-6 >Emitted(62, 30) Source(7, 30) + SourceIndex(3)
-7 >Emitted(62, 31) Source(7, 31) + SourceIndex(3)
-8 >Emitted(62, 32) Source(7, 32) + SourceIndex(3)
+1->Emitted(41, 9) Source(7, 9) + SourceIndex(3)
+2 >Emitted(41, 16) Source(7, 16) + SourceIndex(3)
+3 >Emitted(41, 17) Source(7, 17) + SourceIndex(3)
+4 >Emitted(41, 20) Source(7, 20) + SourceIndex(3)
+5 >Emitted(41, 21) Source(7, 21) + SourceIndex(3)
+6 >Emitted(41, 30) Source(7, 30) + SourceIndex(3)
+7 >Emitted(41, 31) Source(7, 31) + SourceIndex(3)
+8 >Emitted(41, 32) Source(7, 32) + SourceIndex(3)
 ---
 >>>    }
 1 >^^^^
@@ -1990,8 +1596,8 @@ sourceFile:../../../second/second_part1.ts
 1 >
   >    
 2 >    }
-1 >Emitted(63, 5) Source(8, 5) + SourceIndex(3)
-2 >Emitted(63, 6) Source(8, 6) + SourceIndex(3)
+1 >Emitted(42, 5) Source(8, 5) + SourceIndex(3)
+2 >Emitted(42, 6) Source(8, 6) + SourceIndex(3)
 ---
 >>>    f();
 1->^^^^
@@ -2005,10 +1611,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    f
 3 >     ()
 4 >       ;
-1->Emitted(64, 5) Source(10, 5) + SourceIndex(3)
-2 >Emitted(64, 6) Source(10, 6) + SourceIndex(3)
-3 >Emitted(64, 8) Source(10, 8) + SourceIndex(3)
-4 >Emitted(64, 9) Source(10, 9) + SourceIndex(3)
+1->Emitted(43, 5) Source(10, 5) + SourceIndex(3)
+2 >Emitted(43, 6) Source(10, 6) + SourceIndex(3)
+3 >Emitted(43, 8) Source(10, 8) + SourceIndex(3)
+4 >Emitted(43, 9) Source(10, 9) + SourceIndex(3)
 ---
 >>>})(N || (N = {}));
 1->
@@ -2018,7 +1624,7 @@ sourceFile:../../../second/second_part1.ts
 5 >    ^^^^^
 6 >         ^
 7 >          ^^^^^^^^
-8 >                  ^^^^^^^^^^^->
+8 >                  ^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >}
@@ -2033,119 +1639,63 @@ sourceFile:../../../second/second_part1.ts
   >          
   >              f();
   >          }
-1->Emitted(65, 1) Source(11, 1) + SourceIndex(3)
-2 >Emitted(65, 2) Source(11, 2) + SourceIndex(3)
-3 >Emitted(65, 4) Source(5, 11) + SourceIndex(3)
-4 >Emitted(65, 5) Source(5, 12) + SourceIndex(3)
-5 >Emitted(65, 10) Source(5, 11) + SourceIndex(3)
-6 >Emitted(65, 11) Source(5, 12) + SourceIndex(3)
-7 >Emitted(65, 19) Source(11, 2) + SourceIndex(3)
+1->Emitted(44, 1) Source(11, 1) + SourceIndex(3)
+2 >Emitted(44, 2) Source(11, 2) + SourceIndex(3)
+3 >Emitted(44, 4) Source(5, 11) + SourceIndex(3)
+4 >Emitted(44, 5) Source(5, 12) + SourceIndex(3)
+5 >Emitted(44, 10) Source(5, 11) + SourceIndex(3)
+6 >Emitted(44, 11) Source(5, 12) + SourceIndex(3)
+7 >Emitted(44, 19) Source(11, 2) + SourceIndex(3)
 ---
->>>var second1 = (function () {
+>>>function forsecondsecond_part1Rest() {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
+2 >function 
+3 >         forsecondsecond_part1Rest
+1->Emitted(45, 1) Source(12, 1) + SourceIndex(3)
+2 >Emitted(45, 10) Source(12, 10) + SourceIndex(3)
+3 >Emitted(45, 35) Source(12, 35) + SourceIndex(3)
+---
+>>>    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                     ^^
+5 >                                       ^^^^^^^^
+6 >                                               ^^
+7 >                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^
+1->() {
   >
-1->Emitted(66, 1) Source(13, 1) + SourceIndex(3)
+2 >    const 
+3 >        { b, ...rest } = { a: 10, b: 30, yy: 30 }
+4 >                                     
+5 >                                       b
+6 >                                               , 
+7 >                                                 ...rest } = { a: 10, b: 30, yy: 30 }
+8 >                                                                         ;
+1->Emitted(46, 5) Source(13, 1) + SourceIndex(3)
+2 >Emitted(46, 9) Source(13, 7) + SourceIndex(3)
+3 >Emitted(46, 38) Source(13, 48) + SourceIndex(3)
+4 >Emitted(46, 40) Source(13, 9) + SourceIndex(3)
+5 >Emitted(46, 48) Source(13, 10) + SourceIndex(3)
+6 >Emitted(46, 50) Source(13, 12) + SourceIndex(3)
+7 >Emitted(46, 74) Source(13, 48) + SourceIndex(3)
+8 >Emitted(46, 75) Source(13, 49) + SourceIndex(3)
 ---
->>>    function second1() {
-1->^^^^
-2 >    ^^->
-1->
-1->Emitted(67, 5) Source(13, 1) + SourceIndex(3)
----
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^^->
-1->class second1 { 
-2 >    }
-1->Emitted(68, 5) Source(13, 17) + SourceIndex(3)
-2 >Emitted(68, 6) Source(13, 18) + SourceIndex(3)
----
->>>    return second1;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(69, 5) Source(13, 17) + SourceIndex(3)
-2 >Emitted(69, 19) Source(13, 18) + SourceIndex(3)
----
->>>}());
+>>>}
 1 >
 2 >^
-3 > 
-4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >}
-3 > 
-4 > class second1 { }
-1 >Emitted(70, 1) Source(13, 17) + SourceIndex(3)
-2 >Emitted(70, 2) Source(13, 18) + SourceIndex(3)
-3 >Emitted(70, 2) Source(13, 1) + SourceIndex(3)
-4 >Emitted(70, 6) Source(13, 18) + SourceIndex(3)
----
->>>var second2 = (function (_super) {
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
   >
-1->Emitted(71, 1) Source(14, 1) + SourceIndex(3)
----
->>>    __extends(second2, _super);
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->class second2 extends 
-2 >    second1
-1->Emitted(72, 5) Source(14, 23) + SourceIndex(3)
-2 >Emitted(72, 32) Source(14, 30) + SourceIndex(3)
----
->>>    function second2() {
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-1 >Emitted(73, 5) Source(14, 1) + SourceIndex(3)
----
->>>        return _super !== null && _super.apply(this, arguments) || this;
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^^->
-1->class second2 extends second1 { 
-2 >    }
-1->Emitted(75, 5) Source(14, 33) + SourceIndex(3)
-2 >Emitted(75, 6) Source(14, 34) + SourceIndex(3)
----
->>>    return second2;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(76, 5) Source(14, 33) + SourceIndex(3)
-2 >Emitted(76, 19) Source(14, 34) + SourceIndex(3)
----
->>>}(second1));
-1 >
-2 >^
-3 > 
-4 > ^
-5 >  ^^^^^^^
-6 >         ^^^
-7 >            ^^^^^^^^^^^->
-1 >
 2 >}
-3 > 
-4 > class second2 extends 
-5 >  second1
-6 >          { }
-1 >Emitted(77, 1) Source(14, 33) + SourceIndex(3)
-2 >Emitted(77, 2) Source(14, 34) + SourceIndex(3)
-3 >Emitted(77, 2) Source(14, 1) + SourceIndex(3)
-4 >Emitted(77, 3) Source(14, 23) + SourceIndex(3)
-5 >Emitted(77, 10) Source(14, 30) + SourceIndex(3)
-6 >Emitted(77, 13) Source(14, 34) + SourceIndex(3)
+1 >Emitted(47, 1) Source(14, 1) + SourceIndex(3)
+2 >Emitted(47, 2) Source(14, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -2155,13 +1705,13 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >^^^^^^^^^^^^^^^^^^^->
 1->
-1->Emitted(78, 1) Source(1, 1) + SourceIndex(4)
+1->Emitted(48, 1) Source(1, 1) + SourceIndex(4)
 ---
 >>>    function C() {
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(79, 5) Source(1, 1) + SourceIndex(4)
+1->Emitted(49, 5) Source(1, 1) + SourceIndex(4)
 ---
 >>>    }
 1->^^^^
@@ -2173,8 +1723,8 @@ sourceFile:../../../second/second_part2.ts
   >    }
   >
 2 >    }
-1->Emitted(80, 5) Source(5, 1) + SourceIndex(4)
-2 >Emitted(80, 6) Source(5, 2) + SourceIndex(4)
+1->Emitted(50, 5) Source(5, 1) + SourceIndex(4)
+2 >Emitted(50, 6) Source(5, 2) + SourceIndex(4)
 ---
 >>>    C.prototype.doSomething = function () {
 1->^^^^
@@ -2184,9 +1734,9 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >    doSomething
 3 >                           
-1->Emitted(81, 5) Source(2, 5) + SourceIndex(4)
-2 >Emitted(81, 28) Source(2, 16) + SourceIndex(4)
-3 >Emitted(81, 31) Source(2, 5) + SourceIndex(4)
+1->Emitted(51, 5) Source(2, 5) + SourceIndex(4)
+2 >Emitted(51, 28) Source(2, 16) + SourceIndex(4)
+3 >Emitted(51, 31) Source(2, 5) + SourceIndex(4)
 ---
 >>>        console.log("something got done");
 1->^^^^^^^^
@@ -2206,14 +1756,14 @@ sourceFile:../../../second/second_part2.ts
 6 >                    "something got done"
 7 >                                        )
 8 >                                         ;
-1->Emitted(82, 9) Source(3, 9) + SourceIndex(4)
-2 >Emitted(82, 16) Source(3, 16) + SourceIndex(4)
-3 >Emitted(82, 17) Source(3, 17) + SourceIndex(4)
-4 >Emitted(82, 20) Source(3, 20) + SourceIndex(4)
-5 >Emitted(82, 21) Source(3, 21) + SourceIndex(4)
-6 >Emitted(82, 41) Source(3, 41) + SourceIndex(4)
-7 >Emitted(82, 42) Source(3, 42) + SourceIndex(4)
-8 >Emitted(82, 43) Source(3, 43) + SourceIndex(4)
+1->Emitted(52, 9) Source(3, 9) + SourceIndex(4)
+2 >Emitted(52, 16) Source(3, 16) + SourceIndex(4)
+3 >Emitted(52, 17) Source(3, 17) + SourceIndex(4)
+4 >Emitted(52, 20) Source(3, 20) + SourceIndex(4)
+5 >Emitted(52, 21) Source(3, 21) + SourceIndex(4)
+6 >Emitted(52, 41) Source(3, 41) + SourceIndex(4)
+7 >Emitted(52, 42) Source(3, 42) + SourceIndex(4)
+8 >Emitted(52, 43) Source(3, 43) + SourceIndex(4)
 ---
 >>>    };
 1 >^^^^
@@ -2222,8 +1772,8 @@ sourceFile:../../../second/second_part2.ts
 1 >
   >    
 2 >    }
-1 >Emitted(83, 5) Source(4, 5) + SourceIndex(4)
-2 >Emitted(83, 6) Source(4, 6) + SourceIndex(4)
+1 >Emitted(53, 5) Source(4, 5) + SourceIndex(4)
+2 >Emitted(53, 6) Source(4, 6) + SourceIndex(4)
 ---
 >>>    return C;
 1->^^^^
@@ -2231,8 +1781,8 @@ sourceFile:../../../second/second_part2.ts
 1->
   >
 2 >    }
-1->Emitted(84, 5) Source(5, 1) + SourceIndex(4)
-2 >Emitted(84, 13) Source(5, 2) + SourceIndex(4)
+1->Emitted(54, 5) Source(5, 1) + SourceIndex(4)
+2 >Emitted(54, 13) Source(5, 2) + SourceIndex(4)
 ---
 >>>}());
 1 >
@@ -2248,10 +1798,10 @@ sourceFile:../../../second/second_part2.ts
   >         console.log("something got done");
   >     }
   > }
-1 >Emitted(85, 1) Source(5, 1) + SourceIndex(4)
-2 >Emitted(85, 2) Source(5, 2) + SourceIndex(4)
-3 >Emitted(85, 2) Source(1, 1) + SourceIndex(4)
-4 >Emitted(85, 6) Source(5, 2) + SourceIndex(4)
+1 >Emitted(55, 1) Source(5, 1) + SourceIndex(4)
+2 >Emitted(55, 2) Source(5, 2) + SourceIndex(4)
+3 >Emitted(55, 2) Source(1, 1) + SourceIndex(4)
+4 >Emitted(55, 6) Source(5, 2) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -2276,14 +1826,14 @@ sourceFile:../../third_part1.ts
 6 >            C
 7 >             ()
 8 >               ;
-1->Emitted(87, 1) Source(1, 1) + SourceIndex(5)
-2 >Emitted(87, 5) Source(1, 5) + SourceIndex(5)
-3 >Emitted(87, 6) Source(1, 6) + SourceIndex(5)
-4 >Emitted(87, 9) Source(1, 9) + SourceIndex(5)
-5 >Emitted(87, 13) Source(1, 13) + SourceIndex(5)
-6 >Emitted(87, 14) Source(1, 14) + SourceIndex(5)
-7 >Emitted(87, 16) Source(1, 16) + SourceIndex(5)
-8 >Emitted(87, 17) Source(1, 17) + SourceIndex(5)
+1->Emitted(57, 1) Source(1, 1) + SourceIndex(5)
+2 >Emitted(57, 5) Source(1, 5) + SourceIndex(5)
+3 >Emitted(57, 6) Source(1, 6) + SourceIndex(5)
+4 >Emitted(57, 9) Source(1, 9) + SourceIndex(5)
+5 >Emitted(57, 13) Source(1, 13) + SourceIndex(5)
+6 >Emitted(57, 14) Source(1, 14) + SourceIndex(5)
+7 >Emitted(57, 16) Source(1, 16) + SourceIndex(5)
+8 >Emitted(57, 17) Source(1, 17) + SourceIndex(5)
 ---
 >>>c.doSomething();
 1->
@@ -2292,7 +1842,7 @@ sourceFile:../../third_part1.ts
 4 >  ^^^^^^^^^^^
 5 >             ^^
 6 >               ^
-7 >                ^^^^^^^^^^^^->
+7 >                ^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
 2 >c
@@ -2300,125 +1850,69 @@ sourceFile:../../third_part1.ts
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(88, 1) Source(2, 1) + SourceIndex(5)
-2 >Emitted(88, 2) Source(2, 2) + SourceIndex(5)
-3 >Emitted(88, 3) Source(2, 3) + SourceIndex(5)
-4 >Emitted(88, 14) Source(2, 14) + SourceIndex(5)
-5 >Emitted(88, 16) Source(2, 16) + SourceIndex(5)
-6 >Emitted(88, 17) Source(2, 17) + SourceIndex(5)
+1->Emitted(58, 1) Source(2, 1) + SourceIndex(5)
+2 >Emitted(58, 2) Source(2, 2) + SourceIndex(5)
+3 >Emitted(58, 3) Source(2, 3) + SourceIndex(5)
+4 >Emitted(58, 14) Source(2, 14) + SourceIndex(5)
+5 >Emitted(58, 16) Source(2, 16) + SourceIndex(5)
+6 >Emitted(58, 17) Source(2, 17) + SourceIndex(5)
 ---
->>>var third1 = (function () {
+>>>function forthirdthird_part1Rest() {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
+2 >function 
+3 >         forthirdthird_part1Rest
+1->Emitted(59, 1) Source(3, 1) + SourceIndex(5)
+2 >Emitted(59, 10) Source(3, 10) + SourceIndex(5)
+3 >Emitted(59, 33) Source(3, 33) + SourceIndex(5)
+---
+>>>    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+1->^^^^
+2 >    ^^^^
+3 >        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4 >                                     ^^
+5 >                                       ^^^^^^^^
+6 >                                               ^^
+7 >                                                 ^^^^^^^^^^^^^^^^^^^^^^^^
+8 >                                                                         ^
+1->() {
   >
-1->Emitted(89, 1) Source(4, 1) + SourceIndex(5)
+2 >    const 
+3 >        { b, ...rest } = { a: 10, b: 30, yy: 30 }
+4 >                                     
+5 >                                       b
+6 >                                               , 
+7 >                                                 ...rest } = { a: 10, b: 30, yy: 30 }
+8 >                                                                         ;
+1->Emitted(60, 5) Source(4, 1) + SourceIndex(5)
+2 >Emitted(60, 9) Source(4, 7) + SourceIndex(5)
+3 >Emitted(60, 38) Source(4, 48) + SourceIndex(5)
+4 >Emitted(60, 40) Source(4, 9) + SourceIndex(5)
+5 >Emitted(60, 48) Source(4, 10) + SourceIndex(5)
+6 >Emitted(60, 50) Source(4, 12) + SourceIndex(5)
+7 >Emitted(60, 74) Source(4, 48) + SourceIndex(5)
+8 >Emitted(60, 75) Source(4, 49) + SourceIndex(5)
 ---
->>>    function third1() {
-1->^^^^
-2 >    ^^->
-1->
-1->Emitted(90, 5) Source(4, 1) + SourceIndex(5)
----
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^->
-1->class third1 { 
-2 >    }
-1->Emitted(91, 5) Source(4, 16) + SourceIndex(5)
-2 >Emitted(91, 6) Source(4, 17) + SourceIndex(5)
----
->>>    return third1;
-1->^^^^
-2 >    ^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(92, 5) Source(4, 16) + SourceIndex(5)
-2 >Emitted(92, 18) Source(4, 17) + SourceIndex(5)
----
->>>}());
+>>>}
 1 >
 2 >^
-3 > 
-4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >}
-3 > 
-4 > class third1 { }
-1 >Emitted(93, 1) Source(4, 16) + SourceIndex(5)
-2 >Emitted(93, 2) Source(4, 17) + SourceIndex(5)
-3 >Emitted(93, 2) Source(4, 1) + SourceIndex(5)
-4 >Emitted(93, 6) Source(4, 17) + SourceIndex(5)
----
->>>var third2 = (function (_super) {
-1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
   >
-1->Emitted(94, 1) Source(5, 1) + SourceIndex(5)
----
->>>    __extends(third2, _super);
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-1->class third2 extends 
-2 >    third1
-1->Emitted(95, 5) Source(5, 22) + SourceIndex(5)
-2 >Emitted(95, 31) Source(5, 28) + SourceIndex(5)
----
->>>    function third2() {
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-1 >Emitted(96, 5) Source(5, 1) + SourceIndex(5)
----
->>>        return _super !== null && _super.apply(this, arguments) || this;
->>>    }
-1->^^^^
-2 >    ^
-3 >     ^^^^^^^^^^^^^^->
-1->class third2 extends third1 { 
-2 >    }
-1->Emitted(98, 5) Source(5, 31) + SourceIndex(5)
-2 >Emitted(98, 6) Source(5, 32) + SourceIndex(5)
----
->>>    return third2;
-1->^^^^
-2 >    ^^^^^^^^^^^^^
-1->
-2 >    }
-1->Emitted(99, 5) Source(5, 31) + SourceIndex(5)
-2 >Emitted(99, 18) Source(5, 32) + SourceIndex(5)
----
->>>}(third1));
-1 >
-2 >^
-3 > 
-4 > ^
-5 >  ^^^^^^
-6 >        ^^^
-7 >           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
 2 >}
-3 > 
-4 > class third2 extends 
-5 >  third1
-6 >         { }
-1 >Emitted(100, 1) Source(5, 31) + SourceIndex(5)
-2 >Emitted(100, 2) Source(5, 32) + SourceIndex(5)
-3 >Emitted(100, 2) Source(5, 1) + SourceIndex(5)
-4 >Emitted(100, 3) Source(5, 22) + SourceIndex(5)
-5 >Emitted(100, 9) Source(5, 28) + SourceIndex(5)
-6 >Emitted(100, 12) Source(5, 32) + SourceIndex(5)
+1 >Emitted(61, 1) Source(5, 1) + SourceIndex(5)
+2 >Emitted(61, 2) Source(5, 2) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
 
 //// [/src/third/third_part1.ts]
 var c = new C();
 c.doSomething();
-
-class third1 { }
-class third2 extends third1 { }
+function forthirdthird_part1Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}
 
