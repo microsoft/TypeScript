@@ -21,8 +21,9 @@ namespace ts {
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
         const options = host.getCompilerOptions();
         if (options.outFile || options.out) {
-            if (sourceFiles.length) {
-                const bundle = createBundle(sourceFiles, host.getPrependNodes());
+            const prepends = host.getPrependNodes();
+            if (sourceFiles.length || prepends.length) {
+                const bundle = createBundle(sourceFiles, prepends);
                 const result = action(getOutputPathsFor(bundle, host, emitOnlyDtsFiles), bundle);
                 if (result) {
                     return result;
@@ -104,7 +105,7 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<Bundle | SourceFile>[], declarationTransformers?: TransformerFactory<Bundle | SourceFile>[]): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<Bundle | SourceFile>[], declarationTransformers?: TransformerFactory<Bundle | SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
@@ -136,7 +137,7 @@ namespace ts {
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, buildInfo && { sections: buildInfo.dts, sources: buildInfo.sources });
             // Write bundled offset information if applicable
             if (!emitOnlyDtsFiles && !emitSkipped && buildInfoPath) {
-                writeFile(host, emitterDiagnostics, buildInfoPath, JSON.stringify(buildInfo, undefined, 2), /*writeByteOrderMark*/ false);
+                writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo!), /*writeByteOrderMark*/ false);
             }
 
             if (!emitSkipped && emittedFilesList) {
@@ -409,6 +410,131 @@ namespace ts {
         }
     }
 
+    function getBuildInfoText(buildInfo: BuildInfo) {
+        return JSON.stringify(buildInfo, undefined, 2);
+    }
+
+    const notImplementedResolver: EmitResolver = {
+        hasGlobalName: notImplemented,
+        getReferencedExportContainer: notImplemented,
+        getReferencedImportDeclaration: notImplemented,
+        getReferencedDeclarationWithCollidingName: notImplemented,
+        isDeclarationWithCollidingName: notImplemented,
+        isValueAliasDeclaration: notImplemented,
+        isReferencedAliasDeclaration: notImplemented,
+        isTopLevelValueImportEqualsWithEntityName: notImplemented,
+        getNodeCheckFlags: notImplemented,
+        isDeclarationVisible: notImplemented,
+        isLateBound: (_node): _node is LateBoundDeclaration => false,
+        collectLinkedAliases: notImplemented,
+        isImplementationOfOverload: notImplemented,
+        isRequiredInitializedParameter: notImplemented,
+        isOptionalUninitializedParameterProperty: notImplemented,
+        isExpandoFunctionDeclaration: notImplemented,
+        getPropertiesOfContainerFunction: notImplemented,
+        createTypeOfDeclaration: notImplemented,
+        createReturnTypeOfSignatureDeclaration: notImplemented,
+        createTypeOfExpression: notImplemented,
+        createLiteralConstValue: notImplemented,
+        isSymbolAccessible: notImplemented,
+        isEntityNameVisible: notImplemented,
+        // Returns the constant value this property access resolves to: notImplemented, or 'undefined' for a non-constant
+        getConstantValue: notImplemented,
+        getReferencedValueDeclaration: notImplemented,
+        getTypeReferenceSerializationKind: notImplemented,
+        isOptionalParameter: notImplemented,
+        moduleExportsSomeValue: notImplemented,
+        isArgumentsLocalBinding: notImplemented,
+        getExternalModuleFileFromDeclaration: notImplemented,
+        getTypeReferenceDirectivesForEntityName: notImplemented,
+        getTypeReferenceDirectivesForSymbol: notImplemented,
+        isLiteralConstDeclaration: notImplemented,
+        getJsxFactoryEntity: notImplemented,
+        getAllAccessorDeclarations: notImplemented,
+        getSymbolOfExternalModuleSpecifier: notImplemented,
+        isBindingCapturedByNode: notImplemented,
+    };
+
+    /*@internal*/
+    /** File that isnt present resulting in error or output files */
+    export type EmitUsingBuildInfoResult = string | ReadonlyArray<OutputFile>;
+
+    /*@internal*/
+    export interface EmitUsingBuildInfoHost extends ModuleResolutionHost {
+        getCurrentDirectory(): string;
+        getCanonicalFileName(fileName: string): string;
+        useCaseSensitiveFileNames(): boolean;
+        getNewLine(): string;
+    }
+
+    /*@internal*/
+    export function emitUsingBuildInfo(config: ParsedCommandLine, host: EmitUsingBuildInfoHost, getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined): EmitUsingBuildInfoResult {
+        const { buildInfoPath, jsFilePath, sourceMapFilePath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false, config.projectReferences);
+        const buildInfoText = host.readFile(Debug.assertDefined(buildInfoPath));
+        if (!buildInfoText) return buildInfoPath!;
+        const jsFileText = host.readFile(Debug.assertDefined(jsFilePath));
+        if (!jsFileText) return jsFilePath!;
+        const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
+        // error if no source map or for now if inline sourcemap
+        if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
+
+        const buildInfo = JSON.parse(buildInfoText) as BuildInfo;
+        const ownPrependInput = createInputFiles(
+            jsFileText,
+            /*declarationText*/ undefined!,
+            sourceMapFilePath,
+            sourceMapText,
+            /*declarationMapPath*/ undefined!,
+            /*declarationMaptext*/ undefined!,
+            jsFilePath,
+            /*declarationPath*/ undefined,
+            buildInfoPath,
+            buildInfo,
+            /*onlyOwnText*/ true
+        );
+        const optionsWithoutDeclaration = clone(config.options);
+        optionsWithoutDeclaration.declaration = false;
+        optionsWithoutDeclaration.composite = false;
+        const outputFiles: OutputFile[] = [];
+        const emitHost: EmitHost = {
+            getPrependNodes: () => createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f)). concat(ownPrependInput),
+            getProjectReferences: () => config.projectReferences,
+            getCanonicalFileName: host.getCanonicalFileName,
+            getCommonSourceDirectory: () => buildInfo.commonSourceDirectory,
+            getCompilerOptions: () => optionsWithoutDeclaration,
+            getCurrentDirectory: () => host.getCurrentDirectory(),
+            getNewLine: () => host.getNewLine(),
+            getSourceFile: notImplemented,
+            getSourceFileByPath: notImplemented,
+            getSourceFiles: () => emptyArray,
+            getLibFileFromReference: notImplemented,
+            isSourceFileFromExternalLibrary: notImplemented,
+            writeFile: (name, text, writeByteOrderMark) => {
+                if (name === buildInfoPath) {
+                    // Add dts and sources build info since we are not touching that file
+                    const newBuildInfo = JSON.parse(text) as BuildInfo;
+                    newBuildInfo.dts = buildInfo.dts;
+                    newBuildInfo.sources = buildInfo.sources;
+                    text = getBuildInfoText(newBuildInfo);
+                }
+                outputFiles.push({ name, text, writeByteOrderMark });
+            },
+            isEmitBlocked: returnFalse,
+            readFile: f => host.readFile(f),
+            fileExists: f => host.fileExists(f),
+            ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
+            useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
+        };
+        emitFiles(
+            notImplementedResolver,
+            emitHost,
+            /*targetSourceFile*/ undefined,
+            /*emitOnlyDtsFiles*/ false,
+            getTransformers(optionsWithoutDeclaration)
+        );
+        return outputFiles;
+    }
+
     const enum PipelinePhase {
         Notification,
         Substitution,
@@ -562,14 +688,17 @@ namespace ts {
                 writeLine();
                 const pos = getTextPosWithWriteLine();
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
-                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName });
+                if (bundleFileInfo) {
+                    if (prepend.oldFileOfCurrentEmit) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
+                    else bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName });
+                }
             }
 
             const pos = getTextPosWithWriteLine();
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
-            if (bundleFileInfo) {
+            if (bundleFileInfo && bundle.sourceFiles.length) {
                 bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
                 // Store prologues
                 const prologues = getPrologueDirectivesFromBundledSourceFiles(bundle);

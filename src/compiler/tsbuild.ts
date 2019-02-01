@@ -1007,13 +1007,9 @@ namespace ts {
                 return;
             }
 
-            //if (status.type === UpToDateStatusType.OutOfDateWithPrepend) {
-            //    // Fake that files have been built by manipulating prepend and existing output
-            //    //updateOutputTimestamps(proj);
-            //    return;
-            //}
-
-            const buildResult = buildSingleProject(resolved);
+            const buildResult = status.type === UpToDateStatusType.OutOfDateWithPrepend ?
+                updateBundle(resolved) : // Fake that files have been built by manipulating prepend and existing output
+                buildSingleProject(resolved); // Actual build
             if (buildResult & BuildResultFlags.AnyErrors) return;
 
             const { referencingProjectsMap, buildQueue } = getGlobalDependencyGraph();
@@ -1109,8 +1105,7 @@ namespace ts {
 
             if (options.verbose) reportStatus(Diagnostics.Building_project_0, proj);
 
-            let resultFlags = BuildResultFlags.None;
-            resultFlags |= BuildResultFlags.DeclarationOutputUnchanged;
+            let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
 
             const configFile = parseConfigFile(proj);
             if (!configFile) {
@@ -1136,7 +1131,6 @@ namespace ts {
                 configFile.errors,
                 configFile.projectReferences
             );
-            projectCompilerOptions = baseCompilerOptions;
 
             // Don't emit anything in the presence of syntactic errors or options diagnostics
             const syntaxDiagnostics = [
@@ -1208,6 +1202,7 @@ namespace ts {
             diagnostics.removeKey(proj);
             projectStatus.setValue(proj, status);
             afterProgramCreate(proj, program);
+            projectCompilerOptions = baseCompilerOptions;
             return resultFlags;
 
             function buildErrors(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
@@ -1215,6 +1210,7 @@ namespace ts {
                 reportAndStoreErrors(proj, diagnostics);
                 projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
                 afterProgramCreate(proj, program);
+                projectCompilerOptions = baseCompilerOptions;
                 return resultFlags;
             }
         }
@@ -1229,9 +1225,60 @@ namespace ts {
             }
         }
 
+        function updateBundle(proj: ResolvedConfigFileName): BuildResultFlags {
+            if (options.dry) {
+                reportStatus(Diagnostics.A_non_dry_build_would_update_output_javascript_and_javascript_source_map_if_specified_of_project_0, proj);
+                return BuildResultFlags.Success;
+            }
+
+            if (options.verbose) reportStatus(Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, proj);
+
+            // Update js, and source map
+            const config = Debug.assertDefined(parseConfigFile(proj));
+            projectCompilerOptions = config.options;
+            const outputFiles = emitUsingBuildInfo(
+                config,
+                compilerHost,
+                ref => parseConfigFile(resolveProjectName(ref.path)));
+            if (isString(outputFiles)) {
+                reportStatus(Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, proj, relName(outputFiles));
+                return buildSingleProject(proj);
+            }
+
+            // Actual Emit
+            Debug.assert(!!outputFiles.length);
+            const emitterDiagnostics = createDiagnosticCollection();
+            const emittedOutputs = createFileMap<true>(toPath as ToPath);
+            outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
+                emittedOutputs.setValue(name, true);
+                writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
+            });
+            const emitDiagnostics = emitterDiagnostics.getDiagnostics();
+            if (emitDiagnostics.length) {
+                reportAndStoreErrors(proj, emitDiagnostics);
+                projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Emit errors" });
+                projectCompilerOptions = baseCompilerOptions;
+                return BuildResultFlags.DeclarationOutputUnchanged | BuildResultFlags.EmitErrors;
+            }
+
+            // Update timestamps for dts
+            const newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(config, minimumDate, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
+
+            const status: UpToDateStatus = {
+                type: UpToDateStatusType.UpToDate,
+                newestDeclarationFileContentChangedTime,
+                oldestOutputFileName: outputFiles[0].name
+            };
+
+            diagnostics.removeKey(proj);
+            projectStatus.setValue(proj, status);
+            projectCompilerOptions = baseCompilerOptions;
+            return BuildResultFlags.DeclarationOutputUnchanged;
+        }
+
         function updateOutputTimestamps(proj: ParsedCommandLine) {
             if (options.dry) {
-                return reportStatus(Diagnostics.A_non_dry_build_would_build_project_0, proj.options.configFilePath!);
+                return reportStatus(Diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, proj.options.configFilePath!);
             }
             const priorNewestUpdateTime = updateOutputTimestampsWorker(proj, minimumDate, Diagnostics.Updating_output_timestamps_of_project_0);
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
@@ -1354,13 +1401,6 @@ namespace ts {
                     continue;
                 }
 
-                //if (status.type === UpToDateStatusType.OutOfDateWithPrepend && !options.force) {
-                //    reportAndStoreErrors(next, errors);
-                //    // Fake that files have been built by manipulating prepend and existing output
-                //    // updateOutputTimestamps(proj);
-                //    continue;
-                //}
-
                 if (status.type === UpToDateStatusType.UpstreamBlocked) {
                     reportAndStoreErrors(next, errors);
                     if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, projName, status.upstreamProjectName);
@@ -1373,7 +1413,9 @@ namespace ts {
                     continue;
                 }
 
-                const buildResult = buildSingleProject(next);
+                const buildResult = status.type === UpToDateStatusType.OutOfDateWithPrepend && !options.force ?
+                    updateBundle(next) : // Fake that files have been built by manipulating prepend and existing output
+                    buildSingleProject(next); // Actual build
                 anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
             reportErrorSummary();
@@ -1484,7 +1526,7 @@ namespace ts {
                 // Don't report anything for "up to date because it was already built" -- too verbose
                 break;
             case UpToDateStatusType.OutOfDateWithPrepend:
-                return formatMessage(Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed,
+                return formatMessage(Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed,
                     relName(configFileName),
                     relName(status.newerProjectName));
             case UpToDateStatusType.UpToDateWithUpstreamTypes:

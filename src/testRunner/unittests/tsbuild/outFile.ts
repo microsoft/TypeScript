@@ -241,38 +241,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
 
                 incrementalBuild(
                     "incremental declaration doesnt change",
-                    [
-                        // Configs
-                        sources[project.first][source.config],
-                        sources[project.second][source.config],
-                        sources[project.third][source.config],
-
-                        // Source files
-                        ...sources[project.first][source.ts],
-                        ...sources[project.third][source.ts],
-
-                        // Additional source Files
-                        ...(additionalSourceFiles || emptyArray),
-
-                        // outputs
-                        ...outputFiles[project.first],
-                        ...outputFiles[project.second],
-                        outputFiles[project.third][ext.dts],
-                    ],
-                    fs => appendFileContent(fs, relSources[project.first][source.ts][part.one], "console.log(s);"),
-                    [
-                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
-                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                        [Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
-                    ]
-                );
-
-                if (modifyAgainFs) {
-                    incrementalBuild(
-                        "incremental headers change",
+                    withoutBuildInfo ?
                         [
                             // Configs
                             sources[project.first][source.config],
@@ -290,15 +259,122 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                             ...outputFiles[project.first],
                             ...outputFiles[project.second],
                             outputFiles[project.third][ext.dts],
+
+                            // To prepend:: checked to see if we can do prepend manipulation
+                            outputFiles[project.third][ext.buildinfo],
+                        ] :
+                        [
+                            // Configs
+                            sources[project.first][source.config],
+                            sources[project.second][source.config],
+                            sources[project.third][source.config],
+
+                            // Source files
+                            ...sources[project.first][source.ts],
+
+                            // Additional source Files
+                            ...(additionalSourceFiles && additionalSourceFiles.length === 3 ? [additionalSourceFiles[project.first]] : emptyArray),
+
+                            // outputs without d.ts since we just update js
+                            outputFiles[project.first][ext.js],
+                            outputFiles[project.first][ext.jsmap],
+                            outputFiles[project.first][ext.dts],
+                            outputFiles[project.first][ext.buildinfo],
+                            outputFiles[project.second][ext.js],
+                            outputFiles[project.second][ext.jsmap],
+                            outputFiles[project.second][ext.buildinfo],
+
+                            // To prepend::
+                            outputFiles[project.third][ext.buildinfo],
+                            outputFiles[project.third][ext.js],
+                            outputFiles[project.third][ext.jsmap]
                         ],
+                    fs => appendFileContent(fs, relSources[project.first][source.ts][part.one], "console.log(s);"),
+                    [
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                        [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+                        ...<ReadonlyArray<fakes.ExpectedDiagnostic>>(!withoutBuildInfo ?
+                            [
+                                [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
+                            ] :
+                            [
+                                [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
+                                [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                            ])
+                    ]
+                );
+
+                if (modifyAgainFs) {
+                    incrementalBuild(
+                        "incremental headers change",
+                        withoutBuildInfo ?
+                            [
+                                // Configs
+                                sources[project.first][source.config],
+                                sources[project.second][source.config],
+                                sources[project.third][source.config],
+
+                                // Source files
+                                ...sources[project.first][source.ts],
+                                ...sources[project.third][source.ts],
+
+                                // Additional source Files
+                                ...(additionalSourceFiles || emptyArray),
+
+                                // outputs
+                                ...outputFiles[project.first],
+                                ...outputFiles[project.second],
+                                outputFiles[project.third][ext.dts],
+
+                                // To prepend:: checked to see if we can do prepend manipulation
+                                outputFiles[project.third][ext.buildinfo],
+                            ] :
+                            [
+                                // Configs
+                                sources[project.first][source.config],
+                                sources[project.second][source.config],
+                                sources[project.third][source.config],
+
+                                // Source files
+                                ...sources[project.first][source.ts],
+
+                                // Additional source Files
+                                ...(additionalSourceFiles || emptyArray),
+
+                                // outputs without d.ts since we just update js
+                                outputFiles[project.first][ext.js],
+                                outputFiles[project.first][ext.jsmap],
+                                outputFiles[project.first][ext.dts],
+                                outputFiles[project.first][ext.buildinfo],
+                                outputFiles[project.second][ext.js],
+                                outputFiles[project.second][ext.jsmap],
+                                outputFiles[project.second][ext.buildinfo],
+
+                                // To prepend::
+                                outputFiles[project.third][ext.buildinfo],
+                                outputFiles[project.third][ext.js],
+                                outputFiles[project.third][ext.jsmap]
+                            ],
                         fs => modifyAgainFs(fs),
                         [
                             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
                             [Diagnostics.Building_project_0, sources[project.first][source.config]],
                             [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                            [Diagnostics.Project_0_is_out_of_date_because_output_to_prepend_from_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-                            [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                            [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                            [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+                            ...<ReadonlyArray<fakes.ExpectedDiagnostic>>(!withoutBuildInfo ?
+                                [
+                                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
+                                ] :
+                                [
+                                    [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
+                                    [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                                ])
                         ]
                     );
                 }

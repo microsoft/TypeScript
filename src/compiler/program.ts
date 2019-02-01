@@ -1443,30 +1443,16 @@ namespace ts {
             return projectReferences;
         }
 
-        function getPrependNodes(): InputFiles[] {
-            if (!projectReferences) {
-                return emptyArray;
-            }
-
-            const nodes: InputFiles[] = [];
-            for (let i = 0; i < projectReferences.length; i++) {
-                const ref = projectReferences[i];
-                const resolvedRefOpts = resolvedProjectReferences![i]!.commandLine;
-                if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
-                    const out = resolvedRefOpts.options.outFile || resolvedRefOpts.options.out;
-                    // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
-                    if (!out) continue;
-
-                    const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true, resolvedRefOpts.projectReferences);
-                    const node = createInputFiles(fileName => {
-                        const path = toPath(fileName);
-                        const sourceFile = getSourceFileByPath(path);
-                        return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
-                    }, jsFilePath! , sourceMapFilePath, declarationFilePath! , declarationMapPath, buildInfoPath);
-                    nodes.push(node);
+        function getPrependNodes() {
+            return createPrependNodes(
+                projectReferences,
+                (_ref, index) => resolvedProjectReferences![index]!.commandLine,
+                fileName => {
+                    const path = toPath(fileName);
+                    const sourceFile = getSourceFileByPath(path);
+                    return sourceFile ? sourceFile.text : filesByName.has(path) ? undefined : host.readFile(path);
                 }
-            }
-            return nodes;
+            );
         }
 
         function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
@@ -1563,7 +1549,7 @@ namespace ts {
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
-                sourceFile!, // TODO: GH#18217
+                sourceFile,
                 emitOnlyDtsFiles,
                 transformers,
                 customTransformers && customTransformers.afterDeclarations
@@ -3141,6 +3127,25 @@ namespace ts {
         fileExists(fileName: string): boolean;
     }
 
+    /* @internal */
+    export function createPrependNodes(projectReferences: ReadonlyArray<ProjectReference> | undefined, getCommandLine: (ref: ProjectReference, index: number) => ParsedCommandLine | undefined, readFile: (path: string) => string | undefined) {
+        if (!projectReferences) return emptyArray;
+        let nodes: InputFiles[] | undefined;
+        for (let i = 0; i < projectReferences.length; i++) {
+            const ref = projectReferences[i];
+            const resolvedRefOpts = getCommandLine(ref, i);
+            if (ref.prepend && resolvedRefOpts && resolvedRefOpts.options) {
+                const out = resolvedRefOpts.options.outFile || resolvedRefOpts.options.out;
+                // Upstream project didn't have outFile set -- skip (error will have been issued earlier)
+                if (!out) continue;
+
+                const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(resolvedRefOpts.options, /*forceDtsPaths*/ true, resolvedRefOpts.projectReferences);
+                const node = createInputFiles(readFile, jsFilePath!, sourceMapFilePath, declarationFilePath!, declarationMapPath, buildInfoPath);
+                (nodes || (nodes = [])).push(node);
+            }
+        }
+        return nodes || emptyArray;
+    }
     /**
      * Returns the target config filename of a project reference.
      * Note: The file might not exist.

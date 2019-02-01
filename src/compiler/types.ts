@@ -2775,8 +2775,9 @@ namespace ts {
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
-        buildInfoPath?: string;
+        /*@internal*/ buildInfoPath?: string;
         /*@internal*/ buildInfo?: BuildInfo;
+        /*@internal*/ oldFileOfCurrentEmit?: boolean;
     }
 
     export interface UnparsedSource extends Node {
@@ -2785,13 +2786,17 @@ namespace ts {
         text: string;
         prologues: ReadonlyArray<UnparsedPrologue>;
         helpers: ReadonlyArray<UnscopedEmitHelpers> | undefined;
+
+        // References and noDefaultLibAre Dts only
         referencedFiles: ReadonlyArray<FileReference>;
         typeReferenceDirectives: ReadonlyArray<string> | undefined;
         libReferenceDirectives: ReadonlyArray<FileReference>;
         hasNoDefaultLib?: boolean;
+
         sourceMapPath?: string;
         sourceMapText?: string;
         texts: ReadonlyArray<UnparsedSourceText>;
+        /*@internal*/ oldFileOfCurrentEmit?: boolean;
         /*@internal*/ parsedSourceMap?: RawSourceMap | false | undefined;
         // Adding this to satisfy services, fix later
         /*@internal*/

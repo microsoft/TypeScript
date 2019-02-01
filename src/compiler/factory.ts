@@ -2666,6 +2666,7 @@ namespace ts {
         let texts: UnparsedSourceText[] | undefined;
         if (!isString(textOrInputFiles)) {
             Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
+            node.oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
             node.fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
             node.sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
             Object.defineProperties(node, {
@@ -2676,6 +2677,7 @@ namespace ts {
             if (textOrInputFiles.buildInfo) {
                 const sections = mapPathOrType === "js" ? textOrInputFiles.buildInfo.js : textOrInputFiles.buildInfo.dts;
                 for (const section of sections) {
+                    if (textOrInputFiles.oldFileOfCurrentEmit && section.kind !== BundleFileSectionKind.Text) continue;
                     switch (section.kind) {
                         case BundleFileSectionKind.Prologue:
                             (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
@@ -2766,7 +2768,12 @@ namespace ts {
         javascriptMapPath: string | undefined,
         javascriptMapText: string | undefined,
         declarationMapPath: string | undefined,
-        declarationMapText: string | undefined
+        declarationMapText: string | undefined,
+        javascriptPath: string | undefined,
+        declarationPath: string | undefined,
+        buildInfoPath?: string | undefined,
+        buildInfo?: BuildInfo,
+        oldFileOfCurrentEmit?: boolean
     ): InputFiles;
     export function createInputFiles(
         javascriptTextOrReadFileText: string | ((path: string) => string | undefined),
@@ -2774,17 +2781,14 @@ namespace ts {
         javascriptMapPath?: string,
         javascriptMapTextOrDeclarationPath?: string,
         declarationMapPath?: string,
-        declarationMapTextOrBuildInfoPath?: string
+        declarationMapTextOrBuildInfoPath?: string,
+        javascriptPath?: string | undefined,
+        declarationPath?: string | undefined,
+        buildInfoPath?: string | undefined,
+        buildInfo?: BuildInfo,
+        oldFileOfCurrentEmit?: boolean
     ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
-        let buildInfo: BuildInfo | false;
-        const getBuildInfo = (getText: () => string | undefined) => {
-            if (buildInfo === undefined) {
-                const result = getText();
-                buildInfo = result !== undefined ? JSON.parse(result) as BuildInfo : false;
-            }
-            return buildInfo || undefined;
-        };
         if (!isString(javascriptTextOrReadFileText)) {
             const cache = createMap<string | false>();
             const textGetter = (path: string | undefined) => {
@@ -2799,6 +2803,14 @@ namespace ts {
             const definedTextGetter = (path: string) => {
                 const result = textGetter(path);
                 return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
+            };
+            let buildInfo: BuildInfo | false;
+            const getBuildInfo = (getText: () => string | undefined) => {
+                if (buildInfo === undefined) {
+                    const result = getText();
+                    buildInfo = result !== undefined ? JSON.parse(result) as BuildInfo : false;
+                }
+                return buildInfo || undefined;
             };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
@@ -2820,6 +2832,11 @@ namespace ts {
             node.declarationText = declarationTextOrJavascriptPath;
             node.declarationMapPath = declarationMapPath;
             node.declarationMapText = declarationMapTextOrBuildInfoPath;
+            node.javascriptPath = javascriptPath;
+            node.declarationPath = declarationPath,
+            node.buildInfoPath = buildInfoPath;
+            node.buildInfo = buildInfo;
+            node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
         }
         return node;
     }
