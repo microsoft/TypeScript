@@ -34,12 +34,12 @@ namespace ts.refactor.convertToNamedParameters {
     }
 
     function doChange(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken, host: LanguageServiceHost, changes: textChanges.ChangeTracker, functionDeclaration: ValidFunctionDeclaration): void {
-        const newParamDeclaration = map(createObjectParameter(functionDeclaration, program, host), node => getSynthesizedDeepClone(node, /*includeTrivia*/ false));
-        const newFunctionDeclaration = updateDeclarationParameters(functionDeclaration, createNodeArray(newParamDeclaration));
+        const newParamDeclaration = createObjectParameter(functionDeclaration, program, host);
+        const newFunctionDeclaration = getSynthesizedDeepClone(updateDeclarationParameters(functionDeclaration, createNodeArray(newParamDeclaration)), /*includeTrivia*/ false);
         changes.replaceNode(sourceFile, functionDeclaration, newFunctionDeclaration);
 
-        const nameNode = getFunctionDeclarationName(functionDeclaration);
-        const functionRefs = FindAllReferences.getReferenceEntriesForNode(-1, nameNode, program, program.getSourceFiles(), cancellationToken);
+        const nameNodes = getFunctionDeclarationNames(functionDeclaration);
+        const functionRefs = flatMap(nameNodes, name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
         const functionCalls = getDirectFunctionCalls(functionRefs);
 
         forEach(functionCalls, call => {
@@ -124,11 +124,11 @@ namespace ts.refactor.convertToNamedParameters {
                     return !!func.parent.name && isValidParameterNodeArray(func.parameters) && !!func.body && !checker.isImplementationOfOverload(func);
                 }
                 else {
-                    return isVariableDeclaration(func.parent.parent) && isVarConst(func.parent.parent) && isValidParameterNodeArray(func.parameters) && !!func.body && !checker.isImplementationOfOverload(func);
+                    return isVariableDeclaration(func.parent.parent) && !func.parent.parent.type && isVarConst(func.parent.parent) && isValidParameterNodeArray(func.parameters) && !!func.body && !checker.isImplementationOfOverload(func);
                 }
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return isVariableDeclaration(func.parent) && isVarConst(func.parent) && isValidParameterNodeArray(func.parameters);
+                return isVariableDeclaration(func.parent) && !func.parent.type && isVarConst(func.parent) && isValidParameterNodeArray(func.parameters);
         }
         return false;
     }
@@ -217,27 +217,29 @@ namespace ts.refactor.convertToNamedParameters {
         return getTextOfIdentifierOrLiteral(paramDecl.name);
     }
 
-    function getFunctionDeclarationName(functionDeclaration: ValidFunctionDeclaration): Node {
+    function getFunctionDeclarationNames(functionDeclaration: ValidFunctionDeclaration): Node[] {
         switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
-                return functionDeclaration.name;
+                return [functionDeclaration.name];
             case SyntaxKind.Constructor:
                 switch (functionDeclaration.parent.kind) {
                     case SyntaxKind.ClassDeclaration:
-                        return functionDeclaration.parent.name;
+                        return [functionDeclaration, functionDeclaration.parent.name];
                     case SyntaxKind.ClassExpression:
-                        return functionDeclaration.parent.parent.name;
+                        return [functionDeclaration.parent.parent.name];
                     default: return Debug.assertNever(functionDeclaration.parent);
                 }
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
-                return functionDeclaration.parent.name;
+                return [functionDeclaration.parent.name];
         }
     }
 
+    type ValidVariableDeclaration = VariableDeclaration & { type: undefined };
+
     interface ValidConstructor extends ConstructorDeclaration {
-        parent: (ClassDeclaration & { name: Identifier }) | (ClassExpression & { parent: VariableDeclaration });
+        parent: (ClassDeclaration & { name: Identifier }) | (ClassExpression & { parent: ValidVariableDeclaration });
         parameters: NodeArray<ValidParameterDeclaration>;
         body: FunctionBody;
     }
@@ -254,12 +256,12 @@ namespace ts.refactor.convertToNamedParameters {
     }
 
     interface ValidFunctionExpression extends FunctionExpression {
-        parent: VariableDeclaration;
+        parent: ValidVariableDeclaration;
         parameters: NodeArray<ValidParameterDeclaration>;
     }
 
     interface ValidArrowFunction extends ArrowFunction {
-        parent: VariableDeclaration;
+        parent: ValidVariableDeclaration;
         parameters: NodeArray<ValidParameterDeclaration>;
     }
 
