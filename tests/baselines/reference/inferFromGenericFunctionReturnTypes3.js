@@ -170,6 +170,16 @@ const f1: F = () => {
     ]);
 };
 
+// Breaking change repros from #29478
+
+declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
+let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
+
+enum State { A, B }
+type Foo = { state: State }
+declare function bar<T>(f: () => T[]): T[];
+let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
+
 
 //// [inferFromGenericFunctionReturnTypes3.js]
 // Repros from #5487
@@ -261,6 +271,13 @@ const f1 = () => {
         }
     ]);
 };
+let res = foldLeft(true, (acc, t) => acc && t); // Error
+var State;
+(function (State) {
+    State[State["A"] = 0] = "A";
+    State[State["B"] = 1] = "B";
+})(State || (State = {}));
+let x = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]); // Error
 
 
 //// [inferFromGenericFunctionReturnTypes3.d.ts]

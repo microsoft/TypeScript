@@ -450,3 +450,59 @@ const f1: F = () => {
     ]);
 };
 
+// Breaking change repros from #29478
+
+declare function foldLeft<U>(z: U, f: (acc: U, t: boolean) => U): U;
+>foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
+>z : U
+>f : (acc: U, t: boolean) => U
+>acc : U
+>t : boolean
+
+let res: boolean = foldLeft(true, (acc, t) => acc && t);  // Error
+>res : boolean
+>foldLeft(true, (acc, t) => acc && t) : any
+>foldLeft : <U>(z: U, f: (acc: U, t: boolean) => U) => U
+>true : true
+>(acc, t) => acc && t : (acc: true, t: boolean) => boolean
+>acc : true
+>t : boolean
+>acc && t : boolean
+>acc : true
+>t : boolean
+
+enum State { A, B }
+>State : State
+>A : State.A
+>B : State.B
+
+type Foo = { state: State }
+>Foo : Foo
+>state : State
+
+declare function bar<T>(f: () => T[]): T[];
+>bar : <T>(f: () => T[]) => T[]
+>f : () => T[]
+
+let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
+>x : Foo[]
+>bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]) : any
+>bar : <T>(f: () => T[]) => T[]
+>() => !!true ? [{ state: State.A }] : [{ state: State.B }] : () => { state: State.A; }[] | { state: State.B; }[]
+>!!true ? [{ state: State.A }] : [{ state: State.B }] : { state: State; }[]
+>!!true : true
+>!true : false
+>true : true
+>[{ state: State.A }] : { state: State; }[]
+>{ state: State.A } : { state: State; }
+>state : State
+>State.A : State.A
+>State : typeof State
+>A : State.A
+>[{ state: State.B }] : { state: State; }[]
+>{ state: State.B } : { state: State; }
+>state : State
+>State.B : State.B
+>State : typeof State
+>B : State.B
+
