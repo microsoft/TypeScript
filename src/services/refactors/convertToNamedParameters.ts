@@ -40,7 +40,7 @@ namespace ts.refactor.convertToNamedParameters {
 
         const nameNodes = getFunctionDeclarationNames(functionDeclaration);
         const functionRefs = flatMap(nameNodes, name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
-        const functionCalls = getDirectFunctionCalls(functionRefs);
+        const functionCalls = deduplicate(getDirectFunctionCalls(functionRefs), (a, b) => a === b);
 
         forEach(functionCalls, call => {
             if (call.arguments && call.arguments.length) {
@@ -223,13 +223,19 @@ namespace ts.refactor.convertToNamedParameters {
             case SyntaxKind.MethodDeclaration:
                 return [functionDeclaration.name];
             case SyntaxKind.Constructor:
+                const ctrKeyword = findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile());
+                let name: Node;
                 switch (functionDeclaration.parent.kind) {
                     case SyntaxKind.ClassDeclaration:
-                        return [functionDeclaration, functionDeclaration.parent.name];
+                        name = functionDeclaration.parent.name;
+                        break;
                     case SyntaxKind.ClassExpression:
-                        return [functionDeclaration.parent.parent.name];
+                        name = functionDeclaration.parent.parent.name;
+                        break;
                     default: return Debug.assertNever(functionDeclaration.parent);
                 }
+                if (ctrKeyword) return [ctrKeyword, name];
+                return [name];
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 return [functionDeclaration.parent.name];
