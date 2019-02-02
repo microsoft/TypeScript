@@ -5994,7 +5994,8 @@ namespace ts {
         return node.kind === SyntaxKind.UnparsedPrologue ||
             node.kind === SyntaxKind.UnparsedPrependText ||
             node.kind === SyntaxKind.UnparsedText ||
-            node.kind === SyntaxKind.UnparsedSourceMapUrl;
+            node.kind === SyntaxKind.UnparsedSourceMapUrl ||
+            node.kind === SyntaxKind.UnparsedSectionText;
     }
 
     // JSDoc

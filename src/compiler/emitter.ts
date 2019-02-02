@@ -51,7 +51,7 @@ namespace ts {
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        const buildInfoPath = jsFilePath && (options.composite || hasPrependReference(projectReferences)) ? combinePaths(getDirectoryPath(jsFilePath), infoFile) : undefined;
+        const buildInfoPath = outPath && (options.composite || hasPrependReference(projectReferences)) ? combinePaths(getDirectoryPath(outPath), infoFile) : undefined;
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
     }
 
@@ -132,7 +132,7 @@ namespace ts {
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
-            if (buildInfoPath && !emitOnlyDtsFiles) buildInfo = { js: [], dts: [], commonSourceDirectory: host.getCommonSourceDirectory(), sources: {} };
+            if (buildInfoPath) buildInfo = { js: [], dts: [], commonSourceDirectory: host.getCommonSourceDirectory(), sources: {} };
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, buildInfo && { sections: buildInfo.js, sources: buildInfo.sources });
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, buildInfo && { sections: buildInfo.dts, sources: buildInfo.sources });
             // Write bundled offset information if applicable
@@ -498,13 +498,19 @@ namespace ts {
             buildInfo,
             /*onlyOwnText*/ true
         );
+        const optionsWithoutDeclaration = clone(config.options);
+        optionsWithoutDeclaration.declaration = false;
+        optionsWithoutDeclaration.composite = false;
         const outputFiles: OutputFile[] = [];
+        const newBuildInfo: BuildInfo = clone(buildInfo);
+        let writeByteOrderMarkBuildInfo = false;
+        const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
         const emitHost: EmitHost = {
-            getPrependNodes: () => createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f)). concat(ownPrependInput),
+            getPrependNodes: () => prependNodes.concat(ownPrependInput),
             getProjectReferences: () => config.projectReferences,
             getCanonicalFileName: host.getCanonicalFileName,
             getCommonSourceDirectory: () => buildInfo.commonSourceDirectory,
-            getCompilerOptions: () => config.options,
+            getCompilerOptions: () => optionsWithoutDeclaration,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNewLine: () => host.getNewLine(),
             getSourceFile: notImplemented,
@@ -513,30 +519,56 @@ namespace ts {
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: notImplemented,
             writeFile: (name, text, writeByteOrderMark) => {
-                // no need to write dts file
-                if (fileExtensionIs(name, Extension.Dts)) return;
-                if (name === buildInfoPath) {
-                    // Add dts and sources build info since we are not touching that file
-                    const newBuildInfo = JSON.parse(text) as BuildInfo;
-                    newBuildInfo.dts = buildInfo.dts;
-                    newBuildInfo.sources = buildInfo.sources;
-                    text = getBuildInfoText(newBuildInfo);
+                if (name !== buildInfoPath) {
+                    outputFiles.push({ name, text, writeByteOrderMark });
                 }
-                outputFiles.push({ name, text, writeByteOrderMark });
+                else {
+                    // Add dts and sources build info since we are not touching that file
+                    const buildInfo = JSON.parse(text) as BuildInfo;
+                    newBuildInfo.js = buildInfo.js;
+                    writeByteOrderMarkBuildInfo = writeByteOrderMarkBuildInfo || writeByteOrderMark;
+                }
             },
             isEmitBlocked: returnFalse,
             readFile: f => host.readFile(f),
             fileExists: f => host.fileExists(f),
-            ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
+            directoryExists: host.directoryExists && (f => host.directoryExists!(f)),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
+        // Emit js
         emitFiles(
             notImplementedResolver,
             emitHost,
             /*targetSourceFile*/ undefined,
             /*emitOnlyDtsFiles*/ false,
-            getTransformers(config.options)
+            getTransformers(optionsWithoutDeclaration)
         );
+        // Emit d.ts map
+        if (declarationMapText) {
+            emitHost.getPrependNodes = () => [createUnparsedDtsSourceFileWithPrepend(ownPrependInput, prependNodes)];
+            emitHost.getCompilerOptions = () => config.options;
+            emitHost.writeFile = (name, text, writeByteOrderMark) => {
+                // Same dts ignore
+                if (fileExtensionIs(name, Extension.Dts)) return;
+                if (name !== buildInfoPath) {
+                    outputFiles.push({ name, text, writeByteOrderMark });
+                }
+                else {
+                    // Add dts and sources build info since we are not touching that file
+                    const buildInfo = JSON.parse(text) as BuildInfo;
+                    newBuildInfo.dts = buildInfo.dts;
+                    writeByteOrderMarkBuildInfo = writeByteOrderMarkBuildInfo || writeByteOrderMark;
+                }
+            };
+            emitFiles(
+                notImplementedResolver,
+                emitHost,
+                /*targetSourceFile*/ undefined,
+                /*emitOnlyDtsFiles*/ true
+            );
+        }
+        outputFiles.push({ name: buildInfoPath!, text: getBuildInfoText(newBuildInfo), writeByteOrderMark: writeByteOrderMarkBuildInfo });
+        console.log(JSON.stringify(outputFiles, undefined, 2));
         return outputFiles;
     }
 
@@ -881,6 +913,10 @@ namespace ts {
                     case SyntaxKind.UnparsedText:
                     case SyntaxKind.UnparsedSourceMapUrl:
                         return emitUnparsedNode(<UnparsedNode>node);
+
+                    case SyntaxKind.UnparsedSectionText:
+                        return emitUnparsedSectionText(<UnparsedSectionText>node);
+
 
                     // Identifiers
                     case SyntaxKind.Identifier:
@@ -1391,6 +1427,7 @@ namespace ts {
         // SyntaxKind.UnparsedSource
         function emitUnparsedSource(unparsed: UnparsedSource) {
             for (const text of unparsed.texts) {
+                writeLine();
                 emit(text);
             }
         }
@@ -1400,6 +1437,18 @@ namespace ts {
         // SyntaxKind.UnparsedText
         function emitUnparsedNode(unparsed: UnparsedNode) {
             writer.rawWrite(unparsed.parent.text.substring(unparsed.pos, unparsed.end));
+        }
+
+        // SyntaxKind.UnparsedSectionText
+        function emitUnparsedSectionText(unparsed: UnparsedSectionText) {
+            const pos = getTextPosWithWriteLine();
+            emitUnparsedNode(unparsed);
+            if (bundleFileInfo) {
+                const section = clone(unparsed.section);
+                section.pos = pos;
+                section.end = writer.getTextPos();
+                bundleFileInfo.sections.push(section);
+            }
         }
 
         //

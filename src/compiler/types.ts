@@ -433,6 +433,7 @@ namespace ts {
         UnparsedPrependText,
         UnparsedText,
         UnparsedSourceMapUrl,
+        UnparsedSectionText,
 
         // Top-level nodes
         SourceFile,
@@ -2803,7 +2804,7 @@ namespace ts {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
-    export type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl;
+    export type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl | UnparsedSectionText;
     export type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
 
     export interface UnparsedSection extends Node {
@@ -2832,6 +2833,12 @@ namespace ts {
     export interface UnparsedSourceMapUrl extends UnparsedSection {
         kind: SyntaxKind.UnparsedSourceMapUrl;
         parent: UnparsedSource;
+    }
+
+    export interface UnparsedSectionText extends UnparsedSection {
+        kind: SyntaxKind.UnparsedSectionText;
+        parent: UnparsedSource;
+        section: BundleFileSection;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -5311,7 +5318,7 @@ namespace ts {
 
         isEmitBlocked(emitFileName: string): boolean;
 
-        getPrependNodes(): ReadonlyArray<InputFiles>;
+        getPrependNodes(): ReadonlyArray<InputFiles | UnparsedSource>;
         getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
 
         writeFile: WriteFileCallback;

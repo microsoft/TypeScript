@@ -2728,6 +2728,61 @@ namespace ts {
         return node;
     }
 
+    /*@internal*/
+    export function createUnparsedDtsSourceFileWithPrepend(input: InputFiles, prepends: ReadonlyArray<InputFiles>): UnparsedSource {
+        Debug.assert(!!input.oldFileOfCurrentEmit);
+        const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
+        node.oldFileOfCurrentEmit = true;
+        node.fileName = Debug.assertDefined(input.declarationPath);
+        node.sourceMapPath = Debug.assertDefined(input.declarationMapPath);
+        node.text = input.declarationText;
+        node.sourceMapText = input.declarationMapText;
+        const mapOfPrepend = arrayToMap(prepends, prepend => prepend.declarationPath!, prepend => createUnparsedSourceFile(prepend, "dts"));
+        const texts: UnparsedSourceText[] = [];
+        const sections = input.buildInfo!.dts;
+        for (const section of sections) {
+            switch (section.kind) {
+                case BundleFileSectionKind.NoDefaultLib:
+                case BundleFileSectionKind.Reference:
+                case BundleFileSectionKind.Type:
+                case BundleFileSectionKind.Lib:
+                    texts.push(createUnparsedSectionText(section, node));
+                    break;
+
+                case BundleFileSectionKind.Prepend:
+                    const parent = mapOfPrepend.get(section.data)!;
+                    const sectionNode = createUnparsedSectionText(section, parent);
+                    sectionNode.pos = parent.texts[0].pos;
+                    sectionNode.end = last(parent.texts).end;
+                    texts.push(sectionNode);
+                    break;
+
+                case BundleFileSectionKind.Text:
+                    texts.push(createUnparsedNode(section, node) as UnparsedSourceText);
+                    break;
+
+                // Ignore
+                case BundleFileSectionKind.SourceMapUrl:
+                    break;
+
+                // Should never have
+                case BundleFileSectionKind.Prologue:
+                case BundleFileSectionKind.EmitHelpers:
+                    Debug.fail(`Dts shouldnt have section: ${JSON.stringify(section)}`);
+                    break;
+
+                default:
+                    Debug.assertNever(section);
+            }
+        }
+        node.prologues = emptyArray;
+        node.referencedFiles = emptyArray;
+        node.libReferenceDirectives = emptyArray;
+        node.texts = texts;
+        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
+        return node;
+    }
+
     function mapBundleFileSectionKindToSyntaxKind(kind: BundleFileSectionKind): SyntaxKind {
         switch (kind) {
             case BundleFileSectionKind.Prologue: return SyntaxKind.UnparsedPrologue;
@@ -2751,6 +2806,14 @@ namespace ts {
         const node = createNode(mapBundleFileSectionKindToSyntaxKind(section.kind), section.pos, section.end) as UnparsedNode;
         node.parent = parent;
         node.data = section.data;
+        return node;
+    }
+
+    function createUnparsedSectionText(section: BundleFileSection, parent: UnparsedSource) {
+        const node = createNode(SyntaxKind.UnparsedSectionText, section.pos, section.end) as UnparsedSectionText;
+        node.parent = parent;
+        node.data = section.data;
+        node.section = section;
         return node;
     }
 

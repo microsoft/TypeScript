@@ -214,6 +214,7 @@ namespace ts {
                         collectLibs(sourceFile, libs);
                         return sourceFile;
                     }
+                    return prepend;
                 }));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
