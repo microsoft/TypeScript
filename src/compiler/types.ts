@@ -5529,6 +5529,8 @@ namespace ts {
 
     /*@internal*/
     export interface SourceFileInfo {
+        // List of helpers in own source files emitted if no prepend is present
+        helpers?: string[];
     }
 
     /*@internal*/

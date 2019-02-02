@@ -436,7 +436,11 @@ function forfirstfirst_PART1Rest() { }
     }
   ],
   "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "sources": {
+    "helpers": [
+      "typescript:rest"
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]

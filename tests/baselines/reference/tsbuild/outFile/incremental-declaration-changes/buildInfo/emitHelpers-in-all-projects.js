@@ -31,7 +31,11 @@
     }
   ],
   "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "sources": {
+    "helpers": [
+      "typescript:rest"
+    ]
+  }
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -498,7 +502,11 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
     }
   ],
   "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "sources": {
+    "helpers": [
+      "typescript:rest"
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]

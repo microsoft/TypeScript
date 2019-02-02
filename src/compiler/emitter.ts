@@ -572,6 +572,12 @@ namespace ts {
             if (bundleFileInfo) {
                 bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
                 // Source file metadata if needed later on
+
+                // Store helpes
+                const helpers = getHelpersFromBundledSourceFiles(bundle);
+                if (helpers) {
+                    bundleFileInfo.sources.helpers = helpers;
+                }
             }
 
             reset();
@@ -1140,6 +1146,27 @@ namespace ts {
         function pipelineEmitWithSubstitution(hint: EmitHint, node: Node) {
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.Substitution, node);
             pipelinePhase(hint, substituteNode(hint, node));
+        }
+
+        function getHelpersFromBundledSourceFiles(bundle: Bundle): string[] | undefined {
+            let result: string[] | undefined;
+            if (moduleKind === ModuleKind.None || printerOptions.noEmitHelpers) {
+                return undefined;
+            }
+            const bundledHelpers = createMap<boolean>();
+            for (const sourceFile of bundle.sourceFiles) {
+                const shouldSkip = getExternalHelpersModuleName(sourceFile) !== undefined;
+                const helpers = getSortedEmitHelpers(sourceFile);
+                if (!helpers) continue;
+                for (const helper of helpers) {
+                    if (!helper.scoped && !shouldSkip && !bundledHelpers.get(helper.name)) {
+                        bundledHelpers.set(helper.name, true);
+                        (result || (result = [])).push(helper.name);
+                    }
+                }
+            }
+
+            return result;
         }
 
         function emitHelpers(node: Node) {

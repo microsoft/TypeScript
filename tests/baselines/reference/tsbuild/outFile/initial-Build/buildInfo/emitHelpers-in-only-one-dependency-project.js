@@ -31,7 +31,11 @@
     }
   ],
   "commonSourceDirectory": "/src/second/",
-  "sources": {}
+  "sources": {
+    "helpers": [
+      "typescript:rest"
+    ]
+  }
 }
 
 //// [/src/2/second-output.d.ts]

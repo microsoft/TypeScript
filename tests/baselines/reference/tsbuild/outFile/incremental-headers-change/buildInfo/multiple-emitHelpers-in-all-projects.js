@@ -37,7 +37,12 @@
     }
   ],
   "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "sources": {
+    "helpers": [
+      "typescript:read",
+      "typescript:spread"
+    ]
+  }
 }
 
 //// [/src/first/bin/first-output.d.ts.map]
@@ -620,7 +625,13 @@ function forfirstfirst_PART1Rest() { }
     }
   ],
   "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "sources": {
+    "helpers": [
+      "typescript:rest",
+      "typescript:read",
+      "typescript:spread"
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]

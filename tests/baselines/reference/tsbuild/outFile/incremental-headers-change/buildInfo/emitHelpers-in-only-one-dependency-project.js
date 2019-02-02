@@ -31,7 +31,11 @@
     }
   ],
   "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "sources": {
+    "helpers": [
+      "typescript:rest"
+    ]
+  }
 }
 
 //// [/src/first/bin/first-output.d.ts.map]
