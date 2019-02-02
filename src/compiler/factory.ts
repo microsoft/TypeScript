@@ -2656,7 +2656,7 @@ namespace ts {
     export function createUnparsedSourceFile(text: string): UnparsedSource;
     export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, map?: string): UnparsedSource {
+    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapText?: string): UnparsedSource {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
         let prologues: UnparsedPrologue[] | undefined;
         let helpers: UnscopedEmitHelpers[] | undefined;
@@ -2677,7 +2677,7 @@ namespace ts {
             if (textOrInputFiles.buildInfo) {
                 const sections = mapPathOrType === "js" ? textOrInputFiles.buildInfo.js : textOrInputFiles.buildInfo.dts;
                 for (const section of sections) {
-                    if (textOrInputFiles.oldFileOfCurrentEmit && section.kind !== BundleFileSectionKind.Text) continue;
+                    if (node.oldFileOfCurrentEmit && section.kind !== BundleFileSectionKind.Text) continue;
                     switch (section.kind) {
                         case BundleFileSectionKind.Prologue:
                             (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
@@ -2706,13 +2706,17 @@ namespace ts {
                             Debug.assertNever(section);
                     }
                 }
+                if (node.oldFileOfCurrentEmit) {
+                    Debug.assert(helpers === undefined);
+                    helpers = map(textOrInputFiles.buildInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
+                }
             }
         }
         else {
             node.fileName = "";
             node.text = textOrInputFiles;
             node.sourceMapPath = mapPathOrType;
-            node.sourceMapText = map;
+            node.sourceMapText = mapText;
         }
         node.prologues = prologues || emptyArray;
         node.helpers = helpers;
