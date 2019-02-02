@@ -32,7 +32,7 @@ const notPresent = "prop2";
 let { [notPresent]: computed2 } = { prop: "b" };
 >notPresent : "prop2"
 >computed2 : any
->{ prop: "b" } : { prop: string; }
+>{ prop: "b" } : { prop: string; prop2: any; }
 >prop : string
 >"b" : "b"
 

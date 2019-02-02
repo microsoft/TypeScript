@@ -17,6 +17,7 @@ use(x);
 //// [f.js]
 #!/usr/bin/env node
 "use strict";
+/// <reference path="f.d.ts"/>
 exports.__esModule = true;
 var test_1 = require("test");
 use(test_1.x);
