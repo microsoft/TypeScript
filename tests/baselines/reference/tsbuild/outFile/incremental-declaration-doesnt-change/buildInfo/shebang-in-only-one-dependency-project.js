@@ -24,7 +24,8 @@
       "kind": "sourceMapUrl"
     }
   ],
-  "commonSourceDirectory": "/src/first/"
+  "commonSourceDirectory": "/src/first/",
+  "sources": {}
 }
 
 //// [/src/first/bin/first-output.js]
@@ -276,7 +277,8 @@ console.log(s);
       "kind": "sourceMapUrl"
     }
   ],
-  "commonSourceDirectory": "/src/third/"
+  "commonSourceDirectory": "/src/third/",
+  "sources": {}
 }
 
 //// [/src/third/thirdjs/output/third-output.js]

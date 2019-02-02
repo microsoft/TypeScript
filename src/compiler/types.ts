@@ -5528,12 +5528,21 @@ namespace ts {
         BundleFileText | BundleFileSourceMapUrl;
 
     /*@internal*/
-    export type BundleFileInfo = BundleFileSection[];
+    export interface SourceFileInfo {
+    }
+
+    /*@internal*/
+    export interface BundleFileInfo {
+        sections: BundleFileSection[];
+        sources: SourceFileInfo;
+    }
+
     /* @internal */
     export interface BuildInfo {
-        js: BundleFileInfo;
-        dts: BundleFileInfo;
+        js: BundleFileSection[];
+        dts: BundleFileSection[];
         commonSourceDirectory: string;
+        sources: SourceFileInfo;
     }
 
     export interface PrintHandlers {

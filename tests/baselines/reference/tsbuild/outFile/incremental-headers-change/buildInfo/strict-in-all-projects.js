@@ -36,7 +36,8 @@
       "kind": "sourceMapUrl"
     }
   ],
-  "commonSourceDirectory": "/src/first/"
+  "commonSourceDirectory": "/src/first/",
+  "sources": {}
 }
 
 //// [/src/first/bin/first-output.d.ts.map]
@@ -422,7 +423,8 @@ console.log(s);
       "kind": "sourceMapUrl"
     }
   ],
-  "commonSourceDirectory": "/src/third/"
+  "commonSourceDirectory": "/src/third/",
+  "sources": {}
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]

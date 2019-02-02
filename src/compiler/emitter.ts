@@ -131,9 +131,9 @@ namespace ts {
         };
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
-            if (buildInfoPath && !emitOnlyDtsFiles) buildInfo = { js: [], dts: [], commonSourceDirectory: host.getCommonSourceDirectory() };
-            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, buildInfo && buildInfo.js);
-            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, buildInfo && buildInfo.dts);
+            if (buildInfoPath && !emitOnlyDtsFiles) buildInfo = { js: [], dts: [], commonSourceDirectory: host.getCommonSourceDirectory(), sources: {} };
+            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, buildInfo && { sections: buildInfo.js, sources: buildInfo.sources });
+            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, buildInfo && { sections: buildInfo.dts, sources: buildInfo.sources });
             // Write bundled offset information if applicable
             if (!emitOnlyDtsFiles && !emitSkipped && buildInfoPath) {
                 writeFile(host, emitterDiagnostics, buildInfoPath, JSON.stringify(buildInfo, undefined, 2), /*writeByteOrderMark*/ false);
@@ -316,7 +316,7 @@ namespace ts {
                     if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
                     const pos = writer.getTextPos();
                     writer.writeComment(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Tools can sometimes see this line as a source mapping url comment
-                    if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.SourceMapUrl });
+                    if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.SourceMapUrl });
                 }
 
                 // Write the source map
@@ -562,14 +562,17 @@ namespace ts {
                 writeLine();
                 const pos = getTextPosWithWriteLine();
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName });
+                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName });
             }
 
             const pos = getTextPosWithWriteLine();
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
-            if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
+            if (bundleFileInfo) {
+                bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
+                // Source file metadata if needed later on
+            }
 
             reset();
             writer = previousWriter;
@@ -1182,7 +1185,7 @@ namespace ts {
                         else {
                             writeLines(helper.text(makeFileLevelOptimisticUniqueName));
                         }
-                        if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.EmitHelpers, data: helper.name });
+                        if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.EmitHelpers, data: helper.name });
                         helpersEmitted = true;
                     }
                 }
@@ -2953,7 +2956,7 @@ namespace ts {
             if (hasNoDefaultLib) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference no-default-lib="true"/>`);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.NoDefaultLib });
+                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.NoDefaultLib });
                 writeLine();
             }
             if (currentSourceFile && currentSourceFile.moduleName) {
@@ -2974,19 +2977,19 @@ namespace ts {
             for (const directive of files) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference path="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Reference, data: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Reference, data: directive.fileName });
                 writeLine();
             }
             for (const directive of types) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference types="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, data: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Type, data: directive.fileName });
                 writeLine();
             }
             for (const directive of libs) {
                 const pos = writer.getTextPos();
                 writeComment(`/// <reference lib="${directive.fileName}" />`);
-                if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Lib, data: directive.fileName });
+                if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Lib, data: directive.fileName });
                 writeLine();
             }
         }
@@ -3030,7 +3033,7 @@ namespace ts {
                         writeLine();
                         const pos = writer.getTextPos();
                         emit(statement);
-                        if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: statement.expression.text });
+                        if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: statement.expression.text });
                         if (seenPrologueDirectives) {
                             seenPrologueDirectives.set(statement.expression.text, true);
                         }
@@ -3051,7 +3054,7 @@ namespace ts {
                     writeLine();
                     const pos = writer.getTextPos();
                     emit(prologue);
-                    if (bundleFileInfo) bundleFileInfo.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: prologue.data });
+                    if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: prologue.data });
                     if (seenPrologueDirectives) {
                         seenPrologueDirectives.set(prologue.data, true);
                     }
