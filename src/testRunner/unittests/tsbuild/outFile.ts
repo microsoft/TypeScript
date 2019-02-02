@@ -275,19 +275,10 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                             // Additional source Files
                             ...(additionalSourceFiles && additionalSourceFiles.length === 3 ? [additionalSourceFiles[project.first]] : emptyArray),
 
-                            // outputs without d.ts since we just update js
-                            outputFiles[project.first][ext.js],
-                            outputFiles[project.first][ext.jsmap],
-                            outputFiles[project.first][ext.dts],
-                            outputFiles[project.first][ext.buildinfo],
-                            outputFiles[project.second][ext.js],
-                            outputFiles[project.second][ext.jsmap],
-                            outputFiles[project.second][ext.buildinfo],
-
-                            // To prepend::
-                            outputFiles[project.third][ext.buildinfo],
-                            outputFiles[project.third][ext.js],
-                            outputFiles[project.third][ext.jsmap]
+                            // outputs to prepend
+                            ...outputFiles[project.first],
+                            ...outputFiles[project.second],
+                            ...outputFiles[project.third]
                         ],
                     fs => appendFileContent(fs, relSources[project.first][source.ts][part.one], "console.log(s);"),
                     [
@@ -345,19 +336,10 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                                 // Additional source Files
                                 ...(additionalSourceFiles || emptyArray),
 
-                                // outputs without d.ts since we just update js
-                                outputFiles[project.first][ext.js],
-                                outputFiles[project.first][ext.jsmap],
-                                outputFiles[project.first][ext.dts],
-                                outputFiles[project.first][ext.buildinfo],
-                                outputFiles[project.second][ext.js],
-                                outputFiles[project.second][ext.jsmap],
-                                outputFiles[project.second][ext.buildinfo],
-
-                                // To prepend::
-                                outputFiles[project.third][ext.buildinfo],
-                                outputFiles[project.third][ext.js],
-                                outputFiles[project.third][ext.jsmap]
+                                // outputs to prepend
+                                ...outputFiles[project.first],
+                                ...outputFiles[project.second],
+                                ...outputFiles[project.third]
                             ],
                         fs => modifyAgainFs(fs),
                         [

@@ -469,7 +469,7 @@ namespace ts {
 
     /*@internal*/
     export function emitUsingBuildInfo(config: ParsedCommandLine, host: EmitUsingBuildInfoHost, getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined): EmitUsingBuildInfoResult {
-        const { buildInfoPath, jsFilePath, sourceMapFilePath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false, config.projectReferences);
+        const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false, config.projectReferences);
         const buildInfoText = host.readFile(Debug.assertDefined(buildInfoPath));
         if (!buildInfoText) return buildInfoPath!;
         const jsFileText = host.readFile(Debug.assertDefined(jsFilePath));
@@ -477,31 +477,34 @@ namespace ts {
         const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
         // error if no source map or for now if inline sourcemap
         if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
+        const declarationMapText = declarationMapPath && host.readFile(declarationMapPath);
+        // error if no source map or for now if inline sourcemap
+        if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
+        // read declaration text
+        const declarationText = declarationMapText && host.readFile(declarationFilePath!);
+        if (declarationMapText && !declarationText) return declarationFilePath!;
 
         const buildInfo = JSON.parse(buildInfoText) as BuildInfo;
         const ownPrependInput = createInputFiles(
             jsFileText,
-            /*declarationText*/ undefined!,
+            declarationText!,
             sourceMapFilePath,
             sourceMapText,
-            /*declarationMapPath*/ undefined!,
-            /*declarationMaptext*/ undefined!,
+            declarationMapPath,
+            declarationMapText,
             jsFilePath,
-            /*declarationPath*/ undefined,
+            declarationFilePath,
             buildInfoPath,
             buildInfo,
             /*onlyOwnText*/ true
         );
-        const optionsWithoutDeclaration = clone(config.options);
-        optionsWithoutDeclaration.declaration = false;
-        optionsWithoutDeclaration.composite = false;
         const outputFiles: OutputFile[] = [];
         const emitHost: EmitHost = {
             getPrependNodes: () => createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f)). concat(ownPrependInput),
             getProjectReferences: () => config.projectReferences,
             getCanonicalFileName: host.getCanonicalFileName,
             getCommonSourceDirectory: () => buildInfo.commonSourceDirectory,
-            getCompilerOptions: () => optionsWithoutDeclaration,
+            getCompilerOptions: () => config.options,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNewLine: () => host.getNewLine(),
             getSourceFile: notImplemented,
@@ -510,6 +513,8 @@ namespace ts {
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: notImplemented,
             writeFile: (name, text, writeByteOrderMark) => {
+                // no need to write dts file
+                if (fileExtensionIs(name, Extension.Dts)) return;
                 if (name === buildInfoPath) {
                     // Add dts and sources build info since we are not touching that file
                     const newBuildInfo = JSON.parse(text) as BuildInfo;
@@ -530,7 +535,7 @@ namespace ts {
             emitHost,
             /*targetSourceFile*/ undefined,
             /*emitOnlyDtsFiles*/ false,
-            getTransformers(optionsWithoutDeclaration)
+            getTransformers(config.options)
         );
         return outputFiles;
     }
