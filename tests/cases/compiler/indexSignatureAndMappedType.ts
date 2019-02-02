@@ -33,3 +33,15 @@ interface IBaseEntity {
 interface IEntity<T extends string> extends IBaseEntity {
     properties: Record<T, string>;
 }
+
+// Repro from #28798
+
+function constrainedRecord<K extends 'a'>(x: Record<K, number>, y: { [x: string]: number }) {
+    x = y; // error
+    y = x;
+}
+
+function concreteRecord(x: Record<'a', number>, y: { [x: string]: number }) {
+    x = y; // error
+    y = x;
+}

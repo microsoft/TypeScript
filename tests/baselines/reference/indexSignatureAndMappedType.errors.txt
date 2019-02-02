@@ -2,9 +2,11 @@ tests/cases/compiler/indexSignatureAndMappedType.ts(6,5): error TS2322: Type '{ 
 tests/cases/compiler/indexSignatureAndMappedType.ts(15,5): error TS2322: Type 'Record<K, U>' is not assignable to type '{ [key: string]: T; }'.
   Type 'U' is not assignable to type 'T'.
 tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, U>'.
+tests/cases/compiler/indexSignatureAndMappedType.ts(37,5): error TS2322: Type '{ [x: string]: number; }' is not assignable to type 'Record<K, number>'.
+tests/cases/compiler/indexSignatureAndMappedType.ts(42,5): error TS2741: Property 'a' is missing in type '{ [x: string]: number; }' but required in type 'Record<"a", number>'.
 
 
-==== tests/cases/compiler/indexSignatureAndMappedType.ts (3 errors) ====
+==== tests/cases/compiler/indexSignatureAndMappedType.ts (5 errors) ====
     // A mapped type { [P in K]: X }, where K is a generic type, is related to
     // { [key: string]: Y } if X is related to Y.
     
@@ -43,5 +45,21 @@ tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{
     
     interface IEntity<T extends string> extends IBaseEntity {
         properties: Record<T, string>;
+    }
+    
+    // Repro from #28798
+    
+    function constrainedRecord<K extends 'a'>(x: Record<K, number>, y: { [x: string]: number }) {
+        x = y; // error
+        ~
+!!! error TS2322: Type '{ [x: string]: number; }' is not assignable to type 'Record<K, number>'.
+        y = x;
+    }
+    
+    function concreteRecord(x: Record<'a', number>, y: { [x: string]: number }) {
+        x = y; // error
+        ~
+!!! error TS2741: Property 'a' is missing in type '{ [x: string]: number; }' but required in type 'Record<"a", number>'.
+        y = x;
     }
     

@@ -32,6 +32,18 @@ interface IEntity<T extends string> extends IBaseEntity {
     properties: Record<T, string>;
 }
 
+// Repro from #28798
+
+function constrainedRecord<K extends 'a'>(x: Record<K, number>, y: { [x: string]: number }) {
+    x = y; // error
+    y = x;
+}
+
+function concreteRecord(x: Record<'a', number>, y: { [x: string]: number }) {
+    x = y; // error
+    y = x;
+}
+
 
 //// [indexSignatureAndMappedType.js]
 "use strict";
@@ -48,6 +60,15 @@ function f2(x, y) {
 function f3(x, y) {
     x = y; // Error
     y = x; // Error
+}
+// Repro from #28798
+function constrainedRecord(x, y) {
+    x = y; // error
+    y = x;
+}
+function concreteRecord(x, y) {
+    x = y; // error
+    y = x;
 }
 
 
@@ -71,3 +92,9 @@ interface IBaseEntity {
 interface IEntity<T extends string> extends IBaseEntity {
     properties: Record<T, string>;
 }
+declare function constrainedRecord<K extends 'a'>(x: Record<K, number>, y: {
+    [x: string]: number;
+}): void;
+declare function concreteRecord(x: Record<'a', number>, y: {
+    [x: string]: number;
+}): void;

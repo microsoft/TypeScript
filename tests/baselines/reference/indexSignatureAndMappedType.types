@@ -76,3 +76,39 @@ interface IEntity<T extends string> extends IBaseEntity {
 >properties : Record<T, string>
 }
 
+// Repro from #28798
+
+function constrainedRecord<K extends 'a'>(x: Record<K, number>, y: { [x: string]: number }) {
+>constrainedRecord : <K extends "a">(x: Record<K, number>, y: { [x: string]: number; }) => void
+>x : Record<K, number>
+>y : { [x: string]: number; }
+>x : string
+
+    x = y; // error
+>x = y : { [x: string]: number; }
+>x : Record<K, number>
+>y : { [x: string]: number; }
+
+    y = x;
+>y = x : Record<K, number>
+>y : { [x: string]: number; }
+>x : Record<K, number>
+}
+
+function concreteRecord(x: Record<'a', number>, y: { [x: string]: number }) {
+>concreteRecord : (x: Record<"a", number>, y: { [x: string]: number; }) => void
+>x : Record<"a", number>
+>y : { [x: string]: number; }
+>x : string
+
+    x = y; // error
+>x = y : { [x: string]: number; }
+>x : Record<"a", number>
+>y : { [x: string]: number; }
+
+    y = x;
+>y = x : Record<"a", number>
+>y : { [x: string]: number; }
+>x : Record<"a", number>
+}
+

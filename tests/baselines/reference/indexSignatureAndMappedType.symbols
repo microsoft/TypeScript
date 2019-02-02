@@ -96,3 +96,39 @@ interface IEntity<T extends string> extends IBaseEntity {
 >T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 29, 18))
 }
 
+// Repro from #28798
+
+function constrainedRecord<K extends 'a'>(x: Record<K, number>, y: { [x: string]: number }) {
+>constrainedRecord : Symbol(constrainedRecord, Decl(indexSignatureAndMappedType.ts, 31, 1))
+>K : Symbol(K, Decl(indexSignatureAndMappedType.ts, 35, 27))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 35, 42))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(indexSignatureAndMappedType.ts, 35, 27))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 35, 63))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 35, 70))
+
+    x = y; // error
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 35, 42))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 35, 63))
+
+    y = x;
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 35, 63))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 35, 42))
+}
+
+function concreteRecord(x: Record<'a', number>, y: { [x: string]: number }) {
+>concreteRecord : Symbol(concreteRecord, Decl(indexSignatureAndMappedType.ts, 38, 1))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 40, 24))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 40, 47))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 40, 54))
+
+    x = y; // error
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 40, 24))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 40, 47))
+
+    y = x;
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 40, 47))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 40, 24))
+}
+
