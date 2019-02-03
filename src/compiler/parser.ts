@@ -6611,6 +6611,9 @@ namespace ts {
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
+                        case "author":
+                            tag = parseAuthorTag(start, tagName);
+                            break;
                         case "augments":
                         case "extends":
                             tag = parseAugmentsTag(start, tagName);
@@ -6872,6 +6875,69 @@ namespace ts {
                     result.tagName = tagName;
                     result.typeExpression = parseJSDocTypeExpression(/*mayOmitBraces*/ true);
                     return finishNode(result);
+                }
+
+                function parseAuthorTag(start: number, tagName: Identifier): JSDocAuthorTag {
+                    const result = <JSDocAuthorTag>createNode(SyntaxKind.JSDocAuthorTag, start);
+                    result.tagName = tagName;
+
+                    const comment = tryParse(() => tryParseAuthorNameAndEmail());
+
+                    if (comment) {
+                        result.comment = comment;
+                    }
+
+                    return finishNode(result);
+                }
+
+                function tryParseAuthorNameAndEmail(): string | undefined {
+                    const comments: string[] = [];
+                    let seenLessThan = false;
+                    let seenGreaterThan = false;
+                    let seenAtToken = false;
+                    let token = scanner.getToken();
+
+                    loop: while (true) {
+                        switch (token) {
+                            case SyntaxKind.Identifier:
+                            case SyntaxKind.WhitespaceTrivia:
+                            case SyntaxKind.DotToken:
+                                comments.push(scanner.getTokenText());
+                                break;
+                            case SyntaxKind.LessThanToken:
+                                if (seenLessThan || seenAtToken || seenGreaterThan) {
+                                    return;
+                                }
+                                seenLessThan = true;
+                                comments.push(scanner.getTokenText());
+                                break;
+                            case SyntaxKind.GreaterThanToken:
+                                if (!seenLessThan || !seenAtToken || seenGreaterThan) {
+                                    return;
+                                }
+
+                                seenGreaterThan = true;
+                                comments.push(scanner.getTokenText());
+                                break loop;
+                            case SyntaxKind.AtToken:
+                                if (seenAtToken || !seenLessThan || seenGreaterThan) {
+                                    return;
+                                }
+
+                                seenAtToken = true;
+                                comments.push(scanner.getTokenText());
+                                break;
+                            case SyntaxKind.NewLineTrivia:
+                            case SyntaxKind.EndOfFileToken:
+                                break loop;
+                        }
+
+                        token = nextJSDocToken();
+                    }
+
+                    if (seenLessThan && seenAtToken && seenGreaterThan) {
+                        return comments.length === 0 ? undefined : comments.join("");
+                    }
                 }
 
                 function parseAugmentsTag(start: number, tagName: Identifier): JSDocAugmentsTag {

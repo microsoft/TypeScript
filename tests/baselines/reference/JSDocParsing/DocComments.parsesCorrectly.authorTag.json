@@ -1,0 +1,22 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 50,
+    "tags": {
+        "0": {
+            "kind": "JSDocAuthorTag",
+            "pos": 7,
+            "end": 45,
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 8,
+                "end": 14,
+                "escapedText": "author"
+            },
+            "comment": "John Doe <john.doe@example.com>"
+        },
+        "length": 1,
+        "pos": 7,
+        "end": 45
+    }
+}
