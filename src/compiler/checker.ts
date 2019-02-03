@@ -16152,13 +16152,37 @@ namespace ts {
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
-                // We only narrow if all case expressions specify values with unit types
+                // We only narrow if all case expressions specify
+                // values with unit types, except for the case where
+                // `type` is unknown. In this instance we map object
+                // types to the nonPrimitive type and narrow with that.
                 const switchTypes = getSwitchClauseTypes(switchStatement);
                 if (!switchTypes.length) {
                     return type;
                 }
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
+                if ((type.flags & TypeFlags.Unknown) && !hasDefaultClause) {
+                    let groundClauseTypes: Type[] | undefined = undefined;
+                    for (let i = 0; i < clauseTypes.length; i += 1) {
+                        const t = clauseTypes[i];
+                        if (t.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
+                            if (groundClauseTypes !== undefined) {
+                                groundClauseTypes.push(t)
+                            }
+                        }
+                        else if (t.flags & TypeFlags.Object) {
+                            if (groundClauseTypes === undefined) {
+                                groundClauseTypes = clauseTypes.slice(0, i);
+                            }
+                            groundClauseTypes.push(nonPrimitiveType);
+                        }
+                        else {
+                            return type;
+                        }
+                    }
+                    return getUnionType(groundClauseTypes === undefined ? clauseTypes : groundClauseTypes);
+                }
                 const discriminantType = getUnionType(clauseTypes);
                 const caseType =
                     discriminantType.flags & TypeFlags.Never ? neverType :
