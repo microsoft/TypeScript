@@ -15045,6 +15045,10 @@ namespace ts {
             return false;
         }
 
+        function isSyntheticThisPropertyAccess(expr: Node) {
+            return isAccessExpression(expr) && expr.expression.kind === SyntaxKind.ThisKeyword && !!(expr.expression.flags & NodeFlags.Synthesized);
+        }
+
         function findDiscriminantProperties(sourceProperties: Symbol[], target: Type): Symbol[] | undefined {
             let result: Symbol[] | undefined;
             for (const sourceProperty of sourceProperties) {
@@ -16260,8 +16264,13 @@ namespace ts {
                 const left = getReferenceCandidate(expr.left);
                 if (!isMatchingReference(reference, left)) {
                     // For a reference of the form 'x.y', an 'x instanceof T' type guard resets the
-                    // narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, left)) {
+                    // narrowed type of 'y' to its declared type. We do this because preceding 'x.y'
+                    // references might reference a different 'y' property. However, we make an exception
+                    // for property accesses where x is a synthetic 'this' expression, indicating that we
+                    // were called from isPropertyInitializedInConstructor. Without this exception,
+                    // initializations of 'this' properties that occur before a 'this instanceof XXX'
+                    // check would not be considered.
+                    if (containsMatchingReference(reference, left) && !isSyntheticThisPropertyAccess(reference)) {
                         return declaredType;
                     }
                     return type;
