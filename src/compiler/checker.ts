@@ -16163,12 +16163,12 @@ namespace ts {
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
                 if ((type.flags & TypeFlags.Unknown) && !hasDefaultClause) {
-                    let groundClauseTypes: Type[] | undefined = undefined;
+                    let groundClauseTypes: Type[] | undefined;
                     for (let i = 0; i < clauseTypes.length; i += 1) {
                         const t = clauseTypes[i];
                         if (t.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
                             if (groundClauseTypes !== undefined) {
-                                groundClauseTypes.push(t)
+                                groundClauseTypes.push(t);
                             }
                         }
                         else if (t.flags & TypeFlags.Object) {
