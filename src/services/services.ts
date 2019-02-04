@@ -16,17 +16,19 @@ namespace ts {
         public pos: number;
         public end: number;
         public flags: NodeFlags;
+        public modifierFlagsCache: ModifierFlags;
+        public transformFlags: TransformFlags;
         public parent: Node;
         public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
         public jsDoc?: JSDoc[];
         public original?: Node;
-        public transformFlags: TransformFlags;
         private _children: Node[] | undefined;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
+            this.modifierFlagsCache = ModifierFlags.None;
             this.transformFlags = undefined!; // TODO: GH#18217
             this.parent = undefined!;
             this.kind = kind;
@@ -200,16 +202,19 @@ namespace ts {
         public pos: number;
         public end: number;
         public flags: NodeFlags;
+        public modifierFlagsCache: ModifierFlags;
+        public transformFlags: TransformFlags;
         public parent: Node;
         public symbol!: Symbol;
         public jsDocComments?: JSDoc[];
-        public transformFlags!: TransformFlags;
 
         constructor(pos: number, end: number) {
             // Set properties in same order as NodeObject
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
+            this.modifierFlagsCache = ModifierFlags.None;
+            this.transformFlags = undefined!; // TODO: GH#18217
             this.parent = undefined!;
         }
 
