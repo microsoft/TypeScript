@@ -227,3 +227,59 @@ let xyz: LikeA | LikeB = {
 xyz;
 >xyz : Symbol(xyz, Decl(contextualTypeShouldBeLiteral.ts, 82, 3))
 
+// Repro from #29168
+
+interface TestObject {
+>TestObject : Symbol(TestObject, Decl(contextualTypeShouldBeLiteral.ts, 94, 4))
+
+  type?: 'object';
+>type : Symbol(TestObject.type, Decl(contextualTypeShouldBeLiteral.ts, 98, 22))
+
+  items: {
+>items : Symbol(TestObject.items, Decl(contextualTypeShouldBeLiteral.ts, 99, 18))
+
+    [k: string]: TestGeneric;
+>k : Symbol(k, Decl(contextualTypeShouldBeLiteral.ts, 101, 5))
+>TestGeneric : Symbol(TestGeneric, Decl(contextualTypeShouldBeLiteral.ts, 107, 1))
+
+  };
+}
+
+interface TestString {
+>TestString : Symbol(TestString, Decl(contextualTypeShouldBeLiteral.ts, 103, 1))
+
+  type: 'string';
+>type : Symbol(TestString.type, Decl(contextualTypeShouldBeLiteral.ts, 105, 22))
+}
+
+type TestGeneric = (TestString | TestObject) & { [k: string]: any; };
+>TestGeneric : Symbol(TestGeneric, Decl(contextualTypeShouldBeLiteral.ts, 107, 1))
+>TestString : Symbol(TestString, Decl(contextualTypeShouldBeLiteral.ts, 103, 1))
+>TestObject : Symbol(TestObject, Decl(contextualTypeShouldBeLiteral.ts, 94, 4))
+>k : Symbol(k, Decl(contextualTypeShouldBeLiteral.ts, 109, 50))
+
+const test: TestGeneric = {
+>test : Symbol(test, Decl(contextualTypeShouldBeLiteral.ts, 111, 5))
+>TestGeneric : Symbol(TestGeneric, Decl(contextualTypeShouldBeLiteral.ts, 107, 1))
+
+  items: {
+>items : Symbol(items, Decl(contextualTypeShouldBeLiteral.ts, 111, 27))
+
+    hello: { type: 'string' },
+>hello : Symbol(hello, Decl(contextualTypeShouldBeLiteral.ts, 112, 10))
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 113, 12))
+
+    world: {
+>world : Symbol(world, Decl(contextualTypeShouldBeLiteral.ts, 113, 30))
+
+      items: {
+>items : Symbol(items, Decl(contextualTypeShouldBeLiteral.ts, 114, 12))
+
+        nested: { type: 'string' }
+>nested : Symbol(nested, Decl(contextualTypeShouldBeLiteral.ts, 115, 14))
+>type : Symbol(type, Decl(contextualTypeShouldBeLiteral.ts, 116, 17))
+      }
+    }
+  }
+};
+

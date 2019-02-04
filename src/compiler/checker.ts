@@ -6364,7 +6364,9 @@ namespace ts {
                         case SyntaxKind.MethodDeclaration:
                         case SyntaxKind.MethodSignature:
                         case SyntaxKind.Constructor:
-                            return isThislessFunctionLikeDeclaration(<FunctionLikeDeclaration>declaration);
+                        case SyntaxKind.GetAccessor:
+                        case SyntaxKind.SetAccessor:
+                            return isThislessFunctionLikeDeclaration(<FunctionLikeDeclaration | AccessorDeclaration>declaration);
                     }
                 }
             }
@@ -9273,9 +9275,9 @@ namespace ts {
                 const source = types[i];
                 for (const target of types) {
                     if (source !== target) {
-                        if (count === 10000) {
-                            // After 10000 subtype checks we estimate the remaining amount of work by assuming the
-                            // same ratio of checks to removals. If the estimated number of remaining type checks is
+                        if (count === 100000) {
+                            // After 100000 subtype checks we estimate the remaining amount of work by assuming the
+                            // same ratio of checks per element. If the estimated number of remaining type checks is
                             // greater than an upper limit we deem the union type too complex to represent. The
                             // upper limit is 25M for unions of primitives only, and 1M otherwise. This for example
                             // caps union types at 5000 unique literal types and 1000 unique object types.
@@ -14111,7 +14113,9 @@ namespace ts {
             function mapper(t: Type): Type {
                 for (let i = 0; i < inferences.length; i++) {
                     if (t === inferences[i].typeParameter) {
-                        inferences[i].isFixed = true;
+                        if (!(context.flags & InferenceFlags.NoFixing)) {
+                            inferences[i].isFixed = true;
+                        }
                         return getInferredType(context, i);
                     }
                 }
@@ -14632,18 +14636,18 @@ namespace ts {
             }
 
             function inferFromProperties(source: Type, target: Type) {
-                if (isTupleType(source)) {
+                if (isArrayType(source) || isTupleType(source)) {
                     if (isTupleType(target)) {
-                        const sourceLength = getLengthOfTupleType(source);
+                        const sourceLength = isTupleType(source) ? getLengthOfTupleType(source) : 0;
                         const targetLength = getLengthOfTupleType(target);
-                        const sourceRestType = getRestTypeOfTupleType(source);
+                        const sourceRestType = isTupleType(source) ? getRestTypeOfTupleType(source) : getElementTypeOfArrayType(source);
                         const targetRestType = getRestTypeOfTupleType(target);
                         const fixedLength = targetLength < sourceLength || sourceRestType ? targetLength : sourceLength;
                         for (let i = 0; i < fixedLength; i++) {
-                            inferFromTypes(i < sourceLength ? source.typeArguments![i] : sourceRestType!, target.typeArguments![i]);
+                            inferFromTypes(i < sourceLength ? (<TypeReference>source).typeArguments![i] : sourceRestType!, target.typeArguments![i]);
                         }
                         if (targetRestType) {
-                            const types = fixedLength < sourceLength ? source.typeArguments!.slice(fixedLength, sourceLength) : [];
+                            const types = fixedLength < sourceLength ? (<TypeReference>source).typeArguments!.slice(fixedLength, sourceLength) : [];
                             if (sourceRestType) {
                                 types.push(sourceRestType);
                             }
@@ -14837,10 +14841,12 @@ namespace ts {
 
                 const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                 if (constraint) {
+                    context.flags |= InferenceFlags.NoFixing;
                     const instantiatedConstraint = instantiateType(constraint, context);
                     if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                         inference.inferredType = inferredType = instantiatedConstraint;
                     }
+                    context.flags &= ~InferenceFlags.NoFixing;
                 }
             }
 
@@ -15039,9 +15045,8 @@ namespace ts {
             return false;
         }
 
-        function hasNarrowableDeclaredType(expr: Node) {
-            const type = getDeclaredTypeOfReference(expr);
-            return !!(type && type.flags & TypeFlags.Union);
+        function isSyntheticThisPropertyAccess(expr: Node) {
+            return isAccessExpression(expr) && expr.expression.kind === SyntaxKind.ThisKeyword && !!(expr.expression.flags & NodeFlags.Synthesized);
         }
 
         function findDiscriminantProperties(sourceProperties: Symbol[], target: Type): Symbol[] | undefined {
@@ -16101,9 +16106,9 @@ namespace ts {
                 // We have '==', '!=', '====', or !==' operator with 'typeof xxx' and string literal operands
                 const target = getReferenceCandidate(typeOfExpr.expression);
                 if (!isMatchingReference(reference, target)) {
-                    // For a reference of the form 'x.y', where 'x' has a narrowable declared type, a
-                    // 'typeof x === ...' type guard resets the narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, target) && hasNarrowableDeclaredType(target)) {
+                    // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
+                    // narrowed type of 'y' to its declared type.
+                    if (containsMatchingReference(reference, target)) {
                         return declaredType;
                     }
                     return type;
@@ -16258,9 +16263,14 @@ namespace ts {
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 const left = getReferenceCandidate(expr.left);
                 if (!isMatchingReference(reference, left)) {
-                    // For a reference of the form 'x.y', where 'x' has a narrowable declared type, an
-                    // 'x instanceof T' type guard resets the narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, left) && hasNarrowableDeclaredType(left)) {
+                    // For a reference of the form 'x.y', an 'x instanceof T' type guard resets the
+                    // narrowed type of 'y' to its declared type. We do this because preceding 'x.y'
+                    // references might reference a different 'y' property. However, we make an exception
+                    // for property accesses where x is a synthetic 'this' expression, indicating that we
+                    // were called from isPropertyInitializedInConstructor. Without this exception,
+                    // initializations of 'this' properties that occur before a 'this instanceof XXX'
+                    // check would not be considered.
+                    if (containsMatchingReference(reference, left) && !isSyntheticThisPropertyAccess(reference)) {
                         return declaredType;
                     }
                     return type;
@@ -17753,17 +17763,47 @@ namespace ts {
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
         // be "pushed" onto a node using the contextualType property.
         function getApparentTypeOfContextualType(node: Expression): Type | undefined {
-            let contextualType = getContextualType(node);
-            contextualType = contextualType && mapType(contextualType, getApparentType);
-            if (contextualType && contextualType.flags & TypeFlags.Union) {
-                if (isObjectLiteralExpression(node)) {
-                    return discriminateContextualTypeByObjectMembers(node, contextualType as UnionType);
+            const contextualType = instantiateContextualType(getContextualType(node), node);
+            if (contextualType) {
+                const apparentType = mapType(contextualType, getApparentType, /*noReductions*/ true);
+                if (apparentType.flags & TypeFlags.Union) {
+                    if (isObjectLiteralExpression(node)) {
+                        return discriminateContextualTypeByObjectMembers(node, apparentType as UnionType);
+                    }
+                    else if (isJsxAttributes(node)) {
+                        return discriminateContextualTypeByJSXAttributes(node, apparentType as UnionType);
+                    }
                 }
-                else if (isJsxAttributes(node)) {
-                    return discriminateContextualTypeByJSXAttributes(node, contextualType as UnionType);
+                return apparentType;
+            }
+        }
+
+        // If the given contextual type contains instantiable types and if a mapper representing
+        // return type inferences is available, instantiate those types using that mapper.
+        function instantiateContextualType(contextualType: Type | undefined, node: Expression): Type | undefined {
+            if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
+                const returnMapper = (<InferenceContext>getContextualMapper(node)).returnMapper;
+                if (returnMapper) {
+                    return instantiateInstantiableTypes(contextualType, returnMapper);
                 }
             }
             return contextualType;
+        }
+
+        // This function is similar to instantiateType, except that (a) it only instantiates types that
+        // are classified as instantiable (i.e. it doesn't instantiate object types), and (b) it performs
+        // no reductions on instantiated union types.
+        function instantiateInstantiableTypes(type: Type, mapper: TypeMapper): Type {
+            if (type.flags & TypeFlags.Instantiable) {
+                return instantiateType(type, mapper);
+            }
+            if (type.flags & TypeFlags.Union) {
+                return getUnionType(map((<UnionType>type).types, t => instantiateInstantiableTypes(t, mapper)), UnionReduction.None);
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((<IntersectionType>type).types, t => instantiateInstantiableTypes(t, mapper)));
+            }
+            return type;
         }
 
         /**
@@ -19319,7 +19359,19 @@ namespace ts {
                     case SyntaxKind.PropertyDeclaration:
                         return true;
                     case SyntaxKind.PropertyAssignment:
-                        // We might be in `a = { b: this.b }`, so keep looking. See `tests/cases/compiler/useBeforeDeclaration_propertyAssignment.ts`.
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                    case SyntaxKind.SpreadAssignment:
+                    case SyntaxKind.ComputedPropertyName:
+                    case SyntaxKind.TemplateSpan:
+                    case SyntaxKind.JsxExpression:
+                    case SyntaxKind.JsxAttribute:
+                    case SyntaxKind.JsxAttributes:
+                    case SyntaxKind.JsxSpreadAttribute:
+                    case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                    case SyntaxKind.HeritageClause:
                         return false;
                     default:
                         return isExpressionNode(node) ? false : "quit";
@@ -19904,6 +19956,9 @@ namespace ts {
                     const inferenceTargetType = getReturnTypeOfSignature(signature);
                      // Inferences made from return types have lower priority than all other inferences.
                     inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
+                    // Create a type mapper for instantiating generic contextual types using the inferences made
+                    // from the return type.
+                    context.returnMapper = cloneTypeMapper(context);
                 }
             }
 
@@ -23014,7 +23069,12 @@ namespace ts {
             context.contextualMapper = contextualMapper;
             const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
                 contextualMapper ? CheckMode.Inferential : CheckMode.Contextual;
-            const result = checkExpression(node, checkMode);
+            const type = checkExpression(node, checkMode);
+            // We strip literal freshness when an appropriate contextual type is present such that contextually typed
+            // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
+            // here would be to not mark contextually typed literals as fresh in the first place.
+            const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
+                getRegularTypeOfLiteralType(type) : type;
             context.contextualType = saveContextualType;
             context.contextualMapper = saveContextualMapper;
             return result;
@@ -23098,13 +23158,10 @@ namespace ts {
         }
 
         function checkExpressionForMutableLocation(node: Expression, checkMode: CheckMode | undefined, contextualType?: Type, forceTuple?: boolean): Type {
-            if (arguments.length === 2) {
-                contextualType = getContextualType(node);
-            }
             const type = checkExpression(node, checkMode, forceTuple);
             return isConstContext(node) ? getRegularTypeOfLiteralType(type) :
                 isTypeAssertion(node) ? type :
-                getWidenedLiteralLikeTypeForContextualType(type, contextualType);
+                getWidenedLiteralLikeTypeForContextualType(type, instantiateContextualType(arguments.length === 2 ? getContextualType(node) : contextualType, node));
         }
 
         function checkPropertyAssignment(node: PropertyAssignment, checkMode?: CheckMode): Type {
@@ -27168,7 +27225,7 @@ namespace ts {
             reference.expression.parent = reference;
             reference.parent = constructor;
             reference.flowNode = constructor.returnFlowNode;
-            const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
+            const flowType = getFlowTypeOfReference(reference, getOptionalType(propType));
             return !(getFalsyFlags(flowType) & TypeFlags.Undefined);
         }
 
@@ -29534,9 +29591,12 @@ namespace ts {
                         return;
                     }
                     const file = host.getSourceFile(resolvedDirective.resolvedFileName)!;
-                    fileToDirective.set(file.path, key);
+                    // Add the transitive closure of path references loaded by this file (as long as they are not)
+                    // part of an existing type reference.
+                    addReferencedFilesToTypeDirective(file, key);
                 });
             }
+
             return {
                 getReferencedExportContainer,
                 getReferencedImportDeclaration,
@@ -29694,6 +29754,18 @@ namespace ts {
                     }
                 }
                 return false;
+            }
+
+            function addReferencedFilesToTypeDirective(file: SourceFile, key: string) {
+                if (fileToDirective.has(file.path)) return;
+                fileToDirective.set(file.path, key);
+                for (const { fileName } of file.referencedFiles) {
+                    const resolvedFile = resolveTripleslashReference(fileName, file.originalFileName);
+                    const referencedFile = host.getSourceFile(resolvedFile);
+                    if (referencedFile) {
+                        addReferencedFilesToTypeDirective(referencedFile, key);
+                    }
+                }
             }
         }
 
@@ -30750,7 +30822,7 @@ namespace ts {
             }
             else if (node.operator === SyntaxKind.ReadonlyKeyword) {
                 if (node.type.kind !== SyntaxKind.ArrayType && node.type.kind !== SyntaxKind.TupleType) {
-                    return grammarErrorOnFirstToken(node, Diagnostics.readonly_type_modifier_is_only_permitted_on_array_and_tuple_types, tokenToString(SyntaxKind.SymbolKeyword));
+                    return grammarErrorOnFirstToken(node, Diagnostics.readonly_type_modifier_is_only_permitted_on_array_and_tuple_literal_types, tokenToString(SyntaxKind.SymbolKeyword));
                 }
             }
         }
