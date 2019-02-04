@@ -44,7 +44,7 @@ namespace ts.refactor.convertToNamedParameters {
 
         forEach(functionCalls, call => {
             if (call.arguments && call.arguments.length) {
-                const newArguments = getSynthesizedDeepClone(createArgumentObject(functionDeclaration, call));
+                const newArguments = getSynthesizedDeepClone(createArgumentObject(functionDeclaration, call.arguments));
                 changes.replaceNodeRange(getSourceFileOfNode(call), first(call.arguments), last(call.arguments), newArguments);
             }});
     }
@@ -53,12 +53,6 @@ namespace ts.refactor.convertToNamedParameters {
         const newDeclaration = getSynthesizedClone(declaration);
         newDeclaration.parameters = parameters;
         return updateNode(newDeclaration, declaration);
-    }
-
-    function createArgumentObject(func: ValidFunctionDeclaration, funcCall: CallExpression | NewExpression): ObjectLiteralExpression {
-        const parameters = getRefactorableParameters(func.parameters);
-        const properties = map(funcCall.arguments, (arg, i) => createPropertyAssignment(getParameterName(parameters[i]), arg));
-        return createObjectLiteral(properties, /*multiLine*/ false);
     }
 
     function getDirectFunctionCalls(referenceEntries: ReadonlyArray<FindAllReferences.Entry> | undefined): ReadonlyArray<CallExpression | NewExpression> {
@@ -109,26 +103,26 @@ namespace ts.refactor.convertToNamedParameters {
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
         const node = getTokenAtPosition(file, startPosition);
-        const func = getContainingFunction(node);
-        if (!func || !isValidFunctionDeclaration(func, checker) || !rangeContainsRange(func, node) || (func.body && rangeContainsRange(func.body, node))) return undefined;
-        return func;
+        const functionDeclaration = getContainingFunction(node);
+        if (!functionDeclaration || !isValidFunctionDeclaration(functionDeclaration, checker) || !rangeContainsRange(functionDeclaration, node) || (functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))) return undefined;
+        return functionDeclaration;
     }
 
-    function isValidFunctionDeclaration(func: SignatureDeclaration, checker: TypeChecker): func is ValidFunctionDeclaration {
-        switch (func.kind) {
+    function isValidFunctionDeclaration(functionDeclaration: SignatureDeclaration, checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
+        switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
-                return !!func.name && isPropertyName(func.name) && isValidParameterNodeArray(func.parameters) && !!func.body && !checker.isImplementationOfOverload(func);
+                return !!functionDeclaration.name && isPropertyName(functionDeclaration.name) && isValidParameterNodeArray(functionDeclaration.parameters) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
             case SyntaxKind.Constructor:
-                if (isClassDeclaration(func.parent)) {
-                    return !!func.parent.name && isValidParameterNodeArray(func.parameters) && !!func.body && !checker.isImplementationOfOverload(func);
+                if (isClassDeclaration(functionDeclaration.parent)) {
+                    return !!functionDeclaration.parent.name && isValidParameterNodeArray(functionDeclaration.parameters) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
                 }
                 else {
-                    return isVariableDeclaration(func.parent.parent) && !func.parent.parent.type && isVarConst(func.parent.parent) && isValidParameterNodeArray(func.parameters) && !!func.body && !checker.isImplementationOfOverload(func);
+                    return isVariableDeclaration(functionDeclaration.parent.parent) && !functionDeclaration.parent.parent.type && isVarConst(functionDeclaration.parent.parent) && isValidParameterNodeArray(functionDeclaration.parameters) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
                 }
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
-                return isVariableDeclaration(func.parent) && !func.parent.type && isVarConst(func.parent) && isValidParameterNodeArray(func.parameters);
+                return isVariableDeclaration(functionDeclaration.parent) && !functionDeclaration.parent.type && isVarConst(functionDeclaration.parent) && isValidParameterNodeArray(functionDeclaration.parameters);
         }
         return false;
     }
@@ -138,7 +132,7 @@ namespace ts.refactor.convertToNamedParameters {
     }
 
     function isValidParameterDeclaration(paramDecl: ParameterDeclaration): paramDecl is ValidParameterDeclaration {
-        return !paramDecl.modifiers && !paramDecl.dotDotDotToken && isIdentifier(paramDecl.name);
+        return !paramDecl.modifiers && isIdentifier(paramDecl.name);
     }
 
     function hasThisParameter(parameters: NodeArray<ParameterDeclaration>): boolean {
@@ -159,6 +153,21 @@ namespace ts.refactor.convertToNamedParameters {
         return parameters;
     }
 
+    function createArgumentObject(functionDeclaration: ValidFunctionDeclaration, args: NodeArray<Expression>): ObjectLiteralExpression {
+        const parameters = getRefactorableParameters(functionDeclaration.parameters);
+        const hasRestParameter = isRestParameter(last(parameters));
+        const nonRestArguments = hasRestParameter ? args.slice(0, parameters.length - 1) : args;
+        const properties = map(nonRestArguments, (arg, i) => createPropertyAssignment(getParameterName(parameters[i]), arg));
+
+        if (hasRestParameter && args.length >= parameters.length) {
+            const restArguments = args.slice(parameters.length - 1);
+            const restProperty = createPropertyAssignment(getParameterName(last(parameters)), createArrayLiteral(restArguments));
+            properties.push(restProperty);
+        }
+
+        return createObjectLiteral(properties, /*multiLine*/ false);
+    }
+
     function createObjectParameter(functionDeclaration: ValidFunctionDeclaration, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
         const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
         const bindingElements = map(
@@ -168,7 +177,7 @@ namespace ts.refactor.convertToNamedParameters {
                     /*dotDotDotToken*/ undefined,
                     /*propertyName*/ undefined,
                     getParameterName(paramDecl),
-                    paramDecl.initializer); });
+                    isRestParameter(paramDecl) ? createArrayLiteral() : paramDecl.initializer); });
         const paramName = createObjectBindingPattern(bindingElements);
         const paramType = createParamTypeNode(refactorableParameters);
 
@@ -199,17 +208,22 @@ namespace ts.refactor.convertToNamedParameters {
 
         function createPropertySignatureFromParameterDeclaration(paramDeclaration: ValidParameterDeclaration): PropertySignature {
             let paramType = paramDeclaration.type;
-            if (paramDeclaration.initializer && !paramType) {
-                const checker = program.getTypeChecker();
-                const type = checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(paramDeclaration.initializer));
-                paramType = getTypeNodeIfAccessible(type, paramDeclaration, program, host);
+            if (!paramType && (paramDeclaration.initializer || isRestParameter(paramDeclaration))) {
+                paramType = getTypeNode(paramDeclaration);
             }
+
             return createPropertySignature(
                 /*modifiers*/ undefined,
                 paramDeclaration.name,
-                paramDeclaration.initializer ? createToken(SyntaxKind.QuestionToken) : paramDeclaration.questionToken,
+                paramDeclaration.initializer || isRestParameter(paramDeclaration) ? createToken(SyntaxKind.QuestionToken) : paramDeclaration.questionToken,
                 paramType,
                 /*initializer*/ undefined);
+        }
+
+        function getTypeNode(node: Node): TypeNode | undefined {
+            const checker = program.getTypeChecker();
+            const type = checker.getTypeAtLocation(node);
+            return getTypeNodeIfAccessible(type, node, program, host);
         }
     }
 
@@ -275,7 +289,6 @@ namespace ts.refactor.convertToNamedParameters {
 
     interface ValidParameterDeclaration extends ParameterDeclaration {
         name: Identifier;
-        dotDotDotToken: undefined;
         modifiers: undefined;
     }
 }
