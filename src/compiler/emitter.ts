@@ -505,8 +505,9 @@ namespace ts {
         const newBuildInfo: BuildInfo = clone(buildInfo);
         let writeByteOrderMarkBuildInfo = false;
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
+        const jsPrepend = createUnparsedJsSourceFile(ownPrependInput);
         const emitHost: EmitHost = {
-            getPrependNodes: () => prependNodes.concat(ownPrependInput),
+            getPrependNodes: memoize(() => [...prependNodes, jsPrepend]),
             getProjectReferences: () => config.projectReferences,
             getCanonicalFileName: host.getCanonicalFileName,
             getCommonSourceDirectory: () => buildInfo.commonSourceDirectory,
@@ -545,7 +546,7 @@ namespace ts {
         );
         // Emit d.ts map
         if (declarationMapText) {
-            emitHost.getPrependNodes = () => [createUnparsedDtsSourceFileWithPrepend(ownPrependInput, prependNodes)];
+            emitHost.getPrependNodes = memoize(() => [createUnparsedDtsSourceFileWithPrepend(ownPrependInput, prependNodes)]);
             emitHost.getCompilerOptions = () => config.options;
             emitHost.writeFile = (name, text, writeByteOrderMark) => {
                 // Same dts ignore
@@ -568,7 +569,6 @@ namespace ts {
             );
         }
         outputFiles.push({ name: buildInfoPath!, text: getBuildInfoText(newBuildInfo), writeByteOrderMark: writeByteOrderMarkBuildInfo });
-        console.log(JSON.stringify(outputFiles, undefined, 2));
         return outputFiles;
     }
 

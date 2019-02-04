@@ -143,8 +143,8 @@ namespace ts {
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
     export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(idText(node), typeArguments), node)
-        : node;
+            ? updateNode(createIdentifier(idText(node), typeArguments), node)
+            : node;
     }
 
     let nextAutoGenerateId = 0;
@@ -2653,11 +2653,20 @@ namespace ts {
         ], helper => helper.name));
     }
 
+    function createUnparsedSource() {
+        const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
+        node.prologues = emptyArray;
+        node.referencedFiles = emptyArray;
+        node.libReferenceDirectives = emptyArray;
+        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
+        return node;
+    }
+
     export function createUnparsedSourceFile(text: string): UnparsedSource;
     export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapText?: string): UnparsedSource {
-        const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
+        const node = createUnparsedSource();
         let prologues: UnparsedPrologue[] | undefined;
         let helpers: UnscopedEmitHelpers[] | undefined;
         let referencedFiles: FileReference[] | undefined;
@@ -2666,7 +2675,7 @@ namespace ts {
         let texts: UnparsedSourceText[] | undefined;
         if (!isString(textOrInputFiles)) {
             Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
-            node.oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
+            Debug.assert(!textOrInputFiles.oldFileOfCurrentEmit);
             node.fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
             node.sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
             Object.defineProperties(node, {
@@ -2677,7 +2686,6 @@ namespace ts {
             if (textOrInputFiles.buildInfo) {
                 const sections = mapPathOrType === "js" ? textOrInputFiles.buildInfo.js : textOrInputFiles.buildInfo.dts;
                 for (const section of sections) {
-                    if (node.oldFileOfCurrentEmit && section.kind !== BundleFileSectionKind.Text) continue;
                     switch (section.kind) {
                         case BundleFileSectionKind.Prologue:
                             (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
@@ -2706,10 +2714,6 @@ namespace ts {
                             Debug.assertNever(section);
                     }
                 }
-                if (node.oldFileOfCurrentEmit) {
-                    Debug.assert(helpers === undefined);
-                    helpers = map(textOrInputFiles.buildInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
-                }
             }
         }
         else {
@@ -2724,14 +2728,53 @@ namespace ts {
         node.typeReferenceDirectives = typeReferenceDirectives;
         node.libReferenceDirectives = libReferenceDirectives || emptyArray;
         node.texts = texts || [<UnparsedText>createUnparsedNode({ kind: BundleFileSectionKind.Text, pos: 0, end: node.text.length }, node)];
-        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
+        return node;
+    }
+
+    /*@internal*/
+    export function createUnparsedJsSourceFile(input: InputFiles) {
+        Debug.assert(!!input.oldFileOfCurrentEmit);
+        const node = createUnparsedSource();
+        node.oldFileOfCurrentEmit = true;
+        node.fileName = Debug.assertDefined(input.javascriptPath);
+        node.sourceMapPath = input.javascriptMapPath;
+        node.text = input.javascriptText;
+        Object.defineProperties(node, {
+            sourceMapText: { get() { return input.javascriptMapText; } },
+        });
+
+        const buildInfo = Debug.assertDefined(input.buildInfo);
+        const texts: UnparsedSourceText[] = [];
+        for (const section of buildInfo.js) {
+            switch (section.kind) {
+                case BundleFileSectionKind.Text:
+                    texts.push(createUnparsedNode(section, node) as UnparsedSourceText);
+                    break;
+                // Ignore
+                case BundleFileSectionKind.Prologue:
+                case BundleFileSectionKind.EmitHelpers:
+                case BundleFileSectionKind.Prepend:
+                case BundleFileSectionKind.SourceMapUrl:
+                    break;
+                case BundleFileSectionKind.NoDefaultLib:
+                case BundleFileSectionKind.Reference:
+                case BundleFileSectionKind.Type:
+                case BundleFileSectionKind.Lib:
+                    Debug.fail(`js shouldnt have section: ${JSON.stringify(section)}`);
+                    break;
+                default:
+                    Debug.assertNever(section);
+            }
+        }
+        node.texts = texts;
+        node.helpers = map(buildInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
         return node;
     }
 
     /*@internal*/
     export function createUnparsedDtsSourceFileWithPrepend(input: InputFiles, prepends: ReadonlyArray<InputFiles>): UnparsedSource {
         Debug.assert(!!input.oldFileOfCurrentEmit);
-        const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
+        const node = createUnparsedSource();
         node.oldFileOfCurrentEmit = true;
         node.fileName = Debug.assertDefined(input.declarationPath);
         node.sourceMapPath = Debug.assertDefined(input.declarationMapPath);
@@ -2739,7 +2782,7 @@ namespace ts {
         node.sourceMapText = input.declarationMapText;
         const mapOfPrepend = arrayToMap(prepends, prepend => prepend.declarationPath!, prepend => createUnparsedSourceFile(prepend, "dts"));
         const texts: UnparsedSourceText[] = [];
-        const sections = input.buildInfo!.dts;
+        const sections = Debug.assertDefined(input.buildInfo).dts;
         for (const section of sections) {
             switch (section.kind) {
                 case BundleFileSectionKind.NoDefaultLib:
@@ -2775,11 +2818,7 @@ namespace ts {
                     Debug.assertNever(section);
             }
         }
-        node.prologues = emptyArray;
-        node.referencedFiles = emptyArray;
-        node.libReferenceDirectives = emptyArray;
         node.texts = texts;
-        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
         return node;
     }
 
