@@ -15045,9 +15045,8 @@ namespace ts {
             return false;
         }
 
-        function hasNarrowableDeclaredType(expr: Node) {
-            const type = getDeclaredTypeOfReference(expr);
-            return !!(type && type.flags & TypeFlags.Union);
+        function isSyntheticThisPropertyAccess(expr: Node) {
+            return isAccessExpression(expr) && expr.expression.kind === SyntaxKind.ThisKeyword && !!(expr.expression.flags & NodeFlags.Synthesized);
         }
 
         function findDiscriminantProperties(sourceProperties: Symbol[], target: Type): Symbol[] | undefined {
@@ -16107,9 +16106,9 @@ namespace ts {
                 // We have '==', '!=', '====', or !==' operator with 'typeof xxx' and string literal operands
                 const target = getReferenceCandidate(typeOfExpr.expression);
                 if (!isMatchingReference(reference, target)) {
-                    // For a reference of the form 'x.y', where 'x' has a narrowable declared type, a
-                    // 'typeof x === ...' type guard resets the narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, target) && hasNarrowableDeclaredType(target)) {
+                    // For a reference of the form 'x.y', a 'typeof x === ...' type guard resets the
+                    // narrowed type of 'y' to its declared type.
+                    if (containsMatchingReference(reference, target)) {
                         return declaredType;
                     }
                     return type;
@@ -16264,9 +16263,14 @@ namespace ts {
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
                 const left = getReferenceCandidate(expr.left);
                 if (!isMatchingReference(reference, left)) {
-                    // For a reference of the form 'x.y', where 'x' has a narrowable declared type, an
-                    // 'x instanceof T' type guard resets the narrowed type of 'y' to its declared type.
-                    if (containsMatchingReference(reference, left) && hasNarrowableDeclaredType(left)) {
+                    // For a reference of the form 'x.y', an 'x instanceof T' type guard resets the
+                    // narrowed type of 'y' to its declared type. We do this because preceding 'x.y'
+                    // references might reference a different 'y' property. However, we make an exception
+                    // for property accesses where x is a synthetic 'this' expression, indicating that we
+                    // were called from isPropertyInitializedInConstructor. Without this exception,
+                    // initializations of 'this' properties that occur before a 'this instanceof XXX'
+                    // check would not be considered.
+                    if (containsMatchingReference(reference, left) && !isSyntheticThisPropertyAccess(reference)) {
                         return declaredType;
                     }
                     return type;
@@ -27221,7 +27225,7 @@ namespace ts {
             reference.expression.parent = reference;
             reference.parent = constructor;
             reference.flowNode = constructor.returnFlowNode;
-            const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
+            const flowType = getFlowTypeOfReference(reference, getOptionalType(propType));
             return !(getFalsyFlags(flowType) & TypeFlags.Undefined);
         }
 
