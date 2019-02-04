@@ -1,0 +1,194 @@
+=== tests/cases/conformance/classes/mixinClassesAnnotatedWithUnknownRest.ts ===
+// As per bug #29707 allow mixin constructor to have rest parameter of type unknown[]
+
+type Constructor<T> = new(...args: unknown[]) => T;
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 0, 0))
+>T : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 2, 17))
+>args : Symbol(args, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 2, 26))
+>T : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 2, 17))
+
+class Base {
+>Base : Symbol(Base, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 2, 51))
+
+    constructor(public x: number, public y: number) {}
+>x : Symbol(Base.x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 16))
+>y : Symbol(Base.y, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 33))
+}
+
+class Derived extends Base {
+>Derived : Symbol(Derived, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 6, 1))
+>Base : Symbol(Base, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 2, 51))
+
+    constructor(x: number, y: number, public z: number) {
+>x : Symbol(x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 9, 16))
+>y : Symbol(y, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 9, 26))
+>z : Symbol(Derived.z, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 9, 37))
+
+        super(x, y);
+>super : Symbol(Base, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 2, 51))
+>x : Symbol(x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 9, 16))
+>y : Symbol(y, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 9, 26))
+    }
+}
+
+interface Printable {
+>Printable : Symbol(Printable, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 12, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 5))
+
+    print(): void;
+>print : Symbol(Printable.print, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 14, 21))
+}
+
+const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>
+>Printable : Symbol(Printable, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 12, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 5))
+>T : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 19))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 0, 0))
+>Base : Symbol(Base, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 2, 51))
+>superClass : Symbol(superClass, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 48))
+>T : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 19))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 0, 0))
+>Printable : Symbol(Printable, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 12, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 5))
+>message : Symbol(message, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 90))
+>T : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 19))
+
+    class extends superClass {
+>superClass : Symbol(superClass, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 48))
+
+        static message = "hello";
+>message : Symbol((Anonymous class).message, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 19, 30))
+
+        print() {
+>print : Symbol((Anonymous class).print, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 20, 33))
+
+            const output = this.x + "," + this.y;
+>output : Symbol(output, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 22, 17))
+>this.x : Symbol(Base.x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 16))
+>this : Symbol((Anonymous class), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 115))
+>x : Symbol(Base.x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 16))
+>this.y : Symbol(Base.y, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 33))
+>this : Symbol((Anonymous class), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 115))
+>y : Symbol(Base.y, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 33))
+        }
+    }
+
+interface Tagged {
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 28, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 24, 5))
+
+    _tag: string;
+>_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 26, 18))
+}
+
+function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T {
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 28, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 24, 5))
+>T : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 16))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 0, 0))
+>superClass : Symbol(superClass, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 43))
+>T : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 16))
+>Constructor : Symbol(Constructor, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 0, 0))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 28, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 24, 5))
+>T : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 16))
+
+    class C extends superClass {
+>C : Symbol(C, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 84))
+>superClass : Symbol(superClass, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 43))
+
+        _tag: string;
+>_tag : Symbol(C._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 31, 32))
+
+        constructor(...args: unknown[]) {
+>args : Symbol(args, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 33, 20))
+
+            super(...args);
+>super : Symbol(T, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 16))
+>args : Symbol(args, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 33, 20))
+
+            this._tag = "hello";
+>this._tag : Symbol(C._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 31, 32))
+>this : Symbol(C, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 84))
+>_tag : Symbol(C._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 31, 32))
+        }
+    }
+    return C;
+>C : Symbol(C, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 30, 84))
+}
+
+const Thing1 = Tagged(Derived);
+>Thing1 : Symbol(Thing1, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 41, 5))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 28, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 24, 5))
+>Derived : Symbol(Derived, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 6, 1))
+
+const Thing2 = Tagged(Printable(Derived));
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 42, 5))
+>Tagged : Symbol(Tagged, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 28, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 24, 5))
+>Printable : Symbol(Printable, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 12, 1), Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 5))
+>Derived : Symbol(Derived, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 6, 1))
+
+Thing2.message;
+>Thing2.message : Symbol(message, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 90))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 42, 5))
+>message : Symbol(message, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 18, 90))
+
+function f1() {
+>f1 : Symbol(f1, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 43, 15))
+
+    const thing = new Thing1(1, 2, 3);
+>thing : Symbol(thing, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 46, 9))
+>Thing1 : Symbol(Thing1, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 41, 5))
+
+    thing.x;
+>thing.x : Symbol(Base.x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 16))
+>thing : Symbol(thing, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 46, 9))
+>x : Symbol(Base.x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 16))
+
+    thing._tag;
+>thing._tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 26, 18))
+>thing : Symbol(thing, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 46, 9))
+>_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 26, 18))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 49, 1))
+
+    const thing = new Thing2(1, 2, 3);
+>thing : Symbol(thing, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 52, 9))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 42, 5))
+
+    thing.x;
+>thing.x : Symbol(Base.x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 16))
+>thing : Symbol(thing, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 52, 9))
+>x : Symbol(Base.x, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 5, 16))
+
+    thing._tag;
+>thing._tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 26, 18))
+>thing : Symbol(thing, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 52, 9))
+>_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 26, 18))
+
+    thing.print();
+>thing.print : Symbol(Printable.print, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 14, 21))
+>thing : Symbol(thing, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 52, 9))
+>print : Symbol(Printable.print, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 14, 21))
+}
+
+class Thing3 extends Thing2 {
+>Thing3 : Symbol(Thing3, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 56, 1))
+>Thing2 : Symbol(Thing2, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 42, 5))
+
+    constructor(tag: string) {
+>tag : Symbol(tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 59, 16))
+
+        super(10, 20, 30);
+        this._tag = tag;
+>this._tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 26, 18))
+>this : Symbol(Thing3, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 56, 1))
+>_tag : Symbol(Tagged._tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 26, 18))
+>tag : Symbol(tag, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 59, 16))
+    }
+    test() {
+>test : Symbol(Thing3.test, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 62, 5))
+
+        this.print();
+>this.print : Symbol(Printable.print, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 14, 21))
+>this : Symbol(Thing3, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 56, 1))
+>print : Symbol(Printable.print, Decl(mixinClassesAnnotatedWithUnknownRest.ts, 14, 21))
+    }
+}
+

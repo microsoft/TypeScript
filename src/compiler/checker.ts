@@ -494,6 +494,7 @@ namespace ts {
         let globalRegExpType: ObjectType;
         let globalThisType: GenericType;
         let anyArrayType: Type;
+        let unknownArrayType: Type;
         let autoArrayType: Type;
         let anyReadonlyArrayType: Type;
         let deferredGlobalNonNullableTypeAlias: Symbol;
@@ -5850,7 +5851,10 @@ namespace ts {
             const signatures = getSignaturesOfType(type, SignatureKind.Construct);
             if (signatures.length === 1) {
                 const s = signatures[0];
-                return !s.typeParameters && s.parameters.length === 1 && s.hasRestParameter && getTypeOfParameter(s.parameters[0]) === anyArrayType;
+                if (!s.typeParameters && s.parameters.length === 1 && s.hasRestParameter) {
+                    const restParameterType = getTypeOfParameter(s.parameters[0]);
+                    return restParameterType === anyArrayType || restParameterType === unknownArrayType;
+                }
             }
             return false;
         }
@@ -29835,6 +29839,7 @@ namespace ts {
             globalBooleanType = getGlobalType("Boolean" as __String, /*arity*/ 0, /*reportErrors*/ true);
             globalRegExpType = getGlobalType("RegExp" as __String, /*arity*/ 0, /*reportErrors*/ true);
             anyArrayType = createArrayType(anyType);
+            unknownArrayType = createArrayType(unknownType);
 
             autoArrayType = createArrayType(autoType);
             if (autoArrayType === emptyObjectType) {
