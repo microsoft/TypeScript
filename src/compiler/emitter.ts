@@ -571,13 +571,13 @@ namespace ts {
             }
             if (bundleFileInfo) {
                 bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
-                // Source file metadata if needed later on
+                // Store prologues
+                const prologues = getPrologueDirectivesFromBundledSourceFiles(bundle);
+                if (prologues) bundleFileInfo.sources.prologues = prologues;
 
                 // Store helpes
                 const helpers = getHelpersFromBundledSourceFiles(bundle);
-                if (helpers) {
-                    bundleFileInfo.sources.helpers = helpers;
-                }
+                if (helpers) bundleFileInfo.sources.helpers = helpers;
             }
 
             reset();
@@ -3103,6 +3103,32 @@ namespace ts {
                 }
                 setSourceFile(undefined);
             }
+        }
+
+        function getPrologueDirectivesFromBundledSourceFiles(bundle: Bundle): SourceFilePrologueInfo[] | undefined {
+            const seenPrologueDirectives = createMap<true>();
+            let prologues: SourceFilePrologueInfo[] | undefined;
+            for (const sourceFile of bundle.sourceFiles) {
+                let directives: SourceFilePrologueDirective[] | undefined;
+                let end = 0;
+                for (const statement of sourceFile.statements) {
+                    if (!isPrologueDirective(statement)) break;
+                    if (seenPrologueDirectives.has(statement.expression.text)) continue;
+                    seenPrologueDirectives.set(statement.expression.text, true);
+                    (directives || (directives = [])).push({
+                        pos: statement.pos,
+                        end: statement.end,
+                        expression: {
+                            pos: statement.expression.pos,
+                            end: statement.expression.end,
+                            text: statement.expression.text
+                        }
+                    });
+                    end = end < statement.end ? statement.end : end;
+                }
+                if (directives) (prologues || (prologues = [])).push({ file: sourceFile.fileName, text: sourceFile.text.substring(0, end), directives });
+            }
+            return prologues;
         }
 
         function emitShebangIfNeeded(sourceFileOrBundle: Bundle | SourceFile | UnparsedSource) {

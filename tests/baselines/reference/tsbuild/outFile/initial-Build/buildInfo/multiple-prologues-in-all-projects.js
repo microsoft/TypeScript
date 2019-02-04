@@ -43,7 +43,49 @@
     }
   ],
   "commonSourceDirectory": "/src/second/",
-  "sources": {}
+  "sources": {
+    "prologues": [
+      {
+        "file": "/src/second/second_part1.ts",
+        "text": "\"myPrologue\"",
+        "directives": [
+          {
+            "pos": -1,
+            "end": -1,
+            "expression": {
+              "pos": -1,
+              "end": -1,
+              "text": "use strict"
+            }
+          },
+          {
+            "pos": 0,
+            "end": 12,
+            "expression": {
+              "pos": 0,
+              "end": 12,
+              "text": "myPrologue"
+            }
+          }
+        ]
+      },
+      {
+        "file": "/src/second/second_part2.ts",
+        "text": "\"myPrologue2\";",
+        "directives": [
+          {
+            "pos": 0,
+            "end": 14,
+            "expression": {
+              "pos": 0,
+              "end": 13,
+              "text": "myPrologue2"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
 
 //// [/src/2/second-output.d.ts]
@@ -509,7 +551,34 @@ sourceFile:../second/second_part2.ts
     }
   ],
   "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "sources": {
+    "prologues": [
+      {
+        "file": "/src/first/first_PART1.ts",
+        "text": "\"myPrologue\"",
+        "directives": [
+          {
+            "pos": -1,
+            "end": -1,
+            "expression": {
+              "pos": -1,
+              "end": -1,
+              "text": "use strict"
+            }
+          },
+          {
+            "pos": 0,
+            "end": 12,
+            "expression": {
+              "pos": 0,
+              "end": 12,
+              "text": "myPrologue"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -983,7 +1052,43 @@ class C {
     }
   ],
   "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "sources": {
+    "prologues": [
+      {
+        "file": "/src/third/third_part1.ts",
+        "text": "\"myPrologue3\";\n\"myPrologue\";",
+        "directives": [
+          {
+            "pos": -1,
+            "end": -1,
+            "expression": {
+              "pos": -1,
+              "end": -1,
+              "text": "use strict"
+            }
+          },
+          {
+            "pos": 0,
+            "end": 14,
+            "expression": {
+              "pos": 0,
+              "end": 13,
+              "text": "myPrologue3"
+            }
+          },
+          {
+            "pos": 14,
+            "end": 28,
+            "expression": {
+              "pos": 14,
+              "end": 27,
+              "text": "myPrologue"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]

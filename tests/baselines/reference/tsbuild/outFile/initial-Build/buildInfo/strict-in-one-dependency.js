@@ -31,7 +31,25 @@
     }
   ],
   "commonSourceDirectory": "/src/second/",
-  "sources": {}
+  "sources": {
+    "prologues": [
+      {
+        "file": "/src/second/second_part1.ts",
+        "text": "",
+        "directives": [
+          {
+            "pos": -1,
+            "end": -1,
+            "expression": {
+              "pos": -1,
+              "end": -1,
+              "text": "use strict"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
 
 //// [/src/2/second-output.d.ts]

@@ -31,7 +31,25 @@
     }
   ],
   "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "sources": {
+    "prologues": [
+      {
+        "file": "/src/first/first_PART1.ts",
+        "text": "",
+        "directives": [
+          {
+            "pos": -1,
+            "end": -1,
+            "expression": {
+              "pos": -1,
+              "end": -1,
+              "text": "use strict"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
 
 //// [/src/first/bin/first-output.d.ts]
@@ -407,7 +425,25 @@ console.log(s);
     }
   ],
   "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "sources": {
+    "prologues": [
+      {
+        "file": "/src/third/third_part1.ts",
+        "text": "",
+        "directives": [
+          {
+            "pos": -1,
+            "end": -1,
+            "expression": {
+              "pos": -1,
+              "end": -1,
+              "text": "use strict"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/third-output.d.ts]

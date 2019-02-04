@@ -5528,9 +5528,27 @@ namespace ts {
         BundleFileText | BundleFileSourceMapUrl;
 
     /*@internal*/
+    export interface SourceFilePrologueDirectiveExpression extends TextRange {
+        text: string;
+    }
+
+    /*@internal*/
+    export interface SourceFilePrologueDirective extends TextRange {
+        expression: SourceFilePrologueDirectiveExpression;
+    }
+
+    /*@internal*/
+    export interface SourceFilePrologueInfo {
+        file: string;
+        text: string;
+        directives: SourceFilePrologueDirective[];
+    }
+
+    /*@internal*/
     export interface SourceFileInfo {
         // List of helpers in own source files emitted if no prepend is present
         helpers?: string[];
+        prologues?: SourceFilePrologueInfo[];
     }
 
     /*@internal*/

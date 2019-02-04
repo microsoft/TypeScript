@@ -31,7 +31,25 @@
     }
   ],
   "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "sources": {
+    "prologues": [
+      {
+        "file": "/src/first/first_PART1.ts",
+        "text": "\"myPrologue\"",
+        "directives": [
+          {
+            "pos": 0,
+            "end": 12,
+            "expression": {
+              "pos": 0,
+              "end": 12,
+              "text": "myPrologue"
+            }
+          }
+        ]
+      }
+    ]
+  }
 }
 
 //// [/src/first/bin/first-output.d.ts.map]
