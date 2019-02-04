@@ -2838,7 +2838,7 @@ namespace ts {
     export interface UnparsedSectionText extends UnparsedSection {
         kind: SyntaxKind.UnparsedSectionText;
         parent: UnparsedSource;
-        section: BundleFileSection;
+        /*@internal*/ section: BundleFileSection;
     }
 
     export interface JsonSourceFile extends SourceFile {

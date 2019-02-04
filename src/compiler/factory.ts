@@ -2874,6 +2874,15 @@ namespace ts {
         javascriptMapPath: string | undefined,
         javascriptMapText: string | undefined,
         declarationMapPath: string | undefined,
+        declarationMapText: string | undefined
+    ): InputFiles;
+    /*@internal*/
+    export function createInputFiles(
+        javascriptText: string,
+        declarationText: string,
+        javascriptMapPath: string | undefined,
+        javascriptMapText: string | undefined,
+        declarationMapPath: string | undefined,
         declarationMapText: string | undefined,
         javascriptPath: string | undefined,
         declarationPath: string | undefined,

@@ -359,40 +359,41 @@ declare namespace ts {
         UnparsedPrependText = 280,
         UnparsedText = 281,
         UnparsedSourceMapUrl = 282,
-        SourceFile = 283,
-        Bundle = 284,
-        UnparsedSource = 285,
-        InputFiles = 286,
-        JSDocTypeExpression = 287,
-        JSDocAllType = 288,
-        JSDocUnknownType = 289,
-        JSDocNullableType = 290,
-        JSDocNonNullableType = 291,
-        JSDocOptionalType = 292,
-        JSDocFunctionType = 293,
-        JSDocVariadicType = 294,
-        JSDocComment = 295,
-        JSDocTypeLiteral = 296,
-        JSDocSignature = 297,
-        JSDocTag = 298,
-        JSDocAugmentsTag = 299,
-        JSDocClassTag = 300,
-        JSDocCallbackTag = 301,
-        JSDocEnumTag = 302,
-        JSDocParameterTag = 303,
-        JSDocReturnTag = 304,
-        JSDocThisTag = 305,
-        JSDocTypeTag = 306,
-        JSDocTemplateTag = 307,
-        JSDocTypedefTag = 308,
-        JSDocPropertyTag = 309,
-        SyntaxList = 310,
-        NotEmittedStatement = 311,
-        PartiallyEmittedExpression = 312,
-        CommaListExpression = 313,
-        MergeDeclarationMarker = 314,
-        EndOfDeclarationMarker = 315,
-        Count = 316,
+        UnparsedSectionText = 283,
+        SourceFile = 284,
+        Bundle = 285,
+        UnparsedSource = 286,
+        InputFiles = 287,
+        JSDocTypeExpression = 288,
+        JSDocAllType = 289,
+        JSDocUnknownType = 290,
+        JSDocNullableType = 291,
+        JSDocNonNullableType = 292,
+        JSDocOptionalType = 293,
+        JSDocFunctionType = 294,
+        JSDocVariadicType = 295,
+        JSDocComment = 296,
+        JSDocTypeLiteral = 297,
+        JSDocSignature = 298,
+        JSDocTag = 299,
+        JSDocAugmentsTag = 300,
+        JSDocClassTag = 301,
+        JSDocCallbackTag = 302,
+        JSDocEnumTag = 303,
+        JSDocParameterTag = 304,
+        JSDocReturnTag = 305,
+        JSDocThisTag = 306,
+        JSDocTypeTag = 307,
+        JSDocTemplateTag = 308,
+        JSDocTypedefTag = 309,
+        JSDocPropertyTag = 310,
+        SyntaxList = 311,
+        NotEmittedStatement = 312,
+        PartiallyEmittedExpression = 313,
+        CommaListExpression = 314,
+        MergeDeclarationMarker = 315,
+        EndOfDeclarationMarker = 316,
+        Count = 317,
         FirstAssignment = 59,
         LastAssignment = 71,
         FirstCompoundAssignment = 60,
@@ -418,10 +419,10 @@ declare namespace ts {
         FirstBinaryOperator = 28,
         LastBinaryOperator = 71,
         FirstNode = 148,
-        FirstJSDocNode = 287,
-        LastJSDocNode = 309,
-        FirstJSDocTagNode = 298,
-        LastJSDocTagNode = 309
+        FirstJSDocNode = 288,
+        LastJSDocNode = 310,
+        FirstJSDocTagNode = 299,
+        LastJSDocTagNode = 310
     }
     enum NodeFlags {
         None = 0,
@@ -1738,7 +1739,6 @@ declare namespace ts {
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
-        buildInfoPath?: string;
     }
     interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
@@ -1754,7 +1754,7 @@ declare namespace ts {
         sourceMapText?: string;
         texts: ReadonlyArray<UnparsedSourceText>;
     }
-    type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl;
+    type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl | UnparsedSectionText;
     type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
     interface UnparsedSection extends Node {
         kind: SyntaxKind;
@@ -1777,6 +1777,10 @@ declare namespace ts {
     }
     interface UnparsedSourceMapUrl extends UnparsedSection {
         kind: SyntaxKind.UnparsedSourceMapUrl;
+        parent: UnparsedSource;
+    }
+    interface UnparsedSectionText extends UnparsedSection {
+        kind: SyntaxKind.UnparsedSectionText;
         parent: UnparsedSource;
     }
     interface JsonSourceFile extends SourceFile {

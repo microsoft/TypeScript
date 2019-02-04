@@ -348,9 +348,9 @@ function myFunc() { return 10; }`);
             // TODO:: local change does not build logic.js because builder doesnt find any changes in input files to generate output
             // Make local change to function bar
             verifyChangeInCore(`${coreIndex.content}
-function myFunc() { return 100; }`);
+function myFunc() { return 100; }`, /*isLocal*/ true);
 
-            function verifyChangeInCore(content: string) {
+            function verifyChangeInCore(content: string, isLocal?: boolean) {
                 const outputFileStamps = getOutputFileStamps();
                 host.writeFile(coreIndex.path, content);
 
@@ -363,12 +363,14 @@ function myFunc() { return 100; }`);
                     emptyArray
                 );
                 host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                const changedLogicOutput = getOutputFileNames(SubProject.logic, "index");
                 const changedLogic = getOutputFileStamps();
                 verifyChangedFiles(
                     changedLogic,
                     changedCore,
-                    getOutputFileNames(SubProject.logic, "index"),
-                    emptyArray
+                    // Only js file is written and d.ts is modified timestamp if its local change
+                    isLocal ? [changedLogicOutput[0]] : getOutputFileNames(SubProject.logic, "index"),
+                    isLocal ? [changedLogicOutput[1]] : emptyArray
                 );
                 host.checkTimeoutQueueLength(0);
                 checkOutputErrorsIncremental(host, emptyArray);
