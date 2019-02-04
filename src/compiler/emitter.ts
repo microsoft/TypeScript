@@ -467,6 +467,21 @@ namespace ts {
         getNewLine(): string;
     }
 
+    function createSourceFilesForPrologues(buildInfo: BuildInfo): ReadonlyArray<SourceFile> {
+        return map(buildInfo.sources.prologues, prologueInfo => {
+            const sourceFile = createNode(SyntaxKind.SourceFile, 0, prologueInfo.text.length) as SourceFile;
+            sourceFile.fileName = prologueInfo.file;
+            sourceFile.text = prologueInfo.text;
+            sourceFile.statements = createNodeArray(prologueInfo.directives.map(directive => {
+                const statement = createNode(SyntaxKind.ExpressionStatement, directive.pos, directive.end) as PrologueDirective;
+                statement.expression = createNode(SyntaxKind.StringLiteral, directive.expression.pos, directive.expression.end) as StringLiteral;
+                statement.expression.text = directive.expression.text;
+                return statement;
+            }));
+            return sourceFile;
+        }) || emptyArray;
+    }
+
     /*@internal*/
     export function emitUsingBuildInfo(config: ParsedCommandLine, host: EmitUsingBuildInfoHost, getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined): EmitUsingBuildInfoResult {
         const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false, config.projectReferences);
@@ -506,6 +521,7 @@ namespace ts {
         let writeByteOrderMarkBuildInfo = false;
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
         const jsPrepend = createUnparsedJsSourceFile(ownPrependInput);
+        const sourceFilesForJsEmit = createSourceFilesForPrologues(buildInfo);
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, jsPrepend]),
             getProjectReferences: () => config.projectReferences,
@@ -516,9 +532,9 @@ namespace ts {
             getNewLine: () => host.getNewLine(),
             getSourceFile: notImplemented,
             getSourceFileByPath: notImplemented,
-            getSourceFiles: () => emptyArray,
+            getSourceFiles: () => sourceFilesForJsEmit,
             getLibFileFromReference: notImplemented,
-            isSourceFileFromExternalLibrary: notImplemented,
+            isSourceFileFromExternalLibrary: returnFalse,
             writeFile: (name, text, writeByteOrderMark) => {
                 if (name !== buildInfoPath) {
                     outputFiles.push({ name, text, writeByteOrderMark });
@@ -548,6 +564,7 @@ namespace ts {
         if (declarationMapText) {
             emitHost.getPrependNodes = memoize(() => [createUnparsedDtsSourceFileWithPrepend(ownPrependInput, prependNodes)]);
             emitHost.getCompilerOptions = () => config.options;
+            emitHost.getSourceFiles = () => emptyArray;
             emitHost.writeFile = (name, text, writeByteOrderMark) => {
                 // Same dts ignore
                 if (fileExtensionIs(name, Extension.Dts)) return;
@@ -736,14 +753,21 @@ namespace ts {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
             if (bundleFileInfo && bundle.sourceFiles.length) {
-                bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
-                // Store prologues
-                const prologues = getPrologueDirectivesFromBundledSourceFiles(bundle);
-                if (prologues) bundleFileInfo.sources.prologues = prologues;
+                const end = writer.getTextPos();
+                if (pos !== end) {
+                    bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
+                    // Store prologues
+                    const prologues = getPrologueDirectivesFromBundledSourceFiles(bundle);
+                    if (prologues) bundleFileInfo.sources.prologues = prologues;
 
-                // Store helpes
-                const helpers = getHelpersFromBundledSourceFiles(bundle);
-                if (helpers) bundleFileInfo.sources.helpers = helpers;
+                    // Store helpes
+                    const helpers = getHelpersFromBundledSourceFiles(bundle);
+                    if (helpers) bundleFileInfo.sources.helpers = helpers;
+                }
+                else {
+                    // Ensure we have text section
+                    Debug.assert(!!bundleFileInfo.sections.length && last(bundleFileInfo.sections).kind === BundleFileSectionKind.Text);
+                }
             }
 
             reset();
