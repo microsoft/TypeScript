@@ -28,10 +28,10 @@ type tup = [number, number, number, number];
 >tup : [number, number, number, number]
 
 function foo(arg: Circular<tup>): tup {
->foo : (arg: [any, any, any, any]) => [number, number, number, number]
->arg : [any, any, any, any]
+>foo : (arg: any) => [number, number, number, number]
+>arg : any
 
   return arg;
->arg : [any, any, any, any]
+>arg : any
 }
 
