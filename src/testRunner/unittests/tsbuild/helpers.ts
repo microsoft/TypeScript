@@ -15,6 +15,22 @@ namespace ts {
         fs.writeFileSync(path, newContent, "utf-8");
     }
 
+    export function prependText(fs: vfs.FileSystem, path: string, additionalContent: string) {
+        if (!fs.statSync(path).isFile()) {
+            throw new Error(`File ${path} does not exist`);
+        }
+        const old = fs.readFileSync(path, "utf-8");
+        fs.writeFileSync(path, `${additionalContent}${old}`, "utf-8");
+    }
+
+    export function appendText(fs: vfs.FileSystem, path: string, additionalContent: string) {
+        if (!fs.statSync(path).isFile()) {
+            throw new Error(`File ${path} does not exist`);
+        }
+        const old = fs.readFileSync(path, "utf-8");
+        fs.writeFileSync(path, `${old}${additionalContent}`);
+    }
+
     export function getTime() {
         let currentTime = 100;
         return { tick, time, touch };
@@ -58,5 +74,221 @@ namespace ts {
             "/lib/lib.webworker.importscripts.d.ts",
             "/lib/lib.scripthost.d.ts"
         ];
+    }
+
+    function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
+        for (const mapFile of mapFileNames) {
+            const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
+            fs.writeFileSync(`${mapFile}.baseline.txt`, text);
+        }
+    }
+
+    function build({ fs, tick, rootNames, expectedMapFileNames, modifyFs, withoutBuildInfo, expectedDiagnostics }: {
+        fs: vfs.FileSystem;
+        tick: () => void;
+        rootNames: ReadonlyArray<string>;
+        expectedMapFileNames: ReadonlyArray<string>;
+        modifyFs: (fs: vfs.FileSystem) => void;
+        withoutBuildInfo: boolean;
+        expectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic>;
+    }) {
+        const actualReadFileMap = createMap<number>();
+        modifyFs(fs);
+        tick();
+
+        const host = new fakes.SolutionBuilderHost(fs);
+        const builder = createSolutionBuilder(host, rootNames, { dry: false, force: false, verbose: true });
+        host.clearDiagnostics();
+        const originalReadFile = host.readFile;
+        host.readFile = path => {
+            // Dont record libs
+            if (path.startsWith("/src/")) {
+                actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
+            }
+            if (withoutBuildInfo && getBaseFileName(path) === infoFile) {
+                return undefined;
+            }
+            return originalReadFile.call(host, path);
+        };
+        if (withoutBuildInfo) {
+            const originalWriteFile = host.writeFile;
+            host.writeFile = (fileName, content, writeByteOrder) => {
+                return getBaseFileName(fileName) !== infoFile &&
+                    originalWriteFile.call(host, fileName, content, writeByteOrder);
+            };
+        }
+        builder.buildAllProjects();
+        host.assertDiagnosticMessages(...expectedDiagnostics);
+        generateSourceMapBaselineFiles(fs, expectedMapFileNames);
+        fs.makeReadonly();
+        return { fs, actualReadFileMap, host, builder };
+    }
+
+    function generateBaseline(fs: vfs.FileSystem, proj: string, scenario: string, subScenario: string, withoutBuildInfo: boolean, baseFs: vfs.FileSystem) {
+        const patch = fs.diff(baseFs);
+        // tslint:disable-next-line:no-null-keyword
+        Harness.Baseline.runBaseline(`tsbuild/${proj}/${subScenario.split(" ").join("-")}/${withoutBuildInfo ? "no-" : ""}buildInfo/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
+    }
+
+    function verifyReadFileCalls(actualReadFileMap: Map<number>, expectedReadFiles: ReadonlyMap<number>) {
+        TestFSWithWatch.verifyMapSize("readFileCalls", actualReadFileMap, arrayFrom(expectedReadFiles.keys()));
+        expectedReadFiles.forEach((expected, expectedFile) => {
+            const actual = actualReadFileMap.get(expectedFile);
+            assert.equal(actual, expected, `Mismatch in read file call number for: ${expectedFile}
+Not in Actual: ${JSON.stringify(mapDefinedIterator(expectedReadFiles.keys(), f => actualReadFileMap.has(f) ? undefined : f))}
+Mismatch Actual(path, actual, expected): ${JSON.stringify(mapDefinedIterator(actualReadFileMap.entries(),
+                ([p, v]) => expectedReadFiles.get(p) !== v ? [p, v, expectedReadFiles.get(p) || 0] : undefined))}`);
+        });
+    }
+
+    export function getReadFilesMap(filesReadOnce: ReadonlyArray<string>, fileWithTwoReadCalls?: string) {
+        const map = arrayToMap(filesReadOnce, identity, () => 1);
+        if (fileWithTwoReadCalls) {
+            map.set(fileWithTwoReadCalls, 2);
+        }
+        return map;
+    }
+
+    export interface ExpectedBuildOutputPerState {
+        expectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic>;
+        expectedReadFiles?: ReadonlyMap<number>;
+    }
+
+    export interface ExpectedBuildOutputNotDifferingWithBuildInfo extends ExpectedBuildOutputPerState {
+        modifyFs: (fs: vfs.FileSystem) => void;
+    }
+
+    export interface ExpectedBuildOutputDifferingWithBuildInfo {
+        modifyFs: (fs: vfs.FileSystem) => void;
+        withBuildInfo: ExpectedBuildOutputPerState;
+        withoutBuildInfo: ExpectedBuildOutputPerState;
+    }
+
+    function verifyTsbuildOutputWorker({
+        scenario, projFs, time, tick, proj, rootNames, expectedMapFileNames, withoutBuildInfo, lastProjectOutputJs,
+        initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
+    }: {
+        scenario: string;
+        projFs: () => vfs.FileSystem;
+        time: () => number;
+        tick: () => void;
+        proj: string;
+        rootNames: ReadonlyArray<string>;
+        expectedMapFileNames: ReadonlyArray<string>;
+        withoutBuildInfo: boolean;
+        lastProjectOutputJs: string;
+        initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
+        incrementalDtsChangedBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
+        incrementalDtsUnchangedBuild: ExpectedBuildOutputDifferingWithBuildInfo;
+        incrementalHeaderChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
+    }) {
+        describe(`${proj}:: ${scenario}${withoutBuildInfo ? " without build info" : ""}`, () => {
+            let fs: vfs.FileSystem;
+            let actualReadFileMap: Map<number>;
+            let firstBuildTime: number;
+            before(() => {
+                const result = build({
+                    fs: projFs().shadow(),
+                    tick,
+                    rootNames,
+                    expectedMapFileNames,
+                    modifyFs: initialBuild.modifyFs,
+                    withoutBuildInfo,
+                    expectedDiagnostics: initialBuild.expectedDiagnostics
+                });
+                ({ fs, actualReadFileMap } = result);
+                firstBuildTime = time();
+            });
+            after(() => {
+                fs = undefined!;
+                actualReadFileMap = undefined!;
+            });
+            describe("initialBuild", () => {
+                it(`Generates files matching the baseline`, () => {
+                    generateBaseline(fs, proj, scenario, "initial Build", withoutBuildInfo, projFs());
+                });
+                if (initialBuild.expectedReadFiles) {
+                    it("verify readFile calls", () => {
+                        verifyReadFileCalls(actualReadFileMap, initialBuild.expectedReadFiles!);
+                    });
+                }
+            });
+
+            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic>, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
+                describe(subScenario, () => {
+                    let newFs: vfs.FileSystem;
+                    let actualReadFileMap: Map<number>;
+                    before(() => {
+                        assert.equal(fs.statSync(lastProjectOutputJs).mtimeMs, firstBuildTime, "First build timestamp is correct");
+                        tick();
+                        newFs = fs.shadow();
+                        tick();
+                        ({ actualReadFileMap } = build({
+                            fs: newFs,
+                            tick,
+                            rootNames,
+                            expectedMapFileNames,
+                            modifyFs: incrementalModifyFs,
+                            withoutBuildInfo,
+                            expectedDiagnostics: incrementalExpectedDiagnostics
+                        }));
+                        assert.equal(newFs.statSync(lastProjectOutputJs).mtimeMs, time(), "Second build timestamp is correct");
+                    });
+                    after(() => {
+                        newFs = undefined!;
+                        actualReadFileMap = undefined!;
+                    });
+                    it(`Generates files matching the baseline`, () => {
+                        generateBaseline(newFs, proj, scenario, subScenario, withoutBuildInfo, fs);
+                    });
+                    if (incrementalExpectedReadFiles) {
+                        it("verify readFile calls", () => {
+                            verifyReadFileCalls(actualReadFileMap, incrementalExpectedReadFiles);
+                        });
+                    }
+                });
+            }
+
+            incrementalBuild(
+                "incremental declaration changes",
+                incrementalDtsChangedBuild.modifyFs,
+                incrementalDtsChangedBuild.expectedDiagnostics,
+                incrementalDtsChangedBuild.expectedReadFiles
+            );
+
+            incrementalBuild(
+                "incremental declaration doesnt change",
+                incrementalDtsUnchangedBuild.modifyFs,
+                (withoutBuildInfo ? incrementalDtsUnchangedBuild.withoutBuildInfo : incrementalDtsUnchangedBuild.withBuildInfo).expectedDiagnostics,
+                (withoutBuildInfo ? incrementalDtsUnchangedBuild.withoutBuildInfo : incrementalDtsUnchangedBuild.withBuildInfo).expectedReadFiles
+            );
+
+            if (incrementalHeaderChangedBuild) {
+                incrementalBuild(
+                    "incremental headers change",
+                    incrementalHeaderChangedBuild.modifyFs,
+                    (withoutBuildInfo ? incrementalHeaderChangedBuild.withoutBuildInfo : incrementalHeaderChangedBuild.withBuildInfo).expectedDiagnostics,
+                    (withoutBuildInfo ? incrementalHeaderChangedBuild.withoutBuildInfo : incrementalHeaderChangedBuild.withBuildInfo).expectedReadFiles
+                );
+            }
+        });
+    }
+
+    export function verifyTsbuildOutput(input: {
+        scenario: string;
+        projFs: () => vfs.FileSystem;
+        time: () => number;
+        tick: () => void;
+        proj: string;
+        rootNames: ReadonlyArray<string>;
+        expectedMapFileNames: ReadonlyArray<string>;
+        lastProjectOutputJs: string;
+        initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
+        incrementalDtsChangedBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
+        incrementalDtsUnchangedBuild: ExpectedBuildOutputDifferingWithBuildInfo;
+        incrementalHeaderChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
+    }) {
+        verifyTsbuildOutputWorker({ ...input, withoutBuildInfo: false });
+        verifyTsbuildOutputWorker({ ...input, withoutBuildInfo: true });
     }
 }

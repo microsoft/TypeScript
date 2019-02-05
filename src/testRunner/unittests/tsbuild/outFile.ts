@@ -56,6 +56,14 @@ namespace ts {
                 ]
             ]
         ];
+        const expectedMapFileNames = [
+            outputFiles[project.first][ext.jsmap],
+            outputFiles[project.first][ext.dtsmap],
+            outputFiles[project.second][ext.jsmap],
+            outputFiles[project.second][ext.dtsmap],
+            outputFiles[project.third][ext.jsmap],
+            outputFiles[project.third][ext.dtsmap]
+        ];
         const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as [Sources, Sources, Sources];
         const { time, tick } = getTime();
         before(() => {
@@ -69,78 +77,81 @@ namespace ts {
             return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
         }
 
-        function build(fs: vfs.FileSystem, modifyFs: (fs: vfs.FileSystem) => void, withoutBuildInfo: boolean, ...expectedDiagnostics: fakes.ExpectedDiagnostic[]) {
-            const actualReadFileMap = createMap<number>();
-            modifyFs(fs);
-            tick();
+        function verifyOutFileScenario({ scenario, modifyFs, modifyAgainFs, additionalSourceFiles }: { scenario: string; modifyFs: (fs: vfs.FileSystem) => void; modifyAgainFs?: (fs: vfs.FileSystem) => void; additionalSourceFiles?: ReadonlyArray<string>; }) {
+            const incrementalDtsUnchangedWithBuildInfo: ExpectedBuildOutputPerState = {
+                expectedDiagnostics: [
+                    getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                    [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                    [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
+                ],
+                expectedReadFiles: getReadFilesMap([
+                    // Configs
+                    sources[project.first][source.config],
+                    sources[project.second][source.config],
+                    sources[project.third][source.config],
 
-            const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host);
-            host.clearDiagnostics();
-            const originalReadFile = host.readFile;
-            host.readFile = path => {
-                // Dont record libs
-                if (path.startsWith("/src/")) {
-                    actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
-                }
-                if (withoutBuildInfo && getBaseFileName(path) === infoFile) {
-                    return undefined;
-                }
-                return originalReadFile.call(host, path);
+                    // Source files
+                    ...sources[project.first][source.ts],
+
+                    // Additional source Files
+                    ...(additionalSourceFiles && additionalSourceFiles.length === 3 ? [additionalSourceFiles[project.first]] : emptyArray),
+
+                    // outputs to prepend
+                    ...outputFiles[project.first],
+                    ...outputFiles[project.second],
+                    ...outputFiles[project.third]
+                ])
             };
-            if (withoutBuildInfo) {
-                const originalWriteFile = host.writeFile;
-                host.writeFile = (fileName, content, writeByteOrder) => {
-                    return getBaseFileName(fileName) !== infoFile &&
-                        originalWriteFile.call(host, fileName, content, writeByteOrder);
-                };
-            }
-            builder.buildAllProjects();
-            host.assertDiagnosticMessages(...expectedDiagnostics);
-            generateSourceMapBaselineFiles(fs);
-            fs.makeReadonly();
-            return { fs, actualReadFileMap, host, builder };
-        }
+            const incrementalDtsUnchangedWithoutBuildInfo: ExpectedBuildOutputPerState = {
+                expectedDiagnostics: [
+                    getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                    [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                    [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+                    [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
+                    [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                ],
+                expectedReadFiles: getReadFilesMap([
+                    // Configs
+                    sources[project.first][source.config],
+                    sources[project.second][source.config],
+                    sources[project.third][source.config],
 
-        function generateSourceMapBaselineFiles(fs: vfs.FileSystem) {
-            for (const mapFile of [
-                outputFiles[project.first][ext.jsmap],
-                outputFiles[project.first][ext.dtsmap],
-                outputFiles[project.second][ext.jsmap],
-                outputFiles[project.second][ext.dtsmap],
-                outputFiles[project.third][ext.jsmap],
-                outputFiles[project.third][ext.dtsmap]
-            ]) {
-                const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
-                fs.writeFileSync(`${mapFile}.baseline.txt`, text);
-            }
-        }
+                    // Source files
+                    ...sources[project.first][source.ts],
+                    ...sources[project.third][source.ts],
 
-        function generateBaseline(fs: vfs.FileSystem, scenario: string, subScenario: string, withoutBuildInfo: boolean, baseFs?: vfs.FileSystem) {
-            const patch = fs.diff(baseFs || outFileFs);
-            // tslint:disable-next-line:no-null-keyword
-            Harness.Baseline.runBaseline(`tsbuild/outFile/${subScenario.split(" ").join("-")}/${withoutBuildInfo ? "no-" : ""}buildInfo/${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
-        }
+                    // Additional source Files
+                    ...(additionalSourceFiles || emptyArray),
 
-        function verifyReadFileCalls(actualReadFileMap: Map<number>, expectedReadFiles: ReadonlyArray<string>, fileWithTwoReadCalls?: string) {
-            TestFSWithWatch.verifyMapSize("readFileCalls", actualReadFileMap, expectedReadFiles);
-            expectedReadFiles.forEach(expectedFile => {
-                const actual = actualReadFileMap.get(expectedFile);
-                const expected = fileWithTwoReadCalls && expectedFile === fileWithTwoReadCalls ? 2 : 1;
-                assert.equal(actual, expected, `Mismatch in read file call number for: ${expectedFile}
-Not in Actual: ${JSON.stringify(mapDefined(expectedReadFiles, f => actualReadFileMap.has(f) ? undefined : f))}
-Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries()),
-                    ([p, v]) => !contains(expectedReadFiles, p) || (p === fileWithTwoReadCalls && v !== 2) || (p !== fileWithTwoReadCalls && v !== 1) ? [p, v] : undefined))}`);
-            });
-        }
+                    // outputs
+                    ...outputFiles[project.first],
+                    ...outputFiles[project.second],
+                    outputFiles[project.third][ext.dts],
 
-        function verifyOutFileScenarioWorker(scenario: string, modifyFs: (fs: vfs.FileSystem) => void, withoutBuildInfo: boolean, modifyAgainFs?: (fs: vfs.FileSystem) => void, additionalSourceFiles?: ReadonlyArray<string>) {
-            describe(`${scenario}${withoutBuildInfo ? " without build info" : ""}`, () => {
-                let fs: vfs.FileSystem;
-                let actualReadFileMap: Map<number>;
-                let firstBuildTime: number;
-                before(() => {
-                    const result = build(outFileFs.shadow(), modifyFs, withoutBuildInfo,
+                    // To prepend:: checked to see if we can do prepend manipulation
+                    outputFiles[project.third][ext.buildinfo],
+                ])
+            };
+
+            verifyTsbuildOutput({
+                scenario,
+                projFs: () => outFileFs,
+                time,
+                tick,
+                proj: "outfile-concat",
+                rootNames: ["/src/third"],
+                expectedMapFileNames,
+                lastProjectOutputJs: outputFiles[project.third][ext.js],
+                initialBuild: {
+                    modifyFs,
+                    expectedDiagnostics: [
                         getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                         [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.js]],
                         [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -148,68 +159,8 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                         [Diagnostics.Building_project_0, sources[project.second][source.config]],
                         [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], relOutputFiles[project.third][ext.js]],
                         [Diagnostics.Building_project_0, sources[project.third][source.config]]
-                    );
-                    ({ fs, actualReadFileMap } = result);
-                    firstBuildTime = time();
-                });
-                after(() => {
-                    fs = undefined!;
-                    actualReadFileMap = undefined!;
-                });
-                describe("initialBuild", () => {
-                    it(`Generates files matching the baseline`, () => {
-                        generateBaseline(fs, scenario, "initial Build", withoutBuildInfo, outFileFs);
-                    });
-                    it("verify readFile calls", () => {
-                        verifyReadFileCalls(actualReadFileMap, [
-                            // Configs
-                            sources[project.first][source.config],
-                            sources[project.second][source.config],
-                            sources[project.third][source.config],
-
-                            // Source files
-                            ...sources[project.first][source.ts],
-                            ...sources[project.second][source.ts],
-                            ...sources[project.third][source.ts],
-
-                            // Additional source Files
-                            ...(additionalSourceFiles || emptyArray),
-
-                            // outputs
-                            ...outputFiles[project.first],
-                            ...outputFiles[project.second]
-                        ]);
-                    });
-                });
-
-                function incrementalBuild(subScenario: string, expectedReadFiles: ReadonlyArray<string>, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic>, fileWithTwoReadCalls?: string) {
-                    describe(subScenario, () => {
-                        let newFs: vfs.FileSystem;
-                        let actualReadFileMap: Map<number>;
-                        before(() => {
-                            assert.equal(fs.statSync(outputFiles[project.third][ext.js]).mtimeMs, firstBuildTime, "First build timestamp is correct");
-                            tick();
-                            newFs = fs.shadow();
-                            tick();
-                            ({ actualReadFileMap } = build(newFs, incrementalModifyFs, withoutBuildInfo, ...incrementalExpectedDiagnostics));
-                            assert.equal(newFs.statSync(outputFiles[project.third][ext.js]).mtimeMs, time(), "Second build timestamp is correct");
-                        });
-                        after(() => {
-                            newFs = undefined!;
-                            actualReadFileMap = undefined!;
-                        });
-                        it(`Generates files matching the baseline`, () => {
-                            generateBaseline(newFs, scenario, subScenario, withoutBuildInfo, fs);
-                        });
-                        it("verify readFile calls", () => {
-                            verifyReadFileCalls(actualReadFileMap, expectedReadFiles, fileWithTwoReadCalls);
-                        });
-                    });
-                }
-
-                incrementalBuild(
-                    "incremental declaration changes",
-                    [
+                    ],
+                    expectedReadFiles: arrayToMap([
                         // Configs
                         sources[project.first][source.config],
                         sources[project.second][source.config],
@@ -217,6 +168,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
 
                         // Source files
                         ...sources[project.first][source.ts],
+                        ...sources[project.second][source.ts],
                         ...sources[project.third][source.ts],
 
                         // Additional source Files
@@ -224,11 +176,12 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
 
                         // outputs
                         ...outputFiles[project.first],
-                        ...outputFiles[project.second],
-                        outputFiles[project.third][ext.dts],
-                    ],
-                    fs => replaceText(fs, relSources[project.first][source.ts][part.one], "Hello", "Hola"),
-                    [
+                        ...outputFiles[project.second]
+                    ], identity, () => 1)
+                },
+                incrementalDtsChangedBuild: {
+                    modifyFs: fs => replaceText(fs, relSources[project.first][source.ts][part.one], "Hello", "Hola"),
+                    expectedDiagnostics: [
                         getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                         [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
                         [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -236,12 +189,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                         [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/first"],
                         [Diagnostics.Building_project_0, sources[project.third][source.config]]
                     ],
-                    outputFiles[project.first][ext.dts] // dts changes so once read old content, and once new (to emit third)
-                );
-
-                incrementalBuild(
-                    "incremental declaration doesnt change",
-                    withoutBuildInfo ?
+                    expectedReadFiles: getReadFilesMap(
                         [
                             // Configs
                             sources[project.first][source.config],
@@ -259,113 +207,21 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
                             ...outputFiles[project.first],
                             ...outputFiles[project.second],
                             outputFiles[project.third][ext.dts],
-
-                            // To prepend:: checked to see if we can do prepend manipulation
-                            outputFiles[project.third][ext.buildinfo],
-                        ] :
-                        [
-                            // Configs
-                            sources[project.first][source.config],
-                            sources[project.second][source.config],
-                            sources[project.third][source.config],
-
-                            // Source files
-                            ...sources[project.first][source.ts],
-
-                            // Additional source Files
-                            ...(additionalSourceFiles && additionalSourceFiles.length === 3 ? [additionalSourceFiles[project.first]] : emptyArray),
-
-                            // outputs to prepend
-                            ...outputFiles[project.first],
-                            ...outputFiles[project.second],
-                            ...outputFiles[project.third]
                         ],
-                    fs => appendFileContent(fs, relSources[project.first][source.ts][part.one], "console.log(s);"),
-                    [
-                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
-                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                        [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-                        [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
-                        ...<ReadonlyArray<fakes.ExpectedDiagnostic>>(!withoutBuildInfo ?
-                            [
-                                [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
-                            ] :
-                            [
-                                [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
-                                [Diagnostics.Building_project_0, sources[project.third][source.config]]
-                            ])
-                    ]
-                );
-
-                if (modifyAgainFs) {
-                    incrementalBuild(
-                        "incremental headers change",
-                        withoutBuildInfo ?
-                            [
-                                // Configs
-                                sources[project.first][source.config],
-                                sources[project.second][source.config],
-                                sources[project.third][source.config],
-
-                                // Source files
-                                ...sources[project.first][source.ts],
-                                ...sources[project.third][source.ts],
-
-                                // Additional source Files
-                                ...(additionalSourceFiles || emptyArray),
-
-                                // outputs
-                                ...outputFiles[project.first],
-                                ...outputFiles[project.second],
-                                outputFiles[project.third][ext.dts],
-
-                                // To prepend:: checked to see if we can do prepend manipulation
-                                outputFiles[project.third][ext.buildinfo],
-                            ] :
-                            [
-                                // Configs
-                                sources[project.first][source.config],
-                                sources[project.second][source.config],
-                                sources[project.third][source.config],
-
-                                // Source files
-                                ...sources[project.first][source.ts],
-
-                                // Additional source Files
-                                ...(additionalSourceFiles || emptyArray),
-
-                                // outputs to prepend
-                                ...outputFiles[project.first],
-                                ...outputFiles[project.second],
-                                ...outputFiles[project.third]
-                            ],
-                        fs => modifyAgainFs(fs),
-                        [
-                            getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
-                            [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                            [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                            [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-                            [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
-                            ...<ReadonlyArray<fakes.ExpectedDiagnostic>>(!withoutBuildInfo ?
-                                [
-                                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
-                                ] :
-                                [
-                                    [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
-                                    [Diagnostics.Building_project_0, sources[project.third][source.config]]
-                                ])
-                        ]
-                    );
+                        outputFiles[project.first][ext.dts] // dts changes so once read old content, and once new (to emit third)
+                    )
+                },
+                incrementalDtsUnchangedBuild: {
+                    modifyFs: fs => appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);"),
+                    withBuildInfo: incrementalDtsUnchangedWithBuildInfo,
+                    withoutBuildInfo: incrementalDtsUnchangedWithoutBuildInfo
+                },
+                incrementalHeaderChangedBuild: modifyAgainFs && {
+                    modifyFs: modifyAgainFs,
+                    withBuildInfo: incrementalDtsUnchangedWithBuildInfo,
+                    withoutBuildInfo: incrementalDtsUnchangedWithoutBuildInfo
                 }
             });
-        }
-
-        function verifyOutFileScenario({ scenario, modifyFs, modifyAgainFs, additionalSourceFiles }: { scenario: string; modifyFs: (fs: vfs.FileSystem) => void; modifyAgainFs?: (fs: vfs.FileSystem) => void; additionalSourceFiles?: ReadonlyArray<string>; }) {
-            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBuildInfo*/ false, modifyAgainFs, additionalSourceFiles);
-            verifyOutFileScenarioWorker(scenario, modifyFs, /*withoutBuildInfo*/ true, modifyAgainFs, additionalSourceFiles);
         }
 
         verifyOutFileScenario({
@@ -375,7 +231,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
 
         verifyOutFileScenario({
             scenario: "when final project is not composite but uses project references",
-            modifyFs: fs => replaceFileContent(fs, "/src/third/tsconfig.json", `"composite": true,`, "")
+            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, "")
         });
 
         it("clean projects", () => {
@@ -448,24 +304,9 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
             );
         });
 
-        function replaceFileContent(fs: vfs.FileSystem, path: string, searchValue: string, replaceValue: string) {
-            const content = fs.readFileSync(path, "utf8");
-            fs.writeFileSync(path, content.replace(searchValue, replaceValue));
-        }
-
-        function prependFileContent(fs: vfs.FileSystem, path: string, additionalContent: string) {
-            const content = fs.readFileSync(path, "utf8");
-            fs.writeFileSync(path, `${additionalContent}${content}`);
-        }
-
-        function appendFileContent(fs: vfs.FileSystem, path: string, additionalContent: string) {
-            const content = fs.readFileSync(path, "utf8");
-            fs.writeFileSync(path, `${content}${additionalContent}`);
-        }
-
         // Prologues
         function enableStrict(fs: vfs.FileSystem, path: string) {
-            replaceFileContent(fs, path, `"strict": false`, `"strict": true`);
+            replaceText(fs, path, `"strict": false`, `"strict": true`);
         }
 
         verifyOutFileScenario({
@@ -487,7 +328,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
         });
 
         function addPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
-            prependFileContent(fs, path, `${prologue}
+            prependText(fs, path, `${prologue}
 `);
         }
 
@@ -519,7 +360,7 @@ Mismatch Actual: ${JSON.stringify(mapDefined(arrayFrom(actualReadFileMap.entries
 
         // Shebang
         function addShebang(fs: vfs.FileSystem, project: string, file: string) {
-            prependFileContent(fs, `src/${project}/${file}.ts`, `#!someshebang ${project} ${file}
+            prependText(fs, `src/${project}/${file}.ts`, `#!someshebang ${project} ${file}
 `);
         }
 
@@ -553,19 +394,19 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
         }
 
         function addRest(fs: vfs.FileSystem, project: string, file: string) {
-            appendFileContent(fs, `src/${project}/${file}.ts`, restContent(project, file));
+            appendText(fs, `src/${project}/${file}.ts`, restContent(project, file));
         }
 
         function removeRest(fs: vfs.FileSystem, project: string, file: string) {
-            replaceFileContent(fs, `src/${project}/${file}.ts`, restContent(project, file), nonrestContent(project, file));
+            replaceText(fs, `src/${project}/${file}.ts`, restContent(project, file), nonrestContent(project, file));
         }
 
         function addStubFoo(fs: vfs.FileSystem, project: string, file: string) {
-            appendFileContent(fs, `src/${project}/${file}.ts`, nonrestContent(project, file));
+            appendText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file));
         }
 
         function changeStubToRest(fs: vfs.FileSystem, project: string, file: string) {
-            replaceFileContent(fs, `src/${project}/${file}.ts`, nonrestContent(project, file), restContent(project, file));
+            replaceText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file), restContent(project, file));
         }
 
         verifyOutFileScenario({
@@ -594,7 +435,7 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 function ${project}${file}Spread(...b: number[]) { }
 ${project}${file}Spread(...[10, 20, 30]);`);
 
-            replaceFileContent(fs, `src/${project}/tsconfig.json`, `"strict": false,`, `"strict": false,
+            replaceText(fs, `src/${project}/tsconfig.json`, `"strict": false,`, `"strict": false,
     "downlevelIteration": true,`);
         }
 
@@ -629,7 +470,7 @@ ${project}${file}Spread(...[10, 20, 30]);`);
 
         function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
             fs.writeFileSync(getTripleSlashRef(project), `declare class ${project}${file} { }`);
-            prependFileContent(fs, `src/${project}/${file}.ts`, `///<reference path="./tripleRef.d.ts"/>
+            prependText(fs, `src/${project}/${file}.ts`, `///<reference path="./tripleRef.d.ts"/>
 const ${file}Const = new ${project}${file}();
 `);
         }

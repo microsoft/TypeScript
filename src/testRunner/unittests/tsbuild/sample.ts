@@ -357,5 +357,8 @@ export class cNew {}`);
                 ]);
             });
         });
+
+        describe("emit output", () => {
+        });
     });
 }
