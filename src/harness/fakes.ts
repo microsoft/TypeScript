@@ -207,7 +207,7 @@ namespace fakes {
      */
     export class CompilerHost implements ts.CompilerHost {
         public readonly sys: System;
-        public readonly defaultLibLocation: string;
+        public readonly defaultLibLocation!: string;
         public readonly outputs: documents.TextDocument[] = [];
         private readonly _outputsMap: collections.SortedMap<string, number>;
         public readonly traces: string[] = [];

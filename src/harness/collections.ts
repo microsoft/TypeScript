@@ -245,7 +245,7 @@ namespace collections {
     export class Metadata {
         private static readonly _undefinedValue = {};
         private _parent: Metadata | undefined;
-        private _map: { [key: string]: any };
+        private _map!: { [key: string]: any };
         private _version = 0;
         private _size = -1;
         private _parentVersion: number | undefined;
