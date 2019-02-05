@@ -131,7 +131,6 @@ namespace ts.Completions {
     const tsKeywords: string[] = [
         SyntaxKind.EnumKeyword,
         SyntaxKind.AbstractKeyword,
-        SyntaxKind.AsKeyword,
         SyntaxKind.AnyKeyword,
         SyntaxKind.InferKeyword,
         SyntaxKind.IsKeyword,
