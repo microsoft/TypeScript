@@ -553,13 +553,7 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
         };
         // Emit js
-        emitFiles(
-            notImplementedResolver,
-            emitHost,
-            /*targetSourceFile*/ undefined,
-            /*emitOnlyDtsFiles*/ false,
-            getTransformers(optionsWithoutDeclaration)
-        );
+        emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(optionsWithoutDeclaration));
         // Emit d.ts map
         if (declarationMapText) {
             emitHost.getPrependNodes = memoize(() => [createUnparsedDtsSourceFileWithPrepend(ownPrependInput, prependNodes)]);
@@ -567,23 +561,10 @@ namespace ts {
             emitHost.getSourceFiles = () => emptyArray;
             emitHost.writeFile = (name, text, writeByteOrderMark) => {
                 // Same dts ignore
-                if (fileExtensionIs(name, Extension.Dts)) return;
-                if (name !== buildInfoPath) {
-                    outputFiles.push({ name, text, writeByteOrderMark });
-                }
-                else {
-                    // Add dts and sources build info since we are not touching that file
-                    const buildInfo = JSON.parse(text) as BuildInfo;
-                    newBuildInfo.dts = buildInfo.dts;
-                    writeByteOrderMarkBuildInfo = writeByteOrderMarkBuildInfo || writeByteOrderMark;
-                }
+                if (fileExtensionIs(name, Extension.Dts) || name === buildInfoPath) return;
+                outputFiles.push({ name, text, writeByteOrderMark });
             };
-            emitFiles(
-                notImplementedResolver,
-                emitHost,
-                /*targetSourceFile*/ undefined,
-                /*emitOnlyDtsFiles*/ true
-            );
+            emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ true);
         }
         outputFiles.push({ name: buildInfoPath!, text: getBuildInfoText(newBuildInfo), writeByteOrderMark: writeByteOrderMarkBuildInfo });
         return outputFiles;
