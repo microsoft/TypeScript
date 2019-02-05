@@ -20,7 +20,7 @@ namespace ts {
      *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
      */
     export function forEachEmittedFile<T>(
-        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) => T,
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) => T,
         sourceFilesOrTargetSourceFile?: ReadonlyArray<SourceFile> | SourceFile,
         emitOnlyDtsFiles = false) {
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
@@ -42,11 +42,18 @@ namespace ts {
                     return result;
                 }
             }
+            const buildInfoPath = getOutputPathForBuildInfo(host.getCompilerOptions(), host.getProjectReferences());
+            return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
         }
     }
 
-    function hasPrependReference(projectReferences: ReadonlyArray<ProjectReference> | undefined) {
-        return projectReferences && forEach(projectReferences, ref => ref.prepend);
+    /*@internal*/
+    export function getOutputPathForBuildInfo(options: CompilerOptions, projectReferences: ReadonlyArray<ProjectReference> | undefined) {
+        if (!options.composite && !length(projectReferences)) return undefined;
+        const outPath = options.outFile || options.out;
+        if (outPath) return combinePaths(getDirectoryPath(outPath), infoFile);
+        if (options.outDir) return combinePaths(options.outDir, infoFile);
+        return options.configFilePath && combinePaths(getDirectoryPath(options.configFilePath), infoFile);
     }
 
     /*@internal*/
@@ -56,7 +63,7 @@ namespace ts {
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        const buildInfoPath = outPath && (options.composite || hasPrependReference(projectReferences)) ? combinePaths(getDirectoryPath(outPath), infoFile) : undefined;
+        const buildInfoPath = getOutputPathForBuildInfo(options, projectReferences);
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
     }
 
@@ -136,14 +143,11 @@ namespace ts {
             exportedModulesFromDeclarationEmit
         };
 
-        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
+        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) {
             if (buildInfoPath) buildInfo = { js: [], dts: [], commonSourceDirectory: host.getCommonSourceDirectory(), sources: {} };
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, buildInfo && { sections: buildInfo.js, sources: buildInfo.sources });
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath, buildInfo && { sections: buildInfo.dts, sources: buildInfo.sources });
-            // Write bundled offset information if applicable
-            if (!emitOnlyDtsFiles && !emitSkipped && buildInfoPath) {
-                writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo!), /*writeByteOrderMark*/ false);
-            }
+            emitBuildInfo(buildInfo, buildInfoPath);
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
@@ -166,8 +170,15 @@ namespace ts {
             }
         }
 
-        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, bundleFileInfo: BundleFileInfo | undefined) {
-            if (emitOnlyDtsFiles || !jsFilePath) {
+        function emitBuildInfo(buildInfo: BuildInfo | undefined, buildInfoPath: string | undefined) {
+            // Write build information if applicable
+            if (!buildInfo || !buildInfoPath || emitOnlyDtsFiles || emitSkipped) return;
+
+            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false);
+        }
+
+        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle | undefined, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, bundleFileInfo: BundleFileInfo | undefined) {
+            if (!sourceFileOrBundle || emitOnlyDtsFiles || !jsFilePath) {
                 return;
             }
 
@@ -208,8 +219,8 @@ namespace ts {
             transform.dispose();
         }
 
-        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined, bundleFileInfo: BundleFileInfo | undefined) {
-            if (!(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
+        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle | undefined, declarationFilePath: string | undefined, declarationMapPath: string | undefined, bundleFileInfo: BundleFileInfo | undefined) {
+            if (!sourceFileOrBundle || !(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;

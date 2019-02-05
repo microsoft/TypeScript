@@ -349,11 +349,14 @@ export class cNew {}`);
                     "TSFILE: /src/core/index.js",
                     "TSFILE: /src/core/index.d.ts",
                     "TSFILE: /src/core/index.d.ts.map",
+                    "TSFILE: /src/core/.tsbuildinfo",
                     "TSFILE: /src/logic/index.js",
                     "TSFILE: /src/logic/index.js.map",
                     "TSFILE: /src/logic/index.d.ts",
+                    "TSFILE: /src/logic/.tsbuildinfo",
                     "TSFILE: /src/tests/index.js",
                     "TSFILE: /src/tests/index.d.ts",
+                    "TSFILE: /src/tests/.tsbuildinfo",
                 ]);
             });
         });

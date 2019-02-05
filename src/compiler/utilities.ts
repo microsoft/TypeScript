@@ -3361,11 +3361,11 @@ namespace ts {
     }
 
     export interface EmitFileNames {
-        jsFilePath: string | undefined;
-        sourceMapFilePath: string | undefined;
-        declarationFilePath: string | undefined;
-        declarationMapPath: string | undefined;
-        buildInfoPath: string | undefined;
+        jsFilePath?: string | undefined;
+        sourceMapFilePath?: string | undefined;
+        declarationFilePath?: string | undefined;
+        declarationMapPath?: string | undefined;
+        buildInfoPath?: string | undefined;
     }
 
     /**

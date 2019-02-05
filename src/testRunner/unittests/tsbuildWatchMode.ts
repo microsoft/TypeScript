@@ -512,7 +512,8 @@ let x: string = 10;`);
                     changeExtension(fileWithError.path, Extension.Js),
                     changeExtension(fileWithError.path, Extension.Dts),
                     changeExtension(fileWithoutError.path, Extension.Js),
-                    changeExtension(fileWithoutError.path, Extension.Dts)
+                    changeExtension(fileWithoutError.path, Extension.Dts),
+                    `${subProjectLocation}/${infoFile}`
                 ];
 
                 function verifyDtsErrors(host: TsBuildWatchSystem, isIncremental: boolean, expectedErrors: ReadonlyArray<string>) {
@@ -572,9 +573,10 @@ let x: string = 10;`);
                     it("when fixing errors only changed file is emitted", () => {
                         const host = createSolutionWithIncrementalError();
                         fixError(host);
-                        assert.equal(host.writtenFiles.size, 2, `Expected to write only changed files: ${arrayFrom(host.writtenFiles.keys())}`);
+                        assert.equal(host.writtenFiles.size, 3, `Expected to write only changed files: ${arrayFrom(host.writtenFiles.keys())}`);
                         verifyWrittenFile(host, outputs[0]);
                         verifyWrittenFile(host, outputs[1]);
+                        verifyWrittenFile(host, outputs[4]);
                     });
 
                     it("when file with no error changes, declaration errors are reported", () => {

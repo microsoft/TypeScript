@@ -1,3 +1,11 @@
+//// [/src/core/.tsbuildinfo]
+{
+  "js": [],
+  "dts": [],
+  "commonSourceDirectory": "/src/core/",
+  "sources": {}
+}
+
 //// [/src/core/anotherModule.d.ts]
 export declare const World = "hello";
 //# sourceMappingURL=anotherModule.d.ts.map
@@ -180,6 +188,14 @@ function multiply(a, b) { return a * b; }
 exports.multiply = multiply;
 
 
+//// [/src/logic/.tsbuildinfo]
+{
+  "js": [],
+  "dts": [],
+  "commonSourceDirectory": "/src/logic/",
+  "sources": {}
+}
+
 //// [/src/logic/index.d.ts]
 export declare function getSecondsInDay(): number;
 import * as mod from '../core/anotherModule';
@@ -324,6 +340,14 @@ sourceFile:index.ts
 6 >Emitted(9, 17) Source(6, 22) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=index.js.map
+
+//// [/src/tests/.tsbuildinfo]
+{
+  "js": [],
+  "dts": [],
+  "commonSourceDirectory": "/src/tests/",
+  "sources": {}
+}
 
 //// [/src/tests/index.d.ts]
 import * as mod from '../core/anotherModule';

@@ -1300,6 +1300,11 @@ namespace ts {
                         priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file) || missingFileModifiedTime);
                     }
 
+                    // For info file, ignore if we cant update modified time
+                    if (isInfoFile(file) && !host.fileExists(file)) {
+                        continue;
+                    }
+
                     host.setModifiedTime(file, now);
                     if (proj.options.listEmittedFiles) {
                         writeFileName(`TSFILE: ${file}`);
@@ -1482,6 +1487,7 @@ namespace ts {
             for (const inputFile of project.fileNames) {
                 outputs.push(...getOutputFileNames(inputFile, project));
             }
+            if (!ignoreBuildInfo) outputs.push(Debug.assertDefined(getOutputPathForBuildInfo(project.options, project.projectReferences)));
             return outputs;
         }
     }
