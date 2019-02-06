@@ -1753,23 +1753,33 @@ namespace ts {
     /**
      * Sets EmitFlags to suppress leading and trailing trivia on the node.
      */
-    export function suppressLeadingAndTrailingTrivia(node: Node) {
-        suppressLeadingTrivia(node);
-        suppressTrailingTrivia(node);
+    export function suppressLeadingAndTrailingTrivia(node: Node, recursive = true) {
+        suppressLeadingTrivia(node, recursive);
+        suppressTrailingTrivia(node, recursive);
     }
 
     /**
      * Sets EmitFlags to suppress leading trivia on the node.
      */
-    export function suppressLeadingTrivia(node: Node) {
-        addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+    export function suppressLeadingTrivia(node: Node, recursive = true) {
+        if (recursive) {
+            addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
+        }
+        else {
+            addEmitFlags(node, EmitFlags.NoLeadingComments);
+        }
     }
 
     /**
      * Sets EmitFlags to suppress trailing trivia on the node.
      */
-    export function suppressTrailingTrivia(node: Node) {
-        addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+    export function suppressTrailingTrivia(node: Node, recursive = true) {
+        if (recursive) {
+            addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
+        }
+        else {
+            addEmitFlags(node, EmitFlags.NoTrailingComments);
+        }
     }
 
     function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
