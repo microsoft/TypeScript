@@ -22763,6 +22763,10 @@ namespace ts {
                         getUnionType([extractDefinitelyFalsyTypes(strictNullChecks ? leftType : getBaseTypeOfLiteralType(rightType)), rightType]) :
                         leftType;
                 case SyntaxKind.BarBarToken:
+                    leftType = leftType.flags & TypeFlags.IndexedAccess ?
+                        any(getPropertiesOfType((<IndexedAccessType>leftType).objectType), prop => !!(prop.flags & SymbolFlags.Optional)) ?
+                            neverType : leftType :
+                        leftType;
                     return getTypeFacts(leftType) & TypeFacts.Falsy ?
                         getUnionType([removeDefinitelyFalsyTypes(leftType), rightType], UnionReduction.Subtype) :
                         leftType;

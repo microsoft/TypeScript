@@ -232,6 +232,18 @@ namespace ts {
         return undefined;
     }
 
+    /**
+     * Returns true if any of the items in array satisfies predicate 'if provided' or is truthy
+     */
+    export function any<T>(array: ReadonlyArray<T>, predicate?: (i: any) => boolean): boolean {
+        for (const item of array) {
+            if (!predicate ? item : predicate(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
         while (true) {
             const { value, done } = iter.next();
