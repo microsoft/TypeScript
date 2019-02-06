@@ -1716,12 +1716,25 @@ namespace ts {
                 }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
-                    const message = (name === "Promise" || name === "Symbol")
+                    const message = isES2015OrLaterConstructorName(name)
                         ? Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later
                         : Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here;
                     error(errorLocation, message, unescapeLeadingUnderscores(name));
                     return true;
                 }
+            }
+            return false;
+        }
+
+        function isES2015OrLaterConstructorName(n: __String) {
+            switch (n) {
+                case "Promise":
+                case "Symbol":
+                case "Map":
+                case "WeakMap":
+                case "Set":
+                case "WeakSet":
+                    return true;
             }
             return false;
         }
