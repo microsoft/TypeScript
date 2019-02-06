@@ -659,10 +659,6 @@
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
-        "category": "Error",
-        "code": 1209
-    },
     "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1210
@@ -2580,6 +2576,10 @@
     "'{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.": {
         "category": "Error",
         "code": 2747
+    },
+    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 2748
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
