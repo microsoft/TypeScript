@@ -34,6 +34,53 @@
   "sources": {}
 }
 
+//// [/src/2/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/2/second-output.js
+----------------------------------------------------------------------
+text: (0-336)
+var second_part1Const = new secondsecond_part1();
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+----------------------------------------------------------------------
+sourceMapUrl: (336-377)
+//# sourceMappingURL=second-output.js.map
+======================================================================
+======================================================================
+File:: /src/2/second-output.d.ts
+----------------------------------------------------------------------
+reference: (0-49):: ../second/tripleRef.d.ts
+/// <reference path="../second/tripleRef.d.ts" />
+----------------------------------------------------------------------
+text: (51-205)
+declare const second_part1Const: secondsecond_part1;
+declare namespace N {
+}
+declare namespace N {
+}
+declare class C {
+    doSomething(): void;
+}
+
+----------------------------------------------------------------------
+sourceMapUrl: (205-248)
+//# sourceMappingURL=second-output.d.ts.map
+======================================================================
+
 //// [/src/2/second-output.d.ts]
 /// <reference path="../second/tripleRef.d.ts" />
 declare const second_part1Const: secondsecond_part1;
@@ -503,6 +550,40 @@ sourceFile:../second/second_part2.ts
   "sources": {}
 }
 
+//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+text: (0-110)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+sourceMapUrl: (110-150)
+//# sourceMappingURL=first-output.js.map
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+----------------------------------------------------------------------
+sourceMapUrl: (157-199)
+//# sourceMappingURL=first-output.d.ts.map
+======================================================================
+
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
     none: any;
@@ -881,6 +962,82 @@ declare class secondsecond_part1 { }
   "commonSourceDirectory": "/src/third/",
   "sources": {}
 }
+
+//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+prepend: (0-150):: /src/first/bin/first-output.js
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+//# sourceMappingURL=first-output.js.map
+----------------------------------------------------------------------
+prepend: (152-529):: /src/2/second-output.js
+var second_part1Const = new secondsecond_part1();
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+//# sourceMappingURL=second-output.js.map
+----------------------------------------------------------------------
+text: (531-567)
+var c = new C();
+c.doSomething();
+
+----------------------------------------------------------------------
+sourceMapUrl: (567-607)
+//# sourceMappingURL=third-output.js.map
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+reference: (0-55):: ../../../second/tripleRef.d.ts
+/// <reference path="../../../second/tripleRef.d.ts" />
+----------------------------------------------------------------------
+prepend: (57-256):: /src/first/bin/first-output.d.ts
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+//# sourceMappingURL=first-output.d.ts.map
+----------------------------------------------------------------------
+prepend: (258-455):: /src/2/second-output.d.ts
+declare const second_part1Const: secondsecond_part1;
+declare namespace N {
+}
+declare namespace N {
+}
+declare class C {
+    doSomething(): void;
+}
+//# sourceMappingURL=second-output.d.ts.map
+----------------------------------------------------------------------
+text: (457-476)
+declare var c: C;
+
+----------------------------------------------------------------------
+sourceMapUrl: (476-518)
+//# sourceMappingURL=third-output.d.ts.map
+======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 /// <reference path="../../../second/tripleRef.d.ts" />

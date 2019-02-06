@@ -38,6 +38,55 @@
   }
 }
 
+//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+emitHelpers: (0-415):: typescript:rest
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+----------------------------------------------------------------------
+text: (417-643)
+var s = "Hola, world";
+console.log(s);
+function forfirstfirst_PART1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+sourceMapUrl: (643-683)
+//# sourceMappingURL=first-output.js.map
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-207)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hola, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function forfirstfirst_PART1Rest(): void;
+declare function f(): string;
+
+----------------------------------------------------------------------
+sourceMapUrl: (207-249)
+//# sourceMappingURL=first-output.d.ts.map
+======================================================================
+
 //// [/src/first/bin/first-output.d.ts]
 interface TheFirst {
     none: any;
@@ -520,6 +569,128 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
     ]
   }
 }
+
+//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+emitHelpers: (0-415):: typescript:rest
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+----------------------------------------------------------------------
+emitHelpers: (417-921):: typescript:read
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+----------------------------------------------------------------------
+emitHelpers: (923-1093):: typescript:spread
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+----------------------------------------------------------------------
+prepend: (1095-1361):: /src/first/bin/first-output.js
+var s = "Hola, world";
+console.log(s);
+function forfirstfirst_PART1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+//# sourceMappingURL=first-output.js.map
+----------------------------------------------------------------------
+prepend: (1363-1905):: /src/2/second-output.js
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+function secondsecond_part1Spread() {
+    var b = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        b[_i] = arguments[_i];
+    }
+}
+secondsecond_part1Spread.apply(void 0, __spread([10, 20, 30]));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+//# sourceMappingURL=second-output.js.map
+----------------------------------------------------------------------
+text: (1907-2060)
+var c = new C();
+c.doSomething();
+function forthirdthird_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+
+----------------------------------------------------------------------
+sourceMapUrl: (2060-2100)
+//# sourceMappingURL=third-output.js.map
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-249):: /src/first/bin/first-output.d.ts
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hola, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function forfirstfirst_PART1Rest(): void;
+declare function f(): string;
+//# sourceMappingURL=first-output.d.ts.map
+----------------------------------------------------------------------
+prepend: (251-460):: /src/2/second-output.d.ts
+declare namespace N {
+}
+declare namespace N {
+}
+declare function secondsecond_part1Spread(...b: number[]): void;
+declare class C {
+    doSomething(): void;
+}
+//# sourceMappingURL=second-output.d.ts.map
+----------------------------------------------------------------------
+text: (462-532)
+declare var c: C;
+declare function forthirdthird_part1Rest(): void;
+
+----------------------------------------------------------------------
+sourceMapUrl: (532-574)
+//# sourceMappingURL=third-output.d.ts.map
+======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {

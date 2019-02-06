@@ -64,6 +64,11 @@ namespace ts {
             outputFiles[project.third][ext.jsmap],
             outputFiles[project.third][ext.dtsmap]
         ];
+        const expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles> = [
+            [outputFiles[project.first][ext.buildinfo], outputFiles[project.first][ext.js], outputFiles[project.first][ext.dts]],
+            [outputFiles[project.second][ext.buildinfo], outputFiles[project.second][ext.js], outputFiles[project.second][ext.dts]],
+            [outputFiles[project.third][ext.buildinfo], outputFiles[project.third][ext.js], outputFiles[project.third][ext.dts]]
+        ];
         const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as [Sources, Sources, Sources];
         const { time, tick } = getTime();
         before(() => {
@@ -148,6 +153,7 @@ namespace ts {
                 proj: "outfile-concat",
                 rootNames: ["/src/third"],
                 expectedMapFileNames,
+                expectedTsbuildInfoFileNames,
                 lastProjectOutputJs: outputFiles[project.third][ext.js],
                 initialBuild: {
                     modifyFs,

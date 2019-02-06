@@ -45,6 +45,74 @@
   }
 }
 
+//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+emitHelpers: (0-504):: typescript:read
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+----------------------------------------------------------------------
+emitHelpers: (506-676):: typescript:spread
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+----------------------------------------------------------------------
+text: (678-1040)
+var s = "Hello, world";
+console.log(s);
+function forfirstfirst_PART1Rest() { }
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+function firstfirst_part3Spread() {
+    var b = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        b[_i] = arguments[_i];
+    }
+}
+firstfirst_part3Spread.apply(void 0, __spread([10, 20, 30]));
+
+----------------------------------------------------------------------
+sourceMapUrl: (1040-1080)
+//# sourceMappingURL=first-output.js.map
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-272)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function forfirstfirst_PART1Rest(): void;
+declare function f(): string;
+declare function firstfirst_part3Spread(...b: number[]): void;
+
+----------------------------------------------------------------------
+sourceMapUrl: (272-314)
+//# sourceMappingURL=first-output.d.ts.map
+======================================================================
+
 //// [/src/first/bin/first-output.d.ts.map]
 {"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK"}
 
@@ -633,6 +701,146 @@ function forfirstfirst_PART1Rest() { }
     ]
   }
 }
+
+//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+emitHelpers: (0-504):: typescript:read
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+----------------------------------------------------------------------
+emitHelpers: (506-676):: typescript:spread
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+----------------------------------------------------------------------
+emitHelpers: (678-1093):: typescript:rest
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+----------------------------------------------------------------------
+prepend: (1095-1497):: /src/first/bin/first-output.js
+var s = "Hello, world";
+console.log(s);
+function forfirstfirst_PART1Rest() { }
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+function firstfirst_part3Spread() {
+    var b = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        b[_i] = arguments[_i];
+    }
+}
+firstfirst_part3Spread.apply(void 0, __spread([10, 20, 30]));
+//# sourceMappingURL=first-output.js.map
+----------------------------------------------------------------------
+prepend: (1499-2160):: /src/2/second-output.js
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+function forsecondsecond_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+function secondsecond_part2Spread() {
+    var b = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        b[_i] = arguments[_i];
+    }
+}
+secondsecond_part2Spread.apply(void 0, __spread([10, 20, 30]));
+//# sourceMappingURL=second-output.js.map
+----------------------------------------------------------------------
+text: (2162-2527)
+var c = new C();
+c.doSomething();
+function forthirdthird_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+function thirdthird_part1Spread() {
+    var b = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        b[_i] = arguments[_i];
+    }
+}
+thirdthird_part1Spread.apply(void 0, __spread([10, 20, 30]));
+
+----------------------------------------------------------------------
+sourceMapUrl: (2527-2567)
+//# sourceMappingURL=third-output.js.map
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-314):: /src/first/bin/first-output.d.ts
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function forfirstfirst_PART1Rest(): void;
+declare function f(): string;
+declare function firstfirst_part3Spread(...b: number[]): void;
+//# sourceMappingURL=first-output.d.ts.map
+----------------------------------------------------------------------
+prepend: (316-578):: /src/2/second-output.d.ts
+declare namespace N {
+}
+declare namespace N {
+}
+declare function forsecondsecond_part1Rest(): void;
+declare class C {
+    doSomething(): void;
+}
+declare function secondsecond_part2Spread(...b: number[]): void;
+//# sourceMappingURL=second-output.d.ts.map
+----------------------------------------------------------------------
+text: (580-714)
+declare var c: C;
+declare function forthirdthird_part1Rest(): void;
+declare function thirdthird_part1Spread(...b: number[]): void;
+
+----------------------------------------------------------------------
+sourceMapUrl: (714-756)
+//# sourceMappingURL=third-output.d.ts.map
+======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
 {"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;;ACHnD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;AAED,iBAAS,wBAAwB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK;;ACNrD,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B;AACD,iBAAS,sBAAsB,CAAC,GAAG,GAAG,MAAM,EAAE,QAAK"}

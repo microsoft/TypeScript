@@ -52,6 +52,44 @@
   }
 }
 
+//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+prologue: (0-13):: use strict
+"use strict";
+----------------------------------------------------------------------
+text: (15-142)
+var s = "Hello, world";
+console.log(s);
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+sourceMapUrl: (142-182)
+//# sourceMappingURL=first-output.js.map
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+----------------------------------------------------------------------
+sourceMapUrl: (157-199)
+//# sourceMappingURL=first-output.d.ts.map
+======================================================================
+
 //// [/src/first/bin/first-output.js]
 "use strict";
 var s = "Hello, world";
@@ -330,6 +368,81 @@ console.log(s);
     ]
   }
 }
+
+//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+prologue: (0-13):: use strict
+"use strict";
+----------------------------------------------------------------------
+prepend: (15-182):: /src/first/bin/first-output.js
+var s = "Hello, world";
+console.log(s);
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+//# sourceMappingURL=first-output.js.map
+----------------------------------------------------------------------
+prepend: (184-510):: /src/2/second-output.js
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+//# sourceMappingURL=second-output.js.map
+----------------------------------------------------------------------
+text: (512-548)
+var c = new C();
+c.doSomething();
+
+----------------------------------------------------------------------
+sourceMapUrl: (548-588)
+//# sourceMappingURL=third-output.js.map
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-199):: /src/first/bin/first-output.d.ts
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+//# sourceMappingURL=first-output.d.ts.map
+----------------------------------------------------------------------
+prepend: (201-344):: /src/2/second-output.d.ts
+declare namespace N {
+}
+declare namespace N {
+}
+declare class C {
+    doSomething(): void;
+}
+//# sourceMappingURL=second-output.d.ts.map
+----------------------------------------------------------------------
+text: (346-365)
+declare var c: C;
+
+----------------------------------------------------------------------
+sourceMapUrl: (365-407)
+//# sourceMappingURL=third-output.d.ts.map
+======================================================================
 
 //// [/src/third/thirdjs/output/third-output.js]
 "use strict";

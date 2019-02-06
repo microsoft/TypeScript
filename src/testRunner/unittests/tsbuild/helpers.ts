@@ -83,11 +83,49 @@ namespace ts {
         }
     }
 
-    function build({ fs, tick, rootNames, expectedMapFileNames, modifyFs, withoutBuildInfo, expectedDiagnostics }: {
+    // [tsbuildinfo, js, dts]
+    export type BuildInfoSectionBaselineFiles = [string, string | undefined, string | undefined];
+    function generateBuildInfoSectionBaselineFiles(fs: vfs.FileSystem, buildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>) {
+        for (const [file, jsFile, dtsFile] of buildInfoFileNames) {
+            if (!fs.existsSync(file)) continue;
+
+            const buildInfo = JSON.parse(fs.readFileSync(file, "utf8")) as BuildInfo;
+            if (!buildInfo.js.length && !buildInfo.dts.length) continue;
+
+            // Write the baselines:
+            const baselineRecorder = new Harness.Compiler.WriterAggregator();
+            generateBundleFileSectionInfo(fs, baselineRecorder, buildInfo.js, jsFile);
+            generateBundleFileSectionInfo(fs, baselineRecorder, buildInfo.dts, dtsFile);
+            baselineRecorder.Close();
+
+            const text = baselineRecorder.lines.join("\r\n");
+            fs.writeFileSync(`${file}.baseline.txt`, text, "utf8");
+        }
+    }
+
+    function generateBundleFileSectionInfo(fs: vfs.FileSystem, baselineRecorder: Harness.Compiler.WriterAggregator, sections: BundleFileSection[], outFile: string | undefined) {
+        if (!sections.length && !outFile) return; // Nothing to baseline
+
+        const content = outFile && fs.existsSync(outFile) ? fs.readFileSync(outFile, "utf8") : "";
+        baselineRecorder.WriteLine("======================================================================");
+        baselineRecorder.WriteLine(`File:: ${outFile}`);
+        for (const section of sections) {
+            baselineRecorder.WriteLine("----------------------------------------------------------------------");
+            baselineRecorder.WriteLine(`${section.kind}: (${section.pos}-${section.end})${section.data ? ":: " + section.data : ""}`);
+            const textLines = content.substring(section.pos, section.end).split(/\r?\n/);
+            for (const line of textLines) {
+                baselineRecorder.WriteLine(line);
+            }
+        }
+        baselineRecorder.WriteLine("======================================================================");
+    }
+
+    function build({ fs, tick, rootNames, expectedMapFileNames, expectedTsbuildInfoFileNames, modifyFs, withoutBuildInfo, expectedDiagnostics }: {
         fs: vfs.FileSystem;
         tick: () => void;
         rootNames: ReadonlyArray<string>;
         expectedMapFileNames: ReadonlyArray<string>;
+        expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         modifyFs: (fs: vfs.FileSystem) => void;
         withoutBuildInfo: boolean;
         expectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic>;
@@ -120,6 +158,7 @@ namespace ts {
         builder.buildAllProjects();
         host.assertDiagnosticMessages(...expectedDiagnostics);
         generateSourceMapBaselineFiles(fs, expectedMapFileNames);
+        generateBuildInfoSectionBaselineFiles(fs, expectedTsbuildInfoFileNames);
         fs.makeReadonly();
         return { fs, actualReadFileMap, host, builder };
     }
@@ -165,7 +204,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(mapDefinedIterator(act
     }
 
     function verifyTsbuildOutputWorker({
-        scenario, projFs, time, tick, proj, rootNames, expectedMapFileNames, withoutBuildInfo, lastProjectOutputJs,
+        scenario, projFs, time, tick, proj, rootNames, expectedMapFileNames, expectedTsbuildInfoFileNames, withoutBuildInfo, lastProjectOutputJs,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: {
         scenario: string;
@@ -175,6 +214,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(mapDefinedIterator(act
         proj: string;
         rootNames: ReadonlyArray<string>;
         expectedMapFileNames: ReadonlyArray<string>;
+        expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         withoutBuildInfo: boolean;
         lastProjectOutputJs: string;
         initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
@@ -192,6 +232,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(mapDefinedIterator(act
                     tick,
                     rootNames,
                     expectedMapFileNames,
+                    expectedTsbuildInfoFileNames,
                     modifyFs: initialBuild.modifyFs,
                     withoutBuildInfo,
                     expectedDiagnostics: initialBuild.expectedDiagnostics
@@ -228,6 +269,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(mapDefinedIterator(act
                             tick,
                             rootNames,
                             expectedMapFileNames,
+                            expectedTsbuildInfoFileNames,
                             modifyFs: incrementalModifyFs,
                             withoutBuildInfo,
                             expectedDiagnostics: incrementalExpectedDiagnostics
@@ -282,6 +324,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(mapDefinedIterator(act
         proj: string;
         rootNames: ReadonlyArray<string>;
         expectedMapFileNames: ReadonlyArray<string>;
+        expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         lastProjectOutputJs: string;
         initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
         incrementalDtsChangedBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
