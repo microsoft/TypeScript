@@ -384,7 +384,7 @@ namespace ts {
         };
     }
 
-    function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
+    function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
         const host = createProgramHost(system, createProgram) as SolutionBuilderHostBase<T>;
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
@@ -395,13 +395,13 @@ namespace ts {
     }
 
     export function createSolutionBuilderHost<T extends BuilderProgram = BuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
-        const host = createSolutionBuilderHostBase(system, createProgram || createAbstractBuilder as any as CreateProgram<T>, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
+        const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
         host.reportErrorSummary = reportErrorSummary;
         return host;
     }
 
     export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = SemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
-        const host = createSolutionBuilderHostBase(system, createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
+        const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
         const watchHost = createWatchHost(system, reportWatchStatus);
         copyProperties(host, watchHost);
         return host;
@@ -446,7 +446,13 @@ namespace ts {
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
         const originalGetSourceFile = compilerHost.getSourceFile;
         const computeHash = host.createHash || generateDjb2Hash;
-        updateGetSourceFile();
+        compilerHost.getSourceFile = (...args) => {
+            const result = originalGetSourceFile.call(compilerHost, ...args);
+            if (result) {
+                result.version = computeHash.call(host, result.text);
+            }
+            return result;
+        };
 
         // Watch state
         const builderPrograms = createFileMap<T>(toPath);
@@ -508,26 +514,6 @@ namespace ts {
             clearMap(allWatchedInputFiles, inputFileWatches => clearMap(inputFileWatches, closeFileWatcher));
             clearMap(allWatchedConfigFiles, closeFileWatcher);
             builderPrograms.clear();
-            updateGetSourceFile();
-        }
-
-        function updateGetSourceFile() {
-            if (options.watch) {
-                if (compilerHost.getSourceFile === originalGetSourceFile) {
-                    compilerHost.getSourceFile = (...args) => {
-                        const result = originalGetSourceFile.call(compilerHost, ...args);
-                        if (result && options.watch) {
-                            result.version = computeHash.call(host, result.text);
-                        }
-                        return result;
-                    };
-                }
-            }
-            else {
-                if (compilerHost.getSourceFile !== originalGetSourceFile) {
-                    compilerHost.getSourceFile = originalGetSourceFile;
-                }
-            }
         }
 
         function isParsedCommandLine(entry: ConfigFileCacheEntry): entry is ParsedCommandLine {
@@ -817,27 +803,30 @@ namespace ts {
                         };
                     }
 
-                    // If the upstream project's newest file is older than our oldest output, we
-                    // can't be out of date because of it
-                    if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
-                        continue;
-                    }
+                    // Check oldest output file name only if there is no missing output file name
+                    if (!missingOutputFileName) {
+                        // If the upstream project's newest file is older than our oldest output, we
+                        // can't be out of date because of it
+                        if (refStatus.newestInputFileTime && refStatus.newestInputFileTime <= oldestOutputFileTime) {
+                            continue;
+                        }
 
-                    // If the upstream project has only change .d.ts files, and we've built
-                    // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
-                    if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
-                        pseudoUpToDate = true;
-                        upstreamChangedProject = ref.path;
-                        continue;
-                    }
+                        // If the upstream project has only change .d.ts files, and we've built
+                        // *after* those files, then we're "psuedo up to date" and eligible for a fast rebuild
+                        if (refStatus.newestDeclarationFileContentChangedTime && refStatus.newestDeclarationFileContentChangedTime <= oldestOutputFileTime) {
+                            pseudoUpToDate = true;
+                            upstreamChangedProject = ref.path;
+                            continue;
+                        }
 
-                    // We have an output older than an upstream output - we are out of date
-                    Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
-                    return {
-                        type: UpToDateStatusType.OutOfDateWithUpstream,
-                        outOfDateOutputFileName: oldestOutputFileName,
-                        newerProjectName: ref.path
-                    };
+                        // We have an output older than an upstream output - we are out of date
+                        Debug.assert(oldestOutputFileName !== undefined, "Should have an oldest output filename here");
+                        return {
+                            type: UpToDateStatusType.OutOfDateWithUpstream,
+                            outOfDateOutputFileName: oldestOutputFileName,
+                            newerProjectName: ref.path
+                        };
+                    }
                 }
             }
 
@@ -1127,7 +1116,7 @@ namespace ts {
                 configFile.fileNames,
                 configFile.options,
                 compilerHost,
-                builderPrograms.getValue(proj),
+                getOldProgram(proj, configFile),
                 configFile.errors,
                 configFile.projectReferences
             );
@@ -1223,6 +1212,17 @@ namespace ts {
                 program.releaseProgram();
                 builderPrograms.setValue(proj, program);
             }
+        }
+
+        function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            const value = builderPrograms.getValue(proj);
+            if (value) return value;
+            const buildInfoPath = getOutputPathForBuildInfo(parsed.options, parsed.projectReferences);
+            if (!buildInfoPath) return undefined;
+            const content = readFileWithCache(buildInfoPath);
+            if (!content) return undefined;
+            const buildInfo = JSON.parse(content) as BuildInfo;
+            return buildInfo.program && createBuildProgramUsingProgramBuildInfo(buildInfo.program) as any as T;
         }
 
         function updateBundle(proj: ResolvedConfigFileName): BuildResultFlags {

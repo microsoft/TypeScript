@@ -385,7 +385,7 @@ namespace fakes {
     }
 
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-        createProgram = ts.createAbstractBuilder;
+        createProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram;
         now() {
             return new Date(this.sys.vfs.time());
         }

@@ -242,7 +242,8 @@ namespace ts {
             const key = toPath(fileName);
             const value = readFileCache.get(key);
             if (value !== undefined) return value !== false ? value : undefined; // could be .d.ts from output
-            if (!fileExtensionIs(fileName, Extension.Json)) {
+            // Cache json or buildInfo
+            if (!fileExtensionIs(fileName, Extension.Json) && !isInfoFile(fileName)) {
                 return originalReadFile.call(host, fileName);
             }
 
@@ -276,7 +277,7 @@ namespace ts {
                 fileExistsCache.delete(key);
 
                 const value = readFileCache.get(key);
-                if (value && value !== data) {
+                if (value !== undefined && value !== data) {
                     readFileCache.delete(key);
                     sourceFileCache.delete(key);
                 }
@@ -937,7 +938,8 @@ namespace ts {
             getProjectReferenceRedirect,
             getResolvedProjectReferenceToRedirect,
             getResolvedProjectReferenceByPath,
-            forEachResolvedProjectReference
+            forEachResolvedProjectReference,
+            emitBuildInfo
         };
 
         verifyCompilerOptions();
@@ -1432,7 +1434,26 @@ namespace ts {
                 },
                 ...(host.directoryExists ? { directoryExists: f => host.directoryExists!(f) } : {}),
                 useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
+                getProgramBuildInfo: () => program.getProgramBuildInfo && program.getProgramBuildInfo()
             };
+        }
+
+        function emitBuildInfo(writeFileCallback?: WriteFileCallback): EmitResult {
+            Debug.assert(!options.out && !options.outFile);
+            performance.mark("beforeEmit");
+            const emitResult = emitFiles(
+                notImplementedResolver,
+                getEmitHost(writeFileCallback),
+                /*targetSourceFile*/ undefined,
+                /*emitOnlyDtsFiles*/ false,
+                /*transformers*/ undefined,
+                /*declaraitonTransformers*/ undefined,
+                /*onlyBuildInfo*/ true
+            );
+
+            performance.mark("afterEmit");
+            performance.measure("Emit", "beforeEmit", "afterEmit");
+            return emitResult;
         }
 
         function getResolvedProjectReferences() {

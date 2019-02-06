@@ -83,6 +83,41 @@ namespace ts {
         }
 
         function verifyOutFileScenario({ scenario, modifyFs, modifyAgainFs, additionalSourceFiles }: { scenario: string; modifyFs: (fs: vfs.FileSystem) => void; modifyAgainFs?: (fs: vfs.FileSystem) => void; additionalSourceFiles?: ReadonlyArray<string>; }) {
+            const incrementalDtsChanged: ExpectedBuildOutputPerState = {
+                expectedDiagnostics: [
+                    getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                    [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/first"],
+                    [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                ],
+                expectedReadFiles: getReadFilesMap(
+                    [
+                        // Configs
+                        sources[project.first][source.config],
+                        sources[project.second][source.config],
+                        sources[project.third][source.config],
+
+                        // Source files
+                        ...sources[project.first][source.ts],
+                        ...sources[project.third][source.ts],
+
+                        // Additional source Files
+                        ...(additionalSourceFiles || emptyArray),
+
+                        // outputs
+                        ...outputFiles[project.first],
+                        ...outputFiles[project.second],
+                        outputFiles[project.third][ext.dts],
+
+                        // build info
+                        outputFiles[project.third][ext.buildinfo],
+                    ],
+                    outputFiles[project.first][ext.dts], // dts changes so once read old content, and once new (to emit third)
+                    outputFiles[project.first][ext.buildinfo] // since first build info changes
+                )
+            };
             const incrementalDtsUnchangedWithBuildInfo: ExpectedBuildOutputPerState = {
                 expectedDiagnostics: [
                     getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
@@ -93,23 +128,27 @@ namespace ts {
                     [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
                     [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
                 ],
-                expectedReadFiles: getReadFilesMap([
-                    // Configs
-                    sources[project.first][source.config],
-                    sources[project.second][source.config],
-                    sources[project.third][source.config],
+                expectedReadFiles: getReadFilesMap(
+                    [
+                        // Configs
+                        sources[project.first][source.config],
+                        sources[project.second][source.config],
+                        sources[project.third][source.config],
 
-                    // Source files
-                    ...sources[project.first][source.ts],
+                        // Source files
+                        ...sources[project.first][source.ts],
 
-                    // Additional source Files
-                    ...(additionalSourceFiles && additionalSourceFiles.length === 3 ? [additionalSourceFiles[project.first]] : emptyArray),
+                        // Additional source Files
+                        ...(additionalSourceFiles && additionalSourceFiles.length === 3 ? [additionalSourceFiles[project.first]] : emptyArray),
 
-                    // outputs to prepend
-                    ...outputFiles[project.first],
-                    ...outputFiles[project.second],
-                    ...outputFiles[project.third]
-                ])
+                        // outputs to prepend
+                        ...outputFiles[project.first],
+                        ...outputFiles[project.second],
+                        ...outputFiles[project.third],
+                        outputFiles[project.third][ext.buildinfo],
+                    ],
+                    outputFiles[project.first][ext.buildinfo] // since first build info changes
+                )
             };
             const incrementalDtsUnchangedWithoutBuildInfo: ExpectedBuildOutputPerState = {
                 expectedDiagnostics: [
@@ -122,27 +161,30 @@ namespace ts {
                     [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
                     [Diagnostics.Building_project_0, sources[project.third][source.config]]
                 ],
-                expectedReadFiles: getReadFilesMap([
-                    // Configs
-                    sources[project.first][source.config],
-                    sources[project.second][source.config],
-                    sources[project.third][source.config],
+                expectedReadFiles: getReadFilesMap(
+                    [
+                        // Configs
+                        sources[project.first][source.config],
+                        sources[project.second][source.config],
+                        sources[project.third][source.config],
 
-                    // Source files
-                    ...sources[project.first][source.ts],
-                    ...sources[project.third][source.ts],
+                        // Source files
+                        ...sources[project.first][source.ts],
+                        ...sources[project.third][source.ts],
 
-                    // Additional source Files
-                    ...(additionalSourceFiles || emptyArray),
+                        // Additional source Files
+                        ...(additionalSourceFiles || emptyArray),
 
-                    // outputs
-                    ...outputFiles[project.first],
-                    ...outputFiles[project.second],
-                    outputFiles[project.third][ext.dts],
+                        // outputs
+                        ...outputFiles[project.first],
+                        ...outputFiles[project.second],
+                        outputFiles[project.third][ext.dts],
 
-                    // To prepend:: checked to see if we can do prepend manipulation
-                    outputFiles[project.third][ext.buildinfo],
-                ])
+                        // To prepend:: checked to see if we can do prepend manipulation
+                        outputFiles[project.third][ext.buildinfo],
+                    ],
+                    outputFiles[project.first][ext.buildinfo] // since first build info changes
+                )
             };
 
             verifyTsbuildOutput({
@@ -166,35 +208,6 @@ namespace ts {
                         [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], relOutputFiles[project.third][ext.js]],
                         [Diagnostics.Building_project_0, sources[project.third][source.config]]
                     ],
-                    expectedReadFiles: arrayToMap([
-                        // Configs
-                        sources[project.first][source.config],
-                        sources[project.second][source.config],
-                        sources[project.third][source.config],
-
-                        // Source files
-                        ...sources[project.first][source.ts],
-                        ...sources[project.second][source.ts],
-                        ...sources[project.third][source.ts],
-
-                        // Additional source Files
-                        ...(additionalSourceFiles || emptyArray),
-
-                        // outputs
-                        ...outputFiles[project.first],
-                        ...outputFiles[project.second]
-                    ], identity, () => 1)
-                },
-                incrementalDtsChangedBuild: {
-                    modifyFs: fs => replaceText(fs, relSources[project.first][source.ts][part.one], "Hello", "Hola"),
-                    expectedDiagnostics: [
-                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
-                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/first"],
-                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
-                    ],
                     expectedReadFiles: getReadFilesMap(
                         [
                             // Configs
@@ -204,6 +217,7 @@ namespace ts {
 
                             // Source files
                             ...sources[project.first][source.ts],
+                            ...sources[project.second][source.ts],
                             ...sources[project.third][source.ts],
 
                             // Additional source Files
@@ -212,10 +226,19 @@ namespace ts {
                             // outputs
                             ...outputFiles[project.first],
                             ...outputFiles[project.second],
-                            outputFiles[project.third][ext.dts],
+
+                            // build info
+                            outputFiles[project.third][ext.buildinfo],
                         ],
-                        outputFiles[project.first][ext.dts] // dts changes so once read old content, and once new (to emit third)
+                        // These are first not present and later read new contents to generate third output
+                        outputFiles[project.first][ext.buildinfo],
+                        outputFiles[project.second][ext.buildinfo]
                     )
+                },
+                incrementalDtsChangedBuild: {
+                    modifyFs: fs => replaceText(fs, relSources[project.first][source.ts][part.one], "Hello", "Hola"),
+                    withBuildInfo: incrementalDtsChanged,
+                    withoutBuildInfo: incrementalDtsChanged
                 },
                 incrementalDtsUnchangedBuild: {
                     modifyFs: fs => appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);"),

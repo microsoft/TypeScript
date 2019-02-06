@@ -22,7 +22,9 @@ namespace ts {
     export function forEachEmittedFile<T>(
         host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) => T,
         sourceFilesOrTargetSourceFile?: ReadonlyArray<SourceFile> | SourceFile,
-        emitOnlyDtsFiles = false) {
+        emitOnlyDtsFiles = false,
+        onlyBuildInfo?: boolean,
+        includeBuildInfo?: boolean) {
         const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
         const options = host.getCompilerOptions();
         if (options.outFile || options.out) {
@@ -36,14 +38,18 @@ namespace ts {
             }
         }
         else {
-            for (const sourceFile of sourceFiles) {
-                const result = action(getOutputPathsFor(sourceFile, host, emitOnlyDtsFiles), sourceFile);
-                if (result) {
-                    return result;
+            if (!onlyBuildInfo) {
+                for (const sourceFile of sourceFiles) {
+                    const result = action(getOutputPathsFor(sourceFile, host, emitOnlyDtsFiles), sourceFile);
+                    if (result) {
+                        return result;
+                    }
                 }
             }
-            const buildInfoPath = getOutputPathForBuildInfo(host.getCompilerOptions(), host.getProjectReferences());
-            return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
+            if (includeBuildInfo) {
+                const buildInfoPath = getOutputPathForBuildInfo(host.getCompilerOptions(), host.getProjectReferences());
+                return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
+            }
         }
     }
 
@@ -117,7 +123,7 @@ namespace ts {
 
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<Bundle | SourceFile>[], declarationTransformers?: TransformerFactory<Bundle | SourceFile>[]): EmitResult {
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<Bundle | SourceFile>[], declarationTransformers?: TransformerFactory<Bundle | SourceFile>[], onlyBuildInfo?: boolean): EmitResult {
         const compilerOptions = host.getCompilerOptions();
         const sourceMapDataList: SourceMapEmitResult[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
         const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
@@ -131,7 +137,7 @@ namespace ts {
 
         // Emit each output file
         enter();
-        forEachEmittedFile(host, emitSourceFileOrBundle, getSourceFilesToEmit(host, targetSourceFile), emitOnlyDtsFiles);
+        forEachEmittedFile(host, emitSourceFileOrBundle, getSourceFilesToEmit(host, targetSourceFile), emitOnlyDtsFiles, onlyBuildInfo, !targetSourceFile);
         exit();
 
 
@@ -172,8 +178,9 @@ namespace ts {
 
         function emitBuildInfo(buildInfo: BuildInfo | undefined, buildInfoPath: string | undefined) {
             // Write build information if applicable
-            if (!buildInfo || !buildInfoPath || emitOnlyDtsFiles || emitSkipped) return;
-
+            if (!buildInfo || !buildInfoPath || targetSourceFile || emitOnlyDtsFiles || emitSkipped) return;
+            const program = host.getProgramBuildInfo();
+            if (program) buildInfo.program = program;
             writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText(buildInfo), /*writeByteOrderMark*/ false);
         }
 
@@ -430,7 +437,8 @@ namespace ts {
         return JSON.stringify(buildInfo, undefined, 2);
     }
 
-    const notImplementedResolver: EmitResolver = {
+    /*@internal*/
+    export const notImplementedResolver: EmitResolver = {
         hasGlobalName: notImplemented,
         getReferencedExportContainer: notImplemented,
         getReferencedImportDeclaration: notImplemented,
@@ -567,6 +575,7 @@ namespace ts {
             fileExists: f => host.fileExists(f),
             directoryExists: host.directoryExists && (f => host.directoryExists!(f)),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
+            getProgramBuildInfo: () => undefined
         };
         // Emit js
         emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(optionsWithoutDeclaration));

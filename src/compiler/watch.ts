@@ -283,7 +283,7 @@ namespace ts {
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
-    export function createProgramHost<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T>): ProgramHost<T> {
+    export function createProgramHost<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
         const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
         let host: DirectoryStructureHost = system;
         host; // tslint:disable-line no-unused-expression (TODO: `host` is unused!)
@@ -305,7 +305,7 @@ namespace ts {
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
             createHash: maybeBind(system, system.createHash),
-            createProgram
+            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>
         };
     }
 
@@ -314,7 +314,7 @@ namespace ts {
      */
     function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
         const writeFileName = (s: string) => system.write(s + system.newLine);
-        const result = createProgramHost(system, createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>) as WatchCompilerHost<T>;
+        const result = createProgramHost(system, createProgram) as WatchCompilerHost<T>;
         copyProperties(result, createWatchHost(system, reportWatchStatus));
         result.afterProgramCreate = builderProgram => {
             const compilerOptions = builderProgram.getCompilerOptions();

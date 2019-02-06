@@ -49,6 +49,48 @@
       "typescript:read",
       "typescript:spread"
     ]
+  },
+  "program": {
+    "fileInfos": {
+      "/lib/lib.d.ts": {
+        "version": "38840781448"
+      },
+      "/lib/lib.es5.d.ts": {
+        "version": "-157947125741"
+      },
+      "/lib/lib.dom.d.ts": {
+        "version": "-1086375748659"
+      },
+      "/lib/lib.webworker.importscripts.d.ts": {
+        "version": "16827914512"
+      },
+      "/lib/lib.scripthost.d.ts": {
+        "version": "-7856822451"
+      },
+      "/src/first/first_part1.ts": {
+        "version": "2612047891"
+      },
+      "/src/first/first_part2.ts": {
+        "version": "4973778178"
+      },
+      "/src/first/first_part3.ts": {
+        "version": "-5005271345"
+      }
+    },
+    "options": {
+      "target": 1,
+      "composite": true,
+      "removeComments": true,
+      "strict": false,
+      "downlevelIteration": true,
+      "sourceMap": true,
+      "declarationMap": true,
+      "outFile": "/src/first/bin/first-output.js",
+      "skipDefaultLibCheck": true,
+      "configFilePath": "/src/first/tsconfig.json"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {}
   }
 }
 
@@ -788,6 +830,49 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
       "typescript:read",
       "typescript:spread"
     ]
+  },
+  "program": {
+    "fileInfos": {
+      "/lib/lib.d.ts": {
+        "version": "38840781448"
+      },
+      "/lib/lib.es5.d.ts": {
+        "version": "-157947125741"
+      },
+      "/lib/lib.dom.d.ts": {
+        "version": "-1086375748659"
+      },
+      "/lib/lib.webworker.importscripts.d.ts": {
+        "version": "16827914512"
+      },
+      "/lib/lib.scripthost.d.ts": {
+        "version": "-7856822451"
+      },
+      "/src/first/bin/first-output.d.ts": {
+        "version": "2133111739"
+      },
+      "/src/2/second-output.d.ts": {
+        "version": "-13931567723"
+      },
+      "/src/third/third_part1.ts": {
+        "version": "-2949409203"
+      }
+    },
+    "options": {
+      "target": 1,
+      "composite": true,
+      "removeComments": true,
+      "strict": false,
+      "downlevelIteration": true,
+      "sourceMap": true,
+      "declarationMap": true,
+      "declaration": true,
+      "outFile": "/src/third/thirdjs/output/third-output.js",
+      "skipDefaultLibCheck": true,
+      "configFilePath": "/src/third/tsconfig.json"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {}
   }
 }
 

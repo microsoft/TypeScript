@@ -2991,6 +2991,8 @@ namespace ts {
         /*@internal*/ getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
         /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
         /*@internal*/ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
+        /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo;
+        /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     }
 
     /* @internal */
@@ -5325,6 +5327,7 @@ namespace ts {
         getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
 
         writeFile: WriteFileCallback;
+        getProgramBuildInfo(): ProgramBuildInfo | undefined;
     }
 
     export interface TransformationContext {
@@ -5578,6 +5581,7 @@ namespace ts {
         dts: BundleFileSection[];
         commonSourceDirectory: string;
         sources: SourceFileInfo;
+        program?: ProgramBuildInfo;
     }
 
     export interface PrintHandlers {

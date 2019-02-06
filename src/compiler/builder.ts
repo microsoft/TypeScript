@@ -1,5 +1,53 @@
 /*@internal*/
 namespace ts {
+    export interface ReusableBuilderProgramState extends ReusableBuilderState {
+        /**
+         * Cache of semantic diagnostics for files with their Path being the key
+         */
+        semanticDiagnosticsPerFile?: ReadonlyMap<ReadonlyArray<Diagnostic>> | undefined;
+        /**
+         * The map has key by source file's path that has been changed
+         */
+        changedFilesSet?: ReadonlyMap<true>;
+        /**
+         * Set of affected files being iterated
+         */
+        affectedFiles?: ReadonlyArray<SourceFile> | undefined;
+        /**
+         * Current changed file for iterating over affected files
+         */
+        currentChangedFilePath?: Path | undefined;
+        /**
+         * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
+         * These will be committed whenever the iteration through affected files of current changed file is complete
+         */
+        currentAffectedFilesSignatures?: ReadonlyMap<string> | undefined;
+        /**
+         * Newly computed visible to outside referencedSet
+         */
+        currentAffectedFilesExportedModulesMap?: Readonly<BuilderState.ComputingExportedModulesMap> | undefined;
+        /**
+         * True if the semantic diagnostics were copied from the old state
+         */
+        semanticDiagnosticsFromOldState?: Map<true>;
+        /**
+         * program corresponding to this state
+         */
+        program?: Program | undefined;
+        /**
+         * compilerOptions for the program
+         */
+        compilerOptions: CompilerOptions;
+        /**
+         * Files pending to be emitted
+         */
+        affectedFilesPendingEmit?: ReadonlyArray<Path> | undefined;
+        /**
+         * Current index to retrieve pending affected file
+         */
+        affectedFilesPendingEmitIndex?: number | undefined;
+    }
+
     /**
      * State to store the changed files, affected files and cache semantic diagnostics
      */
@@ -63,6 +111,10 @@ namespace ts {
          */
         affectedFilesPendingEmitIndex: number | undefined;
         /**
+         * true if build info is emitted
+         */
+        emittedBuildInfo?: boolean;
+        /**
          * Already seen affected files
          */
         seenEmittedFiles: Map<true> | undefined;
@@ -80,7 +132,7 @@ namespace ts {
     /**
      * Create the state so that we can iterate on changedFiles/affected files
      */
-    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<BuilderProgramState>): BuilderProgramState {
+    function createBuilderProgramState(newProgram: Program, getCanonicalFileName: GetCanonicalFileName, oldState?: Readonly<ReusableBuilderProgramState>): BuilderProgramState {
         const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
@@ -102,12 +154,15 @@ namespace ts {
                 const affectedSignatures = oldState!.currentAffectedFilesSignatures;
                 Debug.assert(!oldState!.affectedFiles && (!affectedSignatures || !affectedSignatures.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
             }
+            const changedFilesSet = oldState!.changedFilesSet;
             if (canCopySemanticDiagnostics) {
-                Debug.assert(!forEachKey(oldState!.changedFilesSet, path => oldState!.semanticDiagnosticsPerFile!.has(path)), "Semantic diagnostics shouldnt be available for changed files");
+                Debug.assert(!changedFilesSet || !forEachKey(changedFilesSet, path => oldState!.semanticDiagnosticsPerFile!.has(path)), "Semantic diagnostics shouldnt be available for changed files");
             }
 
             // Copy old state's changed files set
-            copyEntries(oldState!.changedFilesSet, state.changedFilesSet);
+            if (changedFilesSet) {
+                copyEntries(changedFilesSet, state.changedFilesSet);
+            }
             if (!compilerOptions.outFile && !compilerOptions.out && oldState!.affectedFilesPendingEmit) {
                 state.affectedFilesPendingEmit = oldState!.affectedFilesPendingEmit;
                 state.affectedFilesPendingEmitIndex = oldState!.affectedFilesPendingEmitIndex;
@@ -397,8 +452,11 @@ namespace ts {
      * This is called after completing operation on the next affected file.
      * The operations here are postponed to ensure that cancellation during the iteration is handled correctly
      */
-    function doneWithAffectedFile(state: BuilderProgramState, affected: SourceFile | Program, isPendingEmit?: boolean) {
-        if (affected === state.program) {
+    function doneWithAffectedFile(state: BuilderProgramState, affected: SourceFile | Program, isPendingEmit?: boolean, isBuildInfoEmit?: boolean) {
+        if (isBuildInfoEmit) {
+            state.emittedBuildInfo = true;
+        }
+        else if (affected === state.program) {
             state.changedFilesSet.clear();
             state.programEmitComplete = true;
         }
@@ -416,8 +474,8 @@ namespace ts {
     /**
      * Returns the result with affected file
      */
-    function toAffectedFileResult<T>(state: BuilderProgramState, result: T, affected: SourceFile | Program, isPendingEmit?: boolean): AffectedFileResult<T> {
-        doneWithAffectedFile(state, affected, isPendingEmit);
+    function toAffectedFileResult<T>(state: BuilderProgramState, result: T, affected: SourceFile | Program, isPendingEmit?: boolean, isBuildInfoEmit?: boolean): AffectedFileResult<T> {
+        doneWithAffectedFile(state, affected, isPendingEmit, isBuildInfoEmit);
         return { result, affected };
     }
 
@@ -441,6 +499,55 @@ namespace ts {
             state.semanticDiagnosticsPerFile.set(path, diagnostics);
         }
         return diagnostics;
+    }
+
+    export interface ProgramBuildInfo {
+        fileInfos: MapLike<BuilderState.FileInfo>;
+        options: CompilerOptions;
+        referencedMap?: MapLike<string[]>;
+        exportedModulesMap?: MapLike<string[]>;
+        semanticDiagnosticsPerFile?: string[];
+    }
+
+    /**
+     * Gets the program information to be emitted in buildInfo so that we can use it to create new program
+     */
+    function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>): ProgramBuildInfo {
+        const fileInfos: MapLike<BuilderState.FileInfo> = {};
+        state.fileInfos.forEach((value, key) => {
+            const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
+            fileInfos[key] = signature === undefined ? value : { version: value.version, signature };
+        });
+
+        const result: ProgramBuildInfo = { fileInfos, options: state.compilerOptions };
+        if (state.referencedMap) {
+            const referencedMap: MapLike<string[]> = {};
+            state.referencedMap.forEach((value, key) => {
+                referencedMap[key] = arrayFrom(value.keys());
+            });
+            result.referencedMap = referencedMap;
+        }
+
+        if (state.exportedModulesMap) {
+            const exportedModulesMap: MapLike<string[]> = {};
+            state.exportedModulesMap.forEach((value, key) => {
+                const newValue = state.currentAffectedFilesExportedModulesMap && state.currentAffectedFilesExportedModulesMap.get(key);
+                // Not in temporary cache, use existing value
+                if (newValue === undefined) exportedModulesMap[key] = arrayFrom(value.keys());
+                // Value in cache and has updated value map, use that
+                else if (newValue) exportedModulesMap[key] = arrayFrom(newValue.keys());
+            });
+            result.exportedModulesMap = exportedModulesMap;
+        }
+
+        if (state.semanticDiagnosticsPerFile) {
+            const semanticDiagnosticsPerFile: string[] = [];
+            // Currently not recording actual errors since those mean no emit for tsc --build
+            state.semanticDiagnosticsPerFile.forEach((_value, key) => semanticDiagnosticsPerFile.push(key));
+            result.semanticDiagnosticsPerFile = semanticDiagnosticsPerFile;
+        }
+
+        return result;
     }
 
     export enum BuilderProgramKind {
@@ -508,6 +615,7 @@ namespace ts {
         const computeHash = host.createHash || generateDjb2Hash;
         let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
         let backupState: BuilderProgramState | undefined;
+        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state);
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -556,7 +664,20 @@ namespace ts {
                 if (!state.compilerOptions.out && !state.compilerOptions.outFile) {
                     affected = getNextAffectedFilePendingEmit(state);
                     if (!affected) {
-                        return undefined;
+                        if (state.emittedBuildInfo) {
+                            return undefined;
+                        }
+
+                        const affected = Debug.assertDefined(state.program);
+                        return toAffectedFileResult(
+                            state,
+                            // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
+                            // Otherwise just affected file
+                            affected.emitBuildInfo(writeFile || host.writeFile, cancellationToken),
+                            affected,
+                            /*isPendingEmitFile*/ false,
+                            /*isBuildInfoEmit*/ true
+                        );
                     }
                     isPendingEmitFile = true;
                 }
@@ -712,6 +833,52 @@ namespace ts {
         }
     }
 
+    function getMapOfReferencedSet(mapLike: MapLike<ReadonlyArray<string>> | undefined): ReadonlyMap<BuilderState.ReferencedSet> | undefined {
+        if (!mapLike) return undefined;
+        const map = createMap<BuilderState.ReferencedSet>();
+        // Copies keys/values from template. Note that for..in will not throw if
+        // template is undefined, and instead will just exit the loop.
+        for (const key in mapLike) {
+            if (hasProperty(mapLike, key)) {
+                map.set(key, arrayToSet(mapLike[key]));
+            }
+        }
+        return map;
+    }
+
+    export function createBuildProgramUsingProgramBuildInfo(program: ProgramBuildInfo): EmitAndSemanticDiagnosticsBuilderProgram & SemanticDiagnosticsBuilderProgram {
+        const fileInfos = createMapFromTemplate(program.fileInfos);
+        const state: ReusableBuilderProgramState = {
+            fileInfos,
+            compilerOptions: program.options,
+            referencedMap: getMapOfReferencedSet(program.referencedMap),
+            exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap),
+            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, identity, () => emptyArray)
+        };
+        return {
+            getState: () => state,
+            backupState: noop,
+            restoreState: noop,
+            getProgram: notImplemented,
+            getProgramOrUndefined: () => undefined,
+            releaseProgram: noop,
+            getCompilerOptions: () => state.compilerOptions,
+            getSourceFile: notImplemented,
+            getSourceFiles: notImplemented,
+            getOptionsDiagnostics: notImplemented,
+            getGlobalDiagnostics: notImplemented,
+            getConfigFileParsingDiagnostics: notImplemented,
+            getSyntacticDiagnostics: notImplemented,
+            getDeclarationDiagnostics: notImplemented,
+            getSemanticDiagnostics: notImplemented,
+            emit: notImplemented,
+            getAllDependencies: notImplemented,
+            getCurrentDirectory: notImplemented,
+            emitNextAffectedFile: notImplemented,
+            getSemanticDiagnosticsOfNextAffectedFile: notImplemented
+        };
+    }
+
     export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: ReadonlyArray<Diagnostic>): BuilderProgram {
         return {
             getState: notImplemented,
@@ -764,7 +931,7 @@ namespace ts {
      */
     export interface BuilderProgram {
         /*@internal*/
-        getState(): BuilderProgramState;
+        getState(): ReusableBuilderProgramState;
         /*@internal*/
         backupState(): void;
         /*@internal*/

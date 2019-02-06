@@ -178,16 +178,16 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         });
     }
 
-    export function getReadFilesMap(filesReadOnce: ReadonlyArray<string>, fileWithTwoReadCalls?: string) {
+    export function getReadFilesMap(filesReadOnce: ReadonlyArray<string>, ...filesWithTwoReadCalls: string[]) {
         const map = arrayToMap(filesReadOnce, identity, () => 1);
-        if (fileWithTwoReadCalls) {
+        for (const fileWithTwoReadCalls of filesWithTwoReadCalls) {
             map.set(fileWithTwoReadCalls, 2);
         }
         return map;
     }
 
     export interface ExpectedBuildOutputPerState {
-        expectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic>;
+        expectedDiagnostics?: ReadonlyArray<fakes.ExpectedDiagnostic>;
         expectedReadFiles?: ReadonlyMap<number>;
     }
 
@@ -195,10 +195,14 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         modifyFs: (fs: vfs.FileSystem) => void;
     }
 
-    export interface ExpectedBuildOutputDifferingWithBuildInfo {
+    export interface ExpectedBuildOutputDifferingWithBuildInfo extends ExpectedBuildOutputPerState {
         modifyFs: (fs: vfs.FileSystem) => void;
-        withBuildInfo: ExpectedBuildOutputPerState;
-        withoutBuildInfo: ExpectedBuildOutputPerState;
+        // Common ones
+        expectedDiagnostics?: ReadonlyArray<fakes.ExpectedDiagnostic>;
+        expectedReadFiles?: ReadonlyMap<number>;
+        // Differing
+        withBuildInfo?: ExpectedBuildOutputPerState;
+        withoutBuildInfo?: ExpectedBuildOutputPerState;
     }
 
     function verifyTsbuildOutputWorker({
@@ -216,7 +220,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         withoutBuildInfo: boolean;
         lastProjectOutputJs: string;
         initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
-        incrementalDtsChangedBuild?: ExpectedBuildOutputNotDifferingWithBuildInfo;
+        incrementalDtsChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
         incrementalDtsUnchangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
         incrementalHeaderChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
     }) {
@@ -233,7 +237,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     expectedMapFileNames,
                     expectedTsbuildInfoFileNames,
                     modifyFs: initialBuild.modifyFs,
-                    withoutBuildInfo,
+                    withoutBuildInfo
                 });
                 ({ fs, actualReadFileMap, host } = result);
                 firstBuildTime = time();
@@ -245,7 +249,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
             });
             describe("initialBuild", () => {
                 it(`verify diagnostics`, () => {
-                    host.assertDiagnosticMessages(...initialBuild.expectedDiagnostics);
+                    host.assertDiagnosticMessages(...(initialBuild.expectedDiagnostics || emptyArray));
                 });
                 it(`Generates files matching the baseline`, () => {
                     generateBaseline(fs, proj, scenario, "initial Build", withoutBuildInfo, projFs());
@@ -257,7 +261,11 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 }
             });
 
-            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic>, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
+            function getValue<T extends keyof ExpectedBuildOutputPerState>(value: ExpectedBuildOutputDifferingWithBuildInfo, withoutBuildInfo: boolean, key: T): ExpectedBuildOutputPerState[T] {
+                return (withoutBuildInfo ? value.withoutBuildInfo && value.withoutBuildInfo[key] : value.withBuildInfo && value.withBuildInfo[key]) || value[key];
+            }
+
+            function incrementalBuild(subScenario: string, incrementalModifyFs: (fs: vfs.FileSystem) => void, incrementalExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> | undefined, incrementalExpectedReadFiles: ReadonlyMap<number> | undefined) {
                 describe(subScenario, () => {
                     let newFs: vfs.FileSystem;
                     let actualReadFileMap: Map<number>;
@@ -284,7 +292,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                         host = undefined!;
                     });
                     it(`verify diagnostics`, () => {
-                        host.assertDiagnosticMessages(...incrementalExpectedDiagnostics);
+                        host.assertDiagnosticMessages(...(incrementalExpectedDiagnostics || emptyArray));
                     });
                     it(`Generates files matching the baseline`, () => {
                         generateBaseline(newFs, proj, scenario, subScenario, withoutBuildInfo, fs);
@@ -300,8 +308,8 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 incrementalBuild(
                     "incremental declaration changes",
                     incrementalDtsChangedBuild.modifyFs,
-                    incrementalDtsChangedBuild.expectedDiagnostics,
-                    incrementalDtsChangedBuild.expectedReadFiles
+                    getValue(incrementalDtsChangedBuild, withoutBuildInfo, "expectedDiagnostics"),
+                    getValue(incrementalDtsChangedBuild, withoutBuildInfo, "expectedReadFiles"),
                 );
             }
 
@@ -309,8 +317,8 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 incrementalBuild(
                     "incremental declaration doesnt change",
                     incrementalDtsUnchangedBuild.modifyFs,
-                    (withoutBuildInfo ? incrementalDtsUnchangedBuild.withoutBuildInfo : incrementalDtsUnchangedBuild.withBuildInfo).expectedDiagnostics,
-                    (withoutBuildInfo ? incrementalDtsUnchangedBuild.withoutBuildInfo : incrementalDtsUnchangedBuild.withBuildInfo).expectedReadFiles
+                    getValue(incrementalDtsUnchangedBuild, withoutBuildInfo, "expectedDiagnostics"),
+                    getValue(incrementalDtsUnchangedBuild, withoutBuildInfo, "expectedReadFiles"),
                 );
             }
 
@@ -318,8 +326,8 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 incrementalBuild(
                     "incremental headers change",
                     incrementalHeaderChangedBuild.modifyFs,
-                    (withoutBuildInfo ? incrementalHeaderChangedBuild.withoutBuildInfo : incrementalHeaderChangedBuild.withBuildInfo).expectedDiagnostics,
-                    (withoutBuildInfo ? incrementalHeaderChangedBuild.withoutBuildInfo : incrementalHeaderChangedBuild.withBuildInfo).expectedReadFiles
+                    getValue(incrementalHeaderChangedBuild, withoutBuildInfo, "expectedDiagnostics"),
+                    getValue(incrementalHeaderChangedBuild, withoutBuildInfo, "expectedReadFiles"),
                 );
             }
         });
@@ -336,7 +344,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         lastProjectOutputJs: string;
         initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
-        incrementalDtsChangedBuild?: ExpectedBuildOutputNotDifferingWithBuildInfo;
+        incrementalDtsChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
         incrementalDtsUnchangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
         incrementalHeaderChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
     }) {
