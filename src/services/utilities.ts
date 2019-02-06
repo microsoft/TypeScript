@@ -1317,7 +1317,8 @@ namespace ts {
     export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
         if (preferences.quotePreference && preferences.quotePreference !== "auto") {
             return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
-        } else {
+        }
+        else {
             const firstModuleSpecifier = sourceFile.imports && find(sourceFile.imports, isStringLiteral);
             return firstModuleSpecifier ? quotePreferenceFromString(firstModuleSpecifier, sourceFile) : QuotePreference.Double;
         }
