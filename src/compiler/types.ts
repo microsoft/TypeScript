@@ -1233,7 +1233,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
         type: TypeNode;
     }
 
@@ -4063,6 +4063,7 @@ namespace ts {
     export interface TupleType extends GenericType {
         minLength: number;
         hasRestElement: boolean;
+        readonly: boolean;
         associatedNames?: __String[];
     }
 
@@ -4113,7 +4114,6 @@ namespace ts {
         templateType?: Type;
         modifiersType?: Type;
         resolvedApparentType?: Type;
-        instantiating?: boolean;
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -4340,6 +4340,7 @@ namespace ts {
         None            =      0,  // No special inference behaviors
         NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
+        NoFixing        = 1 << 2,  // Disable type parameter fixing
     }
 
     /**
@@ -4368,6 +4369,7 @@ namespace ts {
         inferences: InferenceInfo[];                  // Inferences made for each type parameter
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
+        returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
     }
 
     /* @internal */

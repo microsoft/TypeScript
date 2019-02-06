@@ -27,7 +27,7 @@ namespace ts {
         currentChangedFilePath: Path | undefined;
         /**
          * Map of file signatures, with key being file path, calculated while getting current changed file's affected files
-         * These will be commited whenever the iteration through affected files of current changed file is complete
+         * These will be committed whenever the iteration through affected files of current changed file is complete
          */
         currentAffectedFilesSignatures: Map<string> | undefined;
         /**
