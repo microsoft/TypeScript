@@ -10854,7 +10854,7 @@ namespace ts {
         function getHomomorphicTypeVariable(type: MappedType) {
             const constraintType = getConstraintTypeFromMappedType(type);
             if (constraintType.flags & TypeFlags.Index) {
-                const typeVariable = (<IndexType>constraintType).type;
+                const typeVariable = getActualTypeVariable((<IndexType>constraintType).type);
                 if (typeVariable.flags & TypeFlags.TypeParameter) {
                     return <TypeParameter>typeVariable;
                 }
@@ -10877,26 +10877,15 @@ namespace ts {
             if (typeVariable) {
                 const mappedTypeVariable = instantiateType(typeVariable, mapper);
                 if (typeVariable !== mappedTypeVariable) {
-                    // If we are already in the process of creating an instantiation of this mapped type,
-                    // return the error type. This situation only arises if we are instantiating the mapped
-                    // type for an array or tuple type, as we then need to eagerly resolve the (possibly
-                    // circular) element type(s).
-                    if (type.instantiating) {
-                        return errorType;
-                    }
-                    type.instantiating = true;
-                    const modifiers = getMappedTypeModifiers(type);
-                    const result = mapType(mappedTypeVariable, t => {
-                        if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType) {
+                    return mapType(mappedTypeVariable, t => {
+                        if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
                             const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
-                            return isArrayType(t) ? createArrayType(instantiateMappedTypeTemplate(type, numberType, /*isOptional*/ true, replacementMapper), getModifiedReadonlyState(isReadonlyArrayType(t), modifiers)) :
+                            return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
                                 isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
                                 instantiateAnonymousType(type, replacementMapper);
                         }
                         return t;
                     });
-                    type.instantiating = false;
-                    return result;
                 }
             }
             return instantiateAnonymousType(type, mapper);
@@ -10904,6 +10893,12 @@ namespace ts {
 
         function getModifiedReadonlyState(state: boolean, modifiers: MappedTypeModifiers) {
             return modifiers & MappedTypeModifiers.IncludeReadonly ? true : modifiers & MappedTypeModifiers.ExcludeReadonly ? false : state;
+        }
+
+        function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
+            const elementType = instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
+            return elementType === errorType ? errorType :
+                createArrayType(elementType, getModifiedReadonlyState(isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType)));
         }
 
         function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
@@ -10915,7 +10910,8 @@ namespace ts {
                 modifiers & MappedTypeModifiers.ExcludeOptional ? getTypeReferenceArity(tupleType) - (tupleType.target.hasRestElement ? 1 : 0) :
                 minLength;
             const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, modifiers);
-            return createTupleType(elementTypes, newMinLength, tupleType.target.hasRestElement, newReadonly, tupleType.target.associatedNames);
+            return contains(elementTypes, errorType) ? errorType :
+                createTupleType(elementTypes, newMinLength, tupleType.target.hasRestElement, newReadonly, tupleType.target.associatedNames);
         }
 
         function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
