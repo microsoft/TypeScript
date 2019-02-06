@@ -11888,7 +11888,7 @@ namespace ts {
             let suppressNextError = false;
             // Ordinarily, we want to construct "breadcrumbs" at each level as we dive into types
             // so that the user can build up the same context that the relationship checker had and
-            // diagnose issues. However, sometimes this trail becomes noise when the deepest elabration
+            // diagnose issues; however, sometimes this trail is just noise when the deepest elaboration
             // is already so specific and obvious. In some cases, we want to just bubble up a single diagnostic.
             let shouldConstructDiagnosticTrail = true;
 
