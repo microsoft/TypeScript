@@ -153,3 +153,26 @@ const foo = <T>(object: T, partial: Partial<T>) => object;
 let o = {a: 5, b: 7};
 foo(o, {b: 9});
 o = foo(o, {b: 9});
+
+// Inferring to { [P in K]: X }, where K extends keyof T, produces same inferences as
+// inferring to { [P in keyof T]: X }.
+
+declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
+declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
+declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
+
+let x0 = f20({ foo: 42, bar: "hello" });
+let x1 = f21({ foo: 42, bar: "hello" });
+let x2 = f22({ foo: { value: 42} , bar: { value: "hello" } });
+
+// Repro from #29765
+
+function getProps<T, K extends keyof T>(obj: T, list: K[]): Pick<T, K> {
+    return {} as any;
+}
+
+const myAny: any = {};
+
+const o1 = getProps(myAny, ['foo', 'bar']);
+
+const o2: { foo: any; bar: any } = getProps(myAny, ['foo', 'bar']);
