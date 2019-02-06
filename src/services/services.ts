@@ -29,7 +29,7 @@ namespace ts {
             this.end = end;
             this.flags = NodeFlags.None;
             this.modifierFlagsCache = ModifierFlags.None;
-            this.transformFlags = undefined!; // TODO: GH#18217
+            this.transformFlags = TransformFlags.None;
             this.parent = undefined!;
             this.kind = kind;
         }
