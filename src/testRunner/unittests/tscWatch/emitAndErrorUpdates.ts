@@ -199,11 +199,11 @@ getPoint().c.x;`
                 change: host => host.writeFile(aFile.path, aFile.content.replace("x2", "x")),
                 getInitialErrors: watch => [
                     getDiagnosticOfFileFromProgram(watch(), cFile.path, cFile.content.indexOf("x: 1"), 4, chainDiagnosticMessages(
-                        chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, "x", "Coords"),
-                        Diagnostics.Type_0_is_not_assignable_to_type_1,
-                        "{ x: number; y: number; }",
-                        "Coords"
-                    )),
+                        /*details*/ undefined,
+                        Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                        "x",
+                        "Coords"),
+                    ),
                     getDiagnosticOfFileFromProgram(watch(), dFile.path, dFile.content.lastIndexOf("x"), 1, Diagnostics.Property_0_does_not_exist_on_type_1, "x", "Coords")
                 ],
                 getIncrementalErrors: () => emptyArray
@@ -272,7 +272,7 @@ export class Data {
                     change: host => host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2")),
                     getInitialErrors: () => emptyArray,
                     getIncrementalErrors: () => [
-                        "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
+                        "lib2/data.ts(5,13): error TS2561: Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
                     ]
                 });
             }
