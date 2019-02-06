@@ -12234,7 +12234,12 @@ namespace ts {
                                         const propDeclaration = prop.valueDeclaration as ObjectLiteralElementLike;
                                         Debug.assertNode(propDeclaration, isObjectLiteralElementLike);
 
+                                        // Give a specific error message span on the property declaration, and signal
+                                        // to the rest of the relationship check not to provide the trail of context.
+                                        // We don't want to overwhelm our users with the context, and hopefully they
+                                        // already have enough information to piece this together.
                                         errorNode = propDeclaration;
+                                        shouldConstructDiagnosticTrail = false;
 
                                         const name = propDeclaration.name!;
                                         if (isIdentifier(name)) {
@@ -12250,7 +12255,6 @@ namespace ts {
                                         reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                             symbolToString(prop), typeToString(errorTarget));
                                     }
-                                    shouldConstructDiagnosticTrail = false;
                                 }
                             }
                             return true;
