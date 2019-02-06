@@ -5071,6 +5071,7 @@ namespace ts {
         ContainsDynamicImport = 1 << 24,
         Super = 1 << 25,
         ContainsSuper = 1 << 26,
+        ContainsES2018 = 1 << 27,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5082,6 +5083,7 @@ namespace ts {
         AssertTypeScript = TypeScript | ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
+        AssertES2018 = ContainsES2018,
         AssertES2017 = ContainsES2017,
         AssertES2016 = ContainsES2016,
         AssertES2015 = ES2015 | ContainsES2015,
