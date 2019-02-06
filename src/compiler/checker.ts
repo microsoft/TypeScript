@@ -11886,6 +11886,11 @@ namespace ts {
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
             let suppressNextError = false;
+            // Ordinarily, we want to construct "breadcrumbs" at each level as we dive into types
+            // so that the user can build up the same context that the relationship checker had and
+            // diagnose issues. However, sometimes this trail becomes noise when the deepest elabration
+            // is already so specific and obvious. In some cases, we want to just bubble up a single diagnostic.
+            let shouldConstructDiagnosticTrail = true;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -11928,7 +11933,9 @@ namespace ts {
 
             function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
                 Debug.assert(!!errorNode);
-                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
+                if (shouldConstructDiagnosticTrail) {
+                    errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
+                }
             }
 
             function associateRelatedInfo(info: DiagnosticRelatedInformation) {
@@ -12243,6 +12250,7 @@ namespace ts {
                                         reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                             symbolToString(prop), typeToString(errorTarget));
                                     }
+                                    shouldConstructDiagnosticTrail = false;
                                 }
                             }
                             return true;
