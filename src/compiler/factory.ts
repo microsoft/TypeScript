@@ -2629,7 +2629,7 @@ namespace ts {
         return node;
     }
 
-    let allUnscopedEmitHelpers: ReadonlyMap<UnscopedEmitHelpers> | undefined;
+    let allUnscopedEmitHelpers: ReadonlyMap<UnscopedEmitHelper> | undefined;
     function getAllUnscopedEmitHelpers() {
         return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
             valuesHelper,
@@ -2668,7 +2668,7 @@ namespace ts {
     export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapText?: string): UnparsedSource {
         const node = createUnparsedSource();
         let prologues: UnparsedPrologue[] | undefined;
-        let helpers: UnscopedEmitHelpers[] | undefined;
+        let helpers: UnscopedEmitHelper[] | undefined;
         let referencedFiles: FileReference[] | undefined;
         let typeReferenceDirectives: string[] | undefined;
         let libReferenceDirectives: FileReference[] | undefined;
@@ -3613,7 +3613,7 @@ namespace ts {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
-    export const valuesHelper: UnscopedEmitHelpers = {
+    export const valuesHelper: UnscopedEmitHelper = {
         name: "typescript:values",
         scoped: false,
         text: `
@@ -3641,7 +3641,7 @@ namespace ts {
         );
     }
 
-    export const readHelper: UnscopedEmitHelpers = {
+    export const readHelper: UnscopedEmitHelper = {
         name: "typescript:read",
         scoped: false,
         text: `
@@ -3677,7 +3677,7 @@ namespace ts {
         );
     }
 
-    export const spreadHelper: UnscopedEmitHelpers = {
+    export const spreadHelper: UnscopedEmitHelper = {
         name: "typescript:spread",
         scoped: false,
         text: `

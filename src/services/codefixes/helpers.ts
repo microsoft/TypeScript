@@ -264,6 +264,7 @@ namespace ts.codefix {
                 createNew(
                     createIdentifier("Error"),
                     /*typeArguments*/ undefined,
+                    // TODO Handle auto quote preference.
                     [createLiteral("Method not implemented.", /*isSingleQuote*/ preferences.quotePreference === "single")]))],
             /*multiline*/ true);
     }

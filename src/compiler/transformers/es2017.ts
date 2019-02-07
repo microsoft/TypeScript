@@ -750,7 +750,7 @@ namespace ts {
                 NodeFlags.Const));
     }
 
-    export const awaiterHelper: UnscopedEmitHelpers = {
+    export const awaiterHelper: UnscopedEmitHelper = {
         name: "typescript:awaiter",
         scoped: false,
         priority: 5,

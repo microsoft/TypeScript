@@ -512,7 +512,7 @@ namespace ts {
         return name;
     }
 
-    export const restHelper: UnscopedEmitHelpers = {
+    export const restHelper: UnscopedEmitHelper = {
         name: "typescript:rest",
         scoped: false,
         text: `

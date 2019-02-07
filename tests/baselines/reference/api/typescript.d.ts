@@ -1745,7 +1745,7 @@ declare namespace ts {
         fileName: string;
         text: string;
         prologues: ReadonlyArray<UnparsedPrologue>;
-        helpers: ReadonlyArray<UnscopedEmitHelpers> | undefined;
+        helpers: ReadonlyArray<UnscopedEmitHelper> | undefined;
         referencedFiles: ReadonlyArray<FileReference>;
         typeReferenceDirectives: ReadonlyArray<string> | undefined;
         libReferenceDirectives: ReadonlyArray<FileReference>;
@@ -2792,7 +2792,7 @@ declare namespace ts {
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
     }
-    interface UnscopedEmitHelpers extends EmitHelper {
+    interface UnscopedEmitHelper extends EmitHelper {
         readonly scoped: false;
         readonly text: string;
     }
@@ -3055,7 +3055,7 @@ declare namespace ts {
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";

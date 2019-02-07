@@ -1716,12 +1716,25 @@ namespace ts {
                 }
                 const symbol = resolveSymbol(resolveName(errorLocation, name, SymbolFlags.Type & ~SymbolFlags.Value, /*nameNotFoundMessage*/undefined, /*nameArg*/ undefined, /*isUse*/ false));
                 if (symbol && !(symbol.flags & SymbolFlags.NamespaceModule)) {
-                    const message = (name === "Promise" || name === "Symbol")
+                    const message = isES2015OrLaterConstructorName(name)
                         ? Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here_Do_you_need_to_change_your_target_library_Try_changing_the_lib_compiler_option_to_es2015_or_later
                         : Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here;
                     error(errorLocation, message, unescapeLeadingUnderscores(name));
                     return true;
                 }
+            }
+            return false;
+        }
+
+        function isES2015OrLaterConstructorName(n: __String) {
+            switch (n) {
+                case "Promise":
+                case "Symbol":
+                case "Map":
+                case "WeakMap":
+                case "Set":
+                case "WeakSet":
+                    return true;
             }
             return false;
         }
@@ -10841,7 +10854,7 @@ namespace ts {
         function getHomomorphicTypeVariable(type: MappedType) {
             const constraintType = getConstraintTypeFromMappedType(type);
             if (constraintType.flags & TypeFlags.Index) {
-                const typeVariable = (<IndexType>constraintType).type;
+                const typeVariable = getActualTypeVariable((<IndexType>constraintType).type);
                 if (typeVariable.flags & TypeFlags.TypeParameter) {
                     return <TypeParameter>typeVariable;
                 }
@@ -10864,26 +10877,15 @@ namespace ts {
             if (typeVariable) {
                 const mappedTypeVariable = instantiateType(typeVariable, mapper);
                 if (typeVariable !== mappedTypeVariable) {
-                    // If we are already in the process of creating an instantiation of this mapped type,
-                    // return the error type. This situation only arises if we are instantiating the mapped
-                    // type for an array or tuple type, as we then need to eagerly resolve the (possibly
-                    // circular) element type(s).
-                    if (type.instantiating) {
-                        return errorType;
-                    }
-                    type.instantiating = true;
-                    const modifiers = getMappedTypeModifiers(type);
-                    const result = mapType(mappedTypeVariable, t => {
-                        if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType) {
+                    return mapType(mappedTypeVariable, t => {
+                        if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
                             const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
-                            return isArrayType(t) ? createArrayType(instantiateMappedTypeTemplate(type, numberType, /*isOptional*/ true, replacementMapper), getModifiedReadonlyState(isReadonlyArrayType(t), modifiers)) :
+                            return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
                                 isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
                                 instantiateAnonymousType(type, replacementMapper);
                         }
                         return t;
                     });
-                    type.instantiating = false;
-                    return result;
                 }
             }
             return instantiateAnonymousType(type, mapper);
@@ -10891,6 +10893,12 @@ namespace ts {
 
         function getModifiedReadonlyState(state: boolean, modifiers: MappedTypeModifiers) {
             return modifiers & MappedTypeModifiers.IncludeReadonly ? true : modifiers & MappedTypeModifiers.ExcludeReadonly ? false : state;
+        }
+
+        function instantiateMappedArrayType(arrayType: Type, mappedType: MappedType, mapper: TypeMapper) {
+            const elementType = instantiateMappedTypeTemplate(mappedType, numberType, /*isOptional*/ true, mapper);
+            return elementType === errorType ? errorType :
+                createArrayType(elementType, getModifiedReadonlyState(isReadonlyArrayType(arrayType), getMappedTypeModifiers(mappedType)));
         }
 
         function instantiateMappedTupleType(tupleType: TupleTypeReference, mappedType: MappedType, mapper: TypeMapper) {
@@ -10902,7 +10910,8 @@ namespace ts {
                 modifiers & MappedTypeModifiers.ExcludeOptional ? getTypeReferenceArity(tupleType) - (tupleType.target.hasRestElement ? 1 : 0) :
                 minLength;
             const newReadonly = getModifiedReadonlyState(tupleType.target.readonly, modifiers);
-            return createTupleType(elementTypes, newMinLength, tupleType.target.hasRestElement, newReadonly, tupleType.target.associatedNames);
+            return contains(elementTypes, errorType) ? errorType :
+                createTupleType(elementTypes, newMinLength, tupleType.target.hasRestElement, newReadonly, tupleType.target.associatedNames);
         }
 
         function instantiateMappedTypeTemplate(type: MappedType, key: Type, isOptional: boolean, mapper: TypeMapper) {
@@ -16151,13 +16160,37 @@ namespace ts {
             }
 
             function narrowTypeBySwitchOnDiscriminant(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number) {
-                // We only narrow if all case expressions specify values with unit types
+                // We only narrow if all case expressions specify
+                // values with unit types, except for the case where
+                // `type` is unknown. In this instance we map object
+                // types to the nonPrimitive type and narrow with that.
                 const switchTypes = getSwitchClauseTypes(switchStatement);
                 if (!switchTypes.length) {
                     return type;
                 }
                 const clauseTypes = switchTypes.slice(clauseStart, clauseEnd);
                 const hasDefaultClause = clauseStart === clauseEnd || contains(clauseTypes, neverType);
+                if ((type.flags & TypeFlags.Unknown) && !hasDefaultClause) {
+                    let groundClauseTypes: Type[] | undefined;
+                    for (let i = 0; i < clauseTypes.length; i += 1) {
+                        const t = clauseTypes[i];
+                        if (t.flags & (TypeFlags.Primitive | TypeFlags.NonPrimitive)) {
+                            if (groundClauseTypes !== undefined) {
+                                groundClauseTypes.push(t);
+                            }
+                        }
+                        else if (t.flags & TypeFlags.Object) {
+                            if (groundClauseTypes === undefined) {
+                                groundClauseTypes = clauseTypes.slice(0, i);
+                            }
+                            groundClauseTypes.push(nonPrimitiveType);
+                        }
+                        else {
+                            return type;
+                        }
+                    }
+                    return getUnionType(groundClauseTypes === undefined ? clauseTypes : groundClauseTypes);
+                }
                 const discriminantType = getUnionType(clauseTypes);
                 const caseType =
                     discriminantType.flags & TypeFlags.Never ? neverType :
@@ -23265,22 +23298,34 @@ namespace ts {
             const uninstantiatedType = checkExpressionWorker(node, checkMode, forceTuple);
             const type = instantiateTypeWithSingleGenericCallSignature(node, uninstantiatedType, checkMode);
             if (isConstEnumObjectType(type)) {
-                // enum object type for const enums are only permitted in:
-                // - 'left' in property access
-                // - 'object' in indexed access
-                // - target in rhs of import statement
-                const ok =
-                    (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).expression === node) ||
-                    (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
-                    ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node) ||
-                    (node.parent.kind === SyntaxKind.TypeQuery && (<TypeQueryNode>node.parent).exprName === node));
-
-                if (!ok) {
-                    error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
-                }
+                checkConstEnumAccess(node, type);
             }
             currentNode = saveCurrentNode;
             return type;
+        }
+
+        function checkConstEnumAccess(node: Expression | QualifiedName, type: Type) {
+            // enum object type for const enums are only permitted in:
+            // - 'left' in property access
+            // - 'object' in indexed access
+            // - target in rhs of import statement
+            const ok =
+                (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).expression === node) ||
+                (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
+                ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node) ||
+                    (node.parent.kind === SyntaxKind.TypeQuery && (<TypeQueryNode>node.parent).exprName === node));
+
+            if (!ok) {
+                error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
+            }
+
+            if (compilerOptions.isolatedModules) {
+                Debug.assert(!!(type.symbol.flags & SymbolFlags.ConstEnum));
+                const constEnumDeclaration = type.symbol.valueDeclaration as EnumDeclaration;
+                if (constEnumDeclaration.flags & NodeFlags.Ambient) {
+                    error(node, Diagnostics.Cannot_access_ambient_const_enums_when_the_isolatedModules_flag_is_provided);
+                }
+            }
         }
 
         function checkParenthesizedExpression(node: ParenthesizedExpression, checkMode?: CheckMode): Type {
@@ -27225,7 +27270,7 @@ namespace ts {
             reference.expression.parent = reference;
             reference.parent = constructor;
             reference.flowNode = constructor.returnFlowNode;
-            const flowType = getFlowTypeOfReference(reference, getOptionalType(propType));
+            const flowType = getFlowTypeOfReference(reference, propType, getOptionalType(propType));
             return !(getFalsyFlags(flowType) & TypeFlags.Undefined);
         }
 
@@ -27460,11 +27505,6 @@ namespace ts {
 
             computeEnumMemberValues(node);
 
-            const enumIsConst = isEnumConst(node);
-            if (compilerOptions.isolatedModules && enumIsConst && node.flags & NodeFlags.Ambient) {
-                error(node.name, Diagnostics.Ambient_const_enums_are_not_allowed_when_the_isolatedModules_flag_is_provided);
-            }
-
             // Spec 2014 - Section 9.3:
             // It isn't possible for one enum declaration to continue the automatic numbering sequence of another,
             // and when an enum type has multiple declarations, only one declaration is permitted to omit a value
@@ -27475,6 +27515,7 @@ namespace ts {
             const firstDeclaration = getDeclarationOfKind(enumSymbol, node.kind);
             if (node === firstDeclaration) {
                 if (enumSymbol.declarations.length > 1) {
+                    const enumIsConst = isEnumConst(node);
                     // check that const is placed\omitted on all enum declarations
                     forEach(enumSymbol.declarations, decl => {
                         if (isEnumDeclaration(decl) && isEnumConst(decl) !== enumIsConst) {

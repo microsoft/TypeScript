@@ -2786,7 +2786,7 @@ namespace ts {
         fileName: string;
         text: string;
         prologues: ReadonlyArray<UnparsedPrologue>;
-        helpers: ReadonlyArray<UnscopedEmitHelpers> | undefined;
+        helpers: ReadonlyArray<UnscopedEmitHelper> | undefined;
 
         // References and noDefaultLibAre Dts only
         referencedFiles: ReadonlyArray<FileReference>;
@@ -4176,7 +4176,6 @@ namespace ts {
         templateType?: Type;
         modifiersType?: Type;
         resolvedApparentType?: Type;
-        instantiating?: boolean;
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -5134,6 +5133,7 @@ namespace ts {
         ContainsDynamicImport = 1 << 24,
         Super = 1 << 25,
         ContainsSuper = 1 << 26,
+        ContainsES2018 = 1 << 27,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5145,6 +5145,7 @@ namespace ts {
         AssertTypeScript = TypeScript | ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
+        AssertES2018 = ContainsES2018,
         AssertES2017 = ContainsES2017,
         AssertES2016 = ContainsES2016,
         AssertES2015 = ES2015 | ContainsES2015,
@@ -5243,7 +5244,7 @@ namespace ts {
         readonly priority?: number;                                     // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
 
-    export interface UnscopedEmitHelpers extends EmitHelper {
+    export interface UnscopedEmitHelper extends EmitHelper {
         readonly scoped: false;                                         // Indicates whether the helper MUST be emitted in the current scope.
         readonly text: string;                                          // ES3-compatible raw script text, or a function yielding such a string
     }
@@ -6018,7 +6019,7 @@ namespace ts {
 
     export interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
