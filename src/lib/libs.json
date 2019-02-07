@@ -33,9 +33,9 @@
         "es2018.regexp",
         "es2018.promise",
         "es2018.intl",
+        "es2019.array",
         "es2019.symbol",
         "esnext.asynciterable",
-        "esnext.array",
         "esnext.bigint",
         "esnext.intl",
         // Default libraries
