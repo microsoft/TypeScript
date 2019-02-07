@@ -564,7 +564,30 @@ class someClass { }`),
                         [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
                         [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/logic"],
                         [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
-                    ]
+                    ],
+                    expectedReadFiles: getReadFilesMap(
+                        [
+                            // Configs
+                            "/src/core/tsconfig.json",
+                            "/src/logic/tsconfig.json",
+                            "/src/tests/tsconfig.json",
+
+                            // Source files
+                            "/src/logic/index.ts",
+                            "/src/tests/index.ts",
+
+                            // Modules of generated files
+                            "/src/core/anotherModule.d.ts",
+                            "/src/core/index.d.ts",
+                            "/src/logic/decls/index.d.ts",
+
+                            // build info
+                            "/src/logic/.tsbuildinfo",
+                            "/src/tests/.tsbuildinfo",
+
+                            "/src/tests/index.d.ts", // to check if d.ts has changed
+                        ]
+                    )
                 }
             });
         });

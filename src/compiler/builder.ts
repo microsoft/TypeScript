@@ -209,6 +209,19 @@ namespace ts {
             }
         });
 
+        if (oldCompilerOptions &&
+            (oldCompilerOptions.outDir !== compilerOptions.outDir ||
+                oldCompilerOptions.declarationDir !== compilerOptions.declarationDir ||
+                (oldCompilerOptions.outFile || oldCompilerOptions.out) !== (compilerOptions.outFile || compilerOptions.out))) {
+            // Add all files to affectedFilesPendingEmit since emit changed
+            state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, newProgram.getSourceFiles().map(f => f.path));
+            if (state.affectedFilesPendingEmitIndex === undefined) {
+                state.affectedFilesPendingEmitIndex = 0;
+            }
+            Debug.assert(state.seenAffectedFiles === undefined);
+            state.seenAffectedFiles = createMap<true>();
+        }
+
         return state;
     }
 
