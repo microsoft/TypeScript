@@ -332,19 +332,6 @@ namespace ts.server {
         }
     }
 
-    /* @internal */
-    export const enum WatchType {
-        ConfigFilePath = "Config file for the program",
-        MissingFilePath = "Missing file from program",
-        WildcardDirectories = "Wild card directory",
-        ClosedScriptInfo = "Closed Script info",
-        ConfigFileForInferredRoot = "Config file for the inferred project root",
-        FailedLookupLocation = "Directory of Failed lookup locations in module resolution",
-        TypeRoots = "Type root directory",
-        NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them",
-        MissingSourceMapFile = "Missing source map file"
-    }
-
     const enum ConfigFileWatcherStatus {
         ReloadingFiles = "Reloading configured projects for files",
         ReloadingInferredRootFiles = "Reloading configured projects for only inferred root files",
@@ -917,7 +904,7 @@ namespace ts.server {
 
         getPreferences(file: NormalizedPath): protocol.UserPreferences {
             const info = this.getScriptInfoForNormalizedPath(file);
-            return info && info.getPreferences() || this.hostConfiguration.preferences;
+            return { ...this.hostConfiguration.preferences, ...info && info.getPreferences() };
         }
 
         getHostFormatCodeOptions(): FormatCodeSettings {
@@ -1035,7 +1022,7 @@ namespace ts.server {
                     }
                 },
                 flags,
-                WatchType.WildcardDirectories,
+                WatchType.WildcardDirectory,
                 project
             );
         }
@@ -1339,7 +1326,7 @@ namespace ts.server {
                 watches.push(WatchType.ConfigFileForInferredRoot);
             }
             if (this.configuredProjects.has(canonicalConfigFilePath)) {
-                watches.push(WatchType.ConfigFilePath);
+                watches.push(WatchType.ConfigFile);
             }
             this.logger.info(`ConfigFilePresence:: Current Watches: ${watches}:: File: ${configFileName} Currently impacted open files: RootsOfInferredProjects: ${inferredRoots} OtherOpenFiles: ${otherFiles} Status: ${status}`);
         }
@@ -1706,7 +1693,7 @@ namespace ts.server {
                 configFileName,
                 (_fileName, eventKind) => this.onConfigChangedForConfiguredProject(project, eventKind),
                 PollingInterval.High,
-                WatchType.ConfigFilePath,
+                WatchType.ConfigFile,
                 project
             );
             this.configuredProjects.set(project.canonicalConfigFilePath, project);

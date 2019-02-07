@@ -1,0 +1,128 @@
+=== tests/cases/compiler/contextuallyTypedParametersWithInitializers.ts ===
+declare function id1<T>(input: T): T;
+>id1 : Symbol(id1, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 0))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 21))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 24))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 21))
+
+declare function id2<T extends (x: any) => any>(input: T): T;
+>id2 : Symbol(id2, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 37))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 1, 21))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers.ts, 1, 32))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers.ts, 1, 48))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 1, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 1, 21))
+
+declare function id3<T extends (x: { foo: any }) => any>(input: T): T;
+>id3 : Symbol(id3, Decl(contextuallyTypedParametersWithInitializers.ts, 1, 61))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 2, 21))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers.ts, 2, 32))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 2, 36))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers.ts, 2, 57))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 2, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 2, 21))
+
+declare function id4<T extends (x: { foo?: number }) => any>(input: T): T;
+>id4 : Symbol(id4, Decl(contextuallyTypedParametersWithInitializers.ts, 2, 70))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 3, 21))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers.ts, 3, 32))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 3, 36))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers.ts, 3, 61))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 3, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 3, 21))
+
+declare function id5<T extends (x?: number) => any>(input: T): T;
+>id5 : Symbol(id5, Decl(contextuallyTypedParametersWithInitializers.ts, 3, 74))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 4, 21))
+>x : Symbol(x, Decl(contextuallyTypedParametersWithInitializers.ts, 4, 32))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers.ts, 4, 52))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 4, 21))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 4, 21))
+
+const f10 = function ({ foo = 42 }) { return foo };
+>f10 : Symbol(f10, Decl(contextuallyTypedParametersWithInitializers.ts, 6, 5))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 6, 23))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 6, 23))
+
+const f11 = id1(function ({ foo = 42 }) { return foo });  // Implicit any error
+>f11 : Symbol(f11, Decl(contextuallyTypedParametersWithInitializers.ts, 7, 5))
+>id1 : Symbol(id1, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 0))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 7, 27))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 7, 27))
+
+const f12 = id2(function ({ foo = 42 }) { return foo });
+>f12 : Symbol(f12, Decl(contextuallyTypedParametersWithInitializers.ts, 8, 5))
+>id2 : Symbol(id2, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 37))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 8, 27))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 8, 27))
+
+const f13 = id3(function ({ foo = 42 }) { return foo });
+>f13 : Symbol(f13, Decl(contextuallyTypedParametersWithInitializers.ts, 9, 5))
+>id3 : Symbol(id3, Decl(contextuallyTypedParametersWithInitializers.ts, 1, 61))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 9, 27))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 9, 27))
+
+const f14 = id4(function ({ foo = 42 }) { return foo });
+>f14 : Symbol(f14, Decl(contextuallyTypedParametersWithInitializers.ts, 10, 5))
+>id4 : Symbol(id4, Decl(contextuallyTypedParametersWithInitializers.ts, 2, 70))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 10, 27))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 10, 27))
+
+const f20 = function (foo = 42) { return foo };
+>f20 : Symbol(f20, Decl(contextuallyTypedParametersWithInitializers.ts, 12, 5))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 12, 22))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 12, 22))
+
+const f21 = id1(function (foo = 42) { return foo });  // Implicit any error
+>f21 : Symbol(f21, Decl(contextuallyTypedParametersWithInitializers.ts, 13, 5))
+>id1 : Symbol(id1, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 0))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 13, 26))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 13, 26))
+
+const f22 = id2(function (foo = 42) { return foo });
+>f22 : Symbol(f22, Decl(contextuallyTypedParametersWithInitializers.ts, 14, 5))
+>id2 : Symbol(id2, Decl(contextuallyTypedParametersWithInitializers.ts, 0, 37))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 14, 26))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 14, 26))
+
+const f25 = id5(function (foo = 42) { return foo });
+>f25 : Symbol(f25, Decl(contextuallyTypedParametersWithInitializers.ts, 15, 5))
+>id5 : Symbol(id5, Decl(contextuallyTypedParametersWithInitializers.ts, 3, 74))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 15, 26))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 15, 26))
+
+// Repro from #28816
+
+function id<T>(input: T): T { return input }
+>id : Symbol(id, Decl(contextuallyTypedParametersWithInitializers.ts, 15, 52))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 19, 12))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers.ts, 19, 15))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 19, 12))
+>T : Symbol(T, Decl(contextuallyTypedParametersWithInitializers.ts, 19, 12))
+>input : Symbol(input, Decl(contextuallyTypedParametersWithInitializers.ts, 19, 15))
+
+function getFoo ({ foo = 42 }) {
+>getFoo : Symbol(getFoo, Decl(contextuallyTypedParametersWithInitializers.ts, 19, 44))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 21, 18))
+
+  return foo;
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 21, 18))
+}
+
+const newGetFoo = id(getFoo);
+>newGetFoo : Symbol(newGetFoo, Decl(contextuallyTypedParametersWithInitializers.ts, 25, 5))
+>id : Symbol(id, Decl(contextuallyTypedParametersWithInitializers.ts, 15, 52))
+>getFoo : Symbol(getFoo, Decl(contextuallyTypedParametersWithInitializers.ts, 19, 44))
+
+const newGetFoo2 = id(function getFoo ({ foo = 42 }) {
+>newGetFoo2 : Symbol(newGetFoo2, Decl(contextuallyTypedParametersWithInitializers.ts, 26, 5))
+>id : Symbol(id, Decl(contextuallyTypedParametersWithInitializers.ts, 15, 52))
+>getFoo : Symbol(getFoo, Decl(contextuallyTypedParametersWithInitializers.ts, 26, 22))
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 26, 40))
+
+  return foo;
+>foo : Symbol(foo, Decl(contextuallyTypedParametersWithInitializers.ts, 26, 40))
+
+});
+

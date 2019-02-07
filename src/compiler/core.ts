@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.3";
+    export const versionMajorMinor = "3.4";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -884,8 +884,11 @@ namespace ts {
     /**
      * Compacts an array, removing any falsey elements.
      */
-    export function compact<T>(array: T[]): T[];
-    export function compact<T>(array: ReadonlyArray<T>): ReadonlyArray<T>;
+    export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[];
+    export function compact<T>(array: ReadonlyArray<T | undefined | null | false | 0 | "">): ReadonlyArray<T>;
+    // TSLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
+    export function compact<T>(array: T[]): T[]; // tslint:disable-line unified-signatures
+    export function compact<T>(array: ReadonlyArray<T>): ReadonlyArray<T>; // tslint:disable-line unified-signatures
     export function compact<T>(array: T[]): T[] {
         let result: T[] | undefined;
         if (array) {
@@ -1387,6 +1390,18 @@ namespace ts {
         return result;
     }
 
+    export function copyProperties<T1 extends T2, T2>(first: T1, second: T2) {
+        for (const id in second) {
+            if (hasOwnProperty.call(second, id)) {
+                (first as any)[id] = second[id];
+            }
+        }
+    }
+
+    export function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
+        return fn ? fn.bind(obj) : undefined;
+    }
+
     export interface MultiMap<T> extends Map<T[]> {
         /**
          * Adds the value to an array of values associated with the key, and returns the array.
@@ -1637,7 +1652,7 @@ namespace ts {
         }
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
+            const detail = typeof member === "object" && "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 

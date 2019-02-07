@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig-base",
+    "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "outFile": "../../built/local/run.js",
         "composite": false,
@@ -43,6 +43,7 @@
         "unittests/asserts.ts",
         "unittests/base64.ts",
         "unittests/builder.ts",
+        "unittests/comments.ts",
         "unittests/compilerCore.ts",
         "unittests/convertToBase64.ts",
         "unittests/customTransforms.ts",
