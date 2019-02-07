@@ -58,6 +58,7 @@
         "unittests/publicApi.ts",
         "unittests/reuseProgramStructure.ts",
         "unittests/semver.ts",
+        "unittests/shimMap.ts",
         "unittests/transform.ts",
         "unittests/tsbuild.ts",
         "unittests/tsbuildWatchMode.ts",
