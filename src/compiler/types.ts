@@ -4658,7 +4658,8 @@ namespace ts {
         ES2016 = 3,
         ES2017 = 4,
         ES2018 = 5,
-        ESNext = 6,
+        ES2019 = 6,
+        ESNext = 7,
         JSON = 100,
         Latest = ESNext,
     }
@@ -5072,6 +5073,7 @@ namespace ts {
         Super = 1 << 25,
         ContainsSuper = 1 << 26,
         ContainsES2018 = 1 << 27,
+        ContainsES2019 = 1 << 28,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5083,6 +5085,7 @@ namespace ts {
         AssertTypeScript = TypeScript | ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
+        AssertES2019 = ContainsES2019,
         AssertES2018 = ContainsES2018,
         AssertES2017 = ContainsES2017,
         AssertES2016 = ContainsES2016,
