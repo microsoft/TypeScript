@@ -139,7 +139,7 @@ namespace ts.refactor.convertToNamedParameters {
     }
 
     function hasThisParameter(parameters: NodeArray<ParameterDeclaration>): boolean {
-        return isThis(parameters[0].name);
+        return parameters.length > 0 && isThis(parameters[0].name);
     }
 
     function getRefactorableParametersLength(parameters: NodeArray<ParameterDeclaration>): number {
