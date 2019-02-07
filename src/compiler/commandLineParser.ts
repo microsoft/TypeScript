@@ -43,6 +43,7 @@ namespace ts {
         ["es2018.promise", "lib.es2018.promise.d.ts"],
         ["es2018.regexp", "lib.es2018.regexp.d.ts"],
         ["es2019.array", "lib.es2019.array.d.ts"],
+        ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
