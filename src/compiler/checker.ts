@@ -12807,7 +12807,7 @@ namespace ts {
                         // errors and instead force a structural comparison (which will include elaborations that
                         // reveal the reason).
                         // We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
-                        // we can return `False` early here to skip calculating the structural error message we don't need. 
+                        // we can return `False` early here to skip calculating the structural error message we don't need.
                         if (varianceCheckFailed && !(reportErrors && some(variances, v => v === Variance.Invariant))) {
                             return Ternary.False;
                         }
@@ -13335,8 +13335,8 @@ namespace ts {
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
         // See comment at call in recursiveTypeRelatedTo for when this case matters.
         function hasCovariantVoidArgument(typeArguments: ReadonlyArray<Type>, variances: Variance[]): boolean {
-            for (let i = 0; i < typeArguments.length; i++) {
-                if ((!variances[i] || variances[i] === Variance.Covariant) && typeArguments[i].flags & TypeFlags.Void) {
+            for (let i = 0; i < variances.length; i++) {
+                if (variances[i] === Variance.Covariant && typeArguments[i].flags & TypeFlags.Void) {
                     return true;
                 }
             }
