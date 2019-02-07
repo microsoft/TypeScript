@@ -9,7 +9,7 @@ export declare const m: typeof mod;
     "compilerOptions": {
         "composite": true,
         "declaration": true,
-        "declarationDir": "decls"
+        "declarationDir": "decls",
         "sourceMap": true,
         "forceConsistentCasingInFileNames": true,
         "skipDefaultLibCheck": true

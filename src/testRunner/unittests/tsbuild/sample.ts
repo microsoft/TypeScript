@@ -448,7 +448,7 @@ class someClass { }`),
                 },
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
-        "declarationDir": "decls"`),
+        "declarationDir": "decls",`),
                     expectedDiagnostics: [
                         getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
                         [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
