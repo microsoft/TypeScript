@@ -260,7 +260,7 @@ namespace ts {
             }
 
             clear(): void {
-                this.data = createDictionaryObject<T>();
+                this.data = createDictionaryObject<MapEntry<T>>();
                 this.size = 0;
 
                 // Reset the linked list. Note that we must adjust the forward
