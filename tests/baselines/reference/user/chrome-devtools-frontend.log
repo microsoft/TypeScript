@@ -699,7 +699,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9093,1): error TS2554: Expected 0-2 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9117,1): error TS2554: Expected 0-2 arguments, but got 3.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9467,15): error TS2339: Property 'axe' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9708,34): error TS2345: Argument of type 'any[][]' is not assignable to parameter of type 'ReadonlyArray<[any, any]>'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9708,34): error TS2345: Argument of type 'any[][]' is not assignable to parameter of type 'readonly [any, any][]'.
   Type 'any[]' is missing the following properties from type '[any, any]': 0, 1
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9948,10): error TS2693: 'ShadowRoot' only refers to a type, but is being used as a value here.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(9969,4): error TS2693: 'ShadowRoot' only refers to a type, but is being used as a value here.
@@ -759,7 +759,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
   Type 'number' is not assignable to type 'void'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(19744,7): error TS2339: Property 'expected' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20005,8): error TS2339: Property 'runLighthouseForConnection' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20015,1): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20035,8): error TS2339: Property 'runLighthouseInWorker' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20039,15): error TS2339: Property 'runLighthouseForConnection' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(20046,8): error TS2339: Property 'getDefaultCategories' does not exist on type 'Window'.
@@ -3107,13 +3106,12 @@ node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(60
       Type '(debuggerModel: DebuggerModel) => void' is not assignable to type '(model: T) => void'.
         Types of parameters 'debuggerModel' and 'model' are incompatible.
           Type 'T' is not assignable to type 'DebuggerModel'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(97,52): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(120,52): error TS2339: Property 'valuesArray' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(123,34): error TS2339: Property 'clear' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(153,34): error TS2339: Property 'deleteAll' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(97,56): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(122,22): error TS2339: Property 'remove' does not exist on type 'V'.
+node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(153,44): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(158,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(166,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(181,38): error TS2339: Property 'set' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(181,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(183,45): error TS2339: Property 'remove' does not exist on type 'Map<UISourceCode, Breakpoint[]>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(237,46): error TS2339: Property 'valuesArray' does not exist on type 'Map<number, Breakpoint[]>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(300,73): error TS2339: Property 'valuesArray' does not exist on type 'Map<number, Map<number, Breakpoint[]>>'.
@@ -3122,7 +3120,7 @@ node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(32
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(330,43): error TS2339: Property 'keysArray' does not exist on type 'Map<number, Breakpoint[]>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(350,58): error TS2339: Property 'keysArray' does not exist on type 'Map<UISourceCode, Map<number, Map<number, Breakpoint[]>>>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(396,17): error TS2339: Property 'remove' does not exist on type 'Breakpoint[]'.
-node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(399,34): error TS2339: Property 'delete' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(399,41): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(442,23): error TS2339: Property 'remove' does not exist on type 'Breakpoint[]'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(444,23): error TS2339: Property 'remove' does not exist on type 'Map<number, Breakpoint[]>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/BreakpointManager.js(446,19): error TS2339: Property 'remove' does not exist on type 'Map<number, Map<number, Breakpoint[]>>'.
@@ -3158,19 +3156,18 @@ node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(126,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(132,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(160,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(169,23): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(172,30): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(182,23): error TS2339: Property 'delete' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(184,30): error TS2339: Property 'delete' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(191,42): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(169,27): error TS2345: Argument of type 'CSSStyleSheetHeader' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(172,34): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(182,48): error TS2345: Argument of type 'LiveLocation' is not assignable to parameter of type 'V'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(184,37): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(191,46): error TS2345: Argument of type 'CSSStyleSheetHeader' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(196,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(203,49): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(205,23): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(208,28): error TS2339: Property 'deleteAll' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(204,16): error TS2339: Property '_header' does not exist on type 'V'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(205,27): error TS2345: Argument of type 'CSSStyleSheetHeader' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(206,16): error TS2339: Property 'update' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(212,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(216,42): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(218,30): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(221,21): error TS2339: Property 'deleteAll' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(216,46): error TS2345: Argument of type 'CSSStyleSheetHeader' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(221,31): error TS2345: Argument of type 'CSSStyleSheetHeader' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/bindings/CSSWorkspaceBinding.js(261,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/bindings/CompilerScriptMapping.js(184,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/bindings/CompilerScriptMapping.js(194,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -3197,9 +3194,9 @@ node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBindin
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(207,34): error TS2339: Property 'valuesArray' does not exist on type 'Set<Location>'.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(230,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(267,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(276,21): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(285,21): error TS2339: Property 'delete' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(292,42): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(276,25): error TS2345: Argument of type 'Script' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(285,28): error TS2345: Argument of type 'Script' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(292,46): error TS2345: Argument of type 'Script' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(349,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(389,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/bindings/DebuggerWorkspaceBinding.js(452,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -3326,7 +3323,7 @@ node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(14
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(155,44): error TS2694: Namespace 'Changes.ChangesHighlighter' has no exported member 'DiffState'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(156,45): error TS2694: Namespace 'Changes.ChangesHighlighter' has no exported member 'DiffState'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(162,53): error TS2694: Namespace 'Changes.ChangesHighlighter' has no exported member 'DiffState'.
-node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(181,28): error TS2339: Property 'DiffState' does not exist on type '(config: any, parserConfig: { diffRows: any[]; baselineLines: string[]; currentLines: string[]; mimeType: string; }) => { startState: () => any; token: (arg0: { backUp: (n: any) => void; column: () => void; current: () => void; ... 10 more ...; sol: () => void; } & StringStream, arg1: any) => string; blankLine: (arg...'.
+node_modules/chrome-devtools-frontend/front_end/changes/ChangesHighlighter.js(181,28): error TS2339: Property 'DiffState' does not exist on type '(config: any, parserConfig: { diffRows: any[]; baselineLines: string[]; currentLines: string[]; mimeType: string; }) => { startState: () => any; token: (arg0: StringStream & { backUp: (n: any) => void; column: () => void; ... 11 more ...; sol: () => void; }, arg1: any) => string; blankLine: (arg0: any) => string; co...'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesSidebar.js(30,90): error TS2339: Property 'uiSourceCode' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesSidebar.js(38,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/changes/ChangesView.js(26,44): error TS2694: Namespace 'Changes.ChangesView' has no exported member 'Row'.
@@ -3727,7 +3724,7 @@ node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(20,29): error TS2694: Namespace 'Common.Renderer' has no exported member 'Options'.
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(27,15): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(40,17): error TS2300: Duplicate identifier 'Options'.
-node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(40,17): error TS2339: Property 'Options' does not exist on type '{ (): void; prototype: { render(object: any, options: any): Promise<Element>; }; renderPromise(object: any, options?: any): Promise<Element>; }'.
+node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(40,17): error TS2339: Property 'Options' does not exist on type 'typeof Renderer'.
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(63,15): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(81,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/common/ModuleExtensionInterfaces.js(105,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -3744,12 +3741,10 @@ node_modules/chrome-devtools-frontend/front_end/common/Object.js(122,76): error 
 node_modules/chrome-devtools-frontend/front_end/common/Object.js(124,15): error TS2339: Property '_listenerCallbackTuple' does not exist on type 'typeof Object'.
 node_modules/chrome-devtools-frontend/front_end/common/Object.js(132,112): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/common/Object.js(132,129): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/common/Object.js(134,20): error TS2339: Property 'EventDescriptor' does not exist on type '{ (): void; removeEventListeners(eventList: any[]): void; prototype: { addEventListener(eventType: symbol, listener: (arg0: any) => any, thisObject?: any): any; once(eventType: symbol): Promise<...>; removeEventListener(eventType: symbol, listener: (arg0: any) => any, thisObject?: any): void; hasEventListeners(event...'.
+node_modules/chrome-devtools-frontend/front_end/common/Object.js(134,20): error TS2339: Property 'EventDescriptor' does not exist on type 'typeof EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/common/Object.js(137,39): error TS2694: Namespace 'Common.EventTarget' has no exported member 'EventDescriptor'.
-node_modules/chrome-devtools-frontend/front_end/common/Object.js(151,31): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/common/Object.js(153,35): error TS2694: Namespace 'Common.EventTarget' has no exported member 'EventDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/common/Object.js(159,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-node_modules/chrome-devtools-frontend/front_end/common/Object.js(165,31): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/common/Object.js(172,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/common/OutputStream.js(13,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/common/ParsedURL.js(122,26): error TS2339: Property '_urlRegexInstance' does not exist on type 'typeof ParsedURL'.
@@ -4435,8 +4430,8 @@ node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(416
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(461,42): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(470,51): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(489,49): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(50,68): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(115,45): error TS2339: Property 'set' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(50,72): error TS2345: Argument of type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(115,72): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'V'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(135,32): error TS2694: Namespace 'Coverage' has no exported member 'RawLocation'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(169,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'location' must be of type 'Location', but here has type 'CSSLocation'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(170,31): error TS2339: Property 'header' does not exist on type 'Location'.
@@ -6126,17 +6121,12 @@ node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersVi
 node_modules/chrome-devtools-frontend/front_end/event_listeners/EventListenersView.js(321,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(93,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(149,19): error TS1110: Type expected.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(186,12): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(298,14): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(300,14): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
+node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(300,9): error TS2555: Expected at least 1 arguments, but got 0.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(314,12): error TS8022: JSDoc '@extends' is not attached to a class.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(371,12): error TS8022: JSDoc '@extends' is not attached to a class.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(381,12): error TS8022: JSDoc '@extends' is not attached to a class.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(391,12): error TS8022: JSDoc '@extends' is not attached to a class.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(429,12): error TS8022: JSDoc '@extends' is not attached to a class.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(529,12): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(544,12): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(551,12): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(789,21): error TS2339: Property 'exposeWebInspectorNamespace' does not exist on type 'ExtensionDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(790,12): error TS2339: Property 'webInspector' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(798,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -6537,8 +6527,6 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(918,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
   Type 'Uint32Array' is missing the following properties from type 'number[]': pop, push, concat, shift, and 5 more.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(920,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
-node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1020,16): error TS2587: JSDoc type 'JSHeapSnapshotEdge' circularly references itself.
-node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1028,16): error TS2587: JSDoc type 'JSHeapSnapshotRetainerEdge' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1045,5): error TS2322: Type 'void' is not assignable to type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1083,14): error TS2339: Property 'key' does not exist on type '(arg0: HeapSnapshotNode) => boolean'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1086,14): error TS2339: Property 'key' does not exist on type '(arg0: HeapSnapshotNode) => boolean'.
@@ -6602,7 +6590,6 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
   Types of property 'item' are incompatible.
     Type '() => HeapSnapshotEdge' is not assignable to type '() => { itemIndex(): number; serialize(): any; }'.
       Type 'HeapSnapshotEdge' is not assignable to type '{ itemIndex(): number; serialize(): any; }'.
-        Property '_snapshot' does not exist on type '{ itemIndex(): number; serialize(): any; }'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2283,13): error TS2339: Property 'nodeIndex' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2287,13): error TS2339: Property 'nodeIndex' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2322,28): error TS2339: Property 'sortRange' does not exist on type 'number[]'.
@@ -6879,7 +6866,6 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(199,80): error TS2339: Property '_layer' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(222,11): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(223,25): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(110,15): error TS2587: JSDoc type 'Layer' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(125,84): error TS2339: Property 'scrollRectIndex' does not exist on type 'Selection'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(135,19): error TS2694: Namespace 'SDK' has no exported member 'SnapshotWithRect'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(149,34): error TS2339: Property '_snapshot' does not exist on type 'Selection'.
@@ -6941,7 +6927,7 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(852
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(858,13): error TS2339: Property 'image' does not exist on type 'WebGLTexture'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(861,81): error TS2339: Property 'image' does not exist on type 'WebGLTexture'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(928,26): error TS2694: Namespace 'SDK' has no exported member 'SnapshotWithRect'.
-node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(932,39): error TS2345: Argument of type 'any[][]' is not assignable to parameter of type 'ReadonlyArray<[any, any]>'.
+node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(932,39): error TS2345: Argument of type 'any[][]' is not assignable to parameter of type 'readonly [any, any][]'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(1080,24): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(1098,15): error TS2304: Cannot find name 'CSSMatrix'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/Layers3DView.js(1143,19): error TS2694: Namespace 'SDK' has no exported member 'SnapshotWithRect'.
@@ -8229,11 +8215,11 @@ node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(62,5)
 node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(176,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(218,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(323,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(326,43): error TS2339: Property 'set' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(326,47): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(331,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(334,43): error TS2339: Property 'delete' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(341,48): error TS2339: Property 'has' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(343,70): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(334,50): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(341,52): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/persistence/Persistence.js(343,74): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/persistence/PersistenceActions.js(30,44): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/persistence/PersistenceActions.js(34,9): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/persistence/PersistenceActions.js(39,44): error TS2555: Expected at least 2 arguments, but got 1.
@@ -8356,213 +8342,8 @@ node_modules/chrome-devtools-frontend/front_end/product_registry/ProductRegistry
 node_modules/chrome-devtools-frontend/front_end/product_registry/ProductRegistry.js(28,41): error TS2694: Namespace 'ProductRegistry.Registry' has no exported member 'ProductEntry'.
 node_modules/chrome-devtools-frontend/front_end/product_registry/ProductRegistry.js(34,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/product_registry/ProductRegistry.js(55,41): error TS2694: Namespace 'ProductRegistry.Registry' has no exported member 'ProductEntry'.
-node_modules/chrome-devtools-frontend/front_end/product_registry/ProductRegistry.js(72,26): error TS2339: Property 'ProductEntry' does not exist on type '{ (): void; prototype: { nameForUrl: (parsedUrl: ParsedURL) => string; entryForUrl: (parsedUrl: ParsedURL) => any; typeForUrl: (parsedUrl: ParsedURL) => number; }; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(1559,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(1563,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(1604,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(1605,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(1606,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(1865,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2136,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2136,64): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2136,86): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2208,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2269,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2270,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2322,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2323,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2503,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2856,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2857,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2858,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2859,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2860,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2861,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2862,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2863,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2864,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(2865,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3126,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3572,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3573,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3574,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3575,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3576,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3747,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3748,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3770,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3771,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3772,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3773,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3774,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3775,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3776,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3780,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3819,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3826,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3873,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3874,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3957,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(3958,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4068,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4069,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4138,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4139,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4203,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4230,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4260,104): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4264,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4265,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4266,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4312,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4480,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4832,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4833,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4834,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(4835,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5127,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5137,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5159,70): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5175,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5186,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5202,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5249,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5522,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5523,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5524,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5525,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5539,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5565,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5612,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5613,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5614,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5615,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5616,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5617,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5618,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5619,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5684,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5789,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5820,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5852,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5858,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5859,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5860,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5970,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5971,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(5972,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6145,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6151,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6152,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6153,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6154,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6180,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6181,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6182,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6183,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6184,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6185,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6186,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6187,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6193,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6194,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6195,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6196,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6197,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6198,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6199,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6217,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6218,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6225,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6227,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6228,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6229,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6230,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6231,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6232,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6233,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6243,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6270,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6272,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6276,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6294,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6296,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6297,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6298,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6299,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6300,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6303,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6305,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6323,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6324,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6325,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6326,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6327,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6333,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6334,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6335,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6336,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6337,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6338,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6339,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6340,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6341,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6342,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6343,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6344,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6345,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6346,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6347,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6348,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6349,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6350,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6351,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6360,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6361,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6362,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6363,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6364,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6365,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6369,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6382,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6388,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6389,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6404,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6405,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6406,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6425,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6441,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6442,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6445,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6481,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6521,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6560,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6573,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6574,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6575,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6576,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6577,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6578,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6579,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6580,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6581,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6582,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6583,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6615,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6620,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6629,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6637,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6661,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6668,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6675,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6689,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6690,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6699,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6726,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6735,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6737,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6738,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
-node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(6741,42): error TS2741: Property 'type' is missing in type '{ "product": number; }' but required in type '{ product: number; type: number; }'.
+node_modules/chrome-devtools-frontend/front_end/product_registry/ProductRegistry.js(72,26): error TS2339: Property 'ProductEntry' does not exist on type 'typeof Registry'.
+node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryData.js(1488,1): error TS2590: Expression produces a union type that is too complex to represent.
 node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryImpl.js(27,41): error TS2694: Namespace 'ProductRegistry.Registry' has no exported member 'ProductEntry'.
 node_modules/chrome-devtools-frontend/front_end/product_registry_impl/ProductRegistryImpl.js(103,67): error TS2694: Namespace 'ProductRegistry.Registry' has no exported member 'ProductEntry'.
 node_modules/chrome-devtools-frontend/front_end/profiler/BottomUpProfileDataGrid.js(83,15): error TS2339: Property '_remainingNodeInfos' does not exist on type 'ProfileDataGridNode'.
@@ -8752,7 +8533,6 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.j
     Type 'HeapSnapshotProviderProxy' is not assignable to type '{ dispose(): void; nodePosition(snapshotObjectId: number): Promise<number>; isEmpty(): Promise<boolean>; serializeItemsRange(startPosition: number, endPosition: number): Promise<...>; sortAndRewind(comparator: ComparatorConfig): Promise<...>; }'.
       Property '_worker' does not exist on type '{ dispose(): void; nodePosition(snapshotObjectId: number): Promise<number>; isEmpty(): Promise<boolean>; serializeItemsRange(startPosition: number, endPosition: number): Promise<...>; sortAndRewind(comparator: ComparatorConfig): Promise<...>; }'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(804,15): error TS2577: Return type annotation circularly references itself.
-node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(804,16): error TS2587: JSDoc type 'HeapSnapshotRetainingObjectNode' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(871,36): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(874,34): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(892,3): error TS2416: Property 'createProvider' in type 'HeapSnapshotInstanceNode' is not assignable to the same property in base type 'HeapSnapshotGenericObjectNode'.
@@ -8992,7 +8772,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(57,23): 
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(78,46): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(79,46): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(80,45): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(84,17): error TS2345: Argument of type '(string | Element)[][]' is not assignable to parameter of type 'ReadonlyArray<[any, any]>'.
+node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(84,17): error TS2345: Argument of type '(string | Element)[][]' is not assignable to parameter of type 'readonly [any, any][]'.
   Type '(string | Element)[]' is missing the following properties from type '[any, any]': 0, 1
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(136,59): error TS2339: Property 'profile' does not exist on type 'ProfileView'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileView.js(136,78): error TS2339: Property 'adjustedTotal' does not exist on type 'ProfileView'.
@@ -9070,9 +8850,9 @@ node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(170
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(194,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(201,17): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(202,20): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(205,38): error TS2339: Property 'Params' does not exist on type '{ (): void; prototype: { sendMessage(message: string): void; disconnect(): Promise<any>; }; }'.
+node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(205,38): error TS2339: Property 'Params' does not exist on type 'typeof Connection'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(208,61): error TS2694: Namespace 'Protocol.InspectorBackend.Connection' has no exported member 'Params'.
-node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(210,38): error TS2339: Property 'Factory' does not exist on type '{ (): void; prototype: { sendMessage(message: string): void; disconnect(): Promise<any>; }; }'.
+node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(210,38): error TS2339: Property 'Factory' does not exist on type 'typeof Connection'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(217,53): error TS2694: Namespace 'Protocol.InspectorBackend.Connection' has no exported member 'Factory'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(229,36): error TS2339: Property 'deprecatedRunAfterPendingDispatches' does not exist on type 'typeof InspectorBackend'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(230,33): error TS2339: Property 'deprecatedRunAfterPendingDispatches' does not exist on type 'typeof InspectorBackend'.
@@ -9688,7 +9468,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(41,47
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleDeclaration.js(50,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleSheetHeader.js(11,24): error TS2694: Namespace 'Protocol' has no exported member 'CSS'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CSSStyleSheetHeader.js(40,5): error TS2322: Type 'StaticContentProvider' is not assignable to type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
-  Property '_contentURL' does not exist on type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(10,52): error TS2694: Namespace 'Protocol.InspectorBackend.Connection' has no exported member 'Params'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(34,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Connections.js(41,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -9848,7 +9627,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(250,43): er
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(281,43): error TS2694: Namespace 'SDK.DebuggerModel' has no exported member 'SetBreakpointResult'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(304,43): error TS2694: Namespace 'SDK.DebuggerModel' has no exported member 'SetBreakpointResult'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(319,24): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
-node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(332,32): error TS2587: JSDoc type 'BreakLocation' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(346,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(347,34): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(355,24): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
@@ -9936,7 +9714,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/HeapProfilerModel.js(44,34):
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(5,25): error TS2694: Namespace 'Protocol' has no exported member 'DOM'.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(18,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(23,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(28,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(33,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(38,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(45,12): error TS2502: 'child' is referenced directly or indirectly in its own type annotation.
@@ -10067,7 +9844,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(812,57): e
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(812,108): error TS2694: Namespace 'SDK.MultitargetNetworkManager' has no exported member 'InterceptionPattern'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(827,21): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(836,31): error TS2339: Property 'networkAgent' does not exist on type 'Target'.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(844,75): error TS2339: Property 'valuesArray' does not exist on type 'Multimap'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(855,32): error TS2339: Property 'networkAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(874,34): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'Conditions'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(884,35): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'Conditions'.
@@ -10075,13 +9851,9 @@ node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(891,24): e
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(905,24): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(955,42): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'BlockedPattern'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(976,41): error TS2694: Namespace 'SDK.NetworkManager' has no exported member 'BlockedPattern'.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1015,46): error TS2339: Property 'size' does not exist on type 'Multimap'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1019,52): error TS2694: Namespace 'SDK.MultitargetNetworkManager' has no exported member 'InterceptionPattern'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1020,45): error TS2694: Namespace 'SDK.MultitargetNetworkManager' has no exported member 'RequestInterceptor'.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1025,37): error TS2339: Property 'deleteAll' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1027,39): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1050,82): error TS2339: Property 'valuesArray' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1059,68): error TS2339: Property 'keysArray' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1060,13): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1084,19): error TS2339: Property 'networkAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1089,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/sdk/NetworkManager.js(1101,35): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ [x: string]: string; }'.
@@ -10433,7 +10205,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/ScreenCaptureModel.js(160,24
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(39,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(143,52): error TS2339: Property 'debuggerAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(159,5): error TS2322: Type 'StaticContentProvider' is not assignable to type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
-  Property '_contentURL' does not exist on type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(174,43): error TS2339: Property 'debuggerAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(190,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/sdk/Script.js(190,50): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
@@ -10499,7 +10270,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(198,25): error 
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(200,27): error TS2339: Property '_base64Map' does not exist on type 'typeof TextSourceMap'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(272,30): error TS2339: Property 'keysArray' does not exist on type 'Map<string, SourceInfo>'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(284,7): error TS2322: Type 'StaticContentProvider' is not assignable to type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
-  Property '_contentURL' does not exist on type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(285,5): error TS2322: Type 'CompilerSourceMappingContentProvider' is not assignable to type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
   Property '_sourceURL' does not exist on type '{ contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<boolean>; requestContent(): Promise<string>; searchInContent(query: string, caseSensitive: boolean, isRegex: boolean): Promise<...>; }'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(325,26): error TS2339: Property 'upperBound' does not exist on type 'SourceMapEntry[]'.
@@ -10516,24 +10286,24 @@ node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(527,37): error 
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(558,18): error TS2339: Property 'lowerBound' does not exist on type 'SourceMapEntry[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMap.js(559,29): error TS2339: Property 'upperBound' does not exist on type 'SourceMapEntry[]'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(52,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(85,37): error TS2339: Property 'has' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(86,42): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(87,47): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(141,45): error TS2339: Property 'has' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(146,40): error TS2339: Property 'set' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(85,41): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(86,46): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(87,51): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(141,49): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(146,44): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(159,36): error TS2352: Conversion of type 'TextSourceMap' to type '{ compiledURL(): string; url(): string; sourceURLs(): string[]; sourceContentProvider(sourceURL: string, contentType: ResourceType): { contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<...>; requestContent(): Promise<...>; searchInContent(query: string, caseSensitive: boolean, isRegex: boo...' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(159,36): error TS2352: Conversion of type 'TextSourceMap' to type '{ compiledURL(): string; url(): string; sourceURLs(): string[]; sourceContentProvider(sourceURL: string, contentType: ResourceType): { contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<...>; requestContent(): Promise<...>; searchInContent(query: string, caseSensitive: boolean, isRegex: boo...' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property '_json' does not exist on type '{ compiledURL(): string; url(): string; sourceURLs(): string[]; sourceContentProvider(sourceURL: string, contentType: ResourceType): { contentURL(): string; contentType(): ResourceType; contentEncoded(): Promise<...>; requestContent(): Promise<...>; searchInContent(query: string, caseSensitive: boolean, isRegex: boo...'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(163,12): error TS2339: Property 'catchException' does not exist on type 'Promise<any>'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(173,56): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(174,42): error TS2339: Property 'deleteAll' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(193,35): error TS2339: Property 'set' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(173,60): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(174,52): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(193,39): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(208,39): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(210,31): error TS2339: Property 'containsAll' does not exist on type 'Set<any>'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(227,38): error TS2339: Property 'hasValue' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(228,46): error TS2339: Property 'delete' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(232,33): error TS2339: Property 'delete' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(234,38): error TS2339: Property 'has' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(227,47): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(228,53): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(232,40): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sdk/SourceMapManager.js(234,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(16,52): error TS2694: Namespace 'Protocol.InspectorBackend.Connection' has no exported member 'Factory'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(148,48): error TS2339: Property 'valuesArray' does not exist on type 'Map<any, any>'.
 node_modules/chrome-devtools-frontend/front_end/sdk/Target.js(159,53): error TS2345: Argument of type 'new (arg1: Target) => T' is not assignable to parameter of type 'new (arg1: Target) => SDKModel'.
@@ -10621,7 +10391,6 @@ node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(576,43): err
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(576,55): error TS2339: Property 'ordinal' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(647,34): error TS2694: Namespace 'SDK.TracingManager' has no exported member 'EventPayload'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(649,15): error TS2577: Return type annotation circularly references itself.
-node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(649,16): error TS2587: JSDoc type 'ObjectSnapshot' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(666,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(859,34): error TS2694: Namespace 'SDK.TracingManager' has no exported member 'EventPayload'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(870,5): error TS2322: Type 'NamedObject[]' is not assignable to type 'Thread[]'.
@@ -10895,7 +10664,6 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/JSONView.js(170,23)
 node_modules/chrome-devtools-frontend/front_end/source_frame/PreviewFactory.js(14,33): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ResourceSourceFrame.js(51,35): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(15,22): error TS2339: Property 'installGutter' does not exist on type 'CodeMirrorTextEditor'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(18,24): error TS2587: JSDoc type 'TextEditorPositionHandle' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(89,28): error TS2339: Property 'toggleLineClass' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(110,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(177,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
@@ -10911,54 +10679,16 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(435,
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(459,15): error TS2339: Property '__fromRegExpQuery' does not exist on type 'RegExp'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(472,36): error TS2339: Property 'lowerBound' does not exist on type 'TextRange[]'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceFrame.js(475,46): error TS2339: Property 'computeLineEndings' does not exist on type 'string'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(19,23): error TS2339: Property 'addKeyMap' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(23,23): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(24,23): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(25,23): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(26,23): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(27,23): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(28,23): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(31,23): error TS2339: Property 'addKeyMap' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(36,23): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(38,23): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(39,23): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(45,12): error TS2339: Property '_isHandlingMouseDownEvent' does not exist on type 'SourcesTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(54,20): error TS2694: Namespace 'UI' has no exported member 'AutocompleteConfig'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(90,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'string'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(93,29): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(134,12): error TS2339: Property '_tokenHighlighter' does not exist on type 'CodeMirrorTextEditor'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(140,23): error TS2339: Property 'operation' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(144,23): error TS2339: Property 'operation' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(168,30): error TS2339: Property 'markText' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(185,23): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(196,23): error TS2339: Property 'clearGutter' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(198,23): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(209,23): error TS2339: Property 'setGutterMarker' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(219,45): error TS2339: Property 'getLineHandle' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(224,23): error TS2339: Property 'addLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(228,44): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(237,37): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(239,55): error TS2339: Property 'markText' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(245,25): error TS2339: Property 'addLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(250,25): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(258,25): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(276,40): error TS2339: Property 'getLineHandle' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(281,25): error TS2339: Property 'addLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(282,25): error TS2339: Property 'addLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(284,25): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(285,25): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(295,38): error TS2339: Property 'lineInfo' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(360,25): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(361,25): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(363,25): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(364,25): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(373,23): error TS2339: Property 'setOption' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(393,27): error TS2339: Property 'replaceRange' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(409,25): error TS2339: Property 'operation' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(411,35): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(412,33): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(428,47): error TS2339: Property 'lineAtHeight' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(428,78): error TS2339: Property 'getScrollInfo' does not exist on type 'CodeMirror'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(237,57): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(262,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(263,37): error TS2339: Property 'clear' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(296,30): error TS2339: Property 'wrapClass' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(414,99): error TS2345: Argument of type 'void' is not assignable to parameter of type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(445,15): error TS2339: Property '_isHandlingMouseDownEvent' does not exist on type 'SourcesTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(561,13): error TS2339: Property '_codeMirrorWhitespaceStyleInjected' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(563,9): error TS2339: Property '_codeMirrorWhitespaceStyleInjected' does not exist on type 'Document'.
@@ -10966,17 +10696,22 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(594,31): error TS2339: Property 'GutterClickEventData' does not exist on type 'typeof SourcesTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(614,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(622,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(631,14): error TS2339: Property 'operation' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(764,24): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(769,24): error TS2339: Property 'addLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(780,51): error TS2339: Property 'markText' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(795,24): error TS2339: Property 'removeLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(797,43): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(798,41): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(803,39): error TS2339: Property 'getSelections' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(809,26): error TS2339: Property 'addLineClass' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(821,33): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(829,24): error TS2339: Property 'removeOverlay' does not exist on type 'CodeMirror'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(759,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(760,32): error TS2339: Property 'clear' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(799,24): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(799,46): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(801,24): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(801,44): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(804,20): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(807,51): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(807,72): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(807,89): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(808,11): error TS1345: An expression of type 'void' cannot be tested for truthiness
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(809,54): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(810,93): error TS2345: Argument of type 'void' is not assignable to parameter of type 'Pos'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(822,79): error TS2339: Property 'charAt' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(823,41): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(823,88): error TS2339: Property 'charAt' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(839,9): error TS2367: This condition will always return 'false' since the types 'void' and 'number' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(854,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(862,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
@@ -10989,7 +10724,6 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(878,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(878,71): error TS2367: This condition will always return 'true' since the types 'void' and 'string' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(882,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(887,22): error TS2339: Property 'addOverlay' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(39,35): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(42,53): error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/XMLView.js(54,59): error TS2345: Argument of type 'string' is not assignable to parameter of type 'SupportedType'.
@@ -11119,12 +10853,13 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSid
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(34,34): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(41,27): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(42,47): error TS2339: Property 'createChild' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(53,24): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(64,45): error TS2339: Property 'keysArray' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(53,28): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(66,35): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(73,36): error TS2339: Property 'createChild' does not exist on type 'ChildNode'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(77,51): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(78,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'uiLocation' must be of type 'UILocation', but here has type 'any'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(78,37): error TS2339: Property 'uiLocation' does not exist on type 'V'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(80,71): error TS2339: Property 'uiLocation' does not exist on type 'V'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(81,60): error TS2339: Property 'breakpoint' does not exist on type 'V'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(82,62): error TS2339: Property 'breakpoint' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(87,7): error TS2322: Type 'Node' is not assignable to type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(92,7): error TS2322: Type 'Node' is not assignable to type 'ChildNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(119,5): error TS2322: Type 'Promise<string>' is not assignable to type 'Promise<undefined>'.
@@ -11192,8 +10927,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(969,32): error TS2339: Property '__nameToToken' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(969,65): error TS2339: Property '__nameToToken' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(974,49): error TS2339: Property '__nameToToken' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1036,67): error TS2339: Property 'lineNumber' does not exist on type '{ lineNumber: number; columnNumber: number; } | {}'.
-  Property 'lineNumber' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1150,11): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1152,17): error TS2339: Property 'shiftKey' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1169,11): error TS2339: Property 'consume' does not exist on type 'Event'.
@@ -11203,7 +10936,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1190,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1201,56): error TS2339: Property 'valuesArray' does not exist on type 'Map<DebuggerModel, ResourceScriptFile>'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1210,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1270,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'location' must be of type '{ lineNumber: number; columnNumber: number; }', but here has type 'UILocation'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1270,16): error TS2403: Subsequent variable declarations must have the same type.  Variable 'location' must be of type 'any', but here has type 'UILocation'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1286,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1326,60): error TS2339: Property 'valuesArray' does not exist on type 'Set<BreakpointDecoration>'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptSourceFrame.js(1400,31): error TS2555: Expected at least 2 arguments, but got 1.
@@ -11225,28 +10958,31 @@ node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(145,21)
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(167,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(175,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(183,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(189,48): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(192,51): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(189,52): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(191,19): error TS2339: Property 'updateTitle' does not exist on type 'V'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(192,55): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(194,22): error TS2339: Property 'updateTitle' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(212,22): error TS2339: Property 'updateTitle' does not exist on type 'NavigatorTreeNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(262,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(275,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(283,51): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(336,29): error TS2339: Property 'set' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(283,55): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(336,33): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(346,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(354,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(388,58): error TS2339: Property 'reverse' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(499,29): error TS2339: Property '_boostOrder' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(527,28): error TS2339: Property '_boostOrder' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(578,14): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(592,41): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(623,41): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(633,29): error TS2339: Property 'delete' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(592,45): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(593,22): error TS2339: Property 'firstValue' does not exist on type 'Set<V>'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(623,45): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(625,36): error TS2345: Argument of type 'V' is not assignable to parameter of type 'NavigatorUISourceCodeTreeNode'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(633,36): error TS2345: Argument of type 'UISourceCode' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(638,27): error TS2339: Property 'parent' does not exist on type 'NavigatorUISourceCodeTreeNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(643,25): error TS2339: Property 'parent' does not exist on type 'NavigatorUISourceCodeTreeNode'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(655,93): error TS2339: Property '_folderPath' does not exist on type '(NavigatorUISourceCodeTreeNode & NavigatorGroupTreeNode) | (NavigatorUISourceCodeTreeNode & NavigatorFolderTreeNode)'.
   Property '_folderPath' does not exist on type 'NavigatorUISourceCodeTreeNode & NavigatorGroupTreeNode'.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(663,46): error TS2339: Property 'valuesArray' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(667,29): error TS2339: Property 'clear' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(664,12): error TS2339: Property 'dispose' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(705,40): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(717,39): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/NavigatorView.js(734,11): error TS2555: Expected at least 2 arguments, but got 1.
@@ -11482,7 +11218,6 @@ node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(443
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(461,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(469,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(483,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(488,40): error TS2339: Property 'operation' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(496,32): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(511,24): error TS2339: Property 'pushAll' does not exist on type 'ToolbarItem[]'.
 node_modules/chrome-devtools-frontend/front_end/sources/UISourceCodeFrame.js(512,25): error TS2339: Property 'pushAll' does not exist on type 'any[]'.
@@ -11791,16 +11526,10 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(47,35): error TS2339: Property 'CodeMirror' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(165,18): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(169,67): error TS2694: Namespace 'TextEditor.CodeMirrorTextEditor' has no exported member 'Decoration'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(198,45): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(207,16): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(214,16): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(222,16): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(230,16): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(251,22): error TS2339: Property 'name' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(252,22): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(252,70): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(270,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(356,16): error TS2339: Property 'addKeyMap' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(395,29): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(449,60): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(557,9): error TS2339: Property 'consume' does not exist on type 'Event'.
@@ -11809,44 +11538,32 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(602,30): error TS2339: Property 'isSelfOrDescendant' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(735,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(796,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(842,23): error TS2339: Property 'set' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(842,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(855,13): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(856,13): error TS2339: Property 'style' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(863,23): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(863,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(866,49): error TS2694: Namespace 'TextEditor.CodeMirrorTextEditor' has no exported member 'Decoration'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(879,23): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(879,27): error TS2345: Argument of type 'number' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(883,49): error TS2694: Namespace 'TextEditor.CodeMirrorTextEditor' has no exported member 'Decoration'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(889,25): error TS2339: Property 'delete' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(889,32): error TS2345: Argument of type 'number' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(899,25): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(902,27): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(955,5): error TS2322: Type 'string' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(956,18): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(968,62): error TS2339: Property 'offsetTop' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1038,34): error TS2694: Namespace 'CodeMirror' has no exported member 'ChangeObject'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1052,23): error TS2339: Property 'valuesArray' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1053,23): error TS2339: Property 'clear' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1261,5): error TS2322: Type 'CodeMirrorPositionHandle' is not assignable to type '{ resolve(): { lineNumber: number; columnNumber: number; }; equal(positionHandle: any): boolean; }'.
-  Property '_codeMirror' does not exist on type '{ resolve(): { lineNumber: number; columnNumber: number; }; equal(positionHandle: any): boolean; }'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1301,31): error TS2339: Property 'listSelections' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1305,38): error TS2339: Property 'findMatchingBracket' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1313,14): error TS2339: Property 'setSelections' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1320,31): error TS2339: Property 'getScrollInfo' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1321,14): error TS2339: Property 'execCommand' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1322,27): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1323,14): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1324,43): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1333,31): error TS2339: Property 'getScrollInfo' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1334,14): error TS2339: Property 'execCommand' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1335,27): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1336,14): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1337,43): error TS2339: Property '_codeMirrorTextEditor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1392,35): error TS2339: Property 'getLineHandle' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1401,58): error TS2339: Property 'getLineNumber' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1451,22): error TS2339: Property 'execCommand' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1539,44): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1543,22): error TS2339: Property 'eachLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1543,69): error TS2339: Property 'lineCount' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1545,22): error TS2339: Property 'eachLine' does not exist on type 'CodeMirror'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1052,104): error TS2339: Property 'widget' does not exist on type 'V'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1302,34): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1307,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1307,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1307,44): error TS2339: Property 'match' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1308,64): error TS2339: Property 'from' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1309,56): error TS2339: Property 'to' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1309,81): error TS2339: Property 'to' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1323,60): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1336,60): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1404,13): error TS2322: Type 'void' is not assignable to type 'number'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1541,98): error TS2339: Property 'length' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1551,68): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1563,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1569,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -11862,47 +11579,45 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1650,33): error TS2339: Property 'Decoration' does not exist on type 'typeof CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1659,29): error TS2694: Namespace 'UI.TextEditor' has no exported member 'Options'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(53,24): error TS2694: Namespace 'CodeMirror' has no exported member 'ChangeObject'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(80,14): error TS2339: Property 'eachLine' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(146,15): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(147,26): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorUtils.js(149,67): error TS2339: Property 'length' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(12,18): error TS2694: Namespace 'UI' has no exported member 'AutocompleteConfig'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(26,22): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(35,22): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(36,22): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(37,22): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(38,22): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(40,24): error TS2339: Property 'on' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(42,47): error TS2339: Property 'getValue' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(47,22): error TS2339: Property 'off' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(49,24): error TS2339: Property 'off' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(50,24): error TS2339: Property 'off' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(51,24): error TS2339: Property 'off' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(52,24): error TS2339: Property 'off' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(55,24): error TS2339: Property 'off' does not exist on type 'CodeMirror'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(42,30): error TS2345: Argument of type 'void' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(62,26): error TS2694: Namespace 'CodeMirror' has no exported member 'BeforeChangeObject'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(67,48): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(113,40): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(135,34): error TS2694: Namespace 'CodeMirror' has no exported member 'ChangeObject'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(151,47): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(159,35): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(198,39): error TS2339: Property 'listSelections' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(218,26): error TS2339: Property 'somethingSelected' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(223,35): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(163,43): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(163,85): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(168,83): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(169,45): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(199,20): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(202,36): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(218,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(224,56): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(224,69): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(231,35): error TS2339: Property 'ch' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(239,31): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(275,35): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(278,86): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(278,99): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(286,18): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(286,31): error TS2339: Property 'ch' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(303,29): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(329,19): error TS2339: Property 'keyCode' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(359,35): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(360,43): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(377,39): error TS2339: Property 'listSelections' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(382,24): error TS2339: Property 'replaceRange' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(389,35): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(390,39): error TS2339: Property 'getScrollInfo' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(391,46): error TS2339: Property 'lineAtHeight' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(392,39): error TS2339: Property 'lineAtHeight' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(404,35): error TS2339: Property 'getCursor' does not exist on type 'CodeMirror'.
-node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(410,35): error TS2339: Property 'getLine' does not exist on type 'CodeMirror'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(360,19): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(360,58): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(360,64): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(377,56): error TS2339: Property 'slice' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(393,16): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(393,51): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(406,18): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(406,96): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(407,18): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(409,16): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(409,62): error TS2339: Property 'ch' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(410,50): error TS2339: Property 'line' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(411,89): error TS2339: Property 'charAt' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/text_editor/TextEditorAutocompleteController.js(411,103): error TS2339: Property 'ch' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/Text.js(21,39): error TS2339: Property 'computeLineEndings' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/Text.js(51,31): error TS2694: Namespace 'TextUtils.Text' has no exported member 'Position'.
 node_modules/chrome-devtools-frontend/front_end/text_utils/Text.js(55,34): error TS2339: Property 'lowerBound' does not exist on type 'number[]'.
@@ -12671,7 +12386,6 @@ node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1811,25): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1819,32): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModelFilter.js(43,22): error TS1110: Type expected.
-node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(72,15): error TS2587: JSDoc type 'TopDownNode' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(74,26): error TS2502: 'parent' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(168,31): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
   Type 'symbol' is not assignable to type 'string'.
@@ -12735,7 +12449,6 @@ node_modules/chrome-devtools-frontend/front_end/ui/Context.js(73,30): error TS23
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(77,33): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(86,45): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(101,16): error TS2339: Property 'runtime' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(36,15): error TS2587: JSDoc type 'ContextMenu' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(42,15): error TS2502: 'contextMenu' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(81,41): error TS2694: Namespace 'InspectorFrontendHostAPI' has no exported member 'ContextMenuDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(87,18): error TS2339: Property '_customElement' does not exist on type 'ContextMenuItem'.
@@ -12750,7 +12463,12 @@ node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(339,39): error
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(340,39): error TS2339: Property 'y' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(344,24): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(352,24): error TS2694: Namespace 'Common' has no exported member 'Event'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(355,22): error TS2339: Property '_useSoftMenu' does not exist on type 'typeof ContextMenu'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(383,20): error TS2339: Property '_pendingMenu' does not exist on type 'typeof ContextMenu'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(390,26): error TS2339: Property '_pendingMenu' does not exist on type 'typeof ContextMenu'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(392,29): error TS2339: Property '_pendingMenu' does not exist on type 'typeof ContextMenu'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(408,17): error TS2339: Property 'consume' does not exist on type 'Event'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(418,45): error TS2339: Property '_useSoftMenu' does not exist on type 'typeof ContextMenu'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(420,46): error TS2339: Property 'ownerDocument' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(422,101): error TS2339: Property 'ownerDocument' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(442,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -13042,7 +12760,6 @@ node_modules/chrome-devtools-frontend/front_end/ui/SearchableView.js(367,42): er
 node_modules/chrome-devtools-frontend/front_end/ui/SearchableView.js(474,9): error TS2352: Conversion of type '{ searchCanceled(): void; performSearch(searchConfig: SearchConfig, shouldJump: boolean, jumpBackwards?: boolean): void; jumpToNextSearchResult(): void; jumpToPreviousSearchResult(): void; supportsCaseSensitiveSearch(): boolean; supportsRegexSearch(): boolean; }' to type '{ replaceSelectionWith(searchConfig: SearchConfig, replacement: string): void; replaceAllWith(searchConfig: SearchConfig, replacement: string): void; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type '{ searchCanceled(): void; performSearch(searchConfig: SearchConfig, shouldJump: boolean, jumpBackwards?: boolean): void; jumpToNextSearchResult(): void; jumpToPreviousSearchResult(): void; supportsCaseSensitiveSearch(): boolean; supportsRegexSearch(): boolean; }' is missing the following properties from type '{ replaceSelectionWith(searchConfig: SearchConfig, replacement: string): void; replaceAllWith(searchConfig: SearchConfig, replacement: string): void; }': replaceSelectionWith, replaceAllWith
 node_modules/chrome-devtools-frontend/front_end/ui/SearchableView.js(482,9): error TS2352: Conversion of type '{ searchCanceled(): void; performSearch(searchConfig: SearchConfig, shouldJump: boolean, jumpBackwards?: boolean): void; jumpToNextSearchResult(): void; jumpToPreviousSearchResult(): void; supportsCaseSensitiveSearch(): boolean; supportsRegexSearch(): boolean; }' to type '{ replaceSelectionWith(searchConfig: SearchConfig, replacement: string): void; replaceAllWith(searchConfig: SearchConfig, replacement: string): void; }' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Type '{ searchCanceled(): void; performSearch(searchConfig: SearchConfig, shouldJump: boolean, jumpBackwards?: boolean): void; jumpToNextSearchResult(): void; jumpToPreviousSearchResult(): void; supportsCaseSensitiveSearch(): boolean; supportsRegexSearch(): boolean; }' is missing the following properties from type '{ replaceSelectionWith(searchConfig: SearchConfig, replacement: string): void; replaceAllWith(searchConfig: SearchConfig, replacement: string): void; }': replaceSelectionWith, replaceAllWith
 node_modules/chrome-devtools-frontend/front_end/ui/SearchableView.js(527,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/ui/SearchableView.js(532,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/ui/SearchableView.js(587,15): error TS2339: Property '__fromRegExpQuery' does not exist on type 'RegExp'.
@@ -13058,13 +12775,13 @@ node_modules/chrome-devtools-frontend/front_end/ui/SettingsUI.js(133,17): error 
 node_modules/chrome-devtools-frontend/front_end/ui/SettingsUI.js(155,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(16,56): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Descriptor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(26,83): error TS2339: Property 'valuesArray' does not exist on type 'Set<string>'.
-node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(34,38): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(34,42): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(39,44): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Descriptor'.
-node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(42,42): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(42,46): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(88,15): error TS2339: Property 'consume' does not exist on type 'KeyboardEvent'.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(94,15): error TS2339: Property 'consume' does not exist on type 'KeyboardEvent'.
-node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(147,35): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(148,31): error TS2339: Property 'set' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(147,39): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(148,35): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutRegistry.js(163,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutsScreen.js(42,54): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/ui/ShortcutsScreen.js(46,46): error TS2555: Expected at least 2 arguments, but got 1.
@@ -13280,7 +12997,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/TextEditor.js(58,15): error T
 node_modules/chrome-devtools-frontend/front_end/ui/TextEditor.js(70,18): error TS2694: Namespace 'UI' has no exported member 'AutocompleteConfig'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextEditor.js(79,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/ui/TextEditor.js(101,15): error TS2300: Duplicate identifier 'Options'.
-node_modules/chrome-devtools-frontend/front_end/ui/TextEditor.js(101,15): error TS2339: Property 'Options' does not exist on type '{ (): void; prototype: { widget(): Widget; fullRange(): TextRange; selection(): TextRange; setSelection(selection: TextRange): void; text(textRange?: TextRange): string; setText(text: string): void; ... 5 more ...; tokenAtTextPosition(lineNumber: number, columnNumber: number): { ...; }; }; Events: { ...; }; }'.
+node_modules/chrome-devtools-frontend/front_end/ui/TextEditor.js(101,15): error TS2339: Property 'Options' does not exist on type 'typeof TextEditor'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextEditor.js(106,119): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(52,74): error TS2694: Namespace 'UI.SuggestBox' has no exported member 'Suggestions'.
 node_modules/chrome-devtools-frontend/front_end/ui/TextPrompt.js(89,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -13727,13 +13444,12 @@ node_modules/chrome-devtools-frontend/front_end/workspace/SearchConfig.js(177,24
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(45,25): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(136,14): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(298,26): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(546,23): error TS2339: Property 'set' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(556,37): error TS2339: Property 'get' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(557,23): error TS2339: Property 'deleteAll' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(567,50): error TS2339: Property 'valuesArray' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(573,44): error TS2339: Property 'valuesArray' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(574,23): error TS2339: Property 'clear' does not exist on type 'Multimap'.
-node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(584,50): error TS2339: Property 'get' does not exist on type 'Multimap'.
+node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(546,27): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(556,41): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(557,33): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
+node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(567,5): error TS2322: Type 'V[]' is not assignable to type 'LineMarker[]'.
+  Type 'V' is not assignable to type 'LineMarker'.
+node_modules/chrome-devtools-frontend/front_end/workspace/UISourceCode.js(584,54): error TS2345: Argument of type 'string' is not assignable to parameter of type 'K'.
 node_modules/chrome-devtools-frontend/front_end/workspace/Workspace.js(37,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/workspace/Workspace.js(42,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/workspace/Workspace.js(47,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.

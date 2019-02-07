@@ -1233,7 +1233,7 @@ namespace ts {
 
     export interface TypeOperatorNode extends TypeNode {
         kind: SyntaxKind.TypeOperator;
-        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword;
+        operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword;
         type: TypeNode;
     }
 
@@ -2761,9 +2761,11 @@ namespace ts {
 
     export interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
+        javascriptPath?: string;
         javascriptText: string;
         javascriptMapPath?: string;
         javascriptMapText?: string;
+        declarationPath?: string;
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
@@ -2771,6 +2773,7 @@ namespace ts {
 
     export interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
+        fileName?: string;
         text: string;
         sourceMapPath?: string;
         sourceMapText?: string;
@@ -2827,7 +2830,7 @@ namespace ts {
         fileName: string,
         data: string,
         writeByteOrderMark: boolean,
-        onError: ((message: string) => void) | undefined,
+        onError?: (message: string) => void,
         sourceFiles?: ReadonlyArray<SourceFile>,
     ) => void;
 
@@ -3952,6 +3955,7 @@ namespace ts {
     // Unique symbol types (TypeFlags.UniqueESSymbol)
     export interface UniqueESSymbolType extends Type {
         symbol: Symbol;
+        escapedName: __String;
     }
 
     export interface StringLiteralType extends LiteralType {
@@ -4059,6 +4063,7 @@ namespace ts {
     export interface TupleType extends GenericType {
         minLength: number;
         hasRestElement: boolean;
+        readonly: boolean;
         associatedNames?: __String[];
     }
 
@@ -4109,7 +4114,6 @@ namespace ts {
         templateType?: Type;
         modifiersType?: Type;
         resolvedApparentType?: Type;
-        instantiating?: boolean;
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -4336,6 +4340,7 @@ namespace ts {
         None            =      0,  // No special inference behaviors
         NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
+        NoFixing        = 1 << 2,  // Disable type parameter fixing
     }
 
     /**
@@ -4364,6 +4369,7 @@ namespace ts {
         inferences: InferenceInfo[];                  // Inferences made for each type parameter
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
+        returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
     }
 
     /* @internal */
@@ -5003,7 +5009,6 @@ namespace ts {
         getDefaultLibLocation?(): string;
         writeFile: WriteFileCallback;
         getCurrentDirectory(): string;
-        getDirectories(path: string): string[];
         getCanonicalFileName(fileName: string): string;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
@@ -5041,7 +5046,6 @@ namespace ts {
         ContainsTypeScript = 1 << 1,
         ContainsJsx = 1 << 2,
         ContainsESNext = 1 << 3,
-        ContainsES2019 = 1 << 4,
         ContainsES2017 = 1 << 5,
         ContainsES2016 = 1 << 6,
         ES2015 = 1 << 7,
@@ -5053,21 +5057,23 @@ namespace ts {
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 13,                // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 14,
-        ContainsCapturedLexicalThis = 1 << 15,
-        ContainsLexicalThisInComputedPropertyName = 1 << 16,
-        ContainsDefaultValueAssignments = 1 << 17,
-        ContainsRestOrSpread = 1 << 18,
-        ContainsObjectRestOrSpread = 1 << 19,
-        ContainsComputedPropertyName = 1 << 20,
-        ContainsBlockScopedBinding = 1 << 21,
-        ContainsBindingPattern = 1 << 22,
-        ContainsYield = 1 << 23,
-        ContainsHoistedDeclarationOrCompletion = 1 << 24,
-        ContainsDynamicImport = 1 << 25,
-        Super = 1 << 26,
-        ContainsSuper = 1 << 27,
+        ContainsTypeScriptClassSyntax = 1 << 12,                // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 13,
+        ContainsCapturedLexicalThis = 1 << 14,
+        ContainsLexicalThisInComputedPropertyName = 1 << 15,
+        ContainsDefaultValueAssignments = 1 << 16,
+        ContainsRestOrSpread = 1 << 17,
+        ContainsObjectRestOrSpread = 1 << 18,
+        ContainsComputedPropertyName = 1 << 19,
+        ContainsBlockScopedBinding = 1 << 20,
+        ContainsBindingPattern = 1 << 21,
+        ContainsYield = 1 << 22,
+        ContainsHoistedDeclarationOrCompletion = 1 << 23,
+        ContainsDynamicImport = 1 << 24,
+        Super = 1 << 25,
+        ContainsSuper = 1 << 26,
+        ContainsES2018 = 1 << 27,
+        ContainsES2019 = 1 << 28,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5080,6 +5086,7 @@ namespace ts {
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
         AssertES2019 = ContainsES2019,
+        AssertES2018 = ContainsES2018,
         AssertES2017 = ContainsES2017,
         AssertES2016 = ContainsES2016,
         AssertES2015 = ES2015 | ContainsES2015,
@@ -5860,13 +5867,14 @@ namespace ts {
 
     export interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     }
 
     /** Represents a bigint literal value without requiring bigint support */

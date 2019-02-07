@@ -1315,7 +1315,7 @@ namespace ts {
     }
 
     export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
-        if (preferences.quotePreference) {
+        if (preferences.quotePreference && preferences.quotePreference !== "auto") {
             return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
         }
         else {
@@ -1868,15 +1868,18 @@ namespace ts {
         if (/^\d+$/.test(text)) {
             return text;
         }
+        // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
+        const quotePreference = preferences.quotePreference || "auto";
         const quoted = JSON.stringify(text);
-        switch (preferences.quotePreference) {
-            case undefined:
+        switch (quotePreference) {
+            // TODO use getQuotePreference to infer the actual quote style.
+            case "auto":
             case "double":
                 return quoted;
             case "single":
                 return `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'`;
             default:
-                return Debug.assertNever(preferences.quotePreference);
+                return Debug.assertNever(quotePreference);
         }
     }
 
