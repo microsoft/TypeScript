@@ -802,9 +802,9 @@ node_modules/npm/lib/utils/error-handler.js(146,27): error TS2339: Property 'con
 node_modules/npm/lib/utils/error-handler.js(166,14): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/error-handler.js(167,16): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/error-handler.js(168,8): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/utils/error-handler.js(186,40): error TS2345: Argument of type '{ (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | ... 1 more ... | undefined): string; }' is not assignable to parameter of type '(value: string, index: number, array: string[]) => string'.
+node_modules/npm/lib/utils/error-handler.js(186,40): error TS2345: Argument of type '{ (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | ... 1 more ... | undefined): string; }' is not assignable to parameter of type '(value: string, index: number, array: string[]) => string'.
   Types of parameters 'replacer' and 'index' are incompatible.
-    Type 'number' is not assignable to type '((key: string, value: any) => any) | undefined'.
+    Type 'number' is not assignable to type '((this: any, key: string, value: any) => any) | undefined'.
 node_modules/npm/lib/utils/error-handler.js(188,33): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(205,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(208,18): error TS2339: Property 'code' does not exist on type 'Error'.
