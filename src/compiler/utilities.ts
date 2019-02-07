@@ -3791,8 +3791,8 @@ namespace ts {
     }
 
     export function getModifierFlags(node: Node): ModifierFlags {
-        if (node.modifierFlagsCache! & ModifierFlags.HasComputedFlags) {
-            return node.modifierFlagsCache! & ~ModifierFlags.HasComputedFlags;
+        if (node.modifierFlagsCache & ModifierFlags.HasComputedFlags) {
+            return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
         }
 
         const flags = getModifierFlagsNoCache(node);
