@@ -3,12 +3,14 @@
     "pos": 0,
     "end": 27,
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTypeTag",
             "pos": 8,
             "end": 22,
             "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -22,6 +24,7 @@
                 "pos": 14,
                 "end": 22,
                 "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 15,

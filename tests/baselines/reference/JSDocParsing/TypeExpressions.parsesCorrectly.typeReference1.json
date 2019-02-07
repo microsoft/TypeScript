@@ -4,6 +4,7 @@
     "end": 11,
     "flags": "JSDoc",
     "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "typeName": {
         "kind": "Identifier",
         "pos": 1,
