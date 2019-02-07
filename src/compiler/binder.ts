@@ -1120,11 +1120,15 @@ namespace ts {
                 // We add the nodes within the `try` block to the `finally`'s antecedents if there's no catch block
                 // (If there is a `catch` block, it will have all these antecedents instead, and the `finally` will
                 // have the end of the `try` block and the end of the `catch` block)
+                let preFinallyPrior = preTryFlow;
                 if (!node.catchClause) {
                     if (tryPriors.length) {
+                        const preFinallyFlow = createBranchLabel();
+                        addAntecedent(preFinallyFlow, preTryFlow);
                         for (const p of tryPriors) {
-                            addAntecedent(preFinallyLabel, p);
+                            addAntecedent(preFinallyFlow, p);
                         }
+                        preFinallyPrior = finishFlowLabel(preFinallyFlow);
                     }
                 }
 
@@ -1156,7 +1160,7 @@ namespace ts {
                 //
                 // extra edges that we inject allows to control this behavior
                 // if when walking the flow we step on post-finally edge - we can mark matching pre-finally edge as locked so it will be skipped.
-                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
+                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preFinallyPrior, lock: {} };
                 addAntecedent(preFinallyLabel, preFinallyFlow);
 
                 currentFlow = finishFlowLabel(preFinallyLabel);
