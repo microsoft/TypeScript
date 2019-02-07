@@ -18,11 +18,16 @@
 ////// FunctionLikeBodyKeywords
 //// function foo() { /*3*/ } 
 //// 
-const tsKeywords = ['type', 'enum', 'abstract', 'any', 'infer', 'is', 'keyof', 'module', 'namespace', 'never', 'readonly', 'unique', 'unknown'];
+////// TypeKeywords
+//// /**
+//// * @param {/*5*/} x
+//// */
+//// function bar(x) {}
+const tsKeywords = ['type', 'enum', 'abstract', 'any', 'infer', 'is', 'keyof', 'module', 'namespace', 'never', 'readonly', 'unique', 'unknown', 'number', 'string', 'boolean', 'symbol'];
 verify.completions(
   {
     marker: ['1'],
-    exact: ['foo', 'C', 'undefined' ,...completion.globalKeywords.filter(keyword => tsKeywords.indexOf(keyword.name) === -1)],
+    exact: ['foo', 'bar', 'C', 'undefined', ...completion.globalKeywords.filter(keyword => tsKeywords.indexOf(keyword.name) === -1)],
   },
   {
     marker: ['2'],
@@ -38,5 +43,9 @@ verify.completions(
     marker: ['4'],
     exact: ['private', 'protected', 'public'],
     isNewIdentifierLocation: true 
+  },
+  {
+    marker: ['5'],
+    exact: ['C', ...completion.typeKeywords]
   }
 );

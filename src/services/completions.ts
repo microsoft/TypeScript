@@ -113,7 +113,9 @@ namespace ts.Completions {
 
         if (keywordFilters !== KeywordCompletionFilters.None) {
             const entryNames = arrayToSet(entries, e => e.name);
-            const keywordsCompletion = isSourceFileJS(sourceFile) ? getKeywordCompletions(keywordFilters).filter(keyword => !isTsKeyWords(keyword)) : getKeywordCompletions(keywordFilters);
+            const keywordsCompletion = isSourceFileJS(sourceFile) && keywordFilters !== KeywordCompletionFilters.TypeKeywords
+                ? getKeywordCompletions(keywordFilters).filter(keyword => !isTsKeywords(keyword))
+                : getKeywordCompletions(keywordFilters);
             for (const keywordEntry of keywordsCompletion) {
                 if (!entryNames.has(keywordEntry.name)) {
                     entries.push(keywordEntry);
@@ -128,7 +130,7 @@ namespace ts.Completions {
         return { isGlobalCompletion: isInSnippetScope, isMemberCompletion: isMemberCompletionKind(completionKind), isNewIdentifierLocation, entries };
     }
 
-    const tsKeywords: string[] = [
+    const tsKeywords = [
         SyntaxKind.EnumKeyword,
         SyntaxKind.AbstractKeyword,
         SyntaxKind.AnyKeyword,
@@ -141,10 +143,14 @@ namespace ts.Completions {
         SyntaxKind.ReadonlyKeyword,
         SyntaxKind.TypeKeyword,
         SyntaxKind.UniqueKeyword,
-        SyntaxKind.UnknownKeyword
+        SyntaxKind.UnknownKeyword,
+        SyntaxKind.NumberKeyword,
+        SyntaxKind.StringKeyword,
+        SyntaxKind.BooleanKeyword,
+        SyntaxKind.SymbolKeyword
     ].map(tokenToString) as string[];
 
-    function isTsKeyWords(keyword: CompletionEntry): boolean {
+    function isTsKeywords(keyword: CompletionEntry): boolean {
         return tsKeywords.indexOf(keyword.name) !== -1;
     }
 
