@@ -49,45 +49,6 @@
         ]
       }
     ]
-  },
-  "program": {
-    "fileInfos": {
-      "/lib/lib.d.ts": {
-        "version": "38840781448"
-      },
-      "/lib/lib.es5.d.ts": {
-        "version": "-157947125741"
-      },
-      "/lib/lib.dom.d.ts": {
-        "version": "-1086375748659"
-      },
-      "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "16827914512"
-      },
-      "/lib/lib.scripthost.d.ts": {
-        "version": "-7856822451"
-      },
-      "/src/second/second_part1.ts": {
-        "version": "-21603042336"
-      },
-      "/src/second/second_part2.ts": {
-        "version": "9339262372"
-      }
-    },
-    "options": {
-      "target": 1,
-      "composite": true,
-      "removeComments": true,
-      "strict": true,
-      "sourceMap": true,
-      "declarationMap": true,
-      "declaration": true,
-      "outFile": "/src/2/second-output.js",
-      "skipDefaultLibCheck": true,
-      "configFilePath": "/src/second/tsconfig.json"
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {}
   }
 }
 
@@ -574,47 +535,6 @@ sourceFile:../second/second_part2.ts
         ]
       }
     ]
-  },
-  "program": {
-    "fileInfos": {
-      "/lib/lib.d.ts": {
-        "version": "38840781448"
-      },
-      "/lib/lib.es5.d.ts": {
-        "version": "-157947125741"
-      },
-      "/lib/lib.dom.d.ts": {
-        "version": "-1086375748659"
-      },
-      "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "16827914512"
-      },
-      "/lib/lib.scripthost.d.ts": {
-        "version": "-7856822451"
-      },
-      "/src/first/first_part1.ts": {
-        "version": "-17207381411"
-      },
-      "/src/first/first_part2.ts": {
-        "version": "4973778178"
-      },
-      "/src/first/first_part3.ts": {
-        "version": "6202806249"
-      }
-    },
-    "options": {
-      "target": 1,
-      "composite": true,
-      "removeComments": true,
-      "strict": true,
-      "sourceMap": true,
-      "declarationMap": true,
-      "outFile": "/src/first/bin/first-output.js",
-      "skipDefaultLibCheck": true,
-      "configFilePath": "/src/first/tsconfig.json"
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {}
   }
 }
 
@@ -1072,48 +992,6 @@ sourceFile:../first_part3.ts
         ]
       }
     ]
-  },
-  "program": {
-    "fileInfos": {
-      "/lib/lib.d.ts": {
-        "version": "38840781448"
-      },
-      "/lib/lib.es5.d.ts": {
-        "version": "-157947125741"
-      },
-      "/lib/lib.dom.d.ts": {
-        "version": "-1086375748659"
-      },
-      "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "16827914512"
-      },
-      "/lib/lib.scripthost.d.ts": {
-        "version": "-7856822451"
-      },
-      "/src/first/bin/first-output.d.ts": {
-        "version": "-23350520794"
-      },
-      "/src/2/second-output.d.ts": {
-        "version": "7752788385"
-      },
-      "/src/third/third_part1.ts": {
-        "version": "10470273651"
-      }
-    },
-    "options": {
-      "target": 1,
-      "composite": true,
-      "removeComments": true,
-      "strict": true,
-      "sourceMap": true,
-      "declarationMap": true,
-      "declaration": true,
-      "outFile": "/src/third/thirdjs/output/third-output.js",
-      "skipDefaultLibCheck": true,
-      "configFilePath": "/src/third/tsconfig.json"
-    },
-    "referencedMap": {},
-    "exportedModulesMap": {}
   }
 }
 

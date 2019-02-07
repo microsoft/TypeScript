@@ -525,7 +525,8 @@ namespace ts {
     /**
      * Gets the program information to be emitted in buildInfo so that we can use it to create new program
      */
-    function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>): ProgramBuildInfo {
+    function getProgramBuildInfo(state: Readonly<ReusableBuilderProgramState>): ProgramBuildInfo | undefined {
+        if (state.compilerOptions.outFile || state.compilerOptions.out) return undefined;
         const fileInfos: MapLike<BuilderState.FileInfo> = {};
         state.fileInfos.forEach((value, key) => {
             const signature = state.currentAffectedFilesSignatures && state.currentAffectedFilesSignatures.get(key);
