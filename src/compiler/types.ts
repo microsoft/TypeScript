@@ -5046,14 +5046,14 @@ namespace ts {
         ContainsTypeScript = 1 << 1,
         ContainsJsx = 1 << 2,
         ContainsESNext = 1 << 3,
-        ContainsES2017 = 1 << 5,
-        ContainsES2016 = 1 << 6,
-        ES2015 = 1 << 7,
-        ContainsES2015 = 1 << 8,
-        Generator = 1 << 9,
-        ContainsGenerator = 1 << 10,
-        DestructuringAssignment = 1 << 11,
-        ContainsDestructuringAssignment = 1 << 12,
+        ContainsES2017 = 1 << 4,
+        ContainsES2016 = 1 << 5,
+        ES2015 = 1 << 6,
+        ContainsES2015 = 1 << 7,
+        Generator = 1 << 8,
+        ContainsGenerator = 1 << 9,
+        DestructuringAssignment = 1 << 10,
+        ContainsDestructuringAssignment = 1 << 11,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
