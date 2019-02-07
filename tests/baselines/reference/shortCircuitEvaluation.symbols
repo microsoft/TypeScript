@@ -1,0 +1,46 @@
+=== tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/shortCircuitEvaluation.ts ===
+let a = undefined || 1;
+>a : Symbol(a, Decl(shortCircuitEvaluation.ts, 0, 3))
+>undefined : Symbol(undefined)
+
+a++
+>a : Symbol(a, Decl(shortCircuitEvaluation.ts, 0, 3))
+
+let b = null || 'foo';
+>b : Symbol(b, Decl(shortCircuitEvaluation.ts, 3, 3))
+
+b.concat('bar')
+>b.concat : Symbol(String.concat, Decl(lib.es5.d.ts, --, --))
+>b : Symbol(b, Decl(shortCircuitEvaluation.ts, 3, 3))
+>concat : Symbol(String.concat, Decl(lib.es5.d.ts, --, --))
+
+type EventType = 'click' | 'dblclick'
+>EventType : Symbol(EventType, Decl(shortCircuitEvaluation.ts, 4, 15))
+
+const handlerMap: { [P in EventType]?: any[] } = {}
+>handlerMap : Symbol(handlerMap, Decl(shortCircuitEvaluation.ts, 8, 5))
+>P : Symbol(P, Decl(shortCircuitEvaluation.ts, 8, 21))
+>EventType : Symbol(EventType, Decl(shortCircuitEvaluation.ts, 4, 15))
+
+function addHandler<P extends EventType>(evType: P) {
+>addHandler : Symbol(addHandler, Decl(shortCircuitEvaluation.ts, 8, 51))
+>P : Symbol(P, Decl(shortCircuitEvaluation.ts, 10, 20))
+>EventType : Symbol(EventType, Decl(shortCircuitEvaluation.ts, 4, 15))
+>evType : Symbol(evType, Decl(shortCircuitEvaluation.ts, 10, 41))
+>P : Symbol(P, Decl(shortCircuitEvaluation.ts, 10, 20))
+
+  const handlerList = handlerMap[evType] || <any[]>[]
+>handlerList : Symbol(handlerList, Decl(shortCircuitEvaluation.ts, 11, 7))
+>handlerMap : Symbol(handlerMap, Decl(shortCircuitEvaluation.ts, 8, 5))
+>evType : Symbol(evType, Decl(shortCircuitEvaluation.ts, 10, 41))
+
+  handlerList.push({})
+>handlerList.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>handlerList : Symbol(handlerList, Decl(shortCircuitEvaluation.ts, 11, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+  handlerMap[evType] = handlerList
+>handlerMap : Symbol(handlerMap, Decl(shortCircuitEvaluation.ts, 8, 5))
+>evType : Symbol(evType, Decl(shortCircuitEvaluation.ts, 10, 41))
+>handlerList : Symbol(handlerList, Decl(shortCircuitEvaluation.ts, 11, 7))
+}
