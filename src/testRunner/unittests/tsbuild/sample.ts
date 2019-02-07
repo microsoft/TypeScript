@@ -359,6 +359,16 @@ export class cNew {}`);
         });
 
         describe("emit output", () => {
+            const initialBuildDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+                getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
+                [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tests/tsconfig.json", "src/tests/index.js"],
+                [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
+            ];
+
             verifyTsbuildOutput({
                 scenario: "sample",
                 projFs: () => projFs,
@@ -375,15 +385,7 @@ export class cNew {}`);
                 lastProjectOutputJs: "/src/tests/index.js",
                 initialBuild: {
                     modifyFs: noop,
-                    expectedDiagnostics: [
-                        getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
-                        [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
-                        [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
-                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tests/tsconfig.json", "src/tests/index.js"],
-                        [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
-                    ]
+                    expectedDiagnostics: initialBuildDiagnostics
                 },
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => appendText(fs, "/src/core/index.ts", `
@@ -423,6 +425,38 @@ class someClass { }`),
                             [Diagnostics.Updating_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
                         ]
                     }
+                }
+            });
+
+            verifyTsbuildOutput({
+                scenario: "when logic config changes declaration dir",
+                projFs: () => projFs,
+                time,
+                tick,
+                proj: "sample1",
+                rootNames: ["/src/tests"],
+                expectedMapFileNames: [
+                    "/src/core/anotherModule.d.ts.map",
+                    "/src/core/index.d.ts.map",
+                    "/src/logic/index.js.map"
+                ],
+                expectedTsbuildInfoFileNames: emptyArray,
+                lastProjectOutputJs: "/src/tests/index.js",
+                initialBuild: {
+                    modifyFs: noop,
+                    expectedDiagnostics: initialBuildDiagnostics
+                },
+                incrementalDtsChangedBuild: {
+                    modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"declaration": true,`, `"declaration": true,
+        "declarationDir": "decls"`),
+                    expectedDiagnostics: [
+                        getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/decls/index.d.ts"],
+                        [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/logic"],
+                        [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
+                    ]
                 }
             });
         });
