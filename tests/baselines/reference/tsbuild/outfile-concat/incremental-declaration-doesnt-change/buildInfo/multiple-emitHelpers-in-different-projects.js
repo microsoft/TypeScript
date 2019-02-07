@@ -1,39 +1,41 @@
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {
+      "helpers": [
+        "typescript:rest"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 661,
-      "kind": "text"
-    },
-    {
-      "pos": 661,
-      "end": 701,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 208,
-      "kind": "text"
-    },
-    {
-      "pos": 208,
-      "end": 250,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {
-    "helpers": [
-      "typescript:rest"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 661,
+        "kind": "text"
+      },
+      {
+        "pos": 661,
+        "end": 701,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 208,
+        "kind": "text"
+      },
+      {
+        "pos": 208,
+        "end": 250,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }
@@ -361,76 +363,78 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {
+      "helpers": [
+        "typescript:rest"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 921,
-      "kind": "emitHelpers",
-      "data": "typescript:read"
-    },
-    {
-      "pos": 923,
-      "end": 1093,
-      "kind": "emitHelpers",
-      "data": "typescript:spread"
-    },
-    {
-      "pos": 1095,
-      "end": 1379,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 1381,
-      "end": 1923,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 1925,
-      "end": 2078,
-      "kind": "text"
-    },
-    {
-      "pos": 2078,
-      "end": 2118,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 250,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 252,
-      "end": 461,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 463,
-      "end": 533,
-      "kind": "text"
-    },
-    {
-      "pos": 533,
-      "end": 575,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {
-    "helpers": [
-      "typescript:rest"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 921,
+        "kind": "emitHelpers",
+        "data": "typescript:read"
+      },
+      {
+        "pos": 923,
+        "end": 1093,
+        "kind": "emitHelpers",
+        "data": "typescript:spread"
+      },
+      {
+        "pos": 1095,
+        "end": 1379,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 1381,
+        "end": 1923,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 1925,
+        "end": 2078,
+        "kind": "text"
+      },
+      {
+        "pos": 2078,
+        "end": 2118,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 250,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 252,
+        "end": 461,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 463,
+        "end": 533,
+        "kind": "text"
+      },
+      {
+        "pos": 533,
+        "end": 575,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }

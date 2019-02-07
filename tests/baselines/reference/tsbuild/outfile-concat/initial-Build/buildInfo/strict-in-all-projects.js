@@ -1,52 +1,54 @@
 //// [/src/2/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "data": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 300,
-      "kind": "text"
-    },
-    {
-      "pos": 300,
-      "end": 341,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 100,
-      "kind": "text"
-    },
-    {
-      "pos": 100,
-      "end": 143,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/second/",
-  "sources": {
-    "prologues": [
-      {
-        "file": "/src/second/second_part1.ts",
-        "text": "",
-        "directives": [
-          {
-            "pos": -1,
-            "end": -1,
-            "expression": {
+  "bundle": {
+    "commonSourceDirectory": "/src/second/",
+    "sources": {
+      "prologues": [
+        {
+          "file": "/src/second/second_part1.ts",
+          "text": "",
+          "directives": [
+            {
               "pos": -1,
               "end": -1,
-              "text": "use strict"
+              "expression": {
+                "pos": -1,
+                "end": -1,
+                "text": "use strict"
+              }
             }
-          }
-        ]
+          ]
+        }
+      ]
+    },
+    "js": [
+      {
+        "pos": 0,
+        "end": 13,
+        "kind": "prologue",
+        "data": "use strict"
+      },
+      {
+        "pos": 15,
+        "end": 300,
+        "kind": "text"
+      },
+      {
+        "pos": 300,
+        "end": 341,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 100,
+        "kind": "text"
+      },
+      {
+        "pos": 100,
+        "end": 143,
+        "kind": "sourceMapUrl"
       }
     ]
   }
@@ -486,53 +488,55 @@ sourceFile:../second/second_part2.ts
 
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "data": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 125,
-      "kind": "text"
-    },
-    {
-      "pos": 125,
-      "end": 165,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 157,
-      "kind": "text"
-    },
-    {
-      "pos": 157,
-      "end": 199,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {
-    "prologues": [
-      {
-        "file": "/src/first/first_PART1.ts",
-        "text": "",
-        "directives": [
-          {
-            "pos": -1,
-            "end": -1,
-            "expression": {
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {
+      "prologues": [
+        {
+          "file": "/src/first/first_PART1.ts",
+          "text": "",
+          "directives": [
+            {
               "pos": -1,
               "end": -1,
-              "text": "use strict"
+              "expression": {
+                "pos": -1,
+                "end": -1,
+                "text": "use strict"
+              }
             }
-          }
-        ]
+          ]
+        }
+      ]
+    },
+    "js": [
+      {
+        "pos": 0,
+        "end": 13,
+        "kind": "prologue",
+        "data": "use strict"
+      },
+      {
+        "pos": 15,
+        "end": 125,
+        "kind": "text"
+      },
+      {
+        "pos": 125,
+        "end": 165,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 157,
+        "kind": "text"
+      },
+      {
+        "pos": 157,
+        "end": 199,
+        "kind": "sourceMapUrl"
       }
     ]
   }
@@ -919,77 +923,79 @@ sourceFile:../first_part3.ts
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "data": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 165,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 167,
-      "end": 493,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 495,
-      "end": 531,
-      "kind": "text"
-    },
-    {
-      "pos": 531,
-      "end": 571,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 199,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 201,
-      "end": 344,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 346,
-      "end": 365,
-      "kind": "text"
-    },
-    {
-      "pos": 365,
-      "end": 407,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {
-    "prologues": [
-      {
-        "file": "/src/third/third_part1.ts",
-        "text": "",
-        "directives": [
-          {
-            "pos": -1,
-            "end": -1,
-            "expression": {
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {
+      "prologues": [
+        {
+          "file": "/src/third/third_part1.ts",
+          "text": "",
+          "directives": [
+            {
               "pos": -1,
               "end": -1,
-              "text": "use strict"
+              "expression": {
+                "pos": -1,
+                "end": -1,
+                "text": "use strict"
+              }
             }
-          }
-        ]
+          ]
+        }
+      ]
+    },
+    "js": [
+      {
+        "pos": 0,
+        "end": 13,
+        "kind": "prologue",
+        "data": "use strict"
+      },
+      {
+        "pos": 15,
+        "end": 165,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 167,
+        "end": 493,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 495,
+        "end": 531,
+        "kind": "text"
+      },
+      {
+        "pos": 531,
+        "end": 571,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 199,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 201,
+        "end": 344,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 346,
+        "end": 365,
+        "kind": "text"
+      },
+      {
+        "pos": 365,
+        "end": 407,
+        "kind": "sourceMapUrl"
       }
     ]
   }

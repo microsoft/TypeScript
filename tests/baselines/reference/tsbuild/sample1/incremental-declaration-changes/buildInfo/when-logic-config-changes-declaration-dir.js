@@ -1,9 +1,5 @@
 //// [/src/logic/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/logic/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
@@ -96,10 +92,6 @@ export declare const m: typeof mod;
 
 //// [/src/tests/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/tests/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {

@@ -1,37 +1,39 @@
 //// [/src/2/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 336,
-      "kind": "text"
-    },
-    {
-      "pos": 336,
-      "end": 377,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 49,
-      "kind": "reference",
-      "data": "../second/tripleRef.d.ts"
-    },
-    {
-      "pos": 51,
-      "end": 205,
-      "kind": "text"
-    },
-    {
-      "pos": 205,
-      "end": 248,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/second/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/second/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 0,
+        "end": 336,
+        "kind": "text"
+      },
+      {
+        "pos": 336,
+        "end": 377,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 49,
+        "kind": "reference",
+        "data": "../second/tripleRef.d.ts"
+      },
+      {
+        "pos": 51,
+        "end": 205,
+        "kind": "text"
+      },
+      {
+        "pos": 205,
+        "end": 248,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/2/.tsbuildinfo.baseline.txt]
@@ -522,32 +524,34 @@ sourceFile:../second/second_part2.ts
 
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 110,
-      "kind": "text"
-    },
-    {
-      "pos": 110,
-      "end": 150,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 157,
-      "kind": "text"
-    },
-    {
-      "pos": 157,
-      "end": 199,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 0,
+        "end": 110,
+        "kind": "text"
+      },
+      {
+        "pos": 110,
+        "end": 150,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 157,
+        "kind": "text"
+      },
+      {
+        "pos": 157,
+        "end": 199,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/first/bin/.tsbuildinfo.baseline.txt]
@@ -905,62 +909,64 @@ declare class secondsecond_part1 { }
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 150,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 152,
-      "end": 529,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 531,
-      "end": 567,
-      "kind": "text"
-    },
-    {
-      "pos": 567,
-      "end": 607,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 55,
-      "kind": "reference",
-      "data": "../../../second/tripleRef.d.ts"
-    },
-    {
-      "pos": 57,
-      "end": 256,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 258,
-      "end": 455,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 457,
-      "end": 476,
-      "kind": "text"
-    },
-    {
-      "pos": 476,
-      "end": 518,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 0,
+        "end": 150,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 152,
+        "end": 529,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 531,
+        "end": 567,
+        "kind": "text"
+      },
+      {
+        "pos": 567,
+        "end": 607,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 55,
+        "kind": "reference",
+        "data": "../../../second/tripleRef.d.ts"
+      },
+      {
+        "pos": 57,
+        "end": 256,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 258,
+        "end": 455,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 457,
+        "end": 476,
+        "kind": "text"
+      },
+      {
+        "pos": 476,
+        "end": 518,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]

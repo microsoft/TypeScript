@@ -1,53 +1,55 @@
 //// [/src/2/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/second/",
+    "sources": {
+      "helpers": [
+        "typescript:rest",
+        "typescript:read",
+        "typescript:spread"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 921,
-      "kind": "emitHelpers",
-      "data": "typescript:read"
-    },
-    {
-      "pos": 923,
-      "end": 1093,
-      "kind": "emitHelpers",
-      "data": "typescript:spread"
-    },
-    {
-      "pos": 1095,
-      "end": 1715,
-      "kind": "text"
-    },
-    {
-      "pos": 1715,
-      "end": 1756,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 219,
-      "kind": "text"
-    },
-    {
-      "pos": 219,
-      "end": 262,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/second/",
-  "sources": {
-    "helpers": [
-      "typescript:rest",
-      "typescript:read",
-      "typescript:spread"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 921,
+        "kind": "emitHelpers",
+        "data": "typescript:read"
+      },
+      {
+        "pos": 923,
+        "end": 1093,
+        "kind": "emitHelpers",
+        "data": "typescript:spread"
+      },
+      {
+        "pos": 1095,
+        "end": 1715,
+        "kind": "text"
+      },
+      {
+        "pos": 1715,
+        "end": 1756,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 219,
+        "kind": "text"
+      },
+      {
+        "pos": 219,
+        "end": 262,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }
@@ -792,54 +794,56 @@ sourceFile:../second/second_part2.ts
 
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {
+      "helpers": [
+        "typescript:rest",
+        "typescript:read",
+        "typescript:spread"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 921,
-      "kind": "emitHelpers",
-      "data": "typescript:read"
-    },
-    {
-      "pos": 923,
-      "end": 1093,
-      "kind": "emitHelpers",
-      "data": "typescript:spread"
-    },
-    {
-      "pos": 1095,
-      "end": 1534,
-      "kind": "text"
-    },
-    {
-      "pos": 1534,
-      "end": 1574,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 272,
-      "kind": "text"
-    },
-    {
-      "pos": 272,
-      "end": 314,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {
-    "helpers": [
-      "typescript:rest",
-      "typescript:read",
-      "typescript:spread"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 921,
+        "kind": "emitHelpers",
+        "data": "typescript:read"
+      },
+      {
+        "pos": 923,
+        "end": 1093,
+        "kind": "emitHelpers",
+        "data": "typescript:spread"
+      },
+      {
+        "pos": 1095,
+        "end": 1534,
+        "kind": "text"
+      },
+      {
+        "pos": 1534,
+        "end": 1574,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 272,
+        "kind": "text"
+      },
+      {
+        "pos": 272,
+        "end": 314,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }
@@ -1582,78 +1586,80 @@ secondsecond_part2Spread(...[10, 20, 30]);
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {
+      "helpers": [
+        "typescript:rest",
+        "typescript:read",
+        "typescript:spread"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 921,
-      "kind": "emitHelpers",
-      "data": "typescript:read"
-    },
-    {
-      "pos": 923,
-      "end": 1093,
-      "kind": "emitHelpers",
-      "data": "typescript:spread"
-    },
-    {
-      "pos": 1095,
-      "end": 1574,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 1576,
-      "end": 2237,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 2239,
-      "end": 2604,
-      "kind": "text"
-    },
-    {
-      "pos": 2604,
-      "end": 2644,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 314,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 316,
-      "end": 578,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 580,
-      "end": 714,
-      "kind": "text"
-    },
-    {
-      "pos": 714,
-      "end": 756,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {
-    "helpers": [
-      "typescript:rest",
-      "typescript:read",
-      "typescript:spread"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 921,
+        "kind": "emitHelpers",
+        "data": "typescript:read"
+      },
+      {
+        "pos": 923,
+        "end": 1093,
+        "kind": "emitHelpers",
+        "data": "typescript:spread"
+      },
+      {
+        "pos": 1095,
+        "end": 1574,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 1576,
+        "end": 2237,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 2239,
+        "end": 2604,
+        "kind": "text"
+      },
+      {
+        "pos": 2604,
+        "end": 2644,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 314,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 316,
+        "end": 578,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 580,
+        "end": 714,
+        "kind": "text"
+      },
+      {
+        "pos": 714,
+        "end": 756,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }

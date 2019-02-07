@@ -1,9 +1,5 @@
 //// [/src/core/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/core/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
@@ -232,10 +228,6 @@ export class someClass { }
 
 //// [/src/logic/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/logic/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
@@ -305,10 +297,6 @@ export class someClass { }
 
 //// [/src/tests/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/tests/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {

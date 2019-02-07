@@ -90,12 +90,13 @@ namespace ts {
             if (!fs.existsSync(file)) continue;
 
             const buildInfo = JSON.parse(fs.readFileSync(file, "utf8")) as BuildInfo;
-            if (!buildInfo.js.length && !buildInfo.dts.length) continue;
+            const bundle = buildInfo.bundle;
+            if (!bundle || (!length(bundle.js) && !length(bundle.dts))) continue;
 
             // Write the baselines:
             const baselineRecorder = new Harness.Compiler.WriterAggregator();
-            generateBundleFileSectionInfo(fs, baselineRecorder, buildInfo.js, jsFile);
-            generateBundleFileSectionInfo(fs, baselineRecorder, buildInfo.dts, dtsFile);
+            generateBundleFileSectionInfo(fs, baselineRecorder, bundle.js, jsFile);
+            generateBundleFileSectionInfo(fs, baselineRecorder, bundle.dts, dtsFile);
             baselineRecorder.Close();
 
             const text = baselineRecorder.lines.join("\r\n");
@@ -103,13 +104,13 @@ namespace ts {
         }
     }
 
-    function generateBundleFileSectionInfo(fs: vfs.FileSystem, baselineRecorder: Harness.Compiler.WriterAggregator, sections: BundleFileSection[], outFile: string | undefined) {
-        if (!sections.length && !outFile) return; // Nothing to baseline
+    function generateBundleFileSectionInfo(fs: vfs.FileSystem, baselineRecorder: Harness.Compiler.WriterAggregator, sections: BundleFileSection[] | undefined, outFile: string | undefined) {
+        if (!length(sections) && !outFile) return; // Nothing to baseline
 
         const content = outFile && fs.existsSync(outFile) ? fs.readFileSync(outFile, "utf8") : "";
         baselineRecorder.WriteLine("======================================================================");
         baselineRecorder.WriteLine(`File:: ${outFile}`);
-        for (const section of sections) {
+        for (const section of sections || emptyArray) {
             baselineRecorder.WriteLine("----------------------------------------------------------------------");
             baselineRecorder.WriteLine(`${section.kind}: (${section.pos}-${section.end})${section.data ? ":: " + section.data : ""}`);
             const textLines = content.substring(section.pos, section.end).split(/\r?\n/);

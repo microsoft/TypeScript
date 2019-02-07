@@ -1,9 +1,5 @@
 //// [/src/core/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/core/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {

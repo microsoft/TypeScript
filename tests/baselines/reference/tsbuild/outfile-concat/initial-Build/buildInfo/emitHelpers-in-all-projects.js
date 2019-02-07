@@ -1,39 +1,41 @@
 //// [/src/2/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/second/",
+    "sources": {
+      "helpers": [
+        "typescript:rest"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 821,
-      "kind": "text"
-    },
-    {
-      "pos": 821,
-      "end": 862,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 153,
-      "kind": "text"
-    },
-    {
-      "pos": 153,
-      "end": 196,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/second/",
-  "sources": {
-    "helpers": [
-      "typescript:rest"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 821,
+        "kind": "text"
+      },
+      {
+        "pos": 821,
+        "end": 862,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 153,
+        "kind": "text"
+      },
+      {
+        "pos": 153,
+        "end": 196,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }
@@ -571,40 +573,42 @@ sourceFile:../second/second_part2.ts
 
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {
+      "helpers": [
+        "typescript:rest"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 644,
-      "kind": "text"
-    },
-    {
-      "pos": 644,
-      "end": 684,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 208,
-      "kind": "text"
-    },
-    {
-      "pos": 208,
-      "end": 250,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {
-    "helpers": [
-      "typescript:rest"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 644,
+        "kind": "text"
+      },
+      {
+        "pos": 644,
+        "end": 684,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 208,
+        "kind": "text"
+      },
+      {
+        "pos": 208,
+        "end": 250,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }
@@ -1083,64 +1087,66 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {
+      "helpers": [
+        "typescript:rest"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 684,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 686,
-      "end": 1131,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 1133,
-      "end": 1286,
-      "kind": "text"
-    },
-    {
-      "pos": 1286,
-      "end": 1326,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 250,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 252,
-      "end": 448,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 450,
-      "end": 520,
-      "kind": "text"
-    },
-    {
-      "pos": 520,
-      "end": 562,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {
-    "helpers": [
-      "typescript:rest"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 684,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 686,
+        "end": 1131,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 1133,
+        "end": 1286,
+        "kind": "text"
+      },
+      {
+        "pos": 1286,
+        "end": 1326,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 250,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 252,
+        "end": 448,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 450,
+        "end": 520,
+        "kind": "text"
+      },
+      {
+        "pos": 520,
+        "end": 562,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }

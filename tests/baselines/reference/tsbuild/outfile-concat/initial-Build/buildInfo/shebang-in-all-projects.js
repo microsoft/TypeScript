@@ -1,31 +1,33 @@
 //// [/src/2/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 35,
-      "end": 320,
-      "kind": "text"
-    },
-    {
-      "pos": 320,
-      "end": 361,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 35,
-      "end": 135,
-      "kind": "text"
-    },
-    {
-      "pos": 135,
-      "end": 178,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/second/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/second/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 35,
+        "end": 320,
+        "kind": "text"
+      },
+      {
+        "pos": 320,
+        "end": 361,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 35,
+        "end": 135,
+        "kind": "text"
+      },
+      {
+        "pos": 135,
+        "end": 178,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/2/.tsbuildinfo.baseline.txt]
@@ -463,32 +465,34 @@ sourceFile:../second/second_part2.ts
 
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 33,
-      "end": 143,
-      "kind": "text"
-    },
-    {
-      "pos": 143,
-      "end": 183,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 33,
-      "end": 190,
-      "kind": "text"
-    },
-    {
-      "pos": 190,
-      "end": 232,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 33,
+        "end": 143,
+        "kind": "text"
+      },
+      {
+        "pos": 143,
+        "end": 183,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 33,
+        "end": 190,
+        "kind": "text"
+      },
+      {
+        "pos": 190,
+        "end": 232,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/first/bin/.tsbuildinfo.baseline.txt]
@@ -869,56 +873,58 @@ namespace N {
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 33,
-      "end": 183,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 185,
-      "end": 511,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 513,
-      "end": 549,
-      "kind": "text"
-    },
-    {
-      "pos": 549,
-      "end": 589,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 33,
-      "end": 232,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 234,
-      "end": 377,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 379,
-      "end": 398,
-      "kind": "text"
-    },
-    {
-      "pos": 398,
-      "end": 440,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 33,
+        "end": 183,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 185,
+        "end": 511,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 513,
+        "end": 549,
+        "kind": "text"
+      },
+      {
+        "pos": 549,
+        "end": 589,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 33,
+        "end": 232,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 234,
+        "end": 377,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 379,
+        "end": 398,
+        "kind": "text"
+      },
+      {
+        "pos": 398,
+        "end": 440,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]

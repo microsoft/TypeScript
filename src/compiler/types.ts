@@ -5575,12 +5575,17 @@ namespace ts {
         sources: SourceFileInfo;
     }
 
-    /* @internal */
-    export interface BuildInfo {
-        js: BundleFileSection[];
-        dts: BundleFileSection[];
+    /*@internal*/
+    export interface BundleBuildInfo {
+        js?: BundleFileSection[];
+        dts?: BundleFileSection[];
         commonSourceDirectory: string;
         sources: SourceFileInfo;
+    }
+
+    /* @internal */
+    export interface BuildInfo {
+        bundle?: BundleBuildInfo;
         program?: ProgramBuildInfo;
     }
 

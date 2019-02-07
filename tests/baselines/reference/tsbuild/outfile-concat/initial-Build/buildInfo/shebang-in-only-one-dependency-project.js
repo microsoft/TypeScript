@@ -1,31 +1,33 @@
 //// [/src/2/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 35,
-      "end": 320,
-      "kind": "text"
-    },
-    {
-      "pos": 320,
-      "end": 361,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 35,
-      "end": 135,
-      "kind": "text"
-    },
-    {
-      "pos": 135,
-      "end": 178,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/second/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/second/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 35,
+        "end": 320,
+        "kind": "text"
+      },
+      {
+        "pos": 320,
+        "end": 361,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 35,
+        "end": 135,
+        "kind": "text"
+      },
+      {
+        "pos": 135,
+        "end": 178,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/2/.tsbuildinfo.baseline.txt]
@@ -463,32 +465,34 @@ sourceFile:../second/second_part2.ts
 
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 110,
-      "kind": "text"
-    },
-    {
-      "pos": 110,
-      "end": 150,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 157,
-      "kind": "text"
-    },
-    {
-      "pos": 157,
-      "end": 199,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 0,
+        "end": 110,
+        "kind": "text"
+      },
+      {
+        "pos": 110,
+        "end": 150,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 157,
+        "kind": "text"
+      },
+      {
+        "pos": 157,
+        "end": 199,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/first/bin/.tsbuildinfo.baseline.txt]
@@ -842,56 +846,58 @@ namespace N {
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 35,
-      "end": 185,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 187,
-      "end": 513,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 515,
-      "end": 551,
-      "kind": "text"
-    },
-    {
-      "pos": 551,
-      "end": 591,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 35,
-      "end": 234,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 236,
-      "end": 379,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 381,
-      "end": 400,
-      "kind": "text"
-    },
-    {
-      "pos": 400,
-      "end": 442,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 35,
+        "end": 185,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 187,
+        "end": 513,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 515,
+        "end": 551,
+        "kind": "text"
+      },
+      {
+        "pos": 551,
+        "end": 591,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 35,
+        "end": 234,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 236,
+        "end": 379,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 381,
+        "end": 400,
+        "kind": "text"
+      },
+      {
+        "pos": 400,
+        "end": 442,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]

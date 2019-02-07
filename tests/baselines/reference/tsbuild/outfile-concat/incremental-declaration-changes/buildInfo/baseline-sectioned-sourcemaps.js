@@ -1,31 +1,33 @@
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 109,
-      "kind": "text"
-    },
-    {
-      "pos": 109,
-      "end": 149,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 156,
-      "kind": "text"
-    },
-    {
-      "pos": 156,
-      "end": 198,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 0,
+        "end": 109,
+        "kind": "text"
+      },
+      {
+        "pos": 109,
+        "end": 149,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 156,
+        "kind": "text"
+      },
+      {
+        "pos": 156,
+        "end": 198,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/first/bin/.tsbuildinfo.baseline.txt]
@@ -378,56 +380,58 @@ console.log(s);
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 149,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 151,
-      "end": 477,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 479,
-      "end": 515,
-      "kind": "text"
-    },
-    {
-      "pos": 515,
-      "end": 555,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 198,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 200,
-      "end": 343,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 345,
-      "end": 364,
-      "kind": "text"
-    },
-    {
-      "pos": 364,
-      "end": 406,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 0,
+        "end": 149,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 151,
+        "end": 477,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 479,
+        "end": 515,
+        "kind": "text"
+      },
+      {
+        "pos": 515,
+        "end": 555,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 198,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 200,
+        "end": 343,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 345,
+        "end": 364,
+        "kind": "text"
+      },
+      {
+        "pos": 364,
+        "end": 406,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]

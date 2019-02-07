@@ -1,39 +1,41 @@
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {
+      "helpers": [
+        "typescript:rest"
+      ]
     },
-    {
-      "pos": 417,
-      "end": 644,
-      "kind": "text"
-    },
-    {
-      "pos": 644,
-      "end": 684,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 208,
-      "kind": "text"
-    },
-    {
-      "pos": 208,
-      "end": 250,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {
-    "helpers": [
-      "typescript:rest"
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 644,
+        "kind": "text"
+      },
+      {
+        "pos": 644,
+        "end": 684,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 208,
+        "kind": "text"
+      },
+      {
+        "pos": 208,
+        "end": 250,
+        "kind": "sourceMapUrl"
+      }
     ]
   }
 }
@@ -484,62 +486,64 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 415,
-      "kind": "emitHelpers",
-      "data": "typescript:rest"
-    },
-    {
-      "pos": 417,
-      "end": 684,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 686,
-      "end": 1131,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 1133,
-      "end": 1169,
-      "kind": "text"
-    },
-    {
-      "pos": 1169,
-      "end": 1209,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 250,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 252,
-      "end": 448,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 450,
-      "end": 469,
-      "kind": "text"
-    },
-    {
-      "pos": 469,
-      "end": 511,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {}
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {},
+    "js": [
+      {
+        "pos": 0,
+        "end": 415,
+        "kind": "emitHelpers",
+        "data": "typescript:rest"
+      },
+      {
+        "pos": 417,
+        "end": 684,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 686,
+        "end": 1131,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 1133,
+        "end": 1169,
+        "kind": "text"
+      },
+      {
+        "pos": 1169,
+        "end": 1209,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 250,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 252,
+        "end": 448,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 450,
+        "end": 469,
+        "kind": "text"
+      },
+      {
+        "pos": 469,
+        "end": 511,
+        "kind": "sourceMapUrl"
+      }
+    ]
+  }
 }
 
 //// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]

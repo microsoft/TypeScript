@@ -1,9 +1,5 @@
 //// [/src/core/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/core/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
@@ -245,10 +241,6 @@ exports.multiply = multiply;
 
 //// [/src/logic/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/logic/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
@@ -463,10 +455,6 @@ sourceFile:index.ts
 
 //// [/src/tests/.tsbuildinfo]
 {
-  "js": [],
-  "dts": [],
-  "commonSourceDirectory": "/src/tests/",
-  "sources": {},
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {

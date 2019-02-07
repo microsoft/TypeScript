@@ -1,67 +1,69 @@
 //// [/src/first/bin/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "data": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 28,
-      "kind": "prologue",
-      "data": "myPrologue"
-    },
-    {
-      "pos": 30,
-      "end": 139,
-      "kind": "text"
-    },
-    {
-      "pos": 139,
-      "end": 179,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 156,
-      "kind": "text"
-    },
-    {
-      "pos": 156,
-      "end": 198,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/first/",
-  "sources": {
-    "prologues": [
-      {
-        "file": "/src/first/first_PART1.ts",
-        "text": "\"myPrologue\"",
-        "directives": [
-          {
-            "pos": -1,
-            "end": -1,
-            "expression": {
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sources": {
+      "prologues": [
+        {
+          "file": "/src/first/first_PART1.ts",
+          "text": "\"myPrologue\"",
+          "directives": [
+            {
               "pos": -1,
               "end": -1,
-              "text": "use strict"
-            }
-          },
-          {
-            "pos": 0,
-            "end": 12,
-            "expression": {
+              "expression": {
+                "pos": -1,
+                "end": -1,
+                "text": "use strict"
+              }
+            },
+            {
               "pos": 0,
               "end": 12,
-              "text": "myPrologue"
+              "expression": {
+                "pos": 0,
+                "end": 12,
+                "text": "myPrologue"
+              }
             }
-          }
-        ]
+          ]
+        }
+      ]
+    },
+    "js": [
+      {
+        "pos": 0,
+        "end": 13,
+        "kind": "prologue",
+        "data": "use strict"
+      },
+      {
+        "pos": 15,
+        "end": 28,
+        "kind": "prologue",
+        "data": "myPrologue"
+      },
+      {
+        "pos": 30,
+        "end": 139,
+        "kind": "text"
+      },
+      {
+        "pos": 139,
+        "end": 179,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 156,
+        "kind": "text"
+      },
+      {
+        "pos": 156,
+        "end": 198,
+        "kind": "sourceMapUrl"
       }
     ]
   }
@@ -441,113 +443,115 @@ console.log(s);
 
 //// [/src/third/thirdjs/output/.tsbuildinfo]
 {
-  "js": [
-    {
-      "pos": 0,
-      "end": 13,
-      "kind": "prologue",
-      "data": "use strict"
-    },
-    {
-      "pos": 15,
-      "end": 28,
-      "kind": "prologue",
-      "data": "myPrologue"
-    },
-    {
-      "pos": 30,
-      "end": 44,
-      "kind": "prologue",
-      "data": "myPrologue2"
-    },
-    {
-      "pos": 46,
-      "end": 60,
-      "kind": "prologue",
-      "data": "myPrologue3"
-    },
-    {
-      "pos": 62,
-      "end": 211,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.js"
-    },
-    {
-      "pos": 213,
-      "end": 539,
-      "kind": "prepend",
-      "data": "/src/2/second-output.js"
-    },
-    {
-      "pos": 541,
-      "end": 577,
-      "kind": "text"
-    },
-    {
-      "pos": 577,
-      "end": 617,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "dts": [
-    {
-      "pos": 0,
-      "end": 198,
-      "kind": "prepend",
-      "data": "/src/first/bin/first-output.d.ts"
-    },
-    {
-      "pos": 200,
-      "end": 343,
-      "kind": "prepend",
-      "data": "/src/2/second-output.d.ts"
-    },
-    {
-      "pos": 345,
-      "end": 364,
-      "kind": "text"
-    },
-    {
-      "pos": 364,
-      "end": 406,
-      "kind": "sourceMapUrl"
-    }
-  ],
-  "commonSourceDirectory": "/src/third/",
-  "sources": {
-    "prologues": [
-      {
-        "file": "/src/third/third_part1.ts",
-        "text": "\"myPrologue3\";\n\"myPrologue\";",
-        "directives": [
-          {
-            "pos": -1,
-            "end": -1,
-            "expression": {
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sources": {
+      "prologues": [
+        {
+          "file": "/src/third/third_part1.ts",
+          "text": "\"myPrologue3\";\n\"myPrologue\";",
+          "directives": [
+            {
               "pos": -1,
               "end": -1,
-              "text": "use strict"
-            }
-          },
-          {
-            "pos": 0,
-            "end": 14,
-            "expression": {
+              "expression": {
+                "pos": -1,
+                "end": -1,
+                "text": "use strict"
+              }
+            },
+            {
               "pos": 0,
-              "end": 13,
-              "text": "myPrologue3"
-            }
-          },
-          {
-            "pos": 14,
-            "end": 28,
-            "expression": {
+              "end": 14,
+              "expression": {
+                "pos": 0,
+                "end": 13,
+                "text": "myPrologue3"
+              }
+            },
+            {
               "pos": 14,
-              "end": 27,
-              "text": "myPrologue"
+              "end": 28,
+              "expression": {
+                "pos": 14,
+                "end": 27,
+                "text": "myPrologue"
+              }
             }
-          }
-        ]
+          ]
+        }
+      ]
+    },
+    "js": [
+      {
+        "pos": 0,
+        "end": 13,
+        "kind": "prologue",
+        "data": "use strict"
+      },
+      {
+        "pos": 15,
+        "end": 28,
+        "kind": "prologue",
+        "data": "myPrologue"
+      },
+      {
+        "pos": 30,
+        "end": 44,
+        "kind": "prologue",
+        "data": "myPrologue2"
+      },
+      {
+        "pos": 46,
+        "end": 60,
+        "kind": "prologue",
+        "data": "myPrologue3"
+      },
+      {
+        "pos": 62,
+        "end": 211,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.js"
+      },
+      {
+        "pos": 213,
+        "end": 539,
+        "kind": "prepend",
+        "data": "/src/2/second-output.js"
+      },
+      {
+        "pos": 541,
+        "end": 577,
+        "kind": "text"
+      },
+      {
+        "pos": 577,
+        "end": 617,
+        "kind": "sourceMapUrl"
+      }
+    ],
+    "dts": [
+      {
+        "pos": 0,
+        "end": 198,
+        "kind": "prepend",
+        "data": "/src/first/bin/first-output.d.ts"
+      },
+      {
+        "pos": 200,
+        "end": 343,
+        "kind": "prepend",
+        "data": "/src/2/second-output.d.ts"
+      },
+      {
+        "pos": 345,
+        "end": 364,
+        "kind": "text"
+      },
+      {
+        "pos": 364,
+        "end": 406,
+        "kind": "sourceMapUrl"
       }
     ]
   }
