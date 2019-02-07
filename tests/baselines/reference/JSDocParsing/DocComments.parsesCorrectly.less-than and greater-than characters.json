@@ -2,21 +2,29 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 61,
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 7,
             "end": 59,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 8,
                 "end": 13,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "param"
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 14,
                 "end": 15,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "x"
             },
             "isNameFirst": true,
