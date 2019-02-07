@@ -21,7 +21,7 @@ class D<T> {
 }
 
 var c1 = new Foo<D<string>>(); // ok, circularity in assignment compat check causes success
->c1 : Foo<D<string>>
->new Foo<D<string>>() : Foo<D<string>>
+>c1 : any
+>new Foo<D<string>>() : any
 >Foo : typeof Foo
 

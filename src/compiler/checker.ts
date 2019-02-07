@@ -12570,6 +12570,7 @@ namespace ts {
 
                 let result: Ternary;
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
+                let varianceCheckFailed = false;
                 const saveErrorInfo = errorInfo;
 
                 // We limit alias variance probing to only object and conditional types since their alias behavior
@@ -12775,12 +12776,11 @@ namespace ts {
                                 }
                             }
                         }
-                        if (result) {
-                            if (!originalErrorInfo) {
-                                errorInfo = saveErrorInfo;
-                                return result;
-                            }
-                            errorInfo = originalErrorInfo;
+                        if (varianceCheckFailed && result) {
+                            errorInfo = originalErrorInfo || errorInfo || saveErrorInfo; // Use variance error (there is no structural one) and return false
+                        }
+                        else if (result) {
+                            return result;
                         }
                     }
                 }
@@ -12790,6 +12790,8 @@ namespace ts {
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors)) {
                         return result;
                     }
+                    const isCovariantVoid = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
+                    varianceCheckFailed = !isCovariantVoid;
                     // The type arguments did not relate appropriately, but it may be because we have no variance
                     // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
                     // arguments). It might also be the case that the target type has a 'void' type argument for
@@ -12797,14 +12799,16 @@ namespace ts {
                     // (in which case any type argument is permitted on the source side). In those cases we proceed
                     // with a structural comparison. Otherwise, we know for certain the instantiations aren't
                     // related and we can return here.
-                    if (variances !== emptyArray && (!targetTypeArguments || !hasCovariantVoidArgument(targetTypeArguments, variances))) {
+                    if (variances !== emptyArray && !isCovariantVoid) {
                         // In some cases generic types that are covariant in regular type checking mode become
                         // invariant in --strictFunctionTypes mode because one or more type parameters are used in
                         // both co- and contravariant positions. In order to make it easier to diagnose *why* such
                         // types are invariant, if any of the type parameters are invariant we reset the reported
                         // errors and instead force a structural comparison (which will include elaborations that
                         // reveal the reason).
-                        if (!(reportErrors && some(variances, v => v === Variance.Invariant))) {
+                        // We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
+                        // we can return `False` early here to skip calculating the structural error message we don't need. 
+                        if (varianceCheckFailed && !(reportErrors && some(variances, v => v === Variance.Invariant))) {
                             return Ternary.False;
                         }
                         // We remember the original error information so we can restore it in case the structural
@@ -13331,8 +13335,8 @@ namespace ts {
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
         // See comment at call in recursiveTypeRelatedTo for when this case matters.
         function hasCovariantVoidArgument(typeArguments: ReadonlyArray<Type>, variances: Variance[]): boolean {
-            for (let i = 0; i < variances.length; i++) {
-                if (variances[i] === Variance.Covariant && typeArguments[i].flags & TypeFlags.Void) {
+            for (let i = 0; i < typeArguments.length; i++) {
+                if ((!variances[i] || variances[i] === Variance.Covariant) && typeArguments[i].flags & TypeFlags.Void) {
                     return true;
                 }
             }

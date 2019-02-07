@@ -1,0 +1,12 @@
+tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts(6,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'C<number>', but here has type 'C<C<string>>'.
+
+
+==== tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts (1 errors) ====
+    class C<T extends C<T>> { // error
+        constructor(x: T) { }
+    }
+    
+    var c = new C(1);
+    var c = new C(new C('')); // error
+        ~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'c' must be of type 'C<number>', but here has type 'C<C<string>>'.
