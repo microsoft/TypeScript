@@ -609,7 +609,7 @@ namespace ts {
     export interface Node extends TextRange {
         kind: SyntaxKind;
         flags: NodeFlags;
-        /* @internal */ modifierFlagsCache?: ModifierFlags;
+        /* @internal */ modifierFlagsCache: ModifierFlags;
         /* @internal */ transformFlags: TransformFlags;       // Flags for transforms, possibly undefined
         decorators?: NodeArray<Decorator>;                    // Array of decorators (in document order)
         modifiers?: ModifiersArray;                           // Array of modifiers
