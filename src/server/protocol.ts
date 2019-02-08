@@ -2493,6 +2493,18 @@ namespace ts.server.protocol {
         projectName: string;
     }
 
+    export type SurveyReadyEventName = "surveyReady";
+
+    export interface SurveyReadyEvent extends Event {
+        event: SurveyReadyEventName;
+        body: SurveyReadyEventBody;
+    }
+
+    export interface SurveyReadyEventBody {
+        /** Name of the survey. This is an internal machine- and programmer-friendly name */
+        surveyId: string;
+    }
+
     export type LargeFileReferencedEventName = "largeFileReferenced";
     export interface LargeFileReferencedEvent extends Event {
         event: LargeFileReferencedEventName;
@@ -2516,7 +2528,7 @@ namespace ts.server.protocol {
 
     /*@internal*/
     export type AnyEvent = RequestCompletedEvent | DiagnosticEvent | ConfigFileDiagnosticEvent | ProjectLanguageServiceStateEvent | TelemetryEvent |
-        ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | LargeFileReferencedEvent;
+        ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | SurveyReadyEvent | LargeFileReferencedEvent;
 
     /**
      * Arguments for reload request.
