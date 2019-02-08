@@ -522,6 +522,14 @@ declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
 >f22 : <T, K extends keyof T>(obj: Boxified<Pick<T, K>>) => T
 >obj : Boxified<Pick<T, K>>
 
+declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
+>f23 : <T, U extends keyof T, K extends U>(obj: Pick<T, K>) => T
+>obj : Pick<T, K>
+
+declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
+>f24 : <T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>) => T & U
+>obj : Pick<T & U, K>
+
 let x0 = f20({ foo: 42, bar: "hello" });
 >x0 : { foo: number; bar: string; }
 >f20({ foo: 42, bar: "hello" }) : { foo: number; bar: string; }
@@ -554,6 +562,26 @@ let x2 = f22({ foo: { value: 42} , bar: { value: "hello" } });
 >bar : { value: string; }
 >{ value: "hello" } : { value: string; }
 >value : string
+>"hello" : "hello"
+
+let x3 = f23({ foo: 42, bar: "hello" });
+>x3 : { foo: number; bar: string; }
+>f23({ foo: 42, bar: "hello" }) : { foo: number; bar: string; }
+>f23 : <T, U extends keyof T, K extends U>(obj: Pick<T, K>) => T
+>{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
+>foo : number
+>42 : 42
+>bar : string
+>"hello" : "hello"
+
+let x4 = f24({ foo: 42, bar: "hello" });
+>x4 : { foo: number; bar: string; } & { foo: number; bar: string; }
+>f24({ foo: 42, bar: "hello" }) : { foo: number; bar: string; } & { foo: number; bar: string; }
+>f24 : <T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>) => T & U
+>{ foo: 42, bar: "hello" } : { foo: number; bar: string; }
+>foo : number
+>42 : 42
+>bar : string
 >"hello" : "hello"
 
 // Repro from #29765

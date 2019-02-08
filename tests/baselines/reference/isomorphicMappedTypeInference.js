@@ -157,10 +157,14 @@ o = foo(o, {b: 9});
 declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
 declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
 declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
+declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
+declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
 
 let x0 = f20({ foo: 42, bar: "hello" });
 let x1 = f21({ foo: 42, bar: "hello" });
 let x2 = f22({ foo: { value: 42} , bar: { value: "hello" } });
+let x3 = f23({ foo: 42, bar: "hello" });
+let x4 = f24({ foo: 42, bar: "hello" });
 
 // Repro from #29765
 
@@ -282,6 +286,8 @@ o = foo(o, { b: 9 });
 var x0 = f20({ foo: 42, bar: "hello" });
 var x1 = f21({ foo: 42, bar: "hello" });
 var x2 = f22({ foo: { value: 42 }, bar: { value: "hello" } });
+var x3 = f23({ foo: 42, bar: "hello" });
+var x4 = f24({ foo: 42, bar: "hello" });
 // Repro from #29765
 function getProps(obj, list) {
     return {};
@@ -360,12 +366,25 @@ declare let o: {
 declare function f20<T, K extends keyof T>(obj: Pick<T, K>): T;
 declare function f21<T, K extends keyof T>(obj: Pick<T, K>): K;
 declare function f22<T, K extends keyof T>(obj: Boxified<Pick<T, K>>): T;
+declare function f23<T, U extends keyof T, K extends U>(obj: Pick<T, K>): T;
+declare function f24<T, U, K extends keyof T | keyof U>(obj: Pick<T & U, K>): T & U;
 declare let x0: {
     foo: number;
     bar: string;
 };
 declare let x1: "foo" | "bar";
 declare let x2: {
+    foo: number;
+    bar: string;
+};
+declare let x3: {
+    foo: number;
+    bar: string;
+};
+declare let x4: {
+    foo: number;
+    bar: string;
+} & {
     foo: number;
     bar: string;
 };
