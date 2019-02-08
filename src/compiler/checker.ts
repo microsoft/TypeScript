@@ -14570,19 +14570,8 @@ namespace ts {
                 return undefined;
             }
 
-            function inferToHomomorphicMappedType(source: Type, target: MappedType, constraintType: IndexType) {
-                const inference = getInferenceInfoForType(constraintType.type);
-                if (inference && !inference.isFixed) {
-                    const inferredType = inferTypeForHomomorphicMappedType(source, target, constraintType);
-                    if (inferredType) {
-                        const savePriority = priority;
-                        priority |= InferencePriority.HomomorphicMappedType;
-                        inferFromTypes(inferredType, inference.typeParameter);
-                        priority = savePriority;
-                    }
-                }
-            }
-
+            // target: { [P in 'a' | 'b' | keyof T | keyof U]: XXX }
+            // source: { a: xxx, b: xxx, c: xxx, d: xxx }
             function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
                 if (constraintType.flags & TypeFlags.Union) {
                     let result = false;
@@ -14596,7 +14585,16 @@ namespace ts {
                     // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
                     // type and then make a secondary inference from that type to T. We make a secondary inference
                     // such that direct inferences to T get priority over inferences to Partial<T>, for example.
-                    inferToHomomorphicMappedType(source, target, <IndexType>constraintType);
+                    const inference = getInferenceInfoForType((<IndexType>constraintType).type);
+                    if (inference && !inference.isFixed) {
+                        const inferredType = inferTypeForHomomorphicMappedType(source, target, <IndexType>constraintType);
+                        if (inferredType) {
+                            const savePriority = priority;
+                            priority |= InferencePriority.HomomorphicMappedType;
+                            inferFromTypes(inferredType, inference.typeParameter);
+                            priority = savePriority;
+                        }
+                    }
                     return true;
                 }
                 if (constraintType.flags & TypeFlags.TypeParameter) {
@@ -14606,15 +14604,16 @@ namespace ts {
                     priority |= InferencePriority.MappedTypeConstraint;
                     inferFromTypes(getIndexType(source), constraintType);
                     priority = savePriority;
-                    // If K is constrained to an index type keyof T, where T is a type parameter, proceed to make
-                    // the same inferences as we would for a homomorphic mapped type { [P in keyof T]: X } (this
-                    // enables us to make meaningful inferences when the target is a Pick<T, K>). Otherwise, infer
-                    // from a union of the property types in the source to the template type X.
+                    // If K is constrained to a type C, also infer to C. Thus, for a mapped type { [P in K]: X },
+                    // where K extends keyof T, we make the same inferences as for a homomorphic mapped type
+                    // { [P in keyof T]: X }. This enables us to make meaningful inferences when the target is a
+                    // Pick<T, K>.
                     const extendedConstraint = getConstraintOfType(constraintType);
-                    if (extendedConstraint && extendedConstraint.flags & TypeFlags.Index) {
-                        inferToHomomorphicMappedType(source, target, <IndexType>extendedConstraint);
+                    if (extendedConstraint && inferToMappedType(source, target, extendedConstraint)) {
                         return true;
                     }
+                    // If no inferences can be made to K's constraint, infer from a union of the property types
+                    // in the source to the template type X.
                     const valueTypes = compact([
                         getIndexTypeOfType(source, IndexKind.String),
                         getIndexTypeOfType(source, IndexKind.Number),
