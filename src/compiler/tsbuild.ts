@@ -1487,7 +1487,10 @@ namespace ts {
             for (const inputFile of project.fileNames) {
                 outputs.push(...getOutputFileNames(inputFile, project));
             }
-            if (!ignoreBuildInfo) outputs.push(Debug.assertDefined(getOutputPathForBuildInfo(project.options, project.projectReferences)));
+            if (!ignoreBuildInfo) {
+                const buildInfoPath = getOutputPathForBuildInfo(project.options, project.projectReferences);
+                if (buildInfoPath) outputs.push(buildInfoPath);
+            }
             return outputs;
         }
     }

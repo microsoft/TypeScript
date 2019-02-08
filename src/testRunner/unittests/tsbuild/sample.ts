@@ -65,6 +65,22 @@ namespace ts {
                     assert(fs.existsSync(output), `Expect file ${output} to exist`);
                 }
             });
+
+            it("builds correctly when project is not composite or doesnt have any references", () => {
+                const fs = projFs.shadow();
+                replaceText(fs, "/src/core/tsconfig.json", `"composite": true,`, "");
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/core"], { verbose: true });
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json"),
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
+                );
+                for (const output of ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map"]) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+            });
         });
 
         describe("dry builds", () => {

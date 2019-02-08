@@ -48,7 +48,7 @@ namespace ts {
             }
             if (includeBuildInfo) {
                 const buildInfoPath = getOutputPathForBuildInfo(host.getCompilerOptions(), host.getProjectReferences());
-                return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
+                if (buildInfoPath) return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
             }
         }
     }
