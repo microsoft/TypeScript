@@ -6191,6 +6191,16 @@ namespace ts {
         return isParameterPropertyModifier(idToken) || idToken === SyntaxKind.StaticKeyword;
     }
 
+    /* @internal */
+    export function isParameterPropertyModifierJS(kind: SyntaxKind): boolean {
+        return !!(modifierToFlag(kind) & ModifierFlags.AccessibilityModifier);
+    }
+
+    /* @internal */
+    export function isClassMemberModifierJS(idToken: SyntaxKind): boolean {
+        return isParameterPropertyModifierJS(idToken) || idToken === SyntaxKind.StaticKeyword;
+    }
+
     export function isModifier(node: Node): node is Modifier {
         return isModifierKind(node.kind);
     }

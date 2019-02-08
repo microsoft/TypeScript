@@ -30,6 +30,10 @@ namespace ts.Completions {
         ConstructorParameterKeywords,   // Keywords at constructor parameter
         FunctionLikeBodyKeywords,       // Keywords at function like body
         TypeKeywords,
+        AllJS,                          // Every possible keyword in JS file
+        ClassElementKeywordsJS,         // Keywords inside class body in JS file
+        ConstructorParameterKeywordsJS, // Keywords at constructor parameter in JS file
+        FunctionLikeBodyKeywordsJS,     // Keywords at function like body in JS file
     }
 
     const enum GlobalsSearch { Continue, Success, Fail }
@@ -113,9 +117,7 @@ namespace ts.Completions {
 
         if (keywordFilters !== KeywordCompletionFilters.None) {
             const entryNames = arrayToSet(entries, e => e.name);
-            const keywordsCompletion = isSourceFileJS(sourceFile) && keywordFilters !== KeywordCompletionFilters.TypeKeywords
-                ? getKeywordCompletions(keywordFilters).filter(keyword => !isTsKeywords(keyword))
-                : getKeywordCompletions(keywordFilters);
+            const keywordsCompletion = getKeywordCompletions(keywordFilters);
             for (const keywordEntry of keywordsCompletion) {
                 if (!entryNames.has(keywordEntry.name)) {
                     entries.push(keywordEntry);
@@ -148,10 +150,10 @@ namespace ts.Completions {
         SyntaxKind.StringKeyword,
         SyntaxKind.BooleanKeyword,
         SyntaxKind.SymbolKeyword
-    ].map(tokenToString) as string[];
+    ];
 
-    function isTsKeywords(keyword: CompletionEntry): boolean {
-        return tsKeywords.indexOf(keyword.name) !== -1;
+    function isTsKeywords(kind: SyntaxKind): boolean {
+        return tsKeywords.indexOf(kind) !== -1;
     }
 
     function isUncheckedFile(sourceFile: SourceFile, compilerOptions: CompilerOptions): boolean {
@@ -993,7 +995,9 @@ namespace ts.Completions {
             // Declaring new property/method/accessor
             isNewIdentifierLocation = true;
             // Has keywords for constructor parameter
-            keywordFilters = KeywordCompletionFilters.ConstructorParameterKeywords;
+            keywordFilters = isSourceFileJS(sourceFile)
+                ? KeywordCompletionFilters.ConstructorParameterKeywordsJS
+                : KeywordCompletionFilters.ConstructorParameterKeywords;
             return GlobalsSearch.Success;
         }
 
@@ -1009,7 +1013,16 @@ namespace ts.Completions {
         }
 
         function getGlobalCompletions(): void {
-            keywordFilters = tryGetFunctionLikeBodyCompletionContainer(contextToken) ? KeywordCompletionFilters.FunctionLikeBodyKeywords : KeywordCompletionFilters.All;
+            if (tryGetFunctionLikeBodyCompletionContainer(contextToken)) {
+                keywordFilters = isSourceFileJS(sourceFile)
+                    ? KeywordCompletionFilters.FunctionLikeBodyKeywordsJS
+                    : KeywordCompletionFilters.FunctionLikeBodyKeywords;
+            }
+            else {
+                keywordFilters = isSourceFileJS(sourceFile)
+                    ? KeywordCompletionFilters.AllJS
+                    : KeywordCompletionFilters.All;
+            }
 
             // Get all entities in the current scope.
             completionKind = CompletionKind.Global;
@@ -1459,8 +1472,13 @@ namespace ts.Completions {
             completionKind = CompletionKind.MemberLike;
             // Declaring new property/method/accessor
             isNewIdentifierLocation = true;
-            keywordFilters = contextToken.kind === SyntaxKind.AsteriskToken ? KeywordCompletionFilters.None :
-                isClassLike(decl) ? KeywordCompletionFilters.ClassElementKeywords : KeywordCompletionFilters.InterfaceElementKeywords;
+            keywordFilters = contextToken.kind === SyntaxKind.AsteriskToken
+                ? KeywordCompletionFilters.None
+                : !isClassLike(decl)
+                ? KeywordCompletionFilters.InterfaceElementKeywords
+                : isSourceFileJS(sourceFile)
+                ? KeywordCompletionFilters.ClassElementKeywordsJS
+                : KeywordCompletionFilters.ClassElementKeywords;
 
             // If you're in an interface you don't want to repeat things from super-interface. So just stop here.
             if (!isClassLike(decl)) return GlobalsSearch.Success;
@@ -1962,6 +1980,14 @@ namespace ts.Completions {
                     return isFunctionLikeBodyKeyword(kind);
                 case KeywordCompletionFilters.TypeKeywords:
                     return isTypeKeyword(kind);
+                case KeywordCompletionFilters.AllJS:
+                    return !isTsKeywords(kind);
+                case KeywordCompletionFilters.ClassElementKeywordsJS:
+                    return isClassMemberCompletionKeywordJS(kind);
+                case KeywordCompletionFilters.ConstructorParameterKeywordsJS:
+                    return isParameterPropertyModifierJS(kind);
+                case KeywordCompletionFilters.FunctionLikeBodyKeywordsJS:
+                    return isFunctionLikeBodyKeywordJS(kind);
                 default:
                     return Debug.assertNever(keywordFilter);
             }
@@ -1985,8 +2011,28 @@ namespace ts.Completions {
         }
     }
 
+    function isClassMemberCompletionKeywordJS(kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.ConstructorKeyword:
+            case SyntaxKind.GetKeyword:
+            case SyntaxKind.SetKeyword:
+            case SyntaxKind.AsyncKeyword:
+                return true;
+            default:
+                return isClassMemberModifierJS(kind);
+        }
+    }
+
     function isFunctionLikeBodyKeyword(kind: SyntaxKind) {
         return kind === SyntaxKind.AsyncKeyword || kind === SyntaxKind.AwaitKeyword || !isContextualKeyword(kind) && !isClassMemberCompletionKeyword(kind);
+    }
+
+    function isFunctionLikeBodyKeywordJS(kind: SyntaxKind) {
+        return kind === SyntaxKind.AsyncKeyword
+            || kind === SyntaxKind.AwaitKeyword
+            || !isContextualKeyword(kind)
+            && !isClassMemberCompletionKeyword(kind)
+            && !isTsKeywords(kind);
     }
 
     function keywordForNode(node: Node): SyntaxKind {
