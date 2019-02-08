@@ -14570,8 +14570,6 @@ namespace ts {
                 return undefined;
             }
 
-            // target: { [P in 'a' | 'b' | keyof T | keyof U]: XXX }
-            // source: { a: xxx, b: xxx, c: xxx, d: xxx }
             function inferToMappedType(source: Type, target: MappedType, constraintType: Type): boolean {
                 if (constraintType.flags & TypeFlags.Union) {
                     let result = false;
