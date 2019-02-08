@@ -16,7 +16,7 @@ tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__pre
             interface ElementChildrenAttribute { children: any; }
         }
     }
-    export function dom(): JSX.Element;
+    export function dom(...args: any[]): JSX.Element;
 ==== tests/cases/conformance/jsx/inline/renderer2.d.ts (0 errors) ====
     export namespace predom {
         namespace JSX {
@@ -32,7 +32,7 @@ tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__pre
             interface ElementChildrenAttribute { children: any; }
         }
     }
-    export function predom(): predom.JSX.Element;
+    export function predom(...args: any[]): predom.JSX.Element;
 ==== tests/cases/conformance/jsx/inline/component.tsx (0 errors) ====
     /** @jsx predom */
     import { predom } from "./renderer2"

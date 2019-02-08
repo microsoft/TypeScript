@@ -20,7 +20,7 @@ error TS5053: Option 'reactNamespace' cannot be specified with option 'jsxFactor
             return el.markAsChildOfRootElement !== undefined;
         }
     
-        export function createElement(args: any[]) {
+        export function createElement(...args: any[]) {
     
             return {
             }

@@ -18,7 +18,7 @@ export namespace Element {
         return el.markAsChildOfRootElement !== undefined;
     }
 
-    export function createElement(args: any[]) {
+    export function createElement(...args: any[]) {
 
         return {
         }
@@ -59,7 +59,7 @@ var Element;
         return el.markAsChildOfRootElement !== undefined;
     }
     Element.isElement = isElement;
-    function createElement(args) {
+    function createElement(...args) {
         return {};
     }
     Element.createElement = createElement;

@@ -1404,7 +1404,7 @@ namespace ts {
     export interface SyntheticExpression extends Expression {
         kind: SyntaxKind.SyntheticExpression;
         isSpread: boolean;
-        type: Type;
+        type: Type | ((mode: number | undefined) => Type);
     }
 
     // see: https://tc39.github.io/ecma262/#prod-ExponentiationExpression
@@ -3954,6 +3954,7 @@ namespace ts {
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
         deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
+        jsxFactoryCall?: CallExpression;    // Manufactured call expression node for checking jsx factory call
     }
 
     export const enum TypeFlags {

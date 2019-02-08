@@ -1,0 +1,23 @@
+tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx(15,12): error TS2345: Argument of type '(attributes: Attributes | undefined, contents: string[]) => string' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx (1 errors) ====
+    type AttributeValue = number | string | Date | boolean;
+    interface Attributes {
+        [key: string]: AttributeValue;
+    }
+    function createElement(name: string, attributes: Attributes | undefined, ...contents: string[]) {
+        return name;
+    }
+    namespace createElement.JSX {
+        type Element = string;
+    }
+    
+    function Button(attributes: Attributes | undefined, contents: string[]) {
+        return '';
+    }
+    const b = <Button></Button>
+               ~~~~~~
+!!! error TS2345: Argument of type '(attributes: Attributes | undefined, contents: string[]) => string' is not assignable to parameter of type 'string'.
+!!! related TS6212 tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx:15:12: Did you mean to call this expression?
+    

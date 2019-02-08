@@ -13,14 +13,17 @@ declare global {
         }
     }
 }
-export function dom(): void;
+export function dom(...args: any[]): void;
 >dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
+>args : Symbol(args, Decl(renderer.d.ts, 7, 20))
 
-export function otherdom(): void;
->otherdom : Symbol(otherdom, Decl(renderer.d.ts, 7, 28))
+export function otherdom(...args: any[]): void;
+>otherdom : Symbol(otherdom, Decl(renderer.d.ts, 7, 42))
+>args : Symbol(args, Decl(renderer.d.ts, 8, 25))
 
-export function createElement(): void;
->createElement : Symbol(createElement, Decl(renderer.d.ts, 8, 33))
+export function createElement(...args: any[]): void;
+>createElement : Symbol(createElement, Decl(renderer.d.ts, 8, 47))
+>args : Symbol(args, Decl(renderer.d.ts, 9, 30))
 
 export { dom as default };
 >dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))

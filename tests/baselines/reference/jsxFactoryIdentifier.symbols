@@ -48,7 +48,7 @@ export namespace Element {
 >undefined : Symbol(undefined)
     }
 
-    export function createElement(args: any[]) {
+    export function createElement(...args: any[]) {
 >createElement : Symbol(createElement, Decl(Element.ts, 15, 5))
 >args : Symbol(args, Decl(Element.ts, 17, 34))
 

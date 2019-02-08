@@ -14,7 +14,7 @@ declare global {
         interface ElementChildrenAttribute { children: any; }
     }
 }
-export function dom(): JSX.Element;
+export function dom(...args: any[]): JSX.Element;
 // @filename: renderer2.d.ts
 export namespace predom {
     namespace JSX {
@@ -30,7 +30,7 @@ export namespace predom {
         interface ElementChildrenAttribute { children: any; }
     }
 }
-export function predom(): predom.JSX.Element;
+export function predom(...args: any[]): predom.JSX.Element;
 // @filename: component.tsx
 /** @jsx predom */
 import { predom } from "./renderer2"

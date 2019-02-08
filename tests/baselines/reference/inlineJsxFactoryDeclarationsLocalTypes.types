@@ -28,8 +28,9 @@ export namespace dom {
 >children : any
     }
 }
-export function dom(): dom.JSX.Element;
->dom : () => dom.JSX.Element
+export function dom(...args: any[]): dom.JSX.Element;
+>dom : (...args: any[]) => dom.JSX.Element
+>args : any[]
 >dom : any
 >JSX : any
 
@@ -63,15 +64,16 @@ export namespace predom {
 >children : any
     }
 }
-export function predom(): predom.JSX.Element;
->predom : () => predom.JSX.Element
+export function predom(...args: any[]): predom.JSX.Element;
+>predom : (...args: any[]) => predom.JSX.Element
+>args : any[]
 >predom : any
 >JSX : any
 
 === tests/cases/conformance/jsx/inline/component.tsx ===
 /** @jsx predom */
 import { predom } from "./renderer2"
->predom : () => predom.JSX.Element
+>predom : (...args: any[]) => predom.JSX.Element
 
 export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{...this.props.children}</p>;
 >MySFC : (props: { x: number; y: number; children?: predom.JSX.Element[]; }) => predom.JSX.Element
@@ -107,7 +109,7 @@ export const MySFC = (props: {x: number, y: number, children?: predom.JSX.Elemen
 export class MyClass implements predom.JSX.Element {
 >MyClass : MyClass
 >predom.JSX : any
->predom : () => predom.JSX.Element
+>predom : (...args: any[]) => predom.JSX.Element
 >JSX : any
 
     __predomBrand!: void;
@@ -192,7 +194,7 @@ export default <h></h>
 === tests/cases/conformance/jsx/inline/index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer"
->dom : () => dom.JSX.Element
+>dom : (...args: any[]) => dom.JSX.Element
 
 import prerendered, {MySFC, MyClass, tree} from "./component";
 >prerendered : import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element
@@ -243,7 +245,7 @@ const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => 
 class DOMClass implements dom.JSX.Element {
 >DOMClass : DOMClass
 >dom.JSX : any
->dom : () => dom.JSX.Element
+>dom : (...args: any[]) => dom.JSX.Element
 >JSX : any
 
     __domBrand!: void;

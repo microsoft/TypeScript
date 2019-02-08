@@ -19,7 +19,7 @@ export namespace dom {
         interface ElementChildrenAttribute { children: any; }
     }
 }
-export function dom(): dom.JSX.Element;
+export function dom(...args: any[]): dom.JSX.Element;
 //// [renderer2.d.ts]
 export namespace predom {
     namespace JSX {
@@ -39,7 +39,7 @@ export namespace predom {
         interface ElementChildrenAttribute { children: any; }
     }
 }
-export function predom(): predom.JSX.Element;
+export function predom(...args: any[]): predom.JSX.Element;
 //// [component.tsx]
 /** @jsx predom */
 import { predom } from "./renderer2"

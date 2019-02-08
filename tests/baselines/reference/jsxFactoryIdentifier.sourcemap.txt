@@ -36,7 +36,7 @@ sourceFile:Element.ts
   >                   return el.markAsChildOfRootElement !== undefined;
   >               }
   >           
-  >               export function createElement(args: any[]) {
+  >               export function createElement(...args: any[]) {
   >           
   >                   return {
   >                   }
@@ -120,7 +120,7 @@ sourceFile:Element.ts
 2 >    ^^^^^^^^^^^^^^^^^
 3 >                     ^^^^^^^^^^^^
 4 >                                 ^
-5 >                                  ^->
+5 >                                  ^^^^->
 1->
 2 >    isElement
 3 >                     (el: any): el is JSX.Element {
@@ -132,24 +132,27 @@ sourceFile:Element.ts
 3 >Emitted(8, 34) Source(16, 6) + SourceIndex(0)
 4 >Emitted(8, 35) Source(16, 6) + SourceIndex(0)
 ---
->>>    function createElement(args) {
+>>>    function createElement(...args) {
 1->^^^^
 2 >    ^^^^^^^^^
 3 >             ^^^^^^^^^^^^^
 4 >                          ^
-5 >                           ^^^^
+5 >                           ^^^
+6 >                              ^^^^
 1->
   >
   >    
 2 >    export function 
 3 >             createElement
 4 >                          (
-5 >                           args: any[]
+5 >                           ...
+6 >                              args: any[]
 1->Emitted(9, 5) Source(18, 5) + SourceIndex(0)
 2 >Emitted(9, 14) Source(18, 21) + SourceIndex(0)
 3 >Emitted(9, 27) Source(18, 34) + SourceIndex(0)
 4 >Emitted(9, 28) Source(18, 35) + SourceIndex(0)
-5 >Emitted(9, 32) Source(18, 46) + SourceIndex(0)
+5 >Emitted(9, 31) Source(18, 38) + SourceIndex(0)
+6 >Emitted(9, 35) Source(18, 49) + SourceIndex(0)
 ---
 >>>        return {};
 1 >^^^^^^^^
@@ -186,7 +189,7 @@ sourceFile:Element.ts
 5 >                                          ^^^^^^^^^^^^^^^->
 1->
 2 >    createElement
-3 >                         (args: any[]) {
+3 >                         (...args: any[]) {
   >                         
   >                                 return {
   >                                 }
@@ -221,7 +224,7 @@ sourceFile:Element.ts
   >                                                        return el.markAsChildOfRootElement !== undefined;
   >                                                    }
   >                                                
-  >                                                    export function createElement(args: any[]) {
+  >                                                    export function createElement(...args: any[]) {
   >                                                
   >                                                        return {
   >                                                        }

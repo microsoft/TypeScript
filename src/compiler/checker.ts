@@ -888,6 +888,7 @@ namespace ts {
                     if (jsxPragma) {
                         const chosenpragma = isArray(jsxPragma) ? jsxPragma[0] : jsxPragma;
                         file.localJsxFactory = parseIsolatedEntityName(chosenpragma.arguments.factory, languageVersion);
+                        visitNode(file.localJsxFactory, markAsSynthetic);
                         if (file.localJsxFactory) {
                             return file.localJsxNamespace = getFirstIdentifier(file.localJsxFactory).escapedText;
                         }
@@ -898,6 +899,7 @@ namespace ts {
                 _jsxNamespace = "React" as __String;
                 if (compilerOptions.jsxFactory) {
                     _jsxFactoryEntity = parseIsolatedEntityName(compilerOptions.jsxFactory, languageVersion);
+                    visitNode(_jsxFactoryEntity, markAsSynthetic);
                     if (_jsxFactoryEntity) {
                         _jsxNamespace = getFirstIdentifier(_jsxFactoryEntity).escapedText;
                     }
@@ -907,6 +909,12 @@ namespace ts {
                 }
             }
             return _jsxNamespace;
+
+            function markAsSynthetic(node: Node): VisitResult<Node> {
+                node.pos = -1;
+                node.end = -1;
+                return visitEachChild(node, markAsSynthetic, nullTransformationContext);
+            }
         }
 
         function getEmitResolver(sourceFile: SourceFile, cancellationToken: CancellationToken) {
@@ -19967,9 +19975,9 @@ namespace ts {
             checkJsxOpeningLikeElementOrOpeningFragment(node);
         }
 
-        function checkJsxSelfClosingElement(node: JsxSelfClosingElement, _checkMode: CheckMode | undefined): Type {
+        function checkJsxSelfClosingElement(node: JsxSelfClosingElement): Type {
             checkNodeDeferred(node);
-            return getJsxElementTypeAt(node) || anyType;
+            return getFactoryReturnTypeForJsxOpeningLikeElement(node);
         }
 
         function checkJsxElementDeferred(node: JsxElement) {
@@ -19987,10 +19995,10 @@ namespace ts {
             checkJsxChildren(node);
         }
 
-        function checkJsxElement(node: JsxElement, _checkMode: CheckMode | undefined): Type {
+        function checkJsxElement(node: JsxElement): Type {
             checkNodeDeferred(node);
 
-            return getJsxElementTypeAt(node) || anyType;
+            return getFactoryReturnTypeForJsxOpeningLikeElement(node.openingElement);
         }
 
         function checkJsxFragment(node: JsxFragment): Type {
@@ -20003,7 +20011,7 @@ namespace ts {
             }
 
             checkJsxChildren(node);
-            return getJsxElementTypeAt(node) || anyType;
+            return getFactoryReturnTypeForJsxOpeningLikeElement(node.openingFragment);
         }
 
         /**
@@ -20427,6 +20435,49 @@ namespace ts {
                     error(errorNode, Diagnostics.JSX_element_implicitly_has_type_any_because_the_global_type_JSX_Element_does_not_exist);
                 }
             }
+        }
+
+        function getFactoryReturnTypeForJsxOpeningLikeElement(node: JsxOpeningLikeElement | JsxOpeningFragment) {
+            const reactRefErr = diagnostics && compilerOptions.jsx === JsxEmit.React ? Diagnostics.Cannot_find_name_0 : undefined;
+            const reactNamespace = getJsxNamespace(node);
+            const reactLocation = isJsxOpeningLikeElement(node) ? node.tagName : node;
+            const reactSym = resolveName(reactLocation, reactNamespace, SymbolFlags.Value, reactRefErr, reactNamespace, /*isUse*/ true);
+            const factoryEntity = getJsxFactoryEntity(reactLocation);
+            if (!factoryEntity) {
+                return getJsxElementTypeAt(node) || errorType;
+            }
+            const factorySymbol = resolveEntityName(factoryEntity, SymbolFlags.Value, /*ignoreErrors*/ true, /*dontUseResolveAlias*/ false, reactLocation);
+            if (reactSym && factorySymbol && factorySymbol !== unknownSymbol) {
+                // Mark local symbol as referenced here because it might not have been marked
+                // if jsx emit was not react as there wont be error being emitted
+                reactSym.isReferenced = SymbolFlags.All;
+
+                // If react symbol is alias, mark it as referenced
+                if (reactSym.flags & SymbolFlags.Alias && !isConstEnumOrConstEnumOnlyModule(resolveAlias(reactSym))) {
+                    markAliasSymbolAsReferenced(reactSym);
+                }
+                const links = getNodeLinks(node);
+                if (!links.jsxFactoryCall) {
+                    const factoryExpression = createSyntheticExpression(node, getTypeOfSymbol(factorySymbol));
+                    const children = isJsxOpeningElement(node) ? node.parent.children : emptyArray;
+                    links.jsxFactoryCall = createCall(factoryExpression, /*typeArguments*/ undefined, [
+                        isJsxOpeningFragment(node)
+                            ? createSyntheticExpression(node, reactSym.exports ? getTypeOfSymbol(getSymbol(getExportsOfSymbol(reactSym), "Fragment" as __String, SymbolFlags.Value) || unknownSymbol) : emptyObjectType)
+                            : isJsxIntrinsicIdentifier(node.tagName) ? createSyntheticExpression(node.tagName, getLiteralType(idText((node.tagName as Identifier)))) : node.tagName,
+                        isJsxOpeningFragment(node) ? createSyntheticExpression(node, nullType) : createSyntheticExpression(node.attributes, checkMode => checkExpression(node.attributes, checkMode)),
+                        ...mapDefined(children, c => isJsxText(c) && c.containsOnlyWhiteSpaces ? undefined : createSyntheticExpression(c, isJsxText(c) ? stringType : (checkMode => checkExpression(c, checkMode))))
+                    ]);
+                    links.jsxFactoryCall.pos = node.pos;
+                    links.jsxFactoryCall.end = node.end;
+                    links.jsxFactoryCall.parent = node.parent;
+                }
+                const result =  getReturnTypeOfSignature(getResolvedSignature(links.jsxFactoryCall));
+                if (result === errorType) {
+                    return getJsxElementTypeAt(node) || errorType;
+                }
+                return result;
+            }
+            return getJsxElementTypeAt(node) || errorType;
         }
 
         function checkJsxOpeningLikeElementOrOpeningFragment(node: JsxOpeningLikeElement | JsxOpeningFragment) {
@@ -21513,7 +21564,7 @@ namespace ts {
                     // We are inferring from a spread expression in the last argument position, i.e. both the parameter
                     // and the argument are ...x forms.
                     return arg.kind === SyntaxKind.SyntheticExpression ?
-                        createArrayType((<SyntheticExpression>arg).type) :
+                        createArrayType(checkExpressionWithContextualType(<SyntheticExpression>arg, restType, context, CheckMode.Normal)) :
                         getArrayifiedType(checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context, CheckMode.Normal));
                 }
             }
@@ -21694,7 +21745,7 @@ namespace ts {
             }
         }
 
-        function createSyntheticExpression(parent: Node, type: Type, isSpread?: boolean) {
+        function createSyntheticExpression(parent: Node, type: Type | ((mode: CheckMode | undefined) => Type), isSpread?: boolean) {
             const result = <SyntheticExpression>createNode(SyntaxKind.SyntheticExpression, parent.pos, parent.end);
             result.parent = parent;
             result.type = type;
@@ -25445,13 +25496,14 @@ namespace ts {
                 case SyntaxKind.YieldExpression:
                     return checkYieldExpression(<YieldExpression>node);
                 case SyntaxKind.SyntheticExpression:
-                    return (<SyntheticExpression>node).type;
+                    const cbOrType = (<SyntheticExpression>node).type;
+                    return typeof cbOrType === "function" ? cbOrType(checkMode) : cbOrType;
                 case SyntaxKind.JsxExpression:
                     return checkJsxExpression(<JsxExpression>node, checkMode);
                 case SyntaxKind.JsxElement:
-                    return checkJsxElement(<JsxElement>node, checkMode);
+                    return checkJsxElement(<JsxElement>node);
                 case SyntaxKind.JsxSelfClosingElement:
-                    return checkJsxSelfClosingElement(<JsxSelfClosingElement>node, checkMode);
+                    return checkJsxSelfClosingElement(<JsxSelfClosingElement>node);
                 case SyntaxKind.JsxFragment:
                     return checkJsxFragment(<JsxFragment>node);
                 case SyntaxKind.JsxAttributes:
@@ -31972,6 +32024,10 @@ namespace ts {
             return literalTypeToNode(<FreshableType>type, node, tracker);
         }
 
+        function getJsxFactoryEntity(location?: Node): EntityName | undefined {
+            return location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity;
+        }
+
         function createResolver(): EmitResolver {
             // this variable and functions that use it are deliberately moved here from the outer scope
             // to avoid scope pollution
@@ -32043,7 +32099,7 @@ namespace ts {
                     const symbol = node && getSymbolOfNode(node);
                     return !!(symbol && getCheckFlags(symbol) & CheckFlags.Late);
                 },
-                getJsxFactoryEntity: location => location ? (getJsxNamespace(location), (getSourceFileOfNode(location).localJsxFactory || _jsxFactoryEntity)) : _jsxFactoryEntity,
+                getJsxFactoryEntity,
                 getAllAccessorDeclarations(accessor: AccessorDeclaration): AllAccessorDeclarations {
                     accessor = getParseTreeNode(accessor, isGetOrSetAccessorDeclaration)!; // TODO: GH#18217
                     const otherKind = accessor.kind === SyntaxKind.SetAccessor ? SyntaxKind.GetAccessor : SyntaxKind.SetAccessor;

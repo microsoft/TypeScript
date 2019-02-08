@@ -9,29 +9,30 @@ declare global {
         }
     }
 }
-export function dom(): void;
->dom : () => void
+export function dom(...args: any[]): void;
+>dom : (...args: any[]) => void
+>args : any[]
 
 export { dom as p };
->dom : () => void
->p : () => void
+>dom : (...args: any[]) => void
+>p : (...args: any[]) => void
 
 === tests/cases/conformance/jsx/inline/reacty.tsx ===
 /** @jsx dom */
 import {dom} from "./renderer";
->dom : () => void
+>dom : (...args: any[]) => void
 
 <h></h>
-><h></h> : error
+><h></h> : void
 >h : any
 >h : any
 
 === tests/cases/conformance/jsx/inline/index.tsx ===
 import { p } from "./renderer";
->p : () => void
+>p : (...args: any[]) => void
 
 <h></h>
-><h></h> : error
+><h></h> : void
 >h : any
 >h : any
 

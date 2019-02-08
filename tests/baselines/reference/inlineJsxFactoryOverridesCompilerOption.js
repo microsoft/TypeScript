@@ -8,7 +8,7 @@ declare global {
         }
     }
 }
-export function dom(): void;
+export function dom(...args: any[]): void;
 export { dom as p };
 //// [reacty.tsx]
 /** @jsx dom */

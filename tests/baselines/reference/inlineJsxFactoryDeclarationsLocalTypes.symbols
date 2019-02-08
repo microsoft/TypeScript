@@ -43,8 +43,9 @@ export namespace dom {
 >children : Symbol(ElementChildrenAttribute.children, Decl(renderer.d.ts, 15, 44))
     }
 }
-export function dom(): dom.JSX.Element;
+export function dom(...args: any[]): dom.JSX.Element;
 >dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))
+>args : Symbol(args, Decl(renderer.d.ts, 18, 20))
 >dom : Symbol(dom, Decl(renderer.d.ts, 17, 1), Decl(renderer.d.ts, 0, 0))
 >JSX : Symbol(dom.JSX, Decl(renderer.d.ts, 0, 22))
 >Element : Symbol(dom.JSX.Element, Decl(renderer.d.ts, 4, 9))
@@ -94,8 +95,9 @@ export namespace predom {
 >children : Symbol(ElementChildrenAttribute.children, Decl(renderer2.d.ts, 15, 44))
     }
 }
-export function predom(): predom.JSX.Element;
+export function predom(...args: any[]): predom.JSX.Element;
 >predom : Symbol(predom, Decl(renderer2.d.ts, 17, 1), Decl(renderer2.d.ts, 0, 0))
+>args : Symbol(args, Decl(renderer2.d.ts, 18, 23))
 >predom : Symbol(predom, Decl(renderer2.d.ts, 17, 1), Decl(renderer2.d.ts, 0, 0))
 >JSX : Symbol(predom.JSX, Decl(renderer2.d.ts, 0, 25))
 >Element : Symbol(predom.JSX.Element, Decl(renderer2.d.ts, 4, 9))

@@ -13,8 +13,9 @@ declare global {
         }
     }
 }
-export function dom(): void;
+export function dom(...args: any[]): void;
 >dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
+>args : Symbol(args, Decl(renderer.d.ts, 7, 20))
 
 export { dom as p };
 >dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))

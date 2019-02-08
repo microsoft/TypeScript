@@ -1,0 +1,16 @@
+tests/cases/compiler/index.tsx(7,15): error TS2554: Expected 1 arguments, but got 2.
+
+
+==== tests/cases/compiler/index.tsx (1 errors) ====
+    declare global {
+        function __make (params: object): any;
+    }
+    
+    declare var __foot: any;
+    
+    const thing = <__foot />;
+                  ~~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 2.
+    
+    export {}
+    

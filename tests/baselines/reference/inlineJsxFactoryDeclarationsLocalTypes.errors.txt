@@ -27,7 +27,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
             interface ElementChildrenAttribute { children: any; }
         }
     }
-    export function dom(): dom.JSX.Element;
+    export function dom(...args: any[]): dom.JSX.Element;
 ==== tests/cases/conformance/jsx/inline/renderer2.d.ts (0 errors) ====
     export namespace predom {
         namespace JSX {
@@ -47,7 +47,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
             interface ElementChildrenAttribute { children: any; }
         }
     }
-    export function predom(): predom.JSX.Element;
+    export function predom(...args: any[]): predom.JSX.Element;
 ==== tests/cases/conformance/jsx/inline/component.tsx (0 errors) ====
     /** @jsx predom */
     import { predom } from "./renderer2"

@@ -7,9 +7,9 @@ declare global {
         }
     }
 }
-export function dom(): void;
-export function otherdom(): void;
-export function createElement(): void;
+export function dom(...args: any[]): void;
+export function otherdom(...args: any[]): void;
+export function createElement(...args: any[]): void;
 export { dom as default };
 // @filename: otherreacty.tsx
 /** @jsx React.createElement */

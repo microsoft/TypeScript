@@ -45,8 +45,8 @@ export namespace Element {
 >undefined : undefined
     }
 
-    export function createElement(args: any[]) {
->createElement : (args: any[]) => {}
+    export function createElement(...args: any[]) {
+>createElement : (...args: any[]) => {}
 >args : any[]
 
         return {
@@ -56,10 +56,10 @@ export namespace Element {
 }
 
 export let createElement = Element.createElement;
->createElement : (args: any[]) => {}
->Element.createElement : (args: any[]) => {}
+>createElement : (...args: any[]) => {}
+>Element.createElement : (...args: any[]) => {}
 >Element : typeof Element
->createElement : (args: any[]) => {}
+>createElement : (...args: any[]) => {}
 
 function toCamelCase(text: string): string {
 >toCamelCase : (text: string) => string
@@ -85,10 +85,10 @@ import { Element} from './Element';
 >Element : typeof Element
 
 let createElement = Element.createElement;
->createElement : (args: any[]) => {}
->Element.createElement : (args: any[]) => {}
+>createElement : (...args: any[]) => {}
+>Element.createElement : (...args: any[]) => {}
 >Element : typeof Element
->createElement : (args: any[]) => {}
+>createElement : (...args: any[]) => {}
 
 let c: {
 >c : { a?: { b: string; }; }
@@ -105,19 +105,19 @@ class A {
 >A : A
 
 	view() {
->view : () => any[]
+>view : () => {}[]
 
 		return [
->[			<meta content="helloworld"></meta>,			<meta content={c.a!.b}></meta>		] : any[]
+>[			<meta content="helloworld"></meta>,			<meta content={c.a!.b}></meta>		] : {}[]
 
 			<meta content="helloworld"></meta>,
-><meta content="helloworld"></meta> : error
+><meta content="helloworld"></meta> : {}
 >meta : any
 >content : string
 >meta : any
 
 			<meta content={c.a!.b}></meta>
-><meta content={c.a!.b}></meta> : error
+><meta content={c.a!.b}></meta> : {}
 >meta : any
 >content : string
 >c.a!.b : string

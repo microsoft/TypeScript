@@ -924,7 +924,7 @@ declare namespace ts {
     export interface SyntheticExpression extends Expression {
         kind: SyntaxKind.SyntheticExpression;
         isSpread: boolean;
-        type: Type;
+        type: Type | ((mode: number | undefined) => Type);
     }
     export type ExponentiationOperator = SyntaxKind.AsteriskAsteriskToken;
     export type MultiplicativeOperator = SyntaxKind.AsteriskToken | SyntaxKind.SlashToken | SyntaxKind.PercentToken;

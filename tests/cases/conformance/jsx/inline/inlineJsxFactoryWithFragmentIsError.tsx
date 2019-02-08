@@ -7,8 +7,8 @@ declare global {
         }
     }
 }
-export function dom(): void;
-export function createElement(): void;
+export function dom(...args: any[]): void;
+export function createElement(...args: any[]): void;
 // @filename: reacty.tsx
 /** @jsx React.createElement */
 import * as React from "./renderer";

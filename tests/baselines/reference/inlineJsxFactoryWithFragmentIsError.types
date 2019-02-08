@@ -9,11 +9,13 @@ declare global {
         }
     }
 }
-export function dom(): void;
->dom : () => void
+export function dom(...args: any[]): void;
+>dom : (...args: any[]) => void
+>args : any[]
 
-export function createElement(): void;
->createElement : () => void
+export function createElement(...args: any[]): void;
+>createElement : (...args: any[]) => void
+>args : any[]
 
 === tests/cases/conformance/jsx/inline/reacty.tsx ===
 /** @jsx React.createElement */
@@ -21,19 +23,19 @@ import * as React from "./renderer";
 >React : typeof React
 
 <><h></h></>
-><><h></h></> : any
-><h></h> : any
+><><h></h></> : void
+><h></h> : void
 >h : any
 >h : any
 
 === tests/cases/conformance/jsx/inline/index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer";
->dom : () => void
+>dom : (...args: any[]) => void
 
 <><h></h></>
-><><h></h></> : any
-><h></h> : any
+><><h></h></> : void
+><h></h> : void
 >h : any
 >h : any
 

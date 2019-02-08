@@ -9,18 +9,21 @@ declare global {
         }
     }
 }
-export function dom(): void;
->dom : () => void
+export function dom(...args: any[]): void;
+>dom : (...args: any[]) => void
+>args : any[]
 
-export function otherdom(): void;
->otherdom : () => void
+export function otherdom(...args: any[]): void;
+>otherdom : (...args: any[]) => void
+>args : any[]
 
-export function createElement(): void;
->createElement : () => void
+export function createElement(...args: any[]): void;
+>createElement : (...args: any[]) => void
+>args : any[]
 
 export { dom as default };
->dom : () => void
->default : () => void
+>dom : (...args: any[]) => void
+>default : (...args: any[]) => void
 
 === tests/cases/conformance/jsx/inline/otherreacty.tsx ===
 /** @jsx React.createElement */
@@ -28,36 +31,36 @@ import * as React from "./renderer";
 >React : typeof React
 
 <h></h>
-><h></h> : error
+><h></h> : void
 >h : any
 >h : any
 
 === tests/cases/conformance/jsx/inline/other.tsx ===
 /** @jsx h */
 import { dom as h } from "./renderer"
->dom : () => void
->h : () => void
+>dom : (...args: any[]) => void
+>h : (...args: any[]) => void
 
 export const prerendered = <h></h>;
->prerendered : error
-><h></h> : error
->h : () => void
->h : () => void
+>prerendered : void
+><h></h> : void
+>h : (...args: any[]) => void
+>h : (...args: any[]) => void
 
 === tests/cases/conformance/jsx/inline/othernoalias.tsx ===
 /** @jsx otherdom */
 import { otherdom } from "./renderer"
->otherdom : () => void
+>otherdom : (...args: any[]) => void
 
 export const prerendered2 = <h></h>;
->prerendered2 : error
-><h></h> : error
+>prerendered2 : void
+><h></h> : void
 >h : any
 >h : any
 
 === tests/cases/conformance/jsx/inline/reacty.tsx ===
 import React from "./renderer"
->React : () => void
+>React : (...args: any[]) => void
 
 export const prerendered3 = <h></h>;
 >prerendered3 : error
@@ -68,10 +71,10 @@ export const prerendered3 = <h></h>;
 === tests/cases/conformance/jsx/inline/index.tsx ===
 /** @jsx dom */
 import { dom } from "./renderer"
->dom : () => void
+>dom : (...args: any[]) => void
 
 <h></h>
-><h></h> : error
+><h></h> : void
 >h : any
 >h : any
 

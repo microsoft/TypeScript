@@ -22,7 +22,7 @@ export namespace Element {
         return el.markAsChildOfRootElement !== undefined;
     }
 
-    export function createElement(args: any[]) {
+    export function createElement(...args: any[]) {
 
         return {
         }

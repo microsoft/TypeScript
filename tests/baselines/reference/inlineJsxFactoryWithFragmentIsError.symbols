@@ -13,11 +13,13 @@ declare global {
         }
     }
 }
-export function dom(): void;
+export function dom(...args: any[]): void;
 >dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
+>args : Symbol(args, Decl(renderer.d.ts, 7, 20))
 
-export function createElement(): void;
->createElement : Symbol(createElement, Decl(renderer.d.ts, 7, 28))
+export function createElement(...args: any[]): void;
+>createElement : Symbol(createElement, Decl(renderer.d.ts, 7, 42))
+>args : Symbol(args, Decl(renderer.d.ts, 8, 30))
 
 === tests/cases/conformance/jsx/inline/reacty.tsx ===
 /** @jsx React.createElement */
