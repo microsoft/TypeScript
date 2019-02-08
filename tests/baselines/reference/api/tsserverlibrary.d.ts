@@ -7597,15 +7597,6 @@ declare namespace ts.server.protocol {
         /** name of the project */
         projectName: string;
     }
-    type SurveyReadyEventName = "surveyReady";
-    interface SurveyReadyEvent extends Event {
-        event: SurveyReadyEventName;
-        body: SurveyReadyEventBody;
-    }
-    interface SurveyReadyEventBody {
-        /** Name of the survey. This is an internal machine- and programmer-friendly name */
-        surveyId: string;
-    }
     type LargeFileReferencedEventName = "largeFileReferenced";
     interface LargeFileReferencedEvent extends Event {
         event: LargeFileReferencedEventName;
@@ -8357,7 +8348,6 @@ declare namespace ts.server {
     const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
     const ProjectLoadingStartEvent = "projectLoadingStart";
     const ProjectLoadingFinishEvent = "projectLoadingFinish";
-    const SurveyReady = "surveyReady";
     const LargeFileReferencedEvent = "largeFileReferenced";
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
@@ -8380,12 +8370,6 @@ declare namespace ts.server {
         eventName: typeof ProjectLoadingFinishEvent;
         data: {
             project: Project;
-        };
-    }
-    interface SurveyReady {
-        eventName: typeof SurveyReady;
-        data: {
-            surveyId: string;
         };
     }
     interface LargeFileReferencedEvent {
@@ -8472,7 +8456,7 @@ declare namespace ts.server {
     interface OpenFileInfo {
         readonly checkJs: boolean;
     }
-    type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
     type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {
@@ -8589,8 +8573,6 @@ declare namespace ts.server {
         readonly syntaxOnly?: boolean;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
-        /** Tracks projects that we have already sent survey events for. */
-        private readonly seenSurveyProjects;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
