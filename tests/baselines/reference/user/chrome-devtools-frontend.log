@@ -3751,6 +3751,7 @@ node_modules/chrome-devtools-frontend/front_end/common/ParsedURL.js(152,25): err
 node_modules/chrome-devtools-frontend/front_end/common/ParsedURL.js(161,25): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/common/ParsedURL.js(211,34): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/common/ParsedURL.js(215,29): error TS2339: Property 'asParsedURL' does not exist on type 'string'.
+node_modules/chrome-devtools-frontend/front_end/common/ParsedURL.js(318,32): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/common/ParsedURL.js(375,18): error TS2339: Property 'asParsedURL' does not exist on type 'String'.
 node_modules/chrome-devtools-frontend/front_end/common/SegmentedRange.js(48,37): error TS2339: Property 'lowerBound' does not exist on type 'Segment[]'.
 node_modules/chrome-devtools-frontend/front_end/common/Settings.js(49,10): error TS2339: Property 'runtime' does not exist on type 'Window'.
@@ -3902,6 +3903,7 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.j
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(192,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(200,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(255,28): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(256,27): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(257,31): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(264,13): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleContextSelector.js(279,14): error TS2555: Expected at least 2 arguments, but got 1.
@@ -4180,6 +4182,7 @@ node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(70
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(733,19): error TS2339: Property 'removeChildren' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(735,35): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(736,31): error TS2555: Expected at least 2 arguments, but got 1.
+node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(750,27): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(803,34): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(804,31): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/console/ConsoleViewMessage.js(806,43): error TS2339: Property 'style' does not exist on type 'Element'.
@@ -4517,6 +4520,7 @@ node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(98,48): er
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(109,26): error TS2352: Conversion of type 'DataGridNode<any>' to type 'NODE_TYPE' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(121,17): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(123,17): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(134,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(135,15): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(139,15): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/data_grid/DataGrid.js(159,33): error TS2694: Namespace 'DataGrid.DataGrid' has no exported member 'ColumnDescriptor'.
@@ -7751,6 +7755,7 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/JavaScriptAutocomplete
 node_modules/chrome-devtools-frontend/front_end/object_ui/JavaScriptAutocomplete.js(471,33): error TS2339: Property 'CompletionGroup' does not exist on type 'typeof JavaScriptAutocomplete'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPopoverHelper.js(82,35): error TS2694: Namespace 'SDK.DebuggerModel' has no exported member 'FunctionDetails'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPopoverHelper.js(91,29): error TS2339: Property 'createChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPopoverHelper.js(108,23): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPopoverHelper.js(114,48): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPopoverHelper.js(129,7): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPopoverHelper.js(145,50): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -7763,6 +7768,7 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSectio
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(181,18): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(207,22): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(209,22): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(209,38): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(211,22): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(263,20): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(268,22): error TS2339: Property 'setTextContentTruncatedIfNeeded' does not exist on type 'Element'.
@@ -8242,6 +8248,7 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(125,15): e
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(125,39): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(132,8): error TS2339: Property 'filterRegex' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(133,27): error TS2339: Property 'regexSpecialCharacters' does not exist on type 'StringConstructor'.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(198,1): error TS2322: Type '(maxLength: number) => string' is not assignable to type '() => string'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(250,8): error TS2339: Property 'hashCode' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(275,8): error TS2339: Property 'isDigitAt' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(320,8): error TS2339: Property 'naturalOrderComparator' does not exist on type 'StringConstructor'.
@@ -11052,6 +11059,7 @@ node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSid
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(81,60): error TS2339: Property 'breakpoint' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(82,62): error TS2339: Property 'breakpoint' does not exist on type 'V'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(119,5): error TS2322: Type 'Promise<string>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(131,38): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(141,29): error TS2339: Property 'enclosingNodeOrSelfWithClass' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(156,33): error TS2339: Property 'checkboxElement' does not exist on type 'EventTarget'.
 node_modules/chrome-devtools-frontend/front_end/sources/JavaScriptBreakpointsSidebarPane.js(159,11): error TS2339: Property 'consume' does not exist on type 'Event'.
@@ -13399,6 +13407,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1561,11): error TS
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1562,17): error TS2339: Property 'value' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1570,25): error TS2339: Property 'value' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1574,11): error TS2339: Property 'value' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1633,64): error TS2554: Expected 0 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1646,40): error TS2339: Property '_textWidthCache' does not exist on type '(context: CanvasRenderingContext2D, text: string) => number'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1649,25): error TS2339: Property '_textWidthCache' does not exist on type '(context: CanvasRenderingContext2D, text: string) => number'.
 node_modules/chrome-devtools-frontend/front_end/ui/UIUtils.js(1715,20): error TS2339: Property 'type' does not exist on type 'Element'.
