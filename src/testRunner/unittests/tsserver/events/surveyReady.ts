@@ -36,7 +36,8 @@ namespace ts.projectSystem {
             verifySurveyReadyEvent(0);
         });
 
-        it("logs an event when checkJs is set", () => {
+        it("does NOT log an event when checkJs is set", () => {
+            // the checkJs survey is now disabled
             const projectRoot = "/user/username/projects/project";
             const file: File = {
                 path: `${projectRoot}/src/file.ts`,
@@ -50,10 +51,11 @@ namespace ts.projectSystem {
             const { session, verifySurveyReadyEvent } = createSessionWithEventHandler(host);
             openFilesForSession([file], session);
 
-            verifySurveyReadyEvent(1);
+            verifySurveyReadyEvent(0);
         });
 
-        it("logs an event when checkJs is set, only the first time", () => {
+        it("does NOT log an event when checkJs is set, only the first time", () => {
+            // the checkJs survey is now disabled
             const projectRoot = "/user/username/projects/project";
             const file: File = {
                 path: `${projectRoot}/src/file.ts`,
@@ -71,16 +73,17 @@ namespace ts.projectSystem {
             const { session, verifySurveyReadyEvent } = createSessionWithEventHandler(host);
             openFilesForSession([file], session);
 
-            verifySurveyReadyEvent(1);
+            verifySurveyReadyEvent(0);
 
             closeFilesForSession([file], session);
             openFilesForSession([rando], session);
             openFilesForSession([file], session);
 
-            verifySurveyReadyEvent(1);
+            verifySurveyReadyEvent(0);
         });
 
-        it("logs an event when checkJs is set after closing and reopening", () => {
+        it("does NOT log an event when checkJs is set after closing and reopening", () => {
+            // the checkJs survey is now disabled
             const projectRoot = "/user/username/projects/project";
             const file: File = {
                 path: `${projectRoot}/src/file.ts`,
@@ -105,7 +108,7 @@ namespace ts.projectSystem {
             host.writeFile(tsconfig.path, JSON.stringify({ compilerOptions: { checkJs: true } }));
             openFilesForSession([file], session);
 
-            verifySurveyReadyEvent(1);
+            verifySurveyReadyEvent(0);
         });
     });
 }

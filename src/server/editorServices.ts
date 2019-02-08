@@ -1616,13 +1616,6 @@ namespace ts.server {
             if (this.seenSurveyProjects.has(project.projectName)) {
                 return;
             }
-
-            if (project.getCompilerOptions().checkJs !== undefined) {
-                const name = "checkJs";
-                this.logger.info(`Survey ${name} is ready`);
-                this.sendSurveyReadyEvent(name);
-                this.seenSurveyProjects.set(project.projectName, true);
-            }
         }
 
         /*@internal*/
