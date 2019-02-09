@@ -468,6 +468,8 @@ namespace ts {
                             visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)
                         : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
                             visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
+            case SyntaxKind.JSDocAuthorTag:
+                return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.JSDocAugmentsTag:
                 return visitNode(cbNode, (node as JSDocTag).tagName) ||
                     visitNode(cbNode, (<JSDocAugmentsTag>node).class);
@@ -6612,7 +6614,7 @@ namespace ts {
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
                         case "author":
-                            tag = parseAuthorTag(start, tagName);
+                            tag = parseAuthorTag(start, tagName, indent);
                             break;
                         case "augments":
                         case "extends":
@@ -6877,14 +6879,22 @@ namespace ts {
                     return finishNode(result);
                 }
 
-                function parseAuthorTag(start: number, tagName: Identifier): JSDocAuthorTag {
+                function parseAuthorTag(start: number, tagName: Identifier, indent: number): JSDocAuthorTag {
                     const result = <JSDocAuthorTag>createNode(SyntaxKind.JSDocAuthorTag, start);
                     result.tagName = tagName;
 
-                    const comment = tryParse(() => tryParseAuthorNameAndEmail());
+                    const authorInfoWithEmail = tryParse(() => tryParseAuthorNameAndEmail());
+                    if (!authorInfoWithEmail) {
+                        return finishNode(result);
+                    }
 
-                    if (comment) {
-                        result.comment = comment;
+                    result.comment = authorInfoWithEmail;
+
+                    if (lookAhead(() => nextToken() !== SyntaxKind.NewLineTrivia)) {
+                        const comment = parseTagComments(indent);
+                        if (comment) {
+                            result.comment += comment;
+                        }
                     }
 
                     return finishNode(result);
@@ -6894,7 +6904,6 @@ namespace ts {
                     const comments: string[] = [];
                     let seenLessThan = false;
                     let seenGreaterThan = false;
-                    let seenAtToken = false;
                     let token = scanner.getToken();
 
                     loop: while (true) {
@@ -6902,31 +6911,24 @@ namespace ts {
                             case SyntaxKind.Identifier:
                             case SyntaxKind.WhitespaceTrivia:
                             case SyntaxKind.DotToken:
+                            case SyntaxKind.AtToken:
                                 comments.push(scanner.getTokenText());
                                 break;
                             case SyntaxKind.LessThanToken:
-                                if (seenLessThan || seenAtToken || seenGreaterThan) {
+                                if (seenLessThan || seenGreaterThan) {
                                     return;
                                 }
                                 seenLessThan = true;
                                 comments.push(scanner.getTokenText());
                                 break;
                             case SyntaxKind.GreaterThanToken:
-                                if (!seenLessThan || !seenAtToken || seenGreaterThan) {
+                                if (!seenLessThan || seenGreaterThan) {
                                     return;
                                 }
-
                                 seenGreaterThan = true;
                                 comments.push(scanner.getTokenText());
+                                scanner.setTextPos(scanner.getTokenPos() + 1);
                                 break loop;
-                            case SyntaxKind.AtToken:
-                                if (seenAtToken || !seenLessThan || seenGreaterThan) {
-                                    return;
-                                }
-
-                                seenAtToken = true;
-                                comments.push(scanner.getTokenText());
-                                break;
                             case SyntaxKind.NewLineTrivia:
                             case SyntaxKind.EndOfFileToken:
                                 break loop;
@@ -6935,7 +6937,7 @@ namespace ts {
                         token = nextJSDocToken();
                     }
 
-                    if (seenLessThan && seenAtToken && seenGreaterThan) {
+                    if (seenLessThan && seenGreaterThan) {
                         return comments.length === 0 ? undefined : comments.join("");
                     }
                 }

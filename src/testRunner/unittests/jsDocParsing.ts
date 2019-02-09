@@ -317,6 +317,7 @@ namespace ts {
                 parsesCorrectly("authorTag",
 `/**
  * @author John Doe <john.doe@example.com>
+ * @author John Doe <john.doe@example.com> unexpected comment
  */`);
             });
         });
