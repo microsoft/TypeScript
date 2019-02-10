@@ -14472,26 +14472,15 @@ namespace ts {
                     inferFromTypes(source, getUnionType([getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)]));
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
-                    const targetTypes = (<UnionOrIntersectionType>target).types;
-                    let typeVariableCount = 0;
-                    let typeVariable: TypeParameter | IndexedAccessType | undefined;
-                    // First infer to each type in union or intersection that isn't a type variable
-                    for (const t of targetTypes) {
-                        if (getInferenceInfoForType(t)) {
-                            typeVariable = <InstantiableType>t;
-                            typeVariableCount++;
-                        }
-                        else {
-                            inferFromTypes(source, t);
-                        }
-                    }
-                    // Next, if target containings a single naked type variable, make a secondary inference to that type
-                    // variable. This gives meaningful results for union types in co-variant positions and intersection
-                    // types in contra-variant positions (such as callback parameters).
-                    if (typeVariableCount === 1) {
+                    for (const t of (<UnionOrIntersectionType>target).types) {
                         const savePriority = priority;
-                        priority |= InferencePriority.NakedTypeVariable;
-                        inferFromTypes(source, typeVariable!);
+                        // Inferences directly to naked type variables are given lower priority as they are
+                        // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
+                        // we want to infer string for T, not Promise<string> | string.
+                        if (getInferenceInfoForType(t)) {
+                            priority |= InferencePriority.NakedTypeVariable;
+                        }
+                        inferFromTypes(source, t);
                         priority = savePriority;
                     }
                 }
