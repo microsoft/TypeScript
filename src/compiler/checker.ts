@@ -21550,13 +21550,8 @@ namespace ts {
             }
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
-                if (isTupleType(restType)) {
-                    if (pos - paramCount < getLengthOfTupleType(restType)) {
-                        return restType.typeArguments![pos - paramCount];
-                    }
-                    return getRestTypeOfTupleType(restType);
-                }
-                return getIndexTypeOfType(restType, IndexKind.Number);
+                const indexType = getLiteralType(pos - paramCount);
+                return getIndexedAccessType(restType, indexType);
             }
             return undefined;
         }
@@ -21564,18 +21559,22 @@ namespace ts {
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
             const paramCount = getParameterCount(source);
             const restType = getEffectiveRestType(source);
-            if (restType && pos === paramCount - 1) {
+            const nonRestCount = paramCount - (restType ? 1 : 0);
+            if (restType && pos === nonRestCount) {
                 return restType;
             }
-            const start = restType ? Math.min(pos, paramCount - 1) : pos;
             const types = [];
             const names = [];
-            for (let i = start; i < paramCount; i++) {
+            for (let i = pos; i < nonRestCount; i++) {
                 types.push(getTypeAtPosition(source, i));
                 names.push(getParameterNameAtPosition(source, i));
             }
+            if (restType) {
+                types.push(getIndexedAccessType(restType, numberType));
+                names.push(getParameterNameAtPosition(source, nonRestCount));
+            }
             const minArgumentCount = getMinArgumentCount(source);
-            const minLength = minArgumentCount < start ? 0 : minArgumentCount - start;
+            const minLength = minArgumentCount < pos ? 0 : minArgumentCount - pos;
             return createTupleType(types, minLength, !!restType, /*readonly*/ false, names);
         }
 
