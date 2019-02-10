@@ -12901,9 +12901,9 @@ namespace ts {
                     if (!(targetProp.flags & SymbolFlags.Prototype)) {
                         const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                         if (sourceProp === targetProp) {
-                            // OK
+                            continue;
                         }
-                        else if (sourceProp) {
+                        if (sourceProp) {
                             if (isIgnoredJsxProperty(source, sourceProp, getTypeOfSymbol(targetProp))) {
                                 continue;
                             }
