@@ -274,7 +274,17 @@ namespace ts.codefix {
             return !!merged;
         }));
         const tag = createJSDocComment(comments.join("\n"), createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
-        changes.insertJsdocCommentBefore(sourceFile, parent, tag);
+        const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
+        jsDocNode.jsDoc = parent.jsDoc;
+        jsDocNode.jsDocCache = parent.jsDocCache;
+        changes.insertJsdocCommentBefore(sourceFile, jsDocNode, tag);
+    }
+
+    function getJsDocNodeForArrowFunction(signature: ArrowFunction): HasJSDoc {
+        if (signature.parent.kind === SyntaxKind.PropertyDeclaration) {
+            return <HasJSDoc>signature.parent;
+        }
+        return <HasJSDoc>signature.parent.parent;
     }
 
     function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {

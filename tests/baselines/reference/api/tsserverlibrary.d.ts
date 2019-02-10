@@ -2571,9 +2571,10 @@ declare namespace ts {
         ES2016 = 3,
         ES2017 = 4,
         ES2018 = 5,
-        ESNext = 6,
+        ES2019 = 6,
+        ESNext = 7,
         JSON = 100,
-        Latest = 6
+        Latest = 7
     }
     enum LanguageVariant {
         Standard = 0,
@@ -3010,7 +3011,7 @@ declare namespace ts {
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
@@ -7927,7 +7928,7 @@ declare namespace ts.server.protocol {
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
@@ -8346,7 +8347,7 @@ declare namespace ts.server {
         excludedFiles: ReadonlyArray<NormalizedPath>;
         private typeAcquisition;
         updateGraph(): boolean;
-        getExcludedFiles(): readonly NormalizedPath[];
+        getExcludedFiles(): ReadonlyArray<NormalizedPath>;
         getTypeAcquisition(): TypeAcquisition;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
     }
