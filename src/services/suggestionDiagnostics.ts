@@ -1,5 +1,7 @@
 /* @internal */
 namespace ts {
+    const visitedNestedConvertibleFunctions = createMap<true>();
+
     export function computeSuggestionDiagnostics(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): DiagnosticWithLocation[] {
         program.getSemanticDiagnostics(sourceFile, cancellationToken);
         const diags: DiagnosticWithLocation[] = [];
@@ -13,6 +15,7 @@ namespace ts {
 
         const isJsFile = isSourceFileJS(sourceFile);
 
+        visitedNestedConvertibleFunctions.clear();
         check(sourceFile);
 
         if (getAllowSyntheticDefaultImports(program.getCompilerOptions())) {
@@ -114,15 +117,20 @@ namespace ts {
     }
 
     function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
-        if (!isAsyncFunction(node) &&
-            node.body &&
-            isBlock(node.body) &&
-            hasReturnStatementWithPromiseHandler(node.body) &&
-            returnsPromise(node, checker)) {
+        // need to check function before checking map so that deeper levels of nested callbacks are checked
+        if (isConvertibleFunction(node, checker) && !visitedNestedConvertibleFunctions.has(getKeyFromNode(node))) {
             diags.push(createDiagnosticForNode(
                 !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
                 Diagnostics.This_may_be_converted_to_an_async_function));
         }
+    }
+
+    function isConvertibleFunction(node: FunctionLikeDeclaration, checker: TypeChecker) {
+        return !isAsyncFunction(node) &&
+            node.body &&
+            isBlock(node.body) &&
+            hasReturnStatementWithPromiseHandler(node.body) &&
+            returnsPromise(node, checker);
     }
 
     function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
@@ -169,14 +177,20 @@ namespace ts {
     // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
     function isFixablePromiseArgument(arg: Expression): boolean {
         switch (arg.kind) {
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.Identifier: // identifier includes undefined
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
+                visitedNestedConvertibleFunctions.set(getKeyFromNode(arg as FunctionLikeDeclaration), true);
+                /* falls through */
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.Identifier: // identifier includes undefined
                 return true;
             default:
                 return false;
         }
+    }
+
+    function getKeyFromNode(exp: FunctionLikeDeclaration) {
+        return `${exp.pos.toString()}:${exp.end.toString()}`;
     }
 }

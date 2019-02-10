@@ -39,16 +39,21 @@ namespace ts {
     }
 
     /*@internal*/
+    export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
+        const outPath = options.outFile || options.out!;
+        const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
+        const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
+        const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
+        const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+        const bundleInfoPath = options.references && jsFilePath ? (removeFileExtension(jsFilePath) + infoExtension) : undefined;
+        return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
+    }
+
+    /*@internal*/
     export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean): EmitFileNames {
         const options = host.getCompilerOptions();
         if (sourceFile.kind === SyntaxKind.Bundle) {
-            const outPath = options.outFile || options.out!;
-            const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
-            const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
-            const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
-            const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-            const bundleInfoPath = options.references && jsFilePath ? (removeFileExtension(jsFilePath) + infoExtension) : undefined;
-            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
+            return getOutputPathsForBundle(options, forceDtsPaths);
         }
         else {
             const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
@@ -2561,6 +2566,7 @@ namespace ts {
         function emitJsxSelfClosingElement(node: JsxSelfClosingElement) {
             writePunctuation("<");
             emitJsxTagName(node.tagName);
+            emitTypeArguments(node, node.typeArguments);
             writeSpace();
             emit(node.attributes);
             writePunctuation("/>");
@@ -2577,6 +2583,7 @@ namespace ts {
 
             if (isJsxOpeningElement(node)) {
                 emitJsxTagName(node.tagName);
+                emitTypeArguments(node, node.typeArguments);
                 if (node.attributes.properties && node.attributes.properties.length > 0) {
                     writeSpace();
                 }
@@ -4370,10 +4377,10 @@ namespace ts {
         }
 
         /**
-         * Skips trivia such as comments and white-space that can optionally overriden by the source map source
+         * Skips trivia such as comments and white-space that can be optionally overridden by the source-map source
          */
         function skipSourceTrivia(source: SourceMapSource, pos: number): number {
-            return source.skipTrivia ? source.skipTrivia(pos) : skipTrivia(sourceMapSource.text, pos);
+            return source.skipTrivia ? source.skipTrivia(pos) : skipTrivia(source.text, pos);
         }
 
         /**
@@ -4389,7 +4396,7 @@ namespace ts {
                 return;
             }
 
-            const { line: sourceLine, character: sourceCharacter } = getLineAndCharacterOfPosition(currentSourceFile!, pos);
+            const { line: sourceLine, character: sourceCharacter } = getLineAndCharacterOfPosition(sourceMapSource, pos);
             sourceMapGenerator!.addMapping(
                 writer.getLine(),
                 writer.getColumn(),

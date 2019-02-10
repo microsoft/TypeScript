@@ -4,7 +4,7 @@ import child_process = require("child_process");
 
 type Author = {
     displayNames: string[];
-    preferedName?: string;
+    preferredName?: string;
     emails: string[];
 };
 
@@ -20,7 +20,7 @@ const authorsPath = path.resolve("../AUTHORS.md");
 
 function getKnownAuthors(): Author[] {
     const segmentRegExp = /\s?([^<]+)\s+<([^>]+)>/g;
-    const preferedNameRegeExp = /\s?#\s?([^#]+)$/;
+    const preferredNameRegeExp = /\s?#\s?([^#]+)$/;
     const knownAuthors: Author[] = [];
 
     if (!fs.existsSync(mailMapPath)) {
@@ -37,13 +37,13 @@ function getKnownAuthors(): Author[] {
             author.displayNames.push(match[1]);
             author.emails.push(match[2]);
         }
-        if (match = preferedNameRegeExp.exec(line)) {
-            author.preferedName = match[1];
+        if (match = preferredNameRegeExp.exec(line)) {
+            author.preferredName = match[1];
         }
         if (!author.emails) continue;
         knownAuthors.push(author);
-        if (line.indexOf("#") > 0 && !author.preferedName) {
-            throw new Error("Could not match prefered name for: " + line);
+        if (line.indexOf("#") > 0 && !author.preferredName) {
+            throw new Error("Could not match preferred name for: " + line);
         }
         // console.log("===> line: " + line);
         // console.log(JSON.stringify(author, undefined, 2));
@@ -52,7 +52,7 @@ function getKnownAuthors(): Author[] {
 }
 
 function getAuthorName(author: Author) {
-    return author.preferedName || author.displayNames[0];
+    return author.preferredName || author.displayNames[0];
 }
 
 function getKnownAuthorMaps() {

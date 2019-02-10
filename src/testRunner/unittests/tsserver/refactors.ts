@@ -116,5 +116,40 @@ namespace ts.projectSystem {
                 renameLocation: undefined,
             });
         });
+
+        it("handles canonicalization of tsconfig path", () => {
+            const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
+            const tsconfig: File = { path: "/Foo/tsconfig.json", content: '{ "files": ["./a.ts"] }' };
+            const session = createSession(createServerHost([aTs, tsconfig]));
+            openFilesForSession([aTs], session);
+
+            const result = executeSessionRequest<protocol.GetEditsForRefactorRequest, protocol.GetEditsForRefactorResponse>(session, protocol.CommandTypes.GetEditsForRefactor, {
+                file: aTs.path,
+                startLine: 1,
+                startOffset: 1,
+                endLine: 2,
+                endOffset: aTs.content.length,
+                refactor: "Move to a new file",
+                action: "Move to a new file",
+            });
+            assert.deepEqual<protocol.RefactorEditInfo | undefined>(result, {
+                edits: [
+                    {
+                        fileName: aTs.path,
+                        textChanges: [{ start: { line: 1, offset: 1 }, end: { line: 1, offset: aTs.content.length + 1 }, newText: "" }],
+                    },
+                    {
+                        fileName: tsconfig.path,
+                        textChanges: [{ start: { line: 1, offset: 21 }, end: { line: 1, offset: 21 }, newText: ', "./x.ts"' }],
+                    },
+                    {
+                        fileName: "/Foo/x.ts",
+                        textChanges: [{ start: { line: 0, offset: 0 }, end: { line: 0, offset: 0 }, newText: "const x = 0;\n" }],
+                    },
+                ],
+                renameFilename: undefined,
+                renameLocation: undefined,
+            });
+        });
     });
 }

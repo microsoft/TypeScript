@@ -1,5 +1,5 @@
 {
-    "extends": "../tsconfig-base",
+    "extends": "../tsconfig-noncomposite-base",
     "compilerOptions": {
         "outFile": "../../built/local/run.js",
         "composite": false,
@@ -43,6 +43,7 @@
         "unittests/asserts.ts",
         "unittests/base64.ts",
         "unittests/builder.ts",
+        "unittests/comments.ts",
         "unittests/compilerCore.ts",
         "unittests/convertToBase64.ts",
         "unittests/customTransforms.ts",
@@ -57,6 +58,7 @@
         "unittests/publicApi.ts",
         "unittests/reuseProgramStructure.ts",
         "unittests/semver.ts",
+        "unittests/shimMap.ts",
         "unittests/transform.ts",
         "unittests/tsbuild.ts",
         "unittests/tsbuildWatchMode.ts",
@@ -89,6 +91,7 @@
         "unittests/services/transpile.ts",
         "unittests/tscWatch/consoleClearing.ts",
         "unittests/tscWatch/emit.ts",
+        "unittests/tscWatch/emitAndErrorUpdates.ts",
         "unittests/tscWatch/programUpdates.ts",
         "unittests/tscWatch/resolutionCache.ts",
         "unittests/tscWatch/watchEnvironment.ts",

@@ -28,12 +28,12 @@ namespace ts.OrganizeImports {
         organizeImportsWorker(topLevelExportDecls, coalesceExports);
 
         for (const ambientModule of sourceFile.statements.filter(isAmbientModule)) {
-            const ambientModuleBody = getModuleBlock(ambientModule as ModuleDeclaration)!; // TODO: GH#18217
+            if (!ambientModule.body) { continue; }
 
-            const ambientModuleImportDecls = ambientModuleBody.statements.filter(isImportDeclaration);
+            const ambientModuleImportDecls = ambientModule.body.statements.filter(isImportDeclaration);
             organizeImportsWorker(ambientModuleImportDecls, coalesceAndOrganizeImports);
 
-            const ambientModuleExportDecls = ambientModuleBody.statements.filter(isExportDeclaration);
+            const ambientModuleExportDecls = ambientModule.body.statements.filter(isExportDeclaration);
             organizeImportsWorker(ambientModuleExportDecls, coalesceExports);
         }
 
@@ -81,14 +81,9 @@ namespace ts.OrganizeImports {
         }
     }
 
-    function getModuleBlock(moduleDecl: ModuleDeclaration): ModuleBlock | undefined {
-        const body = moduleDecl.body;
-        return body && !isIdentifier(body) ? (isModuleBlock(body) ? body : getModuleBlock(body)) : undefined;
-    }
-
     function removeUnusedImports(oldImports: ReadonlyArray<ImportDeclaration>, sourceFile: SourceFile, program: Program) {
         const typeChecker = program.getTypeChecker();
-        const jsxNamespace = typeChecker.getJsxNamespace();
+        const jsxNamespace = typeChecker.getJsxNamespace(sourceFile);
         const jsxElementsPresent = !!(sourceFile.transformFlags & TransformFlags.ContainsJsx);
 
         const usedImports: ImportDeclaration[] = [];

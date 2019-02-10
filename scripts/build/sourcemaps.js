@@ -1,12 +1,13 @@
 // @ts-check
+/// <reference path="../types/ambient.d.ts" />
+
 const path = require("path");
-const Vinyl = require("./vinyl");
 const convertMap = require("convert-source-map");
 const applySourceMap = require("vinyl-sourcemaps-apply");
 const through2 = require("through2");
 
 /**
- * @param {Vinyl} input
+ * @param {import("vinyl")} input
  * @param {string | Buffer} contents
  * @param {string | RawSourceMap} [sourceMap]
  */
@@ -16,13 +17,13 @@ function replaceContents(input, contents, sourceMap) {
     if (input.sourceMap) {
         output.sourceMap = typeof input.sourceMap === "string" ? /**@type {RawSourceMap}*/(JSON.parse(input.sourceMap)) : input.sourceMap;
         if (typeof sourceMap === "string") {
-            sourceMap = /**@type {RawSourceMap}*/(JSON.parse(sourceMap));
+            sourceMap = /** @type {RawSourceMap} */(JSON.parse(sourceMap));
         }
         else if (sourceMap === undefined) {
             const stringContents = typeof contents === "string" ? contents : contents.toString("utf8");
             const newSourceMapConverter = convertMap.fromSource(stringContents);
             if (newSourceMapConverter) {
-                sourceMap = /**@type {RawSourceMap}*/(newSourceMapConverter.toObject());
+                sourceMap = /** @type {RawSourceMap} */(newSourceMapConverter.toObject());
                 output.contents = new Buffer(convertMap.removeMapFileComments(stringContents), "utf8");
             }
         }
@@ -31,7 +32,7 @@ function replaceContents(input, contents, sourceMap) {
             const base = input.base || cwd;
             const sourceRoot = output.sourceMap.sourceRoot;
             makeAbsoluteSourceMap(cwd, base, output.sourceMap);
-            makeAbsoluteSourceMap(cwd, base, sourceMap);
+            makeAbsoluteSourceMap(cwd, base, /** @type {RawSourceMap} */(sourceMap));
             applySourceMap(output, sourceMap);
             makeRelativeSourceMap(cwd, base, sourceRoot, output.sourceMap);
         }
@@ -44,10 +45,12 @@ function replaceContents(input, contents, sourceMap) {
 exports.replaceContents = replaceContents;
 
 function removeSourceMaps() {
-    return through2.obj((/**@type {Vinyl}*/file, _, cb) => {
-        if (file.sourceMap && file.isBuffer()) {
+    return through2.obj((/**@type {import("vinyl")}*/file, _, cb) => {
+        if (file.isBuffer()) {
             file.contents = Buffer.from(convertMap.removeMapFileComments(file.contents.toString("utf8")), "utf8");
-            file.sourceMap = undefined;
+            if (file.sourceMap) {
+                file.sourceMap = undefined;
+            }
         }
         cb(null, file);
     });
@@ -59,7 +62,7 @@ exports.removeSourceMaps = removeSourceMaps;
  * @param {string | undefined} base
  * @param {RawSourceMap} sourceMap
  *
- * @typedef RawSourceMap
+ * @typedef {object} RawSourceMap
  * @property {string} version
  * @property {string} file
  * @property {string} [sourceRoot]

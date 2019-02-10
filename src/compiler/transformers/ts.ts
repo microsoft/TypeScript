@@ -101,7 +101,7 @@ namespace ts {
         function transformBundle(node: Bundle) {
             return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
                 if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend.javascriptText, prepend.javascriptMapPath, prepend.javascriptMapText);
+                    return createUnparsedSourceFile(prepend, "js");
                 }
                 return prepend;
             }));
@@ -1898,6 +1898,7 @@ namespace ts {
                         case SyntaxKind.StringLiteral:
                             return createIdentifier("String");
 
+                        case SyntaxKind.PrefixUnaryExpression:
                         case SyntaxKind.NumericLiteral:
                             return createIdentifier("Number");
 
@@ -1933,8 +1934,13 @@ namespace ts {
                 case SyntaxKind.ConditionalType:
                     return serializeTypeList([(<ConditionalTypeNode>node).trueType, (<ConditionalTypeNode>node).falseType]);
 
-                case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
+                    if ((<TypeOperatorNode>node).operator === SyntaxKind.ReadonlyKeyword) {
+                        return serializeTypeNode((<TypeOperatorNode>node).type);
+                    }
+                    break;
+
+                case SyntaxKind.TypeQuery:
                 case SyntaxKind.IndexedAccessType:
                 case SyntaxKind.MappedType:
                 case SyntaxKind.TypeLiteral:
