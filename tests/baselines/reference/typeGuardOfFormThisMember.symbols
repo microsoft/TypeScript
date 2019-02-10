@@ -32,7 +32,7 @@ namespace Test {
 >this : Symbol(FileSystemObject, Decl(typeGuardOfFormThisMember.ts, 1, 16))
 >Directory : Symbol(Directory, Decl(typeGuardOfFormThisMember.ts, 19, 2))
 		}
-		isNetworked: this is (Networked & this);
+		isNetworked: this is Networked;
 >isNetworked : Symbol(FileSystemObject.isNetworked, Decl(typeGuardOfFormThisMember.ts, 12, 3))
 >Networked : Symbol(Networked, Decl(typeGuardOfFormThisMember.ts, 22, 2))
 

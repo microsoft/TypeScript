@@ -31,7 +31,7 @@ namespace Test {
 >this : this
 >Directory : typeof Directory
 		}
-		isNetworked: this is (Networked & this);
+		isNetworked: this is Networked;
 >isNetworked : boolean
 
 		constructor(public path: string) {}

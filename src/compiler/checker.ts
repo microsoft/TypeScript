@@ -11722,7 +11722,10 @@ namespace ts {
                 }
             }
 
-            const related = compareTypes(source.type, target.type, reportErrors);
+            let related = compareTypes(source.type, target.type, reportErrors);
+            if (related) {
+                related &= compareTypes(target.type, source.type, reportErrors);
+            }
             if (related === Ternary.False && reportErrors) {
                 errorReporter!(Diagnostics.Type_predicate_0_is_not_assignable_to_1, typePredicateToString(source), typePredicateToString(target));
             }

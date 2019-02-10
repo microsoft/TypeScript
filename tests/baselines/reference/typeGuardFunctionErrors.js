@@ -50,6 +50,7 @@ function hasNonMathcingGenericType<T>(a: string): a is T[] {
 let a: A;
 let b: B;
 
+declare function isA(p1): p1 is A;
 declare function isB(p1): p1 is B;
 declare function isC(p1): p1 is C;
 declare function funA(p1: any, p2: any): p1 is B;
@@ -71,8 +72,10 @@ if (hasNoTypeGuard(a)) {
 }
 
 // Type predicate type is not assignable
-declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
+declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is A);
 acceptingDifferentSignatureTypeGuardFunction(isC);
+declare function acceptingDifferentSignatureTypeGuardFunction2(p1: (p1) => p1 is C);
+acceptingDifferentSignatureTypeGuardFunction2(isA);
 
 // Boolean not assignable to type guard
 var assign1: (p1, p2) => p1 is A;
@@ -240,6 +243,7 @@ if (hasNoTypeGuard(a)) {
     a.propB;
 }
 acceptingDifferentSignatureTypeGuardFunction(isC);
+acceptingDifferentSignatureTypeGuardFunction2(isA);
 // Boolean not assignable to type guard
 var assign1;
 assign1 = function (p1, p2) {

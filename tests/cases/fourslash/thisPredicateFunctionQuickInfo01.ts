@@ -7,7 +7,7 @@
 ////     /*2*/isDirectory(): this is Directory {
 ////         return this instanceof Directory;
 ////     }
-////     /*3*/isNetworked(): this is (Networked & this) {
+////     /*3*/isNetworked(): this is Networked {
 ////        return !!(this as Networked).host;
 ////     }
 ////     constructor(public path: string) {}
@@ -43,11 +43,11 @@
 verify.quickInfos({
     1: "(method) FileSystemObject.isFile(): this is Item",
     2: "(method) FileSystemObject.isDirectory(): this is Directory",
-    3: "(method) FileSystemObject.isNetworked(): this is Networked & this",
+    3: "(method) FileSystemObject.isNetworked(): this is Networked",
 
     4: "(method) FileSystemObject.isFile(): this is Item",
-    5: "(method) FileSystemObject.isNetworked(): this is Networked & Item",
+    5: "(method) FileSystemObject.isNetworked(): this is Networked",
     6: "(method) FileSystemObject.isDirectory(): this is Directory",
-    7: "(method) FileSystemObject.isNetworked(): this is Networked & Directory",
-    8: "(method) FileSystemObject.isNetworked(): this is Networked & FileSystemObject"
+    7: "(method) FileSystemObject.isNetworked(): this is Networked",
+    8: "(method) FileSystemObject.isNetworked(): this is Networked"
 });

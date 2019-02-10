@@ -75,7 +75,7 @@ namespace ts.DocumentHighlights {
             case SyntaxKind.SetKeyword:
                 return getFromAllDeclarations(isAccessor, [SyntaxKind.GetKeyword, SyntaxKind.SetKeyword]);
             case SyntaxKind.AwaitKeyword:
-                return useParent(node.parent, isAwaitExpression, getAsyncAndAwaitOccurrences);
+                return useParent<AwaitExpression>(node.parent, isAwaitExpression, getAsyncAndAwaitOccurrences);
             case SyntaxKind.AsyncKeyword:
                 return highlightSpans(getAsyncAndAwaitOccurrences(node));
             case SyntaxKind.YieldKeyword:

@@ -34,7 +34,7 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 >hasTypeGuardTypeInsideTypeGuardType : Symbol(hasTypeGuardTypeInsideTypeGuardType, Decl(typeGuardFunctionErrors.ts, 14, 1))
 >x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 16, 45))
 >x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 16, 45))
->is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 97, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -48,7 +48,7 @@ function hasMissingIsKeyword(): x {
 
 function hasMissingParameter(): x is A {
 >hasMissingParameter : Symbol(hasMissingParameter, Decl(typeGuardFunctionErrors.ts, 22, 1))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 140, 3))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 143, 3))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -65,7 +65,7 @@ function hasMissingTypeInTypeGuardType(x): x is {
 function hasNonMatchingParameter(y): x is A {
 >hasNonMatchingParameter : Symbol(hasNonMatchingParameter, Decl(typeGuardFunctionErrors.ts, 30, 1))
 >y : Symbol(y, Decl(typeGuardFunctionErrors.ts, 32, 33))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 140, 3))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 143, 3))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -107,32 +107,38 @@ let b: B;
 >b : Symbol(b, Decl(typeGuardFunctionErrors.ts, 49, 3))
 >B : Symbol(B, Decl(typeGuardFunctionErrors.ts, 2, 1))
 
+declare function isA(p1): p1 is A;
+>isA : Symbol(isA, Decl(typeGuardFunctionErrors.ts, 49, 9))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 51, 21))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 51, 21))
+>A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
+
 declare function isB(p1): p1 is B;
->isB : Symbol(isB, Decl(typeGuardFunctionErrors.ts, 49, 9))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 51, 21))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 51, 21))
+>isB : Symbol(isB, Decl(typeGuardFunctionErrors.ts, 51, 34))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 52, 21))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 52, 21))
 >B : Symbol(B, Decl(typeGuardFunctionErrors.ts, 2, 1))
 
 declare function isC(p1): p1 is C;
->isC : Symbol(isC, Decl(typeGuardFunctionErrors.ts, 51, 34))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 52, 21))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 52, 21))
+>isC : Symbol(isC, Decl(typeGuardFunctionErrors.ts, 52, 34))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 53, 21))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 53, 21))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 
 declare function funA(p1: any, p2: any): p1 is B;
->funA : Symbol(funA, Decl(typeGuardFunctionErrors.ts, 52, 34))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 53, 22))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 53, 30))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 53, 22))
+>funA : Symbol(funA, Decl(typeGuardFunctionErrors.ts, 53, 34))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 54, 22))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 54, 30))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 54, 22))
 >B : Symbol(B, Decl(typeGuardFunctionErrors.ts, 2, 1))
 
 declare function hasNoTypeGuard(x);
->hasNoTypeGuard : Symbol(hasNoTypeGuard, Decl(typeGuardFunctionErrors.ts, 53, 49))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 54, 32))
+>hasNoTypeGuard : Symbol(hasNoTypeGuard, Decl(typeGuardFunctionErrors.ts, 54, 49))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 55, 32))
 
 // Passed argument is not the same as the one being guarded.
 if (isB(b)) {
->isB : Symbol(isB, Decl(typeGuardFunctionErrors.ts, 49, 9))
+>isB : Symbol(isB, Decl(typeGuardFunctionErrors.ts, 51, 34))
 >b : Symbol(b, Decl(typeGuardFunctionErrors.ts, 49, 3))
 
     a.propB;
@@ -141,7 +147,7 @@ if (isB(b)) {
 
 // Parameter index and argument index for the type guard target is not matching.
 if (funA(0, a)) {
->funA : Symbol(funA, Decl(typeGuardFunctionErrors.ts, 52, 34))
+>funA : Symbol(funA, Decl(typeGuardFunctionErrors.ts, 53, 34))
 >a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 48, 3))
 
     a.propB; // Error
@@ -150,7 +156,7 @@ if (funA(0, a)) {
 
 // No type guard in if statement
 if (hasNoTypeGuard(a)) {
->hasNoTypeGuard : Symbol(hasNoTypeGuard, Decl(typeGuardFunctionErrors.ts, 53, 49))
+>hasNoTypeGuard : Symbol(hasNoTypeGuard, Decl(typeGuardFunctionErrors.ts, 54, 49))
 >a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 48, 3))
 
     a.propB;
@@ -158,46 +164,57 @@ if (hasNoTypeGuard(a)) {
 }
 
 // Type predicate type is not assignable
-declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
->acceptingDifferentSignatureTypeGuardFunction : Symbol(acceptingDifferentSignatureTypeGuardFunction, Decl(typeGuardFunctionErrors.ts, 69, 1))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 72, 62))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 72, 67))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 72, 67))
->B : Symbol(B, Decl(typeGuardFunctionErrors.ts, 2, 1))
+declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is A);
+>acceptingDifferentSignatureTypeGuardFunction : Symbol(acceptingDifferentSignatureTypeGuardFunction, Decl(typeGuardFunctionErrors.ts, 70, 1))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 73, 62))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 73, 67))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 73, 67))
+>A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
 acceptingDifferentSignatureTypeGuardFunction(isC);
->acceptingDifferentSignatureTypeGuardFunction : Symbol(acceptingDifferentSignatureTypeGuardFunction, Decl(typeGuardFunctionErrors.ts, 69, 1))
->isC : Symbol(isC, Decl(typeGuardFunctionErrors.ts, 51, 34))
+>acceptingDifferentSignatureTypeGuardFunction : Symbol(acceptingDifferentSignatureTypeGuardFunction, Decl(typeGuardFunctionErrors.ts, 70, 1))
+>isC : Symbol(isC, Decl(typeGuardFunctionErrors.ts, 52, 34))
+
+declare function acceptingDifferentSignatureTypeGuardFunction2(p1: (p1) => p1 is C);
+>acceptingDifferentSignatureTypeGuardFunction2 : Symbol(acceptingDifferentSignatureTypeGuardFunction2, Decl(typeGuardFunctionErrors.ts, 74, 50))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 75, 63))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 75, 68))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 75, 68))
+>C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
+
+acceptingDifferentSignatureTypeGuardFunction2(isA);
+>acceptingDifferentSignatureTypeGuardFunction2 : Symbol(acceptingDifferentSignatureTypeGuardFunction2, Decl(typeGuardFunctionErrors.ts, 74, 50))
+>isA : Symbol(isA, Decl(typeGuardFunctionErrors.ts, 49, 9))
 
 // Boolean not assignable to type guard
 var assign1: (p1, p2) => p1 is A;
->assign1 : Symbol(assign1, Decl(typeGuardFunctionErrors.ts, 76, 3))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 76, 14))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 76, 17))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 76, 14))
+>assign1 : Symbol(assign1, Decl(typeGuardFunctionErrors.ts, 79, 3))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 79, 14))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 79, 17))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 79, 14))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
 assign1 = function(p1, p2): boolean {
->assign1 : Symbol(assign1, Decl(typeGuardFunctionErrors.ts, 76, 3))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 77, 19))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 77, 22))
+>assign1 : Symbol(assign1, Decl(typeGuardFunctionErrors.ts, 79, 3))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 80, 19))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 80, 22))
 
     return true;
 };
 
 // Must have matching parameter index
 var assign2: (p1, p2) => p1 is A;
->assign2 : Symbol(assign2, Decl(typeGuardFunctionErrors.ts, 82, 3))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 82, 14))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 82, 17))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 82, 14))
+>assign2 : Symbol(assign2, Decl(typeGuardFunctionErrors.ts, 85, 3))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 85, 14))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 85, 17))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 85, 14))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
 assign2 = function(p1, p2): p2 is A {
->assign2 : Symbol(assign2, Decl(typeGuardFunctionErrors.ts, 82, 3))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 83, 19))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 83, 22))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 83, 22))
+>assign2 : Symbol(assign2, Decl(typeGuardFunctionErrors.ts, 85, 3))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 86, 19))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 86, 22))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 86, 22))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -205,18 +222,18 @@ assign2 = function(p1, p2): p2 is A {
 
 // No matching signature
 var assign3: (p1, p2) => p1 is A;
->assign3 : Symbol(assign3, Decl(typeGuardFunctionErrors.ts, 88, 3))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 88, 14))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 88, 17))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 88, 14))
+>assign3 : Symbol(assign3, Decl(typeGuardFunctionErrors.ts, 91, 3))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 91, 14))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 91, 17))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 91, 14))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
 assign3 = function(p1, p2, p3): p1 is A {
->assign3 : Symbol(assign3, Decl(typeGuardFunctionErrors.ts, 88, 3))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 89, 19))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 89, 22))
->p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 89, 26))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 89, 19))
+>assign3 : Symbol(assign3, Decl(typeGuardFunctionErrors.ts, 91, 3))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 92, 19))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 92, 22))
+>p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 92, 26))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 92, 19))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -224,20 +241,20 @@ assign3 = function(p1, p2, p3): p1 is A {
 
 // Type predicates in non-return type positions
 var b1: b is A;
->b1 : Symbol(b1, Decl(typeGuardFunctionErrors.ts, 94, 3))
->is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
->A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 94, 12))
+>b1 : Symbol(b1, Decl(typeGuardFunctionErrors.ts, 97, 3))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 97, 9))
+>A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 97, 12))
 
 function b2(a: b is A) {};
->b2 : Symbol(b2, Decl(typeGuardFunctionErrors.ts, 94, 15))
->a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 95, 12))
->is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 95, 16))
->A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 95, 19))
+>b2 : Symbol(b2, Decl(typeGuardFunctionErrors.ts, 97, 15))
+>a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 98, 12))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 98, 16))
+>A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 98, 19))
 
 function b3(): A | b is A {
->b3 : Symbol(b3, Decl(typeGuardFunctionErrors.ts, 95, 26))
+>b3 : Symbol(b3, Decl(typeGuardFunctionErrors.ts, 98, 26))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
->is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 97, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -245,30 +262,30 @@ function b3(): A | b is A {
 
 // Non-compatiable type predicate positions for signature declarations
 class D {
->D : Symbol(D, Decl(typeGuardFunctionErrors.ts, 98, 2))
+>D : Symbol(D, Decl(typeGuardFunctionErrors.ts, 101, 2))
 
     constructor(p1: A): p1 is C {
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 102, 16))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 105, 16))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 102, 16))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 105, 16))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 
         return true;
     }
     get m1(p1: A): p1 is C {
->m1 : Symbol(D.m1, Decl(typeGuardFunctionErrors.ts, 104, 5))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 105, 11))
+>m1 : Symbol(D.m1, Decl(typeGuardFunctionErrors.ts, 107, 5))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 108, 11))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 105, 11))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 108, 11))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 
         return true;
     }
     set m2(p1: A): p1 is C {
->m2 : Symbol(D.m2, Decl(typeGuardFunctionErrors.ts, 107, 5))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 108, 11))
+>m2 : Symbol(D.m2, Decl(typeGuardFunctionErrors.ts, 110, 5))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 111, 11))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 108, 11))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 111, 11))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 
         return true;
@@ -276,29 +293,29 @@ class D {
 }
 
 interface I1 {
->I1 : Symbol(I1, Decl(typeGuardFunctionErrors.ts, 111, 1))
+>I1 : Symbol(I1, Decl(typeGuardFunctionErrors.ts, 114, 1))
 
     new (p1: A): p1 is C;
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 114, 9))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 117, 9))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 114, 9))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 117, 9))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 }
 
 interface I2 {
->I2 : Symbol(I2, Decl(typeGuardFunctionErrors.ts, 115, 1))
+>I2 : Symbol(I2, Decl(typeGuardFunctionErrors.ts, 118, 1))
 
     [index: number]: p1 is C;
->index : Symbol(index, Decl(typeGuardFunctionErrors.ts, 118, 5))
->is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 94, 9))
+>index : Symbol(index, Decl(typeGuardFunctionErrors.ts, 121, 5))
+>is : Symbol(is, Decl(typeGuardFunctionErrors.ts, 97, 9))
 >C : Symbol(C, Decl(typeGuardFunctionErrors.ts, 6, 1))
 }
 
 // Reference to rest parameter
 function b4(...a): a is A {
->b4 : Symbol(b4, Decl(typeGuardFunctionErrors.ts, 119, 1))
->a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 122, 12))
->a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 122, 12))
+>b4 : Symbol(b4, Decl(typeGuardFunctionErrors.ts, 122, 1))
+>a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 125, 12))
+>a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 125, 12))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -306,40 +323,40 @@ function b4(...a): a is A {
 
 // Reference to binding pattern
 function b5({a, b, p1}, p2, p3): p1 is A {
->b5 : Symbol(b5, Decl(typeGuardFunctionErrors.ts, 124, 1))
->a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 127, 13))
->b : Symbol(b, Decl(typeGuardFunctionErrors.ts, 127, 15))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 127, 18))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 127, 23))
->p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 127, 27))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 127, 18))
+>b5 : Symbol(b5, Decl(typeGuardFunctionErrors.ts, 127, 1))
+>a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 130, 13))
+>b : Symbol(b, Decl(typeGuardFunctionErrors.ts, 130, 15))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 130, 18))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 130, 23))
+>p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 130, 27))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 130, 18))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
 }
 
 function b6([a, b, p1], p2, p3): p1 is A {
->b6 : Symbol(b6, Decl(typeGuardFunctionErrors.ts, 129, 1))
->a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 131, 13))
->b : Symbol(b, Decl(typeGuardFunctionErrors.ts, 131, 15))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 131, 18))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 131, 23))
->p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 131, 27))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 131, 18))
+>b6 : Symbol(b6, Decl(typeGuardFunctionErrors.ts, 132, 1))
+>a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 134, 13))
+>b : Symbol(b, Decl(typeGuardFunctionErrors.ts, 134, 15))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 134, 18))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 134, 23))
+>p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 134, 27))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 134, 18))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
 }
 
 function b7({a, b, c: {p1}}, p2, p3): p1 is A {
->b7 : Symbol(b7, Decl(typeGuardFunctionErrors.ts, 133, 1))
->a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 135, 13))
->b : Symbol(b, Decl(typeGuardFunctionErrors.ts, 135, 15))
+>b7 : Symbol(b7, Decl(typeGuardFunctionErrors.ts, 136, 1))
+>a : Symbol(a, Decl(typeGuardFunctionErrors.ts, 138, 13))
+>b : Symbol(b, Decl(typeGuardFunctionErrors.ts, 138, 15))
 >c : Symbol(c)
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 135, 23))
->p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 135, 28))
->p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 135, 32))
->p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 135, 23))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 138, 23))
+>p2 : Symbol(p2, Decl(typeGuardFunctionErrors.ts, 138, 28))
+>p3 : Symbol(p3, Decl(typeGuardFunctionErrors.ts, 138, 32))
+>p1 : Symbol(p1, Decl(typeGuardFunctionErrors.ts, 138, 23))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
     return true;
@@ -347,7 +364,7 @@ function b7({a, b, c: {p1}}, p2, p3): p1 is A {
 
 // Should not crash the compiler
 var x: A;
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 140, 3))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 143, 3))
 >A : Symbol(A, Decl(typeGuardFunctionErrors.ts, 0, 0))
 
 if (hasMissingParameter()) {
@@ -355,83 +372,83 @@ if (hasMissingParameter()) {
 
     x.propA;
 >x.propA : Symbol(A.propA, Decl(typeGuardFunctionErrors.ts, 0, 9))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 140, 3))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 143, 3))
 >propA : Symbol(A.propA, Decl(typeGuardFunctionErrors.ts, 0, 9))
 }
 
 // repro #17297
 
 type Keys = 'a'|'b'|'c'
->Keys : Symbol(Keys, Decl(typeGuardFunctionErrors.ts, 143, 1))
+>Keys : Symbol(Keys, Decl(typeGuardFunctionErrors.ts, 146, 1))
 
 type KeySet<T extends Keys> = { [k in T]: true }
->KeySet : Symbol(KeySet, Decl(typeGuardFunctionErrors.ts, 147, 23))
->T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 148, 12))
->Keys : Symbol(Keys, Decl(typeGuardFunctionErrors.ts, 143, 1))
->k : Symbol(k, Decl(typeGuardFunctionErrors.ts, 148, 33))
->T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 148, 12))
+>KeySet : Symbol(KeySet, Decl(typeGuardFunctionErrors.ts, 150, 23))
+>T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 151, 12))
+>Keys : Symbol(Keys, Decl(typeGuardFunctionErrors.ts, 146, 1))
+>k : Symbol(k, Decl(typeGuardFunctionErrors.ts, 151, 33))
+>T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 151, 12))
 
 // expected an error, since Keys doesn't have a 'd'
 declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
->hasKey : Symbol(hasKey, Decl(typeGuardFunctionErrors.ts, 148, 48))
->T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 151, 24))
->Keys : Symbol(Keys, Decl(typeGuardFunctionErrors.ts, 143, 1))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 151, 40))
->KeySet : Symbol(KeySet, Decl(typeGuardFunctionErrors.ts, 147, 23))
->T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 151, 24))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 151, 40))
->KeySet : Symbol(KeySet, Decl(typeGuardFunctionErrors.ts, 147, 23))
->T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 151, 24))
+>hasKey : Symbol(hasKey, Decl(typeGuardFunctionErrors.ts, 151, 48))
+>T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 154, 24))
+>Keys : Symbol(Keys, Decl(typeGuardFunctionErrors.ts, 146, 1))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 154, 40))
+>KeySet : Symbol(KeySet, Decl(typeGuardFunctionErrors.ts, 150, 23))
+>T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 154, 24))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 154, 40))
+>KeySet : Symbol(KeySet, Decl(typeGuardFunctionErrors.ts, 150, 23))
+>T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 154, 24))
 
 type Foo = { 'a': string; }
->Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
->'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 153, 12))
+>Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 154, 74))
+>'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 156, 12))
 
 type Bar = { 'a': number; }
->Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
->'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 154, 12))
+>Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 156, 27))
+>'a' : Symbol('a', Decl(typeGuardFunctionErrors.ts, 157, 12))
 
 interface NeedsFoo<T extends Foo> {
->NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
->T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 156, 19))
->Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 151, 74))
+>NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 157, 27))
+>T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 159, 19))
+>Foo : Symbol(Foo, Decl(typeGuardFunctionErrors.ts, 154, 74))
 
     foo: T;
->foo : Symbol(NeedsFoo.foo, Decl(typeGuardFunctionErrors.ts, 156, 35))
->T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 156, 19))
+>foo : Symbol(NeedsFoo.foo, Decl(typeGuardFunctionErrors.ts, 159, 35))
+>T : Symbol(T, Decl(typeGuardFunctionErrors.ts, 159, 19))
 
     isFoo(): this is NeedsFoo<Bar>; // should error
->isFoo : Symbol(NeedsFoo.isFoo, Decl(typeGuardFunctionErrors.ts, 157, 11))
->NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
->Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
+>isFoo : Symbol(NeedsFoo.isFoo, Decl(typeGuardFunctionErrors.ts, 160, 11))
+>NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 157, 27))
+>Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 156, 27))
 
 };
 
 declare var anError: NeedsFoo<Bar>; // error, as expected
->anError : Symbol(anError, Decl(typeGuardFunctionErrors.ts, 161, 11))
->NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
->Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
+>anError : Symbol(anError, Decl(typeGuardFunctionErrors.ts, 164, 11))
+>NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 157, 27))
+>Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 156, 27))
 
 declare var alsoAnError: NeedsFoo<number>; // also error, as expected
->alsoAnError : Symbol(alsoAnError, Decl(typeGuardFunctionErrors.ts, 162, 11))
->NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
+>alsoAnError : Symbol(alsoAnError, Decl(typeGuardFunctionErrors.ts, 165, 11))
+>NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 157, 27))
 
 declare function newError1(x: any): x is NeedsFoo<Bar>; // should error
->newError1 : Symbol(newError1, Decl(typeGuardFunctionErrors.ts, 162, 42))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 163, 27))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 163, 27))
->NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
->Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 153, 27))
+>newError1 : Symbol(newError1, Decl(typeGuardFunctionErrors.ts, 165, 42))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 166, 27))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 166, 27))
+>NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 157, 27))
+>Bar : Symbol(Bar, Decl(typeGuardFunctionErrors.ts, 156, 27))
 
 declare function newError2(x: any): x is NeedsFoo<number>; // should error
->newError2 : Symbol(newError2, Decl(typeGuardFunctionErrors.ts, 163, 55))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 164, 27))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 164, 27))
->NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
+>newError2 : Symbol(newError2, Decl(typeGuardFunctionErrors.ts, 166, 55))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 167, 27))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 167, 27))
+>NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 157, 27))
 
 declare function newError3(x: number): x is NeedsFoo<number>; // should error
->newError3 : Symbol(newError3, Decl(typeGuardFunctionErrors.ts, 164, 58))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 165, 27))
->x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 165, 27))
->NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 154, 27))
+>newError3 : Symbol(newError3, Decl(typeGuardFunctionErrors.ts, 167, 58))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 168, 27))
+>x : Symbol(x, Decl(typeGuardFunctionErrors.ts, 168, 27))
+>NeedsFoo : Symbol(NeedsFoo, Decl(typeGuardFunctionErrors.ts, 157, 27))
 

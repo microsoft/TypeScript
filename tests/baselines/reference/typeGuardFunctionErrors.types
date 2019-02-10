@@ -99,6 +99,10 @@ let a: A;
 let b: B;
 >b : B
 
+declare function isA(p1): p1 is A;
+>isA : (p1: any) => p1 is A
+>p1 : any
+
 declare function isB(p1): p1 is B;
 >isB : (p1: any) => p1 is B
 >p1 : any
@@ -154,15 +158,25 @@ if (hasNoTypeGuard(a)) {
 }
 
 // Type predicate type is not assignable
-declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
->acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
->p1 : (p1: any) => p1 is B
+declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is A);
+>acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is A) => any
+>p1 : (p1: any) => p1 is A
 >p1 : any
 
 acceptingDifferentSignatureTypeGuardFunction(isC);
 >acceptingDifferentSignatureTypeGuardFunction(isC) : any
->acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
+>acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is A) => any
 >isC : (p1: any) => p1 is C
+
+declare function acceptingDifferentSignatureTypeGuardFunction2(p1: (p1) => p1 is C);
+>acceptingDifferentSignatureTypeGuardFunction2 : (p1: (p1: any) => p1 is C) => any
+>p1 : (p1: any) => p1 is C
+>p1 : any
+
+acceptingDifferentSignatureTypeGuardFunction2(isA);
+>acceptingDifferentSignatureTypeGuardFunction2(isA) : any
+>acceptingDifferentSignatureTypeGuardFunction2 : (p1: (p1: any) => p1 is C) => any
+>isA : (p1: any) => p1 is A
 
 // Boolean not assignable to type guard
 var assign1: (p1, p2) => p1 is A;

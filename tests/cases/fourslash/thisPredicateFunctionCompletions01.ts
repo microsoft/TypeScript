@@ -7,7 +7,7 @@
 ////     isDirectory(): this is Directory {
 ////         return this instanceof Directory;
 ////     }
-////     isNetworked(): this is (Networked & this) {
+////     isNetworked(): this is Networked {
 ////        return !!(this as Networked).host;
 ////     }
 ////     constructor(public path: string) {}
@@ -43,8 +43,8 @@
 const common: ReadonlyArray<string> = ["isFile", "isDirectory", "isNetworked", "path"];
 verify.completions(
     { marker: "1", exact: ["content", ...common] },
-    { marker: "2", exact: ["host", "content", ...common] },
+    { marker: "2", exact: ["content", ...common, "host"] },
     { marker: "3", exact: ["children", ...common] },
-    { marker: "4", exact: ["host", "children", ...common] },
-    { marker: "5", exact: ["host", ...common] },
+    { marker: "4", exact: ["children", ...common, "host"] },
+    { marker: "5", exact: [...common, "host"] },
 );

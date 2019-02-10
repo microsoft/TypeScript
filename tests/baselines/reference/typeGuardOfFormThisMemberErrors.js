@@ -12,7 +12,7 @@ namespace Test {
 		get isDirectory(): this is Directory {
 			return this instanceof Directory;
 		}
-		isNetworked: this is (Networked & this);
+		isNetworked: this is Networked;
 		constructor(public path: string) {}
 	}
 
@@ -105,7 +105,7 @@ declare namespace Test {
         isFSO: this is FileSystemObject;
         isFile: this is File;
         readonly isDirectory: this is Directory;
-        isNetworked: this is (Networked & this);
+        isNetworked: this is Networked;
         constructor(path: string);
     }
     class File extends FileSystemObject {
