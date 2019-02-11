@@ -40,16 +40,24 @@ namespace ts.refactor.convertToNamedParameters {
         suppressLeadingAndTrailingTrivia(newFunctionDeclaration, /*recursive*/ false);
         changes.replaceNode(sourceFile, functionDeclaration, newFunctionDeclaration);
 
-        const nameNodes = getFunctionDeclarationNames(functionDeclaration);
-        const functionRefs = flatMap(nameNodes, name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
+        const functionNames = getFunctionDeclarationNames(functionDeclaration);
+        const functionRefs = flatMap(functionNames, name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
         const functionCalls = deduplicate(getDirectFunctionCalls(functionRefs), (a, b) => a === b);
         refactorSucceeded = true; // TODO: check if a bad reference was found
 
         forEach(functionCalls, call => {
             if (call.arguments && call.arguments.length) {
-                const newArguments = getSynthesizedDeepClone(createNewArguments(functionDeclaration, call.arguments), /*includeTrivia*/ true);
-                changes.replaceNodeRange(getSourceFileOfNode(call), first(call.arguments), last(call.arguments), newArguments);
+                const newArgument = getSynthesizedDeepClone(createNewArguments(functionDeclaration, call.arguments), /*includeTrivia*/ true);
+                const newCall = updateCallArguments(call, createNodeArray([newArgument]));
+                suppressLeadingAndTrailingTrivia(newCall, /*recursive*/ false);
+                changes.replaceNode(getSourceFileOfNode(call), call, newCall);
             }});
+    }
+
+    function updateCallArguments(call: CallExpression | NewExpression, args: NodeArray<Expression>) {
+        const newCall = getSynthesizedClone(call);
+        newCall.arguments = args;
+        return updateNode(newCall, call);
     }
 
     function updateDeclarationParameters(declaration: SignatureDeclaration, parameters: NodeArray<ParameterDeclaration>): SignatureDeclaration {
@@ -160,7 +168,12 @@ namespace ts.refactor.convertToNamedParameters {
         const parameters = getRefactorableParameters(functionDeclaration.parameters);
         const hasRestParameter = isRestParameter(last(parameters));
         const nonRestArguments = hasRestParameter ? args.slice(0, parameters.length - 1) : args;
-        const properties = map(nonRestArguments, (arg, i) => createPropertyAssignment(getParameterName(parameters[i]), arg));
+        const properties = map(nonRestArguments, (arg, i) => {
+            const property = createPropertyAssignment(getParameterName(parameters[i]), arg);
+            suppressLeadingAndTrailingTrivia(property.initializer);
+            copyComments(arg, property.initializer);
+            return property;
+        });
 
         if (hasRestParameter && args.length >= parameters.length) {
             const restArguments = args.slice(parameters.length - 1);
@@ -168,7 +181,8 @@ namespace ts.refactor.convertToNamedParameters {
             properties.push(restProperty);
         }
 
-        return createObjectLiteral(properties, /*multiLine*/ false);
+        const objectLiteral = createObjectLiteral(properties, /*multiLine*/ false);
+        return objectLiteral;
     }
 
     function createNewParameters(functionDeclaration: ValidFunctionDeclaration, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
@@ -181,6 +195,12 @@ namespace ts.refactor.convertToNamedParameters {
                     /*propertyName*/ undefined,
                     getParameterName(paramDecl),
                     isRestParameter(paramDecl) ? createArrayLiteral() : paramDecl.initializer);
+
+                suppressLeadingAndTrailingTrivia(element);
+                if (paramDecl.initializer && element.initializer) {
+                    copyComments(paramDecl.initializer, element.initializer);
+                }
+
                 return element; });
         const paramName = createObjectBindingPattern(bindingElements);
         const paramType = createParamTypeNode(refactorableParameters);
@@ -200,13 +220,29 @@ namespace ts.refactor.convertToNamedParameters {
             objectInitializer);
 
         if (hasThisParameter(functionDeclaration.parameters)) {
-            return createNodeArray([functionDeclaration.parameters[0], newParameter]);
+            const thisParam = functionDeclaration.parameters[0];
+            const newThis = createParameter(
+                /*decorators*/ undefined,
+                /*modifiers*/ undefined,
+                /*dotDotDotToken*/ undefined,
+                thisParam.name,
+                /*questionToken*/ undefined,
+                thisParam.type);
+
+            suppressLeadingAndTrailingTrivia(newThis.name);
+            copyComments(thisParam.name, newThis.name);
+            if (thisParam.type && newThis.type) {
+                suppressLeadingAndTrailingTrivia(newThis.type);
+                copyComments(thisParam.type, newThis.type);
+            }
+
+            return createNodeArray([newThis, newParameter]);
         }
         return createNodeArray([newParameter]);
 
         function createParamTypeNode(parameters: NodeArray<ValidParameterDeclaration>): TypeLiteralNode {
             const members = map(parameters, createPropertySignatureFromParameterDeclaration);
-            const typeNode = addEmitFlags(createTypeLiteralNode(members), EmitFlags.SingleLine);
+            const typeNode = addEmitFlags(createTypeLiteralNode(members), EmitFlags.SingleLine); // TODO: add single line option to createTypeLiteralNode
             return typeNode;
         }
 
@@ -216,18 +252,47 @@ namespace ts.refactor.convertToNamedParameters {
                 paramType = getTypeNode(paramDeclaration);
             }
 
-            return createPropertySignature(
+            const propertySignature = createPropertySignature(
                 /*modifiers*/ undefined,
                 getParameterName(paramDeclaration),
                 paramDeclaration.initializer || isRestParameter(paramDeclaration) ? createToken(SyntaxKind.QuestionToken) : paramDeclaration.questionToken,
                 paramType,
                 /*initializer*/ undefined);
+
+            suppressLeadingAndTrailingTrivia(propertySignature);
+            copyComments(paramDeclaration.name, propertySignature.name);
+            if (paramDeclaration.type && propertySignature.type) {
+                copyComments(paramDeclaration.type, propertySignature.type);
+            }
+
+            return propertySignature;
         }
 
         function getTypeNode(node: Node): TypeNode | undefined {
             const checker = program.getTypeChecker();
             const type = checker.getTypeAtLocation(node);
             return getTypeNodeIfAccessible(type, node, program, host);
+        }
+    }
+
+    function copyComments(sourceNode: Node, targetNode: Node) {
+        const sourceFile = sourceNode.getSourceFile();
+        const text = sourceFile.text;
+        if (hasLeadingLineBreak(sourceNode, text)) {
+            copyLeadingComments(sourceNode, targetNode, sourceFile);
+        }
+        else {
+            copyTrailingAsLeadingComments(sourceNode, targetNode, sourceFile);
+        }
+        copyTrailingComments(sourceNode, targetNode, sourceFile);
+
+        function hasLeadingLineBreak(node: Node, text: string) {
+            const start = node.getFullStart();
+            const end = node.getStart();
+            for (let i = start; i < end; i++) {
+                if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
+            }
+            return false;
         }
     }
 
