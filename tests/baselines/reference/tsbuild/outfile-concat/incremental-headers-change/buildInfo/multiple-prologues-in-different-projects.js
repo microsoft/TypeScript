@@ -2,70 +2,74 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
-    "sources": {
-      "prologues": [
+    "js": {
+      "sections": [
         {
-          "file": "/src/first/first_PART1.ts",
-          "text": "\"myPrologue5\"",
-          "directives": [
-            {
-              "pos": -1,
-              "end": -1,
-              "expression": {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 29,
+          "kind": "prologue",
+          "data": "myPrologue5"
+        },
+        {
+          "pos": 31,
+          "end": 141,
+          "kind": "text"
+        },
+        {
+          "pos": 141,
+          "end": 181,
+          "kind": "sourceMapUrl"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": "/src/first/first_PART1.ts",
+            "text": "\"myPrologue5\"",
+            "directives": [
+              {
                 "pos": -1,
                 "end": -1,
-                "text": "use strict"
-              }
-            },
-            {
-              "pos": 0,
-              "end": 13,
-              "expression": {
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              },
+              {
                 "pos": 0,
                 "end": 13,
-                "text": "myPrologue5"
+                "expression": {
+                  "pos": 0,
+                  "end": 13,
+                  "text": "myPrologue5"
+                }
               }
-            }
-          ]
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        },
+        {
+          "pos": 157,
+          "end": 199,
+          "kind": "sourceMapUrl"
         }
       ]
-    },
-    "js": [
-      {
-        "pos": 0,
-        "end": 13,
-        "kind": "prologue",
-        "data": "use strict"
-      },
-      {
-        "pos": 15,
-        "end": 29,
-        "kind": "prologue",
-        "data": "myPrologue5"
-      },
-      {
-        "pos": 31,
-        "end": 141,
-        "kind": "text"
-      },
-      {
-        "pos": 141,
-        "end": 181,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 157,
-        "kind": "text"
-      },
-      {
-        "pos": 157,
-        "end": 199,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    }
   }
 }
 
@@ -434,97 +438,82 @@ console.log(s);
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
-    "sources": {
-      "prologues": [
+    "js": {
+      "sections": [
         {
-          "file": "/src/third/third_part1.ts",
-          "text": "",
-          "directives": [
-            {
-              "pos": -1,
-              "end": -1,
-              "expression": {
-                "pos": -1,
-                "end": -1,
-                "text": "use strict"
-              }
-            }
-          ]
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 29,
+          "kind": "prologue",
+          "data": "myPrologue5"
+        },
+        {
+          "pos": 31,
+          "end": 44,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 46,
+          "end": 60,
+          "kind": "prologue",
+          "data": "myPrologue2"
+        },
+        {
+          "pos": 62,
+          "end": 212,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js"
+        },
+        {
+          "pos": 214,
+          "end": 540,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js"
+        },
+        {
+          "pos": 542,
+          "end": 578,
+          "kind": "text"
+        },
+        {
+          "pos": 578,
+          "end": 618,
+          "kind": "sourceMapUrl"
         }
       ]
     },
-    "js": [
-      {
-        "pos": 0,
-        "end": 13,
-        "kind": "prologue",
-        "data": "use strict"
-      },
-      {
-        "pos": 15,
-        "end": 29,
-        "kind": "prologue",
-        "data": "myPrologue5"
-      },
-      {
-        "pos": 31,
-        "end": 44,
-        "kind": "prologue",
-        "data": "myPrologue"
-      },
-      {
-        "pos": 46,
-        "end": 60,
-        "kind": "prologue",
-        "data": "myPrologue2"
-      },
-      {
-        "pos": 62,
-        "end": 212,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.js"
-      },
-      {
-        "pos": 214,
-        "end": 540,
-        "kind": "prepend",
-        "data": "/src/2/second-output.js"
-      },
-      {
-        "pos": 542,
-        "end": 578,
-        "kind": "text"
-      },
-      {
-        "pos": 578,
-        "end": 618,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 199,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.d.ts"
-      },
-      {
-        "pos": 201,
-        "end": 344,
-        "kind": "prepend",
-        "data": "/src/2/second-output.d.ts"
-      },
-      {
-        "pos": 346,
-        "end": 365,
-        "kind": "text"
-      },
-      {
-        "pos": 365,
-        "end": 407,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 199,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts"
+        },
+        {
+          "pos": 201,
+          "end": 344,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts"
+        },
+        {
+          "pos": 346,
+          "end": 365,
+          "kind": "text"
+        },
+        {
+          "pos": 365,
+          "end": 407,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 

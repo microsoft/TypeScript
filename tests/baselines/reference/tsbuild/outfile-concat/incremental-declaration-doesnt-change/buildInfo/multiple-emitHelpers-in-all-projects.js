@@ -2,55 +2,59 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
-    "sources": {
-      "helpers": [
-        "typescript:rest",
-        "typescript:read",
-        "typescript:spread"
-      ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 415,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 417,
+          "end": 921,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 923,
+          "end": 1093,
+          "kind": "emitHelpers",
+          "data": "typescript:spread"
+        },
+        {
+          "pos": 1095,
+          "end": 1551,
+          "kind": "text"
+        },
+        {
+          "pos": 1551,
+          "end": 1591,
+          "kind": "sourceMapUrl"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest",
+          "typescript:read",
+          "typescript:spread"
+        ]
+      }
     },
-    "js": [
-      {
-        "pos": 0,
-        "end": 415,
-        "kind": "emitHelpers",
-        "data": "typescript:rest"
-      },
-      {
-        "pos": 417,
-        "end": 921,
-        "kind": "emitHelpers",
-        "data": "typescript:read"
-      },
-      {
-        "pos": 923,
-        "end": 1093,
-        "kind": "emitHelpers",
-        "data": "typescript:spread"
-      },
-      {
-        "pos": 1095,
-        "end": 1551,
-        "kind": "text"
-      },
-      {
-        "pos": 1551,
-        "end": 1591,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 272,
-        "kind": "text"
-      },
-      {
-        "pos": 272,
-        "end": 314,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 272,
+          "kind": "text"
+        },
+        {
+          "pos": 272,
+          "end": 314,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 
@@ -553,79 +557,76 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
-    "sources": {
-      "helpers": [
-        "typescript:rest",
-        "typescript:read",
-        "typescript:spread"
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 415,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 417,
+          "end": 921,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 923,
+          "end": 1093,
+          "kind": "emitHelpers",
+          "data": "typescript:spread"
+        },
+        {
+          "pos": 1095,
+          "end": 1591,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js"
+        },
+        {
+          "pos": 1593,
+          "end": 2254,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js"
+        },
+        {
+          "pos": 2256,
+          "end": 2621,
+          "kind": "text"
+        },
+        {
+          "pos": 2621,
+          "end": 2661,
+          "kind": "sourceMapUrl"
+        }
       ]
     },
-    "js": [
-      {
-        "pos": 0,
-        "end": 415,
-        "kind": "emitHelpers",
-        "data": "typescript:rest"
-      },
-      {
-        "pos": 417,
-        "end": 921,
-        "kind": "emitHelpers",
-        "data": "typescript:read"
-      },
-      {
-        "pos": 923,
-        "end": 1093,
-        "kind": "emitHelpers",
-        "data": "typescript:spread"
-      },
-      {
-        "pos": 1095,
-        "end": 1591,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.js"
-      },
-      {
-        "pos": 1593,
-        "end": 2254,
-        "kind": "prepend",
-        "data": "/src/2/second-output.js"
-      },
-      {
-        "pos": 2256,
-        "end": 2621,
-        "kind": "text"
-      },
-      {
-        "pos": 2621,
-        "end": 2661,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 314,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.d.ts"
-      },
-      {
-        "pos": 316,
-        "end": 578,
-        "kind": "prepend",
-        "data": "/src/2/second-output.d.ts"
-      },
-      {
-        "pos": 580,
-        "end": 714,
-        "kind": "text"
-      },
-      {
-        "pos": 714,
-        "end": 756,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 314,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts"
+        },
+        {
+          "pos": 316,
+          "end": 578,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts"
+        },
+        {
+          "pos": 580,
+          "end": 714,
+          "kind": "text"
+        },
+        {
+          "pos": 714,
+          "end": 756,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 

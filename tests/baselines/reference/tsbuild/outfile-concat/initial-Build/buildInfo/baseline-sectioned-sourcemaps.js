@@ -2,31 +2,34 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/second/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 285,
-        "kind": "text"
-      },
-      {
-        "pos": 285,
-        "end": 326,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 100,
-        "kind": "text"
-      },
-      {
-        "pos": 100,
-        "end": 143,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 285,
+          "kind": "text"
+        },
+        {
+          "pos": 285,
+          "end": 326,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 100,
+          "kind": "text"
+        },
+        {
+          "pos": 100,
+          "end": 143,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 
@@ -461,31 +464,34 @@ sourceFile:../second/second_part2.ts
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 110,
-        "kind": "text"
-      },
-      {
-        "pos": 110,
-        "end": 150,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 157,
-        "kind": "text"
-      },
-      {
-        "pos": 157,
-        "end": 199,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 110,
+          "kind": "text"
+        },
+        {
+          "pos": 110,
+          "end": 150,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        },
+        {
+          "pos": 157,
+          "end": 199,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 
@@ -827,55 +833,58 @@ sourceFile:../first_part3.ts
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 150,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.js"
-      },
-      {
-        "pos": 152,
-        "end": 478,
-        "kind": "prepend",
-        "data": "/src/2/second-output.js"
-      },
-      {
-        "pos": 480,
-        "end": 516,
-        "kind": "text"
-      },
-      {
-        "pos": 516,
-        "end": 556,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 199,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.d.ts"
-      },
-      {
-        "pos": 201,
-        "end": 344,
-        "kind": "prepend",
-        "data": "/src/2/second-output.d.ts"
-      },
-      {
-        "pos": 346,
-        "end": 365,
-        "kind": "text"
-      },
-      {
-        "pos": 365,
-        "end": 407,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 150,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js"
+        },
+        {
+          "pos": 152,
+          "end": 478,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js"
+        },
+        {
+          "pos": 480,
+          "end": 516,
+          "kind": "text"
+        },
+        {
+          "pos": 516,
+          "end": 556,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 199,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts"
+        },
+        {
+          "pos": 201,
+          "end": 344,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts"
+        },
+        {
+          "pos": 346,
+          "end": 365,
+          "kind": "text"
+        },
+        {
+          "pos": 365,
+          "end": 407,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 

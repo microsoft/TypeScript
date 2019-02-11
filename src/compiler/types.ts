@@ -5573,15 +5573,14 @@ namespace ts {
     /*@internal*/
     export interface BundleFileInfo {
         sections: BundleFileSection[];
-        sources: SourceFileInfo;
+        sources?: SourceFileInfo;
     }
 
     /*@internal*/
     export interface BundleBuildInfo {
-        js?: BundleFileSection[];
-        dts?: BundleFileSection[];
+        js?: BundleFileInfo;
+        dts?: BundleFileInfo;
         commonSourceDirectory: string;
-        sources: SourceFileInfo;
     }
 
     /* @internal */
@@ -5655,7 +5654,7 @@ namespace ts {
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
         /*@internal*/ neverAsciiEscape?: boolean;
-        /*@internal*/ bundleFileInfo?: BundleFileInfo;
+        /*@internal*/ writeBundleFileInfo?: boolean;
     }
 
     /* @internal */

@@ -91,7 +91,7 @@ namespace ts {
 
             const buildInfo = JSON.parse(fs.readFileSync(file, "utf8")) as BuildInfo;
             const bundle = buildInfo.bundle;
-            if (!bundle || (!length(bundle.js) && !length(bundle.dts))) continue;
+            if (!bundle || (!length(bundle.js && bundle.js.sections) && !length(bundle.dts && bundle.dts.sections))) continue;
 
             // Write the baselines:
             const baselineRecorder = new Harness.Compiler.WriterAggregator();
@@ -104,13 +104,13 @@ namespace ts {
         }
     }
 
-    function generateBundleFileSectionInfo(fs: vfs.FileSystem, baselineRecorder: Harness.Compiler.WriterAggregator, sections: BundleFileSection[] | undefined, outFile: string | undefined) {
-        if (!length(sections) && !outFile) return; // Nothing to baseline
+    function generateBundleFileSectionInfo(fs: vfs.FileSystem, baselineRecorder: Harness.Compiler.WriterAggregator, bundleFileInfo: BundleFileInfo | undefined, outFile: string | undefined) {
+        if (!length(bundleFileInfo && bundleFileInfo.sections) && !outFile) return; // Nothing to baseline
 
         const content = outFile && fs.existsSync(outFile) ? fs.readFileSync(outFile, "utf8") : "";
         baselineRecorder.WriteLine("======================================================================");
         baselineRecorder.WriteLine(`File:: ${outFile}`);
-        for (const section of sections || emptyArray) {
+        for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
             baselineRecorder.WriteLine("----------------------------------------------------------------------");
             baselineRecorder.WriteLine(`${section.kind}: (${section.pos}-${section.end})${section.data ? ":: " + section.data : ""}`);
             const textLines = content.substring(section.pos, section.end).split(/\r?\n/);

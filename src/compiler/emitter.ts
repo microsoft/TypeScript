@@ -151,7 +151,7 @@ namespace ts {
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) {
             if (buildInfoPath && sourceFileOrBundle && isBundle(sourceFileOrBundle)) {
-                bundleBuildInfo = { commonSourceDirectory: host.getCommonSourceDirectory(), sources: {} };
+                bundleBuildInfo = { commonSourceDirectory: host.getCommonSourceDirectory() };
             }
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath);
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
@@ -199,7 +199,6 @@ namespace ts {
             // Transform the source files
             const transform = transformNodes(resolver, host, compilerOptions, [sourceFileOrBundle], transformers!, /*allowDtsFiles*/ false);
 
-            if (bundleBuildInfo) bundleBuildInfo.js = [];
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
                 newLine: compilerOptions.newLine,
@@ -210,7 +209,7 @@ namespace ts {
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 inlineSources: compilerOptions.inlineSources,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
-                bundleFileInfo: bundleBuildInfo && { sections: bundleBuildInfo.js!, sources: bundleBuildInfo.sources }
+                writeBundleFileInfo: !!bundleBuildInfo
             };
 
             // Create a printer to print the nodes
@@ -228,6 +227,7 @@ namespace ts {
 
             // Clean up emit nodes on parse tree
             transform.dispose();
+            if (bundleBuildInfo) bundleBuildInfo.js = printer.bundleFileInfo;
         }
 
         function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle | undefined, declarationFilePath: string | undefined, declarationMapPath: string | undefined) {
@@ -250,7 +250,6 @@ namespace ts {
                 }
             }
 
-            if (bundleBuildInfo) bundleBuildInfo.dts = [];
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
                 newLine: compilerOptions.newLine,
@@ -261,7 +260,7 @@ namespace ts {
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
-                bundleFileInfo: bundleBuildInfo && { sections: bundleBuildInfo.dts!, sources: bundleBuildInfo.sources },
+                writeBundleFileInfo: !!bundleBuildInfo
             };
 
             const declarationPrinter = createPrinter(printerOptions, {
@@ -295,6 +294,7 @@ namespace ts {
                 }
             }
             declarationTransform.dispose();
+            if (bundleBuildInfo) bundleBuildInfo.dts = declarationPrinter.bundleFileInfo;
         }
 
         function collectLinkedAliases(node: Node) {
@@ -503,8 +503,8 @@ namespace ts {
         getNewLine(): string;
     }
 
-    function createSourceFilesForPrologues(bundle: BundleBuildInfo): ReadonlyArray<SourceFile> {
-        return map(bundle.sources.prologues, prologueInfo => {
+    function createSourceFilesForPrologues(bundle: BundleFileInfo): ReadonlyArray<SourceFile> {
+        return map(bundle.sources && bundle.sources.prologues, prologueInfo => {
             const sourceFile = createNode(SyntaxKind.SourceFile, 0, prologueInfo.text.length) as SourceFile;
             sourceFile.fileName = prologueInfo.file;
             sourceFile.text = prologueInfo.text;
@@ -558,7 +558,7 @@ namespace ts {
         let writeByteOrderMarkBuildInfo = false;
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
         const jsPrepend = createUnparsedJsSourceFile(ownPrependInput);
-        const sourceFilesForJsEmit = createSourceFilesForPrologues(buildInfo.bundle);
+        const sourceFilesForJsEmit = createSourceFilesForPrologues(buildInfo.bundle.js);
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, jsPrepend]),
             getProjectReferences: () => config.projectReferences,
@@ -645,7 +645,7 @@ namespace ts {
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
         let write = writeBase;
         let isOwnFileEmit: boolean;
-        const bundleFileInfo = printerOptions.bundleFileInfo;
+        const bundleFileInfo = printerOptions.writeBundleFileInfo ? { sections: [] } as BundleFileInfo : undefined;
 
         // Source Maps
         let sourceMapsDisabled = true;
@@ -777,11 +777,17 @@ namespace ts {
                     bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
                     // Store prologues
                     const prologues = getPrologueDirectivesFromBundledSourceFiles(bundle);
-                    if (prologues) bundleFileInfo.sources.prologues = prologues;
+                    if (prologues) {
+                        if (!bundleFileInfo.sources) bundleFileInfo.sources = {};
+                        bundleFileInfo.sources.prologues = prologues;
+                    }
 
                     // Store helpes
                     const helpers = getHelpersFromBundledSourceFiles(bundle);
-                    if (helpers) bundleFileInfo.sources.helpers = helpers;
+                    if (helpers) {
+                        if (!bundleFileInfo.sources) bundleFileInfo.sources = {};
+                        bundleFileInfo.sources.helpers = helpers;
+                    }
                 }
                 else {
                     // Ensure we have text section

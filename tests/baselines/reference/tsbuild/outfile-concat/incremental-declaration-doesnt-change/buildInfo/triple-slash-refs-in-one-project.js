@@ -2,31 +2,34 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 127,
-        "kind": "text"
-      },
-      {
-        "pos": 127,
-        "end": 167,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 157,
-        "kind": "text"
-      },
-      {
-        "pos": 157,
-        "end": 199,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 127,
+          "kind": "text"
+        },
+        {
+          "pos": 127,
+          "end": 167,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        },
+        {
+          "pos": 157,
+          "end": 199,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 
@@ -268,61 +271,64 @@ console.log(s);
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 167,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.js"
-      },
-      {
-        "pos": 169,
-        "end": 546,
-        "kind": "prepend",
-        "data": "/src/2/second-output.js"
-      },
-      {
-        "pos": 548,
-        "end": 584,
-        "kind": "text"
-      },
-      {
-        "pos": 584,
-        "end": 624,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 55,
-        "kind": "reference",
-        "data": "../../../second/tripleRef.d.ts"
-      },
-      {
-        "pos": 57,
-        "end": 256,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.d.ts"
-      },
-      {
-        "pos": 258,
-        "end": 455,
-        "kind": "prepend",
-        "data": "/src/2/second-output.d.ts"
-      },
-      {
-        "pos": 457,
-        "end": 476,
-        "kind": "text"
-      },
-      {
-        "pos": 476,
-        "end": 518,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 167,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js"
+        },
+        {
+          "pos": 169,
+          "end": 546,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js"
+        },
+        {
+          "pos": 548,
+          "end": 584,
+          "kind": "text"
+        },
+        {
+          "pos": 584,
+          "end": 624,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 55,
+          "kind": "reference",
+          "data": "../../../second/tripleRef.d.ts"
+        },
+        {
+          "pos": 57,
+          "end": 256,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts"
+        },
+        {
+          "pos": 258,
+          "end": 455,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts"
+        },
+        {
+          "pos": 457,
+          "end": 476,
+          "kind": "text"
+        },
+        {
+          "pos": 476,
+          "end": 518,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 

@@ -2,37 +2,40 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 175,
-        "kind": "text"
-      },
-      {
-        "pos": 175,
-        "end": 215,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 42,
-        "kind": "reference",
-        "data": "../tripleRef.d.ts"
-      },
-      {
-        "pos": 44,
-        "end": 252,
-        "kind": "text"
-      },
-      {
-        "pos": 252,
-        "end": 294,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 175,
+          "kind": "text"
+        },
+        {
+          "pos": 175,
+          "end": 215,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 42,
+          "kind": "reference",
+          "data": "../tripleRef.d.ts"
+        },
+        {
+          "pos": 44,
+          "end": 252,
+          "kind": "text"
+        },
+        {
+          "pos": 252,
+          "end": 294,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 
@@ -308,73 +311,76 @@ console.log(s);
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 215,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.js"
-      },
-      {
-        "pos": 217,
-        "end": 594,
-        "kind": "prepend",
-        "data": "/src/2/second-output.js"
-      },
-      {
-        "pos": 596,
-        "end": 680,
-        "kind": "text"
-      },
-      {
-        "pos": 680,
-        "end": 720,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 45,
-        "kind": "reference",
-        "data": "../../tripleRef.d.ts"
-      },
-      {
-        "pos": 47,
-        "end": 101,
-        "kind": "reference",
-        "data": "../../../first/tripleRef.d.ts"
-      },
-      {
-        "pos": 103,
-        "end": 158,
-        "kind": "reference",
-        "data": "../../../second/tripleRef.d.ts"
-      },
-      {
-        "pos": 160,
-        "end": 410,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.d.ts"
-      },
-      {
-        "pos": 412,
-        "end": 609,
-        "kind": "prepend",
-        "data": "/src/2/second-output.d.ts"
-      },
-      {
-        "pos": 611,
-        "end": 681,
-        "kind": "text"
-      },
-      {
-        "pos": 681,
-        "end": 723,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 215,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js"
+        },
+        {
+          "pos": 217,
+          "end": 594,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js"
+        },
+        {
+          "pos": 596,
+          "end": 680,
+          "kind": "text"
+        },
+        {
+          "pos": 680,
+          "end": 720,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 45,
+          "kind": "reference",
+          "data": "../../tripleRef.d.ts"
+        },
+        {
+          "pos": 47,
+          "end": 101,
+          "kind": "reference",
+          "data": "../../../first/tripleRef.d.ts"
+        },
+        {
+          "pos": 103,
+          "end": 158,
+          "kind": "reference",
+          "data": "../../../second/tripleRef.d.ts"
+        },
+        {
+          "pos": 160,
+          "end": 410,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts"
+        },
+        {
+          "pos": 412,
+          "end": 609,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts"
+        },
+        {
+          "pos": 611,
+          "end": 681,
+          "kind": "text"
+        },
+        {
+          "pos": 681,
+          "end": 723,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 

@@ -2684,8 +2684,8 @@ namespace ts {
             });
 
             if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
-                const sections = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
-                for (const section of sections || emptyArray) {
+                const bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
+                for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
                     switch (section.kind) {
                         case BundleFileSectionKind.Prologue:
                             (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
@@ -2743,9 +2743,9 @@ namespace ts {
             sourceMapText: { get() { return input.javascriptMapText; } },
         });
 
-        const bundleBuildInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle);
+        const bundleFileInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle && input.buildInfo.bundle.js);
         const texts: UnparsedSourceText[] = [];
-        for (const section of Debug.assertDefined(bundleBuildInfo.js)) {
+        for (const section of bundleFileInfo.sections) {
             switch (section.kind) {
                 case BundleFileSectionKind.Text:
                     texts.push(createUnparsedNode(section, node) as UnparsedSourceText);
@@ -2767,7 +2767,7 @@ namespace ts {
             }
         }
         node.texts = texts;
-        node.helpers = map(bundleBuildInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
+        node.helpers = map(bundleFileInfo.sources && bundleFileInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
         return node;
     }
 
@@ -2782,8 +2782,8 @@ namespace ts {
         node.sourceMapText = input.declarationMapText;
         const mapOfPrepend = arrayToMap(prepends, prepend => prepend.declarationPath!, prepend => createUnparsedSourceFile(prepend, "dts"));
         const texts: UnparsedSourceText[] = [];
-        const bundleBuildInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle);
-        for (const section of Debug.assertDefined(bundleBuildInfo.dts)) {
+        const bundleFileInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle && input.buildInfo.bundle.dts);
+        for (const section of bundleFileInfo.sections) {
             switch (section.kind) {
                 case BundleFileSectionKind.NoDefaultLib:
                 case BundleFileSectionKind.Reference:

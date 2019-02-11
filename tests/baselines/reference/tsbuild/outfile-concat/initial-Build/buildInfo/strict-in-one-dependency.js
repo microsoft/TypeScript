@@ -2,55 +2,59 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/second/",
-    "sources": {
-      "prologues": [
+    "js": {
+      "sections": [
         {
-          "file": "/src/second/second_part1.ts",
-          "text": "",
-          "directives": [
-            {
-              "pos": -1,
-              "end": -1,
-              "expression": {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 300,
+          "kind": "text"
+        },
+        {
+          "pos": 300,
+          "end": 341,
+          "kind": "sourceMapUrl"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": "/src/second/second_part1.ts",
+            "text": "",
+            "directives": [
+              {
                 "pos": -1,
                 "end": -1,
-                "text": "use strict"
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
               }
-            }
-          ]
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 100,
+          "kind": "text"
+        },
+        {
+          "pos": 100,
+          "end": 143,
+          "kind": "sourceMapUrl"
         }
       ]
-    },
-    "js": [
-      {
-        "pos": 0,
-        "end": 13,
-        "kind": "prologue",
-        "data": "use strict"
-      },
-      {
-        "pos": 15,
-        "end": 300,
-        "kind": "text"
-      },
-      {
-        "pos": 300,
-        "end": 341,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 100,
-        "kind": "text"
-      },
-      {
-        "pos": 100,
-        "end": 143,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    }
   }
 }
 
@@ -490,31 +494,34 @@ sourceFile:../second/second_part2.ts
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 110,
-        "kind": "text"
-      },
-      {
-        "pos": 110,
-        "end": 150,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 157,
-        "kind": "text"
-      },
-      {
-        "pos": 157,
-        "end": 199,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 110,
+          "kind": "text"
+        },
+        {
+          "pos": 110,
+          "end": 150,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        },
+        {
+          "pos": 157,
+          "end": 199,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 
@@ -874,61 +881,64 @@ sourceFile:../first_part3.ts
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
-    "sources": {},
-    "js": [
-      {
-        "pos": 0,
-        "end": 13,
-        "kind": "prologue",
-        "data": "use strict"
-      },
-      {
-        "pos": 15,
-        "end": 165,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.js"
-      },
-      {
-        "pos": 167,
-        "end": 493,
-        "kind": "prepend",
-        "data": "/src/2/second-output.js"
-      },
-      {
-        "pos": 495,
-        "end": 531,
-        "kind": "text"
-      },
-      {
-        "pos": 531,
-        "end": 571,
-        "kind": "sourceMapUrl"
-      }
-    ],
-    "dts": [
-      {
-        "pos": 0,
-        "end": 199,
-        "kind": "prepend",
-        "data": "/src/first/bin/first-output.d.ts"
-      },
-      {
-        "pos": 201,
-        "end": 344,
-        "kind": "prepend",
-        "data": "/src/2/second-output.d.ts"
-      },
-      {
-        "pos": 346,
-        "end": 365,
-        "kind": "text"
-      },
-      {
-        "pos": 365,
-        "end": 407,
-        "kind": "sourceMapUrl"
-      }
-    ]
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 165,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js"
+        },
+        {
+          "pos": 167,
+          "end": 493,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js"
+        },
+        {
+          "pos": 495,
+          "end": 531,
+          "kind": "text"
+        },
+        {
+          "pos": 531,
+          "end": 571,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 199,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts"
+        },
+        {
+          "pos": 201,
+          "end": 344,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts"
+        },
+        {
+          "pos": 346,
+          "end": 365,
+          "kind": "text"
+        },
+        {
+          "pos": 365,
+          "end": 407,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
   }
 }
 
