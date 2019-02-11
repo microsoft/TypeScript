@@ -5478,7 +5478,8 @@ namespace ts {
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T> | undefined, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
-        /*@internal*/ writeBundle(bundle: Bundle, bundleFileInfo: BundleFileInfo | undefined, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
+        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
+        /*@internal*/ bundleFileInfo?: BundleFileInfo;
     }
 
     /*@internal*/
@@ -5654,6 +5655,7 @@ namespace ts {
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
         /*@internal*/ neverAsciiEscape?: boolean;
+        /*@internal*/ bundleFileInfo?: BundleFileInfo;
     }
 
     /* @internal */

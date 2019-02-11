@@ -199,6 +199,7 @@ namespace ts {
             // Transform the source files
             const transform = transformNodes(resolver, host, compilerOptions, [sourceFileOrBundle], transformers!, /*allowDtsFiles*/ false);
 
+            if (bundleBuildInfo) bundleBuildInfo.js = [];
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
                 newLine: compilerOptions.newLine,
@@ -209,6 +210,7 @@ namespace ts {
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 inlineSources: compilerOptions.inlineSources,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
+                bundleFileInfo: bundleBuildInfo && { sections: bundleBuildInfo.js!, sources: bundleBuildInfo.sources }
             };
 
             // Create a printer to print the nodes
@@ -222,8 +224,7 @@ namespace ts {
             });
 
             Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
-            if (bundleBuildInfo) bundleBuildInfo.js = [];
-            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleBuildInfo && { sections: bundleBuildInfo.js!, sources: bundleBuildInfo.sources }, printer, compilerOptions);
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], printer, compilerOptions);
 
             // Clean up emit nodes on parse tree
             transform.dispose();
@@ -249,6 +250,7 @@ namespace ts {
                 }
             }
 
+            if (bundleBuildInfo) bundleBuildInfo.dts = [];
             const printerOptions: PrinterOptions = {
                 removeComments: compilerOptions.removeComments,
                 newLine: compilerOptions.newLine,
@@ -259,6 +261,7 @@ namespace ts {
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
+                bundleFileInfo: bundleBuildInfo && { sections: bundleBuildInfo.dts!, sources: bundleBuildInfo.sources },
             };
 
             const declarationPrinter = createPrinter(printerOptions, {
@@ -273,12 +276,10 @@ namespace ts {
             emitSkipped = emitSkipped || declBlocked;
             if (!declBlocked || emitOnlyDtsFiles) {
                 Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
-                if (bundleBuildInfo) bundleBuildInfo.dts = [];
                 printSourceFileOrBundle(
                     declarationFilePath,
                     declarationMapPath,
                     declarationTransform.transformed[0],
-                    bundleBuildInfo && { sections: bundleBuildInfo.dts!, sources: bundleBuildInfo.sources },
                     declarationPrinter,
                     {
                         sourceMap: compilerOptions.declarationMap,
@@ -310,7 +311,7 @@ namespace ts {
             forEachChild(node, collectLinkedAliases);
         }
 
-        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleFileInfo: BundleFileInfo | undefined, printer: Printer, mapOptions: SourceMapOptions) {
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, printer: Printer, mapOptions: SourceMapOptions) {
             const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
             const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
             const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
@@ -326,7 +327,7 @@ namespace ts {
             }
 
             if (bundle) {
-                printer.writeBundle(bundle, bundleFileInfo, writer, sourceMapGenerator);
+                printer.writeBundle(bundle, writer, sourceMapGenerator);
             }
             else {
                 printer.writeFile(sourceFile!, writer, sourceMapGenerator);
@@ -351,7 +352,7 @@ namespace ts {
                     if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
                     const pos = writer.getTextPos();
                     writer.writeComment(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Tools can sometimes see this line as a source mapping url comment
-                    if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.SourceMapUrl });
+                    if (printer.bundleFileInfo) printer.bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.SourceMapUrl });
                 }
 
                 // Write the source map
@@ -644,7 +645,7 @@ namespace ts {
         let ownWriter: EmitTextWriter; // Reusable `EmitTextWriter` for basic printing.
         let write = writeBase;
         let isOwnFileEmit: boolean;
-        let bundleFileInfo: BundleFileInfo | undefined;
+        const bundleFileInfo = printerOptions.bundleFileInfo;
 
         // Source Maps
         let sourceMapsDisabled = true;
@@ -674,7 +675,8 @@ namespace ts {
             writeNode,
             writeList,
             writeFile,
-            writeBundle
+            writeBundle,
+            bundleFileInfo
         };
 
         function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
@@ -704,7 +706,7 @@ namespace ts {
         }
 
         function printBundle(bundle: Bundle): string {
-            writeBundle(bundle, /*bundleInfo*/ undefined, beginPrint(), /*sourceMapEmitter*/ undefined);
+            writeBundle(bundle, beginPrint(), /*sourceMapEmitter*/ undefined);
             return endPrint();
         }
 
@@ -746,9 +748,8 @@ namespace ts {
             return writer.getTextPosWithWriteLine ? writer.getTextPosWithWriteLine() : writer.getTextPos();
         }
 
-        function writeBundle(bundle: Bundle, bundleInfo: BundleFileInfo | undefined, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
+        function writeBundle(bundle: Bundle, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = false;
-            bundleFileInfo = bundleInfo;
             const previousWriter = writer;
             setWriter(output, sourceMapGenerator);
             emitShebangIfNeeded(bundle);
@@ -802,7 +803,6 @@ namespace ts {
 
         function writeFile(sourceFile: SourceFile, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = true;
-            bundleFileInfo = undefined;
             const previousWriter = writer;
             setWriter(output, sourceMapGenerator);
             emitShebangIfNeeded(sourceFile);
@@ -860,7 +860,6 @@ namespace ts {
             currentSourceFile = undefined!;
             currentLineMap = undefined!;
             detachedCommentsInfo = undefined;
-            bundleFileInfo = undefined;
             setWriter(/*output*/ undefined, /*_sourceMapGenerator*/ undefined);
         }
 
