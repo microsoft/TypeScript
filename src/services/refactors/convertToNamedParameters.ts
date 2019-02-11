@@ -142,7 +142,7 @@ namespace ts.refactor.convertToNamedParameters {
         }
 
         function isValidParameterDeclaration(paramDeclaration: ParameterDeclaration): paramDeclaration is ValidParameterDeclaration {
-            return !paramDeclaration.modifiers && isIdentifier(paramDeclaration.name);
+            return !paramDeclaration.modifiers && !paramDeclaration.decorators && isIdentifier(paramDeclaration.name);
         }
     }
 
@@ -361,5 +361,6 @@ namespace ts.refactor.convertToNamedParameters {
     interface ValidParameterDeclaration extends ParameterDeclaration {
         name: Identifier;
         modifiers: undefined;
+        decorators: undefined;
     }
 }
