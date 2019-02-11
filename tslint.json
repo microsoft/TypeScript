@@ -5,6 +5,11 @@
         "no-unnecessary-type-assertion": true,
 
         "array-type": [true, "array"],
+        "ban": [
+            true,
+            "setInterval",
+            "setTimeout"
+        ],
         "ban-types": {
             "options": [
                 ["Object", "Avoid using the `Object` type. Did you mean `object`?"],
