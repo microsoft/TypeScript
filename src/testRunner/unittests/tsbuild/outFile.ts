@@ -523,5 +523,78 @@ const ${file}Const = new ${project}${file}();
                 getTripleSlashRef("second")
             ]
         });
+
+        function disableRemoveComments(fs: vfs.FileSystem, file: string) {
+            replaceText(fs, file, `"removeComments": true`, `"removeComments": false`);
+        }
+
+        function diableRemoveCommentsInAll(fs: vfs.FileSystem) {
+            disableRemoveComments(fs, sources[project.first][source.config]);
+            disableRemoveComments(fs, sources[project.second][source.config]);
+            disableRemoveComments(fs, sources[project.third][source.config]);
+        }
+
+        function stripInternalOfThird(fs: vfs.FileSystem) {
+            replaceText(fs, sources[project.third][source.config], `"declaration": true,`, `"declaration": true,
+"stripInternal": true`);
+        }
+
+        function stripInternalScenario(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
+            const internal = jsDocStyle ? `/**@internal*/` : `/*@internal*/`;
+            if (removeCommentsDisabled) {
+                diableRemoveCommentsInAll(fs);
+            }
+            stripInternalOfThird(fs);
+            replaceText(fs, sources[project.first][source.ts][part.one], "interface", `${internal} interface`);
+            appendText(fs, sources[project.second][source.ts][part.one], `
+class normalC {
+    ${internal} constructor() { }
+    ${internal} prop: string;
+    ${internal} method() { }
+    ${internal} get c() { return 10; }
+    ${internal} set c(val: number) { }
+}
+namespace normalN {
+    ${internal} export class C { }
+    ${internal} export function foo() {}
+    ${internal} export namespace someNamespace { export class C {} }
+    ${internal} export namespace someOther.something { export class someClass {} }
+    ${internal} export import someImport = someNamespace.C;
+    ${internal} export type internalType = internalC;
+    ${internal} export const internalConst = 10;
+    ${internal} export enum internalEnum { a, b, c }
+}
+${internal} class internalC {}
+${internal} function internalfoo() {}
+${internal} namespace internalNamespace { export class someClass {} }
+${internal} namespace internalOther.something { export class someClass {} }
+${internal} import internalImport = internalNamespace.someClass;
+${internal} type internalType = internalC;
+${internal} const internalConst = 10;
+${internal} enum internalEnum { a, b, c }`);
+        }
+
+        verifyOutFileScenario({
+            scenario: "stripInternal",
+            modifyFs: fs => stripInternalScenario(fs),
+            modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface")
+        });
+
+        verifyOutFileScenario({
+            scenario: "stripInternal with comments emit enabled",
+            modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true),
+            modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface")
+        });
+
+        verifyOutFileScenario({
+            scenario: "stripInternal jsdoc style comment",
+            modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
+            modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/**@internal*/ interface`, "interface")
+        });
+
+        verifyOutFileScenario({
+            scenario: "stripInternal jsdoc style with comments emit enabled",
+            modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
+        });
     });
 }
