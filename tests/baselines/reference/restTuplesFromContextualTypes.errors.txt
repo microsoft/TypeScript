@@ -80,3 +80,17 @@ tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts(56,7): error
     (function foo(...rest){}(1, ''));
     take(function(...rest){});
     
+    // Repro from #29833
+    
+    type ArgsUnion = [number, string] | [number, Error];
+    type TupleUnionFunc = (...params: ArgsUnion) => number;
+    
+    const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+      return num;
+    };
+    
+    const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+      const [num, strOrErr] = params;
+      return num;
+    };
+    

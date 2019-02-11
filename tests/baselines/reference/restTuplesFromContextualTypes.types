@@ -389,3 +389,38 @@ take(function(...rest){});
 >function(...rest){} : (a: number, b: string) => void
 >rest : [number, string]
 
+// Repro from #29833
+
+type ArgsUnion = [number, string] | [number, Error];
+>ArgsUnion : ArgsUnion
+
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+>TupleUnionFunc : TupleUnionFunc
+>params : ArgsUnion
+
+const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+>funcUnionTupleNoRest : TupleUnionFunc
+>(num, strOrErr) => {  return num;} : (num: number, strOrErr: string | Error) => number
+>num : number
+>strOrErr : string | Error
+
+  return num;
+>num : number
+
+};
+
+const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+>funcUnionTupleRest : TupleUnionFunc
+>(...params) => {  const [num, strOrErr] = params;  return num;} : (...params: ArgsUnion) => number
+>params : ArgsUnion
+
+  const [num, strOrErr] = params;
+>num : number
+>strOrErr : string | Error
+>params : ArgsUnion
+
+  return num;
+>num : number
+
+};
+

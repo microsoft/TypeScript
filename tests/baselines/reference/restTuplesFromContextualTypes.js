@@ -69,6 +69,20 @@ declare function take(cb: (a: number, b: string) => void): void;
 (function foo(...rest){}(1, ''));
 take(function(...rest){});
 
+// Repro from #29833
+
+type ArgsUnion = [number, string] | [number, Error];
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+
+const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+  return num;
+};
+
+const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+  const [num, strOrErr] = params;
+  return num;
+};
+
 
 //// [restTuplesFromContextualTypes.js]
 "use strict";
@@ -274,6 +288,17 @@ take(function () {
         rest[_i] = arguments[_i];
     }
 });
+var funcUnionTupleNoRest = function (num, strOrErr) {
+    return num;
+};
+var funcUnionTupleRest = function () {
+    var params = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        params[_i] = arguments[_i];
+    }
+    var num = params[0], strOrErr = params[1];
+    return num;
+};
 
 
 //// [restTuplesFromContextualTypes.d.ts]
@@ -286,3 +311,7 @@ declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
 declare function f4<T extends any[]>(t: T): void;
 declare var tuple: [number, string];
 declare function take(cb: (a: number, b: string) => void): void;
+declare type ArgsUnion = [number, string] | [number, Error];
+declare type TupleUnionFunc = (...params: ArgsUnion) => number;
+declare const funcUnionTupleNoRest: TupleUnionFunc;
+declare const funcUnionTupleRest: TupleUnionFunc;
