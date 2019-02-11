@@ -7,7 +7,6 @@ namespace ts.server {
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
     export const ProjectLoadingStartEvent = "projectLoadingStart";
     export const ProjectLoadingFinishEvent = "projectLoadingFinish";
-    export const SurveyReady = "surveyReady";
     export const LargeFileReferencedEvent = "largeFileReferenced";
     export const ConfigFileDiagEvent = "configFileDiag";
     export const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
@@ -28,11 +27,6 @@ namespace ts.server {
     export interface ProjectLoadingFinishEvent {
         eventName: typeof ProjectLoadingFinishEvent;
         data: { project: Project; };
-    }
-
-    export interface SurveyReady {
-        eventName: typeof SurveyReady;
-        data: { surveyId: string; };
     }
 
     export interface LargeFileReferencedEvent {
@@ -146,7 +140,6 @@ namespace ts.server {
     }
 
     export type ProjectServiceEvent = LargeFileReferencedEvent |
-        SurveyReady |
         ProjectsUpdatedInBackgroundEvent |
         ProjectLoadingStartEvent |
         ProjectLoadingFinishEvent |
@@ -518,9 +511,6 @@ namespace ts.server {
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();
 
-        /** Tracks projects that we have already sent survey events for. */
-        private readonly seenSurveyProjects = createMap<true>();
-
         /*@internal*/
         readonly watchFactory: WatchFactory<WatchType, Project>;
 
@@ -720,14 +710,6 @@ namespace ts.server {
                 }
             };
             this.eventHandler(event);
-        }
-
-        /* @internal */
-        sendSurveyReadyEvent(surveyId: string) {
-            if (!this.eventHandler) {
-                return;
-            }
-            this.eventHandler({ eventName: SurveyReady, data: { surveyId } });
         }
 
         /* @internal */
@@ -1609,20 +1591,6 @@ namespace ts.server {
             this.addFilesToNonInferredProject(project, files, externalFilePropertyReader, typeAcquisition);
             this.externalProjects.push(project);
             return project;
-        }
-
-        /*@internal*/
-        sendSurveyReady(project: ExternalProject | ConfiguredProject): void {
-            if (this.seenSurveyProjects.has(project.projectName)) {
-                return;
-            }
-
-            if (project.getCompilerOptions().checkJs !== undefined) {
-                const name = "checkJs";
-                this.logger.info(`Survey ${name} is ready`);
-                this.sendSurveyReadyEvent(name);
-                this.seenSurveyProjects.set(project.projectName, true);
-            }
         }
 
         /*@internal*/

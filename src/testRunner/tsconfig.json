@@ -109,7 +109,6 @@
         "unittests/tsserver/events/projectLanguageServiceState.ts",
         "unittests/tsserver/events/projectLoading.ts",
         "unittests/tsserver/events/projectUpdatedInBackground.ts",
-        "unittests/tsserver/events/surveyReady.ts",
         "unittests/tsserver/externalProjects.ts",
         "unittests/tsserver/forceConsistentCasingInFileNames.ts",
         "unittests/tsserver/formatSettings.ts",

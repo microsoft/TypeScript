@@ -265,3 +265,40 @@ take(function(...rest){});
 >take : Symbol(take, Decl(restTuplesFromContextualTypes.ts, 61, 33))
 >rest : Symbol(rest, Decl(restTuplesFromContextualTypes.ts, 68, 14))
 
+// Repro from #29833
+
+type ArgsUnion = [number, string] | [number, Error];
+>ArgsUnion : Symbol(ArgsUnion, Decl(restTuplesFromContextualTypes.ts, 68, 26))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+>TupleUnionFunc : Symbol(TupleUnionFunc, Decl(restTuplesFromContextualTypes.ts, 72, 52))
+>params : Symbol(params, Decl(restTuplesFromContextualTypes.ts, 73, 23))
+>ArgsUnion : Symbol(ArgsUnion, Decl(restTuplesFromContextualTypes.ts, 68, 26))
+
+const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+>funcUnionTupleNoRest : Symbol(funcUnionTupleNoRest, Decl(restTuplesFromContextualTypes.ts, 75, 5))
+>TupleUnionFunc : Symbol(TupleUnionFunc, Decl(restTuplesFromContextualTypes.ts, 72, 52))
+>num : Symbol(num, Decl(restTuplesFromContextualTypes.ts, 75, 46))
+>strOrErr : Symbol(strOrErr, Decl(restTuplesFromContextualTypes.ts, 75, 50))
+
+  return num;
+>num : Symbol(num, Decl(restTuplesFromContextualTypes.ts, 75, 46))
+
+};
+
+const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+>funcUnionTupleRest : Symbol(funcUnionTupleRest, Decl(restTuplesFromContextualTypes.ts, 79, 5))
+>TupleUnionFunc : Symbol(TupleUnionFunc, Decl(restTuplesFromContextualTypes.ts, 72, 52))
+>params : Symbol(params, Decl(restTuplesFromContextualTypes.ts, 79, 44))
+
+  const [num, strOrErr] = params;
+>num : Symbol(num, Decl(restTuplesFromContextualTypes.ts, 80, 9))
+>strOrErr : Symbol(strOrErr, Decl(restTuplesFromContextualTypes.ts, 80, 13))
+>params : Symbol(params, Decl(restTuplesFromContextualTypes.ts, 79, 44))
+
+  return num;
+>num : Symbol(num, Decl(restTuplesFromContextualTypes.ts, 80, 9))
+
+};
+

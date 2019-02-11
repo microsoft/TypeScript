@@ -12693,10 +12693,11 @@ namespace ts {
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
-                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
-                        // and Y1 is related to Y2.
-                        if (isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
-                            (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
+                        // they have the same distributivity, T1 and T2 are identical types, U1 and U2 are identical
+                        // types, X1 is related to X2, and Y1 is related to Y2.
+                        if ((<ConditionalType>source).root.isDistributive === (<ConditionalType>target).root.isDistributive &&
+                            isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
+                            isTypeIdenticalTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType)) {
                             if (result = isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
                             }
@@ -21539,13 +21540,8 @@ namespace ts {
             }
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
-                if (isTupleType(restType)) {
-                    if (pos - paramCount < getLengthOfTupleType(restType)) {
-                        return restType.typeArguments![pos - paramCount];
-                    }
-                    return getRestTypeOfTupleType(restType);
-                }
-                return getIndexTypeOfType(restType, IndexKind.Number);
+                const indexType = getLiteralType(pos - paramCount);
+                return getIndexedAccessType(restType, indexType);
             }
             return undefined;
         }
@@ -21553,18 +21549,22 @@ namespace ts {
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
             const paramCount = getParameterCount(source);
             const restType = getEffectiveRestType(source);
-            if (restType && pos === paramCount - 1) {
+            const nonRestCount = paramCount - (restType ? 1 : 0);
+            if (restType && pos === nonRestCount) {
                 return restType;
             }
-            const start = restType ? Math.min(pos, paramCount - 1) : pos;
             const types = [];
             const names = [];
-            for (let i = start; i < paramCount; i++) {
+            for (let i = pos; i < nonRestCount; i++) {
                 types.push(getTypeAtPosition(source, i));
                 names.push(getParameterNameAtPosition(source, i));
             }
+            if (restType) {
+                types.push(getIndexedAccessType(restType, numberType));
+                names.push(getParameterNameAtPosition(source, nonRestCount));
+            }
             const minArgumentCount = getMinArgumentCount(source);
-            const minLength = minArgumentCount < start ? 0 : minArgumentCount - start;
+            const minLength = minArgumentCount < pos ? 0 : minArgumentCount - pos;
             return createTupleType(types, minLength, !!restType, /*readonly*/ false, names);
         }
 
