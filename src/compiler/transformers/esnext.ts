@@ -1,7 +1,7 @@
 /*@internal*/
 namespace ts {
     export function transformESNext(context: TransformationContext) {
-        return chainBundle(transformSourceFile);
+        return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {

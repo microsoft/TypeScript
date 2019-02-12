@@ -3,7 +3,7 @@ namespace ts {
     export function transformES2016(context: TransformationContext) {
         const { hoistVariableDeclaration } = context;
 
-        return chainBundle(transformSourceFile);
+        return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {

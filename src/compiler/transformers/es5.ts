@@ -24,7 +24,7 @@ namespace ts {
         context.onSubstituteNode = onSubstituteNode;
         context.enableSubstitution(SyntaxKind.PropertyAccessExpression);
         context.enableSubstitution(SyntaxKind.PropertyAssignment);
-        return chainBundle(transformSourceFile);
+        return transformSourceFile;
 
         /**
          * Transforms an ES5 source file to ES3.

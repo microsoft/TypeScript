@@ -33,7 +33,7 @@ namespace ts {
         /** A set of node IDs for generated super accessors. */
         const substitutedSuperAccessors: boolean[] = [];
 
-        return chainBundle(transformSourceFile);
+        return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {

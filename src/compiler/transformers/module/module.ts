@@ -45,7 +45,7 @@ namespace ts {
         let noSubstitution: boolean[]; // Set of nodes for which substitution rules should be ignored.
         let needUMDDynamicImportHelper: boolean;
 
-        return chainBundle(transformSourceFile);
+        return transformSourceFile;
 
         /**
          * Transforms the module aspects of a SourceFile.

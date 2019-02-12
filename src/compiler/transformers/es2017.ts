@@ -49,7 +49,7 @@ namespace ts {
         context.onEmitNode = onEmitNode;
         context.onSubstituteNode = onSubstituteNode;
 
-        return chainBundle(transformSourceFile);
+        return transformSourceFile;
 
         function transformSourceFile(node: SourceFile) {
             if (node.isDeclarationFile) {
