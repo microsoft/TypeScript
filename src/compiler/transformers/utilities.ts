@@ -33,7 +33,12 @@ namespace ts {
         }
 
         function transformBundle(node: Bundle) {
-            return createBundle(map(node.sourceFiles, transformSourceFile), node.prepends);
+            return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
+                if (prepend.kind === SyntaxKind.InputFiles) {
+                    return createUnparsedSourceFile(prepend, "js");
+                }
+                return prepend;
+            }));
         }
     }
 

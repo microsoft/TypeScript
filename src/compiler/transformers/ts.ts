@@ -89,23 +89,7 @@ namespace ts {
          */
         let pendingExpressions: Expression[] | undefined;
 
-        return transformSourceFileOrBundle;
-
-        function transformSourceFileOrBundle(node: SourceFile | Bundle) {
-            if (node.kind === SyntaxKind.Bundle) {
-                return transformBundle(node);
-            }
-            return transformSourceFile(node);
-        }
-
-        function transformBundle(node: Bundle) {
-            return createBundle(node.sourceFiles.map(transformSourceFile), mapDefined(node.prepends, prepend => {
-                if (prepend.kind === SyntaxKind.InputFiles) {
-                    return createUnparsedSourceFile(prepend, "js");
-                }
-                return prepend;
-            }));
-        }
+        return transformSourceFile;
 
         /**
          * Transform TypeScript-specific syntax in a SourceFile.

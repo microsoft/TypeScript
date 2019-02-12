@@ -73,7 +73,7 @@ namespace ts {
 
         addRange(transformers, customTransformers && customTransformers.after);
 
-        return map(transformers, (tf:TransformerFactory<SourceFile>) => (context: TransformationContext) => chainBundle(tf(context)));
+        return map(transformers, (tf: TransformerFactory<SourceFile>) => (context: TransformationContext) => chainBundle(tf(context)));
     }
 
     export function noEmitSubstitution(_hint: EmitHint, node: Node) {
