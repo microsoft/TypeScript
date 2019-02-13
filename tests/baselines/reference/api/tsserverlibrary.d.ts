@@ -8347,7 +8347,7 @@ declare namespace ts.server {
         excludedFiles: ReadonlyArray<NormalizedPath>;
         private typeAcquisition;
         updateGraph(): boolean;
-        getExcludedFiles(): ReadonlyArray<NormalizedPath>;
+        getExcludedFiles(): readonly NormalizedPath[];
         getTypeAcquisition(): TypeAcquisition;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
     }

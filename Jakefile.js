@@ -24,7 +24,7 @@ const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 
 const defaultTestTimeout = 40000;
 const useBuilt =
-    process.env.USE_BUILT === "true" ? true :
+    (process.env.USE_BUILT === "true" || process.env.CI === "true") ? true :
     process.env.LKG === "true" ? false :
     false;
 
