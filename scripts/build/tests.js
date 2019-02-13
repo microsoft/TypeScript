@@ -159,7 +159,7 @@ async function cleanTestDirs() {
 exports.cleanTestDirs = cleanTestDirs;
 
 /**
- * used to pass data from jake command line directly to run.js
+ * used to pass data from gulp command line directly to run.js
  * @param {string} tests
  * @param {string} runners
  * @param {boolean} light

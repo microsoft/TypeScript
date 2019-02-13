@@ -79,9 +79,9 @@ gulp tests            # Build the test infrastructure using the built compiler.
 gulp runtests         # Run tests using the built compiler and test infrastructure. 
                       # You can override the host or specify a test for this command. 
                       # Use --host=<hostName> or --tests=<testPath>. 
-gulp runtests-browser # Runs the tests using the built run.js file. Syntax is jake runtests. Optional
+gulp runtests-browser # Runs the tests using the built run.js file. Syntax is gulp runtests. Optional
                         parameters '--host=', '--tests=[regex], --reporter=[list|spec|json|<more>]'.
-gulp baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests.
+gulp baseline-accept  # This replaces the baseline test results with the results obtained from gulp runtests.
 gulp lint             # Runs tslint on the TypeScript source.
 gulp help             # List the above commands. 
 ```
