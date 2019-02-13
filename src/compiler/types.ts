@@ -1648,12 +1648,15 @@ namespace ts {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
 
-    /* @internal */
     export const enum TokenFlags {
         None = 0,
+        /* @internal */
         PrecedingLineBreak = 1 << 0,
+        /* @internal */
         PrecedingJSDocComment = 1 << 1,
+        /* @internal */
         Unterminated = 1 << 2,
+        /* @internal */
         ExtendedUnicodeEscape = 1 << 3,
         Scientific = 1 << 4,        // e.g. `10e2`
         Octal = 1 << 5,             // e.g. `0777`
