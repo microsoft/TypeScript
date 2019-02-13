@@ -997,6 +997,17 @@ declare namespace ts {
     interface NoSubstitutionTemplateLiteral extends LiteralExpression {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
+    enum TokenFlags {
+        None = 0,
+        Scientific = 16,
+        Octal = 32,
+        HexSpecifier = 64,
+        BinarySpecifier = 128,
+        OctalSpecifier = 256,
+        ContainsSeparator = 512,
+        BinaryOrOctalSpecifier = 384,
+        NumericLiteralFlags = 1008
+    }
     interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
     }
@@ -3663,7 +3674,7 @@ declare namespace ts {
     function createLiteral(value: number | PseudoBigInt): NumericLiteral;
     function createLiteral(value: boolean): BooleanLiteral;
     function createLiteral(value: string | number | PseudoBigInt | boolean): PrimaryExpression;
-    function createNumericLiteral(value: string): NumericLiteral;
+    function createNumericLiteral(value: string, numericLiteralFlags?: TokenFlags): NumericLiteral;
     function createBigIntLiteral(value: string): BigIntLiteral;
     function createStringLiteral(text: string): StringLiteral;
     function createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
