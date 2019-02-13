@@ -949,12 +949,12 @@ interface i04<T = number, U = string> {
 interface i05<T = T> {
     a: T;
 }
-declare const i05c00: {};
+declare const i05c00: any;
 declare const i05c01: number;
 interface i06<T = U, U = T> {
     a: [T, U];
 }
-declare const i06c00: [{}, {}];
+declare const i06c00: [any, any];
 declare const i06c01: [number, number];
 declare const i06c02: [number, string];
 interface i07 {

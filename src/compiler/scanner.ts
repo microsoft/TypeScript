@@ -31,6 +31,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanLessThanToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJSDocToken(): JsDocSyntaxKind;
         scan(): SyntaxKind;
@@ -337,13 +338,14 @@ namespace ts {
         return result;
     }
 
-    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number {
-        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
-    }
-
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
     /* @internal */
-    export function getPositionOfLineAndCharacterWithEdits(sourceFile: SourceFileLike, line: number, character: number): number {
-        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, /*allowEdits*/ true);
+    // tslint:disable-next-line:unified-signatures
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number;
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
+        return sourceFile.getPositionOfLineAndCharacter ?
+            sourceFile.getPositionOfLineAndCharacter(line, character, allowEdits) :
+            computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, allowEdits);
     }
 
     /* @internal */
@@ -659,8 +661,15 @@ namespace ts {
         let pendingKind!: CommentKind;
         let pendingHasTrailingNewLine!: boolean;
         let hasPendingCommentRange = false;
-        let collecting = trailing || pos === 0;
+        let collecting = trailing;
         let accumulator = initial;
+        if (pos === 0) {
+            collecting = true;
+            const shebang = getShebang(text);
+            if (shebang) {
+                pos = shebang.length;
+            }
+        }
         scan: while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
@@ -873,6 +882,7 @@ namespace ts {
             scanJsxIdentifier,
             scanJsxAttributeValue,
             reScanJsxToken,
+            reScanLessThanToken,
             scanJsxToken,
             scanJSDocToken,
             scan,
@@ -1936,6 +1946,14 @@ namespace ts {
         function reScanJsxToken(): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
             return token = scanJsxToken();
+        }
+
+        function reScanLessThanToken(): SyntaxKind {
+            if (token === SyntaxKind.LessThanLessThanToken) {
+                pos = tokenPos + 1;
+                return token = SyntaxKind.LessThanToken;
+            }
+            return token;
         }
 
         function scanJsxToken(): JsxTokenSyntaxKind {

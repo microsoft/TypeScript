@@ -210,7 +210,7 @@ namespace ts {
         checkCache("resolved type directives", program, fileName, expectedContent, f => f.resolvedTypeReferenceDirectiveNames, checkResolvedTypeDirective);
     }
 
-    describe("Reuse program structure", () => {
+    describe("unittests:: Reuse program structure:: General", () => {
         const target = ScriptTarget.Latest;
         const files: NamedSourceText[] = [
             {
@@ -895,7 +895,7 @@ namespace ts {
         });
     });
 
-    describe("host is optional", () => {
+    describe("unittests:: Reuse program structure:: host is optional", () => {
         it("should work if host is not provided", () => {
             createProgram([], {});
         });
@@ -905,7 +905,7 @@ namespace ts {
     import createTestSystem = TestFSWithWatch.createWatchedSystem;
     import libFile = TestFSWithWatch.libFile;
 
-    describe("isProgramUptoDate should return true when there is no change in compiler options and", () => {
+    describe("unittests:: Reuse program structure:: isProgramUptoDate should return true when there is no change in compiler options and", () => {
         function verifyProgramIsUptoDate(
             program: Program,
             newRootFileNames: string[],

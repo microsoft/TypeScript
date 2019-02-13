@@ -1,5 +1,5 @@
 namespace ts {
-    describe("builder", () => {
+    describe("unittests:: builder", () => {
         it("emits dependent files", () => {
             const files: NamedSourceText[] = [
                 { name: "/a.ts", text: SourceText.New("", 'import { b } from "./b";', "") },
