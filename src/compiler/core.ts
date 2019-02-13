@@ -1399,7 +1399,7 @@ namespace ts {
             if (arg === undefined) continue;
             for (const p in arg) {
                 if (hasProperty(arg, p)) {
-                    t[p] = arg[p]; // TODO: GH#23368
+                    t[p] = arg[p];
                 }
             }
         }
