@@ -20471,7 +20471,7 @@ namespace ts {
                     links.jsxFactoryCall.end = node.end;
                     links.jsxFactoryCall.parent = node.parent;
                 }
-                const result =  getReturnTypeOfSignature(getResolvedSignature(links.jsxFactoryCall));
+                const result = getReturnTypeOfSignature(getResolvedSignature(links.jsxFactoryCall));
                 if (result === errorType) {
                     return getJsxElementTypeAt(node) || errorType;
                 }
