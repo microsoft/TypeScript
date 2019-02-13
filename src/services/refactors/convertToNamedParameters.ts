@@ -367,7 +367,9 @@ namespace ts.refactor.convertToNamedParameters {
                     default: return Debug.assertNever(functionDeclaration.parent);
                 }
             case SyntaxKind.ArrowFunction:
+                return [functionDeclaration.parent.name];
             case SyntaxKind.FunctionExpression:
+                if (functionDeclaration.name) return [functionDeclaration.name, functionDeclaration.parent.name];
                 return [functionDeclaration.parent.name];
         }
     }
