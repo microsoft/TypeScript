@@ -11,8 +11,8 @@ namespace ts.refactor.convertToNamedParameters {
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, startPosition } = context;
-        const func = getFunctionDeclarationAtPosition(file, startPosition, context.program.getTypeChecker());
-        if (!func) return emptyArray;
+        const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, context.program.getTypeChecker());
+        if (!functionDeclaration) return emptyArray;
 
         return [{
             name: refactorName,
@@ -31,7 +31,7 @@ namespace ts.refactor.convertToNamedParameters {
         if (!functionDeclaration || !cancellationToken) return undefined;
 
         const edits = textChanges.ChangeTracker.with(context, t => doChange(file, program, cancellationToken, host, t, functionDeclaration));
-        return refactorSucceeded ? { renameFilename: undefined, renameLocation: undefined, edits } : undefined;
+        return { renameFilename: undefined, renameLocation: undefined, edits: refactorSucceeded ? edits : [] }; 
     }
 
     function doChange(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken, host: LanguageServiceHost, changes: textChanges.ChangeTracker, functionDeclaration: ValidFunctionDeclaration): void {
@@ -42,8 +42,9 @@ namespace ts.refactor.convertToNamedParameters {
 
         const functionNames = getFunctionDeclarationNames(functionDeclaration);
         const functionRefs = flatMap(functionNames, name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
-        const functionCalls = deduplicate(getDirectFunctionCalls(functionRefs), (a, b) => a === b);
-        refactorSucceeded = true; // TODO: check if a bad reference was found
+        const groupedRefs = groupReferences(functionNames, functionRefs);
+        checkReferences(functionNames, groupedRefs);
+        const functionCalls = groupedRefs.calls;
 
         forEach(functionCalls, call => {
             if (call.arguments && call.arguments.length) {
@@ -66,9 +67,37 @@ namespace ts.refactor.convertToNamedParameters {
         return updateNode(newDeclaration, declaration);
     }
 
-    function getDirectFunctionCalls(referenceEntries: ReadonlyArray<FindAllReferences.Entry> | undefined): ReadonlyArray<CallExpression | NewExpression> {
-        return mapDefined(referenceEntries, (entry) => {
-            if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node.parent) {
+    function checkReferences(names: Node[], groupedRefs: GroupedReferences): void {
+        if (groupedRefs.unhandled.length > 0) {
+            refactorSucceeded = false;
+        }
+        if (groupedRefs.declarations.length > names.length) {
+            refactorSucceeded = false;
+        }
+    }
+
+    function groupReferences(names: Node[], referenceEntries: ReadonlyArray<FindAllReferences.Entry> | undefined): GroupedReferences {
+        const references: GroupedReferences = { calls: [], declarations: [], unhandled: [] };
+        forEach(referenceEntries, (entry) => {
+            const decl = entryToDeclarationName(entry);
+            if (decl) {
+                references.declarations.push(decl);
+                return;
+            }
+            const call = entryToFunctionCall(entry);
+            if (call) {
+                references.calls.push(call);
+                return;
+            }
+            const node = entryToNode(entry);
+            if (node) {
+                references.unhandled.push(node);
+            }
+        });
+        return references;
+
+        function entryToFunctionCall(entry: FindAllReferences.Entry): CallExpression | NewExpression | undefined {
+            if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node && entry.node.parent) {
                 const functionRef = entry.node;
                 const parent = functionRef.parent;
                 switch (parent.kind) {
@@ -109,7 +138,27 @@ namespace ts.refactor.convertToNamedParameters {
                 }
             }
             return undefined;
-        });
+        }
+    
+        function entryToDeclarationName(entry: FindAllReferences.Entry): Node | undefined {
+            if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node && contains(names, entry.node)) {
+                return entry.node;
+            }
+            return undefined;
+        }
+    
+        function entryToNode(entry: FindAllReferences.Entry): Node | undefined {
+            if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node) {
+                return entry.node;
+            }
+            return undefined;
+        }
+    }
+
+    interface GroupedReferences {
+        calls: (CallExpression | NewExpression)[];
+        declarations: Node[];
+        unhandled: Node[];
     }
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
@@ -126,7 +175,7 @@ namespace ts.refactor.convertToNamedParameters {
                 return !!functionDeclaration.name && isPropertyName(functionDeclaration.name) && isValidParameterNodeArray(functionDeclaration.parameters) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
             case SyntaxKind.Constructor:
                 if (isClassDeclaration(functionDeclaration.parent)) {
-                    return !!functionDeclaration.parent.name && isValidParameterNodeArray(functionDeclaration.parameters) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
+                    return isValidParameterNodeArray(functionDeclaration.parameters) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
                 }
                 else {
                     return isVariableDeclaration(functionDeclaration.parent.parent) && !functionDeclaration.parent.parent.type && isVarConst(functionDeclaration.parent.parent) && isValidParameterNodeArray(functionDeclaration.parameters) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
@@ -310,15 +359,13 @@ namespace ts.refactor.convertToNamedParameters {
                 let name: Node;
                 switch (functionDeclaration.parent.kind) {
                     case SyntaxKind.ClassDeclaration:
-                        name = functionDeclaration.parent.name;
-                        break;
+                        return [ctrKeyword!];
                     case SyntaxKind.ClassExpression:
                         name = functionDeclaration.parent.parent.name;
-                        break;
+                        if (ctrKeyword) return [ctrKeyword, name];
+                        return [name];
                     default: return Debug.assertNever(functionDeclaration.parent);
                 }
-                if (ctrKeyword) return [ctrKeyword, name];
-                return [name];
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.FunctionExpression:
                 return [functionDeclaration.parent.name];
@@ -330,7 +377,7 @@ namespace ts.refactor.convertToNamedParameters {
     type ValidVariableDeclaration = VariableDeclaration & { type: undefined };
 
     interface ValidConstructor extends ConstructorDeclaration {
-        parent: (ClassDeclaration & { name: Identifier }) | (ClassExpression & { parent: ValidVariableDeclaration });
+        parent: ClassDeclaration | (ClassExpression & { parent: ValidVariableDeclaration });
         parameters: NodeArray<ValidParameterDeclaration>;
         body: FunctionBody;
     }
