@@ -232,7 +232,7 @@ task("watch-tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
 }
 
-task("min", series(lkgPreBuild, parallel(buildTsc, buildServer)));
+task("min", series(preBuild, parallel(buildTsc, buildServer)));
 task("min").description = "Builds only tsc and tsserver";
 task("min").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -375,7 +375,7 @@ task("lint").flags = {
 
 const buildFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("build")); };
 const buildFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("build")); };
-task("local", series(buildFoldStart, lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl), buildFoldEnd));
+task("local", series(buildFoldStart, preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl), buildFoldEnd));
 task("local").description = "Builds the full compiler and services";
 task("local").flags = {
     "   --built": "Compile using the built version of the compiler."
