@@ -5,7 +5,6 @@ namespace ts.refactor.convertToNamedParameters {
     const actionNameNamedParameters = "Convert to named parameters";
     const actionDescriptionNamedParameters = "Convert to named parameters";
     const minimumParameterLength = 1;
-    let refactorSucceeded = true;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
 
@@ -30,22 +29,27 @@ namespace ts.refactor.convertToNamedParameters {
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
         if (!functionDeclaration || !cancellationToken) return undefined;
 
-        const edits = textChanges.ChangeTracker.with(context, t => doChange(file, program, cancellationToken, host, t, functionDeclaration));
-        return { renameFilename: undefined, renameLocation: undefined, edits: refactorSucceeded ? edits : [] }; 
+        const functionNames = getFunctionDeclarationNames(functionDeclaration);
+        const groupedReferences = getGroupedReferences(functionNames, program, cancellationToken);
+        if (checkReferences(functionNames, groupedReferences)) {
+            const edits = textChanges.ChangeTracker.with(context, t => doChange(file, program, host, t, functionDeclaration, groupedReferences));
+            return { renameFilename: undefined, renameLocation: undefined, edits };
+        }
+
+        return { edits: [] };
     }
 
-    function doChange(sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken, host: LanguageServiceHost, changes: textChanges.ChangeTracker, functionDeclaration: ValidFunctionDeclaration): void {
-        const newParamDeclaration = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param, /*includeTrivia*/ true));
-        const newFunctionDeclaration = updateDeclarationParameters(functionDeclaration, createNodeArray(newParamDeclaration));
-        suppressLeadingAndTrailingTrivia(newFunctionDeclaration, /*recursive*/ false);
-        changes.replaceNode(sourceFile, functionDeclaration, newFunctionDeclaration);
 
-        const functionNames = getFunctionDeclarationNames(functionDeclaration);
-        const functionRefs = flatMap(functionNames, name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
-        const groupedRefs = groupReferences(functionNames, functionRefs);
-        checkReferences(functionNames, groupedRefs);
-        const functionCalls = groupedRefs.calls;
+    function doChange(sourceFile: SourceFile, program: Program, host: LanguageServiceHost, changes: textChanges.ChangeTracker, functionDeclaration: ValidFunctionDeclaration, groupedReferences: GroupedReferences): void {
+        const newParamDeclaration = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
+        changes.replaceNodeRangeWithNodes(
+            sourceFile,
+            first(functionDeclaration.parameters),
+            last(functionDeclaration.parameters),
+            newParamDeclaration,
+            { joiner: ", ", indentation: 0 }); // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
 
+        const functionCalls = groupedReferences.calls;
         forEach(functionCalls, call => {
             if (call.arguments && call.arguments.length) {
                 const newArgument = getSynthesizedDeepClone(createNewArguments(functionDeclaration, call.arguments), /*includeTrivia*/ true);
@@ -61,104 +65,99 @@ namespace ts.refactor.convertToNamedParameters {
         return updateNode(newCall, call);
     }
 
-    function updateDeclarationParameters(declaration: SignatureDeclaration, parameters: NodeArray<ParameterDeclaration>): SignatureDeclaration {
-        const newDeclaration = getSynthesizedClone(declaration);
-        newDeclaration.parameters = parameters;
-        return updateNode(newDeclaration, declaration);
-    }
+    function getGroupedReferences(functionNames: Node[], program: Program, cancellationToken: CancellationToken): GroupedReferences {
+        const functionRefs = flatMap(functionNames, name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
+        const groupedReferences = groupReferences(functionRefs);
+        return groupedReferences;
 
-    function checkReferences(names: Node[], groupedRefs: GroupedReferences): void {
-        if (groupedRefs.unhandled.length > 0) {
-            refactorSucceeded = false;
-        }
-        if (groupedRefs.declarations.length > names.length) {
-            refactorSucceeded = false;
-        }
-    }
-
-    function groupReferences(names: Node[], referenceEntries: ReadonlyArray<FindAllReferences.Entry> | undefined): GroupedReferences {
-        const references: GroupedReferences = { calls: [], declarations: [], unhandled: [] };
-        forEach(referenceEntries, (entry) => {
-            const decl = entryToDeclarationName(entry);
-            if (decl) {
-                references.declarations.push(decl);
-                return;
-            }
-            const call = entryToFunctionCall(entry);
-            if (call) {
-                references.calls.push(call);
-                return;
-            }
-            const node = entryToNode(entry);
-            if (node) {
-                references.unhandled.push(node);
-            }
-        });
-        return references;
-
-        function entryToFunctionCall(entry: FindAllReferences.Entry): CallExpression | NewExpression | undefined {
-            if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node && entry.node.parent) {
-                const functionRef = entry.node;
-                const parent = functionRef.parent;
-                switch (parent.kind) {
-                    // Function call (foo(...))
-                    case SyntaxKind.CallExpression:
-                        const callExpression = tryCast(parent, isCallExpression);
-                        if (callExpression && callExpression.expression === functionRef) {
-                            return callExpression;
-                        }
-                        break;
-                    // Constructor call (new Foo(...))
-                    case SyntaxKind.NewExpression:
-                        const newExpression = tryCast(parent, isNewExpression);
-                        if (newExpression && newExpression.expression === functionRef) {
-                            return newExpression;
-                        }
-                        break;
-                    // Method call (x.foo(...))
-                    case SyntaxKind.PropertyAccessExpression:
-                        const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
-                        if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionRef) {
-                            const callExpression = tryCast(propertyAccessExpression.parent, isCallExpression);
-                            if (callExpression && callExpression.expression === propertyAccessExpression) {
-                                return callExpression;
-                            }
-                        }
-                        break;
-                    // Method call (x['foo'](...))
-                    case SyntaxKind.ElementAccessExpression:
-                        const elementAccessExpression = tryCast(parent, isElementAccessExpression);
-                        if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionRef) {
-                            const callExpression = tryCast(elementAccessExpression.parent, isCallExpression);
-                            if (callExpression && callExpression.expression === elementAccessExpression) {
-                                return callExpression;
-                            }
-                        }
-                        break;
+        function groupReferences(referenceEntries: ReadonlyArray<FindAllReferences.Entry> | undefined): GroupedReferences {
+            const references: GroupedReferences = { calls: [], declarations: [], unhandled: [] };
+            forEach(referenceEntries, (entry) => {
+                const decl = entryToDeclarationName(entry);
+                if (decl) {
+                    references.declarations.push(decl);
+                    return;
                 }
+                const call = entryToFunctionCall(entry);
+                if (call) {
+                    references.calls.push(call);
+                    return;
+                }
+                const node = entryToNode(entry);
+                if (node) {
+                    references.unhandled.push(node);
+                }
+            });
+            return references;
+
+            function entryToFunctionCall(entry: FindAllReferences.Entry): CallExpression | NewExpression | undefined {
+                if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node && entry.node.parent) {
+                    const functionRef = entry.node;
+                    const parent = functionRef.parent;
+                    switch (parent.kind) {
+                        // Function call (foo(...))
+                        case SyntaxKind.CallExpression:
+                            const callExpression = tryCast(parent, isCallExpression);
+                            if (callExpression && callExpression.expression === functionRef) {
+                                return callExpression;
+                            }
+                            break;
+                        // Constructor call (new Foo(...))
+                        case SyntaxKind.NewExpression:
+                            const newExpression = tryCast(parent, isNewExpression);
+                            if (newExpression && newExpression.expression === functionRef) {
+                                return newExpression;
+                            }
+                            break;
+                        // Method call (x.foo(...))
+                        case SyntaxKind.PropertyAccessExpression:
+                            const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
+                            if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionRef) {
+                                const callExpression = tryCast(propertyAccessExpression.parent, isCallExpression);
+                                if (callExpression && callExpression.expression === propertyAccessExpression) {
+                                    return callExpression;
+                                }
+                            }
+                            break;
+                        // Method call (x['foo'](...))
+                        case SyntaxKind.ElementAccessExpression:
+                            const elementAccessExpression = tryCast(parent, isElementAccessExpression);
+                            if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionRef) {
+                                const callExpression = tryCast(elementAccessExpression.parent, isCallExpression);
+                                if (callExpression && callExpression.expression === elementAccessExpression) {
+                                    return callExpression;
+                                }
+                            }
+                            break;
+                    }
+                }
+                return undefined;
             }
-            return undefined;
-        }
-    
-        function entryToDeclarationName(entry: FindAllReferences.Entry): Node | undefined {
-            if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node && contains(names, entry.node)) {
-                return entry.node;
+
+            function entryToDeclarationName(entry: FindAllReferences.Entry): Node | undefined {
+                if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node && contains(functionNames, entry.node)) {
+                    return entry.node;
+                }
+                return undefined;
             }
-            return undefined;
-        }
-    
-        function entryToNode(entry: FindAllReferences.Entry): Node | undefined {
-            if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node) {
-                return entry.node;
+
+            function entryToNode(entry: FindAllReferences.Entry): Node | undefined {
+                if (entry.kind !== FindAllReferences.EntryKind.Span && entry.node) {
+                    return entry.node;
+                }
+                return undefined;
             }
-            return undefined;
         }
     }
 
-    interface GroupedReferences {
-        calls: (CallExpression | NewExpression)[];
-        declarations: Node[];
-        unhandled: Node[];
+    function checkReferences(functionNames: Node[], groupedReferences: GroupedReferences): boolean {
+        if (groupedReferences.unhandled.length > 0) {
+            return false;
+        }
+        if (groupedReferences.declarations.length > functionNames.length) {
+            return false;
+        }
+        return true;
     }
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
@@ -411,5 +410,11 @@ namespace ts.refactor.convertToNamedParameters {
         name: Identifier;
         modifiers: undefined;
         decorators: undefined;
+    }
+
+    interface GroupedReferences {
+        calls: (CallExpression | NewExpression)[];
+        declarations: Node[];
+        unhandled: Node[];
     }
 }
