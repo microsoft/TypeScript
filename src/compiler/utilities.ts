@@ -4515,7 +4515,7 @@ namespace ts {
     }
 
     export function getObjectFlags(type: Type): ObjectFlags {
-        return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
+        return type.flags & TypeFlags.ObjectFlagsType ? (<ObjectFlagsType>type).objectFlags : 0;
     }
 
     export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
