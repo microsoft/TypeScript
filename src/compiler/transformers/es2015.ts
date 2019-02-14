@@ -194,6 +194,7 @@ namespace ts {
         ConstructorWithCapturedSuper = 1 << 12, // Enclosed in a constructor that captures 'this' for use with 'super'
         ComputedPropertyName = 1 << 13,         // Enclosed in a computed property name
         // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
+        // NOTE: when adding a new ancestor flag, be sure to update the subtree flags below.
 
         //
         // Ancestor masks
@@ -255,9 +256,11 @@ namespace ts {
         //
         // Subtree facts
         //
-        NewTarget = 1 << 14,                        // Contains a 'new.target' meta-property
-        NewTargetInComputedPropertyName = 1 << 15,  // Contains a 'new.target' meta-property in a computed property name.
+        NewTarget = 1 << 14,                            // Contains a 'new.target' meta-property
+        NewTargetInComputedPropertyName = 1 << 15,      // Contains a 'new.target' meta-property in a computed property name.
 
+        LexicalThis = 1 << 16,                          // Contains a lexical `this` reference.
+        LexicalThisInComputedPropertyName = 1 << 17,    // Contains a lexical `this` reference in a computed property name.
 
         //
         // Subtree masks
@@ -596,6 +599,12 @@ namespace ts {
         }
 
         function visitThisKeyword(node: Node): Node {
+            if (hierarchyFacts & HierarchyFacts.ComputedPropertyName) {
+                hierarchyFacts |= HierarchyFacts.LexicalThisInComputedPropertyName;
+            }
+            else {
+                hierarchyFacts |= HierarchyFacts.LexicalThis;
+            }
             if (convertedLoopState) {
                 if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
                     // if the enclosing function is an ArrowFunction then we use the captured 'this' keyword.
@@ -1214,14 +1223,14 @@ namespace ts {
             }
         }
 
-        /**
-         * Gets a value indicating whether we need to add default value assignments for a
-         * function-like node.
-         *
-         * @param node A function-like node.
-         */
-        function shouldAddDefaultValueAssignments(node: FunctionLikeDeclaration): boolean {
-            return (node.transformFlags & TransformFlags.ContainsDefaultValueAssignments) !== 0;
+        function hasDefaultValueOrBindingPattern(node: ParameterDeclaration) {
+            return node.initializer !== undefined
+                || isBindingPattern(node.name);
+        }
+
+        function hasDefaultValueOrBindingPatternOrRest(node: ParameterDeclaration) {
+            return hasDefaultValueOrBindingPattern(node)
+                || node.dotDotDotToken !== undefined;
         }
 
         /**
@@ -1232,7 +1241,7 @@ namespace ts {
          * @param node A function-like node.
          */
         function addDefaultValueAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): void {
-            if (!shouldAddDefaultValueAssignments(node)) {
+            if (!some(node.parameters, hasDefaultValueOrBindingPattern)) {
                 return;
             }
 
@@ -1744,6 +1753,10 @@ namespace ts {
             return func;
         }
 
+        function containsCapturedLexicalThis(node: Node) {
+            return (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis) !== 0;
+        }
+
         /**
          * Visits a FunctionExpression node.
          *
@@ -1757,7 +1770,9 @@ namespace ts {
             convertedLoopState = undefined;
 
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags & TransformFlags.ES2015
+            const shouldTransform = forEachChild(node, containsCapturedLexicalThis)
+                || some(node.parameters, hasDefaultValueOrBindingPatternOrRest);
+            const body = shouldTransform
                 ? transformFunctionBody(node)
                 : visitFunctionBodyDownLevel(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
@@ -1788,7 +1803,9 @@ namespace ts {
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags & TransformFlags.ES2015
+            const shouldTransform = forEachChild(node, containsCapturedLexicalThis)
+                || some(node.parameters, hasDefaultValueOrBindingPatternOrRest);
+            const body = shouldTransform
                 ? transformFunctionBody(node)
                 : visitFunctionBodyDownLevel(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
@@ -2074,7 +2091,7 @@ namespace ts {
          * @param node A VariableDeclarationList node.
          */
         function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
-            if (node.transformFlags & TransformFlags.ES2015) {
+            if (node.flags & NodeFlags.BlockScoped || node.transformFlags & TransformFlags.ContainsBindingPattern) {
                 if (node.flags & NodeFlags.BlockScoped) {
                     enableSubstitutionsForBlockScopedBindings();
                 }
@@ -3561,7 +3578,7 @@ namespace ts {
          * @param node An ArrayLiteralExpression node.
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression): Expression {
-            if (node.transformFlags & TransformFlags.ES2015) {
+            if (some(node.elements, isSpreadElement)) {
                 // We are here because we contain a SpreadElementExpression.
                 return transformAndSpreadElements(node.elements, /*needsUniqueCopy*/ true, !!node.multiLine, /*hasTrailingComma*/ !!node.elements.hasTrailingComma);
             }
@@ -3578,7 +3595,10 @@ namespace ts {
                 return visitTypeScriptClassWrapper(node);
             }
 
-            if (node.transformFlags & TransformFlags.ES2015) {
+            const expression = skipOuterExpressions(node.expression);
+            if (expression.kind === SyntaxKind.SuperKeyword ||
+                isSuperProperty(expression) ||
+                some(node.arguments, isSpreadElement)) {
                 return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
             }
 
@@ -3820,7 +3840,7 @@ namespace ts {
          * @param node A NewExpression node.
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
-            if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
+            if (some(node.arguments, isSpreadElement)) {
                 // We are here because we contain a SpreadElementExpression.
                 // [source]
                 //      new C(...a)

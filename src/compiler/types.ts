@@ -5045,9 +5045,9 @@ namespace ts {
         ContainsTypeScript = 1 << 1,
         ContainsJsx = 1 << 2,
         ContainsESNext = 1 << 3,
-        ContainsES2017 = 1 << 4,
-        ContainsES2016 = 1 << 5,
-        ES2015 = 1 << 6,
+        ContainsES2018 = 1 << 4,
+        ContainsES2017 = 1 << 5,
+        ContainsES2016 = 1 << 6,
         ContainsES2015 = 1 << 7,
         Generator = 1 << 8,
         ContainsGenerator = 1 << 9,
@@ -5057,21 +5057,21 @@ namespace ts {
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
         ContainsTypeScriptClassSyntax = 1 << 12,                // Decorators, Property Initializers, Parameter Property Initializers
+
         ContainsLexicalThis = 1 << 13,
         ContainsCapturedLexicalThis = 1 << 14,
+
         ContainsLexicalThisInComputedPropertyName = 1 << 15,
-        ContainsDefaultValueAssignments = 1 << 16,
-        ContainsRestOrSpread = 1 << 17,
-        ContainsObjectRestOrSpread = 1 << 18,
-        ContainsComputedPropertyName = 1 << 19,
-        ContainsBlockScopedBinding = 1 << 20,
-        ContainsBindingPattern = 1 << 21,
-        ContainsYield = 1 << 22,
-        ContainsHoistedDeclarationOrCompletion = 1 << 23,
-        ContainsDynamicImport = 1 << 24,
-        Super = 1 << 25,
-        ContainsSuper = 1 << 26,
-        ContainsES2018 = 1 << 27,
+        ContainsRestOrSpread = 1 << 16,
+        ContainsObjectRestOrSpread = 1 << 17,
+        ContainsComputedPropertyName = 1 << 18,
+        ContainsBlockScopedBinding = 1 << 19,
+        ContainsBindingPattern = 1 << 20,
+        ContainsYield = 1 << 21,
+        ContainsHoistedDeclarationOrCompletion = 1 << 22,
+        ContainsDynamicImport = 1 << 23,
+        Super = 1 << 24,
+        ContainsSuper = 1 << 25,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5086,20 +5086,20 @@ namespace ts {
         AssertES2018 = ContainsES2018,
         AssertES2017 = ContainsES2017,
         AssertES2016 = ContainsES2016,
-        AssertES2015 = ES2015 | ContainsES2015,
+        AssertES2015 = ContainsES2015,
         AssertGenerator = Generator | ContainsGenerator,
         AssertDestructuringAssignment = DestructuringAssignment | ContainsDestructuringAssignment,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        OuterExpressionExcludes = TypeScript | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
+        OuterExpressionExcludes = TypeScript | DestructuringAssignment | Generator | HasComputedFlags,
         PropertyAccessExcludes = OuterExpressionExcludes | Super,
         NodeExcludes = PropertyAccessExcludes | ContainsSuper,
-        ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
         ClassExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
         ModuleExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
@@ -5112,7 +5112,6 @@ namespace ts {
 
         // Masks
         // - Additional bitmasks
-        ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
     }
 
     export interface SourceMapRange extends TextRange {

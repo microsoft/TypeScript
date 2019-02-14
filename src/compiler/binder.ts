@@ -3186,7 +3186,7 @@ namespace ts {
         // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
         // it is ES6 syntax and its container must emit default value assignments or parameter destructuring downlevel.
         if (subtreeFlags & TransformFlags.ContainsBindingPattern || initializer || dotDotDotToken) {
-            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsDefaultValueAssignments;
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3442,7 +3442,7 @@ namespace ts {
             // If a FunctionDeclaration's subtree has marked the container as needing to capture the
             // lexical this, or the function contains parameters with initializers, then this node is
             // ES6 syntax.
-            if (subtreeFlags & TransformFlags.ES2015FunctionSyntaxMask) {
+            if (subtreeFlags & TransformFlags.ContainsCapturedLexicalThis) {
                 transformFlags |= TransformFlags.AssertES2015;
             }
 
@@ -3485,7 +3485,7 @@ namespace ts {
         // If a FunctionExpression's subtree has marked the container as needing to capture the
         // lexical this, or the function contains parameters with initializers, then this node is
         // ES6 syntax.
-        if (subtreeFlags & TransformFlags.ES2015FunctionSyntaxMask) {
+        if (subtreeFlags & TransformFlags.ContainsCapturedLexicalThis) {
             transformFlags |= TransformFlags.AssertES2015;
         }
 
@@ -3567,7 +3567,7 @@ namespace ts {
 
     function computeVariableDeclaration(node: VariableDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+        transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern; // TODO(rbuckton): Why are these set unconditionally?
 
         // A VariableDeclaration containing ObjectRest is ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
@@ -3890,14 +3890,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.NewExpression:
                 excludeFlags = TransformFlags.ArrayLiteralOrCallOrNewExcludes;
-                if (subtreeFlags & TransformFlags.ContainsRestOrSpread) {
-                    // If the this node contains a SpreadExpression, then it is an ES6
-                    // node.
-                    transformFlags |= TransformFlags.AssertES2015;
-                }
-
                 break;
 
             case SyntaxKind.DoStatement:
