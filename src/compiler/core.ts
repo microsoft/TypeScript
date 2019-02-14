@@ -1396,9 +1396,10 @@ namespace ts {
 
     export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
         for (const arg of args) {
-            for (const p in arg!) {
-                if (hasProperty(arg!, p)) {
-                    t![p] = arg![p]; // TODO: GH#23368
+            if (arg === undefined) continue;
+            for (const p in arg) {
+                if (hasProperty(arg, p)) {
+                    t[p] = arg[p];
                 }
             }
         }
