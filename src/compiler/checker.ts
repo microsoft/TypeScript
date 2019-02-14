@@ -18354,7 +18354,6 @@ namespace ts {
             let propertiesTable: SymbolTable;
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
-            let propagatedFlags: ObjectFlags = 0;
 
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
@@ -18364,7 +18363,7 @@ namespace ts {
             const isInJavascript = isInJSFile(node) && !isInJsonFile(node);
             const enumTag = getJSDocEnumTag(node);
             const isJSObjectLiteral = !contextualType && isInJavascript && !enumTag;
-            let objectFlags: ObjectFlags = 0;
+            let objectFlags: ObjectFlags = freshObjectLiteralFlag;
             let patternWithComputedProperties = false;
             let hasComputedStringProperty = false;
             let hasComputedNumberProperty = false;
@@ -18392,7 +18391,7 @@ namespace ts {
                             checkTypeAssignableTo(type, getTypeFromTypeNode(enumTag.typeExpression), memberDecl);
                         }
                     }
-                    objectFlags |= getObjectFlags(type);
+                    objectFlags |= getObjectFlags(type) & ObjectFlags.PropagatingFlags;
                     const nameType = computedNameType && isTypeUsableAsPropertyName(computedNameType) ? computedNameType : undefined;
                     const prop = nameType ?
                         createSymbol(SymbolFlags.Property | member.flags, getPropertyNameFromType(nameType), checkFlags | CheckFlags.Late) :
@@ -18440,19 +18439,18 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags | ObjectFlags.FreshLiteral, inConstContext);
+                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
                         propertiesArray = [];
                         propertiesTable = createSymbolTable();
                         hasComputedStringProperty = false;
                         hasComputedNumberProperty = false;
-                        objectFlags = 0;
                     }
                     const type = checkExpression(memberDecl.expression);
                     if (!isValidSpreadType(type)) {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags | ObjectFlags.FreshLiteral, inConstContext);
+                    spread = getSpreadType(spread, type, node.symbol, objectFlags, inConstContext);
                     offset = i + 1;
                     continue;
                 }
@@ -18502,7 +18500,7 @@ namespace ts {
 
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags | ObjectFlags.FreshLiteral, inConstContext);
+                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
                 }
                 return spread;
             }
@@ -18513,7 +18511,7 @@ namespace ts {
                 const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, IndexKind.String) : undefined;
                 const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node, offset, propertiesArray, IndexKind.Number) : undefined;
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
-                result.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectLiteral | freshObjectLiteralFlag | objectFlags & ObjectFlags.PropagatingFlags;
+                result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectLiteral;
                 if (isJSObjectLiteral) {
                     result.objectFlags |= ObjectFlags.JSLiteral;
                 }
@@ -18523,7 +18521,6 @@ namespace ts {
                 if (inDestructuringPattern) {
                     result.pattern = node;
                 }
-                propagatedFlags |= result.objectFlags & ObjectFlags.PropagatingFlags;
                 return result;
             }
         }
@@ -18710,7 +18707,7 @@ namespace ts {
             function createJsxAttributesType() {
                 objectFlags |= freshObjectLiteralFlag;
                 const result = createAnonymousType(attributes.symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                result.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectLiteral | objectFlags;
+                result.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectLiteral;
                 return result;
             }
         }
