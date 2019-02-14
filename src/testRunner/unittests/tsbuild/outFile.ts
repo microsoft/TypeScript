@@ -82,16 +82,26 @@ namespace ts {
             return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
         }
 
-        function verifyOutFileScenario({ scenario, modifyFs, modifyAgainFs, additionalSourceFiles }: { scenario: string; modifyFs: (fs: vfs.FileSystem) => void; modifyAgainFs?: (fs: vfs.FileSystem) => void; additionalSourceFiles?: ReadonlyArray<string>; }) {
+        function verifyOutFileScenario({ scenario, modifyFs, modifyAgainFs, additionalSourceFiles, dependOrdered }: { scenario: string; modifyFs: (fs: vfs.FileSystem) => void; modifyAgainFs?: (fs: vfs.FileSystem) => void; additionalSourceFiles?: ReadonlyArray<string>; dependOrdered?: boolean }) {
             const incrementalDtsChanged: ExpectedBuildOutputPerState = {
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
-                    [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/first"],
-                    [Diagnostics.Building_project_0, sources[project.third][source.config]]
-                ],
+                expectedDiagnostics: dependOrdered ?
+                    [
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.second][source.config], relOutputFiles[project.second][ext.js], "src/first"],
+                        [Diagnostics.Building_project_0, sources[project.second][source.config]],
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/second"],
+                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                    ] :
+                    [
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/first"],
+                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                    ],
                 expectedReadFiles: getReadFilesMap(
                     [
                         // Configs
@@ -101,6 +111,7 @@ namespace ts {
 
                         // Source files
                         ...sources[project.first][source.ts],
+                        ...(dependOrdered ? sources[project.second][source.ts] : emptyArray),
                         ...sources[project.third][source.ts],
 
                         // Additional source Files
@@ -115,19 +126,38 @@ namespace ts {
                         outputFiles[project.third][ext.buildinfo],
                     ],
                     outputFiles[project.first][ext.dts], // dts changes so once read old content, and once new (to emit third)
-                    outputFiles[project.first][ext.buildinfo] // since first build info changes
+                    outputFiles[project.first][ext.buildinfo], // since first build info changes
+                    ...(dependOrdered ?
+                        [
+                            outputFiles[project.second][ext.dts], // dts changes so once read old content, and once new (to emit third)
+                            outputFiles[project.second][ext.buildinfo] // since first build info changes
+                        ] :
+                        emptyArray
+                    )
                 )
             };
             const incrementalDtsUnchangedWithBuildInfo: ExpectedBuildOutputPerState = {
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
-                    [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                    [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-                    [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
-                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
-                ],
+                expectedDiagnostics: dependOrdered ?
+                    [
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.second][source.config], "src/first"],
+                        [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.second][source.config]],
+                        [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.second][source.config]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/second"],
+                        [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+                        [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
+                    ] :
+                    [
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                        [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+                        [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]
+                    ],
                 expectedReadFiles: getReadFilesMap(
                     [
                         // Configs
@@ -147,20 +177,35 @@ namespace ts {
                         ...outputFiles[project.third],
                         outputFiles[project.third][ext.buildinfo],
                     ],
-                    outputFiles[project.first][ext.buildinfo] // since first build info changes
+                    outputFiles[project.first][ext.buildinfo], // since first build info changes
+                    ...(dependOrdered ? outputFiles[project.second] : emptyArray), // Since this changes too
                 )
             };
             const incrementalDtsUnchangedWithoutBuildInfo: ExpectedBuildOutputPerState = {
-                expectedDiagnostics: [
-                    getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
-                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
-                    [Diagnostics.Building_project_0, sources[project.first][source.config]],
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-                    [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-                    [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
-                    [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
-                    [Diagnostics.Building_project_0, sources[project.third][source.config]]
-                ],
+                expectedDiagnostics: dependOrdered ?
+                    [
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.second][source.config], "src/first"],
+                        [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.second][source.config]],
+                        [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.second][source.config], relOutputFiles[project.second][ext.buildinfo]],
+                        [Diagnostics.Building_project_0, sources[project.second][source.config]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/second"],
+                        [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+                        [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
+                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                    ] :
+                    [
+                        getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                        [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                        [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                        [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                        [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+                        [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
+                        [Diagnostics.Building_project_0, sources[project.third][source.config]]
+                    ],
                 expectedReadFiles: getReadFilesMap(
                     [
                         // Configs
@@ -170,6 +215,7 @@ namespace ts {
 
                         // Source files
                         ...sources[project.first][source.ts],
+                        ...(dependOrdered ? sources[project.second][source.ts] : emptyArray),
                         ...sources[project.third][source.ts],
 
                         // Additional source Files
@@ -183,7 +229,8 @@ namespace ts {
                         // To prepend:: checked to see if we can do prepend manipulation
                         outputFiles[project.third][ext.buildinfo],
                     ],
-                    outputFiles[project.first][ext.buildinfo] // since first build info changes
+                    outputFiles[project.first][ext.buildinfo], // since first build info changes
+                    ...(dependOrdered ? [outputFiles[project.second][ext.buildinfo]] : emptyArray)
                 )
             };
 
@@ -595,6 +642,44 @@ ${internal} enum internalEnum { a, b, c }`);
         verifyOutFileScenario({
             scenario: "stripInternal jsdoc style with comments emit enabled",
             modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
+        });
+
+        function makeOneTwoThreeDependOrder(fs: vfs.FileSystem) {
+            replaceText(fs, sources[project.second][source.config], "[", `[
+    { "path": "../first", "prepend": true }`);
+            replaceText(fs, sources[project.third][source.config], `{ "path": "../first", "prepend": true },`, "");
+        }
+
+        function stripInternalWithDependentOrder(fs: vfs.FileSystem, removeCommentsDisabled?: boolean, jsDocStyle?: boolean) {
+            stripInternalScenario(fs, removeCommentsDisabled, jsDocStyle);
+            makeOneTwoThreeDependOrder(fs);
+        }
+
+        verifyOutFileScenario({
+            scenario: "stripInternal when one-two-three are prepended in order",
+            modifyFs: fs => stripInternalWithDependentOrder(fs),
+            modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
+            dependOrdered: true
+        });
+
+        verifyOutFileScenario({
+            scenario: "stripInternal with comments emit enabled when one-two-three are prepended in order",
+            modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true),
+            modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
+            dependOrdered: true
+        });
+
+        verifyOutFileScenario({
+            scenario: "stripInternal jsdoc style comment when one-two-three are prepended in order",
+            modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
+            modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/**@internal*/ interface`, "interface"),
+            dependOrdered: true
+        });
+
+        verifyOutFileScenario({
+            scenario: "stripInternal jsdoc style with comments emit enabled when one-two-three are prepended in order",
+            modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
+            dependOrdered: true
         });
     });
 }
