@@ -68,7 +68,7 @@
         "gulp-sourcemaps": "latest",
         "istanbul": "latest",
         "jake": "latest",
-        "lodash": "4.17.10",
+        "lodash": "^4.17.11",
         "merge2": "latest",
         "minimist": "latest",
         "mkdirp": "latest",
