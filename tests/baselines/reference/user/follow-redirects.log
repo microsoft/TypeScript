@@ -1,14 +1,16 @@
 Exit Code: 1
 Standard output:
-node_modules/follow-redirects/index.js(105,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(106,10): error TS2339: Property 'abort' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(173,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(212,16): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(259,12): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(293,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
-  Type 'undefined' is not assignable to type 'string'.
-node_modules/follow-redirects/index.js(306,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
 
 
 
 Standard error:
+internal/modules/cjs/loader.js:583
+    throw err;
+    ^
+
+Error: Cannot find module '../../../built/local/tsc.js'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:507:25)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:742:12)
+    at startup (internal/bootstrap/node.js:283:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:743:3)

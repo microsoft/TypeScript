@@ -1,8 +1,16 @@
 Exit Code: 1
 Standard output:
-node_modules/url-search-params/build/url-search-params.node.js(174,1): error TS2539: Cannot assign to 'URLSearchParams' because it is not a variable.
-node_modules/url-search-params/build/url-search-params.node.js(174,44): error TS2339: Property 'URLSearchParams' does not exist on type 'Global'.
 
 
 
 Standard error:
+internal/modules/cjs/loader.js:583
+    throw err;
+    ^
+
+Error: Cannot find module '../../../built/local/tsc.js'
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:581:15)
+    at Function.Module._load (internal/modules/cjs/loader.js:507:25)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:742:12)
+    at startup (internal/bootstrap/node.js:283:19)
+    at bootstrapNodeJSCore (internal/bootstrap/node.js:743:3)
