@@ -632,7 +632,7 @@ namespace ts {
                 getModifiedTime,
                 setModifiedTime,
                 deleteFile,
-                createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
+                createHash: _crypto ? createSHA256Hash : generateDjb2Hash,
                 createSHA256Hash: _crypto ? createSHA256Hash : undefined,
                 getMemoryUsage() {
                     if (global.gc) {
@@ -1123,12 +1123,6 @@ namespace ts {
                 catch (e) {
                     return;
                 }
-            }
-
-            function createMD5HashUsingNativeCrypto(data: string): string {
-                const hash = _crypto!.createHash("md5");
-                hash.update(data);
-                return hash.digest("hex");
             }
 
             function createSHA256Hash(data: string): string {
