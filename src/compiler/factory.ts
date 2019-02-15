@@ -2663,9 +2663,9 @@ namespace ts {
     }
 
     export function createUnparsedSourceFile(text: string): UnparsedSource;
-    export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
+    export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapText?: string): UnparsedSource {
+    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapTextOrStripInternal?: string | boolean): UnparsedSource {
         const node = createUnparsedSource();
         let prologues: UnparsedPrologue[] | undefined;
         let helpers: UnscopedEmitHelper[] | undefined;
@@ -2684,6 +2684,8 @@ namespace ts {
             });
 
             if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
+                Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
+                const stripInternal = mapTextOrStripInternal as boolean | undefined;
                 const bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
                 for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
                     switch (section.kind) {
@@ -2710,9 +2712,12 @@ namespace ts {
                             prependNode.texts = section.texts.map(text => createUnparsedNode(text, node) as UnparsedTextLike);
                             (texts || (texts = [])).push(prependNode);
                             break;
+                        case BundleFileSectionKind.Internal:
+                            if (stripInternal) break;
+                            // falls through
                         case BundleFileSectionKind.Text:
                         case BundleFileSectionKind.SourceMapUrl:
-                            (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedSourceText);
+                            (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
                             break;
                         default:
                             Debug.assertNever(section);
@@ -2724,7 +2729,7 @@ namespace ts {
             node.fileName = "";
             node.text = textOrInputFiles;
             node.sourceMapPath = mapPathOrType;
-            node.sourceMapText = mapText;
+            node.sourceMapText = mapTextOrStripInternal as string;
         }
         node.prologues = prologues || emptyArray;
         node.helpers = helpers;
@@ -2748,11 +2753,11 @@ namespace ts {
         });
 
         const bundleFileInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle && input.buildInfo.bundle.js);
-        const texts: UnparsedSourceText[] = [];
+        const texts: UnparsedTextLike[] = [];
         for (const section of bundleFileInfo.sections) {
             switch (section.kind) {
                 case BundleFileSectionKind.Text:
-                    texts.push(createUnparsedNode(section, node) as UnparsedSourceText);
+                    texts.push(createUnparsedNode(section, node) as UnparsedTextLike);
                     break;
                 // Ignore
                 case BundleFileSectionKind.Prologue:
@@ -2764,6 +2769,7 @@ namespace ts {
                 case BundleFileSectionKind.Reference:
                 case BundleFileSectionKind.Type:
                 case BundleFileSectionKind.Lib:
+                case BundleFileSectionKind.Internal:
                     Debug.fail(`js shouldnt have section: ${JSON.stringify(section)}`);
                     break;
                 default:
@@ -2776,7 +2782,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function createUnparsedDtsSourceFileWithPrepend(input: InputFiles, prepends: ReadonlyArray<InputFiles>): UnparsedSource {
+    export function createUnparsedDtsSourceFileWithPrepend(input: InputFiles, prepends: ReadonlyArray<InputFiles>, stripInternal: boolean | undefined): UnparsedSource {
         Debug.assert(!!input.oldFileOfCurrentEmit);
         const node = createUnparsedSource();
         node.oldFileOfCurrentEmit = true;
@@ -2784,7 +2790,7 @@ namespace ts {
         node.sourceMapPath = Debug.assertDefined(input.declarationMapPath);
         node.text = input.declarationText;
         node.sourceMapText = input.declarationMapText;
-        const mapOfPrepend = arrayToMap(prepends, prepend => prepend.declarationPath!, prepend => createUnparsedSourceFile(prepend, "dts"));
+        const mapOfPrepend = arrayToMap(prepends, prepend => prepend.declarationPath!, prepend => createUnparsedSourceFile(prepend, "dts", stripInternal));
         const texts: UnparsedSourceText[] = [];
         const bundleFileInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle && input.buildInfo.bundle.dts);
         for (const section of bundleFileInfo.sections) {
@@ -2798,14 +2804,15 @@ namespace ts {
 
                 case BundleFileSectionKind.Prepend:
                     const parent = mapOfPrepend.get(section.data)!;
-                    const sectionNode = createUnparsedSectionText(section, parent);
-                    sectionNode.pos = parent.texts[0].pos;
-                    sectionNode.end = last(parent.texts).end;
-                    texts.push(sectionNode);
+                    const prependNode = createUnparsedNode(section, node) as UnparsedPrepend;
+                    parent.texts.forEach(text => Debug.assert(isUnparsedTextLike(text)));
+                    prependNode.texts = parent.texts as UnparsedTextLike[];
+                    texts.push(prependNode);
                     break;
 
+                case BundleFileSectionKind.Internal:
                 case BundleFileSectionKind.Text:
-                    texts.push(createUnparsedNode(section, node) as UnparsedSourceText);
+                    texts.push(createUnparsedNode(section, node) as UnparsedTextLike);
                     break;
 
                 // Ignore
@@ -2830,6 +2837,7 @@ namespace ts {
         switch (kind) {
             case BundleFileSectionKind.Prologue: return SyntaxKind.UnparsedPrologue;
             case BundleFileSectionKind.Prepend: return SyntaxKind.UnparsedPrepend;
+            case BundleFileSectionKind.Internal: return SyntaxKind.UnparsedInternalText;
             case BundleFileSectionKind.Text: return SyntaxKind.UnparsedText;
             case BundleFileSectionKind.SourceMapUrl: return SyntaxKind.UnparsedSourceMapUrl;
 

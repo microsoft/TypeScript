@@ -432,6 +432,7 @@ namespace ts {
         UnparsedPrologue,
         UnparsedPrepend,
         UnparsedText,
+        UnparsedInternalText,
         UnparsedSourceMapUrl,
         UnparsedSectionText,
 
@@ -2827,7 +2828,7 @@ namespace ts {
     }
 
     export interface UnparsedTextLike extends UnparsedSection {
-        kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedSourceMapUrl;
+        kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText | SyntaxKind.UnparsedSourceMapUrl;
         parent: UnparsedSource;
     }
 
@@ -5506,8 +5507,9 @@ namespace ts {
         Lib = "lib",
         Prepend = "prepend",
         Text = "text",
+        Internal = "internal",
         SourceMapUrl = "sourceMapUrl",
-        // internal comments?
+        // comments?
     }
 
     /*@internal*/
@@ -5547,8 +5549,11 @@ namespace ts {
     }
 
     /*@internal*/
+    export type BundleFileTextLikeKind = BundleFileSectionKind.Text | BundleFileSectionKind.Internal | BundleFileSectionKind.SourceMapUrl;
+
+    /*@internal*/
     export interface BundleFileTextLike extends BundleFileSectionBase {
-        kind: BundleFileSectionKind.Text | BundleFileSectionKind.SourceMapUrl;
+        kind: BundleFileTextLikeKind;
     }
 
     /*@internal*/
@@ -5665,6 +5670,8 @@ namespace ts {
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
         /*@internal*/ neverAsciiEscape?: boolean;
         /*@internal*/ writeBundleFileInfo?: boolean;
+        /*@internal*/ recordInternalSection?: boolean;
+        /*@internal*/ stripInternal?: boolean;
     }
 
     /* @internal */

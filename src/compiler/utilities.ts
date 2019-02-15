@@ -4605,6 +4605,7 @@ namespace ts {
     export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
         switch (section.kind) {
             case BundleFileSectionKind.Text:
+            case BundleFileSectionKind.Internal:
             case BundleFileSectionKind.SourceMapUrl:
                 return true;
             default:
@@ -6007,12 +6008,22 @@ namespace ts {
         return node.kind === SyntaxKind.UnparsedPrepend;
     }
 
+    export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
+        switch (node.kind) {
+            case SyntaxKind.UnparsedText:
+            case SyntaxKind.UnparsedInternalText:
+            case SyntaxKind.UnparsedSourceMapUrl:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     export function isUnparsedNode(node: Node): node is UnparsedNode {
-        return node.kind === SyntaxKind.UnparsedPrologue ||
-            node.kind === SyntaxKind.UnparsedPrepend ||
-            node.kind === SyntaxKind.UnparsedText ||
-            node.kind === SyntaxKind.UnparsedSourceMapUrl ||
-            node.kind === SyntaxKind.UnparsedSectionText;
+        return isUnparsedTextLike(node) ||
+            node.kind === SyntaxKind.UnparsedPrologue ||
+            node.kind === SyntaxKind.UnparsedSectionText ||
+            isUnparsedPrepend(node);
     }
 
     // JSDoc

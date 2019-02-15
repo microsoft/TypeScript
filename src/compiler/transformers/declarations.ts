@@ -9,6 +9,15 @@ namespace ts {
         return result.diagnostics;
     }
 
+    export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
+        const parseTreeNode = getParseTreeNode(node);
+        const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
+        return !!forEach(leadingCommentRanges, range => {
+            const comment = currentSourceFile.text.substring(range.pos, range.end);
+            return stringContains(comment, "@internal");
+        });
+    }
+
     const declarationEmitNodeBuilderFlags =
         NodeBuilderFlags.MultilineObjectLiterals |
         NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
@@ -207,7 +216,7 @@ namespace ts {
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
-                        const sourceFile = createUnparsedSourceFile(prepend, "dts");
+                        const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
                         hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
                         collectReferences(sourceFile, refs);
                         recordTypeReferenceDirectivesIfNecessary(sourceFile.typeReferenceDirectives);
@@ -1228,19 +1237,8 @@ namespace ts {
             errorNameNode = undefined;
         }
 
-        function hasInternalAnnotation(range: CommentRange) {
-            const comment = currentSourceFile.text.substring(range.pos, range.end);
-            return stringContains(comment, "@internal");
-        }
-
         function shouldStripInternal(node: Node) {
-            if (stripInternal && node) {
-                const leadingCommentRanges = getLeadingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile);
-                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
-                    return true;
-                }
-            }
-            return false;
+            return !!stripInternal && !!node && isInternalDeclaration(node, currentSourceFile);
         }
 
         function isScopeMarker(node: Node) {

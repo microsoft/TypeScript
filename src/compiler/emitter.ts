@@ -260,7 +260,8 @@ namespace ts {
                 inlineSourceMap: compilerOptions.inlineSourceMap,
                 extendedDiagnostics: compilerOptions.extendedDiagnostics,
                 onlyPrintJsDocStyle: true,
-                writeBundleFileInfo: !!bundleBuildInfo
+                writeBundleFileInfo: !!bundleBuildInfo,
+                recordInternalSection: !!bundleBuildInfo
             };
 
             const declarationPrinter = createPrinter(printerOptions, {
@@ -528,12 +529,14 @@ namespace ts {
         const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
         // error if no source map or for now if inline sourcemap
         if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
+        const stripInternal = config.options.stripInternal;
         const declarationMapText = declarationMapPath && host.readFile(declarationMapPath);
         // error if no source map or for now if inline sourcemap
         if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
         // read declaration text
-        const declarationText = declarationMapText && host.readFile(declarationFilePath!);
-        if (declarationMapText && !declarationText) return declarationFilePath!;
+        const shouldHaveDeclarationText = stripInternal || declarationMapText;
+        const declarationText = shouldHaveDeclarationText && host.readFile(declarationFilePath!);
+        if (shouldHaveDeclarationText && !declarationText) return declarationFilePath!;
 
         const buildInfo = JSON.parse(buildInfoText) as BuildInfo;
         if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationMapText && !buildInfo.bundle.dts)) return buildInfoPath!;
@@ -593,14 +596,22 @@ namespace ts {
         // Emit js
         emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(optionsWithoutDeclaration));
         // Emit d.ts map
-        if (declarationMapText) {
-            emitHost.getPrependNodes = memoize(() => [createUnparsedDtsSourceFileWithPrepend(ownPrependInput, prependNodes)]);
+        if (shouldHaveDeclarationText) {
+            emitHost.getPrependNodes = memoize(() => [createUnparsedDtsSourceFileWithPrepend(ownPrependInput, prependNodes, stripInternal)]);
             emitHost.getCompilerOptions = () => config.options;
             emitHost.getSourceFiles = () => emptyArray;
             emitHost.writeFile = (name, text, writeByteOrderMark) => {
                 // Same dts ignore
-                if (fileExtensionIs(name, Extension.Dts) || name === buildInfoPath) return;
-                outputFiles.push({ name, text, writeByteOrderMark });
+                if (!stripInternal && (fileExtensionIs(name, Extension.Dts) || name === buildInfoPath)) return;
+                // Even though dts file hasnt changed, whether def is internal or not could change, so write the dts and update buildInfo
+                if (name !== buildInfo) {
+                    outputFiles.push({ name, text, writeByteOrderMark });
+                }
+                else {
+                    const buildInfo = JSON.parse(text) as BuildInfo;
+                    newBundle.dts = buildInfo.bundle && buildInfo.bundle.dts;
+                    writeByteOrderMarkBuildInfo = writeByteOrderMarkBuildInfo || writeByteOrderMark;
+                }
             };
             emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ true);
         }
@@ -646,6 +657,8 @@ namespace ts {
         let write = writeBase;
         let isOwnFileEmit: boolean;
         const bundleFileInfo = printerOptions.writeBundleFileInfo ? { sections: [] } as BundleFileInfo : undefined;
+        const recordInternalSection = printerOptions.recordInternalSection;
+        let sourceFileTextPos = 0;
 
         // Source Maps
         let sourceMapsDisabled = true;
@@ -748,6 +761,24 @@ namespace ts {
             return writer.getTextPosWithWriteLine ? writer.getTextPosWithWriteLine() : writer.getTextPos();
         }
 
+        function updateOrPushBundleFileTextLike(pos: number, end: number, kind: BundleFileTextLikeKind) {
+            const last = lastOrUndefined(bundleFileInfo!.sections);
+            if (last && last.kind === kind) {
+                last.end = end;
+            }
+            else {
+                bundleFileInfo!.sections.push({ pos, end, kind });
+            }
+        }
+
+        function recordBundleFileTextSection(end: number) {
+            if (sourceFileTextPos < end) {
+                updateOrPushBundleFileTextLike(sourceFileTextPos, end, BundleFileSectionKind.Text);
+                return true;
+            }
+            return false;
+        }
+
         function writeBundle(bundle: Bundle, output: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined) {
             isOwnFileEmit = false;
             const previousWriter = writer;
@@ -774,14 +805,13 @@ namespace ts {
                 }
             }
 
-            const pos = getTextPosWithWriteLine();
+            sourceFileTextPos = getTextPosWithWriteLine();
             for (const sourceFile of bundle.sourceFiles) {
                 print(EmitHint.SourceFile, sourceFile, sourceFile);
             }
             if (bundleFileInfo && bundle.sourceFiles.length) {
                 const end = writer.getTextPos();
-                if (pos !== end) {
-                    bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
+                if (recordBundleFileTextSection(end)) {
                     // Store prologues
                     const prologues = getPrologueDirectivesFromBundledSourceFiles(bundle);
                     if (prologues) {
@@ -882,8 +912,15 @@ namespace ts {
 
         function emit(node: Node | undefined) {
             if (node === undefined) return;
+            const end = writer.getTextPos();
+            const pos = getTextPosWithWriteLine();
             const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
             pipelinePhase(EmitHint.Unspecified, node);
+            if (recordInternalSection && bundleFileInfo && currentSourceFile && (isDeclaration(node) || isVariableStatement(node)) && isInternalDeclaration(node, currentSourceFile)) {
+                recordBundleFileTextSection(end);
+                updateOrPushBundleFileTextLike(pos, writer.getTextPos(), BundleFileSectionKind.Internal);
+                sourceFileTextPos = getTextPosWithWriteLine();
+            }
         }
 
         function emitIdentifierName(node: Identifier | undefined) {
@@ -967,6 +1004,7 @@ namespace ts {
                         return writeUnparsedNode(<UnparsedNode>node);
 
                     case SyntaxKind.UnparsedText:
+                    case SyntaxKind.UnparsedInternalText:
                     case SyntaxKind.UnparsedSourceMapUrl:
                         return emitUnparsedTextLike(<UnparsedTextLike>node);
 
@@ -1491,24 +1529,29 @@ namespace ts {
 
         // SyntaxKind.UnparsedPrologue
         // SyntaxKind.UnparsedText
+        // SyntaxKind.UnparsedInternalText
         // SyntaxKind.UnparsedSourceMapUrl
+        // SyntaxKind.UnparsedSectionText
         function writeUnparsedNode(unparsed: UnparsedNode) {
             writer.rawWrite(unparsed.parent.text.substring(unparsed.pos, unparsed.end));
         }
 
         // SyntaxKind.UnparsedText
+        // SyntaxKind.UnparsedInternalText
         // SyntaxKind.UnparsedSourceMapUrl
         function emitUnparsedTextLike(unparsed: UnparsedTextLike) {
             const pos = getTextPosWithWriteLine();
             writeUnparsedNode(unparsed);
             if (bundleFileInfo) {
-                bundleFileInfo.sections.push({
+                updateOrPushBundleFileTextLike(
                     pos,
-                    end: writer.getTextPos(),
-                    kind: unparsed.kind === SyntaxKind.UnparsedText ?
-                        BundleFileSectionKind.Text
-                        : BundleFileSectionKind.SourceMapUrl
-                });
+                    writer.getTextPos(),
+                    unparsed.kind === SyntaxKind.UnparsedText ?
+                        BundleFileSectionKind.Text :
+                        unparsed.kind === SyntaxKind.UnparsedInternalText ?
+                            BundleFileSectionKind.Internal :
+                            BundleFileSectionKind.SourceMapUrl
+                );
             }
         }
 
