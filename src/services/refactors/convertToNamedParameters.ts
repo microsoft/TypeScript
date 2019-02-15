@@ -59,16 +59,13 @@ namespace ts.refactor.convertToNamedParameters {
         forEach(functionCalls, call => {
             if (call.arguments && call.arguments.length) {
                 const newArgument = getSynthesizedDeepClone(createNewArguments(functionDeclaration, call.arguments), /*includeTrivia*/ true);
-                const newCall = updateCallArguments(call, createNodeArray([newArgument]));
-                suppressLeadingAndTrailingTrivia(newCall, /*recursive*/ false);
-                changes.replaceNode(getSourceFileOfNode(call), call, newCall);
+                changes.replaceNodeRange(
+                    getSourceFileOfNode(call),
+                    first(call.arguments),
+                    last(call.arguments),
+                    newArgument,
+                    { startPosition: textChanges.LeadingTriviaOption.IncludeAll, endPosition: textChanges.TrailingTriviaOption.Include });
             }});
-    }
-
-    function updateCallArguments(call: CallExpression | NewExpression, args: NodeArray<Expression>) {
-        const newCall = getSynthesizedClone(call);
-        newCall.arguments = args;
-        return updateNode(newCall, call);
     }
 
     function getGroupedReferences(functionNames: Node[], program: Program, cancellationToken: CancellationToken): GroupedReferences {
