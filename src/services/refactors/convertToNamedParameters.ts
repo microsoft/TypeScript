@@ -47,7 +47,13 @@ namespace ts.refactor.convertToNamedParameters {
             first(functionDeclaration.parameters),
             last(functionDeclaration.parameters),
             newParamDeclaration,
-            { joiner: ", ", indentation: 0 }); // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
+            {   joiner: ", ",
+                // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
+                indentation: 0,
+                startPosition: textChanges.LeadingTriviaOption.IncludeAll,
+                endPosition: textChanges.TrailingTriviaOption.Include
+            });
+
 
         const functionCalls = groupedReferences.calls;
         forEach(functionCalls, call => {
