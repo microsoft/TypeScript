@@ -658,13 +658,37 @@ function forfirstfirst_PART1Rest() { }
           "pos": 1095,
           "end": 1497,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js"
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 1095,
+              "end": 1457,
+              "kind": "text"
+            },
+            {
+              "pos": 1457,
+              "end": 1497,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 1499,
           "end": 2160,
           "kind": "prepend",
-          "data": "/src/2/second-output.js"
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 1499,
+              "end": 2119,
+              "kind": "text"
+            },
+            {
+              "pos": 2119,
+              "end": 2160,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 2162,
@@ -684,13 +708,37 @@ function forfirstfirst_PART1Rest() { }
           "pos": 0,
           "end": 314,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts"
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 272,
+              "kind": "text"
+            },
+            {
+              "pos": 272,
+              "end": 314,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 316,
           "end": 578,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts"
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 316,
+              "end": 535,
+              "kind": "text"
+            },
+            {
+              "pos": 535,
+              "end": 578,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 580,
@@ -746,7 +794,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1095-1497):: /src/first/bin/first-output.js
+prepend: (1095-1497):: /src/first/bin/first-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (1095-1457)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -761,9 +811,14 @@ function firstfirst_part3Spread() {
     }
 }
 firstfirst_part3Spread.apply(void 0, __spread([10, 20, 30]));
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (1457-1497)
 //# sourceMappingURL=first-output.js.map
 ----------------------------------------------------------------------
-prepend: (1499-2160):: /src/2/second-output.js
+prepend: (1499-2160):: /src/2/second-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (1499-2119)
 var N;
 (function (N) {
     function f() {
@@ -789,6 +844,9 @@ function secondsecond_part2Spread() {
     }
 }
 secondsecond_part2Spread.apply(void 0, __spread([10, 20, 30]));
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (2119-2160)
 //# sourceMappingURL=second-output.js.map
 ----------------------------------------------------------------------
 text: (2162-2527)
@@ -812,7 +870,9 @@ sourceMapUrl: (2527-2567)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-314):: /src/first/bin/first-output.d.ts
+prepend: (0-314):: /src/first/bin/first-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (0-272)
 interface TheFirst {
     none: any;
 }
@@ -823,9 +883,14 @@ interface NoJsForHereEither {
 declare function forfirstfirst_PART1Rest(): void;
 declare function f(): string;
 declare function firstfirst_part3Spread(...b: number[]): void;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (272-314)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (316-578):: /src/2/second-output.d.ts
+prepend: (316-578):: /src/2/second-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (316-535)
 declare namespace N {
 }
 declare namespace N {
@@ -835,6 +900,9 @@ declare class C {
     doSomething(): void;
 }
 declare function secondsecond_part2Spread(...b: number[]): void;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (535-578)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
 text: (580-714)

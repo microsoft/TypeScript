@@ -430,7 +430,7 @@ namespace ts {
         EnumMember,
         // Unparsed
         UnparsedPrologue,
-        UnparsedPrependText,
+        UnparsedPrepend,
         UnparsedText,
         UnparsedSourceMapUrl,
         UnparsedSectionText,
@@ -2804,7 +2804,7 @@ namespace ts {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
-    export type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl | UnparsedSectionText;
+    export type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike | UnparsedSectionText;
     export type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
 
     export interface UnparsedSection extends Node {
@@ -2819,19 +2819,15 @@ namespace ts {
         parent: UnparsedSource;
     }
 
-    export interface UnparsedPrependText extends UnparsedSection {
-        kind: SyntaxKind.UnparsedPrependText;
+    export interface UnparsedPrepend extends UnparsedSection {
+        kind: SyntaxKind.UnparsedPrepend;
         data: string;
         parent: UnparsedSource;
+        texts: ReadonlyArray<UnparsedTextLike>;
     }
 
-    export interface UnparsedText extends UnparsedSection {
-        kind: SyntaxKind.UnparsedText;
-        parent: UnparsedSource;
-    }
-
-    export interface UnparsedSourceMapUrl extends UnparsedSection {
-        kind: SyntaxKind.UnparsedSourceMapUrl;
+    export interface UnparsedTextLike extends UnparsedSection {
+        kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedSourceMapUrl;
         parent: UnparsedSource;
     }
 
@@ -5547,22 +5543,18 @@ namespace ts {
     export interface BundleFilePrepend extends BundleFileSectionBase {
         kind: BundleFileSectionKind.Prepend;
         data: string;
+        texts: BundleFileTextLike[];
     }
 
     /*@internal*/
-    export interface BundleFileText extends BundleFileSectionBase {
-        kind: BundleFileSectionKind.Text;
-    }
-
-    /*@internal*/
-    export interface BundleFileSourceMapUrl extends BundleFileSectionBase {
-        kind: BundleFileSectionKind.SourceMapUrl;
+    export interface BundleFileTextLike extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.Text | BundleFileSectionKind.SourceMapUrl;
     }
 
     /*@internal*/
     export type BundleFileSection = BundleFilePrologue | BundleFileEmitHelpers |
         BundleFileHasNoDefaultLib | BundleFileReference | BundleFilePrepend |
-        BundleFileText | BundleFileSourceMapUrl;
+        BundleFileTextLike;
 
     /*@internal*/
     export interface SourceFilePrologueDirectiveExpression extends TextRange {

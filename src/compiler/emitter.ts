@@ -760,10 +760,17 @@ namespace ts {
             for (const prepend of bundle.prepends) {
                 writeLine();
                 const pos = getTextPosWithWriteLine();
+                const savedSections = bundleFileInfo && bundleFileInfo.sections;
+                if (savedSections) bundleFileInfo!.sections = [];
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
                 if (bundleFileInfo) {
+                    const newSections = bundleFileInfo.sections;
+                    bundleFileInfo.sections = savedSections!;
                     if (prepend.oldFileOfCurrentEmit) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
-                    else bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName });
+                    else {
+                        newSections.forEach(section => Debug.assert(isBundleFileTextLike(section)));
+                        bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName, texts: newSections as BundleFileTextLike[] });
+                    }
                 }
             }
 
@@ -791,7 +798,7 @@ namespace ts {
                 }
                 else {
                     // Ensure we have text section
-                    Debug.assert(!!bundleFileInfo.sections.length && last(bundleFileInfo.sections).kind === BundleFileSectionKind.Text);
+                    Debug.assert(!!bundleFileInfo.sections.length && isBundleFileTextLike(last(bundleFileInfo.sections)));
                 }
             }
 
@@ -953,13 +960,15 @@ namespace ts {
                         return emitLiteral(<LiteralExpression>node);
 
                     case SyntaxKind.UnparsedSource:
-                        return emitUnparsedSource(<UnparsedSource>node);
+                    case SyntaxKind.UnparsedPrepend:
+                        return emitUnparsedSourceOrPrepend(<UnparsedSource>node);
 
                     case SyntaxKind.UnparsedPrologue:
-                    case SyntaxKind.UnparsedPrependText:
+                        return writeUnparsedNode(<UnparsedNode>node);
+
                     case SyntaxKind.UnparsedText:
                     case SyntaxKind.UnparsedSourceMapUrl:
-                        return emitUnparsedNode(<UnparsedNode>node);
+                        return emitUnparsedTextLike(<UnparsedTextLike>node);
 
                     case SyntaxKind.UnparsedSectionText:
                         return emitUnparsedSectionText(<UnparsedSectionText>node);
@@ -1472,7 +1481,8 @@ namespace ts {
         }
 
         // SyntaxKind.UnparsedSource
-        function emitUnparsedSource(unparsed: UnparsedSource) {
+        // SyntaxKind.UnparsedPrepend
+        function emitUnparsedSourceOrPrepend(unparsed: UnparsedSource | UnparsedPrepend) {
             for (const text of unparsed.texts) {
                 writeLine();
                 emit(text);
@@ -1480,16 +1490,32 @@ namespace ts {
         }
 
         // SyntaxKind.UnparsedPrologue
-        // SyntaxKind.UnparsedPrependText
         // SyntaxKind.UnparsedText
-        function emitUnparsedNode(unparsed: UnparsedNode) {
+        // SyntaxKind.UnparsedSourceMapUrl
+        function writeUnparsedNode(unparsed: UnparsedNode) {
             writer.rawWrite(unparsed.parent.text.substring(unparsed.pos, unparsed.end));
+        }
+
+        // SyntaxKind.UnparsedText
+        // SyntaxKind.UnparsedSourceMapUrl
+        function emitUnparsedTextLike(unparsed: UnparsedTextLike) {
+            const pos = getTextPosWithWriteLine();
+            writeUnparsedNode(unparsed);
+            if (bundleFileInfo) {
+                bundleFileInfo.sections.push({
+                    pos,
+                    end: writer.getTextPos(),
+                    kind: unparsed.kind === SyntaxKind.UnparsedText ?
+                        BundleFileSectionKind.Text
+                        : BundleFileSectionKind.SourceMapUrl
+                });
+            }
         }
 
         // SyntaxKind.UnparsedSectionText
         function emitUnparsedSectionText(unparsed: UnparsedSectionText) {
             const pos = getTextPosWithWriteLine();
-            emitUnparsedNode(unparsed);
+            writeUnparsedNode(unparsed);
             if (bundleFileInfo) {
                 const section = clone(unparsed.section);
                 section.pos = pos;
@@ -4692,7 +4718,7 @@ namespace ts {
 
         function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
             const pipelinePhase = getNextPipelinePhase(PipelinePhase.SourceMaps, node);
-            if (isUnparsedSource(node)) {
+            if (isUnparsedSource(node) || isUnparsedPrepend(node)) {
                 pipelinePhase(hint, node);
             }
             else if (isUnparsedNode(node)) {

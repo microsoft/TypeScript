@@ -8,7 +8,19 @@
           "pos": 0,
           "end": 149,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js"
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 109,
+              "kind": "text"
+            },
+            {
+              "pos": 109,
+              "end": 149,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 151,
@@ -28,7 +40,19 @@
           "pos": 0,
           "end": 213,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts"
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 171,
+              "kind": "text"
+            },
+            {
+              "pos": 171,
+              "end": 213,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 215,
@@ -49,13 +73,18 @@
 ======================================================================
 File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-prepend: (0-149):: /src/first/bin/first-output.js
+prepend: (0-149):: /src/first/bin/first-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (0-109)
 var s = "Hola, world";
 console.log(s);
 console.log(f());
 function f() {
     return "JS does hoists";
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (109-149)
 //# sourceMappingURL=first-output.js.map
 ----------------------------------------------------------------------
 text: (151-3585)
@@ -169,7 +198,9 @@ sourceMapUrl: (3585-3626)
 ======================================================================
 File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-213):: /src/first/bin/first-output.d.ts
+prepend: (0-213):: /src/first/bin/first-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (0-171)
 /**@internal*/ interface TheFirst {
     none: any;
 }
@@ -178,6 +209,9 @@ interface NoJsForHereEither {
     none: any;
 }
 declare function f(): string;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (171-213)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
 text: (215-1575)
@@ -3413,7 +3447,29 @@ console.log(s);
           "pos": 0,
           "end": 3626,
           "kind": "prepend",
-          "data": "/src/2/second-output.js"
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 109,
+              "kind": "text"
+            },
+            {
+              "pos": 109,
+              "end": 149,
+              "kind": "sourceMapUrl"
+            },
+            {
+              "pos": 151,
+              "end": 3585,
+              "kind": "text"
+            },
+            {
+              "pos": 3585,
+              "end": 3626,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 3628,
@@ -3433,7 +3489,29 @@ console.log(s);
           "pos": 0,
           "end": 1618,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts"
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 171,
+              "kind": "text"
+            },
+            {
+              "pos": 171,
+              "end": 213,
+              "kind": "sourceMapUrl"
+            },
+            {
+              "pos": 215,
+              "end": 1575,
+              "kind": "text"
+            },
+            {
+              "pos": 1575,
+              "end": 1618,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 1620,
@@ -3454,14 +3532,21 @@ console.log(s);
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-3626):: /src/2/second-output.js
+prepend: (0-3626):: /src/2/second-output.js texts:: 4
+>>--------------------------------------------------------------------
+text: (0-109)
 var s = "Hola, world";
 console.log(s);
 console.log(f());
 function f() {
     return "JS does hoists";
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (109-149)
 //# sourceMappingURL=first-output.js.map
+>>--------------------------------------------------------------------
+text: (151-3585)
 var N;
 (function (N) {
     function f() {
@@ -3564,6 +3649,9 @@ var C = /** @class */ (function () {
     };
     return C;
 }());
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (3585-3626)
 //# sourceMappingURL=second-output.js.map
 ----------------------------------------------------------------------
 text: (3628-3664)
@@ -3577,7 +3665,9 @@ sourceMapUrl: (3664-3704)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-1618):: /src/2/second-output.d.ts
+prepend: (0-1618):: /src/2/second-output.d.ts texts:: 4
+>>--------------------------------------------------------------------
+text: (0-171)
 /**@internal*/ interface TheFirst {
     none: any;
 }
@@ -3586,7 +3676,12 @@ interface NoJsForHereEither {
     none: any;
 }
 declare function f(): string;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (171-213)
 //# sourceMappingURL=first-output.d.ts.map
+>>--------------------------------------------------------------------
+text: (215-1575)
 declare namespace N {
 }
 declare namespace N {
@@ -3640,6 +3735,9 @@ declare namespace normalN {
 declare class C {
     doSomething(): void;
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (1575-1618)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
 text: (1620-1639)

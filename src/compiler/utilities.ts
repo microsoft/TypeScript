@@ -4601,6 +4601,16 @@ namespace ts {
     export function isAccessExpression(node: Node): node is AccessExpression {
         return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression;
     }
+
+    export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
+        switch (section.kind) {
+            case BundleFileSectionKind.Text:
+            case BundleFileSectionKind.SourceMapUrl:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
 
 namespace ts {
@@ -5993,9 +6003,13 @@ namespace ts {
         return node.kind === SyntaxKind.UnparsedSource;
     }
 
+    export function isUnparsedPrepend(node: Node): node is UnparsedPrepend {
+        return node.kind === SyntaxKind.UnparsedPrepend;
+    }
+
     export function isUnparsedNode(node: Node): node is UnparsedNode {
         return node.kind === SyntaxKind.UnparsedPrologue ||
-            node.kind === SyntaxKind.UnparsedPrependText ||
+            node.kind === SyntaxKind.UnparsedPrepend ||
             node.kind === SyntaxKind.UnparsedText ||
             node.kind === SyntaxKind.UnparsedSourceMapUrl ||
             node.kind === SyntaxKind.UnparsedSectionText;

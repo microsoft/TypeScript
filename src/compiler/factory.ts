@@ -2706,6 +2706,10 @@ namespace ts {
                             (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.data });
                             break;
                         case BundleFileSectionKind.Prepend:
+                            const prependNode = createUnparsedNode(section, node) as UnparsedPrepend;
+                            prependNode.texts = section.texts.map(text => createUnparsedNode(text, node) as UnparsedTextLike);
+                            (texts || (texts = [])).push(prependNode);
+                            break;
                         case BundleFileSectionKind.Text:
                         case BundleFileSectionKind.SourceMapUrl:
                             (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedSourceText);
@@ -2727,7 +2731,7 @@ namespace ts {
         node.referencedFiles = referencedFiles || emptyArray;
         node.typeReferenceDirectives = typeReferenceDirectives;
         node.libReferenceDirectives = libReferenceDirectives || emptyArray;
-        node.texts = texts || [<UnparsedText>createUnparsedNode({ kind: BundleFileSectionKind.Text, pos: 0, end: node.text.length }, node)];
+        node.texts = texts || [<UnparsedTextLike>createUnparsedNode({ kind: BundleFileSectionKind.Text, pos: 0, end: node.text.length }, node)];
         return node;
     }
 
@@ -2825,7 +2829,7 @@ namespace ts {
     function mapBundleFileSectionKindToSyntaxKind(kind: BundleFileSectionKind): SyntaxKind {
         switch (kind) {
             case BundleFileSectionKind.Prologue: return SyntaxKind.UnparsedPrologue;
-            case BundleFileSectionKind.Prepend: return SyntaxKind.UnparsedPrependText;
+            case BundleFileSectionKind.Prepend: return SyntaxKind.UnparsedPrepend;
             case BundleFileSectionKind.Text: return SyntaxKind.UnparsedText;
             case BundleFileSectionKind.SourceMapUrl: return SyntaxKind.UnparsedSourceMapUrl;
 

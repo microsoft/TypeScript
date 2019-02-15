@@ -2910,13 +2910,37 @@ namespace normalN {
           "pos": 0,
           "end": 150,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js"
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 110,
+              "kind": "text"
+            },
+            {
+              "pos": 110,
+              "end": 150,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 152,
           "end": 3245,
           "kind": "prepend",
-          "data": "/src/2/second-output.js"
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 152,
+              "end": 3204,
+              "kind": "text"
+            },
+            {
+              "pos": 3204,
+              "end": 3245,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 3247,
@@ -2936,13 +2960,37 @@ namespace normalN {
           "pos": 0,
           "end": 199,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts"
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 157,
+              "kind": "text"
+            },
+            {
+              "pos": 157,
+              "end": 199,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 201,
           "end": 1289,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts"
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 201,
+              "end": 1246,
+              "kind": "text"
+            },
+            {
+              "pos": 1246,
+              "end": 1289,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 1291,
@@ -2963,16 +3011,23 @@ namespace normalN {
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-150):: /src/first/bin/first-output.js
+prepend: (0-150):: /src/first/bin/first-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (0-110)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
 function f() {
     return "JS does hoists";
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (110-150)
 //# sourceMappingURL=first-output.js.map
 ----------------------------------------------------------------------
-prepend: (152-3245):: /src/2/second-output.js
+prepend: (152-3245):: /src/2/second-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (152-3204)
 var N;
 (function (N) {
     function f() {
@@ -3075,6 +3130,9 @@ var C = (function () {
     };
     return C;
 }());
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (3204-3245)
 //# sourceMappingURL=second-output.js.map
 ----------------------------------------------------------------------
 text: (3247-3283)
@@ -3088,7 +3146,9 @@ sourceMapUrl: (3283-3323)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-199):: /src/first/bin/first-output.d.ts
+prepend: (0-199):: /src/first/bin/first-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (0-157)
 interface TheFirst {
     none: any;
 }
@@ -3097,9 +3157,14 @@ interface NoJsForHereEither {
     none: any;
 }
 declare function f(): string;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (157-199)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (201-1289):: /src/2/second-output.d.ts
+prepend: (201-1289):: /src/2/second-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (201-1246)
 declare namespace N {
 }
 declare namespace N {
@@ -3153,6 +3218,9 @@ declare enum internalEnum {
 declare class C {
     doSomething(): void;
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (1246-1289)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
 text: (1291-1310)

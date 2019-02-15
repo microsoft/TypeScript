@@ -112,13 +112,32 @@ namespace ts {
         baselineRecorder.WriteLine(`File:: ${outFile}`);
         for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
             baselineRecorder.WriteLine("----------------------------------------------------------------------");
-            baselineRecorder.WriteLine(`${section.kind}: (${section.pos}-${section.end})${section.data ? ":: " + section.data : ""}`);
-            const textLines = content.substring(section.pos, section.end).split(/\r?\n/);
+            writeSectionHeader(section);
+            if (section.kind !== BundleFileSectionKind.Prepend) {
+                writeTextOfSection(section.pos, section.end);
+            }
+            else {
+                Debug.assert(section.pos === first(section.texts).pos);
+                Debug.assert(section.end === last(section.texts).end);
+                for (const text of section.texts) {
+                    baselineRecorder.WriteLine(">>--------------------------------------------------------------------");
+                    writeSectionHeader(text);
+                    writeTextOfSection(text.pos, text.end);
+                }
+            }
+        }
+        baselineRecorder.WriteLine("======================================================================");
+
+        function writeTextOfSection(pos: number, end: number) {
+            const textLines = content.substring(pos, end).split(/\r?\n/);
             for (const line of textLines) {
                 baselineRecorder.WriteLine(line);
             }
         }
-        baselineRecorder.WriteLine("======================================================================");
+
+        function writeSectionHeader(section: BundleFileSection) {
+            baselineRecorder.WriteLine(`${section.kind}: (${section.pos}-${section.end})${section.data ? ":: " + section.data : ""}${section.kind === BundleFileSectionKind.Prepend ? " texts:: " + section.texts.length : ""}`);
+        }
     }
 
     function build({ fs, tick, rootNames, expectedMapFileNames, expectedTsbuildInfoFileNames, modifyFs, withoutBuildInfo }: {

@@ -381,13 +381,37 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
           "pos": 417,
           "end": 701,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js"
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 417,
+              "end": 661,
+              "kind": "text"
+            },
+            {
+              "pos": 661,
+              "end": 701,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 703,
           "end": 1148,
           "kind": "prepend",
-          "data": "/src/2/second-output.js"
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 703,
+              "end": 1107,
+              "kind": "text"
+            },
+            {
+              "pos": 1107,
+              "end": 1148,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 1150,
@@ -407,13 +431,37 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
           "pos": 0,
           "end": 250,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts"
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 208,
+              "kind": "text"
+            },
+            {
+              "pos": 208,
+              "end": 250,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 252,
           "end": 448,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts"
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 252,
+              "end": 405,
+              "kind": "text"
+            },
+            {
+              "pos": 405,
+              "end": 448,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 450,
@@ -445,7 +493,9 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (417-701):: /src/first/bin/first-output.js
+prepend: (417-701):: /src/first/bin/first-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (417-661)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -456,9 +506,14 @@ console.log(f());
 function f() {
     return "JS does hoists";
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (661-701)
 //# sourceMappingURL=first-output.js.map
 ----------------------------------------------------------------------
-prepend: (703-1148):: /src/2/second-output.js
+prepend: (703-1148):: /src/2/second-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (703-1107)
 var N;
 (function (N) {
     function f() {
@@ -477,6 +532,9 @@ var C = (function () {
     };
     return C;
 }());
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (1107-1148)
 //# sourceMappingURL=second-output.js.map
 ----------------------------------------------------------------------
 text: (1150-1303)
@@ -493,7 +551,9 @@ sourceMapUrl: (1303-1343)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-250):: /src/first/bin/first-output.d.ts
+prepend: (0-250):: /src/first/bin/first-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (0-208)
 interface TheFirst {
     none: any;
 }
@@ -503,9 +563,14 @@ interface NoJsForHereEither {
 }
 declare function forfirstfirst_PART1Rest(): void;
 declare function f(): string;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (208-250)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (252-448):: /src/2/second-output.d.ts
+prepend: (252-448):: /src/2/second-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (252-405)
 declare namespace N {
 }
 declare namespace N {
@@ -514,6 +579,9 @@ declare function forsecondsecond_part1Rest(): void;
 declare class C {
     doSomething(): void;
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (405-448)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
 text: (450-520)

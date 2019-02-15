@@ -364,13 +364,37 @@ console.log(s);
           "pos": 62,
           "end": 229,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js"
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 62,
+              "end": 189,
+              "kind": "text"
+            },
+            {
+              "pos": 189,
+              "end": 229,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 231,
           "end": 557,
           "kind": "prepend",
-          "data": "/src/2/second-output.js"
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 231,
+              "end": 516,
+              "kind": "text"
+            },
+            {
+              "pos": 516,
+              "end": 557,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 559,
@@ -390,13 +414,37 @@ console.log(s);
           "pos": 0,
           "end": 199,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts"
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 157,
+              "kind": "text"
+            },
+            {
+              "pos": 157,
+              "end": 199,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 201,
           "end": 344,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts"
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 201,
+              "end": 301,
+              "kind": "text"
+            },
+            {
+              "pos": 301,
+              "end": 344,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 346,
@@ -429,7 +477,9 @@ prologue: (30-44):: myPrologue2
 prologue: (46-60):: myPrologue3
 "myPrologue3";
 ----------------------------------------------------------------------
-prepend: (62-229):: /src/first/bin/first-output.js
+prepend: (62-229):: /src/first/bin/first-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (62-189)
 var s = "Hello, world";
 console.log(s);
 console.log(s);
@@ -437,9 +487,14 @@ console.log(f());
 function f() {
     return "JS does hoists";
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (189-229)
 //# sourceMappingURL=first-output.js.map
 ----------------------------------------------------------------------
-prepend: (231-557):: /src/2/second-output.js
+prepend: (231-557):: /src/2/second-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (231-516)
 var N;
 (function (N) {
     function f() {
@@ -455,6 +510,9 @@ var C = (function () {
     };
     return C;
 }());
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (516-557)
 //# sourceMappingURL=second-output.js.map
 ----------------------------------------------------------------------
 text: (559-595)
@@ -468,7 +526,9 @@ sourceMapUrl: (595-635)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-199):: /src/first/bin/first-output.d.ts
+prepend: (0-199):: /src/first/bin/first-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (0-157)
 interface TheFirst {
     none: any;
 }
@@ -477,9 +537,14 @@ interface NoJsForHereEither {
     none: any;
 }
 declare function f(): string;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (157-199)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (201-344):: /src/2/second-output.d.ts
+prepend: (201-344):: /src/2/second-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (201-301)
 declare namespace N {
 }
 declare namespace N {
@@ -487,6 +552,9 @@ declare namespace N {
 declare class C {
     doSomething(): void;
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (301-344)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
 text: (346-365)

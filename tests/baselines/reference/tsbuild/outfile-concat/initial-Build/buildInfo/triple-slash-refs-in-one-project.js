@@ -923,13 +923,37 @@ declare class secondsecond_part1 { }
           "pos": 0,
           "end": 150,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.js"
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 110,
+              "kind": "text"
+            },
+            {
+              "pos": 110,
+              "end": 150,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 152,
           "end": 529,
           "kind": "prepend",
-          "data": "/src/2/second-output.js"
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 152,
+              "end": 488,
+              "kind": "text"
+            },
+            {
+              "pos": 488,
+              "end": 529,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 531,
@@ -955,13 +979,37 @@ declare class secondsecond_part1 { }
           "pos": 57,
           "end": 256,
           "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts"
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 57,
+              "end": 214,
+              "kind": "text"
+            },
+            {
+              "pos": 214,
+              "end": 256,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 258,
           "end": 455,
           "kind": "prepend",
-          "data": "/src/2/second-output.d.ts"
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 258,
+              "end": 412,
+              "kind": "text"
+            },
+            {
+              "pos": 412,
+              "end": 455,
+              "kind": "sourceMapUrl"
+            }
+          ]
         },
         {
           "pos": 457,
@@ -982,16 +1030,23 @@ declare class secondsecond_part1 { }
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-150):: /src/first/bin/first-output.js
+prepend: (0-150):: /src/first/bin/first-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (0-110)
 var s = "Hello, world";
 console.log(s);
 console.log(f());
 function f() {
     return "JS does hoists";
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (110-150)
 //# sourceMappingURL=first-output.js.map
 ----------------------------------------------------------------------
-prepend: (152-529):: /src/2/second-output.js
+prepend: (152-529):: /src/2/second-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (152-488)
 var second_part1Const = new secondsecond_part1();
 var N;
 (function (N) {
@@ -1008,6 +1063,9 @@ var C = (function () {
     };
     return C;
 }());
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (488-529)
 //# sourceMappingURL=second-output.js.map
 ----------------------------------------------------------------------
 text: (531-567)
@@ -1024,7 +1082,9 @@ File:: /src/third/thirdjs/output/third-output.d.ts
 reference: (0-55):: ../../../second/tripleRef.d.ts
 /// <reference path="../../../second/tripleRef.d.ts" />
 ----------------------------------------------------------------------
-prepend: (57-256):: /src/first/bin/first-output.d.ts
+prepend: (57-256):: /src/first/bin/first-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (57-214)
 interface TheFirst {
     none: any;
 }
@@ -1033,9 +1093,14 @@ interface NoJsForHereEither {
     none: any;
 }
 declare function f(): string;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (214-256)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (258-455):: /src/2/second-output.d.ts
+prepend: (258-455):: /src/2/second-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (258-412)
 declare const second_part1Const: secondsecond_part1;
 declare namespace N {
 }
@@ -1044,6 +1109,9 @@ declare namespace N {
 declare class C {
     doSomething(): void;
 }
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (412-455)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
 text: (457-476)
