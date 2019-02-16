@@ -13,5 +13,5 @@ edit.applyRefactor({
     newContent: `function foo({ a, b, rest = [] }: { a: number; b: number; rest?: number[]; }) {
     return a + b;
 }
-foo({ a: /**a*/ 1 /**b*/, b: /**c*/ 2 /**d*/, rest: [/**e*/ 3 /**f*/, /**g*/ 4 /**h*/] });`
+foo({ /**a*/ a: 1 /**b*/, /**c*/ b: 2 /**d*/, rest: [/**e*/ 3 /**f*/, /**g*/ 4 /**h*/] });`
 });

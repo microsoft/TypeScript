@@ -58,7 +58,7 @@ namespace ts.refactor.convertToNamedParameters {
         const functionCalls = groupedReferences.calls;
         forEach(functionCalls, call => {
             if (call.arguments && call.arguments.length) {
-                const newArgument = getSynthesizedDeepClone(createNewArguments(functionDeclaration, call.arguments), /*includeTrivia*/ true);
+                const newArgument = getSynthesizedDeepClone(createNewArgument(functionDeclaration, call.arguments), /*includeTrivia*/ true);
                 changes.replaceNodeRange(
                     getSourceFileOfNode(call),
                     first(call.arguments),
@@ -215,14 +215,14 @@ namespace ts.refactor.convertToNamedParameters {
         return parameters;
     }
 
-    function createNewArguments(functionDeclaration: ValidFunctionDeclaration, args: NodeArray<Expression>): ObjectLiteralExpression {
+    function createNewArgument(functionDeclaration: ValidFunctionDeclaration, args: NodeArray<Expression>): ObjectLiteralExpression {
         const parameters = getRefactorableParameters(functionDeclaration.parameters);
         const hasRestParameter = isRestParameter(last(parameters));
         const nonRestArguments = hasRestParameter ? args.slice(0, parameters.length - 1) : args;
         const properties = map(nonRestArguments, (arg, i) => {
             const property = createPropertyAssignment(getParameterName(parameters[i]), arg);
             suppressLeadingAndTrailingTrivia(property.initializer);
-            copyComments(arg, property.initializer);
+            copyComments(arg, property);
             return property;
         });
 
