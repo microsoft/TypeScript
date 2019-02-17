@@ -6,7 +6,7 @@
 ////     constructor() {}
 //// }
 ////
-//// class Bar extends Foo {
+//// class [|Bar|] extends Foo {
 ////     constructor() {
 ////         su/*super_call*/per();
 ////     }

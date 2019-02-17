@@ -15,7 +15,7 @@
 //// }
 ////
 //// class OtherBar extends SuperBar {
-////     hello() {}
+////     [|hello|]() {}
 ////     hello2() {}
 ////     hello3() {}
 //// }
@@ -27,7 +27,7 @@
 //// }
 ////
 //// class NotBar extends SuperBar {
-////     hello() {}         // Should not be returned because it is not structurally equivalent to Bar
+////     [|hello|]() {}
 //// }
 ////
 //// function whatever(x: Bar) {

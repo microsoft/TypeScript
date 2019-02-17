@@ -28,7 +28,7 @@
 //// };
 ////
 //// class FooLike implements SuperFoo {
-////      hello() {}
+////      [|hello|]() {}
 ////      someOtherFunction() {}
 //// }
 ////
@@ -38,7 +38,7 @@
 //// }
 ////
 //// class NotFoo implements SuperFoo {
-////      hello() {}                // We only want implementations of Foo, even though the function is declared in SuperFoo
+////      [|hello|]() {}
 //// }
 ////
 //// function (x: Foo) {

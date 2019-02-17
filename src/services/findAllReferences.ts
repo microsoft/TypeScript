@@ -61,9 +61,52 @@ namespace ts.FindAllReferences {
 
     export function getImplementationsAtPosition(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ImplementationLocation[] | undefined {
         const node = getTouchingPropertyName(sourceFile, position);
-        const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, position);
+        const referenceEntries = getDerivedImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, position, [node]);
         const checker = program.getTypeChecker();
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
+    }
+
+    function getDerivedImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number, seenNodes: Node[]): ReadonlyArray<Entry> | undefined {
+        const referenceEntries = getImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, position);
+        if (!referenceEntries) {
+            return referenceEntries;
+        }
+        const derivedReferenceEntries = referenceEntries
+            .filter(entry => {
+                if ("node" in entry) {
+                    return seenNodes.indexOf(entry.node) === -1;
+                }
+                return false;
+            })
+            .map(entry => {
+                const node = (<NodeEntry>entry).node;
+                seenNodes.push(node);
+                return getDerivedImplementationReferenceEntries(program, cancellationToken, sourceFiles, node, node.pos, seenNodes);
+            })
+            .reduce((res, curEntry) => {
+                if (curEntry) {
+                    return [...res!, ...curEntry];
+                }
+                return [...res!];
+            }, []);
+        const res = derivedReferenceEntries ? [...referenceEntries, ...derivedReferenceEntries] : referenceEntries;
+        for (const entry of res) {
+            if ("textSpan" in entry) {
+                return res;
+            }
+        }
+        return res
+            .map(entry => (<NodeEntry>entry).node)
+            .reduce((uniqueIdx: number[], curNode, nodeIdx) => {
+                for (const i of uniqueIdx) {
+                    if ((<NodeEntry>res[i]).node !== curNode) {
+                        continue;
+                    }
+                    return uniqueIdx;
+                }
+                return [nodeIdx, ...uniqueIdx];
+            }, [])
+            .map(idx => res[idx]);
     }
 
     function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number): ReadonlyArray<Entry> | undefined {

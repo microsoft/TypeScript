@@ -10,10 +10,10 @@
 ////     abstract hello (): void;
 //// }
 ////
-//// class Bar extends SuperBar {
+//// class [|Bar|] extends SuperBar {
 //// }
 ////
-//// class NotAbstractBar extends AbstractBar {
+//// class [|NotAbstractBar|] extends AbstractBar {
 ////     hello () {}
 //// }
 ////

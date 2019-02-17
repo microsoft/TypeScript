@@ -6,7 +6,7 @@
 ////     hello() {}
 //// }
 ////
-//// class Bar extends Foo {
+//// class [|Bar|] extends Foo {
 ////     hello() {
 ////         sup/*super_call*/er.hello();
 ////     }

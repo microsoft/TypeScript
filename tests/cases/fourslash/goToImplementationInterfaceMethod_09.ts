@@ -7,11 +7,11 @@
 //// }
 ////
 //// class SubBar extends Bar {
-////     hello() {}
+////     [|hello|]() {}
 //// }
 ////
 //// class Bar extends SuperBar {
-////     hello() {}
+////     [|hello|]() {}
 ////
 ////     whatever() {
 ////         super.he/*function_call*/llo();
