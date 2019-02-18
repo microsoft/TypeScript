@@ -523,7 +523,7 @@ interface Boolean {
 
 interface BooleanConstructor {
     new(value?: any): Boolean;
-    (value?: any): boolean;
+    <T>(value?: T): value is Exclude<T, false | null | undefined | '' | 0>;
     readonly prototype: Boolean;
 }
 
