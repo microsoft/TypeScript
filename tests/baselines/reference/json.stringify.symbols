@@ -36,3 +36,22 @@ JSON.stringify(value, undefined, 2);
 >value : Symbol(value, Decl(json.stringify.ts, 0, 3))
 >undefined : Symbol(undefined)
 
+const isUndefined: string = JSON.stringify(undefined);
+>isUndefined : Symbol(isUndefined, Decl(json.stringify.ts, 7, 5))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+const maybeUndefined: string = JSON.stringify("apple" as string | undefined);
+>maybeUndefined : Symbol(maybeUndefined, Decl(json.stringify.ts, 8, 5))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+const isNotUndefined: string = JSON.stringify("banana");
+>isNotUndefined : Symbol(isNotUndefined, Decl(json.stringify.ts, 9, 5))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

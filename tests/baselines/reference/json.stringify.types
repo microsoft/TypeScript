@@ -5,27 +5,27 @@ var value = null;
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify(value, undefined, 2) : string
->JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >value : null
 >undefined : undefined
 >2 : 2
 
 JSON.stringify(value, null, 2);
 >JSON.stringify(value, null, 2) : string
->JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >value : null
 >null : null
 >2 : 2
 
 JSON.stringify(value, ["a", 1], 2);
 >JSON.stringify(value, ["a", 1], 2) : string
->JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >value : null
 >["a", 1] : (string | number)[]
 >"a" : "a"
@@ -34,9 +34,9 @@ JSON.stringify(value, ["a", 1], 2);
 
 JSON.stringify(value, (k) => undefined, 2);
 >JSON.stringify(value, (k) => undefined, 2) : string
->JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >value : null
 >(k) => undefined : (this: any, k: string) => undefined
 >k : string
@@ -45,10 +45,35 @@ JSON.stringify(value, (k) => undefined, 2);
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify(value, undefined, 2) : string
->JSON.stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>JSON.stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >JSON : JSON
->stringify : { (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
+>stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
 >value : null
 >undefined : undefined
 >2 : 2
+
+const isUndefined: string = JSON.stringify(undefined);
+>isUndefined : string
+>JSON.stringify(undefined) : string | undefined
+>JSON.stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
+>JSON : JSON
+>stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
+>undefined : undefined
+
+const maybeUndefined: string = JSON.stringify("apple" as string | undefined);
+>maybeUndefined : string
+>JSON.stringify("apple" as string | undefined) : string | undefined
+>JSON.stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
+>JSON : JSON
+>stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
+>"apple" as string | undefined : string | undefined
+>"apple" : "apple"
+
+const isNotUndefined: string = JSON.stringify("banana");
+>isNotUndefined : string
+>JSON.stringify("banana") : string
+>JSON.stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
+>JSON : JSON
+>stringify : { <T>(value: T, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): StringifyReturnType<T>; <T>(value: T, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): StringifyReturnType<T>; }
+>"banana" : "banana"
 

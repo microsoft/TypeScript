@@ -1029,6 +1029,8 @@ interface URIErrorConstructor {
 
 declare const URIError: URIErrorConstructor;
 
+type StringifyReturnType<T> = T extends undefined ? string | undefined : string;
+
 interface JSON {
     /**
       * Converts a JavaScript Object Notation (JSON) string into an object.
@@ -1043,14 +1045,14 @@ interface JSON {
       * @param replacer A function that transforms the results.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer?: (this: any, key: string, value: any) => any, space?: string | number): string;
+    stringify<T>(value: T, replacer?: (this: any, key: string, value: any) => any, space?: string | number): StringifyReturnType<T>;
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.
       * @param replacer An array of strings and numbers that acts as a approved list for selecting the object properties that will be stringified.
       * @param space Adds indentation, white space, and line break characters to the return-value JSON text to make it easier to read.
       */
-    stringify(value: any, replacer?: (number | string)[] | null, space?: string | number): string;
+    stringify<T>(value: T, replacer?: (number | string)[] | null, space?: string | number): StringifyReturnType<T>;
 }
 
 /**
