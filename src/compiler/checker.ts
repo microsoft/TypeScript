@@ -5425,7 +5425,16 @@ namespace ts {
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
-            return links.type || (links.type = getTypeOfVariableOrParameterOrPropertyWorker(symbol));
+            if (!links.type) {
+                const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
+                // For a contextually typed parameter it is possible that a type has already
+                // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
+                // to preserve this type.
+                if (!links.type) {
+                    links.type = type;
+                }
+            }
+            return links.type;
         }
 
         function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol) {
@@ -5469,7 +5478,7 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.ValueModule) {
                     return getTypeOfFuncClassEnumModule(symbol);
                 }
-                return errorType;
+                return reportCircularityError(symbol);
             }
             let type: Type | undefined;
             if (isInJSFile(declaration) &&
@@ -5528,7 +5537,7 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.ValueModule) {
                     return getTypeOfFuncClassEnumModule(symbol);
                 }
-                type = reportCircularityError(symbol);
+                return reportCircularityError(symbol);
             }
             return type;
         }
