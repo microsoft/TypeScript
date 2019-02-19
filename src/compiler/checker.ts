@@ -13172,7 +13172,8 @@ namespace ts {
                     // if T is related to U.
                     return (kind === IndexKind.String && isRelatedTo(getTemplateTypeFromMappedType(source), targetInfo.type, reportErrors)) as any as Ternary; // TODO: GH#18217
                 }
-                if (isObjectTypeWithInferableIndex(source)) {
+                // Don't try inferable indexes on subtype relation checks (since the index isn't manifest, it will disappear, so can't be used as part of the ordering!)
+                if (relation !== subtypeRelation && isObjectTypeWithInferableIndex(source)) {
                     let related = Ternary.True;
                     if (kind === IndexKind.String) {
                         const sourceNumberInfo = getIndexInfoOfType(source, IndexKind.Number);
