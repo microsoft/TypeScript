@@ -195,7 +195,7 @@ namespace ts.textChanges {
     function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
         const { end } = node;
         const { endPosition } = options;
-        if (endPosition === TrailingTriviaOption.Exclude || isExpression(node)) {
+        if (endPosition === TrailingTriviaOption.Exclude || (isExpression(node) && endPosition !== TrailingTriviaOption.Include)) {
             return end;
         }
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
