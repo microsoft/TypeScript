@@ -1,0 +1,24 @@
+tests/cases/compiler/json.stringify.ts(8,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+tests/cases/compiler/json.stringify.ts(9,7): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/json.stringify.ts (2 errors) ====
+    var value = null;
+    JSON.stringify(value, undefined, 2);
+    JSON.stringify(value, null, 2);
+    JSON.stringify(value, ["a", 1], 2);
+    JSON.stringify(value, (k) => undefined, 2);
+    JSON.stringify(value, undefined, 2);
+    
+    const isUndefined: string = JSON.stringify(undefined);
+          ~~~~~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    const maybeUndefined: string = JSON.stringify("apple" as string | undefined);
+          ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+    const isNotUndefined: string = JSON.stringify("banana");
+    
