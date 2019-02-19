@@ -530,6 +530,8 @@ namespace Harness.Parallel.Host {
 
                 const replayRunner = new Mocha.Runner(new Mocha.Suite(""), /*delay*/ false);
                 replayRunner.started = true;
+                const createStatsCollector = require("mocha/lib/stats-collector");
+                createStatsCollector(replayRunner); // manually init stats collector like mocha.run would
 
                 const consoleReporter = new Base(replayRunner);
                 patchStats(consoleReporter.stats);
