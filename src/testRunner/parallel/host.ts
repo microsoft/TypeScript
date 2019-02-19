@@ -302,6 +302,7 @@ namespace Harness.Parallel.Host {
                                 worker.timer = undefined;
                             }
                             else {
+                                // tslint:disable-next-line:ban
                                 worker.timer = setTimeout(killChild, data.payload.duration, data.payload);
                             }
                             break;
@@ -623,6 +624,7 @@ namespace Harness.Parallel.Host {
             shimNoopTestInterface(global);
         }
 
+        // tslint:disable-next-line:ban
         setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
     }
 }

@@ -70,3 +70,17 @@ declare function take(cb: (a: number, b: string) => void): void;
 
 (function foo(...rest){}(1, ''));
 take(function(...rest){});
+
+// Repro from #29833
+
+type ArgsUnion = [number, string] | [number, Error];
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+
+const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+  return num;
+};
+
+const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+  const [num, strOrErr] = params;
+  return num;
+};

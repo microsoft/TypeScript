@@ -1,23 +1,23 @@
-tests/cases/conformance/types/conditional/inferTypes1.ts(31,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any[]) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(32,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any[]) => any'.
-  Type 'Function' provides no match for the signature '(...args: any[]): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(37,25): error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any[]) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(38,25): error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any[]) => any'.
-  Type 'Function' provides no match for the signature 'new (...args: any[]): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(46,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(47,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(31,23): error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(32,23): error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
+  Type 'Function' provides no match for the signature '(...args: any): any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(38,25): error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(39,25): error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
+  Type 'Function' provides no match for the signature 'new (...args: any): any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(47,25): error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(48,25): error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
   Type 'Function' provides no match for the signature '(x: any): any'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(73,12): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(74,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(74,41): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(74,51): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
-tests/cases/conformance/types/conditional/inferTypes1.ts(75,15): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(75,15): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(75,43): error TS2304: Cannot find name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(75,43): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(82,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(74,12): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(75,15): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(75,41): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(75,51): error TS1338: 'infer' declarations are only permitted in the 'extends' clause of a conditional type.
+tests/cases/conformance/types/conditional/inferTypes1.ts(76,15): error TS2304: Cannot find name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(76,15): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(76,43): error TS2304: Cannot find name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(76,43): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(83,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(144,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
   Type 'T' is not assignable to type 'symbol'.
 
 
@@ -54,22 +54,23 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(144,40): error TS2322: 
     type T16 = ReturnType<never>;  // never
     type T17 = ReturnType<string>;  // Error
                           ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint '(...args: any[]) => any'.
+!!! error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
     type T18 = ReturnType<Function>;  // Error
                           ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any[]) => any'.
-!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any[]): any'.
+!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any): any'.
+    type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;  // T[]
     
     type U10 = InstanceType<typeof C>;  // C
     type U11 = InstanceType<any>;  // any
     type U12 = InstanceType<never>;  // never
     type U13 = InstanceType<string>;  // Error
                             ~~~~~~
-!!! error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any[]) => any'.
+!!! error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
     type U14 = InstanceType<Function>;  // Error
                             ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any[]) => any'.
-!!! error TS2344:   Type 'Function' provides no match for the signature 'new (...args: any[]): any'.
+!!! error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
+!!! error TS2344:   Type 'Function' provides no match for the signature 'new (...args: any): any'.
     
     type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
     
@@ -226,4 +227,14 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(144,40): error TS2322: 
     
     type Test1 = EnsureIsString<"hello">;  // "hello"
     type Test2 = EnsureIsString<42>;  // never
+    
+    // Repros from #26856
+    
+    function invoker <K extends string | number | symbol, A extends any[]> (key: K, ...args: A) {
+        return <T extends Record<K, (...args: A) => any>> (obj: T): ReturnType<T[K]> => obj[key](...args)
+    }
+    
+    const result = invoker('test', true)({ test: (a: boolean) => 123 })
+    
+    type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
     

@@ -8,10 +8,8 @@ const path = require("path");
 const fold = require("travis-fold");
 const ts = require("./lib/typescript");
 const del = require("del");
-const getDirSize = require("./scripts/build/getDirSize");
+const { getDirSize, needsUpdate, flatten } = require("./scripts/build/utils");
 const { base64VLQFormatEncode } = require("./scripts/build/sourcemaps");
-const needsUpdate = require("./scripts/build/needsUpdate");
-const { flatten } = require("./scripts/build/project");
 
 // add node_modules to path so we don't need global modules, prefer the modules by adding them first
 var nodeModulesPathPrefix = path.resolve("./node_modules/.bin/") + path.delimiter;
@@ -25,6 +23,10 @@ else if (process.env.PATH !== undefined) {
 const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 
 const defaultTestTimeout = 40000;
+const useBuilt =
+    (process.env.USE_BUILT === "true" || process.env.CI === "true") ? true :
+    process.env.LKG === "true" ? false :
+    false;
 
 let useDebugMode = true;
 
@@ -298,7 +300,7 @@ task(TaskNames.buildFoldEnd, [], function () {
 
 desc("Compiles tslint rules to js");
 task(TaskNames.buildRules, [], function () {
-    tsbuild(ConfigFileFor.lint, false, () => complete());
+    tsbuild(ConfigFileFor.lint, !useBuilt, () => complete());
 }, { async: true });
 
 desc("Cleans the compiler output, declare files, and tests");
@@ -361,7 +363,7 @@ file(ConfigFileFor.tsserverLibrary, [], function () {
         compilerOptions: {
             "removeComments": false,
             "stripInternal": true,
-            "declarationMap": false,
+            "declaration": true,
             "outFile": "tsserverlibrary.out.js"
         }
     })
@@ -370,7 +372,7 @@ file(ConfigFileFor.tsserverLibrary, [], function () {
 // tsserverlibrary.js
 // tsserverlibrary.d.ts
 file(Paths.tsserverLibraryFile, [TaskNames.coreBuild, ConfigFileFor.tsserverLibrary], function() {
-    tsbuild(ConfigFileFor.tsserverLibrary, false, () => {
+    tsbuild(ConfigFileFor.tsserverLibrary, !useBuilt, () => {
         if (needsUpdate([Paths.tsserverLibraryOutFile, Paths.tsserverLibraryDefinitionOutFile], [Paths.tsserverLibraryFile, Paths.tsserverLibraryDefinitionFile])) {
             const copyright = readFileSync(Paths.copyright);
 
@@ -429,7 +431,7 @@ file(ConfigFileFor.typescriptServices, [], function () {
 // typescriptServices.js
 // typescriptServices.d.ts
 file(Paths.servicesFile, [TaskNames.coreBuild, ConfigFileFor.typescriptServices], function() {
-    tsbuild(ConfigFileFor.typescriptServices, false, () => {
+    tsbuild(ConfigFileFor.typescriptServices, !useBuilt, () => {
         if (needsUpdate([Paths.servicesOutFile, Paths.servicesDefinitionOutFile], [Paths.servicesFile, Paths.servicesDefinitionFile])) {
             const copyright = readFileSync(Paths.copyright);
 
