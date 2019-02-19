@@ -6,5 +6,5 @@
 
 verify.completions({
     marker: "",
-    exact: ["T", "globalThis", ...completion.typeKeywords],
+    exact: ["globalThis", "T", ...completion.typeKeywords],
 });

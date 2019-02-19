@@ -19,8 +19,8 @@
 verify.completions({
     marker: "",
     exact: [
-        "undefined",
         "globalThis",
+        "undefined",
         { name: "foo", source: "/foo/lib/foo", sourceDisplay: "./foo", text: "const foo: 0", kind: "const", kindModifiers: "export", hasAction: true },
         ...completion.statementKeywordsWithTypes,
     ],

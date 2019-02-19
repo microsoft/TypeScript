@@ -96,6 +96,8 @@ namespace ts {
         globalThisSymbol.exports = globals;
         globalThisSymbol.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
         (globalThisSymbol.valueDeclaration as Identifier).escapedText = "globalThis" as __String;
+        globals.set(globalThisSymbol.escapedName, globalThisSymbol);
+
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
 
@@ -726,7 +728,6 @@ namespace ts {
 
         const builtinGlobals = createSymbolTable();
         builtinGlobals.set(undefinedSymbol.escapedName, undefinedSymbol);
-        builtinGlobals.set(globalThisSymbol.escapedName, globalThisSymbol);
 
         const isNotOverloadAndNotAccessor = and(isNotOverload, isNotAccessor);
 

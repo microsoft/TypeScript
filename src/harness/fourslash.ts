@@ -774,7 +774,7 @@ namespace FourSlash {
             if ("exact" in options) {
                 ts.Debug.assert(!("includes" in options) && !("excludes" in options));
                 if (options.exact === undefined) throw this.raiseError("Expected no completions");
-                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact));
+                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact), options.marker);
             }
             else {
                 if (options.includes) {
@@ -841,14 +841,14 @@ namespace FourSlash {
             }
         }
 
-        private verifyCompletionsAreExactly(actual: ReadonlyArray<ts.CompletionEntry>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>) {
+        private verifyCompletionsAreExactly(actual: ReadonlyArray<ts.CompletionEntry>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, marker?: ArrayOrSingle<string | Marker>) {
             // First pass: test that names are right. Then we'll test details.
-            assert.deepEqual(actual.map(a => a.name), expected.map(e => typeof e === "string" ? e : e.name));
+            assert.deepEqual(actual.map(a => a.name), expected.map(e => typeof e === "string" ? e : e.name), marker ? "At marker " + JSON.stringify(marker) : undefined);
 
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const name = typeof expectedCompletion === "string" ? expectedCompletion : expectedCompletion.name;
                 if (completion.name !== name) {
-                    this.raiseError(`Expected completion at index ${index} to be ${name}, got ${completion.name}`);
+                    this.raiseError(`${marker ? JSON.stringify(marker) : "" } Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
             });
@@ -4545,9 +4545,9 @@ namespace FourSlashInterface {
 
         export function globalTypesPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
             return [
+                { name: "globalThis", kind: "module" },
                 ...globalTypeDecls,
                 ...plus,
-                { name: "globalThis", kind: "module" },
                 ...typeKeywords,
             ];
         }
@@ -4787,9 +4787,9 @@ namespace FourSlashInterface {
         export const globalsInsideFunction = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> => [
             { name: "arguments", kind: "local var" },
             ...plus,
+            { name: "globalThis", kind: "module" },
             ...globalsVars,
             { name: "undefined", kind: "var" },
-            { name: "globalThis", kind: "module" },
             ...globalKeywordsInsideFunction,
         ];
 
@@ -4923,18 +4923,18 @@ namespace FourSlashInterface {
         })();
 
         export const globals: ReadonlyArray<ExpectedCompletionEntryObject> = [
+            { name: "globalThis", kind: "module" },
             ...globalsVars,
             { name: "undefined", kind: "var" },
-            { name: "globalThis", kind: "module" },
             ...globalKeywords
         ];
 
         export function globalsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
             return [
+                { name: "globalThis", kind: "module" },
                 ...globalsVars,
                 ...plus,
                 { name: "undefined", kind: "var" },
-                { name: "globalThis", kind: "module" },
                 ...globalKeywords];
         }
     }

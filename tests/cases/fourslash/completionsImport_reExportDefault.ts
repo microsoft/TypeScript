@@ -15,9 +15,9 @@
 verify.completions({
     marker: "",
     exact: [
+        "globalThis",
         ...completion.globalsVars,
         "undefined",
-        "globalThis",
         {
             name: "foo",
             source: "/a/b/impl",
