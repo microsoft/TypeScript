@@ -10,6 +10,8 @@ namespace ts.refactor.convertToNamedParameters {
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, startPosition } = context;
+        const isJSFile = isSourceFileJS(file);
+        if (isJSFile) return emptyArray;
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, context.program.getTypeChecker());
         if (!functionDeclaration) return emptyArray;
 
