@@ -172,7 +172,7 @@ namespace ts.projectSystem {
                     const additionalFiles = getAdditionalFileOrFolder ? getAdditionalFileOrFolder() : [];
                     const configFile = {
                         path: configFilePath,
-                        content: JSON.stringify(configObj || { compilerOptions: {} })
+                        content: JSON.stringify(configObj || { compilerOptions: {} })!
                     };
 
                     const files: File[] = [file1Consumer1, moduleFile1, file1Consumer2, moduleFile2, ...additionalFiles, globalFile3, libFile, configFile];
@@ -525,7 +525,7 @@ namespace ts.projectSystem {
                 };
 
                 function eventToString(event: server.ProjectsUpdatedInBackgroundEvent) {
-                    return JSON.stringify(event && { eventName: event.eventName, data: event.data });
+                    return JSON.stringify(event && { eventName: event.eventName, data: event.data })!;
                 }
 
                 function eventsToString(events: ReadonlyArray<server.ProjectsUpdatedInBackgroundEvent>) {

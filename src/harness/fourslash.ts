@@ -1518,7 +1518,7 @@ Actual: ${stringify(fullActual)}`);
 
         public printCurrentParameterHelp() {
             const help = this.languageService.getSignatureHelpItems(this.activeFile.fileName, this.currentCaretPosition, /*options*/ undefined);
-            Harness.IO.log(stringify(help));
+            Harness.IO.log(stringify(help)!);
         }
 
         public printCurrentQuickInfo() {
@@ -3565,7 +3565,7 @@ ${code}
         };
     }
 
-    function stringify(data: any, replacer?: (key: string, value: any) => any): string {
+    function stringify<T>(data: T, replacer?: (key: string, value: any) => any) {
         return JSON.stringify(data, replacer, 2);
     }
 

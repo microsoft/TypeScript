@@ -11,7 +11,7 @@ namespace ts.tscWatch {
         };
         const config: File = {
             path: `${projectRoot}/tsconfig.json`,
-            content: JSON.stringify(configFileJson)
+            content: JSON.stringify(configFileJson)!
         };
         const settingsJson: File = {
             path: `${projectRoot}/settings.json`,

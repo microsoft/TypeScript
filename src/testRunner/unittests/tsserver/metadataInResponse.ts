@@ -10,7 +10,7 @@ namespace ts.projectSystem {
         function verifyCommandWithMetadata<T extends server.protocol.Request, U = undefined>(session: TestSession, host: TestServerHost, command: Partial<T>, expectedResponseBody: U) {
             command.seq = session.getSeq();
             command.type = "request";
-            session.onMessage(JSON.stringify(command));
+            session.onMessage(JSON.stringify(command)!);
             verifyOutput(host, expectedResponseBody ?
                 { seq: 0, type: "response", command: command.command!, request_seq: command.seq, success: true, body: expectedResponseBody, metadata } :
                 { seq: 0, type: "response", command: command.command!, request_seq: command.seq, success: false, message: "No content available." }

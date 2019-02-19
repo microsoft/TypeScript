@@ -77,7 +77,7 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
 
         getTypeRootsVersion?(): number;
-        readDirectory(rootDir: string, extension: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
+        readDirectory(rootDir: string, extension?: string, basePaths?: string, excludeEx?: string, includeFileEx?: string, includeDirEx?: string, depth?: number): string;
         readFile(path: string, encoding?: string): string | undefined;
         fileExists(path: string): boolean;
 
