@@ -88,14 +88,12 @@ namespace ts {
             modifyAgainFs,
             additionalSourceFiles,
             dependOrdered,
-            unchangedDtsWritesThirdDts,
         }: {
             scenario: string;
             modifyFs: (fs: vfs.FileSystem) => void;
             modifyAgainFs?: (fs: vfs.FileSystem) => void;
             additionalSourceFiles?: ReadonlyArray<string>;
             dependOrdered?: boolean;
-            unchangedDtsWritesThirdDts?: boolean;
         }) {
             const incrementalDtsChanged: ExpectedBuildOutputPerState = {
                 expectedDiagnostics: dependOrdered ?
@@ -161,7 +159,7 @@ namespace ts {
                         [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.second][source.config]],
                         [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/second"],
                         [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
-                        ...getUnchangedOutputTimeStampUpdateOfProjectThree(),
+                        [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]],
                     ] :
                     [
                         getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
@@ -170,7 +168,7 @@ namespace ts {
                         [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
                         [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
                         [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
-                        ...getUnchangedOutputTimeStampUpdateOfProjectThree(),
+                        [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]],
                     ],
                 expectedReadFiles: getReadFilesMap(
                     [
@@ -312,12 +310,6 @@ namespace ts {
                     withoutBuildInfo: incrementalDtsUnchangedWithoutBuildInfo
                 }
             });
-
-            function getUnchangedOutputTimeStampUpdateOfProjectThree(): ReadonlyArray<fakes.ExpectedDiagnostic> {
-                return !unchangedDtsWritesThirdDts ?
-                    [[Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]]] :
-                    emptyArray;
-            }
         }
 
         verifyOutFileScenario({
@@ -645,27 +637,23 @@ ${internal} enum internalEnum { a, b, c }`);
             scenario: "stripInternal",
             modifyFs: fs => stripInternalScenario(fs),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
-            unchangedDtsWritesThirdDts: true
         });
 
         verifyOutFileScenario({
             scenario: "stripInternal with comments emit enabled",
             modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
-            unchangedDtsWritesThirdDts: true
         });
 
         verifyOutFileScenario({
             scenario: "stripInternal jsdoc style comment",
             modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/**@internal*/ interface`, "interface"),
-            unchangedDtsWritesThirdDts: true
         });
 
         verifyOutFileScenario({
             scenario: "stripInternal jsdoc style with comments emit enabled",
             modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
-            unchangedDtsWritesThirdDts: true
         });
 
         function makeOneTwoThreeDependOrder(fs: vfs.FileSystem) {
@@ -684,7 +672,6 @@ ${internal} enum internalEnum { a, b, c }`);
             modifyFs: fs => stripInternalWithDependentOrder(fs),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
             dependOrdered: true,
-            unchangedDtsWritesThirdDts: true
         });
 
         verifyOutFileScenario({
@@ -692,7 +679,6 @@ ${internal} enum internalEnum { a, b, c }`);
             modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
             dependOrdered: true,
-            unchangedDtsWritesThirdDts: true
         });
 
         verifyOutFileScenario({
@@ -700,14 +686,12 @@ ${internal} enum internalEnum { a, b, c }`);
             modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/**@internal*/ interface`, "interface"),
             dependOrdered: true,
-            unchangedDtsWritesThirdDts: true
         });
 
         verifyOutFileScenario({
             scenario: "stripInternal jsdoc style with comments emit enabled when one-two-three are prepended in order",
             modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
             dependOrdered: true,
-            unchangedDtsWritesThirdDts: true
         });
     });
 }

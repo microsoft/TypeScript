@@ -562,6 +562,7 @@ namespace ts {
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
         const jsPrepend = createUnparsedJsSourceFile(ownPrependInput);
         const sourceFilesForJsEmit = createSourceFilesForPrologues(buildInfo.bundle.js);
+        let currentBuildInfoType: "js" | "dts" = "js";
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, jsPrepend]),
             getProjectReferences: () => config.projectReferences,
@@ -576,14 +577,36 @@ namespace ts {
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: returnFalse,
             writeFile: (name, text, writeByteOrderMark) => {
-                if (name !== buildInfoPath) {
-                    outputFiles.push({ name, text, writeByteOrderMark });
-                }
-                else {
-                    // Add dts and sources build info since we are not touching that file
-                    const buildInfo = JSON.parse(text) as BuildInfo;
-                    newBundle.js = buildInfo.bundle && buildInfo.bundle.js;
-                    writeByteOrderMarkBuildInfo = writeByteOrderMarkBuildInfo || writeByteOrderMark;
+                switch (name) {
+                    case jsFilePath:
+                        if (jsFileText !== text) {
+                            outputFiles.push({ name, text, writeByteOrderMark });
+                        }
+                        break;
+                    case sourceMapFilePath:
+                        if (sourceMapText !== text) {
+                            outputFiles.push({ name, text, writeByteOrderMark });
+                        }
+                        break;
+                    case buildInfoPath:
+                        if (currentBuildInfoType === "js" || stripInternal) {
+                            const buildInfo = JSON.parse(text) as BuildInfo;
+                            newBundle[currentBuildInfoType] = buildInfo.bundle && buildInfo.bundle[currentBuildInfoType];
+                            writeByteOrderMarkBuildInfo = writeByteOrderMarkBuildInfo || writeByteOrderMark;
+                        }
+                        break;
+                    case declarationFilePath:
+                        if (stripInternal && declarationText !== text) {
+                            outputFiles.push({ name, text, writeByteOrderMark });
+                        }
+                        break;
+                    case declarationMapPath:
+                        if (declarationMapText !== text) {
+                            outputFiles.push({ name, text, writeByteOrderMark });
+                        }
+                        break;
+                    default:
+                        Debug.assertNever(name as never);
                 }
             },
             isEmitBlocked: returnFalse,
@@ -597,23 +620,11 @@ namespace ts {
         emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(optionsWithoutDeclaration));
         // Emit d.ts map
         if (shouldHaveDeclarationText) {
+            currentBuildInfoType = "dts";
             const dtsPrepends = prependNodes.map(prepend => createUnparsedSourceFile(prepend, "dts", stripInternal));
             emitHost.getPrependNodes = memoize(() => [...dtsPrepends, createUnparsedDtsSourceFile(ownPrependInput)]);
             emitHost.getCompilerOptions = () => config.options;
             emitHost.getSourceFiles = () => emptyArray;
-            emitHost.writeFile = (name, text, writeByteOrderMark) => {
-                // Same dts ignore
-                if (!stripInternal && (fileExtensionIs(name, Extension.Dts) || name === buildInfoPath)) return;
-                // Even though dts file hasnt changed, whether def is internal or not could change, so write the dts and update buildInfo
-                if (name !== buildInfoPath) {
-                    outputFiles.push({ name, text, writeByteOrderMark });
-                }
-                else {
-                    const buildInfo = JSON.parse(text) as BuildInfo;
-                    newBundle.dts = buildInfo.bundle && buildInfo.bundle.dts;
-                    writeByteOrderMarkBuildInfo = writeByteOrderMarkBuildInfo || writeByteOrderMark;
-                }
-            };
             emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ true);
         }
         outputFiles.push({ name: buildInfoPath!, text: getBuildInfoText({ program: buildInfo.program, bundle: newBundle }), writeByteOrderMark: writeByteOrderMarkBuildInfo });
