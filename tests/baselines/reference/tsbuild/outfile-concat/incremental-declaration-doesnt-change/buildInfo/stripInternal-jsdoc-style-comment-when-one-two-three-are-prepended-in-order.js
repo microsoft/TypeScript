@@ -44,6 +44,11 @@
           "texts": [
             {
               "pos": 0,
+              "end": 39,
+              "kind": "internal"
+            },
+            {
+              "pos": 41,
               "end": 157,
               "kind": "text"
             },
@@ -56,6 +61,36 @@
         },
         {
           "pos": 201,
+          "end": 278,
+          "kind": "text"
+        },
+        {
+          "pos": 278,
+          "end": 352,
+          "kind": "internal"
+        },
+        {
+          "pos": 354,
+          "end": 386,
+          "kind": "text"
+        },
+        {
+          "pos": 386,
+          "end": 778,
+          "kind": "internal"
+        },
+        {
+          "pos": 780,
+          "end": 783,
+          "kind": "text"
+        },
+        {
+          "pos": 783,
+          "end": 1196,
+          "kind": "internal"
+        },
+        {
+          "pos": 1198,
           "end": 1246,
           "kind": "text"
         },
@@ -199,12 +234,14 @@ sourceMapUrl: (3221-3262)
 ======================================================================
 File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-199):: /src/first/bin/first-output.d.ts texts:: 2
+prepend: (0-199):: /src/first/bin/first-output.d.ts texts:: 3
 >>--------------------------------------------------------------------
-text: (0-157)
+internal: (0-39)
 interface TheFirst {
     none: any;
 }
+>>--------------------------------------------------------------------
+text: (41-157)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -215,18 +252,26 @@ declare function f(): string;
 sourceMapUrl: (157-199)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-text: (201-1246)
+text: (201-278)
 declare namespace N {
 }
 declare namespace N {
 }
 declare class normalC {
+
+----------------------------------------------------------------------
+internal: (278-352)
     constructor();
     prop: string;
     method(): void;
     c: number;
+----------------------------------------------------------------------
+text: (354-386)
 }
 declare namespace normalN {
+
+----------------------------------------------------------------------
+internal: (386-778)
     class C {
     }
     function foo(): void;
@@ -246,7 +291,12 @@ declare namespace normalN {
         b = 1,
         c = 2
     }
+----------------------------------------------------------------------
+text: (780-783)
 }
+
+----------------------------------------------------------------------
+internal: (783-1196)
 declare class internalC {
 }
 declare function internalfoo(): void;
@@ -266,6 +316,8 @@ declare enum internalEnum {
     b = 1,
     c = 2
 }
+----------------------------------------------------------------------
+text: (1198-1246)
 declare class C {
     doSomething(): void;
 }
@@ -2023,6 +2075,11 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
+          "end": 39,
+          "kind": "internal"
+        },
+        {
+          "pos": 41,
           "end": 157,
           "kind": "text"
         },
@@ -2056,10 +2113,12 @@ sourceMapUrl: (127-167)
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-157)
+internal: (0-39)
 interface TheFirst {
     none: any;
 }
+----------------------------------------------------------------------
+text: (41-157)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -2320,12 +2379,17 @@ console.log(s);
       "sections": [
         {
           "pos": 0,
-          "end": 1289,
+          "end": 404,
           "kind": "prepend",
           "data": "/src/2/second-output.d.ts",
           "texts": [
             {
               "pos": 0,
+              "end": 39,
+              "kind": "internal"
+            },
+            {
+              "pos": 41,
               "end": 157,
               "kind": "text"
             },
@@ -2336,24 +2400,24 @@ console.log(s);
             },
             {
               "pos": 201,
-              "end": 1246,
+              "end": 361,
               "kind": "text"
             },
             {
-              "pos": 1246,
-              "end": 1289,
+              "pos": 361,
+              "end": 404,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 1291,
-          "end": 1310,
+          "pos": 406,
+          "end": 425,
           "kind": "text"
         },
         {
-          "pos": 1310,
-          "end": 1352,
+          "pos": 425,
+          "end": 467,
           "kind": "sourceMapUrl"
         }
       ]
@@ -2499,12 +2563,14 @@ sourceMapUrl: (3300-3340)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-1289):: /src/2/second-output.d.ts texts:: 4
+prepend: (0-404):: /src/2/second-output.d.ts texts:: 5
 >>--------------------------------------------------------------------
-text: (0-157)
+internal: (0-39)
 interface TheFirst {
     none: any;
 }
+>>--------------------------------------------------------------------
+text: (41-157)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -2515,70 +2581,28 @@ declare function f(): string;
 sourceMapUrl: (157-199)
 //# sourceMappingURL=first-output.d.ts.map
 >>--------------------------------------------------------------------
-text: (201-1246)
+text: (201-361)
 declare namespace N {
 }
 declare namespace N {
 }
 declare class normalC {
-    constructor();
-    prop: string;
-    method(): void;
-    c: number;
 }
 declare namespace normalN {
-    class C {
-    }
-    function foo(): void;
-    namespace someNamespace {
-        class C {
-        }
-    }
-    namespace someOther.something {
-        class someClass {
-        }
-    }
-    export import someImport = someNamespace.C;
-    type internalType = internalC;
-    const internalConst = 10;
-    enum internalEnum {
-        a = 0,
-        b = 1,
-        c = 2
-    }
-}
-declare class internalC {
-}
-declare function internalfoo(): void;
-declare namespace internalNamespace {
-    class someClass {
-    }
-}
-declare namespace internalOther.something {
-    class someClass {
-    }
-}
-import internalImport = internalNamespace.someClass;
-declare type internalType = internalC;
-declare const internalConst = 10;
-declare enum internalEnum {
-    a = 0,
-    b = 1,
-    c = 2
 }
 declare class C {
     doSomething(): void;
 }
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (1246-1289)
+sourceMapUrl: (361-404)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
-text: (1291-1310)
+text: (406-425)
 declare var c: C;
 
 ----------------------------------------------------------------------
-sourceMapUrl: (1310-1352)
+sourceMapUrl: (425-467)
 //# sourceMappingURL=third-output.d.ts.map
 ======================================================================
 

@@ -1,3 +1,72 @@
+//// [/src/first/bin/.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 110,
+          "kind": "text"
+        },
+        {
+          "pos": 110,
+          "end": 150,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        },
+        {
+          "pos": 157,
+          "end": 199,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+text: (0-110)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+sourceMapUrl: (110-150)
+//# sourceMappingURL=first-output.js.map
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+----------------------------------------------------------------------
+sourceMapUrl: (157-199)
+//# sourceMappingURL=first-output.d.ts.map
+======================================================================
+
 //// [/src/first/bin/first-output.d.ts.map]
 {"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AERD,iBAAS,CAAC,WAET"}
 
@@ -289,8 +358,322 @@ interface NoJsForHereEither {
 console.log(s);
 
 
+//// [/src/third/thirdjs/output/.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 150,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 110,
+              "kind": "text"
+            },
+            {
+              "pos": 110,
+              "end": 150,
+              "kind": "sourceMapUrl"
+            }
+          ]
+        },
+        {
+          "pos": 152,
+          "end": 3245,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 152,
+              "end": 3204,
+              "kind": "text"
+            },
+            {
+              "pos": 3204,
+              "end": 3245,
+              "kind": "sourceMapUrl"
+            }
+          ]
+        },
+        {
+          "pos": 3247,
+          "end": 3283,
+          "kind": "text"
+        },
+        {
+          "pos": 3283,
+          "end": 3323,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 199,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 157,
+              "kind": "text"
+            },
+            {
+              "pos": 157,
+              "end": 199,
+              "kind": "sourceMapUrl"
+            }
+          ]
+        },
+        {
+          "pos": 201,
+          "end": 404,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 201,
+              "end": 361,
+              "kind": "text"
+            },
+            {
+              "pos": 361,
+              "end": 404,
+              "kind": "sourceMapUrl"
+            }
+          ]
+        },
+        {
+          "pos": 406,
+          "end": 425,
+          "kind": "text"
+        },
+        {
+          "pos": 425,
+          "end": 467,
+          "kind": "sourceMapUrl"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+prepend: (0-150):: /src/first/bin/first-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (0-110)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (110-150)
+//# sourceMappingURL=first-output.js.map
+----------------------------------------------------------------------
+prepend: (152-3245):: /src/2/second-output.js texts:: 2
+>>--------------------------------------------------------------------
+text: (152-3204)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var normalC = (function () {
+    function normalC() {
+    }
+    normalC.prototype.method = function () { };
+    Object.defineProperty(normalC.prototype, "c", {
+        get: function () { return 10; },
+        set: function (val) { },
+        enumerable: true,
+        configurable: true
+    });
+    return normalC;
+}());
+var normalN;
+(function (normalN) {
+    var C = (function () {
+        function C() {
+        }
+        return C;
+    }());
+    normalN.C = C;
+    function foo() { }
+    normalN.foo = foo;
+    var someNamespace;
+    (function (someNamespace) {
+        var C = (function () {
+            function C() {
+            }
+            return C;
+        }());
+        someNamespace.C = C;
+    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));
+    var someOther;
+    (function (someOther) {
+        var something;
+        (function (something) {
+            var someClass = (function () {
+                function someClass() {
+                }
+                return someClass;
+            }());
+            something.someClass = someClass;
+        })(something = someOther.something || (someOther.something = {}));
+    })(someOther = normalN.someOther || (normalN.someOther = {}));
+    normalN.someImport = someNamespace.C;
+    normalN.internalConst = 10;
+    var internalEnum;
+    (function (internalEnum) {
+        internalEnum[internalEnum["a"] = 0] = "a";
+        internalEnum[internalEnum["b"] = 1] = "b";
+        internalEnum[internalEnum["c"] = 2] = "c";
+    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
+})(normalN || (normalN = {}));
+var internalC = (function () {
+    function internalC() {
+    }
+    return internalC;
+}());
+function internalfoo() { }
+var internalNamespace;
+(function (internalNamespace) {
+    var someClass = (function () {
+        function someClass() {
+        }
+        return someClass;
+    }());
+    internalNamespace.someClass = someClass;
+})(internalNamespace || (internalNamespace = {}));
+var internalOther;
+(function (internalOther) {
+    var something;
+    (function (something) {
+        var someClass = (function () {
+            function someClass() {
+            }
+            return someClass;
+        }());
+        something.someClass = someClass;
+    })(something = internalOther.something || (internalOther.something = {}));
+})(internalOther || (internalOther = {}));
+var internalImport = internalNamespace.someClass;
+var internalConst = 10;
+var internalEnum;
+(function (internalEnum) {
+    internalEnum[internalEnum["a"] = 0] = "a";
+    internalEnum[internalEnum["b"] = 1] = "b";
+    internalEnum[internalEnum["c"] = 2] = "c";
+})(internalEnum || (internalEnum = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (3204-3245)
+//# sourceMappingURL=second-output.js.map
+----------------------------------------------------------------------
+text: (3247-3283)
+var c = new C();
+c.doSomething();
+
+----------------------------------------------------------------------
+sourceMapUrl: (3283-3323)
+//# sourceMappingURL=third-output.js.map
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-199):: /src/first/bin/first-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (157-199)
+//# sourceMappingURL=first-output.d.ts.map
+----------------------------------------------------------------------
+prepend: (201-404):: /src/2/second-output.d.ts texts:: 2
+>>--------------------------------------------------------------------
+text: (201-361)
+declare namespace N {
+}
+declare namespace N {
+}
+declare class normalC {
+}
+declare namespace normalN {
+}
+declare class C {
+    doSomething(): void;
+}
+
+>>--------------------------------------------------------------------
+sourceMapUrl: (361-404)
+//# sourceMappingURL=second-output.d.ts.map
+----------------------------------------------------------------------
+text: (406-425)
+declare var c: C;
+
+----------------------------------------------------------------------
+sourceMapUrl: (425-467)
+//# sourceMappingURL=third-output.d.ts.map
+======================================================================
+
+//// [/src/third/thirdjs/output/third-output.d.ts]
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+//# sourceMappingURL=first-output.d.ts.map
+declare namespace N {
+}
+declare namespace N {
+}
+declare class normalC {
+}
+declare namespace normalN {
+}
+declare class C {
+    doSomething(): void;
+}
+//# sourceMappingURL=second-output.d.ts.map
+declare var c: C;
+//# sourceMappingURL=third-output.d.ts.map
+
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEM,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACF,CAAC,EACM,MAAM;CACnC;AACD,kBAAU,OAAO,CAAC;IACC,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACtD;AACc,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,aAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC5C,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -488,59 +871,17 @@ sourceFile:../../../second/second_part1.ts
 2 >Emitted(14, 15) Source(13, 7) + SourceIndex(2)
 3 >Emitted(14, 22) Source(13, 14) + SourceIndex(2)
 ---
->>>    constructor();
->>>    prop: string;
-1 >^^^^
-2 >    ^^^^
-3 >        ^^
-4 >          ^^^^^^
-5 >                ^
-6 >                 ^^^->
-1 > {
-  >    /**@internal*/ constructor() { }
-  >    /**@internal*/ 
-2 >    prop
-3 >        : 
-4 >          string
-5 >                ;
-1 >Emitted(16, 5) Source(15, 20) + SourceIndex(2)
-2 >Emitted(16, 9) Source(15, 24) + SourceIndex(2)
-3 >Emitted(16, 11) Source(15, 26) + SourceIndex(2)
-4 >Emitted(16, 17) Source(15, 32) + SourceIndex(2)
-5 >Emitted(16, 18) Source(15, 33) + SourceIndex(2)
----
->>>    method(): void;
-1->^^^^
-2 >    ^^^^^^
-3 >          ^^^^^->
-1->
-  >    /**@internal*/ 
-2 >    method
-1->Emitted(17, 5) Source(16, 20) + SourceIndex(2)
-2 >Emitted(17, 11) Source(16, 26) + SourceIndex(2)
----
->>>    c: number;
-1->^^^^
-2 >    ^
-3 >     ^^
-4 >       ^^^^^^
-1->() { }
-  >    /**@internal*/ get 
-2 >    c
-3 >     () { return 10; }
-  >         /**@internal*/ set c(val: 
-4 >       number
-1->Emitted(18, 5) Source(17, 24) + SourceIndex(2)
-2 >Emitted(18, 6) Source(17, 25) + SourceIndex(2)
-3 >Emitted(18, 8) Source(18, 31) + SourceIndex(2)
-4 >Emitted(18, 14) Source(18, 37) + SourceIndex(2)
----
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >) { }
+1 > {
+  >    /**@internal*/ constructor() { }
+  >    /**@internal*/ prop: string;
+  >    /**@internal*/ method() { }
+  >    /**@internal*/ get c() { return 10; }
+  >    /**@internal*/ set c(val: number) { }
   >}
-1 >Emitted(19, 2) Source(19, 2) + SourceIndex(2)
+1 >Emitted(15, 2) Source(19, 2) + SourceIndex(2)
 ---
 >>>declare namespace normalN {
 1->
@@ -552,488 +893,25 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  normalN
 4 >                          
-1->Emitted(20, 1) Source(20, 1) + SourceIndex(2)
-2 >Emitted(20, 19) Source(20, 11) + SourceIndex(2)
-3 >Emitted(20, 26) Source(20, 18) + SourceIndex(2)
-4 >Emitted(20, 27) Source(20, 19) + SourceIndex(2)
----
->>>    class C {
-1 >^^^^
-2 >    ^^^^^^
-3 >          ^
-1 >{
-  >    /**@internal*/ 
-2 >    export class 
-3 >          C
-1 >Emitted(21, 5) Source(21, 20) + SourceIndex(2)
-2 >Emitted(21, 11) Source(21, 33) + SourceIndex(2)
-3 >Emitted(21, 12) Source(21, 34) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(22, 6) Source(21, 38) + SourceIndex(2)
----
->>>    function foo(): void;
-1->^^^^
-2 >    ^^^^^^^^^
-3 >             ^^^
-4 >                ^^^^^^^^^
-5 >                         ^^^^^->
-1->
-  >    /**@internal*/ 
-2 >    export function 
-3 >             foo
-4 >                () {}
-1->Emitted(23, 5) Source(22, 20) + SourceIndex(2)
-2 >Emitted(23, 14) Source(22, 36) + SourceIndex(2)
-3 >Emitted(23, 17) Source(22, 39) + SourceIndex(2)
-4 >Emitted(23, 26) Source(22, 44) + SourceIndex(2)
----
->>>    namespace someNamespace {
-1->^^^^
-2 >    ^^^^^^^^^^
-3 >              ^^^^^^^^^^^^^
-4 >                           ^
-1->
-  >    /**@internal*/ 
-2 >    export namespace 
-3 >              someNamespace
-4 >                            
-1->Emitted(24, 5) Source(23, 20) + SourceIndex(2)
-2 >Emitted(24, 15) Source(23, 37) + SourceIndex(2)
-3 >Emitted(24, 28) Source(23, 50) + SourceIndex(2)
-4 >Emitted(24, 29) Source(23, 51) + SourceIndex(2)
----
->>>        class C {
-1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-1 >{ 
-2 >        export class 
-3 >              C
-1 >Emitted(25, 9) Source(23, 53) + SourceIndex(2)
-2 >Emitted(25, 15) Source(23, 66) + SourceIndex(2)
-3 >Emitted(25, 16) Source(23, 67) + SourceIndex(2)
----
->>>        }
-1 >^^^^^^^^^
-1 > {}
-1 >Emitted(26, 10) Source(23, 70) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(27, 6) Source(23, 72) + SourceIndex(2)
----
->>>    namespace someOther.something {
-1->^^^^
-2 >    ^^^^^^^^^^
-3 >              ^^^^^^^^^
-4 >                       ^
-5 >                        ^^^^^^^^^
-6 >                                 ^
-1->
-  >    /**@internal*/ 
-2 >    export namespace 
-3 >              someOther
-4 >                       .
-5 >                        something
-6 >                                  
-1->Emitted(28, 5) Source(24, 20) + SourceIndex(2)
-2 >Emitted(28, 15) Source(24, 37) + SourceIndex(2)
-3 >Emitted(28, 24) Source(24, 46) + SourceIndex(2)
-4 >Emitted(28, 25) Source(24, 47) + SourceIndex(2)
-5 >Emitted(28, 34) Source(24, 56) + SourceIndex(2)
-6 >Emitted(28, 35) Source(24, 57) + SourceIndex(2)
----
->>>        class someClass {
-1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^^^^^^^^^
-1 >{ 
-2 >        export class 
-3 >              someClass
-1 >Emitted(29, 9) Source(24, 59) + SourceIndex(2)
-2 >Emitted(29, 15) Source(24, 72) + SourceIndex(2)
-3 >Emitted(29, 24) Source(24, 81) + SourceIndex(2)
----
->>>        }
-1 >^^^^^^^^^
-1 > {}
-1 >Emitted(30, 10) Source(24, 84) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(31, 6) Source(24, 86) + SourceIndex(2)
----
->>>    export import someImport = someNamespace.C;
-1->^^^^
-2 >    ^^^^^^
-3 >          ^^^^^^^^
-4 >                  ^^^^^^^^^^
-5 >                            ^^^
-6 >                               ^^^^^^^^^^^^^
-7 >                                            ^
-8 >                                             ^
-9 >                                              ^
-1->
-  >    /**@internal*/ 
-2 >    export
-3 >           import 
-4 >                  someImport
-5 >                             = 
-6 >                               someNamespace
-7 >                                            .
-8 >                                             C
-9 >                                              ;
-1->Emitted(32, 5) Source(25, 20) + SourceIndex(2)
-2 >Emitted(32, 11) Source(25, 26) + SourceIndex(2)
-3 >Emitted(32, 19) Source(25, 34) + SourceIndex(2)
-4 >Emitted(32, 29) Source(25, 44) + SourceIndex(2)
-5 >Emitted(32, 32) Source(25, 47) + SourceIndex(2)
-6 >Emitted(32, 45) Source(25, 60) + SourceIndex(2)
-7 >Emitted(32, 46) Source(25, 61) + SourceIndex(2)
-8 >Emitted(32, 47) Source(25, 62) + SourceIndex(2)
-9 >Emitted(32, 48) Source(25, 63) + SourceIndex(2)
----
->>>    type internalType = internalC;
-1 >^^^^
-2 >    ^^^^^
-3 >         ^^^^^^^^^^^^
-4 >                     ^^^
-5 >                        ^^^^^^^^^
-6 >                                 ^
-1 >
-  >    /**@internal*/ 
-2 >    export type 
-3 >         internalType
-4 >                      = 
-5 >                        internalC
-6 >                                 ;
-1 >Emitted(33, 5) Source(26, 20) + SourceIndex(2)
-2 >Emitted(33, 10) Source(26, 32) + SourceIndex(2)
-3 >Emitted(33, 22) Source(26, 44) + SourceIndex(2)
-4 >Emitted(33, 25) Source(26, 47) + SourceIndex(2)
-5 >Emitted(33, 34) Source(26, 56) + SourceIndex(2)
-6 >Emitted(33, 35) Source(26, 57) + SourceIndex(2)
----
->>>    const internalConst = 10;
-1 >^^^^
-2 >    ^^^^^^
-3 >          ^^^^^^^^^^^^^
-4 >                       ^^^^^
-5 >                            ^
-1 >
-  >    /**@internal*/ export 
-2 >    const 
-3 >          internalConst
-4 >                        = 10
-5 >                            ;
-1 >Emitted(34, 5) Source(27, 27) + SourceIndex(2)
-2 >Emitted(34, 11) Source(27, 33) + SourceIndex(2)
-3 >Emitted(34, 24) Source(27, 46) + SourceIndex(2)
-4 >Emitted(34, 29) Source(27, 51) + SourceIndex(2)
-5 >Emitted(34, 30) Source(27, 52) + SourceIndex(2)
----
->>>    enum internalEnum {
-1 >^^^^
-2 >    ^^^^^
-3 >         ^^^^^^^^^^^^
-1 >
-  >    /**@internal*/ 
-2 >    export enum 
-3 >         internalEnum
-1 >Emitted(35, 5) Source(28, 20) + SourceIndex(2)
-2 >Emitted(35, 10) Source(28, 32) + SourceIndex(2)
-3 >Emitted(35, 22) Source(28, 44) + SourceIndex(2)
----
->>>        a = 0,
-1 >^^^^^^^^
-2 >        ^
-3 >         ^^^^
-4 >             ^^->
-1 > { 
-2 >        a
-3 >         
-1 >Emitted(36, 9) Source(28, 47) + SourceIndex(2)
-2 >Emitted(36, 10) Source(28, 48) + SourceIndex(2)
-3 >Emitted(36, 14) Source(28, 48) + SourceIndex(2)
----
->>>        b = 1,
-1->^^^^^^^^
-2 >        ^
-3 >         ^^^^
-4 >             ^->
-1->, 
-2 >        b
-3 >         
-1->Emitted(37, 9) Source(28, 50) + SourceIndex(2)
-2 >Emitted(37, 10) Source(28, 51) + SourceIndex(2)
-3 >Emitted(37, 14) Source(28, 51) + SourceIndex(2)
----
->>>        c = 2
-1->^^^^^^^^
-2 >        ^
-3 >         ^^^^
-1->, 
-2 >        c
-3 >         
-1->Emitted(38, 9) Source(28, 53) + SourceIndex(2)
-2 >Emitted(38, 10) Source(28, 54) + SourceIndex(2)
-3 >Emitted(38, 14) Source(28, 54) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-1 > }
-1 >Emitted(39, 6) Source(28, 56) + SourceIndex(2)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >}
-1 >Emitted(40, 2) Source(29, 2) + SourceIndex(2)
----
->>>declare class internalC {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^^^^^^^^
-1->
-  >/**@internal*/ 
-2 >class 
-3 >              internalC
-1->Emitted(41, 1) Source(30, 16) + SourceIndex(2)
-2 >Emitted(41, 15) Source(30, 22) + SourceIndex(2)
-3 >Emitted(41, 24) Source(30, 31) + SourceIndex(2)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > {}
-1 >Emitted(42, 2) Source(30, 34) + SourceIndex(2)
----
->>>declare function internalfoo(): void;
-1->
-2 >^^^^^^^^^^^^^^^^^
-3 >                 ^^^^^^^^^^^
-4 >                            ^^^^^^^^^
-5 >                                     ^->
-1->
-  >/**@internal*/ 
-2 >function 
-3 >                 internalfoo
-4 >                            () {}
-1->Emitted(43, 1) Source(31, 16) + SourceIndex(2)
-2 >Emitted(43, 18) Source(31, 25) + SourceIndex(2)
-3 >Emitted(43, 29) Source(31, 36) + SourceIndex(2)
-4 >Emitted(43, 38) Source(31, 41) + SourceIndex(2)
----
->>>declare namespace internalNamespace {
-1->
-2 >^^^^^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^^^^^^^^^^
-4 >                                   ^
-1->
-  >/**@internal*/ 
-2 >namespace 
-3 >                  internalNamespace
-4 >                                    
-1->Emitted(44, 1) Source(32, 16) + SourceIndex(2)
-2 >Emitted(44, 19) Source(32, 26) + SourceIndex(2)
-3 >Emitted(44, 36) Source(32, 43) + SourceIndex(2)
-4 >Emitted(44, 37) Source(32, 44) + SourceIndex(2)
----
->>>    class someClass {
-1 >^^^^
-2 >    ^^^^^^
-3 >          ^^^^^^^^^
-1 >{ 
-2 >    export class 
-3 >          someClass
-1 >Emitted(45, 5) Source(32, 46) + SourceIndex(2)
-2 >Emitted(45, 11) Source(32, 59) + SourceIndex(2)
-3 >Emitted(45, 20) Source(32, 68) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-1 > {}
-1 >Emitted(46, 6) Source(32, 71) + SourceIndex(2)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(47, 2) Source(32, 73) + SourceIndex(2)
----
->>>declare namespace internalOther.something {
-1->
-2 >^^^^^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^^^^^^
-4 >                               ^
-5 >                                ^^^^^^^^^
-6 >                                         ^
-1->
-  >/**@internal*/ 
-2 >namespace 
-3 >                  internalOther
-4 >                               .
-5 >                                something
-6 >                                          
-1->Emitted(48, 1) Source(33, 16) + SourceIndex(2)
-2 >Emitted(48, 19) Source(33, 26) + SourceIndex(2)
-3 >Emitted(48, 32) Source(33, 39) + SourceIndex(2)
-4 >Emitted(48, 33) Source(33, 40) + SourceIndex(2)
-5 >Emitted(48, 42) Source(33, 49) + SourceIndex(2)
-6 >Emitted(48, 43) Source(33, 50) + SourceIndex(2)
----
->>>    class someClass {
-1 >^^^^
-2 >    ^^^^^^
-3 >          ^^^^^^^^^
-1 >{ 
-2 >    export class 
-3 >          someClass
-1 >Emitted(49, 5) Source(33, 52) + SourceIndex(2)
-2 >Emitted(49, 11) Source(33, 65) + SourceIndex(2)
-3 >Emitted(49, 20) Source(33, 74) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-1 > {}
-1 >Emitted(50, 6) Source(33, 77) + SourceIndex(2)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(51, 2) Source(33, 79) + SourceIndex(2)
----
->>>import internalImport = internalNamespace.someClass;
-1->
-2 >^^^^^^^
-3 >       ^^^^^^^^^^^^^^
-4 >                     ^^^
-5 >                        ^^^^^^^^^^^^^^^^^
-6 >                                         ^
-7 >                                          ^^^^^^^^^
-8 >                                                   ^
-1->
-  >/**@internal*/ 
-2 >import 
-3 >       internalImport
-4 >                      = 
-5 >                        internalNamespace
-6 >                                         .
-7 >                                          someClass
-8 >                                                   ;
-1->Emitted(52, 1) Source(34, 16) + SourceIndex(2)
-2 >Emitted(52, 8) Source(34, 23) + SourceIndex(2)
-3 >Emitted(52, 22) Source(34, 37) + SourceIndex(2)
-4 >Emitted(52, 25) Source(34, 40) + SourceIndex(2)
-5 >Emitted(52, 42) Source(34, 57) + SourceIndex(2)
-6 >Emitted(52, 43) Source(34, 58) + SourceIndex(2)
-7 >Emitted(52, 52) Source(34, 67) + SourceIndex(2)
-8 >Emitted(52, 53) Source(34, 68) + SourceIndex(2)
----
->>>declare type internalType = internalC;
-1 >
-2 >^^^^^^^^^^^^^
-3 >             ^^^^^^^^^^^^
-4 >                         ^^^
-5 >                            ^^^^^^^^^
-6 >                                     ^
-1 >
-  >/**@internal*/ 
-2 >type 
-3 >             internalType
-4 >                          = 
-5 >                            internalC
-6 >                                     ;
-1 >Emitted(53, 1) Source(35, 16) + SourceIndex(2)
-2 >Emitted(53, 14) Source(35, 21) + SourceIndex(2)
-3 >Emitted(53, 26) Source(35, 33) + SourceIndex(2)
-4 >Emitted(53, 29) Source(35, 36) + SourceIndex(2)
-5 >Emitted(53, 38) Source(35, 45) + SourceIndex(2)
-6 >Emitted(53, 39) Source(35, 46) + SourceIndex(2)
----
->>>declare const internalConst = 10;
-1 >
-2 >^^^^^^^^
-3 >        ^^^^^^
-4 >              ^^^^^^^^^^^^^
-5 >                           ^^^^^
-6 >                                ^
-1 >
-  >/**@internal*/ 
-2 >
-3 >        const 
-4 >              internalConst
-5 >                            = 10
-6 >                                ;
-1 >Emitted(54, 1) Source(36, 16) + SourceIndex(2)
-2 >Emitted(54, 9) Source(36, 16) + SourceIndex(2)
-3 >Emitted(54, 15) Source(36, 22) + SourceIndex(2)
-4 >Emitted(54, 28) Source(36, 35) + SourceIndex(2)
-5 >Emitted(54, 33) Source(36, 40) + SourceIndex(2)
-6 >Emitted(54, 34) Source(36, 41) + SourceIndex(2)
----
->>>declare enum internalEnum {
-1 >
-2 >^^^^^^^^^^^^^
-3 >             ^^^^^^^^^^^^
-1 >
-  >/**@internal*/ 
-2 >enum 
-3 >             internalEnum
-1 >Emitted(55, 1) Source(37, 16) + SourceIndex(2)
-2 >Emitted(55, 14) Source(37, 21) + SourceIndex(2)
-3 >Emitted(55, 26) Source(37, 33) + SourceIndex(2)
----
->>>    a = 0,
-1 >^^^^
-2 >    ^
-3 >     ^^^^
-4 >         ^^->
-1 > { 
-2 >    a
-3 >     
-1 >Emitted(56, 5) Source(37, 36) + SourceIndex(2)
-2 >Emitted(56, 6) Source(37, 37) + SourceIndex(2)
-3 >Emitted(56, 10) Source(37, 37) + SourceIndex(2)
----
->>>    b = 1,
-1->^^^^
-2 >    ^
-3 >     ^^^^
-4 >         ^->
-1->, 
-2 >    b
-3 >     
-1->Emitted(57, 5) Source(37, 39) + SourceIndex(2)
-2 >Emitted(57, 6) Source(37, 40) + SourceIndex(2)
-3 >Emitted(57, 10) Source(37, 40) + SourceIndex(2)
----
->>>    c = 2
-1->^^^^
-2 >    ^
-3 >     ^^^^
-1->, 
-2 >    c
-3 >     
-1->Emitted(58, 5) Source(37, 42) + SourceIndex(2)
-2 >Emitted(58, 6) Source(37, 43) + SourceIndex(2)
-3 >Emitted(58, 10) Source(37, 43) + SourceIndex(2)
+1->Emitted(16, 1) Source(20, 1) + SourceIndex(2)
+2 >Emitted(16, 19) Source(20, 11) + SourceIndex(2)
+3 >Emitted(16, 26) Source(20, 18) + SourceIndex(2)
+4 >Emitted(16, 27) Source(20, 19) + SourceIndex(2)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(59, 2) Source(37, 45) + SourceIndex(2)
+1 >{
+  >    /**@internal*/ export class C { }
+  >    /**@internal*/ export function foo() {}
+  >    /**@internal*/ export namespace someNamespace { export class C {} }
+  >    /**@internal*/ export namespace someOther.something { export class someClass {} }
+  >    /**@internal*/ export import someImport = someNamespace.C;
+  >    /**@internal*/ export type internalType = internalC;
+  >    /**@internal*/ export const internalConst = 10;
+  >    /**@internal*/ export enum internalEnum { a, b, c }
+  >}
+1 >Emitted(17, 2) Source(29, 2) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1047,9 +925,9 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >class 
 3 >              C
-1->Emitted(60, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(60, 15) Source(1, 7) + SourceIndex(3)
-3 >Emitted(60, 16) Source(1, 8) + SourceIndex(3)
+1->Emitted(18, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(18, 15) Source(1, 7) + SourceIndex(3)
+3 >Emitted(18, 16) Source(1, 8) + SourceIndex(3)
 ---
 >>>    doSomething(): void;
 1->^^^^
@@ -1057,8 +935,8 @@ sourceFile:../../../second/second_part2.ts
 1-> {
   >    
 2 >    doSomething
-1->Emitted(61, 5) Source(2, 5) + SourceIndex(3)
-2 >Emitted(61, 16) Source(2, 16) + SourceIndex(3)
+1->Emitted(19, 5) Source(2, 5) + SourceIndex(3)
+2 >Emitted(19, 16) Source(2, 16) + SourceIndex(3)
 ---
 >>>}
 1 >^
@@ -1067,7 +945,7 @@ sourceFile:../../../second/second_part2.ts
   >        console.log("something got done");
   >    }
   >}
-1 >Emitted(62, 2) Source(5, 2) + SourceIndex(3)
+1 >Emitted(20, 2) Source(5, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1088,12 +966,12 @@ sourceFile:../../third_part1.ts
 4 >            c
 5 >              = new C()
 6 >                ;
-1->Emitted(64, 1) Source(1, 1) + SourceIndex(4)
-2 >Emitted(64, 9) Source(1, 1) + SourceIndex(4)
-3 >Emitted(64, 13) Source(1, 5) + SourceIndex(4)
-4 >Emitted(64, 14) Source(1, 6) + SourceIndex(4)
-5 >Emitted(64, 17) Source(1, 16) + SourceIndex(4)
-6 >Emitted(64, 18) Source(1, 17) + SourceIndex(4)
+1->Emitted(22, 1) Source(1, 1) + SourceIndex(4)
+2 >Emitted(22, 9) Source(1, 1) + SourceIndex(4)
+3 >Emitted(22, 13) Source(1, 5) + SourceIndex(4)
+4 >Emitted(22, 14) Source(1, 6) + SourceIndex(4)
+5 >Emitted(22, 17) Source(1, 16) + SourceIndex(4)
+6 >Emitted(22, 18) Source(1, 17) + SourceIndex(4)
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 

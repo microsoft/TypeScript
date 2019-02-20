@@ -20,6 +20,11 @@
       "sections": [
         {
           "pos": 0,
+          "end": 39,
+          "kind": "internal"
+        },
+        {
+          "pos": 41,
           "end": 157,
           "kind": "text"
         },
@@ -53,10 +58,12 @@ sourceMapUrl: (127-167)
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-157)
+internal: (0-39)
 interface TheFirst {
     none: any;
 }
+----------------------------------------------------------------------
+text: (41-157)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -325,48 +332,48 @@ console.log(s);
       "sections": [
         {
           "pos": 0,
-          "end": 199,
+          "end": 158,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 157,
+              "end": 116,
               "kind": "text"
             },
             {
-              "pos": 157,
-              "end": 199,
+              "pos": 116,
+              "end": 158,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 201,
-          "end": 1303,
+          "pos": 160,
+          "end": 363,
           "kind": "prepend",
           "data": "/src/2/second-output.d.ts",
           "texts": [
             {
-              "pos": 201,
-              "end": 1260,
+              "pos": 160,
+              "end": 320,
               "kind": "text"
             },
             {
-              "pos": 1260,
-              "end": 1303,
+              "pos": 320,
+              "end": 363,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 1305,
-          "end": 1324,
+          "pos": 365,
+          "end": 384,
           "kind": "text"
         },
         {
-          "pos": 1324,
-          "end": 1366,
+          "pos": 384,
+          "end": 426,
           "kind": "sourceMapUrl"
         }
       ]
@@ -514,12 +521,9 @@ sourceMapUrl: (3664-3704)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-199):: /src/first/bin/first-output.d.ts texts:: 2
+prepend: (0-158):: /src/first/bin/first-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
-text: (0-157)
-interface TheFirst {
-    none: any;
-}
+text: (0-116)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -527,75 +531,33 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (157-199)
+sourceMapUrl: (116-158)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (201-1303):: /src/2/second-output.d.ts texts:: 2
+prepend: (160-363):: /src/2/second-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
-text: (201-1260)
+text: (160-320)
 declare namespace N {
 }
 declare namespace N {
 }
 declare class normalC {
-    constructor();
-    prop: string;
-    method(): void;
-    /*@internal*/ c: number;
 }
 declare namespace normalN {
-    class C {
-    }
-    function foo(): void;
-    namespace someNamespace {
-        class C {
-        }
-    }
-    namespace someOther.something {
-        class someClass {
-        }
-    }
-    export import someImport = someNamespace.C;
-    type internalType = internalC;
-    const internalConst = 10;
-    enum internalEnum {
-        a = 0,
-        b = 1,
-        c = 2
-    }
-}
-declare class internalC {
-}
-declare function internalfoo(): void;
-declare namespace internalNamespace {
-    class someClass {
-    }
-}
-declare namespace internalOther.something {
-    class someClass {
-    }
-}
-import internalImport = internalNamespace.someClass;
-declare type internalType = internalC;
-declare const internalConst = 10;
-declare enum internalEnum {
-    a = 0,
-    b = 1,
-    c = 2
 }
 declare class C {
     doSomething(): void;
 }
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (1260-1303)
+sourceMapUrl: (320-363)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
-text: (1305-1324)
+text: (365-384)
 declare var c: C;
 
 ----------------------------------------------------------------------
-sourceMapUrl: (1324-1366)
+sourceMapUrl: (384-426)
 //# sourceMappingURL=third-output.d.ts.map
 ======================================================================
 

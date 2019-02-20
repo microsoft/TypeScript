@@ -20,6 +20,36 @@
       "sections": [
         {
           "pos": 0,
+          "end": 77,
+          "kind": "text"
+        },
+        {
+          "pos": 77,
+          "end": 226,
+          "kind": "internal"
+        },
+        {
+          "pos": 228,
+          "end": 260,
+          "kind": "text"
+        },
+        {
+          "pos": 260,
+          "end": 772,
+          "kind": "internal"
+        },
+        {
+          "pos": 774,
+          "end": 777,
+          "kind": "text"
+        },
+        {
+          "pos": 777,
+          "end": 1310,
+          "kind": "internal"
+        },
+        {
+          "pos": 1312,
           "end": 1360,
           "kind": "text"
         },
@@ -148,18 +178,26 @@ sourceMapUrl: (3434-3475)
 ======================================================================
 File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (0-1360)
+text: (0-77)
 declare namespace N {
 }
 declare namespace N {
 }
 declare class normalC {
+
+----------------------------------------------------------------------
+internal: (77-226)
     /**@internal*/ constructor();
     /**@internal*/ prop: string;
     /**@internal*/ method(): void;
     /**@internal*/ /**@internal*/ c: number;
+----------------------------------------------------------------------
+text: (228-260)
 }
 declare namespace normalN {
+
+----------------------------------------------------------------------
+internal: (260-772)
     /**@internal*/ class C {
     }
     /**@internal*/ function foo(): void;
@@ -179,7 +217,12 @@ declare namespace normalN {
         b = 1,
         c = 2
     }
+----------------------------------------------------------------------
+text: (774-777)
 }
+
+----------------------------------------------------------------------
+internal: (777-1310)
 /**@internal*/ declare class internalC {
 }
 /**@internal*/ declare function internalfoo(): void;
@@ -199,6 +242,8 @@ declare namespace normalN {
     b = 1,
     c = 2
 }
+----------------------------------------------------------------------
+text: (1312-1360)
 declare class C {
     doSomething(): void;
 }
@@ -2724,6 +2769,11 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
+          "end": 54,
+          "kind": "internal"
+        },
+        {
+          "pos": 56,
           "end": 172,
           "kind": "text"
         },
@@ -2756,10 +2806,12 @@ sourceMapUrl: (110-150)
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-172)
+internal: (0-54)
 /**@internal*/ interface TheFirst {
     none: any;
 }
+----------------------------------------------------------------------
+text: (56-172)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -3228,48 +3280,48 @@ namespace normalN {
       "sections": [
         {
           "pos": 0,
-          "end": 214,
+          "end": 158,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 172,
+              "end": 116,
               "kind": "text"
             },
             {
-              "pos": 172,
-              "end": 214,
+              "pos": 116,
+              "end": 158,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 216,
-          "end": 1619,
+          "pos": 160,
+          "end": 363,
           "kind": "prepend",
           "data": "/src/2/second-output.d.ts",
           "texts": [
             {
-              "pos": 216,
-              "end": 1576,
+              "pos": 160,
+              "end": 320,
               "kind": "text"
             },
             {
-              "pos": 1576,
-              "end": 1619,
+              "pos": 320,
+              "end": 363,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 1621,
-          "end": 1640,
+          "pos": 365,
+          "end": 384,
           "kind": "text"
         },
         {
-          "pos": 1640,
-          "end": 1682,
+          "pos": 384,
+          "end": 426,
           "kind": "sourceMapUrl"
         }
       ]
@@ -3416,12 +3468,9 @@ sourceMapUrl: (3665-3705)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-214):: /src/first/bin/first-output.d.ts texts:: 2
+prepend: (0-158):: /src/first/bin/first-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
-text: (0-172)
-/**@internal*/ interface TheFirst {
-    none: any;
-}
+text: (0-116)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -3429,82 +3478,37 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (172-214)
+sourceMapUrl: (116-158)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (216-1619):: /src/2/second-output.d.ts texts:: 2
+prepend: (160-363):: /src/2/second-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
-text: (216-1576)
+text: (160-320)
 declare namespace N {
 }
 declare namespace N {
 }
 declare class normalC {
-    /**@internal*/ constructor();
-    /**@internal*/ prop: string;
-    /**@internal*/ method(): void;
-    /**@internal*/ /**@internal*/ c: number;
 }
 declare namespace normalN {
-    /**@internal*/ class C {
-    }
-    /**@internal*/ function foo(): void;
-    /**@internal*/ namespace someNamespace {
-        class C {
-        }
-    }
-    /**@internal*/ namespace someOther.something {
-        class someClass {
-        }
-    }
-    /**@internal*/ export import someImport = someNamespace.C;
-    /**@internal*/ type internalType = internalC;
-    /**@internal*/ const internalConst = 10;
-    /**@internal*/ enum internalEnum {
-        a = 0,
-        b = 1,
-        c = 2
-    }
-}
-/**@internal*/ declare class internalC {
-}
-/**@internal*/ declare function internalfoo(): void;
-/**@internal*/ declare namespace internalNamespace {
-    class someClass {
-    }
-}
-/**@internal*/ declare namespace internalOther.something {
-    class someClass {
-    }
-}
-/**@internal*/ import internalImport = internalNamespace.someClass;
-/**@internal*/ declare type internalType = internalC;
-/**@internal*/ declare const internalConst = 10;
-/**@internal*/ declare enum internalEnum {
-    a = 0,
-    b = 1,
-    c = 2
 }
 declare class C {
     doSomething(): void;
 }
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (1576-1619)
+sourceMapUrl: (320-363)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
-text: (1621-1640)
+text: (365-384)
 declare var c: C;
 
 ----------------------------------------------------------------------
-sourceMapUrl: (1640-1682)
+sourceMapUrl: (384-426)
 //# sourceMappingURL=third-output.d.ts.map
 ======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
-/**@internal*/ interface TheFirst {
-    none: any;
-}
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -3516,50 +3520,8 @@ declare namespace N {
 declare namespace N {
 }
 declare class normalC {
-    /**@internal*/ constructor();
-    /**@internal*/ prop: string;
-    /**@internal*/ method(): void;
-    /**@internal*/ /**@internal*/ c: number;
 }
 declare namespace normalN {
-    /**@internal*/ class C {
-    }
-    /**@internal*/ function foo(): void;
-    /**@internal*/ namespace someNamespace {
-        class C {
-        }
-    }
-    /**@internal*/ namespace someOther.something {
-        class someClass {
-        }
-    }
-    /**@internal*/ export import someImport = someNamespace.C;
-    /**@internal*/ type internalType = internalC;
-    /**@internal*/ const internalConst = 10;
-    /**@internal*/ enum internalEnum {
-        a = 0,
-        b = 1,
-        c = 2
-    }
-}
-/**@internal*/ declare class internalC {
-}
-/**@internal*/ declare function internalfoo(): void;
-/**@internal*/ declare namespace internalNamespace {
-    class someClass {
-    }
-}
-/**@internal*/ declare namespace internalOther.something {
-    class someClass {
-    }
-}
-/**@internal*/ import internalImport = internalNamespace.someClass;
-/**@internal*/ declare type internalType = internalC;
-/**@internal*/ declare const internalConst = 10;
-/**@internal*/ declare enum internalEnum {
-    a = 0,
-    b = 1,
-    c = 2
 }
 declare class C {
     doSomething(): void;
@@ -3569,7 +3531,7 @@ declare var c: C;
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,cAAc,CAAC,UAAU,QAAQ;IAC7B,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;IACT,cAAc;IACd,cAAc,CAAC,IAAI,EAAE,MAAM,CAAC;IAC5B,cAAc,CAAC,MAAM;IACrB,cAAc,gBAAK,CAAC,EACM,MAAM;CACnC;AACD,kBAAU,OAAO,CAAC;IACd,cAAc,CAAC,MAAa,CAAC;KAAI;IACjC,cAAc,CAAC,SAAgB,GAAG,SAAK;IACvC,cAAc,CAAC,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACnE,cAAc,CAAC,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IACjF,cAAc,CAAC,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC1D,cAAc,CAAC,KAAY,YAAY,GAAG,SAAS,CAAC;IACpD,cAAc,CAAQ,MAAM,aAAa,KAAK,CAAC;IAC/C,cAAc,CAAC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACtD;AACD,cAAc,CAAC,cAAM,SAAS;CAAG;AACjC,cAAc,CAAC,iBAAS,WAAW,SAAK;AACxC,cAAc,CAAC,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACxE,cAAc,CAAC,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC9E,cAAc,CAAC,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACnE,cAAc,CAAC,aAAK,YAAY,GAAG,SAAS,CAAC;AAC7C,cAAc,CAAC,QAAA,MAAM,aAAa,KAAK,CAAC;AACxC,cAAc,CAAC,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC5C,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAIA,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;CAMZ;AACD,kBAAU,OAAO,CAAC;CASjB;AC5BD,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -3582,56 +3544,16 @@ sources: ../../../first/first_PART1.ts,../../../first/first_part3.ts,../../../se
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
 sourceFile:../../../first/first_PART1.ts
 -------------------------------------------------------------------
->>>/**@internal*/ interface TheFirst {
-1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^
-5 >                         ^^^^^^^^
-1 >
-2 >/**@internal*/
-3 >               
-4 >               interface 
-5 >                         TheFirst
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 15) Source(1, 15) + SourceIndex(0)
-3 >Emitted(1, 16) Source(1, 16) + SourceIndex(0)
-4 >Emitted(1, 26) Source(1, 26) + SourceIndex(0)
-5 >Emitted(1, 34) Source(1, 34) + SourceIndex(0)
----
->>>    none: any;
-1 >^^^^
-2 >    ^^^^
-3 >        ^^
-4 >          ^^^
-5 >             ^
-1 > {
-  >    
-2 >    none
-3 >        : 
-4 >          any
-5 >             ;
-1 >Emitted(2, 5) Source(2, 5) + SourceIndex(0)
-2 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
-3 >Emitted(2, 11) Source(2, 11) + SourceIndex(0)
-4 >Emitted(2, 14) Source(2, 14) + SourceIndex(0)
-5 >Emitted(2, 15) Source(2, 15) + SourceIndex(0)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >}
-1 >Emitted(3, 2) Source(3, 2) + SourceIndex(0)
----
 >>>declare const s = "Hello, world";
-1->
+1 >
 2 >^^^^^^^^
 3 >        ^^^^^^
 4 >              ^
 5 >               ^^^^^^^^^^^^^^^^^
 6 >                                ^
-1->
+1 >/**@internal*/ interface TheFirst {
+  >    none: any;
+  >}
   >
   >
 2 >
@@ -3639,12 +3561,12 @@ sourceFile:../../../first/first_PART1.ts
 4 >              s
 5 >                = "Hello, world"
 6 >                                ;
-1->Emitted(4, 1) Source(5, 1) + SourceIndex(0)
-2 >Emitted(4, 9) Source(5, 1) + SourceIndex(0)
-3 >Emitted(4, 15) Source(5, 7) + SourceIndex(0)
-4 >Emitted(4, 16) Source(5, 8) + SourceIndex(0)
-5 >Emitted(4, 33) Source(5, 25) + SourceIndex(0)
-6 >Emitted(4, 34) Source(5, 26) + SourceIndex(0)
+1 >Emitted(1, 1) Source(5, 1) + SourceIndex(0)
+2 >Emitted(1, 9) Source(5, 1) + SourceIndex(0)
+3 >Emitted(1, 15) Source(5, 7) + SourceIndex(0)
+4 >Emitted(1, 16) Source(5, 8) + SourceIndex(0)
+5 >Emitted(1, 33) Source(5, 25) + SourceIndex(0)
+6 >Emitted(1, 34) Source(5, 26) + SourceIndex(0)
 ---
 >>>interface NoJsForHereEither {
 1 >
@@ -3655,9 +3577,9 @@ sourceFile:../../../first/first_PART1.ts
   >
 2 >interface 
 3 >          NoJsForHereEither
-1 >Emitted(5, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(5, 11) Source(7, 11) + SourceIndex(0)
-3 >Emitted(5, 28) Source(7, 28) + SourceIndex(0)
+1 >Emitted(2, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(2, 11) Source(7, 11) + SourceIndex(0)
+3 >Emitted(2, 28) Source(7, 28) + SourceIndex(0)
 ---
 >>>    none: any;
 1 >^^^^
@@ -3671,18 +3593,18 @@ sourceFile:../../../first/first_PART1.ts
 3 >        : 
 4 >          any
 5 >             ;
-1 >Emitted(6, 5) Source(8, 5) + SourceIndex(0)
-2 >Emitted(6, 9) Source(8, 9) + SourceIndex(0)
-3 >Emitted(6, 11) Source(8, 11) + SourceIndex(0)
-4 >Emitted(6, 14) Source(8, 14) + SourceIndex(0)
-5 >Emitted(6, 15) Source(8, 15) + SourceIndex(0)
+1 >Emitted(3, 5) Source(8, 5) + SourceIndex(0)
+2 >Emitted(3, 9) Source(8, 9) + SourceIndex(0)
+3 >Emitted(3, 11) Source(8, 11) + SourceIndex(0)
+4 >Emitted(3, 14) Source(8, 14) + SourceIndex(0)
+5 >Emitted(3, 15) Source(8, 15) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(7, 2) Source(9, 2) + SourceIndex(0)
+1 >Emitted(4, 2) Source(9, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -3700,10 +3622,10 @@ sourceFile:../../../first/first_part3.ts
 4 >                  () {
   >                      return "JS does hoists";
   >                  }
-1->Emitted(8, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(8, 18) Source(1, 10) + SourceIndex(1)
-3 >Emitted(8, 19) Source(1, 11) + SourceIndex(1)
-4 >Emitted(8, 30) Source(3, 2) + SourceIndex(1)
+1->Emitted(5, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(5, 18) Source(1, 10) + SourceIndex(1)
+3 >Emitted(5, 19) Source(1, 11) + SourceIndex(1)
+4 >Emitted(5, 30) Source(3, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -3719,10 +3641,10 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(10, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(10, 19) Source(1, 11) + SourceIndex(2)
-3 >Emitted(10, 20) Source(1, 12) + SourceIndex(2)
-4 >Emitted(10, 21) Source(1, 13) + SourceIndex(2)
+1->Emitted(7, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(7, 19) Source(1, 11) + SourceIndex(2)
+3 >Emitted(7, 20) Source(1, 12) + SourceIndex(2)
+4 >Emitted(7, 21) Source(1, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -3730,7 +3652,7 @@ sourceFile:../../../second/second_part1.ts
 1 >{
   >    // Comment text
   >}
-1 >Emitted(11, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(8, 2) Source(3, 2) + SourceIndex(2)
 ---
 >>>declare namespace N {
 1->
@@ -3743,10 +3665,10 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(12, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(12, 19) Source(5, 11) + SourceIndex(2)
-3 >Emitted(12, 20) Source(5, 12) + SourceIndex(2)
-4 >Emitted(12, 21) Source(5, 13) + SourceIndex(2)
+1->Emitted(9, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(9, 19) Source(5, 11) + SourceIndex(2)
+3 >Emitted(9, 20) Source(5, 12) + SourceIndex(2)
+4 >Emitted(9, 21) Source(5, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -3758,691 +3680,62 @@ sourceFile:../../../second/second_part1.ts
   >
   >    f();
   >}
-1 >Emitted(13, 2) Source(11, 2) + SourceIndex(2)
+1 >Emitted(10, 2) Source(11, 2) + SourceIndex(2)
 ---
 >>>declare class normalC {
 1->
 2 >^^^^^^^^^^^^^^
 3 >              ^^^^^^^
-4 >                     ^^^^^^^^^^^^^->
 1->
   >
   >
 2 >class 
 3 >              normalC
-1->Emitted(14, 1) Source(13, 1) + SourceIndex(2)
-2 >Emitted(14, 15) Source(13, 7) + SourceIndex(2)
-3 >Emitted(14, 22) Source(13, 14) + SourceIndex(2)
----
->>>    /**@internal*/ constructor();
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^^^^^^^^->
-1-> {
-  >    
-2 >    /**@internal*/
-1->Emitted(15, 5) Source(14, 5) + SourceIndex(2)
-2 >Emitted(15, 19) Source(14, 19) + SourceIndex(2)
----
->>>    /**@internal*/ prop: string;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^
-5 >                       ^^
-6 >                         ^^^^^^
-7 >                               ^
-8 >                                ^^^->
-1-> constructor() { }
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   prop
-5 >                       : 
-6 >                         string
-7 >                               ;
-1->Emitted(16, 5) Source(15, 5) + SourceIndex(2)
-2 >Emitted(16, 19) Source(15, 19) + SourceIndex(2)
-3 >Emitted(16, 20) Source(15, 20) + SourceIndex(2)
-4 >Emitted(16, 24) Source(15, 24) + SourceIndex(2)
-5 >Emitted(16, 26) Source(15, 26) + SourceIndex(2)
-6 >Emitted(16, 32) Source(15, 32) + SourceIndex(2)
-7 >Emitted(16, 33) Source(15, 33) + SourceIndex(2)
----
->>>    /**@internal*/ method(): void;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^^
-5 >                         ^^^^^^^^^^^^^^^^^^^^->
-1->
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   method
-1->Emitted(17, 5) Source(16, 5) + SourceIndex(2)
-2 >Emitted(17, 19) Source(16, 19) + SourceIndex(2)
-3 >Emitted(17, 20) Source(16, 20) + SourceIndex(2)
-4 >Emitted(17, 26) Source(16, 26) + SourceIndex(2)
----
->>>    /**@internal*/ /**@internal*/ c: number;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^^^^^^^^^^^^^^^^
-4 >                                  ^
-5 >                                   ^^
-6 >                                     ^^^^^^
-1->() { }
-  >    
-2 >    /**@internal*/
-3 >                   get 
-4 >                                  c
-5 >                                   () { return 10; }
-  >                                       /**@internal*/ set c(val: 
-6 >                                     number
-1->Emitted(18, 5) Source(17, 5) + SourceIndex(2)
-2 >Emitted(18, 19) Source(17, 19) + SourceIndex(2)
-3 >Emitted(18, 35) Source(17, 24) + SourceIndex(2)
-4 >Emitted(18, 36) Source(17, 25) + SourceIndex(2)
-5 >Emitted(18, 38) Source(18, 31) + SourceIndex(2)
-6 >Emitted(18, 44) Source(18, 37) + SourceIndex(2)
+1->Emitted(11, 1) Source(13, 1) + SourceIndex(2)
+2 >Emitted(11, 15) Source(13, 7) + SourceIndex(2)
+3 >Emitted(11, 22) Source(13, 14) + SourceIndex(2)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >) { }
+1 > {
+  >    /**@internal*/ constructor() { }
+  >    /**@internal*/ prop: string;
+  >    /**@internal*/ method() { }
+  >    /**@internal*/ get c() { return 10; }
+  >    /**@internal*/ set c(val: number) { }
   >}
-1 >Emitted(19, 2) Source(19, 2) + SourceIndex(2)
+1 >Emitted(12, 2) Source(19, 2) + SourceIndex(2)
 ---
 >>>declare namespace normalN {
 1->
 2 >^^^^^^^^^^^^^^^^^^
 3 >                  ^^^^^^^
 4 >                         ^
-5 >                          ^^^->
 1->
   >
 2 >namespace 
 3 >                  normalN
 4 >                          
-1->Emitted(20, 1) Source(20, 1) + SourceIndex(2)
-2 >Emitted(20, 19) Source(20, 11) + SourceIndex(2)
-3 >Emitted(20, 26) Source(20, 18) + SourceIndex(2)
-4 >Emitted(20, 27) Source(20, 19) + SourceIndex(2)
----
->>>    /**@internal*/ class C {
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^^
-5 >                         ^
-1->{
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   export class 
-5 >                         C
-1->Emitted(21, 5) Source(21, 5) + SourceIndex(2)
-2 >Emitted(21, 19) Source(21, 19) + SourceIndex(2)
-3 >Emitted(21, 20) Source(21, 20) + SourceIndex(2)
-4 >Emitted(21, 26) Source(21, 33) + SourceIndex(2)
-5 >Emitted(21, 27) Source(21, 34) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > { }
-1 >Emitted(22, 6) Source(21, 38) + SourceIndex(2)
----
->>>    /**@internal*/ function foo(): void;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^^^^^
-5 >                            ^^^
-6 >                               ^^^^^^^^^
-7 >                                        ^^^^^->
-1->
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   export function 
-5 >                            foo
-6 >                               () {}
-1->Emitted(23, 5) Source(22, 5) + SourceIndex(2)
-2 >Emitted(23, 19) Source(22, 19) + SourceIndex(2)
-3 >Emitted(23, 20) Source(22, 20) + SourceIndex(2)
-4 >Emitted(23, 29) Source(22, 36) + SourceIndex(2)
-5 >Emitted(23, 32) Source(22, 39) + SourceIndex(2)
-6 >Emitted(23, 41) Source(22, 44) + SourceIndex(2)
----
->>>    /**@internal*/ namespace someNamespace {
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^^^^^^
-5 >                             ^^^^^^^^^^^^^
-6 >                                          ^
-1->
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   export namespace 
-5 >                             someNamespace
-6 >                                           
-1->Emitted(24, 5) Source(23, 5) + SourceIndex(2)
-2 >Emitted(24, 19) Source(23, 19) + SourceIndex(2)
-3 >Emitted(24, 20) Source(23, 20) + SourceIndex(2)
-4 >Emitted(24, 30) Source(23, 37) + SourceIndex(2)
-5 >Emitted(24, 43) Source(23, 50) + SourceIndex(2)
-6 >Emitted(24, 44) Source(23, 51) + SourceIndex(2)
----
->>>        class C {
-1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-1 >{ 
-2 >        export class 
-3 >              C
-1 >Emitted(25, 9) Source(23, 53) + SourceIndex(2)
-2 >Emitted(25, 15) Source(23, 66) + SourceIndex(2)
-3 >Emitted(25, 16) Source(23, 67) + SourceIndex(2)
----
->>>        }
-1 >^^^^^^^^^
-1 > {}
-1 >Emitted(26, 10) Source(23, 70) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(27, 6) Source(23, 72) + SourceIndex(2)
----
->>>    /**@internal*/ namespace someOther.something {
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^^^^^^
-5 >                             ^^^^^^^^^
-6 >                                      ^
-7 >                                       ^^^^^^^^^
-8 >                                                ^
-1->
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   export namespace 
-5 >                             someOther
-6 >                                      .
-7 >                                       something
-8 >                                                 
-1->Emitted(28, 5) Source(24, 5) + SourceIndex(2)
-2 >Emitted(28, 19) Source(24, 19) + SourceIndex(2)
-3 >Emitted(28, 20) Source(24, 20) + SourceIndex(2)
-4 >Emitted(28, 30) Source(24, 37) + SourceIndex(2)
-5 >Emitted(28, 39) Source(24, 46) + SourceIndex(2)
-6 >Emitted(28, 40) Source(24, 47) + SourceIndex(2)
-7 >Emitted(28, 49) Source(24, 56) + SourceIndex(2)
-8 >Emitted(28, 50) Source(24, 57) + SourceIndex(2)
----
->>>        class someClass {
-1 >^^^^^^^^
-2 >        ^^^^^^
-3 >              ^^^^^^^^^
-1 >{ 
-2 >        export class 
-3 >              someClass
-1 >Emitted(29, 9) Source(24, 59) + SourceIndex(2)
-2 >Emitted(29, 15) Source(24, 72) + SourceIndex(2)
-3 >Emitted(29, 24) Source(24, 81) + SourceIndex(2)
----
->>>        }
-1 >^^^^^^^^^
-1 > {}
-1 >Emitted(30, 10) Source(24, 84) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-2 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(31, 6) Source(24, 86) + SourceIndex(2)
----
->>>    /**@internal*/ export import someImport = someNamespace.C;
-1->^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^^
-5 >                         ^^^^^^^^
-6 >                                 ^^^^^^^^^^
-7 >                                           ^^^
-8 >                                              ^^^^^^^^^^^^^
-9 >                                                           ^
-10>                                                            ^
-11>                                                             ^
-1->
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   export
-5 >                          import 
-6 >                                 someImport
-7 >                                            = 
-8 >                                              someNamespace
-9 >                                                           .
-10>                                                            C
-11>                                                             ;
-1->Emitted(32, 5) Source(25, 5) + SourceIndex(2)
-2 >Emitted(32, 19) Source(25, 19) + SourceIndex(2)
-3 >Emitted(32, 20) Source(25, 20) + SourceIndex(2)
-4 >Emitted(32, 26) Source(25, 26) + SourceIndex(2)
-5 >Emitted(32, 34) Source(25, 34) + SourceIndex(2)
-6 >Emitted(32, 44) Source(25, 44) + SourceIndex(2)
-7 >Emitted(32, 47) Source(25, 47) + SourceIndex(2)
-8 >Emitted(32, 60) Source(25, 60) + SourceIndex(2)
-9 >Emitted(32, 61) Source(25, 61) + SourceIndex(2)
-10>Emitted(32, 62) Source(25, 62) + SourceIndex(2)
-11>Emitted(32, 63) Source(25, 63) + SourceIndex(2)
----
->>>    /**@internal*/ type internalType = internalC;
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^
-5 >                        ^^^^^^^^^^^^
-6 >                                    ^^^
-7 >                                       ^^^^^^^^^
-8 >                                                ^
-1 >
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   export type 
-5 >                        internalType
-6 >                                     = 
-7 >                                       internalC
-8 >                                                ;
-1 >Emitted(33, 5) Source(26, 5) + SourceIndex(2)
-2 >Emitted(33, 19) Source(26, 19) + SourceIndex(2)
-3 >Emitted(33, 20) Source(26, 20) + SourceIndex(2)
-4 >Emitted(33, 25) Source(26, 32) + SourceIndex(2)
-5 >Emitted(33, 37) Source(26, 44) + SourceIndex(2)
-6 >Emitted(33, 40) Source(26, 47) + SourceIndex(2)
-7 >Emitted(33, 49) Source(26, 56) + SourceIndex(2)
-8 >Emitted(33, 50) Source(26, 57) + SourceIndex(2)
----
->>>    /**@internal*/ const internalConst = 10;
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^^
-5 >                         ^^^^^^^^^^^^^
-6 >                                      ^^^^^
-7 >                                           ^
-1 >
-  >    
-2 >    /**@internal*/
-3 >                   export 
-4 >                   const 
-5 >                         internalConst
-6 >                                       = 10
-7 >                                           ;
-1 >Emitted(34, 5) Source(27, 5) + SourceIndex(2)
-2 >Emitted(34, 19) Source(27, 19) + SourceIndex(2)
-3 >Emitted(34, 20) Source(27, 27) + SourceIndex(2)
-4 >Emitted(34, 26) Source(27, 33) + SourceIndex(2)
-5 >Emitted(34, 39) Source(27, 46) + SourceIndex(2)
-6 >Emitted(34, 44) Source(27, 51) + SourceIndex(2)
-7 >Emitted(34, 45) Source(27, 52) + SourceIndex(2)
----
->>>    /**@internal*/ enum internalEnum {
-1 >^^^^
-2 >    ^^^^^^^^^^^^^^
-3 >                  ^
-4 >                   ^^^^^
-5 >                        ^^^^^^^^^^^^
-1 >
-  >    
-2 >    /**@internal*/
-3 >                   
-4 >                   export enum 
-5 >                        internalEnum
-1 >Emitted(35, 5) Source(28, 5) + SourceIndex(2)
-2 >Emitted(35, 19) Source(28, 19) + SourceIndex(2)
-3 >Emitted(35, 20) Source(28, 20) + SourceIndex(2)
-4 >Emitted(35, 25) Source(28, 32) + SourceIndex(2)
-5 >Emitted(35, 37) Source(28, 44) + SourceIndex(2)
----
->>>        a = 0,
-1 >^^^^^^^^
-2 >        ^
-3 >         ^^^^
-4 >             ^^->
-1 > { 
-2 >        a
-3 >         
-1 >Emitted(36, 9) Source(28, 47) + SourceIndex(2)
-2 >Emitted(36, 10) Source(28, 48) + SourceIndex(2)
-3 >Emitted(36, 14) Source(28, 48) + SourceIndex(2)
----
->>>        b = 1,
-1->^^^^^^^^
-2 >        ^
-3 >         ^^^^
-4 >             ^->
-1->, 
-2 >        b
-3 >         
-1->Emitted(37, 9) Source(28, 50) + SourceIndex(2)
-2 >Emitted(37, 10) Source(28, 51) + SourceIndex(2)
-3 >Emitted(37, 14) Source(28, 51) + SourceIndex(2)
----
->>>        c = 2
-1->^^^^^^^^
-2 >        ^
-3 >         ^^^^
-1->, 
-2 >        c
-3 >         
-1->Emitted(38, 9) Source(28, 53) + SourceIndex(2)
-2 >Emitted(38, 10) Source(28, 54) + SourceIndex(2)
-3 >Emitted(38, 14) Source(28, 54) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-1 > }
-1 >Emitted(39, 6) Source(28, 56) + SourceIndex(2)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >}
-1 >Emitted(40, 2) Source(29, 2) + SourceIndex(2)
----
->>>/**@internal*/ declare class internalC {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^^^^
-5 >                             ^^^^^^^^^
-1->
-  >
-2 >/**@internal*/
-3 >               
-4 >               class 
-5 >                             internalC
-1->Emitted(41, 1) Source(30, 1) + SourceIndex(2)
-2 >Emitted(41, 15) Source(30, 15) + SourceIndex(2)
-3 >Emitted(41, 16) Source(30, 16) + SourceIndex(2)
-4 >Emitted(41, 30) Source(30, 22) + SourceIndex(2)
-5 >Emitted(41, 39) Source(30, 31) + SourceIndex(2)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > {}
-1 >Emitted(42, 2) Source(30, 34) + SourceIndex(2)
----
->>>/**@internal*/ declare function internalfoo(): void;
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^^^^^^^
-5 >                                ^^^^^^^^^^^
-6 >                                           ^^^^^^^^^
-7 >                                                    ^->
-1->
-  >
-2 >/**@internal*/
-3 >               
-4 >               function 
-5 >                                internalfoo
-6 >                                           () {}
-1->Emitted(43, 1) Source(31, 1) + SourceIndex(2)
-2 >Emitted(43, 15) Source(31, 15) + SourceIndex(2)
-3 >Emitted(43, 16) Source(31, 16) + SourceIndex(2)
-4 >Emitted(43, 33) Source(31, 25) + SourceIndex(2)
-5 >Emitted(43, 44) Source(31, 36) + SourceIndex(2)
-6 >Emitted(43, 53) Source(31, 41) + SourceIndex(2)
----
->>>/**@internal*/ declare namespace internalNamespace {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^^^^^^^^
-5 >                                 ^^^^^^^^^^^^^^^^^
-6 >                                                  ^
-1->
-  >
-2 >/**@internal*/
-3 >               
-4 >               namespace 
-5 >                                 internalNamespace
-6 >                                                   
-1->Emitted(44, 1) Source(32, 1) + SourceIndex(2)
-2 >Emitted(44, 15) Source(32, 15) + SourceIndex(2)
-3 >Emitted(44, 16) Source(32, 16) + SourceIndex(2)
-4 >Emitted(44, 34) Source(32, 26) + SourceIndex(2)
-5 >Emitted(44, 51) Source(32, 43) + SourceIndex(2)
-6 >Emitted(44, 52) Source(32, 44) + SourceIndex(2)
----
->>>    class someClass {
-1 >^^^^
-2 >    ^^^^^^
-3 >          ^^^^^^^^^
-1 >{ 
-2 >    export class 
-3 >          someClass
-1 >Emitted(45, 5) Source(32, 46) + SourceIndex(2)
-2 >Emitted(45, 11) Source(32, 59) + SourceIndex(2)
-3 >Emitted(45, 20) Source(32, 68) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-1 > {}
-1 >Emitted(46, 6) Source(32, 71) + SourceIndex(2)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(47, 2) Source(32, 73) + SourceIndex(2)
----
->>>/**@internal*/ declare namespace internalOther.something {
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^^^^^^^^
-5 >                                 ^^^^^^^^^^^^^
-6 >                                              ^
-7 >                                               ^^^^^^^^^
-8 >                                                        ^
-1->
-  >
-2 >/**@internal*/
-3 >               
-4 >               namespace 
-5 >                                 internalOther
-6 >                                              .
-7 >                                               something
-8 >                                                         
-1->Emitted(48, 1) Source(33, 1) + SourceIndex(2)
-2 >Emitted(48, 15) Source(33, 15) + SourceIndex(2)
-3 >Emitted(48, 16) Source(33, 16) + SourceIndex(2)
-4 >Emitted(48, 34) Source(33, 26) + SourceIndex(2)
-5 >Emitted(48, 47) Source(33, 39) + SourceIndex(2)
-6 >Emitted(48, 48) Source(33, 40) + SourceIndex(2)
-7 >Emitted(48, 57) Source(33, 49) + SourceIndex(2)
-8 >Emitted(48, 58) Source(33, 50) + SourceIndex(2)
----
->>>    class someClass {
-1 >^^^^
-2 >    ^^^^^^
-3 >          ^^^^^^^^^
-1 >{ 
-2 >    export class 
-3 >          someClass
-1 >Emitted(49, 5) Source(33, 52) + SourceIndex(2)
-2 >Emitted(49, 11) Source(33, 65) + SourceIndex(2)
-3 >Emitted(49, 20) Source(33, 74) + SourceIndex(2)
----
->>>    }
-1 >^^^^^
-1 > {}
-1 >Emitted(50, 6) Source(33, 77) + SourceIndex(2)
----
->>>}
-1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(51, 2) Source(33, 79) + SourceIndex(2)
----
->>>/**@internal*/ import internalImport = internalNamespace.someClass;
-1->
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^
-5 >                      ^^^^^^^^^^^^^^
-6 >                                    ^^^
-7 >                                       ^^^^^^^^^^^^^^^^^
-8 >                                                        ^
-9 >                                                         ^^^^^^^^^
-10>                                                                  ^
-1->
-  >
-2 >/**@internal*/
-3 >               
-4 >               import 
-5 >                      internalImport
-6 >                                     = 
-7 >                                       internalNamespace
-8 >                                                        .
-9 >                                                         someClass
-10>                                                                  ;
-1->Emitted(52, 1) Source(34, 1) + SourceIndex(2)
-2 >Emitted(52, 15) Source(34, 15) + SourceIndex(2)
-3 >Emitted(52, 16) Source(34, 16) + SourceIndex(2)
-4 >Emitted(52, 23) Source(34, 23) + SourceIndex(2)
-5 >Emitted(52, 37) Source(34, 37) + SourceIndex(2)
-6 >Emitted(52, 40) Source(34, 40) + SourceIndex(2)
-7 >Emitted(52, 57) Source(34, 57) + SourceIndex(2)
-8 >Emitted(52, 58) Source(34, 58) + SourceIndex(2)
-9 >Emitted(52, 67) Source(34, 67) + SourceIndex(2)
-10>Emitted(52, 68) Source(34, 68) + SourceIndex(2)
----
->>>/**@internal*/ declare type internalType = internalC;
-1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^^^
-5 >                            ^^^^^^^^^^^^
-6 >                                        ^^^
-7 >                                           ^^^^^^^^^
-8 >                                                    ^
-1 >
-  >
-2 >/**@internal*/
-3 >               
-4 >               type 
-5 >                            internalType
-6 >                                         = 
-7 >                                           internalC
-8 >                                                    ;
-1 >Emitted(53, 1) Source(35, 1) + SourceIndex(2)
-2 >Emitted(53, 15) Source(35, 15) + SourceIndex(2)
-3 >Emitted(53, 16) Source(35, 16) + SourceIndex(2)
-4 >Emitted(53, 29) Source(35, 21) + SourceIndex(2)
-5 >Emitted(53, 41) Source(35, 33) + SourceIndex(2)
-6 >Emitted(53, 44) Source(35, 36) + SourceIndex(2)
-7 >Emitted(53, 53) Source(35, 45) + SourceIndex(2)
-8 >Emitted(53, 54) Source(35, 46) + SourceIndex(2)
----
->>>/**@internal*/ declare const internalConst = 10;
-1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^^
-5 >                       ^^^^^^
-6 >                             ^^^^^^^^^^^^^
-7 >                                          ^^^^^
-8 >                                               ^
-1 >
-  >
-2 >/**@internal*/
-3 >               
-4 >               
-5 >                       const 
-6 >                             internalConst
-7 >                                           = 10
-8 >                                               ;
-1 >Emitted(54, 1) Source(36, 1) + SourceIndex(2)
-2 >Emitted(54, 15) Source(36, 15) + SourceIndex(2)
-3 >Emitted(54, 16) Source(36, 16) + SourceIndex(2)
-4 >Emitted(54, 24) Source(36, 16) + SourceIndex(2)
-5 >Emitted(54, 30) Source(36, 22) + SourceIndex(2)
-6 >Emitted(54, 43) Source(36, 35) + SourceIndex(2)
-7 >Emitted(54, 48) Source(36, 40) + SourceIndex(2)
-8 >Emitted(54, 49) Source(36, 41) + SourceIndex(2)
----
->>>/**@internal*/ declare enum internalEnum {
-1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^
-4 >               ^^^^^^^^^^^^^
-5 >                            ^^^^^^^^^^^^
-1 >
-  >
-2 >/**@internal*/
-3 >               
-4 >               enum 
-5 >                            internalEnum
-1 >Emitted(55, 1) Source(37, 1) + SourceIndex(2)
-2 >Emitted(55, 15) Source(37, 15) + SourceIndex(2)
-3 >Emitted(55, 16) Source(37, 16) + SourceIndex(2)
-4 >Emitted(55, 29) Source(37, 21) + SourceIndex(2)
-5 >Emitted(55, 41) Source(37, 33) + SourceIndex(2)
----
->>>    a = 0,
-1 >^^^^
-2 >    ^
-3 >     ^^^^
-4 >         ^^->
-1 > { 
-2 >    a
-3 >     
-1 >Emitted(56, 5) Source(37, 36) + SourceIndex(2)
-2 >Emitted(56, 6) Source(37, 37) + SourceIndex(2)
-3 >Emitted(56, 10) Source(37, 37) + SourceIndex(2)
----
->>>    b = 1,
-1->^^^^
-2 >    ^
-3 >     ^^^^
-4 >         ^->
-1->, 
-2 >    b
-3 >     
-1->Emitted(57, 5) Source(37, 39) + SourceIndex(2)
-2 >Emitted(57, 6) Source(37, 40) + SourceIndex(2)
-3 >Emitted(57, 10) Source(37, 40) + SourceIndex(2)
----
->>>    c = 2
-1->^^^^
-2 >    ^
-3 >     ^^^^
-1->, 
-2 >    c
-3 >     
-1->Emitted(58, 5) Source(37, 42) + SourceIndex(2)
-2 >Emitted(58, 6) Source(37, 43) + SourceIndex(2)
-3 >Emitted(58, 10) Source(37, 43) + SourceIndex(2)
+1->Emitted(13, 1) Source(20, 1) + SourceIndex(2)
+2 >Emitted(13, 19) Source(20, 11) + SourceIndex(2)
+3 >Emitted(13, 26) Source(20, 18) + SourceIndex(2)
+4 >Emitted(13, 27) Source(20, 19) + SourceIndex(2)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^->
-1 > }
-1 >Emitted(59, 2) Source(37, 45) + SourceIndex(2)
+1 >{
+  >    /**@internal*/ export class C { }
+  >    /**@internal*/ export function foo() {}
+  >    /**@internal*/ export namespace someNamespace { export class C {} }
+  >    /**@internal*/ export namespace someOther.something { export class someClass {} }
+  >    /**@internal*/ export import someImport = someNamespace.C;
+  >    /**@internal*/ export type internalType = internalC;
+  >    /**@internal*/ export const internalConst = 10;
+  >    /**@internal*/ export enum internalEnum { a, b, c }
+  >}
+1 >Emitted(14, 2) Source(29, 2) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -4456,9 +3749,9 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >class 
 3 >              C
-1->Emitted(60, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(60, 15) Source(1, 7) + SourceIndex(3)
-3 >Emitted(60, 16) Source(1, 8) + SourceIndex(3)
+1->Emitted(15, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(15, 15) Source(1, 7) + SourceIndex(3)
+3 >Emitted(15, 16) Source(1, 8) + SourceIndex(3)
 ---
 >>>    doSomething(): void;
 1->^^^^
@@ -4466,8 +3759,8 @@ sourceFile:../../../second/second_part2.ts
 1-> {
   >    
 2 >    doSomething
-1->Emitted(61, 5) Source(2, 5) + SourceIndex(3)
-2 >Emitted(61, 16) Source(2, 16) + SourceIndex(3)
+1->Emitted(16, 5) Source(2, 5) + SourceIndex(3)
+2 >Emitted(16, 16) Source(2, 16) + SourceIndex(3)
 ---
 >>>}
 1 >^
@@ -4476,7 +3769,7 @@ sourceFile:../../../second/second_part2.ts
   >        console.log("something got done");
   >    }
   >}
-1 >Emitted(62, 2) Source(5, 2) + SourceIndex(3)
+1 >Emitted(17, 2) Source(5, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -4497,12 +3790,12 @@ sourceFile:../../third_part1.ts
 4 >            c
 5 >              = new C()
 6 >                ;
-1->Emitted(64, 1) Source(1, 1) + SourceIndex(4)
-2 >Emitted(64, 9) Source(1, 1) + SourceIndex(4)
-3 >Emitted(64, 13) Source(1, 5) + SourceIndex(4)
-4 >Emitted(64, 14) Source(1, 6) + SourceIndex(4)
-5 >Emitted(64, 17) Source(1, 16) + SourceIndex(4)
-6 >Emitted(64, 18) Source(1, 17) + SourceIndex(4)
+1->Emitted(19, 1) Source(1, 1) + SourceIndex(4)
+2 >Emitted(19, 9) Source(1, 1) + SourceIndex(4)
+3 >Emitted(19, 13) Source(1, 5) + SourceIndex(4)
+4 >Emitted(19, 14) Source(1, 6) + SourceIndex(4)
+5 >Emitted(19, 17) Source(1, 16) + SourceIndex(4)
+6 >Emitted(19, 18) Source(1, 17) + SourceIndex(4)
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 

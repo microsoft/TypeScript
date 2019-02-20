@@ -798,7 +798,7 @@ namespace ts {
                 if (bundleFileInfo) {
                     const newSections = bundleFileInfo.sections;
                     bundleFileInfo.sections = savedSections!;
-                    if (prepend.oldFileOfCurrentEmit) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Text });
+                    if (prepend.oldFileOfCurrentEmit) bundleFileInfo.sections.push(...newSections);
                     else {
                         newSections.forEach(section => Debug.assert(isBundleFileTextLike(section)));
                         bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prepend, data: (prepend as UnparsedSource).fileName, texts: newSections as BundleFileTextLike[] });
