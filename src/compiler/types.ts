@@ -3881,39 +3881,33 @@ namespace ts {
     }
 
     export const enum TypeFlags {
-        Any                     = 1 << 0,
-        Unknown                 = 1 << 1,
-        String                  = 1 << 2,
-        Number                  = 1 << 3,
-        Boolean                 = 1 << 4,
-        Enum                    = 1 << 5,
-        BigInt                  = 1 << 6,
-        StringLiteral           = 1 << 7,
-        NumberLiteral           = 1 << 8,
-        BooleanLiteral          = 1 << 9,
-        EnumLiteral             = 1 << 10,  // Always combined with StringLiteral, NumberLiteral, or Union
-        BigIntLiteral           = 1 << 11,
-        ESSymbol                = 1 << 12,  // Type of symbol primitive introduced in ES6
-        UniqueESSymbol          = 1 << 13,  // unique symbol
-        Void                    = 1 << 14,
-        Undefined               = 1 << 15,
-        Null                    = 1 << 16,
-        Never                   = 1 << 17,  // Never type
-        TypeParameter           = 1 << 18,  // Type parameter
-        Object                  = 1 << 19,  // Object type
-        Union                   = 1 << 20,  // Union (T | U)
-        Intersection            = 1 << 21,  // Intersection (T & U)
-        Index                   = 1 << 22,  // keyof T
-        IndexedAccess           = 1 << 23,  // T[K]
-        Conditional             = 1 << 24,  // T extends U ? X : Y
-        Substitution            = 1 << 25,  // Type parameter substitution
-        NonPrimitive            = 1 << 26,  // intrinsic object type
-        /* @internal */
-        ContainsWideningType    = 1 << 27,  // Type is or contains undefined or null widening type
-        /* @internal */
-        ContainsObjectLiteral   = 1 << 28,  // Type is or contains object literal type
-        /* @internal */
-        ContainsAnyFunctionType = 1 << 29,  // Type is or contains the anyFunctionType
+        Any             = 1 << 0,
+        Unknown         = 1 << 1,
+        String          = 1 << 2,
+        Number          = 1 << 3,
+        Boolean         = 1 << 4,
+        Enum            = 1 << 5,
+        BigInt          = 1 << 6,
+        StringLiteral   = 1 << 7,
+        NumberLiteral   = 1 << 8,
+        BooleanLiteral  = 1 << 9,
+        EnumLiteral     = 1 << 10,  // Always combined with StringLiteral, NumberLiteral, or Union
+        BigIntLiteral   = 1 << 11,
+        ESSymbol        = 1 << 12,  // Type of symbol primitive introduced in ES6
+        UniqueESSymbol  = 1 << 13,  // unique symbol
+        Void            = 1 << 14,
+        Undefined       = 1 << 15,
+        Null            = 1 << 16,
+        Never           = 1 << 17,  // Never type
+        TypeParameter   = 1 << 18,  // Type parameter
+        Object          = 1 << 19,  // Object type
+        Union           = 1 << 20,  // Union (T | U)
+        Intersection    = 1 << 21,  // Intersection (T & U)
+        Index           = 1 << 22,  // keyof T
+        IndexedAccess   = 1 << 23,  // T[K]
+        Conditional     = 1 << 24,  // T extends U ? X : Y
+        Substitution    = 1 << 25,  // Type parameter substitution
+        NonPrimitive    = 1 << 26,  // intrinsic object type
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -3947,29 +3941,29 @@ namespace ts {
         InstantiablePrimitive = Index,
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
-
+        /* @internal */
+        ObjectFlagsType = Nullable | Object | Union | Intersection,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | Unknown | ESSymbol | Object | NonPrimitive,
         /* @internal */
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
+        // The following flags are aggregated during union and intersection type construction
         /* @internal */
-        RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
-        /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType,
+        IncludesMask = Any | Unknown | Primitive | Never | Object | Union,
         // The following flags are used for different purposes during union and intersection type construction
         /* @internal */
-        NonWideningType = ContainsWideningType,
+        IncludesStructuredOrInstantiable = TypeParameter,
         /* @internal */
-        Wildcard = ContainsObjectLiteral,
+        IncludesNonWideningType = Intersection,
         /* @internal */
-        EmptyObject = ContainsAnyFunctionType,
+        IncludesWildcard = Index,
         /* @internal */
-        ConstructionFlags = NonWideningType | Wildcard | EmptyObject,
+        IncludesEmptyObject = IndexedAccess,
         // The following flag is used for different purposes by maybeTypeOfKind
         /* @internal */
-        GenericMappedType = ContainsWideningType
+        GenericMappedType = Never,
     }
 
     export type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
@@ -3996,6 +3990,12 @@ namespace ts {
     // Intrinsic types (TypeFlags.Intrinsic)
     export interface IntrinsicType extends Type {
         intrinsicName: string;        // Name of intrinsic type
+        objectFlags: ObjectFlags;
+    }
+
+    /* @internal */
+    export interface NullableType extends IntrinsicType {
+        objectFlags: ObjectFlags;
     }
 
     /* @internal */
@@ -4055,8 +4055,23 @@ namespace ts {
         MarkerType       = 1 << 13, // Marker type used for variance probing
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
         FreshLiteral     = 1 << 15, // Fresh object literal
-        ClassOrInterface = Class | Interface
+        /* @internal */
+        PrimitiveUnion   = 1 << 16, // Union of only primitive types
+        /* @internal */
+        ContainsWideningType = 1 << 17, // Type is or contains undefined or null widening type
+        /* @internal */
+        ContainsObjectLiteral = 1 << 18, // Type is or contains object literal type
+        /* @internal */
+        ContainsAnyFunctionType = 1 << 19, // Type is or contains the anyFunctionType
+        ClassOrInterface = Class | Interface,
+        /* @internal */
+        RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
+        /* @internal */
+        PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType
     }
+
+    /* @internal */
+    export type ObjectFlagsType = NullableType | ObjectType | UnionType | IntersectionType;
 
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
@@ -4138,6 +4153,8 @@ namespace ts {
     export interface UnionOrIntersectionType extends Type {
         types: Type[];                    // Constituent types
         /* @internal */
+        objectFlags: ObjectFlags;
+        /* @internal */
         propertyCache: SymbolTable;       // Cache of resolved properties
         /* @internal */
         resolvedProperties: Symbol[];
@@ -4152,8 +4169,6 @@ namespace ts {
     }
 
     export interface UnionType extends UnionOrIntersectionType {
-        /* @internal */
-        primitiveTypesOnly: boolean;
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
