@@ -12603,6 +12603,7 @@ namespace ts {
                 // the order in which things were checked.
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
+                    !isTypeIdenticalTo(getRestrictiveInstantiation(source), source) && !isTypeIdenticalTo(getRestrictiveInstantiation(target), target) &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances);

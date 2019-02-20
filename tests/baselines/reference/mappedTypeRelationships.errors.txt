@@ -34,9 +34,7 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(66,5): error TS2
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(66,5): error TS2542: Index signature in type 'Readonly<U>' only permits reading.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(72,5): error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(78,5): error TS2322: Type 'Partial<Thing>' is not assignable to type 'Partial<T>'.
-  Type 'Thing' is not assignable to type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(88,5): error TS2322: Type 'Readonly<Thing>' is not assignable to type 'Readonly<T>'.
-  Type 'Thing' is not assignable to type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(127,5): error TS2322: Type 'Partial<U>' is not assignable to type 'Identity<U>'.
 tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(143,5): error TS2322: Type '{ [P in keyof T]: T[P]; }' is not assignable to type '{ [P in keyof T]: U[P]; }'.
   Type 'T[P]' is not assignable to type 'U[P]'.
@@ -199,7 +197,6 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         y = x;  // Error
         ~
 !!! error TS2322: Type 'Partial<Thing>' is not assignable to type 'Partial<T>'.
-!!! error TS2322:   Type 'Thing' is not assignable to type 'T'.
     }
     
     function f40<T>(x: T, y: Readonly<T>) {
@@ -212,7 +209,6 @@ tests/cases/conformance/types/mapped/mappedTypeRelationships.ts(168,5): error TS
         y = x;  // Error
         ~
 !!! error TS2322: Type 'Readonly<Thing>' is not assignable to type 'Readonly<T>'.
-!!! error TS2322:   Type 'Thing' is not assignable to type 'T'.
     }
     
     type Item = {
