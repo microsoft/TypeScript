@@ -332,8 +332,8 @@ function f4<T extends any[]>(t: T) {
     f((...x) => {});
 >f((...x) => {}) : void
 >f : (cb: (x: number, ...args: T) => void) => void
->(...x) => {} : (x: number, ...args: any[]) => void
->x : [number, ...any[]]
+>(...x) => {} : (x: number, ...args: T[number][]) => void
+>x : [number, ...T[number][]]
 
     f((a, ...x) => {});
 >f((a, ...x) => {}) : void
@@ -345,10 +345,10 @@ function f4<T extends any[]>(t: T) {
     f((a, b, ...x) => {});
 >f((a, b, ...x) => {}) : void
 >f : (cb: (x: number, ...args: T) => void) => void
->(a, b, ...x) => {} : (a: number, b: any, ...x: any[]) => void
+>(a, b, ...x) => {} : (a: number, b: T[0], ...x: T[number][]) => void
 >a : number
->b : any
->x : any[]
+>b : T[0]
+>x : T[number][]
 }
 
 // Repro from #25288
@@ -388,4 +388,39 @@ take(function(...rest){});
 >take : (cb: (a: number, b: string) => void) => void
 >function(...rest){} : (a: number, b: string) => void
 >rest : [number, string]
+
+// Repro from #29833
+
+type ArgsUnion = [number, string] | [number, Error];
+>ArgsUnion : ArgsUnion
+
+type TupleUnionFunc = (...params: ArgsUnion) => number;
+>TupleUnionFunc : TupleUnionFunc
+>params : ArgsUnion
+
+const funcUnionTupleNoRest: TupleUnionFunc = (num, strOrErr) => {
+>funcUnionTupleNoRest : TupleUnionFunc
+>(num, strOrErr) => {  return num;} : (num: number, strOrErr: string | Error) => number
+>num : number
+>strOrErr : string | Error
+
+  return num;
+>num : number
+
+};
+
+const funcUnionTupleRest: TupleUnionFunc = (...params) => {
+>funcUnionTupleRest : TupleUnionFunc
+>(...params) => {  const [num, strOrErr] = params;  return num;} : (...params: ArgsUnion) => number
+>params : ArgsUnion
+
+  const [num, strOrErr] = params;
+>num : number
+>strOrErr : string | Error
+>params : ArgsUnion
+
+  return num;
+>num : number
+
+};
 

@@ -3,6 +3,8 @@
     "pos": 1,
     "end": 13,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "parameters": {
         "length": 0,
         "pos": 2,
@@ -12,6 +14,8 @@
         "kind": "StringKeyword",
         "pos": 6,
         "end": 13,
-        "flags": "JSDoc"
+        "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 0
     }
 }

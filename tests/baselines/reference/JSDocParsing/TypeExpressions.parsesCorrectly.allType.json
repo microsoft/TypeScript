@@ -2,5 +2,7 @@
     "kind": "JSDocAllType",
     "pos": 1,
     "end": 2,
-    "flags": "JSDoc"
+    "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0
 }
