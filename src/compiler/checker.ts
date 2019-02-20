@@ -10058,6 +10058,13 @@ namespace ts {
             return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeVariable : type;
         }
 
+        /**
+         * Invokes union simplification logic to determine if an intersection is considered empty as a union constituent
+         */
+        function isIntersectionEmpty(type1: Type, type2: Type) {
+            return !!(getUnionType([intersectTypes(type1, type2), neverType]).flags & TypeFlags.Never);
+        }
+
         function getConditionalType(root: ConditionalRoot, mapper: TypeMapper | undefined): Type {
             const checkType = instantiateType(root.checkType, mapper);
             const extendsType = instantiateType(root.extendsType, mapper);
@@ -10076,7 +10083,7 @@ namespace ts {
                 if (checkType.flags & TypeFlags.Any || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
                     result = getDefaultConstraintOfTrueBranchOfConditionalType(root, /*combinedMapper*/ undefined, mapper);
                 }
-                else if (getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
+                else if (isIntersectionEmpty(checkType, extendsType)) { // Always false
                     result = neverType;
                 }
             }
@@ -10084,7 +10091,7 @@ namespace ts {
                 if (!(checkType.flags & TypeFlags.Any) && isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
                     result = neverType;
                 }
-                else if (checkType.flags & TypeFlags.Any || getUnionType([getIntersectionType([checkType, extendsType]), neverType]).flags & TypeFlags.Never) { // Always false
+                else if (checkType.flags & TypeFlags.Any || isIntersectionEmpty(checkType, extendsType)) { // Always false
                     result = falseType; // TODO: Intersect negated `extends` type here
                 }
             }
