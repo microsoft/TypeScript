@@ -347,7 +347,7 @@ namespace ts {
                 function addUnusedDiagnostics() {
                     checkUnusedIdentifiers(getPotentiallyUnusedIdentifiers(file), (containingNode, kind, diag) => {
                         if (!containsParseError(containingNode) && !unusedIsError(kind)) {
-                            (diagnostics || (diagnostics = [])).push({ ...diag, category: DiagnosticCategory.Suggestion });
+                            (diagnostics || (diagnostics = [])).push({...diag, category: DiagnosticCategory.Suggestion}); //and it looks like this
                         }
                     });
                 }
