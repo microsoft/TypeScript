@@ -659,10 +659,6 @@
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
-        "category": "Error",
-        "code": 1209
-    },
     "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1210
@@ -1023,7 +1019,7 @@
         "category": "Error",
         "code": 1353
     },
-    "'readonly' type modifier is only permitted on array and tuple types.": {
+    "'readonly' type modifier is only permitted on array and tuple literal types.": {
         "category": "Error",
         "code": 1354
     },
@@ -2581,6 +2577,14 @@
         "category": "Error",
         "code": 2747
     },
+    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 2748
+    },
+    "'{0}' refers to a value, but is being used as a type here.": {
+        "category": "Error",
+        "code": 2749
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3109,7 +3113,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },

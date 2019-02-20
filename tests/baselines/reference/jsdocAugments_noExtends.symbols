@@ -13,9 +13,7 @@ class B {
 >m : Symbol(B.m, Decl(b.js, 3, 9))
 
         return this.x;
->this.x : Symbol(A.x, Decl(b.js, 0, 25))
 >this : Symbol(B, Decl(b.js, 0, 41))
->x : Symbol(A.x, Decl(b.js, 0, 25))
     }
 }
 

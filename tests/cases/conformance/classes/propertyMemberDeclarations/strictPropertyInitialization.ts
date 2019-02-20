@@ -99,3 +99,14 @@ class C10 {
         let y = this.c;
     }
 }
+
+// Property is considered initialized by type any even though value could be undefined
+
+declare function someValue(): any;
+
+class C11 {
+    a: number;
+    constructor() {
+        this.a = someValue();
+    }
+}
