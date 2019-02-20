@@ -9708,6 +9708,7 @@ interface MediaDevices extends EventTarget {
     ondevicechange: ((this: MediaDevices, ev: Event) => any) | null;
     enumerateDevices(): Promise<MediaDeviceInfo[]>;
     getSupportedConstraints(): MediaTrackSupportedConstraints;
+    getDisplayMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
     getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
     addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -10374,7 +10375,6 @@ interface NavigatorStorageUtils {
 
 interface NavigatorUserMedia {
     readonly mediaDevices: MediaDevices;
-    getDisplayMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
     getUserMedia(constraints: MediaStreamConstraints, successCallback: NavigatorUserMediaSuccessCallback, errorCallback: NavigatorUserMediaErrorCallback): void;
 }
 
