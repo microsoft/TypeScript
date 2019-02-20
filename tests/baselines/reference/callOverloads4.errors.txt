@@ -1,8 +1,8 @@
 tests/cases/compiler/callOverloads4.ts(1,10): error TS2300: Duplicate identifier 'Foo'.
-tests/cases/compiler/callOverloads4.ts(1,16): error TS2304: Cannot find name 'Foo'.
+tests/cases/compiler/callOverloads4.ts(1,16): error TS2749: 'Foo' refers to a value, but is being used as a type here.
 tests/cases/compiler/callOverloads4.ts(2,10): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads4.ts(2,10): error TS2391: Function implementation is missing or not immediately following the declaration.
-tests/cases/compiler/callOverloads4.ts(2,24): error TS2304: Cannot find name 'Foo'.
+tests/cases/compiler/callOverloads4.ts(2,24): error TS2749: 'Foo' refers to a value, but is being used as a type here.
 tests/cases/compiler/callOverloads4.ts(3,7): error TS2300: Duplicate identifier 'Foo'.
 tests/cases/compiler/callOverloads4.ts(11,10): error TS2350: Only a void function can be called with the 'new' keyword.
 
@@ -12,14 +12,14 @@ tests/cases/compiler/callOverloads4.ts(11,10): error TS2350: Only a void functio
              ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
                    ~~~
-!!! error TS2304: Cannot find name 'Foo'.
+!!! error TS2749: 'Foo' refers to a value, but is being used as a type here.
     function Foo(s:string):Foo; // error
              ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.
              ~~~
 !!! error TS2391: Function implementation is missing or not immediately following the declaration.
                            ~~~
-!!! error TS2304: Cannot find name 'Foo'.
+!!! error TS2749: 'Foo' refers to a value, but is being used as a type here.
     class Foo { // error
           ~~~
 !!! error TS2300: Duplicate identifier 'Foo'.

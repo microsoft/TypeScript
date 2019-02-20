@@ -31,28 +31,35 @@ namespace ts.server.typingsInstaller {
     }
 
     /*@internal*/
-    export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+    export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (file: string, args: string[]) => boolean) {
         let hasError = false;
         for (let remaining = packageNames.length; remaining > 0;) {
             const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
             remaining = result.remaining;
-            hasError = install(result.command) || hasError;
+            hasError = install(result.command[0], result.command[1]) || hasError;
         }
         return hasError;
     }
 
+    function getUserAgent(tsVersion: string) {
+        return `--user-agent="typesInstaller/${tsVersion}"`;
+    }
+    const npmInstall = "install", ignoreScripts = "--ignore-scripts", saveDev = "--save-dev";
+    const commandBaseLength = npmInstall.length + ignoreScripts.length + saveDev.length + getUserAgent("").length + 5;
     /*@internal*/
     export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
         const sliceStart = packageNames.length - remaining;
-        let command: string, toSlice = remaining;
+        let packages: string[], toSlice = remaining;
         while (true) {
-            command = `${npmPath} install --ignore-scripts ${(toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice)).join(" ")} --save-dev --user-agent="typesInstaller/${tsVersion}"`;
-            if (command.length < 8000) {
+            packages = toSlice === packageNames.length ? packageNames : packageNames.slice(sliceStart, sliceStart + toSlice);
+            const commandLength = npmPath.length + commandBaseLength + packages.join(" ").length + tsVersion.length;
+            if (commandLength < 8000) {
                 break;
             }
 
             toSlice = toSlice - Math.floor(toSlice / 2);
         }
+        const command: [string, string[]] = [npmPath, [npmInstall, ignoreScripts, ...packages, saveDev, getUserAgent(tsVersion)]];
         return { command, remaining: remaining - toSlice };
     }
 
