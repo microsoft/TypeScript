@@ -72,6 +72,14 @@ function pad(str: string, visiblelen: number, len: number) {
     return str;
 }
 
+function getPipelinesChecksOutput(f: Lint.RuleFailure) {
+    // TODO: Get the devops folks to make a version of this that can handle both start _and_ end positions
+    // And ideally that can include a GH "suggested change" for fixable lints.
+    const lineAndCharacter = f.getStartPosition().getLineAndCharacter();
+    return process.env.CI !== "true" ? "" : `
+##vso[task.logissue type=${f.getRuleSeverity()};sourcepath=${f.getFileName()};linenumber=${lineAndCharacter.line + 1};columnnumber=${lineAndCharacter.character + 1};code=100;]${f.getRuleName()}: ${f.getFailure()}`;
+}
+
 export class Formatter extends Lint.Formatters.AbstractFormatter {
     public static metadata: Lint.IFormatterMetadata = {
         formatterName: "autolinkableStylish",
@@ -91,7 +99,7 @@ export class Formatter extends Lint.Formatters.AbstractFormatter {
             const nameMaxSize = getNameMaxSize(group);
             return `
 ${currentFile}
-${group.map(f => `${pad(getLink(f, /*color*/ true), getLink(f, /*color*/ false).length, linkMaxSize)} ${chalk.grey(pad(f.getRuleName(), f.getRuleName().length, nameMaxSize))} ${chalk.yellow(f.getFailure())}`).join("\n")}`;
+${group.map(f => `${pad(getLink(f, /*color*/ true), getLink(f, /*color*/ false).length, linkMaxSize)} ${chalk.grey(pad(f.getRuleName(), f.getRuleName().length, nameMaxSize))} ${chalk.yellow(f.getFailure())}${getPipelinesChecksOutput(f)}`).join("\n")}`;
         }).join("\n");
     }
 }
