@@ -434,7 +434,7 @@ namespace ts {
         UnparsedText,
         UnparsedInternalText,
         UnparsedSourceMapUrl,
-        UnparsedSectionText,
+        UnparsedSyntheticReference,
 
         // Top-level nodes
         SourceFile,
@@ -2797,6 +2797,7 @@ namespace ts {
 
         sourceMapPath?: string;
         sourceMapText?: string;
+        syntheticReferences?: ReadonlyArray<UnparsedSyntheticReference>;
         texts: ReadonlyArray<UnparsedSourceText>;
         /*@internal*/ oldFileOfCurrentEmit?: boolean;
         /*@internal*/ parsedSourceMap?: RawSourceMap | false | undefined;
@@ -2805,8 +2806,8 @@ namespace ts {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
     }
 
-    export type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike | UnparsedSectionText;
-    export type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
+    export type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike;
+    export type UnparsedNode = UnparsedPrologue | UnparsedSourceText | UnparsedSyntheticReference;
 
     export interface UnparsedSection extends Node {
         kind: SyntaxKind;
@@ -2832,10 +2833,10 @@ namespace ts {
         parent: UnparsedSource;
     }
 
-    export interface UnparsedSectionText extends UnparsedSection {
-        kind: SyntaxKind.UnparsedSectionText;
+    export interface UnparsedSyntheticReference extends UnparsedSection {
+        kind: SyntaxKind.UnparsedSyntheticReference;
         parent: UnparsedSource;
-        /*@internal*/ section: BundleFileSection;
+        /*@internal*/ section: BundleFileHasNoDefaultLib | BundleFileReference;
     }
 
     export interface JsonSourceFile extends SourceFile {

@@ -6022,8 +6022,7 @@ namespace ts {
     export function isUnparsedNode(node: Node): node is UnparsedNode {
         return isUnparsedTextLike(node) ||
             node.kind === SyntaxKind.UnparsedPrologue ||
-            node.kind === SyntaxKind.UnparsedSectionText ||
-            isUnparsedPrepend(node);
+            node.kind === SyntaxKind.UnparsedSyntheticReference;
     }
 
     // JSDoc

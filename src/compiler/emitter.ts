@@ -597,7 +597,8 @@ namespace ts {
         emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(optionsWithoutDeclaration));
         // Emit d.ts map
         if (shouldHaveDeclarationText) {
-            emitHost.getPrependNodes = memoize(() => [createUnparsedDtsSourceFileWithPrepend(ownPrependInput, prependNodes, stripInternal)]);
+            const dtsPrepends = prependNodes.map(prepend => createUnparsedSourceFile(prepend, "dts", stripInternal));
+            emitHost.getPrependNodes = memoize(() => [...dtsPrepends, createUnparsedDtsSourceFile(ownPrependInput)]);
             emitHost.getCompilerOptions = () => config.options;
             emitHost.getSourceFiles = () => emptyArray;
             emitHost.writeFile = (name, text, writeByteOrderMark) => {
@@ -1008,8 +1009,8 @@ namespace ts {
                     case SyntaxKind.UnparsedSourceMapUrl:
                         return emitUnparsedTextLike(<UnparsedTextLike>node);
 
-                    case SyntaxKind.UnparsedSectionText:
-                        return emitUnparsedSectionText(<UnparsedSectionText>node);
+                    case SyntaxKind.UnparsedSyntheticReference:
+                        return emitUnparsedSyntheticReference(<UnparsedSyntheticReference>node);
 
 
                     // Identifiers
@@ -1531,7 +1532,7 @@ namespace ts {
         // SyntaxKind.UnparsedText
         // SyntaxKind.UnparsedInternalText
         // SyntaxKind.UnparsedSourceMapUrl
-        // SyntaxKind.UnparsedSectionText
+        // SyntaxKind.UnparsedSyntheticReference
         function writeUnparsedNode(unparsed: UnparsedNode) {
             writer.rawWrite(unparsed.parent.text.substring(unparsed.pos, unparsed.end));
         }
@@ -1555,8 +1556,8 @@ namespace ts {
             }
         }
 
-        // SyntaxKind.UnparsedSectionText
-        function emitUnparsedSectionText(unparsed: UnparsedSectionText) {
+        // SyntaxKind.UnparsedSyntheticReference
+        function emitUnparsedSyntheticReference(unparsed: UnparsedSyntheticReference) {
             const pos = getTextPosWithWriteLine();
             writeUnparsedNode(unparsed);
             if (bundleFileInfo) {
@@ -3272,6 +3273,14 @@ namespace ts {
 
         function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
             emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
+            for (const prepend of node.prepends) {
+                if (isUnparsedSource(prepend) && prepend.syntheticReferences) {
+                    for (const ref of prepend.syntheticReferences) {
+                        emit(ref);
+                        writeLine();
+                    }
+                }
+            }
         }
 
         function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {

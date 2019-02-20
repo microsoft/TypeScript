@@ -2782,7 +2782,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function createUnparsedDtsSourceFileWithPrepend(input: InputFiles, prepends: ReadonlyArray<InputFiles>, stripInternal: boolean | undefined): UnparsedSource {
+    export function createUnparsedDtsSourceFile(input: InputFiles): UnparsedSource {
         Debug.assert(!!input.oldFileOfCurrentEmit);
         const node = createUnparsedSource();
         node.oldFileOfCurrentEmit = true;
@@ -2790,8 +2790,8 @@ namespace ts {
         node.sourceMapPath = Debug.assertDefined(input.declarationMapPath);
         node.text = input.declarationText;
         node.sourceMapText = input.declarationMapText;
-        const mapOfPrepend = arrayToMap(prepends, prepend => prepend.declarationPath!, prepend => createUnparsedSourceFile(prepend, "dts", stripInternal));
-        const texts: UnparsedSourceText[] = [];
+        const texts: UnparsedTextLike[] = [];
+        let syntheticReferences: UnparsedSyntheticReference[] | undefined;
         const bundleFileInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle && input.buildInfo.bundle.dts);
         for (const section of bundleFileInfo.sections) {
             switch (section.kind) {
@@ -2799,15 +2799,7 @@ namespace ts {
                 case BundleFileSectionKind.Reference:
                 case BundleFileSectionKind.Type:
                 case BundleFileSectionKind.Lib:
-                    texts.push(createUnparsedSectionText(section, node));
-                    break;
-
-                case BundleFileSectionKind.Prepend:
-                    const parent = mapOfPrepend.get(section.data)!;
-                    const prependNode = createUnparsedNode(section, node) as UnparsedPrepend;
-                    parent.texts.forEach(text => Debug.assert(isUnparsedTextLike(text)));
-                    prependNode.texts = parent.texts as UnparsedTextLike[];
-                    texts.push(prependNode);
+                    (syntheticReferences || (syntheticReferences = [])).push(createUnparsedSyntheticReference(section, node));
                     break;
 
                 case BundleFileSectionKind.Internal:
@@ -2816,6 +2808,7 @@ namespace ts {
                     break;
 
                 // Ignore
+                case BundleFileSectionKind.Prepend:
                 case BundleFileSectionKind.SourceMapUrl:
                     break;
 
@@ -2830,6 +2823,7 @@ namespace ts {
             }
         }
         node.texts = texts;
+        node.syntheticReferences = syntheticReferences;
         return node;
     }
 
@@ -2860,8 +2854,8 @@ namespace ts {
         return node;
     }
 
-    function createUnparsedSectionText(section: BundleFileSection, parent: UnparsedSource) {
-        const node = createNode(SyntaxKind.UnparsedSectionText, section.pos, section.end) as UnparsedSectionText;
+    function createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference, parent: UnparsedSource) {
+        const node = createNode(SyntaxKind.UnparsedSyntheticReference, section.pos, section.end) as UnparsedSyntheticReference;
         node.parent = parent;
         node.data = section.data;
         node.section = section;
