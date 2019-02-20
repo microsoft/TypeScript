@@ -180,7 +180,7 @@ namespace ts {
 
         function emitBuildInfo(bundle: BundleBuildInfo | undefined, buildInfoPath: string | undefined) {
             // Write build information if applicable
-            if (!buildInfoPath || targetSourceFile || emitOnlyDtsFiles || emitSkipped) return;
+            if (!buildInfoPath || targetSourceFile || emitSkipped) return;
             const program = host.getProgramBuildInfo();
             if (!bundle && !program) return;
             writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program }), /*writeByteOrderMark*/ false);
@@ -605,7 +605,7 @@ namespace ts {
                 // Same dts ignore
                 if (!stripInternal && (fileExtensionIs(name, Extension.Dts) || name === buildInfoPath)) return;
                 // Even though dts file hasnt changed, whether def is internal or not could change, so write the dts and update buildInfo
-                if (name !== buildInfo) {
+                if (name !== buildInfoPath) {
                     outputFiles.push({ name, text, writeByteOrderMark });
                 }
                 else {
@@ -791,7 +791,7 @@ namespace ts {
 
             for (const prepend of bundle.prepends) {
                 writeLine();
-                const pos = getTextPosWithWriteLine();
+                const pos = writer.getTextPos();
                 const savedSections = bundleFileInfo && bundleFileInfo.sections;
                 if (savedSections) bundleFileInfo!.sections = [];
                 print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
