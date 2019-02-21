@@ -1404,7 +1404,7 @@
         "category": "Error",
         "code": 2393
     },
-    "Overload signature is not compatible with function implementation.": {
+    "This overload signature is not compatible with its implementation signature.": {
         "category": "Error",
         "code": 2394
     },

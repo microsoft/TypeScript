@@ -24448,7 +24448,7 @@ namespace ts {
                     const bodySignature = getSignatureFromDeclaration(bodyDeclaration);
                     for (const signature of signatures) {
                         if (!isImplementationCompatibleWithOverload(bodySignature, signature)) {
-                            error(signature.declaration, Diagnostics.Overload_signature_is_not_compatible_with_function_implementation);
+                            error(signature.declaration, Diagnostics.This_overload_signature_is_not_compatible_with_its_implementation_signature);
                             break;
                         }
                     }
