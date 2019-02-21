@@ -3,24 +3,24 @@
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "38840781448",
-        "signature": "38840781448"
+        "version": "/lib/lib.d.ts",
+        "signature": "/lib/lib.d.ts"
       },
       "/lib/lib.es5.d.ts": {
-        "version": "-157947125741",
-        "signature": "-157947125741"
+        "version": "/lib/lib.es5.d.ts",
+        "signature": "/lib/lib.es5.d.ts"
       },
       "/lib/lib.dom.d.ts": {
-        "version": "-1086375748659",
-        "signature": "-1086375748659"
+        "version": "/lib/lib.dom.d.ts",
+        "signature": "/lib/lib.dom.d.ts"
       },
       "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "16827914512",
-        "signature": "16827914512"
+        "version": "/lib/lib.webworker.importscripts.d.ts",
+        "signature": "/lib/lib.webworker.importscripts.d.ts"
       },
       "/lib/lib.scripthost.d.ts": {
-        "version": "-7856822451",
-        "signature": "-7856822451"
+        "version": "/lib/lib.scripthost.d.ts",
+        "signature": "/lib/lib.scripthost.d.ts"
       },
       "/src/core/anothermodule.ts": {
         "version": "-2676574883",
@@ -46,13 +46,13 @@
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "/lib/lib.d.ts",
-      "/lib/lib.es5.d.ts",
       "/lib/lib.dom.d.ts",
-      "/lib/lib.webworker.importscripts.d.ts",
+      "/lib/lib.es5.d.ts",
       "/lib/lib.scripthost.d.ts",
+      "/lib/lib.webworker.importscripts.d.ts",
       "/src/core/anothermodule.ts",
-      "/src/core/some_decl.d.ts",
-      "/src/core/index.ts"
+      "/src/core/index.ts",
+      "/src/core/some_decl.d.ts"
     ]
   }
 }
@@ -231,24 +231,24 @@ export class someClass { }
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "38840781448",
-        "signature": "38840781448"
+        "version": "/lib/lib.d.ts",
+        "signature": "/lib/lib.d.ts"
       },
       "/lib/lib.es5.d.ts": {
-        "version": "-157947125741",
-        "signature": "-157947125741"
+        "version": "/lib/lib.es5.d.ts",
+        "signature": "/lib/lib.es5.d.ts"
       },
       "/lib/lib.dom.d.ts": {
-        "version": "-1086375748659",
-        "signature": "-1086375748659"
+        "version": "/lib/lib.dom.d.ts",
+        "signature": "/lib/lib.dom.d.ts"
       },
       "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "16827914512",
-        "signature": "16827914512"
+        "version": "/lib/lib.webworker.importscripts.d.ts",
+        "signature": "/lib/lib.webworker.importscripts.d.ts"
       },
       "/lib/lib.scripthost.d.ts": {
-        "version": "-7856822451",
-        "signature": "-7856822451"
+        "version": "/lib/lib.scripthost.d.ts",
+        "signature": "/lib/lib.scripthost.d.ts"
       },
       "/src/core/index.ts": {
         "version": "-2069755619",
@@ -273,8 +273,8 @@ export class someClass { }
     },
     "referencedMap": {
       "/src/logic/index.ts": [
-        "/src/core/index.d.ts",
-        "/src/core/anothermodule.d.ts"
+        "/src/core/anothermodule.d.ts",
+        "/src/core/index.d.ts"
       ]
     },
     "exportedModulesMap": {
@@ -284,10 +284,10 @@ export class someClass { }
     },
     "semanticDiagnosticsPerFile": [
       "/lib/lib.d.ts",
-      "/lib/lib.es5.d.ts",
       "/lib/lib.dom.d.ts",
-      "/lib/lib.webworker.importscripts.d.ts",
+      "/lib/lib.es5.d.ts",
       "/lib/lib.scripthost.d.ts",
+      "/lib/lib.webworker.importscripts.d.ts",
       "/src/core/anothermodule.ts",
       "/src/core/index.ts",
       "/src/logic/index.ts"
@@ -300,24 +300,24 @@ export class someClass { }
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "38840781448",
-        "signature": "38840781448"
+        "version": "/lib/lib.d.ts",
+        "signature": "/lib/lib.d.ts"
       },
       "/lib/lib.es5.d.ts": {
-        "version": "-157947125741",
-        "signature": "-157947125741"
+        "version": "/lib/lib.es5.d.ts",
+        "signature": "/lib/lib.es5.d.ts"
       },
       "/lib/lib.dom.d.ts": {
-        "version": "-1086375748659",
-        "signature": "-1086375748659"
+        "version": "/lib/lib.dom.d.ts",
+        "signature": "/lib/lib.dom.d.ts"
       },
       "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "16827914512",
-        "signature": "16827914512"
+        "version": "/lib/lib.webworker.importscripts.d.ts",
+        "signature": "/lib/lib.webworker.importscripts.d.ts"
       },
       "/lib/lib.scripthost.d.ts": {
-        "version": "-7856822451",
-        "signature": "-7856822451"
+        "version": "/lib/lib.scripthost.d.ts",
+        "signature": "/lib/lib.scripthost.d.ts"
       },
       "/src/core/index.ts": {
         "version": "-2069755619",
@@ -348,9 +348,9 @@ export class someClass { }
         "/src/core/anothermodule.d.ts"
       ],
       "/src/tests/index.ts": [
+        "/src/core/anothermodule.d.ts",
         "/src/core/index.d.ts",
-        "/src/logic/index.d.ts",
-        "/src/core/anothermodule.d.ts"
+        "/src/logic/index.d.ts"
       ]
     },
     "exportedModulesMap": {
@@ -363,13 +363,13 @@ export class someClass { }
     },
     "semanticDiagnosticsPerFile": [
       "/lib/lib.d.ts",
-      "/lib/lib.es5.d.ts",
       "/lib/lib.dom.d.ts",
-      "/lib/lib.webworker.importscripts.d.ts",
+      "/lib/lib.es5.d.ts",
       "/lib/lib.scripthost.d.ts",
+      "/lib/lib.webworker.importscripts.d.ts",
       "/src/core/anothermodule.ts",
-      "/src/logic/index.ts",
       "/src/core/index.ts",
+      "/src/logic/index.ts",
       "/src/tests/index.ts"
     ]
   }

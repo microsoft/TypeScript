@@ -446,7 +446,8 @@ namespace ts {
         }
     }
 
-    function getBuildInfoText(buildInfo: BuildInfo) {
+    /*@internal*/
+    export function getBuildInfoText(buildInfo: BuildInfo) {
         return JSON.stringify(buildInfo, undefined, 2);
     }
 

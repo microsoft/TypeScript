@@ -385,7 +385,68 @@ namespace fakes {
     }
 
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-        createProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        createProgram(rootNames: ReadonlyArray<string> | undefined, options: ts.CompilerOptions | undefined, host?: CompilerHost, oldProgram?: ts.EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<ts.Diagnostic>, projectReferences?: ReadonlyArray<ts.ProjectReference> | undefined) {
+            const program = ts.createEmitAndSemanticDiagnosticsBuilderProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
+            const originalGetProgramBuildInfo = program.getProgramBuildInfo.bind(program);
+            program.getProgramBuildInfo = () => {
+                const program = originalGetProgramBuildInfo() as ts.ProgramBuildInfo | undefined;
+                if (!program) return program;
+                // Fix lib signatures
+                for (const path of ts.getOwnKeys(program.fileInfos)) {
+                    if (ts.startsWith(path, "/lib/")) {
+                        const currentValue = program.fileInfos[path];
+                        ts.Debug.assert(currentValue.signature === currentValue.version);
+                        program.fileInfos[path] = { version: path, signature: path };
+                    }
+                }
+
+                // reference Map
+                if (program.referencedMap) {
+                    const referencedMap: ts.MapLike<string[]> = {};
+                    for (const path of ts.getOwnKeys(program.referencedMap).sort()) {
+                        referencedMap[path] = program.referencedMap[path].sort();
+                    }
+                    program.referencedMap = referencedMap;
+                }
+
+                // exportedModulesMap
+                if (program.exportedModulesMap) {
+                    const exportedModulesMap: ts.MapLike<string[]> = {};
+                    for (const path of ts.getOwnKeys(program.exportedModulesMap).sort()) {
+                        exportedModulesMap[path] = program.exportedModulesMap[path].sort();
+                    }
+                    program.exportedModulesMap = exportedModulesMap;
+                }
+
+                // semanticDiagnosticsPerFile
+                if (program.semanticDiagnosticsPerFile) {
+                    program.semanticDiagnosticsPerFile.sort();
+                }
+
+                return program;
+            };
+            return program;
+        }
+
+        readFile(path: string) {
+            const value = super.readFile(path);
+            if (!value || !ts.isBuildInfoFile(path)) return value;
+            const buildInfo = JSON.parse(value) as ts.BuildInfo;
+            if (!buildInfo.program) return value;
+            // Fix lib signatures
+            for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
+                if (ts.startsWith(path, "/lib/")) {
+                    const currentValue = buildInfo.program.fileInfos[path];
+                    ts.Debug.assert(currentValue.signature === path);
+                    ts.Debug.assert(currentValue.signature === currentValue.version);
+                    const text = super.readFile(path)!;
+                    const signature = ts.generateDjb2Hash(text);
+                    buildInfo.program.fileInfos[path] = { version: signature, signature };
+                }
+            }
+            return ts.getBuildInfoText(buildInfo);
+        }
+
         now() {
             return new Date(this.sys.vfs.time());
         }
