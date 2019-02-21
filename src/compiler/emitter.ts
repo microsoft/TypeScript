@@ -530,8 +530,8 @@ namespace ts {
         // error if no source map or for now if inline sourcemap
         if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
         // read declaration text
-        const declarationText = declarationFilePath && host.readFile(declarationFilePath!);
-        if (declarationFilePath && !declarationText) return declarationFilePath!;
+        const declarationText = declarationFilePath && host.readFile(declarationFilePath);
+        if (declarationFilePath && !declarationText) return declarationFilePath;
         const declarationMapText = declarationMapPath && host.readFile(declarationMapPath);
         // error if no source map or for now if inline sourcemap
         if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";

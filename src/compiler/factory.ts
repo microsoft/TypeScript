@@ -2666,20 +2666,11 @@ namespace ts {
     export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapTextOrStripInternal?: string | boolean): UnparsedSource {
-        if (!isString(textOrInputFiles) && textOrInputFiles.oldFileOfCurrentEmit) {
-            Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
-            return mapPathOrType === "js" ? createUnparsedJsSourceFile(textOrInputFiles) : createUnparsedDtsSourceFile(textOrInputFiles);
-        }
         const node = createUnparsedSource();
-        let prologues: UnparsedPrologue[] | undefined;
-        let helpers: UnscopedEmitHelper[] | undefined;
-        let referencedFiles: FileReference[] | undefined;
-        let typeReferenceDirectives: string[] | undefined;
-        let libReferenceDirectives: FileReference[] | undefined;
-        let texts: UnparsedSourceText[] | undefined;
+        let stripInternal: boolean | undefined;
+        let bundleFileInfo: BundleFileInfo | undefined;
         if (!isString(textOrInputFiles)) {
             Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
-            Debug.assert(!textOrInputFiles.oldFileOfCurrentEmit);
             node.fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
             node.sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
             Object.defineProperties(node, {
@@ -2687,45 +2678,15 @@ namespace ts {
                 sourceMapText: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText; } },
             });
 
+
             if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
+                node.oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
                 Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
-                const stripInternal = mapTextOrStripInternal as boolean | undefined;
-                const bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
-                for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
-                    switch (section.kind) {
-                        case BundleFileSectionKind.Prologue:
-                            (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
-                            break;
-                        case BundleFileSectionKind.EmitHelpers:
-                            (helpers || (helpers = [])).push(getAllUnscopedEmitHelpers().get(section.data)!);
-                            break;
-                        case BundleFileSectionKind.NoDefaultLib:
-                            node.hasNoDefaultLib = true;
-                            break;
-                        case BundleFileSectionKind.Reference:
-                            (referencedFiles || (referencedFiles = [])).push({ pos: -1, end: -1, fileName: section.data });
-                            break;
-                        case BundleFileSectionKind.Type:
-                            (typeReferenceDirectives || (typeReferenceDirectives = [])).push(section.data);
-                            break;
-                        case BundleFileSectionKind.Lib:
-                            (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.data });
-                            break;
-                        case BundleFileSectionKind.Prepend:
-                            const prependNode = createUnparsedNode(section, node) as UnparsedPrepend;
-                            prependNode.texts = section.texts.map(text => createUnparsedNode(text, node) as UnparsedTextLike);
-                            (texts || (texts = [])).push(prependNode);
-                            break;
-                        case BundleFileSectionKind.Internal:
-                            if (stripInternal) break;
-                            // falls through
-                        case BundleFileSectionKind.Text:
-                        case BundleFileSectionKind.SourceMapUrl:
-                            (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
-                            break;
-                        default:
-                            Debug.assertNever(section);
-                    }
+                stripInternal = mapTextOrStripInternal as boolean | undefined;
+                bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
+                if (node.oldFileOfCurrentEmit) {
+                    parseOldFileOfCurrentEmit(node, Debug.assertDefined(bundleFileInfo));
+                    return node;
                 }
             }
         }
@@ -2735,68 +2696,81 @@ namespace ts {
             node.sourceMapPath = mapPathOrType;
             node.sourceMapText = mapTextOrStripInternal as string;
         }
+        Debug.assert(!node.oldFileOfCurrentEmit);
+        parseUnparsedSourceFile(node, bundleFileInfo, stripInternal);
+        return node;
+    }
+
+    function parseUnparsedSourceFile(node: UnparsedSource, bundleFileInfo: BundleFileInfo | undefined, stripInternal: boolean | undefined) {
+        let prologues: UnparsedPrologue[] | undefined;
+        let helpers: UnscopedEmitHelper[] | undefined;
+        let referencedFiles: FileReference[] | undefined;
+        let typeReferenceDirectives: string[] | undefined;
+        let libReferenceDirectives: FileReference[] | undefined;
+        let texts: UnparsedSourceText[] | undefined;
+
+        for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
+            switch (section.kind) {
+                case BundleFileSectionKind.Prologue:
+                    (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
+                    break;
+                case BundleFileSectionKind.EmitHelpers:
+                    (helpers || (helpers = [])).push(getAllUnscopedEmitHelpers().get(section.data)!);
+                    break;
+                case BundleFileSectionKind.NoDefaultLib:
+                    node.hasNoDefaultLib = true;
+                    break;
+                case BundleFileSectionKind.Reference:
+                    (referencedFiles || (referencedFiles = [])).push({ pos: -1, end: -1, fileName: section.data });
+                    break;
+                case BundleFileSectionKind.Type:
+                    (typeReferenceDirectives || (typeReferenceDirectives = [])).push(section.data);
+                    break;
+                case BundleFileSectionKind.Lib:
+                    (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.data });
+                    break;
+                case BundleFileSectionKind.Prepend:
+                    const prependNode = createUnparsedNode(section, node) as UnparsedPrepend;
+                    let prependTexts: UnparsedTextLike[] | undefined;
+                    for (const text of section.texts) {
+                        if (!stripInternal || text.kind !== BundleFileSectionKind.Internal) {
+                            (prependTexts || (prependTexts = [])).push(createUnparsedNode(text, node) as UnparsedTextLike);
+                        }
+                    }
+                    prependNode.texts = prependTexts || emptyArray;
+                    (texts || (texts = [])).push(prependNode);
+                    break;
+                case BundleFileSectionKind.Internal:
+                    if (stripInternal) break;
+                // falls through
+                case BundleFileSectionKind.Text:
+                case BundleFileSectionKind.SourceMapUrl:
+                    (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
+                    break;
+                default:
+                    Debug.assertNever(section);
+            }
+        }
+
         node.prologues = prologues || emptyArray;
         node.helpers = helpers;
         node.referencedFiles = referencedFiles || emptyArray;
         node.typeReferenceDirectives = typeReferenceDirectives;
         node.libReferenceDirectives = libReferenceDirectives || emptyArray;
         node.texts = texts || [<UnparsedTextLike>createUnparsedNode({ kind: BundleFileSectionKind.Text, pos: 0, end: node.text.length }, node)];
-        return node;
     }
 
-    function createUnparsedJsSourceFile(input: InputFiles) {
-        Debug.assert(!!input.oldFileOfCurrentEmit);
-        const node = createUnparsedSource();
-        node.oldFileOfCurrentEmit = true;
-        node.fileName = Debug.assertDefined(input.javascriptPath);
-        node.sourceMapPath = input.javascriptMapPath;
-        node.text = input.javascriptText;
-        Object.defineProperties(node, {
-            sourceMapText: { get() { return input.javascriptMapText; } },
-        });
-
-        const bundleFileInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle && input.buildInfo.bundle.js);
-        const texts: UnparsedTextLike[] = [];
-        for (const section of bundleFileInfo.sections) {
-            switch (section.kind) {
-                case BundleFileSectionKind.Text:
-                    texts.push(createUnparsedNode(section, node) as UnparsedTextLike);
-                    break;
-                // Ignore
-                case BundleFileSectionKind.Prologue:
-                case BundleFileSectionKind.EmitHelpers:
-                case BundleFileSectionKind.Prepend:
-                case BundleFileSectionKind.SourceMapUrl:
-                    break;
-                case BundleFileSectionKind.NoDefaultLib:
-                case BundleFileSectionKind.Reference:
-                case BundleFileSectionKind.Type:
-                case BundleFileSectionKind.Lib:
-                case BundleFileSectionKind.Internal:
-                    Debug.fail(`js shouldnt have section: ${JSON.stringify(section)}`);
-                    break;
-                default:
-                    Debug.assertNever(section);
-            }
-        }
-        node.texts = texts;
-        node.helpers = map(bundleFileInfo.sources && bundleFileInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
-        return node;
-    }
-
-    function createUnparsedDtsSourceFile(input: InputFiles): UnparsedSource {
-        Debug.assert(!!input.oldFileOfCurrentEmit);
-        const node = createUnparsedSource();
-        node.oldFileOfCurrentEmit = true;
-        node.fileName = Debug.assertDefined(input.declarationPath);
-        node.sourceMapPath = Debug.assertDefined(input.declarationMapPath);
-        node.text = input.declarationText;
-        node.sourceMapText = input.declarationMapText;
-        const texts: UnparsedTextLike[] = [];
+    function parseOldFileOfCurrentEmit(node: UnparsedSource, bundleFileInfo: BundleFileInfo) {
+        Debug.assert(!!node.oldFileOfCurrentEmit);
+        let texts: UnparsedTextLike[] | undefined;
         let syntheticReferences: UnparsedSyntheticReference[] | undefined;
-        const bundleFileInfo = Debug.assertDefined(input.buildInfo && input.buildInfo.bundle && input.buildInfo.bundle.dts);
         for (const section of bundleFileInfo.sections) {
             switch (section.kind) {
+                case BundleFileSectionKind.Internal:
+                case BundleFileSectionKind.Text:
+                    (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
+                    break;
+
                 case BundleFileSectionKind.NoDefaultLib:
                 case BundleFileSectionKind.Reference:
                 case BundleFileSectionKind.Type:
@@ -2804,27 +2778,19 @@ namespace ts {
                     (syntheticReferences || (syntheticReferences = [])).push(createUnparsedSyntheticReference(section, node));
                     break;
 
-                case BundleFileSectionKind.Internal:
-                case BundleFileSectionKind.Text:
-                    texts.push(createUnparsedNode(section, node) as UnparsedTextLike);
-                    break;
-
                 // Ignore
-                case BundleFileSectionKind.Prepend:
-                case BundleFileSectionKind.SourceMapUrl:
-                    break;
-
-                // Should never have
                 case BundleFileSectionKind.Prologue:
                 case BundleFileSectionKind.EmitHelpers:
-                    Debug.fail(`Dts shouldnt have section: ${JSON.stringify(section)}`);
+                case BundleFileSectionKind.Prepend:
+                case BundleFileSectionKind.SourceMapUrl:
                     break;
 
                 default:
                     Debug.assertNever(section);
             }
         }
-        node.texts = texts;
+        node.texts = texts || emptyArray;
+        node.helpers = map(bundleFileInfo.sources && bundleFileInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
         node.syntheticReferences = syntheticReferences;
         return node;
     }

@@ -2479,45 +2479,40 @@ console.log(s);
       "sections": [
         {
           "pos": 0,
-          "end": 404,
+          "end": 363,
           "kind": "prepend",
           "data": "/src/2/second-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 39,
-              "kind": "internal"
-            },
-            {
-              "pos": 41,
-              "end": 157,
+              "end": 116,
               "kind": "text"
             },
             {
-              "pos": 157,
-              "end": 199,
+              "pos": 116,
+              "end": 158,
               "kind": "sourceMapUrl"
             },
             {
-              "pos": 201,
-              "end": 361,
+              "pos": 160,
+              "end": 320,
               "kind": "text"
             },
             {
-              "pos": 361,
-              "end": 404,
+              "pos": 320,
+              "end": 363,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 406,
-          "end": 425,
+          "pos": 365,
+          "end": 384,
           "kind": "text"
         },
         {
-          "pos": 425,
-          "end": 467,
+          "pos": 384,
+          "end": 426,
           "kind": "sourceMapUrl"
         }
       ]
@@ -2663,14 +2658,9 @@ sourceMapUrl: (3664-3704)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-404):: /src/2/second-output.d.ts texts:: 5
+prepend: (0-363):: /src/2/second-output.d.ts texts:: 4
 >>--------------------------------------------------------------------
-internal: (0-39)
-interface TheFirst {
-    none: any;
-}
->>--------------------------------------------------------------------
-text: (41-157)
+text: (0-116)
 declare const s = "Hello, world";
 interface NoJsForHereEither {
     none: any;
@@ -2678,10 +2668,10 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (157-199)
+sourceMapUrl: (116-158)
 //# sourceMappingURL=first-output.d.ts.map
 >>--------------------------------------------------------------------
-text: (201-361)
+text: (160-320)
 declare namespace N {
 }
 declare namespace N {
@@ -2695,14 +2685,14 @@ declare class C {
 }
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (361-404)
+sourceMapUrl: (320-363)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
-text: (406-425)
+text: (365-384)
 declare var c: C;
 
 ----------------------------------------------------------------------
-sourceMapUrl: (425-467)
+sourceMapUrl: (384-426)
 //# sourceMappingURL=third-output.d.ts.map
 ======================================================================
 
