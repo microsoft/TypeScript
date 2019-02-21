@@ -356,44 +356,45 @@ declare namespace ts {
         SpreadAssignment = 277,
         EnumMember = 278,
         UnparsedPrologue = 279,
-        UnparsedPrependText = 280,
+        UnparsedPrepend = 280,
         UnparsedText = 281,
-        UnparsedSourceMapUrl = 282,
-        UnparsedSectionText = 283,
-        SourceFile = 284,
-        Bundle = 285,
-        UnparsedSource = 286,
-        InputFiles = 287,
-        JSDocTypeExpression = 288,
-        JSDocAllType = 289,
-        JSDocUnknownType = 290,
-        JSDocNullableType = 291,
-        JSDocNonNullableType = 292,
-        JSDocOptionalType = 293,
-        JSDocFunctionType = 294,
-        JSDocVariadicType = 295,
-        JSDocComment = 296,
-        JSDocTypeLiteral = 297,
-        JSDocSignature = 298,
-        JSDocTag = 299,
-        JSDocAugmentsTag = 300,
-        JSDocClassTag = 301,
-        JSDocCallbackTag = 302,
-        JSDocEnumTag = 303,
-        JSDocParameterTag = 304,
-        JSDocReturnTag = 305,
-        JSDocThisTag = 306,
-        JSDocTypeTag = 307,
-        JSDocTemplateTag = 308,
-        JSDocTypedefTag = 309,
-        JSDocPropertyTag = 310,
-        SyntaxList = 311,
-        NotEmittedStatement = 312,
-        PartiallyEmittedExpression = 313,
-        CommaListExpression = 314,
-        MergeDeclarationMarker = 315,
-        EndOfDeclarationMarker = 316,
-        Count = 317,
+        UnparsedInternalText = 282,
+        UnparsedSourceMapUrl = 283,
+        UnparsedSyntheticReference = 284,
+        SourceFile = 285,
+        Bundle = 286,
+        UnparsedSource = 287,
+        InputFiles = 288,
+        JSDocTypeExpression = 289,
+        JSDocAllType = 290,
+        JSDocUnknownType = 291,
+        JSDocNullableType = 292,
+        JSDocNonNullableType = 293,
+        JSDocOptionalType = 294,
+        JSDocFunctionType = 295,
+        JSDocVariadicType = 296,
+        JSDocComment = 297,
+        JSDocTypeLiteral = 298,
+        JSDocSignature = 299,
+        JSDocTag = 300,
+        JSDocAugmentsTag = 301,
+        JSDocClassTag = 302,
+        JSDocCallbackTag = 303,
+        JSDocEnumTag = 304,
+        JSDocParameterTag = 305,
+        JSDocReturnTag = 306,
+        JSDocThisTag = 307,
+        JSDocTypeTag = 308,
+        JSDocTemplateTag = 309,
+        JSDocTypedefTag = 310,
+        JSDocPropertyTag = 311,
+        SyntaxList = 312,
+        NotEmittedStatement = 313,
+        PartiallyEmittedExpression = 314,
+        CommaListExpression = 315,
+        MergeDeclarationMarker = 316,
+        EndOfDeclarationMarker = 317,
+        Count = 318,
         FirstAssignment = 59,
         LastAssignment = 71,
         FirstCompoundAssignment = 60,
@@ -419,10 +420,10 @@ declare namespace ts {
         FirstBinaryOperator = 28,
         LastBinaryOperator = 71,
         FirstNode = 148,
-        FirstJSDocNode = 288,
-        LastJSDocNode = 310,
-        FirstJSDocTagNode = 299,
-        LastJSDocTagNode = 310
+        FirstJSDocNode = 289,
+        LastJSDocNode = 311,
+        FirstJSDocTagNode = 300,
+        LastJSDocTagNode = 311
     }
     enum NodeFlags {
         None = 0,
@@ -1752,10 +1753,11 @@ declare namespace ts {
         hasNoDefaultLib?: boolean;
         sourceMapPath?: string;
         sourceMapText?: string;
+        syntheticReferences?: ReadonlyArray<UnparsedSyntheticReference>;
         texts: ReadonlyArray<UnparsedSourceText>;
     }
-    type UnparsedSourceText = UnparsedPrependText | UnparsedText | UnparsedSourceMapUrl | UnparsedSectionText;
-    type UnparsedNode = UnparsedPrologue | UnparsedSourceText;
+    type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike;
+    type UnparsedNode = UnparsedPrologue | UnparsedSourceText | UnparsedSyntheticReference;
     interface UnparsedSection extends Node {
         kind: SyntaxKind;
         data?: string;
@@ -1766,21 +1768,18 @@ declare namespace ts {
         data: string;
         parent: UnparsedSource;
     }
-    interface UnparsedPrependText extends UnparsedSection {
-        kind: SyntaxKind.UnparsedPrependText;
+    interface UnparsedPrepend extends UnparsedSection {
+        kind: SyntaxKind.UnparsedPrepend;
         data: string;
         parent: UnparsedSource;
+        texts: ReadonlyArray<UnparsedTextLike>;
     }
-    interface UnparsedText extends UnparsedSection {
-        kind: SyntaxKind.UnparsedText;
+    interface UnparsedTextLike extends UnparsedSection {
+        kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText | SyntaxKind.UnparsedSourceMapUrl;
         parent: UnparsedSource;
     }
-    interface UnparsedSourceMapUrl extends UnparsedSection {
-        kind: SyntaxKind.UnparsedSourceMapUrl;
-        parent: UnparsedSource;
-    }
-    interface UnparsedSectionText extends UnparsedSection {
-        kind: SyntaxKind.UnparsedSectionText;
+    interface UnparsedSyntheticReference extends UnparsedSection {
+        kind: SyntaxKind.UnparsedSyntheticReference;
         parent: UnparsedSource;
     }
     interface JsonSourceFile extends SourceFile {
@@ -3496,6 +3495,8 @@ declare namespace ts {
     function isSourceFile(node: Node): node is SourceFile;
     function isBundle(node: Node): node is Bundle;
     function isUnparsedSource(node: Node): node is UnparsedSource;
+    function isUnparsedPrepend(node: Node): node is UnparsedPrepend;
+    function isUnparsedTextLike(node: Node): node is UnparsedTextLike;
     function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
     function isJSDocAllType(node: JSDocAllType): node is JSDocAllType;
@@ -4032,7 +4033,7 @@ declare namespace ts {
     function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>): CommaListExpression;
     function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource | InputFiles>): Bundle;
     function createUnparsedSourceFile(text: string): UnparsedSource;
-    function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
+    function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
     function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
