@@ -2585,6 +2585,10 @@
         "category": "Error",
         "code": 2749
     },
+    "The implementation signature is declared here.": {
+        "category": "Error",
+        "code": 2750
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
