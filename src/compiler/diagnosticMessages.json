@@ -1404,7 +1404,7 @@
         "category": "Error",
         "code": 2393
     },
-    "Overload signature is not compatible with function implementation.": {
+    "This overload signature is not compatible with its implementation signature.": {
         "category": "Error",
         "code": 2394
     },
@@ -2584,6 +2584,10 @@
     "'{0}' refers to a value, but is being used as a type here.": {
         "category": "Error",
         "code": 2749
+    },
+    "The implementation signature is declared here.": {
+        "category": "Error",
+        "code": 2750
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
