@@ -529,14 +529,12 @@ namespace ts {
         const sourceMapText = sourceMapFilePath && host.readFile(sourceMapFilePath);
         // error if no source map or for now if inline sourcemap
         if ((sourceMapFilePath && !sourceMapText) || config.options.inlineSourceMap) return sourceMapFilePath || "inline sourcemap decoding";
-        const stripInternal = config.options.stripInternal;
+        // read declaration text
+        const declarationText = declarationFilePath && host.readFile(declarationFilePath!);
+        if (declarationFilePath && !declarationText) return declarationFilePath!;
         const declarationMapText = declarationMapPath && host.readFile(declarationMapPath);
         // error if no source map or for now if inline sourcemap
         if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
-        // read declaration text
-        const shouldHaveDeclarationText = stripInternal || declarationMapText;
-        const declarationText = shouldHaveDeclarationText && host.readFile(declarationFilePath!);
-        if (shouldHaveDeclarationText && !declarationText) return declarationFilePath!;
 
         const buildInfo = JSON.parse(buildInfoText) as BuildInfo;
         if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationMapText && !buildInfo.bundle.dts)) return buildInfoPath!;
@@ -553,61 +551,45 @@ namespace ts {
             buildInfo,
             /*onlyOwnText*/ true
         );
-        const optionsWithoutDeclaration = clone(config.options);
-        optionsWithoutDeclaration.declaration = false;
-        optionsWithoutDeclaration.composite = false;
         const outputFiles: OutputFile[] = [];
-        const newBundle: BundleBuildInfo = clone(buildInfo.bundle);
-        let writeByteOrderMarkBuildInfo = false;
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
-        const jsPrepend = createUnparsedJsSourceFile(ownPrependInput);
         const sourceFilesForJsEmit = createSourceFilesForPrologues(buildInfo.bundle.js);
-        let currentBuildInfoType: "js" | "dts" = "js";
         const emitHost: EmitHost = {
-            getPrependNodes: memoize(() => [...prependNodes, jsPrepend]),
+            getPrependNodes: memoize(() => [...prependNodes, ownPrependInput]),
             getProjectReferences: () => config.projectReferences,
             getCanonicalFileName: host.getCanonicalFileName,
             getCommonSourceDirectory: () => buildInfo.bundle!.commonSourceDirectory,
-            getCompilerOptions: () => optionsWithoutDeclaration,
+            getCompilerOptions: () => config.options,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNewLine: () => host.getNewLine(),
-            getSourceFile: notImplemented,
-            getSourceFileByPath: notImplemented,
+            getSourceFile: () => undefined,
+            getSourceFileByPath: () => undefined,
             getSourceFiles: () => sourceFilesForJsEmit,
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: returnFalse,
             writeFile: (name, text, writeByteOrderMark) => {
                 switch (name) {
                     case jsFilePath:
-                        if (jsFileText !== text) {
-                            outputFiles.push({ name, text, writeByteOrderMark });
-                        }
+                        if (jsFileText === text) return;
                         break;
                     case sourceMapFilePath:
-                        if (sourceMapText !== text) {
-                            outputFiles.push({ name, text, writeByteOrderMark });
-                        }
+                        if (sourceMapText === text) return;
                         break;
                     case buildInfoPath:
-                        if (currentBuildInfoType === "js" || stripInternal) {
-                            const buildInfo = JSON.parse(text) as BuildInfo;
-                            newBundle[currentBuildInfoType] = buildInfo.bundle && buildInfo.bundle[currentBuildInfoType];
-                            writeByteOrderMarkBuildInfo = writeByteOrderMarkBuildInfo || writeByteOrderMark;
-                        }
-                        break;
+                        const newBuildInfo = JSON.parse(text) as BuildInfo;
+                        newBuildInfo.program = buildInfo.program;
+                        outputFiles.push({ name, text: getBuildInfoText({ program: buildInfo.program, bundle: newBuildInfo.bundle }), writeByteOrderMark });
+                        return;
                     case declarationFilePath:
-                        if (stripInternal && declarationText !== text) {
-                            outputFiles.push({ name, text, writeByteOrderMark });
-                        }
+                        if (declarationText === text) return;
                         break;
                     case declarationMapPath:
-                        if (declarationMapText !== text) {
-                            outputFiles.push({ name, text, writeByteOrderMark });
-                        }
+                        if (declarationMapText === text) return;
                         break;
                     default:
                         Debug.assertNever(name as never);
                 }
+                outputFiles.push({ name, text, writeByteOrderMark });
             },
             isEmitBlocked: returnFalse,
             readFile: f => host.readFile(f),
@@ -616,18 +598,7 @@ namespace ts {
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
             getProgramBuildInfo: () => undefined
         };
-        // Emit js
-        emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(optionsWithoutDeclaration));
-        // Emit d.ts map
-        if (shouldHaveDeclarationText) {
-            currentBuildInfoType = "dts";
-            const dtsPrepends = prependNodes.map(prepend => createUnparsedSourceFile(prepend, "dts", stripInternal));
-            emitHost.getPrependNodes = memoize(() => [...dtsPrepends, createUnparsedDtsSourceFile(ownPrependInput)]);
-            emitHost.getCompilerOptions = () => config.options;
-            emitHost.getSourceFiles = () => emptyArray;
-            emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ true);
-        }
-        outputFiles.push({ name: buildInfoPath!, text: getBuildInfoText({ program: buildInfo.program, bundle: newBundle }), writeByteOrderMark: writeByteOrderMarkBuildInfo });
+        emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(config.options));
         return outputFiles;
     }
 

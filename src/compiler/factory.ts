@@ -2666,6 +2666,10 @@ namespace ts {
     export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapTextOrStripInternal?: string | boolean): UnparsedSource {
+        if (!isString(textOrInputFiles) && textOrInputFiles.oldFileOfCurrentEmit) {
+            Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
+            return mapPathOrType === "js" ? createUnparsedJsSourceFile(textOrInputFiles) : createUnparsedDtsSourceFile(textOrInputFiles);
+        }
         const node = createUnparsedSource();
         let prologues: UnparsedPrologue[] | undefined;
         let helpers: UnscopedEmitHelper[] | undefined;
@@ -2740,8 +2744,7 @@ namespace ts {
         return node;
     }
 
-    /*@internal*/
-    export function createUnparsedJsSourceFile(input: InputFiles) {
+    function createUnparsedJsSourceFile(input: InputFiles) {
         Debug.assert(!!input.oldFileOfCurrentEmit);
         const node = createUnparsedSource();
         node.oldFileOfCurrentEmit = true;
@@ -2781,8 +2784,7 @@ namespace ts {
         return node;
     }
 
-    /*@internal*/
-    export function createUnparsedDtsSourceFile(input: InputFiles): UnparsedSource {
+    function createUnparsedDtsSourceFile(input: InputFiles): UnparsedSource {
         Debug.assert(!!input.oldFileOfCurrentEmit);
         const node = createUnparsedSource();
         node.oldFileOfCurrentEmit = true;
