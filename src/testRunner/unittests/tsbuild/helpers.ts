@@ -213,10 +213,6 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         expectedReadFiles?: ReadonlyMap<number>;
     }
 
-    export interface ExpectedBuildOutputNotDifferingWithBuildInfo extends ExpectedBuildOutputPerState {
-        modifyFs: (fs: vfs.FileSystem) => void;
-    }
-
     export interface ExpectedBuildOutputDifferingWithBuildInfo extends ExpectedBuildOutputPerState {
         modifyFs: (fs: vfs.FileSystem) => void;
         // Common ones
@@ -261,14 +257,15 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
             });
             describe("initialBuild", () => {
                 it(`verify diagnostics`, () => {
-                    host.assertDiagnosticMessages(...(initialBuild.expectedDiagnostics || emptyArray));
+                    host.assertDiagnosticMessages(...(getValue(initialBuild, withoutBuildInfo, "expectedDiagnostics") || emptyArray));
                 });
                 it(`Generates files matching the baseline`, () => {
                     generateBaseline(fs, proj, scenario, "initial Build", withoutBuildInfo, projFs());
                 });
-                if (initialBuild.expectedReadFiles) {
+                const expectedReadFiles = getValue(initialBuild, withoutBuildInfo, "expectedReadFiles");
+                if (expectedReadFiles) {
                     it("verify readFile calls", () => {
-                        verifyReadFileCalls(actualReadFileMap, initialBuild.expectedReadFiles!);
+                        verifyReadFileCalls(actualReadFileMap, expectedReadFiles);
                     });
                 }
             });
@@ -380,7 +377,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         expectedMapFileNames: ReadonlyArray<string>;
         expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         lastProjectOutputJs: string;
-        initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
+        initialBuild: ExpectedBuildOutputDifferingWithBuildInfo;
         outputFiles?: ReadonlyArray<string>;
         incrementalDtsChangedBuild ?: ExpectedBuildOutputDifferingWithBuildInfo;
         incrementalDtsUnchangedBuild ?: ExpectedBuildOutputDifferingWithBuildInfo;

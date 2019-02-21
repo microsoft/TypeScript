@@ -379,7 +379,7 @@ export class cNew {}`);
         });
 
         describe("emit output", () => {
-            const initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo = {
+            const initialBuild: ExpectedBuildOutputDifferingWithBuildInfo = {
                 modifyFs: noop,
                 expectedDiagnostics: [
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
