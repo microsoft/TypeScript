@@ -5432,7 +5432,16 @@ namespace ts {
 
         function getTypeOfVariableOrParameterOrProperty(symbol: Symbol): Type {
             const links = getSymbolLinks(symbol);
-            return links.type || (links.type = getTypeOfVariableOrParameterOrPropertyWorker(symbol));
+            if (!links.type) {
+                const type = getTypeOfVariableOrParameterOrPropertyWorker(symbol);
+                // For a contextually typed parameter it is possible that a type has already
+                // been assigned (in assignTypeToParameterAndFixTypeParameters), and we want
+                // to preserve this type.
+                if (!links.type) {
+                    links.type = type;
+                }
+            }
+            return links.type;
         }
 
         function getTypeOfVariableOrParameterOrPropertyWorker(symbol: Symbol) {
@@ -5476,7 +5485,7 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.ValueModule) {
                     return getTypeOfFuncClassEnumModule(symbol);
                 }
-                return errorType;
+                return reportCircularityError(symbol);
             }
             let type: Type | undefined;
             if (isInJSFile(declaration) &&
@@ -5535,7 +5544,7 @@ namespace ts {
                 if (symbol.flags & SymbolFlags.ValueModule) {
                     return getTypeOfFuncClassEnumModule(symbol);
                 }
-                type = reportCircularityError(symbol);
+                return reportCircularityError(symbol);
             }
             return type;
         }
@@ -12593,6 +12602,7 @@ namespace ts {
 
                 let result: Ternary;
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
+                let varianceCheckFailed = false;
                 const saveErrorInfo = errorInfo;
 
                 // We limit alias variance probing to only object and conditional types since their alias behavior
@@ -12602,11 +12612,10 @@ namespace ts {
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
-                    if (result = typeArgumentsRelatedTo(source.aliasTypeArguments, target.aliasTypeArguments, variances, reportErrors)) {
-                        return result;
+                    const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances);
+                    if (varianceResult !== undefined) {
+                        return varianceResult;
                     }
-                    originalErrorInfo = errorInfo;
-                    errorInfo = saveErrorInfo;
                 }
 
                 if (target.flags & TypeFlags.TypeParameter) {
@@ -12771,31 +12780,9 @@ namespace ts {
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
                         const variances = getVariances((<TypeReference>source).target);
-                        if (result = typeArgumentsRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, variances, reportErrors)) {
-                            return result;
-                        }
-                        // The type arguments did not relate appropriately, but it may be because we have no variance
-                        // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
-                        // arguments). It might also be the case that the target type has a 'void' type argument for
-                        // a covariant type parameter that is only used in return positions within the generic type
-                        // (in which case any type argument is permitted on the source side). In those cases we proceed
-                        // with a structural comparison. Otherwise, we know for certain the instantiations aren't
-                        // related and we can return here.
-                        if (variances !== emptyArray && !hasCovariantVoidArgument(<TypeReference>target, variances)) {
-                            // In some cases generic types that are covariant in regular type checking mode become
-                            // invariant in --strictFunctionTypes mode because one or more type parameters are used in
-                            // both co- and contravariant positions. In order to make it easier to diagnose *why* such
-                            // types are invariant, if any of the type parameters are invariant we reset the reported
-                            // errors and instead force a structural comparison (which will include elaborations that
-                            // reveal the reason).
-                            if (!(reportErrors && some(variances, v => v === Variance.Invariant))) {
-                                return Ternary.False;
-                            }
-                            // We remember the original error information so we can restore it in case the structural
-                            // comparison unexpectedly succeeds. This can happen when the structural comparison result
-                            // is a Ternary.Maybe for example caused by the recursion depth limiter.
-                            originalErrorInfo = errorInfo;
-                            errorInfo = saveErrorInfo;
+                        const varianceResult = relateVariances((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, variances);
+                        if (varianceResult !== undefined) {
+                            return varianceResult;
                         }
                     }
                     else if (isReadonlyArrayType(target) ? isArrayType(source) || isTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
@@ -12822,16 +12809,48 @@ namespace ts {
                                 }
                             }
                         }
-                        if (result) {
-                            if (!originalErrorInfo) {
-                                errorInfo = saveErrorInfo;
-                                return result;
-                            }
-                            errorInfo = originalErrorInfo;
+                        if (varianceCheckFailed && result) {
+                            errorInfo = originalErrorInfo || errorInfo || saveErrorInfo; // Use variance error (there is no structural one) and return false
+                        }
+                        else if (result) {
+                            return result;
                         }
                     }
                 }
                 return Ternary.False;
+
+                function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
+                    if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors)) {
+                        return result;
+                    }
+                    const isCovariantVoid = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
+                    varianceCheckFailed = !isCovariantVoid;
+                    // The type arguments did not relate appropriately, but it may be because we have no variance
+                    // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
+                    // arguments). It might also be the case that the target type has a 'void' type argument for
+                    // a covariant type parameter that is only used in return positions within the generic type
+                    // (in which case any type argument is permitted on the source side). In those cases we proceed
+                    // with a structural comparison. Otherwise, we know for certain the instantiations aren't
+                    // related and we can return here.
+                    if (variances !== emptyArray && !isCovariantVoid) {
+                        // In some cases generic types that are covariant in regular type checking mode become
+                        // invariant in --strictFunctionTypes mode because one or more type parameters are used in
+                        // both co- and contravariant positions. In order to make it easier to diagnose *why* such
+                        // types are invariant, if any of the type parameters are invariant we reset the reported
+                        // errors and instead force a structural comparison (which will include elaborations that
+                        // reveal the reason).
+                        // We can switch on `reportErrors` here, since varianceCheckFailed guarantees we return `False`,
+                        // we can return `False` early here to skip calculating the structural error message we don't need.
+                        if (varianceCheckFailed && !(reportErrors && some(variances, v => v === Variance.Invariant))) {
+                            return Ternary.False;
+                        }
+                        // We remember the original error information so we can restore it in case the structural
+                        // comparison unexpectedly succeeds. This can happen when the structural comparison result
+                        // is a Ternary.Maybe for example caused by the recursion depth limiter.
+                        originalErrorInfo = errorInfo;
+                        errorInfo = saveErrorInfo;
+                    }
+                }
             }
 
             // A type [P in S]: X is related to a type [Q in T]: Y if T is related to S and X' is
@@ -13340,7 +13359,7 @@ namespace ts {
 
         function getVariances(type: GenericType): Variance[] {
             // Arrays and tuples are known to be covariant, no need to spend time computing this (emptyArray implies covariance for all parameters)
-            if (!strictFunctionTypes || type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
+            if (type === globalArrayType || type === globalReadonlyArrayType || type.objectFlags & ObjectFlags.Tuple) {
                 return emptyArray;
             }
             return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference);
@@ -13348,9 +13367,9 @@ namespace ts {
 
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
         // See comment at call in recursiveTypeRelatedTo for when this case matters.
-        function hasCovariantVoidArgument(type: TypeReference, variances: Variance[]): boolean {
+        function hasCovariantVoidArgument(typeArguments: ReadonlyArray<Type>, variances: Variance[]): boolean {
             for (let i = 0; i < variances.length; i++) {
-                if (variances[i] === Variance.Covariant && type.typeArguments![i].flags & TypeFlags.Void) {
+                if (variances[i] === Variance.Covariant && typeArguments[i].flags & TypeFlags.Void) {
                     return true;
                 }
             }

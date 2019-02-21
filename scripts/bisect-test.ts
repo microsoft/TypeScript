@@ -15,6 +15,7 @@ function tsc(tscArgs: string, onExit: (exitCode: number) => void) {
     });
 }
 
+// TODO: Rewrite bisect script to handle the post-jake/gulp swap period
 var jake = cp.exec('jake clean local', () => void 0);
 jake.on('close', jakeExitCode => {
     if (jakeExitCode === 0) {
