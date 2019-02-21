@@ -243,7 +243,7 @@ namespace ts {
             const value = readFileCache.get(key);
             if (value !== undefined) return value !== false ? value : undefined; // could be .d.ts from output
             // Cache json or buildInfo
-            if (!fileExtensionIs(fileName, Extension.Json) && !isInfoFile(fileName)) {
+            if (!fileExtensionIs(fileName, Extension.Json) && !isBuildInfoFile(fileName)) {
                 return originalReadFile.call(host, fileName);
             }
 

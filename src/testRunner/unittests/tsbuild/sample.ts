@@ -552,7 +552,23 @@ class someClass { }`),
                             ],
                         )
                     }
-                }
+                },
+                outputFiles: [
+                    "/src/core/anotherModule.js",
+                    "/src/core/anotherModule.d.ts",
+                    "/src/core/anotherModule.d.ts.map",
+                    "/src/core/index.js",
+                    "/src/core/index.d.ts",
+                    "/src/core/index.d.ts.map",
+                    "/src/core/.tsbuildinfo",
+                    "/src/logic/index.js",
+                    "/src/logic/index.js.map",
+                    "/src/logic/index.d.ts",
+                    "/src/logic/.tsbuildinfo",
+                    "/src/tests/index.js",
+                    "/src/tests/index.d.ts",
+                    "/src/tests/.tsbuildinfo",
+                ]
             });
 
             verifyTsbuildOutput({
@@ -604,7 +620,23 @@ class someClass { }`),
                             "/src/tests/index.d.ts", // to check if d.ts has changed
                         ]
                     )
-                }
+                },
+                outputFiles: [
+                    "/src/core/anotherModule.js",
+                    "/src/core/anotherModule.d.ts",
+                    "/src/core/anotherModule.d.ts.map",
+                    "/src/core/index.js",
+                    "/src/core/index.d.ts",
+                    "/src/core/index.d.ts.map",
+                    "/src/core/.tsbuildinfo",
+                    "/src/logic/index.js",
+                    "/src/logic/index.js.map",
+                    "/src/logic/decls/index.d.ts",
+                    "/src/logic/.tsbuildinfo",
+                    "/src/tests/index.js",
+                    "/src/tests/index.d.ts",
+                    "/src/tests/.tsbuildinfo",
+                ]
             });
         });
     });

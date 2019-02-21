@@ -140,7 +140,7 @@ namespace ts {
         }
     }
 
-    function build({ fs, tick, rootNames, expectedMapFileNames, expectedTsbuildInfoFileNames, modifyFs, withoutBuildInfo }: {
+    interface BuildInput {
         fs: vfs.FileSystem;
         tick: () => void;
         rootNames: ReadonlyArray<string>;
@@ -148,7 +148,9 @@ namespace ts {
         expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         modifyFs: (fs: vfs.FileSystem) => void;
         withoutBuildInfo: boolean;
-    }) {
+    }
+
+    function build({ fs, tick, rootNames, expectedMapFileNames, expectedTsbuildInfoFileNames, modifyFs, withoutBuildInfo }: BuildInput) {
         const actualReadFileMap = createMap<number>();
         modifyFs(fs);
         tick();
@@ -162,7 +164,7 @@ namespace ts {
             if (path.startsWith("/src/")) {
                 actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
             }
-            if (withoutBuildInfo && isInfoFile(path)) {
+            if (withoutBuildInfo && isBuildInfoFile(path)) {
                 return undefined;
             }
             return originalReadFile.call(host, path);
@@ -170,7 +172,7 @@ namespace ts {
         if (withoutBuildInfo) {
             const originalWriteFile = host.writeFile;
             host.writeFile = (fileName, content, writeByteOrder) => {
-                return !isInfoFile(fileName) &&
+                return !isBuildInfoFile(fileName) &&
                     originalWriteFile.call(host, fileName, content, writeByteOrder);
             };
         }
@@ -225,25 +227,15 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         withoutBuildInfo?: ExpectedBuildOutputPerState;
     }
 
-    function verifyTsbuildOutputWorker({
-        scenario, projFs, time, tick, proj, rootNames, expectedMapFileNames, expectedTsbuildInfoFileNames, withoutBuildInfo, lastProjectOutputJs,
-        initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
-    }: {
-        scenario: string;
-        projFs: () => vfs.FileSystem;
-        time: () => number;
-        tick: () => void;
-        proj: string;
-        rootNames: ReadonlyArray<string>;
-        expectedMapFileNames: ReadonlyArray<string>;
-        expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
+    interface VerifyTsBuildInputWorker extends VerifyTsBuildInput {
         withoutBuildInfo: boolean;
-        lastProjectOutputJs: string;
-        initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
-        incrementalDtsChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
-        incrementalDtsUnchangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
-        incrementalHeaderChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
-    }) {
+    }
+
+    function verifyTsbuildOutputWorker({
+        scenario, projFs, time, tick, proj, rootNames, outputFiles,
+        expectedMapFileNames, expectedTsbuildInfoFileNames, withoutBuildInfo, lastProjectOutputJs,
+        initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
+    }: VerifyTsBuildInputWorker) {
         describe(`tsc --b ${proj}:: ${scenario}${withoutBuildInfo ? " without build info" : ""}`, () => {
             let fs: vfs.FileSystem;
             let actualReadFileMap: Map<number>;
@@ -322,6 +314,31 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             verifyReadFileCalls(actualReadFileMap, incrementalExpectedReadFiles);
                         });
                     }
+                    it(`Verify emit output file text is same when built clean`, () => {
+                        const expectedOutputFiles = Debug.assertDefined(outputFiles);
+                        const { fs } = build({
+                            fs: newFs.shadow(),
+                            tick,
+                            rootNames,
+                            expectedMapFileNames: emptyArray,
+                            expectedTsbuildInfoFileNames: emptyArray,
+                            modifyFs: fs => {
+                                // Delete output files
+                                for (const outputFile of expectedOutputFiles) {
+                                    if (fs.existsSync(outputFile)) {
+                                        fs.rimrafSync(outputFile);
+                                    }
+                                }
+                            },
+                            withoutBuildInfo
+                        });
+
+                        for (const outputFile of expectedOutputFiles) {
+                            const expectedText = fs.existsSync(outputFile) ? fs.readFileSync(outputFile, "utf8") : undefined;
+                            const actualText = newFs.existsSync(outputFile) ? newFs.readFileSync(outputFile, "utf8") : undefined;
+                            assert.equal(actualText, expectedText, `File: ${outputFile}`);
+                        }
+                    });
                 });
             }
             if (incrementalDtsChangedBuild) {
@@ -338,22 +355,22 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     "incremental declaration doesnt change",
                     incrementalDtsUnchangedBuild.modifyFs,
                     getValue(incrementalDtsUnchangedBuild, withoutBuildInfo, "expectedDiagnostics"),
-                    getValue(incrementalDtsUnchangedBuild, withoutBuildInfo, "expectedReadFiles"),
+                    getValue(incrementalDtsUnchangedBuild, withoutBuildInfo, "expectedReadFiles")
                 );
             }
 
             if (incrementalHeaderChangedBuild) {
                 incrementalBuild(
-                    "incremental headers change",
+                    "incremental headers change without dts changes",
                     incrementalHeaderChangedBuild.modifyFs,
                     getValue(incrementalHeaderChangedBuild, withoutBuildInfo, "expectedDiagnostics"),
-                    getValue(incrementalHeaderChangedBuild, withoutBuildInfo, "expectedReadFiles"),
+                    getValue(incrementalHeaderChangedBuild, withoutBuildInfo, "expectedReadFiles")
                 );
             }
         });
     }
 
-    export function verifyTsbuildOutput(input: {
+    export interface VerifyTsBuildInput {
         scenario: string;
         projFs: () => vfs.FileSystem;
         time: () => number;
@@ -364,10 +381,13 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         lastProjectOutputJs: string;
         initialBuild: ExpectedBuildOutputNotDifferingWithBuildInfo;
-        incrementalDtsChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
-        incrementalDtsUnchangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
-        incrementalHeaderChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
-    }) {
+        outputFiles?: ReadonlyArray<string>;
+        incrementalDtsChangedBuild ?: ExpectedBuildOutputDifferingWithBuildInfo;
+        incrementalDtsUnchangedBuild ?: ExpectedBuildOutputDifferingWithBuildInfo;
+        incrementalHeaderChangedBuild ?: ExpectedBuildOutputDifferingWithBuildInfo;
+    }
+
+    export function verifyTsbuildOutput(input: VerifyTsBuildInput) {
         verifyTsbuildOutputWorker({ ...input, withoutBuildInfo: false });
         verifyTsbuildOutputWorker({ ...input, withoutBuildInfo: true });
     }

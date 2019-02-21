@@ -308,7 +308,12 @@ namespace ts {
                     modifyFs: modifyAgainFs,
                     withBuildInfo: incrementalDtsUnchangedWithBuildInfo,
                     withoutBuildInfo: incrementalDtsUnchangedWithoutBuildInfo
-                }
+                },
+                outputFiles: [
+                    ...outputFiles[project.first],
+                    ...outputFiles[project.second],
+                    ...outputFiles[project.third]
+                ]
             });
         }
 

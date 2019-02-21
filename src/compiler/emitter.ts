@@ -5,7 +5,7 @@ namespace ts {
     const syntheticParent: TextRange = { pos: -1, end: -1 };
 
     /*@internal*/
-    export function isInfoFile(file: string) {
+    export function isBuildInfoFile(file: string) {
         return endsWith(file, `/${infoFile}`);
     }
 

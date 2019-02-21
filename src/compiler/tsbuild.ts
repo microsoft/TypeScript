@@ -1301,7 +1301,7 @@ namespace ts {
                     }
 
                     // For info file, ignore if we cant update modified time
-                    if (isInfoFile(file) && !host.fileExists(file)) {
+                    if (isBuildInfoFile(file) && !host.fileExists(file)) {
                         continue;
                     }
 
