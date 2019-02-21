@@ -629,7 +629,7 @@ namespace ts {
         const computeHash = host.createHash || generateDjb2Hash;
         let state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
         let backupState: BuilderProgramState | undefined;
-        newProgram.getProgramBuildInfo = () => getProgramBuildInfo(state);
+        newProgram.getProgramBuildInfo = () => result.getProgramBuildInfo();
 
         // To ensure that we arent storing any references to old program or new program without state
         newProgram = undefined!; // TODO: GH#18217
@@ -653,6 +653,7 @@ namespace ts {
             releaseCache(state);
             backupState = undefined;
         };
+        result.getProgramBuildInfo = () => getProgramBuildInfo(state);
 
         if (kind === BuilderProgramKind.SemanticDiagnosticsBuilderProgram) {
             (result as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile = getSemanticDiagnosticsOfNextAffectedFile;
@@ -889,7 +890,8 @@ namespace ts {
             getAllDependencies: notImplemented,
             getCurrentDirectory: notImplemented,
             emitNextAffectedFile: notImplemented,
-            getSemanticDiagnosticsOfNextAffectedFile: notImplemented
+            getSemanticDiagnosticsOfNextAffectedFile: notImplemented,
+            getProgramBuildInfo: notImplemented
         };
     }
 
@@ -912,7 +914,8 @@ namespace ts {
             getSemanticDiagnostics: (sourceFile, cancellationToken) => getProgram().getSemanticDiagnostics(sourceFile, cancellationToken),
             emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) => getProgram().emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
             getAllDependencies: notImplemented,
-            getCurrentDirectory: () => getProgram().getCurrentDirectory()
+            getCurrentDirectory: () => getProgram().getCurrentDirectory(),
+            getProgramBuildInfo: () => undefined
         };
 
         function getProgram() {
@@ -1026,6 +1029,10 @@ namespace ts {
          * Get the current directory of the program
          */
         getCurrentDirectory(): string;
+        /**
+         * Returns the program info to be serialised
+         */
+        /*@internal*/ getProgramBuildInfo(): ProgramBuildInfo | undefined;
     }
 
     /**
