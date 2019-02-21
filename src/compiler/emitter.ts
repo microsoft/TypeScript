@@ -537,7 +537,7 @@ namespace ts {
         if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
 
         const buildInfo = JSON.parse(buildInfoText) as BuildInfo;
-        if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationMapText && !buildInfo.bundle.dts)) return buildInfoPath!;
+        if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationText && !buildInfo.bundle.dts)) return buildInfoPath!;
         const ownPrependInput = createInputFiles(
             jsFileText,
             declarationText!,
@@ -578,7 +578,13 @@ namespace ts {
                     case buildInfoPath:
                         const newBuildInfo = JSON.parse(text) as BuildInfo;
                         newBuildInfo.program = buildInfo.program;
-                        outputFiles.push({ name, text: getBuildInfoText({ program: buildInfo.program, bundle: newBuildInfo.bundle }), writeByteOrderMark });
+                        // Update sourceFileInfo
+                        const { js, dts } = buildInfo.bundle!;
+                        newBuildInfo.bundle!.js!.sources = js!.sources;
+                        if (dts) {
+                            newBuildInfo.bundle!.dts!.sources = dts.sources;
+                        }
+                        outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark });
                         return;
                     case declarationFilePath:
                         if (declarationText === text) return;

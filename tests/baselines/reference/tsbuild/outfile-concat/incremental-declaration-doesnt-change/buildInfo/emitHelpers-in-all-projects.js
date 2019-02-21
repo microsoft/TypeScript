@@ -423,7 +423,12 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
           "end": 1343,
           "kind": "sourceMapUrl"
         }
-      ]
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest"
+        ]
+      }
     },
     "dts": {
       "sections": [

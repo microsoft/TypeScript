@@ -700,7 +700,14 @@ function forfirstfirst_PART1Rest() { }
           "end": 2567,
           "kind": "sourceMapUrl"
         }
-      ]
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest",
+          "typescript:read",
+          "typescript:spread"
+        ]
+      }
     },
     "dts": {
       "sections": [

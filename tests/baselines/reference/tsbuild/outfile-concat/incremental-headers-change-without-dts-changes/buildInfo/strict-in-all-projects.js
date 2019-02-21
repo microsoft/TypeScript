@@ -498,7 +498,26 @@ console.log(s);
           "end": 586,
           "kind": "sourceMapUrl"
         }
-      ]
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": "/src/third/third_part1.ts",
+            "text": "",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              }
+            ]
+          }
+        ]
+      }
     },
     "dts": {
       "sections": [

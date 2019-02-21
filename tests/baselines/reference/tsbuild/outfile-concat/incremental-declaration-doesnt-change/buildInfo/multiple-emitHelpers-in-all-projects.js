@@ -623,7 +623,14 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
           "end": 2661,
           "kind": "sourceMapUrl"
         }
-      ]
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest",
+          "typescript:read",
+          "typescript:spread"
+        ]
+      }
     },
     "dts": {
       "sections": [

@@ -466,7 +466,12 @@ function forfirstfirst_PART1Rest() { }
           "end": 1249,
           "kind": "sourceMapUrl"
         }
-      ]
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest"
+        ]
+      }
     },
     "dts": {
       "sections": [
