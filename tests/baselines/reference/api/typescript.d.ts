@@ -1003,10 +1003,7 @@ declare namespace ts {
         Octal = 32,
         HexSpecifier = 64,
         BinarySpecifier = 128,
-        OctalSpecifier = 256,
-        ContainsSeparator = 512,
-        BinaryOrOctalSpecifier = 384,
-        NumericLiteralFlags = 1008
+        OctalSpecifier = 256
     }
     interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
