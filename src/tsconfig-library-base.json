@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig-base",
+    "compilerOptions": {
+        "declarationMap": false,
+        "composite": false,
+        "declaration": true,
+        "stripInternal":  true
+    }
+}

@@ -203,6 +203,7 @@ namespace ts {
         return compilerHost;
     }
 
+    /*@internal*/
     interface CompilerHostLikeForCache {
         fileExists(fileName: string): boolean;
         readFile(fileName: string, encoding?: string): string | undefined;
@@ -3123,6 +3124,7 @@ namespace ts {
         }
     }
 
+    /*@internal*/
     interface CompilerHostLike {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;

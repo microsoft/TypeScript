@@ -1427,6 +1427,7 @@ namespace ts {
         return _tsconfigRootOptions;
     }
 
+    /*@internal*/
     interface JsonConversionNotifier {
         /**
          * Notifies parent option object is being set with the optionKey and a valid optionValue

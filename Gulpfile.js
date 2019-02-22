@@ -127,12 +127,24 @@ const buildServices = (() => {
     // build typescriptServices.out.js
     const buildTypescriptServicesOut = () => buildProject("built/local/typescriptServices.tsconfig.json", cmdLineOptions);
 
+    // build typescriptServices/typescriptServices.js
+    const buildTypescriptServicesOut1 = () => buildProject("src/typescriptServices/tsconfig.json", { ...cmdLineOptions, lkg: false });
+
     // create typescriptServices.js
     const createTypescriptServicesJs = () => src("built/local/typescriptServices.out.js")
         .pipe(newer("built/local/typescriptServices.js"))
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(prependFile(copyright))
         .pipe(rename("typescriptServices.js"))
+        .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
+        .pipe(dest("built/local"));
+
+    // create typescriptServices1.js
+    const createTypescriptServicesJs1 = () => src("built/local/typescriptServices/typescriptServices.js")
+        .pipe(newer("built/local/typescriptServices1.js"))
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(prependFile(copyright))
+        .pipe(rename("typescriptServices1.js"))
         .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
         .pipe(dest("built/local"));
 
@@ -144,11 +156,27 @@ const buildServices = (() => {
         .pipe(rename("typescriptServices.d.ts"))
         .pipe(dest("built/local"));
 
+    // create typescriptServices1.d.ts
+    const createTypescriptServicesDts1 = () => src("built/local/typescriptServices/typescriptServices.d.ts")
+        .pipe(newer("built/local/typescriptServices1.d.ts"))
+        .pipe(prependFile(copyright))
+        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
+        .pipe(rename("typescriptServices1.d.ts"))
+        .pipe(dest("built/local"));
+
     // create typescript.js
     const createTypescriptJs = () => src("built/local/typescriptServices.js")
         .pipe(newer("built/local/typescript.js"))
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(rename("typescript.js"))
+        .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
+        .pipe(dest("built/local"));
+
+    // create typescript1.js
+    const createTypescriptJs1 = () => src("built/local/typescriptServices1.js")
+        .pipe(newer("built/local/typescript1.js"))
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(rename("typescript1.js"))
         .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
         .pipe(dest("built/local"));
 
@@ -159,11 +187,25 @@ const buildServices = (() => {
         .pipe(rename("typescript.d.ts"))
         .pipe(dest("built/local"));
 
+    // create typescript1.d.ts
+    const createTypescriptDts1 = () => src("built/local/typescriptServices1.d.ts")
+        .pipe(newer("built/local/typescript1.d.ts"))
+        .pipe(append("\nexport = ts;"))
+        .pipe(rename("typescript1.d.ts"))
+        .pipe(dest("built/local"));
+
     // create typescript_standalone.d.ts
     const createTypescriptStandaloneDts = () => src("built/local/typescriptServices.d.ts")
         .pipe(newer("built/local/typescript_standalone.d.ts"))
         .pipe(transform(content => content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"')))
         .pipe(rename("typescript_standalone.d.ts"))
+        .pipe(dest("built/local"));
+
+    // create typescript_standalone.d.ts
+    const createTypescriptStandaloneDts1 = () => src("built/local/typescriptServices1.d.ts")
+        .pipe(newer("built/local/typescript_standalone1.d.ts"))
+        .pipe(transform(content => content.replace(/declare (namespace|module) ts/g, 'declare module "typescript"')))
+        .pipe(rename("typescript_standalone1.d.ts"))
         .pipe(dest("built/local"));
 
     return series(
@@ -173,7 +215,15 @@ const buildServices = (() => {
         createTypescriptServicesDts,
         createTypescriptJs,
         createTypescriptDts,
-        createTypescriptStandaloneDts);
+        createTypescriptStandaloneDts,
+        localPreBuild,
+        buildTypescriptServicesOut1,
+        createTypescriptServicesJs1,
+        createTypescriptServicesDts1,
+        createTypescriptJs1,
+        createTypescriptDts1,
+        createTypescriptStandaloneDts1,
+    );
 })();
 task("services", series(preBuild, buildServices));
 task("services").description = "Builds the language service";
@@ -193,6 +243,13 @@ const cleanServices = async () => {
         "built/local/typescript.js",
         "built/local/typescript.d.ts",
         "built/local/typescript_standalone.d.ts",
+        "built/local/typescriptServices/typescriptServices.js",
+        "built/local/typescriptServices/typescriptServices.js.map",
+        "built/local/typescriptServices/typescriptServices.d.ts",
+        "built/local/typescriptServices1.js",
+        "built/local/typescript1.js",
+        "built/local/typescript1.d.ts",
+        "built/local/typescript_standalone1.d.ts",
     ]);
 };
 cleanTasks.push(cleanServices);
@@ -263,12 +320,24 @@ const buildLssl = (() => {
     // build tsserverlibrary.out.js
     const buildServerLibraryOut = () => buildProject("built/local/tsserverlibrary.tsconfig.json", cmdLineOptions);
 
+    // build tsserverlibrary1.out.js
+    const buildServerLibraryOut1 = () => buildProject("src/tsserverlibrary/tsconfig.json", { ...cmdLineOptions, lkg: false });
+
     // create tsserverlibrary.js
     const createServerLibraryJs = () => src("built/local/tsserverlibrary.out.js")
         .pipe(newer("built/local/tsserverlibrary.js"))
         .pipe(sourcemaps.init({ loadMaps: true }))
         .pipe(prependFile(copyright))
         .pipe(rename("tsserverlibrary.js"))
+        .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
+        .pipe(dest("built/local"));
+
+    // create tsserverlibrary1.js
+    const createServerLibraryJs1 = () => src("built/local/tsserverlibrary/tsserverlibrary.js")
+        .pipe(newer("built/local/tsserverlibrary1.js"))
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(prependFile(copyright))
+        .pipe(rename("tsserverlibrary1.js"))
         .pipe(sourcemaps.write(".", { includeContent: false, destPath: "built/local" }))
         .pipe(dest("built/local"));
 
@@ -281,11 +350,25 @@ const buildLssl = (() => {
         .pipe(rename("tsserverlibrary.d.ts"))
         .pipe(dest("built/local"));
 
+    // create tsserverlibrary1.d.ts
+    const createServerLibraryDts1 = () => src("built/local/tsserverlibrary/tsserverlibrary.d.ts")
+        .pipe(newer("built/local/tsserverlibrary1.d.ts"))
+        .pipe(prependFile(copyright))
+        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
+        .pipe(append("\nexport = ts;\nexport as namespace ts;"))
+        .pipe(rename("tsserverlibrary1.d.ts"))
+        .pipe(dest("built/local"));
+
     return series(
         flattenTsServerProject,
         buildServerLibraryOut,
         createServerLibraryJs,
-        createServerLibraryDts);
+        createServerLibraryDts,
+        localPreBuild,
+        buildServerLibraryOut1,
+        createServerLibraryJs1,
+        createServerLibraryDts1
+    );
 })();
 task("lssl", series(preBuild, buildLssl));
 task("lssl").description = "Builds language service server library";
@@ -303,6 +386,11 @@ const cleanLssl = async () => {
         "built/local/tsserverlibrary.out.d.ts",
         "built/local/tsserverlibrary.js",
         "built/local/tsserverlibrary.d.ts",
+        "built/local/tsserverlibrary/tsserverlibrary.js",
+        "built/local/tsserverlibrary/tsserverlibrary.js.map",
+        "built/local/tsserverlibrary/tsserverlibrary.d.ts",
+        "built/local/tsserverlibrary1.js",
+        "built/local/tsserverlibrary1.d.ts",
     ]);
 };
 cleanTasks.push(cleanLssl);

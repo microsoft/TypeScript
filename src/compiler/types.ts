@@ -6024,6 +6024,7 @@ namespace ts {
     // The above fallback to `object` when there's no args to allow `{}` (as intended), but not the number 2, for example
     // TODO: Swap to `undefined` for a cleaner API once strictNullChecks is enabled
 
+    /* @internal */
     type ConcretePragmaSpecs = typeof commentPragmas;
 
     /* @internal */

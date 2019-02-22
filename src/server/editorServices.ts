@@ -335,6 +335,7 @@ namespace ts.server {
         RootOfInferredProjectFalse = "Open file was set as not inferred root",
     }
 
+    /*@internal*/
     interface ConfigFileExistenceInfo {
         /**
          * Cached value of existence of config file
