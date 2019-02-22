@@ -3996,11 +3996,11 @@
         "category": "Message",
         "code": 6371
     },
-    "Project '{0}' is out of date because output javascript and source map (if specified) of its dependency '{1}' has changed": {
+    "Project '{0}' is out of date because output of its dependency '{1}' has changed": {
         "category": "Message",
         "code": 6372
     },
-    "Updating output javascript and javascript source map (if specified) of project '{0}'...": {
+    "Updating output of project '{0}'...": {
         "category": "Message",
         "code": 6373
     },
@@ -4008,11 +4008,11 @@
         "category": "Message",
         "code": 6374
     },
-    "A non-dry build would update output javascript and javascript source map (if specified) of project '{0}'": {
+    "A non-dry build would update output of project '{0}'": {
         "category": "Message",
         "code": 6375
     },
-    "Cannot update output javascript and javascript source map (if specified) of project '{0}' because there was error reading file '{1}'": {
+    "Cannot update output of project '{0}' because there was error reading file '{1}'": {
         "category": "Message",
         "code": 6376
     },

@@ -156,8 +156,8 @@ namespace ts {
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
             [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-            [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-            [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+            [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+            [Diagnostics.Updating_output_of_project_0, sources[project.third][source.config]],
             [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]],
         ];
         let incrementalDtsUnchangedWithBuildInfoExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
@@ -183,11 +183,11 @@ namespace ts {
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
-            [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.second][source.config], "src/first"],
-            [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.second][source.config]],
+            [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[project.second][source.config], "src/first"],
+            [Diagnostics.Updating_output_of_project_0, sources[project.second][source.config]],
             [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.second][source.config]],
-            [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/second"],
-            [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
+            [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/second"],
+            [Diagnostics.Updating_output_of_project_0, sources[project.third][source.config]],
             [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]],
         ];
         let incrementalDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered: ReadonlyMap<number> = getIncrementalDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered();
@@ -197,9 +197,9 @@ namespace ts {
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
             [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
-            [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
-            [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
-            [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
+            [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+            [Diagnostics.Updating_output_of_project_0, sources[project.third][source.config]],
+            [Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
             [Diagnostics.Building_project_0, sources[project.third][source.config]]
         ];
         let incrementalDtsUnchangedWithoutBuildInfoExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
@@ -228,13 +228,13 @@ namespace ts {
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
-            [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.second][source.config], "src/first"],
-            [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.second][source.config]],
-            [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.second][source.config], relOutputFiles[project.second][ext.buildinfo]],
+            [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[project.second][source.config], "src/first"],
+            [Diagnostics.Updating_output_of_project_0, sources[project.second][source.config]],
+            [Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, sources[project.second][source.config], relOutputFiles[project.second][ext.buildinfo]],
             [Diagnostics.Building_project_0, sources[project.second][source.config]],
-            [Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/second"],
-            [Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, sources[project.third][source.config]],
-            [Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
+            [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/second"],
+            [Diagnostics.Updating_output_of_project_0, sources[project.third][source.config]],
+            [Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
             [Diagnostics.Building_project_0, sources[project.third][source.config]]
         ];
         let incrementalDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered: ReadonlyMap<number> = getIncrementalDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered();

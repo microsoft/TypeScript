@@ -1227,11 +1227,11 @@ namespace ts {
 
         function updateBundle(proj: ResolvedConfigFileName): BuildResultFlags {
             if (options.dry) {
-                reportStatus(Diagnostics.A_non_dry_build_would_update_output_javascript_and_javascript_source_map_if_specified_of_project_0, proj);
+                reportStatus(Diagnostics.A_non_dry_build_would_update_output_of_project_0, proj);
                 return BuildResultFlags.Success;
             }
 
-            if (options.verbose) reportStatus(Diagnostics.Updating_output_javascript_and_javascript_source_map_if_specified_of_project_0, proj);
+            if (options.verbose) reportStatus(Diagnostics.Updating_output_of_project_0, proj);
 
             // Update js, and source map
             const config = Debug.assertDefined(parseConfigFile(proj));
@@ -1241,7 +1241,7 @@ namespace ts {
                 compilerHost,
                 ref => parseConfigFile(resolveProjectName(ref.path)));
             if (isString(outputFiles)) {
-                reportStatus(Diagnostics.Cannot_update_output_javascript_and_javascript_source_map_if_specified_of_project_0_because_there_was_error_reading_file_1, proj, relName(outputFiles));
+                reportStatus(Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, proj, relName(outputFiles));
                 return buildSingleProject(proj);
             }
 
@@ -1535,7 +1535,7 @@ namespace ts {
                 // Don't report anything for "up to date because it was already built" -- too verbose
                 break;
             case UpToDateStatusType.OutOfDateWithPrepend:
-                return formatMessage(Diagnostics.Project_0_is_out_of_date_because_output_javascript_and_source_map_if_specified_of_its_dependency_1_has_changed,
+                return formatMessage(Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed,
                     relName(configFileName),
                     relName(status.newerProjectName));
             case UpToDateStatusType.UpToDateWithUpstreamTypes:
