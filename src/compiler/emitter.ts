@@ -778,6 +778,30 @@ namespace ts {
             }
         }
 
+        function recordBundleFileInternalSectionStart(node: Node) {
+            if (recordInternalSection &&
+                bundleFileInfo &&
+                currentSourceFile &&
+                (isDeclaration(node) || isVariableStatement(node)) &&
+                isInternalDeclaration(node, currentSourceFile) &&
+                sourceFileTextKind !== BundleFileSectionKind.Internal) {
+                const prevSourceFileTextKind = sourceFileTextKind;
+                recordBundleFileTextLikeSection(writer.getTextPos());
+                sourceFileTextPos = getTextPosWithWriteLine();
+                sourceFileTextKind = BundleFileSectionKind.Internal;
+                return prevSourceFileTextKind;
+            }
+            return undefined;
+        }
+
+        function recordBundleFileInternalSectionEnd(prevSourceFileTextKind: ReturnType<typeof recordBundleFileInternalSectionStart>) {
+            if (prevSourceFileTextKind) {
+                recordBundleFileTextLikeSection(writer.getTextPos());
+                sourceFileTextPos = getTextPosWithWriteLine();
+                sourceFileTextKind = prevSourceFileTextKind;
+            }
+        }
+
         function recordBundleFileTextLikeSection(end: number) {
             if (sourceFileTextPos < end) {
                 updateOrPushBundleFileTextLike(sourceFileTextPos, end, sourceFileTextKind);
@@ -915,20 +939,10 @@ namespace ts {
 
         function emit(node: Node | undefined) {
             if (node === undefined) return;
-            const isInternal = recordInternalSection && bundleFileInfo && currentSourceFile && (isDeclaration(node) || isVariableStatement(node)) && isInternalDeclaration(node, currentSourceFile);
-            const prevSourceFileTextKind = sourceFileTextKind;
-            if (isInternal) {
-                recordBundleFileTextLikeSection(writer.getTextPos());
-                sourceFileTextPos = getTextPosWithWriteLine();
-                sourceFileTextKind = BundleFileSectionKind.Internal;
-            }
+            const prevSourceFileTextKind = recordBundleFileInternalSectionStart(node);
             const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
             pipelinePhase(EmitHint.Unspecified, node);
-            if (isInternal) {
-                recordBundleFileTextLikeSection(writer.getTextPos());
-                sourceFileTextPos = getTextPosWithWriteLine();
-                sourceFileTextKind = prevSourceFileTextKind;
-            }
+            recordBundleFileInternalSectionEnd(prevSourceFileTextKind);
         }
 
         function emitIdentifierName(node: Identifier | undefined) {
@@ -3693,6 +3707,7 @@ namespace ts {
 
                 // Emit each child.
                 let previousSibling: Node | undefined;
+                let previousSourceFileTextKind: ReturnType<typeof recordBundleFileInternalSectionStart>;
                 let shouldDecreaseIndentAfterEmit = false;
                 for (let i = 0; i < count; i++) {
                     const child = children![start + i];
@@ -3714,6 +3729,7 @@ namespace ts {
                             emitLeadingCommentsOfPosition(previousSibling.end);
                         }
                         writeDelimiter(format);
+                        recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
 
                         // Write either a line terminator or whitespace to separate the elements.
                         if (shouldWriteSeparatingLineTerminator(previousSibling, child, format)) {
@@ -3733,6 +3749,7 @@ namespace ts {
                     }
 
                     // Emit this child.
+                    previousSourceFileTextKind = recordBundleFileInternalSectionStart(child);
                     if (shouldEmitInterveningComments) {
                         if (emitTrailingCommentsOfPosition) {
                             const commentRange = getCommentRange(child);
@@ -3774,6 +3791,8 @@ namespace ts {
                 if (format & ListFormat.Indented) {
                     decreaseIndent();
                 }
+
+                recordBundleFileInternalSectionEnd(previousSourceFileTextKind);
 
                 // Write the closing line terminator or closing whitespace.
                 if (shouldWriteClosingLineTerminator(parentNode, children!, format)) {

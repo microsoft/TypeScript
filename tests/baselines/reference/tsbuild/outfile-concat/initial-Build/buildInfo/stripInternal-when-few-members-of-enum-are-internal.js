@@ -496,66 +496,16 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 42,
-          "end": 68,
+          "end": 156,
           "kind": "internal"
         },
         {
-          "pos": 70,
-          "end": 71,
-          "kind": "text"
-        },
-        {
-          "pos": 71,
-          "end": 100,
-          "kind": "internal"
-        },
-        {
-          "pos": 102,
-          "end": 103,
-          "kind": "text"
-        },
-        {
-          "pos": 103,
-          "end": 123,
-          "kind": "internal"
-        },
-        {
-          "pos": 125,
-          "end": 126,
-          "kind": "text"
-        },
-        {
-          "pos": 126,
-          "end": 155,
-          "kind": "internal"
-        },
-        {
-          "pos": 157,
+          "pos": 158,
           "end": 276,
           "kind": "text"
         },
         {
           "pos": 276,
-          "end": 303,
-          "kind": "internal"
-        },
-        {
-          "pos": 305,
-          "end": 306,
-          "kind": "text"
-        },
-        {
-          "pos": 306,
-          "end": 338,
-          "kind": "internal"
-        },
-        {
-          "pos": 340,
-          "end": 341,
-          "kind": "text"
-        },
-        {
-          "pos": 341,
           "end": 371,
           "kind": "internal"
         },
@@ -614,32 +564,13 @@ declare enum TokenFlags {
     None = 0,
 
 ----------------------------------------------------------------------
-internal: (42-68)
-    PrecedingLineBreak = 1
+internal: (42-156)
+    PrecedingLineBreak = 1,
+    PrecedingJSDocComment = 2,
+    Unterminated = 4,
+    ExtendedUnicodeEscape = 8,
 ----------------------------------------------------------------------
-text: (70-71)
-
-
-----------------------------------------------------------------------
-internal: (71-100)
-    PrecedingJSDocComment = 2
-----------------------------------------------------------------------
-text: (102-103)
-
-
-----------------------------------------------------------------------
-internal: (103-123)
-    Unterminated = 4
-----------------------------------------------------------------------
-text: (125-126)
-
-
-----------------------------------------------------------------------
-internal: (126-155)
-    ExtendedUnicodeEscape = 8
-----------------------------------------------------------------------
-text: (157-276)
-
+text: (158-276)
     Scientific = 16,
     Octal = 32,
     HexSpecifier = 64,
@@ -647,21 +578,9 @@ text: (157-276)
     OctalSpecifier = 256,
 
 ----------------------------------------------------------------------
-internal: (276-303)
-    ContainsSeparator = 512
-----------------------------------------------------------------------
-text: (305-306)
-
-
-----------------------------------------------------------------------
-internal: (306-338)
-    BinaryOrOctalSpecifier = 384
-----------------------------------------------------------------------
-text: (340-341)
-
-
-----------------------------------------------------------------------
-internal: (341-371)
+internal: (276-371)
+    ContainsSeparator = 512,
+    BinaryOrOctalSpecifier = 384,
     NumericLiteralFlags = 1008
 ----------------------------------------------------------------------
 text: (373-533)
@@ -1559,48 +1478,48 @@ console.log(s);
       "sections": [
         {
           "pos": 0,
-          "end": 368,
+          "end": 362,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 326,
+              "end": 320,
               "kind": "text"
             },
             {
-              "pos": 326,
-              "end": 368,
+              "pos": 320,
+              "end": 362,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 370,
-          "end": 513,
+          "pos": 364,
+          "end": 507,
           "kind": "prepend",
           "data": "/src/2/second-output.d.ts",
           "texts": [
             {
-              "pos": 370,
-              "end": 470,
+              "pos": 364,
+              "end": 464,
               "kind": "text"
             },
             {
-              "pos": 470,
-              "end": 513,
+              "pos": 464,
+              "end": 507,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 515,
-          "end": 534,
+          "pos": 509,
+          "end": 528,
           "kind": "text"
         },
         {
-          "pos": 534,
-          "end": 576,
+          "pos": 528,
+          "end": 570,
           "kind": "sourceMapUrl"
         }
       ]
@@ -1676,22 +1595,16 @@ sourceMapUrl: (1537-1577)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-368):: /src/first/bin/first-output.d.ts texts:: 2
+prepend: (0-362):: /src/first/bin/first-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
-text: (0-326)
+text: (0-320)
 declare enum TokenFlags {
     None = 0,
-
-
-
-
     Scientific = 16,
     Octal = 32,
     HexSpecifier = 64,
     BinarySpecifier = 128,
     OctalSpecifier = 256,
-
-
 }
 interface TheFirst {
     none: any;
@@ -1703,12 +1616,12 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (326-368)
+sourceMapUrl: (320-362)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (370-513):: /src/2/second-output.d.ts texts:: 2
+prepend: (364-507):: /src/2/second-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
-text: (370-470)
+text: (364-464)
 declare namespace N {
 }
 declare namespace N {
@@ -1718,31 +1631,25 @@ declare class C {
 }
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (470-513)
+sourceMapUrl: (464-507)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
-text: (515-534)
+text: (509-528)
 declare var c: C;
 
 ----------------------------------------------------------------------
-sourceMapUrl: (534-576)
+sourceMapUrl: (528-570)
 //# sourceMappingURL=third-output.d.ts.map
 ======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 declare enum TokenFlags {
     None = 0,
-
-
-
-
     Scientific = 16,
     Octal = 32,
     HexSpecifier = 64,
     BinarySpecifier = 128,
     OctalSpecifier = 256,
-
-
 }
 interface TheFirst {
     none: any;
@@ -1765,7 +1672,7 @@ declare var c: C;
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,aAAK,UAAU;IACX,IAAI,IAAI;;;;;IASR,UAAU,KAAS;IACnB,KAAK,KAAS;IACd,YAAY,KAAS;IACrB,eAAe,MAAS;IACxB,cAAc,MAAS;;;CAO1B;AACD,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AC9BD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,aAAK,UAAU;IACX,IAAI,IAAI;IASR,UAAU,KAAS;IACnB,KAAK,KAAS;IACd,YAAY,KAAS;IACrB,eAAe,MAAS;IACxB,cAAc,MAAS;CAO1B;AACD,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AC9BD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -1793,6 +1700,7 @@ sourceFile:../../../first/first_PART1.ts
 1 >^^^^
 2 >    ^^^^
 3 >        ^^^^
+4 >            ^^^^^^^^^->
 1 > {
   >    
 2 >    None
@@ -1801,15 +1709,11 @@ sourceFile:../../../first/first_PART1.ts
 2 >Emitted(2, 9) Source(2, 9) + SourceIndex(0)
 3 >Emitted(2, 13) Source(2, 13) + SourceIndex(0)
 ---
->>>
->>>
->>>
->>>
 >>>    Scientific = 16,
-1 >^^^^
+1->^^^^
 2 >    ^^^^^^^^^^
 3 >              ^^^^^
-1 >,
+1->,
   >    /* @internal */
   >    PrecedingLineBreak = 1 << 0,
   >    /* @internal */
@@ -1821,9 +1725,9 @@ sourceFile:../../../first/first_PART1.ts
   >    
 2 >    Scientific
 3 >               = 1 << 4
-1 >Emitted(7, 5) Source(11, 5) + SourceIndex(0)
-2 >Emitted(7, 15) Source(11, 15) + SourceIndex(0)
-3 >Emitted(7, 20) Source(11, 24) + SourceIndex(0)
+1->Emitted(3, 5) Source(11, 5) + SourceIndex(0)
+2 >Emitted(3, 15) Source(11, 15) + SourceIndex(0)
+3 >Emitted(3, 20) Source(11, 24) + SourceIndex(0)
 ---
 >>>    Octal = 32,
 1 >^^^^
@@ -1834,9 +1738,9 @@ sourceFile:../../../first/first_PART1.ts
   >    
 2 >    Octal
 3 >          = 1 << 5
-1 >Emitted(8, 5) Source(12, 5) + SourceIndex(0)
-2 >Emitted(8, 10) Source(12, 10) + SourceIndex(0)
-3 >Emitted(8, 15) Source(12, 19) + SourceIndex(0)
+1 >Emitted(4, 5) Source(12, 5) + SourceIndex(0)
+2 >Emitted(4, 10) Source(12, 10) + SourceIndex(0)
+3 >Emitted(4, 15) Source(12, 19) + SourceIndex(0)
 ---
 >>>    HexSpecifier = 64,
 1->^^^^
@@ -1847,9 +1751,9 @@ sourceFile:../../../first/first_PART1.ts
   >    
 2 >    HexSpecifier
 3 >                 = 1 << 6
-1->Emitted(9, 5) Source(13, 5) + SourceIndex(0)
-2 >Emitted(9, 17) Source(13, 17) + SourceIndex(0)
-3 >Emitted(9, 22) Source(13, 26) + SourceIndex(0)
+1->Emitted(5, 5) Source(13, 5) + SourceIndex(0)
+2 >Emitted(5, 17) Source(13, 17) + SourceIndex(0)
+3 >Emitted(5, 22) Source(13, 26) + SourceIndex(0)
 ---
 >>>    BinarySpecifier = 128,
 1->^^^^
@@ -1860,9 +1764,9 @@ sourceFile:../../../first/first_PART1.ts
   >    
 2 >    BinarySpecifier
 3 >                    = 1 << 7
-1->Emitted(10, 5) Source(14, 5) + SourceIndex(0)
-2 >Emitted(10, 20) Source(14, 20) + SourceIndex(0)
-3 >Emitted(10, 26) Source(14, 29) + SourceIndex(0)
+1->Emitted(6, 5) Source(14, 5) + SourceIndex(0)
+2 >Emitted(6, 20) Source(14, 20) + SourceIndex(0)
+3 >Emitted(6, 26) Source(14, 29) + SourceIndex(0)
 ---
 >>>    OctalSpecifier = 256,
 1->^^^^
@@ -1872,12 +1776,10 @@ sourceFile:../../../first/first_PART1.ts
   >    
 2 >    OctalSpecifier
 3 >                   = 1 << 8
-1->Emitted(11, 5) Source(15, 5) + SourceIndex(0)
-2 >Emitted(11, 19) Source(15, 19) + SourceIndex(0)
-3 >Emitted(11, 25) Source(15, 28) + SourceIndex(0)
+1->Emitted(7, 5) Source(15, 5) + SourceIndex(0)
+2 >Emitted(7, 19) Source(15, 19) + SourceIndex(0)
+3 >Emitted(7, 25) Source(15, 28) + SourceIndex(0)
 ---
->>>
->>>
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^->
@@ -1889,7 +1791,7 @@ sourceFile:../../../first/first_PART1.ts
   >    /* @internal */
   >    NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
   >}
-1 >Emitted(14, 2) Source(22, 2) + SourceIndex(0)
+1 >Emitted(8, 2) Source(22, 2) + SourceIndex(0)
 ---
 >>>interface TheFirst {
 1->
@@ -1899,9 +1801,9 @@ sourceFile:../../../first/first_PART1.ts
   >
 2 >interface 
 3 >          TheFirst
-1->Emitted(15, 1) Source(23, 1) + SourceIndex(0)
-2 >Emitted(15, 11) Source(23, 11) + SourceIndex(0)
-3 >Emitted(15, 19) Source(23, 19) + SourceIndex(0)
+1->Emitted(9, 1) Source(23, 1) + SourceIndex(0)
+2 >Emitted(9, 11) Source(23, 11) + SourceIndex(0)
+3 >Emitted(9, 19) Source(23, 19) + SourceIndex(0)
 ---
 >>>    none: any;
 1 >^^^^
@@ -1915,18 +1817,18 @@ sourceFile:../../../first/first_PART1.ts
 3 >        : 
 4 >          any
 5 >             ;
-1 >Emitted(16, 5) Source(24, 5) + SourceIndex(0)
-2 >Emitted(16, 9) Source(24, 9) + SourceIndex(0)
-3 >Emitted(16, 11) Source(24, 11) + SourceIndex(0)
-4 >Emitted(16, 14) Source(24, 14) + SourceIndex(0)
-5 >Emitted(16, 15) Source(24, 15) + SourceIndex(0)
+1 >Emitted(10, 5) Source(24, 5) + SourceIndex(0)
+2 >Emitted(10, 9) Source(24, 9) + SourceIndex(0)
+3 >Emitted(10, 11) Source(24, 11) + SourceIndex(0)
+4 >Emitted(10, 14) Source(24, 14) + SourceIndex(0)
+5 >Emitted(10, 15) Source(24, 15) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(17, 2) Source(25, 2) + SourceIndex(0)
+1 >Emitted(11, 2) Source(25, 2) + SourceIndex(0)
 ---
 >>>declare const s = "Hello, world";
 1->
@@ -1943,12 +1845,12 @@ sourceFile:../../../first/first_PART1.ts
 4 >              s
 5 >                = "Hello, world"
 6 >                                ;
-1->Emitted(18, 1) Source(27, 1) + SourceIndex(0)
-2 >Emitted(18, 9) Source(27, 1) + SourceIndex(0)
-3 >Emitted(18, 15) Source(27, 7) + SourceIndex(0)
-4 >Emitted(18, 16) Source(27, 8) + SourceIndex(0)
-5 >Emitted(18, 33) Source(27, 25) + SourceIndex(0)
-6 >Emitted(18, 34) Source(27, 26) + SourceIndex(0)
+1->Emitted(12, 1) Source(27, 1) + SourceIndex(0)
+2 >Emitted(12, 9) Source(27, 1) + SourceIndex(0)
+3 >Emitted(12, 15) Source(27, 7) + SourceIndex(0)
+4 >Emitted(12, 16) Source(27, 8) + SourceIndex(0)
+5 >Emitted(12, 33) Source(27, 25) + SourceIndex(0)
+6 >Emitted(12, 34) Source(27, 26) + SourceIndex(0)
 ---
 >>>interface NoJsForHereEither {
 1 >
@@ -1959,9 +1861,9 @@ sourceFile:../../../first/first_PART1.ts
   >
 2 >interface 
 3 >          NoJsForHereEither
-1 >Emitted(19, 1) Source(29, 1) + SourceIndex(0)
-2 >Emitted(19, 11) Source(29, 11) + SourceIndex(0)
-3 >Emitted(19, 28) Source(29, 28) + SourceIndex(0)
+1 >Emitted(13, 1) Source(29, 1) + SourceIndex(0)
+2 >Emitted(13, 11) Source(29, 11) + SourceIndex(0)
+3 >Emitted(13, 28) Source(29, 28) + SourceIndex(0)
 ---
 >>>    none: any;
 1 >^^^^
@@ -1975,18 +1877,18 @@ sourceFile:../../../first/first_PART1.ts
 3 >        : 
 4 >          any
 5 >             ;
-1 >Emitted(20, 5) Source(30, 5) + SourceIndex(0)
-2 >Emitted(20, 9) Source(30, 9) + SourceIndex(0)
-3 >Emitted(20, 11) Source(30, 11) + SourceIndex(0)
-4 >Emitted(20, 14) Source(30, 14) + SourceIndex(0)
-5 >Emitted(20, 15) Source(30, 15) + SourceIndex(0)
+1 >Emitted(14, 5) Source(30, 5) + SourceIndex(0)
+2 >Emitted(14, 9) Source(30, 9) + SourceIndex(0)
+3 >Emitted(14, 11) Source(30, 11) + SourceIndex(0)
+4 >Emitted(14, 14) Source(30, 14) + SourceIndex(0)
+5 >Emitted(14, 15) Source(30, 15) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(21, 2) Source(31, 2) + SourceIndex(0)
+1 >Emitted(15, 2) Source(31, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -2004,10 +1906,10 @@ sourceFile:../../../first/first_part3.ts
 4 >                  () {
   >                      return "JS does hoists";
   >                  }
-1->Emitted(22, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(22, 18) Source(1, 10) + SourceIndex(1)
-3 >Emitted(22, 19) Source(1, 11) + SourceIndex(1)
-4 >Emitted(22, 30) Source(3, 2) + SourceIndex(1)
+1->Emitted(16, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(16, 18) Source(1, 10) + SourceIndex(1)
+3 >Emitted(16, 19) Source(1, 11) + SourceIndex(1)
+4 >Emitted(16, 30) Source(3, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -2023,10 +1925,10 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(24, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(24, 19) Source(1, 11) + SourceIndex(2)
-3 >Emitted(24, 20) Source(1, 12) + SourceIndex(2)
-4 >Emitted(24, 21) Source(1, 13) + SourceIndex(2)
+1->Emitted(18, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(18, 19) Source(1, 11) + SourceIndex(2)
+3 >Emitted(18, 20) Source(1, 12) + SourceIndex(2)
+4 >Emitted(18, 21) Source(1, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -2034,7 +1936,7 @@ sourceFile:../../../second/second_part1.ts
 1 >{
   >    // Comment text
   >}
-1 >Emitted(25, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(19, 2) Source(3, 2) + SourceIndex(2)
 ---
 >>>declare namespace N {
 1->
@@ -2047,10 +1949,10 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(26, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(26, 19) Source(5, 11) + SourceIndex(2)
-3 >Emitted(26, 20) Source(5, 12) + SourceIndex(2)
-4 >Emitted(26, 21) Source(5, 13) + SourceIndex(2)
+1->Emitted(20, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(20, 19) Source(5, 11) + SourceIndex(2)
+3 >Emitted(20, 20) Source(5, 12) + SourceIndex(2)
+4 >Emitted(20, 21) Source(5, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -2062,7 +1964,7 @@ sourceFile:../../../second/second_part1.ts
   >
   >    f();
   >}
-1 >Emitted(27, 2) Source(11, 2) + SourceIndex(2)
+1 >Emitted(21, 2) Source(11, 2) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -2076,9 +1978,9 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >class 
 3 >              C
-1->Emitted(28, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(28, 15) Source(1, 7) + SourceIndex(3)
-3 >Emitted(28, 16) Source(1, 8) + SourceIndex(3)
+1->Emitted(22, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(22, 15) Source(1, 7) + SourceIndex(3)
+3 >Emitted(22, 16) Source(1, 8) + SourceIndex(3)
 ---
 >>>    doSomething(): void;
 1->^^^^
@@ -2086,8 +1988,8 @@ sourceFile:../../../second/second_part2.ts
 1-> {
   >    
 2 >    doSomething
-1->Emitted(29, 5) Source(2, 5) + SourceIndex(3)
-2 >Emitted(29, 16) Source(2, 16) + SourceIndex(3)
+1->Emitted(23, 5) Source(2, 5) + SourceIndex(3)
+2 >Emitted(23, 16) Source(2, 16) + SourceIndex(3)
 ---
 >>>}
 1 >^
@@ -2096,7 +1998,7 @@ sourceFile:../../../second/second_part2.ts
   >        console.log("something got done");
   >    }
   >}
-1 >Emitted(30, 2) Source(5, 2) + SourceIndex(3)
+1 >Emitted(24, 2) Source(5, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -2117,12 +2019,12 @@ sourceFile:../../third_part1.ts
 4 >            c
 5 >              = new C()
 6 >                ;
-1->Emitted(32, 1) Source(1, 1) + SourceIndex(4)
-2 >Emitted(32, 9) Source(1, 1) + SourceIndex(4)
-3 >Emitted(32, 13) Source(1, 5) + SourceIndex(4)
-4 >Emitted(32, 14) Source(1, 6) + SourceIndex(4)
-5 >Emitted(32, 17) Source(1, 16) + SourceIndex(4)
-6 >Emitted(32, 18) Source(1, 17) + SourceIndex(4)
+1->Emitted(26, 1) Source(1, 1) + SourceIndex(4)
+2 >Emitted(26, 9) Source(1, 1) + SourceIndex(4)
+3 >Emitted(26, 13) Source(1, 5) + SourceIndex(4)
+4 >Emitted(26, 14) Source(1, 6) + SourceIndex(4)
+5 >Emitted(26, 17) Source(1, 16) + SourceIndex(4)
+6 >Emitted(26, 18) Source(1, 17) + SourceIndex(4)
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 
