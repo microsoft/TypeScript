@@ -473,21 +473,22 @@ task("diff").description = "Diffs the compiler baselines using the diff tool spe
 task("diff-rwc", () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true }));
 task("diff-rwc").description = "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable";
 
-const baselineAccept = subfolder => merge2(
-    src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**`, `!${localBaseline}${subfolder}/**/*.delete`], { base: localBaseline })
+/**
+ * @param {string} localBaseline Path to the local copy of the baselines
+ * @param {string} refBaseline Path to the reference copy of the baselines
+ */
+const baselineAccept = (localBaseline, refBaseline) => merge2(
+    src([`${localBaseline}/**`, `!${localBaseline}/**/*.delete`], { base: localBaseline })
         .pipe(dest(refBaseline)),
-    src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**/*.delete`], { base: localBaseline, read: false })
+    src([`${localBaseline}/**/*.delete`], { base: localBaseline, read: false })
         .pipe(rm())
         .pipe(rename({ extname: "" }))
         .pipe(rm(refBaseline)));
-task("baseline-accept", () => baselineAccept(""));
+task("baseline-accept", () => baselineAccept(localBaseline, refBaseline));
 task("baseline-accept").description = "Makes the most recent test results the new baseline, overwriting the old baseline";
 
-task("baseline-accept-rwc", () => baselineAccept("rwc"));
+task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
-
-task("baseline-accept-test262", () => baselineAccept("test262"));
-task("baseline-accept-test262").description = "Makes the most recent test262 test results the new baseline, overwriting the old baseline";
 
 // TODO(rbuckton): Determine if 'webhost' is still in use.
 const buildWebHost = () => buildProject("tests/webhost/webtsc.tsconfig.json");
