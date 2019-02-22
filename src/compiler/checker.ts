@@ -16067,14 +16067,17 @@ namespace ts {
                 const inferenceContext = createInferenceContext(
                     childTypeParameters,
                     childConstructor,
-                    InferenceFlags.AnyDefault, // TODO: we might consider stricter flags in the future
+                    InferenceFlags.NoDefault, // exclude defaults values from inference, since they don't participate in actual typing here.
                 );
 
                 // Infer the types from superType onto the return type of the child constructor.
                 inferTypes(inferenceContext.inferences, superType, getReturnTypeOfSignature(childConstructor), InferencePriority.ReturnType);
 
                 // We extract the inferred arguments from the inference context.
-                const childArguments = getInferredTypes(inferenceContext);
+                // silentNeverType indicates that no type could be inferred.
+                // In these cases, falling back on any produces the simplest user experience.
+                const childArguments = getInferredTypes(inferenceContext).map(type => type === silentNeverType ? anyType : type);
+
 
                 // Lastly, supply the childType with the new parameters.
                 return instantiateType(getReturnTypeOfSignature(childConstructor), param => {
@@ -16158,8 +16161,12 @@ namespace ts {
                     }
 
                     const narrowedGenericClassTypeCandidate = narrowTypeParametersByAssignability(type, rightType);
-                    if (narrowedGenericClassTypeCandidate && !(narrowedGenericClassTypeCandidate.flags & TypeFlags.Never)) {
-                        // When applicable, this overrides the basic target.
+                    if (narrowedGenericClassTypeCandidate && !(narrowedGenericClassTypeCandidate.flags & TypeFlags.Never) && isTypeSubtypeOf(narrowedGenericClassTypeCandidate, type)) {
+                        // When the resulting narrowed type is actually a subtype of the original, the candidate it used.
+                        // In some cases, this fail (due to apparent non-inhabitedness).
+                        // For example, if Child<A> extends Parent<A, A> and we narrow Parent<string, number> to Child<?>,
+                        // we'll end up with a candidate Child<string | number> which fails to be a subtype of Parent<string, number>.
+                        // In this case, we skip updating the target type.
                         targetType = narrowedGenericClassTypeCandidate;
                     }
                 }

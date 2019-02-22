@@ -1,7 +1,5 @@
 //// [narrowGenericTypeByInstanceOf.ts]
-import { stringify } from "querystring";
-
-function example1() {
+function exampleSingleArgument() {
   class Parent<T> {
     value: T;
   }
@@ -10,22 +8,13 @@ function example1() {
     other: T;
   }
 
-  const obj = new Parent<number>();
-
-  function onlyChildNumber(child: Child<number>) {
-    // no-op
-  }
-  function onlyChildString(child: Child<string>) {
-    // no-op
-  }
+  const obj: Parent<number> = undefined as any;
 
   if (obj instanceof Child) {
-    onlyChildNumber(obj); // should PASS
-
-    onlyChildString(obj); // should ERROR: Child<number> is not assignable to Child<string>.
+    obj;
   }
 }
-function example2() {
+function exampleSingleExtendsMultiple() {
   class Parent<A, B> {
     value1: A;
     value2: B;
@@ -35,23 +24,14 @@ function example2() {
     other: T;
   }
 
-  const obj = new Parent<number, number>();
-
-  function onlyChildNumber(child: Child<number>) {
-    // no-op
-  }
-  function onlyChildString(child: Child<string>) {
-    // no-op
-  }
+  const obj: Parent<number, number> = undefined as any;
 
   if (obj instanceof Child) {
-    onlyChildNumber(obj); // should PASS
-
-    onlyChildString(obj); // should ERROR: Child<number> is not assignable to Child<string>.
+    obj;
   }
 }
 
-function example3() {
+function exampleSwapParameterOrder() {
   class Parent<A, B> {
     value1: A;
     value2: B;
@@ -62,27 +42,14 @@ function example3() {
     value4: D;
   }
 
-  const obj = new Parent<number, string>();
-
-  function onlyChildNumberString(child: Child<number, string>) {
-    // no-op
-  }
-  function onlyChildStringNumber(child: Child<string, number>) {
-    // no-op
-  }
-  function onlyChildNumberNumber(child: Child<string, number>) {
-    // no-op
-  }
+  const obj: Parent<number, string> = undefined as any;
 
   if (obj instanceof Child) {
-    onlyChildNumberString(obj); // should ERROR: Child<string, number> is not assignable to Child<number, string>.
-    onlyChildNumberNumber(obj); // should ERROR: Child<number, number> is not assignable to Child<number, string>.
-
-    onlyChildStringNumber(obj); // should PASS
+    obj;
   }
 }
 
-function example4() {
+function exampleSingleExtendsMultipleReject() {
   class Parent<A, B> {
     value1: A;
     value2: B;
@@ -92,61 +59,14 @@ function example4() {
     value3: C;
   }
 
-  const obj1 = new Parent<number, string>();
-  const obj2 = new Parent<number, number>();
-
-  function onlyChildNumber(child: Child<number>) {
-    // no-op
-  }
-  function onlyChildString(child: Child<string>) {
-    // no-op
-  }
-  function onlyChildStringAndNumber(child: Child<string & number>) {
-    // no-op
-  }
-
-  if (obj1 instanceof Child) {
-    onlyChildNumber(obj1);
-    onlyChildString(obj1);
-    onlyChildStringAndNumber(obj1);
-  }
-  if (obj2 instanceof Child) {
-    onlyChildNumber(obj2);
-    onlyChildString(obj2);
-    onlyChildStringAndNumber(obj2);
-  }
-}
-
-function example5<S, T>() {
-  class Parent<A, B> {
-    value1: A;
-    value2: B;
-  }
-
-  class Child<C> extends Parent<C, C> {
-    value3: C;
-  }
-
-  const obj = new Parent<S, T>();
-
-  function onlyChildS(child: Child<S>) {
-    // no-op
-  }
-  function onlyChildT(child: Child<T>) {
-    // no-op
-  }
-  function onlyChildSAndT(child: Child<S & T>) {
-    // no-op
-  }
+  const obj: Parent<number, string> = undefined as any;
 
   if (obj instanceof Child) {
-    onlyChildS(obj);
-    onlyChildT(obj);
-    onlyChildSAndT(obj);
+    obj;
   }
 }
 
-function example6() {
+function exampleUnion() {
   class Parent<A, B> {
     value1: A;
     value2: B;
@@ -156,47 +76,40 @@ function example6() {
     value3: C;
   }
 
-  const obj:
+  const obj0:
     | Parent<{ foo: string }, { foo: string }>
     | Parent<string, string>
     | Parent<number, number> = undefined as any;
+  if (obj0 instanceof Child) {
+    obj0;
+  }
 
   const obj1 = undefined as Parent<{ foo: string }, { foo: string }>;
-  const obj2 = undefined as Parent<string, string>;
-  const obj3 = undefined as Parent<number, number>;
-  const obj4 = undefined as string | { foo: string };
-  const obj5 = undefined as { foo: string };
-
-  function onlyChildString(child: Child<string>) {
-    // no-op
-  }
-  function onlyChildNumber(child: Child<number>) {
-    // no-op
-  }
-
-  if (obj instanceof Child) {
-    onlyChildString(obj);
-    onlyChildNumber(obj);
-  }
-
   if (obj1 instanceof Child) {
-    console.log(obj1);
+    obj1;
   }
+
+  const obj2 = undefined as Parent<string, string>;
   if (obj2 instanceof Child) {
-    console.log(obj2);
+    obj2;
   }
+
+  const obj3 = undefined as Parent<number, number>;
   if (obj3 instanceof Child) {
-    console.log(obj3);
+    obj3;
   }
+
+  const obj4 = undefined as string | { foo: string };
   if (obj4 instanceof Child) {
-    console.log(obj4);
+    obj4;
   }
+  const obj5 = undefined as { foo: string };
   if (obj5 instanceof Child) {
-    console.log(obj5);
+    obj5;
   }
 }
 
-function negative1() {
+function exampleNegative() {
   class Parent<A, B> {
     value1: A;
     value2: B;
@@ -212,15 +125,56 @@ function negative1() {
     | Child<string> = undefined as any;
 
   if (obj instanceof Child) {
+    // Here we filter out matching ones, instead of just narrowing to them.
+    obj;
     return;
   }
 
   console.log(obj);
 }
 
+function exampleIgnoreDefaults() {
+  // default parameters shouldn't have any impact on this narrowing.
+  class Parent<A> {
+    a: A;
+  }
+  class Child<A2, C = number> extends Parent<A2> {
+    a2: A2;
+    c: C;
+  }
+
+  const obj: Parent<number> = undefined as any;
+  if (obj instanceof Child) {
+    obj;
+  }
+}
+
+function exampleConstraints() {
+  class Parent<A> {
+    a: A;
+  }
+  class Child<B extends number> extends Parent<B> {
+    b: B;
+  }
+
+  const objPass: Parent<number> = undefined as any;
+  if (objPass instanceof Child) {
+    objPass;
+  }
+
+  const objFour: Parent<4> = undefined as any;
+  if (objFour instanceof Child) {
+    objFour;
+  }
+
+  const objFail: Parent<string> = undefined as any;
+  if (objFail instanceof Child) {
+    objFail;
+  }
+}
+
 
 //// [narrowGenericTypeByInstanceOf.js]
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -234,151 +188,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
-function example1() {
-    var Parent = /** @class */ (function () {
-        function Parent() {
-        }
-        return Parent;
-    }());
-    var Child = /** @class */ (function (_super) {
-        __extends(Child, _super);
-        function Child() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Child;
-    }(Parent));
-    var obj = new Parent();
-    function onlyChildNumber(child) {
-        // no-op
-    }
-    function onlyChildString(child) {
-        // no-op
-    }
-    if (obj instanceof Child) {
-        onlyChildNumber(obj); // should PASS
-        onlyChildString(obj); // should ERROR: Child<number> is not assignable to Child<string>.
-    }
-}
-function example2() {
-    var Parent = /** @class */ (function () {
-        function Parent() {
-        }
-        return Parent;
-    }());
-    var Child = /** @class */ (function (_super) {
-        __extends(Child, _super);
-        function Child() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Child;
-    }(Parent));
-    var obj = new Parent();
-    function onlyChildNumber(child) {
-        // no-op
-    }
-    function onlyChildString(child) {
-        // no-op
-    }
-    if (obj instanceof Child) {
-        onlyChildNumber(obj); // should PASS
-        onlyChildString(obj); // should ERROR: Child<number> is not assignable to Child<string>.
-    }
-}
-function example3() {
-    var Parent = /** @class */ (function () {
-        function Parent() {
-        }
-        return Parent;
-    }());
-    var Child = /** @class */ (function (_super) {
-        __extends(Child, _super);
-        function Child() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Child;
-    }(Parent));
-    var obj = new Parent();
-    function onlyChildNumberString(child) {
-        // no-op
-    }
-    function onlyChildStringNumber(child) {
-        // no-op
-    }
-    function onlyChildNumberNumber(child) {
-        // no-op
-    }
-    if (obj instanceof Child) {
-        onlyChildNumberString(obj); // should ERROR: Child<string, number> is not assignable to Child<number, string>.
-        onlyChildNumberNumber(obj); // should ERROR: Child<number, number> is not assignable to Child<number, string>.
-        onlyChildStringNumber(obj); // should PASS
-    }
-}
-function example4() {
-    var Parent = /** @class */ (function () {
-        function Parent() {
-        }
-        return Parent;
-    }());
-    var Child = /** @class */ (function (_super) {
-        __extends(Child, _super);
-        function Child() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Child;
-    }(Parent));
-    var obj1 = new Parent();
-    var obj2 = new Parent();
-    function onlyChildNumber(child) {
-        // no-op
-    }
-    function onlyChildString(child) {
-        // no-op
-    }
-    function onlyChildStringAndNumber(child) {
-        // no-op
-    }
-    if (obj1 instanceof Child) {
-        onlyChildNumber(obj1);
-        onlyChildString(obj1);
-        onlyChildStringAndNumber(obj1);
-    }
-    if (obj2 instanceof Child) {
-        onlyChildNumber(obj2);
-        onlyChildString(obj2);
-        onlyChildStringAndNumber(obj2);
-    }
-}
-function example5() {
-    var Parent = /** @class */ (function () {
-        function Parent() {
-        }
-        return Parent;
-    }());
-    var Child = /** @class */ (function (_super) {
-        __extends(Child, _super);
-        function Child() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return Child;
-    }(Parent));
-    var obj = new Parent();
-    function onlyChildS(child) {
-        // no-op
-    }
-    function onlyChildT(child) {
-        // no-op
-    }
-    function onlyChildSAndT(child) {
-        // no-op
-    }
-    if (obj instanceof Child) {
-        onlyChildS(obj);
-        onlyChildT(obj);
-        onlyChildSAndT(obj);
-    }
-}
-function example6() {
+function exampleSingleArgument() {
     var Parent = /** @class */ (function () {
         function Parent() {
         }
@@ -392,38 +202,103 @@ function example6() {
         return Child;
     }(Parent));
     var obj = undefined;
+    if (obj instanceof Child) {
+        obj;
+    }
+}
+function exampleSingleExtendsMultiple() {
+    var Parent = /** @class */ (function () {
+        function Parent() {
+        }
+        return Parent;
+    }());
+    var Child = /** @class */ (function (_super) {
+        __extends(Child, _super);
+        function Child() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Child;
+    }(Parent));
+    var obj = undefined;
+    if (obj instanceof Child) {
+        obj;
+    }
+}
+function exampleSwapParameterOrder() {
+    var Parent = /** @class */ (function () {
+        function Parent() {
+        }
+        return Parent;
+    }());
+    var Child = /** @class */ (function (_super) {
+        __extends(Child, _super);
+        function Child() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Child;
+    }(Parent));
+    var obj = undefined;
+    if (obj instanceof Child) {
+        obj;
+    }
+}
+function exampleSingleExtendsMultipleReject() {
+    var Parent = /** @class */ (function () {
+        function Parent() {
+        }
+        return Parent;
+    }());
+    var Child = /** @class */ (function (_super) {
+        __extends(Child, _super);
+        function Child() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Child;
+    }(Parent));
+    var obj = undefined;
+    if (obj instanceof Child) {
+        obj;
+    }
+}
+function exampleUnion() {
+    var Parent = /** @class */ (function () {
+        function Parent() {
+        }
+        return Parent;
+    }());
+    var Child = /** @class */ (function (_super) {
+        __extends(Child, _super);
+        function Child() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Child;
+    }(Parent));
+    var obj0 = undefined;
+    if (obj0 instanceof Child) {
+        obj0;
+    }
     var obj1 = undefined;
-    var obj2 = undefined;
-    var obj3 = undefined;
-    var obj4 = undefined;
-    var obj5 = undefined;
-    function onlyChildString(child) {
-        // no-op
-    }
-    function onlyChildNumber(child) {
-        // no-op
-    }
-    if (obj instanceof Child) {
-        onlyChildString(obj);
-        onlyChildNumber(obj);
-    }
     if (obj1 instanceof Child) {
-        console.log(obj1);
+        obj1;
     }
+    var obj2 = undefined;
     if (obj2 instanceof Child) {
-        console.log(obj2);
+        obj2;
     }
+    var obj3 = undefined;
     if (obj3 instanceof Child) {
-        console.log(obj3);
+        obj3;
     }
+    var obj4 = undefined;
     if (obj4 instanceof Child) {
-        console.log(obj4);
+        obj4;
     }
+    var obj5 = undefined;
     if (obj5 instanceof Child) {
-        console.log(obj5);
+        obj5;
     }
 }
-function negative1() {
+function exampleNegative() {
     var Parent = /** @class */ (function () {
         function Parent() {
         }
@@ -438,7 +313,54 @@ function negative1() {
     }(Parent));
     var obj = undefined;
     if (obj instanceof Child) {
+        // Here we filter out matching ones, instead of just narrowing to them.
+        obj;
         return;
     }
     console.log(obj);
+}
+function exampleIgnoreDefaults() {
+    // default parameters shouldn't have any impact on this narrowing.
+    var Parent = /** @class */ (function () {
+        function Parent() {
+        }
+        return Parent;
+    }());
+    var Child = /** @class */ (function (_super) {
+        __extends(Child, _super);
+        function Child() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Child;
+    }(Parent));
+    var obj = undefined;
+    if (obj instanceof Child) {
+        obj;
+    }
+}
+function exampleConstraints() {
+    var Parent = /** @class */ (function () {
+        function Parent() {
+        }
+        return Parent;
+    }());
+    var Child = /** @class */ (function (_super) {
+        __extends(Child, _super);
+        function Child() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return Child;
+    }(Parent));
+    var objPass = undefined;
+    if (objPass instanceof Child) {
+        objPass;
+    }
+    var objFour = undefined;
+    if (objFour instanceof Child) {
+        objFour;
+    }
+    var objFail = undefined;
+    if (objFail instanceof Child) {
+        objFail;
+    }
 }
