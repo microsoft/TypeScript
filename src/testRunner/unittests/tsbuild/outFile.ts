@@ -890,5 +890,45 @@ ${internal} enum internalEnum { a, b, c }`);
             ignoreDtsChanged: true,
             baselineOnly: true
         });
+
+        // only baseline
+        verifyOutFileScenario({
+            scenario: "stripInternal baseline when internal is inside another internal",
+            modifyFs: fs => {
+                stripInternalOfThird(fs);
+                prependText(fs, sources[project.first][source.ts][part.one], `namespace ts {
+    /* @internal */
+    /**
+     * Subset of properties from SourceFile that are used in multiple utility functions
+     */
+    export interface SourceFileLike {
+        readonly text: string;
+        lineMap?: ReadonlyArray<number>;
+        /* @internal */
+        getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
+    }
+
+    /* @internal */
+    export interface RedirectInfo {
+        /** Source file this redirects to. */
+        readonly redirectTarget: SourceFile;
+        /**
+         * Source file for the duplicate package. This will not be used by the Program,
+         * but we need to keep this around so we can watch for changes in underlying.
+         */
+        readonly unredirected: SourceFile;
+    }
+
+    // Source files are declarations when they are external modules.
+    export interface SourceFile {
+        someProp: string;
+    }
+}`);
+            },
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            ignoreDtsUnchanged: true,
+            baselineOnly: true
+        });
     });
 }
