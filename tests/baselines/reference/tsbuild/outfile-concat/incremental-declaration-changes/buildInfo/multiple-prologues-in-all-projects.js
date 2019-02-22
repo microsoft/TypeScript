@@ -25,11 +25,6 @@
           "pos": 30,
           "end": 139,
           "kind": "text"
-        },
-        {
-          "pos": 139,
-          "end": 179,
-          "kind": "sourceMapUrl"
         }
       ],
       "sources": {
@@ -67,11 +62,6 @@
           "pos": 0,
           "end": 156,
           "kind": "text"
-        },
-        {
-          "pos": 156,
-          "end": 198,
-          "kind": "sourceMapUrl"
         }
       ]
     }
@@ -96,9 +86,6 @@ function f() {
     return "JS does hoists";
 }
 
-----------------------------------------------------------------------
-sourceMapUrl: (139-179)
-//# sourceMappingURL=first-output.js.map
 ======================================================================
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
@@ -113,9 +100,6 @@ interface NoJsForHereEither {
 }
 declare function f(): string;
 
-----------------------------------------------------------------------
-sourceMapUrl: (156-198)
-//# sourceMappingURL=first-output.d.ts.map
 ======================================================================
 
 //// [/src/first/bin/first-output.d.ts]
@@ -485,7 +469,7 @@ console.log(s);
         },
         {
           "pos": 62,
-          "end": 211,
+          "end": 171,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.js",
           "texts": [
@@ -493,41 +477,26 @@ console.log(s);
               "pos": 62,
               "end": 171,
               "kind": "text"
-            },
-            {
-              "pos": 171,
-              "end": 211,
-              "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 213,
-          "end": 539,
+          "pos": 171,
+          "end": 456,
           "kind": "prepend",
           "data": "/src/2/second-output.js",
           "texts": [
             {
-              "pos": 213,
-              "end": 498,
+              "pos": 171,
+              "end": 456,
               "kind": "text"
-            },
-            {
-              "pos": 498,
-              "end": 539,
-              "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 541,
-          "end": 577,
+          "pos": 456,
+          "end": 492,
           "kind": "text"
-        },
-        {
-          "pos": 577,
-          "end": 617,
-          "kind": "sourceMapUrl"
         }
       ],
       "sources": {
@@ -572,7 +541,7 @@ console.log(s);
       "sections": [
         {
           "pos": 0,
-          "end": 198,
+          "end": 156,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.d.ts",
           "texts": [
@@ -580,41 +549,26 @@ console.log(s);
               "pos": 0,
               "end": 156,
               "kind": "text"
-            },
-            {
-              "pos": 156,
-              "end": 198,
-              "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 200,
-          "end": 343,
+          "pos": 156,
+          "end": 256,
           "kind": "prepend",
           "data": "/src/2/second-output.d.ts",
           "texts": [
             {
-              "pos": 200,
-              "end": 300,
+              "pos": 156,
+              "end": 256,
               "kind": "text"
-            },
-            {
-              "pos": 300,
-              "end": 343,
-              "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 345,
-          "end": 364,
+          "pos": 256,
+          "end": 275,
           "kind": "text"
-        },
-        {
-          "pos": 364,
-          "end": 406,
-          "kind": "sourceMapUrl"
         }
       ]
     }
@@ -637,7 +591,7 @@ prologue: (30-44):: myPrologue2
 prologue: (46-60):: myPrologue3
 "myPrologue3";
 ----------------------------------------------------------------------
-prepend: (62-211):: /src/first/bin/first-output.js texts:: 2
+prepend: (62-171):: /src/first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (62-171)
 var s = "Hola, world";
@@ -647,13 +601,10 @@ function f() {
     return "JS does hoists";
 }
 
->>--------------------------------------------------------------------
-sourceMapUrl: (171-211)
-//# sourceMappingURL=first-output.js.map
 ----------------------------------------------------------------------
-prepend: (213-539):: /src/2/second-output.js texts:: 2
+prepend: (171-456):: /src/2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (213-498)
+text: (171-456)
 var N;
 (function (N) {
     function f() {
@@ -670,22 +621,16 @@ var C = (function () {
     return C;
 }());
 
->>--------------------------------------------------------------------
-sourceMapUrl: (498-539)
-//# sourceMappingURL=second-output.js.map
 ----------------------------------------------------------------------
-text: (541-577)
+text: (456-492)
 var c = new C();
 c.doSomething();
 
-----------------------------------------------------------------------
-sourceMapUrl: (577-617)
-//# sourceMappingURL=third-output.js.map
 ======================================================================
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-198):: /src/first/bin/first-output.d.ts texts:: 2
+prepend: (0-156):: /src/first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-156)
 interface TheFirst {
@@ -697,13 +642,10 @@ interface NoJsForHereEither {
 }
 declare function f(): string;
 
->>--------------------------------------------------------------------
-sourceMapUrl: (156-198)
-//# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (200-343):: /src/2/second-output.d.ts texts:: 2
+prepend: (156-256):: /src/2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (200-300)
+text: (156-256)
 declare namespace N {
 }
 declare namespace N {
@@ -712,16 +654,10 @@ declare class C {
     doSomething(): void;
 }
 
->>--------------------------------------------------------------------
-sourceMapUrl: (300-343)
-//# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
-text: (345-364)
+text: (256-275)
 declare var c: C;
 
-----------------------------------------------------------------------
-sourceMapUrl: (364-406)
-//# sourceMappingURL=third-output.d.ts.map
 ======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -733,7 +669,6 @@ interface NoJsForHereEither {
     none: any;
 }
 declare function f(): string;
-//# sourceMappingURL=first-output.d.ts.map
 declare namespace N {
 }
 declare namespace N {
@@ -741,12 +676,11 @@ declare namespace N {
 declare class C {
     doSomething(): void;
 }
-//# sourceMappingURL=second-output.d.ts.map
 declare var c: C;
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AACA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACTD,iBAAS,CAAC,WAET;;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;;ACHD,QAAA,IAAI,CAAC,GAAU,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AACA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,gBAAgB,CAAC;AAExB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACTD,iBAAS,CAAC,WAET;ACDD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;ACHD,QAAA,IAAI,CAAC,GAAU,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -865,7 +799,6 @@ sourceFile:../../../first/first_part3.ts
 2 >^^^^^^^^^^^^^^^^^
 3 >                 ^
 4 >                  ^^^^^^^^^^^
-5 >                             ^^^^^^^^^^^^^^->
 1->
 2 >function 
 3 >                 f
@@ -881,21 +814,20 @@ sourceFile:../../../first/first_part3.ts
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
 sourceFile:../../../second/second_part1.ts
 -------------------------------------------------------------------
->>>//# sourceMappingURL=first-output.d.ts.map
 >>>declare namespace N {
-1->
+1 >
 2 >^^^^^^^^^^^^^^^^^^
 3 >                  ^
 4 >                   ^
-1->"myPrologue"
+1 >"myPrologue"
   >
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(10, 1) Source(2, 1) + SourceIndex(2)
-2 >Emitted(10, 19) Source(2, 11) + SourceIndex(2)
-3 >Emitted(10, 20) Source(2, 12) + SourceIndex(2)
-4 >Emitted(10, 21) Source(2, 13) + SourceIndex(2)
+1 >Emitted(9, 1) Source(2, 1) + SourceIndex(2)
+2 >Emitted(9, 19) Source(2, 11) + SourceIndex(2)
+3 >Emitted(9, 20) Source(2, 12) + SourceIndex(2)
+4 >Emitted(9, 21) Source(2, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -903,7 +835,7 @@ sourceFile:../../../second/second_part1.ts
 1 >{
   >    // Comment text
   >}
-1 >Emitted(11, 2) Source(4, 2) + SourceIndex(2)
+1 >Emitted(10, 2) Source(4, 2) + SourceIndex(2)
 ---
 >>>declare namespace N {
 1->
@@ -916,10 +848,10 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(12, 1) Source(6, 1) + SourceIndex(2)
-2 >Emitted(12, 19) Source(6, 11) + SourceIndex(2)
-3 >Emitted(12, 20) Source(6, 12) + SourceIndex(2)
-4 >Emitted(12, 21) Source(6, 13) + SourceIndex(2)
+1->Emitted(11, 1) Source(6, 1) + SourceIndex(2)
+2 >Emitted(11, 19) Source(6, 11) + SourceIndex(2)
+3 >Emitted(11, 20) Source(6, 12) + SourceIndex(2)
+4 >Emitted(11, 21) Source(6, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -931,7 +863,7 @@ sourceFile:../../../second/second_part1.ts
   >
   >    f();
   >}
-1 >Emitted(13, 2) Source(12, 2) + SourceIndex(2)
+1 >Emitted(12, 2) Source(12, 2) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -946,9 +878,9 @@ sourceFile:../../../second/second_part2.ts
   >
 2 >class 
 3 >              C
-1->Emitted(14, 1) Source(2, 1) + SourceIndex(3)
-2 >Emitted(14, 15) Source(2, 7) + SourceIndex(3)
-3 >Emitted(14, 16) Source(2, 8) + SourceIndex(3)
+1->Emitted(13, 1) Source(2, 1) + SourceIndex(3)
+2 >Emitted(13, 15) Source(2, 7) + SourceIndex(3)
+3 >Emitted(13, 16) Source(2, 8) + SourceIndex(3)
 ---
 >>>    doSomething(): void;
 1->^^^^
@@ -956,23 +888,22 @@ sourceFile:../../../second/second_part2.ts
 1-> {
   >    
 2 >    doSomething
-1->Emitted(15, 5) Source(3, 5) + SourceIndex(3)
-2 >Emitted(15, 16) Source(3, 16) + SourceIndex(3)
+1->Emitted(14, 5) Source(3, 5) + SourceIndex(3)
+2 >Emitted(14, 16) Source(3, 16) + SourceIndex(3)
 ---
 >>>}
 1 >^
-2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 > ^^^^^^^^^^^^^^^^^->
 1 >() {
   >        console.log("something got done");
   >    }
   >}
-1 >Emitted(16, 2) Source(6, 2) + SourceIndex(3)
+1 >Emitted(15, 2) Source(6, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
 sourceFile:../../third_part1.ts
 -------------------------------------------------------------------
->>>//# sourceMappingURL=second-output.d.ts.map
 >>>declare var c: C;
 1->
 2 >^^^^^^^^
@@ -989,12 +920,12 @@ sourceFile:../../third_part1.ts
 4 >            c
 5 >              = new C()
 6 >                ;
-1->Emitted(18, 1) Source(3, 1) + SourceIndex(4)
-2 >Emitted(18, 9) Source(3, 1) + SourceIndex(4)
-3 >Emitted(18, 13) Source(3, 5) + SourceIndex(4)
-4 >Emitted(18, 14) Source(3, 6) + SourceIndex(4)
-5 >Emitted(18, 17) Source(3, 16) + SourceIndex(4)
-6 >Emitted(18, 18) Source(3, 17) + SourceIndex(4)
+1->Emitted(16, 1) Source(3, 1) + SourceIndex(4)
+2 >Emitted(16, 9) Source(3, 1) + SourceIndex(4)
+3 >Emitted(16, 13) Source(3, 5) + SourceIndex(4)
+4 >Emitted(16, 14) Source(3, 6) + SourceIndex(4)
+5 >Emitted(16, 17) Source(3, 16) + SourceIndex(4)
+6 >Emitted(16, 18) Source(3, 17) + SourceIndex(4)
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 
@@ -1009,7 +940,6 @@ console.log(f());
 function f() {
     return "JS does hoists";
 }
-//# sourceMappingURL=first-output.js.map
 var N;
 (function (N) {
     function f() {
@@ -1025,13 +955,12 @@ var C = (function () {
     };
     return C;
 }());
-//# sourceMappingURL=second-output.js.map
 var c = new C();
 c.doSomething();
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../second/second_part2.ts","../../third_part1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts"],"names":[],"mappings":";AAAA,YAAY,CAAA;ACAZ,aAAa,CAAC;ACAd,aAAa,CAAC;AFKd,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AGXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;;ACGD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AJVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;;ACHD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../second/second_part2.ts","../../third_part1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts"],"names":[],"mappings":";AAAA,YAAY,CAAA;ACAZ,aAAa,CAAC;ACAd,aAAa,CAAC;AFKd,IAAM,CAAC,GAAG,aAAa,CAAC;AAMxB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;AGXf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;ACGD,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;AJVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;ACHD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -1218,7 +1147,7 @@ sourceFile:../../../first/first_part3.ts
 >>>}
 1 >
 2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+3 > ^^^^^^->
 1 >
   >
 2 >}
@@ -1229,7 +1158,6 @@ sourceFile:../../../first/first_part3.ts
 emittedFile:/src/third/thirdjs/output/third-output.js
 sourceFile:../../../second/second_part1.ts
 -------------------------------------------------------------------
->>>//# sourceMappingURL=first-output.js.map
 >>>var N;
 1->
 2 >^^^^
@@ -1251,10 +1179,10 @@ sourceFile:../../../second/second_part1.ts
   >     
   >         f();
   >     }
-1->Emitted(12, 1) Source(6, 1) + SourceIndex(5)
-2 >Emitted(12, 5) Source(6, 11) + SourceIndex(5)
-3 >Emitted(12, 6) Source(6, 12) + SourceIndex(5)
-4 >Emitted(12, 7) Source(12, 2) + SourceIndex(5)
+1->Emitted(11, 1) Source(6, 1) + SourceIndex(5)
+2 >Emitted(11, 5) Source(6, 11) + SourceIndex(5)
+3 >Emitted(11, 6) Source(6, 12) + SourceIndex(5)
+4 >Emitted(11, 7) Source(12, 2) + SourceIndex(5)
 ---
 >>>(function (N) {
 1->
@@ -1264,9 +1192,9 @@ sourceFile:../../../second/second_part1.ts
 1->
 2 >namespace 
 3 >           N
-1->Emitted(13, 1) Source(6, 1) + SourceIndex(5)
-2 >Emitted(13, 12) Source(6, 11) + SourceIndex(5)
-3 >Emitted(13, 13) Source(6, 12) + SourceIndex(5)
+1->Emitted(12, 1) Source(6, 1) + SourceIndex(5)
+2 >Emitted(12, 12) Source(6, 11) + SourceIndex(5)
+3 >Emitted(12, 13) Source(6, 12) + SourceIndex(5)
 ---
 >>>    function f() {
 1->^^^^
@@ -1277,9 +1205,9 @@ sourceFile:../../../second/second_part1.ts
   >    
 2 >    function 
 3 >             f
-1->Emitted(14, 5) Source(7, 5) + SourceIndex(5)
-2 >Emitted(14, 14) Source(7, 14) + SourceIndex(5)
-3 >Emitted(14, 15) Source(7, 15) + SourceIndex(5)
+1->Emitted(13, 5) Source(7, 5) + SourceIndex(5)
+2 >Emitted(13, 14) Source(7, 14) + SourceIndex(5)
+3 >Emitted(13, 15) Source(7, 15) + SourceIndex(5)
 ---
 >>>        console.log('testing');
 1->^^^^^^^^
@@ -1299,14 +1227,14 @@ sourceFile:../../../second/second_part1.ts
 6 >                    'testing'
 7 >                             )
 8 >                              ;
-1->Emitted(15, 9) Source(8, 9) + SourceIndex(5)
-2 >Emitted(15, 16) Source(8, 16) + SourceIndex(5)
-3 >Emitted(15, 17) Source(8, 17) + SourceIndex(5)
-4 >Emitted(15, 20) Source(8, 20) + SourceIndex(5)
-5 >Emitted(15, 21) Source(8, 21) + SourceIndex(5)
-6 >Emitted(15, 30) Source(8, 30) + SourceIndex(5)
-7 >Emitted(15, 31) Source(8, 31) + SourceIndex(5)
-8 >Emitted(15, 32) Source(8, 32) + SourceIndex(5)
+1->Emitted(14, 9) Source(8, 9) + SourceIndex(5)
+2 >Emitted(14, 16) Source(8, 16) + SourceIndex(5)
+3 >Emitted(14, 17) Source(8, 17) + SourceIndex(5)
+4 >Emitted(14, 20) Source(8, 20) + SourceIndex(5)
+5 >Emitted(14, 21) Source(8, 21) + SourceIndex(5)
+6 >Emitted(14, 30) Source(8, 30) + SourceIndex(5)
+7 >Emitted(14, 31) Source(8, 31) + SourceIndex(5)
+8 >Emitted(14, 32) Source(8, 32) + SourceIndex(5)
 ---
 >>>    }
 1 >^^^^
@@ -1315,8 +1243,8 @@ sourceFile:../../../second/second_part1.ts
 1 >
   >    
 2 >    }
-1 >Emitted(16, 5) Source(9, 5) + SourceIndex(5)
-2 >Emitted(16, 6) Source(9, 6) + SourceIndex(5)
+1 >Emitted(15, 5) Source(9, 5) + SourceIndex(5)
+2 >Emitted(15, 6) Source(9, 6) + SourceIndex(5)
 ---
 >>>    f();
 1->^^^^
@@ -1330,10 +1258,10 @@ sourceFile:../../../second/second_part1.ts
 2 >    f
 3 >     ()
 4 >       ;
-1->Emitted(17, 5) Source(11, 5) + SourceIndex(5)
-2 >Emitted(17, 6) Source(11, 6) + SourceIndex(5)
-3 >Emitted(17, 8) Source(11, 8) + SourceIndex(5)
-4 >Emitted(17, 9) Source(11, 9) + SourceIndex(5)
+1->Emitted(16, 5) Source(11, 5) + SourceIndex(5)
+2 >Emitted(16, 6) Source(11, 6) + SourceIndex(5)
+3 >Emitted(16, 8) Source(11, 8) + SourceIndex(5)
+4 >Emitted(16, 9) Source(11, 9) + SourceIndex(5)
 ---
 >>>})(N || (N = {}));
 1->
@@ -1358,13 +1286,13 @@ sourceFile:../../../second/second_part1.ts
   >          
   >              f();
   >          }
-1->Emitted(18, 1) Source(12, 1) + SourceIndex(5)
-2 >Emitted(18, 2) Source(12, 2) + SourceIndex(5)
-3 >Emitted(18, 4) Source(6, 11) + SourceIndex(5)
-4 >Emitted(18, 5) Source(6, 12) + SourceIndex(5)
-5 >Emitted(18, 10) Source(6, 11) + SourceIndex(5)
-6 >Emitted(18, 11) Source(6, 12) + SourceIndex(5)
-7 >Emitted(18, 19) Source(12, 2) + SourceIndex(5)
+1->Emitted(17, 1) Source(12, 1) + SourceIndex(5)
+2 >Emitted(17, 2) Source(12, 2) + SourceIndex(5)
+3 >Emitted(17, 4) Source(6, 11) + SourceIndex(5)
+4 >Emitted(17, 5) Source(6, 12) + SourceIndex(5)
+5 >Emitted(17, 10) Source(6, 11) + SourceIndex(5)
+6 >Emitted(17, 11) Source(6, 12) + SourceIndex(5)
+7 >Emitted(17, 19) Source(12, 2) + SourceIndex(5)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
@@ -1375,13 +1303,13 @@ sourceFile:../../../second/second_part2.ts
 2 >^^^^^^^^^^^^^^^^^^^->
 1->"myPrologue2";
   >
-1->Emitted(19, 1) Source(2, 1) + SourceIndex(1)
+1->Emitted(18, 1) Source(2, 1) + SourceIndex(1)
 ---
 >>>    function C() {
 1->^^^^
 2 >    ^^->
 1->
-1->Emitted(20, 5) Source(2, 1) + SourceIndex(1)
+1->Emitted(19, 5) Source(2, 1) + SourceIndex(1)
 ---
 >>>    }
 1->^^^^
@@ -1393,8 +1321,8 @@ sourceFile:../../../second/second_part2.ts
   >    }
   >
 2 >    }
-1->Emitted(21, 5) Source(6, 1) + SourceIndex(1)
-2 >Emitted(21, 6) Source(6, 2) + SourceIndex(1)
+1->Emitted(20, 5) Source(6, 1) + SourceIndex(1)
+2 >Emitted(20, 6) Source(6, 2) + SourceIndex(1)
 ---
 >>>    C.prototype.doSomething = function () {
 1->^^^^
@@ -1404,9 +1332,9 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >    doSomething
 3 >                           
-1->Emitted(22, 5) Source(3, 5) + SourceIndex(1)
-2 >Emitted(22, 28) Source(3, 16) + SourceIndex(1)
-3 >Emitted(22, 31) Source(3, 5) + SourceIndex(1)
+1->Emitted(21, 5) Source(3, 5) + SourceIndex(1)
+2 >Emitted(21, 28) Source(3, 16) + SourceIndex(1)
+3 >Emitted(21, 31) Source(3, 5) + SourceIndex(1)
 ---
 >>>        console.log("something got done");
 1->^^^^^^^^
@@ -1426,14 +1354,14 @@ sourceFile:../../../second/second_part2.ts
 6 >                    "something got done"
 7 >                                        )
 8 >                                         ;
-1->Emitted(23, 9) Source(4, 9) + SourceIndex(1)
-2 >Emitted(23, 16) Source(4, 16) + SourceIndex(1)
-3 >Emitted(23, 17) Source(4, 17) + SourceIndex(1)
-4 >Emitted(23, 20) Source(4, 20) + SourceIndex(1)
-5 >Emitted(23, 21) Source(4, 21) + SourceIndex(1)
-6 >Emitted(23, 41) Source(4, 41) + SourceIndex(1)
-7 >Emitted(23, 42) Source(4, 42) + SourceIndex(1)
-8 >Emitted(23, 43) Source(4, 43) + SourceIndex(1)
+1->Emitted(22, 9) Source(4, 9) + SourceIndex(1)
+2 >Emitted(22, 16) Source(4, 16) + SourceIndex(1)
+3 >Emitted(22, 17) Source(4, 17) + SourceIndex(1)
+4 >Emitted(22, 20) Source(4, 20) + SourceIndex(1)
+5 >Emitted(22, 21) Source(4, 21) + SourceIndex(1)
+6 >Emitted(22, 41) Source(4, 41) + SourceIndex(1)
+7 >Emitted(22, 42) Source(4, 42) + SourceIndex(1)
+8 >Emitted(22, 43) Source(4, 43) + SourceIndex(1)
 ---
 >>>    };
 1 >^^^^
@@ -1442,8 +1370,8 @@ sourceFile:../../../second/second_part2.ts
 1 >
   >    
 2 >    }
-1 >Emitted(24, 5) Source(5, 5) + SourceIndex(1)
-2 >Emitted(24, 6) Source(5, 6) + SourceIndex(1)
+1 >Emitted(23, 5) Source(5, 5) + SourceIndex(1)
+2 >Emitted(23, 6) Source(5, 6) + SourceIndex(1)
 ---
 >>>    return C;
 1->^^^^
@@ -1451,15 +1379,15 @@ sourceFile:../../../second/second_part2.ts
 1->
   >
 2 >    }
-1->Emitted(25, 5) Source(6, 1) + SourceIndex(1)
-2 >Emitted(25, 13) Source(6, 2) + SourceIndex(1)
+1->Emitted(24, 5) Source(6, 1) + SourceIndex(1)
+2 >Emitted(24, 13) Source(6, 2) + SourceIndex(1)
 ---
 >>>}());
 1 >
 2 >^
 3 > 
 4 > ^^^^
-5 >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+5 >     ^^^^^^^^^^^^->
 1 >
 2 >}
 3 > 
@@ -1468,16 +1396,15 @@ sourceFile:../../../second/second_part2.ts
   >         console.log("something got done");
   >     }
   > }
-1 >Emitted(26, 1) Source(6, 1) + SourceIndex(1)
-2 >Emitted(26, 2) Source(6, 2) + SourceIndex(1)
-3 >Emitted(26, 2) Source(2, 1) + SourceIndex(1)
-4 >Emitted(26, 6) Source(6, 2) + SourceIndex(1)
+1 >Emitted(25, 1) Source(6, 1) + SourceIndex(1)
+2 >Emitted(25, 2) Source(6, 2) + SourceIndex(1)
+3 >Emitted(25, 2) Source(2, 1) + SourceIndex(1)
+4 >Emitted(25, 6) Source(6, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.js
 sourceFile:../../third_part1.ts
 -------------------------------------------------------------------
->>>//# sourceMappingURL=second-output.js.map
 >>>var c = new C();
 1->
 2 >^^^^
@@ -1498,14 +1425,14 @@ sourceFile:../../third_part1.ts
 6 >            C
 7 >             ()
 8 >               ;
-1->Emitted(28, 1) Source(3, 1) + SourceIndex(2)
-2 >Emitted(28, 5) Source(3, 5) + SourceIndex(2)
-3 >Emitted(28, 6) Source(3, 6) + SourceIndex(2)
-4 >Emitted(28, 9) Source(3, 9) + SourceIndex(2)
-5 >Emitted(28, 13) Source(3, 13) + SourceIndex(2)
-6 >Emitted(28, 14) Source(3, 14) + SourceIndex(2)
-7 >Emitted(28, 16) Source(3, 16) + SourceIndex(2)
-8 >Emitted(28, 17) Source(3, 17) + SourceIndex(2)
+1->Emitted(26, 1) Source(3, 1) + SourceIndex(2)
+2 >Emitted(26, 5) Source(3, 5) + SourceIndex(2)
+3 >Emitted(26, 6) Source(3, 6) + SourceIndex(2)
+4 >Emitted(26, 9) Source(3, 9) + SourceIndex(2)
+5 >Emitted(26, 13) Source(3, 13) + SourceIndex(2)
+6 >Emitted(26, 14) Source(3, 14) + SourceIndex(2)
+7 >Emitted(26, 16) Source(3, 16) + SourceIndex(2)
+8 >Emitted(26, 17) Source(3, 17) + SourceIndex(2)
 ---
 >>>c.doSomething();
 1->
@@ -1522,12 +1449,12 @@ sourceFile:../../third_part1.ts
 4 >  doSomething
 5 >             ()
 6 >               ;
-1->Emitted(29, 1) Source(4, 1) + SourceIndex(2)
-2 >Emitted(29, 2) Source(4, 2) + SourceIndex(2)
-3 >Emitted(29, 3) Source(4, 3) + SourceIndex(2)
-4 >Emitted(29, 14) Source(4, 14) + SourceIndex(2)
-5 >Emitted(29, 16) Source(4, 16) + SourceIndex(2)
-6 >Emitted(29, 17) Source(4, 17) + SourceIndex(2)
+1->Emitted(27, 1) Source(4, 1) + SourceIndex(2)
+2 >Emitted(27, 2) Source(4, 2) + SourceIndex(2)
+3 >Emitted(27, 3) Source(4, 3) + SourceIndex(2)
+4 >Emitted(27, 14) Source(4, 14) + SourceIndex(2)
+5 >Emitted(27, 16) Source(4, 16) + SourceIndex(2)
+6 >Emitted(27, 17) Source(4, 17) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=third-output.js.map
 

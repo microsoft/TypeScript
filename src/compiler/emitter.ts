@@ -358,9 +358,7 @@ namespace ts {
 
                 if (sourceMappingURL) {
                     if (!writer.isAtStartOfLine()) writer.rawWrite(newLine);
-                    const pos = writer.getTextPos();
                     writer.writeComment(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Tools can sometimes see this line as a source mapping url comment
-                    if (printer.bundleFileInfo) printer.bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.SourceMapUrl });
                 }
 
                 // Write the source map
@@ -1027,7 +1025,6 @@ namespace ts {
 
                     case SyntaxKind.UnparsedText:
                     case SyntaxKind.UnparsedInternalText:
-                    case SyntaxKind.UnparsedSourceMapUrl:
                         return emitUnparsedTextLike(<UnparsedTextLike>node);
 
                     case SyntaxKind.UnparsedSyntheticReference:
@@ -1551,16 +1548,14 @@ namespace ts {
 
         // SyntaxKind.UnparsedPrologue
         // SyntaxKind.UnparsedText
-        // SyntaxKind.UnparsedInternalText
-        // SyntaxKind.UnparsedSourceMapUrl
+        // SyntaxKind.UnparsedInternal
         // SyntaxKind.UnparsedSyntheticReference
         function writeUnparsedNode(unparsed: UnparsedNode) {
             writer.rawWrite(unparsed.parent.text.substring(unparsed.pos, unparsed.end));
         }
 
         // SyntaxKind.UnparsedText
-        // SyntaxKind.UnparsedInternalText
-        // SyntaxKind.UnparsedSourceMapUrl
+        // SyntaxKind.UnparsedInternal
         function emitUnparsedTextLike(unparsed: UnparsedTextLike) {
             const pos = getTextPosWithWriteLine();
             writeUnparsedNode(unparsed);
@@ -1570,9 +1565,7 @@ namespace ts {
                     writer.getTextPos(),
                     unparsed.kind === SyntaxKind.UnparsedText ?
                         BundleFileSectionKind.Text :
-                        unparsed.kind === SyntaxKind.UnparsedInternalText ?
-                            BundleFileSectionKind.Internal :
-                            BundleFileSectionKind.SourceMapUrl
+                        BundleFileSectionKind.Internal
                 );
             }
         }

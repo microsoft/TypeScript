@@ -12,11 +12,6 @@
           "pos": 0,
           "end": 285,
           "kind": "text"
-        },
-        {
-          "pos": 285,
-          "end": 326,
-          "kind": "sourceMapUrl"
         }
       ]
     },
@@ -26,11 +21,6 @@
           "pos": 0,
           "end": 100,
           "kind": "text"
-        },
-        {
-          "pos": 100,
-          "end": 143,
-          "kind": "sourceMapUrl"
         }
       ]
     }
@@ -58,9 +48,6 @@ var C = (function () {
     return C;
 }());
 
-----------------------------------------------------------------------
-sourceMapUrl: (285-326)
-//# sourceMappingURL=second-output.js.map
 ======================================================================
 ======================================================================
 File:: /src/2/second-output.d.ts
@@ -74,9 +61,6 @@ declare class C {
     doSomething(): void;
 }
 
-----------------------------------------------------------------------
-sourceMapUrl: (100-143)
-//# sourceMappingURL=second-output.d.ts.map
 ======================================================================
 
 //// [/src/2/second-output.d.ts]
@@ -479,11 +463,6 @@ sourceFile:../second/second_part2.ts
           "pos": 0,
           "end": 110,
           "kind": "text"
-        },
-        {
-          "pos": 110,
-          "end": 150,
-          "kind": "sourceMapUrl"
         }
       ]
     },
@@ -493,11 +472,6 @@ sourceFile:../second/second_part2.ts
           "pos": 0,
           "end": 157,
           "kind": "text"
-        },
-        {
-          "pos": 157,
-          "end": 199,
-          "kind": "sourceMapUrl"
         }
       ]
     }
@@ -516,9 +490,6 @@ function f() {
     return "JS does hoists";
 }
 
-----------------------------------------------------------------------
-sourceMapUrl: (110-150)
-//# sourceMappingURL=first-output.js.map
 ======================================================================
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
@@ -533,9 +504,6 @@ interface NoJsForHereEither {
 }
 declare function f(): string;
 
-----------------------------------------------------------------------
-sourceMapUrl: (157-199)
-//# sourceMappingURL=first-output.d.ts.map
 ======================================================================
 
 //// [/src/first/bin/first-output.d.ts]
@@ -849,7 +817,7 @@ sourceFile:../first_part3.ts
       "sections": [
         {
           "pos": 0,
-          "end": 150,
+          "end": 110,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.js",
           "texts": [
@@ -857,29 +825,19 @@ sourceFile:../first_part3.ts
               "pos": 0,
               "end": 110,
               "kind": "text"
-            },
-            {
-              "pos": 110,
-              "end": 150,
-              "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 152,
-          "end": 478,
+          "pos": 110,
+          "end": 395,
           "kind": "prepend",
           "data": "/src/2/second-output.js",
           "texts": [
             {
-              "pos": 152,
-              "end": 437,
+              "pos": 110,
+              "end": 395,
               "kind": "text"
-            },
-            {
-              "pos": 437,
-              "end": 478,
-              "kind": "sourceMapUrl"
             }
           ]
         }
@@ -889,7 +847,7 @@ sourceFile:../first_part3.ts
       "sections": [
         {
           "pos": 0,
-          "end": 199,
+          "end": 157,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.d.ts",
           "texts": [
@@ -897,29 +855,19 @@ sourceFile:../first_part3.ts
               "pos": 0,
               "end": 157,
               "kind": "text"
-            },
-            {
-              "pos": 157,
-              "end": 199,
-              "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 201,
-          "end": 344,
+          "pos": 157,
+          "end": 257,
           "kind": "prepend",
           "data": "/src/2/second-output.d.ts",
           "texts": [
             {
-              "pos": 201,
-              "end": 301,
+              "pos": 157,
+              "end": 257,
               "kind": "text"
-            },
-            {
-              "pos": 301,
-              "end": 344,
-              "kind": "sourceMapUrl"
             }
           ]
         }
@@ -932,7 +880,7 @@ sourceFile:../first_part3.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-prepend: (0-150):: /src/first/bin/first-output.js texts:: 2
+prepend: (0-110):: /src/first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
 text: (0-110)
 var s = "Hello, world";
@@ -942,13 +890,10 @@ function f() {
     return "JS does hoists";
 }
 
->>--------------------------------------------------------------------
-sourceMapUrl: (110-150)
-//# sourceMappingURL=first-output.js.map
 ----------------------------------------------------------------------
-prepend: (152-478):: /src/2/second-output.js texts:: 2
+prepend: (110-395):: /src/2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (152-437)
+text: (110-395)
 var N;
 (function (N) {
     function f() {
@@ -965,14 +910,11 @@ var C = (function () {
     return C;
 }());
 
->>--------------------------------------------------------------------
-sourceMapUrl: (437-478)
-//# sourceMappingURL=second-output.js.map
 ======================================================================
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-199):: /src/first/bin/first-output.d.ts texts:: 2
+prepend: (0-157):: /src/first/bin/first-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
 text: (0-157)
 interface TheFirst {
@@ -984,13 +926,10 @@ interface NoJsForHereEither {
 }
 declare function f(): string;
 
->>--------------------------------------------------------------------
-sourceMapUrl: (157-199)
-//# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (201-344):: /src/2/second-output.d.ts texts:: 2
+prepend: (157-257):: /src/2/second-output.d.ts texts:: 1
 >>--------------------------------------------------------------------
-text: (201-301)
+text: (157-257)
 declare namespace N {
 }
 declare namespace N {
@@ -999,9 +938,6 @@ declare class C {
     doSomething(): void;
 }
 
->>--------------------------------------------------------------------
-sourceMapUrl: (301-344)
-//# sourceMappingURL=second-output.d.ts.map
 ======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
@@ -1013,7 +949,6 @@ interface NoJsForHereEither {
     none: any;
 }
 declare function f(): string;
-//# sourceMappingURL=first-output.d.ts.map
 declare namespace N {
 }
 declare namespace N {
@@ -1021,7 +956,6 @@ declare namespace N {
 declare class C {
     doSomething(): void;
 }
-//# sourceMappingURL=second-output.d.ts.map
 
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -1031,7 +965,6 @@ console.log(f());
 function f() {
     return "JS does hoists";
 }
-//# sourceMappingURL=first-output.js.map
 var N;
 (function (N) {
     function f() {
@@ -1047,7 +980,6 @@ var C = (function () {
     };
     return C;
 }());
-//# sourceMappingURL=second-output.js.map
 
 
 //// [/src/third/third_part1.ts]

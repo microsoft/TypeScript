@@ -2744,7 +2744,6 @@ namespace ts {
                     if (stripInternal) break;
                 // falls through
                 case BundleFileSectionKind.Text:
-                case BundleFileSectionKind.SourceMapUrl:
                     (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
                     break;
                 default:
@@ -2782,7 +2781,6 @@ namespace ts {
                 case BundleFileSectionKind.Prologue:
                 case BundleFileSectionKind.EmitHelpers:
                 case BundleFileSectionKind.Prepend:
-                case BundleFileSectionKind.SourceMapUrl:
                     break;
 
                 default:
@@ -2801,7 +2799,6 @@ namespace ts {
             case BundleFileSectionKind.Prepend: return SyntaxKind.UnparsedPrepend;
             case BundleFileSectionKind.Internal: return SyntaxKind.UnparsedInternalText;
             case BundleFileSectionKind.Text: return SyntaxKind.UnparsedText;
-            case BundleFileSectionKind.SourceMapUrl: return SyntaxKind.UnparsedSourceMapUrl;
 
             case BundleFileSectionKind.EmitHelpers:
             case BundleFileSectionKind.NoDefaultLib:

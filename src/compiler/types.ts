@@ -433,7 +433,6 @@ namespace ts {
         UnparsedPrepend,
         UnparsedText,
         UnparsedInternalText,
-        UnparsedSourceMapUrl,
         UnparsedSyntheticReference,
 
         // Top-level nodes
@@ -2835,7 +2834,7 @@ namespace ts {
     }
 
     export interface UnparsedTextLike extends UnparsedSection {
-        kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText | SyntaxKind.UnparsedSourceMapUrl;
+        kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
         parent: UnparsedSource;
     }
 
@@ -5515,7 +5514,6 @@ namespace ts {
         Prepend = "prepend",
         Text = "text",
         Internal = "internal",
-        SourceMapUrl = "sourceMapUrl",
         // comments?
     }
 
@@ -5556,7 +5554,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export type BundleFileTextLikeKind = BundleFileSectionKind.Text | BundleFileSectionKind.Internal | BundleFileSectionKind.SourceMapUrl;
+    export type BundleFileTextLikeKind = BundleFileSectionKind.Text | BundleFileSectionKind.Internal;
 
     /*@internal*/
     export interface BundleFileTextLike extends BundleFileSectionBase {

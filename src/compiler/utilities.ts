@@ -4606,7 +4606,6 @@ namespace ts {
         switch (section.kind) {
             case BundleFileSectionKind.Text:
             case BundleFileSectionKind.Internal:
-            case BundleFileSectionKind.SourceMapUrl:
                 return true;
             default:
                 return false;
@@ -6012,7 +6011,6 @@ namespace ts {
         switch (node.kind) {
             case SyntaxKind.UnparsedText:
             case SyntaxKind.UnparsedInternalText:
-            case SyntaxKind.UnparsedSourceMapUrl:
                 return true;
             default:
                 return false;
