@@ -2,12 +2,16 @@ Exit Code: 1
 Standard output:
 node_modules/follow-redirects/index.js(105,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
 node_modules/follow-redirects/index.js(106,10): error TS2339: Property 'abort' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(173,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(212,16): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(259,12): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
-node_modules/follow-redirects/index.js(293,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+node_modules/follow-redirects/index.js(153,10): error TS2339: Property 'once' does not exist on type 'RedirectableRequest'.
+node_modules/follow-redirects/index.js(156,12): error TS2339: Property 'socket' does not exist on type 'RedirectableRequest'.
+node_modules/follow-redirects/index.js(166,8): error TS2339: Property 'once' does not exist on type 'RedirectableRequest'.
+node_modules/follow-redirects/index.js(167,8): error TS2339: Property 'once' does not exist on type 'RedirectableRequest'.
+node_modules/follow-redirects/index.js(206,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
+node_modules/follow-redirects/index.js(245,16): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
+node_modules/follow-redirects/index.js(292,12): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
+node_modules/follow-redirects/index.js(326,35): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/follow-redirects/index.js(306,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
+node_modules/follow-redirects/index.js(339,10): error TS2339: Property 'emit' does not exist on type 'RedirectableRequest'.
 
 
 
