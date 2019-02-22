@@ -78,6 +78,7 @@ namespace ts {
 
     function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {
         for (const mapFile of mapFileNames) {
+            if (!fs.existsSync(mapFile)) continue;
             const text = Harness.SourceMapRecorder.getSourceMapRecordWithVFS(fs, mapFile);
             fs.writeFileSync(`${mapFile}.baseline.txt`, text);
         }

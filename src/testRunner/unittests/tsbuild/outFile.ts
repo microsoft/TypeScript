@@ -419,7 +419,7 @@ namespace ts {
         // Verify baseline with and without build info
         verifyOutFileScenario({
             scenario: "when final project is not composite but uses project references",
-            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
+            modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, ""),
             ignoreDtsChanged: true,
             ignoreDtsUnchanged: true,
             baselineOnly: true
@@ -540,9 +540,7 @@ namespace ts {
         // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "strict in one dependency",
-            modifyFs: fs => {
-                enableStrict(fs, sources[project.second][source.config]);
-            },
+            modifyFs: fs => enableStrict(fs, sources[project.second][source.config]),
             modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`),
             ignoreWithoutBuildInfo: true,
             ignoreDtsChanged: true,
@@ -606,9 +604,7 @@ namespace ts {
         // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "shebang in only one dependency project",
-            modifyFs: fs => {
-                addShebang(fs, "second", "second_part1");
-            },
+            modifyFs: fs => addShebang(fs, "second", "second_part1"),
             ignoreWithoutBuildInfo: true,
             ignoreDtsChanged: true,
             baselineOnly: true
@@ -798,7 +794,7 @@ ${internal} enum internalEnum { a, b, c }`);
         // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "stripInternal",
-            modifyFs: fs => stripInternalScenario(fs),
+            modifyFs: stripInternalScenario,
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
         });
 
@@ -845,7 +841,7 @@ ${internal} enum internalEnum { a, b, c }`);
         // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "stripInternal when one-two-three are prepended in order",
-            modifyFs: fs => stripInternalWithDependentOrder(fs),
+            modifyFs: stripInternalWithDependentOrder,
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
             dependOrdered: true,
         });
@@ -882,10 +878,14 @@ ${internal} enum internalEnum { a, b, c }`);
             baselineOnly: true
         });
 
+        function makeThirdEmptySourceFile(fs: vfs.FileSystem) {
+            fs.writeFileSync(sources[project.third][source.ts][part.one], "", "utf8");
+        }
+
         // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "when source files are empty in the own file",
-            modifyFs: fs => fs.writeFileSync(sources[project.third][source.ts][part.one], "", "utf8"),
+            modifyFs: makeThirdEmptySourceFile,
             ignoreWithoutBuildInfo: true,
             ignoreDtsChanged: true,
             baselineOnly: true
@@ -959,6 +959,21 @@ ${internal} enum internalEnum { a, b, c }`);
     NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
 }
 `);
+            },
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            ignoreDtsUnchanged: true,
+            baselineOnly: true
+        });
+
+        // only baseline
+        verifyOutFileScenario({
+            scenario: "declarationMap and sourceMap disabled",
+            modifyFs: fs => {
+                makeThirdEmptySourceFile(fs);
+                replaceText(fs, sources[project.third][source.config], `"composite": true,`, "");
+                replaceText(fs, sources[project.third][source.config], `"sourceMap": true,`, "");
+                replaceText(fs, sources[project.third][source.config], `"declarationMap": true,`, "");
             },
             ignoreWithoutBuildInfo: true,
             ignoreDtsChanged: true,
