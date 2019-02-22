@@ -6780,7 +6780,7 @@ namespace ts {
     /* @internal */
     export function isDeclaration(node: Node): node is NamedDeclaration {
         if (node.kind === SyntaxKind.TypeParameter) {
-            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJSFile(node);
+            return (node.parent && node.parent.kind !== SyntaxKind.JSDocTemplateTag) || isInJSFile(node);
         }
 
         return isDeclarationKind(node.kind);
