@@ -930,5 +930,40 @@ ${internal} enum internalEnum { a, b, c }`);
             ignoreDtsUnchanged: true,
             baselineOnly: true
         });
+
+        // only baseline
+        verifyOutFileScenario({
+            scenario: "stripInternal when few members of enum are internal",
+            modifyFs: fs => {
+                stripInternalOfThird(fs);
+                prependText(fs, sources[project.first][source.ts][part.one], `enum TokenFlags {
+    None = 0,
+    /* @internal */
+    PrecedingLineBreak = 1 << 0,
+    /* @internal */
+    PrecedingJSDocComment = 1 << 1,
+    /* @internal */
+    Unterminated = 1 << 2,
+    /* @internal */
+    ExtendedUnicodeEscape = 1 << 3,
+    Scientific = 1 << 4,
+    Octal = 1 << 5,
+    HexSpecifier = 1 << 6,
+    BinarySpecifier = 1 << 7,
+    OctalSpecifier = 1 << 8,
+    /* @internal */
+    ContainsSeparator = 1 << 9,
+    /* @internal */
+    BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
+    /* @internal */
+    NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
+}
+`);
+            },
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            ignoreDtsUnchanged: true,
+            baselineOnly: true
+        });
     });
 }
