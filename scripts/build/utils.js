@@ -340,6 +340,7 @@ function rm(dest, opts) {
             duplex.push(file);
             cb();
         }
+        duplex.push(null); // signal end of read queue
     };
 
     const duplex = new Duplex({
