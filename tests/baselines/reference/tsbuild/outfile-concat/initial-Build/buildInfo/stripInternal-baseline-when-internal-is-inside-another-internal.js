@@ -491,11 +491,11 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
-          "end": 130,
+          "end": 24,
           "kind": "text"
         },
         {
-          "pos": 130,
+          "pos": 24,
           "end": 363,
           "kind": "internal"
         },
@@ -533,14 +533,14 @@ sourceMapUrl: (110-150)
 ======================================================================
 File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
-text: (0-130)
+text: (0-24)
 declare namespace ts {
+
+----------------------------------------------------------------------
+internal: (24-363)
     interface SourceFileLike {
         readonly text: string;
         lineMap?: ReadonlyArray<number>;
-
-----------------------------------------------------------------------
-internal: (130-363)
         getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
     }
     interface RedirectInfo {
@@ -1287,48 +1287,48 @@ console.log(s);
       "sections": [
         {
           "pos": 0,
-          "end": 394,
+          "end": 288,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.d.ts",
           "texts": [
             {
               "pos": 0,
-              "end": 352,
+              "end": 246,
               "kind": "text"
             },
             {
-              "pos": 352,
-              "end": 394,
+              "pos": 246,
+              "end": 288,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 396,
-          "end": 539,
+          "pos": 290,
+          "end": 433,
           "kind": "prepend",
           "data": "/src/2/second-output.d.ts",
           "texts": [
             {
-              "pos": 396,
-              "end": 496,
+              "pos": 290,
+              "end": 390,
               "kind": "text"
             },
             {
-              "pos": 496,
-              "end": 539,
+              "pos": 390,
+              "end": 433,
               "kind": "sourceMapUrl"
             }
           ]
         },
         {
-          "pos": 541,
-          "end": 560,
+          "pos": 435,
+          "end": 454,
           "kind": "text"
         },
         {
-          "pos": 560,
-          "end": 602,
+          "pos": 454,
+          "end": 496,
           "kind": "sourceMapUrl"
         }
       ]
@@ -1388,13 +1388,10 @@ sourceMapUrl: (516-556)
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.d.ts
 ----------------------------------------------------------------------
-prepend: (0-394):: /src/first/bin/first-output.d.ts texts:: 2
+prepend: (0-288):: /src/first/bin/first-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
-text: (0-352)
+text: (0-246)
 declare namespace ts {
-    interface SourceFileLike {
-        readonly text: string;
-        lineMap?: ReadonlyArray<number>;
     interface SourceFile {
         someProp: string;
     }
@@ -1409,12 +1406,12 @@ interface NoJsForHereEither {
 declare function f(): string;
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (352-394)
+sourceMapUrl: (246-288)
 //# sourceMappingURL=first-output.d.ts.map
 ----------------------------------------------------------------------
-prepend: (396-539):: /src/2/second-output.d.ts texts:: 2
+prepend: (290-433):: /src/2/second-output.d.ts texts:: 2
 >>--------------------------------------------------------------------
-text: (396-496)
+text: (290-390)
 declare namespace N {
 }
 declare namespace N {
@@ -1424,22 +1421,19 @@ declare class C {
 }
 
 >>--------------------------------------------------------------------
-sourceMapUrl: (496-539)
+sourceMapUrl: (390-433)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
-text: (541-560)
+text: (435-454)
 declare var c: C;
 
 ----------------------------------------------------------------------
-sourceMapUrl: (560-602)
+sourceMapUrl: (454-496)
 //# sourceMappingURL=third-output.d.ts.map
 ======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 declare namespace ts {
-    interface SourceFileLike {
-        readonly text: string;
-        lineMap?: ReadonlyArray<number>;
     interface SourceFile {
         someProp: string;
     }
@@ -1465,7 +1459,7 @@ declare var c: C;
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,kBAAU,EAAE,CAAC;IAKT,UAAiB,cAAc;QAC3B,QAAQ,CAAC,IAAI,EAAE,MAAM,CAAC;QACtB,OAAO,CAAC,EAAE,aAAa,CAAC,MAAM,CAAC,CAAC;IAiBpC,UAAiB,UAAU;QACvB,QAAQ,EAAE,MAAM,CAAC;KACpB;CACJ;AAAA,UAAU,QAAQ;IACf,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACnCD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,kBAAU,EAAE,CAAC;IAwBT,UAAiB,UAAU;QACvB,QAAQ,EAAE,MAAM,CAAC;KACpB;CACJ;AAAA,UAAU,QAAQ;IACf,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACnCD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -1483,7 +1477,7 @@ sourceFile:../../../first/first_PART1.ts
 2 >^^^^^^^^^^^^^^^^^^
 3 >                  ^^
 4 >                    ^
-5 >                     ^^^^^^^^^^->
+5 >                     ^^^^^^->
 1 >
 2 >namespace 
 3 >                  ts
@@ -1493,84 +1487,19 @@ sourceFile:../../../first/first_PART1.ts
 3 >Emitted(1, 21) Source(1, 13) + SourceIndex(0)
 4 >Emitted(1, 22) Source(1, 14) + SourceIndex(0)
 ---
->>>    interface SourceFileLike {
+>>>    interface SourceFile {
 1->^^^^
 2 >    ^^^^^^^^^^
-3 >              ^^^^^^^^^^^^^^
-4 >                            ^^^->
+3 >              ^^^^^^^^^^
+4 >                        ^^->
 1->{
   >    /* @internal */
   >    /**
   >     * Subset of properties from SourceFile that are used in multiple utility functions
   >     */
-  >    
-2 >    export interface 
-3 >              SourceFileLike
-1->Emitted(2, 5) Source(6, 5) + SourceIndex(0)
-2 >Emitted(2, 15) Source(6, 22) + SourceIndex(0)
-3 >Emitted(2, 29) Source(6, 36) + SourceIndex(0)
----
->>>        readonly text: string;
-1->^^^^^^^^
-2 >        ^^^^^^^^
-3 >                ^
-4 >                 ^^^^
-5 >                     ^^
-6 >                       ^^^^^^
-7 >                             ^
-8 >                              ^^^^^^^^^^^->
-1-> {
-  >        
-2 >        readonly
-3 >                 
-4 >                 text
-5 >                     : 
-6 >                       string
-7 >                             ;
-1->Emitted(3, 9) Source(7, 9) + SourceIndex(0)
-2 >Emitted(3, 17) Source(7, 17) + SourceIndex(0)
-3 >Emitted(3, 18) Source(7, 18) + SourceIndex(0)
-4 >Emitted(3, 22) Source(7, 22) + SourceIndex(0)
-5 >Emitted(3, 24) Source(7, 24) + SourceIndex(0)
-6 >Emitted(3, 30) Source(7, 30) + SourceIndex(0)
-7 >Emitted(3, 31) Source(7, 31) + SourceIndex(0)
----
->>>        lineMap?: ReadonlyArray<number>;
-1->^^^^^^^^
-2 >        ^^^^^^^
-3 >               ^
-4 >                ^^
-5 >                  ^^^^^^^^^^^^^
-6 >                               ^
-7 >                                ^^^^^^
-8 >                                      ^
-9 >                                       ^
-1->
-  >        
-2 >        lineMap
-3 >               ?
-4 >                : 
-5 >                  ReadonlyArray
-6 >                               <
-7 >                                number
-8 >                                      >
-9 >                                       ;
-1->Emitted(4, 9) Source(8, 9) + SourceIndex(0)
-2 >Emitted(4, 16) Source(8, 16) + SourceIndex(0)
-3 >Emitted(4, 17) Source(8, 17) + SourceIndex(0)
-4 >Emitted(4, 19) Source(8, 19) + SourceIndex(0)
-5 >Emitted(4, 32) Source(8, 32) + SourceIndex(0)
-6 >Emitted(4, 33) Source(8, 33) + SourceIndex(0)
-7 >Emitted(4, 39) Source(8, 39) + SourceIndex(0)
-8 >Emitted(4, 40) Source(8, 40) + SourceIndex(0)
-9 >Emitted(4, 41) Source(8, 41) + SourceIndex(0)
----
->>>    interface SourceFile {
-1 >^^^^
-2 >    ^^^^^^^^^^
-3 >              ^^^^^^^^^^
-4 >                        ^^->
-1 >
+  >    export interface SourceFileLike {
+  >        readonly text: string;
+  >        lineMap?: ReadonlyArray<number>;
   >        /* @internal */
   >        getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
   >    }
@@ -1590,9 +1519,9 @@ sourceFile:../../../first/first_PART1.ts
   >    
 2 >    export interface 
 3 >              SourceFile
-1 >Emitted(5, 5) Source(25, 5) + SourceIndex(0)
-2 >Emitted(5, 15) Source(25, 22) + SourceIndex(0)
-3 >Emitted(5, 25) Source(25, 32) + SourceIndex(0)
+1->Emitted(2, 5) Source(25, 5) + SourceIndex(0)
+2 >Emitted(2, 15) Source(25, 22) + SourceIndex(0)
+3 >Emitted(2, 25) Source(25, 32) + SourceIndex(0)
 ---
 >>>        someProp: string;
 1->^^^^^^^^
@@ -1606,24 +1535,24 @@ sourceFile:../../../first/first_PART1.ts
 3 >                : 
 4 >                  string
 5 >                        ;
-1->Emitted(6, 9) Source(26, 9) + SourceIndex(0)
-2 >Emitted(6, 17) Source(26, 17) + SourceIndex(0)
-3 >Emitted(6, 19) Source(26, 19) + SourceIndex(0)
-4 >Emitted(6, 25) Source(26, 25) + SourceIndex(0)
-5 >Emitted(6, 26) Source(26, 26) + SourceIndex(0)
+1->Emitted(3, 9) Source(26, 9) + SourceIndex(0)
+2 >Emitted(3, 17) Source(26, 17) + SourceIndex(0)
+3 >Emitted(3, 19) Source(26, 19) + SourceIndex(0)
+4 >Emitted(3, 25) Source(26, 25) + SourceIndex(0)
+5 >Emitted(3, 26) Source(26, 26) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >    }
-1 >Emitted(7, 6) Source(27, 6) + SourceIndex(0)
+1 >Emitted(4, 6) Source(27, 6) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(8, 2) Source(28, 2) + SourceIndex(0)
+1 >Emitted(5, 2) Source(28, 2) + SourceIndex(0)
 ---
 >>>interface TheFirst {
 1->
@@ -1632,9 +1561,9 @@ sourceFile:../../../first/first_PART1.ts
 1->
 2 >interface 
 3 >          TheFirst
-1->Emitted(9, 1) Source(28, 2) + SourceIndex(0)
-2 >Emitted(9, 11) Source(28, 12) + SourceIndex(0)
-3 >Emitted(9, 19) Source(28, 20) + SourceIndex(0)
+1->Emitted(6, 1) Source(28, 2) + SourceIndex(0)
+2 >Emitted(6, 11) Source(28, 12) + SourceIndex(0)
+3 >Emitted(6, 19) Source(28, 20) + SourceIndex(0)
 ---
 >>>    none: any;
 1 >^^^^
@@ -1648,18 +1577,18 @@ sourceFile:../../../first/first_PART1.ts
 3 >        : 
 4 >          any
 5 >             ;
-1 >Emitted(10, 5) Source(29, 5) + SourceIndex(0)
-2 >Emitted(10, 9) Source(29, 9) + SourceIndex(0)
-3 >Emitted(10, 11) Source(29, 11) + SourceIndex(0)
-4 >Emitted(10, 14) Source(29, 14) + SourceIndex(0)
-5 >Emitted(10, 15) Source(29, 15) + SourceIndex(0)
+1 >Emitted(7, 5) Source(29, 5) + SourceIndex(0)
+2 >Emitted(7, 9) Source(29, 9) + SourceIndex(0)
+3 >Emitted(7, 11) Source(29, 11) + SourceIndex(0)
+4 >Emitted(7, 14) Source(29, 14) + SourceIndex(0)
+5 >Emitted(7, 15) Source(29, 15) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(11, 2) Source(30, 2) + SourceIndex(0)
+1 >Emitted(8, 2) Source(30, 2) + SourceIndex(0)
 ---
 >>>declare const s = "Hello, world";
 1->
@@ -1676,12 +1605,12 @@ sourceFile:../../../first/first_PART1.ts
 4 >              s
 5 >                = "Hello, world"
 6 >                                ;
-1->Emitted(12, 1) Source(32, 1) + SourceIndex(0)
-2 >Emitted(12, 9) Source(32, 1) + SourceIndex(0)
-3 >Emitted(12, 15) Source(32, 7) + SourceIndex(0)
-4 >Emitted(12, 16) Source(32, 8) + SourceIndex(0)
-5 >Emitted(12, 33) Source(32, 25) + SourceIndex(0)
-6 >Emitted(12, 34) Source(32, 26) + SourceIndex(0)
+1->Emitted(9, 1) Source(32, 1) + SourceIndex(0)
+2 >Emitted(9, 9) Source(32, 1) + SourceIndex(0)
+3 >Emitted(9, 15) Source(32, 7) + SourceIndex(0)
+4 >Emitted(9, 16) Source(32, 8) + SourceIndex(0)
+5 >Emitted(9, 33) Source(32, 25) + SourceIndex(0)
+6 >Emitted(9, 34) Source(32, 26) + SourceIndex(0)
 ---
 >>>interface NoJsForHereEither {
 1 >
@@ -1692,9 +1621,9 @@ sourceFile:../../../first/first_PART1.ts
   >
 2 >interface 
 3 >          NoJsForHereEither
-1 >Emitted(13, 1) Source(34, 1) + SourceIndex(0)
-2 >Emitted(13, 11) Source(34, 11) + SourceIndex(0)
-3 >Emitted(13, 28) Source(34, 28) + SourceIndex(0)
+1 >Emitted(10, 1) Source(34, 1) + SourceIndex(0)
+2 >Emitted(10, 11) Source(34, 11) + SourceIndex(0)
+3 >Emitted(10, 28) Source(34, 28) + SourceIndex(0)
 ---
 >>>    none: any;
 1 >^^^^
@@ -1708,18 +1637,18 @@ sourceFile:../../../first/first_PART1.ts
 3 >        : 
 4 >          any
 5 >             ;
-1 >Emitted(14, 5) Source(35, 5) + SourceIndex(0)
-2 >Emitted(14, 9) Source(35, 9) + SourceIndex(0)
-3 >Emitted(14, 11) Source(35, 11) + SourceIndex(0)
-4 >Emitted(14, 14) Source(35, 14) + SourceIndex(0)
-5 >Emitted(14, 15) Source(35, 15) + SourceIndex(0)
+1 >Emitted(11, 5) Source(35, 5) + SourceIndex(0)
+2 >Emitted(11, 9) Source(35, 9) + SourceIndex(0)
+3 >Emitted(11, 11) Source(35, 11) + SourceIndex(0)
+4 >Emitted(11, 14) Source(35, 14) + SourceIndex(0)
+5 >Emitted(11, 15) Source(35, 15) + SourceIndex(0)
 ---
 >>>}
 1 >^
 2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >}
-1 >Emitted(15, 2) Source(36, 2) + SourceIndex(0)
+1 >Emitted(12, 2) Source(36, 2) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1737,10 +1666,10 @@ sourceFile:../../../first/first_part3.ts
 4 >                  () {
   >                      return "JS does hoists";
   >                  }
-1->Emitted(16, 1) Source(1, 1) + SourceIndex(1)
-2 >Emitted(16, 18) Source(1, 10) + SourceIndex(1)
-3 >Emitted(16, 19) Source(1, 11) + SourceIndex(1)
-4 >Emitted(16, 30) Source(3, 2) + SourceIndex(1)
+1->Emitted(13, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(13, 18) Source(1, 10) + SourceIndex(1)
+3 >Emitted(13, 19) Source(1, 11) + SourceIndex(1)
+4 >Emitted(13, 30) Source(3, 2) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1756,10 +1685,10 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(18, 1) Source(1, 1) + SourceIndex(2)
-2 >Emitted(18, 19) Source(1, 11) + SourceIndex(2)
-3 >Emitted(18, 20) Source(1, 12) + SourceIndex(2)
-4 >Emitted(18, 21) Source(1, 13) + SourceIndex(2)
+1->Emitted(15, 1) Source(1, 1) + SourceIndex(2)
+2 >Emitted(15, 19) Source(1, 11) + SourceIndex(2)
+3 >Emitted(15, 20) Source(1, 12) + SourceIndex(2)
+4 >Emitted(15, 21) Source(1, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -1767,7 +1696,7 @@ sourceFile:../../../second/second_part1.ts
 1 >{
   >    // Comment text
   >}
-1 >Emitted(19, 2) Source(3, 2) + SourceIndex(2)
+1 >Emitted(16, 2) Source(3, 2) + SourceIndex(2)
 ---
 >>>declare namespace N {
 1->
@@ -1780,10 +1709,10 @@ sourceFile:../../../second/second_part1.ts
 2 >namespace 
 3 >                  N
 4 >                    
-1->Emitted(20, 1) Source(5, 1) + SourceIndex(2)
-2 >Emitted(20, 19) Source(5, 11) + SourceIndex(2)
-3 >Emitted(20, 20) Source(5, 12) + SourceIndex(2)
-4 >Emitted(20, 21) Source(5, 13) + SourceIndex(2)
+1->Emitted(17, 1) Source(5, 1) + SourceIndex(2)
+2 >Emitted(17, 19) Source(5, 11) + SourceIndex(2)
+3 >Emitted(17, 20) Source(5, 12) + SourceIndex(2)
+4 >Emitted(17, 21) Source(5, 13) + SourceIndex(2)
 ---
 >>>}
 1 >^
@@ -1795,7 +1724,7 @@ sourceFile:../../../second/second_part1.ts
   >
   >    f();
   >}
-1 >Emitted(21, 2) Source(11, 2) + SourceIndex(2)
+1 >Emitted(18, 2) Source(11, 2) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1809,9 +1738,9 @@ sourceFile:../../../second/second_part2.ts
 1->
 2 >class 
 3 >              C
-1->Emitted(22, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(22, 15) Source(1, 7) + SourceIndex(3)
-3 >Emitted(22, 16) Source(1, 8) + SourceIndex(3)
+1->Emitted(19, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(19, 15) Source(1, 7) + SourceIndex(3)
+3 >Emitted(19, 16) Source(1, 8) + SourceIndex(3)
 ---
 >>>    doSomething(): void;
 1->^^^^
@@ -1819,8 +1748,8 @@ sourceFile:../../../second/second_part2.ts
 1-> {
   >    
 2 >    doSomething
-1->Emitted(23, 5) Source(2, 5) + SourceIndex(3)
-2 >Emitted(23, 16) Source(2, 16) + SourceIndex(3)
+1->Emitted(20, 5) Source(2, 5) + SourceIndex(3)
+2 >Emitted(20, 16) Source(2, 16) + SourceIndex(3)
 ---
 >>>}
 1 >^
@@ -1829,7 +1758,7 @@ sourceFile:../../../second/second_part2.ts
   >        console.log("something got done");
   >    }
   >}
-1 >Emitted(24, 2) Source(5, 2) + SourceIndex(3)
+1 >Emitted(21, 2) Source(5, 2) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/third/thirdjs/output/third-output.d.ts
@@ -1850,12 +1779,12 @@ sourceFile:../../third_part1.ts
 4 >            c
 5 >              = new C()
 6 >                ;
-1->Emitted(26, 1) Source(1, 1) + SourceIndex(4)
-2 >Emitted(26, 9) Source(1, 1) + SourceIndex(4)
-3 >Emitted(26, 13) Source(1, 5) + SourceIndex(4)
-4 >Emitted(26, 14) Source(1, 6) + SourceIndex(4)
-5 >Emitted(26, 17) Source(1, 16) + SourceIndex(4)
-6 >Emitted(26, 18) Source(1, 17) + SourceIndex(4)
+1->Emitted(23, 1) Source(1, 1) + SourceIndex(4)
+2 >Emitted(23, 9) Source(1, 1) + SourceIndex(4)
+3 >Emitted(23, 13) Source(1, 5) + SourceIndex(4)
+4 >Emitted(23, 14) Source(1, 6) + SourceIndex(4)
+5 >Emitted(23, 17) Source(1, 16) + SourceIndex(4)
+6 >Emitted(23, 18) Source(1, 17) + SourceIndex(4)
 ---
 >>>//# sourceMappingURL=third-output.d.ts.map
 

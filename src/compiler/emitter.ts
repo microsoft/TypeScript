@@ -665,6 +665,7 @@ namespace ts {
         const bundleFileInfo = printerOptions.writeBundleFileInfo ? { sections: [] } as BundleFileInfo : undefined;
         const recordInternalSection = printerOptions.recordInternalSection;
         let sourceFileTextPos = 0;
+        let sourceFileTextKind: BundleFileTextLikeKind = BundleFileSectionKind.Text;
 
         // Source Maps
         let sourceMapsDisabled = true;
@@ -777,9 +778,9 @@ namespace ts {
             }
         }
 
-        function recordBundleFileTextSection(end: number) {
+        function recordBundleFileTextLikeSection(end: number) {
             if (sourceFileTextPos < end) {
-                updateOrPushBundleFileTextLike(sourceFileTextPos, end, BundleFileSectionKind.Text);
+                updateOrPushBundleFileTextLike(sourceFileTextPos, end, sourceFileTextKind);
                 return true;
             }
             return false;
@@ -817,7 +818,7 @@ namespace ts {
             }
             if (bundleFileInfo && bundle.sourceFiles.length) {
                 const end = writer.getTextPos();
-                if (recordBundleFileTextSection(end)) {
+                if (recordBundleFileTextLikeSection(end)) {
                     // Store prologues
                     const prologues = getPrologueDirectivesFromBundledSourceFiles(bundle);
                     if (prologues) {
@@ -914,14 +915,19 @@ namespace ts {
 
         function emit(node: Node | undefined) {
             if (node === undefined) return;
-            const end = writer.getTextPos();
-            const pos = getTextPosWithWriteLine();
+            const isInternal = recordInternalSection && bundleFileInfo && currentSourceFile && (isDeclaration(node) || isVariableStatement(node)) && isInternalDeclaration(node, currentSourceFile);
+            const prevSourceFileTextKind = sourceFileTextKind;
+            if (isInternal) {
+                recordBundleFileTextLikeSection(writer.getTextPos());
+                sourceFileTextPos = getTextPosWithWriteLine();
+                sourceFileTextKind = BundleFileSectionKind.Internal;
+            }
             const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, node);
             pipelinePhase(EmitHint.Unspecified, node);
-            if (recordInternalSection && bundleFileInfo && currentSourceFile && (isDeclaration(node) || isVariableStatement(node)) && isInternalDeclaration(node, currentSourceFile)) {
-                recordBundleFileTextSection(end);
-                updateOrPushBundleFileTextLike(pos, writer.getTextPos(), BundleFileSectionKind.Internal);
+            if (isInternal) {
+                recordBundleFileTextLikeSection(writer.getTextPos());
                 sourceFileTextPos = getTextPosWithWriteLine();
+                sourceFileTextKind = prevSourceFileTextKind;
             }
         }
 
