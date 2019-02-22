@@ -2941,6 +2941,7 @@ namespace ts {
         }
 
         function verifyProjectReferences() {
+            const buildInfoPath = !options.noEmit && !options.suppressOutputPathCheck ? getOutputPathForBuildInfo(options, projectReferences) : undefined;
             forEachProjectReference(projectReferences, resolvedProjectReferences, (resolvedRef, index, parent) => {
                 const ref = (parent ? parent.commandLine.projectReferences : projectReferences)![index];
                 const parentFile = parent && parent.sourceFile as JsonSourceFile;
@@ -2966,6 +2967,11 @@ namespace ts {
                     else {
                         createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_prepend_project_0_because_it_does_not_have_outFile_set, ref.path);
                     }
+                }
+                const refBuildInfoPath = getOutputPathForBuildInfo(options, resolvedRef.commandLine.projectReferences);
+                if (refBuildInfoPath && refBuildInfoPath === buildInfoPath) {
+                    createDiagnosticForReference(parentFile, index, Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_of_referenced_project_1, buildInfoPath, ref.path);
+                    hasEmitBlockingDiagnostics.set(toPath(buildInfoPath), true);
                 }
             });
         }

@@ -4016,6 +4016,10 @@
         "category": "Message",
         "code": 6376
     },
+    "Cannot write file '{0}' because it will overwrite '.tsbuildinfo' of referenced project '{1}'": {
+        "category": "Error",
+        "code": 6377
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

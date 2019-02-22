@@ -478,6 +478,32 @@ namespace ts {
             );
         });
 
+        it("verify that if multiple projects write tsbuildinfo to same location, reports error", () => {
+            const fs = outFileFs.shadow();
+            const host = new fakes.SolutionBuilderHost(fs);
+            replaceText(fs, sources[project.first][source.config], "./bin/first-output.js", "../bin/first-output.js");
+            replaceText(fs, sources[project.second][source.config], "../2/second-output.js", "../bin/second-output.js");
+            replaceText(fs, sources[project.third][source.config], "./thirdjs/output/third-output.js", "../bin/third-output.js");
+            const builder = createSolutionBuilder(host);
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(
+                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], "src/bin/first-output.js"],
+                [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.second][source.config], "src/bin/second-output.js"],
+                [Diagnostics.Building_project_0, sources[project.second][source.config]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], "src/bin/third-output.js"],
+                [Diagnostics.Building_project_0, sources[project.third][source.config]],
+                [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_of_referenced_project_1, "/src/bin/.tsbuildinfo", "/src/first"],
+                [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_of_referenced_project_1, "/src/bin/.tsbuildinfo", "/src/second"]
+            );
+            // Verify they exist
+            for (const output of ["/src/bin/first-output.js", "/src/bin/second-output.js"]) {
+                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
+            assert.isFalse(fs.existsSync("/src/bin/third-output.js"), `Expect file "/src/bin/third-output.js" to not exist`);
+        });
+
         // Prologues
         function enableStrict(fs: vfs.FileSystem, path: string) {
             replaceText(fs, path, `"strict": false`, `"strict": true`);
