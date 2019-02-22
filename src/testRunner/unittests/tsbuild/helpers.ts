@@ -228,7 +228,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
     }
 
     function verifyTsbuildOutputWorker({
-        scenario, projFs, time, tick, proj, rootNames, outputFiles,
+        scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly,
         expectedMapFileNames, expectedTsbuildInfoFileNames, withoutBuildInfo, lastProjectOutputJs,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInputWorker) {
@@ -256,14 +256,16 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 host = undefined!;
             });
             describe("initialBuild", () => {
-                it(`verify diagnostics`, () => {
-                    host.assertDiagnosticMessages(...(getValue(initialBuild, withoutBuildInfo, "expectedDiagnostics") || emptyArray));
-                });
+                if (!baselineOnly) {
+                    it(`verify diagnostics`, () => {
+                        host.assertDiagnosticMessages(...(getValue(initialBuild, withoutBuildInfo, "expectedDiagnostics") || emptyArray));
+                    });
+                }
                 it(`Generates files matching the baseline`, () => {
                     generateBaseline(fs, proj, scenario, "initial Build", withoutBuildInfo, projFs());
                 });
                 const expectedReadFiles = getValue(initialBuild, withoutBuildInfo, "expectedReadFiles");
-                if (expectedReadFiles) {
+                if (!baselineOnly && expectedReadFiles) {
                     it("verify readFile calls", () => {
                         verifyReadFileCalls(actualReadFileMap, expectedReadFiles);
                     });
@@ -300,13 +302,15 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                         actualReadFileMap = undefined!;
                         host = undefined!;
                     });
-                    it(`verify diagnostics`, () => {
-                        host.assertDiagnosticMessages(...(incrementalExpectedDiagnostics || emptyArray));
-                    });
+                    if (!baselineOnly) {
+                        it(`verify diagnostics`, () => {
+                            host.assertDiagnosticMessages(...(incrementalExpectedDiagnostics || emptyArray));
+                        });
+                    }
                     it(`Generates files matching the baseline`, () => {
                         generateBaseline(newFs, proj, scenario, subScenario, withoutBuildInfo, fs);
                     });
-                    if (incrementalExpectedReadFiles) {
+                    if (!baselineOnly && incrementalExpectedReadFiles) {
                         it("verify readFile calls", () => {
                             verifyReadFileCalls(actualReadFileMap, incrementalExpectedReadFiles);
                         });
@@ -379,13 +383,15 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         lastProjectOutputJs: string;
         initialBuild: ExpectedBuildOutputDifferingWithBuildInfo;
         outputFiles?: ReadonlyArray<string>;
+        ignoreWithoutBuildInfo?: boolean;
         incrementalDtsChangedBuild ?: ExpectedBuildOutputDifferingWithBuildInfo;
         incrementalDtsUnchangedBuild ?: ExpectedBuildOutputDifferingWithBuildInfo;
-        incrementalHeaderChangedBuild ?: ExpectedBuildOutputDifferingWithBuildInfo;
+        incrementalHeaderChangedBuild?: ExpectedBuildOutputDifferingWithBuildInfo;
+        baselineOnly?: true;
     }
 
     export function verifyTsbuildOutput(input: VerifyTsBuildInput) {
         verifyTsbuildOutputWorker({ ...input, withoutBuildInfo: false });
-        verifyTsbuildOutputWorker({ ...input, withoutBuildInfo: true });
+        if (!input.ignoreWithoutBuildInfo) verifyTsbuildOutputWorker({ ...input, withoutBuildInfo: true });
     }
 }

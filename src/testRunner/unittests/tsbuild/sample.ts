@@ -636,7 +636,8 @@ class someClass { }`),
                     "/src/tests/index.js",
                     "/src/tests/index.d.ts",
                     "/src/tests/.tsbuildinfo",
-                ]
+                ],
+                ignoreWithoutBuildInfo: true
             });
         });
     });

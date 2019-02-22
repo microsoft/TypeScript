@@ -76,7 +76,7 @@ namespace ts {
             ...outputFiles[project.second],
             ...outputFiles[project.third]
         ];
-        let initialBuildExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let initialExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], relOutputFiles[project.first][ext.js]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -85,7 +85,7 @@ namespace ts {
             [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], relOutputFiles[project.third][ext.js]],
             [Diagnostics.Building_project_0, sources[project.third][source.config]]
         ];
-        let initialBuildExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
+        let initialExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
             [
                 // Configs
                 sources[project.first][source.config],
@@ -109,7 +109,7 @@ namespace ts {
             outputFiles[project.second][ext.buildinfo]
         );
 
-        let incrementalDtsChangedExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsChangedExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -117,7 +117,7 @@ namespace ts {
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/first"],
             [Diagnostics.Building_project_0, sources[project.third][source.config]]
         ];
-        let incrementalDtsChangedExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
+        let dtsChangedExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
             [
                 // Configs
                 sources[project.first][source.config],
@@ -140,7 +140,7 @@ namespace ts {
             outputFiles[project.first][ext.buildinfo], // since first build info changes
         );
 
-        let incrementalDtsChangedExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsChangedExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -149,9 +149,9 @@ namespace ts {
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.js], "src/second"],
             [Diagnostics.Building_project_0, sources[project.third][source.config]]
         ];
-        let incrementalDtsChangedExpectedReadFilesDependOrdered: ReadonlyMap<number> = getIncrementalDtsChangedReadFilesDependOrdered();
+        let dtsChangedExpectedReadFilesDependOrdered: ReadonlyMap<number> = getDtsChangedReadFilesDependOrdered();
 
-        let incrementalDtsUnchangedWithBuildInfoExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsUnchangedWithBuildInfoExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -160,7 +160,7 @@ namespace ts {
             [Diagnostics.Updating_output_of_project_0, sources[project.third][source.config]],
             [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]],
         ];
-        let incrementalDtsUnchangedWithBuildInfoExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
+        let dtsUnchangedWithBuildInfoExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
             [
                 // Configs
                 sources[project.first][source.config],
@@ -179,7 +179,7 @@ namespace ts {
             outputFiles[project.first][ext.buildinfo], // since first build info changes
         );
 
-        let incrementalDtsUnchangedWithBuildInfoExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsUnchangedWithBuildInfoExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -190,9 +190,9 @@ namespace ts {
             [Diagnostics.Updating_output_of_project_0, sources[project.third][source.config]],
             [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, sources[project.third][source.config]],
         ];
-        let incrementalDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered: ReadonlyMap<number> = getIncrementalDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered();
+        let dtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered: ReadonlyMap<number> = getDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered();
 
-        let incrementalDtsUnchangedWithoutBuildInfoExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsUnchangedWithoutBuildInfoExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -202,7 +202,7 @@ namespace ts {
             [Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
             [Diagnostics.Building_project_0, sources[project.third][source.config]]
         ];
-        let incrementalDtsUnchangedWithoutBuildInfoExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
+        let dtsUnchangedWithoutBuildInfoExpectedReadFiles: ReadonlyMap<number> = getReadFilesMap(
             [
                 // Configs
                 sources[project.first][source.config],
@@ -224,7 +224,7 @@ namespace ts {
             outputFiles[project.first][ext.buildinfo], // since first build info changes
         );
 
-        let incrementalDtsUnchangedWithoutBuildInfoExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
+        let dtsUnchangedWithoutBuildInfoExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
             getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
             [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
             [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -237,7 +237,7 @@ namespace ts {
             [Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, sources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo]],
             [Diagnostics.Building_project_0, sources[project.third][source.config]]
         ];
-        let incrementalDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered: ReadonlyMap<number> = getIncrementalDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered();
+        let dtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered: ReadonlyMap<number> = getDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered();
 
         before(() => {
             outFileFs = loadProjectFromDisk("tests/projects/outfile-concat", time);
@@ -245,37 +245,37 @@ namespace ts {
         after(() => {
             outFileFs = undefined!;
             expectedOutputFiles = undefined!;
-            initialBuildExpectedDiagnostics = undefined!;
-            initialBuildExpectedReadFiles = undefined!;
-            incrementalDtsChangedExpectedDiagnostics = undefined!;
-            incrementalDtsChangedExpectedReadFiles = undefined!;
-            incrementalDtsChangedExpectedDiagnosticsDependOrdered = undefined!;
-            incrementalDtsChangedExpectedReadFilesDependOrdered = undefined!;
-            incrementalDtsUnchangedWithBuildInfoExpectedDiagnostics = undefined!;
-            incrementalDtsUnchangedWithBuildInfoExpectedReadFiles = undefined!;
-            incrementalDtsUnchangedWithBuildInfoExpectedDiagnosticsDependOrdered = undefined!;
-            incrementalDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered = undefined!;
-            incrementalDtsUnchangedWithoutBuildInfoExpectedDiagnostics = undefined!;
-            incrementalDtsUnchangedWithoutBuildInfoExpectedReadFiles = undefined!;
-            incrementalDtsUnchangedWithoutBuildInfoExpectedDiagnosticsDependOrdered = undefined!;
-            incrementalDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered = undefined!;
+            initialExpectedDiagnostics = undefined!;
+            initialExpectedReadFiles = undefined!;
+            dtsChangedExpectedDiagnostics = undefined!;
+            dtsChangedExpectedReadFiles = undefined!;
+            dtsChangedExpectedDiagnosticsDependOrdered = undefined!;
+            dtsChangedExpectedReadFilesDependOrdered = undefined!;
+            dtsUnchangedWithBuildInfoExpectedDiagnostics = undefined!;
+            dtsUnchangedWithBuildInfoExpectedReadFiles = undefined!;
+            dtsUnchangedWithBuildInfoExpectedDiagnosticsDependOrdered = undefined!;
+            dtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered = undefined!;
+            dtsUnchangedWithoutBuildInfoExpectedDiagnostics = undefined!;
+            dtsUnchangedWithoutBuildInfoExpectedReadFiles = undefined!;
+            dtsUnchangedWithoutBuildInfoExpectedDiagnosticsDependOrdered = undefined!;
+            dtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered = undefined!;
         });
 
         function createSolutionBuilder(host: fakes.SolutionBuilderHost) {
             return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
         }
 
-        function getInitialBuildExpectedReadFiles(additionalSourceFiles?: ReadonlyArray<string>) {
-            if (!additionalSourceFiles) return initialBuildExpectedReadFiles;
-            const expectedReadFiles = cloneMap(initialBuildExpectedReadFiles);
+        function getInitialExpectedReadFiles(additionalSourceFiles?: ReadonlyArray<string>) {
+            if (!additionalSourceFiles) return initialExpectedReadFiles;
+            const expectedReadFiles = cloneMap(initialExpectedReadFiles);
             for (const path of additionalSourceFiles) {
                 expectedReadFiles.set(path, 1);
             }
             return expectedReadFiles;
         }
 
-        function getIncrementalDtsChangedReadFilesDependOrdered() {
-            const value = cloneMap(incrementalDtsChangedExpectedReadFiles);
+        function getDtsChangedReadFilesDependOrdered() {
+            const value = cloneMap(dtsChangedExpectedReadFiles);
             for (const path of sources[project.second][source.ts]) {
                 value.set(path, 1);
             }
@@ -284,8 +284,8 @@ namespace ts {
             return value;
         }
 
-        function getIncrementalDtsChangedReadFiles(dependOrdered?: boolean, additionalSourceFiles?: ReadonlyArray<string>) {
-            const value = dependOrdered ? incrementalDtsChangedExpectedReadFilesDependOrdered : incrementalDtsChangedExpectedReadFiles;
+        function getDtsChangedReadFiles(dependOrdered?: boolean, additionalSourceFiles?: ReadonlyArray<string>) {
+            const value = dependOrdered ? dtsChangedExpectedReadFilesDependOrdered : dtsChangedExpectedReadFiles;
             if (!additionalSourceFiles) return value;
             const expectedReadFiles = cloneMap(value);
             for (const path of additionalSourceFiles) {
@@ -294,8 +294,8 @@ namespace ts {
             return expectedReadFiles;
         }
 
-        function getIncrementalDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered() {
-            const value = cloneMap(incrementalDtsUnchangedWithBuildInfoExpectedReadFiles);
+        function getDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered() {
+            const value = cloneMap(dtsUnchangedWithBuildInfoExpectedReadFiles);
             // Since this changes too
             for (const path of outputFiles[project.second]) {
                 value.set(path, 2);
@@ -303,8 +303,8 @@ namespace ts {
             return value;
         }
 
-        function getIncrementalDtsUnchangedWithBuildInfoReadFiles(dependOrdered?: boolean, additionalSourceFiles?: ReadonlyArray<string>) {
-            const value = dependOrdered ? incrementalDtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered : incrementalDtsUnchangedWithBuildInfoExpectedReadFiles;
+        function getDtsUnchangedWithBuildInfoReadFiles(dependOrdered?: boolean, additionalSourceFiles?: ReadonlyArray<string>) {
+            const value = dependOrdered ? dtsUnchangedWithBuildInfoExpectedReadFilesDependOrdered : dtsUnchangedWithBuildInfoExpectedReadFiles;
             if (!additionalSourceFiles || additionalSourceFiles.length !== 3) return value;
             const expectedReadFiles = cloneMap(value);
             // Additional source Files
@@ -312,8 +312,8 @@ namespace ts {
             return expectedReadFiles;
         }
 
-        function getIncrementalDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered() {
-            const value = cloneMap(incrementalDtsUnchangedWithoutBuildInfoExpectedReadFiles);
+        function getDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered() {
+            const value = cloneMap(dtsUnchangedWithoutBuildInfoExpectedReadFiles);
             // Source files
             for (const path of sources[project.second][source.ts]) {
                 value.set(path, 1);
@@ -323,8 +323,8 @@ namespace ts {
             return value;
         }
 
-        function getIncrementalDtsUnchangedWithoutBuildInfoReadFiles(dependOrdered?: boolean, additionalSourceFiles?: ReadonlyArray<string>) {
-            const value = dependOrdered ? incrementalDtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered : incrementalDtsUnchangedWithoutBuildInfoExpectedReadFiles;
+        function getDtsUnchangedWithoutBuildInfoReadFiles(dependOrdered?: boolean, additionalSourceFiles?: ReadonlyArray<string>) {
+            const value = dependOrdered ? dtsUnchangedWithoutBuildInfoExpectedReadFilesDependOrdered : dtsUnchangedWithoutBuildInfoExpectedReadFiles;
             if (!additionalSourceFiles) return value;
             const expectedReadFiles = cloneMap(value);
             // Additional source Files
@@ -334,33 +334,43 @@ namespace ts {
             return expectedReadFiles;
         }
 
+        interface VerifyOutFileScenarioInput {
+            scenario: string;
+            modifyFs: (fs: vfs.FileSystem) => void;
+            modifyAgainFs?: (fs: vfs.FileSystem) => void;
+            additionalSourceFiles?: ReadonlyArray<string>;
+            dependOrdered?: true;
+            ignoreDtsChanged?: true;
+            ignoreDtsUnchanged?: true;
+            ignoreWithoutBuildInfo?: true;
+            baselineOnly?: true;
+        }
+
         function verifyOutFileScenario({
             scenario,
             modifyFs,
             modifyAgainFs,
             additionalSourceFiles,
             dependOrdered,
-        }: {
-            scenario: string;
-            modifyFs: (fs: vfs.FileSystem) => void;
-            modifyAgainFs?: (fs: vfs.FileSystem) => void;
-            additionalSourceFiles?: ReadonlyArray<string>;
-            dependOrdered?: boolean;
-            }) {
-            const initialBuildExpectedReadFiles = getInitialBuildExpectedReadFiles(additionalSourceFiles);
-            const incrementalDtsChangedReadFiles = getIncrementalDtsChangedReadFiles(dependOrdered, additionalSourceFiles);
-            const incrementalDtsUnchangedWithBuildInfo: ExpectedBuildOutputPerState = {
+            ignoreDtsChanged,
+            ignoreDtsUnchanged,
+            ignoreWithoutBuildInfo,
+            baselineOnly
+        }: VerifyOutFileScenarioInput) {
+            const initialExpectedReadFiles = !baselineOnly ? getInitialExpectedReadFiles(additionalSourceFiles) : undefined;
+            const dtsChangedReadFiles = !baselineOnly && !ignoreDtsChanged ? getDtsChangedReadFiles(dependOrdered, additionalSourceFiles) : undefined;
+            const dtsUnchangedWithBuildInfo: ExpectedBuildOutputPerState | undefined = !baselineOnly && (!ignoreDtsUnchanged || !modifyAgainFs) ? {
                 expectedDiagnostics: dependOrdered ?
-                    incrementalDtsUnchangedWithBuildInfoExpectedDiagnosticsDependOrdered :
-                    incrementalDtsUnchangedWithBuildInfoExpectedDiagnostics,
-                expectedReadFiles: getIncrementalDtsUnchangedWithBuildInfoReadFiles(dependOrdered, additionalSourceFiles)
-            };
-            const incrementalDtsUnchangedWithoutBuildInfo: ExpectedBuildOutputPerState = {
+                    dtsUnchangedWithBuildInfoExpectedDiagnosticsDependOrdered :
+                    dtsUnchangedWithBuildInfoExpectedDiagnostics,
+                expectedReadFiles: getDtsUnchangedWithBuildInfoReadFiles(dependOrdered, additionalSourceFiles)
+            } : undefined;
+            const dtsUnchangedWithoutBuildInfo: ExpectedBuildOutputPerState | undefined = !baselineOnly && !ignoreWithoutBuildInfo && (!ignoreDtsUnchanged || !modifyAgainFs) ? {
                 expectedDiagnostics: dependOrdered ?
-                    incrementalDtsUnchangedWithoutBuildInfoExpectedDiagnosticsDependOrdered :
-                    incrementalDtsUnchangedWithoutBuildInfoExpectedDiagnostics,
-                expectedReadFiles: getIncrementalDtsUnchangedWithoutBuildInfoReadFiles(dependOrdered, additionalSourceFiles)
-            };
+                    dtsUnchangedWithoutBuildInfoExpectedDiagnosticsDependOrdered :
+                    dtsUnchangedWithoutBuildInfoExpectedDiagnostics,
+                expectedReadFiles: getDtsUnchangedWithoutBuildInfoReadFiles(dependOrdered, additionalSourceFiles)
+            } : undefined;
 
             verifyTsbuildOutput({
                 scenario,
@@ -374,38 +384,45 @@ namespace ts {
                 lastProjectOutputJs: outputFiles[project.third][ext.js],
                 initialBuild: {
                     modifyFs,
-                    expectedDiagnostics: initialBuildExpectedDiagnostics,
-                    expectedReadFiles: initialBuildExpectedReadFiles
+                    expectedDiagnostics: initialExpectedDiagnostics,
+                    expectedReadFiles: initialExpectedReadFiles
                 },
-                incrementalDtsChangedBuild: {
+                incrementalDtsChangedBuild: !ignoreDtsChanged ? {
                     modifyFs: fs => replaceText(fs, relSources[project.first][source.ts][part.one], "Hello", "Hola"),
                     expectedDiagnostics: dependOrdered ?
-                        incrementalDtsChangedExpectedDiagnosticsDependOrdered :
-                        incrementalDtsChangedExpectedDiagnostics,
-                    expectedReadFiles: incrementalDtsChangedReadFiles
-                },
-                incrementalDtsUnchangedBuild: {
+                        dtsChangedExpectedDiagnosticsDependOrdered :
+                        dtsChangedExpectedDiagnostics,
+                    expectedReadFiles: dtsChangedReadFiles
+                } : undefined,
+                incrementalDtsUnchangedBuild: !ignoreDtsUnchanged ? {
                     modifyFs: fs => appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);"),
-                    withBuildInfo: incrementalDtsUnchangedWithBuildInfo,
-                    withoutBuildInfo: incrementalDtsUnchangedWithoutBuildInfo
-                },
-                incrementalHeaderChangedBuild: modifyAgainFs && {
+                    withBuildInfo: dtsUnchangedWithBuildInfo,
+                    withoutBuildInfo: dtsUnchangedWithoutBuildInfo
+                } : undefined,
+                incrementalHeaderChangedBuild: modifyAgainFs ? {
                     modifyFs: modifyAgainFs,
-                    withBuildInfo: incrementalDtsUnchangedWithBuildInfo,
-                    withoutBuildInfo: incrementalDtsUnchangedWithoutBuildInfo
-                },
-                outputFiles: expectedOutputFiles
+                    withBuildInfo: dtsUnchangedWithBuildInfo,
+                    withoutBuildInfo: dtsUnchangedWithoutBuildInfo
+                } : undefined,
+                outputFiles: expectedOutputFiles,
+                ignoreWithoutBuildInfo,
+                baselineOnly
             });
         }
 
+        // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "baseline sectioned sourcemaps",
             modifyFs: noop
         });
 
+        // Verify baseline with and without build info
         verifyOutFileScenario({
             scenario: "when final project is not composite but uses project references",
-            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, "")
+            modifyFs: fs => replaceText(fs, "/src/third/tsconfig.json", `"composite": true,`, ""),
+            ignoreDtsChanged: true,
+            ignoreDtsUnchanged: true,
+            baselineOnly: true
         });
 
         it("clean projects", () => {
@@ -509,6 +526,7 @@ namespace ts {
             replaceText(fs, path, `"strict": false`, `"strict": true`);
         }
 
+        // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "strict in all projects",
             modifyFs: fs => {
@@ -519,12 +537,16 @@ namespace ts {
             modifyAgainFs: fs => addPrologue(fs, relSources[project.first][source.ts][part.one], `"myPrologue"`)
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "strict in one dependency",
             modifyFs: fs => {
                 enableStrict(fs, sources[project.second][source.config]);
             },
-            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`)
+            modifyAgainFs: fs => addPrologue(fs, "src/first/first_PART1.ts", `"myPrologue"`),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
         function addPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
@@ -532,6 +554,7 @@ namespace ts {
 `);
         }
 
+        // Verify initial + incremental edits - sourcemap verification
         verifyOutFileScenario({
             scenario: "multiple prologues in all projects",
             modifyFs: fs => {
@@ -547,6 +570,7 @@ namespace ts {
             modifyAgainFs: fs => addPrologue(fs, relSources[project.first][source.ts][part.one], `"myPrologue5"`)
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "multiple prologues in different projects",
             modifyFs: fs => {
@@ -555,7 +579,10 @@ namespace ts {
                 addPrologue(fs, sources[project.second][source.ts][part.two], `"myPrologue2";`);
                 enableStrict(fs, sources[project.third][source.config]);
             },
-            modifyAgainFs: fs => addPrologue(fs, sources[project.first][source.ts][part.one], `"myPrologue5"`)
+            modifyAgainFs: fs => addPrologue(fs, sources[project.first][source.ts][part.one], `"myPrologue5"`),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
         // Shebang
@@ -565,6 +592,7 @@ namespace ts {
         }
 
         // changes declaration because its emitted in .d.ts file
+        // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "shebang in all projects",
             modifyFs: fs => {
@@ -575,11 +603,15 @@ namespace ts {
             },
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "shebang in only one dependency project",
             modifyFs: fs => {
                 addShebang(fs, "second", "second_part1");
             },
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
         // emitHelpers
@@ -609,6 +641,7 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
             replaceText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file), restContent(project, file));
         }
 
+        // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "emitHelpers in all projects",
             modifyFs: fs => {
@@ -619,13 +652,17 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
             modifyAgainFs: fs => removeRest(fs, "first", "first_PART1")
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "emitHelpers in only one dependency project",
             modifyFs: fs => {
                 addStubFoo(fs, "first", "first_PART1");
                 addRest(fs, "second", "second_part1");
             },
-            modifyAgainFs: fs => changeStubToRest(fs, "first", "first_PART1")
+            modifyAgainFs: fs => changeStubToRest(fs, "first", "first_PART1"),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
         function addSpread(fs: vfs.FileSystem, project: string, file: string) {
@@ -639,6 +676,7 @@ ${project}${file}Spread(...[10, 20, 30]);`);
     "downlevelIteration": true,`);
         }
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "multiple emitHelpers in all projects",
             modifyFs: fs => {
@@ -649,9 +687,13 @@ ${project}${file}Spread(...[10, 20, 30]);`);
                 addRest(fs, "third", "third_part1");
                 addSpread(fs, "third", "third_part1");
             },
-            modifyAgainFs: fs => removeRest(fs, "first", "first_PART1")
+            modifyAgainFs: fs => removeRest(fs, "first", "first_PART1"),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "multiple emitHelpers in different projects",
             modifyFs: fs => {
@@ -659,7 +701,10 @@ ${project}${file}Spread(...[10, 20, 30]);`);
                 addSpread(fs, "second", "second_part1");
                 addRest(fs, "third", "third_part1");
             },
-            modifyAgainFs: fs => removeRest(fs, "first", "first_PART1")
+            modifyAgainFs: fs => removeRest(fs, "first", "first_PART1"),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
         // triple slash refs
@@ -675,6 +720,7 @@ const ${file}Const = new ${project}${file}();
 `);
         }
 
+        // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "triple slash refs in all projects",
             modifyFs: fs => {
@@ -687,12 +733,16 @@ const ${file}Const = new ${project}${file}();
             ]
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "triple slash refs in one project",
             modifyFs: fs => addTripleSlashRef(fs, "second", "second_part1"),
             additionalSourceFiles: [
                 getTripleSlashRef("second")
-            ]
+            ],
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
         function disableRemoveComments(fs: vfs.FileSystem, file: string) {
@@ -745,27 +795,40 @@ ${internal} const internalConst = 10;
 ${internal} enum internalEnum { a, b, c }`);
         }
 
+        // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "stripInternal",
             modifyFs: fs => stripInternalScenario(fs),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "stripInternal with comments emit enabled",
             modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "stripInternal jsdoc style comment",
             modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/**@internal*/ interface`, "interface"),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "stripInternal jsdoc style with comments emit enabled",
             modifyFs: fs => stripInternalScenario(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
         function makeOneTwoThreeDependOrder(fs: vfs.FileSystem) {
@@ -779,6 +842,7 @@ ${internal} enum internalEnum { a, b, c }`);
             makeOneTwoThreeDependOrder(fs);
         }
 
+        // Verify initial + incremental edits
         verifyOutFileScenario({
             scenario: "stripInternal when one-two-three are prepended in order",
             modifyFs: fs => stripInternalWithDependentOrder(fs),
@@ -786,29 +850,45 @@ ${internal} enum internalEnum { a, b, c }`);
             dependOrdered: true,
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "stripInternal with comments emit enabled when one-two-three are prepended in order",
             modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/*@internal*/ interface`, "interface"),
             dependOrdered: true,
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "stripInternal jsdoc style comment when one-two-three are prepended in order",
             modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ false, /*jsDocStyle*/ true),
             modifyAgainFs: fs => replaceText(fs, sources[project.first][source.ts][part.one], `/**@internal*/ interface`, "interface"),
             dependOrdered: true,
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "stripInternal jsdoc style with comments emit enabled when one-two-three are prepended in order",
             modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
             dependOrdered: true,
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
 
+        // Verify ignore without build info and dtsChanged
         verifyOutFileScenario({
             scenario: "when source files are empty in the own file",
-            modifyFs: fs => fs.writeFileSync(sources[project.third][source.ts][part.one], "", "utf8")
+            modifyFs: fs => fs.writeFileSync(sources[project.third][source.ts][part.one], "", "utf8"),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            baselineOnly: true
         });
     });
 }
