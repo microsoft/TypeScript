@@ -779,5 +779,10 @@ ${internal} enum internalEnum { a, b, c }`);
             modifyFs: fs => stripInternalWithDependentOrder(fs, /*removeCommentsDisabled*/ true, /*jsDocStyle*/ true),
             dependOrdered: true,
         });
+
+        verifyOutFileScenario({
+            scenario: "when source files are empty in the own file",
+            modifyFs: fs => fs.writeFileSync(sources[project.third][source.ts][part.one], "", "utf8")
+        });
     });
 }

@@ -2,6 +2,11 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
     "js": {
       "sections": [
         {
@@ -634,6 +639,9 @@ function forfirstfirst_PART1Rest() { }
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
     "js": {
       "sections": [
         {

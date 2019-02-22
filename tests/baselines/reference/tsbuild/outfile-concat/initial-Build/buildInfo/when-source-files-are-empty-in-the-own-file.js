@@ -885,12 +885,7 @@ sourceFile:../first_part3.ts
         },
         {
           "pos": 480,
-          "end": 516,
-          "kind": "text"
-        },
-        {
-          "pos": 516,
-          "end": 556,
+          "end": 520,
           "kind": "sourceMapUrl"
         }
       ]
@@ -935,12 +930,7 @@ sourceFile:../first_part3.ts
         },
         {
           "pos": 346,
-          "end": 365,
-          "kind": "text"
-        },
-        {
-          "pos": 365,
-          "end": 407,
+          "end": 388,
           "kind": "sourceMapUrl"
         }
       ]
@@ -989,12 +979,7 @@ var C = (function () {
 sourceMapUrl: (437-478)
 //# sourceMappingURL=second-output.js.map
 ----------------------------------------------------------------------
-text: (480-516)
-var c = new C();
-c.doSomething();
-
-----------------------------------------------------------------------
-sourceMapUrl: (516-556)
+sourceMapUrl: (480-520)
 //# sourceMappingURL=third-output.js.map
 ======================================================================
 ======================================================================
@@ -1031,11 +1016,7 @@ declare class C {
 sourceMapUrl: (301-344)
 //# sourceMappingURL=second-output.d.ts.map
 ----------------------------------------------------------------------
-text: (346-365)
-declare var c: C;
-
-----------------------------------------------------------------------
-sourceMapUrl: (365-407)
+sourceMapUrl: (346-388)
 //# sourceMappingURL=third-output.d.ts.map
 ======================================================================
 
@@ -1057,11 +1038,10 @@ declare class C {
     doSomething(): void;
 }
 //# sourceMappingURL=second-output.d.ts.map
-declare var c: C;
 //# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
-{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd;;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC"}
+{"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;ACVD,cAAM,CAAC;IACH,WAAW;CAGd"}
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map.baseline.txt]
 ===================================================================
@@ -1280,32 +1260,7 @@ sourceFile:../../../second/second_part2.ts
   >}
 1 >Emitted(16, 2) Source(5, 2) + SourceIndex(3)
 ---
--------------------------------------------------------------------
-emittedFile:/src/third/thirdjs/output/third-output.d.ts
-sourceFile:../../third_part1.ts
--------------------------------------------------------------------
 >>>//# sourceMappingURL=second-output.d.ts.map
->>>declare var c: C;
-1->
-2 >^^^^^^^^
-3 >        ^^^^
-4 >            ^
-5 >             ^^^
-6 >                ^
-7 >                 ^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
-2 >
-3 >        var 
-4 >            c
-5 >              = new C()
-6 >                ;
-1->Emitted(18, 1) Source(1, 1) + SourceIndex(4)
-2 >Emitted(18, 9) Source(1, 1) + SourceIndex(4)
-3 >Emitted(18, 13) Source(1, 5) + SourceIndex(4)
-4 >Emitted(18, 14) Source(1, 6) + SourceIndex(4)
-5 >Emitted(18, 17) Source(1, 16) + SourceIndex(4)
-6 >Emitted(18, 18) Source(1, 17) + SourceIndex(4)
----
 >>>//# sourceMappingURL=third-output.d.ts.map
 
 //// [/src/third/thirdjs/output/third-output.js]
@@ -1332,12 +1287,10 @@ var C = (function () {
     return C;
 }());
 //# sourceMappingURL=second-output.js.map
-var c = new C();
-c.doSomething();
 //# sourceMappingURL=third-output.js.map
 
 //// [/src/third/thirdjs/output/third-output.js.map]
-{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC;;ACJD,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
+{"version":3,"file":"third-output.js","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part2.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC;ACVf,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC;ACAjB,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC;;ACED,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV;ACVD;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
 //// [/src/third/thirdjs/output/third-output.js.map.baseline.txt]
 ===================================================================
@@ -1727,59 +1680,9 @@ sourceFile:../../../second/second_part2.ts
 3 >Emitted(22, 2) Source(1, 1) + SourceIndex(4)
 4 >Emitted(22, 6) Source(5, 2) + SourceIndex(4)
 ---
--------------------------------------------------------------------
-emittedFile:/src/third/thirdjs/output/third-output.js
-sourceFile:../../third_part1.ts
--------------------------------------------------------------------
 >>>//# sourceMappingURL=second-output.js.map
->>>var c = new C();
-1->
-2 >^^^^
-3 >    ^
-4 >     ^^^
-5 >        ^^^^
-6 >            ^
-7 >             ^^
-8 >               ^
-9 >                ^->
-1->
-2 >var 
-3 >    c
-4 >      = 
-5 >        new 
-6 >            C
-7 >             ()
-8 >               ;
-1->Emitted(24, 1) Source(1, 1) + SourceIndex(5)
-2 >Emitted(24, 5) Source(1, 5) + SourceIndex(5)
-3 >Emitted(24, 6) Source(1, 6) + SourceIndex(5)
-4 >Emitted(24, 9) Source(1, 9) + SourceIndex(5)
-5 >Emitted(24, 13) Source(1, 13) + SourceIndex(5)
-6 >Emitted(24, 14) Source(1, 14) + SourceIndex(5)
-7 >Emitted(24, 16) Source(1, 16) + SourceIndex(5)
-8 >Emitted(24, 17) Source(1, 17) + SourceIndex(5)
----
->>>c.doSomething();
-1->
-2 >^
-3 > ^
-4 >  ^^^^^^^^^^^
-5 >             ^^
-6 >               ^
-7 >                ^^^^^^^^^^^^^^^^^^^^^^^->
-1->
-  >
-2 >c
-3 > .
-4 >  doSomething
-5 >             ()
-6 >               ;
-1->Emitted(25, 1) Source(2, 1) + SourceIndex(5)
-2 >Emitted(25, 2) Source(2, 2) + SourceIndex(5)
-3 >Emitted(25, 3) Source(2, 3) + SourceIndex(5)
-4 >Emitted(25, 14) Source(2, 14) + SourceIndex(5)
-5 >Emitted(25, 16) Source(2, 16) + SourceIndex(5)
-6 >Emitted(25, 17) Source(2, 17) + SourceIndex(5)
----
 >>>//# sourceMappingURL=third-output.js.map
+
+//// [/src/third/third_part1.ts]
+
 

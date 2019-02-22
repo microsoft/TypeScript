@@ -2,6 +2,10 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/second/",
+    "sourceFiles": [
+      "/src/second/second_part1.ts",
+      "/src/second/second_part2.ts"
+    ],
     "js": {
       "sections": [
         {
@@ -24,7 +28,7 @@
       "sources": {
         "prologues": [
           {
-            "file": "/src/second/second_part1.ts",
+            "file": 0,
             "text": "",
             "directives": [
               {
@@ -494,6 +498,11 @@ sourceFile:../second/second_part2.ts
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
     "js": {
       "sections": [
         {
@@ -516,7 +525,7 @@ sourceFile:../second/second_part2.ts
       "sources": {
         "prologues": [
           {
-            "file": "/src/first/first_PART1.ts",
+            "file": 0,
             "text": "",
             "directives": [
               {
@@ -933,6 +942,9 @@ sourceFile:../first_part3.ts
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
     "js": {
       "sections": [
         {
@@ -991,7 +1003,7 @@ sourceFile:../first_part3.ts
       "sources": {
         "prologues": [
           {
-            "file": "/src/third/third_part1.ts",
+            "file": 0,
             "text": "",
             "directives": [
               {

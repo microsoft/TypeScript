@@ -2,6 +2,11 @@
 {
   "bundle": {
     "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
     "js": {
       "sections": [
         {
@@ -723,6 +728,9 @@ const { b, ...rest } = { a: 10, b: 30, yy: 30 };
 {
   "bundle": {
     "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
     "js": {
       "sections": [
         {

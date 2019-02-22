@@ -5574,7 +5574,7 @@ namespace ts {
 
     /*@internal*/
     export interface SourceFilePrologueInfo {
-        file: string;
+        file: number;
         text: string;
         directives: SourceFilePrologueDirective[];
     }
@@ -5597,6 +5597,7 @@ namespace ts {
         js?: BundleFileInfo;
         dts?: BundleFileInfo;
         commonSourceDirectory: string;
+        sourceFiles: ReadonlyArray<string>;
     }
 
     /* @internal */

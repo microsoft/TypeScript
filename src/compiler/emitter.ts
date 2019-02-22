@@ -151,7 +151,10 @@ namespace ts {
 
         function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle | undefined) {
             if (buildInfoPath && sourceFileOrBundle && isBundle(sourceFileOrBundle)) {
-                bundleBuildInfo = { commonSourceDirectory: host.getCommonSourceDirectory() };
+                bundleBuildInfo = {
+                    commonSourceDirectory: host.getCommonSourceDirectory(),
+                    sourceFiles: sourceFileOrBundle.sourceFiles.map(file => file.fileName)
+                };
             }
             emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath);
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
@@ -505,19 +508,27 @@ namespace ts {
         getNewLine(): string;
     }
 
-    function createSourceFilesForPrologues(bundle: BundleFileInfo): ReadonlyArray<SourceFile> {
-        return map(bundle.sources && bundle.sources.prologues, prologueInfo => {
-            const sourceFile = createNode(SyntaxKind.SourceFile, 0, prologueInfo.text.length) as SourceFile;
-            sourceFile.fileName = prologueInfo.file;
+    function createSourceFilesFromBundleBuildInfo(bundle: BundleBuildInfo): ReadonlyArray<SourceFile> {
+        const sourceFiles = bundle.sourceFiles.map(fileName => {
+            const sourceFile = createNode(SyntaxKind.SourceFile, 0, 0) as SourceFile;
+            sourceFile.fileName = fileName;
+            sourceFile.text = "";
+            sourceFile.statements = createNodeArray();
+            return sourceFile;
+        });
+        const jsBundle = Debug.assertDefined(bundle.js);
+        forEach(jsBundle.sources && jsBundle.sources.prologues, prologueInfo => {
+            const sourceFile = sourceFiles[prologueInfo.file];
             sourceFile.text = prologueInfo.text;
+            sourceFile.end = prologueInfo.text.length;
             sourceFile.statements = createNodeArray(prologueInfo.directives.map(directive => {
                 const statement = createNode(SyntaxKind.ExpressionStatement, directive.pos, directive.end) as PrologueDirective;
                 statement.expression = createNode(SyntaxKind.StringLiteral, directive.expression.pos, directive.expression.end) as StringLiteral;
                 statement.expression.text = directive.expression.text;
                 return statement;
             }));
-            return sourceFile;
-        }) || emptyArray;
+        });
+        return sourceFiles;
     }
 
     /*@internal*/
@@ -554,7 +565,7 @@ namespace ts {
         );
         const outputFiles: OutputFile[] = [];
         const prependNodes = createPrependNodes(config.projectReferences, getCommandLine, f => host.readFile(f));
-        const sourceFilesForJsEmit = createSourceFilesForPrologues(buildInfo.bundle.js);
+        const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle);
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, ownPrependInput]),
             getProjectReferences: () => config.projectReferences,
@@ -580,11 +591,12 @@ namespace ts {
                         const newBuildInfo = JSON.parse(text) as BuildInfo;
                         newBuildInfo.program = buildInfo.program;
                         // Update sourceFileInfo
-                        const { js, dts } = buildInfo.bundle!;
+                        const { js, dts, sourceFiles } = buildInfo.bundle!;
                         newBuildInfo.bundle!.js!.sources = js!.sources;
                         if (dts) {
                             newBuildInfo.bundle!.dts!.sources = dts.sources;
                         }
+                        newBuildInfo.bundle!.sourceFiles = sourceFiles;
                         outputFiles.push({ name, text: getBuildInfoText(newBuildInfo), writeByteOrderMark });
                         return;
                     case declarationFilePath:
@@ -815,10 +827,6 @@ namespace ts {
                         if (!bundleFileInfo.sources) bundleFileInfo.sources = {};
                         bundleFileInfo.sources.helpers = helpers;
                     }
-                }
-                else {
-                    // Ensure we have text section
-                    Debug.assert(!!bundleFileInfo.sections.length && isBundleFileTextLike(last(bundleFileInfo.sections)));
                 }
             }
 
@@ -3405,7 +3413,8 @@ namespace ts {
         function getPrologueDirectivesFromBundledSourceFiles(bundle: Bundle): SourceFilePrologueInfo[] | undefined {
             const seenPrologueDirectives = createMap<true>();
             let prologues: SourceFilePrologueInfo[] | undefined;
-            for (const sourceFile of bundle.sourceFiles) {
+            for (let index = 0; index < bundle.sourceFiles.length; index++) {
+                const sourceFile = bundle.sourceFiles[index];
                 let directives: SourceFilePrologueDirective[] | undefined;
                 let end = 0;
                 for (const statement of sourceFile.statements) {
@@ -3423,7 +3432,7 @@ namespace ts {
                     });
                     end = end < statement.end ? statement.end : end;
                 }
-                if (directives) (prologues || (prologues = [])).push({ file: sourceFile.fileName, text: sourceFile.text.substring(0, end), directives });
+                if (directives) (prologues || (prologues = [])).push({ file: index, text: sourceFile.text.substring(0, end), directives });
             }
             return prologues;
         }
