@@ -140,13 +140,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     await deleteTemporaryProjectOutput();
 
     if (error !== undefined) {
-        if (watchMode) {
-            throw error;
-        }
-        else {
-            log.error(error);
-            process.exit(typeof errorStatus === "number" ? errorStatus : 2);
-        }
+        process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;
+        throw error;
     }
 }
 exports.runConsoleTests = runConsoleTests;
