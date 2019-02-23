@@ -216,13 +216,13 @@ const buildServices = (() => {
         createTypescriptJs,
         createTypescriptDts,
         createTypescriptStandaloneDts,
-        localPreBuild,
-        buildTypescriptServicesOut1,
-        createTypescriptServicesJs1,
-        createTypescriptServicesDts1,
-        createTypescriptJs1,
-        createTypescriptDts1,
-        createTypescriptStandaloneDts1,
+        //localPreBuild,
+        //buildTypescriptServicesOut1,
+        //createTypescriptServicesJs1,
+        //createTypescriptServicesDts1,
+        //createTypescriptJs1,
+        //createTypescriptDts1,
+        //createTypescriptStandaloneDts1,
     );
 })();
 task("services", series(preBuild, buildServices));
@@ -364,10 +364,10 @@ const buildLssl = (() => {
         buildServerLibraryOut,
         createServerLibraryJs,
         createServerLibraryDts,
-        localPreBuild,
-        buildServerLibraryOut1,
-        createServerLibraryJs1,
-        createServerLibraryDts1
+        //localPreBuild,
+        //buildServerLibraryOut1,
+        //createServerLibraryJs1,
+        //createServerLibraryDts1
     );
 })();
 task("lssl", series(preBuild, buildLssl));
