@@ -917,7 +917,7 @@ namespace ts {
 
     /**
      * Deduplicates an unsorted array.
-     * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
+     * @param equalityComparer An `EqualityComparer` used to determine if two values are duplicates.
      * @param comparer An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
      */
