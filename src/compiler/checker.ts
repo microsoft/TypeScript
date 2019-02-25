@@ -12603,7 +12603,6 @@ namespace ts {
                 // the order in which things were checked.
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                    !isTypeIdenticalTo(getRestrictiveInstantiation(source), source) && !isTypeIdenticalTo(getRestrictiveInstantiation(target), target) &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances);
@@ -12813,12 +12812,16 @@ namespace ts {
                 }
                 return Ternary.False;
 
+                function isNonGeneric(type: Type) {
+                    return isTypeIdenticalTo(getRestrictiveInstantiation(type), type);
+                }
+
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors)) {
                         return result;
                     }
-                    const isCovariantVoid = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
-                    varianceCheckFailed = !isCovariantVoid;
+                    const allowStructuralFallback = (targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances)) || isNonGeneric(source) || isNonGeneric(target);
+                    varianceCheckFailed = !allowStructuralFallback;
                     // The type arguments did not relate appropriately, but it may be because we have no variance
                     // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
                     // arguments). It might also be the case that the target type has a 'void' type argument for
@@ -12826,7 +12829,7 @@ namespace ts {
                     // (in which case any type argument is permitted on the source side). In those cases we proceed
                     // with a structural comparison. Otherwise, we know for certain the instantiations aren't
                     // related and we can return here.
-                    if (variances !== emptyArray && !isCovariantVoid) {
+                    if (variances !== emptyArray && !allowStructuralFallback) {
                         // In some cases generic types that are covariant in regular type checking mode become
                         // invariant in --strictFunctionTypes mode because one or more type parameters are used in
                         // both co- and contravariant positions. In order to make it easier to diagnose *why* such
