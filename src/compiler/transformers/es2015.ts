@@ -192,7 +192,6 @@ namespace ts {
         ForStatement = 1 << 10,                 // Enclosing block-scoped container is a ForStatement
         ForInOrForOfStatement = 1 << 11,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
         ConstructorWithCapturedSuper = 1 << 12, // Enclosed in a constructor that captures 'this' for use with 'super'
-        ComputedPropertyName = 1 << 13,         // Enclosed in a computed property name
         // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
         // NOTE: when adding a new ancestor flag, be sure to update the subtree flags below.
 
@@ -200,7 +199,7 @@ namespace ts {
         // Ancestor masks
         //
 
-        AncestorFactsMask = (ComputedPropertyName << 1) - 1,
+        AncestorFactsMask = (ConstructorWithCapturedSuper << 1) - 1,
 
         // We are always in *some* kind of block scope, but only specific block-scope containers are
         // top-level or Blocks.
@@ -213,14 +212,14 @@ namespace ts {
 
         // Functions, methods, and accessors are both new lexical scopes and new block scopes.
         FunctionIncludes = Function | TopLevel,
-        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | ComputedPropertyName,
+        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper,
 
         AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
         AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
 
         // Arrow functions are lexically scoped to their container, but are new block scopes.
         ArrowFunctionIncludes = ArrowFunction | TopLevel,
-        ArrowFunctionExcludes = BlockScopeExcludes & ~TopLevel | ConstructorWithCapturedSuper | ComputedPropertyName,
+        ArrowFunctionExcludes = BlockScopeExcludes & ~TopLevel | ConstructorWithCapturedSuper,
 
         // Constructors are both new lexical scopes and new block scopes. Constructors are also
         // always considered non-static members of a class.
@@ -249,25 +248,23 @@ namespace ts {
         IterationStatementBlockIncludes = IterationStatementBlock,
         IterationStatementBlockExcludes = BlockScopeExcludes,
 
-        // Computed property names track subtree flags differently than their containing members.
-        ComputedPropertyNameIncludes = ComputedPropertyName,
-        ComputedPropertyNameExcludes = None,
-
         //
         // Subtree facts
         //
-        NewTarget = 1 << 14,                            // Contains a 'new.target' meta-property
-        NewTargetInComputedPropertyName = 1 << 15,      // Contains a 'new.target' meta-property in a computed property name.
 
-        LexicalThis = 1 << 16,                          // Contains a lexical `this` reference.
-        LexicalThisInComputedPropertyName = 1 << 17,    // Contains a lexical `this` reference in a computed property name.
+        NewTarget = 1 << 13,                            // Contains a 'new.target' meta-property
+        LexicalThis = 1 << 14,                          // Contains a lexical `this` reference.
+        CapturedLexicalThis = 1 << 15,                  // Contains a lexical `this` reference captured by an arrow function.
 
         //
         // Subtree masks
         //
 
         SubtreeFactsMask = ~AncestorFactsMask,
-        PropagateNewTargetMask = NewTarget | NewTargetInComputedPropertyName,
+
+        PropagateNewTargetMask = NewTarget,
+        ArrowFunctionSubtreeExcludes = None,
+        FunctionSubtreeExcludes = NewTarget | LexicalThis | CapturedLexicalThis,
     }
 
     export function transformES2015(context: TransformationContext) {
@@ -599,12 +596,7 @@ namespace ts {
         }
 
         function visitThisKeyword(node: Node): Node {
-            if (hierarchyFacts & HierarchyFacts.ComputedPropertyName) {
-                hierarchyFacts |= HierarchyFacts.LexicalThisInComputedPropertyName;
-            }
-            else {
-                hierarchyFacts |= HierarchyFacts.LexicalThis;
-            }
+            hierarchyFacts |= HierarchyFacts.LexicalThis;
             if (convertedLoopState) {
                 if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
                     // if the enclosing function is an ArrowFunction then we use the captured 'this' keyword.
@@ -913,7 +905,7 @@ namespace ts {
             }
 
             statements.push(constructorFunction);
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
         }
 
@@ -1621,7 +1613,6 @@ namespace ts {
          * @param member The MethodDeclaration node.
          */
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node) {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
             const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
@@ -1643,8 +1634,6 @@ namespace ts {
             // No source map should be emitted for this statement to align with the
             // old emitter.
             setEmitFlags(statement, EmitFlags.NoSourceMap);
-
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return statement;
         }
 
@@ -1671,8 +1660,6 @@ namespace ts {
          * @param receiver The receiver for the member.
          */
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations, container: Node, startsOnNewLine: boolean): Expression {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
-
             // To align with source maps in the old emitter, the receiver and property name
             // arguments are both mapped contiguously to the accessor name.
             const target = getMutableClone(receiver);
@@ -1720,7 +1707,6 @@ namespace ts {
                 startOnNewLine(call);
             }
 
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return call;
         }
 
@@ -1779,7 +1765,7 @@ namespace ts {
                 ? getLocalName(node)
                 : node.name;
 
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updateFunctionExpression(
                 node,
@@ -1812,7 +1798,7 @@ namespace ts {
                 ? getLocalName(node)
                 : node.name;
 
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updateFunctionDeclaration(
                 node,
@@ -1846,7 +1832,7 @@ namespace ts {
                 name = getGeneratedNameForNode(node);
             }
 
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return setOriginalNode(
                 setTextRange(
@@ -3443,7 +3429,6 @@ namespace ts {
          * @param receiver The receiver for the assignment.
          */
         function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, container: Node, startsOnNewLine: boolean) {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -3455,7 +3440,6 @@ namespace ts {
             if (startsOnNewLine) {
                 startOnNewLine(expression);
             }
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return expression;
         }
 
@@ -3535,7 +3519,7 @@ namespace ts {
             else {
                 updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
             }
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updated;
         }
@@ -3556,10 +3540,7 @@ namespace ts {
         }
 
         function visitComputedPropertyName(node: ComputedPropertyName) {
-            const ancestorFacts = enterSubtree(HierarchyFacts.ComputedPropertyNameExcludes, HierarchyFacts.ComputedPropertyNameIncludes);
-            const updated = visitEachChild(node, visitor, context);
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTargetInComputedPropertyName : HierarchyFacts.None);
-            return updated;
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -4152,12 +4133,7 @@ namespace ts {
 
         function visitMetaProperty(node: MetaProperty) {
             if (node.keywordToken === SyntaxKind.NewKeyword && node.name.escapedText === "target") {
-                if (hierarchyFacts & HierarchyFacts.ComputedPropertyName) {
-                    hierarchyFacts |= HierarchyFacts.NewTargetInComputedPropertyName;
-                }
-                else {
-                    hierarchyFacts |= HierarchyFacts.NewTarget;
-                }
+                hierarchyFacts |= HierarchyFacts.NewTarget;
                 return createFileLevelUniqueName("_newTarget");
             }
             return node;
