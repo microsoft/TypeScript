@@ -8,6 +8,9 @@
 ////var foo = new Foo("c", "d");
 
 goTo.select("a", "b");
+/*  The expected new content is currently wrong.
+    `new Bar("a", "b")` should be modified by the refactor to be `new Bar({ t: "a", s: "b" })`
+*/
 edit.applyRefactor({
     refactorName: "Convert to named parameters",
     actionName: "Convert to named parameters",
@@ -16,6 +19,6 @@ edit.applyRefactor({
     constructor({ t, s }: { t: string; s: string; }) { }
 }
 class Bar extends Foo { }
-var bar = new Bar({ t: "a", s: "b" });
-var foo = new Foo({ t: "c", s: "d" })`
+var bar = new Bar("a", "b");
+var foo = new Foo({ t: "c", s: "d" });`
 });

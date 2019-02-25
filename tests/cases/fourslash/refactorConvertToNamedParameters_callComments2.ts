@@ -14,6 +14,7 @@
 ////    4);
 
 goTo.select("a", "b");
+/* The expected content is currently wrong. The new argument object has the wrong formatting. */
 edit.applyRefactor({
     refactorName: "Convert to named parameters",
     actionName: "Convert to named parameters",
@@ -22,14 +23,12 @@ edit.applyRefactor({
     return a + b;
 }
 foo(
-    {
-        /**a*/
-        a: 1,
-        /**c*/
-        b: 2,
-        rest: [
+    { /**a*/
+        a: 1, /**c*/
+        b: 2, rest: [
             /**e*/
             3,
             /**g*/
-            4]});`
+            4]
+    });`
 });
