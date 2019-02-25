@@ -5041,37 +5041,34 @@ namespace ts {
 
         // Facts
         // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
-        TypeScript = 1 << 0,
-        ContainsTypeScript = 1 << 1,
-        ContainsJsx = 1 << 2,
-        ContainsESNext = 1 << 3,
-        ContainsES2018 = 1 << 4,
-        ContainsES2017 = 1 << 5,
-        ContainsES2016 = 1 << 6,
-        ContainsES2015 = 1 << 7,
-        Generator = 1 << 8,
-        ContainsGenerator = 1 << 9,
-        DestructuringAssignment = 1 << 10,
-        ContainsDestructuringAssignment = 1 << 11,
+        ContainsTypeScript = 1 << 0,
+        ContainsJsx = 1 << 1,
+        ContainsESNext = 1 << 2,
+        ContainsES2018 = 1 << 3,
+        ContainsES2017 = 1 << 4,
+        ContainsES2016 = 1 << 5,
+        ContainsES2015 = 1 << 6,
+        Generator = 1 << 7,
+        ContainsGenerator = 1 << 8,
+        DestructuringAssignment = 1 << 9,
+        ContainsDestructuringAssignment = 1 << 10,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 12,                // Decorators, Property Initializers, Parameter Property Initializers
-
-        ContainsLexicalThis = 1 << 13,
-        ContainsCapturedLexicalThis = 1 << 14,
-
-        ContainsLexicalThisInComputedPropertyName = 1 << 15,
-        ContainsRestOrSpread = 1 << 16,
-        ContainsObjectRestOrSpread = 1 << 17,
-        ContainsComputedPropertyName = 1 << 18,
-        ContainsBlockScopedBinding = 1 << 19,
-        ContainsBindingPattern = 1 << 20,
-        ContainsYield = 1 << 21,
-        ContainsHoistedDeclarationOrCompletion = 1 << 22,
-        ContainsDynamicImport = 1 << 23,
-        Super = 1 << 24,
-        ContainsSuper = 1 << 25,
+        ContainsTypeScriptClassSyntax = 1 << 11,                // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 12,
+        ContainsCapturedLexicalThis = 1 << 13,
+        ContainsLexicalThisInComputedPropertyName = 1 << 14,
+        ContainsRestOrSpread = 1 << 15,
+        ContainsObjectRestOrSpread = 1 << 16,
+        ContainsComputedPropertyName = 1 << 17,
+        ContainsBlockScopedBinding = 1 << 18,
+        ContainsBindingPattern = 1 << 19,
+        ContainsYield = 1 << 20,
+        ContainsHoistedDeclarationOrCompletion = 1 << 21,
+        ContainsDynamicImport = 1 << 22,
+        Super = 1 << 23,
+        ContainsSuper = 1 << 24,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5080,7 +5077,7 @@ namespace ts {
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
-        AssertTypeScript = TypeScript | ContainsTypeScript,
+        AssertTypeScript = ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
         AssertES2018 = ContainsES2018,
@@ -5093,7 +5090,7 @@ namespace ts {
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        OuterExpressionExcludes = TypeScript | DestructuringAssignment | Generator | HasComputedFlags,
+        OuterExpressionExcludes = DestructuringAssignment | Generator | HasComputedFlags,
         PropertyAccessExcludes = OuterExpressionExcludes | Super,
         NodeExcludes = PropertyAccessExcludes | ContainsSuper,
         ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
