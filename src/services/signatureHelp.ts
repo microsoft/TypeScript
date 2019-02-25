@@ -566,7 +566,7 @@ namespace ts.SignatureHelp {
     }
 
     function itemInfoForParameters(candidateSignature: Signature, checker: TypeChecker, enclosingDeclaration: Node, sourceFile: SourceFile): SignatureHelpItemInfo {
-        const isVariadic = candidateSignature.hasRestParameter;
+        let isVariadic = candidateSignature.hasRestParameter;
         const printer = createPrinter({ removeComments: true });
         const typeParameterParts = mapToDisplayParts(writer => {
             if (candidateSignature.typeParameters && candidateSignature.typeParameters.length) {
@@ -574,7 +574,16 @@ namespace ts.SignatureHelp {
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });
-        const parameters = candidateSignature.parameters.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer));
+
+        const expandedParameters = checker.getExpandedParameters(candidateSignature);
+        const parameters = expandedParameters.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer));
+
+        // If parameters are not the same as the expanded parameters, we need to reevaluate whether this a variadic signature based on the last parameter
+        if (expandedParameters !== candidateSignature.parameters) {
+            const restCandidate = lastOrUndefined(expandedParameters);
+            isVariadic = !!restCandidate && !!(getCheckFlags(restCandidate) & CheckFlags.RestParameter);
+        }
+
         return { isVariadic, parameters, prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)], suffix: [punctuationPart(SyntaxKind.CloseParenToken)] };
     }
 

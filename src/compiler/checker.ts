@@ -112,6 +112,7 @@ namespace ts {
             getMergedSymbol,
             getDiagnostics,
             getGlobalDiagnostics,
+            getExpandedParameters,
             getTypeOfSymbolAtLocation: (symbol, location) => {
                 location = getParseTreeNode(location);
                 return location ? getTypeOfSymbolAtLocation(symbol, location) : errorType;

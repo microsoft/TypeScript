@@ -3032,6 +3032,7 @@ namespace ts {
         /* @internal */
         getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
         getReturnTypeOfSignature(signature: Signature): Type;
+        /* @internal */ getExpandedParameters(sig: Signature): ReadonlyArray<Symbol>;
         /**
          * Gets the type of a parameter at a given position in a signature.
          * Returns `any` if the index is not valid.
