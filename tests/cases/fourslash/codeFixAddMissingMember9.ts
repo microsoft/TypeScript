@@ -18,7 +18,7 @@ verify.codeFixAll({
         const x = 0;
         this.y(x, "a", this.z);
     }
-    y(x: number, arg1: string, z: boolean): any {
+    y(x: number, arg1: string, z: boolean) {
         throw new Error("Method not implemented.");
     }
 }`,

@@ -89,10 +89,10 @@ namespace ts {
         return createLiteralFromNode(value);
     }
 
-    export function createNumericLiteral(value: string): NumericLiteral {
+    export function createNumericLiteral(value: string, numericLiteralFlags: TokenFlags = TokenFlags.None): NumericLiteral {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
-        node.numericLiteralFlags = 0;
+        node.numericLiteralFlags = numericLiteralFlags;
         return node;
     }
 
