@@ -31,7 +31,7 @@ ${file.content}`;
 
         function verify(applyChangesToOpen: (session: TestSession) => void) {
             const host = createServerHost([app, file3, commonFile1, commonFile2, libFile, configFile]);
-            const session = projectSystem.createSession(host);
+            const session = createSession(host);
             session.executeCommandSeq<protocol.OpenRequest>({
                 command: protocol.CommandTypes.Open,
                 arguments: { file: app.path }
@@ -93,6 +93,46 @@ ${file.content}`;
                                     {
                                         span: { start: 0, length: 0 },
                                         newText: "let zz = 10;"
+                                    }
+                                ]
+                            }
+                        ],
+                        closedFiles: [
+                            file3.path
+                        ]
+                    }
+                })
+            );
+        });
+
+        it("with applyChangesToOpenFiles request", () => {
+            verify(session =>
+                session.executeCommandSeq<protocol.ApplyChangesToOpenFilesRequest>({
+                    command: protocol.CommandTypes.ApplyChangesToOpenFiles,
+                    arguments: {
+                        openFiles: [
+                            {
+                                file: commonFile1.path,
+                                fileContent: fileContentWithComment(commonFile1)
+                            },
+                            {
+                                file: commonFile2.path,
+                                fileContent: fileContentWithComment(commonFile2)
+                            }
+                        ],
+                        changedFiles: [
+                            {
+                                fileName: app.path,
+                                textChanges: [
+                                    {
+                                        start: { line: 1, offset: 1 },
+                                        end: { line: 1, offset: 1 },
+                                        newText: "let zz = 10;",
+                                    },
+                                    {
+                                        start: { line: 1, offset: 1 },
+                                        end: { line: 1, offset: 1 },
+                                        newText: "let zzz = 10;",
                                     }
                                 ]
                             }

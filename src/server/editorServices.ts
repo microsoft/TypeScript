@@ -407,6 +407,21 @@ namespace ts.server {
         }
     }
 
+    /*@internal*/
+    export interface OpenFileArguments {
+        fileName: string;
+        content?: string;
+        scriptKind?: protocol.ScriptKindName | ScriptKind;
+        hasMixedContent?: boolean;
+        projectRootPath?: string;
+    }
+
+    /*@internal*/
+    export interface ChangeFileArguments {
+        fileName: string;
+        changes: Iterator<TextChange>;
+    }
+
     export class ProjectService {
 
         /*@internal*/
@@ -2770,18 +2785,22 @@ namespace ts.server {
         }
 
         /* @internal */
-        applyChangesInOpenFiles(openFiles: protocol.ExternalFile[] | undefined, changedFiles: protocol.ChangedOpenFile[] | undefined, closedFiles: string[] | undefined): void {
+        applyChangesInOpenFiles(openFiles: Iterator<OpenFileArguments> | undefined, changedFiles?: Iterator<ChangeFileArguments>, closedFiles?: string[]): void {
             if (openFiles) {
-                for (const file of openFiles) {
+                while (true) {
+                    const { value: file, done } = openFiles.next();
+                    if (done) break;
                     const scriptInfo = this.getScriptInfo(file.fileName);
                     Debug.assert(!scriptInfo || !scriptInfo.isScriptOpen(), "Script should not exist and not be open already");
                     const normalizedPath = scriptInfo ? scriptInfo.fileName : toNormalizedPath(file.fileName);
-                    this.openClientFileWithNormalizedPath(normalizedPath, file.content, tryConvertScriptKindName(file.scriptKind!), file.hasMixedContent); // TODO: GH#18217
+                    this.openClientFileWithNormalizedPath(normalizedPath, file.content, tryConvertScriptKindName(file.scriptKind!), file.hasMixedContent, file.projectRootPath ? toNormalizedPath(file.projectRootPath) : undefined); // TODO: GH#18217
                 }
             }
 
             if (changedFiles) {
-                for (const file of changedFiles) {
+                while (true) {
+                    const { value: file, done } = changedFiles.next();
+                    if (done) break;
                     const scriptInfo = this.getScriptInfo(file.fileName)!;
                     Debug.assert(!!scriptInfo);
                     this.applyChangesToFile(scriptInfo, file.changes);
@@ -2796,10 +2815,10 @@ namespace ts.server {
         }
 
         /* @internal */
-        applyChangesToFile(scriptInfo: ScriptInfo, changes: TextChange[]) {
-            // apply changes in reverse order
-            for (let i = changes.length - 1; i >= 0; i--) {
-                const change = changes[i];
+        applyChangesToFile(scriptInfo: ScriptInfo, changes: Iterator<TextChange>) {
+            while (true) {
+                const { value: change, done } = changes.next();
+                if (done) break;
                 scriptInfo.editContent(change.span.start, change.span.start + change.span.length, change.newText);
             }
         }
