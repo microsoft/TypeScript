@@ -82,11 +82,12 @@ namespace ts.textChanges {
      * Usually leading trivia of the variable declaration 'y' should not include trailing trivia (whitespace, comment 'this is x' and newline) from the preceding
      * variable declaration and trailing trivia for 'y' should include (whitespace, comment 'this is y', newline).
      * By default when removing nodes we adjust start and end positions to respect specification of the trivia above.
-     * If pos\end should be interpreted literally 'useNonAdjustedStartPosition' or 'useNonAdjustedEndPosition' should be set to true
+     * If pos\end should be interpreted literally (that is, withouth including leading and trailing trivia), `leadingTriviaOption` should be set to `LeadingTriviaOption.Exclude`
+     * and `trailingTriviaOption` to `TrailingTriviaOption.Exclude`. 
      */
     export interface ConfigurableStartEnd extends ConfigurableStart, ConfigurableEnd {}
 
-    export const useNonAdjustedPositions: ConfigurableStartEnd = {
+    const useNonAdjustedPositions: ConfigurableStartEnd = {
         leadingTriviaOption: LeadingTriviaOption.Exclude,
         trailingTriviaOption: TrailingTriviaOption.Exclude,
     };
