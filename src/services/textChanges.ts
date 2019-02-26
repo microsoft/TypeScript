@@ -37,8 +37,6 @@ namespace ts.textChanges {
     export enum LeadingTriviaOption {
         /** Exclude all leading trivia (use getStart()) */
         Exclude,
-        /** Include leading trivia (default behavior) */
-        Include,
         /** Include leading trivia and,
          * if there are no line breaks between the node and the previous token,
          * include all trivia between the node and the previous token
@@ -49,8 +47,6 @@ namespace ts.textChanges {
     export enum TrailingTriviaOption {
         /** Exclude all trailing trivia (use getEnd()) */
         Exclude,
-        /** TODO (default behavior) */
-        IncludeIfLineBreak,
         /** Include trailing trivia */
         Include,
     }
@@ -83,7 +79,7 @@ namespace ts.textChanges {
      * variable declaration and trailing trivia for 'y' should include (whitespace, comment 'this is y', newline).
      * By default when removing nodes we adjust start and end positions to respect specification of the trivia above.
      * If pos\end should be interpreted literally (that is, withouth including leading and trailing trivia), `leadingTriviaOption` should be set to `LeadingTriviaOption.Exclude`
-     * and `trailingTriviaOption` to `TrailingTriviaOption.Exclude`. 
+     * and `trailingTriviaOption` to `TrailingTriviaOption.Exclude`.
      */
     export interface ConfigurableStartEnd extends ConfigurableStart, ConfigurableEnd {}
 
@@ -1107,7 +1103,7 @@ namespace ts.textChanges {
                 case SyntaxKind.ImportDeclaration:
                     deleteNode(changes, sourceFile, node,
                         // For first import, leave header comment in place
-                        node === sourceFile.imports[0].parent ? { leadingTriviaOption: LeadingTriviaOption.Exclude, trailingTriviaOption: TrailingTriviaOption.IncludeIfLineBreak } : undefined);
+                        node === sourceFile.imports[0].parent ? { leadingTriviaOption: LeadingTriviaOption.Exclude } : undefined);
                     break;
 
                 case SyntaxKind.BindingElement:
