@@ -50,8 +50,8 @@ namespace ts.refactor.convertToNamedParameters {
             {   joiner: ", ",
                 // indentation is set to 0 because otherwise the object parameter will be indented if there is a `this` parameter
                 indentation: 0,
-                startPosition: textChanges.LeadingTriviaOption.IncludeAll,
-                endPosition: textChanges.TrailingTriviaOption.Include
+                leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll,
+                trailingTriviaOption: textChanges.TrailingTriviaOption.Include
             });
 
 
@@ -64,7 +64,7 @@ namespace ts.refactor.convertToNamedParameters {
                     first(call.arguments),
                     last(call.arguments),
                     newArgument,
-                    { startPosition: textChanges.LeadingTriviaOption.IncludeAll, endPosition: textChanges.TrailingTriviaOption.Include });
+                    { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include });
             }});
     }
 

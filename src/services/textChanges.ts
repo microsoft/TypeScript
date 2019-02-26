@@ -28,11 +28,10 @@ namespace ts.textChanges {
     }
 
     export interface ConfigurableStart {
-        startPosition?: LeadingTriviaOption;
+        leadingTriviaOption?: LeadingTriviaOption;
     }
     export interface ConfigurableEnd {
-        /** True to use getEnd() without adjustment. */
-        endPosition?: TrailingTriviaOption;
+        trailingTriviaOption?: TrailingTriviaOption;
     }
 
     export enum LeadingTriviaOption {
@@ -48,7 +47,7 @@ namespace ts.textChanges {
     }
 
     export enum TrailingTriviaOption {
-        /** Exclude all leading trivia (use getEnd()) */
+        /** Exclude all trailing trivia (use getEnd()) */
         Exclude,
         /** TODO (default behavior) */
         IncludeIfLineBreak,
@@ -88,8 +87,8 @@ namespace ts.textChanges {
     export interface ConfigurableStartEnd extends ConfigurableStart, ConfigurableEnd {}
 
     export const useNonAdjustedPositions: ConfigurableStartEnd = {
-        startPosition: LeadingTriviaOption.Exclude,
-        endPosition: TrailingTriviaOption.Exclude,
+        leadingTriviaOption: LeadingTriviaOption.Exclude,
+        trailingTriviaOption: TrailingTriviaOption.Exclude,
     };
 
     export interface InsertNodeOptions {
@@ -162,8 +161,8 @@ namespace ts.textChanges {
     }
 
     function getAdjustedStartPosition(sourceFile: SourceFile, node: Node, options: ConfigurableStart) {
-        const { startPosition } = options;
-        if (startPosition === LeadingTriviaOption.Exclude) {
+        const { leadingTriviaOption } = options;
+        if (leadingTriviaOption === LeadingTriviaOption.Exclude) {
             return node.getStart(sourceFile);
         }
         const fullStart = node.getFullStart();
@@ -181,7 +180,7 @@ namespace ts.textChanges {
             // fullstart
             // when b is replaced - we usually want to keep the leading trvia
             // when b is deleted - we delete it
-            return startPosition === LeadingTriviaOption.IncludeAll ? fullStart : start;
+            return leadingTriviaOption === LeadingTriviaOption.IncludeAll ? fullStart : start;
         }
         // get start position of the line following the line that contains fullstart position
         // (but only if the fullstart isn't the very beginning of the file)
@@ -194,12 +193,12 @@ namespace ts.textChanges {
 
     function getAdjustedEndPosition(sourceFile: SourceFile, node: Node, options: ConfigurableEnd) {
         const { end } = node;
-        const { endPosition } = options;
-        if (endPosition === TrailingTriviaOption.Exclude || (isExpression(node) && endPosition !== TrailingTriviaOption.Include)) {
+        const { trailingTriviaOption } = options;
+        if (trailingTriviaOption === TrailingTriviaOption.Exclude || (isExpression(node) && trailingTriviaOption !== TrailingTriviaOption.Include)) {
             return end;
         }
         const newEnd = skipTrivia(sourceFile.text, end, /*stopAfterLineBreak*/ true);
-        return newEnd !== end && (endPosition === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
+        return newEnd !== end && (trailingTriviaOption === TrailingTriviaOption.Include || isLineBreak(sourceFile.text.charCodeAt(newEnd - 1)))
             ? newEnd
             : end;
     }
@@ -257,13 +256,13 @@ namespace ts.textChanges {
             this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
         }
 
-        public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = { startPosition: LeadingTriviaOption.IncludeAll }): void {
+        public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
             this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
         }
 
-        public deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options: ConfigurableStartEnd = { startPosition: LeadingTriviaOption.IncludeAll }): void {
+        public deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options);
             const endPosition = afterEndNode === undefined ? sourceFile.text.length : getAdjustedStartPosition(sourceFile, afterEndNode, options);
             this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
@@ -753,7 +752,7 @@ namespace ts.textChanges {
 
     // find first non-whitespace position in the leading trivia of the node
     function startPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node): number {
-        return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { startPosition: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
+        return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, { leadingTriviaOption: LeadingTriviaOption.IncludeAll }), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
 
     function getClassOrObjectBraceEnds(cls: ClassLikeDeclaration | InterfaceDeclaration | ObjectLiteralExpression, sourceFile: SourceFile): [number, number] {
@@ -1107,7 +1106,7 @@ namespace ts.textChanges {
                 case SyntaxKind.ImportDeclaration:
                     deleteNode(changes, sourceFile, node,
                         // For first import, leave header comment in place
-                        node === sourceFile.imports[0].parent ? { startPosition: LeadingTriviaOption.Exclude, endPosition: TrailingTriviaOption.IncludeIfLineBreak } : undefined);
+                        node === sourceFile.imports[0].parent ? { leadingTriviaOption: LeadingTriviaOption.Exclude, trailingTriviaOption: TrailingTriviaOption.IncludeIfLineBreak } : undefined);
                     break;
 
                 case SyntaxKind.BindingElement:
@@ -1151,7 +1150,7 @@ namespace ts.textChanges {
                         deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
                     }
                     else {
-                        deleteNode(changes, sourceFile, node, node.kind === SyntaxKind.SemicolonToken ? { endPosition: TrailingTriviaOption.Exclude } : undefined);
+                        deleteNode(changes, sourceFile, node, node.kind === SyntaxKind.SemicolonToken ? { trailingTriviaOption: TrailingTriviaOption.Exclude } : undefined);
                     }
             }
         }
@@ -1230,7 +1229,7 @@ namespace ts.textChanges {
 
     /** Warning: This deletes comments too. See `copyComments` in `convertFunctionToEs6Class`. */
     // Exported for tests only! (TODO: improve tests to not need this)
-    export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { startPosition: LeadingTriviaOption.IncludeAll }): void {
+    export function deleteNode(changes: ChangeTracker, sourceFile: SourceFile, node: Node, options: ConfigurableStartEnd = { leadingTriviaOption: LeadingTriviaOption.IncludeAll }): void {
         const startPosition = getAdjustedStartPosition(sourceFile, node, options);
         const endPosition = getAdjustedEndPosition(sourceFile, node, options);
         changes.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
