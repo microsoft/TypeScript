@@ -10684,6 +10684,23 @@ namespace ts {
                 mapper;
         }
 
+        function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
+            // Filter context to only those parameters which actually have inference candidates
+            const params = [];
+            const inferences = [];
+            for (let i = 0; i < context.typeParameters.length; i++) {
+                const info = context.inferences[i];
+                if (info.candidates || info.contraCandidates) {
+                    params.push(context.typeParameters[i]);
+                    inferences.push(info);
+                }
+            }
+            if (!params.length) {
+                return undefined;
+            }
+            return createInferenceContext(params, context.signature, context.flags | InferenceFlags.NoDefault, context.compareTypes, inferences);
+        }
+
         function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper | undefined): TypeMapper;
         function combineTypeMappers(mapper1: TypeMapper, mapper2: TypeMapper): TypeMapper {
@@ -14884,7 +14901,7 @@ namespace ts {
                             // parameter should be instantiated to the empty object type.
                             inferredType = instantiateType(defaultType,
                                 combineTypeMappers(
-                                    createBackreferenceMapper(context.signature!.typeParameters!, index),
+                                    createBackreferenceMapper(context.typeParameters, index),
                                     context));
                         }
                         else {
@@ -20035,7 +20052,7 @@ namespace ts {
                     inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
                     // Create a type mapper for instantiating generic contextual types using the inferences made
                     // from the return type.
-                    context.returnMapper = cloneTypeMapper(context);
+                    context.returnMapper = cloneInferredPartOfContext(context);
                 }
             }
 
