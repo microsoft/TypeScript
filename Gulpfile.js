@@ -385,7 +385,6 @@ const buildWatchGuard = () => buildProject("src/watchGuard");
 const cleanWatchGuard = () => cleanProject("src/watchGuard");
 cleanTasks.push(cleanWatchGuard);
 
-// TODO(rbuckton): This task isn't triggered by any other task. Is it still needed?
 const generateTypesMap = () => src("src/server/typesMap.json")
     .pipe(newer("built/local/typesMap.json"))
     .pipe(transform(contents => (JSON.parse(contents), contents))) // validates typesMap.json is valid JSON
