@@ -59,7 +59,7 @@ ${file.content}`;
             applyChangesToOpen(session);
 
             // Verify again
-            verifyProjectVersion(project, 5);
+            verifyProjectVersion(project, 3);
             // Open file contents
             verifyText(service, commonFile1.path, fileContentWithComment(commonFile1));
             verifyText(service, commonFile2.path, fileContentWithComment(commonFile2));
