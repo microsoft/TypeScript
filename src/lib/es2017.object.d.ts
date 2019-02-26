@@ -3,13 +3,25 @@ interface ObjectConstructor {
      * Returns an array of values of the enumerable properties of an object
      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
      */
-    values<T extends {}>(o: T): (T extends {[index: string]: infer V} ? V : T extends ArrayLike<infer V> ? V : any)[];
+    values<T>(o: { [s: string]: T } |  ArrayLike<T>): T[];
+
+    /**	
+     * Returns an array of values of the enumerable properties of an object	
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.	
+     */	
+    values(o: {}): any[];
 
     /**
      * Returns an array of key/values of the enumerable properties of an object
      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
      */
-    entries<T extends {}>(o: T): [string, (T extends {[index: string]: infer V} ? V : T extends ArrayLike<infer V> ? V : any)][];
+    entries<T>(o: { [s: string]: T } | ArrayLike<T>): [string, T][];
+
+    /**
+     * Returns an array of key/values of the enumerable properties of an object
+     * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+     */
+    entries(o: {}): [string, any][];
 
     /**
      * Returns an object containing all own property descriptors of an object
