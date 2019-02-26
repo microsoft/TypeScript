@@ -340,7 +340,6 @@ function rm(dest, opts) {
             duplex.push(file);
             cb();
         }
-        duplex.push(null); // signal end of read queue
     };
 
     const duplex = new Duplex({
@@ -374,15 +373,16 @@ function rm(dest, opts) {
             pending.push(entry);
         },
         final(cb) {
+            const endThenCb = () => (duplex.push(null), cb()); // signal end of read queue
             processDeleted();
             if (pending.length) {
                 Promise
                     .all(pending.map(entry => entry.promise))
                     .then(() => processDeleted())
-                    .then(() => cb(), cb);
+                    .then(() => endThenCb(), endThenCb);
                 return;
             }
-            cb();
+            endThenCb();
         },
         read() {
         }

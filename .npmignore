@@ -12,7 +12,11 @@ tests
 tslint.json
 Jakefile.js
 .editorconfig
+.failed-tests
+.git
+.git/
 .gitattributes
+.github/
 .gitmodules
 .settings/
 .travis.yml
@@ -23,6 +27,5 @@ Jakefile.js
 test.config
 package-lock.json
 yarn.lock
-.github/
 CONTRIBUTING.md
 TEST-results.xml
