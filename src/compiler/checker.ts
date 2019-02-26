@@ -13469,7 +13469,7 @@ namespace ts {
         // Return true if the given type is deeply nested. We consider this to be the case when structural type comparisons
         // for 5 or more occurrences or instantiations of the type have been recorded on the given stack. It is possible,
         // though highly unlikely, for this test to be true in a situation where a chain of instantiations is not infinitely
-        // expanding. Effectively, we will generate a false positive when two types are structurally equal to at least 5
+        // expanding. Effectively, we will generate a false positive when two types are structurally equal to at least 4
         // levels, but unequal at some level beyond that.
         function isDeeplyNestedType(type: Type, stack: Type[], depth: number): boolean {
             // We track all object types that have an associated symbol (representing the origin of the type)
@@ -13481,7 +13481,7 @@ namespace ts {
                         const t = stack[i];
                         if (t.flags & TypeFlags.Object && t.symbol === symbol) {
                             count++;
-                            if (count >= 5) return true;
+                            if (count >= 4) return true;
                         }
                     }
                 }
