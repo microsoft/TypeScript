@@ -66,8 +66,8 @@ export function fooToBar(
 >null : null
 
   const result = foos == null ? {} : mapValues(foos, f => f.foo);
->result : {}
->foos == null ? {} : mapValues(foos, f => f.foo) : {}
+>result : Dictionary<string>
+>foos == null ? {} : mapValues(foos, f => f.foo) : Dictionary<string>
 >foos == null : boolean
 >foos : Record<string, Foo>
 >null : null
@@ -83,6 +83,6 @@ export function fooToBar(
 
   // This line _should_ fail, because `result` is not the right type.
   return result;
->result : {}
+>result : Dictionary<string>
 }
 
