@@ -11062,7 +11062,13 @@ namespace ts {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
             }
             if (flags & TypeFlags.Substitution) {
-                return instantiateType((<SubstitutionType>type).typeVariable, mapper);
+                const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
+                if (maybeVariable.flags & TypeFlags.TypeVariable) {
+                    return getSubstitutionType(maybeVariable as TypeVariable, instantiateType((<SubstitutionType>type).substitute, mapper));
+                }
+                else {
+                    return maybeVariable;
+                }
             }
             return type;
         }
@@ -14464,6 +14470,9 @@ namespace ts {
                             }
                         }
                     }
+                }
+                else if (target.flags & TypeFlags.Substitution) {
+                    inferFromTypes(source, (target as SubstitutionType).typeVariable);
                 }
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // If source and target are references to the same generic type, infer from type arguments
