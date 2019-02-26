@@ -12813,6 +12813,12 @@ namespace ts {
                 return Ternary.False;
 
                 function isNonGeneric(type: Type) {
+                    // If we're already doing identity checking, don't dive into a new `isIdenticalTo` call, so we
+                    // can properly trigger a `Maybe` result (which we interpret as "potentially generic" here) if
+                    // relating the identity of the type ends up being recursive
+                    if (relation === identityRelation) {
+                        return isRelatedTo(getRestrictiveInstantiation(type), type) === Ternary.True;
+                    }
                     return isTypeIdenticalTo(getRestrictiveInstantiation(type), type);
                 }
 
