@@ -171,3 +171,41 @@ function exampleConstraints() {
     objFail;
   }
 }
+
+function exampleUnrelated() {
+  class Child<A, B> {
+    a: A;
+    b: B;
+    foo: number;
+  }
+
+  const objA = { a: 5 };
+  if (objA instanceof Child) {
+    objA; // Child<number, any>
+  }
+
+  const objB = { b: "hello" };
+  if (objB instanceof Child) {
+    objB; // Child<any, string>
+  }
+
+  const objAB = { a: 5, b: "hello" };
+  if (objAB instanceof Child) {
+    objAB; // Child<number, string>
+  }
+
+  const objAX = { a: 5, x: 7 };
+  if (objAX instanceof Child) {
+    objAX; // Child<number, any>
+  }
+
+  const objBX = { b: "hello", x: 7 };
+  if (objBX instanceof Child) {
+    objBX; // Child<any, string>
+  }
+
+  const objABX = { a: 5, b: "hello", x: 7 };
+  if (objABX instanceof Child) {
+    objABX; // Child<number, string>
+  }
+}

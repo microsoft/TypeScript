@@ -404,3 +404,120 @@ function exampleConstraints() {
   }
 }
 
+function exampleUnrelated() {
+>exampleUnrelated : () => void
+
+  class Child<A, B> {
+>Child : Child<A, B>
+
+    a: A;
+>a : A
+
+    b: B;
+>b : B
+
+    foo: number;
+>foo : number
+  }
+
+  const objA = { a: 5 };
+>objA : { a: number; }
+>{ a: 5 } : { a: number; }
+>a : number
+>5 : 5
+
+  if (objA instanceof Child) {
+>objA instanceof Child : boolean
+>objA : { a: number; }
+>Child : typeof Child
+
+    objA; // Child<number, any>
+>objA : Child<number, any>
+  }
+
+  const objB = { b: "hello" };
+>objB : { b: string; }
+>{ b: "hello" } : { b: string; }
+>b : string
+>"hello" : "hello"
+
+  if (objB instanceof Child) {
+>objB instanceof Child : boolean
+>objB : { b: string; }
+>Child : typeof Child
+
+    objB; // Child<any, string>
+>objB : Child<any, string>
+  }
+
+  const objAB = { a: 5, b: "hello" };
+>objAB : { a: number; b: string; }
+>{ a: 5, b: "hello" } : { a: number; b: string; }
+>a : number
+>5 : 5
+>b : string
+>"hello" : "hello"
+
+  if (objAB instanceof Child) {
+>objAB instanceof Child : boolean
+>objAB : { a: number; b: string; }
+>Child : typeof Child
+
+    objAB; // Child<number, string>
+>objAB : Child<number, string>
+  }
+
+  const objAX = { a: 5, x: 7 };
+>objAX : { a: number; x: number; }
+>{ a: 5, x: 7 } : { a: number; x: number; }
+>a : number
+>5 : 5
+>x : number
+>7 : 7
+
+  if (objAX instanceof Child) {
+>objAX instanceof Child : boolean
+>objAX : { a: number; x: number; }
+>Child : typeof Child
+
+    objAX; // Child<number, any>
+>objAX : { a: number; x: number; } & Child<any, any>
+  }
+
+  const objBX = { b: "hello", x: 7 };
+>objBX : { b: string; x: number; }
+>{ b: "hello", x: 7 } : { b: string; x: number; }
+>b : string
+>"hello" : "hello"
+>x : number
+>7 : 7
+
+  if (objBX instanceof Child) {
+>objBX instanceof Child : boolean
+>objBX : { b: string; x: number; }
+>Child : typeof Child
+
+    objBX; // Child<any, string>
+>objBX : { b: string; x: number; } & Child<any, any>
+  }
+
+  const objABX = { a: 5, b: "hello", x: 7 };
+>objABX : { a: number; b: string; x: number; }
+>{ a: 5, b: "hello", x: 7 } : { a: number; b: string; x: number; }
+>a : number
+>5 : 5
+>b : string
+>"hello" : "hello"
+>x : number
+>7 : 7
+
+  if (objABX instanceof Child) {
+>objABX instanceof Child : boolean
+>objABX : { a: number; b: string; x: number; }
+>Child : typeof Child
+
+    objABX; // Child<number, string>
+>objABX : { a: number; b: string; x: number; } & Child<any, any>
+  }
+}
+

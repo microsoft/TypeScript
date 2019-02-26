@@ -452,3 +452,101 @@ function exampleConstraints() {
   }
 }
 
+function exampleUnrelated() {
+>exampleUnrelated : Symbol(exampleUnrelated, Decl(narrowGenericTypeByInstanceOf.ts, 172, 1))
+
+  class Child<A, B> {
+>Child : Symbol(Child, Decl(narrowGenericTypeByInstanceOf.ts, 174, 29))
+>A : Symbol(A, Decl(narrowGenericTypeByInstanceOf.ts, 175, 14))
+>B : Symbol(B, Decl(narrowGenericTypeByInstanceOf.ts, 175, 16))
+
+    a: A;
+>a : Symbol(Child.a, Decl(narrowGenericTypeByInstanceOf.ts, 175, 21))
+>A : Symbol(A, Decl(narrowGenericTypeByInstanceOf.ts, 175, 14))
+
+    b: B;
+>b : Symbol(Child.b, Decl(narrowGenericTypeByInstanceOf.ts, 176, 9))
+>B : Symbol(B, Decl(narrowGenericTypeByInstanceOf.ts, 175, 16))
+
+    foo: number;
+>foo : Symbol(Child.foo, Decl(narrowGenericTypeByInstanceOf.ts, 177, 9))
+  }
+
+  const objA = { a: 5 };
+>objA : Symbol(objA, Decl(narrowGenericTypeByInstanceOf.ts, 181, 7))
+>a : Symbol(a, Decl(narrowGenericTypeByInstanceOf.ts, 181, 16))
+
+  if (objA instanceof Child) {
+>objA : Symbol(objA, Decl(narrowGenericTypeByInstanceOf.ts, 181, 7))
+>Child : Symbol(Child, Decl(narrowGenericTypeByInstanceOf.ts, 174, 29))
+
+    objA; // Child<number, any>
+>objA : Symbol(objA, Decl(narrowGenericTypeByInstanceOf.ts, 181, 7))
+  }
+
+  const objB = { b: "hello" };
+>objB : Symbol(objB, Decl(narrowGenericTypeByInstanceOf.ts, 186, 7))
+>b : Symbol(b, Decl(narrowGenericTypeByInstanceOf.ts, 186, 16))
+
+  if (objB instanceof Child) {
+>objB : Symbol(objB, Decl(narrowGenericTypeByInstanceOf.ts, 186, 7))
+>Child : Symbol(Child, Decl(narrowGenericTypeByInstanceOf.ts, 174, 29))
+
+    objB; // Child<any, string>
+>objB : Symbol(objB, Decl(narrowGenericTypeByInstanceOf.ts, 186, 7))
+  }
+
+  const objAB = { a: 5, b: "hello" };
+>objAB : Symbol(objAB, Decl(narrowGenericTypeByInstanceOf.ts, 191, 7))
+>a : Symbol(a, Decl(narrowGenericTypeByInstanceOf.ts, 191, 17))
+>b : Symbol(b, Decl(narrowGenericTypeByInstanceOf.ts, 191, 23))
+
+  if (objAB instanceof Child) {
+>objAB : Symbol(objAB, Decl(narrowGenericTypeByInstanceOf.ts, 191, 7))
+>Child : Symbol(Child, Decl(narrowGenericTypeByInstanceOf.ts, 174, 29))
+
+    objAB; // Child<number, string>
+>objAB : Symbol(objAB, Decl(narrowGenericTypeByInstanceOf.ts, 191, 7))
+  }
+
+  const objAX = { a: 5, x: 7 };
+>objAX : Symbol(objAX, Decl(narrowGenericTypeByInstanceOf.ts, 196, 7))
+>a : Symbol(a, Decl(narrowGenericTypeByInstanceOf.ts, 196, 17))
+>x : Symbol(x, Decl(narrowGenericTypeByInstanceOf.ts, 196, 23))
+
+  if (objAX instanceof Child) {
+>objAX : Symbol(objAX, Decl(narrowGenericTypeByInstanceOf.ts, 196, 7))
+>Child : Symbol(Child, Decl(narrowGenericTypeByInstanceOf.ts, 174, 29))
+
+    objAX; // Child<number, any>
+>objAX : Symbol(objAX, Decl(narrowGenericTypeByInstanceOf.ts, 196, 7))
+  }
+
+  const objBX = { b: "hello", x: 7 };
+>objBX : Symbol(objBX, Decl(narrowGenericTypeByInstanceOf.ts, 201, 7))
+>b : Symbol(b, Decl(narrowGenericTypeByInstanceOf.ts, 201, 17))
+>x : Symbol(x, Decl(narrowGenericTypeByInstanceOf.ts, 201, 29))
+
+  if (objBX instanceof Child) {
+>objBX : Symbol(objBX, Decl(narrowGenericTypeByInstanceOf.ts, 201, 7))
+>Child : Symbol(Child, Decl(narrowGenericTypeByInstanceOf.ts, 174, 29))
+
+    objBX; // Child<any, string>
+>objBX : Symbol(objBX, Decl(narrowGenericTypeByInstanceOf.ts, 201, 7))
+  }
+
+  const objABX = { a: 5, b: "hello", x: 7 };
+>objABX : Symbol(objABX, Decl(narrowGenericTypeByInstanceOf.ts, 206, 7))
+>a : Symbol(a, Decl(narrowGenericTypeByInstanceOf.ts, 206, 18))
+>b : Symbol(b, Decl(narrowGenericTypeByInstanceOf.ts, 206, 24))
+>x : Symbol(x, Decl(narrowGenericTypeByInstanceOf.ts, 206, 36))
+
+  if (objABX instanceof Child) {
+>objABX : Symbol(objABX, Decl(narrowGenericTypeByInstanceOf.ts, 206, 7))
+>Child : Symbol(Child, Decl(narrowGenericTypeByInstanceOf.ts, 174, 29))
+
+    objABX; // Child<number, string>
+>objABX : Symbol(objABX, Decl(narrowGenericTypeByInstanceOf.ts, 206, 7))
+  }
+}
+
