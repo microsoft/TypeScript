@@ -32,6 +32,7 @@ tests/cases/conformance/types/mapped/recursiveMappedTypes.ts(20,19): error TS258
         [K in keyof Recurse1]: Recurse1[K]
               ~~~~~~~~~~~~~~
 !!! error TS2313: Type parameter 'K' has a circular constraint.
+!!! related TS2751 tests/cases/conformance/types/mapped/recursiveMappedTypes.ts:8:17: Circularity originates in type at this location.
     }
     
     // Repro from #27881
