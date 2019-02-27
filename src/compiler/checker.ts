@@ -88,8 +88,16 @@ namespace ts {
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
 
+        const globals = createSymbolTable();
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
+
+        const globalThisSymbol = createSymbol(SymbolFlags.Module, "globalThis" as __String, CheckFlags.Readonly);
+        globalThisSymbol.exports = globals;
+        globalThisSymbol.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
+        (globalThisSymbol.valueDeclaration as Identifier).escapedText = "globalThis" as __String;
+        globals.set(globalThisSymbol.escapedName, globalThisSymbol);
+
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
 
@@ -310,9 +318,9 @@ namespace ts {
             getAccessibleSymbolChain,
             getTypePredicateOfSignature: getTypePredicateOfSignature as (signature: Signature) => TypePredicate, // TODO: GH#18217
             resolveExternalModuleSymbol,
-            tryGetThisTypeAt: node => {
+            tryGetThisTypeAt: (node, includeGlobalThis) => {
                 node = getParseTreeNode(node);
-                return node && tryGetThisTypeAt(node);
+                return node && tryGetThisTypeAt(node, includeGlobalThis);
             },
             getTypeArgumentConstraint: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
@@ -459,7 +467,6 @@ namespace ts {
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
-        const globals = createSymbolTable();
         interface DuplicateInfoForSymbol {
             readonly firstFileLocations: Node[];
             readonly secondFileLocations: Node[];
@@ -7406,7 +7413,7 @@ namespace ts {
                 const nameType = property.name && getLiteralTypeFromPropertyName(property.name);
                 const name = nameType && isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
                 const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
-                return !!expected && isLiteralType(expected) && !isTypeIdenticalTo(getTypeOfNode(property), expected);
+                return !!expected && isLiteralType(expected) && !isTypeAssignableTo(getTypeOfNode(property), expected);
             });
         }
 
@@ -9703,7 +9710,7 @@ namespace ts {
         }
 
         function getLiteralTypeFromProperties(type: Type, include: TypeFlags) {
-            return getUnionType(map(getPropertiesOfType(type), t => getLiteralTypeFromProperty(t, include)));
+            return getUnionType(map(getPropertiesOfType(type), p => getLiteralTypeFromProperty(p, include)));
         }
 
         function getNonEnumNumberIndexInfo(type: Type) {
@@ -11062,7 +11069,13 @@ namespace ts {
                 return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers((<ConditionalType>type).mapper, mapper));
             }
             if (flags & TypeFlags.Substitution) {
-                return instantiateType((<SubstitutionType>type).typeVariable, mapper);
+                const maybeVariable = instantiateType((<SubstitutionType>type).typeVariable, mapper);
+                if (maybeVariable.flags & TypeFlags.TypeVariable) {
+                    return getSubstitutionType(maybeVariable as TypeVariable, instantiateType((<SubstitutionType>type).substitute, mapper));
+                }
+                else {
+                    return maybeVariable;
+                }
             }
             return type;
         }
@@ -12718,11 +12731,10 @@ namespace ts {
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
-                        // they have the same distributivity, T1 and T2 are identical types, U1 and U2 are identical
-                        // types, X1 is related to X2, and Y1 is related to Y2.
-                        if ((<ConditionalType>source).root.isDistributive === (<ConditionalType>target).root.isDistributive &&
-                            isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
-                            isTypeIdenticalTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType)) {
+                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
+                        // and Y1 is related to Y2.
+                        if (isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
+                            (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
                             if (result = isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
                             }
@@ -12781,6 +12793,11 @@ namespace ts {
                     else if (isReadonlyArrayType(target) ? isArrayType(source) || isTupleType(source) : isArrayType(target) && isTupleType(source) && !source.target.readonly) {
                         return isRelatedTo(getIndexTypeOfType(source, IndexKind.Number) || anyType, getIndexTypeOfType(target, IndexKind.Number) || anyType, reportErrors);
                     }
+                    // Consider a fresh empty object literal type "closed" under the subtype relationship - this way `{} <- {[idx: string]: any} <- fresh({})`
+                    // and not `{} <- fresh({}) <- {[idx: string]: any}`
+                    else if (relation === subtypeRelation && isEmptyObjectType(target) && getObjectFlags(target) & ObjectFlags.FreshLiteral && !isEmptyObjectType(source)) {
+                        return Ternary.False;
+                    }
                     // Even if relationship doesn't hold for unions, intersections, or generic type references,
                     // it may hold in a structural comparison.
                     // In a check of the form X = A & B, we will have previously checked if A relates to X or B relates
@@ -12812,12 +12829,22 @@ namespace ts {
                 }
                 return Ternary.False;
 
+                function isNonGeneric(type: Type) {
+                    // If we're already in identity relationship checking, we should use `isRelatedTo`
+                    // to catch the `Maybe` from an excessively deep type (which we then assume means
+                    // that the type could possibly contain a generic)
+                    if (relation === identityRelation) {
+                        return isRelatedTo(type, getPermissiveInstantiation(type)) === Ternary.True;
+                    }
+                    return isTypeIdenticalTo(type, getPermissiveInstantiation(type));
+                }
+
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors)) {
                         return result;
                     }
-                    const isCovariantVoid = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
-                    varianceCheckFailed = !isCovariantVoid;
+                    const allowStructuralFallback = (targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances)) || isNonGeneric(source) || isNonGeneric(target);
+                    varianceCheckFailed = !allowStructuralFallback;
                     // The type arguments did not relate appropriately, but it may be because we have no variance
                     // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
                     // arguments). It might also be the case that the target type has a 'void' type argument for
@@ -12825,7 +12852,7 @@ namespace ts {
                     // (in which case any type argument is permitted on the source side). In those cases we proceed
                     // with a structural comparison. Otherwise, we know for certain the instantiations aren't
                     // related and we can return here.
-                    if (variances !== emptyArray && !isCovariantVoid) {
+                    if (variances !== emptyArray && !allowStructuralFallback) {
                         // In some cases generic types that are covariant in regular type checking mode become
                         // invariant in --strictFunctionTypes mode because one or more type parameters are used in
                         // both co- and contravariant positions. In order to make it easier to diagnose *why* such
@@ -14465,6 +14492,9 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.Substitution) {
+                    inferFromTypes(source, (target as SubstitutionType).typeVariable);
+                }
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // If source and target are references to the same generic type, infer from type arguments
                     const sourceTypes = (<TypeReference>source).typeArguments || emptyArray;
@@ -14505,7 +14535,8 @@ namespace ts {
                     inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
                 else if (target.flags & TypeFlags.Conditional) {
-                    inferFromTypes(source, getUnionType([getTrueTypeFromConditionalType(<ConditionalType>target), getFalseTypeFromConditionalType(<ConditionalType>target)]));
+                    inferFromTypes(source, getTrueTypeFromConditionalType(<ConditionalType>target));
+                    inferFromTypes(source, getFalseTypeFromConditionalType(<ConditionalType>target));
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     for (const t of (<UnionOrIntersectionType>target).types) {
@@ -16966,25 +16997,27 @@ namespace ts {
                 captureLexicalThis(node, container);
             }
 
-            const type = tryGetThisTypeAt(node, container);
-            if (!type && noImplicitThis) {
-                // With noImplicitThis, functions may not reference 'this' if it has type 'any'
-                const diag = error(
-                    node,
-                    capturedByArrowFunction && container.kind === SyntaxKind.SourceFile ?
-                        Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this_which_implicitly_has_type_any :
-                        Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
-                if (!isSourceFile(container)) {
-                    const outsideThis = tryGetThisTypeAt(container);
-                    if (outsideThis) {
-                        addRelatedInfo(diag, createDiagnosticForNode(container, Diagnostics.An_outer_value_of_this_is_shadowed_by_this_container));
+            const type = tryGetThisTypeAt(node, /*includeGlobalThis*/ true, container);
+            if (noImplicitThis) {
+                const globalThisType = getTypeOfSymbol(globalThisSymbol);
+                if (type === globalThisType && capturedByArrowFunction) {
+                    error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this);
+                }
+                else if (!type) {
+                    // With noImplicitThis, functions may not reference 'this' if it has type 'any'
+                    const diag = error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
+                    if (!isSourceFile(container)) {
+                        const outsideThis = tryGetThisTypeAt(container);
+                        if (outsideThis && outsideThis !== globalThisType) {
+                            addRelatedInfo(diag, createDiagnosticForNode(container, Diagnostics.An_outer_value_of_this_is_shadowed_by_this_container));
+                        }
                     }
                 }
             }
             return type || anyType;
         }
 
-        function tryGetThisTypeAt(node: Node, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
+        function tryGetThisTypeAt(node: Node, includeGlobalThis = true, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
             const isInJS = isInJSFile(node);
             if (isFunctionLike(container) &&
                 (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
@@ -17029,6 +17062,16 @@ namespace ts {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== errorType) {
                     return getFlowTypeOfReference(node, type);
+                }
+            }
+            if (isSourceFile(container)) {
+                // look up in the source file's locals or exports
+                if (container.commonJsModuleIndicator) {
+                    const fileSymbol = getSymbolOfNode(container);
+                    return fileSymbol && getTypeOfSymbol(fileSymbol);
+                }
+                else if (includeGlobalThis) {
+                    return getTypeOfSymbol(globalThisSymbol);
                 }
             }
         }
@@ -19326,6 +19369,12 @@ namespace ts {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);
                 if (!(indexInfo && indexInfo.type)) {
                     if (isJSLiteralType(leftType)) {
+                        return anyType;
+                    }
+                    if (leftType.symbol === globalThisSymbol) {
+                        if (noImplicitAny) {
+                            error(right, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(leftType));
+                        }
                         return anyType;
                     }
                     if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {

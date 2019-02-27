@@ -461,9 +461,34 @@ task("lint").flags = {
     "   --f[iles]=<regex>": "pattern to match files to lint",
 };
 
+const buildCancellationToken = () => buildProject("src/cancellationToken");
+const cleanCancellationToken = () => cleanProject("src/cancellationToken");
+cleanTasks.push(cleanCancellationToken);
+
+const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
+const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
+cleanTasks.push(cleanTypingsInstaller);
+
+const buildWatchGuard = () => buildProject("src/watchGuard");
+const cleanWatchGuard = () => cleanProject("src/watchGuard");
+cleanTasks.push(cleanWatchGuard);
+
+const generateTypesMap = () => src("src/server/typesMap.json")
+    .pipe(newer("built/local/typesMap.json"))
+    .pipe(transform(contents => (JSON.parse(contents), contents))) // validates typesMap.json is valid JSON
+    .pipe(dest("built/local"));
+task("generate-types-map", generateTypesMap);
+
+const cleanTypesMap = () => del("built/local/typesMap.json");
+cleanTasks.push(cleanTypesMap);
+
+const buildOtherOutputs = parallel(buildCancellationToken, buildTypingsInstaller, buildWatchGuard, generateTypesMap);
+task("other-outputs", series(preBuild, buildOtherOutputs));
+task("other-outputs").description = "Builds miscelaneous scripts and documents distributed with the LKG";
+
 const buildFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("build")); };
 const buildFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("build")); };
-task("local", series(buildFoldStart, preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl), buildFoldEnd));
+task("local", series(buildFoldStart, preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs), buildFoldEnd));
 task("local").description = "Builds the full compiler and services";
 task("local").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -639,28 +664,6 @@ const buildReleaseTsc = () => buildProject("src/tsc/tsconfig.release.json");
 const cleanReleaseTsc = () => cleanProject("src/tsc/tsconfig.release.json");
 cleanTasks.push(cleanReleaseTsc);
 
-const buildCancellationToken = () => buildProject("src/cancellationToken");
-const cleanCancellationToken = () => cleanProject("src/cancellationToken");
-cleanTasks.push(cleanCancellationToken);
-
-const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
-const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
-cleanTasks.push(cleanTypingsInstaller);
-
-const buildWatchGuard = () => buildProject("src/watchGuard");
-const cleanWatchGuard = () => cleanProject("src/watchGuard");
-cleanTasks.push(cleanWatchGuard);
-
-// TODO(rbuckton): This task isn't triggered by any other task. Is it still needed?
-const generateTypesMap = () => src("src/server/typesMap.json")
-    .pipe(newer("built/local/typesMap.json"))
-    .pipe(transform(contents => (JSON.parse(contents), contents))) // validates typesMap.json is valid JSON
-    .pipe(dest("built/local"));
-task("generate-types-map", generateTypesMap);
-
-const cleanTypesMap = () => del("built/local/typesMap.json");
-cleanTasks.push(cleanTypesMap);
-
 const cleanBuilt = () => del("built");
 
 const produceLKG = async () => {
@@ -690,7 +693,7 @@ const produceLKG = async () => {
     }
 };
 
-task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildCancellationToken, buildTypingsInstaller, buildWatchGuard, buildReleaseTsc), produceLKG));
+task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs, buildReleaseTsc), produceLKG));
 task("LKG").description = "Makes a new LKG out of the built js files";
 task("LKG").flags = {
     "   --built": "Compile using the built version of the compiler.",
