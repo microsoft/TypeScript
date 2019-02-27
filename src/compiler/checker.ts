@@ -2786,7 +2786,6 @@ namespace ts {
         function createTypeParameter(symbol?: Symbol) {
             const type = <TypeParameter>createType(TypeFlags.TypeParameter);
             if (symbol) type.symbol = symbol;
-            type.calculatedFlags = CalculatedTypeFlags.HasCalculatedContainsTypeParameter | CalculatedTypeFlags.ContainsTypeParameter;
             return type;
         }
 
@@ -12610,7 +12609,7 @@ namespace ts {
                 // the order in which things were checked.
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                    !(source.calculatedFlags! & CalculatedTypeFlags.IsMarkerType || target.calculatedFlags! & CalculatedTypeFlags.IsMarkerType)) {
+                    !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances);
                     if (varianceResult !== undefined) {
@@ -12825,7 +12824,13 @@ namespace ts {
                 return Ternary.False;
 
                 function isNonGeneric(type: Type) {
-                    return !hasAggregatedCalculatedFlag(type, CalculatedTypeFlags.ContainsTypeParameter);
+                    // If we're already in identity relationship checking, we should use `isRelatedTo`
+                    // to catch the `Maybe` from an excessively deep type (which we then assume means
+                    // that the type could possibly contain a generic)
+                    if (relation === identityRelation) {
+                        return isRelatedTo(type, getPermissiveInstantiation(type)) === Ternary.True;
+                    }
+                    return isTypeIdenticalTo(type, getPermissiveInstantiation(type));
                 }
 
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
@@ -12859,110 +12864,6 @@ namespace ts {
                         originalErrorInfo = errorInfo;
                         errorInfo = saveErrorInfo;
                     }
-                }
-            }
-
-            function hasAggregatedCalculatedFlag(type: Type, storageBit: CalculatedTypeFlags) {
-                const checkedBit = storageBit >> 1;
-                const visited = createMap<true>();
-                return visitType(type);
-
-                function visitType(type: Type): boolean {
-                    const id = "" + getTypeId(type);
-                    if (visited.has(id)) return false;
-                    visited.set(id, true);
-                    const flags = type.flags;
-                    if (type.calculatedFlags! & checkedBit) {
-                        return !!(type.calculatedFlags! & storageBit);
-                    }
-                    if (flags & TypeFlags.Object) {
-                        const objectFlags = (<ObjectType>type).objectFlags;
-                        if (isGenericMappedType(type)) {
-                            return cacheResult(type, visitType(getConstraintTypeFromMappedType(type)) || visitType(getTemplateTypeFromMappedType(type)));
-                        }
-                        else if (objectFlags & ObjectFlags.ReverseMapped) {
-                            return cacheResult(type, visitType((type as ReverseMappedType).mappedType) ||
-                                visitType((type as ReverseMappedType).source) ||
-                                visitType((type as ReverseMappedType).constraintType));
-                        }
-                        else if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped | ObjectFlags.ClassOrInterface)) {
-                            return cacheResult(type, visitStructuredType(type as StructuredType));
-                        }
-                        else if (objectFlags & ObjectFlags.Reference) {
-                            const typeArguments = (<TypeReference>type).typeArguments;
-                            return cacheResult(type, some(typeArguments, visitType));
-                        }
-                    }
-                    else if (flags & TypeFlags.UnionOrIntersection) {
-                        return cacheResult(type, some((type as UnionOrIntersectionType).types, visitType));
-                    }
-                    else if (flags & TypeFlags.Index) {
-                        return cacheResult(type, visitType((type as IndexType).type));
-                    }
-                    else if (flags & TypeFlags.IndexedAccess) {
-                        return cacheResult(type, visitType((type as IndexedAccessType).objectType) ||
-                            visitType((type as IndexedAccessType).indexType));
-                    }
-                    else if (flags & TypeFlags.Conditional) {
-                        return cacheResult(type, visitType((type as ConditionalType).checkType) ||
-                            visitType((type as ConditionalType).extendsType) ||
-                            visitType(getTrueTypeFromConditionalType(type as ConditionalType)) ||
-                            visitType(getFalseTypeFromConditionalType(type as ConditionalType)));
-                    }
-                    else if (flags & TypeFlags.Substitution) {
-                        return cacheResult(type, visitType((type as SubstitutionType).typeVariable) ||
-                            visitType((type as SubstitutionType).substitute));
-                    }
-                    return false;
-                }
-
-                function cacheResult(type: Type, result: boolean) {
-                    type.calculatedFlags! |= checkedBit;
-                    if (result) {
-                        type.calculatedFlags! |= storageBit;
-                    }
-                    return result;
-                }
-
-                function visitStructuredType(type: StructuredType) {
-                    resolveStructuredTypeMembers(type);
-                    const strIdx = getIndexInfoOfType(type, IndexKind.String);
-                    if (strIdx) {
-                        if (visitType(strIdx.type)) {
-                            return true;
-                        }
-                    }
-                    const numIdx = getIndexInfoOfType(type, IndexKind.Number);
-                    if (numIdx) {
-                        if (visitType(numIdx.type)) {
-                            return true;
-                        }
-                    }
-                    for (const sig of getSignaturesOfStructuredType(type, SignatureKind.Call)) {
-                        if (visitSignature(sig)) {
-                            return true;
-                        }
-                    }
-                    for (const sig of getSignaturesOfStructuredType(type, SignatureKind.Construct)) {
-                        if (visitSignature(sig)) {
-                            return true;
-                        }
-                    }
-                    for (const member of ((type as ResolvedType).properties || emptyArray)) {
-                        if (visitType(getTypeOfSymbol(member))) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
-                function visitSignature(sig: Signature) {
-                    for (const param of sig.parameters) {
-                        if (visitType(getTypeOfSymbol(param))) {
-                            return true;
-                        }
-                    }
-                    return visitType(getReturnTypeOfSignature(sig));
                 }
             }
 
@@ -13431,7 +13332,7 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
                 const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
-                type.calculatedFlags! |= CalculatedTypeFlags.IsMarkerType;
+                type.aliasTypeArgumentsContainsMarker = true;
                 return type;
             });
         }

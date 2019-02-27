@@ -3919,20 +3919,13 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
-        /* @internal */ calculatedFlags?: CalculatedTypeFlags;
+        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean;   // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
         /* @internal */
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
-    }
-
-    /* @internal */
-    export const enum CalculatedTypeFlags {
-        IsMarkerType                        = 1 << 0,
-        HasCalculatedContainsTypeParameter  = 1 << 1,
-        ContainsTypeParameter               = 1 << 2,
     }
 
     /* @internal */
