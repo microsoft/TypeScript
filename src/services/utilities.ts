@@ -1753,33 +1753,23 @@ namespace ts {
     /**
      * Sets EmitFlags to suppress leading and trailing trivia on the node.
      */
-    export function suppressLeadingAndTrailingTrivia(node: Node, recursive = true) {
-        suppressLeadingTrivia(node, recursive);
-        suppressTrailingTrivia(node, recursive);
+    export function suppressLeadingAndTrailingTrivia(node: Node) {
+        suppressLeadingTrivia(node);
+        suppressTrailingTrivia(node);
     }
 
     /**
      * Sets EmitFlags to suppress leading trivia on the node.
      */
-    export function suppressLeadingTrivia(node: Node, recursive = true) {
-        if (recursive) {
-            addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
-        }
-        else {
-            addEmitFlags(node, EmitFlags.NoLeadingComments);
-        }
+    export function suppressLeadingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoLeadingComments, getFirstChild);
     }
 
     /**
      * Sets EmitFlags to suppress trailing trivia on the node.
      */
-    export function suppressTrailingTrivia(node: Node, recursive = true) {
-        if (recursive) {
-            addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
-        }
-        else {
-            addEmitFlags(node, EmitFlags.NoTrailingComments);
-        }
+    export function suppressTrailingTrivia(node: Node) {
+        addEmitFlagsRecursively(node, EmitFlags.NoTrailingComments, getLastChild);
     }
 
     function addEmitFlagsRecursively(node: Node, flag: EmitFlags, getChild: (n: Node) => Node | undefined) {
@@ -1832,35 +1822,12 @@ namespace ts {
     }
 
     export function copyLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
-        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
-            if (kind === SyntaxKind.MultiLineCommentTrivia) {
-                // Remove leading /*
-                pos += 2;
-                // Remove trailing */
-                end -= 2;
-            }
-            else {
-                // Remove leading //
-                pos += 2;
-            }
-            addSyntheticLeadingComment(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
-        });
+        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
     }
 
+
     export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
-        forEachTrailingCommentRange(sourceFile.text, sourceNode.end, (pos, end, kind, htnl) => {
-            if (kind === SyntaxKind.MultiLineCommentTrivia) {
-                // Remove leading /*
-                pos += 2;
-                // Remove trailing */
-                end -= 2;
-            }
-            else {
-                // Remove leading //
-                pos += 2;
-            }
-            addSyntheticTrailingComment(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
-        });
+        forEachTrailingCommentRange(sourceFile.text, sourceNode.end, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticTrailingComment));
     }
 
     /**
@@ -1871,7 +1838,11 @@ namespace ts {
      * The comment refers to `a` but belongs to the `(` token, but we might want to copy it.
      */
     export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
-        forEachTrailingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
+        forEachTrailingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
+    }
+
+    function getAddCommentsFunction(targetNode: Node, sourceFile: SourceFile, commentKind: CommentKind | undefined, hasTrailingNewLine: boolean | undefined, cb: (node: Node, kind: CommentKind, text: string, hasTrailingNewLine?: boolean) => void) {
+        return (pos: number, end: number, kind: CommentKind, htnl: boolean) => {
             if (kind === SyntaxKind.MultiLineCommentTrivia) {
                 // Remove leading /*
                 pos += 2;
@@ -1882,11 +1853,9 @@ namespace ts {
                 // Remove leading //
                 pos += 2;
             }
-            addSyntheticLeadingComment(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
-        });
+            cb(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
+        };
     }
-
-
 
     function indexInTextChange(change: string, name: string): number {
         if (startsWith(change, name)) return 0;
