@@ -127,12 +127,12 @@ ${file.content}`;
                                     {
                                         start: { line: 1, offset: 1 },
                                         end: { line: 1, offset: 1 },
-                                        newText: "let zz = 10;",
+                                        newText: "let zzz = 10;",
                                     },
                                     {
                                         start: { line: 1, offset: 1 },
                                         end: { line: 1, offset: 1 },
-                                        newText: "let zzz = 10;",
+                                        newText: "let zz = 10;",
                                     }
                                 ]
                             }

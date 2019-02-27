@@ -2107,7 +2107,7 @@ namespace ts.server {
                     })),
                     request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
                         fileName: file.fileName,
-                        changes: mapDefinedIterator(arrayIterator(file.textChanges), change => {
+                        changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
                             const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file.fileName));
                             const start = scriptInfo.lineOffsetToPosition(change.start.line, change.start.offset);
                             const end = scriptInfo.lineOffsetToPosition(change.end.line, change.end.offset);
