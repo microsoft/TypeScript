@@ -2786,6 +2786,7 @@ namespace ts {
         function createTypeParameter(symbol?: Symbol) {
             const type = <TypeParameter>createType(TypeFlags.TypeParameter);
             if (symbol) type.symbol = symbol;
+            type.calculatedFlags = CalculatedTypeFlags.HasCalculatedContainsTypeParameter | CalculatedTypeFlags.ContainsTypeParameter;
             return type;
         }
 
@@ -12609,7 +12610,7 @@ namespace ts {
                 // the order in which things were checked.
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                    !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
+                    !(source.calculatedFlags! & CalculatedTypeFlags.IsMarkerType || target.calculatedFlags! & CalculatedTypeFlags.IsMarkerType)) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances);
                     if (varianceResult !== undefined) {
@@ -12824,16 +12825,7 @@ namespace ts {
                 return Ternary.False;
 
                 function isNonGeneric(type: Type) {
-                    let containsGeneric = false;
-                    traverseType(type, markTypeParameter);
-                    return !containsGeneric;
-
-                    function markTypeParameter(type: Type) {
-                        if (type.flags & TypeFlags.TypeParameter) {
-                            containsGeneric = true;
-                        }
-                        return containsGeneric;
-                    }
+                    return !hasAggregatedCalculatedFlag(type, CalculatedTypeFlags.ContainsTypeParameter);
                 }
 
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
@@ -12870,79 +12862,107 @@ namespace ts {
                 }
             }
 
-            function traverseType(type: Type, visitor: (t: Type) => boolean) {
+            function hasAggregatedCalculatedFlag(type: Type, storageBit: CalculatedTypeFlags) {
+                const checkedBit = storageBit >> 1;
                 const visited = createMap<true>();
                 return visitType(type);
 
-                function visitType(type: Type) {
+                function visitType(type: Type): boolean {
                     const id = "" + getTypeId(type);
-                    if (visited.has(id)) return;
+                    if (visited.has(id)) return false;
                     visited.set(id, true);
-                    if (visitor(type)) return;
                     const flags = type.flags;
+                    if (type.calculatedFlags! & checkedBit) {
+                        return !!(type.calculatedFlags! & storageBit);
+                    }
                     if (flags & TypeFlags.Object) {
                         const objectFlags = (<ObjectType>type).objectFlags;
                         if (isGenericMappedType(type)) {
-                            visitType(getConstraintTypeFromMappedType(type));
-                            visitType(getTemplateTypeFromMappedType(type));
+                            return cacheResult(type, visitType(getConstraintTypeFromMappedType(type)) || visitType(getTemplateTypeFromMappedType(type)));
                         }
                         else if (objectFlags & ObjectFlags.ReverseMapped) {
-                            visitType((type as ReverseMappedType).mappedType);
-                            visitType((type as ReverseMappedType).source);
-                            visitType((type as ReverseMappedType).constraintType);
+                            return cacheResult(type, visitType((type as ReverseMappedType).mappedType) ||
+                                visitType((type as ReverseMappedType).source) ||
+                                visitType((type as ReverseMappedType).constraintType));
                         }
                         else if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped | ObjectFlags.ClassOrInterface)) {
-                            resolveStructuredTypeMembers(type as StructuredType);
-                            const strIdx = getIndexInfoOfType(type, IndexKind.String);
-                            if (strIdx) {
-                                visitType(strIdx.type);
-                            }
-                            const numIdx = getIndexInfoOfType(type, IndexKind.Number);
-                            if (numIdx) {
-                                visitType(numIdx.type);
-                            } 
-                            for (const sig of getSignaturesOfStructuredType(type, SignatureKind.Call)) {
-                                visitSignature(sig);
-                            }
-                            for (const sig of getSignaturesOfStructuredType(type, SignatureKind.Construct)) {
-                                visitSignature(sig);
-                            }
-                            for (const member of ((type as ResolvedType).properties || emptyArray)) {
-                                visitType(getTypeOfSymbol(member));
-                            }
+                            return cacheResult(type, visitStructuredType(type as StructuredType));
                         }
                         else if (objectFlags & ObjectFlags.Reference) {
                             const typeArguments = (<TypeReference>type).typeArguments;
-                            forEach(typeArguments, visitType);
+                            return cacheResult(type, some(typeArguments, visitType));
                         }
                     }
                     else if (flags & TypeFlags.UnionOrIntersection) {
-                        forEachType(type, visitType);
+                        return cacheResult(type, some((type as UnionOrIntersectionType).types, visitType));
                     }
                     else if (flags & TypeFlags.Index) {
-                        visitType((type as IndexType).type);
+                        return cacheResult(type, visitType((type as IndexType).type));
                     }
                     else if (flags & TypeFlags.IndexedAccess) {
-                        visitType((type as IndexedAccessType).objectType);
-                        visitType((type as IndexedAccessType).indexType);
+                        return cacheResult(type, visitType((type as IndexedAccessType).objectType) ||
+                            visitType((type as IndexedAccessType).indexType));
                     }
                     else if (flags & TypeFlags.Conditional) {
-                        visitType((type as ConditionalType).checkType);
-                        visitType((type as ConditionalType).extendsType);
-                        visitType(getTrueTypeFromConditionalType(type as ConditionalType));
-                        visitType(getFalseTypeFromConditionalType(type as ConditionalType));
+                        return cacheResult(type, visitType((type as ConditionalType).checkType) ||
+                            visitType((type as ConditionalType).extendsType) ||
+                            visitType(getTrueTypeFromConditionalType(type as ConditionalType)) ||
+                            visitType(getFalseTypeFromConditionalType(type as ConditionalType)));
                     }
                     else if (flags & TypeFlags.Substitution) {
-                        visitType((type as SubstitutionType).typeVariable);
-                        visitType((type as SubstitutionType).substitute);
+                        return cacheResult(type, visitType((type as SubstitutionType).typeVariable) ||
+                            visitType((type as SubstitutionType).substitute));
                     }
+                    return false;
+                }
+
+                function cacheResult(type: Type, result: boolean) {
+                    type.calculatedFlags! |= checkedBit;
+                    if (result) {
+                        type.calculatedFlags! |= storageBit;
+                    }
+                    return result;
+                }
+
+                function visitStructuredType(type: StructuredType) {
+                    resolveStructuredTypeMembers(type);
+                    const strIdx = getIndexInfoOfType(type, IndexKind.String);
+                    if (strIdx) {
+                        if (visitType(strIdx.type)) {
+                            return true;
+                        }
+                    }
+                    const numIdx = getIndexInfoOfType(type, IndexKind.Number);
+                    if (numIdx) {
+                        if (visitType(numIdx.type)) {
+                            return true;
+                        }
+                    }
+                    for (const sig of getSignaturesOfStructuredType(type, SignatureKind.Call)) {
+                        if (visitSignature(sig)) {
+                            return true;
+                        }
+                    }
+                    for (const sig of getSignaturesOfStructuredType(type, SignatureKind.Construct)) {
+                        if (visitSignature(sig)) {
+                            return true;
+                        }
+                    }
+                    for (const member of ((type as ResolvedType).properties || emptyArray)) {
+                        if (visitType(getTypeOfSymbol(member))) {
+                            return true;
+                        }
+                    }
+                    return false;
                 }
 
                 function visitSignature(sig: Signature) {
                     for (const param of sig.parameters) {
-                        visitType(getTypeOfSymbol(param));
+                        if (visitType(getTypeOfSymbol(param))) {
+                            return true;
+                        }
                     }
-                    visitType(getReturnTypeOfSignature(sig));
+                    return visitType(getReturnTypeOfSignature(sig));
                 }
             }
 
@@ -13411,7 +13431,7 @@ namespace ts {
             const links = getSymbolLinks(symbol);
             return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
                 const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
-                type.aliasTypeArgumentsContainsMarker = true;
+                type.calculatedFlags! |= CalculatedTypeFlags.IsMarkerType;
                 return type;
             });
         }
