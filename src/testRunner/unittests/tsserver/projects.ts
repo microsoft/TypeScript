@@ -709,6 +709,7 @@ namespace ts.projectSystem {
             const project = configuredProjectAt(projectService, 0);
             let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, emptyOptions);
             assert(completions && completions.entries[1].name === "hello", `expected entry hello to be in completion list`);
+            assert(completions && completions.entries[0].name === "globalThis", `first entry should be globalThis (not strictly relevant for this test).`);
 
             // Close HTML file
             projectService.applyChangesInOpenFiles(

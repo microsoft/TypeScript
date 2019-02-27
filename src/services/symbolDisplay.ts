@@ -310,7 +310,7 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
         }
-        if (symbolFlags & SymbolFlags.Module) {
+        if (symbolFlags & SymbolFlags.Module && !isThisExpression) {
             prefixNextMeaning();
             const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
             const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;

@@ -92,7 +92,7 @@ namespace ts {
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
 
-        const globalThisSymbol = createSymbol(SymbolFlags.ValueModule | SymbolFlags.NamespaceModule, "globalThis" as __String, CheckFlags.Readonly);
+        const globalThisSymbol = createSymbol(SymbolFlags.Module, "globalThis" as __String, CheckFlags.Readonly);
         globalThisSymbol.exports = globals;
         globalThisSymbol.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
         (globalThisSymbol.valueDeclaration as Identifier).escapedText = "globalThis" as __String;
@@ -318,9 +318,9 @@ namespace ts {
             getAccessibleSymbolChain,
             getTypePredicateOfSignature: getTypePredicateOfSignature as (signature: Signature) => TypePredicate, // TODO: GH#18217
             resolveExternalModuleSymbol,
-            tryGetThisTypeAt: node => {
+            tryGetThisTypeAt: (node, includeGlobalThis) => {
                 node = getParseTreeNode(node);
-                return node && tryGetThisTypeAt(node);
+                return node && tryGetThisTypeAt(node, includeGlobalThis);
             },
             getTypeArgumentConstraint: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
@@ -16988,9 +16988,9 @@ namespace ts {
                 captureLexicalThis(node, container);
             }
 
-            const type = tryGetThisTypeAt(node, container);
-            const globalThisType = getTypeOfSymbol(globalThisSymbol);
+            const type = tryGetThisTypeAt(node, /*includeGlobalThis*/ true, container);
             if (noImplicitThis) {
+                const globalThisType = getTypeOfSymbol(globalThisSymbol);
                 if (type === globalThisType && capturedByArrowFunction) {
                     error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this);
                 }
@@ -17008,7 +17008,7 @@ namespace ts {
             return type || anyType;
         }
 
-        function tryGetThisTypeAt(node: Node, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
+        function tryGetThisTypeAt(node: Node, includeGlobalThis = true, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
             const isInJS = isInJSFile(node);
             if (isFunctionLike(container) &&
                 (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
@@ -17061,7 +17061,7 @@ namespace ts {
                     const fileSymbol = getSymbolOfNode(container);
                     return fileSymbol && getTypeOfSymbol(fileSymbol);
                 }
-                else {
+                else if (includeGlobalThis) {
                     return getTypeOfSymbol(globalThisSymbol);
                 }
             }

@@ -12,4 +12,4 @@
 //// // different 'this'
 //// function f(this) { return this; }
 
-verify.singleReferenceGroup("module globalThis\nthis: typeof globalThis");
+verify.singleReferenceGroup("this: typeof globalThis");
