@@ -12824,13 +12824,16 @@ namespace ts {
                 return Ternary.False;
 
                 function isNonGeneric(type: Type) {
-                    // If we're already doing identity checking, don't dive into a new `isIdenticalTo` call, so we
-                    // can properly trigger a `Maybe` result (which we interpret as "potentially generic" here) if
-                    // relating the identity of the type ends up being recursive
-                    if (relation === identityRelation) {
-                        return isRelatedTo(getRestrictiveInstantiation(type), type) === Ternary.True;
+                    let containsGeneric = false;
+                    traverseType(type, markTypeParameter);
+                    return !containsGeneric;
+
+                    function markTypeParameter(type: Type) {
+                        if (type.flags & TypeFlags.TypeParameter) {
+                            containsGeneric = true;
+                        }
+                        return containsGeneric;
                     }
-                    return isTypeIdenticalTo(getRestrictiveInstantiation(type), type);
                 }
 
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
@@ -12864,6 +12867,82 @@ namespace ts {
                         originalErrorInfo = errorInfo;
                         errorInfo = saveErrorInfo;
                     }
+                }
+            }
+
+            function traverseType(type: Type, visitor: (t: Type) => boolean) {
+                const visited = createMap<true>();
+                return visitType(type);
+
+                function visitType(type: Type) {
+                    const id = "" + getTypeId(type);
+                    if (visited.has(id)) return;
+                    visited.set(id, true);
+                    if (visitor(type)) return;
+                    const flags = type.flags;
+                    if (flags & TypeFlags.Object) {
+                        const objectFlags = (<ObjectType>type).objectFlags;
+                        if (isGenericMappedType(type)) {
+                            visitType(getConstraintTypeFromMappedType(type));
+                            visitType(getTemplateTypeFromMappedType(type));
+                        }
+                        else if (objectFlags & ObjectFlags.ReverseMapped) {
+                            visitType((type as ReverseMappedType).mappedType);
+                            visitType((type as ReverseMappedType).source);
+                            visitType((type as ReverseMappedType).constraintType);
+                        }
+                        else if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped | ObjectFlags.ClassOrInterface)) {
+                            resolveStructuredTypeMembers(type as StructuredType);
+                            const strIdx = getIndexInfoOfType(type, IndexKind.String);
+                            if (strIdx) {
+                                visitType(strIdx.type);
+                            }
+                            const numIdx = getIndexInfoOfType(type, IndexKind.Number);
+                            if (numIdx) {
+                                visitType(numIdx.type);
+                            } 
+                            for (const sig of getSignaturesOfStructuredType(type, SignatureKind.Call)) {
+                                visitSignature(sig);
+                            }
+                            for (const sig of getSignaturesOfStructuredType(type, SignatureKind.Construct)) {
+                                visitSignature(sig);
+                            }
+                            for (const member of ((type as ResolvedType).properties || emptyArray)) {
+                                visitType(getTypeOfSymbol(member));
+                            }
+                        }
+                        else if (objectFlags & ObjectFlags.Reference) {
+                            const typeArguments = (<TypeReference>type).typeArguments;
+                            forEach(typeArguments, visitType);
+                        }
+                    }
+                    else if (flags & TypeFlags.UnionOrIntersection) {
+                        forEachType(type, visitType);
+                    }
+                    else if (flags & TypeFlags.Index) {
+                        visitType((type as IndexType).type);
+                    }
+                    else if (flags & TypeFlags.IndexedAccess) {
+                        visitType((type as IndexedAccessType).objectType);
+                        visitType((type as IndexedAccessType).indexType);
+                    }
+                    else if (flags & TypeFlags.Conditional) {
+                        visitType((type as ConditionalType).checkType);
+                        visitType((type as ConditionalType).extendsType);
+                        visitType(getTrueTypeFromConditionalType(type as ConditionalType));
+                        visitType(getFalseTypeFromConditionalType(type as ConditionalType));
+                    }
+                    else if (flags & TypeFlags.Substitution) {
+                        visitType((type as SubstitutionType).typeVariable);
+                        visitType((type as SubstitutionType).substitute);
+                    }
+                }
+
+                function visitSignature(sig: Signature) {
+                    for (const param of sig.parameters) {
+                        visitType(getTypeOfSymbol(param));
+                    }
+                    visitType(getReturnTypeOfSignature(sig));
                 }
             }
 

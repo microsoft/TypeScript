@@ -358,22 +358,22 @@ function test5() {
 
     // Union of all intrinsics and components of `any`
     function App(props: { component:React.ReactType }) {
->App : (props: { component: React.ReactType<any>; }) => JSX.Element
->props : { component: React.ReactType<any>; }
->component : React.ReactType<any>
+>App : (props: { component: string | React.ComponentClass<any, any> | React.StatelessComponent<any>; }) => JSX.Element
+>props : { component: string | React.ComponentClass<any, any> | React.StatelessComponent<any>; }
+>component : string | React.ComponentClass<any, any> | React.StatelessComponent<any>
 >React : any
 
         const Comp: React.ReactType = props.component;
->Comp : React.ReactType<any>
+>Comp : string | React.ComponentClass<any, any> | React.StatelessComponent<any>
 >React : any
->props.component : React.ReactType<any>
->props : { component: React.ReactType<any>; }
->component : React.ReactType<any>
+>props.component : string | React.ComponentClass<any, any> | React.StatelessComponent<any>
+>props : { component: string | React.ComponentClass<any, any> | React.StatelessComponent<any>; }
+>component : string | React.ComponentClass<any, any> | React.StatelessComponent<any>
 
         return (<Comp />);
 >(<Comp />) : JSX.Element
 ><Comp /> : JSX.Element
->Comp : React.ReactType<any>
+>Comp : string | React.ComponentClass<any, any> | React.StatelessComponent<any>
     }
 
     // custom components with non-subset props
