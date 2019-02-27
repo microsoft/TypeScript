@@ -13497,7 +13497,7 @@ namespace ts {
                         const t = stack[i];
                         if (t.flags & TypeFlags.Object && t.symbol === symbol) {
                             count++;
-                            if (count >= 4) return true;
+                            if (count >= 5) return true;
                         }
                     }
                 }
