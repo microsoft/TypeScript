@@ -7406,7 +7406,7 @@ namespace ts {
                 const nameType = property.name && getLiteralTypeFromPropertyName(property.name);
                 const name = nameType && isTypeUsableAsPropertyName(nameType) ? getPropertyNameFromType(nameType) : undefined;
                 const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
-                return !!expected && isLiteralType(expected) && !isTypeIdenticalTo(getTypeOfNode(property), expected);
+                return !!expected && isLiteralType(expected) && !isTypeAssignableTo(getTypeOfNode(property), expected);
             });
         }
 
