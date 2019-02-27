@@ -1,6 +1,4 @@
 //// [conditionalTypes2.ts]
-// #27118: Conditional types are now invariant in the check type.
-
 interface Covariant<T> {
     foo: T extends string ? T : number;
 }
@@ -14,13 +12,13 @@ interface Invariant<T> {
 }
 
 function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
-    a = b;  // Error
+    a = b;
     b = a;  // Error
 }
 
 function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
     a = b;  // Error
-    b = a;  // Error
+    b = a;
 }
 
 function f3<A, B extends A>(a: Invariant<A>, b: Invariant<B>) {
@@ -76,6 +74,38 @@ function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: E
     fooBat(x);  // Error
     fooBat(y);  // Error
     fooBat(z);  // Error
+}
+
+// Repros from #22860
+
+class Opt<T> {
+    toVector(): Vector<T> {
+        return <any>undefined;
+    }
+}
+
+interface Seq<T> {
+    tail(): Opt<Seq<T>>;
+}
+
+class Vector<T> implements Seq<T> {
+    tail(): Opt<Vector<T>> {
+        return <any>undefined;
+    }
+    partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
+    partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
+    partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
+        return <any>undefined;
+    }
+}
+
+interface A1<T> {
+    bat: B1<A1<T>>;
+}
+
+interface B1<T> extends A1<T> {
+    bat: B1<B1<T>>;
+    boom: T extends any ? true : true
 }
 
 // Repro from #22899
@@ -159,36 +189,16 @@ type ProductComplementComplement = {
 type PCCA = ProductComplementComplement['a'];
 type PCCB = ProductComplementComplement['b'];
 
-// Repros from #27118
-
-type MyElement<A> = [A] extends [[infer E]] ? E : never;
-function oops<A, B extends A>(arg: MyElement<A>): MyElement<B> {
-    return arg;  // Unsound, should be error
-}
-
-type MyAcceptor<A> = [A] extends [[infer E]] ? (arg: E) => void : never;
-function oops2<A, B extends A>(arg: MyAcceptor<B>): MyAcceptor<A> {
-    return arg;  // Unsound, should be error
-}
-
-type Dist<T> = T extends number ? number : string;
-type Aux<A extends { a: unknown }> = A["a"] extends number ? number : string;
-type Nondist<T> = Aux<{a: T}>;
-function oops3<T>(arg: Dist<T>): Nondist<T> {
-    return arg;  // Unsound, should be error
-}
-
 
 //// [conditionalTypes2.js]
 "use strict";
-// #27118: Conditional types are now invariant in the check type.
 function f1(a, b) {
-    a = b; // Error
+    a = b;
     b = a; // Error
 }
 function f2(a, b) {
     a = b; // Error
-    b = a; // Error
+    b = a;
 }
 function f3(a, b) {
     a = b; // Error
@@ -229,20 +239,31 @@ function f21(x, y, z) {
     fooBat(y); // Error
     fooBat(z); // Error
 }
+// Repros from #22860
+var Opt = /** @class */ (function () {
+    function Opt() {
+    }
+    Opt.prototype.toVector = function () {
+        return undefined;
+    };
+    return Opt;
+}());
+var Vector = /** @class */ (function () {
+    function Vector() {
+    }
+    Vector.prototype.tail = function () {
+        return undefined;
+    };
+    Vector.prototype.partition2 = function (predicate) {
+        return undefined;
+    };
+    return Vector;
+}());
 function foo(value) {
     if (isFunction(value)) {
         toString1(value);
         toString2(value);
     }
-}
-function oops(arg) {
-    return arg; // Unsound, should be error
-}
-function oops2(arg) {
-    return arg; // Unsound, should be error
-}
-function oops3(arg) {
-    return arg; // Unsound, should be error
 }
 
 
@@ -281,6 +302,24 @@ declare function fooBat(x: {
 declare type Extract2<T, U, V> = T extends U ? T extends V ? T : never : never;
 declare function f20<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>): void;
 declare function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: Extract2<T, Foo, Bar>): void;
+declare class Opt<T> {
+    toVector(): Vector<T>;
+}
+interface Seq<T> {
+    tail(): Opt<Seq<T>>;
+}
+declare class Vector<T> implements Seq<T> {
+    tail(): Opt<Vector<T>>;
+    partition2<U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>];
+    partition2(predicate: (x: T) => boolean): [Vector<T>, Vector<T>];
+}
+interface A1<T> {
+    bat: B1<A1<T>>;
+}
+interface B1<T> extends A1<T> {
+    bat: B1<B1<T>>;
+    boom: T extends any ? true : true;
+}
 declare function toString1(value: object | Function): string;
 declare function toString2(value: Function): string;
 declare function foo<T>(value: T): void;
@@ -353,15 +392,3 @@ declare type ProductComplementComplement = {
 };
 declare type PCCA = ProductComplementComplement['a'];
 declare type PCCB = ProductComplementComplement['b'];
-declare type MyElement<A> = [A] extends [[infer E]] ? E : never;
-declare function oops<A, B extends A>(arg: MyElement<A>): MyElement<B>;
-declare type MyAcceptor<A> = [A] extends [[infer E]] ? (arg: E) => void : never;
-declare function oops2<A, B extends A>(arg: MyAcceptor<B>): MyAcceptor<A>;
-declare type Dist<T> = T extends number ? number : string;
-declare type Aux<A extends {
-    a: unknown;
-}> = A["a"] extends number ? number : string;
-declare type Nondist<T> = Aux<{
-    a: T;
-}>;
-declare function oops3<T>(arg: Dist<T>): Nondist<T>;
