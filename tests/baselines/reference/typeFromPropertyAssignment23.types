@@ -46,7 +46,7 @@ D.prototype.foo = () =>  {
     this.n = 'not checked, so no error'
 >this.n = 'not checked, so no error' : "not checked, so no error"
 >this.n : any
->this : any
+>this : typeof globalThis
 >n : any
 >'not checked, so no error' : "not checked, so no error"
 }

@@ -88,8 +88,16 @@ namespace ts {
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
 
+        const globals = createSymbolTable();
         const undefinedSymbol = createSymbol(SymbolFlags.Property, "undefined" as __String);
         undefinedSymbol.declarations = [];
+
+        const globalThisSymbol = createSymbol(SymbolFlags.Module, "globalThis" as __String, CheckFlags.Readonly);
+        globalThisSymbol.exports = globals;
+        globalThisSymbol.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
+        (globalThisSymbol.valueDeclaration as Identifier).escapedText = "globalThis" as __String;
+        globals.set(globalThisSymbol.escapedName, globalThisSymbol);
+
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
         const requireSymbol = createSymbol(SymbolFlags.Property, "require" as __String);
 
@@ -310,9 +318,9 @@ namespace ts {
             getAccessibleSymbolChain,
             getTypePredicateOfSignature: getTypePredicateOfSignature as (signature: Signature) => TypePredicate, // TODO: GH#18217
             resolveExternalModuleSymbol,
-            tryGetThisTypeAt: node => {
+            tryGetThisTypeAt: (node, includeGlobalThis) => {
                 node = getParseTreeNode(node);
-                return node && tryGetThisTypeAt(node);
+                return node && tryGetThisTypeAt(node, includeGlobalThis);
             },
             getTypeArgumentConstraint: nodeIn => {
                 const node = getParseTreeNode(nodeIn, isTypeNode);
@@ -459,7 +467,6 @@ namespace ts {
 
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
-        const globals = createSymbolTable();
         interface DuplicateInfoForSymbol {
             readonly firstFileLocations: Node[];
             readonly secondFileLocations: Node[];
@@ -9703,7 +9710,7 @@ namespace ts {
         }
 
         function getLiteralTypeFromProperties(type: Type, include: TypeFlags) {
-            return getUnionType(map(getPropertiesOfType(type), t => getLiteralTypeFromProperty(t, include)));
+            return getUnionType(map(getPropertiesOfType(type), p => getLiteralTypeFromProperty(p, include)));
         }
 
         function getNonEnumNumberIndexInfo(type: Type) {
@@ -16990,25 +16997,27 @@ namespace ts {
                 captureLexicalThis(node, container);
             }
 
-            const type = tryGetThisTypeAt(node, container);
-            if (!type && noImplicitThis) {
-                // With noImplicitThis, functions may not reference 'this' if it has type 'any'
-                const diag = error(
-                    node,
-                    capturedByArrowFunction && container.kind === SyntaxKind.SourceFile ?
-                        Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this_which_implicitly_has_type_any :
-                        Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
-                if (!isSourceFile(container)) {
-                    const outsideThis = tryGetThisTypeAt(container);
-                    if (outsideThis) {
-                        addRelatedInfo(diag, createDiagnosticForNode(container, Diagnostics.An_outer_value_of_this_is_shadowed_by_this_container));
+            const type = tryGetThisTypeAt(node, /*includeGlobalThis*/ true, container);
+            if (noImplicitThis) {
+                const globalThisType = getTypeOfSymbol(globalThisSymbol);
+                if (type === globalThisType && capturedByArrowFunction) {
+                    error(node, Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this);
+                }
+                else if (!type) {
+                    // With noImplicitThis, functions may not reference 'this' if it has type 'any'
+                    const diag = error(node, Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
+                    if (!isSourceFile(container)) {
+                        const outsideThis = tryGetThisTypeAt(container);
+                        if (outsideThis && outsideThis !== globalThisType) {
+                            addRelatedInfo(diag, createDiagnosticForNode(container, Diagnostics.An_outer_value_of_this_is_shadowed_by_this_container));
+                        }
                     }
                 }
             }
             return type || anyType;
         }
 
-        function tryGetThisTypeAt(node: Node, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
+        function tryGetThisTypeAt(node: Node, includeGlobalThis = true, container = getThisContainer(node, /*includeArrowFunctions*/ false)): Type | undefined {
             const isInJS = isInJSFile(node);
             if (isFunctionLike(container) &&
                 (!isInParameterInitializerBeforeContainingFunction(node) || getThisParameter(container))) {
@@ -17053,6 +17062,16 @@ namespace ts {
                 const type = getTypeForThisExpressionFromJSDoc(container);
                 if (type && type !== errorType) {
                     return getFlowTypeOfReference(node, type);
+                }
+            }
+            if (isSourceFile(container)) {
+                // look up in the source file's locals or exports
+                if (container.commonJsModuleIndicator) {
+                    const fileSymbol = getSymbolOfNode(container);
+                    return fileSymbol && getTypeOfSymbol(fileSymbol);
+                }
+                else if (includeGlobalThis) {
+                    return getTypeOfSymbol(globalThisSymbol);
                 }
             }
         }
@@ -19350,6 +19369,12 @@ namespace ts {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);
                 if (!(indexInfo && indexInfo.type)) {
                     if (isJSLiteralType(leftType)) {
+                        return anyType;
+                    }
+                    if (leftType.symbol === globalThisSymbol) {
+                        if (noImplicitAny) {
+                            error(right, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(leftType));
+                        }
                         return anyType;
                     }
                     if (right.escapedText && !checkAndReportErrorForExtendingInterface(node)) {
