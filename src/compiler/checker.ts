@@ -12672,16 +12672,26 @@ namespace ts {
                             (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(target)) {
                             return Ternary.True;
                         }
-                        // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
-                        if (!isGenericMappedType(source) && isRelatedTo(getConstraintTypeFromMappedType(target), getIndexType(source))) {
-                            const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(target));
-                            const templateType = getTemplateTypeFromMappedType(target);
-                            if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
-                                return result;
+                        if (!isGenericMappedType(source)) {
+                            const targetConstraint = getConstraintTypeFromMappedType(target);
+                            const sourceKeys = getIndexType(source);
+                            const hasOptionalUnionKeys = modifiers & MappedTypeModifiers.IncludeOptional && targetConstraint.flags & TypeFlags.Union;
+                            const filteredByApplicability = hasOptionalUnionKeys ? filterType(targetConstraint, t => !!isRelatedTo(t, sourceKeys)) : undefined;
+                            // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
+                            // A source type T is related to a target type { [P in Q]?: X } if some Q = Q' is related to keyof T and T[Q'] is related to X.
+                            if (hasOptionalUnionKeys
+                                    ? !(filteredByApplicability!.flags & TypeFlags.Never)
+                                    : isRelatedTo(targetConstraint, sourceKeys)) {
+                                const indexingType = hasOptionalUnionKeys ? filteredByApplicability! : getTypeParameterFromMappedType(target);
+                                const indexedAccessType = getIndexedAccessType(source, indexingType);
+                                const templateType = getTemplateTypeFromMappedType(target);
+                                if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
+                                    return result;
+                                }
                             }
+                            originalErrorInfo = errorInfo;
+                            errorInfo = saveErrorInfo;
                         }
-                        originalErrorInfo = errorInfo;
-                        errorInfo = saveErrorInfo;
                     }
                 }
 
