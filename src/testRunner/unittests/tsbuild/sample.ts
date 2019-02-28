@@ -366,14 +366,14 @@ export class cNew {}`);
                     "TSFILE: /src/core/index.js",
                     "TSFILE: /src/core/index.d.ts",
                     "TSFILE: /src/core/index.d.ts.map",
-                    "TSFILE: /src/core/.tsbuildinfo",
+                    "TSFILE: /src/core/tsconfig.tsbuildinfo",
                     "TSFILE: /src/logic/index.js",
                     "TSFILE: /src/logic/index.js.map",
                     "TSFILE: /src/logic/index.d.ts",
-                    "TSFILE: /src/logic/.tsbuildinfo",
+                    "TSFILE: /src/logic/tsconfig.tsbuildinfo",
                     "TSFILE: /src/tests/index.js",
                     "TSFILE: /src/tests/index.d.ts",
-                    "TSFILE: /src/tests/.tsbuildinfo",
+                    "TSFILE: /src/tests/tsconfig.tsbuildinfo",
                 ]);
             });
         });
@@ -410,9 +410,9 @@ export class cNew {}`);
                         "/src/logic/index.d.ts",
 
                         // build info
-                        "/src/core/.tsbuildinfo",
-                        "/src/logic/.tsbuildinfo",
-                        "/src/tests/.tsbuildinfo"
+                        "/src/core/tsconfig.tsbuildinfo",
+                        "/src/logic/tsconfig.tsbuildinfo",
+                        "/src/tests/tsconfig.tsbuildinfo"
                     ]
                 )
             };
@@ -454,9 +454,9 @@ export class someClass { }`),
                             "/src/logic/index.d.ts",
 
                             // build info
-                            "/src/core/.tsbuildinfo",
-                            "/src/logic/.tsbuildinfo",
-                            "/src/tests/.tsbuildinfo",
+                            "/src/core/tsconfig.tsbuildinfo",
+                            "/src/logic/tsconfig.tsbuildinfo",
+                            "/src/tests/tsconfig.tsbuildinfo",
 
                             "/src/tests/index.d.ts", // to check if d.ts has changed
                         ],
@@ -517,7 +517,7 @@ class someClass { }`),
                                 "/src/core/index.d.ts",
 
                                 // build info
-                                "/src/core/.tsbuildinfo",
+                                "/src/core/tsconfig.tsbuildinfo",
                             ],
                         )
                     },
@@ -548,7 +548,7 @@ class someClass { }`),
                                 "/src/core/anotherModule.d.ts", // Since its generated again without .buildInfo
 
                                 // build info
-                                "/src/core/.tsbuildinfo",
+                                "/src/core/tsconfig.tsbuildinfo",
                             ],
                         )
                     }
@@ -560,14 +560,14 @@ class someClass { }`),
                     "/src/core/index.js",
                     "/src/core/index.d.ts",
                     "/src/core/index.d.ts.map",
-                    "/src/core/.tsbuildinfo",
+                    "/src/core/tsconfig.tsbuildinfo",
                     "/src/logic/index.js",
                     "/src/logic/index.js.map",
                     "/src/logic/index.d.ts",
-                    "/src/logic/.tsbuildinfo",
+                    "/src/logic/tsconfig.tsbuildinfo",
                     "/src/tests/index.js",
                     "/src/tests/index.d.ts",
-                    "/src/tests/.tsbuildinfo",
+                    "/src/tests/tsconfig.tsbuildinfo",
                 ]
             });
 
@@ -614,8 +614,8 @@ class someClass { }`),
                             "/src/logic/decls/index.d.ts",
 
                             // build info
-                            "/src/logic/.tsbuildinfo",
-                            "/src/tests/.tsbuildinfo",
+                            "/src/logic/tsconfig.tsbuildinfo",
+                            "/src/tests/tsconfig.tsbuildinfo",
 
                             "/src/tests/index.d.ts", // to check if d.ts has changed
                         ]
@@ -628,14 +628,14 @@ class someClass { }`),
                     "/src/core/index.js",
                     "/src/core/index.d.ts",
                     "/src/core/index.d.ts.map",
-                    "/src/core/.tsbuildinfo",
+                    "/src/core/tsconfig.tsbuildinfo",
                     "/src/logic/index.js",
                     "/src/logic/index.js.map",
                     "/src/logic/decls/index.d.ts",
-                    "/src/logic/.tsbuildinfo",
+                    "/src/logic/tsconfig.tsbuildinfo",
                     "/src/tests/index.js",
                     "/src/tests/index.d.ts",
-                    "/src/tests/.tsbuildinfo",
+                    "/src/tests/tsconfig.tsbuildinfo",
                 ],
                 ignoreWithoutBuildInfo: true
             });

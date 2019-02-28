@@ -1,296 +1,3 @@
-//// [/src/2/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/second/",
-    "sourceFiles": [
-      "/src/second/second_part1.ts",
-      "/src/second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 110,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 110,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 110,
-          "end": 3162,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 157,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 157,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 157,
-          "end": 234,
-          "kind": "text"
-        },
-        {
-          "pos": 234,
-          "end": 308,
-          "kind": "internal"
-        },
-        {
-          "pos": 310,
-          "end": 342,
-          "kind": "text"
-        },
-        {
-          "pos": 342,
-          "end": 734,
-          "kind": "internal"
-        },
-        {
-          "pos": 736,
-          "end": 739,
-          "kind": "text"
-        },
-        {
-          "pos": 739,
-          "end": 1152,
-          "kind": "internal"
-        },
-        {
-          "pos": 1154,
-          "end": 1202,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/2/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/2/second-output.js
-----------------------------------------------------------------------
-prepend: (0-110):: /src/first/bin/first-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-110)
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-----------------------------------------------------------------------
-text: (110-3162)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var normalC = (function () {
-    function normalC() {
-    }
-    normalC.prototype.method = function () { };
-    Object.defineProperty(normalC.prototype, "c", {
-        get: function () { return 10; },
-        set: function (val) { },
-        enumerable: true,
-        configurable: true
-    });
-    return normalC;
-}());
-var normalN;
-(function (normalN) {
-    var C = (function () {
-        function C() {
-        }
-        return C;
-    }());
-    normalN.C = C;
-    function foo() { }
-    normalN.foo = foo;
-    var someNamespace;
-    (function (someNamespace) {
-        var C = (function () {
-            function C() {
-            }
-            return C;
-        }());
-        someNamespace.C = C;
-    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));
-    var someOther;
-    (function (someOther) {
-        var something;
-        (function (something) {
-            var someClass = (function () {
-                function someClass() {
-                }
-                return someClass;
-            }());
-            something.someClass = someClass;
-        })(something = someOther.something || (someOther.something = {}));
-    })(someOther = normalN.someOther || (normalN.someOther = {}));
-    normalN.someImport = someNamespace.C;
-    normalN.internalConst = 10;
-    var internalEnum;
-    (function (internalEnum) {
-        internalEnum[internalEnum["a"] = 0] = "a";
-        internalEnum[internalEnum["b"] = 1] = "b";
-        internalEnum[internalEnum["c"] = 2] = "c";
-    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
-})(normalN || (normalN = {}));
-var internalC = (function () {
-    function internalC() {
-    }
-    return internalC;
-}());
-function internalfoo() { }
-var internalNamespace;
-(function (internalNamespace) {
-    var someClass = (function () {
-        function someClass() {
-        }
-        return someClass;
-    }());
-    internalNamespace.someClass = someClass;
-})(internalNamespace || (internalNamespace = {}));
-var internalOther;
-(function (internalOther) {
-    var something;
-    (function (something) {
-        var someClass = (function () {
-            function someClass() {
-            }
-            return someClass;
-        }());
-        something.someClass = someClass;
-    })(something = internalOther.something || (internalOther.something = {}));
-})(internalOther || (internalOther = {}));
-var internalImport = internalNamespace.someClass;
-var internalConst = 10;
-var internalEnum;
-(function (internalEnum) {
-    internalEnum[internalEnum["a"] = 0] = "a";
-    internalEnum[internalEnum["b"] = 1] = "b";
-    internalEnum[internalEnum["c"] = 2] = "c";
-})(internalEnum || (internalEnum = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-======================================================================
-======================================================================
-File:: /src/2/second-output.d.ts
-----------------------------------------------------------------------
-prepend: (0-157):: /src/first/bin/first-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-157)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-
-----------------------------------------------------------------------
-text: (157-234)
-declare namespace N {
-}
-declare namespace N {
-}
-declare class normalC {
-
-----------------------------------------------------------------------
-internal: (234-308)
-    constructor();
-    prop: string;
-    method(): void;
-    c: number;
-----------------------------------------------------------------------
-text: (310-342)
-}
-declare namespace normalN {
-
-----------------------------------------------------------------------
-internal: (342-734)
-    class C {
-    }
-    function foo(): void;
-    namespace someNamespace {
-        class C {
-        }
-    }
-    namespace someOther.something {
-        class someClass {
-        }
-    }
-    export import someImport = someNamespace.C;
-    type internalType = internalC;
-    const internalConst = 10;
-    enum internalEnum {
-        a = 0,
-        b = 1,
-        c = 2
-    }
-----------------------------------------------------------------------
-text: (736-739)
-}
-
-----------------------------------------------------------------------
-internal: (739-1152)
-declare class internalC {
-}
-declare function internalfoo(): void;
-declare namespace internalNamespace {
-    class someClass {
-    }
-}
-declare namespace internalOther.something {
-    class someClass {
-    }
-}
-import internalImport = internalNamespace.someClass;
-declare type internalType = internalC;
-declare const internalConst = 10;
-declare enum internalEnum {
-    a = 0,
-    b = 1,
-    c = 2
-}
-----------------------------------------------------------------------
-text: (1154-1202)
-declare class C {
-    doSomething(): void;
-}
-
-======================================================================
-
 //// [/src/2/second-output.d.ts.map]
 {"version":3,"file":"second-output.d.ts","sourceRoot":"","sources":["../first/first_PART1.ts","../first/first_part3.ts","../second/second_part1.ts","../second/second_part2.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;ACRD,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AAED,cAAM,OAAO;;IAEK,IAAI,EAAE,MAAM,CAAC;IACb,MAAM;IACF,CAAC,EACM,MAAM;CAClC;AACD,kBAAU,OAAO,CAAC;IACA,MAAa,CAAC;KAAI;IAClB,SAAgB,GAAG,SAAK;IACxB,UAAiB,aAAa,CAAC;QAAE,MAAa,CAAC;SAAG;KAAE;IACpD,UAAiB,SAAS,CAAC,SAAS,CAAC;QAAE,MAAa,SAAS;SAAG;KAAE;IAClE,MAAM,QAAQ,UAAU,GAAG,aAAa,CAAC,CAAC,CAAC;IAC3C,KAAY,YAAY,GAAG,SAAS,CAAC;IAC9B,MAAM,aAAa,KAAK,CAAC;IAChC,KAAY,YAAY;QAAG,CAAC,IAAA;QAAE,CAAC,IAAA;QAAE,CAAC,IAAA;KAAE;CACrD;AACa,cAAM,SAAS;CAAG;AAClB,iBAAS,WAAW,SAAK;AACzB,kBAAU,iBAAiB,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AACzD,kBAAU,aAAa,CAAC,SAAS,CAAC;IAAE,MAAa,SAAS;KAAG;CAAE;AAC/D,OAAO,cAAc,GAAG,iBAAiB,CAAC,SAAS,CAAC;AACpD,aAAK,YAAY,GAAG,SAAS,CAAC;AAC9B,QAAA,MAAM,aAAa,KAAK,CAAC;AACzB,aAAK,YAAY;IAAG,CAAC,IAAA;IAAE,CAAC,IAAA;IAAE,CAAC,IAAA;CAAE;ACpC3C,cAAM,CAAC;IACH,WAAW;CAGd"}
 
@@ -2652,20 +2359,32 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/first/bin/.tsbuildinfo]
+//// [/src/2/second-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "/src/second/",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "/src/second/second_part1.ts",
+      "/src/second/second_part2.ts"
     ],
     "js": {
       "sections": [
         {
           "pos": 0,
           "end": 110,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 110,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 110,
+          "end": 3162,
           "kind": "text"
         }
       ]
@@ -2675,6 +2394,49 @@ sourceFile:../second/second_part2.ts
         {
           "pos": 0,
           "end": 157,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 157,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 157,
+          "end": 234,
+          "kind": "text"
+        },
+        {
+          "pos": 234,
+          "end": 308,
+          "kind": "internal"
+        },
+        {
+          "pos": 310,
+          "end": 342,
+          "kind": "text"
+        },
+        {
+          "pos": 342,
+          "end": 734,
+          "kind": "internal"
+        },
+        {
+          "pos": 736,
+          "end": 739,
+          "kind": "text"
+        },
+        {
+          "pos": 739,
+          "end": 1152,
+          "kind": "internal"
+        },
+        {
+          "pos": 1154,
+          "end": 1202,
           "kind": "text"
         }
       ]
@@ -2682,10 +2444,12 @@ sourceFile:../second/second_part2.ts
   }
 }
 
-//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+//// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
-File:: /src/first/bin/first-output.js
+File:: /src/2/second-output.js
 ----------------------------------------------------------------------
+prepend: (0-110):: /src/first/bin/first-output.js texts:: 1
+>>--------------------------------------------------------------------
 text: (0-110)
 var s = "Hello, world";
 console.log(s);
@@ -2694,10 +2458,117 @@ function f() {
     return "JS does hoists";
 }
 
-======================================================================
-======================================================================
-File:: /src/first/bin/first-output.d.ts
 ----------------------------------------------------------------------
+text: (110-3162)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var normalC = (function () {
+    function normalC() {
+    }
+    normalC.prototype.method = function () { };
+    Object.defineProperty(normalC.prototype, "c", {
+        get: function () { return 10; },
+        set: function (val) { },
+        enumerable: true,
+        configurable: true
+    });
+    return normalC;
+}());
+var normalN;
+(function (normalN) {
+    var C = (function () {
+        function C() {
+        }
+        return C;
+    }());
+    normalN.C = C;
+    function foo() { }
+    normalN.foo = foo;
+    var someNamespace;
+    (function (someNamespace) {
+        var C = (function () {
+            function C() {
+            }
+            return C;
+        }());
+        someNamespace.C = C;
+    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));
+    var someOther;
+    (function (someOther) {
+        var something;
+        (function (something) {
+            var someClass = (function () {
+                function someClass() {
+                }
+                return someClass;
+            }());
+            something.someClass = someClass;
+        })(something = someOther.something || (someOther.something = {}));
+    })(someOther = normalN.someOther || (normalN.someOther = {}));
+    normalN.someImport = someNamespace.C;
+    normalN.internalConst = 10;
+    var internalEnum;
+    (function (internalEnum) {
+        internalEnum[internalEnum["a"] = 0] = "a";
+        internalEnum[internalEnum["b"] = 1] = "b";
+        internalEnum[internalEnum["c"] = 2] = "c";
+    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
+})(normalN || (normalN = {}));
+var internalC = (function () {
+    function internalC() {
+    }
+    return internalC;
+}());
+function internalfoo() { }
+var internalNamespace;
+(function (internalNamespace) {
+    var someClass = (function () {
+        function someClass() {
+        }
+        return someClass;
+    }());
+    internalNamespace.someClass = someClass;
+})(internalNamespace || (internalNamespace = {}));
+var internalOther;
+(function (internalOther) {
+    var something;
+    (function (something) {
+        var someClass = (function () {
+            function someClass() {
+            }
+            return someClass;
+        }());
+        something.someClass = someClass;
+    })(something = internalOther.something || (internalOther.something = {}));
+})(internalOther || (internalOther = {}));
+var internalImport = internalNamespace.someClass;
+var internalConst = 10;
+var internalEnum;
+(function (internalEnum) {
+    internalEnum[internalEnum["a"] = 0] = "a";
+    internalEnum[internalEnum["b"] = 1] = "b";
+    internalEnum[internalEnum["c"] = 2] = "c";
+})(internalEnum || (internalEnum = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+======================================================================
+======================================================================
+File:: /src/2/second-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-157):: /src/first/bin/first-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
 text: (0-157)
 interface TheFirst {
     none: any;
@@ -2707,6 +2578,77 @@ interface NoJsForHereEither {
     none: any;
 }
 declare function f(): string;
+
+----------------------------------------------------------------------
+text: (157-234)
+declare namespace N {
+}
+declare namespace N {
+}
+declare class normalC {
+
+----------------------------------------------------------------------
+internal: (234-308)
+    constructor();
+    prop: string;
+    method(): void;
+    c: number;
+----------------------------------------------------------------------
+text: (310-342)
+}
+declare namespace normalN {
+
+----------------------------------------------------------------------
+internal: (342-734)
+    class C {
+    }
+    function foo(): void;
+    namespace someNamespace {
+        class C {
+        }
+    }
+    namespace someOther.something {
+        class someClass {
+        }
+    }
+    export import someImport = someNamespace.C;
+    type internalType = internalC;
+    const internalConst = 10;
+    enum internalEnum {
+        a = 0,
+        b = 1,
+        c = 2
+    }
+----------------------------------------------------------------------
+text: (736-739)
+}
+
+----------------------------------------------------------------------
+internal: (739-1152)
+declare class internalC {
+}
+declare function internalfoo(): void;
+declare namespace internalNamespace {
+    class someClass {
+    }
+}
+declare namespace internalOther.something {
+    class someClass {
+    }
+}
+import internalImport = internalNamespace.someClass;
+declare type internalType = internalC;
+declare const internalConst = 10;
+declare enum internalEnum {
+    a = 0,
+    b = 1,
+    c = 2
+}
+----------------------------------------------------------------------
+text: (1154-1202)
+declare class C {
+    doSomething(): void;
+}
 
 ======================================================================
 
@@ -2987,6 +2929,64 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
+//// [/src/first/bin/first-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 110,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+text: (0-110)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+======================================================================
+
 //// [/src/first/first_PART1.ts]
 interface TheFirst {
     none: any;
@@ -3000,214 +3000,6 @@ interface NoJsForHereEither {
 
 console.log(s);
 
-
-//// [/src/third/thirdjs/output/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/third/",
-    "sourceFiles": [
-      "/src/third/third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 3162,
-          "kind": "prepend",
-          "data": "/src/2/second-output.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 3162,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 3162,
-          "end": 3198,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 317,
-          "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 317,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 317,
-          "end": 336,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/third/thirdjs/output/third-output.js
-----------------------------------------------------------------------
-prepend: (0-3162):: /src/2/second-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-3162)
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var normalC = (function () {
-    function normalC() {
-    }
-    normalC.prototype.method = function () { };
-    Object.defineProperty(normalC.prototype, "c", {
-        get: function () { return 10; },
-        set: function (val) { },
-        enumerable: true,
-        configurable: true
-    });
-    return normalC;
-}());
-var normalN;
-(function (normalN) {
-    var C = (function () {
-        function C() {
-        }
-        return C;
-    }());
-    normalN.C = C;
-    function foo() { }
-    normalN.foo = foo;
-    var someNamespace;
-    (function (someNamespace) {
-        var C = (function () {
-            function C() {
-            }
-            return C;
-        }());
-        someNamespace.C = C;
-    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));
-    var someOther;
-    (function (someOther) {
-        var something;
-        (function (something) {
-            var someClass = (function () {
-                function someClass() {
-                }
-                return someClass;
-            }());
-            something.someClass = someClass;
-        })(something = someOther.something || (someOther.something = {}));
-    })(someOther = normalN.someOther || (normalN.someOther = {}));
-    normalN.someImport = someNamespace.C;
-    normalN.internalConst = 10;
-    var internalEnum;
-    (function (internalEnum) {
-        internalEnum[internalEnum["a"] = 0] = "a";
-        internalEnum[internalEnum["b"] = 1] = "b";
-        internalEnum[internalEnum["c"] = 2] = "c";
-    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
-})(normalN || (normalN = {}));
-var internalC = (function () {
-    function internalC() {
-    }
-    return internalC;
-}());
-function internalfoo() { }
-var internalNamespace;
-(function (internalNamespace) {
-    var someClass = (function () {
-        function someClass() {
-        }
-        return someClass;
-    }());
-    internalNamespace.someClass = someClass;
-})(internalNamespace || (internalNamespace = {}));
-var internalOther;
-(function (internalOther) {
-    var something;
-    (function (something) {
-        var someClass = (function () {
-            function someClass() {
-            }
-            return someClass;
-        }());
-        something.someClass = someClass;
-    })(something = internalOther.something || (internalOther.something = {}));
-})(internalOther || (internalOther = {}));
-var internalImport = internalNamespace.someClass;
-var internalConst = 10;
-var internalEnum;
-(function (internalEnum) {
-    internalEnum[internalEnum["a"] = 0] = "a";
-    internalEnum[internalEnum["b"] = 1] = "b";
-    internalEnum[internalEnum["c"] = 2] = "c";
-})(internalEnum || (internalEnum = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-----------------------------------------------------------------------
-text: (3162-3198)
-var c = new C();
-c.doSomething();
-
-======================================================================
-======================================================================
-File:: /src/third/thirdjs/output/third-output.d.ts
-----------------------------------------------------------------------
-prepend: (0-317):: /src/2/second-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-317)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-declare namespace N {
-}
-declare namespace N {
-}
-declare class normalC {
-}
-declare namespace normalN {
-}
-declare class C {
-    doSomething(): void;
-}
-
-----------------------------------------------------------------------
-text: (317-336)
-declare var c: C;
-
-======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -5165,4 +4957,212 @@ sourceFile:../../third_part1.ts
 6 >Emitted(110, 17) Source(2, 17) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 3162,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 3162,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 3162,
+          "end": 3198,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 317,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 317,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 317,
+          "end": 336,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+prepend: (0-3162):: /src/2/second-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (0-3162)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var normalC = (function () {
+    function normalC() {
+    }
+    normalC.prototype.method = function () { };
+    Object.defineProperty(normalC.prototype, "c", {
+        get: function () { return 10; },
+        set: function (val) { },
+        enumerable: true,
+        configurable: true
+    });
+    return normalC;
+}());
+var normalN;
+(function (normalN) {
+    var C = (function () {
+        function C() {
+        }
+        return C;
+    }());
+    normalN.C = C;
+    function foo() { }
+    normalN.foo = foo;
+    var someNamespace;
+    (function (someNamespace) {
+        var C = (function () {
+            function C() {
+            }
+            return C;
+        }());
+        someNamespace.C = C;
+    })(someNamespace = normalN.someNamespace || (normalN.someNamespace = {}));
+    var someOther;
+    (function (someOther) {
+        var something;
+        (function (something) {
+            var someClass = (function () {
+                function someClass() {
+                }
+                return someClass;
+            }());
+            something.someClass = someClass;
+        })(something = someOther.something || (someOther.something = {}));
+    })(someOther = normalN.someOther || (normalN.someOther = {}));
+    normalN.someImport = someNamespace.C;
+    normalN.internalConst = 10;
+    var internalEnum;
+    (function (internalEnum) {
+        internalEnum[internalEnum["a"] = 0] = "a";
+        internalEnum[internalEnum["b"] = 1] = "b";
+        internalEnum[internalEnum["c"] = 2] = "c";
+    })(internalEnum = normalN.internalEnum || (normalN.internalEnum = {}));
+})(normalN || (normalN = {}));
+var internalC = (function () {
+    function internalC() {
+    }
+    return internalC;
+}());
+function internalfoo() { }
+var internalNamespace;
+(function (internalNamespace) {
+    var someClass = (function () {
+        function someClass() {
+        }
+        return someClass;
+    }());
+    internalNamespace.someClass = someClass;
+})(internalNamespace || (internalNamespace = {}));
+var internalOther;
+(function (internalOther) {
+    var something;
+    (function (something) {
+        var someClass = (function () {
+            function someClass() {
+            }
+            return someClass;
+        }());
+        something.someClass = someClass;
+    })(something = internalOther.something || (internalOther.something = {}));
+})(internalOther || (internalOther = {}));
+var internalImport = internalNamespace.someClass;
+var internalConst = 10;
+var internalEnum;
+(function (internalEnum) {
+    internalEnum[internalEnum["a"] = 0] = "a";
+    internalEnum[internalEnum["b"] = 1] = "b";
+    internalEnum[internalEnum["c"] = 2] = "c";
+})(internalEnum || (internalEnum = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+----------------------------------------------------------------------
+text: (3162-3198)
+var c = new C();
+c.doSomething();
+
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-317):: /src/2/second-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-317)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+declare namespace N {
+}
+declare namespace N {
+}
+declare class normalC {
+}
+declare namespace normalN {
+}
+declare class C {
+    doSomething(): void;
+}
+
+----------------------------------------------------------------------
+text: (317-336)
+declare var c: C;
+
+======================================================================
 

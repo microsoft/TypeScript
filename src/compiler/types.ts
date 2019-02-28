@@ -4646,6 +4646,7 @@ namespace ts {
         reactNamespace?: string;
         jsxFactory?: string;
         composite?: boolean;
+        incremental?: boolean;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
@@ -5056,7 +5057,8 @@ namespace ts {
         Dts = ".d.ts",
         Js = ".js",
         Jsx = ".jsx",
-        Json = ".json"
+        Json = ".json",
+        TsBuildInfo = ".tsbuildinfo"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
@@ -5345,7 +5347,6 @@ namespace ts {
         isEmitBlocked(emitFileName: string): boolean;
 
         getPrependNodes(): ReadonlyArray<InputFiles | UnparsedSource>;
-        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
 
         writeFile: WriteFileCallback;
         getProgramBuildInfo(): ProgramBuildInfo | undefined;

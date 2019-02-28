@@ -1,63 +1,3 @@
-//// [/src/first/bin/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/first/",
-    "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 150,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 208,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/first/bin/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/first/bin/first-output.js
-----------------------------------------------------------------------
-text: (0-150)
-var s = "Hello, world";
-console.log(s);
-function forfirstfirst_PART1Rest() { }
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-======================================================================
-======================================================================
-File:: /src/first/bin/first-output.d.ts
-----------------------------------------------------------------------
-text: (0-208)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function forfirstfirst_PART1Rest(): void;
-declare function f(): string;
-
-======================================================================
-
 //// [/src/first/bin/first-output.d.ts.map]
 {"version":3,"file":"first-output.d.ts","sourceRoot":"","sources":["../first_PART1.ts","../first_part2.ts","../first_part3.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;AEXtC,iBAAS,CAAC,WAET"}
 
@@ -383,6 +323,66 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
+//// [/src/first/bin/first-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 150,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 208,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+text: (0-150)
+var s = "Hello, world";
+console.log(s);
+function forfirstfirst_PART1Rest() { }
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-208)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function forfirstfirst_PART1Rest(): void;
+declare function f(): string;
+
+======================================================================
+
 //// [/src/first/first_PART1.ts]
 interface TheFirst {
     none: any;
@@ -396,191 +396,6 @@ interface NoJsForHereEither {
 
 console.log(s);
 function forfirstfirst_PART1Rest() { }
-
-//// [/src/third/thirdjs/output/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/third/",
-    "sourceFiles": [
-      "/src/third/third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 415,
-          "kind": "emitHelpers",
-          "data": "typescript:rest"
-        },
-        {
-          "pos": 417,
-          "end": 567,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 417,
-              "end": 567,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 567,
-          "end": 971,
-          "kind": "prepend",
-          "data": "/src/2/second-output.js",
-          "texts": [
-            {
-              "pos": 567,
-              "end": 971,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 971,
-          "end": 1124,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "helpers": [
-          "typescript:rest"
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 208,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 208,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 208,
-          "end": 361,
-          "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 208,
-              "end": 361,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 361,
-          "end": 431,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/third/thirdjs/output/third-output.js
-----------------------------------------------------------------------
-emitHelpers: (0-415):: typescript:rest
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
-};
-----------------------------------------------------------------------
-prepend: (417-567):: /src/first/bin/first-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (417-567)
-var s = "Hello, world";
-console.log(s);
-function forfirstfirst_PART1Rest() { }
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-----------------------------------------------------------------------
-prepend: (567-971):: /src/2/second-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (567-971)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-function forsecondsecond_part1Rest() {
-    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
-}
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-----------------------------------------------------------------------
-text: (971-1124)
-var c = new C();
-c.doSomething();
-function forthirdthird_part1Rest() {
-    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
-}
-
-======================================================================
-======================================================================
-File:: /src/third/thirdjs/output/third-output.d.ts
-----------------------------------------------------------------------
-prepend: (0-208):: /src/first/bin/first-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-208)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function forfirstfirst_PART1Rest(): void;
-declare function f(): string;
-
-----------------------------------------------------------------------
-prepend: (208-361):: /src/2/second-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (208-361)
-declare namespace N {
-}
-declare namespace N {
-}
-declare function forsecondsecond_part1Rest(): void;
-declare class C {
-    doSomething(): void;
-}
-
-----------------------------------------------------------------------
-text: (361-431)
-declare var c: C;
-declare function forthirdthird_part1Rest(): void;
-
-======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts.map]
 {"version":3,"file":"third-output.d.ts","sourceRoot":"","sources":["../../../first/first_PART1.ts","../../../first/first_part3.ts","../../../second/second_part1.ts","../../../second/second_part2.ts","../../third_part1.ts"],"names":[],"mappings":"AAAA,UAAU,QAAQ;IACd,IAAI,EAAE,GAAG,CAAC;CACb;AAED,QAAA,MAAM,CAAC,iBAAiB,CAAC;AAEzB,UAAU,iBAAiB;IACvB,IAAI,EAAE,GAAG,CAAC;CACb;AAGD,iBAAS,uBAAuB,SAAM;ACXtC,iBAAS,CAAC,WAET;ACFD,kBAAU,CAAC,CAAC;CAEX;AAED,kBAAU,CAAC,CAAC;CAMX;AACD,iBAAS,yBAAyB,SAEjC;ACbD,cAAM,CAAC;IACH,WAAW;CAGd;ACJD,QAAA,IAAI,CAAC,GAAU,CAAC;AAEhB,iBAAS,uBAAuB,SAE/B"}
@@ -1492,4 +1307,189 @@ sourceFile:../../third_part1.ts
 2 >Emitted(39, 2) Source(5, 2) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 415,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 417,
+          "end": 567,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 417,
+              "end": 567,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 567,
+          "end": 971,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 567,
+              "end": 971,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 971,
+          "end": 1124,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 208,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 208,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 208,
+          "end": 361,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 208,
+              "end": 361,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 361,
+          "end": 431,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+emitHelpers: (0-415):: typescript:rest
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+----------------------------------------------------------------------
+prepend: (417-567):: /src/first/bin/first-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (417-567)
+var s = "Hello, world";
+console.log(s);
+function forfirstfirst_PART1Rest() { }
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+prepend: (567-971):: /src/2/second-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (567-971)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+function forsecondsecond_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+----------------------------------------------------------------------
+text: (971-1124)
+var c = new C();
+c.doSomething();
+function forthirdthird_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-208):: /src/first/bin/first-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-208)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function forfirstfirst_PART1Rest(): void;
+declare function f(): string;
+
+----------------------------------------------------------------------
+prepend: (208-361):: /src/2/second-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (208-361)
+declare namespace N {
+}
+declare namespace N {
+}
+declare function forsecondsecond_part1Rest(): void;
+declare class C {
+    doSomething(): void;
+}
+
+----------------------------------------------------------------------
+text: (361-431)
+declare var c: C;
+declare function forthirdthird_part1Rest(): void;
+
+======================================================================
 

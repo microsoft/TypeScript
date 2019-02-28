@@ -1,118 +1,3 @@
-//// [/src/2/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/second/",
-    "sourceFiles": [
-      "/src/second/second_part1.ts",
-      "/src/second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 504,
-          "kind": "emitHelpers",
-          "data": "typescript:read"
-        },
-        {
-          "pos": 506,
-          "end": 676,
-          "kind": "emitHelpers",
-          "data": "typescript:spread"
-        },
-        {
-          "pos": 678,
-          "end": 1179,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "helpers": [
-          "typescript:read",
-          "typescript:spread"
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 166,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/2/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/2/second-output.js
-----------------------------------------------------------------------
-emitHelpers: (0-504):: typescript:read
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-----------------------------------------------------------------------
-emitHelpers: (506-676):: typescript:spread
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-----------------------------------------------------------------------
-text: (678-1179)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-function secondsecond_part1Spread() {
-    var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i] = arguments[_i];
-    }
-}
-secondsecond_part1Spread.apply(void 0, __spread([10, 20, 30]));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-======================================================================
-======================================================================
-File:: /src/2/second-output.d.ts
-----------------------------------------------------------------------
-text: (0-166)
-declare namespace N {
-}
-declare namespace N {
-}
-declare function secondsecond_part1Spread(...b: number[]): void;
-declare class C {
-    doSomething(): void;
-}
-
-======================================================================
-
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }
@@ -673,32 +558,38 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/first/bin/.tsbuildinfo]
+//// [/src/2/second-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "/src/second/",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "/src/second/second_part1.ts",
+      "/src/second/second_part2.ts"
     ],
     "js": {
       "sections": [
         {
           "pos": 0,
-          "end": 415,
+          "end": 504,
           "kind": "emitHelpers",
-          "data": "typescript:rest"
+          "data": "typescript:read"
         },
         {
-          "pos": 417,
-          "end": 644,
+          "pos": 506,
+          "end": 676,
+          "kind": "emitHelpers",
+          "data": "typescript:spread"
+        },
+        {
+          "pos": 678,
+          "end": 1179,
           "kind": "text"
         }
       ],
       "sources": {
         "helpers": [
-          "typescript:rest"
+          "typescript:read",
+          "typescript:spread"
         ]
       }
     },
@@ -706,7 +597,7 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
-          "end": 208,
+          "end": 166,
           "kind": "text"
         }
       ]
@@ -714,46 +605,71 @@ sourceFile:../second/second_part2.ts
   }
 }
 
-//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+//// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
-File:: /src/first/bin/first-output.js
+File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-415):: typescript:rest
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
+emitHelpers: (0-504):: typescript:read
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
 };
 ----------------------------------------------------------------------
-text: (417-644)
-var s = "Hello, world";
-console.log(s);
-function forfirstfirst_PART1Rest() {
-    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+emitHelpers: (506-676):: typescript:spread
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+----------------------------------------------------------------------
+text: (678-1179)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+function secondsecond_part1Spread() {
+    var b = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        b[_i] = arguments[_i];
+    }
 }
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
+secondsecond_part1Spread.apply(void 0, __spread([10, 20, 30]));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
 
 ======================================================================
 ======================================================================
-File:: /src/first/bin/first-output.d.ts
+File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (0-208)
-interface TheFirst {
-    none: any;
+text: (0-166)
+declare namespace N {
 }
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
+declare namespace N {
 }
-declare function forfirstfirst_PART1Rest(): void;
-declare function f(): string;
+declare function secondsecond_part1Spread(...b: number[]): void;
+declare class C {
+    doSomething(): void;
+}
 
 ======================================================================
 
@@ -1148,6 +1064,90 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
+//// [/src/first/bin/first-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 415,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 417,
+          "end": 644,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 208,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+emitHelpers: (0-415):: typescript:rest
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+----------------------------------------------------------------------
+text: (417-644)
+var s = "Hello, world";
+console.log(s);
+function forfirstfirst_PART1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-208)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function forfirstfirst_PART1Rest(): void;
+declare function f(): string;
+
+======================================================================
+
 //// [/src/first/first_PART1.ts]
 interface TheFirst {
     none: any;
@@ -1198,233 +1198,6 @@ secondsecond_part1Spread(...[10, 20, 30]);
   ]
 }
 
-
-//// [/src/third/thirdjs/output/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/third/",
-    "sourceFiles": [
-      "/src/third/third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 415,
-          "kind": "emitHelpers",
-          "data": "typescript:rest"
-        },
-        {
-          "pos": 417,
-          "end": 921,
-          "kind": "emitHelpers",
-          "data": "typescript:read"
-        },
-        {
-          "pos": 923,
-          "end": 1093,
-          "kind": "emitHelpers",
-          "data": "typescript:spread"
-        },
-        {
-          "pos": 1095,
-          "end": 1322,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 1095,
-              "end": 1322,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 1322,
-          "end": 1823,
-          "kind": "prepend",
-          "data": "/src/2/second-output.js",
-          "texts": [
-            {
-              "pos": 1322,
-              "end": 1823,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 1823,
-          "end": 1976,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "helpers": [
-          "typescript:rest"
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 208,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 208,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 208,
-          "end": 374,
-          "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 208,
-              "end": 374,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 374,
-          "end": 444,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/third/thirdjs/output/third-output.js
-----------------------------------------------------------------------
-emitHelpers: (0-415):: typescript:rest
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
-    return t;
-};
-----------------------------------------------------------------------
-emitHelpers: (417-921):: typescript:read
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-----------------------------------------------------------------------
-emitHelpers: (923-1093):: typescript:spread
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-----------------------------------------------------------------------
-prepend: (1095-1322):: /src/first/bin/first-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (1095-1322)
-var s = "Hello, world";
-console.log(s);
-function forfirstfirst_PART1Rest() {
-    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
-}
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-----------------------------------------------------------------------
-prepend: (1322-1823):: /src/2/second-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (1322-1823)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-function secondsecond_part1Spread() {
-    var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i] = arguments[_i];
-    }
-}
-secondsecond_part1Spread.apply(void 0, __spread([10, 20, 30]));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-----------------------------------------------------------------------
-text: (1823-1976)
-var c = new C();
-c.doSomething();
-function forthirdthird_part1Rest() {
-    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
-}
-
-======================================================================
-======================================================================
-File:: /src/third/thirdjs/output/third-output.d.ts
-----------------------------------------------------------------------
-prepend: (0-208):: /src/first/bin/first-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-208)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function forfirstfirst_PART1Rest(): void;
-declare function f(): string;
-
-----------------------------------------------------------------------
-prepend: (208-374):: /src/2/second-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (208-374)
-declare namespace N {
-}
-declare namespace N {
-}
-declare function secondsecond_part1Spread(...b: number[]): void;
-declare class C {
-    doSomething(): void;
-}
-
-----------------------------------------------------------------------
-text: (374-444)
-declare var c: C;
-declare function forthirdthird_part1Rest(): void;
-
-======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -2498,6 +2271,233 @@ sourceFile:../../third_part1.ts
 2 >Emitted(65, 2) Source(5, 2) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 415,
+          "kind": "emitHelpers",
+          "data": "typescript:rest"
+        },
+        {
+          "pos": 417,
+          "end": 921,
+          "kind": "emitHelpers",
+          "data": "typescript:read"
+        },
+        {
+          "pos": 923,
+          "end": 1093,
+          "kind": "emitHelpers",
+          "data": "typescript:spread"
+        },
+        {
+          "pos": 1095,
+          "end": 1322,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 1095,
+              "end": 1322,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 1322,
+          "end": 1823,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 1322,
+              "end": 1823,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 1823,
+          "end": 1976,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "helpers": [
+          "typescript:rest"
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 208,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 208,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 208,
+          "end": 374,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 208,
+              "end": 374,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 374,
+          "end": 444,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+emitHelpers: (0-415):: typescript:rest
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
+            t[p[i]] = s[p[i]];
+    return t;
+};
+----------------------------------------------------------------------
+emitHelpers: (417-921):: typescript:read
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+----------------------------------------------------------------------
+emitHelpers: (923-1093):: typescript:spread
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+----------------------------------------------------------------------
+prepend: (1095-1322):: /src/first/bin/first-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (1095-1322)
+var s = "Hello, world";
+console.log(s);
+function forfirstfirst_PART1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+prepend: (1322-1823):: /src/2/second-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (1322-1823)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+function secondsecond_part1Spread() {
+    var b = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        b[_i] = arguments[_i];
+    }
+}
+secondsecond_part1Spread.apply(void 0, __spread([10, 20, 30]));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+----------------------------------------------------------------------
+text: (1823-1976)
+var c = new C();
+c.doSomething();
+function forthirdthird_part1Rest() {
+    var _a = { a: 10, b: 30, yy: 30 }, b = _a.b, rest = __rest(_a, ["b"]);
+}
+
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-208):: /src/first/bin/first-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-208)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function forfirstfirst_PART1Rest(): void;
+declare function f(): string;
+
+----------------------------------------------------------------------
+prepend: (208-374):: /src/2/second-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (208-374)
+declare namespace N {
+}
+declare namespace N {
+}
+declare function secondsecond_part1Spread(...b: number[]): void;
+declare class C {
+    doSomething(): void;
+}
+
+----------------------------------------------------------------------
+text: (374-444)
+declare var c: C;
+declare function forthirdthird_part1Rest(): void;
+
+======================================================================
 
 //// [/src/third/third_part1.ts]
 var c = new C();

@@ -1,68 +1,3 @@
-//// [/src/2/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/second/",
-    "sourceFiles": [
-      "/src/second/second_part1.ts",
-      "/src/second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 285,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 100,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/2/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/2/second-output.js
-----------------------------------------------------------------------
-text: (0-285)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-======================================================================
-======================================================================
-File:: /src/2/second-output.d.ts
-----------------------------------------------------------------------
-text: (0-100)
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-
-======================================================================
-
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }
@@ -448,20 +383,19 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/first/bin/.tsbuildinfo]
+//// [/src/2/second-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "/src/second/",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "/src/second/second_part1.ts",
+      "/src/second/second_part2.ts"
     ],
     "js": {
       "sections": [
         {
           "pos": 0,
-          "end": 1131,
+          "end": 285,
           "kind": "text"
         }
       ]
@@ -470,27 +404,7 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
-          "end": 42,
-          "kind": "text"
-        },
-        {
-          "pos": 42,
-          "end": 156,
-          "kind": "internal"
-        },
-        {
-          "pos": 158,
-          "end": 276,
-          "kind": "text"
-        },
-        {
-          "pos": 276,
-          "end": 371,
-          "kind": "internal"
-        },
-        {
-          "pos": 373,
-          "end": 533,
+          "end": 100,
           "kind": "text"
         }
       ]
@@ -498,72 +412,39 @@ sourceFile:../second/second_part2.ts
   }
 }
 
-//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+//// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
-File:: /src/first/bin/first-output.js
+File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-text: (0-1131)
-var TokenFlags;
-(function (TokenFlags) {
-    TokenFlags[TokenFlags["None"] = 0] = "None";
-    TokenFlags[TokenFlags["PrecedingLineBreak"] = 1] = "PrecedingLineBreak";
-    TokenFlags[TokenFlags["PrecedingJSDocComment"] = 2] = "PrecedingJSDocComment";
-    TokenFlags[TokenFlags["Unterminated"] = 4] = "Unterminated";
-    TokenFlags[TokenFlags["ExtendedUnicodeEscape"] = 8] = "ExtendedUnicodeEscape";
-    TokenFlags[TokenFlags["Scientific"] = 16] = "Scientific";
-    TokenFlags[TokenFlags["Octal"] = 32] = "Octal";
-    TokenFlags[TokenFlags["HexSpecifier"] = 64] = "HexSpecifier";
-    TokenFlags[TokenFlags["BinarySpecifier"] = 128] = "BinarySpecifier";
-    TokenFlags[TokenFlags["OctalSpecifier"] = 256] = "OctalSpecifier";
-    TokenFlags[TokenFlags["ContainsSeparator"] = 512] = "ContainsSeparator";
-    TokenFlags[TokenFlags["BinaryOrOctalSpecifier"] = 384] = "BinaryOrOctalSpecifier";
-    TokenFlags[TokenFlags["NumericLiteralFlags"] = 1008] = "NumericLiteralFlags";
-})(TokenFlags || (TokenFlags = {}));
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
+text: (0-285)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
 
 ======================================================================
 ======================================================================
-File:: /src/first/bin/first-output.d.ts
+File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (0-42)
-declare enum TokenFlags {
-    None = 0,
-
-----------------------------------------------------------------------
-internal: (42-156)
-    PrecedingLineBreak = 1,
-    PrecedingJSDocComment = 2,
-    Unterminated = 4,
-    ExtendedUnicodeEscape = 8,
-----------------------------------------------------------------------
-text: (158-276)
-    Scientific = 16,
-    Octal = 32,
-    HexSpecifier = 64,
-    BinarySpecifier = 128,
-    OctalSpecifier = 256,
-
-----------------------------------------------------------------------
-internal: (276-371)
-    ContainsSeparator = 512,
-    BinaryOrOctalSpecifier = 384,
-    NumericLiteralFlags = 1008
-----------------------------------------------------------------------
-text: (373-533)
+text: (0-100)
+declare namespace N {
 }
-interface TheFirst {
-    none: any;
+declare namespace N {
 }
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
+declare class C {
+    doSomething(): void;
 }
-declare function f(): string;
 
 ======================================================================
 
@@ -1349,6 +1230,125 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
+//// [/src/first/bin/first-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 1131,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 42,
+          "kind": "text"
+        },
+        {
+          "pos": 42,
+          "end": 156,
+          "kind": "internal"
+        },
+        {
+          "pos": 158,
+          "end": 276,
+          "kind": "text"
+        },
+        {
+          "pos": 276,
+          "end": 371,
+          "kind": "internal"
+        },
+        {
+          "pos": 373,
+          "end": 533,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+text: (0-1131)
+var TokenFlags;
+(function (TokenFlags) {
+    TokenFlags[TokenFlags["None"] = 0] = "None";
+    TokenFlags[TokenFlags["PrecedingLineBreak"] = 1] = "PrecedingLineBreak";
+    TokenFlags[TokenFlags["PrecedingJSDocComment"] = 2] = "PrecedingJSDocComment";
+    TokenFlags[TokenFlags["Unterminated"] = 4] = "Unterminated";
+    TokenFlags[TokenFlags["ExtendedUnicodeEscape"] = 8] = "ExtendedUnicodeEscape";
+    TokenFlags[TokenFlags["Scientific"] = 16] = "Scientific";
+    TokenFlags[TokenFlags["Octal"] = 32] = "Octal";
+    TokenFlags[TokenFlags["HexSpecifier"] = 64] = "HexSpecifier";
+    TokenFlags[TokenFlags["BinarySpecifier"] = 128] = "BinarySpecifier";
+    TokenFlags[TokenFlags["OctalSpecifier"] = 256] = "OctalSpecifier";
+    TokenFlags[TokenFlags["ContainsSeparator"] = 512] = "ContainsSeparator";
+    TokenFlags[TokenFlags["BinaryOrOctalSpecifier"] = 384] = "BinaryOrOctalSpecifier";
+    TokenFlags[TokenFlags["NumericLiteralFlags"] = 1008] = "NumericLiteralFlags";
+})(TokenFlags || (TokenFlags = {}));
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-42)
+declare enum TokenFlags {
+    None = 0,
+
+----------------------------------------------------------------------
+internal: (42-156)
+    PrecedingLineBreak = 1,
+    PrecedingJSDocComment = 2,
+    Unterminated = 4,
+    ExtendedUnicodeEscape = 8,
+----------------------------------------------------------------------
+text: (158-276)
+    Scientific = 16,
+    Octal = 32,
+    HexSpecifier = 64,
+    BinarySpecifier = 128,
+    OctalSpecifier = 256,
+
+----------------------------------------------------------------------
+internal: (276-371)
+    ContainsSeparator = 512,
+    BinaryOrOctalSpecifier = 384,
+    NumericLiteralFlags = 1008
+----------------------------------------------------------------------
+text: (373-533)
+}
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+======================================================================
+
 //// [/src/first/first_PART1.ts]
 enum TokenFlags {
     None = 0,
@@ -1384,183 +1384,6 @@ interface NoJsForHereEither {
 
 console.log(s);
 
-
-//// [/src/third/thirdjs/output/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/third/",
-    "sourceFiles": [
-      "/src/third/third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 1131,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 1131,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 1131,
-          "end": 1416,
-          "kind": "prepend",
-          "data": "/src/2/second-output.js",
-          "texts": [
-            {
-              "pos": 1131,
-              "end": 1416,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 1416,
-          "end": 1452,
-          "kind": "text"
-        }
-      ]
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 320,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 320,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 320,
-          "end": 420,
-          "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 320,
-              "end": 420,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 420,
-          "end": 439,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/third/thirdjs/output/third-output.js
-----------------------------------------------------------------------
-prepend: (0-1131):: /src/first/bin/first-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (0-1131)
-var TokenFlags;
-(function (TokenFlags) {
-    TokenFlags[TokenFlags["None"] = 0] = "None";
-    TokenFlags[TokenFlags["PrecedingLineBreak"] = 1] = "PrecedingLineBreak";
-    TokenFlags[TokenFlags["PrecedingJSDocComment"] = 2] = "PrecedingJSDocComment";
-    TokenFlags[TokenFlags["Unterminated"] = 4] = "Unterminated";
-    TokenFlags[TokenFlags["ExtendedUnicodeEscape"] = 8] = "ExtendedUnicodeEscape";
-    TokenFlags[TokenFlags["Scientific"] = 16] = "Scientific";
-    TokenFlags[TokenFlags["Octal"] = 32] = "Octal";
-    TokenFlags[TokenFlags["HexSpecifier"] = 64] = "HexSpecifier";
-    TokenFlags[TokenFlags["BinarySpecifier"] = 128] = "BinarySpecifier";
-    TokenFlags[TokenFlags["OctalSpecifier"] = 256] = "OctalSpecifier";
-    TokenFlags[TokenFlags["ContainsSeparator"] = 512] = "ContainsSeparator";
-    TokenFlags[TokenFlags["BinaryOrOctalSpecifier"] = 384] = "BinaryOrOctalSpecifier";
-    TokenFlags[TokenFlags["NumericLiteralFlags"] = 1008] = "NumericLiteralFlags";
-})(TokenFlags || (TokenFlags = {}));
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-----------------------------------------------------------------------
-prepend: (1131-1416):: /src/2/second-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (1131-1416)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-----------------------------------------------------------------------
-text: (1416-1452)
-var c = new C();
-c.doSomething();
-
-======================================================================
-======================================================================
-File:: /src/third/thirdjs/output/third-output.d.ts
-----------------------------------------------------------------------
-prepend: (0-320):: /src/first/bin/first-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-320)
-declare enum TokenFlags {
-    None = 0,
-    Scientific = 16,
-    Octal = 32,
-    HexSpecifier = 64,
-    BinarySpecifier = 128,
-    OctalSpecifier = 256,
-}
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-
-----------------------------------------------------------------------
-prepend: (320-420):: /src/2/second-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (320-420)
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-
-----------------------------------------------------------------------
-text: (420-439)
-declare var c: C;
-
-======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 declare enum TokenFlags {
@@ -2690,6 +2513,183 @@ sourceFile:../../third_part1.ts
 6 >Emitted(39, 17) Source(2, 17) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 1131,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 1131,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 1131,
+          "end": 1416,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 1131,
+              "end": 1416,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 1416,
+          "end": 1452,
+          "kind": "text"
+        }
+      ]
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 320,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 320,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 320,
+          "end": 420,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 320,
+              "end": 420,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 420,
+          "end": 439,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+prepend: (0-1131):: /src/first/bin/first-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (0-1131)
+var TokenFlags;
+(function (TokenFlags) {
+    TokenFlags[TokenFlags["None"] = 0] = "None";
+    TokenFlags[TokenFlags["PrecedingLineBreak"] = 1] = "PrecedingLineBreak";
+    TokenFlags[TokenFlags["PrecedingJSDocComment"] = 2] = "PrecedingJSDocComment";
+    TokenFlags[TokenFlags["Unterminated"] = 4] = "Unterminated";
+    TokenFlags[TokenFlags["ExtendedUnicodeEscape"] = 8] = "ExtendedUnicodeEscape";
+    TokenFlags[TokenFlags["Scientific"] = 16] = "Scientific";
+    TokenFlags[TokenFlags["Octal"] = 32] = "Octal";
+    TokenFlags[TokenFlags["HexSpecifier"] = 64] = "HexSpecifier";
+    TokenFlags[TokenFlags["BinarySpecifier"] = 128] = "BinarySpecifier";
+    TokenFlags[TokenFlags["OctalSpecifier"] = 256] = "OctalSpecifier";
+    TokenFlags[TokenFlags["ContainsSeparator"] = 512] = "ContainsSeparator";
+    TokenFlags[TokenFlags["BinaryOrOctalSpecifier"] = 384] = "BinaryOrOctalSpecifier";
+    TokenFlags[TokenFlags["NumericLiteralFlags"] = 1008] = "NumericLiteralFlags";
+})(TokenFlags || (TokenFlags = {}));
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+prepend: (1131-1416):: /src/2/second-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (1131-1416)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+----------------------------------------------------------------------
+text: (1416-1452)
+var c = new C();
+c.doSomething();
+
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-320):: /src/first/bin/first-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-320)
+declare enum TokenFlags {
+    None = 0,
+    Scientific = 16,
+    Octal = 32,
+    HexSpecifier = 64,
+    BinarySpecifier = 128,
+    OctalSpecifier = 256,
+}
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+----------------------------------------------------------------------
+prepend: (320-420):: /src/2/second-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (320-420)
+declare namespace N {
+}
+declare namespace N {
+}
+declare class C {
+    doSomething(): void;
+}
+
+----------------------------------------------------------------------
+text: (420-439)
+declare var c: C;
+
+======================================================================
 
 //// [/src/third/tsconfig.json]
 {

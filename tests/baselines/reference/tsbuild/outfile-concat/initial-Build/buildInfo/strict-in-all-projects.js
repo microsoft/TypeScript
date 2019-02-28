@@ -1,96 +1,3 @@
-//// [/src/2/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/second/",
-    "sourceFiles": [
-      "/src/second/second_part1.ts",
-      "/src/second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 13,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 15,
-          "end": 300,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "prologues": [
-          {
-            "file": 0,
-            "text": "",
-            "directives": [
-              {
-                "pos": -1,
-                "end": -1,
-                "expression": {
-                  "pos": -1,
-                  "end": -1,
-                  "text": "use strict"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 100,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/2/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/2/second-output.js
-----------------------------------------------------------------------
-prologue: (0-13):: use strict
-"use strict";
-----------------------------------------------------------------------
-text: (15-300)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-======================================================================
-======================================================================
-File:: /src/2/second-output.d.ts
-----------------------------------------------------------------------
-text: (0-100)
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-
-======================================================================
-
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }
@@ -478,14 +385,13 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/first/bin/.tsbuildinfo]
+//// [/src/2/second-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "/src/second/",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "/src/second/second_part1.ts",
+      "/src/second/second_part2.ts"
     ],
     "js": {
       "sections": [
@@ -497,7 +403,7 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 15,
-          "end": 125,
+          "end": 300,
           "kind": "text"
         }
       ],
@@ -525,7 +431,7 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
-          "end": 157,
+          "end": 100,
           "kind": "text"
         }
       ]
@@ -533,34 +439,42 @@ sourceFile:../second/second_part2.ts
   }
 }
 
-//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+//// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
-File:: /src/first/bin/first-output.js
+File:: /src/2/second-output.js
 ----------------------------------------------------------------------
 prologue: (0-13):: use strict
 "use strict";
 ----------------------------------------------------------------------
-text: (15-125)
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
+text: (15-300)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
 
 ======================================================================
 ======================================================================
-File:: /src/first/bin/first-output.d.ts
+File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (0-157)
-interface TheFirst {
-    none: any;
+text: (0-100)
+declare namespace N {
 }
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
+declare namespace N {
 }
-declare function f(): string;
+declare class C {
+    doSomething(): void;
+}
 
 ======================================================================
 
@@ -866,6 +780,92 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
+//// [/src/first/bin/first-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 125,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+prologue: (0-13):: use strict
+"use strict";
+----------------------------------------------------------------------
+text: (15-125)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+======================================================================
+
 //// [/src/first/tsconfig.json]
 {
   "compilerOptions": {
@@ -905,187 +905,6 @@ sourceFile:../first_part3.ts
   ]
 }
 
-
-//// [/src/third/thirdjs/output/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/third/",
-    "sourceFiles": [
-      "/src/third/third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 13,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 15,
-          "end": 125,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 15,
-              "end": 125,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 125,
-          "end": 410,
-          "kind": "prepend",
-          "data": "/src/2/second-output.js",
-          "texts": [
-            {
-              "pos": 125,
-              "end": 410,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 410,
-          "end": 446,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "prologues": [
-          {
-            "file": 0,
-            "text": "",
-            "directives": [
-              {
-                "pos": -1,
-                "end": -1,
-                "expression": {
-                  "pos": -1,
-                  "end": -1,
-                  "text": "use strict"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 157,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 157,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 157,
-          "end": 257,
-          "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 157,
-              "end": 257,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 257,
-          "end": 276,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/third/thirdjs/output/third-output.js
-----------------------------------------------------------------------
-prologue: (0-13):: use strict
-"use strict";
-----------------------------------------------------------------------
-prepend: (15-125):: /src/first/bin/first-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (15-125)
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-----------------------------------------------------------------------
-prepend: (125-410):: /src/2/second-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (125-410)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-----------------------------------------------------------------------
-text: (410-446)
-var c = new C();
-c.doSomething();
-
-======================================================================
-======================================================================
-File:: /src/third/thirdjs/output/third-output.d.ts
-----------------------------------------------------------------------
-prepend: (0-157):: /src/first/bin/first-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-157)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-
-----------------------------------------------------------------------
-prepend: (157-257):: /src/2/second-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (157-257)
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-
-----------------------------------------------------------------------
-text: (257-276)
-declare var c: C;
-
-======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -1823,6 +1642,187 @@ sourceFile:../../third_part1.ts
 6 >Emitted(24, 17) Source(2, 17) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=third-output.js.map
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 125,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 15,
+              "end": 125,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 125,
+          "end": 410,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 125,
+              "end": 410,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 410,
+          "end": 446,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 157,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 157,
+          "end": 257,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 157,
+              "end": 257,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 257,
+          "end": 276,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+prologue: (0-13):: use strict
+"use strict";
+----------------------------------------------------------------------
+prepend: (15-125):: /src/first/bin/first-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (15-125)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+prepend: (125-410):: /src/2/second-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (125-410)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+----------------------------------------------------------------------
+text: (410-446)
+var c = new C();
+c.doSomething();
+
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-157):: /src/first/bin/first-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+----------------------------------------------------------------------
+prepend: (157-257):: /src/2/second-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (157-257)
+declare namespace N {
+}
+declare namespace N {
+}
+declare class C {
+    doSomething(): void;
+}
+
+----------------------------------------------------------------------
+text: (257-276)
+declare var c: C;
+
+======================================================================
 
 //// [/src/third/tsconfig.json]
 {

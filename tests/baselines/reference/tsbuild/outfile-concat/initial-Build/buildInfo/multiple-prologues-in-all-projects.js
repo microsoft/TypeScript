@@ -1,138 +1,3 @@
-//// [/src/2/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/second/",
-    "sourceFiles": [
-      "/src/second/second_part1.ts",
-      "/src/second/second_part2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 13,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 15,
-          "end": 28,
-          "kind": "prologue",
-          "data": "myPrologue"
-        },
-        {
-          "pos": 30,
-          "end": 44,
-          "kind": "prologue",
-          "data": "myPrologue2"
-        },
-        {
-          "pos": 46,
-          "end": 331,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "prologues": [
-          {
-            "file": 0,
-            "text": "\"myPrologue\"",
-            "directives": [
-              {
-                "pos": -1,
-                "end": -1,
-                "expression": {
-                  "pos": -1,
-                  "end": -1,
-                  "text": "use strict"
-                }
-              },
-              {
-                "pos": 0,
-                "end": 12,
-                "expression": {
-                  "pos": 0,
-                  "end": 12,
-                  "text": "myPrologue"
-                }
-              }
-            ]
-          },
-          {
-            "file": 1,
-            "text": "\"myPrologue2\";",
-            "directives": [
-              {
-                "pos": 0,
-                "end": 14,
-                "expression": {
-                  "pos": 0,
-                  "end": 13,
-                  "text": "myPrologue2"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 100,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/2/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/2/second-output.js
-----------------------------------------------------------------------
-prologue: (0-13):: use strict
-"use strict";
-----------------------------------------------------------------------
-prologue: (15-28):: myPrologue
-"myPrologue";
-----------------------------------------------------------------------
-prologue: (30-44):: myPrologue2
-"myPrologue2";
-----------------------------------------------------------------------
-text: (46-331)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-======================================================================
-======================================================================
-File:: /src/2/second-output.d.ts
-----------------------------------------------------------------------
-text: (0-100)
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-
-======================================================================
-
 //// [/src/2/second-output.d.ts]
 declare namespace N {
 }
@@ -557,14 +422,13 @@ sourceFile:../second/second_part2.ts
 ---
 >>>//# sourceMappingURL=second-output.js.map
 
-//// [/src/first/bin/.tsbuildinfo]
+//// [/src/2/second-output.tsbuildinfo]
 {
   "bundle": {
-    "commonSourceDirectory": "/src/first/",
+    "commonSourceDirectory": "/src/second/",
     "sourceFiles": [
-      "/src/first/first_PART1.ts",
-      "/src/first/first_part2.ts",
-      "/src/first/first_part3.ts"
+      "/src/second/second_part1.ts",
+      "/src/second/second_part2.ts"
     ],
     "js": {
       "sections": [
@@ -582,7 +446,13 @@ sourceFile:../second/second_part2.ts
         },
         {
           "pos": 30,
-          "end": 140,
+          "end": 44,
+          "kind": "prologue",
+          "data": "myPrologue2"
+        },
+        {
+          "pos": 46,
+          "end": 331,
           "kind": "text"
         }
       ],
@@ -611,6 +481,21 @@ sourceFile:../second/second_part2.ts
                 }
               }
             ]
+          },
+          {
+            "file": 1,
+            "text": "\"myPrologue2\";",
+            "directives": [
+              {
+                "pos": 0,
+                "end": 14,
+                "expression": {
+                  "pos": 0,
+                  "end": 13,
+                  "text": "myPrologue2"
+                }
+              }
+            ]
           }
         ]
       }
@@ -619,7 +504,7 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
-          "end": 157,
+          "end": 100,
           "kind": "text"
         }
       ]
@@ -627,9 +512,9 @@ sourceFile:../second/second_part2.ts
   }
 }
 
-//// [/src/first/bin/.tsbuildinfo.baseline.txt]
+//// [/src/2/second-output.tsbuildinfo.baseline.txt]
 ======================================================================
-File:: /src/first/bin/first-output.js
+File:: /src/2/second-output.js
 ----------------------------------------------------------------------
 prologue: (0-13):: use strict
 "use strict";
@@ -637,27 +522,38 @@ prologue: (0-13):: use strict
 prologue: (15-28):: myPrologue
 "myPrologue";
 ----------------------------------------------------------------------
-text: (30-140)
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
+prologue: (30-44):: myPrologue2
+"myPrologue2";
+----------------------------------------------------------------------
+text: (46-331)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
 
 ======================================================================
 ======================================================================
-File:: /src/first/bin/first-output.d.ts
+File:: /src/2/second-output.d.ts
 ----------------------------------------------------------------------
-text: (0-157)
-interface TheFirst {
-    none: any;
+text: (0-100)
+declare namespace N {
 }
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
+declare namespace N {
 }
-declare function f(): string;
+declare class C {
+    doSomething(): void;
+}
 
 ======================================================================
 
@@ -978,6 +874,110 @@ sourceFile:../first_part3.ts
 ---
 >>>//# sourceMappingURL=first-output.js.map
 
+//// [/src/first/bin/first-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/first/",
+    "sourceFiles": [
+      "/src/first/first_PART1.ts",
+      "/src/first/first_part2.ts",
+      "/src/first/first_part3.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 28,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 30,
+          "end": 140,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "\"myPrologue\"",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              },
+              {
+                "pos": 0,
+                "end": 12,
+                "expression": {
+                  "pos": 0,
+                  "end": 12,
+                  "text": "myPrologue"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/first/bin/first-output.js
+----------------------------------------------------------------------
+prologue: (0-13):: use strict
+"use strict";
+----------------------------------------------------------------------
+prologue: (15-28):: myPrologue
+"myPrologue";
+----------------------------------------------------------------------
+text: (30-140)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+======================================================================
+======================================================================
+File:: /src/first/bin/first-output.d.ts
+----------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+======================================================================
+
 //// [/src/first/first_PART1.ts]
 "myPrologue"
 interface TheFirst {
@@ -1056,232 +1056,6 @@ class C {
   ]
 }
 
-
-//// [/src/third/thirdjs/output/.tsbuildinfo]
-{
-  "bundle": {
-    "commonSourceDirectory": "/src/third/",
-    "sourceFiles": [
-      "/src/third/third_part1.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 13,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 15,
-          "end": 28,
-          "kind": "prologue",
-          "data": "myPrologue"
-        },
-        {
-          "pos": 30,
-          "end": 44,
-          "kind": "prologue",
-          "data": "myPrologue2"
-        },
-        {
-          "pos": 46,
-          "end": 60,
-          "kind": "prologue",
-          "data": "myPrologue3"
-        },
-        {
-          "pos": 62,
-          "end": 172,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.js",
-          "texts": [
-            {
-              "pos": 62,
-              "end": 172,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 172,
-          "end": 457,
-          "kind": "prepend",
-          "data": "/src/2/second-output.js",
-          "texts": [
-            {
-              "pos": 172,
-              "end": 457,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 457,
-          "end": 493,
-          "kind": "text"
-        }
-      ],
-      "sources": {
-        "prologues": [
-          {
-            "file": 0,
-            "text": "\"myPrologue3\";\n\"myPrologue\";",
-            "directives": [
-              {
-                "pos": -1,
-                "end": -1,
-                "expression": {
-                  "pos": -1,
-                  "end": -1,
-                  "text": "use strict"
-                }
-              },
-              {
-                "pos": 0,
-                "end": 14,
-                "expression": {
-                  "pos": 0,
-                  "end": 13,
-                  "text": "myPrologue3"
-                }
-              },
-              {
-                "pos": 14,
-                "end": 28,
-                "expression": {
-                  "pos": 14,
-                  "end": 27,
-                  "text": "myPrologue"
-                }
-              }
-            ]
-          }
-        ]
-      }
-    },
-    "dts": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 157,
-          "kind": "prepend",
-          "data": "/src/first/bin/first-output.d.ts",
-          "texts": [
-            {
-              "pos": 0,
-              "end": 157,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 157,
-          "end": 257,
-          "kind": "prepend",
-          "data": "/src/2/second-output.d.ts",
-          "texts": [
-            {
-              "pos": 157,
-              "end": 257,
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "pos": 257,
-          "end": 276,
-          "kind": "text"
-        }
-      ]
-    }
-  }
-}
-
-//// [/src/third/thirdjs/output/.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /src/third/thirdjs/output/third-output.js
-----------------------------------------------------------------------
-prologue: (0-13):: use strict
-"use strict";
-----------------------------------------------------------------------
-prologue: (15-28):: myPrologue
-"myPrologue";
-----------------------------------------------------------------------
-prologue: (30-44):: myPrologue2
-"myPrologue2";
-----------------------------------------------------------------------
-prologue: (46-60):: myPrologue3
-"myPrologue3";
-----------------------------------------------------------------------
-prepend: (62-172):: /src/first/bin/first-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (62-172)
-var s = "Hello, world";
-console.log(s);
-console.log(f());
-function f() {
-    return "JS does hoists";
-}
-
-----------------------------------------------------------------------
-prepend: (172-457):: /src/2/second-output.js texts:: 1
->>--------------------------------------------------------------------
-text: (172-457)
-var N;
-(function (N) {
-    function f() {
-        console.log('testing');
-    }
-    f();
-})(N || (N = {}));
-var C = (function () {
-    function C() {
-    }
-    C.prototype.doSomething = function () {
-        console.log("something got done");
-    };
-    return C;
-}());
-
-----------------------------------------------------------------------
-text: (457-493)
-var c = new C();
-c.doSomething();
-
-======================================================================
-======================================================================
-File:: /src/third/thirdjs/output/third-output.d.ts
-----------------------------------------------------------------------
-prepend: (0-157):: /src/first/bin/first-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (0-157)
-interface TheFirst {
-    none: any;
-}
-declare const s = "Hello, world";
-interface NoJsForHereEither {
-    none: any;
-}
-declare function f(): string;
-
-----------------------------------------------------------------------
-prepend: (157-257):: /src/2/second-output.d.ts texts:: 1
->>--------------------------------------------------------------------
-text: (157-257)
-declare namespace N {
-}
-declare namespace N {
-}
-declare class C {
-    doSomething(): void;
-}
-
-----------------------------------------------------------------------
-text: (257-276)
-declare var c: C;
-
-======================================================================
 
 //// [/src/third/thirdjs/output/third-output.d.ts]
 interface TheFirst {
@@ -2080,6 +1854,232 @@ sourceFile:../../third_part1.ts
 6 >Emitted(27, 17) Source(4, 17) + SourceIndex(2)
 ---
 >>>//# sourceMappingURL=third-output.js.map
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo]
+{
+  "bundle": {
+    "commonSourceDirectory": "/src/third/",
+    "sourceFiles": [
+      "/src/third/third_part1.ts"
+    ],
+    "js": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 13,
+          "kind": "prologue",
+          "data": "use strict"
+        },
+        {
+          "pos": 15,
+          "end": 28,
+          "kind": "prologue",
+          "data": "myPrologue"
+        },
+        {
+          "pos": 30,
+          "end": 44,
+          "kind": "prologue",
+          "data": "myPrologue2"
+        },
+        {
+          "pos": 46,
+          "end": 60,
+          "kind": "prologue",
+          "data": "myPrologue3"
+        },
+        {
+          "pos": 62,
+          "end": 172,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.js",
+          "texts": [
+            {
+              "pos": 62,
+              "end": 172,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 172,
+          "end": 457,
+          "kind": "prepend",
+          "data": "/src/2/second-output.js",
+          "texts": [
+            {
+              "pos": 172,
+              "end": 457,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 457,
+          "end": 493,
+          "kind": "text"
+        }
+      ],
+      "sources": {
+        "prologues": [
+          {
+            "file": 0,
+            "text": "\"myPrologue3\";\n\"myPrologue\";",
+            "directives": [
+              {
+                "pos": -1,
+                "end": -1,
+                "expression": {
+                  "pos": -1,
+                  "end": -1,
+                  "text": "use strict"
+                }
+              },
+              {
+                "pos": 0,
+                "end": 14,
+                "expression": {
+                  "pos": 0,
+                  "end": 13,
+                  "text": "myPrologue3"
+                }
+              },
+              {
+                "pos": 14,
+                "end": 28,
+                "expression": {
+                  "pos": 14,
+                  "end": 27,
+                  "text": "myPrologue"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "dts": {
+      "sections": [
+        {
+          "pos": 0,
+          "end": 157,
+          "kind": "prepend",
+          "data": "/src/first/bin/first-output.d.ts",
+          "texts": [
+            {
+              "pos": 0,
+              "end": 157,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 157,
+          "end": 257,
+          "kind": "prepend",
+          "data": "/src/2/second-output.d.ts",
+          "texts": [
+            {
+              "pos": 157,
+              "end": 257,
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "pos": 257,
+          "end": 276,
+          "kind": "text"
+        }
+      ]
+    }
+  }
+}
+
+//// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]
+======================================================================
+File:: /src/third/thirdjs/output/third-output.js
+----------------------------------------------------------------------
+prologue: (0-13):: use strict
+"use strict";
+----------------------------------------------------------------------
+prologue: (15-28):: myPrologue
+"myPrologue";
+----------------------------------------------------------------------
+prologue: (30-44):: myPrologue2
+"myPrologue2";
+----------------------------------------------------------------------
+prologue: (46-60):: myPrologue3
+"myPrologue3";
+----------------------------------------------------------------------
+prepend: (62-172):: /src/first/bin/first-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (62-172)
+var s = "Hello, world";
+console.log(s);
+console.log(f());
+function f() {
+    return "JS does hoists";
+}
+
+----------------------------------------------------------------------
+prepend: (172-457):: /src/2/second-output.js texts:: 1
+>>--------------------------------------------------------------------
+text: (172-457)
+var N;
+(function (N) {
+    function f() {
+        console.log('testing');
+    }
+    f();
+})(N || (N = {}));
+var C = (function () {
+    function C() {
+    }
+    C.prototype.doSomething = function () {
+        console.log("something got done");
+    };
+    return C;
+}());
+
+----------------------------------------------------------------------
+text: (457-493)
+var c = new C();
+c.doSomething();
+
+======================================================================
+======================================================================
+File:: /src/third/thirdjs/output/third-output.d.ts
+----------------------------------------------------------------------
+prepend: (0-157):: /src/first/bin/first-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (0-157)
+interface TheFirst {
+    none: any;
+}
+declare const s = "Hello, world";
+interface NoJsForHereEither {
+    none: any;
+}
+declare function f(): string;
+
+----------------------------------------------------------------------
+prepend: (157-257):: /src/2/second-output.d.ts texts:: 1
+>>--------------------------------------------------------------------
+text: (157-257)
+declare namespace N {
+}
+declare namespace N {
+}
+declare class C {
+    doSomething(): void;
+}
+
+----------------------------------------------------------------------
+text: (257-276)
+declare var c: C;
+
+======================================================================
 
 //// [/src/third/third_part1.ts]
 "myPrologue3";

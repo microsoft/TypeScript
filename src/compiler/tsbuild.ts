@@ -307,7 +307,7 @@ namespace ts {
 
     function getOutFileOutputs(project: ParsedCommandLine, ignoreBuildInfo?: boolean): ReadonlyArray<string> {
         Debug.assert(!!project.options.outFile || !!project.options.out, "outFile must be set");
-        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false, project.projectReferences);
+        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false);
 
         let outputs: string[] | undefined = [];
         const addOutput = (path: string | undefined) => path && (outputs || (outputs = [])).push(path);
@@ -1217,7 +1217,7 @@ namespace ts {
         function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
             const value = builderPrograms.getValue(proj);
             if (value) return value;
-            const buildInfoPath = getOutputPathForBuildInfo(parsed.options, parsed.projectReferences);
+            const buildInfoPath = getOutputPathForBuildInfo(parsed.options);
             if (!buildInfoPath) return undefined;
             const content = readFileWithCache(buildInfoPath);
             if (!content) return undefined;
@@ -1488,7 +1488,7 @@ namespace ts {
                 outputs.push(...getOutputFileNames(inputFile, project));
             }
             if (!ignoreBuildInfo) {
-                const buildInfoPath = getOutputPathForBuildInfo(project.options, project.projectReferences);
+                const buildInfoPath = getOutputPathForBuildInfo(project.options);
                 if (buildInfoPath) outputs.push(buildInfoPath);
             }
             return outputs;

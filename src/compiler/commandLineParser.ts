@@ -332,6 +332,13 @@ namespace ts {
             description: Diagnostics.Enable_project_compilation,
         },
         {
+            name: "incremental",
+            type: "boolean",
+            isTSConfigOnly: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Enable_incremental_compilation,
+        },
+        {
             name: "removeComments",
             type: "boolean",
             showInSimplifiedHelpView: true,

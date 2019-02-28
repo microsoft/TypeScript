@@ -1,12 +1,10 @@
 namespace ts {
-    /*@internal*/
-    export const infoFile = ".tsbuildinfo";
     const brackets = createBracketsMap();
     const syntheticParent: TextRange = { pos: -1, end: -1 };
 
     /*@internal*/
     export function isBuildInfoFile(file: string) {
-        return endsWith(file, `/${infoFile}`);
+        return fileExtensionIs(file, Extension.TsBuildInfo);
     }
 
     /*@internal*/
@@ -47,29 +45,41 @@ namespace ts {
                 }
             }
             if (includeBuildInfo) {
-                const buildInfoPath = getOutputPathForBuildInfo(host.getCompilerOptions(), host.getProjectReferences());
+                const buildInfoPath = getOutputPathForBuildInfo(host.getCompilerOptions());
                 if (buildInfoPath) return action({ buildInfoPath }, /*sourceFileOrBundle*/ undefined);
             }
         }
     }
 
     /*@internal*/
-    export function getOutputPathForBuildInfo(options: CompilerOptions, projectReferences: ReadonlyArray<ProjectReference> | undefined) {
-        if (!options.composite && !length(projectReferences)) return undefined;
+    export function getOutputPathForBuildInfo(options: CompilerOptions) {
+        const configFile = options.configFilePath;
+        if (!configFile || !options.incremental && !options.composite) return undefined;
+        // TODO:: Add outFile like tsBuildInfoFile option
         const outPath = options.outFile || options.out;
-        if (outPath) return combinePaths(getDirectoryPath(outPath), infoFile);
-        if (options.outDir) return combinePaths(options.outDir, infoFile);
-        return options.configFilePath && combinePaths(getDirectoryPath(options.configFilePath), infoFile);
+        let buildInfoExtensionLess: string;
+        if (outPath) {
+            buildInfoExtensionLess = removeFileExtension(outPath);
+        }
+        else {
+            const configFileExtensionLess = removeFileExtension(configFile);
+            buildInfoExtensionLess = options.outDir ?
+                options.rootDir ?
+                    resolvePath(options.outDir, getRelativePathFromDirectory(options.rootDir, configFileExtensionLess, /*ignoreCase*/ true)) :
+                    combinePaths(options.outDir, getBaseFileName(configFileExtensionLess)) :
+                configFileExtensionLess;
+        }
+        return buildInfoExtensionLess + Extension.TsBuildInfo;
     }
 
     /*@internal*/
-    export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean, projectReferences: ReadonlyArray<ProjectReference> | undefined): EmitFileNames {
+    export function getOutputPathsForBundle(options: CompilerOptions, forceDtsPaths: boolean): EmitFileNames {
         const outPath = options.outFile || options.out!;
         const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
         const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
         const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
         const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
-        const buildInfoPath = getOutputPathForBuildInfo(options, projectReferences);
+        const buildInfoPath = getOutputPathForBuildInfo(options);
         return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath };
     }
 
@@ -77,7 +87,7 @@ namespace ts {
     export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean): EmitFileNames {
         const options = host.getCompilerOptions();
         if (sourceFile.kind === SyntaxKind.Bundle) {
-            return getOutputPathsForBundle(options, forceDtsPaths, host.getProjectReferences());
+            return getOutputPathsForBundle(options, forceDtsPaths);
         }
         else {
             const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
@@ -535,7 +545,7 @@ namespace ts {
 
     /*@internal*/
     export function emitUsingBuildInfo(config: ParsedCommandLine, host: EmitUsingBuildInfoHost, getCommandLine: (ref: ProjectReference) => ParsedCommandLine | undefined): EmitUsingBuildInfoResult {
-        const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false, config.projectReferences);
+        const { buildInfoPath, jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath } = getOutputPathsForBundle(config.options, /*forceDtsPaths*/ false);
         const buildInfoText = host.readFile(Debug.assertDefined(buildInfoPath));
         if (!buildInfoText) return buildInfoPath!;
         const jsFileText = host.readFile(Debug.assertDefined(jsFilePath));
@@ -570,7 +580,6 @@ namespace ts {
         const sourceFilesForJsEmit = createSourceFilesFromBundleBuildInfo(buildInfo.bundle);
         const emitHost: EmitHost = {
             getPrependNodes: memoize(() => [...prependNodes, ownPrependInput]),
-            getProjectReferences: () => config.projectReferences,
             getCanonicalFileName: host.getCanonicalFileName,
             getCommonSourceDirectory: () => buildInfo.bundle!.commonSourceDirectory,
             getCompilerOptions: () => config.options,

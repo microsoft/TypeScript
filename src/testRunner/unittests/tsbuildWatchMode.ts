@@ -513,7 +513,7 @@ let x: string = 10;`);
                     changeExtension(fileWithError.path, Extension.Dts),
                     changeExtension(fileWithoutError.path, Extension.Js),
                     changeExtension(fileWithoutError.path, Extension.Dts),
-                    `${subProjectLocation}/${infoFile}`
+                    `${subProjectLocation}/tsconfig${Extension.TsBuildInfo}`
                 ];
 
                 function verifyDtsErrors(host: TsBuildWatchSystem, isIncremental: boolean, expectedErrors: ReadonlyArray<string>) {
