@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-base",
     "compilerOptions": {
-        "outFile": "../../built/local/compiler/compiler.js"
+        "outFile": "../../built/local/compiler.js"
     },
 
     "references": [],

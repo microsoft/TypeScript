@@ -1,7 +1,7 @@
 {
     "extends": "../tsconfig-library-base",
     "compilerOptions": {
-        "outFile": "../../built/local/tsserverlibrary/tsserverlibrary.js"
+        "outFile": "../../built/local/tsserverlibrary.out.js"
     },
     "files": [
         "tsserverlibrary.ts"
