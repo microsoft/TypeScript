@@ -16071,7 +16071,8 @@ namespace ts {
                 );
 
                 // Infer the types from superType onto the return type of the child constructor.
-                inferTypes(inferenceContext.inferences, superType, getReturnTypeOfSignature(childConstructor), InferencePriority.ReturnType);
+                const childTemplateType = getReturnTypeOfSignature(childConstructor);
+                inferTypes(inferenceContext.inferences, superType, childTemplateType, InferencePriority.NakedTypeVariable);
 
                 // We extract the inferred arguments from the inference context.
                 // silentNeverType indicates that no type could be inferred.
@@ -16080,7 +16081,7 @@ namespace ts {
 
 
                 // Lastly, supply the childType with the new parameters.
-                return instantiateType(getReturnTypeOfSignature(childConstructor), param => {
+                return instantiateType(childTemplateType, param => {
                     if (childTypeParameters.indexOf(param) >= 0) {
                         return childArguments[childTypeParameters.indexOf(param)];
                     }

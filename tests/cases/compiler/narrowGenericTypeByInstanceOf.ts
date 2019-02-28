@@ -152,23 +152,38 @@ function exampleConstraints() {
   class Parent<A> {
     a: A;
   }
-  class Child<B extends number> extends Parent<B> {
+  class Child<B extends 1 | 2 | 3> extends Parent<B> {
     b: B;
   }
 
-  const objPass: Parent<number> = undefined as any;
+  const objPass: Parent<1 | 2 | 3> = undefined as any;
   if (objPass instanceof Child) {
-    objPass;
+    objPass; // expect: Child<1 | 2 | 3>
   }
 
-  const objFour: Parent<4> = undefined as any;
-  if (objFour instanceof Child) {
-    objFour;
+  const obj12: Parent<1 | 2> = undefined as any;
+  if (obj12 instanceof Child) {
+    obj12; // expect: Child<1 | 2>
   }
 
   const objFail: Parent<string> = undefined as any;
   if (objFail instanceof Child) {
-    objFail;
+    objFail; // Child<any>, since string and 1|2|3 have no overlap.
+  }
+
+  const objRefine: Parent<number> = undefined as any;
+  if (objRefine instanceof Child) {
+    objRefine; // expect: Child<1 | 2 | 3>
+  }
+
+  const objRefine1234: Parent<1 | 2 | 3 | 4> = undefined as any;
+  if (objRefine1234 instanceof Child) {
+    objRefine1234; // expect: Child<1 | 2 | 3>
+  }
+
+  const objOverlap: Parent<2 | 3 | 4 | 5> = undefined as any;
+  if (objOverlap instanceof Child) {
+    objOverlap; // ideally, Child<2 | 3>, but actually Child<any> since 2|3|4|5 is not a supertype of 1|2|3.
   }
 }
 

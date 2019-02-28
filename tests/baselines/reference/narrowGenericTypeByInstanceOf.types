@@ -353,7 +353,7 @@ function exampleConstraints() {
     a: A;
 >a : A
   }
-  class Child<B extends number> extends Parent<B> {
+  class Child<B extends 1 | 2 | 3> extends Parent<B> {
 >Child : Child<B>
 >Parent : Parent<B>
 
@@ -361,32 +361,32 @@ function exampleConstraints() {
 >b : B
   }
 
-  const objPass: Parent<number> = undefined as any;
->objPass : Parent<number>
+  const objPass: Parent<1 | 2 | 3> = undefined as any;
+>objPass : Parent<1 | 2 | 3>
 >undefined as any : any
 >undefined : undefined
 
   if (objPass instanceof Child) {
 >objPass instanceof Child : boolean
->objPass : Parent<number>
+>objPass : Parent<1 | 2 | 3>
 >Child : typeof Child
 
-    objPass;
->objPass : Child<number>
+    objPass; // expect: Child<1 | 2 | 3>
+>objPass : Child<1 | 2 | 3>
   }
 
-  const objFour: Parent<4> = undefined as any;
->objFour : Parent<4>
+  const obj12: Parent<1 | 2> = undefined as any;
+>obj12 : Parent<1 | 2>
 >undefined as any : any
 >undefined : undefined
 
-  if (objFour instanceof Child) {
->objFour instanceof Child : boolean
->objFour : Parent<4>
+  if (obj12 instanceof Child) {
+>obj12 instanceof Child : boolean
+>obj12 : Parent<1 | 2>
 >Child : typeof Child
 
-    objFour;
->objFour : Child<any>
+    obj12; // expect: Child<1 | 2>
+>obj12 : Child<1 | 2>
   }
 
   const objFail: Parent<string> = undefined as any;
@@ -399,8 +399,50 @@ function exampleConstraints() {
 >objFail : Parent<string>
 >Child : typeof Child
 
-    objFail;
+    objFail; // Child<any>, since string and 1|2|3 have no overlap.
 >objFail : Child<any>
+  }
+
+  const objRefine: Parent<number> = undefined as any;
+>objRefine : Parent<number>
+>undefined as any : any
+>undefined : undefined
+
+  if (objRefine instanceof Child) {
+>objRefine instanceof Child : boolean
+>objRefine : Parent<number>
+>Child : typeof Child
+
+    objRefine; // expect: Child<1 | 2 | 3>
+>objRefine : Child<1 | 2 | 3>
+  }
+
+  const objRefine1234: Parent<1 | 2 | 3 | 4> = undefined as any;
+>objRefine1234 : Parent<1 | 2 | 3 | 4>
+>undefined as any : any
+>undefined : undefined
+
+  if (objRefine1234 instanceof Child) {
+>objRefine1234 instanceof Child : boolean
+>objRefine1234 : Parent<1 | 2 | 3 | 4>
+>Child : typeof Child
+
+    objRefine1234; // expect: Child<1 | 2 | 3>
+>objRefine1234 : Child<1 | 2 | 3>
+  }
+
+  const objOverlap: Parent<2 | 3 | 4 | 5> = undefined as any;
+>objOverlap : Parent<2 | 3 | 4 | 5>
+>undefined as any : any
+>undefined : undefined
+
+  if (objOverlap instanceof Child) {
+>objOverlap instanceof Child : boolean
+>objOverlap : Parent<2 | 3 | 4 | 5>
+>Child : typeof Child
+
+    objOverlap; // ideally, Child<2 | 3>, but actually Child<any> since 2|3|4|5 is not a supertype of 1|2|3.
+>objOverlap : Child<any>
   }
 }
 
