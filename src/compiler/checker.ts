@@ -681,10 +681,10 @@ namespace ts {
         }
 
         const enum CheckMode {
-            Normal = 0,                // Normal type checking
-            SkipContextSensitive = 1,  // Skip context sensitive function expressions
-            Inferential = 2,           // Inferential typing
-            Contextual = 3,            // Normal type checking informed by a contextual type, therefore not cacheable
+            Normal = 0,                     // Normal type checking
+            Contextual = 1 << 0,            // Explicitly assigned contextual type, therefore not cacheable
+            Inferential = 1 << 1,           // Inferential typing
+            SkipContextSensitive = 1 << 2,  // Skip context sensitive function expressions
         }
 
         const enum CallbackCheck {
@@ -19985,10 +19985,9 @@ namespace ts {
 
         function inferJsxTypeArguments(node: JsxOpeningLikeElement, signature: Signature, excludeArgument: ReadonlyArray<boolean> | undefined, context: InferenceContext): Type[] {
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-
-            const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, excludeArgument && excludeArgument[0] !== undefined ? identityMapper : context);
+            const checkMode = excludeArgument && excludeArgument[0] ? CheckMode.SkipContextSensitive : 0;
+            const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, context, checkMode);
             inferTypes(context.inferences, checkAttrType, paramType);
-
             return getInferredTypes(context);
         }
 
@@ -20054,8 +20053,8 @@ namespace ts {
                     const paramType = getTypeAtPosition(signature, i);
                     // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
                     // context sensitive function expressions as wildcards
-                    const mapper = excludeArgument && excludeArgument[i] !== undefined ? identityMapper : context;
-                    const argType = checkExpressionWithContextualType(arg, paramType, mapper);
+                    const checkMode = excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0;
+                    const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
                     inferTypes(context.inferences, argType, paramType);
                 }
             }
@@ -20083,7 +20082,7 @@ namespace ts {
                     // and the argument are ...x forms.
                     return arg.kind === SyntaxKind.SyntheticExpression ?
                         createArrayType((<SyntheticExpression>arg).type) :
-                        getArrayifiedType(checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context));
+                        getArrayifiedType(checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context, CheckMode.Normal));
                 }
             }
             const contextualType = getIndexTypeOfType(restType, IndexKind.Number) || anyType;
@@ -20091,7 +20090,7 @@ namespace ts {
             const types = [];
             let spreadIndex = -1;
             for (let i = index; i < argCount; i++) {
-                const argType = checkExpressionWithContextualType(args[i], contextualType, context);
+                const argType = checkExpressionWithContextualType(args[i], contextualType, context, CheckMode.Normal);
                 if (spreadIndex < 0 && isSpreadArgument(args[i])) {
                     spreadIndex = i - index;
                 }
@@ -20156,7 +20155,8 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, excludeArgument && excludeArgument[0] ? identityMapper : undefined);
+            const checkMode = excludeArgument && excludeArgument[0] ? CheckMode.SkipContextSensitive : 0;
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, undefined, checkMode);
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
         }
 
@@ -20190,7 +20190,8 @@ namespace ts {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    const argType = checkExpressionWithContextualType(arg, paramType, excludeArgument && excludeArgument[i] ? identityMapper : undefined);
+                    const checkMode = excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0;
+                    const argType = checkExpressionWithContextualType(arg, paramType, undefined, checkMode);
                     // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
@@ -21145,7 +21146,7 @@ namespace ts {
             if (isJsxIntrinsicIdentifier(node.tagName)) {
                 const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
                 const fakeSignature = createSignatureForJSXIntrinsic(node, result);
-                checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*mapper*/ undefined), result, node.tagName, node.attributes);
+                checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*mapper*/ undefined, CheckMode.Normal), result, node.tagName, node.attributes);
                 return fakeSignature;
             }
             const exprTypes = checkExpression(node.tagName);
@@ -22086,7 +22087,7 @@ namespace ts {
             checkNodeDeferred(node);
 
             // The identityMapper object is used to indicate that function expressions are wildcards
-            if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
+            if (checkMode && checkMode & CheckMode.SkipContextSensitive && isContextSensitive(node)) {
                 // Skip parameters, return signature with return type that retains noncontextual parts so inferences can still be drawn in an early stage
                 if (!getEffectiveReturnTypeNode(node) && hasContextSensitiveReturnExpression(node)) {
                     const links = getNodeLinks(node);
@@ -22126,7 +22127,7 @@ namespace ts {
                         const signature = getSignaturesOfType(type, SignatureKind.Call)[0];
                         if (isContextSensitive(node)) {
                             const contextualMapper = getContextualMapper(node);
-                            if (checkMode === CheckMode.Inferential) {
+                            if (checkMode && checkMode & CheckMode.Inferential) {
                                 inferFromAnnotatedParameters(signature, contextualSignature, contextualMapper);
                             }
                             const instantiatedContextualSignature = contextualMapper === identityMapper ?
@@ -23137,15 +23138,13 @@ namespace ts {
             return node;
         }
 
-        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper | undefined): Type {
+        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper | undefined, checkMode: CheckMode): Type {
             const context = getContextNode(node);
             const saveContextualType = context.contextualType;
             const saveContextualMapper = context.contextualMapper;
             context.contextualType = contextualType;
             context.contextualMapper = contextualMapper;
-            const checkMode = contextualMapper === identityMapper ? CheckMode.SkipContextSensitive :
-                contextualMapper ? CheckMode.Inferential : CheckMode.Contextual;
-            const type = checkExpression(node, checkMode);
+            const type = checkExpression(node, checkMode | CheckMode.Contextual | (contextualMapper ? CheckMode.Inferential : 0));
             // We strip literal freshness when an appropriate contextual type is present such that contextually typed
             // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
             // here would be to not mark contextually typed literals as fresh in the first place.
@@ -23159,7 +23158,7 @@ namespace ts {
         function checkExpressionCached(node: Expression, checkMode?: CheckMode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
-                if (checkMode) {
+                if (checkMode && checkMode !== CheckMode.Normal) {
                     return checkExpression(node, checkMode);
                 }
                 // When computing a type that we're going to cache, we need to ignore any ongoing control flow
@@ -23267,7 +23266,7 @@ namespace ts {
         }
 
         function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration | QualifiedName, type: Type, checkMode?: CheckMode) {
-            if (checkMode === CheckMode.Inferential) {
+            if (checkMode && checkMode & CheckMode.Inferential) {
                 const signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
                     const contextualType = getApparentTypeOfContextualType(<Expression>node);
