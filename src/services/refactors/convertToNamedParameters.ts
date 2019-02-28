@@ -60,9 +60,8 @@ namespace ts.refactor.convertToNamedParameters {
                 trailingTriviaOption: textChanges.TrailingTriviaOption.Include
             });
 
-
-        const functionCalls = deduplicate(groupedReferences.functionCalls, equateValues);
-        forEach(functionCalls, call => {
+        const functionCalls = sortAndDeduplicate(groupedReferences.functionCalls, /*comparer*/ (a, b) => compareValues(a.pos, b.pos));
+        for (const call of functionCalls) {
             if (call.arguments && call.arguments.length) {
                 const newArgument = getSynthesizedDeepClone(createNewArgument(functionDeclaration, call.arguments), /*includeTrivia*/ true);
                 changes.replaceNodeRange(
@@ -71,7 +70,8 @@ namespace ts.refactor.convertToNamedParameters {
                     last(call.arguments),
                     newArgument,
                     { leadingTriviaOption: textChanges.LeadingTriviaOption.IncludeAll, trailingTriviaOption: textChanges.TrailingTriviaOption.Include });
-            }});
+            }
+        }
     }
 
     function getGroupedReferences(functionDeclaration: ValidFunctionDeclaration, program: Program, cancellationToken: CancellationToken): GroupedReferences {
