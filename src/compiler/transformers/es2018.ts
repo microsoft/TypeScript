@@ -689,12 +689,12 @@ namespace ts {
                 enableSubstitutionForAsyncMethodsWithSuper();
                 const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
                 substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-                addStatementsAfterPrologue(statements, [variableStatement]);
+                insertStatementsAfterStandardPrologue(statements, [variableStatement]);
             }
 
             statements.push(returnStatement);
 
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             const block = updateBlock(node.body!, statements);
 
             if (emitSuperHelpers && hasSuperElementAccess) {
@@ -726,7 +726,7 @@ namespace ts {
             const leadingStatements = endLexicalEnvironment();
             if (statementOffset > 0 || some(statements) || some(leadingStatements)) {
                 const block = convertToFunctionBody(body, /*multiLine*/ true);
-                addStatementsAfterPrologue(statements, leadingStatements);
+                insertStatementsAfterStandardPrologue(statements, leadingStatements);
                 addRange(statements, block.statements.slice(statementOffset));
                 return updateBlock(block, setTextRange(createNodeArray(statements), block.statements));
             }

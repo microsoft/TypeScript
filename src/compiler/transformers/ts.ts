@@ -675,7 +675,7 @@ namespace ts {
                 setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
                 statements.push(statement);
 
-                addStatementsAfterPrologue(statements, context.endLexicalEnvironment());
+                insertStatementsAfterStandardPrologue(statements, context.endLexicalEnvironment());
 
                 const iife = createImmediatelyInvokedArrowFunction(statements);
                 setEmitFlags(iife, EmitFlags.TypeScriptClassWrapper);
@@ -2672,7 +2672,7 @@ namespace ts {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             const members = map(node.members, transformEnumMember);
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             addRange(statements, members);
 
             currentNamespaceContainerName = savedCurrentNamespaceLocalName;
@@ -2993,7 +2993,7 @@ namespace ts {
                 statementsLocation = moveRangePos(moduleBlock.statements, -1);
             }
 
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             currentNamespaceContainerName = savedCurrentNamespaceContainerName;
             currentNamespace = savedCurrentNamespace;
             currentScopeFirstDeclarationsOfName = savedCurrentScopeFirstDeclarationsOfName;

@@ -401,10 +401,7 @@ namespace ts {
         return !nodeIsMissing(node);
     }
 
-    /**
-     * Prepends statements to an array while taking care of prologue directives.
-     */
-    export function addStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+    function insertStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
         if (from === undefined || from.length === 0) return to;
         let statementIndex = 0;
         // skip all prologue directives to insert at the correct position
@@ -415,6 +412,46 @@ namespace ts {
         }
         to.splice(statementIndex, 0, ...from);
         return to;
+    }
+
+    function insertStatementAfterPrologue<T extends Statement>(to: T[], statement: T | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
+        if (statement === undefined) return to;
+        let statementIndex = 0;
+        // skip all prologue directives to insert at the correct position
+        for (; statementIndex < to.length; ++statementIndex) {
+            if (!isPrologueDirective(to[statementIndex])) {
+                break;
+            }
+        }
+        to.splice(statementIndex, 0, statement);
+        return to;
+    }
+
+
+    function isAnyPrologueDirective(node: Node) {
+        return isPrologueDirective(node) || !!(getEmitFlags(node) & EmitFlags.CustomPrologue);
+    }
+
+    /**
+     * Prepends statements to an array while taking care of prologue directives.
+     */
+    export function insertStatementsAfterStandardPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+        return insertStatementsAfterPrologue(to, from, isPrologueDirective);
+    }
+
+    export function insertStatementsAfterCustomPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+        return insertStatementsAfterPrologue(to, from, isAnyPrologueDirective);
+    }
+
+    /**
+     * Prepends statements to an array while taking care of prologue directives.
+     */
+    export function insertStatementAfterStandardPrologue<T extends Statement>(to: T[], statement: T | undefined): T[] {
+        return insertStatementAfterPrologue(to, statement, isPrologueDirective);
+    }
+
+    export function insertStatementAfterCustomPrologue<T extends Statement>(to: T[], statement: T | undefined): T[] {
+        return insertStatementAfterPrologue(to, statement, isAnyPrologueDirective);
     }
 
     /**
@@ -3418,8 +3455,8 @@ namespace ts {
         return computeLineAndCharacterOfPosition(lineMap, pos).line;
     }
 
-    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
-        return find(node.members, (member): member is ConstructorDeclaration => isConstructorDeclaration(member) && nodeIsPresent(member.body));
+    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration & { body: FunctionBody } | undefined {
+        return find(node.members, (member): member is ConstructorDeclaration & { body: FunctionBody } => isConstructorDeclaration(member) && nodeIsPresent(member.body));
     }
 
     function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {

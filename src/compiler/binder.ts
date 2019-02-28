@@ -3839,6 +3839,7 @@ namespace ts {
 
             case SyntaxKind.ThisKeyword:
                 // Mark this node and its ancestors as containing a lexical `this` keyword.
+                transformFlags |= TransformFlags.AssertES2015;
                 transformFlags |= TransformFlags.ContainsLexicalThis;
                 break;
 
