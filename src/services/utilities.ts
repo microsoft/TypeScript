@@ -1664,6 +1664,18 @@ namespace ts {
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
     }
 
+    export function getSymbolTarget(symbol: Symbol): Symbol {
+        let next: Symbol = symbol;
+        while (isTransientSymbol(next) && next.target) {
+           next = next.target;
+        }
+        return next;
+    }
+
+    function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
+        return (symbol.flags & SymbolFlags.Transient) !== 0;
+    }
+
     export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker) {
         return getSymbolId(skipAlias(symbol, checker));
     }
