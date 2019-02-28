@@ -40,7 +40,13 @@ namespace ts.refactor.convertToNamedParameters {
         return { edits: [] }; // TODO: GH#30113
     }
 
-    function doChange(sourceFile: SourceFile, program: Program, host: LanguageServiceHost, changes: textChanges.ChangeTracker, functionDeclaration: ValidFunctionDeclaration, groupedReferences: GroupedReferences): void {
+    function doChange(
+        sourceFile: SourceFile,
+        program: Program,
+        host: LanguageServiceHost,
+        changes: textChanges.ChangeTracker,
+        functionDeclaration: ValidFunctionDeclaration,
+        groupedReferences: GroupedReferences): void {
         const newParamDeclaration = map(createNewParameters(functionDeclaration, program, host), param => getSynthesizedDeepClone(param));
         changes.replaceNodeRangeWithNodes(
             sourceFile,
@@ -74,7 +80,7 @@ namespace ts.refactor.convertToNamedParameters {
         const names = deduplicate([...functionNames, ...classNames], equateValues);
         const checker = program.getTypeChecker();
 
-        const references = flatMap(names, name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
+        const references = flatMap(names, /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
         const isConstructor = isConstructorDeclaration(functionDeclaration);
         const groupedReferences = groupReferences(references, isConstructor);
 
@@ -231,8 +237,12 @@ namespace ts.refactor.convertToNamedParameters {
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
         const node = getTokenAtPosition(file, startPosition);
         const functionDeclaration = getContainingFunction(node);
-        if (!functionDeclaration || !isValidFunctionDeclaration(functionDeclaration, checker) || !rangeContainsRange(functionDeclaration, node) || (functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))) return undefined;
-        return functionDeclaration;
+        if (functionDeclaration
+            && isValidFunctionDeclaration(functionDeclaration, checker)
+            && rangeContainsRange(functionDeclaration, node)
+            && !(functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))) return functionDeclaration;
+
+        return undefined;
     }
 
     function isValidFunctionDeclaration(functionDeclaration: SignatureDeclaration, checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
@@ -311,10 +321,11 @@ namespace ts.refactor.convertToNamedParameters {
         const bindingElements = map(refactorableParameters, createBindingElementFromParameterDeclaration);
         const objectParameterName = createObjectBindingPattern(bindingElements);
         const objectParameterType = createParameterTypeNode(refactorableParameters);
+        const checker = program.getTypeChecker();
 
         let objectInitializer: Expression | undefined;
         // If every parameter in the original function was optional, add an empty object initializer to the new object parameter
-        if (every(refactorableParameters, param => !!param.initializer || !!param.questionToken)) {
+        if (every(refactorableParameters, checker.isOptionalParameter)) {
             objectInitializer = createObjectLiteral();
         }
 
@@ -339,9 +350,9 @@ namespace ts.refactor.convertToNamedParameters {
 
             suppressLeadingAndTrailingTrivia(newThisParameter.name);
             copyComments(thisParameter.name, newThisParameter.name);
-            if (thisParameter.type && newThisParameter.type) {
-                suppressLeadingAndTrailingTrivia(newThisParameter.type);
-                copyComments(thisParameter.type, newThisParameter.type);
+            if (thisParameter.type) {
+                suppressLeadingAndTrailingTrivia(newThisParameter.type!);
+                copyComments(thisParameter.type, newThisParameter.type!);
             }
 
             return createNodeArray([newThisParameter, objectParameter]);
@@ -453,6 +464,8 @@ namespace ts.refactor.convertToNamedParameters {
             case SyntaxKind.FunctionExpression:
                 if (functionDeclaration.name) return [functionDeclaration.name, functionDeclaration.parent.name];
                 return [functionDeclaration.parent.name];
+            default:
+                return Debug.assertNever(functionDeclaration);
         }
     }
 
