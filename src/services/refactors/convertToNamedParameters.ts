@@ -1,9 +1,6 @@
 /* @internal */
 namespace ts.refactor.convertToNamedParameters {
     const refactorName = "Convert to named parameters";
-    const refactorDescription = "Convert to named parameters";
-    const actionNameNamedParameters = "Convert to named parameters";
-    const actionDescriptionNamedParameters = "Convert to named parameters";
     const minimumParameterLength = 2;
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
@@ -15,18 +12,20 @@ namespace ts.refactor.convertToNamedParameters {
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, context.program.getTypeChecker());
         if (!functionDeclaration) return emptyArray;
 
+        const description = getLocaleSpecificMessage(Diagnostics.Convert_to_named_parameters);
         return [{
             name: refactorName,
-            description: refactorDescription,
+            description,
+            inlineable: false,
             actions: [{
-                name: actionNameNamedParameters,
-                description: actionDescriptionNamedParameters
+                name: refactorName,
+                description
             }]
         }];
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        Debug.assert(actionName === actionNameNamedParameters);
+        Debug.assert(actionName === refactorName);
         const { file, startPosition, program, cancellationToken, host } = context;
         const functionDeclaration = getFunctionDeclarationAtPosition(file, startPosition, program.getTypeChecker());
         if (!functionDeclaration || !cancellationToken) return undefined;
