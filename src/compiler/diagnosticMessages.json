@@ -4028,6 +4028,10 @@
         "category": "Message",
         "code": 6378
     },
+    "Composite projects may not disable incremental compilation.": {
+        "category": "Error",
+        "code": 6379
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

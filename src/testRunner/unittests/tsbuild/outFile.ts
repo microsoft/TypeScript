@@ -416,10 +416,20 @@ namespace ts {
             modifyFs: noop
         });
 
-        // Verify baseline with and without build info
+        // Verify baseline with build info
         verifyOutFileScenario({
             scenario: "when final project is not composite but uses project references",
             modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, ""),
+            ignoreWithoutBuildInfo: true,
+            ignoreDtsChanged: true,
+            ignoreDtsUnchanged: true,
+            baselineOnly: true
+        });
+
+        // Verify baseline with and without build info
+        verifyOutFileScenario({
+            scenario: "when final project is not composite but incremental",
+            modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, `"incremental": true,`),
             ignoreDtsChanged: true,
             ignoreDtsUnchanged: true,
             baselineOnly: true

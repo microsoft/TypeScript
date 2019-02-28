@@ -1,0 +1,7 @@
+error TS6304: Composite projects may not disable declaration emit.
+
+
+!!! error TS6304: Composite projects may not disable declaration emit.
+==== tests/cases/compiler/optionsCompositeWithIncrementalFalse.ts (0 errors) ====
+    const x = "Hello World";
+    

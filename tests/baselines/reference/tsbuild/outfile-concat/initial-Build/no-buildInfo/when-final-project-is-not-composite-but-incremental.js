@@ -1431,7 +1431,7 @@ sourceFile:../../third_part1.ts
 {
   "compilerOptions": {
     "target": "es5",
-    
+    "incremental": true,
     "removeComments": true,
     "strict": false,
     "sourceMap": true,

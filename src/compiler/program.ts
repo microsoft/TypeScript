@@ -2720,6 +2720,9 @@ namespace ts {
                 if (options.declaration === false) {
                     createDiagnosticForOptionName(Diagnostics.Composite_projects_may_not_disable_declaration_emit, "declaration");
                 }
+                if (options.incremental === false) {
+                    createDiagnosticForOptionName(Diagnostics.Composite_projects_may_not_disable_declaration_emit, "declaration");
+                }
             }
 
             verifyProjectReferences();
