@@ -18897,7 +18897,7 @@ namespace ts {
                 const namespaceName = getJsxNamespace(location);
                 const resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
                 if (resolvedNamespace) {
-                    const candidate = getSymbol(getExportsOfSymbol(resolveSymbol(resolvedNamespace)), JsxNames.JSX, SymbolFlags.Namespace);
+                    const candidate = resolveSymbol(getSymbol(getExportsOfSymbol(resolveSymbol(resolvedNamespace)), JsxNames.JSX, SymbolFlags.Namespace));
                     if (candidate) {
                         if (links) {
                             links.jsxNamespace = candidate;
