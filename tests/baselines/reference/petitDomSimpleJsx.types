@@ -1,0 +1,2101 @@
+=== tests/cases/compiler/node_modules/petit-dom/index.d.ts ===
+// Modified type definitions for Petit-Dom 0.2
+// Project: https://github.com/yelouafi/petit-dom
+// Definitions by: James Messinger <https://github.com/JamesMessinger>, modified by @weswigham for testing
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 3.4
+
+/**
+ * Creates a VNode of the specified HTML Element type and with the
+ * specified properties and contents.
+ *
+ * @param type - The tag name of element to create
+ * @param props - Properties to set on the element
+ * @param ...children - Child nodes
+ * @returns A new VNode object
+ */
+export function h<T extends keyof ElementTagNameMap, E extends ElementTagNameMap[T]>(
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+
+    type: T,
+>type : T
+
+    props?: PetitDom.Props<E> | null,
+>props : PetitDom.Props<E> | null | undefined
+>PetitDom : any
+>null : null
+
+    ...children: ReadonlyArray<PetitDom.Content>
+>children : readonly PetitDom.Content[]
+>PetitDom : any
+
+): PetitDom.ElementNode<T, E>;
+>PetitDom : any
+
+/**
+ * Creates a VNode using a PetitDom component object.
+ *
+ * @param type - A PetitDom component object
+ * @param props - Properties to set on the component
+ * @param ...children - Child nodes
+ * @returns A new VNode object
+ */
+export function h<P extends PetitDom.ComponentProps = PetitDom.ComponentProps>(
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>PetitDom : any
+>PetitDom : any
+
+    type: PetitDom.Component<P>,
+>type : PetitDom.Component<P>
+>PetitDom : any
+
+    props?: (P & PetitDom.IntrinsicProps) | null,
+>props : (P & PetitDom.IntrinsicProps) | null | undefined
+>PetitDom : any
+>null : null
+
+    ...children: ReadonlyArray<PetitDom.Content>
+>children : readonly PetitDom.Content[]
+>PetitDom : any
+
+): PetitDom.ComponentNode<P>;
+>PetitDom : any
+
+/**
+ * Creates a VNode using a PetitDom component class.
+ *
+ * @param type - A PetitDom component class
+ * @param props - Properties to set on the component
+ * @param ...children - Child nodes
+ * @returns A new VNode object
+ */
+export function h<P extends PetitDom.ComponentProps = PetitDom.ComponentProps>(
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>PetitDom : any
+>PetitDom : any
+
+    type: PetitDom.ComponentClass<P>,
+>type : PetitDom.ComponentClass<P>
+>PetitDom : any
+
+    props?: (P & PetitDom.IntrinsicProps) | null,
+>props : (P & PetitDom.IntrinsicProps) | null | undefined
+>PetitDom : any
+>null : null
+
+    ...children: ReadonlyArray<PetitDom.Content>
+>children : readonly PetitDom.Content[]
+>PetitDom : any
+
+): PetitDom.ComponentClassNode<P>;
+>PetitDom : any
+
+/**
+ * Creates a VNode using a PetitDom function component.
+ *
+ * This function is compatible with both JSX and HyperScript syntax.
+ *
+ * @param type - A PetitDom function component
+ * @param props - Properties to set on the component
+ * @param ...children - Child nodes
+ * @returns A new VNode object
+ */
+export function h<P extends PetitDom.ComponentProps = PetitDom.ComponentProps>(
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>PetitDom : any
+>PetitDom : any
+
+    type: PetitDom.FunctionComponent<P>,
+>type : PetitDom.FunctionComponent<P>
+>PetitDom : any
+
+    props?: (P & PetitDom.IntrinsicProps) | null,
+>props : (P & PetitDom.IntrinsicProps) | null | undefined
+>PetitDom : any
+>null : null
+
+    ...children: ReadonlyArray<PetitDom.Content>
+>children : readonly PetitDom.Content[]
+>PetitDom : any
+
+): PetitDom.FunctionComponentNode<P>;
+>PetitDom : any
+
+/**
+ * Creates actual DOM Elements for the given VNode and its children.
+ *
+ * @param vnode - The VNode object to mount
+ * @returns The newly-created DOM element
+ */
+export function mount(vnode: PetitDom.VNode): Element;
+>mount : (vnode: PetitDom.VNode) => Element
+>vnode : PetitDom.VNode
+>PetitDom : any
+
+/**
+ * Diffs two VNodes and applies the necessary DOM changes
+ *
+ * @param newVNode - The new VNode object, which will be mounted to the DOM element of oldVNode
+ * @param oldVNode - The old VNode object to diff against
+ * @param parent - The parent DOM element. Used internally by PetitDom to recursively patch child nodes
+ * @returns The updated DOM element. This element is also moved from oldVNode to newVNode
+ */
+export function patch(newVNode: PetitDom.VNode, oldVNode: PetitDom.VNode, parent?: Element): Element;
+>patch : (newVNode: PetitDom.VNode, oldVNode: PetitDom.VNode, parent?: Element | undefined) => Element
+>newVNode : PetitDom.VNode
+>PetitDom : any
+>oldVNode : PetitDom.VNode
+>PetitDom : any
+>parent : Element | undefined
+
+/**
+ * Removes the given VNode from the actual DOM
+ *
+ * @param vnode - The VNode object to unmount
+ */
+export function unmount(vnode: PetitDom.VNode): void;
+>unmount : (vnode: PetitDom.VNode) => void
+>vnode : PetitDom.VNode
+>PetitDom : any
+
+export namespace PetitDom {
+    type Key = string | number;
+>Key : string | number
+
+    type ComponentProps = object;
+>ComponentProps : object
+
+    interface ContentArray extends ReadonlyArray<Content> {}
+    type Content = string | VNode | ContentArray;
+>Content : Content
+
+    type DOMElementProps<E extends Element> = {
+>DOMElementProps : DOMElementProps<E>
+
+        [P in keyof E]?: E[P];
+    };
+
+    interface IntrinsicProps {
+        content?: Content | ReadonlyArray<Content>;
+>content : string | VNode | ContentArray | readonly Content[] | undefined
+
+        key?: Key;
+>key : string | number | undefined
+    }
+
+    type Props<E extends Element = Element> = IntrinsicProps & DOMElementProps<E>;
+>Props : Props<E>
+
+    type ShouldUpdate<P extends ComponentProps> = (
+>ShouldUpdate : ShouldUpdate<P>
+
+        newProps: P,
+>newProps : P
+
+        oldProps: P,
+>oldProps : P
+
+        newContent: ReadonlyArray<VNode>,
+>newContent : readonly VNode[]
+
+        oldContent: ReadonlyArray<VNode>
+>oldContent : readonly VNode[]
+
+    ) => boolean;
+
+    interface FunctionComponent<P extends ComponentProps> {
+        (props: P, content: ReadonlyArray<Content>): FunctionComponentNode<P>;
+>props : P
+>content : readonly Content[]
+
+        shouldUpdate?: ShouldUpdate<P>;
+>shouldUpdate : ShouldUpdate<P> | undefined
+    }
+
+    interface ComponentClass<P extends ComponentProps> {
+        new(props: P, content: ReadonlyArray<Content>): Component<P>;
+>props : P
+>content : readonly Content[]
+    }
+
+    interface Component<P extends ComponentProps> {
+        mount(props: P, content: ReadonlyArray<VNode>): Element;
+>mount : (props: P, content: readonly VNode[]) => Element
+>props : P
+>content : readonly VNode[]
+
+        patch(element: Element, newProps: P, oldProps: P, newContent: ReadonlyArray<VNode>, oldContent: ReadonlyArray<VNode>): Element;
+>patch : (element: Element, newProps: P, oldProps: P, newContent: readonly VNode[], oldContent: readonly VNode[]) => Element
+>element : Element
+>newProps : P
+>oldProps : P
+>newContent : readonly VNode[]
+>oldContent : readonly VNode[]
+
+        unmount(element: Element): void;
+>unmount : (element: Element) => void
+>element : Element
+    }
+
+    interface VNode {
+        readonly isSVG: boolean;
+>isSVG : boolean
+
+        readonly type: any;
+>type : any
+
+        readonly key: Key | null;
+>key : string | number | null
+>null : null
+
+        readonly props: any;
+>props : any
+
+        readonly content: ReadonlyArray<VNode>;
+>content : readonly VNode[]
+    }
+
+    interface ElementNode<T extends keyof DomElements, E extends DomElements[T]> extends VNode {
+        readonly type: T;
+>type : T
+
+        readonly props: Props<E>;
+>props : Props<E>
+    }
+
+    interface ComponentNode<P extends ComponentProps> extends VNode {
+        readonly type: Component<P>;
+>type : Component<P>
+
+        readonly props: P & IntrinsicProps;
+>props : P & IntrinsicProps
+    }
+
+    interface ComponentClassNode<P extends ComponentProps> extends VNode {
+        readonly type: ComponentClass<P>;
+>type : ComponentClass<P>
+
+        readonly props: P & IntrinsicProps;
+>props : P & IntrinsicProps
+    }
+
+    interface FunctionComponentNode<P extends ComponentProps> extends VNode {
+        readonly type: FunctionComponent<P>;
+>type : FunctionComponent<P>
+
+        readonly props: P & IntrinsicProps;
+>props : P & IntrinsicProps
+    }
+
+    interface DomElements extends HTMLElementTagNameMap, SVGElementTagNameMap {
+        "main": HTMLMainElement;
+>"main" : HTMLMainElement
+    }
+}
+
+declare global {
+>global : any
+
+    namespace JSX {
+        // tslint:disable-next-line:no-empty-interface
+        interface Element extends PetitDom.VNode { }
+>PetitDom : any
+
+        // tslint:disable-next-line:no-empty-interface
+        interface ElementClass extends PetitDom.Component<PetitDom.ComponentProps> { }
+>PetitDom : any
+>PetitDom : any
+
+        // tslint:disable-next-line:no-empty-interface
+        interface IntrinsicClassAttributes<T> extends PetitDom.Props { }
+>PetitDom : any
+
+        // tslint:disable-next-line:no-empty-interface
+        interface IntrinsicAttributes extends PetitDom.IntrinsicProps { }
+>PetitDom : any
+
+        interface ElementAttributesProperty { props: PetitDom.Props; }
+>props : PetitDom.Props<Element>
+>PetitDom : any
+
+        interface ElementChildrenAttribute { content: PetitDom.VNode[]; }
+>content : PetitDom.VNode[]
+>PetitDom : any
+
+        type IntrinsicElements = {
+>IntrinsicElements : IntrinsicElements
+
+            [P in keyof PetitDom.DomElements]:
+>PetitDom : any
+
+            PetitDom.Props<PetitDom.DomElements[P]> &
+>PetitDom : any
+>PetitDom : any
+            {
+                content?: PetitDom.Content | ReadonlyArray<PetitDom.Content>;
+>content : string | PetitDom.VNode | PetitDom.ContentArray | readonly PetitDom.Content[] | undefined
+>PetitDom : any
+>PetitDom : any
+
+            };
+        };
+    }
+}
+
+=== tests/cases/compiler/petit-dom-tests.tsx ===
+/* @jsx h */
+// tslint:disable:no-empty
+// tslint:disable:no-null-keyword
+
+import { h, mount, patch, PetitDom, unmount } from "petit-dom";
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>mount : (vnode: PetitDom.VNode) => Element
+>patch : (newVNode: PetitDom.VNode, oldVNode: PetitDom.VNode, parent?: Element | undefined) => Element
+>PetitDom : any
+>unmount : (vnode: PetitDom.VNode) => void
+
+function assertEqual<T>(a: T, b: T) { }
+>assertEqual : <T>(a: T, b: T) => void
+>a : T
+>b : T
+
+function eventHandler(event: Event): void { }
+>eventHandler : (event: Event) => void
+>event : Event
+
+interface CustomProps {
+    name: string;
+>name : string
+
+    count: number;
+>count : number
+
+    onSomeEvent(event: Event): void;
+>onSomeEvent : (event: Event) => void
+>event : Event
+}
+
+/**
+ * Create an <a> element with text content, using HyperScript syntax and JSX syntax
+ */
+export function testHtmlElementWithTextContent() {
+>testHtmlElementWithTextContent : () => void
+
+    // HyperScript syntax returns an ElementNode<T> object, with typed properties
+    const aNode = h("a", { href: "link", onclick: eventHandler }, "click here");
+>aNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>h("a", { href: "link", onclick: eventHandler }, "click here") : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>"a" : "a"
+>{ href: "link", onclick: eventHandler } : { href: string; onclick: (event: Event) => void; }
+>href : string
+>"link" : "link"
+>onclick : (event: Event) => void
+>eventHandler : (event: Event) => void
+>"click here" : "click here"
+
+    assertEqual(aNode.isSVG, false);
+>assertEqual(aNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>aNode.isSVG : boolean
+>aNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>isSVG : boolean
+>false : false
+
+    assertEqual(aNode.type, "a");
+>assertEqual(aNode.type, "a") : void
+>assertEqual : <T>(a: T, b: T) => void
+>aNode.type : "a"
+>aNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>type : "a"
+>"a" : "a"
+
+    assertEqual(aNode.key, null);
+>assertEqual(aNode.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>aNode.key : string | number | null
+>aNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>key : string | number | null
+>null : null
+
+    assertEqual(aNode.props.href, "link");
+>assertEqual(aNode.props.href, "link") : void
+>assertEqual : <T>(a: T, b: T) => void
+>aNode.props.href : string | undefined
+>aNode.props : PetitDom.Props<HTMLAnchorElement>
+>aNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>props : PetitDom.Props<HTMLAnchorElement>
+>href : string | undefined
+>"link" : "link"
+
+    assertEqual(aNode.props.onclick, eventHandler);
+>assertEqual(aNode.props.onclick, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>aNode.props.onclick : ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null | undefined
+>aNode.props : PetitDom.Props<HTMLAnchorElement>
+>aNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>props : PetitDom.Props<HTMLAnchorElement>
+>onclick : ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null | undefined
+>eventHandler : (event: Event) => void
+
+    assertEqual(aNode.content.length, 1);
+>assertEqual(aNode.content.length, 1) : void
+>assertEqual : <T>(a: T, b: T) => void
+>aNode.content.length : number
+>aNode.content : readonly PetitDom.VNode[]
+>aNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>content : readonly PetitDom.VNode[]
+>length : number
+>1 : 1
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <a href="link" onclick={eventHandler}>click here</a>;
+>jsxNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+><a href="link" onclick={eventHandler}>click here</a> : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>a : any
+>href : string
+>onclick : (event: Event) => void
+>eventHandler : (event: Event) => void
+>a : any
+
+    const jsxNodeType = jsxNode.type as string;
+>jsxNodeType : string
+>jsxNode.type as string : string
+>jsxNode.type : "a"
+>jsxNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>type : "a"
+
+    const jsxNodeProps = jsxNode.props as PetitDom.Props<HTMLAnchorElement>;
+>jsxNodeProps : PetitDom.Props<HTMLAnchorElement>
+>jsxNode.props as PetitDom.Props<HTMLAnchorElement> : PetitDom.Props<HTMLAnchorElement>
+>jsxNode.props : PetitDom.Props<HTMLAnchorElement>
+>jsxNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>props : PetitDom.Props<HTMLAnchorElement>
+>PetitDom : any
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual(jsxNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>isSVG : boolean
+>false : false
+
+    assertEqual(jsxNodeType, "a");
+>assertEqual(jsxNodeType, "a") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : string
+>"a" : "a"
+
+    assertEqual(jsxNode.key, null);
+>assertEqual(jsxNode.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>key : string | number | null
+>null : null
+
+    assertEqual(jsxNodeProps.href, "link");
+>assertEqual(jsxNodeProps.href, "link") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.href : string | undefined
+>jsxNodeProps : PetitDom.Props<HTMLAnchorElement>
+>href : string | undefined
+>"link" : "link"
+
+    assertEqual(jsxNodeProps.onclick, eventHandler);
+>assertEqual(jsxNodeProps.onclick, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.onclick : ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null | undefined
+>jsxNodeProps : PetitDom.Props<HTMLAnchorElement>
+>onclick : ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null | undefined
+>eventHandler : (event: Event) => void
+
+    assertEqual(jsxNode.content.length, 1);
+>assertEqual(jsxNode.content.length, 1) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.ElementNode<"a", HTMLAnchorElement>
+>content : readonly PetitDom.VNode[]
+>length : number
+>1 : 1
+}
+
+/**
+ * Create a <form> element with both text content and child elements, using HyperScript syntax and JSX syntax
+ */
+export function testHtmlElementWithMixedContent() {
+>testHtmlElementWithMixedContent : () => void
+
+    // HyperScript syntax returns an ElementNode<T> object, with typed properties
+    const formNode = h(
+>formNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>h(        "form",        { key: 1, method: "POST", onsubmit: eventHandler },        "Hello ", h("span", null, "World")    ) : PetitDom.ElementNode<"form", HTMLFormElement>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+
+        "form",
+>"form" : "form"
+
+        { key: 1, method: "POST", onsubmit: eventHandler },
+>{ key: 1, method: "POST", onsubmit: eventHandler } : { key: number; method: string; onsubmit: (event: Event) => void; }
+>key : number
+>1 : 1
+>method : string
+>"POST" : "POST"
+>onsubmit : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+        "Hello ", h("span", null, "World")
+>"Hello " : "Hello "
+>h("span", null, "World") : PetitDom.ElementNode<"span", HTMLSpanElement>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>"span" : "span"
+>null : null
+>"World" : "World"
+
+    );
+
+    assertEqual(formNode.isSVG, false);
+>assertEqual(formNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>formNode.isSVG : boolean
+>formNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>isSVG : boolean
+>false : false
+
+    assertEqual(formNode.type, "form");
+>assertEqual(formNode.type, "form") : void
+>assertEqual : <T>(a: T, b: T) => void
+>formNode.type : "form"
+>formNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>type : "form"
+>"form" : "form"
+
+    assertEqual(formNode.key, 1);
+>assertEqual(formNode.key, 1) : void
+>assertEqual : <T>(a: T, b: T) => void
+>formNode.key : string | number | null
+>formNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>key : string | number | null
+>1 : 1
+
+    assertEqual(formNode.props.method, "POST");
+>assertEqual(formNode.props.method, "POST") : void
+>assertEqual : <T>(a: T, b: T) => void
+>formNode.props.method : string | undefined
+>formNode.props : PetitDom.Props<HTMLFormElement>
+>formNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>props : PetitDom.Props<HTMLFormElement>
+>method : string | undefined
+>"POST" : "POST"
+
+    assertEqual(formNode.props.onsubmit, eventHandler);
+>assertEqual(formNode.props.onsubmit, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>formNode.props.onsubmit : ((this: GlobalEventHandlers, ev: Event) => any) | null | undefined
+>formNode.props : PetitDom.Props<HTMLFormElement>
+>formNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>props : PetitDom.Props<HTMLFormElement>
+>onsubmit : ((this: GlobalEventHandlers, ev: Event) => any) | null | undefined
+>eventHandler : (event: Event) => void
+
+    assertEqual(formNode.content.length, 2);
+>assertEqual(formNode.content.length, 2) : void
+>assertEqual : <T>(a: T, b: T) => void
+>formNode.content.length : number
+>formNode.content : readonly PetitDom.VNode[]
+>formNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>content : readonly PetitDom.VNode[]
+>length : number
+>2 : 2
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <form key={1} method="POST" onsubmit={eventHandler}>Hello <span>World</span></form>;
+>jsxNode : PetitDom.ElementNode<"form", HTMLFormElement>
+><form key={1} method="POST" onsubmit={eventHandler}>Hello <span>World</span></form> : PetitDom.ElementNode<"form", HTMLFormElement>
+>form : any
+>key : number
+>1 : 1
+>method : string
+>onsubmit : (event: Event) => void
+>eventHandler : (event: Event) => void
+><span>World</span> : PetitDom.ElementNode<"span", HTMLSpanElement>
+>span : any
+>span : any
+>form : any
+
+    const jsxNodeType = jsxNode.type as string;
+>jsxNodeType : string
+>jsxNode.type as string : string
+>jsxNode.type : "form"
+>jsxNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>type : "form"
+
+    const jsxNodeProps = jsxNode.props as PetitDom.Props<HTMLFormElement>;
+>jsxNodeProps : PetitDom.Props<HTMLFormElement>
+>jsxNode.props as PetitDom.Props<HTMLFormElement> : PetitDom.Props<HTMLFormElement>
+>jsxNode.props : PetitDom.Props<HTMLFormElement>
+>jsxNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>props : PetitDom.Props<HTMLFormElement>
+>PetitDom : any
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual(jsxNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>isSVG : boolean
+>false : false
+
+    assertEqual(jsxNodeType, "form");
+>assertEqual(jsxNodeType, "form") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : string
+>"form" : "form"
+
+    assertEqual(jsxNode.key, 1);
+>assertEqual(jsxNode.key, 1) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>key : string | number | null
+>1 : 1
+
+    assertEqual(jsxNodeProps.method, "POST");
+>assertEqual(jsxNodeProps.method, "POST") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.method : string | undefined
+>jsxNodeProps : PetitDom.Props<HTMLFormElement>
+>method : string | undefined
+>"POST" : "POST"
+
+    assertEqual(jsxNodeProps.onsubmit, eventHandler);
+>assertEqual(jsxNodeProps.onsubmit, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.onsubmit : ((this: GlobalEventHandlers, ev: Event) => any) | null | undefined
+>jsxNodeProps : PetitDom.Props<HTMLFormElement>
+>onsubmit : ((this: GlobalEventHandlers, ev: Event) => any) | null | undefined
+>eventHandler : (event: Event) => void
+
+    assertEqual(jsxNode.content.length, 2);
+>assertEqual(jsxNode.content.length, 2) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.ElementNode<"form", HTMLFormElement>
+>content : readonly PetitDom.VNode[]
+>length : number
+>2 : 2
+}
+
+/**
+ * Create an <svg> element with a child element, using HyperScript syntax and JSX syntax
+ */
+export function testSvgElementWithChild() {
+>testSvgElementWithChild : () => void
+
+    // HyperScript syntax returns an ElementNode<T> object, with typed properties
+    const svgNode = h("svg", { key: 2, currentScale: 1 }, h("path"));
+>svgNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>h("svg", { key: 2, currentScale: 1 }, h("path")) : PetitDom.ElementNode<"svg", SVGSVGElement>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>"svg" : "svg"
+>{ key: 2, currentScale: 1 } : { key: number; currentScale: number; }
+>key : number
+>2 : 2
+>currentScale : number
+>1 : 1
+>h("path") : PetitDom.ElementNode<"path", SVGPathElement>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>"path" : "path"
+
+    assertEqual(svgNode.isSVG, true);
+>assertEqual(svgNode.isSVG, true) : void
+>assertEqual : <T>(a: T, b: T) => void
+>svgNode.isSVG : boolean
+>svgNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>isSVG : boolean
+>true : true
+
+    assertEqual(svgNode.type, "svg");
+>assertEqual(svgNode.type, "svg") : void
+>assertEqual : <T>(a: T, b: T) => void
+>svgNode.type : "svg"
+>svgNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>type : "svg"
+>"svg" : "svg"
+
+    assertEqual(svgNode.key, 2);
+>assertEqual(svgNode.key, 2) : void
+>assertEqual : <T>(a: T, b: T) => void
+>svgNode.key : string | number | null
+>svgNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>key : string | number | null
+>2 : 2
+
+    assertEqual(svgNode.props.currentScale, 1);
+>assertEqual(svgNode.props.currentScale, 1) : void
+>assertEqual : <T>(a: T, b: T) => void
+>svgNode.props.currentScale : number | undefined
+>svgNode.props : PetitDom.Props<SVGSVGElement>
+>svgNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>props : PetitDom.Props<SVGSVGElement>
+>currentScale : number | undefined
+>1 : 1
+
+    assertEqual(svgNode.content.length, 1);
+>assertEqual(svgNode.content.length, 1) : void
+>assertEqual : <T>(a: T, b: T) => void
+>svgNode.content.length : number
+>svgNode.content : readonly PetitDom.VNode[]
+>svgNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>content : readonly PetitDom.VNode[]
+>length : number
+>1 : 1
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <svg key={2} currentScale={1}><path /></svg>;
+>jsxNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+><svg key={2} currentScale={1}><path /></svg> : PetitDom.ElementNode<"svg", SVGSVGElement>
+>svg : any
+>key : number
+>2 : 2
+>currentScale : number
+>1 : 1
+><path /> : PetitDom.ElementNode<"path", SVGPathElement>
+>path : any
+>svg : any
+
+    const jsxNodeType = jsxNode.type as string;
+>jsxNodeType : string
+>jsxNode.type as string : string
+>jsxNode.type : "svg"
+>jsxNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>type : "svg"
+
+    const jsxNodeProps = jsxNode.props as PetitDom.Props<SVGSVGElement>;
+>jsxNodeProps : PetitDom.Props<SVGSVGElement>
+>jsxNode.props as PetitDom.Props<SVGSVGElement> : PetitDom.Props<SVGSVGElement>
+>jsxNode.props : PetitDom.Props<SVGSVGElement>
+>jsxNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>props : PetitDom.Props<SVGSVGElement>
+>PetitDom : any
+
+    assertEqual(jsxNode.isSVG, true);
+>assertEqual(jsxNode.isSVG, true) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>isSVG : boolean
+>true : true
+
+    assertEqual(jsxNodeType, "svg");
+>assertEqual(jsxNodeType, "svg") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : string
+>"svg" : "svg"
+
+    assertEqual(jsxNode.key, 2);
+>assertEqual(jsxNode.key, 2) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>key : string | number | null
+>2 : 2
+
+    assertEqual(jsxNodeProps.currentScale, 1);
+>assertEqual(jsxNodeProps.currentScale, 1) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.currentScale : number | undefined
+>jsxNodeProps : PetitDom.Props<SVGSVGElement>
+>currentScale : number | undefined
+>1 : 1
+
+    assertEqual(jsxNode.content.length, 1);
+>assertEqual(jsxNode.content.length, 1) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.ElementNode<"svg", SVGSVGElement>
+>content : readonly PetitDom.VNode[]
+>length : number
+>1 : 1
+}
+
+/**
+ * Create a function component, using HyperScript syntax and JSX syntax
+ */
+export function testFunctionComponent() {
+>testFunctionComponent : () => void
+
+    function FunctionComponent(): JSX.Element {
+>FunctionComponent : () => JSX.Element
+>JSX : any
+
+        return <div>Hello World</div>;
+><div>Hello World</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>div : any
+    }
+
+    // HyperScript syntax returns a FunctionComponentNode<T> object, with typed properties
+    const node = h(FunctionComponent, { key: "1" });
+>node : PetitDom.FunctionComponentNode<any>
+>h(FunctionComponent, { key: "1" }) : PetitDom.FunctionComponentNode<any>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>FunctionComponent : () => JSX.Element
+>{ key: "1" } : { key: string; }
+>key : string
+>"1" : "1"
+
+    assertEqual(node.isSVG, false);
+>assertEqual(node.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.isSVG : boolean
+>node : PetitDom.FunctionComponentNode<any>
+>isSVG : boolean
+>false : false
+
+    assertEqual(node.type, FunctionComponent);
+>assertEqual(node.type, FunctionComponent) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.type : PetitDom.FunctionComponent<any>
+>node : PetitDom.FunctionComponentNode<any>
+>type : PetitDom.FunctionComponent<any>
+>FunctionComponent : () => JSX.Element
+
+    assertEqual(node.key, "1");
+>assertEqual(node.key, "1") : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.key : string | number | null
+>node : PetitDom.FunctionComponentNode<any>
+>key : string | number | null
+>"1" : "1"
+
+    assertEqual(node.props.key, "1");
+>assertEqual(node.props.key, "1") : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.key : any
+>node.props : any
+>node : PetitDom.FunctionComponentNode<any>
+>props : any
+>key : any
+>"1" : "1"
+
+    assertEqual(node.content.length, 0);
+>assertEqual(node.content.length, 0) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.content.length : number
+>node.content : readonly PetitDom.VNode[]
+>node : PetitDom.FunctionComponentNode<any>
+>content : readonly PetitDom.VNode[]
+>length : number
+>0 : 0
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <FunctionComponent key="1" />;
+>jsxNode : PetitDom.FunctionComponentNode<any>
+><FunctionComponent key="1" /> : PetitDom.FunctionComponentNode<any>
+>FunctionComponent : () => JSX.Element
+>key : string
+
+    const jsxNodeType = jsxNode.type as PetitDom.FunctionComponent<{}>;
+>jsxNodeType : PetitDom.FunctionComponent<{}>
+>jsxNode.type as PetitDom.FunctionComponent<{}> : PetitDom.FunctionComponent<{}>
+>jsxNode.type : PetitDom.FunctionComponent<any>
+>jsxNode : PetitDom.FunctionComponentNode<any>
+>type : PetitDom.FunctionComponent<any>
+>PetitDom : any
+
+    const jsxNodeProps = jsxNode.props as PetitDom.IntrinsicProps;
+>jsxNodeProps : PetitDom.IntrinsicProps
+>jsxNode.props as PetitDom.IntrinsicProps : PetitDom.IntrinsicProps
+>jsxNode.props : any
+>jsxNode : PetitDom.FunctionComponentNode<any>
+>props : any
+>PetitDom : any
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual(jsxNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.FunctionComponentNode<any>
+>isSVG : boolean
+>false : false
+
+    assertEqual(jsxNodeType, FunctionComponent);
+>assertEqual(jsxNodeType, FunctionComponent) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : PetitDom.FunctionComponent<{}>
+>FunctionComponent : () => JSX.Element
+
+    assertEqual(jsxNode.key, "1");
+>assertEqual(jsxNode.key, "1") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.FunctionComponentNode<any>
+>key : string | number | null
+>"1" : "1"
+
+    assertEqual(jsxNodeProps.key, "1");
+>assertEqual(jsxNodeProps.key, "1") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.key : string | number | undefined
+>jsxNodeProps : PetitDom.IntrinsicProps
+>key : string | number | undefined
+>"1" : "1"
+
+    assertEqual(jsxNode.content.length, 0);
+>assertEqual(jsxNode.content.length, 0) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.FunctionComponentNode<any>
+>content : readonly PetitDom.VNode[]
+>length : number
+>0 : 0
+}
+
+/**
+ * Create a function component with props, using HyperScript syntax and JSX syntax
+ */
+export function testFunctionComponentWithProps() {
+>testFunctionComponentWithProps : () => void
+
+    function FunctionComponentWithProps(props: CustomProps): JSX.Element {
+>FunctionComponentWithProps : (props: CustomProps) => JSX.Element
+>props : CustomProps
+>JSX : any
+
+        const { name, count, onSomeEvent } = props;
+>name : string
+>count : number
+>onSomeEvent : (event: Event) => void
+>props : CustomProps
+
+        return <div className={name} tabIndex={count} onclick={onSomeEvent}></div>;
+><div className={name} tabIndex={count} onclick={onSomeEvent}></div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>className : string
+>name : string
+>tabIndex : number
+>count : number
+>onclick : (event: Event) => void
+>onSomeEvent : (event: Event) => void
+>div : any
+    }
+
+    // HyperScript syntax returns a FunctionComponentNode<T> object, with typed properties
+    const node = h(FunctionComponentWithProps, { name: "xyz", count: 123, onSomeEvent: eventHandler });
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>h(FunctionComponentWithProps, { name: "xyz", count: 123, onSomeEvent: eventHandler }) : PetitDom.FunctionComponentNode<CustomProps>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>FunctionComponentWithProps : (props: CustomProps) => JSX.Element
+>{ name: "xyz", count: 123, onSomeEvent: eventHandler } : { name: string; count: number; onSomeEvent: (event: Event) => void; }
+>name : string
+>"xyz" : "xyz"
+>count : number
+>123 : 123
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(node.isSVG, false);
+>assertEqual(node.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.isSVG : boolean
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>isSVG : boolean
+>false : false
+
+    assertEqual(node.type, FunctionComponentWithProps);
+>assertEqual(node.type, FunctionComponentWithProps) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.type : PetitDom.FunctionComponent<CustomProps>
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>type : PetitDom.FunctionComponent<CustomProps>
+>FunctionComponentWithProps : (props: CustomProps) => JSX.Element
+
+    assertEqual(node.key, null);
+>assertEqual(node.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.key : string | number | null
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>key : string | number | null
+>null : null
+
+    assertEqual(node.props.name, "xyz");
+>assertEqual(node.props.name, "xyz") : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.name : string
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>name : string
+>"xyz" : "xyz"
+
+    assertEqual(node.props.count, 123);
+>assertEqual(node.props.count, 123) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.count : number
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>count : number
+>123 : 123
+
+    assertEqual(node.props.onSomeEvent, eventHandler);
+>assertEqual(node.props.onSomeEvent, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.onSomeEvent : (event: Event) => void
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(node.content.length, 0);
+>assertEqual(node.content.length, 0) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.content.length : number
+>node.content : readonly PetitDom.VNode[]
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>content : readonly PetitDom.VNode[]
+>length : number
+>0 : 0
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <FunctionComponentWithProps name="xyz" count={123} onSomeEvent={eventHandler} />;
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+><FunctionComponentWithProps name="xyz" count={123} onSomeEvent={eventHandler} /> : PetitDom.FunctionComponentNode<CustomProps>
+>FunctionComponentWithProps : (props: CustomProps) => JSX.Element
+>name : string
+>count : number
+>123 : 123
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    const jsxNodeType = jsxNode.type as PetitDom.FunctionComponent<CustomProps>;
+>jsxNodeType : PetitDom.FunctionComponent<CustomProps>
+>jsxNode.type as PetitDom.FunctionComponent<CustomProps> : PetitDom.FunctionComponent<CustomProps>
+>jsxNode.type : PetitDom.FunctionComponent<CustomProps>
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>type : PetitDom.FunctionComponent<CustomProps>
+>PetitDom : any
+
+    const jsxNodeProps = jsxNode.props as CustomProps;
+>jsxNodeProps : CustomProps
+>jsxNode.props as CustomProps : CustomProps
+>jsxNode.props : CustomProps & PetitDom.IntrinsicProps
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual(jsxNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>isSVG : boolean
+>false : false
+
+    assertEqual(jsxNodeType, FunctionComponentWithProps);
+>assertEqual(jsxNodeType, FunctionComponentWithProps) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : PetitDom.FunctionComponent<CustomProps>
+>FunctionComponentWithProps : (props: CustomProps) => JSX.Element
+
+    assertEqual(jsxNode.key, null);
+>assertEqual(jsxNode.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>key : string | number | null
+>null : null
+
+    assertEqual(jsxNodeProps.name, "xyz");
+>assertEqual(jsxNodeProps.name, "xyz") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.name : string
+>jsxNodeProps : CustomProps
+>name : string
+>"xyz" : "xyz"
+
+    assertEqual(jsxNodeProps.count, 123);
+>assertEqual(jsxNodeProps.count, 123) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.count : number
+>jsxNodeProps : CustomProps
+>count : number
+>123 : 123
+
+    assertEqual(jsxNodeProps.onSomeEvent, eventHandler);
+>assertEqual(jsxNodeProps.onSomeEvent, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.onSomeEvent : (event: Event) => void
+>jsxNodeProps : CustomProps
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(jsxNode.content.length, 0);
+>assertEqual(jsxNode.content.length, 0) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>content : readonly PetitDom.VNode[]
+>length : number
+>0 : 0
+}
+
+/**
+ * Create a function component with child content, using HyperScript syntax and JSX syntax
+ */
+export function testFunctionComponentWithChildren() {
+>testFunctionComponentWithChildren : () => void
+
+    function FunctionComponentWithChildren(props: CustomProps, content: ReadonlyArray<PetitDom.Content>): JSX.Element {
+>FunctionComponentWithChildren : (props: CustomProps, content: readonly PetitDom.Content[]) => JSX.Element
+>props : CustomProps
+>content : readonly PetitDom.Content[]
+>PetitDom : any
+>JSX : any
+
+        const { name, count, onSomeEvent } = props;
+>name : string
+>count : number
+>onSomeEvent : (event: Event) => void
+>props : CustomProps
+
+        return <div className={name} tabIndex={count} onclick={onSomeEvent}>{content}</div>;
+><div className={name} tabIndex={count} onclick={onSomeEvent}>{content}</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>className : string
+>name : string
+>tabIndex : number
+>count : number
+>onclick : (event: Event) => void
+>onSomeEvent : (event: Event) => void
+>content : readonly PetitDom.Content[]
+>div : any
+    }
+
+    // HyperScript syntax returns a FunctionComponentNode<T> object, with typed properties
+    const node = h(
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>h(        FunctionComponentWithChildren,        { name: "xyz", count: 123, onSomeEvent: eventHandler },        "Hello",        h("span", null, "World")    ) : PetitDom.FunctionComponentNode<CustomProps>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+
+        FunctionComponentWithChildren,
+>FunctionComponentWithChildren : (props: CustomProps, content: readonly PetitDom.Content[]) => JSX.Element
+
+        { name: "xyz", count: 123, onSomeEvent: eventHandler },
+>{ name: "xyz", count: 123, onSomeEvent: eventHandler } : { name: string; count: number; onSomeEvent: (event: Event) => void; }
+>name : string
+>"xyz" : "xyz"
+>count : number
+>123 : 123
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+        "Hello",
+>"Hello" : "Hello"
+
+        h("span", null, "World")
+>h("span", null, "World") : PetitDom.ElementNode<"span", HTMLSpanElement>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>"span" : "span"
+>null : null
+>"World" : "World"
+
+    );
+
+    assertEqual(node.isSVG, false);
+>assertEqual(node.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.isSVG : boolean
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>isSVG : boolean
+>false : false
+
+    assertEqual(node.type, FunctionComponentWithChildren);
+>assertEqual(node.type, FunctionComponentWithChildren) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.type : PetitDom.FunctionComponent<CustomProps>
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>type : PetitDom.FunctionComponent<CustomProps>
+>FunctionComponentWithChildren : (props: CustomProps, content: readonly PetitDom.Content[]) => JSX.Element
+
+    assertEqual(node.key, null);
+>assertEqual(node.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.key : string | number | null
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>key : string | number | null
+>null : null
+
+    assertEqual(node.props.name, "xyz");
+>assertEqual(node.props.name, "xyz") : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.name : string
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>name : string
+>"xyz" : "xyz"
+
+    assertEqual(node.props.count, 123);
+>assertEqual(node.props.count, 123) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.count : number
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>count : number
+>123 : 123
+
+    assertEqual(node.props.onSomeEvent, eventHandler);
+>assertEqual(node.props.onSomeEvent, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.onSomeEvent : (event: Event) => void
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(node.content.length, 2);
+>assertEqual(node.content.length, 2) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.content.length : number
+>node.content : readonly PetitDom.VNode[]
+>node : PetitDom.FunctionComponentNode<CustomProps>
+>content : readonly PetitDom.VNode[]
+>length : number
+>2 : 2
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = (
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>(        <FunctionComponentWithChildren name="xyz" count={123} onSomeEvent={eventHandler}>            Hello <span>World</span>        </FunctionComponentWithChildren>    ) : PetitDom.FunctionComponentNode<CustomProps>
+
+        <FunctionComponentWithChildren name="xyz" count={123} onSomeEvent={eventHandler}>
+><FunctionComponentWithChildren name="xyz" count={123} onSomeEvent={eventHandler}>            Hello <span>World</span>        </FunctionComponentWithChildren> : PetitDom.FunctionComponentNode<CustomProps>
+>FunctionComponentWithChildren : (props: CustomProps, content: readonly PetitDom.Content[]) => JSX.Element
+>name : string
+>count : number
+>123 : 123
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+            Hello <span>World</span>
+><span>World</span> : PetitDom.ElementNode<"span", HTMLSpanElement>
+>span : any
+>span : any
+
+        </FunctionComponentWithChildren>
+>FunctionComponentWithChildren : (props: CustomProps, content: readonly PetitDom.Content[]) => JSX.Element
+
+    );
+    const jsxNodeType = jsxNode.type as PetitDom.FunctionComponent<CustomProps>;
+>jsxNodeType : PetitDom.FunctionComponent<CustomProps>
+>jsxNode.type as PetitDom.FunctionComponent<CustomProps> : PetitDom.FunctionComponent<CustomProps>
+>jsxNode.type : PetitDom.FunctionComponent<CustomProps>
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>type : PetitDom.FunctionComponent<CustomProps>
+>PetitDom : any
+
+    const jsxNodeProps = jsxNode.props as CustomProps;
+>jsxNodeProps : CustomProps
+>jsxNode.props as CustomProps : CustomProps
+>jsxNode.props : CustomProps & PetitDom.IntrinsicProps
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual(jsxNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>isSVG : boolean
+>false : false
+
+    assertEqual(jsxNodeType, FunctionComponentWithChildren);
+>assertEqual(jsxNodeType, FunctionComponentWithChildren) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : PetitDom.FunctionComponent<CustomProps>
+>FunctionComponentWithChildren : (props: CustomProps, content: readonly PetitDom.Content[]) => JSX.Element
+
+    assertEqual(jsxNode.key, null);
+>assertEqual(jsxNode.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>key : string | number | null
+>null : null
+
+    assertEqual(jsxNodeProps.name, "xyz");
+>assertEqual(jsxNodeProps.name, "xyz") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.name : string
+>jsxNodeProps : CustomProps
+>name : string
+>"xyz" : "xyz"
+
+    assertEqual(jsxNodeProps.count, 123);
+>assertEqual(jsxNodeProps.count, 123) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.count : number
+>jsxNodeProps : CustomProps
+>count : number
+>123 : 123
+
+    assertEqual(jsxNodeProps.onSomeEvent, eventHandler);
+>assertEqual(jsxNodeProps.onSomeEvent, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.onSomeEvent : (event: Event) => void
+>jsxNodeProps : CustomProps
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(jsxNode.content.length, 2);
+>assertEqual(jsxNode.content.length, 2) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.FunctionComponentNode<CustomProps>
+>content : readonly PetitDom.VNode[]
+>length : number
+>2 : 2
+}
+
+/**
+ * Create a component class, using HyperScript syntax and JSX syntax
+ */
+export function testComponentClass() {
+>testComponentClass : () => void
+
+    class ComponentClass {
+>ComponentClass : ComponentClass
+
+        props = {};
+>props : {}
+>{} : {}
+
+        mount(): Element {
+>mount : () => Element
+
+            return mount(<div className="some-class"></div>);
+>mount(<div className="some-class"></div>) : Element
+>mount : (vnode: PetitDom.VNode) => Element
+><div className="some-class"></div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>className : string
+>div : any
+        }
+
+        patch(element: Element, newProps: object, oldProps: object, newContent: ReadonlyArray<PetitDom.VNode>, oldContent: ReadonlyArray<PetitDom.VNode>): Element {
+>patch : (element: Element, newProps: object, oldProps: object, newContent: readonly PetitDom.VNode[], oldContent: readonly PetitDom.VNode[]) => Element
+>element : Element
+>newProps : object
+>oldProps : object
+>newContent : readonly PetitDom.VNode[]
+>PetitDom : any
+>oldContent : readonly PetitDom.VNode[]
+>PetitDom : any
+
+            patch(
+>patch(                <div {...oldProps}>{oldContent}</div>,                <div {...newProps}>{newContent}</div>            ) : Element
+>patch : (newVNode: PetitDom.VNode, oldVNode: PetitDom.VNode, parent?: Element | undefined) => Element
+
+                <div {...oldProps}>{oldContent}</div>,
+><div {...oldProps}>{oldContent}</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>oldProps : object
+>oldContent : readonly PetitDom.VNode[]
+>div : any
+
+                <div {...newProps}>{newContent}</div>
+><div {...newProps}>{newContent}</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>newProps : object
+>newContent : readonly PetitDom.VNode[]
+>div : any
+
+            );
+            return element;
+>element : Element
+        }
+
+        unmount(element: Element): void {
+>unmount : (element: Element) => void
+>element : Element
+
+            unmount(<div>Hello World</div>);
+>unmount(<div>Hello World</div>) : void
+>unmount : (vnode: PetitDom.VNode) => void
+><div>Hello World</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>div : any
+        }
+    }
+
+    // HyperScript syntax returns a ComponentClassNode<T> object, with typed properties
+    const node = h(ComponentClass, { key: "1" });
+>node : PetitDom.ComponentClassNode<object>
+>h(ComponentClass, { key: "1" }) : PetitDom.ComponentClassNode<object>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>ComponentClass : typeof ComponentClass
+>{ key: "1" } : { key: string; }
+>key : string
+>"1" : "1"
+
+    assertEqual(node.isSVG, false);
+>assertEqual(node.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.isSVG : boolean
+>node : PetitDom.ComponentClassNode<object>
+>isSVG : boolean
+>false : false
+
+    assertEqual(node.type, ComponentClass);
+>assertEqual(node.type, ComponentClass) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.type : PetitDom.ComponentClass<object>
+>node : PetitDom.ComponentClassNode<object>
+>type : PetitDom.ComponentClass<object>
+>ComponentClass : typeof ComponentClass
+
+    assertEqual(node.key, "1");
+>assertEqual(node.key, "1") : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.key : string | number | null
+>node : PetitDom.ComponentClassNode<object>
+>key : string | number | null
+>"1" : "1"
+
+    assertEqual(node.props.key, "1");
+>assertEqual(node.props.key, "1") : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.key : string | number | undefined
+>node.props : object & PetitDom.IntrinsicProps
+>node : PetitDom.ComponentClassNode<object>
+>props : object & PetitDom.IntrinsicProps
+>key : string | number | undefined
+>"1" : "1"
+
+    assertEqual(node.content.length, 0);
+>assertEqual(node.content.length, 0) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.content.length : number
+>node.content : readonly PetitDom.VNode[]
+>node : PetitDom.ComponentClassNode<object>
+>content : readonly PetitDom.VNode[]
+>length : number
+>0 : 0
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <ComponentClass key="1" />;
+>jsxNode : PetitDom.ComponentClassNode<object>
+><ComponentClass key="1" /> : PetitDom.ComponentClassNode<object>
+>ComponentClass : typeof ComponentClass
+>key : string
+
+    const jsxNodeType = jsxNode.type as PetitDom.ComponentClass<{}>;
+>jsxNodeType : PetitDom.ComponentClass<{}>
+>jsxNode.type as PetitDom.ComponentClass<{}> : PetitDom.ComponentClass<{}>
+>jsxNode.type : PetitDom.ComponentClass<object>
+>jsxNode : PetitDom.ComponentClassNode<object>
+>type : PetitDom.ComponentClass<object>
+>PetitDom : any
+
+    const jsxNodeProps = jsxNode.props as PetitDom.IntrinsicProps;
+>jsxNodeProps : PetitDom.IntrinsicProps
+>jsxNode.props as PetitDom.IntrinsicProps : PetitDom.IntrinsicProps
+>jsxNode.props : object & PetitDom.IntrinsicProps
+>jsxNode : PetitDom.ComponentClassNode<object>
+>props : object & PetitDom.IntrinsicProps
+>PetitDom : any
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual(jsxNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.ComponentClassNode<object>
+>isSVG : boolean
+>false : false
+
+    assertEqual(jsxNodeType, ComponentClass);
+>assertEqual(jsxNodeType, ComponentClass) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : PetitDom.ComponentClass<{}>
+>ComponentClass : typeof ComponentClass
+
+    assertEqual(jsxNode.key, "1");
+>assertEqual(jsxNode.key, "1") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.ComponentClassNode<object>
+>key : string | number | null
+>"1" : "1"
+
+    assertEqual(jsxNodeProps.key, "1");
+>assertEqual(jsxNodeProps.key, "1") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.key : string | number | undefined
+>jsxNodeProps : PetitDom.IntrinsicProps
+>key : string | number | undefined
+>"1" : "1"
+
+    assertEqual(jsxNode.content.length, 0);
+>assertEqual(jsxNode.content.length, 0) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.ComponentClassNode<object>
+>content : readonly PetitDom.VNode[]
+>length : number
+>0 : 0
+}
+
+/**
+ * Create a component class with props, using HyperScript syntax and JSX syntax
+ */
+export function testComponentClassWithProps() {
+>testComponentClassWithProps : () => void
+
+    class ComponentClassWithProps {
+>ComponentClassWithProps : ComponentClassWithProps
+
+        props: CustomProps;
+>props : CustomProps
+
+        constructor(props: CustomProps) {
+>props : CustomProps
+
+            this.props = props;
+>this.props = props : CustomProps
+>this.props : CustomProps
+>this : this
+>props : CustomProps
+>props : CustomProps
+        }
+
+        mount(props: CustomProps): Element {
+>mount : (props: CustomProps) => Element
+>props : CustomProps
+
+            const { name, count, onSomeEvent } = props;
+>name : string
+>count : number
+>onSomeEvent : (event: Event) => void
+>props : CustomProps
+
+            return mount(<div className={name} tabIndex={count} onclick={onSomeEvent} />);
+>mount(<div className={name} tabIndex={count} onclick={onSomeEvent} />) : Element
+>mount : (vnode: PetitDom.VNode) => Element
+><div className={name} tabIndex={count} onclick={onSomeEvent} /> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>className : string
+>name : string
+>tabIndex : number
+>count : number
+>onclick : (event: Event) => void
+>onSomeEvent : (event: Event) => void
+        }
+
+        patch(element: Element, newProps: CustomProps, oldProps: CustomProps, newContent: ReadonlyArray<PetitDom.VNode>, oldContent: ReadonlyArray<PetitDom.VNode>): Element {
+>patch : (element: Element, newProps: CustomProps, oldProps: CustomProps, newContent: readonly PetitDom.VNode[], oldContent: readonly PetitDom.VNode[]) => Element
+>element : Element
+>newProps : CustomProps
+>oldProps : CustomProps
+>newContent : readonly PetitDom.VNode[]
+>PetitDom : any
+>oldContent : readonly PetitDom.VNode[]
+>PetitDom : any
+
+            patch(
+>patch(                <div {...oldProps}>{oldContent}</div>,                <div {...newProps}>{newContent}</div>            ) : Element
+>patch : (newVNode: PetitDom.VNode, oldVNode: PetitDom.VNode, parent?: Element | undefined) => Element
+
+                <div {...oldProps}>{oldContent}</div>,
+><div {...oldProps}>{oldContent}</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>oldProps : CustomProps
+>oldContent : readonly PetitDom.VNode[]
+>div : any
+
+                <div {...newProps}>{newContent}</div>
+><div {...newProps}>{newContent}</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>newProps : CustomProps
+>newContent : readonly PetitDom.VNode[]
+>div : any
+
+            );
+            return element;
+>element : Element
+        }
+
+        unmount(element: Element): void {
+>unmount : (element: Element) => void
+>element : Element
+
+            unmount(<div> Hello World</div >);
+>unmount(<div> Hello World</div >) : void
+>unmount : (vnode: PetitDom.VNode) => void
+><div> Hello World</div > : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>div : any
+        }
+    }
+
+    // HyperScript syntax returns a ComponentClassNode<T> object, with typed properties
+    const node = h(ComponentClassWithProps, { name: "xyz", count: 123, onSomeEvent: eventHandler });
+>node : PetitDom.ComponentClassNode<CustomProps>
+>h(ComponentClassWithProps, { name: "xyz", count: 123, onSomeEvent: eventHandler }) : PetitDom.ComponentClassNode<CustomProps>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>ComponentClassWithProps : typeof ComponentClassWithProps
+>{ name: "xyz", count: 123, onSomeEvent: eventHandler } : { name: string; count: number; onSomeEvent: (event: Event) => void; }
+>name : string
+>"xyz" : "xyz"
+>count : number
+>123 : 123
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(node.isSVG, false);
+>assertEqual(node.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.isSVG : boolean
+>node : PetitDom.ComponentClassNode<CustomProps>
+>isSVG : boolean
+>false : false
+
+    assertEqual(node.type, ComponentClassWithProps);
+>assertEqual(node.type, ComponentClassWithProps) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.type : PetitDom.ComponentClass<CustomProps>
+>node : PetitDom.ComponentClassNode<CustomProps>
+>type : PetitDom.ComponentClass<CustomProps>
+>ComponentClassWithProps : typeof ComponentClassWithProps
+
+    assertEqual(node.key, null);
+>assertEqual(node.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.key : string | number | null
+>node : PetitDom.ComponentClassNode<CustomProps>
+>key : string | number | null
+>null : null
+
+    assertEqual(node.props.name, "xyz");
+>assertEqual(node.props.name, "xyz") : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.name : string
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.ComponentClassNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>name : string
+>"xyz" : "xyz"
+
+    assertEqual(node.props.count, 123);
+>assertEqual(node.props.count, 123) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.count : number
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.ComponentClassNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>count : number
+>123 : 123
+
+    assertEqual(node.props.onSomeEvent, eventHandler);
+>assertEqual(node.props.onSomeEvent, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.onSomeEvent : (event: Event) => void
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.ComponentClassNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(node.content.length, 0);
+>assertEqual(node.content.length, 0) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.content.length : number
+>node.content : readonly PetitDom.VNode[]
+>node : PetitDom.ComponentClassNode<CustomProps>
+>content : readonly PetitDom.VNode[]
+>length : number
+>0 : 0
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <ComponentClassWithProps name="xyz" count={123} onSomeEvent={eventHandler} />;
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+><ComponentClassWithProps name="xyz" count={123} onSomeEvent={eventHandler} /> : PetitDom.ComponentClassNode<CustomProps>
+>ComponentClassWithProps : typeof ComponentClassWithProps
+>name : string
+>count : number
+>123 : 123
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    const jsxNodeType = jsxNode.type as PetitDom.ComponentClass<CustomProps>;
+>jsxNodeType : PetitDom.ComponentClass<CustomProps>
+>jsxNode.type as PetitDom.ComponentClass<CustomProps> : PetitDom.ComponentClass<CustomProps>
+>jsxNode.type : PetitDom.ComponentClass<CustomProps>
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>type : PetitDom.ComponentClass<CustomProps>
+>PetitDom : any
+
+    const jsxNodeProps = jsxNode.props as CustomProps;
+>jsxNodeProps : CustomProps
+>jsxNode.props as CustomProps : CustomProps
+>jsxNode.props : CustomProps & PetitDom.IntrinsicProps
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual(jsxNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>isSVG : boolean
+>false : false
+
+    assertEqual(jsxNodeType, ComponentClassWithProps);
+>assertEqual(jsxNodeType, ComponentClassWithProps) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : PetitDom.ComponentClass<CustomProps>
+>ComponentClassWithProps : typeof ComponentClassWithProps
+
+    assertEqual(jsxNode.key, null);
+>assertEqual(jsxNode.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>key : string | number | null
+>null : null
+
+    assertEqual(jsxNodeProps.name, "xyz");
+>assertEqual(jsxNodeProps.name, "xyz") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.name : string
+>jsxNodeProps : CustomProps
+>name : string
+>"xyz" : "xyz"
+
+    assertEqual(jsxNodeProps.count, 123);
+>assertEqual(jsxNodeProps.count, 123) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.count : number
+>jsxNodeProps : CustomProps
+>count : number
+>123 : 123
+
+    assertEqual(jsxNodeProps.onSomeEvent, eventHandler);
+>assertEqual(jsxNodeProps.onSomeEvent, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.onSomeEvent : (event: Event) => void
+>jsxNodeProps : CustomProps
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(jsxNode.content.length, 0);
+>assertEqual(jsxNode.content.length, 0) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>content : readonly PetitDom.VNode[]
+>length : number
+>0 : 0
+}
+
+/**
+ * Create a component class with child content, using HyperScript syntax and JSX syntax
+ */
+export function testComponentClassWithChildren() {
+>testComponentClassWithChildren : () => void
+
+    class ComponentClassWithChildren {
+>ComponentClassWithChildren : ComponentClassWithChildren
+
+        props: CustomProps;
+>props : CustomProps
+
+        constructor(props: CustomProps) {
+>props : CustomProps
+
+            this.props = props;
+>this.props = props : CustomProps
+>this.props : CustomProps
+>this : this
+>props : CustomProps
+>props : CustomProps
+        }
+
+        mount(props: CustomProps, content: ReadonlyArray<PetitDom.Content>): Element {
+>mount : (props: CustomProps, content: readonly PetitDom.Content[]) => Element
+>props : CustomProps
+>content : readonly PetitDom.Content[]
+>PetitDom : any
+
+            const { name, count, onSomeEvent } = props;
+>name : string
+>count : number
+>onSomeEvent : (event: Event) => void
+>props : CustomProps
+
+            return mount(
+>mount(                <div className={name} tabIndex={count} onclick={onSomeEvent}>{content}</div>            ) : Element
+>mount : (vnode: PetitDom.VNode) => Element
+
+                <div className={name} tabIndex={count} onclick={onSomeEvent}>{content}</div>
+><div className={name} tabIndex={count} onclick={onSomeEvent}>{content}</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>className : string
+>name : string
+>tabIndex : number
+>count : number
+>onclick : (event: Event) => void
+>onSomeEvent : (event: Event) => void
+>content : readonly PetitDom.Content[]
+>div : any
+
+            );
+        }
+
+        patch(element: Element, newProps: CustomProps, oldProps: CustomProps, newContent: ReadonlyArray<PetitDom.VNode>, oldContent: ReadonlyArray<PetitDom.VNode>): Element {
+>patch : (element: Element, newProps: CustomProps, oldProps: CustomProps, newContent: readonly PetitDom.VNode[], oldContent: readonly PetitDom.VNode[]) => Element
+>element : Element
+>newProps : CustomProps
+>oldProps : CustomProps
+>newContent : readonly PetitDom.VNode[]
+>PetitDom : any
+>oldContent : readonly PetitDom.VNode[]
+>PetitDom : any
+
+            patch(
+>patch(                <div {...oldProps}>{oldContent}</div>,                <div {...newProps}>{newContent}</div>            ) : Element
+>patch : (newVNode: PetitDom.VNode, oldVNode: PetitDom.VNode, parent?: Element | undefined) => Element
+
+                <div {...oldProps}>{oldContent}</div>,
+><div {...oldProps}>{oldContent}</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>oldProps : CustomProps
+>oldContent : readonly PetitDom.VNode[]
+>div : any
+
+                <div {...newProps}>{newContent}</div>
+><div {...newProps}>{newContent}</div> : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>newProps : CustomProps
+>newContent : readonly PetitDom.VNode[]
+>div : any
+
+            );
+            return element;
+>element : Element
+        }
+
+        unmount(element: Element): void {
+>unmount : (element: Element) => void
+>element : Element
+
+            unmount(<div> Hello World</div >);
+>unmount(<div> Hello World</div >) : void
+>unmount : (vnode: PetitDom.VNode) => void
+><div> Hello World</div > : PetitDom.ElementNode<"div", HTMLDivElement>
+>div : any
+>div : any
+        }
+    }
+
+    // HyperScript syntax returns a ComponentClassNode<T> object, with typed properties
+    const node = h(
+>node : PetitDom.ComponentClassNode<CustomProps>
+>h(        ComponentClassWithChildren,        { name: "xyz", count: 123, onSomeEvent: eventHandler },        "Hello",        h("span", null, "World")    ) : PetitDom.ComponentClassNode<CustomProps>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+
+        ComponentClassWithChildren,
+>ComponentClassWithChildren : typeof ComponentClassWithChildren
+
+        { name: "xyz", count: 123, onSomeEvent: eventHandler },
+>{ name: "xyz", count: 123, onSomeEvent: eventHandler } : { name: string; count: number; onSomeEvent: (event: Event) => void; }
+>name : string
+>"xyz" : "xyz"
+>count : number
+>123 : 123
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+        "Hello",
+>"Hello" : "Hello"
+
+        h("span", null, "World")
+>h("span", null, "World") : PetitDom.ElementNode<"span", HTMLSpanElement>
+>h : { <T extends "symbol" | "object" | "a" | "abbr" | "address" | "applet" | "area" | "article" | "aside" | "audio" | "b" | "base" | "basefont" | "bdi" | "bdo" | "blockquote" | "body" | "br" | "button" | "canvas" | "caption" | "cite" | "code" | "col" | "colgroup" | "data" | "datalist" | "dd" | "del" | "details" | "dfn" | "dialog" | "dir" | "div" | "dl" | "dt" | "em" | "embed" | "fieldset" | "figcaption" | "figure" | "font" | "footer" | "form" | "frame" | "frameset" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "head" | "header" | "hgroup" | "hr" | "html" | "i" | "iframe" | "img" | "input" | "ins" | "kbd" | "label" | "legend" | "li" | "link" | "main" | "map" | "mark" | "marquee" | "menu" | "meta" | "meter" | "nav" | "noscript" | "ol" | "optgroup" | "option" | "output" | "p" | "param" | "picture" | "pre" | "progress" | "q" | "rp" | "rt" | "ruby" | "s" | "samp" | "script" | "section" | "select" | "slot" | "small" | "source" | "span" | "strong" | "style" | "sub" | "summary" | "sup" | "table" | "tbody" | "td" | "template" | "textarea" | "tfoot" | "th" | "thead" | "time" | "title" | "tr" | "track" | "u" | "ul" | "var" | "video" | "wbr" | "circle" | "clipPath" | "defs" | "desc" | "ellipse" | "feBlend" | "feColorMatrix" | "feComponentTransfer" | "feComposite" | "feConvolveMatrix" | "feDiffuseLighting" | "feDisplacementMap" | "feDistantLight" | "feFlood" | "feFuncA" | "feFuncB" | "feFuncG" | "feFuncR" | "feGaussianBlur" | "feImage" | "feMerge" | "feMergeNode" | "feMorphology" | "feOffset" | "fePointLight" | "feSpecularLighting" | "feSpotLight" | "feTile" | "feTurbulence" | "filter" | "foreignObject" | "g" | "image" | "line" | "linearGradient" | "marker" | "mask" | "metadata" | "path" | "pattern" | "polygon" | "polyline" | "radialGradient" | "rect" | "stop" | "svg" | "switch" | "text" | "textPath" | "tspan" | "use" | "view", E extends ElementTagNameMap[T]>(type: T, props?: PetitDom.Props<E> | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ElementNode<T, E>; <P extends object = object>(type: PetitDom.Component<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentNode<P>; <P extends object = object>(type: PetitDom.ComponentClass<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.ComponentClassNode<P>; <P extends object = object>(type: PetitDom.FunctionComponent<P>, props?: (P & PetitDom.IntrinsicProps) | null | undefined, ...children: readonly PetitDom.Content[]): PetitDom.FunctionComponentNode<P>; }
+>"span" : "span"
+>null : null
+>"World" : "World"
+
+    );
+
+    assertEqual(node.isSVG, false);
+>assertEqual(node.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.isSVG : boolean
+>node : PetitDom.ComponentClassNode<CustomProps>
+>isSVG : boolean
+>false : false
+
+    assertEqual(node.type, ComponentClassWithChildren);
+>assertEqual(node.type, ComponentClassWithChildren) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.type : PetitDom.ComponentClass<CustomProps>
+>node : PetitDom.ComponentClassNode<CustomProps>
+>type : PetitDom.ComponentClass<CustomProps>
+>ComponentClassWithChildren : typeof ComponentClassWithChildren
+
+    assertEqual(node.key, null);
+>assertEqual(node.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.key : string | number | null
+>node : PetitDom.ComponentClassNode<CustomProps>
+>key : string | number | null
+>null : null
+
+    assertEqual(node.props.name, "xyz");
+>assertEqual(node.props.name, "xyz") : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.name : string
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.ComponentClassNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>name : string
+>"xyz" : "xyz"
+
+    assertEqual(node.props.count, 123);
+>assertEqual(node.props.count, 123) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.count : number
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.ComponentClassNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>count : number
+>123 : 123
+
+    assertEqual(node.props.onSomeEvent, eventHandler);
+>assertEqual(node.props.onSomeEvent, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.props.onSomeEvent : (event: Event) => void
+>node.props : CustomProps & PetitDom.IntrinsicProps
+>node : PetitDom.ComponentClassNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(node.content.length, 2);
+>assertEqual(node.content.length, 2) : void
+>assertEqual : <T>(a: T, b: T) => void
+>node.content.length : number
+>node.content : readonly PetitDom.VNode[]
+>node : PetitDom.ComponentClassNode<CustomProps>
+>content : readonly PetitDom.VNode[]
+>length : number
+>2 : 2
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = (
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>(        <ComponentClassWithChildren name="xyz" count={123} onSomeEvent={eventHandler}>            Hello <span>World</span>        </ComponentClassWithChildren>    ) : PetitDom.ComponentClassNode<CustomProps>
+
+        <ComponentClassWithChildren name="xyz" count={123} onSomeEvent={eventHandler}>
+><ComponentClassWithChildren name="xyz" count={123} onSomeEvent={eventHandler}>            Hello <span>World</span>        </ComponentClassWithChildren> : PetitDom.ComponentClassNode<CustomProps>
+>ComponentClassWithChildren : typeof ComponentClassWithChildren
+>name : string
+>count : number
+>123 : 123
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+            Hello <span>World</span>
+><span>World</span> : PetitDom.ElementNode<"span", HTMLSpanElement>
+>span : any
+>span : any
+
+        </ComponentClassWithChildren>
+>ComponentClassWithChildren : typeof ComponentClassWithChildren
+
+    );
+    const jsxNodeType = jsxNode.type as PetitDom.ComponentClass<CustomProps>;
+>jsxNodeType : PetitDom.ComponentClass<CustomProps>
+>jsxNode.type as PetitDom.ComponentClass<CustomProps> : PetitDom.ComponentClass<CustomProps>
+>jsxNode.type : PetitDom.ComponentClass<CustomProps>
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>type : PetitDom.ComponentClass<CustomProps>
+>PetitDom : any
+
+    const jsxNodeProps = jsxNode.props as CustomProps;
+>jsxNodeProps : CustomProps
+>jsxNode.props as CustomProps : CustomProps
+>jsxNode.props : CustomProps & PetitDom.IntrinsicProps
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>props : CustomProps & PetitDom.IntrinsicProps
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual(jsxNode.isSVG, false) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.isSVG : boolean
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>isSVG : boolean
+>false : false
+
+    assertEqual(jsxNodeType, ComponentClassWithChildren);
+>assertEqual(jsxNodeType, ComponentClassWithChildren) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeType : PetitDom.ComponentClass<CustomProps>
+>ComponentClassWithChildren : typeof ComponentClassWithChildren
+
+    assertEqual(jsxNode.key, null);
+>assertEqual(jsxNode.key, null) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.key : string | number | null
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>key : string | number | null
+>null : null
+
+    assertEqual(jsxNodeProps.name, "xyz");
+>assertEqual(jsxNodeProps.name, "xyz") : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.name : string
+>jsxNodeProps : CustomProps
+>name : string
+>"xyz" : "xyz"
+
+    assertEqual(jsxNodeProps.count, 123);
+>assertEqual(jsxNodeProps.count, 123) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.count : number
+>jsxNodeProps : CustomProps
+>count : number
+>123 : 123
+
+    assertEqual(jsxNodeProps.onSomeEvent, eventHandler);
+>assertEqual(jsxNodeProps.onSomeEvent, eventHandler) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNodeProps.onSomeEvent : (event: Event) => void
+>jsxNodeProps : CustomProps
+>onSomeEvent : (event: Event) => void
+>eventHandler : (event: Event) => void
+
+    assertEqual(jsxNode.content.length, 2);
+>assertEqual(jsxNode.content.length, 2) : void
+>assertEqual : <T>(a: T, b: T) => void
+>jsxNode.content.length : number
+>jsxNode.content : readonly PetitDom.VNode[]
+>jsxNode : PetitDom.ComponentClassNode<CustomProps>
+>content : readonly PetitDom.VNode[]
+>length : number
+>2 : 2
+}
+

@@ -317,10 +317,11 @@ namespace ts {
     export function getSourceFileOfNode(node: Node): SourceFile;
     export function getSourceFileOfNode(node: Node | undefined): SourceFile | undefined;
     export function getSourceFileOfNode(node: Node): SourceFile {
+        const root = node;
         while (node && node.kind !== SyntaxKind.SourceFile) {
             node = node.parent;
         }
-        return <SourceFile>node;
+        return <SourceFile>node || (root && root.original && getSourceFileOfNode(root.original));
     }
 
     export function isStatementWithLocals(node: Node) {
@@ -938,6 +939,9 @@ namespace ts {
     }
 
     export function getErrorSpanForNode(sourceFile: SourceFile, node: Node): TextSpan {
+        while (node.original) {
+            node = node.original;
+        }
         let errorNode: Node | undefined = node;
         switch (node.kind) {
             case SyntaxKind.SourceFile:
@@ -3038,6 +3042,7 @@ namespace ts {
             case SyntaxKind.TemplateExpression:
             case SyntaxKind.ParenthesizedExpression:
             case SyntaxKind.OmittedExpression:
+            case SyntaxKind.SyntheticExpression:
                 return 20;
 
             default:

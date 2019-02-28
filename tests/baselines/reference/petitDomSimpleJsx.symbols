@@ -1,0 +1,2047 @@
+=== tests/cases/compiler/node_modules/petit-dom/index.d.ts ===
+// Modified type definitions for Petit-Dom 0.2
+// Project: https://github.com/yelouafi/petit-dom
+// Definitions by: James Messinger <https://github.com/JamesMessinger>, modified by @weswigham for testing
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 3.4
+
+/**
+ * Creates a VNode of the specified HTML Element type and with the
+ * specified properties and contents.
+ *
+ * @param type - The tag name of element to create
+ * @param props - Properties to set on the element
+ * @param ...children - Child nodes
+ * @returns A new VNode object
+ */
+export function h<T extends keyof ElementTagNameMap, E extends ElementTagNameMap[T]>(
+>h : Symbol(h, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 19, 30), Decl(index.d.ts, 33, 29), Decl(index.d.ts, 47, 34))
+>T : Symbol(T, Decl(index.d.ts, 15, 18))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>E : Symbol(E, Decl(index.d.ts, 15, 52))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>T : Symbol(T, Decl(index.d.ts, 15, 18))
+
+    type: T,
+>type : Symbol(type, Decl(index.d.ts, 15, 85))
+>T : Symbol(T, Decl(index.d.ts, 15, 18))
+
+    props?: PetitDom.Props<E> | null,
+>props : Symbol(props, Decl(index.d.ts, 16, 12))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Props : Symbol(PetitDom.Props, Decl(index.d.ts, 103, 5))
+>E : Symbol(E, Decl(index.d.ts, 15, 52))
+
+    ...children: ReadonlyArray<PetitDom.Content>
+>children : Symbol(children, Decl(index.d.ts, 17, 37))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Content : Symbol(PetitDom.Content, Decl(index.d.ts, 93, 60))
+
+): PetitDom.ElementNode<T, E>;
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ElementNode : Symbol(PetitDom.ElementNode, Decl(index.d.ts, 135, 5))
+>T : Symbol(T, Decl(index.d.ts, 15, 18))
+>E : Symbol(E, Decl(index.d.ts, 15, 52))
+
+/**
+ * Creates a VNode using a PetitDom component object.
+ *
+ * @param type - A PetitDom component object
+ * @param props - Properties to set on the component
+ * @param ...children - Child nodes
+ * @returns A new VNode object
+ */
+export function h<P extends PetitDom.ComponentProps = PetitDom.ComponentProps>(
+>h : Symbol(h, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 19, 30), Decl(index.d.ts, 33, 29), Decl(index.d.ts, 47, 34))
+>P : Symbol(P, Decl(index.d.ts, 29, 18))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentProps : Symbol(PetitDom.ComponentProps, Decl(index.d.ts, 91, 31))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentProps : Symbol(PetitDom.ComponentProps, Decl(index.d.ts, 91, 31))
+
+    type: PetitDom.Component<P>,
+>type : Symbol(type, Decl(index.d.ts, 29, 79))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Component : Symbol(PetitDom.Component, Decl(index.d.ts, 121, 5))
+>P : Symbol(P, Decl(index.d.ts, 29, 18))
+
+    props?: (P & PetitDom.IntrinsicProps) | null,
+>props : Symbol(props, Decl(index.d.ts, 30, 32))
+>P : Symbol(P, Decl(index.d.ts, 29, 18))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>IntrinsicProps : Symbol(PetitDom.IntrinsicProps, Decl(index.d.ts, 98, 6))
+
+    ...children: ReadonlyArray<PetitDom.Content>
+>children : Symbol(children, Decl(index.d.ts, 31, 49))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Content : Symbol(PetitDom.Content, Decl(index.d.ts, 93, 60))
+
+): PetitDom.ComponentNode<P>;
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentNode : Symbol(PetitDom.ComponentNode, Decl(index.d.ts, 140, 5))
+>P : Symbol(P, Decl(index.d.ts, 29, 18))
+
+/**
+ * Creates a VNode using a PetitDom component class.
+ *
+ * @param type - A PetitDom component class
+ * @param props - Properties to set on the component
+ * @param ...children - Child nodes
+ * @returns A new VNode object
+ */
+export function h<P extends PetitDom.ComponentProps = PetitDom.ComponentProps>(
+>h : Symbol(h, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 19, 30), Decl(index.d.ts, 33, 29), Decl(index.d.ts, 47, 34))
+>P : Symbol(P, Decl(index.d.ts, 43, 18))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentProps : Symbol(PetitDom.ComponentProps, Decl(index.d.ts, 91, 31))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentProps : Symbol(PetitDom.ComponentProps, Decl(index.d.ts, 91, 31))
+
+    type: PetitDom.ComponentClass<P>,
+>type : Symbol(type, Decl(index.d.ts, 43, 79))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentClass : Symbol(PetitDom.ComponentClass, Decl(index.d.ts, 117, 5))
+>P : Symbol(P, Decl(index.d.ts, 43, 18))
+
+    props?: (P & PetitDom.IntrinsicProps) | null,
+>props : Symbol(props, Decl(index.d.ts, 44, 37))
+>P : Symbol(P, Decl(index.d.ts, 43, 18))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>IntrinsicProps : Symbol(PetitDom.IntrinsicProps, Decl(index.d.ts, 98, 6))
+
+    ...children: ReadonlyArray<PetitDom.Content>
+>children : Symbol(children, Decl(index.d.ts, 45, 49))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Content : Symbol(PetitDom.Content, Decl(index.d.ts, 93, 60))
+
+): PetitDom.ComponentClassNode<P>;
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentClassNode : Symbol(PetitDom.ComponentClassNode, Decl(index.d.ts, 145, 5))
+>P : Symbol(P, Decl(index.d.ts, 43, 18))
+
+/**
+ * Creates a VNode using a PetitDom function component.
+ *
+ * This function is compatible with both JSX and HyperScript syntax.
+ *
+ * @param type - A PetitDom function component
+ * @param props - Properties to set on the component
+ * @param ...children - Child nodes
+ * @returns A new VNode object
+ */
+export function h<P extends PetitDom.ComponentProps = PetitDom.ComponentProps>(
+>h : Symbol(h, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 19, 30), Decl(index.d.ts, 33, 29), Decl(index.d.ts, 47, 34))
+>P : Symbol(P, Decl(index.d.ts, 59, 18))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentProps : Symbol(PetitDom.ComponentProps, Decl(index.d.ts, 91, 31))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentProps : Symbol(PetitDom.ComponentProps, Decl(index.d.ts, 91, 31))
+
+    type: PetitDom.FunctionComponent<P>,
+>type : Symbol(type, Decl(index.d.ts, 59, 79))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>FunctionComponent : Symbol(PetitDom.FunctionComponent, Decl(index.d.ts, 112, 17))
+>P : Symbol(P, Decl(index.d.ts, 59, 18))
+
+    props?: (P & PetitDom.IntrinsicProps) | null,
+>props : Symbol(props, Decl(index.d.ts, 60, 40))
+>P : Symbol(P, Decl(index.d.ts, 59, 18))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>IntrinsicProps : Symbol(PetitDom.IntrinsicProps, Decl(index.d.ts, 98, 6))
+
+    ...children: ReadonlyArray<PetitDom.Content>
+>children : Symbol(children, Decl(index.d.ts, 61, 49))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Content : Symbol(PetitDom.Content, Decl(index.d.ts, 93, 60))
+
+): PetitDom.FunctionComponentNode<P>;
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>FunctionComponentNode : Symbol(PetitDom.FunctionComponentNode, Decl(index.d.ts, 150, 5))
+>P : Symbol(P, Decl(index.d.ts, 59, 18))
+
+/**
+ * Creates actual DOM Elements for the given VNode and its children.
+ *
+ * @param vnode - The VNode object to mount
+ * @returns The newly-created DOM element
+ */
+export function mount(vnode: PetitDom.VNode): Element;
+>mount : Symbol(mount, Decl(index.d.ts, 63, 37))
+>vnode : Symbol(vnode, Decl(index.d.ts, 71, 22))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+/**
+ * Diffs two VNodes and applies the necessary DOM changes
+ *
+ * @param newVNode - The new VNode object, which will be mounted to the DOM element of oldVNode
+ * @param oldVNode - The old VNode object to diff against
+ * @param parent - The parent DOM element. Used internally by PetitDom to recursively patch child nodes
+ * @returns The updated DOM element. This element is also moved from oldVNode to newVNode
+ */
+export function patch(newVNode: PetitDom.VNode, oldVNode: PetitDom.VNode, parent?: Element): Element;
+>patch : Symbol(patch, Decl(index.d.ts, 71, 54))
+>newVNode : Symbol(newVNode, Decl(index.d.ts, 81, 22))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>oldVNode : Symbol(oldVNode, Decl(index.d.ts, 81, 47))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>parent : Symbol(parent, Decl(index.d.ts, 81, 73))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+/**
+ * Removes the given VNode from the actual DOM
+ *
+ * @param vnode - The VNode object to unmount
+ */
+export function unmount(vnode: PetitDom.VNode): void;
+>unmount : Symbol(unmount, Decl(index.d.ts, 81, 101))
+>vnode : Symbol(vnode, Decl(index.d.ts, 88, 24))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+
+export namespace PetitDom {
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+
+    type Key = string | number;
+>Key : Symbol(Key, Decl(index.d.ts, 90, 27))
+
+    type ComponentProps = object;
+>ComponentProps : Symbol(ComponentProps, Decl(index.d.ts, 91, 31))
+
+    interface ContentArray extends ReadonlyArray<Content> {}
+>ContentArray : Symbol(ContentArray, Decl(index.d.ts, 92, 33))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Content : Symbol(Content, Decl(index.d.ts, 93, 60))
+
+    type Content = string | VNode | ContentArray;
+>Content : Symbol(Content, Decl(index.d.ts, 93, 60))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+>ContentArray : Symbol(ContentArray, Decl(index.d.ts, 92, 33))
+
+    type DOMElementProps<E extends Element> = {
+>DOMElementProps : Symbol(DOMElementProps, Decl(index.d.ts, 94, 49))
+>E : Symbol(E, Decl(index.d.ts, 96, 25))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+        [P in keyof E]?: E[P];
+>P : Symbol(P, Decl(index.d.ts, 97, 9))
+>E : Symbol(E, Decl(index.d.ts, 96, 25))
+>E : Symbol(E, Decl(index.d.ts, 96, 25))
+>P : Symbol(P, Decl(index.d.ts, 97, 9))
+
+    };
+
+    interface IntrinsicProps {
+>IntrinsicProps : Symbol(IntrinsicProps, Decl(index.d.ts, 98, 6))
+
+        content?: Content | ReadonlyArray<Content>;
+>content : Symbol(IntrinsicProps.content, Decl(index.d.ts, 100, 30))
+>Content : Symbol(Content, Decl(index.d.ts, 93, 60))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Content : Symbol(Content, Decl(index.d.ts, 93, 60))
+
+        key?: Key;
+>key : Symbol(IntrinsicProps.key, Decl(index.d.ts, 101, 51))
+>Key : Symbol(Key, Decl(index.d.ts, 90, 27))
+    }
+
+    type Props<E extends Element = Element> = IntrinsicProps & DOMElementProps<E>;
+>Props : Symbol(Props, Decl(index.d.ts, 103, 5))
+>E : Symbol(E, Decl(index.d.ts, 105, 15))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>IntrinsicProps : Symbol(IntrinsicProps, Decl(index.d.ts, 98, 6))
+>DOMElementProps : Symbol(DOMElementProps, Decl(index.d.ts, 94, 49))
+>E : Symbol(E, Decl(index.d.ts, 105, 15))
+
+    type ShouldUpdate<P extends ComponentProps> = (
+>ShouldUpdate : Symbol(ShouldUpdate, Decl(index.d.ts, 105, 82))
+>P : Symbol(P, Decl(index.d.ts, 107, 22))
+>ComponentProps : Symbol(ComponentProps, Decl(index.d.ts, 91, 31))
+
+        newProps: P,
+>newProps : Symbol(newProps, Decl(index.d.ts, 107, 51))
+>P : Symbol(P, Decl(index.d.ts, 107, 22))
+
+        oldProps: P,
+>oldProps : Symbol(oldProps, Decl(index.d.ts, 108, 20))
+>P : Symbol(P, Decl(index.d.ts, 107, 22))
+
+        newContent: ReadonlyArray<VNode>,
+>newContent : Symbol(newContent, Decl(index.d.ts, 109, 20))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+
+        oldContent: ReadonlyArray<VNode>
+>oldContent : Symbol(oldContent, Decl(index.d.ts, 110, 41))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+
+    ) => boolean;
+
+    interface FunctionComponent<P extends ComponentProps> {
+>FunctionComponent : Symbol(FunctionComponent, Decl(index.d.ts, 112, 17))
+>P : Symbol(P, Decl(index.d.ts, 114, 32))
+>ComponentProps : Symbol(ComponentProps, Decl(index.d.ts, 91, 31))
+
+        (props: P, content: ReadonlyArray<Content>): FunctionComponentNode<P>;
+>props : Symbol(props, Decl(index.d.ts, 115, 9))
+>P : Symbol(P, Decl(index.d.ts, 114, 32))
+>content : Symbol(content, Decl(index.d.ts, 115, 18))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Content : Symbol(Content, Decl(index.d.ts, 93, 60))
+>FunctionComponentNode : Symbol(FunctionComponentNode, Decl(index.d.ts, 150, 5))
+>P : Symbol(P, Decl(index.d.ts, 114, 32))
+
+        shouldUpdate?: ShouldUpdate<P>;
+>shouldUpdate : Symbol(FunctionComponent.shouldUpdate, Decl(index.d.ts, 115, 78))
+>ShouldUpdate : Symbol(ShouldUpdate, Decl(index.d.ts, 105, 82))
+>P : Symbol(P, Decl(index.d.ts, 114, 32))
+    }
+
+    interface ComponentClass<P extends ComponentProps> {
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 117, 5))
+>P : Symbol(P, Decl(index.d.ts, 119, 29))
+>ComponentProps : Symbol(ComponentProps, Decl(index.d.ts, 91, 31))
+
+        new(props: P, content: ReadonlyArray<Content>): Component<P>;
+>props : Symbol(props, Decl(index.d.ts, 120, 12))
+>P : Symbol(P, Decl(index.d.ts, 119, 29))
+>content : Symbol(content, Decl(index.d.ts, 120, 21))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Content : Symbol(Content, Decl(index.d.ts, 93, 60))
+>Component : Symbol(Component, Decl(index.d.ts, 121, 5))
+>P : Symbol(P, Decl(index.d.ts, 119, 29))
+    }
+
+    interface Component<P extends ComponentProps> {
+>Component : Symbol(Component, Decl(index.d.ts, 121, 5))
+>P : Symbol(P, Decl(index.d.ts, 123, 24))
+>ComponentProps : Symbol(ComponentProps, Decl(index.d.ts, 91, 31))
+
+        mount(props: P, content: ReadonlyArray<VNode>): Element;
+>mount : Symbol(Component.mount, Decl(index.d.ts, 123, 51))
+>props : Symbol(props, Decl(index.d.ts, 124, 14))
+>P : Symbol(P, Decl(index.d.ts, 123, 24))
+>content : Symbol(content, Decl(index.d.ts, 124, 23))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+        patch(element: Element, newProps: P, oldProps: P, newContent: ReadonlyArray<VNode>, oldContent: ReadonlyArray<VNode>): Element;
+>patch : Symbol(Component.patch, Decl(index.d.ts, 124, 64))
+>element : Symbol(element, Decl(index.d.ts, 125, 14))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>newProps : Symbol(newProps, Decl(index.d.ts, 125, 31))
+>P : Symbol(P, Decl(index.d.ts, 123, 24))
+>oldProps : Symbol(oldProps, Decl(index.d.ts, 125, 44))
+>P : Symbol(P, Decl(index.d.ts, 123, 24))
+>newContent : Symbol(newContent, Decl(index.d.ts, 125, 57))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+>oldContent : Symbol(oldContent, Decl(index.d.ts, 125, 91))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+        unmount(element: Element): void;
+>unmount : Symbol(Component.unmount, Decl(index.d.ts, 125, 135))
+>element : Symbol(element, Decl(index.d.ts, 126, 16))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+    }
+
+    interface VNode {
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+
+        readonly isSVG: boolean;
+>isSVG : Symbol(VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+        readonly type: any;
+>type : Symbol(VNode.type, Decl(index.d.ts, 130, 32))
+
+        readonly key: Key | null;
+>key : Symbol(VNode.key, Decl(index.d.ts, 131, 27))
+>Key : Symbol(Key, Decl(index.d.ts, 90, 27))
+
+        readonly props: any;
+>props : Symbol(VNode.props, Decl(index.d.ts, 132, 33))
+
+        readonly content: ReadonlyArray<VNode>;
+>content : Symbol(VNode.content, Decl(index.d.ts, 133, 28))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+    }
+
+    interface ElementNode<T extends keyof DomElements, E extends DomElements[T]> extends VNode {
+>ElementNode : Symbol(ElementNode, Decl(index.d.ts, 135, 5))
+>T : Symbol(T, Decl(index.d.ts, 137, 26))
+>DomElements : Symbol(DomElements, Decl(index.d.ts, 155, 5))
+>E : Symbol(E, Decl(index.d.ts, 137, 54))
+>DomElements : Symbol(DomElements, Decl(index.d.ts, 155, 5))
+>T : Symbol(T, Decl(index.d.ts, 137, 26))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+
+        readonly type: T;
+>type : Symbol(ElementNode.type, Decl(index.d.ts, 137, 96))
+>T : Symbol(T, Decl(index.d.ts, 137, 26))
+
+        readonly props: Props<E>;
+>props : Symbol(ElementNode.props, Decl(index.d.ts, 138, 25))
+>Props : Symbol(Props, Decl(index.d.ts, 103, 5))
+>E : Symbol(E, Decl(index.d.ts, 137, 54))
+    }
+
+    interface ComponentNode<P extends ComponentProps> extends VNode {
+>ComponentNode : Symbol(ComponentNode, Decl(index.d.ts, 140, 5))
+>P : Symbol(P, Decl(index.d.ts, 142, 28))
+>ComponentProps : Symbol(ComponentProps, Decl(index.d.ts, 91, 31))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+
+        readonly type: Component<P>;
+>type : Symbol(ComponentNode.type, Decl(index.d.ts, 142, 69))
+>Component : Symbol(Component, Decl(index.d.ts, 121, 5))
+>P : Symbol(P, Decl(index.d.ts, 142, 28))
+
+        readonly props: P & IntrinsicProps;
+>props : Symbol(ComponentNode.props, Decl(index.d.ts, 143, 36))
+>P : Symbol(P, Decl(index.d.ts, 142, 28))
+>IntrinsicProps : Symbol(IntrinsicProps, Decl(index.d.ts, 98, 6))
+    }
+
+    interface ComponentClassNode<P extends ComponentProps> extends VNode {
+>ComponentClassNode : Symbol(ComponentClassNode, Decl(index.d.ts, 145, 5))
+>P : Symbol(P, Decl(index.d.ts, 147, 33))
+>ComponentProps : Symbol(ComponentProps, Decl(index.d.ts, 91, 31))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+
+        readonly type: ComponentClass<P>;
+>type : Symbol(ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>ComponentClass : Symbol(ComponentClass, Decl(index.d.ts, 117, 5))
+>P : Symbol(P, Decl(index.d.ts, 147, 33))
+
+        readonly props: P & IntrinsicProps;
+>props : Symbol(ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>P : Symbol(P, Decl(index.d.ts, 147, 33))
+>IntrinsicProps : Symbol(IntrinsicProps, Decl(index.d.ts, 98, 6))
+    }
+
+    interface FunctionComponentNode<P extends ComponentProps> extends VNode {
+>FunctionComponentNode : Symbol(FunctionComponentNode, Decl(index.d.ts, 150, 5))
+>P : Symbol(P, Decl(index.d.ts, 152, 36))
+>ComponentProps : Symbol(ComponentProps, Decl(index.d.ts, 91, 31))
+>VNode : Symbol(VNode, Decl(index.d.ts, 127, 5))
+
+        readonly type: FunctionComponent<P>;
+>type : Symbol(FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>FunctionComponent : Symbol(FunctionComponent, Decl(index.d.ts, 112, 17))
+>P : Symbol(P, Decl(index.d.ts, 152, 36))
+
+        readonly props: P & IntrinsicProps;
+>props : Symbol(FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>P : Symbol(P, Decl(index.d.ts, 152, 36))
+>IntrinsicProps : Symbol(IntrinsicProps, Decl(index.d.ts, 98, 6))
+    }
+
+    interface DomElements extends HTMLElementTagNameMap, SVGElementTagNameMap {
+>DomElements : Symbol(DomElements, Decl(index.d.ts, 155, 5))
+>HTMLElementTagNameMap : Symbol(HTMLElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+>SVGElementTagNameMap : Symbol(SVGElementTagNameMap, Decl(lib.dom.d.ts, --, --))
+
+        "main": HTMLMainElement;
+>"main" : Symbol(DomElements["main"], Decl(index.d.ts, 157, 79))
+>HTMLMainElement : Symbol(HTMLMainElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+    }
+}
+
+declare global {
+>global : Symbol(global, Decl(index.d.ts, 160, 1))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(index.d.ts, 162, 16))
+
+        // tslint:disable-next-line:no-empty-interface
+        interface Element extends PetitDom.VNode { }
+>Element : Symbol(Element, Decl(index.d.ts, 163, 19))
+>PetitDom.VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+
+        // tslint:disable-next-line:no-empty-interface
+        interface ElementClass extends PetitDom.Component<PetitDom.ComponentProps> { }
+>ElementClass : Symbol(ElementClass, Decl(index.d.ts, 165, 52))
+>PetitDom.Component : Symbol(PetitDom.Component, Decl(index.d.ts, 121, 5))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Component : Symbol(PetitDom.Component, Decl(index.d.ts, 121, 5))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>ComponentProps : Symbol(PetitDom.ComponentProps, Decl(index.d.ts, 91, 31))
+
+        // tslint:disable-next-line:no-empty-interface
+        interface IntrinsicClassAttributes<T> extends PetitDom.Props { }
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(index.d.ts, 168, 86))
+>T : Symbol(T, Decl(index.d.ts, 171, 43))
+>PetitDom.Props : Symbol(PetitDom.Props, Decl(index.d.ts, 103, 5))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Props : Symbol(PetitDom.Props, Decl(index.d.ts, 103, 5))
+
+        // tslint:disable-next-line:no-empty-interface
+        interface IntrinsicAttributes extends PetitDom.IntrinsicProps { }
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(index.d.ts, 171, 72))
+>PetitDom.IntrinsicProps : Symbol(PetitDom.IntrinsicProps, Decl(index.d.ts, 98, 6))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>IntrinsicProps : Symbol(PetitDom.IntrinsicProps, Decl(index.d.ts, 98, 6))
+
+        interface ElementAttributesProperty { props: PetitDom.Props; }
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(index.d.ts, 174, 73))
+>props : Symbol(ElementAttributesProperty.props, Decl(index.d.ts, 176, 45))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Props : Symbol(PetitDom.Props, Decl(index.d.ts, 103, 5))
+
+        interface ElementChildrenAttribute { content: PetitDom.VNode[]; }
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(index.d.ts, 176, 70))
+>content : Symbol(ElementChildrenAttribute.content, Decl(index.d.ts, 178, 44))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+
+        type IntrinsicElements = {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(index.d.ts, 178, 73))
+
+            [P in keyof PetitDom.DomElements]:
+>P : Symbol(P, Decl(index.d.ts, 181, 13))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>DomElements : Symbol(PetitDom.DomElements, Decl(index.d.ts, 155, 5))
+
+            PetitDom.Props<PetitDom.DomElements[P]> &
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Props : Symbol(PetitDom.Props, Decl(index.d.ts, 103, 5))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>DomElements : Symbol(PetitDom.DomElements, Decl(index.d.ts, 155, 5))
+>P : Symbol(P, Decl(index.d.ts, 181, 13))
+            {
+                content?: PetitDom.Content | ReadonlyArray<PetitDom.Content>;
+>content : Symbol(content, Decl(index.d.ts, 183, 13))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Content : Symbol(PetitDom.Content, Decl(index.d.ts, 93, 60))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(index.d.ts, 88, 53))
+>Content : Symbol(PetitDom.Content, Decl(index.d.ts, 93, 60))
+
+            };
+        };
+    }
+}
+
+=== tests/cases/compiler/petit-dom-tests.tsx ===
+/* @jsx h */
+// tslint:disable:no-empty
+// tslint:disable:no-null-keyword
+
+import { h, mount, patch, PetitDom, unmount } from "petit-dom";
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+>mount : Symbol(mount, Decl(petit-dom-tests.tsx, 4, 11))
+>patch : Symbol(patch, Decl(petit-dom-tests.tsx, 4, 18))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>unmount : Symbol(unmount, Decl(petit-dom-tests.tsx, 4, 35))
+
+function assertEqual<T>(a: T, b: T) { }
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>T : Symbol(T, Decl(petit-dom-tests.tsx, 6, 21))
+>a : Symbol(a, Decl(petit-dom-tests.tsx, 6, 24))
+>T : Symbol(T, Decl(petit-dom-tests.tsx, 6, 21))
+>b : Symbol(b, Decl(petit-dom-tests.tsx, 6, 29))
+>T : Symbol(T, Decl(petit-dom-tests.tsx, 6, 21))
+
+function eventHandler(event: Event): void { }
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+>event : Symbol(event, Decl(petit-dom-tests.tsx, 8, 22))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+interface CustomProps {
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    name: string;
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    count: number;
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    onSomeEvent(event: Event): void;
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>event : Symbol(event, Decl(petit-dom-tests.tsx, 13, 16))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+
+/**
+ * Create an <a> element with text content, using HyperScript syntax and JSX syntax
+ */
+export function testHtmlElementWithTextContent() {
+>testHtmlElementWithTextContent : Symbol(testHtmlElementWithTextContent, Decl(petit-dom-tests.tsx, 14, 1))
+
+    // HyperScript syntax returns an ElementNode<T> object, with typed properties
+    const aNode = h("a", { href: "link", onclick: eventHandler }, "click here");
+>aNode : Symbol(aNode, Decl(petit-dom-tests.tsx, 21, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+>href : Symbol(href, Decl(petit-dom-tests.tsx, 21, 26))
+>onclick : Symbol(onclick, Decl(petit-dom-tests.tsx, 21, 40))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(aNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>aNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>aNode : Symbol(aNode, Decl(petit-dom-tests.tsx, 21, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(aNode.type, "a");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>aNode.type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+>aNode : Symbol(aNode, Decl(petit-dom-tests.tsx, 21, 9))
+>type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+
+    assertEqual(aNode.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>aNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>aNode : Symbol(aNode, Decl(petit-dom-tests.tsx, 21, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(aNode.props.href, "link");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>aNode.props.href : Symbol(href, Decl(lib.dom.d.ts, --, --))
+>aNode.props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>aNode : Symbol(aNode, Decl(petit-dom-tests.tsx, 21, 9))
+>props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>href : Symbol(href, Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(aNode.props.onclick, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>aNode.props.onclick : Symbol(onclick, Decl(lib.dom.d.ts, --, --))
+>aNode.props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>aNode : Symbol(aNode, Decl(petit-dom-tests.tsx, 21, 9))
+>props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>onclick : Symbol(onclick, Decl(lib.dom.d.ts, --, --))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(aNode.content.length, 1);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>aNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>aNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>aNode : Symbol(aNode, Decl(petit-dom-tests.tsx, 21, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <a href="link" onclick={eventHandler}>click here</a>;
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 31, 9))
+>a : Symbol("a", Decl(lib.dom.d.ts, --, --))
+>href : Symbol(href, Decl(petit-dom-tests.tsx, 31, 22))
+>onclick : Symbol(onclick, Decl(petit-dom-tests.tsx, 31, 34))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+>a : Symbol("a", Decl(lib.dom.d.ts, --, --))
+
+    const jsxNodeType = jsxNode.type as string;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 32, 9))
+>jsxNode.type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 31, 9))
+>type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+
+    const jsxNodeProps = jsxNode.props as PetitDom.Props<HTMLAnchorElement>;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 33, 9))
+>jsxNode.props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 31, 9))
+>props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>Props : Symbol(PetitDom.Props, Decl(index.d.ts, 103, 5))
+>HTMLAnchorElement : Symbol(HTMLAnchorElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 31, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, "a");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 32, 9))
+
+    assertEqual(jsxNode.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 31, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.href, "link");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.href : Symbol(href, Decl(lib.dom.d.ts, --, --))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 33, 9))
+>href : Symbol(href, Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(jsxNodeProps.onclick, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.onclick : Symbol(onclick, Decl(lib.dom.d.ts, --, --))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 33, 9))
+>onclick : Symbol(onclick, Decl(lib.dom.d.ts, --, --))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(jsxNode.content.length, 1);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 31, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Create a <form> element with both text content and child elements, using HyperScript syntax and JSX syntax
+ */
+export function testHtmlElementWithMixedContent() {
+>testHtmlElementWithMixedContent : Symbol(testHtmlElementWithMixedContent, Decl(petit-dom-tests.tsx, 41, 1))
+
+    // HyperScript syntax returns an ElementNode<T> object, with typed properties
+    const formNode = h(
+>formNode : Symbol(formNode, Decl(petit-dom-tests.tsx, 48, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+
+        "form",
+        { key: 1, method: "POST", onsubmit: eventHandler },
+>key : Symbol(key, Decl(petit-dom-tests.tsx, 50, 9))
+>method : Symbol(method, Decl(petit-dom-tests.tsx, 50, 17))
+>onsubmit : Symbol(onsubmit, Decl(petit-dom-tests.tsx, 50, 33))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+        "Hello ", h("span", null, "World")
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+
+    );
+
+    assertEqual(formNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>formNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>formNode : Symbol(formNode, Decl(petit-dom-tests.tsx, 48, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(formNode.type, "form");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>formNode.type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+>formNode : Symbol(formNode, Decl(petit-dom-tests.tsx, 48, 9))
+>type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+
+    assertEqual(formNode.key, 1);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>formNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>formNode : Symbol(formNode, Decl(petit-dom-tests.tsx, 48, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(formNode.props.method, "POST");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>formNode.props.method : Symbol(method, Decl(lib.dom.d.ts, --, --))
+>formNode.props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>formNode : Symbol(formNode, Decl(petit-dom-tests.tsx, 48, 9))
+>props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>method : Symbol(method, Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(formNode.props.onsubmit, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>formNode.props.onsubmit : Symbol(onsubmit, Decl(lib.dom.d.ts, --, --))
+>formNode.props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>formNode : Symbol(formNode, Decl(petit-dom-tests.tsx, 48, 9))
+>props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>onsubmit : Symbol(onsubmit, Decl(lib.dom.d.ts, --, --))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(formNode.content.length, 2);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>formNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>formNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>formNode : Symbol(formNode, Decl(petit-dom-tests.tsx, 48, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <form key={1} method="POST" onsubmit={eventHandler}>Hello <span>World</span></form>;
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 62, 9))
+>form : Symbol("form", Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(petit-dom-tests.tsx, 62, 25))
+>method : Symbol(method, Decl(petit-dom-tests.tsx, 62, 33))
+>onsubmit : Symbol(onsubmit, Decl(petit-dom-tests.tsx, 62, 47))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+>span : Symbol("span", Decl(lib.dom.d.ts, --, --))
+>span : Symbol("span", Decl(lib.dom.d.ts, --, --))
+>form : Symbol("form", Decl(lib.dom.d.ts, --, --))
+
+    const jsxNodeType = jsxNode.type as string;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 63, 9))
+>jsxNode.type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 62, 9))
+>type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+
+    const jsxNodeProps = jsxNode.props as PetitDom.Props<HTMLFormElement>;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 64, 9))
+>jsxNode.props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 62, 9))
+>props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>Props : Symbol(PetitDom.Props, Decl(index.d.ts, 103, 5))
+>HTMLFormElement : Symbol(HTMLFormElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 62, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, "form");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 63, 9))
+
+    assertEqual(jsxNode.key, 1);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 62, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.method, "POST");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.method : Symbol(method, Decl(lib.dom.d.ts, --, --))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 64, 9))
+>method : Symbol(method, Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(jsxNodeProps.onsubmit, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.onsubmit : Symbol(onsubmit, Decl(lib.dom.d.ts, --, --))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 64, 9))
+>onsubmit : Symbol(onsubmit, Decl(lib.dom.d.ts, --, --))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(jsxNode.content.length, 2);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 62, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Create an <svg> element with a child element, using HyperScript syntax and JSX syntax
+ */
+export function testSvgElementWithChild() {
+>testSvgElementWithChild : Symbol(testSvgElementWithChild, Decl(petit-dom-tests.tsx, 72, 1))
+
+    // HyperScript syntax returns an ElementNode<T> object, with typed properties
+    const svgNode = h("svg", { key: 2, currentScale: 1 }, h("path"));
+>svgNode : Symbol(svgNode, Decl(petit-dom-tests.tsx, 79, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+>key : Symbol(key, Decl(petit-dom-tests.tsx, 79, 30))
+>currentScale : Symbol(currentScale, Decl(petit-dom-tests.tsx, 79, 38))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+
+    assertEqual(svgNode.isSVG, true);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>svgNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>svgNode : Symbol(svgNode, Decl(petit-dom-tests.tsx, 79, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(svgNode.type, "svg");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>svgNode.type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+>svgNode : Symbol(svgNode, Decl(petit-dom-tests.tsx, 79, 9))
+>type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+
+    assertEqual(svgNode.key, 2);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>svgNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>svgNode : Symbol(svgNode, Decl(petit-dom-tests.tsx, 79, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(svgNode.props.currentScale, 1);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>svgNode.props.currentScale : Symbol(currentScale, Decl(lib.dom.d.ts, --, --))
+>svgNode.props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>svgNode : Symbol(svgNode, Decl(petit-dom-tests.tsx, 79, 9))
+>props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>currentScale : Symbol(currentScale, Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(svgNode.content.length, 1);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>svgNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>svgNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>svgNode : Symbol(svgNode, Decl(petit-dom-tests.tsx, 79, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <svg key={2} currentScale={1}><path /></svg>;
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 88, 9))
+>svg : Symbol("svg", Decl(lib.dom.d.ts, --, --))
+>key : Symbol(key, Decl(petit-dom-tests.tsx, 88, 24))
+>currentScale : Symbol(currentScale, Decl(petit-dom-tests.tsx, 88, 32))
+>path : Symbol("path", Decl(lib.dom.d.ts, --, --))
+>svg : Symbol("svg", Decl(lib.dom.d.ts, --, --))
+
+    const jsxNodeType = jsxNode.type as string;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 89, 9))
+>jsxNode.type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 88, 9))
+>type : Symbol(PetitDom.ElementNode.type, Decl(index.d.ts, 137, 96))
+
+    const jsxNodeProps = jsxNode.props as PetitDom.Props<SVGSVGElement>;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 90, 9))
+>jsxNode.props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 88, 9))
+>props : Symbol(PetitDom.ElementNode.props, Decl(index.d.ts, 138, 25))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>Props : Symbol(PetitDom.Props, Decl(index.d.ts, 103, 5))
+>SVGSVGElement : Symbol(SVGSVGElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(jsxNode.isSVG, true);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 88, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, "svg");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 89, 9))
+
+    assertEqual(jsxNode.key, 2);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 88, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.currentScale, 1);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.currentScale : Symbol(currentScale, Decl(lib.dom.d.ts, --, --))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 90, 9))
+>currentScale : Symbol(currentScale, Decl(lib.dom.d.ts, --, --))
+
+    assertEqual(jsxNode.content.length, 1);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 88, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Create a function component, using HyperScript syntax and JSX syntax
+ */
+export function testFunctionComponent() {
+>testFunctionComponent : Symbol(testFunctionComponent, Decl(petit-dom-tests.tsx, 97, 1))
+
+    function FunctionComponent(): JSX.Element {
+>FunctionComponent : Symbol(FunctionComponent, Decl(petit-dom-tests.tsx, 102, 41))
+>JSX : Symbol(JSX, Decl(index.d.ts, 162, 16))
+>Element : Symbol(JSX.Element, Decl(index.d.ts, 163, 19))
+
+        return <div>Hello World</div>;
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+    }
+
+    // HyperScript syntax returns a FunctionComponentNode<T> object, with typed properties
+    const node = h(FunctionComponent, { key: "1" });
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 108, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+>FunctionComponent : Symbol(FunctionComponent, Decl(petit-dom-tests.tsx, 102, 41))
+>key : Symbol(key, Decl(petit-dom-tests.tsx, 108, 39))
+
+    assertEqual(node.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 108, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(node.type, FunctionComponent);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 108, 9))
+>type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>FunctionComponent : Symbol(FunctionComponent, Decl(petit-dom-tests.tsx, 102, 41))
+
+    assertEqual(node.key, "1");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 108, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(node.props.key, "1");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 108, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+
+    assertEqual(node.content.length, 0);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>node.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 108, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <FunctionComponent key="1" />;
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 117, 9))
+>FunctionComponent : Symbol(FunctionComponent, Decl(petit-dom-tests.tsx, 102, 41))
+>key : Symbol(key, Decl(petit-dom-tests.tsx, 117, 38))
+
+    const jsxNodeType = jsxNode.type as PetitDom.FunctionComponent<{}>;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 118, 9))
+>jsxNode.type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 117, 9))
+>type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>FunctionComponent : Symbol(PetitDom.FunctionComponent, Decl(index.d.ts, 112, 17))
+
+    const jsxNodeProps = jsxNode.props as PetitDom.IntrinsicProps;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 119, 9))
+>jsxNode.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 117, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>IntrinsicProps : Symbol(PetitDom.IntrinsicProps, Decl(index.d.ts, 98, 6))
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 117, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, FunctionComponent);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 118, 9))
+>FunctionComponent : Symbol(FunctionComponent, Decl(petit-dom-tests.tsx, 102, 41))
+
+    assertEqual(jsxNode.key, "1");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 117, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.key, "1");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.key : Symbol(PetitDom.IntrinsicProps.key, Decl(index.d.ts, 101, 51))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 119, 9))
+>key : Symbol(PetitDom.IntrinsicProps.key, Decl(index.d.ts, 101, 51))
+
+    assertEqual(jsxNode.content.length, 0);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 117, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Create a function component with props, using HyperScript syntax and JSX syntax
+ */
+export function testFunctionComponentWithProps() {
+>testFunctionComponentWithProps : Symbol(testFunctionComponentWithProps, Decl(petit-dom-tests.tsx, 126, 1))
+
+    function FunctionComponentWithProps(props: CustomProps): JSX.Element {
+>FunctionComponentWithProps : Symbol(FunctionComponentWithProps, Decl(petit-dom-tests.tsx, 131, 50))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 132, 40))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+>JSX : Symbol(JSX, Decl(index.d.ts, 162, 16))
+>Element : Symbol(JSX.Element, Decl(index.d.ts, 163, 19))
+
+        const { name, count, onSomeEvent } = props;
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 133, 15))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 133, 21))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 133, 28))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 132, 40))
+
+        return <div className={name} tabIndex={count} onclick={onSomeEvent}></div>;
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>className : Symbol(className, Decl(petit-dom-tests.tsx, 134, 19))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 133, 15))
+>tabIndex : Symbol(tabIndex, Decl(petit-dom-tests.tsx, 134, 36))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 133, 21))
+>onclick : Symbol(onclick, Decl(petit-dom-tests.tsx, 134, 53))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 133, 28))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+    }
+
+    // HyperScript syntax returns a FunctionComponentNode<T> object, with typed properties
+    const node = h(FunctionComponentWithProps, { name: "xyz", count: 123, onSomeEvent: eventHandler });
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 138, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+>FunctionComponentWithProps : Symbol(FunctionComponentWithProps, Decl(petit-dom-tests.tsx, 131, 50))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 138, 48))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 138, 61))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 138, 73))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(node.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 138, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(node.type, FunctionComponentWithProps);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 138, 9))
+>type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>FunctionComponentWithProps : Symbol(FunctionComponentWithProps, Decl(petit-dom-tests.tsx, 131, 50))
+
+    assertEqual(node.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 138, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(node.props.name, "xyz");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+>node.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 138, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    assertEqual(node.props.count, 123);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+>node.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 138, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    assertEqual(node.props.onSomeEvent, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>node.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 138, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(node.content.length, 0);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>node.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 138, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <FunctionComponentWithProps name="xyz" count={123} onSomeEvent={eventHandler} />;
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 149, 9))
+>FunctionComponentWithProps : Symbol(FunctionComponentWithProps, Decl(petit-dom-tests.tsx, 131, 50))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 149, 47))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 149, 58))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 149, 70))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    const jsxNodeType = jsxNode.type as PetitDom.FunctionComponent<CustomProps>;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 150, 9))
+>jsxNode.type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 149, 9))
+>type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>FunctionComponent : Symbol(PetitDom.FunctionComponent, Decl(index.d.ts, 112, 17))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    const jsxNodeProps = jsxNode.props as CustomProps;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 151, 9))
+>jsxNode.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 149, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 149, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, FunctionComponentWithProps);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 150, 9))
+>FunctionComponentWithProps : Symbol(FunctionComponentWithProps, Decl(petit-dom-tests.tsx, 131, 50))
+
+    assertEqual(jsxNode.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 149, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.name, "xyz");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 151, 9))
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    assertEqual(jsxNodeProps.count, 123);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 151, 9))
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    assertEqual(jsxNodeProps.onSomeEvent, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 151, 9))
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(jsxNode.content.length, 0);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 149, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Create a function component with child content, using HyperScript syntax and JSX syntax
+ */
+export function testFunctionComponentWithChildren() {
+>testFunctionComponentWithChildren : Symbol(testFunctionComponentWithChildren, Decl(petit-dom-tests.tsx, 160, 1))
+
+    function FunctionComponentWithChildren(props: CustomProps, content: ReadonlyArray<PetitDom.Content>): JSX.Element {
+>FunctionComponentWithChildren : Symbol(FunctionComponentWithChildren, Decl(petit-dom-tests.tsx, 165, 53))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 166, 43))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+>content : Symbol(content, Decl(petit-dom-tests.tsx, 166, 62))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>Content : Symbol(PetitDom.Content, Decl(index.d.ts, 93, 60))
+>JSX : Symbol(JSX, Decl(index.d.ts, 162, 16))
+>Element : Symbol(JSX.Element, Decl(index.d.ts, 163, 19))
+
+        const { name, count, onSomeEvent } = props;
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 167, 15))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 167, 21))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 167, 28))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 166, 43))
+
+        return <div className={name} tabIndex={count} onclick={onSomeEvent}>{content}</div>;
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>className : Symbol(className, Decl(petit-dom-tests.tsx, 168, 19))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 167, 15))
+>tabIndex : Symbol(tabIndex, Decl(petit-dom-tests.tsx, 168, 36))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 167, 21))
+>onclick : Symbol(onclick, Decl(petit-dom-tests.tsx, 168, 53))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 167, 28))
+>content : Symbol(content, Decl(petit-dom-tests.tsx, 166, 62))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+    }
+
+    // HyperScript syntax returns a FunctionComponentNode<T> object, with typed properties
+    const node = h(
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 172, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+
+        FunctionComponentWithChildren,
+>FunctionComponentWithChildren : Symbol(FunctionComponentWithChildren, Decl(petit-dom-tests.tsx, 165, 53))
+
+        { name: "xyz", count: 123, onSomeEvent: eventHandler },
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 174, 9))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 174, 22))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 174, 34))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+        "Hello",
+        h("span", null, "World")
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+
+    );
+
+    assertEqual(node.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 172, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(node.type, FunctionComponentWithChildren);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 172, 9))
+>type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>FunctionComponentWithChildren : Symbol(FunctionComponentWithChildren, Decl(petit-dom-tests.tsx, 165, 53))
+
+    assertEqual(node.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 172, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(node.props.name, "xyz");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+>node.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 172, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    assertEqual(node.props.count, 123);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+>node.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 172, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    assertEqual(node.props.onSomeEvent, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>node.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 172, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(node.content.length, 2);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>node.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 172, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = (
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 188, 9))
+
+        <FunctionComponentWithChildren name="xyz" count={123} onSomeEvent={eventHandler}>
+>FunctionComponentWithChildren : Symbol(FunctionComponentWithChildren, Decl(petit-dom-tests.tsx, 165, 53))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 189, 38))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 189, 49))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 189, 61))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+            Hello <span>World</span>
+>span : Symbol("span", Decl(lib.dom.d.ts, --, --))
+>span : Symbol("span", Decl(lib.dom.d.ts, --, --))
+
+        </FunctionComponentWithChildren>
+>FunctionComponentWithChildren : Symbol(FunctionComponentWithChildren, Decl(petit-dom-tests.tsx, 165, 53))
+
+    );
+    const jsxNodeType = jsxNode.type as PetitDom.FunctionComponent<CustomProps>;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 193, 9))
+>jsxNode.type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 188, 9))
+>type : Symbol(PetitDom.FunctionComponentNode.type, Decl(index.d.ts, 152, 77))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>FunctionComponent : Symbol(PetitDom.FunctionComponent, Decl(index.d.ts, 112, 17))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    const jsxNodeProps = jsxNode.props as CustomProps;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 194, 9))
+>jsxNode.props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 188, 9))
+>props : Symbol(PetitDom.FunctionComponentNode.props, Decl(index.d.ts, 153, 44))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 188, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, FunctionComponentWithChildren);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 193, 9))
+>FunctionComponentWithChildren : Symbol(FunctionComponentWithChildren, Decl(petit-dom-tests.tsx, 165, 53))
+
+    assertEqual(jsxNode.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 188, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.name, "xyz");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 194, 9))
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    assertEqual(jsxNodeProps.count, 123);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 194, 9))
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    assertEqual(jsxNodeProps.onSomeEvent, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 194, 9))
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(jsxNode.content.length, 2);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 188, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Create a component class, using HyperScript syntax and JSX syntax
+ */
+export function testComponentClass() {
+>testComponentClass : Symbol(testComponentClass, Decl(petit-dom-tests.tsx, 203, 1))
+
+    class ComponentClass {
+>ComponentClass : Symbol(ComponentClass, Decl(petit-dom-tests.tsx, 208, 38))
+
+        props = {};
+>props : Symbol(ComponentClass.props, Decl(petit-dom-tests.tsx, 209, 26))
+
+        mount(): Element {
+>mount : Symbol(ComponentClass.mount, Decl(petit-dom-tests.tsx, 210, 19))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            return mount(<div className="some-class"></div>);
+>mount : Symbol(mount, Decl(petit-dom-tests.tsx, 4, 11))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>className : Symbol(className, Decl(petit-dom-tests.tsx, 213, 29))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+        }
+
+        patch(element: Element, newProps: object, oldProps: object, newContent: ReadonlyArray<PetitDom.VNode>, oldContent: ReadonlyArray<PetitDom.VNode>): Element {
+>patch : Symbol(ComponentClass.patch, Decl(petit-dom-tests.tsx, 214, 9))
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 216, 14))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>newProps : Symbol(newProps, Decl(petit-dom-tests.tsx, 216, 31))
+>oldProps : Symbol(oldProps, Decl(petit-dom-tests.tsx, 216, 49))
+>newContent : Symbol(newContent, Decl(petit-dom-tests.tsx, 216, 67))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>oldContent : Symbol(oldContent, Decl(petit-dom-tests.tsx, 216, 110))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            patch(
+>patch : Symbol(patch, Decl(petit-dom-tests.tsx, 4, 18))
+
+                <div {...oldProps}>{oldContent}</div>,
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>oldProps : Symbol(oldProps, Decl(petit-dom-tests.tsx, 216, 49))
+>oldContent : Symbol(oldContent, Decl(petit-dom-tests.tsx, 216, 110))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+
+                <div {...newProps}>{newContent}</div>
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>newProps : Symbol(newProps, Decl(petit-dom-tests.tsx, 216, 31))
+>newContent : Symbol(newContent, Decl(petit-dom-tests.tsx, 216, 67))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+
+            );
+            return element;
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 216, 14))
+        }
+
+        unmount(element: Element): void {
+>unmount : Symbol(ComponentClass.unmount, Decl(petit-dom-tests.tsx, 222, 9))
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 224, 16))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            unmount(<div>Hello World</div>);
+>unmount : Symbol(unmount, Decl(petit-dom-tests.tsx, 4, 35))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+        }
+    }
+
+    // HyperScript syntax returns a ComponentClassNode<T> object, with typed properties
+    const node = h(ComponentClass, { key: "1" });
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 230, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+>ComponentClass : Symbol(ComponentClass, Decl(petit-dom-tests.tsx, 208, 38))
+>key : Symbol(key, Decl(petit-dom-tests.tsx, 230, 36))
+
+    assertEqual(node.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 230, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(node.type, ComponentClass);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 230, 9))
+>type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>ComponentClass : Symbol(ComponentClass, Decl(petit-dom-tests.tsx, 208, 38))
+
+    assertEqual(node.key, "1");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 230, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(node.props.key, "1");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.key : Symbol(PetitDom.IntrinsicProps.key, Decl(index.d.ts, 101, 51))
+>node.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 230, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>key : Symbol(PetitDom.IntrinsicProps.key, Decl(index.d.ts, 101, 51))
+
+    assertEqual(node.content.length, 0);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>node.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 230, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <ComponentClass key="1" />;
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 239, 9))
+>ComponentClass : Symbol(ComponentClass, Decl(petit-dom-tests.tsx, 208, 38))
+>key : Symbol(key, Decl(petit-dom-tests.tsx, 239, 35))
+
+    const jsxNodeType = jsxNode.type as PetitDom.ComponentClass<{}>;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 240, 9))
+>jsxNode.type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 239, 9))
+>type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>ComponentClass : Symbol(PetitDom.ComponentClass, Decl(index.d.ts, 117, 5))
+
+    const jsxNodeProps = jsxNode.props as PetitDom.IntrinsicProps;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 241, 9))
+>jsxNode.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 239, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>IntrinsicProps : Symbol(PetitDom.IntrinsicProps, Decl(index.d.ts, 98, 6))
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 239, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, ComponentClass);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 240, 9))
+>ComponentClass : Symbol(ComponentClass, Decl(petit-dom-tests.tsx, 208, 38))
+
+    assertEqual(jsxNode.key, "1");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 239, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.key, "1");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.key : Symbol(PetitDom.IntrinsicProps.key, Decl(index.d.ts, 101, 51))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 241, 9))
+>key : Symbol(PetitDom.IntrinsicProps.key, Decl(index.d.ts, 101, 51))
+
+    assertEqual(jsxNode.content.length, 0);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 239, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Create a component class with props, using HyperScript syntax and JSX syntax
+ */
+export function testComponentClassWithProps() {
+>testComponentClassWithProps : Symbol(testComponentClassWithProps, Decl(petit-dom-tests.tsx, 248, 1))
+
+    class ComponentClassWithProps {
+>ComponentClassWithProps : Symbol(ComponentClassWithProps, Decl(petit-dom-tests.tsx, 253, 47))
+
+        props: CustomProps;
+>props : Symbol(ComponentClassWithProps.props, Decl(petit-dom-tests.tsx, 254, 35))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+        constructor(props: CustomProps) {
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 257, 20))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+            this.props = props;
+>this.props : Symbol(ComponentClassWithProps.props, Decl(petit-dom-tests.tsx, 254, 35))
+>this : Symbol(ComponentClassWithProps, Decl(petit-dom-tests.tsx, 253, 47))
+>props : Symbol(ComponentClassWithProps.props, Decl(petit-dom-tests.tsx, 254, 35))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 257, 20))
+        }
+
+        mount(props: CustomProps): Element {
+>mount : Symbol(ComponentClassWithProps.mount, Decl(petit-dom-tests.tsx, 259, 9))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 261, 14))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            const { name, count, onSomeEvent } = props;
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 262, 19))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 262, 25))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 262, 32))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 261, 14))
+
+            return mount(<div className={name} tabIndex={count} onclick={onSomeEvent} />);
+>mount : Symbol(mount, Decl(petit-dom-tests.tsx, 4, 11))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>className : Symbol(className, Decl(petit-dom-tests.tsx, 263, 29))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 262, 19))
+>tabIndex : Symbol(tabIndex, Decl(petit-dom-tests.tsx, 263, 46))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 262, 25))
+>onclick : Symbol(onclick, Decl(petit-dom-tests.tsx, 263, 63))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 262, 32))
+        }
+
+        patch(element: Element, newProps: CustomProps, oldProps: CustomProps, newContent: ReadonlyArray<PetitDom.VNode>, oldContent: ReadonlyArray<PetitDom.VNode>): Element {
+>patch : Symbol(ComponentClassWithProps.patch, Decl(petit-dom-tests.tsx, 264, 9))
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 266, 14))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>newProps : Symbol(newProps, Decl(petit-dom-tests.tsx, 266, 31))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+>oldProps : Symbol(oldProps, Decl(petit-dom-tests.tsx, 266, 54))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+>newContent : Symbol(newContent, Decl(petit-dom-tests.tsx, 266, 77))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>oldContent : Symbol(oldContent, Decl(petit-dom-tests.tsx, 266, 120))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            patch(
+>patch : Symbol(patch, Decl(petit-dom-tests.tsx, 4, 18))
+
+                <div {...oldProps}>{oldContent}</div>,
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>oldProps : Symbol(oldProps, Decl(petit-dom-tests.tsx, 266, 54))
+>oldContent : Symbol(oldContent, Decl(petit-dom-tests.tsx, 266, 120))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+
+                <div {...newProps}>{newContent}</div>
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>newProps : Symbol(newProps, Decl(petit-dom-tests.tsx, 266, 31))
+>newContent : Symbol(newContent, Decl(petit-dom-tests.tsx, 266, 77))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+
+            );
+            return element;
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 266, 14))
+        }
+
+        unmount(element: Element): void {
+>unmount : Symbol(ComponentClassWithProps.unmount, Decl(petit-dom-tests.tsx, 272, 9))
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 274, 16))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            unmount(<div> Hello World</div >);
+>unmount : Symbol(unmount, Decl(petit-dom-tests.tsx, 4, 35))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+        }
+    }
+
+    // HyperScript syntax returns a ComponentClassNode<T> object, with typed properties
+    const node = h(ComponentClassWithProps, { name: "xyz", count: 123, onSomeEvent: eventHandler });
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 280, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+>ComponentClassWithProps : Symbol(ComponentClassWithProps, Decl(petit-dom-tests.tsx, 253, 47))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 280, 45))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 280, 58))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 280, 70))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(node.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 280, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(node.type, ComponentClassWithProps);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 280, 9))
+>type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>ComponentClassWithProps : Symbol(ComponentClassWithProps, Decl(petit-dom-tests.tsx, 253, 47))
+
+    assertEqual(node.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 280, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(node.props.name, "xyz");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+>node.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 280, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    assertEqual(node.props.count, 123);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+>node.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 280, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    assertEqual(node.props.onSomeEvent, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>node.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 280, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(node.content.length, 0);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>node.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 280, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = <ComponentClassWithProps name="xyz" count={123} onSomeEvent={eventHandler} />;
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 291, 9))
+>ComponentClassWithProps : Symbol(ComponentClassWithProps, Decl(petit-dom-tests.tsx, 253, 47))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 291, 44))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 291, 55))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 291, 67))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    const jsxNodeType = jsxNode.type as PetitDom.ComponentClass<CustomProps>;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 292, 9))
+>jsxNode.type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 291, 9))
+>type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>ComponentClass : Symbol(PetitDom.ComponentClass, Decl(index.d.ts, 117, 5))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    const jsxNodeProps = jsxNode.props as CustomProps;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 293, 9))
+>jsxNode.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 291, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 291, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, ComponentClassWithProps);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 292, 9))
+>ComponentClassWithProps : Symbol(ComponentClassWithProps, Decl(petit-dom-tests.tsx, 253, 47))
+
+    assertEqual(jsxNode.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 291, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.name, "xyz");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 293, 9))
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    assertEqual(jsxNodeProps.count, 123);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 293, 9))
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    assertEqual(jsxNodeProps.onSomeEvent, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 293, 9))
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(jsxNode.content.length, 0);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 291, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+
+/**
+ * Create a component class with child content, using HyperScript syntax and JSX syntax
+ */
+export function testComponentClassWithChildren() {
+>testComponentClassWithChildren : Symbol(testComponentClassWithChildren, Decl(petit-dom-tests.tsx, 302, 1))
+
+    class ComponentClassWithChildren {
+>ComponentClassWithChildren : Symbol(ComponentClassWithChildren, Decl(petit-dom-tests.tsx, 307, 50))
+
+        props: CustomProps;
+>props : Symbol(ComponentClassWithChildren.props, Decl(petit-dom-tests.tsx, 308, 38))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+        constructor(props: CustomProps) {
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 311, 20))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+            this.props = props;
+>this.props : Symbol(ComponentClassWithChildren.props, Decl(petit-dom-tests.tsx, 308, 38))
+>this : Symbol(ComponentClassWithChildren, Decl(petit-dom-tests.tsx, 307, 50))
+>props : Symbol(ComponentClassWithChildren.props, Decl(petit-dom-tests.tsx, 308, 38))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 311, 20))
+        }
+
+        mount(props: CustomProps, content: ReadonlyArray<PetitDom.Content>): Element {
+>mount : Symbol(ComponentClassWithChildren.mount, Decl(petit-dom-tests.tsx, 313, 9))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 315, 14))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+>content : Symbol(content, Decl(petit-dom-tests.tsx, 315, 33))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>Content : Symbol(PetitDom.Content, Decl(index.d.ts, 93, 60))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            const { name, count, onSomeEvent } = props;
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 316, 19))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 316, 25))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 316, 32))
+>props : Symbol(props, Decl(petit-dom-tests.tsx, 315, 14))
+
+            return mount(
+>mount : Symbol(mount, Decl(petit-dom-tests.tsx, 4, 11))
+
+                <div className={name} tabIndex={count} onclick={onSomeEvent}>{content}</div>
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>className : Symbol(className, Decl(petit-dom-tests.tsx, 318, 20))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 316, 19))
+>tabIndex : Symbol(tabIndex, Decl(petit-dom-tests.tsx, 318, 37))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 316, 25))
+>onclick : Symbol(onclick, Decl(petit-dom-tests.tsx, 318, 54))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 316, 32))
+>content : Symbol(content, Decl(petit-dom-tests.tsx, 315, 33))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+
+            );
+        }
+
+        patch(element: Element, newProps: CustomProps, oldProps: CustomProps, newContent: ReadonlyArray<PetitDom.VNode>, oldContent: ReadonlyArray<PetitDom.VNode>): Element {
+>patch : Symbol(ComponentClassWithChildren.patch, Decl(petit-dom-tests.tsx, 320, 9))
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 322, 14))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>newProps : Symbol(newProps, Decl(petit-dom-tests.tsx, 322, 31))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+>oldProps : Symbol(oldProps, Decl(petit-dom-tests.tsx, 322, 54))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+>newContent : Symbol(newContent, Decl(petit-dom-tests.tsx, 322, 77))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>oldContent : Symbol(oldContent, Decl(petit-dom-tests.tsx, 322, 120))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>VNode : Symbol(PetitDom.VNode, Decl(index.d.ts, 127, 5))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            patch(
+>patch : Symbol(patch, Decl(petit-dom-tests.tsx, 4, 18))
+
+                <div {...oldProps}>{oldContent}</div>,
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>oldProps : Symbol(oldProps, Decl(petit-dom-tests.tsx, 322, 54))
+>oldContent : Symbol(oldContent, Decl(petit-dom-tests.tsx, 322, 120))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+
+                <div {...newProps}>{newContent}</div>
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>newProps : Symbol(newProps, Decl(petit-dom-tests.tsx, 322, 31))
+>newContent : Symbol(newContent, Decl(petit-dom-tests.tsx, 322, 77))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+
+            );
+            return element;
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 322, 14))
+        }
+
+        unmount(element: Element): void {
+>unmount : Symbol(ComponentClassWithChildren.unmount, Decl(petit-dom-tests.tsx, 328, 9))
+>element : Symbol(element, Decl(petit-dom-tests.tsx, 330, 16))
+>Element : Symbol(Element, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+            unmount(<div> Hello World</div >);
+>unmount : Symbol(unmount, Decl(petit-dom-tests.tsx, 4, 35))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+>div : Symbol("div", Decl(lib.dom.d.ts, --, --))
+        }
+    }
+
+    // HyperScript syntax returns a ComponentClassNode<T> object, with typed properties
+    const node = h(
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 336, 9))
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+
+        ComponentClassWithChildren,
+>ComponentClassWithChildren : Symbol(ComponentClassWithChildren, Decl(petit-dom-tests.tsx, 307, 50))
+
+        { name: "xyz", count: 123, onSomeEvent: eventHandler },
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 338, 9))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 338, 22))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 338, 34))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+        "Hello",
+        h("span", null, "World")
+>h : Symbol(h, Decl(petit-dom-tests.tsx, 4, 8))
+
+    );
+
+    assertEqual(node.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 336, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(node.type, ComponentClassWithChildren);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 336, 9))
+>type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>ComponentClassWithChildren : Symbol(ComponentClassWithChildren, Decl(petit-dom-tests.tsx, 307, 50))
+
+    assertEqual(node.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 336, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(node.props.name, "xyz");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+>node.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 336, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    assertEqual(node.props.count, 123);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+>node.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 336, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    assertEqual(node.props.onSomeEvent, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.props.onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>node.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 336, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(node.content.length, 2);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>node.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>node.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>node : Symbol(node, Decl(petit-dom-tests.tsx, 336, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    // JSX syntax returns a VNode object, so the "type" and "props" properties are "any"
+    const jsxNode = (
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 352, 9))
+
+        <ComponentClassWithChildren name="xyz" count={123} onSomeEvent={eventHandler}>
+>ComponentClassWithChildren : Symbol(ComponentClassWithChildren, Decl(petit-dom-tests.tsx, 307, 50))
+>name : Symbol(name, Decl(petit-dom-tests.tsx, 353, 35))
+>count : Symbol(count, Decl(petit-dom-tests.tsx, 353, 46))
+>onSomeEvent : Symbol(onSomeEvent, Decl(petit-dom-tests.tsx, 353, 58))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+            Hello <span>World</span>
+>span : Symbol("span", Decl(lib.dom.d.ts, --, --))
+>span : Symbol("span", Decl(lib.dom.d.ts, --, --))
+
+        </ComponentClassWithChildren>
+>ComponentClassWithChildren : Symbol(ComponentClassWithChildren, Decl(petit-dom-tests.tsx, 307, 50))
+
+    );
+    const jsxNodeType = jsxNode.type as PetitDom.ComponentClass<CustomProps>;
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 357, 9))
+>jsxNode.type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 352, 9))
+>type : Symbol(PetitDom.ComponentClassNode.type, Decl(index.d.ts, 147, 74))
+>PetitDom : Symbol(PetitDom, Decl(petit-dom-tests.tsx, 4, 25))
+>ComponentClass : Symbol(PetitDom.ComponentClass, Decl(index.d.ts, 117, 5))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    const jsxNodeProps = jsxNode.props as CustomProps;
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 358, 9))
+>jsxNode.props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 352, 9))
+>props : Symbol(PetitDom.ComponentClassNode.props, Decl(index.d.ts, 148, 41))
+>CustomProps : Symbol(CustomProps, Decl(petit-dom-tests.tsx, 8, 45))
+
+    assertEqual(jsxNode.isSVG, false);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 352, 9))
+>isSVG : Symbol(PetitDom.VNode.isSVG, Decl(index.d.ts, 129, 21))
+
+    assertEqual(jsxNodeType, ComponentClassWithChildren);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeType : Symbol(jsxNodeType, Decl(petit-dom-tests.tsx, 357, 9))
+>ComponentClassWithChildren : Symbol(ComponentClassWithChildren, Decl(petit-dom-tests.tsx, 307, 50))
+
+    assertEqual(jsxNode.key, null);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 352, 9))
+>key : Symbol(PetitDom.VNode.key, Decl(index.d.ts, 131, 27))
+
+    assertEqual(jsxNodeProps.name, "xyz");
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 358, 9))
+>name : Symbol(CustomProps.name, Decl(petit-dom-tests.tsx, 10, 23))
+
+    assertEqual(jsxNodeProps.count, 123);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 358, 9))
+>count : Symbol(CustomProps.count, Decl(petit-dom-tests.tsx, 11, 17))
+
+    assertEqual(jsxNodeProps.onSomeEvent, eventHandler);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNodeProps.onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>jsxNodeProps : Symbol(jsxNodeProps, Decl(petit-dom-tests.tsx, 358, 9))
+>onSomeEvent : Symbol(CustomProps.onSomeEvent, Decl(petit-dom-tests.tsx, 12, 18))
+>eventHandler : Symbol(eventHandler, Decl(petit-dom-tests.tsx, 6, 39))
+
+    assertEqual(jsxNode.content.length, 2);
+>assertEqual : Symbol(assertEqual, Decl(petit-dom-tests.tsx, 4, 63))
+>jsxNode.content.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>jsxNode.content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>jsxNode : Symbol(jsxNode, Decl(petit-dom-tests.tsx, 352, 9))
+>content : Symbol(PetitDom.VNode.content, Decl(index.d.ts, 133, 28))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+}
+

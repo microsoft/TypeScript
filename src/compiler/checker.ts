@@ -20122,6 +20122,7 @@ namespace ts {
                     // Fake up a property declaration for the children
                     childrenPropSymbol.valueDeclaration = createPropertySignature(/*modifiers*/ undefined, unescapeLeadingUnderscores(jsxChildrenPropertyName), /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined);
                     childrenPropSymbol.valueDeclaration.parent = attributes;
+                    childrenPropSymbol.valueDeclaration.original = parent;
                     childrenPropSymbol.valueDeclaration.symbol = childrenPropSymbol;
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
@@ -21747,6 +21748,7 @@ namespace ts {
 
         function createSyntheticExpression(parent: Node, type: Type | ((mode: CheckMode | undefined) => Type), isSpread?: boolean) {
             const result = <SyntheticExpression>createNode(SyntaxKind.SyntheticExpression, parent.pos, parent.end);
+            result.original = parent;
             result.parent = parent;
             result.type = type;
             result.isSpread = isSpread || false;
