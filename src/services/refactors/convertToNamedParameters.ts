@@ -16,7 +16,6 @@ namespace ts.refactor.convertToNamedParameters {
         return [{
             name: refactorName,
             description,
-            inlineable: false,
             actions: [{
                 name: refactorName,
                 description
