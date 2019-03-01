@@ -1,10 +1,33 @@
 /*@internal*/
 namespace ts {
+    export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {
+        /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
+        reportsUnnecessary?: {};
+        source?: string;
+        relatedInformation?: ReusableDiagnosticRelatedInformation[];
+    }
+
+    export interface ReusableDiagnosticRelatedInformation {
+        category: DiagnosticCategory;
+        code: number;
+        file: Path | undefined;
+        start: number | undefined;
+        length: number | undefined;
+        messageText: string | ReusableDiagnosticMessageChain;
+    }
+
+    export interface ReusableDiagnosticMessageChain {
+        messageText: string;
+        category: DiagnosticCategory;
+        code: number;
+        next?: ReusableDiagnosticMessageChain;
+    }
+
     export interface ReusableBuilderProgramState extends ReusableBuilderState {
         /**
          * Cache of semantic diagnostics for files with their Path being the key
          */
-        semanticDiagnosticsPerFile?: ReadonlyMap<ReadonlyArray<Diagnostic>> | undefined;
+        semanticDiagnosticsPerFile?: ReadonlyMap<ReadonlyArray<ReusableDiagnostic> | ReadonlyArray<Diagnostic>> | undefined;
         /**
          * The map has key by source file's path that has been changed
          */
@@ -46,6 +69,10 @@ namespace ts {
          * Current index to retrieve pending affected file
          */
         affectedFilesPendingEmitIndex?: number | undefined;
+        /*
+         * true if semantic diagnostics are ReusableDiagnostic instead of Diagnostic
+         */
+        hasReusableDiagnostic?: true;
     }
 
     /**
@@ -200,7 +227,7 @@ namespace ts {
                 // Unchanged file copy diagnostics
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
                 if (diagnostics) {
-                    state.semanticDiagnosticsPerFile!.set(sourceFilePath, diagnostics);
+                    state.semanticDiagnosticsPerFile!.set(sourceFilePath, oldState!.hasReusableDiagnostic ? convertToDiagnostics(diagnostics as ReadonlyArray<ReusableDiagnostic>, newProgram) : diagnostics as ReadonlyArray<Diagnostic>);
                     if (!state.semanticDiagnosticsFromOldState) {
                         state.semanticDiagnosticsFromOldState = createMap<true>();
                     }
@@ -223,6 +250,40 @@ namespace ts {
         }
 
         return state;
+    }
+
+    function convertToDiagnostics(diagnostics: ReadonlyArray<ReusableDiagnostic>, newProgram: Program): ReadonlyArray<Diagnostic> {
+        if (!diagnostics.length) return emptyArray;
+        return diagnostics.map(diagnostic => {
+            const result: Diagnostic = convertToDiagnosticRelatedInformation(diagnostic, newProgram);
+            result.reportsUnnecessary = diagnostic.reportsUnnecessary;
+            result.source = diagnostic.source;
+            const { relatedInformation } = diagnostic;
+            result.relatedInformation = relatedInformation ?
+                relatedInformation.length ?
+                    relatedInformation.map(r => convertToDiagnosticRelatedInformation(r, newProgram)) :
+                    emptyArray :
+                undefined;
+            return result;
+        });
+    }
+
+    function convertToDiagnosticRelatedInformation(diagnostic: ReusableDiagnosticRelatedInformation, newProgram: Program): DiagnosticRelatedInformation {
+        const { file, messageText } = diagnostic;
+        return {
+            ...diagnostic,
+            file: file && newProgram.getSourceFileByPath(file),
+            messageText: messageText === undefined || isString(messageText) ?
+                messageText :
+                convertToDiagnosticMessageChain(messageText, newProgram)
+        };
+    }
+
+    function convertToDiagnosticMessageChain(diagnostic: ReusableDiagnosticMessageChain, newProgram: Program): DiagnosticMessageChain {
+        return {
+            ...diagnostic,
+            next: diagnostic.next && convertToDiagnosticMessageChain(diagnostic.next, newProgram)
+        };
     }
 
     /**
@@ -514,12 +575,13 @@ namespace ts {
         return diagnostics;
     }
 
+    export type ProgramBuildInfoDiagnostic = string | [string, ReadonlyArray<ReusableDiagnostic>];
     export interface ProgramBuildInfo {
         fileInfos: MapLike<BuilderState.FileInfo>;
         options: CompilerOptions;
         referencedMap?: MapLike<string[]>;
         exportedModulesMap?: MapLike<string[]>;
-        semanticDiagnosticsPerFile?: string[];
+        semanticDiagnosticsPerFile?: ProgramBuildInfoDiagnostic[];
     }
 
     /**
@@ -555,13 +617,56 @@ namespace ts {
         }
 
         if (state.semanticDiagnosticsPerFile) {
-            const semanticDiagnosticsPerFile: string[] = [];
+            const semanticDiagnosticsPerFile: ProgramBuildInfoDiagnostic[] = [];
             // Currently not recording actual errors since those mean no emit for tsc --build
-            state.semanticDiagnosticsPerFile.forEach((_value, key) => semanticDiagnosticsPerFile.push(key));
+            state.semanticDiagnosticsPerFile.forEach((value, key) => semanticDiagnosticsPerFile.push(
+                value.length ?
+                    [
+                        key,
+                        state.hasReusableDiagnostic ?
+                            value as ReadonlyArray<ReusableDiagnostic> :
+                            convertToReusableDiagnostics(value as ReadonlyArray<Diagnostic>)
+                    ] :
+                    key
+            ));
             result.semanticDiagnosticsPerFile = semanticDiagnosticsPerFile;
         }
 
         return result;
+    }
+
+    function convertToReusableDiagnostics(diagnostics: ReadonlyArray<Diagnostic>): ReadonlyArray<ReusableDiagnostic> {
+        Debug.assert(!!diagnostics.length);
+        return diagnostics.map(diagnostic => {
+            const result: ReusableDiagnostic = convertToReusableDiagnosticRelatedInformation(diagnostic);
+            result.reportsUnnecessary = diagnostic.reportsUnnecessary;
+            result.source = diagnostic.source;
+            const { relatedInformation } = diagnostic;
+            result.relatedInformation = relatedInformation ?
+                relatedInformation.length ?
+                    relatedInformation.map(r => convertToReusableDiagnosticRelatedInformation(r)) :
+                    emptyArray :
+                undefined;
+            return result;
+        });
+    }
+
+    function convertToReusableDiagnosticRelatedInformation(diagnostic: DiagnosticRelatedInformation): ReusableDiagnosticRelatedInformation {
+        const { file, messageText } = diagnostic;
+        return {
+            ...diagnostic,
+            file: file && file.path,
+            messageText: messageText === undefined || isString(messageText) ?
+                messageText :
+                convertToReusableDiagnosticMessageChain(messageText)
+        };
+    }
+
+    function convertToReusableDiagnosticMessageChain(diagnostic: DiagnosticMessageChain): ReusableDiagnosticMessageChain {
+        return {
+            ...diagnostic,
+            next: diagnostic.next && convertToReusableDiagnosticMessageChain(diagnostic.next)
+        };
     }
 
     export enum BuilderProgramKind {
@@ -868,7 +973,8 @@ namespace ts {
             compilerOptions: program.options,
             referencedMap: getMapOfReferencedSet(program.referencedMap),
             exportedModulesMap: getMapOfReferencedSet(program.exportedModulesMap),
-            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, identity, () => emptyArray)
+            semanticDiagnosticsPerFile: program.semanticDiagnosticsPerFile && arrayToMap(program.semanticDiagnosticsPerFile, value => isString(value) ? value : value[0], value => isString(value) ? emptyArray : value[1]),
+            hasReusableDiagnostic: true
         };
         return {
             getState: () => state,
