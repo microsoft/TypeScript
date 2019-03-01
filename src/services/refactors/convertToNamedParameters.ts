@@ -469,7 +469,10 @@ namespace ts.refactor.convertToNamedParameters {
 
     type ValidParameterNodeArray = NodeArray<ValidParameterDeclaration>;
 
-    type ValidVariableDeclaration = VariableDeclaration & { name: Identifier, type: undefined };
+    interface ValidVariableDeclaration extends VariableDeclaration {
+        name: Identifier;
+        type: undefined;
+    }
 
     interface ValidConstructor extends ConstructorDeclaration {
         parent: (ClassDeclaration & { name: Identifier }) | (ClassExpression & { parent: ValidVariableDeclaration });
