@@ -685,6 +685,7 @@ namespace ts {
             Contextual = 1 << 0,            // Explicitly assigned contextual type, therefore not cacheable
             Inferential = 1 << 1,           // Inferential typing
             SkipContextSensitive = 1 << 2,  // Skip context sensitive function expressions
+            SkipGenericFunctions = 1 << 3,  // Skip single signature generic functions
         }
 
         const enum CallbackCheck {
@@ -20053,7 +20054,8 @@ namespace ts {
                     const paramType = getTypeAtPosition(signature, i);
                     // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
                     // context sensitive function expressions as wildcards
-                    const checkMode = excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0;
+                    const checkMode = (excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0) |
+                        (excludeArgument ? CheckMode.SkipGenericFunctions : 0);
                     const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
                     inferTypes(context.inferences, argType, paramType);
                 }
@@ -20190,7 +20192,8 @@ namespace ts {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    const checkMode = excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0;
+                    const checkMode = (excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0) |
+                        (excludeArgument ? CheckMode.SkipGenericFunctions : 0);
                     const argType = checkExpressionWithContextualType(arg, paramType, undefined, checkMode);
                     // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
@@ -23266,9 +23269,12 @@ namespace ts {
         }
 
         function instantiateTypeWithSingleGenericCallSignature(node: Expression | MethodDeclaration | QualifiedName, type: Type, checkMode?: CheckMode) {
-            if (checkMode && checkMode & CheckMode.Inferential) {
+            if (checkMode && checkMode & (CheckMode.Inferential | CheckMode.SkipGenericFunctions)) {
                 const signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
+                    if (checkMode & CheckMode.SkipGenericFunctions) {
+                        return anyFunctionType;
+                    }
                     const contextualType = getApparentTypeOfContextualType(<Expression>node);
                     if (contextualType) {
                         const contextualSignature = getSingleCallSignature(getNonNullableType(contextualType));
@@ -23278,7 +23284,6 @@ namespace ts {
                     }
                 }
             }
-
             return type;
         }
 
