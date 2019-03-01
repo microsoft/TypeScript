@@ -451,15 +451,7 @@ namespace ts {
         let readFileWithCache = (f: string) => host.readFile(f);
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
-        const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = host.createHash || generateDjb2Hash;
-        compilerHost.getSourceFile = (...args) => {
-            const result = originalGetSourceFile.call(compilerHost, ...args);
-            if (result) {
-                result.version = computeHash.call(host, result.text);
-            }
-            return result;
-        };
+        setCreateSourceFileAsHashVersioned(compilerHost, host);
 
         const buildInfoChecked = createFileMap<true>(toPath);
 

@@ -280,6 +280,18 @@ namespace ts {
         }
     }
 
+    export function setCreateSourceFileAsHashVersioned(compilerHost: CompilerHost, host: ProgramHost<any>) {
+        const originalGetSourceFile = compilerHost.getSourceFile;
+        const computeHash = host.createHash || generateDjb2Hash;
+        compilerHost.getSourceFile = (...args) => {
+            const result = originalGetSourceFile.call(compilerHost, ...args);
+            if (result) {
+                result.version = computeHash.call(host, result.text);
+            }
+            return result;
+        };
+    }
+
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
@@ -524,8 +536,6 @@ namespace ts {
         }
     }
 
-    const initialVersion = 1;
-
     /**
      * Creates the watch from the host for root files and compiler options
      */
@@ -536,13 +546,14 @@ namespace ts {
     export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
     export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T> & WatchCompilerHostOfConfigFile<T>): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
         interface FilePresentOnHost {
-            version: number;
+            version: string;
             sourceFile: SourceFile;
             fileWatcher: FileWatcher;
         }
-        type FileMissingOnHost = number;
+        type FileMissingOnHost = false;
         interface FilePresenceUnknownOnHost {
-            version: number;
+            version: false;
+            fileWatcher?: FileWatcher;
         }
         type FileMayBePresentOnHost = FilePresentOnHost | FilePresenceUnknownOnHost;
         type HostFileInfo = FilePresentOnHost | FileMissingOnHost | FilePresenceUnknownOnHost;
@@ -597,6 +608,7 @@ namespace ts {
         }
 
         const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
+        setCreateSourceFileAsHashVersioned(compilerHost, host);
         // Members for CompilerHost
         const getNewSourceFile = compilerHost.getSourceFile;
         compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);
@@ -731,19 +743,19 @@ namespace ts {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
-        function isFileMissingOnHost(hostSourceFile: HostFileInfo): hostSourceFile is FileMissingOnHost {
-            return typeof hostSourceFile === "number";
+        function isFileMissingOnHost(hostSourceFile: HostFileInfo | undefined): hostSourceFile is FileMissingOnHost {
+            return typeof hostSourceFile === "boolean";
         }
 
-        function isFilePresentOnHost(hostSourceFile: FileMayBePresentOnHost): hostSourceFile is FilePresentOnHost {
-            return !!(hostSourceFile as FilePresentOnHost).sourceFile;
+        function isFilePresenceUnknownOnHost(hostSourceFile: FileMayBePresentOnHost): hostSourceFile is FilePresenceUnknownOnHost {
+            return typeof (hostSourceFile as FilePresenceUnknownOnHost).version === "boolean";
         }
 
         function fileExists(fileName: string) {
             const path = toPath(fileName);
             // If file is missing on host from cache, we can definitely say file doesnt exist
             // otherwise we need to ensure from the disk
-            if (isFileMissingOnHost(sourceFilesCache.get(path)!)) {
+            if (isFileMissingOnHost(sourceFilesCache.get(path))) {
                 return true;
             }
 
@@ -751,44 +763,39 @@ namespace ts {
         }
 
         function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-            const hostSourceFile = sourceFilesCache.get(path)!;
+            const hostSourceFile = sourceFilesCache.get(path);
             // No source file on the host
             if (isFileMissingOnHost(hostSourceFile)) {
                 return undefined;
             }
 
             // Create new source file if requested or the versions dont match
-            if (!hostSourceFile || shouldCreateNewSourceFile || !isFilePresentOnHost(hostSourceFile) || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
+            if (hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile)) {
                 const sourceFile = getNewSourceFile(fileName, languageVersion, onError);
                 if (hostSourceFile) {
-                    if (shouldCreateNewSourceFile) {
-                        hostSourceFile.version++;
-                    }
-
                     if (sourceFile) {
                         // Set the source file and create file watcher now that file was present on the disk
                         (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
-                        sourceFile.version = hostSourceFile.version.toString();
-                        if (!(hostSourceFile as FilePresentOnHost).fileWatcher) {
-                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
+                        hostSourceFile.version = sourceFile.version;
+                        if (!hostSourceFile.fileWatcher) {
+                            hostSourceFile.fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
                         }
                     }
                     else {
                         // There is no source file on host any more, close the watch, missing file paths will track it
-                        if (isFilePresentOnHost(hostSourceFile)) {
+                        if (hostSourceFile.fileWatcher) {
                             hostSourceFile.fileWatcher.close();
                         }
-                        sourceFilesCache.set(path, hostSourceFile.version);
+                        sourceFilesCache.set(path, false);
                     }
                 }
                 else {
                     if (sourceFile) {
-                        sourceFile.version = initialVersion.toString();
                         const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
-                        sourceFilesCache.set(path, { sourceFile, version: initialVersion, fileWatcher });
+                        sourceFilesCache.set(path, { sourceFile, version: sourceFile.version, fileWatcher });
                     }
                     else {
-                        sourceFilesCache.set(path, initialVersion);
+                        sourceFilesCache.set(path, false);
                     }
                 }
                 return sourceFile;
@@ -801,17 +808,17 @@ namespace ts {
             if (hostSourceFile !== undefined) {
                 if (isFileMissingOnHost(hostSourceFile)) {
                     // The next version, lets set it as presence unknown file
-                    sourceFilesCache.set(path, { version: Number(hostSourceFile) + 1 });
+                    sourceFilesCache.set(path, { version: false });
                 }
                 else {
-                    hostSourceFile.version++;
+                    (hostSourceFile as FilePresenceUnknownOnHost).version = false;
                 }
             }
         }
 
         function getSourceVersion(path: Path): string | undefined {
             const hostSourceFile = sourceFilesCache.get(path);
-            return !hostSourceFile || isFileMissingOnHost(hostSourceFile) ? undefined : hostSourceFile.version.toString();
+            return !hostSourceFile || !hostSourceFile.version ? undefined : hostSourceFile.version;
         }
 
         function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
@@ -820,14 +827,14 @@ namespace ts {
             // remove the cached entry.
             // Note we arent deleting entry if file became missing in new program or
             // there was version update and new source file was created.
-            if (hostSourceFileInfo) {
+            if (hostSourceFileInfo !== undefined) {
                 // record the missing file paths so they can be removed later if watchers arent tracking them
                 if (isFileMissingOnHost(hostSourceFileInfo)) {
                     (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
                 }
                 else if ((hostSourceFileInfo as FilePresentOnHost).sourceFile === oldSourceFile) {
-                    if ((hostSourceFileInfo as FilePresentOnHost).fileWatcher) {
-                        (hostSourceFileInfo as FilePresentOnHost).fileWatcher.close();
+                    if (hostSourceFileInfo.fileWatcher) {
+                        hostSourceFileInfo.fileWatcher.close();
                     }
                     sourceFilesCache.delete(oldSourceFile.resolvedPath);
                     if (!hasSourceFileByPath) {
@@ -924,7 +931,7 @@ namespace ts {
             updateCachedSystemWithFile(fileName, path, eventKind);
 
             // Update the source file cache
-            if (eventKind === FileWatcherEventKind.Deleted && sourceFilesCache.get(path)) {
+            if (eventKind === FileWatcherEventKind.Deleted && sourceFilesCache.has(path)) {
                 resolutionCache.invalidateResolutionOfFile(path);
             }
             resolutionCache.removeResolutionsFromProjectReferenceRedirects(path);
