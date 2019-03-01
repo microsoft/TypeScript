@@ -713,8 +713,7 @@ namespace ts {
             }
 
             // Collect the expected outputs of this project
-            // Do not use presence or absence of buildInfo to determine status of build
-            const outputs = getAllProjectOutputs(project, /*ignoreBuildInfo*/ true);
+            const outputs = getAllProjectOutputs(project);
 
             if (outputs.length === 0) {
                 return {
@@ -1300,11 +1299,6 @@ namespace ts {
                         priorNewestUpdateTime = newer(priorNewestUpdateTime, host.getModifiedTime(file) || missingFileModifiedTime);
                     }
 
-                    // For info file, ignore if we cant update modified time
-                    if (isBuildInfoFile(file) && !host.fileExists(file)) {
-                        continue;
-                    }
-
                     host.setModifiedTime(file, now);
                     if (proj.options.listEmittedFiles) {
                         writeFileName(`TSFILE: ${file}`);
@@ -1478,19 +1472,17 @@ namespace ts {
         return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
     }
 
-    export function getAllProjectOutputs(project: ParsedCommandLine, ignoreBuildInfo?: true): ReadonlyArray<string> {
+    export function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
         if (project.options.outFile || project.options.out) {
-            return getOutFileOutputs(project, ignoreBuildInfo);
+            return getOutFileOutputs(project);
         }
         else {
             const outputs: string[] = [];
             for (const inputFile of project.fileNames) {
                 outputs.push(...getOutputFileNames(inputFile, project));
             }
-            if (!ignoreBuildInfo) {
-                const buildInfoPath = getOutputPathForBuildInfo(project.options);
-                if (buildInfoPath) outputs.push(buildInfoPath);
-            }
+            const buildInfoPath = getOutputPathForBuildInfo(project.options);
+            if (buildInfoPath) outputs.push(buildInfoPath);
             return outputs;
         }
     }

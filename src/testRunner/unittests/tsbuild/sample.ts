@@ -379,7 +379,7 @@ export class cNew {}`);
         });
 
         describe("emit output", () => {
-            const initialBuild: ExpectedBuildOutputDifferingWithBuildInfo = {
+            const initialBuild: BuildState = {
                 modifyFs: noop,
                 expectedDiagnostics: [
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
@@ -433,6 +433,17 @@ export class cNew {}`);
                 incrementalDtsChangedBuild: {
                     modifyFs: fs => appendText(fs, "/src/core/index.ts", `
 export class someClass { }`),
+                    expectedDiagnostics: [
+                        // Emits only partial core instead of all outputs
+                        getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/core/tsconfig.json", "src/core/anotherModule.js", "src/core/index.ts"],
+                        [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                        [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/core/tsconfig.json"],
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/logic/tsconfig.json", "src/logic/index.js", "src/core"],
+                        [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/core"],
+                        [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
+                    ],
                     expectedReadFiles: getReadFilesMap(
                         [
                             // Configs
@@ -461,96 +472,39 @@ export class someClass { }`),
                         ],
                         "/src/core/index.d.ts", // to check if changed, and to build other projects after change
                     ),
-                    withBuildInfo: {
-                        expectedDiagnostics: [
-                            // Emits only partial core instead of all outputs
-                            getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/core/tsconfig.json", "src/core/anotherModule.js", "src/core/index.ts"],
-                            [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                            [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/core/tsconfig.json"],
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/logic/tsconfig.json", "src/logic/index.js", "src/core"],
-                            [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/core"],
-                            [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
-                        ]
-                    },
-                    withoutBuildInfo: {
-                        expectedDiagnostics: [
-                            getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/core/tsconfig.json", "src/core/anotherModule.js", "src/core/index.ts"],
-                            [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/logic/tsconfig.json", "src/logic/index.js", "src/core"],
-                            [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/core"],
-                            [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
-                        ]
-                    }
                 },
                 incrementalDtsUnchangedBuild: {
                     modifyFs: fs => appendText(fs, "/src/core/index.ts", `
 class someClass { }`),
-                    withBuildInfo: {
-                        expectedDiagnostics: [
-                            getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/core/tsconfig.json", "src/core/anotherModule.js", "src/core/index.ts"],
-                            [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                            [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/core/tsconfig.json"],
-                            [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/logic/tsconfig.json"],
-                            [Diagnostics.Updating_output_timestamps_of_project_0, "/src/logic/tsconfig.json"],
-                            [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/tests/tsconfig.json"],
-                            [Diagnostics.Updating_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
+                    expectedDiagnostics: [
+                        getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                        [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/core/tsconfig.json", "src/core/anotherModule.js", "src/core/index.ts"],
+                        [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                        [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/core/tsconfig.json"],
+                        [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/logic/tsconfig.json"],
+                        [Diagnostics.Updating_output_timestamps_of_project_0, "/src/logic/tsconfig.json"],
+                        [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/tests/tsconfig.json"],
+                        [Diagnostics.Updating_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
+                    ],
+                    expectedReadFiles: getReadFilesMap(
+                        [
+                            // Configs
+                            "/src/core/tsconfig.json",
+                            "/src/logic/tsconfig.json",
+                            "/src/tests/tsconfig.json",
+
+                            // Source files
+                            "/src/core/anotherModule.ts",
+                            "/src/core/index.ts",
+                            "/src/core/some_decl.d.ts",
+
+                            // to check if changed
+                            "/src/core/index.d.ts",
+
+                            // build info
+                            "/src/core/tsconfig.tsbuildinfo",
                         ],
-                        expectedReadFiles: getReadFilesMap(
-                            [
-                                // Configs
-                                "/src/core/tsconfig.json",
-                                "/src/logic/tsconfig.json",
-                                "/src/tests/tsconfig.json",
-
-                                // Source files
-                                "/src/core/anotherModule.ts",
-                                "/src/core/index.ts",
-                                "/src/core/some_decl.d.ts",
-
-                                // to check if changed
-                                "/src/core/index.d.ts",
-
-                                // build info
-                                "/src/core/tsconfig.tsbuildinfo",
-                            ],
-                        )
-                    },
-                    withoutBuildInfo: {
-                        expectedDiagnostics: [
-                            getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                            [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/core/tsconfig.json", "src/core/anotherModule.js", "src/core/index.ts"],
-                            [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
-                            [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/logic/tsconfig.json"],
-                            [Diagnostics.Updating_output_timestamps_of_project_0, "/src/logic/tsconfig.json"],
-                            [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/tests/tsconfig.json"],
-                            [Diagnostics.Updating_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
-                        ],
-                        expectedReadFiles: getReadFilesMap(
-                            [
-                                // Configs
-                                "/src/core/tsconfig.json",
-                                "/src/logic/tsconfig.json",
-                                "/src/tests/tsconfig.json",
-
-                                // Source files
-                                "/src/core/anotherModule.ts",
-                                "/src/core/index.ts",
-                                "/src/core/some_decl.d.ts",
-
-                                // to check if changed
-                                "/src/core/index.d.ts",
-                                "/src/core/anotherModule.d.ts", // Since its generated again without .buildInfo
-
-                                // build info
-                                "/src/core/tsconfig.tsbuildinfo",
-                            ],
-                        )
-                    }
+                    )
                 },
                 outputFiles: [
                     "/src/core/anotherModule.js",
@@ -635,7 +589,6 @@ class someClass { }`),
                     "/src/tests/index.d.ts",
                     "/src/tests/tsconfig.tsbuildinfo",
                 ],
-                ignoreWithoutBuildInfo: true
             });
 
             verifyTsbuildOutput({
