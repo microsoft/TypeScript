@@ -69,7 +69,7 @@ namespace ts {
             [outputFiles[project.second][ext.buildinfo], outputFiles[project.second][ext.js], outputFiles[project.second][ext.dts]],
             [outputFiles[project.third][ext.buildinfo], outputFiles[project.third][ext.js], outputFiles[project.third][ext.dts]]
         ];
-        const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as [Sources, Sources, Sources];
+        const relSources = sources.map(([config, sources]) => [relName(config), sources.map(relName)]) as any as [Sources, Sources, Sources];
         const { time, tick } = getTime();
         let expectedOutputFiles = [
             ...outputFiles[project.first],
