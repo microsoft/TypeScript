@@ -1684,9 +1684,9 @@ namespace ts.projectSystem {
             TI.getNpmCommandForInstallation(npmPath, tsVersion, packageNames, packageNames.length - Math.ceil(packageNames.length / 2)).command
         ];
         it("works when the command is too long to install all packages at once", () => {
-            const commands: [string, string[]][] = [];
-            const hasError = TI.installNpmPackages(npmPath, tsVersion, packageNames, (file, args) => {
-                commands.push([file, args]);
+            const commands: string[] = [];
+            const hasError = TI.installNpmPackages(npmPath, tsVersion, packageNames, command => {
+                commands.push(command);
                 return false;
             });
             assert.isFalse(hasError);
@@ -1694,9 +1694,9 @@ namespace ts.projectSystem {
         });
 
         it("installs remaining packages when one of the partial command fails", () => {
-            const commands: [string, string[]][] = [];
-            const hasError = TI.installNpmPackages(npmPath, tsVersion, packageNames, (file, args) => {
-                commands.push([file, args]);
+            const commands: string[] = [];
+            const hasError = TI.installNpmPackages(npmPath, tsVersion, packageNames, command => {
+                commands.push(command);
                 return commands.length === 1;
             });
             assert.isTrue(hasError);

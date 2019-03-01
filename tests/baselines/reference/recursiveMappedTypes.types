@@ -97,3 +97,39 @@ type a = Remap1<string[]>;  // string[]
 type b = Remap2<string[]>;  // string[]
 >b : string[]
 
+// Repro from #29992
+
+type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
+>NonOptionalKeys : { [P in keyof T]: undefined extends T[P] ? never : P; }[keyof T]
+
+type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
+>Child : Child<T>
+
+export interface ListWidget {
+    "type": "list",
+>"type" : "list"
+
+    "minimum_count": number,
+>"minimum_count" : number
+
+    "maximum_count": number,
+>"maximum_count" : number
+
+    "collapsable"?: boolean, //default to false, means all expanded
+>"collapsable" : boolean
+
+    "each": Child<ListWidget>;
+>"each" : Child<ListWidget>
+}
+
+type ListChild = Child<ListWidget>
+>ListChild : Child<ListWidget>
+
+declare let x: ListChild;
+>x : Child<ListWidget>
+
+x.type;
+>x.type : any
+>x : Child<ListWidget>
+>type : any
+
