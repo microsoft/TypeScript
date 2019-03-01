@@ -345,13 +345,6 @@ namespace ts {
             }
         }
 
-        function functionBodyVisitor(node: Block): Block {
-            if (shouldVisitNode(node)) {
-                return visitBlock(node, /*isFunctionBody*/ true);
-            }
-            return node;
-        }
-
         function callExpressionVisitor(node: Node): VisitResult<Node> {
             if (node.kind === SyntaxKind.SuperKeyword) {
                 return visitSuperKeyword(/*isExpressionOfCall*/ true);
@@ -507,7 +500,6 @@ namespace ts {
             const statements: Statement[] = [];
             startLexicalEnvironment();
             let statementOffset = addStandardPrologue(prologue, node.statements, /*ensureUseStrict*/ false);
-            insertCaptureThisForNodeIfNeeded(prologue, node);
             statementOffset = addCustomPrologue(prologue, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             if (taggedTemplateStringDeclarations) {
@@ -515,7 +507,8 @@ namespace ts {
                     createVariableStatement(/*modifiers*/ undefined,
                         createVariableDeclarationList(taggedTemplateStringDeclarations)));
             }
-            insertStatementsAfterStandardPrologue(prologue, endLexicalEnvironment());
+            mergeLexicalEnvironment(prologue, endLexicalEnvironment());
+            insertCaptureThisForNodeIfNeeded(prologue, node);
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
                 node,
@@ -1194,11 +1187,6 @@ namespace ts {
                 || isBindingPattern(node.name);
         }
 
-        function hasDefaultValueOrBindingPatternOrRest(node: ParameterDeclaration) {
-            return hasDefaultValueOrBindingPattern(node)
-                || node.dotDotDotToken !== undefined;
-        }
-
         /**
          * Adds statements to the body of a function-like node if it contains parameters with
          * binding patterns or initializers.
@@ -1446,12 +1434,13 @@ namespace ts {
 
         /**
          * Adds a statement to capture the `this` of a function declaration if it is needed.
+         * NOTE: This must be executed *after* the subtree has been visited.
          *
          * @param statements The statements for the new function body.
          * @param node A node.
          */
         function insertCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): boolean {
-            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
+            if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
                 insertCaptureThisForNode(statements, node, createThis());
                 return true;
             }
@@ -1731,10 +1720,6 @@ namespace ts {
             return func;
         }
 
-        function containsCapturedLexicalThis(node: Node) {
-            return (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis) !== 0;
-        }
-
         /**
          * Visits a FunctionExpression node.
          *
@@ -1748,11 +1733,7 @@ namespace ts {
             convertedLoopState = undefined;
 
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const shouldTransform = forEachChild(node, containsCapturedLexicalThis)
-                || some(node.parameters, hasDefaultValueOrBindingPatternOrRest);
-            const body = shouldTransform
-                ? transformFunctionBody(node)
-                : visitFunctionBodyDownLevel(node);
+            const body = transformFunctionBody(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
                 ? getLocalName(node)
                 : node.name;
@@ -1781,11 +1762,7 @@ namespace ts {
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const shouldTransform = forEachChild(node, containsCapturedLexicalThis)
-                || some(node.parameters, hasDefaultValueOrBindingPatternOrRest);
-            const body = shouldTransform
-                ? transformFunctionBody(node)
-                : visitFunctionBodyDownLevel(node);
+            const body = transformFunctionBody(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
                 ? getLocalName(node)
                 : node.name;
@@ -1921,7 +1898,13 @@ namespace ts {
                 multiLine = true;
             }
 
-            const block = createBlock(setTextRange(createNodeArray(concatenate(prologue, statements)), statementsLocation), multiLine);
+            statements.unshift(...prologue);
+            if (isBlock(body) && arrayIsEqualTo(statements, body.statements)) {
+                // no changes were made, preserve the tree
+                return body;
+            }
+
+            const block = createBlock(setTextRange(createNodeArray(statements), statementsLocation), multiLine);
             setTextRange(block, node.body);
             if (!multiLine && singleLine) {
                 setEmitFlags(block, EmitFlags.SingleLine);
@@ -1933,19 +1916,6 @@ namespace ts {
 
             setOriginalNode(block, node.body);
             return block;
-        }
-
-        function visitFunctionBodyDownLevel(node: FunctionDeclaration | FunctionExpression | AccessorDeclaration) {
-            const updated = visitFunctionBody(node.body, functionBodyVisitor, context)!;
-            return updateBlock(
-                updated,
-                setTextRange(
-                    createNodeArray(
-                        insertCaptureNewTargetIfNeeded(updated.statements as MutableNodeArray<Statement>, node, /*copyOnWrite*/ true)
-                    ),
-                    /*location*/ updated.statements
-                )
-            );
         }
 
         function visitBlock(node: Block, isFunctionBody: boolean): Block {
@@ -3501,9 +3471,7 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             let updated: AccessorDeclaration;
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsES2015)
-                ? transformFunctionBody(node)
-                : visitFunctionBodyDownLevel(node);
+            const body = transformFunctionBody(node);
             if (node.kind === SyntaxKind.GetAccessor) {
                 updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
             }
