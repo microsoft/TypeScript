@@ -233,7 +233,7 @@ namespace ts.refactor.convertToNamedParameters {
     }
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
-        const node = getTokenAtPosition(file, startPosition);
+        const node = getTouchingToken(file, startPosition);
         const functionDeclaration = getContainingFunction(node);
         if (functionDeclaration
             && isValidFunctionDeclaration(functionDeclaration, checker)
