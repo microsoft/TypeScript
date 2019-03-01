@@ -339,6 +339,15 @@ namespace ts {
             description: Diagnostics.Enable_incremental_compilation,
         },
         {
+            name: "tsBuildInfoFile",
+            type: "string",
+            isFilePath: true,
+            paramType: Diagnostics.FILE,
+            isTSConfigOnly: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Specify_file_to_store_incremental_compilation_information,
+        },
+        {
             name: "removeComments",
             type: "boolean",
             showInSimplifiedHelpView: true,

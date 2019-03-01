@@ -2725,6 +2725,12 @@ namespace ts {
                 }
             }
 
+            if (options.tsBuildInfoFile) {
+                if (!isIncrementalCompilation(options)) {
+                    createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "tsBuildInfoFile", "incremental", "composite");
+                }
+            }
+
             verifyProjectReferences();
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list

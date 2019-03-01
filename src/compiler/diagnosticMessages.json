@@ -4032,6 +4032,10 @@
         "category": "Error",
         "code": 6379
     },
+    "Specify file to store incremental compilation information": {
+        "category": "Message",
+        "code": 6380
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

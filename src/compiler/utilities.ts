@@ -7250,6 +7250,10 @@ namespace ts {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
+    export function isIncrementalCompilation(options: CompilerOptions) {
+        return !!(options.incremental || options.composite);
+    }
+
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictBindCallApply" | "strictPropertyInitialization" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {

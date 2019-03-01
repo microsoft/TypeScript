@@ -339,6 +339,7 @@ namespace ts {
             modifyFs: (fs: vfs.FileSystem) => void;
             modifyAgainFs?: (fs: vfs.FileSystem) => void;
             additionalSourceFiles?: ReadonlyArray<string>;
+            expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
             dependOrdered?: true;
             ignoreDtsChanged?: true;
             ignoreDtsUnchanged?: true;
@@ -351,6 +352,7 @@ namespace ts {
             modifyFs,
             modifyAgainFs,
             additionalSourceFiles,
+            expectedBuildInfoFilesForSectionBaselines,
             dependOrdered,
             ignoreDtsChanged,
             ignoreDtsUnchanged,
@@ -380,7 +382,7 @@ namespace ts {
                 proj: "outfile-concat",
                 rootNames: ["/src/third"],
                 expectedMapFileNames,
-                expectedTsbuildInfoFileNames,
+                expectedBuildInfoFilesForSectionBaselines: expectedBuildInfoFilesForSectionBaselines || expectedTsbuildInfoFileNames,
                 lastProjectOutputJs: outputFiles[project.third][ext.js],
                 initialBuild: {
                     modifyFs,
@@ -430,6 +432,21 @@ namespace ts {
         verifyOutFileScenario({
             scenario: "when final project is not composite but incremental",
             modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, `"incremental": true,`),
+            ignoreDtsChanged: true,
+            ignoreDtsUnchanged: true,
+            baselineOnly: true
+        });
+
+        // Verify baseline with and without build info
+        verifyOutFileScenario({
+            scenario: "when final project specifies tsBuildInfoFile",
+            modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, `"composite": true,
+        "tsBuildInfoFile": "./thirdjs/output/third.tsbuildinfo",`),
+            expectedBuildInfoFilesForSectionBaselines: [
+                expectedTsbuildInfoFileNames[0],
+                expectedTsbuildInfoFileNames[1],
+                ["/src/third/thirdjs/output/third.tsbuildinfo", expectedTsbuildInfoFileNames[2][1], expectedTsbuildInfoFileNames[2][2]]
+            ],
             ignoreDtsChanged: true,
             ignoreDtsUnchanged: true,
             baselineOnly: true

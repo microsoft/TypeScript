@@ -146,12 +146,12 @@ namespace ts {
         tick: () => void;
         rootNames: ReadonlyArray<string>;
         expectedMapFileNames: ReadonlyArray<string>;
-        expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
+        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         modifyFs: (fs: vfs.FileSystem) => void;
         withoutBuildInfo: boolean;
     }
 
-    function build({ fs, tick, rootNames, expectedMapFileNames, expectedTsbuildInfoFileNames, modifyFs, withoutBuildInfo }: BuildInput) {
+    function build({ fs, tick, rootNames, expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, modifyFs, withoutBuildInfo }: BuildInput) {
         const actualReadFileMap = createMap<number>();
         modifyFs(fs);
         tick();
@@ -179,7 +179,7 @@ namespace ts {
         }
         builder.buildAllProjects();
         generateSourceMapBaselineFiles(fs, expectedMapFileNames);
-        generateBuildInfoSectionBaselineFiles(fs, expectedTsbuildInfoFileNames);
+        generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();
         return { fs, actualReadFileMap, host, builder };
     }
@@ -230,7 +230,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
 
     function verifyTsbuildOutputWorker({
         scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly,
-        expectedMapFileNames, expectedTsbuildInfoFileNames, withoutBuildInfo, lastProjectOutputJs,
+        expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, withoutBuildInfo, lastProjectOutputJs,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInputWorker) {
         describe(`tsc --b ${proj}:: ${scenario}${withoutBuildInfo ? " without build info" : ""}`, () => {
@@ -244,7 +244,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     tick,
                     rootNames,
                     expectedMapFileNames,
-                    expectedTsbuildInfoFileNames,
+                    expectedBuildInfoFilesForSectionBaselines,
                     modifyFs: initialBuild.modifyFs,
                     withoutBuildInfo
                 });
@@ -292,7 +292,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             tick,
                             rootNames,
                             expectedMapFileNames,
-                            expectedTsbuildInfoFileNames,
+                            expectedBuildInfoFilesForSectionBaselines,
                             modifyFs: incrementalModifyFs,
                             withoutBuildInfo
                         }));
@@ -323,7 +323,6 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             tick,
                             rootNames,
                             expectedMapFileNames: emptyArray,
-                            expectedTsbuildInfoFileNames: emptyArray,
                             modifyFs: fs => {
                                 // Delete output files
                                 for (const outputFile of expectedOutputFiles) {
@@ -380,7 +379,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         proj: string;
         rootNames: ReadonlyArray<string>;
         expectedMapFileNames: ReadonlyArray<string>;
-        expectedTsbuildInfoFileNames: ReadonlyArray<BuildInfoSectionBaselineFiles>;
+        expectedBuildInfoFilesForSectionBaselines?: ReadonlyArray<BuildInfoSectionBaselineFiles>;
         lastProjectOutputJs: string;
         initialBuild: ExpectedBuildOutputDifferingWithBuildInfo;
         outputFiles?: ReadonlyArray<string>;

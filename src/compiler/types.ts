@@ -4647,6 +4647,7 @@ namespace ts {
         jsxFactory?: string;
         composite?: boolean;
         incremental?: boolean;
+        tsBuildInfoFile?: string;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];

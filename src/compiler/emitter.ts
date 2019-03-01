@@ -54,8 +54,8 @@ namespace ts {
     /*@internal*/
     export function getOutputPathForBuildInfo(options: CompilerOptions) {
         const configFile = options.configFilePath;
-        if (!configFile || !options.incremental && !options.composite) return undefined;
-        // TODO:: Add outFile like tsBuildInfoFile option
+        if (!configFile || !isIncrementalCompilation(options)) return undefined;
+        if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
         const outPath = options.outFile || options.out;
         let buildInfoExtensionLess: string;
         if (outPath) {

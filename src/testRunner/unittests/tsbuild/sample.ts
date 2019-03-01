@@ -428,7 +428,6 @@ export class cNew {}`);
                     "/src/core/index.d.ts.map",
                     "/src/logic/index.js.map"
                 ],
-                expectedTsbuildInfoFileNames: emptyArray,
                 lastProjectOutputJs: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
@@ -583,7 +582,6 @@ class someClass { }`),
                     "/src/core/index.d.ts.map",
                     "/src/logic/index.js.map"
                 ],
-                expectedTsbuildInfoFileNames: emptyArray,
                 lastProjectOutputJs: "/src/tests/index.js",
                 initialBuild,
                 incrementalDtsChangedBuild: {
@@ -638,6 +636,67 @@ class someClass { }`),
                     "/src/tests/tsconfig.tsbuildinfo",
                 ],
                 ignoreWithoutBuildInfo: true
+            });
+
+            verifyTsbuildOutput({
+                scenario: "when logic specifies tsBuildInfoFile",
+                projFs: () => projFs,
+                time,
+                tick,
+                proj: "sample1",
+                rootNames: ["/src/tests"],
+                expectedMapFileNames: [
+                    "/src/core/anotherModule.d.ts.map",
+                    "/src/core/index.d.ts.map",
+                    "/src/logic/index.js.map"
+                ],
+                lastProjectOutputJs: "/src/tests/index.js",
+                initialBuild: {
+                    modifyFs: fs => replaceText(fs, "/src/logic/tsconfig.json", `"composite": true,`, `"composite": true,
+        "tsBuildInfoFile": "ownFile.tsbuildinfo",`),
+                    expectedDiagnostics: initialBuild.expectedDiagnostics,
+                    expectedReadFiles: getReadFilesMap(
+                        [
+                            // Configs
+                            "/src/core/tsconfig.json",
+                            "/src/logic/tsconfig.json",
+                            "/src/tests/tsconfig.json",
+
+                            // Source files
+                            "/src/core/anotherModule.ts",
+                            "/src/core/index.ts",
+                            "/src/core/some_decl.d.ts",
+                            "/src/logic/index.ts",
+                            "/src/tests/index.ts",
+
+                            // Modules of generated files
+                            "/src/core/anotherModule.d.ts",
+                            "/src/core/index.d.ts",
+                            "/src/logic/index.d.ts",
+
+                            // build info
+                            "/src/core/tsconfig.tsbuildinfo",
+                            "/src/logic/ownFile.tsbuildinfo",
+                            "/src/tests/tsconfig.tsbuildinfo"
+                        ]
+                    )
+                },
+                outputFiles: [
+                    "/src/core/anotherModule.js",
+                    "/src/core/anotherModule.d.ts",
+                    "/src/core/anotherModule.d.ts.map",
+                    "/src/core/index.js",
+                    "/src/core/index.d.ts",
+                    "/src/core/index.d.ts.map",
+                    "/src/core/tsconfig.tsbuildinfo",
+                    "/src/logic/index.js",
+                    "/src/logic/index.js.map",
+                    "/src/logic/index.d.ts",
+                    "/src/logic/ownFile.tsbuildinfo",
+                    "/src/tests/index.js",
+                    "/src/tests/index.d.ts",
+                    "/src/tests/tsconfig.tsbuildinfo",
+                ]
             });
         });
     });
