@@ -2589,6 +2589,10 @@
         "category": "Error",
         "code": 2750
     },
+    "Circularity originates in type at this location.": {
+        "category": "Error",
+        "code": 2751
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

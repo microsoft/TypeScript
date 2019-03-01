@@ -3349,6 +3349,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/closebrackets.js(8,5): error 
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(12,9): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(12,34): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(12,47): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(13,10): error TS2339: Property 'CodeMirror' does not exist on type 'typeof CodeMirror$1'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(26,46): error TS2551: Property 'documentMode' does not exist on type 'Document'. Did you mean 'DOCUMENT_NODE'?
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(44,23): error TS2322: Type 'number' is not assignable to type 'RegExpMatchArray'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(45,23): error TS2365: Operator '>=' cannot be applied to types 'RegExpMatchArray' and 'number'.
@@ -3486,6 +3487,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(15,17): error TS23
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,19): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(16,43): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/cm/overlay.js(17,5): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(7,1): error TS2740: Type '{}' is missing the following properties from type 'typeof CodeMirror': on, prototype, Pass, showHint, and 16 more.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(30,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'ok' must be of type 'boolean', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/cm_headless/headlesscodemirror.js(74,1): error TS2719: Type 'typeof StringStream' is not assignable to type 'typeof StringStream'. Two different types with this name exist, but they are unrelated.
   Types of property 'prototype' are incompatible.
@@ -6432,6 +6434,7 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/RelaxedJSONPars
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,10): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(4,48): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(5,20): error TS2339: Property 'acorn' does not exist on type 'typeof import("/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn")'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(402,56): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(527,43): error TS2339: Property 'startNode' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(528,8): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
@@ -6469,6 +6472,9 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,10): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,35): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(4,48): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(5,20): error TS2339: Property 'acorn' does not exist on type 'typeof import("/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose")'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(5,55): error TS2339: Property 'acorn' does not exist on type 'typeof import("/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose")'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(5,102): error TS2339: Property 'acorn' does not exist on type 'typeof import("/chrome-devtools-frontend/node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose")'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(85,10): error TS2339: Property 'next' does not exist on type 'LooseParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(114,16): error TS2339: Property 'lookAhead' does not exist on type 'LooseParser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn_loose.js(115,42): error TS2339: Property 'next' does not exist on type 'LooseParser'.

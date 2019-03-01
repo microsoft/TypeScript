@@ -7584,7 +7584,19 @@ namespace ts {
                     constraintDepth++;
                     let result = computeBaseConstraint(getSimplifiedType(t));
                     constraintDepth--;
-                    if (!popTypeResolution() || nonTerminating) {
+                    if (!popTypeResolution()) {
+                        if (t.flags & TypeFlags.TypeParameter) {
+                            const errorNode = getConstraintDeclaration(<TypeParameter>t);
+                            if (errorNode) {
+                                const diagnostic = error(errorNode, Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(t));
+                                if (currentNode && !isNodeDescendantOf(errorNode, currentNode) && !isNodeDescendantOf(currentNode, errorNode)) {
+                                    addRelatedInfo(diagnostic, createDiagnosticForNode(currentNode, Diagnostics.Circularity_originates_in_type_at_this_location));
+                                }
+                            }
+                        }
+                        result = circularConstraintType;
+                    }
+                    if (nonTerminating) {
                         result = circularConstraintType;
                     }
                     t.immediateBaseConstraint = result || noConstraintType;
@@ -10685,10 +10697,27 @@ namespace ts {
             return !!(<InferenceContext>mapper).typeParameters;
         }
 
-        function cloneTypeMapper(mapper: TypeMapper): TypeMapper {
+        function cloneTypeMapper(mapper: TypeMapper, extraFlags: InferenceFlags = 0): TypeMapper {
             return mapper && isInferenceContext(mapper) ?
-                createInferenceContext(mapper.typeParameters, mapper.signature, mapper.flags | InferenceFlags.NoDefault, mapper.compareTypes, mapper.inferences) :
+                createInferenceContext(mapper.typeParameters, mapper.signature, mapper.flags | extraFlags, mapper.compareTypes, mapper.inferences) :
                 mapper;
+        }
+
+        function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
+            // Filter context to only those parameters which actually have inference candidates
+            const params = [];
+            const inferences = [];
+            for (let i = 0; i < context.typeParameters.length; i++) {
+                const info = context.inferences[i];
+                if (info.candidates || info.contraCandidates) {
+                    params.push(context.typeParameters[i]);
+                    inferences.push(info);
+                }
+            }
+            if (!params.length) {
+                return undefined;
+            }
+            return createInferenceContext(params, context.signature, context.flags | InferenceFlags.NoDefault, context.compareTypes, inferences);
         }
 
         function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
@@ -14900,7 +14929,7 @@ namespace ts {
                             // parameter should be instantiated to the empty object type.
                             inferredType = instantiateType(defaultType,
                                 combineTypeMappers(
-                                    createBackreferenceMapper(context.signature!.typeParameters!, index),
+                                    createBackreferenceMapper(context.typeParameters, index),
                                     context));
                         }
                         else {
@@ -18868,7 +18897,7 @@ namespace ts {
                 const namespaceName = getJsxNamespace(location);
                 const resolvedNamespace = resolveName(location, namespaceName, SymbolFlags.Namespace, /*diagnosticMessage*/ undefined, namespaceName, /*isUse*/ false);
                 if (resolvedNamespace) {
-                    const candidate = getSymbol(getExportsOfSymbol(resolveSymbol(resolvedNamespace)), JsxNames.JSX, SymbolFlags.Namespace);
+                    const candidate = resolveSymbol(getSymbol(getExportsOfSymbol(resolveSymbol(resolvedNamespace)), JsxNames.JSX, SymbolFlags.Namespace));
                     if (candidate) {
                         if (links) {
                             links.jsxNamespace = candidate;
@@ -20052,7 +20081,7 @@ namespace ts {
                     // We clone the contextual mapper to avoid disturbing a resolution in progress for an
                     // outer call expression. Effectively we just want a snapshot of whatever has been
                     // inferred for any outer call expression so far.
-                    const instantiatedType = instantiateType(contextualType, cloneTypeMapper(getContextualMapper(node)));
+                    const instantiatedType = instantiateType(contextualType, cloneTypeMapper(getContextualMapper(node), InferenceFlags.NoDefault));
                     // If the contextual type is a generic function type with a single call signature, we
                     // instantiate the type with its own type parameters and type arguments. This ensures that
                     // the type parameters are not erased to type any during type inference such that they can
@@ -20069,7 +20098,7 @@ namespace ts {
                     inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
                     // Create a type mapper for instantiating generic contextual types using the inferences made
                     // from the return type.
-                    context.returnMapper = cloneTypeMapper(context);
+                    context.returnMapper = cloneInferredPartOfContext(context);
                 }
             }
 
@@ -21719,6 +21748,17 @@ namespace ts {
                         inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
                     }
                 }
+            }
+            const restType = getEffectiveRestType(context);
+            if (restType && restType.flags & TypeFlags.TypeParameter) {
+                // The contextual signature has a generic rest parameter. We first instantiate the contextual
+                // signature (without fixing type parameters) and assign types to contextually typed parameters.
+                const instantiatedContext = instantiateSignature(context, cloneTypeMapper(mapper));
+                assignContextualParameterTypes(signature, instantiatedContext);
+                // We then infer from a tuple type representing the parameters that correspond to the contextual
+                // rest parameter.
+                const restPos = getParameterCount(context) - 1;
+                inferTypes((<InferenceContext>mapper).inferences, getRestTypeAtPosition(signature, restPos), restType);
             }
         }
 
@@ -23524,9 +23564,8 @@ namespace ts {
             checkSourceElement(node.constraint);
             checkSourceElement(node.default);
             const typeParameter = getDeclaredTypeOfTypeParameter(getSymbolOfNode(node));
-            if (!hasNonCircularBaseConstraint(typeParameter)) {
-                error(getEffectiveConstraintOfTypeParameter(node), Diagnostics.Type_parameter_0_has_a_circular_constraint, typeToString(typeParameter));
-            }
+            // Resolve base constraint to reveal circularity errors
+            getBaseConstraintOfType(typeParameter);
             if (!hasNonCircularTypeParameterDefault(typeParameter)) {
                 error(node.default, Diagnostics.Type_parameter_0_has_a_circular_default, typeToString(typeParameter));
             }
