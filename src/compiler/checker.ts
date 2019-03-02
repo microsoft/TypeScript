@@ -21641,7 +21641,7 @@ namespace ts {
             if (isTupleType(restType)) {
                 const associatedNames = (<TupleType>(<TypeReference>restType).target).associatedNames;
                 const index = pos - paramCount;
-                return associatedNames ? associatedNames[index] : restParameter.escapedName + "_" + index as __String;
+                return associatedNames && associatedNames[index] || restParameter.escapedName + "_" + index as __String;
             }
             return restParameter.escapedName;
         }
