@@ -24,8 +24,8 @@
 ////const x = { [|{| "isWriteAccess": true, "isDefinition": true |}this|]: 0 }
 ////x.[|this|];
 
-const [global, f0, f1, g0, g1, x, y, constructor, method, propDef, propUse] = test.ranges();
-verify.singleReferenceGroup("this", [global]);
+const [glob, f0, f1, g0, g1, x, y, constructor, method, propDef, propUse] = test.ranges();
+verify.singleReferenceGroup("this: typeof globalThis", [glob]);
 verify.singleReferenceGroup("(parameter) this: any", [f0, f1]);
 verify.singleReferenceGroup("(parameter) this: any", [g0, g1]);
 verify.singleReferenceGroup("this: typeof C", [x, y]);

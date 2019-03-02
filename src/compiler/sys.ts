@@ -615,7 +615,17 @@ namespace ts {
                 directoryExists,
                 createDirectory(directoryName: string) {
                     if (!nodeSystem.directoryExists(directoryName)) {
-                        _fs.mkdirSync(directoryName);
+                        // Wrapped in a try-catch to prevent crashing if we are in a race
+                        // with another copy of ourselves to create the same directory
+                        try {
+                            _fs.mkdirSync(directoryName);
+                        }
+                        catch (e) {
+                            if (e.code !== "EEXIST") {
+                                // Failed for some other reason (access denied?); still throw
+                                throw e;
+                            }
+                        }
                     }
                 },
                 getExecutingFilePath() {

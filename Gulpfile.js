@@ -232,7 +232,7 @@ task("watch-tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
 }
 
-task("min", series(lkgPreBuild, parallel(buildTsc, buildServer)));
+task("min", series(preBuild, parallel(buildTsc, buildServer)));
 task("min").description = "Builds only tsc and tsserver";
 task("min").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -373,9 +373,34 @@ task("lint").flags = {
     "   --f[iles]=<regex>": "pattern to match files to lint",
 };
 
+const buildCancellationToken = () => buildProject("src/cancellationToken");
+const cleanCancellationToken = () => cleanProject("src/cancellationToken");
+cleanTasks.push(cleanCancellationToken);
+
+const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
+const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
+cleanTasks.push(cleanTypingsInstaller);
+
+const buildWatchGuard = () => buildProject("src/watchGuard");
+const cleanWatchGuard = () => cleanProject("src/watchGuard");
+cleanTasks.push(cleanWatchGuard);
+
+const generateTypesMap = () => src("src/server/typesMap.json")
+    .pipe(newer("built/local/typesMap.json"))
+    .pipe(transform(contents => (JSON.parse(contents), contents))) // validates typesMap.json is valid JSON
+    .pipe(dest("built/local"));
+task("generate-types-map", generateTypesMap);
+
+const cleanTypesMap = () => del("built/local/typesMap.json");
+cleanTasks.push(cleanTypesMap);
+
+const buildOtherOutputs = parallel(buildCancellationToken, buildTypingsInstaller, buildWatchGuard, generateTypesMap);
+task("other-outputs", series(preBuild, buildOtherOutputs));
+task("other-outputs").description = "Builds miscelaneous scripts and documents distributed with the LKG";
+
 const buildFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("build")); };
 const buildFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("build")); };
-task("local", series(buildFoldStart, lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl), buildFoldEnd));
+task("local", series(buildFoldStart, preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs), buildFoldEnd));
 task("local").description = "Builds the full compiler and services";
 task("local").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -473,21 +498,22 @@ task("diff").description = "Diffs the compiler baselines using the diff tool spe
 task("diff-rwc", () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true }));
 task("diff-rwc").description = "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable";
 
-const baselineAccept = subfolder => merge2(
-    src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**`, `!${localBaseline}${subfolder}/**/*.delete`], { base: localBaseline })
+/**
+ * @param {string} localBaseline Path to the local copy of the baselines
+ * @param {string} refBaseline Path to the reference copy of the baselines
+ */
+const baselineAccept = (localBaseline, refBaseline) => merge2(
+    src([`${localBaseline}/**`, `!${localBaseline}/**/*.delete`], { base: localBaseline })
         .pipe(dest(refBaseline)),
-    src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**/*.delete`], { base: localBaseline, read: false })
+    src([`${localBaseline}/**/*.delete`], { base: localBaseline, read: false })
         .pipe(rm())
         .pipe(rename({ extname: "" }))
         .pipe(rm(refBaseline)));
-task("baseline-accept", () => baselineAccept(""));
+task("baseline-accept", () => baselineAccept(localBaseline, refBaseline));
 task("baseline-accept").description = "Makes the most recent test results the new baseline, overwriting the old baseline";
 
-task("baseline-accept-rwc", () => baselineAccept("rwc"));
+task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
-
-task("baseline-accept-test262", () => baselineAccept("test262"));
-task("baseline-accept-test262").description = "Makes the most recent test262 test results the new baseline, overwriting the old baseline";
 
 // TODO(rbuckton): Determine if 'webhost' is still in use.
 const buildWebHost = () => buildProject("tests/webhost/webtsc.tsconfig.json");
@@ -550,28 +576,6 @@ const buildReleaseTsc = () => buildProject("src/tsc/tsconfig.release.json");
 const cleanReleaseTsc = () => cleanProject("src/tsc/tsconfig.release.json");
 cleanTasks.push(cleanReleaseTsc);
 
-const buildCancellationToken = () => buildProject("src/cancellationToken");
-const cleanCancellationToken = () => cleanProject("src/cancellationToken");
-cleanTasks.push(cleanCancellationToken);
-
-const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
-const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
-cleanTasks.push(cleanTypingsInstaller);
-
-const buildWatchGuard = () => buildProject("src/watchGuard");
-const cleanWatchGuard = () => cleanProject("src/watchGuard");
-cleanTasks.push(cleanWatchGuard);
-
-// TODO(rbuckton): This task isn't triggered by any other task. Is it still needed?
-const generateTypesMap = () => src("src/server/typesMap.json")
-    .pipe(newer("built/local/typesMap.json"))
-    .pipe(transform(contents => (JSON.parse(contents), contents))) // validates typesMap.json is valid JSON
-    .pipe(dest("built/local"));
-task("generate-types-map", generateTypesMap);
-
-const cleanTypesMap = () => del("built/local/typesMap.json");
-cleanTasks.push(cleanTypesMap);
-
 const cleanBuilt = () => del("built");
 
 const produceLKG = async () => {
@@ -601,7 +605,7 @@ const produceLKG = async () => {
     }
 };
 
-task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildCancellationToken, buildTypingsInstaller, buildWatchGuard, buildReleaseTsc), produceLKG));
+task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs, buildReleaseTsc), produceLKG));
 task("LKG").description = "Makes a new LKG out of the built js files";
 task("LKG").flags = {
     "   --built": "Compile using the built version of the compiler.",

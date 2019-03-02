@@ -1404,7 +1404,7 @@
         "category": "Error",
         "code": 2393
     },
-    "Overload signature is not compatible with function implementation.": {
+    "This overload signature is not compatible with its implementation signature.": {
         "category": "Error",
         "code": 2394
     },
@@ -2584,6 +2584,14 @@
     "'{0}' refers to a value, but is being used as a type here.": {
         "category": "Error",
         "code": 2749
+    },
+    "The implementation signature is declared here.": {
+        "category": "Error",
+        "code": 2750
+    },
+    "Circularity originates in type at this location.": {
+        "category": "Error",
+        "code": 2751
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4145,7 +4153,7 @@
         "category": "Error",
         "code": 7040
     },
-    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+    "The containing arrow function captures the global value of 'this'.": {
         "category": "Error",
         "code": 7041
     },
