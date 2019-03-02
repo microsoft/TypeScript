@@ -130,5 +130,29 @@ class B extends A {
 >{ f } : { f: () => void; }
 >f : () => void
     }
+
+    // inner async super call
+    async inner() {
+>inner : () => Promise<void>
+
+        (async () => {
+>(async () => {            super["x"]();            super.x();        })() : Promise<void>
+>(async () => {            super["x"]();            super.x();        }) : () => Promise<void>
+>async () => {            super["x"]();            super.x();        } : () => Promise<void>
+
+            super["x"]();
+>super["x"]() : void
+>super["x"] : () => void
+>super : A
+>"x" : "x"
+
+            super.x();
+>super.x() : void
+>super.x : () => void
+>super : A
+>x : () => void
+
+        })();
+    }
 }
 

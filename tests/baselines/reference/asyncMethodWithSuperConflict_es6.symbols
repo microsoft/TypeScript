@@ -120,5 +120,22 @@ class B extends A {
 >"x" : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
 >f : Symbol(f, Decl(asyncMethodWithSuperConflict_es6.ts, 55, 30))
     }
+
+    // inner async super call
+    async inner() {
+>inner : Symbol(B.inner, Decl(asyncMethodWithSuperConflict_es6.ts, 56, 5))
+
+        (async () => {
+            super["x"]();
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+            super.x();
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+        })();
+    }
 }
 

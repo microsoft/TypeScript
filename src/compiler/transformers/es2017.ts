@@ -35,7 +35,7 @@ namespace ts {
         /**
          * Keeps track of property names accessed on super (`super.x`) within async functions.
          */
-        let capturedSuperProperties: UnderscoreEscapedMap<true>;
+        let capturedSuperProperties: UnderscoreEscapedMap<true> | undefined;
         /** Whether the async function contains an element access on super (`super[x]`). */
         let hasSuperElementAccess: boolean;
         /** A set of node IDs for generated super accessors (variable statements). */
@@ -86,13 +86,15 @@ namespace ts {
                     return visitArrowFunction(<ArrowFunction>node);
 
                 case SyntaxKind.PropertyAccessExpression:
-                    if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
+                    if (isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
+                        capturedSuperProperties = capturedSuperProperties || createUnderscoreEscapedMap<true>();
                         capturedSuperProperties.set(node.name.escapedText, true);
                     }
+
                     return visitEachChild(node, visitor, context);
 
                 case SyntaxKind.ElementAccessExpression:
-                    if (capturedSuperProperties && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
+                    if ((<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
@@ -418,11 +420,6 @@ namespace ts {
                 recordDeclarationName(parameter, enclosingFunctionParameterNames);
             }
 
-            const savedCapturedSuperProperties = capturedSuperProperties;
-            const savedHasSuperElementAccess = hasSuperElementAccess;
-            capturedSuperProperties = createUnderscoreEscapedMap<true>();
-            hasSuperElementAccess = false;
-
             let result: ConciseBody;
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
@@ -446,9 +443,15 @@ namespace ts {
 
                 if (emitSuperHelpers) {
                     enableSubstitutionForAsyncMethodsWithSuper();
-                    const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
-                    substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-                    insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+                    // Do not create the _super variable if do not have any super call.
+                    if (capturedSuperProperties) {
+                        const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
+                        substitutedSuperAccessors[getNodeId(variableStatement)] = true;
+                        insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+
+                        // Clean up to not affect the next method with previous method variables.
+                        capturedSuperProperties = undefined;
+                    }
                 }
 
                 const block = createBlock(statements, /*multiLine*/ true);
@@ -485,8 +488,6 @@ namespace ts {
             }
 
             enclosingFunctionParameterNames = savedEnclosingFunctionParameterNames;
-            capturedSuperProperties = savedCapturedSuperProperties;
-            hasSuperElementAccess = savedHasSuperElementAccess;
             return result;
         }
 

@@ -52,6 +52,14 @@ class B extends A {
         // destructuring assign with element access
         ({ f: super["x"] } = { f });
     }
+
+    // inner async super call
+    async inner() {
+        (async () => {
+            super["x"]();
+            super.x();
+        })();
+    }
 }
 
 
@@ -107,6 +115,22 @@ var B = /** @class */ (function (_super) {
                 (_super.prototype.x = { f: f }.f);
                 // destructuring assign with element access
                 (_super.prototype["x"] = { f: f }.f);
+                return [2 /*return*/];
+            });
+        });
+    };
+    // inner async super call
+    B.prototype.inner = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                (function () { return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        _super.prototype["x"].call(this);
+                        _super.prototype.x.call(this);
+                        return [2 /*return*/];
+                    });
+                }); })();
                 return [2 /*return*/];
             });
         });

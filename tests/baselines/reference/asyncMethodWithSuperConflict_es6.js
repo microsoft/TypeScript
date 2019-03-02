@@ -56,6 +56,14 @@ class B extends A {
         // destructuring assign with element access
         ({ f: super["x"] } = { f });
     }
+
+    // inner async super call
+    async inner() {
+        (async () => {
+            super["x"]();
+            super.x();
+        })();
+    }
 }
 
 
@@ -126,6 +134,19 @@ class B extends A {
             ({ f: _super_1.x } = { f });
             // destructuring assign with element access
             ({ f: _superIndex_1("x").value } = { f });
+        });
+    }
+    // inner async super call
+    inner() {
+        const _superIndex_1 = name => super[name];
+        const _super_1 = Object.create(null, {
+            x: { get: () => super.x }
+        });
+        return __awaiter(this, void 0, void 0, function* () {
+            (() => __awaiter(this, void 0, void 0, function* () {
+                _superIndex_1("x").call(this);
+                _super_1.x.call(this);
+            }))();
         });
     }
 }

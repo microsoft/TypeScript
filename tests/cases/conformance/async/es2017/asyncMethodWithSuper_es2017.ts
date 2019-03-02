@@ -53,4 +53,12 @@ class B extends A {
         // destructuring assign with element access
         ({ f: super["x"] } = { f });
     }
+
+    // inner async super call
+    async inner() {
+        (async () => {
+            super["x"]();
+            super.x();
+        })();
+    }
 }
