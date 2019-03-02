@@ -2,7 +2,7 @@
 namespace ts.codefix {
     const fixIdPlain = "fixJSDocTypes_plain";
     const fixIdNullable = "fixJSDocTypes_nullable";
-    const errorCodes = [Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments.code];
+    const errorCodes = [Diagnostics.Expected_or.code];
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {

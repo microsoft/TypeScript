@@ -24127,7 +24127,7 @@ namespace ts {
         function checkTypeReferenceNode(node: TypeReferenceNode | ExpressionWithTypeArguments) {
             checkGrammarTypeArguments(node, node.typeArguments);
             if (node.kind === SyntaxKind.TypeReference && node.typeName.jsdocDotPos !== undefined && !isInJSFile(node) && !isInJSDoc(node)) {
-                grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+                grammarErrorAtPos(node, node.typeName.jsdocDotPos, 1, Diagnostics.Expected_or);
             }
             const type = getTypeFromTypeReference(node);
             if (type !== errorType) {
@@ -28305,7 +28305,7 @@ namespace ts {
 
         function checkJSDocTypeIsInJsFile(node: Node): void {
             if (!isInJSFile(node)) {
-                grammarErrorOnNode(node, Diagnostics.JSDoc_types_can_only_be_used_inside_documentation_comments);
+                grammarErrorOnNode(node, Diagnostics.Expected_or);
             }
         }
 
