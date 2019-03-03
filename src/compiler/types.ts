@@ -4391,6 +4391,7 @@ namespace ts {
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
+        inferredTypeParameters?: ReadonlyArray<TypeParameter>;
     }
 
     /* @internal */

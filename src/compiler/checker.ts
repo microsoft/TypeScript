@@ -3983,7 +3983,7 @@ namespace ts {
                 context.flags &= ~NodeBuilderFlags.WriteTypeParametersInQualifiedName; // Avoids potential infinite loop when building for a claimspace with a generic
                 const shouldUseGeneratedName =
                     context.flags & NodeBuilderFlags.GenerateNamesForShadowedTypeParams &&
-                    type.symbol.declarations[0] &&
+                    type.symbol.declarations && type.symbol.declarations[0] &&
                     isTypeParameterDeclaration(type.symbol.declarations[0]) &&
                     typeParameterShadowsNameInScope(type, context);
                 const name = shouldUseGeneratedName
@@ -8375,9 +8375,23 @@ namespace ts {
             return undefined;
         }
 
-        function getSignatureInstantiation(signature: Signature, typeArguments: Type[] | undefined, isJavascript: boolean): Signature {
-            return getSignatureInstantiationWithoutFillingInTypeArguments(signature, fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters), isJavascript));
+        function getSignatureInstantiation(signature: Signature, typeArguments: Type[] | undefined, isJavascript: boolean, inferredTypeParameters?: ReadonlyArray<TypeParameter>): Signature {
+            const instantiatedSignature = getSignatureInstantiationWithoutFillingInTypeArguments(signature, fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters), isJavascript));
+            if (inferredTypeParameters) {
+                const returnSignature = getSingleCallSignature(getReturnTypeOfSignature(instantiatedSignature));
+                if (returnSignature) {
+                    const newReturnSignature = cloneSignature(returnSignature);
+                    newReturnSignature.typeParameters = inferredTypeParameters;
+                    newReturnSignature.target = returnSignature.target;
+                    newReturnSignature.mapper = returnSignature.mapper;
+                    const newInstantiatedSignature = cloneSignature(instantiatedSignature);
+                    newInstantiatedSignature.resolvedReturnType = getOrCreateTypeFromSignature(newReturnSignature);
+                    return newInstantiatedSignature;
+                }
+            }
+            return instantiatedSignature;
         }
+
         function getSignatureInstantiationWithoutFillingInTypeArguments(signature: Signature, typeArguments: ReadonlyArray<Type> | undefined): Signature {
             const instantiations = signature.instantiations || (signature.instantiations = createMap<Signature>());
             const id = getTypeListId(typeArguments);
@@ -8391,6 +8405,7 @@ namespace ts {
         function createSignatureInstantiation(signature: Signature, typeArguments: ReadonlyArray<Type> | undefined): Signature {
             return instantiateSignature(signature, createSignatureTypeMapper(signature, typeArguments), /*eraseTypeParameters*/ true);
         }
+
         function createSignatureTypeMapper(signature: Signature, typeArguments: ReadonlyArray<Type> | undefined): TypeMapper {
             return createTypeMapper(signature.typeParameters!, typeArguments);
         }
@@ -20652,7 +20667,7 @@ namespace ts {
                             inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
                             typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
                         }
-                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration));
+                        checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a
                         // signature with different arity and we need to perform another arity check.
                         if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
@@ -20677,7 +20692,7 @@ namespace ts {
                         excludeArgument = undefined;
                         if (inferenceContext) {
                             const typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
-                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration));
+                            checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                             // If the original signature has a generic rest type, instantiation may produce a
                             // signature with different arity and we need to perform another arity check.
                             if (getNonArrayRestType(candidate) && !hasCorrectArity(node, args, checkCandidate, signatureHelpTrailingComma)) {
@@ -23378,12 +23393,102 @@ namespace ts {
                     if (contextualType) {
                         const contextualSignature = getSingleCallSignature(getNonNullableType(contextualType));
                         if (contextualSignature && !contextualSignature.typeParameters) {
-                            return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, getContextualMapper(node)));
+                            const context = <InferenceContext>getContextualMapper(node);
+                            // We have an expression that is an argument of a generic function for which we are performing
+                            // type argument inference. The expression is of a function type with a single generic call
+                            // signature and a contextual function type with a single non-generic call signature. Now check
+                            // if the outer function returns a function type with a single non-generic call signature and
+                            // if some of the outer function type parameters have no inferences so far. If so, we can
+                            // potentially add inferred type parameters to the outer function return type.
+                            const returnSignature = context.signature && getSingleCallSignature(getReturnTypeOfSignature(context.signature));
+                            if (returnSignature && !returnSignature.typeParameters && !every(context.inferences, hasInferenceCandidates)) {
+                                // Instantiate the expression type with its own type parameters as type arguments. This
+                                // ensures that the type parameters are not erased to type any during type inference such
+                                // that they can be inferred as actual types.
+                                const uniqueTypeParameters = getUniqueTypeParameters(context, signature.typeParameters);
+                                const strippedType = getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(signature, uniqueTypeParameters));
+                                // Infer from the stripped expression type to the contextual type starting with an empty
+                                // set of inference candidates.
+                                const inferences = map(context.typeParameters, createInferenceInfo);
+                                inferTypes(inferences, strippedType, contextualType);
+                                // If we produced some inference candidates and if the type parameters for which we produced
+                                // candidates do not already have existing inferences, we adopt the new inference candidates and
+                                // add the type parameters of the expression type to the set of inferred type parameters for
+                                // the outer function return type.
+                                if (some(inferences, hasInferenceCandidates) && !hasOverlappingInferences(context.inferences, inferences)) {
+                                    mergeInferences(context.inferences, inferences);
+                                    context.inferredTypeParameters = concatenate(context.inferredTypeParameters, uniqueTypeParameters);
+                                    return strippedType;
+                                }
+                            }
+                            return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, context));
                         }
                     }
                 }
             }
             return type;
+        }
+
+        function hasInferenceCandidates(info: InferenceInfo) {
+            return !!(info.candidates || info.contraCandidates);
+        }
+
+        function hasOverlappingInferences(a: InferenceInfo[], b: InferenceInfo[]) {
+            for (let i = 0; i < a.length; i++) {
+                if (hasInferenceCandidates(a[i]) && hasInferenceCandidates(b[i])) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function mergeInferences(target: InferenceInfo[], source: InferenceInfo[]) {
+            for (let i = 0; i < target.length; i++) {
+                if (!hasInferenceCandidates(target[i]) && hasInferenceCandidates(source[i])) {
+                    target[i] = source[i];
+                }
+            }
+        }
+
+        function getUniqueTypeParameters(context: InferenceContext, typeParameters: ReadonlyArray<TypeParameter>): ReadonlyArray<TypeParameter> {
+            let result: TypeParameter[] = [];
+            let oldTypeParameters: TypeParameter[] | undefined;
+            let newTypeParameters: TypeParameter[] | undefined;
+            for (const tp of typeParameters) {
+                const name = tp.symbol.escapedName;
+                if (hasInferredTypeParameterByName(context, name)) {
+                    const symbol = createSymbol(SymbolFlags.TypeParameter, getUniqueInferredTypeParameterName(context, name));
+                    const newTypeParameter = createTypeParameter(symbol);
+                    newTypeParameter.target = tp;
+                    oldTypeParameters = append(oldTypeParameters, tp);
+                    newTypeParameters = append(newTypeParameters, newTypeParameter);
+                    result.push(newTypeParameter);
+                }
+                else {
+                    result.push(tp);
+                }
+            }
+            if (newTypeParameters) {
+                const mapper = createTypeMapper(oldTypeParameters!, newTypeParameters);
+                for (const tp of newTypeParameters) {
+                    tp.mapper = mapper;
+                }
+            }
+            return result;
+        }
+
+        function hasInferredTypeParameterByName(context: InferenceContext, name: __String) {
+            return some(context.inferredTypeParameters, tp => tp.symbol.escapedName === name);
+        }
+
+        function getUniqueInferredTypeParameterName(context: InferenceContext, baseName: __String) {
+            let index = 1;
+            while (true) {
+                const augmentedName = <__String>(<string>baseName + index);
+                if (!hasInferredTypeParameterByName(context, augmentedName)) {
+                    return augmentedName;
+                }
+            }
         }
 
         /**
