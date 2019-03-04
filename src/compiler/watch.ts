@@ -646,6 +646,7 @@ namespace ts {
             ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
+        readBuilderProgram();
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -655,18 +656,30 @@ namespace ts {
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram } :
             { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, updateRootFileNames };
 
+        function readBuilderProgram() {
+            if (compilerOptions.out || compilerOptions.outFile) return;
+            if (!isIncrementalCompilation(compilerOptions)) return;
+            const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
+            if (!buildInfoPath) return;
+            const content = directoryStructureHost.readFile(buildInfoPath);
+            if (!content) return;
+            const buildInfo = JSON.parse(content) as BuildInfo;
+            if (!buildInfo.program) return;
+            builderProgram = createBuildProgramUsingProgramBuildInfo(buildInfo.program) as any as T;
+        }
+
         function getCurrentBuilderProgram() {
             return builderProgram;
         }
 
         function getCurrentProgram() {
-            return builderProgram && builderProgram.getProgram();
+            return builderProgram && builderProgram.getProgramOrUndefined();
         }
 
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);
 
-            const program = getCurrentProgram();
+            const program = getCurrentBuilderProgram();
             if (hasChangedCompilerOptions) {
                 newLine = updateNewLine();
                 if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
@@ -683,7 +696,7 @@ namespace ts {
                 }
             }
             else {
-                createNewProgram(program, hasInvalidatedResolution);
+                createNewProgram(hasInvalidatedResolution);
             }
 
             if (host.afterProgramCreate) {
@@ -693,13 +706,13 @@ namespace ts {
             return builderProgram;
         }
 
-        function createNewProgram(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
+        function createNewProgram(hasInvalidatedResolution: HasInvalidatedResolution) {
             // Compile the program
             writeLog("CreatingProgramWith::");
             writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
             writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
 
-            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
+            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !getCurrentProgram();
             hasChangedCompilerOptions = false;
             hasChangedConfigFileParsingErrors = false;
             resolutionCache.startCachingPerDirectoryResolution();
