@@ -22104,7 +22104,7 @@ namespace ts {
             forEachReturnStatement(<Block>func.body, returnStatement => {
                 const expr = returnStatement.expression;
                 if (expr) {
-                    let type = checkExpressionCached(expr, checkMode && checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
+                    let type = checkExpressionCached(expr, checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
                     if (functionFlags & FunctionFlags.Async) {
                         // From within an async function you can return either a non-promise value or a promise. Any
                         // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
