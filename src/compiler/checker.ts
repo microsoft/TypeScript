@@ -23456,8 +23456,9 @@ namespace ts {
             let newTypeParameters: TypeParameter[] | undefined;
             for (const tp of typeParameters) {
                 const name = tp.symbol.escapedName;
-                if (hasInferredTypeParameterByName(context, name)) {
-                    const symbol = createSymbol(SymbolFlags.TypeParameter, getUniqueInferredTypeParameterName(context, name));
+                if (hasTypeParameterByName(context.inferredTypeParameters, name) || hasTypeParameterByName(result, name)) {
+                    const newName = getUniqueTypeParameterName(concatenate(context.inferredTypeParameters, result), name);
+                    const symbol = createSymbol(SymbolFlags.TypeParameter, newName);
                     const newTypeParameter = createTypeParameter(symbol);
                     newTypeParameter.target = tp;
                     oldTypeParameters = append(oldTypeParameters, tp);
@@ -23477,15 +23478,17 @@ namespace ts {
             return result;
         }
 
-        function hasInferredTypeParameterByName(context: InferenceContext, name: __String) {
-            return some(context.inferredTypeParameters, tp => tp.symbol.escapedName === name);
+        function hasTypeParameterByName(typeParameters: ReadonlyArray<TypeParameter> | undefined, name: __String) {
+            return some(typeParameters, tp => tp.symbol.escapedName === name);
         }
 
-        function getUniqueInferredTypeParameterName(context: InferenceContext, baseName: __String) {
-            let index = 1;
-            while (true) {
-                const augmentedName = <__String>(<string>baseName + index);
-                if (!hasInferredTypeParameterByName(context, augmentedName)) {
+        function getUniqueTypeParameterName(typeParameters: ReadonlyArray<TypeParameter>, baseName: __String) {
+            let len = (<string>baseName).length;
+            while (len > 1 && (<string>baseName).charCodeAt(len - 1) >= CharacterCodes._0 && (<string>baseName).charCodeAt(len - 1) <= CharacterCodes._9) len--;
+            const s = (<string>baseName).slice(0, len);
+            for (let index = 1; true; index++) {
+                const augmentedName = <__String>(s + index);
+                if (!hasTypeParameterByName(typeParameters, augmentedName)) {
                     return augmentedName;
                 }
             }
