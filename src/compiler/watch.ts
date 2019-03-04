@@ -371,6 +371,19 @@ namespace ts {
         host.projectReferences = projectReferences;
         return host;
     }
+
+    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
+        if (compilerOptions.out || compilerOptions.outFile) return undefined;
+        if (!isIncrementalCompilation(compilerOptions)) return undefined;
+        const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
+        if (!buildInfoPath) return undefined;
+        const content = readFile(buildInfoPath);
+        if (!content) return undefined;
+        const buildInfo = getBuildInfo(content);
+        if (buildInfo.version !== version) return undefined;
+        if (!buildInfo.program) return undefined;
+        return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
+    }
 }
 
 namespace ts {
@@ -645,7 +658,7 @@ namespace ts {
             ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
-        readBuilderProgram();
+        readBuilderProgram(compilerOptions, path => compilerHost.readFile(path));
         synchronizeProgram();
 
         // Update the wild card directory watch
@@ -675,18 +688,6 @@ namespace ts {
                 clearMap(missingFilesMap, closeFileWatcher);
                 missingFilesMap = undefined!;
             }
-        }
-
-        function readBuilderProgram() {
-            if (compilerOptions.out || compilerOptions.outFile) return;
-            if (!isIncrementalCompilation(compilerOptions)) return;
-            const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
-            if (!buildInfoPath) return;
-            const content = directoryStructureHost.readFile(buildInfoPath);
-            if (!content) return;
-            const buildInfo = JSON.parse(content) as BuildInfo;
-            if (!buildInfo.program) return;
-            builderProgram = createBuildProgramUsingProgramBuildInfo(buildInfo.program) as any as T;
         }
 
         function getCurrentBuilderProgram() {

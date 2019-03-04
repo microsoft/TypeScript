@@ -1233,13 +1233,7 @@ namespace ts {
         function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
             const value = builderPrograms.getValue(proj);
             if (value) return value;
-            const buildInfoPath = getOutputPathForBuildInfo(parsed.options);
-            if (!buildInfoPath) return undefined;
-            const content = readFileWithCache(buildInfoPath);
-            if (!content) return undefined;
-            const buildInfo = getBuildInfo(content);
-            if (buildInfo.version !== version) return undefined;
-            return buildInfo.program && createBuildProgramUsingProgramBuildInfo(buildInfo.program) as any as T;
+            return readBuilderProgram(parsed.options, readFileWithCache) as any as T;
         }
 
         function updateBundle(proj: ResolvedConfigFileName): BuildResultFlags {
