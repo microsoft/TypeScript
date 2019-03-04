@@ -129,7 +129,6 @@ namespace ts {
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;
         addRange(diagnostics, program.getSyntacticDiagnostics());
-        let reportSemanticDiagnostics = false;
 
         // If we didn't have any syntactic errors, then also try getting the global and
         // semantic errors.
@@ -138,17 +137,13 @@ namespace ts {
             addRange(diagnostics, program.getGlobalDiagnostics());
 
             if (diagnostics.length === configFileParsingDiagnosticsLength) {
-                reportSemanticDiagnostics = true;
+                addRange(diagnostics, program.getSemanticDiagnostics());
             }
         }
 
         // Emit and report any errors we ran into.
         const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit(/*targetSourceFile*/ undefined, writeFile);
         addRange(diagnostics, emitDiagnostics);
-
-        if (reportSemanticDiagnostics) {
-            addRange(diagnostics, program.getSemanticDiagnostics());
-        }
 
         sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
         if (writeFileName) {
@@ -506,6 +501,9 @@ namespace ts {
         /** Gets the existing program without synchronizing with changes on host */
         /*@internal*/
         getCurrentProgram(): T;
+        /** Closes the watch */
+        /*@internal*/
+        close(): void;
     }
 
     /**
@@ -603,8 +601,9 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
+        let configFileWatcher: FileWatcher | undefined;
         if (configFileName) {
-            watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, WatchType.ConfigFile);
+            configFileWatcher = watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, WatchType.ConfigFile);
         }
 
         const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
@@ -653,8 +652,30 @@ namespace ts {
         watchConfigFileWildCardDirectories();
 
         return configFileName ?
-            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram } :
-            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, updateRootFileNames };
+            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, close } :
+            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, updateRootFileNames, close };
+
+        function close() {
+            resolutionCache.clear();
+            clearMap(sourceFilesCache, value => {
+                if (value && value.fileWatcher) {
+                    value.fileWatcher.close();
+                    value.fileWatcher = undefined;
+                }
+            });
+            if (configFileWatcher) {
+                configFileWatcher.close();
+                configFileWatcher = undefined;
+            }
+            if (watchedWildcardDirectories) {
+                clearMap(watchedWildcardDirectories, closeFileWatcherOf);
+                watchedWildcardDirectories = undefined!;
+            }
+            if (missingFilesMap) {
+                clearMap(missingFilesMap, closeFileWatcher);
+                missingFilesMap = undefined!;
+            }
+        }
 
         function readBuilderProgram() {
             if (compilerOptions.out || compilerOptions.outFile) return;
