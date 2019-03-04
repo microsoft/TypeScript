@@ -23451,7 +23451,7 @@ namespace ts {
         }
 
         function getUniqueTypeParameters(context: InferenceContext, typeParameters: ReadonlyArray<TypeParameter>): ReadonlyArray<TypeParameter> {
-            let result: TypeParameter[] = [];
+            const result: TypeParameter[] = [];
             let oldTypeParameters: TypeParameter[] | undefined;
             let newTypeParameters: TypeParameter[] | undefined;
             for (const tp of typeParameters) {
