@@ -20138,7 +20138,7 @@ namespace ts {
                     const paramType = getTypeAtPosition(signature, i);
                     // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
                     // context sensitive function expressions as wildcards
-                    const checkMode = (excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0) |
+                    const checkMode = (excludeArgument && i < excludeArgument.length && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0) |
                         (excludeArgument ? CheckMode.SkipGenericFunctions : 0);
                     const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
                     inferTypes(context.inferences, argType, paramType);
@@ -20241,7 +20241,7 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-            const checkMode = excludeArgument && excludeArgument[0] ? CheckMode.SkipContextSensitive : 0;
+            const checkMode = excludeArgument && excludeArgument.length > 0 && excludeArgument[0] ? CheckMode.SkipContextSensitive : 0;
             const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined, checkMode);
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
         }
@@ -20276,13 +20276,13 @@ namespace ts {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    const checkMode = (excludeArgument && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0) |
+                    const checkMode = (excludeArgument && i < excludeArgument.length && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0) |
                         (excludeArgument ? CheckMode.SkipGenericFunctions : 0);
                     const argType = checkExpressionWithContextualType(arg, paramType, /*contextualMapper*/ undefined, checkMode);
                     // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                    const checkArgType = excludeArgument ? getRegularTypeOfObjectLiteral(argType) : argType;
+                    const checkArgType = excludeArgument && excludeArgument.length ? getRegularTypeOfObjectLiteral(argType) : argType;
                     if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage)) {
                         return false;
                     }
@@ -20665,7 +20665,7 @@ namespace ts {
                         }
                         else {
                             inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                            typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
+                            typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument || emptyArray, inferenceContext);
                         }
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a
@@ -20678,14 +20678,14 @@ namespace ts {
                     else {
                         checkCandidate = candidate;
                     }
-                    if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument || inferenceContext && emptyArray, /*reportErrors*/ false)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
                             candidateForArgumentError = checkCandidate;
                         }
                         continue;
                     }
-                    if (excludeArgument) {
+                    if (excludeArgument || inferenceContext && inferenceContext.flags & InferenceFlags.SkippedGenericFunction) {
                         // If one or more context sensitive arguments were excluded, we start including
                         // them now (and keeping do so for any subsequent candidates) and perform a second
                         // round of type inference and applicability checking for this particular candidate.
@@ -20830,7 +20830,7 @@ namespace ts {
 
         function inferSignatureInstantiationForOverloadFailure(node: CallLikeExpression, typeParameters: ReadonlyArray<TypeParameter>, candidate: Signature, args: ReadonlyArray<Expression>): Signature {
             const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-            const typeArgumentTypes = inferTypeArguments(node, candidate, args, getExcludeArgument(args), inferenceContext);
+            const typeArgumentTypes = inferTypeArguments(node, candidate, args, getExcludeArgument(args) || emptyArray, inferenceContext);
             return createSignatureInstantiation(candidate, typeArgumentTypes);
         }
 
@@ -20932,6 +20932,7 @@ namespace ts {
             // sensitive arguments are being deferred) and every call signature is generic and returns a function type,
             // we return resolvingSignature here. This result will be propagated out and turned into anyFunctionType.
             if (checkMode & CheckMode.SkipGenericFunctions && callSignatures.every(isGenericFunctionReturningFunction)) {
+                skippedGenericFunction(node, checkMode);
                 return resolvingSignature;
             }
             // If the function is explicitly marked with `@class`, then it must be constructed.
@@ -23387,6 +23388,7 @@ namespace ts {
                 const signature = getSingleCallSignature(type);
                 if (signature && signature.typeParameters) {
                     if (checkMode & CheckMode.SkipGenericFunctions) {
+                        skippedGenericFunction(node, checkMode);
                         return anyFunctionType;
                     }
                     const contextualType = getApparentTypeOfContextualType(<Expression>node);
@@ -23427,6 +23429,15 @@ namespace ts {
                 }
             }
             return type;
+        }
+
+        function skippedGenericFunction(node: Node, checkMode: CheckMode) {
+            if (checkMode & CheckMode.Inferential) {
+                // We have skipped a generic function during inferential typing. Obtain the inference context and
+                // indicate this has occurred such that we know a second pass of inference is be needed.
+                const context = <InferenceContext>getContextualMapper(node);
+                context.flags |= InferenceFlags.SkippedGenericFunction;
+            }
         }
 
         function hasInferenceCandidates(info: InferenceInfo) {

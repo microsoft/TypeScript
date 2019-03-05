@@ -4362,6 +4362,7 @@ namespace ts {
         NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
         NoFixing        = 1 << 2,  // Disable type parameter fixing
+        SkippedGenericFunction = 1 << 3,
     }
 
     /**
