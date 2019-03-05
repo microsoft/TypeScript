@@ -2096,7 +2096,7 @@ namespace ts.server {
                 });
                 return this.requiredResponse(converted);
             },
-            [CommandNames.ApplyChangesToOpenFiles]: (request: protocol.ApplyChangesToOpenFilesRequest) => {
+            [CommandNames.UpdateOpen]: (request: protocol.UpdateOpenRequest) => {
                 this.changeSeq++;
                 this.projectService.applyChangesInOpenFiles(
                     request.arguments.openFiles && mapIterator(arrayIterator(request.arguments.openFiles), file => ({

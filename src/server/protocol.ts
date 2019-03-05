@@ -92,7 +92,7 @@ namespace ts.server.protocol {
         SynchronizeProjectList = "synchronizeProjectList",
         /* @internal */
         ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
-        ApplyChangesToOpenFiles = "applyChangesToOpenFiles",
+        UpdateOpen = "updateOpen",
         /* @internal */
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
@@ -1547,15 +1547,15 @@ namespace ts.server.protocol {
     /**
      * Request to synchronize list of open files with the client
      */
-    export interface ApplyChangesToOpenFilesRequest extends Request {
-        command: CommandTypes.ApplyChangesToOpenFiles;
-        arguments: ApplyChangesToOpenFilesRequestArgs;
+    export interface UpdateOpenRequest extends Request {
+        command: CommandTypes.UpdateOpen;
+        arguments: UpdateOpenRequestArgs;
     }
 
     /**
-     * Arguments to ApplyChangesToOpenFilesRequest
+     * Arguments to UpdateOpenRequest
      */
-    export interface ApplyChangesToOpenFilesRequestArgs {
+    export interface UpdateOpenRequestArgs {
         /**
          * List of newly open files
          */

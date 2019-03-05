@@ -5720,7 +5720,7 @@ declare namespace ts.server.protocol {
         OpenExternalProject = "openExternalProject",
         OpenExternalProjects = "openExternalProjects",
         CloseExternalProject = "closeExternalProject",
-        ApplyChangesToOpenFiles = "applyChangesToOpenFiles",
+        UpdateOpen = "updateOpen",
         GetOutliningSpans = "getOutliningSpans",
         TodoComments = "todoComments",
         Indentation = "indentation",
@@ -6792,14 +6792,14 @@ declare namespace ts.server.protocol {
     /**
      * Request to synchronize list of open files with the client
      */
-    interface ApplyChangesToOpenFilesRequest extends Request {
-        command: CommandTypes.ApplyChangesToOpenFiles;
-        arguments: ApplyChangesToOpenFilesRequestArgs;
+    interface UpdateOpenRequest extends Request {
+        command: CommandTypes.UpdateOpen;
+        arguments: UpdateOpenRequestArgs;
     }
     /**
-     * Arguments to ApplyChangesToOpenFilesRequest
+     * Arguments to UpdateOpenRequest
      */
-    interface ApplyChangesToOpenFilesRequestArgs {
+    interface UpdateOpenRequestArgs {
         /**
          * List of newly open files
          */

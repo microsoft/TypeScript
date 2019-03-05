@@ -105,10 +105,10 @@ ${file.content}`;
             );
         });
 
-        it("with applyChangesToOpenFiles request", () => {
+        it("with updateOpen request", () => {
             verify(session =>
-                session.executeCommandSeq<protocol.ApplyChangesToOpenFilesRequest>({
-                    command: protocol.CommandTypes.ApplyChangesToOpenFiles,
+                session.executeCommandSeq<protocol.UpdateOpenRequest>({
+                    command: protocol.CommandTypes.UpdateOpen,
                     arguments: {
                         openFiles: [
                             {
