@@ -309,7 +309,7 @@ declare function f16<A, B>(a: A, b: B): A | B;
 declare let x20: number;
 declare let x21: string;
 declare let x22: string | number;
-declare let x23: unknown;
+declare let x23: string | number;
 declare let x24: string | number;
 declare let x30: string;
 declare let x31: string | number;
