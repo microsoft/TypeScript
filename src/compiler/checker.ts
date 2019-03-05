@@ -20068,15 +20068,14 @@ namespace ts {
             return getSignatureInstantiation(signature, getInferredTypes(context), isInJSFile(contextualSignature.declaration));
         }
 
-        function inferJsxTypeArguments(node: JsxOpeningLikeElement, signature: Signature, excludeArgument: ReadonlyArray<boolean> | undefined, context: InferenceContext): Type[] {
+        function inferJsxTypeArguments(node: JsxOpeningLikeElement, signature: Signature, checkMode: CheckMode, context: InferenceContext): Type[] {
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-            const checkMode = excludeArgument && excludeArgument[0] ? CheckMode.SkipContextSensitive : 0;
             const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, context, checkMode);
             inferTypes(context.inferences, checkAttrType, paramType);
             return getInferredTypes(context);
         }
 
-        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, excludeArgument: ReadonlyArray<boolean> | undefined, context: InferenceContext): Type[] {
+        function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, checkMode: CheckMode, context: InferenceContext): Type[] {
             // Clear out all the inference results from the last time inferTypeArguments was called on this context
             for (const inference of context.inferences) {
                 // As an optimization, we don't have to clear (and later recompute) inferred types
@@ -20089,7 +20088,7 @@ namespace ts {
             }
 
             if (isJsxOpeningLikeElement(node)) {
-                return inferJsxTypeArguments(node, signature, excludeArgument, context);
+                return inferJsxTypeArguments(node, signature, checkMode, context);
             }
 
             // If a contextual type is available, infer from that type to the return type of the call expression. For
@@ -20136,10 +20135,6 @@ namespace ts {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    // For context sensitive arguments we pass the identityMapper, which is a signal to treat all
-                    // context sensitive function expressions as wildcards
-                    const checkMode = (excludeArgument && i < excludeArgument.length && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0) |
-                        (excludeArgument ? CheckMode.SkipGenericFunctions : 0);
                     const argType = checkExpressionWithContextualType(arg, paramType, context, checkMode);
                     inferTypes(context.inferences, argType, paramType);
                 }
@@ -20234,14 +20229,12 @@ namespace ts {
          * @param node a JSX opening-like element we are trying to figure its call signature
          * @param signature a candidate signature we are trying whether it is a call signature
          * @param relation a relationship to check parameter and argument type
-         * @param excludeArgument
          */
-        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[] | undefined, reportErrors: boolean) {
+        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, checkMode: CheckMode, reportErrors: boolean) {
             // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-            const checkMode = excludeArgument && excludeArgument.length > 0 && excludeArgument[0] ? CheckMode.SkipContextSensitive : 0;
             const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined, checkMode);
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
         }
@@ -20251,10 +20244,10 @@ namespace ts {
             args: ReadonlyArray<Expression>,
             signature: Signature,
             relation: Map<RelationComparisonResult>,
-            excludeArgument: boolean[] | undefined,
+            checkMode: CheckMode,
             reportErrors: boolean) {
             if (isJsxOpeningLikeElement(node)) {
-                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, excludeArgument, reportErrors);
+                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, checkMode, reportErrors);
             }
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
@@ -20276,13 +20269,11 @@ namespace ts {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    const checkMode = (excludeArgument && i < excludeArgument.length && excludeArgument[i] ? CheckMode.SkipContextSensitive : 0) |
-                        (excludeArgument ? CheckMode.SkipGenericFunctions : 0);
                     const argType = checkExpressionWithContextualType(arg, paramType, /*contextualMapper*/ undefined, checkMode);
-                    // If one or more arguments are still excluded (as indicated by a non-null excludeArgument parameter),
+                    // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
-                    const checkArgType = excludeArgument && excludeArgument.length ? getRegularTypeOfObjectLiteral(argType) : argType;
+                    const checkArgType = checkMode & CheckMode.SkipContextSensitive ? getRegularTypeOfObjectLiteral(argType) : argType;
                     if (!checkTypeRelatedToAndOptionallyElaborate(checkArgType, paramType, relation, reportErrors ? arg : undefined, arg, headMessage)) {
                         return false;
                     }
@@ -20540,7 +20531,7 @@ namespace ts {
             // For a decorator, no arguments are susceptible to contextual typing due to the fact
             // decorators are applied to a declaration by the emitter, and not to an expression.
             const isSingleNonGenericCandidate = candidates.length === 1 && !candidates[0].typeParameters;
-            let excludeArgument = !isDecorator && !isSingleNonGenericCandidate ? getExcludeArgument(args) : undefined;
+            let argCheckMode = !isDecorator && !isSingleNonGenericCandidate && some(args, isContextSensitive) ? CheckMode.SkipContextSensitive : CheckMode.Normal;
 
             // The following variables are captured and modified by calls to chooseOverload.
             // If overload resolution or type argument inference fails, we want to report the
@@ -20599,12 +20590,7 @@ namespace ts {
             // skip the checkApplicableSignature check.
             if (reportErrors) {
                 if (candidateForArgumentError) {
-                    // excludeArgument is undefined, in this case also equivalent to [undefined, undefined, ...]
-                    // The importance of excludeArgument is to prevent us from typing function expression parameters
-                    // in arguments too early. If possible, we'd like to only type them once we know the correct
-                    // overload. However, this matters for the case where the call is correct. When the call is
-                    // an error, we don't need to exclude any arguments, although it would cause no harm to do so.
-                    checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, /*excludeArgument*/ undefined, /*reportErrors*/ true);
+                    checkApplicableSignature(node, args, candidateForArgumentError, assignableRelation, CheckMode.Normal, /*reportErrors*/ true);
                 }
                 else if (candidateForArgumentArityError) {
                     diagnostics.add(getArgumentArityError(node, [candidateForArgumentArityError], args));
@@ -20638,7 +20624,7 @@ namespace ts {
                     if (typeArguments || !hasCorrectArity(node, args, candidate, signatureHelpTrailingComma)) {
                         return undefined;
                     }
-                    if (!checkApplicableSignature(node, args, candidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, candidate, relation, CheckMode.Normal, /*reportErrors*/ false)) {
                         candidateForArgumentError = candidate;
                         return undefined;
                     }
@@ -20665,7 +20651,8 @@ namespace ts {
                         }
                         else {
                             inferenceContext = createInferenceContext(candidate.typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-                            typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument || emptyArray, inferenceContext);
+                            typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode | CheckMode.SkipGenericFunctions, inferenceContext);
+                            argCheckMode |= inferenceContext.flags & InferenceFlags.SkippedGenericFunction ? CheckMode.SkipGenericFunctions : CheckMode.Normal;
                         }
                         checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                         // If the original signature has a generic rest type, instantiation may produce a
@@ -20678,20 +20665,20 @@ namespace ts {
                     else {
                         checkCandidate = candidate;
                     }
-                    if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument || inferenceContext && emptyArray, /*reportErrors*/ false)) {
+                    if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false)) {
                         // Give preference to error candidates that have no rest parameters (as they are more specific)
                         if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
                             candidateForArgumentError = checkCandidate;
                         }
                         continue;
                     }
-                    if (excludeArgument || inferenceContext && inferenceContext.flags & InferenceFlags.SkippedGenericFunction) {
+                    if (argCheckMode) {
                         // If one or more context sensitive arguments were excluded, we start including
                         // them now (and keeping do so for any subsequent candidates) and perform a second
                         // round of type inference and applicability checking for this particular candidate.
-                        excludeArgument = undefined;
+                        argCheckMode = CheckMode.Normal;
                         if (inferenceContext) {
-                            const typeArgumentTypes = inferTypeArguments(node, candidate, args, excludeArgument, inferenceContext);
+                            const typeArgumentTypes = inferTypeArguments(node, candidate, args, argCheckMode, inferenceContext);
                             checkCandidate = getSignatureInstantiation(candidate, typeArgumentTypes, isInJSFile(candidate.declaration), inferenceContext && inferenceContext.inferredTypeParameters);
                             // If the original signature has a generic rest type, instantiation may produce a
                             // signature with different arity and we need to perform another arity check.
@@ -20700,7 +20687,7 @@ namespace ts {
                                 continue;
                             }
                         }
-                        if (!checkApplicableSignature(node, args, checkCandidate, relation, excludeArgument, /*reportErrors*/ false)) {
+                        if (!checkApplicableSignature(node, args, checkCandidate, relation, argCheckMode, /*reportErrors*/ false)) {
                             // Give preference to error candidates that have no rest parameters (as they are more specific)
                             if (!candidateForArgumentError || getEffectiveRestType(candidateForArgumentError) || !getEffectiveRestType(checkCandidate)) {
                                 candidateForArgumentError = checkCandidate;
@@ -20714,21 +20701,6 @@ namespace ts {
 
                 return undefined;
             }
-        }
-
-        function getExcludeArgument(args: ReadonlyArray<Expression>): boolean[] | undefined {
-            let excludeArgument: boolean[] | undefined;
-            // We do not need to call `getEffectiveArgumentCount` here as it only
-            // applies when calculating the number of arguments for a decorator.
-            for (let i = 0; i < args.length; i++) {
-                if (isContextSensitive(args[i])) {
-                    if (!excludeArgument) {
-                        excludeArgument = new Array(args.length);
-                    }
-                    excludeArgument[i] = true;
-                }
-            }
-            return excludeArgument;
         }
 
         // No signature was applicable. We have already reported the errors for the invalid signature.
@@ -20830,7 +20802,7 @@ namespace ts {
 
         function inferSignatureInstantiationForOverloadFailure(node: CallLikeExpression, typeParameters: ReadonlyArray<TypeParameter>, candidate: Signature, args: ReadonlyArray<Expression>): Signature {
             const inferenceContext = createInferenceContext(typeParameters, candidate, /*flags*/ isInJSFile(node) ? InferenceFlags.AnyDefault : InferenceFlags.None);
-            const typeArgumentTypes = inferTypeArguments(node, candidate, args, getExcludeArgument(args) || emptyArray, inferenceContext);
+            const typeArgumentTypes = inferTypeArguments(node, candidate, args, CheckMode.SkipContextSensitive | CheckMode.SkipGenericFunctions, inferenceContext);
             return createSignatureInstantiation(candidate, typeArgumentTypes);
         }
 
