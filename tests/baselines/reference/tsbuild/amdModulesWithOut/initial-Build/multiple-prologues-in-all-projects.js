@@ -23,7 +23,7 @@ declare const myVar = 30;
 //# sourceMappingURL=module.d.ts.map
 
 //// [/src/app/module.d.ts.map]
-{"version":3,"file":"module.d.ts","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICDlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICCpB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACDpB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICCvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC"}
+{"version":3,"file":"module.d.ts","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICDlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICCpB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC;;ICAvB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,KAAK,KAAK,CAAC"}
 
 //// [/src/app/module.d.ts.map.baseline.txt]
 ===================================================================
@@ -127,18 +127,19 @@ sourceFile:../lib/global.ts
 4 >              ^^^^^^^^^^^
 5 >                         ^^^^^
 6 >                              ^
-1 >
+1 >"myPrologue3"
+  >
 2 >
 3 >        const 
 4 >              globalConst
 5 >                          = 10
 6 >                              ;
-1 >Emitted(8, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(8, 9) Source(1, 1) + SourceIndex(3)
-3 >Emitted(8, 15) Source(1, 7) + SourceIndex(3)
-4 >Emitted(8, 26) Source(1, 18) + SourceIndex(3)
-5 >Emitted(8, 31) Source(1, 23) + SourceIndex(3)
-6 >Emitted(8, 32) Source(1, 24) + SourceIndex(3)
+1 >Emitted(8, 1) Source(2, 1) + SourceIndex(3)
+2 >Emitted(8, 9) Source(2, 1) + SourceIndex(3)
+3 >Emitted(8, 15) Source(2, 7) + SourceIndex(3)
+4 >Emitted(8, 26) Source(2, 18) + SourceIndex(3)
+5 >Emitted(8, 31) Source(2, 23) + SourceIndex(3)
+6 >Emitted(8, 32) Source(2, 24) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.d.ts
@@ -201,7 +202,7 @@ sourceFile:file4.ts
 //// [/src/app/module.js]
 "use strict";
 "myPrologue";
-    "myPrologueFile";
+"myPrologue3";
 "myPrologue2";
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
@@ -226,14 +227,14 @@ var myVar = 30;
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file2.ts","file4.ts","../lib/file1.ts","../lib/global.ts","file3.ts"],"names":[],"mappings":";AAAA,YAAY,CAAA;ICAZ,gBAAgB,CAAA;ACAhB,aAAa,CAAC;AFCd,IAAM,MAAM,GAAG,EAAE,CAAC;;;;IGDL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;IFApB,gBAAgB,CAAA;;IACH,QAAA,CAAC,GAAG,EAAE,CAAC;;AGDpB,IAAM,WAAW,GAAG,EAAE,CAAC;;;ICAvB,YAAY,CAAA;;IACC,QAAA,CAAC,GAAG,EAAE,CAAC;;AHApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/global.ts","file4.ts","../lib/file1.ts","../lib/file2.ts","file3.ts"],"names":[],"mappings":";AAAA,YAAY,CAAA;ACAZ,aAAa,CAAA;ACAb,aAAa,CAAC;AFCd,IAAM,MAAM,GAAG,EAAE,CAAC;;;;IGDL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;ICApB,gBAAgB,CAAA;;IACH,QAAA,CAAC,GAAG,EAAE,CAAC;;AHApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;IIDvB,YAAY,CAAA;;IACC,QAAA,CAAC,GAAG,EAAE,CAAC;;AHApB,IAAM,KAAK,GAAG,EAAE,CAAC"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
 JsFile: module.js
 mapUrl: module.js.map
 sourceRoot: 
-sources: ../lib/file0.ts,../lib/file2.ts,file4.ts,../lib/file1.ts,../lib/global.ts,file3.ts
+sources: ../lib/file0.ts,../lib/global.ts,file4.ts,../lib/file1.ts,../lib/file2.ts,file3.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -244,7 +245,7 @@ sourceFile:../lib/file0.ts
 1 >
 2 >^^^^^^^^^^^^
 3 >            ^
-4 >             ^^^^^^^^^->
+4 >             ^^->
 1 >
 2 >"myPrologue"
 3 >            
@@ -254,32 +255,33 @@ sourceFile:../lib/file0.ts
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
-sourceFile:../lib/file2.ts
+sourceFile:../lib/global.ts
 -------------------------------------------------------------------
->>>    "myPrologueFile";
-1->^^^^
-2 >    ^^^^^^^^^^^^^^^^
-3 >                    ^
+>>>"myPrologue3";
 1->
-2 >    "myPrologueFile"
-3 >                    
-1->Emitted(3, 5) Source(1, 1) + SourceIndex(1)
-2 >Emitted(3, 21) Source(1, 17) + SourceIndex(1)
-3 >Emitted(3, 22) Source(1, 17) + SourceIndex(1)
+2 >^^^^^^^^^^^^^
+3 >             ^
+4 >              ^->
+1->
+2 >"myPrologue3"
+3 >             
+1->Emitted(3, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(3, 14) Source(1, 14) + SourceIndex(1)
+3 >Emitted(3, 15) Source(1, 14) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
 sourceFile:file4.ts
 -------------------------------------------------------------------
 >>>"myPrologue2";
-1 >
+1->
 2 >^^^^^^^^^^^^^
 3 >             ^
 4 >              ^^^->
-1 >
+1->
 2 >"myPrologue2"
 3 >             ;
-1 >Emitted(4, 1) Source(1, 1) + SourceIndex(2)
+1->Emitted(4, 1) Source(1, 1) + SourceIndex(2)
 2 >Emitted(4, 14) Source(1, 14) + SourceIndex(2)
 3 >Emitted(4, 15) Source(1, 15) + SourceIndex(2)
 ---
@@ -351,9 +353,9 @@ sourceFile:../lib/file2.ts
 1 >
 2 >    "myPrologueFile"
 3 >                    
-1 >Emitted(13, 5) Source(1, 1) + SourceIndex(1)
-2 >Emitted(13, 21) Source(1, 17) + SourceIndex(1)
-3 >Emitted(13, 22) Source(1, 17) + SourceIndex(1)
+1 >Emitted(13, 5) Source(1, 1) + SourceIndex(4)
+2 >Emitted(13, 21) Source(1, 17) + SourceIndex(4)
+3 >Emitted(13, 22) Source(1, 17) + SourceIndex(4)
 ---
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.y = 20;
@@ -370,12 +372,12 @@ sourceFile:../lib/file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1->Emitted(15, 5) Source(2, 14) + SourceIndex(1)
-2 >Emitted(15, 13) Source(2, 14) + SourceIndex(1)
-3 >Emitted(15, 14) Source(2, 15) + SourceIndex(1)
-4 >Emitted(15, 17) Source(2, 18) + SourceIndex(1)
-5 >Emitted(15, 19) Source(2, 20) + SourceIndex(1)
-6 >Emitted(15, 20) Source(2, 21) + SourceIndex(1)
+1->Emitted(15, 5) Source(2, 14) + SourceIndex(4)
+2 >Emitted(15, 13) Source(2, 14) + SourceIndex(4)
+3 >Emitted(15, 14) Source(2, 15) + SourceIndex(4)
+4 >Emitted(15, 17) Source(2, 18) + SourceIndex(4)
+5 >Emitted(15, 19) Source(2, 20) + SourceIndex(4)
+6 >Emitted(15, 20) Source(2, 21) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -390,18 +392,19 @@ sourceFile:../lib/global.ts
 5 >                  ^^
 6 >                    ^
 7 >                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
+1 >"myPrologue3"
+  >
 2 >const 
 3 >    globalConst
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(17, 1) Source(1, 1) + SourceIndex(4)
-2 >Emitted(17, 5) Source(1, 7) + SourceIndex(4)
-3 >Emitted(17, 16) Source(1, 18) + SourceIndex(4)
-4 >Emitted(17, 19) Source(1, 21) + SourceIndex(4)
-5 >Emitted(17, 21) Source(1, 23) + SourceIndex(4)
-6 >Emitted(17, 22) Source(1, 24) + SourceIndex(4)
+1 >Emitted(17, 1) Source(2, 1) + SourceIndex(1)
+2 >Emitted(17, 5) Source(2, 7) + SourceIndex(1)
+3 >Emitted(17, 16) Source(2, 18) + SourceIndex(1)
+4 >Emitted(17, 19) Source(2, 21) + SourceIndex(1)
+5 >Emitted(17, 21) Source(2, 23) + SourceIndex(1)
+6 >Emitted(17, 22) Source(2, 24) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -496,44 +499,32 @@ sourceFile:file4.ts
         },
         {
           "pos": 30,
-          "end": 51,
+          "end": 44,
           "kind": "prologue",
-          "data": "myPrologueFile"
+          "data": "myPrologue3"
         },
         {
-          "pos": 53,
-          "end": 67,
+          "pos": 46,
+          "end": 60,
           "kind": "prologue",
           "data": "myPrologue2"
         },
         {
-          "pos": 69,
-          "end": 501,
+          "pos": 62,
+          "end": 494,
           "kind": "prepend",
           "data": "/src/lib/module.js",
           "texts": [
             {
-              "pos": 69,
-              "end": 501,
+              "pos": 62,
+              "end": 494,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 572,
-          "end": 589,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 591,
-          "end": 608,
-          "kind": "prologue",
-          "data": "myPrologue"
-        },
-        {
-          "pos": 501,
-          "end": 721,
+          "pos": 494,
+          "end": 714,
           "kind": "text"
         }
       ],
@@ -601,15 +592,15 @@ prologue: (0-13):: use strict
 prologue: (15-28):: myPrologue
 "myPrologue";
 ----------------------------------------------------------------------
-prologue: (30-51):: myPrologueFile
-    "myPrologueFile";
+prologue: (30-44):: myPrologue3
+"myPrologue3";
 ----------------------------------------------------------------------
-prologue: (53-67):: myPrologue2
+prologue: (46-60):: myPrologue2
 "myPrologue2";
 ----------------------------------------------------------------------
-prepend: (69-501):: /src/lib/module.js texts:: 1
+prepend: (62-494):: /src/lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (69-501)
+text: (62-494)
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -625,13 +616,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-prologue: (572-589):: use strict
-    "use strict";
-----------------------------------------------------------------------
-prologue: (591-608):: myPrologue
-    "myPrologue";
-----------------------------------------------------------------------
-text: (501-721)
+text: (494-714)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     "myPrologue";
@@ -690,6 +675,10 @@ const myGlob = 20;
 "myPrologueFile"
 export const y = 20;
 
+//// [/src/lib/global.ts]
+"myPrologue3"
+const globalConst = 10;
+
 //// [/src/lib/module.d.ts]
 declare const myGlob = 20;
 declare module "file1" {
@@ -702,7 +691,7 @@ declare const globalConst = 10;
 //# sourceMappingURL=module.d.ts.map
 
 //// [/src/lib/module.d.ts.map]
-{"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICDlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICCpB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACDpB,QAAA,MAAM,WAAW,KAAK,CAAC"}
+{"version":3,"file":"module.d.ts","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":"AACA,QAAA,MAAM,MAAM,KAAK,CAAC;;ICDlB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;;ICCpB,MAAM,CAAC,MAAM,CAAC,KAAK,CAAC;;ACApB,QAAA,MAAM,WAAW,KAAK,CAAC"}
 
 //// [/src/lib/module.d.ts.map.baseline.txt]
 ===================================================================
@@ -807,24 +796,26 @@ sourceFile:global.ts
 5 >                         ^^^^^
 6 >                              ^
 7 >                               ^^^^->
-1 >
+1 >"myPrologue3"
+  >
 2 >
 3 >        const 
 4 >              globalConst
 5 >                          = 10
 6 >                              ;
-1 >Emitted(8, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(8, 9) Source(1, 1) + SourceIndex(3)
-3 >Emitted(8, 15) Source(1, 7) + SourceIndex(3)
-4 >Emitted(8, 26) Source(1, 18) + SourceIndex(3)
-5 >Emitted(8, 31) Source(1, 23) + SourceIndex(3)
-6 >Emitted(8, 32) Source(1, 24) + SourceIndex(3)
+1 >Emitted(8, 1) Source(2, 1) + SourceIndex(3)
+2 >Emitted(8, 9) Source(2, 1) + SourceIndex(3)
+3 >Emitted(8, 15) Source(2, 7) + SourceIndex(3)
+4 >Emitted(8, 26) Source(2, 18) + SourceIndex(3)
+5 >Emitted(8, 31) Source(2, 23) + SourceIndex(3)
+6 >Emitted(8, 32) Source(2, 24) + SourceIndex(3)
 ---
 >>>//# sourceMappingURL=module.d.ts.map
 
 //// [/src/lib/module.js]
 "use strict";
 "myPrologue";
+"myPrologue3";
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -841,14 +832,14 @@ var globalConst = 10;
 //# sourceMappingURL=module.js.map
 
 //// [/src/lib/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","file1.ts","file2.ts","global.ts"],"names":[],"mappings":";AAAA,YAAY,CAAA;AACZ,IAAM,MAAM,GAAG,EAAE,CAAC;;;;ICDL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;ICApB,gBAAgB,CAAA;;IACH,QAAA,CAAC,GAAG,EAAE,CAAC;;ACDpB,IAAM,WAAW,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["file0.ts","global.ts","file1.ts","file2.ts"],"names":[],"mappings":";AAAA,YAAY,CAAA;ACAZ,aAAa,CAAA;ADCb,IAAM,MAAM,GAAG,EAAE,CAAC;;;;IEDL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;ICApB,gBAAgB,CAAA;;IACH,QAAA,CAAC,GAAG,EAAE,CAAC;;AFApB,IAAM,WAAW,GAAG,EAAE,CAAC"}
 
 //// [/src/lib/module.js.map.baseline.txt]
 ===================================================================
 JsFile: module.js
 mapUrl: module.js.map
 sourceRoot: 
-sources: file0.ts,file1.ts,file2.ts,global.ts
+sources: file0.ts,global.ts,file1.ts,file2.ts
 ===================================================================
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -859,7 +850,7 @@ sourceFile:file0.ts
 1 >
 2 >^^^^^^^^^^^^
 3 >            ^
-4 >             ^^^^->
+4 >             ^^->
 1 >
 2 >"myPrologue"
 3 >            
@@ -867,6 +858,26 @@ sourceFile:file0.ts
 2 >Emitted(2, 13) Source(1, 13) + SourceIndex(0)
 3 >Emitted(2, 14) Source(1, 13) + SourceIndex(0)
 ---
+-------------------------------------------------------------------
+emittedFile:/src/lib/module.js
+sourceFile:global.ts
+-------------------------------------------------------------------
+>>>"myPrologue3";
+1->
+2 >^^^^^^^^^^^^^
+3 >             ^
+4 >              ^^^->
+1->
+2 >"myPrologue3"
+3 >             
+1->Emitted(3, 1) Source(1, 1) + SourceIndex(1)
+2 >Emitted(3, 14) Source(1, 14) + SourceIndex(1)
+3 >Emitted(3, 15) Source(1, 14) + SourceIndex(1)
+---
+-------------------------------------------------------------------
+emittedFile:/src/lib/module.js
+sourceFile:file0.ts
+-------------------------------------------------------------------
 >>>var myGlob = 20;
 1->
 2 >^^^^
@@ -875,19 +886,19 @@ sourceFile:file0.ts
 5 >             ^^
 6 >               ^
 7 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1->
+1->"myPrologue"
   >
 2 >const 
 3 >    myGlob
 4 >           = 
 5 >             20
 6 >               ;
-1->Emitted(3, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(3, 5) Source(2, 7) + SourceIndex(0)
-3 >Emitted(3, 11) Source(2, 13) + SourceIndex(0)
-4 >Emitted(3, 14) Source(2, 16) + SourceIndex(0)
-5 >Emitted(3, 16) Source(2, 18) + SourceIndex(0)
-6 >Emitted(3, 17) Source(2, 19) + SourceIndex(0)
+1->Emitted(4, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(2, 7) + SourceIndex(0)
+3 >Emitted(4, 11) Source(2, 13) + SourceIndex(0)
+4 >Emitted(4, 14) Source(2, 16) + SourceIndex(0)
+5 >Emitted(4, 16) Source(2, 18) + SourceIndex(0)
+6 >Emitted(4, 17) Source(2, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -909,12 +920,12 @@ sourceFile:file1.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1->Emitted(7, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(7, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(7, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(7, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(7, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(7, 20) Source(1, 21) + SourceIndex(1)
+1->Emitted(8, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(8, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(8, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(8, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(8, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(8, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -931,9 +942,9 @@ sourceFile:file2.ts
 1 >
 2 >    "myPrologueFile"
 3 >                    
-1 >Emitted(11, 5) Source(1, 1) + SourceIndex(2)
-2 >Emitted(11, 21) Source(1, 17) + SourceIndex(2)
-3 >Emitted(11, 22) Source(1, 17) + SourceIndex(2)
+1 >Emitted(12, 5) Source(1, 1) + SourceIndex(3)
+2 >Emitted(12, 21) Source(1, 17) + SourceIndex(3)
+3 >Emitted(12, 22) Source(1, 17) + SourceIndex(3)
 ---
 >>>    Object.defineProperty(exports, "__esModule", { value: true });
 >>>    exports.y = 20;
@@ -950,12 +961,12 @@ sourceFile:file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1->Emitted(13, 5) Source(2, 14) + SourceIndex(2)
-2 >Emitted(13, 13) Source(2, 14) + SourceIndex(2)
-3 >Emitted(13, 14) Source(2, 15) + SourceIndex(2)
-4 >Emitted(13, 17) Source(2, 18) + SourceIndex(2)
-5 >Emitted(13, 19) Source(2, 20) + SourceIndex(2)
-6 >Emitted(13, 20) Source(2, 21) + SourceIndex(2)
+1->Emitted(14, 5) Source(2, 14) + SourceIndex(3)
+2 >Emitted(14, 13) Source(2, 14) + SourceIndex(3)
+3 >Emitted(14, 14) Source(2, 15) + SourceIndex(3)
+4 >Emitted(14, 17) Source(2, 18) + SourceIndex(3)
+5 >Emitted(14, 19) Source(2, 20) + SourceIndex(3)
+6 >Emitted(14, 20) Source(2, 21) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/lib/module.js
@@ -970,18 +981,19 @@ sourceFile:global.ts
 5 >                  ^^
 6 >                    ^
 7 >                     ^^^^^^^^^^^^->
-1 >
+1 >"myPrologue3"
+  >
 2 >const 
 3 >    globalConst
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(15, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(15, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(15, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(15, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(15, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(15, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(16, 1) Source(2, 1) + SourceIndex(1)
+2 >Emitted(16, 5) Source(2, 7) + SourceIndex(1)
+3 >Emitted(16, 16) Source(2, 18) + SourceIndex(1)
+4 >Emitted(16, 19) Source(2, 21) + SourceIndex(1)
+5 >Emitted(16, 21) Source(2, 23) + SourceIndex(1)
+6 >Emitted(16, 22) Source(2, 24) + SourceIndex(1)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -1010,26 +1022,14 @@ sourceFile:global.ts
           "data": "myPrologue"
         },
         {
-          "pos": 119,
-          "end": 136,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 303,
-          "end": 320,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 322,
-          "end": 343,
-          "kind": "prologue",
-          "data": "myPrologueFile"
-        },
-        {
           "pos": 30,
-          "end": 462,
+          "end": 44,
+          "kind": "prologue",
+          "data": "myPrologue3"
+        },
+        {
+          "pos": 46,
+          "end": 478,
           "kind": "text"
         }
       ],
@@ -1055,6 +1055,21 @@ sourceFile:global.ts
                   "pos": 0,
                   "end": 12,
                   "text": "myPrologue"
+                }
+              }
+            ]
+          },
+          {
+            "file": 3,
+            "text": "\"myPrologue3\"",
+            "directives": [
+              {
+                "pos": 0,
+                "end": 13,
+                "expression": {
+                  "pos": 0,
+                  "end": 13,
+                  "text": "myPrologue3"
                 }
               }
             ]
@@ -1084,16 +1099,10 @@ prologue: (0-13):: use strict
 prologue: (15-28):: myPrologue
 "myPrologue";
 ----------------------------------------------------------------------
-prologue: (119-136):: use strict
-    "use strict";
+prologue: (30-44):: myPrologue3
+"myPrologue3";
 ----------------------------------------------------------------------
-prologue: (303-320):: use strict
-    "use strict";
-----------------------------------------------------------------------
-prologue: (322-343):: myPrologueFile
-    "myPrologueFile";
-----------------------------------------------------------------------
-text: (30-462)
+text: (46-478)
 var myGlob = 20;
 define("file1", ["require", "exports"], function (require, exports) {
     "use strict";

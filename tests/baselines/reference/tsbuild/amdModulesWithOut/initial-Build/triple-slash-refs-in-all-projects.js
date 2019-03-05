@@ -241,7 +241,6 @@ sourceFile:file4.ts
 >>>//# sourceMappingURL=module.d.ts.map
 
 //// [/src/app/module.js]
-    "use strict";
 ///<reference path="./tripleRef.d.ts"/>
 var file0Const = new libfile0();
 var myGlob = 20;
@@ -267,7 +266,7 @@ var myVar = 30;
 //# sourceMappingURL=module.js.map
 
 //// [/src/app/module.js.map]
-{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":";AAAA,uCAAuC;AACvC,IAAM,UAAU,GAAG,IAAI,QAAQ,EAAE,CAAC;AAClC,IAAM,MAAM,GAAG,EAAE,CAAC;;;;ICFL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,uCAAuC;AACvC,IAAM,UAAU,GAAG,IAAI,QAAQ,EAAE,CAAC;AAClC,IAAM,KAAK,GAAG,EAAE,CAAC"}
+{"version":3,"file":"module.js","sourceRoot":"","sources":["../lib/file0.ts","../lib/file1.ts","../lib/file2.ts","../lib/global.ts","file3.ts","file4.ts"],"names":[],"mappings":"AAAA,uCAAuC;AACvC,IAAM,UAAU,GAAG,IAAI,QAAQ,EAAE,CAAC;AAClC,IAAM,MAAM,GAAG,EAAE,CAAC;;;;ICFL,QAAA,CAAC,GAAG,EAAE,CAAC;;;;;ICAP,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,IAAM,WAAW,GAAG,EAAE,CAAC;;;;ICAV,QAAA,CAAC,GAAG,EAAE,CAAC;;ACApB,uCAAuC;AACvC,IAAM,UAAU,GAAG,IAAI,QAAQ,EAAE,CAAC;AAClC,IAAM,KAAK,GAAG,EAAE,CAAC"}
 
 //// [/src/app/module.js.map.baseline.txt]
 ===================================================================
@@ -280,14 +279,13 @@ sources: ../lib/file0.ts,../lib/file1.ts,../lib/file2.ts,../lib/global.ts,file3.
 emittedFile:/src/app/module.js
 sourceFile:../lib/file0.ts
 -------------------------------------------------------------------
->>>    "use strict";
 >>>///<reference path="./tripleRef.d.ts"/>
 1 >
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >///<reference path="./tripleRef.d.ts"/>
-1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(2, 40) Source(1, 40) + SourceIndex(0)
+1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 40) Source(1, 40) + SourceIndex(0)
 ---
 >>>var file0Const = new libfile0();
 1 >
@@ -307,14 +305,14 @@ sourceFile:../lib/file0.ts
 6 >                     libfile0
 7 >                             ()
 8 >                               ;
-1 >Emitted(3, 1) Source(2, 1) + SourceIndex(0)
-2 >Emitted(3, 5) Source(2, 7) + SourceIndex(0)
-3 >Emitted(3, 15) Source(2, 17) + SourceIndex(0)
-4 >Emitted(3, 18) Source(2, 20) + SourceIndex(0)
-5 >Emitted(3, 22) Source(2, 24) + SourceIndex(0)
-6 >Emitted(3, 30) Source(2, 32) + SourceIndex(0)
-7 >Emitted(3, 32) Source(2, 34) + SourceIndex(0)
-8 >Emitted(3, 33) Source(2, 35) + SourceIndex(0)
+1 >Emitted(2, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(2, 7) + SourceIndex(0)
+3 >Emitted(2, 15) Source(2, 17) + SourceIndex(0)
+4 >Emitted(2, 18) Source(2, 20) + SourceIndex(0)
+5 >Emitted(2, 22) Source(2, 24) + SourceIndex(0)
+6 >Emitted(2, 30) Source(2, 32) + SourceIndex(0)
+7 >Emitted(2, 32) Source(2, 34) + SourceIndex(0)
+8 >Emitted(2, 33) Source(2, 35) + SourceIndex(0)
 ---
 >>>var myGlob = 20;
 1 >
@@ -331,12 +329,12 @@ sourceFile:../lib/file0.ts
 4 >           = 
 5 >             20
 6 >               ;
-1 >Emitted(4, 1) Source(3, 1) + SourceIndex(0)
-2 >Emitted(4, 5) Source(3, 7) + SourceIndex(0)
-3 >Emitted(4, 11) Source(3, 13) + SourceIndex(0)
-4 >Emitted(4, 14) Source(3, 16) + SourceIndex(0)
-5 >Emitted(4, 16) Source(3, 18) + SourceIndex(0)
-6 >Emitted(4, 17) Source(3, 19) + SourceIndex(0)
+1 >Emitted(3, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(3, 5) Source(3, 7) + SourceIndex(0)
+3 >Emitted(3, 11) Source(3, 13) + SourceIndex(0)
+4 >Emitted(3, 14) Source(3, 16) + SourceIndex(0)
+5 >Emitted(3, 16) Source(3, 18) + SourceIndex(0)
+6 >Emitted(3, 17) Source(3, 19) + SourceIndex(0)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -358,12 +356,12 @@ sourceFile:../lib/file1.ts
 4 >              = 
 5 >                10
 6 >                  ;
-1->Emitted(8, 5) Source(1, 14) + SourceIndex(1)
-2 >Emitted(8, 13) Source(1, 14) + SourceIndex(1)
-3 >Emitted(8, 14) Source(1, 15) + SourceIndex(1)
-4 >Emitted(8, 17) Source(1, 18) + SourceIndex(1)
-5 >Emitted(8, 19) Source(1, 20) + SourceIndex(1)
-6 >Emitted(8, 20) Source(1, 21) + SourceIndex(1)
+1->Emitted(7, 5) Source(1, 14) + SourceIndex(1)
+2 >Emitted(7, 13) Source(1, 14) + SourceIndex(1)
+3 >Emitted(7, 14) Source(1, 15) + SourceIndex(1)
+4 >Emitted(7, 17) Source(1, 18) + SourceIndex(1)
+5 >Emitted(7, 19) Source(1, 20) + SourceIndex(1)
+6 >Emitted(7, 20) Source(1, 21) + SourceIndex(1)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -386,12 +384,12 @@ sourceFile:../lib/file2.ts
 4 >              = 
 5 >                20
 6 >                  ;
-1 >Emitted(13, 5) Source(1, 14) + SourceIndex(2)
-2 >Emitted(13, 13) Source(1, 14) + SourceIndex(2)
-3 >Emitted(13, 14) Source(1, 15) + SourceIndex(2)
-4 >Emitted(13, 17) Source(1, 18) + SourceIndex(2)
-5 >Emitted(13, 19) Source(1, 20) + SourceIndex(2)
-6 >Emitted(13, 20) Source(1, 21) + SourceIndex(2)
+1 >Emitted(12, 5) Source(1, 14) + SourceIndex(2)
+2 >Emitted(12, 13) Source(1, 14) + SourceIndex(2)
+3 >Emitted(12, 14) Source(1, 15) + SourceIndex(2)
+4 >Emitted(12, 17) Source(1, 18) + SourceIndex(2)
+5 >Emitted(12, 19) Source(1, 20) + SourceIndex(2)
+6 >Emitted(12, 20) Source(1, 21) + SourceIndex(2)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -412,12 +410,12 @@ sourceFile:../lib/global.ts
 4 >                = 
 5 >                  10
 6 >                    ;
-1 >Emitted(15, 1) Source(1, 1) + SourceIndex(3)
-2 >Emitted(15, 5) Source(1, 7) + SourceIndex(3)
-3 >Emitted(15, 16) Source(1, 18) + SourceIndex(3)
-4 >Emitted(15, 19) Source(1, 21) + SourceIndex(3)
-5 >Emitted(15, 21) Source(1, 23) + SourceIndex(3)
-6 >Emitted(15, 22) Source(1, 24) + SourceIndex(3)
+1 >Emitted(14, 1) Source(1, 1) + SourceIndex(3)
+2 >Emitted(14, 5) Source(1, 7) + SourceIndex(3)
+3 >Emitted(14, 16) Source(1, 18) + SourceIndex(3)
+4 >Emitted(14, 19) Source(1, 21) + SourceIndex(3)
+5 >Emitted(14, 21) Source(1, 23) + SourceIndex(3)
+6 >Emitted(14, 22) Source(1, 24) + SourceIndex(3)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -439,12 +437,12 @@ sourceFile:file3.ts
 4 >              = 
 5 >                30
 6 >                  ;
-1->Emitted(19, 5) Source(1, 14) + SourceIndex(4)
-2 >Emitted(19, 13) Source(1, 14) + SourceIndex(4)
-3 >Emitted(19, 14) Source(1, 15) + SourceIndex(4)
-4 >Emitted(19, 17) Source(1, 18) + SourceIndex(4)
-5 >Emitted(19, 19) Source(1, 20) + SourceIndex(4)
-6 >Emitted(19, 20) Source(1, 21) + SourceIndex(4)
+1->Emitted(18, 5) Source(1, 14) + SourceIndex(4)
+2 >Emitted(18, 13) Source(1, 14) + SourceIndex(4)
+3 >Emitted(18, 14) Source(1, 15) + SourceIndex(4)
+4 >Emitted(18, 17) Source(1, 18) + SourceIndex(4)
+5 >Emitted(18, 19) Source(1, 20) + SourceIndex(4)
+6 >Emitted(18, 20) Source(1, 21) + SourceIndex(4)
 ---
 -------------------------------------------------------------------
 emittedFile:/src/app/module.js
@@ -456,8 +454,8 @@ sourceFile:file4.ts
 2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 1 >
 2 >///<reference path="./tripleRef.d.ts"/>
-1 >Emitted(21, 1) Source(1, 1) + SourceIndex(5)
-2 >Emitted(21, 40) Source(1, 40) + SourceIndex(5)
+1 >Emitted(20, 1) Source(1, 1) + SourceIndex(5)
+2 >Emitted(20, 40) Source(1, 40) + SourceIndex(5)
 ---
 >>>var file4Const = new appfile4();
 1 >
@@ -477,14 +475,14 @@ sourceFile:file4.ts
 6 >                     appfile4
 7 >                             ()
 8 >                               ;
-1 >Emitted(22, 1) Source(2, 1) + SourceIndex(5)
-2 >Emitted(22, 5) Source(2, 7) + SourceIndex(5)
-3 >Emitted(22, 15) Source(2, 17) + SourceIndex(5)
-4 >Emitted(22, 18) Source(2, 20) + SourceIndex(5)
-5 >Emitted(22, 22) Source(2, 24) + SourceIndex(5)
-6 >Emitted(22, 30) Source(2, 32) + SourceIndex(5)
-7 >Emitted(22, 32) Source(2, 34) + SourceIndex(5)
-8 >Emitted(22, 33) Source(2, 35) + SourceIndex(5)
+1 >Emitted(21, 1) Source(2, 1) + SourceIndex(5)
+2 >Emitted(21, 5) Source(2, 7) + SourceIndex(5)
+3 >Emitted(21, 15) Source(2, 17) + SourceIndex(5)
+4 >Emitted(21, 18) Source(2, 20) + SourceIndex(5)
+5 >Emitted(21, 22) Source(2, 24) + SourceIndex(5)
+6 >Emitted(21, 30) Source(2, 32) + SourceIndex(5)
+7 >Emitted(21, 32) Source(2, 34) + SourceIndex(5)
+8 >Emitted(21, 33) Source(2, 35) + SourceIndex(5)
 ---
 >>>var myVar = 30;
 1 >
@@ -501,12 +499,12 @@ sourceFile:file4.ts
 4 >          = 
 5 >            30
 6 >              ;
-1 >Emitted(23, 1) Source(3, 1) + SourceIndex(5)
-2 >Emitted(23, 5) Source(3, 7) + SourceIndex(5)
-3 >Emitted(23, 10) Source(3, 12) + SourceIndex(5)
-4 >Emitted(23, 13) Source(3, 15) + SourceIndex(5)
-5 >Emitted(23, 15) Source(3, 17) + SourceIndex(5)
-6 >Emitted(23, 16) Source(3, 18) + SourceIndex(5)
+1 >Emitted(22, 1) Source(3, 1) + SourceIndex(5)
+2 >Emitted(22, 5) Source(3, 7) + SourceIndex(5)
+3 >Emitted(22, 10) Source(3, 12) + SourceIndex(5)
+4 >Emitted(22, 13) Source(3, 15) + SourceIndex(5)
+5 >Emitted(22, 15) Source(3, 17) + SourceIndex(5)
+6 >Emitted(22, 16) Source(3, 18) + SourceIndex(5)
 ---
 >>>//# sourceMappingURL=module.js.map
 
@@ -522,32 +520,20 @@ sourceFile:file4.ts
       "sections": [
         {
           "pos": 0,
-          "end": 17,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 19,
-          "end": 503,
+          "end": 484,
           "kind": "prepend",
           "data": "/src/lib/module.js",
           "texts": [
             {
-              "pos": 19,
-              "end": 503,
+              "pos": 0,
+              "end": 484,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 574,
-          "end": 591,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 503,
-          "end": 779,
+          "pos": 484,
+          "end": 760,
           "kind": "text"
         }
       ]
@@ -593,12 +579,9 @@ sourceFile:file4.ts
 ======================================================================
 File:: /src/app/module.js
 ----------------------------------------------------------------------
-prologue: (0-17):: use strict
-    "use strict";
-----------------------------------------------------------------------
-prepend: (19-503):: /src/lib/module.js texts:: 1
+prepend: (0-484):: /src/lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (19-503)
+text: (0-484)
 ///<reference path="./tripleRef.d.ts"/>
 var file0Const = new libfile0();
 var myGlob = 20;
@@ -615,10 +598,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-prologue: (574-591):: use strict
-    "use strict";
-----------------------------------------------------------------------
-text: (503-779)
+text: (484-760)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1008,18 +988,6 @@ sourceFile:global.ts
     "js": {
       "sections": [
         {
-          "pos": 164,
-          "end": 181,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
-          "pos": 348,
-          "end": 365,
-          "kind": "prologue",
-          "data": "use strict"
-        },
-        {
           "pos": 0,
           "end": 484,
           "kind": "text"
@@ -1047,12 +1015,6 @@ sourceFile:global.ts
 //// [/src/lib/module.tsbuildinfo.baseline.txt]
 ======================================================================
 File:: /src/lib/module.js
-----------------------------------------------------------------------
-prologue: (164-181):: use strict
-    "use strict";
-----------------------------------------------------------------------
-prologue: (348-365):: use strict
-    "use strict";
 ----------------------------------------------------------------------
 text: (0-484)
 ///<reference path="./tripleRef.d.ts"/>

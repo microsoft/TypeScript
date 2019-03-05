@@ -109,6 +109,7 @@ namespace ts {
                         enableStrict(fs, sources[project.lib][source.config]);
                         addTestPrologue(fs, sources[project.lib][source.ts][0], `"myPrologue"`);
                         addTestPrologue(fs, sources[project.lib][source.ts][2], `"myPrologueFile"`);
+                        addTestPrologue(fs, sources[project.lib][source.ts][3], `"myPrologue3"`);
                         enableStrict(fs, sources[project.app][source.config]);
                         addTestPrologue(fs, sources[project.app][source.ts][0], `"myPrologue"`);
                         addTestPrologue(fs, sources[project.app][source.ts][1], `"myPrologue2";`);
@@ -160,7 +161,7 @@ namespace ts {
                 function stripInternalScenario(fs: vfs.FileSystem) {
                     const internal = "/*@internal*/";
                     replaceText(fs, sources[project.app][source.config], `"composite": true,`, `"composite": true,
-"stripInternal": true,`);;
+"stripInternal": true,`);
                     replaceText(fs, sources[project.lib][source.ts][0], "const", `${internal} const`);
                     appendText(fs, sources[project.lib][source.ts][1], `
 export class normalC {

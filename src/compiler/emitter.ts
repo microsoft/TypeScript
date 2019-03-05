@@ -3377,7 +3377,7 @@ namespace ts {
          * Emits any prologue directives at the start of a Statement list, returning the
          * number of prologue directives written to the output.
          */
-        function emitPrologueDirectives(statements: ReadonlyArray<Node>, sourceFile?: SourceFile, seenPrologueDirectives?: Map<true>): number {
+        function emitPrologueDirectives(statements: ReadonlyArray<Node>, sourceFile?: SourceFile, seenPrologueDirectives?: Map<true>, recordBundleFileSection?: true): number {
             let needsToSetSourceFile = !!sourceFile;
             for (let i = 0; i < statements.length; i++) {
                 const statement = statements[i];
@@ -3391,7 +3391,7 @@ namespace ts {
                         writeLine();
                         const pos = writer.getTextPos();
                         emit(statement);
-                        if (bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: statement.expression.text });
+                        if (recordBundleFileSection && bundleFileInfo) bundleFileInfo.sections.push({ pos, end: writer.getTextPos(), kind: BundleFileSectionKind.Prologue, data: statement.expression.text });
                         if (seenPrologueDirectives) {
                             seenPrologueDirectives.set(statement.expression.text, true);
                         }
@@ -3430,7 +3430,7 @@ namespace ts {
                     emitUnparsedPrologues((prepend as UnparsedSource).prologues, seenPrologueDirectives);
                 }
                 for (const sourceFile of sourceFileOrBundle.sourceFiles) {
-                    emitPrologueDirectives(sourceFile.statements, sourceFile, seenPrologueDirectives);
+                    emitPrologueDirectives(sourceFile.statements, sourceFile, seenPrologueDirectives, /*recordBundleFileSection*/ true);
                 }
                 setSourceFile(undefined);
             }
