@@ -281,11 +281,6 @@ const cleanLssl = async () => {
         "built/local/tsserverlibrary.out.tsbuildinfo",
         "built/local/tsserverlibrary.js",
         "built/local/tsserverlibrary.d.ts",
-        "built/local/tsserverlibrary/tsserverlibrary.js",
-        "built/local/tsserverlibrary/tsserverlibrary.js.map",
-        "built/local/tsserverlibrary/tsserverlibrary.d.ts",
-        "built/local/tsserverlibrary1.js",
-        "built/local/tsserverlibrary1.d.ts",
     ]);
 };
 cleanTasks.push(cleanLssl);
