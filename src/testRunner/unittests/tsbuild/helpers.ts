@@ -359,4 +359,66 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
             }
         });
     }
+
+    export function enableStrict(fs: vfs.FileSystem, path: string) {
+        replaceText(fs, path, `"strict": false`, `"strict": true`);
+    }
+
+    export function addTestPrologue(fs: vfs.FileSystem, path: string, prologue: string) {
+        prependText(fs, path, `${prologue}
+`);
+    }
+
+    export function addShebang(fs: vfs.FileSystem, project: string, file: string) {
+        prependText(fs, `src/${project}/${file}.ts`, `#!someshebang ${project} ${file}
+`);
+    }
+
+    export function restContent(project: string, file: string) {
+        return `function for${project}${file}Rest() {
+const { b, ...rest } = { a: 10, b: 30, yy: 30 };
+}`;
+    }
+
+    function nonrestContent(project: string, file: string) {
+        return `function for${project}${file}Rest() { }`;
+    }
+
+    export function addRest(fs: vfs.FileSystem, project: string, file: string) {
+        appendText(fs, `src/${project}/${file}.ts`, restContent(project, file));
+    }
+
+    export function removeRest(fs: vfs.FileSystem, project: string, file: string) {
+        replaceText(fs, `src/${project}/${file}.ts`, restContent(project, file), nonrestContent(project, file));
+    }
+
+    export function addStubFoo(fs: vfs.FileSystem, project: string, file: string) {
+        appendText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file));
+    }
+
+    export function changeStubToRest(fs: vfs.FileSystem, project: string, file: string) {
+        replaceText(fs, `src/${project}/${file}.ts`, nonrestContent(project, file), restContent(project, file));
+    }
+
+    export function addSpread(fs: vfs.FileSystem, project: string, file: string) {
+        const path = `src/${project}/${file}.ts`;
+        const content = fs.readFileSync(path, "utf8");
+        fs.writeFileSync(path, `${content}
+function ${project}${file}Spread(...b: number[]) { }
+${project}${file}Spread(...[10, 20, 30]);`);
+
+        replaceText(fs, `src/${project}/tsconfig.json`, `"strict": false,`, `"strict": false,
+    "downlevelIteration": true,`);
+    }
+
+    export function getTripleSlashRef(project: string) {
+        return `/src/${project}/tripleRef.d.ts`;
+    }
+
+    export function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
+        fs.writeFileSync(getTripleSlashRef(project), `declare class ${project}${file} { }`);
+        prependText(fs, `src/${project}/${file}.ts`, `///<reference path="./tripleRef.d.ts"/>
+const ${file}Const = new ${project}${file}();
+`);
+    }
 }
