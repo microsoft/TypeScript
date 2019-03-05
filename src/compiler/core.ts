@@ -1173,6 +1173,21 @@ namespace ts {
         }};
     }
 
+    export function arrayReverseIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
+        let i = array.length;
+        return {
+            next: () => {
+                if (i === 0) {
+                    return { value: undefined as never, done: true };
+                }
+                else {
+                    i--;
+                    return { value: array[i], done: false };
+                }
+            }
+        };
+    }
+
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
