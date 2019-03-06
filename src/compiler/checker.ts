@@ -20900,10 +20900,19 @@ namespace ts {
                 }
                 return resolveErrorCall(node);
             }
-            // If we are skipping generic functions (i.e. this call is an argument to another call for which context
-            // sensitive arguments are being deferred) and every call signature is generic and returns a function type,
-            // we return resolvingSignature here. This result will be propagated out and turned into anyFunctionType.
-            if (checkMode & CheckMode.SkipGenericFunctions && callSignatures.every(isGenericFunctionReturningFunction)) {
+            // When a call to a generic function is an argument to an outer call to a generic function for which
+            // inference is in process, we have a choice to make. If the inner call relies on inferences made from
+            // its contextual type to its return type, deferring the inner call processing allows the best possible
+            // contextual type to accumulate. But if the outer call relies on inferences made from the return type of
+            // the inner call, the inner call should be processed early. There's no sure way to know which choice is
+            // right (only a full unification algorithm can determine that), so we resort to the following heuristic:
+            // If no type arguments are specified in the inner call and at least one call signature is generic and
+            // returns a function type, we choose to defer processing. This narrowly permits function composition
+            // operators to flow inferences through return types, but otherwise processes calls right away. We
+            // use the resolvingSignature singleton to indicate that we deferred processing. This result will be
+            // propagated out and eventually turned into silentNeverType (a type that is assignable to anything and
+            // from which we never make inferences).
+            if (checkMode & CheckMode.SkipGenericFunctions && !node.typeArguments && callSignatures.some(isGenericFunctionReturningFunction)) {
                 skippedGenericFunction(node, checkMode);
                 return resolvingSignature;
             }
@@ -21385,7 +21394,7 @@ namespace ts {
             if (signature === resolvingSignature) {
                 // CheckMode.SkipGenericFunctions is enabled and this is a call to a generic function that
                 // returns a function type. We defer checking and return anyFunctionType.
-                return anyFunctionType;
+                return silentNeverType;
             }
 
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
