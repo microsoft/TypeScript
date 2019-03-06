@@ -3088,19 +3088,18 @@ namespace ts {
 
     function computeCallExpression(node: CallExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
+        const callee = skipOuterExpressions(node.expression);
         const expression = node.expression;
 
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        if (subtreeFlags & TransformFlags.ContainsRestOrSpread
-            || (expression.transformFlags & (TransformFlags.Super | TransformFlags.ContainsSuper))) {
+        if (subtreeFlags & TransformFlags.ContainsRestOrSpread || isSuperOrSuperProperty(callee)) {
             // If the this node contains a SpreadExpression, or is a super call, then it is an ES6
             // node.
             transformFlags |= TransformFlags.AssertES2015;
-
-            if (expression.transformFlags & TransformFlags.ContainsSuper) {
+            if (isSuperProperty(callee)) {
                 transformFlags |= TransformFlags.ContainsLexicalThis;
             }
         }
@@ -3497,11 +3496,10 @@ namespace ts {
 
         // If a PropertyAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
-        if (transformFlags & TransformFlags.Super) {
-            transformFlags ^= TransformFlags.Super;
+        if (node.expression.kind === SyntaxKind.SuperKeyword) {
             // super inside of an async function requires hoisting the super access (ES2017).
             // same for super inside of an async generator, which is ES2018.
-            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
+            transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3510,16 +3508,13 @@ namespace ts {
 
     function computeElementAccess(node: ElementAccessExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const expression = node.expression;
-        const expressionFlags = expression.transformFlags; // We do not want to aggregate flags from the argument expression for super/this capturing
 
         // If an ElementAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
-        if (expressionFlags & TransformFlags.Super) {
-            transformFlags &= ~TransformFlags.Super;
+        if (node.expression.kind === SyntaxKind.SuperKeyword) {
             // super inside of an async function requires hoisting the super access (ES2017).
             // same for super inside of an async generator, which is ES2018.
-            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
+            transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3783,7 +3778,7 @@ namespace ts {
 
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.Super;
+                transformFlags |= TransformFlags.AssertES2015;
                 excludeFlags = TransformFlags.OuterExpressionExcludes; // must be set to persist `Super`
                 break;
 

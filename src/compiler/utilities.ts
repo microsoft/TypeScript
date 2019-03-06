@@ -1473,6 +1473,11 @@ namespace ts {
         }
     }
 
+    export function isSuperOrSuperProperty(node: Node): node is SuperExpression | SuperProperty {
+        return node.kind === SyntaxKind.SuperKeyword
+            || isSuperProperty(node);
+    }
+
     /**
      * Determines whether a node is a property or element access expression for `super`.
      */

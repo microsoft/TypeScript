@@ -5048,25 +5048,22 @@ namespace ts {
         ContainsES2017 = 1 << 4,
         ContainsES2016 = 1 << 5,
         ContainsES2015 = 1 << 6,
-        Generator = 1 << 7,
-        ContainsGenerator = 1 << 8,
-        DestructuringAssignment = 1 << 9,
-        ContainsDestructuringAssignment = 1 << 10,
+        ContainsGenerator = 1 << 7,
+        DestructuringAssignment = 1 << 8,
+        ContainsDestructuringAssignment = 1 << 9,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
+        ContainsTypeScriptClassSyntax = 1 << 10,                // Decorators, Property Initializers, Parameter Property Initializers
         ContainsLexicalThis = 1 << 11,
-        ContainsTypeScriptClassSyntax = 1 << 12,                // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsRestOrSpread = 1 << 13,
-        ContainsObjectRestOrSpread = 1 << 14,
-        ContainsComputedPropertyName = 1 << 15,
-        ContainsBlockScopedBinding = 1 << 16,
-        ContainsBindingPattern = 1 << 17,
-        ContainsYield = 1 << 18,
-        ContainsHoistedDeclarationOrCompletion = 1 << 19,
-        ContainsDynamicImport = 1 << 20,
-        Super = 1 << 21,
-        ContainsSuper = 1 << 22,
+        ContainsRestOrSpread = 1 << 12,
+        ContainsObjectRestOrSpread = 1 << 13,
+        ContainsComputedPropertyName = 1 << 14,
+        ContainsBlockScopedBinding = 1 << 15,
+        ContainsBindingPattern = 1 << 16,
+        ContainsYield = 1 << 17,
+        ContainsHoistedDeclarationOrCompletion = 1 << 18,
+        ContainsDynamicImport = 1 << 19,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5082,15 +5079,15 @@ namespace ts {
         AssertES2017 = ContainsES2017,
         AssertES2016 = ContainsES2016,
         AssertES2015 = ContainsES2015,
-        AssertGenerator = Generator | ContainsGenerator,
+        AssertGenerator = ContainsGenerator,
         AssertDestructuringAssignment = DestructuringAssignment | ContainsDestructuringAssignment,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        OuterExpressionExcludes = DestructuringAssignment | Generator | HasComputedFlags,
-        PropertyAccessExcludes = OuterExpressionExcludes | Super,
-        NodeExcludes = PropertyAccessExcludes | ContainsSuper,
+        OuterExpressionExcludes = DestructuringAssignment | HasComputedFlags,
+        PropertyAccessExcludes = OuterExpressionExcludes,
+        NodeExcludes = PropertyAccessExcludes,
         ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
         FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
         ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
