@@ -371,6 +371,8 @@ namespace ts {
             else {
                 directoryWatcher = {
                     watcher: host.watchDirectory(dirName, fileName => {
+                        if (isInNodeModulesStartingWithDot(fileName)) return;
+
                         // Call the actual callback
                         callbackCache.forEach((callbacks, rootDirName) => {
                             if (rootDirName === dirPath || (startsWith(dirPath, rootDirName) && dirPath[rootDirName.length] === directorySeparator)) {
@@ -426,7 +428,7 @@ namespace ts {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
-                    return filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
+                    return !isInNodeModulesStartingWithDot(childFullName) && filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
                 existingChildWatches,
                 (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
@@ -451,6 +453,16 @@ namespace ts {
             function addChildDirectoryWatcher(childWatcher: ChildDirectoryWatcher) {
                 (newChildWatches || (newChildWatches = [])).push(childWatcher);
             }
+        }
+
+        function isInNodeModulesStartingWithDot(path: string) {
+            return isInPath(path, "/node_modules/.");
+        }
+
+        function isInPath(path: string, searchPath: string) {
+            if (stringContains(path, searchPath)) return true;
+            if (host.useCaseSensitiveFileNames) return false;
+            return stringContains(toCanonicalFilePath(path), searchPath);
         }
     }
 
