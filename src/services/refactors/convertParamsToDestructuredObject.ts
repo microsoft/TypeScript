@@ -100,6 +100,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     continue;
                 }
                 if (contains(functionSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
+                    const importReference = entryToImport(entry);
+                    if (importReference) {
+                        continue;
+                    }
+
                     const decl = entryToDeclaration(entry);
                     if (decl) {
                         groupedReferences.declarations.push(decl);
@@ -114,6 +119,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 }
                 // if the refactored function is a constructor, we must also check if the references to its class are valid
                 if (isConstructor && contains(classSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
+                    const importReference = entryToImport(entry);
+                    if (importReference) {
+                        continue;
+                    }
+
                     const decl = entryToDeclaration(entry);
                     if (decl) {
                         groupedReferences.declarations.push(decl);
@@ -136,21 +146,16 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                         }
                     }
                 }
-                
-                const importNode = entryToImport(entry);
-                if (importNode) {
-                    continue; // TODO: do we need to do aditional checks on imports?
-                }
-                
+
                 groupedReferences.valid = false;
             }
 
             return groupedReferences;
         }
-    }
-
-    function symbolComparer(a: Symbol, b: Symbol): boolean {
-        return getSymbolTarget(a) === getSymbolTarget(b);
+        
+        function symbolComparer(a: Symbol, b: Symbol): boolean {
+            return getSymbolTarget(a, checker) === getSymbolTarget(b, checker);
+        }
     }
 
     function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | undefined {
@@ -233,7 +238,10 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         if (getMeaningFromLocation(reference) === SemanticMeaning.Type || isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)) {
             return reference;
         }
+<<<<<<< HEAD
         return undefined;
+=======
+>>>>>>> recognize ES6 imports
     }
 
     function entryToImport(entry: FindAllReferences.NodeEntry): Node | undefined {
