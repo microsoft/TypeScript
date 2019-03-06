@@ -20,5 +20,5 @@ edit.applyRefactor({
 });
 
 goTo.file("a.ts");
-verify.currentFileContentIs(`import { f } from "./f"
-f({ a: 4, b: "b" });`)
+verify.currentFileContentIs(`import { f as g } from "./f"
+g({ a: 4, b: "b" });`)
