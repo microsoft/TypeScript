@@ -4875,5 +4875,9 @@
     "Enable the 'experimentalDecorators' option in your configuration file": {
         "category": "Message",
         "code": 95074
+    },
+    "Convert to named parameters": {
+        "category": "Message",
+        "code": 95075
     }
 }

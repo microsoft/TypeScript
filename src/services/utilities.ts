@@ -1664,6 +1664,18 @@ namespace ts {
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
     }
 
+    export function getSymbolTarget(symbol: Symbol): Symbol {
+        let next: Symbol = symbol;
+        while (isTransientSymbol(next) && next.target) {
+           next = next.target;
+        }
+        return next;
+    }
+
+    function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
+        return (symbol.flags & SymbolFlags.Transient) !== 0;
+    }
+
     export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker) {
         return getSymbolId(skipAlias(symbol, checker));
     }
@@ -1821,8 +1833,28 @@ namespace ts {
         return lastPos;
     }
 
-    export function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
-        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
+    export function copyLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
+    }
+
+
+    export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+        forEachTrailingCommentRange(sourceFile.text, sourceNode.end, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticTrailingComment));
+    }
+
+    /**
+     * This function copies the trailing comments for the token that comes before `sourceNode`, as leading comments of `targetNode`.
+     * This is useful because sometimes a comment that refers to `sourceNode` will be a leading comment for `sourceNode`, according to the
+     * notion of trivia ownership, and instead will be a trailing comment for the token before `sourceNode`, e.g.:
+     * `function foo(\* not leading comment for a *\ a: string) {}`
+     * The comment refers to `a` but belongs to the `(` token, but we might want to copy it.
+     */
+    export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+        forEachTrailingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
+    }
+
+    function getAddCommentsFunction(targetNode: Node, sourceFile: SourceFile, commentKind: CommentKind | undefined, hasTrailingNewLine: boolean | undefined, cb: (node: Node, kind: CommentKind, text: string, hasTrailingNewLine?: boolean) => void) {
+        return (pos: number, end: number, kind: CommentKind, htnl: boolean) => {
             if (kind === SyntaxKind.MultiLineCommentTrivia) {
                 // Remove leading /*
                 pos += 2;
@@ -1833,8 +1865,8 @@ namespace ts {
                 // Remove leading //
                 pos += 2;
             }
-            addSyntheticLeadingComment(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
-        });
+            cb(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
+        };
     }
 
     function indexInTextChange(change: string, name: string): number {
@@ -1913,5 +1945,29 @@ namespace ts {
 
     export function getSwitchedType(caseClause: CaseClause, checker: TypeChecker): Type | undefined {
         return checker.getTypeAtLocation(caseClause.parent.parent.expression);
+    }
+
+    export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
+        const checker = program.getTypeChecker();
+        let typeIsAccessible = true;
+        const notAccessible = () => { typeIsAccessible = false; };
+        const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
+            trackSymbol: (symbol, declaration, meaning) => {
+                // TODO: GH#18217
+                typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning!, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
+            },
+            reportInaccessibleThisError: notAccessible,
+            reportPrivateInBaseOfClassExpression: notAccessible,
+            reportInaccessibleUniqueSymbolError: notAccessible,
+            moduleResolverHost: {
+                readFile: host.readFile,
+                fileExists: host.fileExists,
+                directoryExists: host.directoryExists,
+                getSourceFiles: program.getSourceFiles,
+                getCurrentDirectory: program.getCurrentDirectory,
+                getCommonSourceDirectory: program.getCommonSourceDirectory,
+            }
+        });
+        return typeIsAccessible ? res : undefined;
     }
 }
