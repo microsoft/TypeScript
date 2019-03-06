@@ -183,6 +183,22 @@ namespace ts.projectSystem {
         host.checkTimeoutQueueLength(0);
         verifyProject();
 
+        const gitIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/.git/someFile.d.ts`,
+            content: ""
+        };
+        host.ensureFileOrFolder(gitIgnoredFileFromIgnoreDirectory);
+        host.checkTimeoutQueueLength(0);
+        verifyProject();
+
+        const gitIgnoredFile: File = {
+            path: `${projectFolder}/.gitCache.d.ts`,
+            content: ""
+        };
+        host.ensureFileOrFolder(gitIgnoredFile);
+        host.checkTimeoutQueueLength(0);
+        verifyProject();
+
         function verifyProject() {
             checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
             checkWatchedFilesDetailed(host, expectedWatchedFiles);
