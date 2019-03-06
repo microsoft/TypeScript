@@ -229,8 +229,7 @@ namespace ts {
         //
 
         NewTarget = 1 << 13,                            // Contains a 'new.target' meta-property
-        LexicalThis = 1 << 14,                          // Contains a lexical `this` reference.
-        CapturedLexicalThis = 1 << 15,                  // Contains a lexical `this` reference captured by an arrow function.
+        CapturedLexicalThis = 1 << 14,                  // Contains a lexical `this` reference captured by an arrow function.
 
         //
         // Subtree masks
@@ -239,7 +238,7 @@ namespace ts {
         SubtreeFactsMask = ~AncestorFactsMask,
 
         ArrowFunctionSubtreeExcludes = None,
-        FunctionSubtreeExcludes = NewTarget | LexicalThis | CapturedLexicalThis,
+        FunctionSubtreeExcludes = NewTarget | CapturedLexicalThis,
     }
 
     export function transformES2015(context: TransformationContext) {
@@ -565,7 +564,6 @@ namespace ts {
         }
 
         function visitThisKeyword(node: Node): Node {
-            hierarchyFacts |= HierarchyFacts.LexicalThis;
             if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
                 hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
@@ -989,7 +987,7 @@ namespace ts {
             insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
 
             if (isDerivedClass) {
-                if (superCallExpression && statementOffset === constructor.body.statements.length && !(hierarchyFacts & HierarchyFacts.LexicalThis)) {
+                if (superCallExpression && statementOffset === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
                     // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
                     // following representation:
                     //
@@ -1693,6 +1691,10 @@ namespace ts {
          * @param node An ArrowFunction node.
          */
         function visitArrowFunction(node: ArrowFunction) {
+            if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
+                hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
+            }
+
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.ArrowFunctionExcludes, HierarchyFacts.ArrowFunctionIncludes);
