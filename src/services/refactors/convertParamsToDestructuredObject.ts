@@ -136,6 +136,12 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                         }
                     }
                 }
+                
+                const importNode = entryToImport(entry);
+                if (importNode) {
+                    continue; // TODO: do we need to do aditional checks on imports?
+                }
+                
                 groupedReferences.valid = false;
             }
 
@@ -226,6 +232,14 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         const reference = entry.node;
         if (getMeaningFromLocation(reference) === SemanticMeaning.Type || isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)) {
             return reference;
+        }
+        return undefined;
+    }
+
+    function entryToImport(entry: FindAllReferences.NodeEntry): Node | undefined {
+        const node = entry.node;
+        if (isImportSpecifier(node.parent) || isImportClause(node.parent)) {
+            return node;
         }
         return undefined;
     }
