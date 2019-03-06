@@ -20,10 +20,5 @@ edit.applyRefactor({
 });
 
 goTo.file("a.ts");
-<<<<<<< HEAD
 verify.currentFileContentIs(`import { f as g } from "./f";
 g({ a: 4, b: "b" });`)
-=======
-verify.currentFileContentIs(`import { f as g } from "./f"
-g({ a: 4, b: "b" });`)
->>>>>>> fix imported function test

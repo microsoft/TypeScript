@@ -146,12 +146,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                         }
                     }
                 }
-                
-                const importNode = entryToImport(entry);
-                if (importNode) {
-                    continue; // TODO: do we need to do aditional checks on imports?
-                }
-                
+
                 groupedReferences.valid = false;
             }
 
