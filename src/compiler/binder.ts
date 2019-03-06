@@ -3189,7 +3189,6 @@ namespace ts {
         let transformFlags = subtreeFlags;
         const expression = node.expression;
         const expressionKind = expression.kind;
-        const expressionTransformFlags = expression.transformFlags;
 
         // If the node is synthesized, it means the emitter put the parentheses there,
         // not the user. If we didn't want them, the emitter would not have put them
@@ -3197,12 +3196,6 @@ namespace ts {
         if (expressionKind === SyntaxKind.AsExpression
             || expressionKind === SyntaxKind.TypeAssertionExpression) {
             transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        // If the expression of a ParenthesizedExpression is a destructuring assignment,
-        // then the ParenthesizedExpression is a destructuring assignment.
-        if (expressionTransformFlags & TransformFlags.DestructuringAssignment) {
-            transformFlags |= TransformFlags.DestructuringAssignment;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3585,15 +3578,7 @@ namespace ts {
     }
 
     function computeExpressionStatement(node: ExpressionStatement, subtreeFlags: TransformFlags) {
-        let transformFlags = subtreeFlags;
-
-        // If the expression of an expression statement is a destructuring assignment,
-        // then we treat the statement as ES6 so that we can indicate that we do not
-        // need to hold on to the right-hand side.
-        if (node.expression.transformFlags & TransformFlags.DestructuringAssignment) {
-            transformFlags |= TransformFlags.AssertES2015;
-        }
-
+        const transformFlags = subtreeFlags;
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.NodeExcludes;
     }

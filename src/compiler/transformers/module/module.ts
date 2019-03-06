@@ -537,8 +537,8 @@ namespace ts {
             if (isImportCall(node)) {
                 return visitImportCallExpression(node);
             }
-            else if (node.transformFlags & TransformFlags.DestructuringAssignment && isBinaryExpression(node)) {
-                return visitDestructuringAssignment(node as DestructuringAssignment);
+            else if (isDestructuringAssignment(node)) {
+                return visitDestructuringAssignment(node);
             }
             else {
                 return visitEachChild(node, moduleExpressionElementVisitor, context);

@@ -5049,21 +5049,20 @@ namespace ts {
         ContainsES2016 = 1 << 5,
         ContainsES2015 = 1 << 6,
         ContainsGenerator = 1 << 7,
-        DestructuringAssignment = 1 << 8,
-        ContainsDestructuringAssignment = 1 << 9,
+        ContainsDestructuringAssignment = 1 << 8,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 10,                // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 11,
-        ContainsRestOrSpread = 1 << 12,
-        ContainsObjectRestOrSpread = 1 << 13,
-        ContainsComputedPropertyName = 1 << 14,
-        ContainsBlockScopedBinding = 1 << 15,
-        ContainsBindingPattern = 1 << 16,
-        ContainsYield = 1 << 17,
-        ContainsHoistedDeclarationOrCompletion = 1 << 18,
-        ContainsDynamicImport = 1 << 19,
+        ContainsTypeScriptClassSyntax = 1 << 9,                // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 10,
+        ContainsRestOrSpread = 1 << 11,
+        ContainsObjectRestOrSpread = 1 << 12,
+        ContainsComputedPropertyName = 1 << 13,
+        ContainsBlockScopedBinding = 1 << 14,
+        ContainsBindingPattern = 1 << 15,
+        ContainsYield = 1 << 16,
+        ContainsHoistedDeclarationOrCompletion = 1 << 17,
+        ContainsDynamicImport = 1 << 18,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5080,12 +5079,12 @@ namespace ts {
         AssertES2016 = ContainsES2016,
         AssertES2015 = ContainsES2015,
         AssertGenerator = ContainsGenerator,
-        AssertDestructuringAssignment = DestructuringAssignment | ContainsDestructuringAssignment,
+        AssertDestructuringAssignment = ContainsDestructuringAssignment,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        OuterExpressionExcludes = DestructuringAssignment | HasComputedFlags,
+        OuterExpressionExcludes = HasComputedFlags,
         PropertyAccessExcludes = OuterExpressionExcludes,
         NodeExcludes = PropertyAccessExcludes,
         ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,

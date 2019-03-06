@@ -316,7 +316,7 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (transformFlags & TransformFlags.Generator) {
+            else if (isFunctionLikeDeclaration(node) && node.asteriskToken) {
                 return visitGenerator(node);
             }
             else if (transformFlags & TransformFlags.ContainsGenerator) {
