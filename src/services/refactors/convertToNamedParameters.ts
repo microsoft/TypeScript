@@ -79,8 +79,7 @@ namespace ts.refactor.convertToNamedParameters {
         const checker = program.getTypeChecker();
 
         const references = flatMap(names, /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
-        const isConstructor = isConstructorDeclaration(functionDeclaration);
-        const groupedReferences = groupReferences(references, isConstructor);
+        const groupedReferences = groupReferences(references);
 
         if (!every(groupedReferences.declarations, decl => contains(names, decl))) {
             groupedReferences.valid = false;
@@ -88,11 +87,12 @@ namespace ts.refactor.convertToNamedParameters {
 
         return groupedReferences;
 
-        function groupReferences(referenceEntries: ReadonlyArray<FindAllReferences.Entry>, isConstructor: boolean): GroupedReferences {
+        function groupReferences(referenceEntries: ReadonlyArray<FindAllReferences.Entry>): GroupedReferences {
             const classReferences: ClassReferences = { accessExpressions: [], typeUsages: [] };
             const groupedReferences: GroupedReferences = { functionCalls: [], declarations: [], classReferences, valid: true };
             const functionSymbols = map(functionNames, checker.getSymbolAtLocation);
             const classSymbols = map(classNames, checker.getSymbolAtLocation);
+            const isConstructor = isConstructorDeclaration(functionDeclaration);
 
             for (const entry of referenceEntries) {
                 if (entry.kind !== FindAllReferences.EntryKind.Node) {
@@ -141,95 +141,93 @@ namespace ts.refactor.convertToNamedParameters {
 
             return groupedReferences;
         }
+    }
 
-        function symbolComparer(a: Symbol, b: Symbol): boolean {
-            return getSymbolTarget(a) === getSymbolTarget(b);
+    function symbolComparer(a: Symbol, b: Symbol): boolean {
+        return getSymbolTarget(a) === getSymbolTarget(b);
+    }
+
+    function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | undefined {
+        if (isDeclaration(entry.node.parent)) {
+            return entry.node;
         }
+        return undefined;
+    }
 
-        function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | undefined {
-            if (isDeclaration(entry.node.parent)) {
-                return entry.node;
-            }
-            return undefined;
-        }
-
-        function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression | NewExpression | undefined {
-            if (entry.node.parent) {
-                const functionReference = entry.node;
-                const parent = functionReference.parent;
-                switch (parent.kind) {
-                    // Function call (foo(...) or super(...))
-                    case SyntaxKind.CallExpression:
-                        const callExpression = tryCast(parent, isCallExpression);
-                        if (callExpression && callExpression.expression === functionReference) {
+    function entryToFunctionCall(entry: FindAllReferences.NodeEntry): CallExpression | NewExpression | undefined {
+        if (entry.node.parent) {
+            const functionReference = entry.node;
+            const parent = functionReference.parent;
+            switch (parent.kind) {
+                // Function call (foo(...) or super(...))
+                case SyntaxKind.CallExpression:
+                    const callExpression = tryCast(parent, isCallExpression);
+                    if (callExpression && callExpression.expression === functionReference) {
+                        return callExpression;
+                    }
+                    break;
+                // Constructor call (new Foo(...))
+                case SyntaxKind.NewExpression:
+                    const newExpression = tryCast(parent, isNewExpression);
+                    if (newExpression && newExpression.expression === functionReference) {
+                        return newExpression;
+                    }
+                    break;
+                // Method call (x.foo(...))
+                case SyntaxKind.PropertyAccessExpression:
+                    const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
+                    if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionReference) {
+                        const callExpression = tryCast(propertyAccessExpression.parent, isCallExpression);
+                        if (callExpression && callExpression.expression === propertyAccessExpression) {
                             return callExpression;
                         }
-                        break;
-                    // Constructor call (new Foo(...))
-                    case SyntaxKind.NewExpression:
-                        const newExpression = tryCast(parent, isNewExpression);
-                        if (newExpression && newExpression.expression === functionReference) {
-                            return newExpression;
+                    }
+                    break;
+                // Method call (x["foo"](...))
+                case SyntaxKind.ElementAccessExpression:
+                    const elementAccessExpression = tryCast(parent, isElementAccessExpression);
+                    if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionReference) {
+                        const callExpression = tryCast(elementAccessExpression.parent, isCallExpression);
+                        if (callExpression && callExpression.expression === elementAccessExpression) {
+                            return callExpression;
                         }
-                        break;
-                    // Method call (x.foo(...))
-                    case SyntaxKind.PropertyAccessExpression:
-                        const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
-                        if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionReference) {
-                            const callExpression = tryCast(propertyAccessExpression.parent, isCallExpression);
-                            if (callExpression && callExpression.expression === propertyAccessExpression) {
-                                return callExpression;
-                            }
-                        }
-                        break;
-                    // Method call (x["foo"](...))
-                    case SyntaxKind.ElementAccessExpression:
-                        const elementAccessExpression = tryCast(parent, isElementAccessExpression);
-                        if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionReference) {
-                            const callExpression = tryCast(elementAccessExpression.parent, isCallExpression);
-                            if (callExpression && callExpression.expression === elementAccessExpression) {
-                                return callExpression;
-                            }
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
-            return undefined;
         }
+        return undefined;
+    }
 
-        function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAccessExpression | PropertyAccessExpression | undefined {
-            if (entry.node.parent) {
-                const reference = entry.node;
-                const parent = reference.parent;
-                switch (parent.kind) {
-                    // `C.foo`
-                    case SyntaxKind.PropertyAccessExpression:
-                        const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
-                        if (propertyAccessExpression && propertyAccessExpression.expression === reference) {
-                            return propertyAccessExpression;
-                        }
-                        break;
-                    // `C["foo"]`
-                    case SyntaxKind.ElementAccessExpression:
-                        const elementAccessExpression = tryCast(parent, isElementAccessExpression);
-                        if (elementAccessExpression && elementAccessExpression.expression === reference) {
-                            return elementAccessExpression;
-                        }
-                        break;
-                }
+    function entryToAccessExpression(entry: FindAllReferences.NodeEntry): ElementAccessExpression | PropertyAccessExpression | undefined {
+        if (entry.node.parent) {
+            const reference = entry.node;
+            const parent = reference.parent;
+            switch (parent.kind) {
+                // `C.foo`
+                case SyntaxKind.PropertyAccessExpression:
+                    const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
+                    if (propertyAccessExpression && propertyAccessExpression.expression === reference) {
+                        return propertyAccessExpression;
+                    }
+                    break;
+                // `C["foo"]`
+                case SyntaxKind.ElementAccessExpression:
+                    const elementAccessExpression = tryCast(parent, isElementAccessExpression);
+                    if (elementAccessExpression && elementAccessExpression.expression === reference) {
+                        return elementAccessExpression;
+                    }
+                    break;
             }
-            return undefined;
         }
+        return undefined;
+    }
 
-        function entryToType(entry: FindAllReferences.Entry): Node | undefined {
-            if (entry.kind === FindAllReferences.EntryKind.Node) {
-                const reference = entry.node;
-                if (getMeaningFromLocation(reference) === SemanticMeaning.Type || isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)) {
-                    return reference;
-                }
-            }
-            return undefined;
+    function entryToType(entry: FindAllReferences.NodeEntry): Node | undefined {
+        const reference = entry.node;
+        if (getMeaningFromLocation(reference) === SemanticMeaning.Type || isExpressionWithTypeArgumentsInClassExtendsClause(reference.parent)) {
+            return reference;
         }
+        return undefined;
     }
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
@@ -261,18 +259,18 @@ namespace ts.refactor.convertToNamedParameters {
                 return isValidVariableDeclaration(functionDeclaration.parent);
         }
         return false;
+    }
 
-        function isValidParameterNodeArray(parameters: NodeArray<ParameterDeclaration>): parameters is ValidParameterNodeArray {
-            return getRefactorableParametersLength(parameters) >= minimumParameterLength && every(parameters, isValidParameterDeclaration);
-        }
+    function isValidParameterNodeArray(parameters: NodeArray<ParameterDeclaration>): parameters is ValidParameterNodeArray {
+        return getRefactorableParametersLength(parameters) >= minimumParameterLength && every(parameters, isValidParameterDeclaration);
+    }
 
-        function isValidParameterDeclaration(paramDeclaration: ParameterDeclaration): paramDeclaration is ValidParameterDeclaration {
-            return !paramDeclaration.modifiers && !paramDeclaration.decorators && isIdentifier(paramDeclaration.name);
-        }
+    function isValidParameterDeclaration(paramDeclaration: ParameterDeclaration): paramDeclaration is ValidParameterDeclaration {
+        return !paramDeclaration.modifiers && !paramDeclaration.decorators && isIdentifier(paramDeclaration.name);
+    }
 
-        function isValidVariableDeclaration(node: Node): node is ValidVariableDeclaration {
-            return isVariableDeclaration(node) && isVarConst(node) && isIdentifier(node.name) && !node.type; // TODO: GH#30113
-        }
+    function isValidVariableDeclaration(node: Node): node is ValidVariableDeclaration {
+        return isVariableDeclaration(node) && isVarConst(node) && isIdentifier(node.name) && !node.type; // TODO: GH#30113
     }
 
     function hasThisParameter(parameters: NodeArray<ParameterDeclaration>): boolean {
@@ -357,20 +355,6 @@ namespace ts.refactor.convertToNamedParameters {
         }
         return createNodeArray([objectParameter]);
 
-        function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
-            const element = createBindingElement(
-                /*dotDotDotToken*/ undefined,
-                /*propertyName*/ undefined,
-                getParameterName(parameterDeclaration),
-                isRestParameter(parameterDeclaration) ? createArrayLiteral() : parameterDeclaration.initializer);
-
-            suppressLeadingAndTrailingTrivia(element);
-            if (parameterDeclaration.initializer && element.initializer) {
-                copyComments(parameterDeclaration.initializer, element.initializer);
-            }
-            return element;
-        }
-
         function createParameterTypeNode(parameters: NodeArray<ValidParameterDeclaration>): TypeLiteralNode {
             const members = map(parameters, createPropertySignatureFromParameterDeclaration);
             const typeNode = addEmitFlags(createTypeLiteralNode(members), EmitFlags.SingleLine);
@@ -406,6 +390,20 @@ namespace ts.refactor.convertToNamedParameters {
         }
     }
 
+    function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
+        const element = createBindingElement(
+            /*dotDotDotToken*/ undefined,
+            /*propertyName*/ undefined,
+            getParameterName(parameterDeclaration),
+            isRestParameter(parameterDeclaration) ? createArrayLiteral() : parameterDeclaration.initializer);
+
+        suppressLeadingAndTrailingTrivia(element);
+        if (parameterDeclaration.initializer && element.initializer) {
+            copyComments(parameterDeclaration.initializer, element.initializer);
+        }
+        return element;
+    }
+
     function copyComments(sourceNode: Node, targetNode: Node) {
         const sourceFile = sourceNode.getSourceFile();
         const text = sourceFile.text;
@@ -416,15 +414,15 @@ namespace ts.refactor.convertToNamedParameters {
             copyTrailingAsLeadingComments(sourceNode, targetNode, sourceFile);
         }
         copyTrailingComments(sourceNode, targetNode, sourceFile);
+    }
 
-        function hasLeadingLineBreak(node: Node, text: string) {
-            const start = node.getFullStart();
-            const end = node.getStart();
-            for (let i = start; i < end; i++) {
-                if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
-            }
-            return false;
+    function hasLeadingLineBreak(node: Node, text: string) {
+        const start = node.getFullStart();
+        const end = node.getStart();
+        for (let i = start; i < end; i++) {
+            if (text.charCodeAt(i) === CharacterCodes.lineFeed) return true;
         }
+        return false;
     }
 
     function getParameterName(paramDeclaration: ValidParameterDeclaration) {
