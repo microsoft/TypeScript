@@ -146,7 +146,6 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                         }
                     }
                 }
-
                 groupedReferences.valid = false;
             }
 
