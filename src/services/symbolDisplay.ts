@@ -135,6 +135,7 @@ namespace ts.SymbolDisplay {
         let printer: Printer;
         let documentationFromAlias: SymbolDisplayPart[] | undefined;
         let tagsFromAlias: JSDocTagInfo[] | undefined;
+        let signature: Signature | undefined;
 
         if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
             return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
@@ -147,7 +148,6 @@ namespace ts.SymbolDisplay {
                 symbolKind = ScriptElementKind.memberVariableElement;
             }
 
-            let signature: Signature | undefined;
             type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol.exportSymbol || symbol, location);
 
             if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
@@ -501,7 +501,7 @@ namespace ts.SymbolDisplay {
 
         if (!documentation) {
             documentation = symbol.getDocumentationComment(typeChecker);
-            tags = symbol.getJsDocTags();
+            tags = signature ? signature.getJsDocTags() : symbol.getJsDocTags();
             if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
                 // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
                 // there documentation comments might be attached to the right hand side symbol of their declarations.
