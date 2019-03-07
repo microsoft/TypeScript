@@ -11189,7 +11189,7 @@ namespace ts {
             // which is redundant - we'll produce new type identities, but all type params have already been mapped.
             // This also gives us a way to detect restrictive instances upon comparisons and _disable_ the "distributeive constraint"
             // assignability check for them, which is distinctly unsafe, as once you have a restrctive instance, all the type parameters
-            // are constrained to `unknown` and produce tons of false positives/negatives! 
+            // are constrained to `unknown` and produce tons of false positives/negatives!
             type.restrictiveInstantiation.restrictiveInstantiation = type.restrictiveInstantiation;
             return type.restrictiveInstantiation;
         }
