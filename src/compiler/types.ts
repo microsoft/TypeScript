@@ -5066,26 +5066,26 @@ namespace ts {
         ContainsTypeScript = 1 << 0,
         ContainsJsx = 1 << 1,
         ContainsESNext = 1 << 2,
-        ContainsES2018 = 1 << 3,
-        ContainsES2017 = 1 << 4,
-        ContainsES2016 = 1 << 5,
-        ContainsES2015 = 1 << 6,
-        ContainsGenerator = 1 << 7,
-        ContainsDestructuringAssignment = 1 << 8,
+        ContainsES2019 = 1 << 3,
+        ContainsES2018 = 1 << 4,
+        ContainsES2017 = 1 << 5,
+        ContainsES2016 = 1 << 6,
+        ContainsES2015 = 1 << 7,
+        ContainsGenerator = 1 << 8,
+        ContainsDestructuringAssignment = 1 << 9,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 9,                // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 10,
-        ContainsRestOrSpread = 1 << 11,
-        ContainsObjectRestOrSpread = 1 << 12,
-        ContainsComputedPropertyName = 1 << 13,
-        ContainsBlockScopedBinding = 1 << 14,
-        ContainsBindingPattern = 1 << 15,
-        ContainsYield = 1 << 16,
-        ContainsHoistedDeclarationOrCompletion = 1 << 17,
-        ContainsDynamicImport = 1 << 18,
-        ContainsES2019 = 1 << 19,
+        ContainsTypeScriptClassSyntax = 1 << 10, // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 11,
+        ContainsRestOrSpread = 1 << 12,
+        ContainsObjectRestOrSpread = 1 << 13,
+        ContainsComputedPropertyName = 1 << 14,
+        ContainsBlockScopedBinding = 1 << 15,
+        ContainsBindingPattern = 1 << 16,
+        ContainsYield = 1 << 17,
+        ContainsHoistedDeclarationOrCompletion = 1 << 18,
+        ContainsDynamicImport = 1 << 19,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
