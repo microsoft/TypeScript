@@ -304,30 +304,6 @@ namespace ts.codefix {
         }
     }
 
-    function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
-        const checker = program.getTypeChecker();
-        let typeIsAccessible = true;
-        const notAccessible = () => { typeIsAccessible = false; };
-        const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
-            trackSymbol: (symbol, declaration, meaning) => {
-                // TODO: GH#18217
-                typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning!, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
-            },
-            reportInaccessibleThisError: notAccessible,
-            reportPrivateInBaseOfClassExpression: notAccessible,
-            reportInaccessibleUniqueSymbolError: notAccessible,
-            moduleResolverHost: {
-                readFile: host.readFile,
-                fileExists: host.fileExists,
-                directoryExists: host.directoryExists,
-                getSourceFiles: program.getSourceFiles,
-                getCurrentDirectory: program.getCurrentDirectory,
-                getCommonSourceDirectory: program.getCommonSourceDirectory,
-            }
-        });
-        return typeIsAccessible ? res : undefined;
-    }
-
     function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> {
         // Position shouldn't matter since token is not a SourceFile.
         return mapDefined(FindAllReferences.getReferenceEntriesForNode(-1, token, program, program.getSourceFiles(), cancellationToken), entry =>

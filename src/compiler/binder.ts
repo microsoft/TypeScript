@@ -2499,8 +2499,13 @@ namespace ts {
                     declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
                 case SyntaxKind.SourceFile:
-                    // this.foo assignment in a source file
-                    // Do not bind. It would be nice to support this someday though.
+                    // this.property = assignment in a source file -- declare symbol in exports for a module, in locals for a script
+                    if ((thisContainer as SourceFile).commonJsModuleIndicator) {
+                        declareSymbol(thisContainer.symbol.exports!, thisContainer.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+                    }
+                    else {
+                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                     break;
 
                 default:
@@ -3269,7 +3274,7 @@ namespace ts {
         let transformFlags = subtreeFlags;
 
         if (!node.variableDeclaration) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2019;
         }
         else if (isBindingPattern(node.variableDeclaration.name)) {
             transformFlags |= TransformFlags.AssertES2015;

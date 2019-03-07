@@ -1404,7 +1404,7 @@
         "category": "Error",
         "code": 2393
     },
-    "Overload signature is not compatible with function implementation.": {
+    "This overload signature is not compatible with its implementation signature.": {
         "category": "Error",
         "code": 2394
     },
@@ -2581,6 +2581,18 @@
         "category": "Error",
         "code": 2748
     },
+    "'{0}' refers to a value, but is being used as a type here.": {
+        "category": "Error",
+        "code": 2749
+    },
+    "The implementation signature is declared here.": {
+        "category": "Error",
+        "code": 2750
+    },
+    "Circularity originates in type at this location.": {
+        "category": "Error",
+        "code": 2751
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3109,7 +3121,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
@@ -4141,7 +4153,7 @@
         "category": "Error",
         "code": 7040
     },
-    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+    "The containing arrow function captures the global value of 'this'.": {
         "category": "Error",
         "code": 7041
     },
@@ -4863,5 +4875,9 @@
     "Enable the 'experimentalDecorators' option in your configuration file": {
         "category": "Message",
         "code": 95074
+    },
+    "Convert to named parameters": {
+        "category": "Message",
+        "code": 95075
     }
 }

@@ -92,6 +92,7 @@ namespace ts.server.protocol {
         SynchronizeProjectList = "synchronizeProjectList",
         /* @internal */
         ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
+        UpdateOpen = "updateOpen",
         /* @internal */
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
@@ -1537,6 +1538,32 @@ namespace ts.server.protocol {
          * List of open files files that were changes
          */
         changedFiles?: ChangedOpenFile[];
+        /**
+         * List of files that were closed
+         */
+        closedFiles?: string[];
+    }
+
+    /**
+     * Request to synchronize list of open files with the client
+     */
+    export interface UpdateOpenRequest extends Request {
+        command: CommandTypes.UpdateOpen;
+        arguments: UpdateOpenRequestArgs;
+    }
+
+    /**
+     * Arguments to UpdateOpenRequest
+     */
+    export interface UpdateOpenRequestArgs {
+        /**
+         * List of newly open files
+         */
+        openFiles?: OpenRequestArgs[];
+        /**
+         * List of open files files that were changes
+         */
+        changedFiles?: FileCodeEdits[];
         /**
          * List of files that were closed
          */
