@@ -100,6 +100,8 @@ namespace ts {
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
     }
 
+    let flowNodeCreated: <T extends FlowNode>(node: T) => T = identity;
+
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
@@ -530,6 +532,7 @@ namespace ts {
                 blockScopeContainer.locals = undefined;
             }
             if (containerFlags & ContainerFlags.IsControlFlowContainer) {
+                const saveFlowNodeCreated = flowNodeCreated;
                 const saveCurrentFlow = currentFlow;
                 const saveBreakTarget = currentBreakTarget;
                 const saveContinueTarget = currentContinueTarget;
@@ -547,12 +550,13 @@ namespace ts {
                     }
                 }
                 // We create a return control flow graph for IIFEs and constructors. For constructors
-                // we use the return control flow graph in strict property intialization checks.
+                // we use the return control flow graph in strict property initialization checks.
                 currentReturnTarget = isIIFE || node.kind === SyntaxKind.Constructor ? createBranchLabel() : undefined;
                 currentBreakTarget = undefined;
                 currentContinueTarget = undefined;
                 activeLabels = undefined;
                 hasExplicitReturn = false;
+                flowNodeCreated = identity;
                 bindChildren(node);
                 // Reset all reachability check related flags on node (for incremental scenarios)
                 node.flags &= ~NodeFlags.ReachabilityAndEmitFlags;
@@ -579,6 +583,7 @@ namespace ts {
                 currentReturnTarget = saveReturnTarget;
                 activeLabels = saveActiveLabels;
                 hasExplicitReturn = saveHasExplicitReturn;
+                flowNodeCreated = saveFlowNodeCreated;
             }
             else if (containerFlags & ContainerFlags.IsInterface) {
                 seenThisKeyword = false;
@@ -753,7 +758,7 @@ namespace ts {
 
         function isNarrowableReference(expr: Expression): boolean {
             return expr.kind === SyntaxKind.Identifier || expr.kind === SyntaxKind.ThisKeyword || expr.kind === SyntaxKind.SuperKeyword ||
-                isPropertyAccessExpression(expr) && isNarrowableReference(expr.expression) ||
+                (isPropertyAccessExpression(expr) || isNonNullExpression(expr) || isParenthesizedExpression(expr)) && isNarrowableReference(expr.expression) ||
                 isElementAccessExpression(expr) && expr.argumentExpression &&
                 (isStringLiteral(expr.argumentExpression) || isNumericLiteral(expr.argumentExpression)) &&
                 isNarrowableReference(expr.expression);
@@ -858,7 +863,7 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return { flags, expression, antecedent };
+            return flowNodeCreated({ flags, expression, antecedent });
         }
 
         function createFlowSwitchClause(antecedent: FlowNode, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): FlowNode {
@@ -866,17 +871,17 @@ namespace ts {
                 return antecedent;
             }
             setFlowNodeReferenced(antecedent);
-            return { flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent };
+            return flowNodeCreated({ flags: FlowFlags.SwitchClause, switchStatement, clauseStart, clauseEnd, antecedent });
         }
 
         function createFlowAssignment(antecedent: FlowNode, node: Expression | VariableDeclaration | BindingElement): FlowNode {
             setFlowNodeReferenced(antecedent);
-            return { flags: FlowFlags.Assignment, antecedent, node };
+            return flowNodeCreated({ flags: FlowFlags.Assignment, antecedent, node });
         }
 
         function createFlowArrayMutation(antecedent: FlowNode, node: CallExpression | BinaryExpression): FlowNode {
             setFlowNodeReferenced(antecedent);
-            const res: FlowArrayMutation = { flags: FlowFlags.ArrayMutation, antecedent, node };
+            const res: FlowArrayMutation = flowNodeCreated({ flags: FlowFlags.ArrayMutation, antecedent, node });
             return res;
         }
 
@@ -1080,8 +1085,16 @@ namespace ts {
         function bindTryStatement(node: TryStatement): void {
             const preFinallyLabel = createBranchLabel();
             const preTryFlow = currentFlow;
-            // TODO: Every statement in try block is potentially an exit point!
+            const tryPriors: FlowNode[] = [];
+            const oldFlowNodeCreated = flowNodeCreated;
+            // We hook the creation of all flow nodes within the `try` scope and store them so we can add _all_ of them
+            // as possible antecedents of the start of the `catch` or `finally` blocks.
+            // Don't bother intercepting the call if there's no finally or catch block that needs the information
+            if (node.catchClause || node.finallyBlock) {
+                flowNodeCreated = node => (tryPriors.push(node), node);
+            }
             bind(node.tryBlock);
+            flowNodeCreated = oldFlowNodeCreated;
             addAntecedent(preFinallyLabel, currentFlow);
 
             const flowAfterTry = currentFlow;
@@ -1089,12 +1102,36 @@ namespace ts {
 
             if (node.catchClause) {
                 currentFlow = preTryFlow;
+                if (tryPriors.length) {
+                    const preCatchFlow = createBranchLabel();
+                    addAntecedent(preCatchFlow, currentFlow);
+                    for (const p of tryPriors) {
+                        addAntecedent(preCatchFlow, p);
+                    }
+                    currentFlow = finishFlowLabel(preCatchFlow);
+                }
+
                 bind(node.catchClause);
                 addAntecedent(preFinallyLabel, currentFlow);
 
                 flowAfterCatch = currentFlow;
             }
             if (node.finallyBlock) {
+                // We add the nodes within the `try` block to the `finally`'s antecedents if there's no catch block
+                // (If there is a `catch` block, it will have all these antecedents instead, and the `finally` will
+                // have the end of the `try` block and the end of the `catch` block)
+                let preFinallyPrior = preTryFlow;
+                if (!node.catchClause) {
+                    if (tryPriors.length) {
+                        const preFinallyFlow = createBranchLabel();
+                        addAntecedent(preFinallyFlow, preTryFlow);
+                        for (const p of tryPriors) {
+                            addAntecedent(preFinallyFlow, p);
+                        }
+                        preFinallyPrior = finishFlowLabel(preFinallyFlow);
+                    }
+                }
+
                 // in finally flow is combined from pre-try/flow from try/flow from catch
                 // pre-flow is necessary to make sure that finally is reachable even if finally flows in both try and finally blocks are unreachable
 
@@ -1123,7 +1160,7 @@ namespace ts {
                 //
                 // extra edges that we inject allows to control this behavior
                 // if when walking the flow we step on post-finally edge - we can mark matching pre-finally edge as locked so it will be skipped.
-                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preTryFlow, lock: {} };
+                const preFinallyFlow: PreFinallyFlow = { flags: FlowFlags.PreFinally, antecedent: preFinallyPrior, lock: {} };
                 addAntecedent(preFinallyLabel, preFinallyFlow);
 
                 currentFlow = finishFlowLabel(preFinallyLabel);
@@ -1142,7 +1179,7 @@ namespace ts {
                     }
                 }
                 if (!(currentFlow.flags & FlowFlags.Unreachable)) {
-                    const afterFinallyFlow: AfterFinallyFlow = { flags: FlowFlags.AfterFinally, antecedent: currentFlow };
+                    const afterFinallyFlow: AfterFinallyFlow = flowNodeCreated({ flags: FlowFlags.AfterFinally, antecedent: currentFlow });
                     preFinallyFlow.lock = afterFinallyFlow;
                     currentFlow = afterFinallyFlow;
                 }
@@ -2462,8 +2499,13 @@ namespace ts {
                     declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
                 case SyntaxKind.SourceFile:
-                    // this.foo assignment in a source file
-                    // Do not bind. It would be nice to support this someday though.
+                    // this.property = assignment in a source file -- declare symbol in exports for a module, in locals for a script
+                    if ((thisContainer as SourceFile).commonJsModuleIndicator) {
+                        declareSymbol(thisContainer.symbol.exports!, thisContainer.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+                    }
+                    else {
+                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                     break;
 
                 default:
@@ -3104,8 +3146,8 @@ namespace ts {
 
         if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
             // Destructuring object assignments with are ES2015 syntax
-            // and possibly ESNext if they contain rest
-            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
+            // and possibly ES2018 if they contain rest
+            transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ArrayLiteralExpression) {
             // Destructuring assignments are ES2015 syntax.
@@ -3141,9 +3183,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsTypeScriptClassSyntax;
         }
 
-        // parameters with object rest destructuring are ES Next syntax
+        // parameters with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
@@ -3259,7 +3301,7 @@ namespace ts {
         let transformFlags = subtreeFlags;
 
         if (!node.variableDeclaration) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2019;
         }
         else if (isBindingPattern(node.variableDeclaration.name)) {
             transformFlags |= TransformFlags.AssertES2015;
@@ -3293,9 +3335,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // function declarations with object rest destructuring are ES Next syntax
+        // function declarations with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3317,14 +3359,14 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // function declarations with object rest destructuring are ES Next syntax
+        // function declarations with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         // An async method declaration is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
+            transformFlags |= node.asteriskToken ? TransformFlags.AssertES2018 : TransformFlags.AssertES2017;
         }
 
         if (node.asteriskToken) {
@@ -3348,9 +3390,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // function declarations with object rest destructuring are ES Next syntax
+        // function declarations with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3394,12 +3436,12 @@ namespace ts {
 
             // An async function declaration is ES2017 syntax.
             if (modifierFlags & ModifierFlags.Async) {
-                transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
+                transformFlags |= node.asteriskToken ? TransformFlags.AssertES2018 : TransformFlags.AssertES2017;
             }
 
-            // function declarations with object rest destructuring are ES Next syntax
+            // function declarations with object rest destructuring are ES2018 syntax
             if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-                transformFlags |= TransformFlags.AssertESNext;
+                transformFlags |= TransformFlags.AssertES2018;
             }
 
             // If a FunctionDeclaration's subtree has marked the container as needing to capture the
@@ -3412,7 +3454,7 @@ namespace ts {
             // If a FunctionDeclaration is generator function and is the body of a
             // transformed async function, then this node can be transformed to a
             // down-level generator.
-            // Currently we do not support transforming any other generator fucntions
+            // Currently we do not support transforming any other generator functions
             // down level.
             if (node.asteriskToken) {
                 transformFlags |= TransformFlags.AssertGenerator;
@@ -3436,12 +3478,12 @@ namespace ts {
 
         // An async function expression is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
+            transformFlags |= node.asteriskToken ? TransformFlags.AssertES2018 : TransformFlags.AssertES2017;
         }
 
-        // function expressions with object rest destructuring are ES Next syntax
+        // function expressions with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
 
@@ -3480,9 +3522,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES2017;
         }
 
-        // arrow functions with object rest destructuring are ES Next syntax
+        // arrow functions with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
@@ -3502,8 +3544,8 @@ namespace ts {
         if (transformFlags & TransformFlags.Super) {
             transformFlags ^= TransformFlags.Super;
             // super inside of an async function requires hoisting the super access (ES2017).
-            // same for super inside of an async generator, which is ESNext.
-            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsESNext;
+            // same for super inside of an async generator, which is ES2018.
+            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3520,8 +3562,8 @@ namespace ts {
         if (expressionFlags & TransformFlags.Super) {
             transformFlags &= ~TransformFlags.Super;
             // super inside of an async function requires hoisting the super access (ES2017).
-            // same for super inside of an async generator, which is ESNext.
-            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsESNext;
+            // same for super inside of an async generator, which is ES2018.
+            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3532,9 +3574,9 @@ namespace ts {
         let transformFlags = subtreeFlags;
         transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
 
-        // A VariableDeclaration containing ObjectRest is ESNext syntax
+        // A VariableDeclaration containing ObjectRest is ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         // Type annotations are TypeScript syntax.
@@ -3641,8 +3683,8 @@ namespace ts {
         switch (kind) {
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.AwaitExpression:
-                // async/await is ES2017 syntax, but may be ESNext syntax (for async generators)
-                transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2017;
+                // async/await is ES2017 syntax, but may be ES2018 syntax (for async generators)
+                transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2017;
                 break;
 
             case SyntaxKind.TypeAssertionExpression:
@@ -3714,7 +3756,7 @@ namespace ts {
             case SyntaxKind.ForOfStatement:
                 // This node is either ES2015 syntax or ES2017 syntax (if it is a for-await-of).
                 if ((<ForOfStatement>node).awaitModifier) {
-                    transformFlags |= TransformFlags.AssertESNext;
+                    transformFlags |= TransformFlags.AssertES2018;
                 }
                 transformFlags |= TransformFlags.AssertES2015;
                 break;
@@ -3722,7 +3764,7 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 // This node is either ES2015 syntax (in a generator) or ES2017 syntax (in an async
                 // generator).
-                transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
+                transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
                 break;
 
             case SyntaxKind.AnyKeyword:
@@ -3791,7 +3833,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.SpreadAssignment:
-                transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectRestOrSpread;
+                transformFlags |= TransformFlags.AssertES2018 | TransformFlags.ContainsObjectRestOrSpread;
                 break;
 
             case SyntaxKind.SuperKeyword:
@@ -3808,7 +3850,7 @@ namespace ts {
             case SyntaxKind.ObjectBindingPattern:
                 transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
                 if (subtreeFlags & TransformFlags.ContainsRestOrSpread) {
-                    transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectRestOrSpread;
+                    transformFlags |= TransformFlags.AssertES2018 | TransformFlags.ContainsObjectRestOrSpread;
                 }
                 excludeFlags = TransformFlags.BindingPatternExcludes;
                 break;
@@ -3846,8 +3888,8 @@ namespace ts {
 
                 if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
                     // If an ObjectLiteralExpression contains a spread element, then it
-                    // is an ES next node.
-                    transformFlags |= TransformFlags.AssertESNext;
+                    // is an ES2018 node.
+                    transformFlags |= TransformFlags.AssertES2018;
                 }
 
                 break;
@@ -3882,8 +3924,8 @@ namespace ts {
                 break;
 
             case SyntaxKind.ReturnStatement:
-                // Return statements may require an `await` in ESNext.
-                transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion | TransformFlags.AssertESNext;
+                // Return statements may require an `await` in ES2018.
+                transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion | TransformFlags.AssertES2018;
                 break;
 
             case SyntaxKind.ContinueStatement:

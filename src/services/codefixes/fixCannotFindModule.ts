@@ -74,7 +74,7 @@ namespace ts.codefix {
         const tsconfigObjectLiteral = getTsConfigObjectLiteralExpression(configFile);
         if (!tsconfigObjectLiteral) return undefined;
 
-        const compilerOptionsProperty = findProperty(tsconfigObjectLiteral, "compilerOptions");
+        const compilerOptionsProperty = findJsonProperty(tsconfigObjectLiteral, "compilerOptions");
         if (!compilerOptionsProperty) {
             const newCompilerOptions = createObjectLiteral([makeDefaultBaseUrl(), makeDefaultPaths()]);
             changes.insertNodeAtObjectStart(configFile, tsconfigObjectLiteral, createJsonPropertyAssignment("compilerOptions", newCompilerOptions));
@@ -94,7 +94,7 @@ namespace ts.codefix {
         return createJsonPropertyAssignment("baseUrl", createStringLiteral(defaultBaseUrl));
     }
     function getOrAddBaseUrl(changes: textChanges.ChangeTracker, tsconfig: TsConfigSourceFile, compilerOptions: ObjectLiteralExpression): string {
-        const baseUrlProp = findProperty(compilerOptions, "baseUrl");
+        const baseUrlProp = findJsonProperty(compilerOptions, "baseUrl");
         if (baseUrlProp) {
             return isStringLiteral(baseUrlProp.initializer) ? baseUrlProp.initializer.text : defaultBaseUrl;
         }
@@ -112,7 +112,7 @@ namespace ts.codefix {
         return createJsonPropertyAssignment("paths", createObjectLiteral([makeDefaultPathMapping()]));
     }
     function getOrAddPathMapping(changes: textChanges.ChangeTracker, tsconfig: TsConfigSourceFile, compilerOptions: ObjectLiteralExpression) {
-        const paths = findProperty(compilerOptions, "paths");
+        const paths = findJsonProperty(compilerOptions, "paths");
         if (!paths || !isObjectLiteralExpression(paths.initializer)) {
             changes.insertNodeAtObjectStart(tsconfig, compilerOptions, makeDefaultPaths());
             return defaultTypesDirectoryName;
@@ -127,14 +127,6 @@ namespace ts.codefix {
 
         changes.insertNodeAtObjectStart(tsconfig, paths.initializer, makeDefaultPathMapping());
         return defaultTypesDirectoryName;
-    }
-
-    function createJsonPropertyAssignment(name: string, initializer: Expression) {
-        return createPropertyAssignment(createStringLiteral(name), initializer);
-    }
-
-    function findProperty(obj: ObjectLiteralExpression, name: string): PropertyAssignment | undefined {
-        return find(obj.properties, (p): p is PropertyAssignment => isPropertyAssignment(p) && !!p.name && isStringLiteral(p.name) && p.name.text === name);
     }
 
     function getInstallCommand(fileName: string, packageName: string): InstallPackageAction {

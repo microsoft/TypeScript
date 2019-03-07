@@ -1,10 +1,6 @@
 tests/cases/conformance/jsx/file.tsx(20,10): error TS2741: Property 'children' is missing in type '{ a: number; b: string; }' but required in type 'Prop'.
-tests/cases/conformance/jsx/file.tsx(24,6): error TS2322: Type '{ children: Element; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type 'Element' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
-tests/cases/conformance/jsx/file.tsx(28,6): error TS2322: Type '{ children: typeof Button; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
+tests/cases/conformance/jsx/file.tsx(25,9): error TS2740: Type 'Element' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
+tests/cases/conformance/jsx/file.tsx(29,10): error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -35,17 +31,15 @@ tests/cases/conformance/jsx/file.tsx(28,6): error TS2322: Type '{ children: type
     // Error: JSX.element is not the same as JSX.ElementClass
     let k1 =
         <Comp a={10} b="hi">
-         ~~~~
-!!! error TS2322: Type '{ children: Element; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type 'Element' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
             <Button />
+            ~~~~~~~~~~
+!!! error TS2740: Type 'Element' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:6:5: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & Prop'
         </Comp>;
     let k2 =
         <Comp a={10} b="hi">
-         ~~~~
-!!! error TS2322: Type '{ children: typeof Button; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
             {Button}
+             ~~~~~~
+!!! error TS2740: Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
+!!! related TS6213 tests/cases/conformance/jsx/file.tsx:29:10: Did you mean to use 'new' with this expression?
         </Comp>;

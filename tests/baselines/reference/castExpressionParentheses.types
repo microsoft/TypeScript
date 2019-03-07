@@ -77,13 +77,13 @@ declare var a;
 (<any>this); 
 >(<any>this) : any
 ><any>this : any
->this : any
+>this : typeof globalThis
 
 (<any>this.x); 
 >(<any>this.x) : any
 ><any>this.x : any
 >this.x : any
->this : any
+>this : typeof globalThis
 >x : any
 
 (<any>(<any>a).x);

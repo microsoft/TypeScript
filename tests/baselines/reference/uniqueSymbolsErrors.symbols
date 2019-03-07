@@ -238,5 +238,5 @@ declare const invalidIntersection: unique symbol | unique symbol;
 // https://github.com/Microsoft/TypeScript/issues/21584
 const shouldNotBeAssignable: string = Symbol();
 >shouldNotBeAssignable : Symbol(shouldNotBeAssignable, Decl(uniqueSymbolsErrors.ts, 86, 5))
->Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2019.symbol.d.ts, --, --))
 

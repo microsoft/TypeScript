@@ -367,7 +367,9 @@ namespace ts.Completions {
     }
 
     function getSymbolName(symbol: Symbol, origin: SymbolOriginInfo | undefined, target: ScriptTarget): string {
-        return origin && originIsExport(origin) && origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default
+        return origin && originIsExport(origin) && (
+            (origin.isDefaultExport && symbol.escapedName === InternalSymbolName.Default) ||
+            (symbol.escapedName === InternalSymbolName.ExportEquals))
             // Name of "export default foo;" is "foo". Name of "export default 0" is the filename converted to camelCase.
             ? firstDefined(symbol.declarations, d => isExportAssignment(d) && isIdentifier(d.expression) ? d.expression.text : undefined)
                 || codefix.moduleSymbolToValidIdentifier(origin.moduleSymbol, target)
@@ -1028,7 +1030,7 @@ namespace ts.Completions {
 
             // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
             if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
-                const thisType = typeChecker.tryGetThisTypeAt(scopeNode);
+                const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false);
                 if (thisType) {
                     for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                         symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.ThisType };

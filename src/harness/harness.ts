@@ -77,6 +77,7 @@ namespace Utils {
         const environment = getExecutionEnvironment();
         switch (environment) {
             case ExecutionEnvironment.Browser:
+                // tslint:disable-next-line:no-eval
                 eval(fileContents);
                 break;
             case ExecutionEnvironment.Node:

@@ -31,6 +31,7 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanLessThanToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
         scanJSDocToken(): JsDocSyntaxKind;
         scan(): SyntaxKind;
@@ -660,8 +661,15 @@ namespace ts {
         let pendingKind!: CommentKind;
         let pendingHasTrailingNewLine!: boolean;
         let hasPendingCommentRange = false;
-        let collecting = trailing || pos === 0;
+        let collecting = trailing;
         let accumulator = initial;
+        if (pos === 0) {
+            collecting = true;
+            const shebang = getShebang(text);
+            if (shebang) {
+                pos = shebang.length;
+            }
+        }
         scan: while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
@@ -874,6 +882,7 @@ namespace ts {
             scanJsxIdentifier,
             scanJsxAttributeValue,
             reScanJsxToken,
+            reScanLessThanToken,
             scanJsxToken,
             scanJSDocToken,
             scan,
@@ -1937,6 +1946,14 @@ namespace ts {
         function reScanJsxToken(): JsxTokenSyntaxKind {
             pos = tokenPos = startPos;
             return token = scanJsxToken();
+        }
+
+        function reScanLessThanToken(): SyntaxKind {
+            if (token === SyntaxKind.LessThanLessThanToken) {
+                pos = tokenPos + 1;
+                return token = SyntaxKind.LessThanToken;
+            }
+            return token;
         }
 
         function scanJsxToken(): JsxTokenSyntaxKind {

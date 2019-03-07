@@ -1,15 +1,11 @@
 tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'Element' but required in type 'Element'.
-tests/cases/conformance/jsx/inline/index.tsx(21,22): error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
-  Types of property 'children' are incompatible.
-    Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]'.
-      Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
   Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
+tests/cases/conformance/jsx/inline/index.tsx(21,63): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,63): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
-tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
-  Types of property 'children' are incompatible.
-    Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]'.
-      Property '__domBrand' is missing in type 'Element' but required in type 'Element'.
+tests/cases/conformance/jsx/inline/index.tsx(24,42): error TS2741: Property '__domBrand' is missing in type 'Element' but required in type 'Element'.
+tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
 
 
 ==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
@@ -72,7 +68,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
     
     export default <h></h>
     
-==== tests/cases/conformance/jsx/inline/index.tsx (5 errors) ====
+==== tests/cases/conformance/jsx/inline/index.tsx (7 errors) ====
     /** @jsx dom */
     import { dom } from "./renderer"
     import prerendered, {MySFC, MyClass, tree} from "./component";
@@ -97,24 +93,22 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
     
     // Should fail, no dom elements
     const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
-                         ~~~~~
-!!! error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]'.
-!!! error TS2322:       Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+                                           ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
                                            ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
 !!! error TS2605:   Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
+                                                                  ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
     
     // Should fail, nondom isn't allowed as children of dom
     const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
-                          ~~~~~~
-!!! error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]'.
-!!! error TS2322:       Property '__domBrand' is missing in type 'Element' but required in type 'Element'.
+                                             ~~~~~~
+!!! error TS2741: Property '__domBrand' is missing in type 'Element' but required in type 'Element'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
+                                                   ~~~~~~
+!!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
     
