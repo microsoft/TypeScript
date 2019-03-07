@@ -8790,7 +8790,7 @@ namespace ts {
 
         function getTypeReferenceTypeWorker(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
             if (symbol.flags & (SymbolFlags.Class | SymbolFlags.Interface)) {
-                if (symbol.valueDeclaration && isBinaryExpression(symbol.valueDeclaration.parent)) {
+                if (symbol.valueDeclaration && symbol.valueDeclaration.parent && isBinaryExpression(symbol.valueDeclaration.parent)) {
                     const jsdocType = getJSDocTypeReference(node, symbol, typeArguments);
                     if (jsdocType) {
                         return jsdocType;
