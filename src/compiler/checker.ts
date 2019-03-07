@@ -7472,7 +7472,13 @@ namespace ts {
 
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
             if (!type.resolvedDefaultConstraint) {
-                type.resolvedDefaultConstraint = getUnionType([getDefaultConstraintOfTrueBranchOfConditionalType(type.root, type.combinedMapper, type.mapper), getFalseTypeFromConditionalType(type)]);
+                // An `any` branch of a conditional type would normally be viral - specifically, without special handling here,
+                // a conditional type with a single branch of type `any` would be assignable to anything, since it's constraint would simplify to
+                // just `any`. This result is _usually_ unwanted - so instead here we elide an `any` branch from the constraint type,
+                // in effect treating `any` like `never` rather than `unknown` in this location.
+                const trueConstraint = getDefaultConstraintOfTrueBranchOfConditionalType(type.root, type.combinedMapper, type.mapper);
+                const falseConstraint = getFalseTypeFromConditionalType(type);
+                type.resolvedDefaultConstraint = isTypeAny(trueConstraint) ? falseConstraint : isTypeAny(falseConstraint) ? trueConstraint : getUnionType([trueConstraint, falseConstraint]);
             }
             return type.resolvedDefaultConstraint;
         }
@@ -7483,7 +7489,13 @@ namespace ts {
             // with its constraint. We do this because if the constraint is a union type it will be distributed
             // over the conditional type and possibly reduced. For example, 'T extends undefined ? never : T'
             // removes 'undefined' from T.
-            if (type.root.isDistributive) {
+            // We skip returning a distributive constraint for a restrictive instantiation of a conditional type
+            // as the constraint for all type params (check type included) have been replace with `unknown`, which
+            // is going to produce even more false positive/negative results than the distribute constraint already does.
+            // Please note: the distributive constraint is a kludge for emulating what a negated type could to do filter
+            // a union - once negated types exist and are applied to the conditional false branch, this "constraint"
+            // likely doesn't need to exist.
+            if (type.root.isDistributive && type.restrictiveInstantiation !== type) {
                 const simplified = getSimplifiedType(type.checkType);
                 const constraint = simplified === type.checkType ? getConstraintOfType(simplified) : simplified;
                 if (constraint && constraint !== type.checkType) {
@@ -11166,8 +11178,20 @@ namespace ts {
         }
 
         function getRestrictiveInstantiation(type: Type) {
-            return type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never) ? type :
-                type.restrictiveInstantiation || (type.restrictiveInstantiation = instantiateType(type, restrictiveMapper));
+            if (type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never)) {
+                return type;
+            }
+            if (type.restrictiveInstantiation) {
+                return type.restrictiveInstantiation;
+            }
+            type.restrictiveInstantiation = instantiateType(type, restrictiveMapper);
+            // We set the following so we don't attempt to set the restrictive instance of a restrictive instance
+            // which is redundant - we'll produce new type identities, but all type params have already been mapped.
+            // This also gives us a way to detect restrictive instances upon comparisons and _disable_ the "distributeive constraint"
+            // assignability check for them, which is distinctly unsafe, as once you have a restrctive instance, all the type parameters
+            // are constrained to `unknown` and produce tons of false positives/negatives! 
+            type.restrictiveInstantiation.restrictiveInstantiation = type.restrictiveInstantiation;
+            return type.restrictiveInstantiation;
         }
 
         function instantiateIndexInfo(info: IndexInfo | undefined, mapper: TypeMapper): IndexInfo | undefined {
