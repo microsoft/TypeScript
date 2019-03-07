@@ -20925,7 +20925,7 @@ namespace ts {
         }
 
         function isGenericFunctionReturningFunction(signature: Signature) {
-            return !!(signature.typeParameters && getSingleCallSignature(getReturnTypeOfSignature(signature)));
+            return !!(signature.typeParameters && isFunctionType(getReturnTypeOfSignature(signature)));
         }
 
         /**
