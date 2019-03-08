@@ -57,7 +57,7 @@ class C4 extends C3 {
 var x2 = this.asdf; // no error, this is any
 >x2 : any
 >this.asdf : any
->this : any
+>this : typeof globalThis
 >asdf : any
 
 class C5 {

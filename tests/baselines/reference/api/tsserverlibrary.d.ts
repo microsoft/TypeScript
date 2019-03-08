@@ -997,6 +997,14 @@ declare namespace ts {
     interface NoSubstitutionTemplateLiteral extends LiteralExpression {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
+    enum TokenFlags {
+        None = 0,
+        Scientific = 16,
+        Octal = 32,
+        HexSpecifier = 64,
+        BinarySpecifier = 128,
+        OctalSpecifier = 256
+    }
     interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
     }
@@ -2571,9 +2579,10 @@ declare namespace ts {
         ES2016 = 3,
         ES2017 = 4,
         ES2018 = 5,
-        ESNext = 6,
+        ES2019 = 6,
+        ESNext = 7,
         JSON = 100,
-        Latest = 6
+        Latest = 7
     }
     enum LanguageVariant {
         Standard = 0,
@@ -3010,7 +3019,7 @@ declare namespace ts {
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         readonly includeCompletionsForModuleExports?: boolean;
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
@@ -3360,6 +3369,7 @@ declare namespace ts {
     function isNewExpression(node: Node): node is NewExpression;
     function isTaggedTemplateExpression(node: Node): node is TaggedTemplateExpression;
     function isTypeAssertion(node: Node): node is TypeAssertion;
+    function isConstTypeReference(node: Node): boolean;
     function isParenthesizedExpression(node: Node): node is ParenthesizedExpression;
     function skipPartiallyEmittedExpressions(node: Expression): Expression;
     function skipPartiallyEmittedExpressions(node: Node): Node;
@@ -3668,7 +3678,7 @@ declare namespace ts {
     function createLiteral(value: number | PseudoBigInt): NumericLiteral;
     function createLiteral(value: boolean): BooleanLiteral;
     function createLiteral(value: string | number | PseudoBigInt | boolean): PrimaryExpression;
-    function createNumericLiteral(value: string): NumericLiteral;
+    function createNumericLiteral(value: string, numericLiteralFlags?: TokenFlags): NumericLiteral;
     function createBigIntLiteral(value: string): BigIntLiteral;
     function createStringLiteral(text: string): StringLiteral;
     function createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
@@ -5710,6 +5720,7 @@ declare namespace ts.server.protocol {
         OpenExternalProject = "openExternalProject",
         OpenExternalProjects = "openExternalProjects",
         CloseExternalProject = "closeExternalProject",
+        UpdateOpen = "updateOpen",
         GetOutliningSpans = "getOutliningSpans",
         TodoComments = "todoComments",
         Indentation = "indentation",
@@ -6777,6 +6788,30 @@ declare namespace ts.server.protocol {
      * no body field is required.
      */
     interface CloseExternalProjectResponse extends Response {
+    }
+    /**
+     * Request to synchronize list of open files with the client
+     */
+    interface UpdateOpenRequest extends Request {
+        command: CommandTypes.UpdateOpen;
+        arguments: UpdateOpenRequestArgs;
+    }
+    /**
+     * Arguments to UpdateOpenRequest
+     */
+    interface UpdateOpenRequestArgs {
+        /**
+         * List of newly open files
+         */
+        openFiles?: OpenRequestArgs[];
+        /**
+         * List of open files files that were changes
+         */
+        changedFiles?: FileCodeEdits[];
+        /**
+         * List of files that were closed
+         */
+        closedFiles?: string[];
     }
     /**
      * Request to set compiler options for inferred projects.
@@ -7926,7 +7961,7 @@ declare namespace ts.server.protocol {
     }
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.
@@ -8355,7 +8390,6 @@ declare namespace ts.server {
     const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
     const ProjectLoadingStartEvent = "projectLoadingStart";
     const ProjectLoadingFinishEvent = "projectLoadingFinish";
-    const SurveyReady = "surveyReady";
     const LargeFileReferencedEvent = "largeFileReferenced";
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
@@ -8378,12 +8412,6 @@ declare namespace ts.server {
         eventName: typeof ProjectLoadingFinishEvent;
         data: {
             project: Project;
-        };
-    }
-    interface SurveyReady {
-        eventName: typeof SurveyReady;
-        data: {
-            surveyId: string;
         };
     }
     interface LargeFileReferencedEvent {
@@ -8470,7 +8498,7 @@ declare namespace ts.server {
     interface OpenFileInfo {
         readonly checkJs: boolean;
     }
-    type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
     type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {
@@ -8587,8 +8615,6 @@ declare namespace ts.server {
         readonly syntaxOnly?: boolean;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
-        /** Tracks projects that we have already sent survey events for. */
-        private readonly seenSurveyProjects;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
@@ -8626,6 +8652,7 @@ declare namespace ts.server {
          */
         private onConfigFileChangeForOpenScriptInfo;
         private removeProject;
+        private assignOrphanScriptInfosToInferredProject;
         /**
          * Remove this file from the set of open, non-configured files.
          * @param info The file that has been closed or newly configured
@@ -8744,6 +8771,9 @@ declare namespace ts.server {
          */
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
         private findExternalProjectContainingOpenScriptInfo;
+        private getOrCreateOpenScriptInfo;
+        private assignProjectToOpenedScriptInfo;
+        private cleanupAfterOpeningFile;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         private removeOrphanConfiguredProjects;
         private removeOrphanScriptInfos;

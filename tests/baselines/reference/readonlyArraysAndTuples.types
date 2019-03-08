@@ -26,6 +26,9 @@ type T31<T> = readonly T;  // Error
 type T32 = readonly readonly string[];  // Error
 >T32 : readonly string[]
 
+type T33 = readonly Array<string>;  // Error
+>T33 : string[]
+
 function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
 >f1 : (ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) => void
 >ma : string[]

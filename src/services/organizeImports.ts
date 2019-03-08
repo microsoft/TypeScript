@@ -68,8 +68,8 @@ namespace ts.OrganizeImports {
             else {
                 // Note: Delete the surrounding trivia because it will have been retained in newImportDecls.
                 changeTracker.replaceNodeWithNodes(sourceFile, oldImportDecls[0], newImportDecls, {
-                    useNonAdjustedStartPosition: true, // Leave header comment in place
-                    useNonAdjustedEndPosition: false,
+                    leadingTriviaOption: textChanges.LeadingTriviaOption.Exclude, // Leave header comment in place
+                    trailingTriviaOption: textChanges.TrailingTriviaOption.Include,
                     suffix: getNewLineOrDefaultFromHost(host, formatContext.options),
                 });
             }

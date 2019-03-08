@@ -89,10 +89,10 @@ namespace ts {
         return createLiteralFromNode(value);
     }
 
-    export function createNumericLiteral(value: string): NumericLiteral {
+    export function createNumericLiteral(value: string, numericLiteralFlags: TokenFlags = TokenFlags.None): NumericLiteral {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
-        node.numericLiteralFlags = 0;
+        node.numericLiteralFlags = numericLiteralFlags;
         return node;
     }
 
@@ -2875,7 +2875,7 @@ namespace ts {
                     return node.emitNode = { annotatedNodes: [node] } as EmitNode;
                 }
 
-                const sourceFile = getSourceFileOfNode(node);
+                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node)));
                 getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
             }
 

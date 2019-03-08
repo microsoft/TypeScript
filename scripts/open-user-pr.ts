@@ -24,7 +24,7 @@ const branchName = `user-update-${now.getFullYear()}${padNum(now.getMonth())}${p
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 runSequence([
     ["git", ["checkout", "."]], // reset any changes
-    ["node", ["./node_modules/jake/bin/cli.js", "baseline-accept"]], // accept baselines
+    ["node", ["./node_modules/gulp/bin/gulp.js", "baseline-accept"]], // accept baselines
     ["git", ["checkout", "-b", branchName]], // create a branch
     ["git", ["add", "."]], // Add all changes
     ["git", ["commit", "-m", `"Update user baselines"`]], // Commit all changes

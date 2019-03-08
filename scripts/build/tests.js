@@ -116,6 +116,17 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
             errorStatus = exitCode;
             error = new Error(`Process exited with status code ${errorStatus}.`);
         }
+        else if (process.env.CI === "true") {
+            // finally, do a sanity check and build the compiler with the built version of itself
+            log.info("Starting sanity check build...");
+            // Cleanup everything except lint rules (we'll need those later and would rather not waste time rebuilding them)
+            await exec("gulp", ["clean-tsc", "clean-services", "clean-tsserver", "clean-lssl", "clean-tests"], { cancelToken });
+            const { exitCode } = await exec("gulp", ["local", "--lkg=false"], { cancelToken });
+            if (exitCode !== 0) {
+                errorStatus = exitCode;
+                error = new Error(`Sanity check build process exited with status code ${errorStatus}.`);
+            }
+        }
     }
     catch (e) {
         errorStatus = undefined;
@@ -129,13 +140,8 @@ async function runConsoleTests(runJs, defaultReporter, runInParallel, watchMode,
     await deleteTemporaryProjectOutput();
 
     if (error !== undefined) {
-        if (watchMode) {
-            throw error;
-        }
-        else {
-            log.error(error);
-            process.exit(typeof errorStatus === "number" ? errorStatus : 2);
-        }
+        process.exitCode = typeof errorStatus === "number" ? errorStatus : 2;
+        throw error;
     }
 }
 exports.runConsoleTests = runConsoleTests;
@@ -148,7 +154,7 @@ async function cleanTestDirs() {
 exports.cleanTestDirs = cleanTestDirs;
 
 /**
- * used to pass data from jake command line directly to run.js
+ * used to pass data from gulp command line directly to run.js
  * @param {string} tests
  * @param {string} runners
  * @param {boolean} light

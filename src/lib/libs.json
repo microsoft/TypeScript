@@ -6,6 +6,7 @@
         "es2016",
         "es2017",
         "es2018",
+        "es2019",
         "esnext",
         // Host only
         "dom.generated",
@@ -29,13 +30,14 @@
         "es2017.string",
         "es2017.intl",
         "es2017.typedarrays",
+        "es2018.asynciterable",
         "es2018.regexp",
         "es2018.promise",
         "es2018.intl",
-        "esnext.asynciterable",
-        "esnext.array",
+        "es2019.array",
+        "es2019.string",
+        "es2019.symbol",
         "esnext.bigint",
-        "esnext.symbol",
         "esnext.intl",
         // Default libraries
         "es5.full",
@@ -43,6 +45,7 @@
         "es2016.full",
         "es2017.full",
         "es2018.full",
+        "es2019.full",
         "esnext.full"
     ],
     "paths": {

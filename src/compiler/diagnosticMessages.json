@@ -659,10 +659,6 @@
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
-        "category": "Error",
-        "code": 1209
-    },
     "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1210
@@ -1023,9 +1019,13 @@
         "category": "Error",
         "code": 1353
     },
-    "'readonly' type modifier is only permitted on array and tuple types.": {
+    "'readonly' type modifier is only permitted on array and tuple literal types.": {
         "category": "Error",
         "code": 1354
+    },
+    "A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.": {
+        "category": "Error",
+        "code": 1355
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1404,7 +1404,7 @@
         "category": "Error",
         "code": 2393
     },
-    "Overload signature is not compatible with function implementation.": {
+    "This overload signature is not compatible with its implementation signature.": {
         "category": "Error",
         "code": 2394
     },
@@ -2096,15 +2096,15 @@
         "category": "Error",
         "code": 2577
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
         "category": "Error",
         "code": 2581
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
         "category": "Error",
         "code": 2582
     },
@@ -2139,6 +2139,18 @@
     "Expression produces a union type that is too complex to represent.": {
         "category": "Error",
         "code": 2590
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2591
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2592
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2593
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2549,12 +2561,6 @@
         "category": "Error",
         "code": 2743
     },
-<<<<<<< HEAD
-    "Type '{0}' does not satisfy uniformity constraint of type '{1}'. Values of type '{0}' do not behave identically under typeof": {
-        "category": "Error",
-        "code": 2744
-    },
-=======
     "Type parameter defaults can only reference previously declared type parameters.": {
         "category": "Error",
         "code": 2744
@@ -2571,8 +2577,26 @@
         "category": "Error",
         "code": 2747
     },
->>>>>>> master
-
+    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 2748
+    },
+    "'{0}' refers to a value, but is being used as a type here.": {
+        "category": "Error",
+        "code": 2749
+    },
+    "The implementation signature is declared here.": {
+        "category": "Error",
+        "code": 2750
+    },
+    "Circularity originates in type at this location.": {
+        "category": "Error",
+        "code": 2751
+    },
+    "Type '{0}' does not satisfy uniformity constraint of type '{1}'. Values of type '{0}' do not behave identically under typeof": {
+        "category": "Error",
+        "code": 2752
+    },
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -3100,7 +3124,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
@@ -4132,7 +4156,7 @@
         "category": "Error",
         "code": 7040
     },
-    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+    "The containing arrow function captures the global value of 'this'.": {
         "category": "Error",
         "code": 7041
     },
@@ -4854,5 +4878,9 @@
     "Enable the 'experimentalDecorators' option in your configuration file": {
         "category": "Message",
         "code": 95074
+    },
+    "Convert to named parameters": {
+        "category": "Message",
+        "code": 95075
     }
 }

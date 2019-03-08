@@ -1,3 +1,5 @@
+// @target: es2015
+
 // Repro from #2264
 
 interface Y { 'i am a very certain type': Y }
@@ -70,3 +72,21 @@ declare var mbp: Man & Bear;
 
 pigify(mbp).oinks; // OK, mbp is treated as Pig
 pigify(mbp).walks; // Ok, mbp is treated as Man
+
+// Repros from #29815
+
+interface ITest {
+  name: 'test'
+}
+
+const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
+
+const createTest = (): ITest => {
+  return { name: 'test' }
+}
+
+declare function f1<T, U>(x: T | U): T | U;
+declare function f2<T, U>(x: T & U): T & U;
+
+let x1: string = f1('a');
+let x2: string = f2('a');

@@ -12,6 +12,7 @@ type T21 = readonly [number, number];
 type T30 = readonly string;  // Error
 type T31<T> = readonly T;  // Error
 type T32 = readonly readonly string[];  // Error
+type T33 = readonly Array<string>;  // Error
 
 function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]) {
     ma = ra;  // Error

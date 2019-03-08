@@ -15,7 +15,7 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `class A {
-    foo1(arg0: number, arg1: number, arg2: number): any {
+    foo1(arg0: number, arg1: number, arg2: number) {
         throw new Error("Method not implemented.");
     }
     constructor() {
@@ -34,10 +34,10 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `class A {
-    foo2<T, U, V, W, X, Y, Z>(): any {
+    foo2<T, U, V, W, X, Y, Z>() {
         throw new Error("Method not implemented.");
     }
-    foo1(arg0: number, arg1: number, arg2: number): any {
+    foo1(arg0: number, arg1: number, arg2: number) {
         throw new Error("Method not implemented.");
     }
     constructor() {
@@ -56,13 +56,13 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `class A {
-    foo3<T0, T1, T2, T3, T4, T5, T6, T7>(): any {
+    foo3<T0, T1, T2, T3, T4, T5, T6, T7>() {
         throw new Error("Method not implemented.");
     }
-    foo2<T, U, V, W, X, Y, Z>(): any {
+    foo2<T, U, V, W, X, Y, Z>() {
         throw new Error("Method not implemented.");
     }
-    foo1(arg0: number, arg1: number, arg2: number): any {
+    foo1(arg0: number, arg1: number, arg2: number) {
         throw new Error("Method not implemented.");
     }
     constructor() {

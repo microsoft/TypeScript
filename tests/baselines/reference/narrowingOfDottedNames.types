@@ -132,3 +132,80 @@ class Foo2
     }
 }
 
+// Repro from  #29513
+
+class AInfo {
+>AInfo : AInfo
+
+    a_count: number = 1;
+>a_count : number
+>1 : 1
+}
+
+class BInfo {
+>BInfo : BInfo
+
+    b_count: number = 1;
+>b_count : number
+>1 : 1
+}
+
+class Base {
+>Base : Base
+
+    id: number = 0;
+>id : number
+>0 : 0
+}
+
+class A2 extends Base {
+>A2 : A2
+>Base : Base
+
+    info!: AInfo;
+>info : AInfo
+}
+
+class B2 extends Base {
+>B2 : B2
+>Base : Base
+
+    info!: BInfo;
+>info : BInfo
+}
+
+let target: Base = null as any;
+>target : Base
+>null as any : any
+>null : null
+
+while (target) {
+>target : Base
+
+    if (target instanceof A2) {
+>target instanceof A2 : boolean
+>target : Base
+>A2 : typeof A2
+
+        target.info.a_count = 3;
+>target.info.a_count = 3 : 3
+>target.info.a_count : number
+>target.info : AInfo
+>target : A2
+>info : AInfo
+>a_count : number
+>3 : 3
+    }
+    else if (target instanceof B2) {
+>target instanceof B2 : boolean
+>target : Base
+>B2 : typeof B2
+
+        const j: BInfo = target.info;
+>j : BInfo
+>target.info : BInfo
+>target : B2
+>info : BInfo
+    }
+}
+
