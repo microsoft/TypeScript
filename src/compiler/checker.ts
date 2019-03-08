@@ -20042,6 +20042,12 @@ namespace ts {
             });
             if (!contextualMapper) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
+                const signaturePredicate = getTypePredicateOfSignature(signature);
+                const contextualPredicate = getTypePredicateOfSignature(sourceSignature);
+                if (signaturePredicate && contextualPredicate && signaturePredicate.kind === contextualPredicate.kind &&
+                    (signaturePredicate.kind === TypePredicateKind.This || signaturePredicate.parameterIndex === (contextualPredicate as IdentifierTypePredicate).parameterIndex)) {
+                    inferTypes(context.inferences, contextualPredicate.type, signaturePredicate.type, InferencePriority.ReturnType);
+                }
             }
             return getSignatureInstantiation(signature, getInferredTypes(context), isInJSFile(contextualSignature.declaration));
         }
