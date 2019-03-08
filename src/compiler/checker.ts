@@ -20045,7 +20045,7 @@ namespace ts {
                 const signaturePredicate = getTypePredicateOfSignature(signature);
                 const contextualPredicate = getTypePredicateOfSignature(sourceSignature);
                 if (signaturePredicate && contextualPredicate && signaturePredicate.kind === contextualPredicate.kind &&
-                    (signaturePredicate.kind !== TypePredicateKind.Identifier || signaturePredicate.parameterIndex === (contextualPredicate as IdentifierTypePredicate).parameterIndex)) {
+                    (signaturePredicate.kind === TypePredicateKind.This || signaturePredicate.parameterIndex === (contextualPredicate as IdentifierTypePredicate).parameterIndex)) {
                     inferTypes(context.inferences, contextualPredicate.type, signaturePredicate.type, InferencePriority.ReturnType);
                 }
             }
