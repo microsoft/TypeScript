@@ -2061,6 +2061,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Convert_to_named_parameters_95075" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Convert to named parameters]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Corrupted_locale_file_0_6051" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Corrupted locale file {0}.]]></Val>
@@ -4521,6 +4527,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_curren_6381" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}']]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed_6372" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Project '{0}' is out of date because output of its dependency '{1}' has changed]]></Val>
@@ -6282,6 +6294,12 @@
             <Item ItemId=";Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1_4004" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Type parameter '{0}' of exported interface has or is using private name '{1}'.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";Type_parameter_0_of_exported_mapped_object_type_is_using_private_name_1_4103" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Type parameter '{0}' of exported mapped object type is using private name '{1}'.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
