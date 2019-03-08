@@ -303,6 +303,7 @@ namespace ts {
             getNeverType: () => neverType,
             isSymbolAccessible,
             getObjectFlags,
+            isTupleLikeType,
             isArrayLikeType,
             isTypeInvalidDueToUnionDiscriminant,
             getAllPossiblePropertiesOfTypes,

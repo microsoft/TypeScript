@@ -313,15 +313,15 @@ namespace ts.refactor.convertToNamedParameters {
     }
 
     function createNewParameters(functionDeclaration: ValidFunctionDeclaration, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
+        const checker = program.getTypeChecker();
         const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
         const bindingElements = map(refactorableParameters, createBindingElementFromParameterDeclaration);
         const objectParameterName = createObjectBindingPattern(bindingElements);
         const objectParameterType = createParameterTypeNode(refactorableParameters);
-        const checker = program.getTypeChecker();
 
         let objectInitializer: Expression | undefined;
         // If every parameter in the original function was optional, add an empty object initializer to the new object parameter
-        if (every(refactorableParameters, checker.isOptionalParameter)) {
+        if (every(refactorableParameters, isOptionalParameter)) {
             objectInitializer = createObjectLiteral();
         }
 
@@ -355,6 +355,20 @@ namespace ts.refactor.convertToNamedParameters {
         }
         return createNodeArray([objectParameter]);
 
+        function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
+            const element = createBindingElement(
+                /*dotDotDotToken*/ undefined,
+                /*propertyName*/ undefined,
+                getParameterName(parameterDeclaration),
+                isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? createArrayLiteral() : parameterDeclaration.initializer);
+
+            suppressLeadingAndTrailingTrivia(element);
+            if (parameterDeclaration.initializer && element.initializer) {
+                copyComments(parameterDeclaration.initializer, element.initializer);
+            }
+            return element;
+        }
+
         function createParameterTypeNode(parameters: NodeArray<ValidParameterDeclaration>): TypeLiteralNode {
             const members = map(parameters, createPropertySignatureFromParameterDeclaration);
             const typeNode = addEmitFlags(createTypeLiteralNode(members), EmitFlags.SingleLine);
@@ -370,7 +384,7 @@ namespace ts.refactor.convertToNamedParameters {
             const propertySignature = createPropertySignature(
                 /*modifiers*/ undefined,
                 getParameterName(parameterDeclaration),
-                parameterDeclaration.initializer || isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
+                isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
                 parameterType,
                 /*initializer*/ undefined);
 
@@ -384,24 +398,17 @@ namespace ts.refactor.convertToNamedParameters {
         }
 
         function getTypeNode(node: Node): TypeNode | undefined {
-            const checker = program.getTypeChecker();
             const type = checker.getTypeAtLocation(node);
             return getTypeNodeIfAccessible(type, node, program, host);
         }
-    }
 
-    function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
-        const element = createBindingElement(
-            /*dotDotDotToken*/ undefined,
-            /*propertyName*/ undefined,
-            getParameterName(parameterDeclaration),
-            isRestParameter(parameterDeclaration) ? createArrayLiteral() : parameterDeclaration.initializer);
-
-        suppressLeadingAndTrailingTrivia(element);
-        if (parameterDeclaration.initializer && element.initializer) {
-            copyComments(parameterDeclaration.initializer, element.initializer);
+        function isOptionalParameter(parameterDeclaration: ValidParameterDeclaration): boolean {
+            if (isRestParameter(parameterDeclaration)) {
+                const type = checker.getTypeAtLocation(parameterDeclaration);
+                return checker.isTupleLikeType(type) ? false : true;
+            }
+            return checker.isOptionalParameter(parameterDeclaration);
         }
-        return element;
     }
 
     function copyComments(sourceNode: Node, targetNode: Node) {

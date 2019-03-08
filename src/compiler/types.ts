@@ -3189,6 +3189,7 @@ namespace ts {
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
 
+        /* @internal */ isTupleLikeType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ getObjectFlags(type: Type): ObjectFlags;
 
