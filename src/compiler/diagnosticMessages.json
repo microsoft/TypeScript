@@ -2930,6 +2930,10 @@
         "category": "Error",
         "code": 4102
     },
+    "Type parameter '{0}' of exported mapped object type is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4103
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",

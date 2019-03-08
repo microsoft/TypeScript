@@ -12,10 +12,9 @@ const merge2 = require("merge2");
 const mkdirp = require("mkdirp");
 const { src, dest, task, parallel, series, watch } = require("gulp");
 const { append, transform } = require("gulp-insert");
-const { browserify } = require("./scripts/build/browserify");
 const { prependFile } = require("./scripts/build/prepend");
 const { exec, readJson, needsUpdate, getDiffTool, getDirSize, flatten, rm } = require("./scripts/build/utils");
-const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
+const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 const { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
 const cmdLineOptions = require("./scripts/build/options");
 
@@ -454,44 +453,6 @@ task("runtests-parallel").flags = {
     "   --built": "Compile using the built version of the compiler.",
 };
 
-const buildWebTestServer = () => buildProject("tests/webTestServer.tsconfig.json");
-const cleanWebTestServer = () => cleanProject("tests/webTestServer.tsconfig.json");
-cleanTasks.push(cleanWebTestServer);
-
-const browserifyTests = () => src(["built/local/run.js"], { base: "built/local" })
-    .pipe(newer("built/local/bundle.js"))
-    .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(browserify())
-    .pipe(rename("bundle.js"))
-    .pipe(sourcemaps.write(".", /**@type {*}*/({ includeContent: false, destPath: "built/local" })))
-    .pipe(dest("built/local"));
-
-const runtestsBrowser = async () => {
-    await cleanTestDirs();
-    const { tests, runners, light } = cmdLineOptions;
-    const testConfigFile = "test.config";
-    await del([testConfigFile]);
-    if (tests || runners || light) {
-        writeTestConfigFile(tests, runners, light);
-    }
-    const args = ["tests/webTestServer.js"];
-    if (cmdLineOptions.browser) {
-        args.push(cmdLineOptions.browser);
-    }
-    if (tests) {
-        args.push(JSON.stringify(tests));
-    }
-    await exec(process.execPath, args);
-};
-
-task("runtests-browser", series(preBuild, parallel(buildTests, buildServices, buildLssl, buildWebTestServer), browserifyTests, runtestsBrowser));
-task("runtests-browser").description = "Runs the tests using the built run.js file like 'gulp runtests'.";
-task("runtests-browser").flags = {
-    "-t --tests=<regex>": "pattern for tests to run",
-    "-b --browser=<browser>": "Either 'IE' or 'chrome'",
-    "   --built": "Compile using the built version of the compiler.",
-};
-
 task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true }));
 task("diff").description = "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable";
 
@@ -524,16 +485,6 @@ const cleanWebHost = () => cleanProject("tests/webhost/webtsc.tsconfig.json");
 cleanTasks.push(cleanWebHost);
 task("clean-webhost", cleanWebHost);
 task("clean-webhost").description = "Cleans the outputs of the tsc web host";
-
-// TODO(rbuckton): Determine if 'perftsc' is still in use.
-const buildPerfTsc = () => buildProject("tests/perftsc.tsconfig.json");
-task("perftsc", series(lkgPreBuild, buildPerfTsc));
-task("perftsc").description = "Builds augmented version of the compiler for perf tests";
-
-const cleanPerfTsc = () => cleanProject("tests/perftsc.tsconfig.json");
-cleanTasks.push(cleanPerfTsc);
-task("clean-perftsc", cleanPerfTsc);
-task("clean-perftsc").description = "Cleans the outputs of the perftsc project";
 
 const buildLoggedIO = async () => {
     mkdirp.sync("built/local/temp");
