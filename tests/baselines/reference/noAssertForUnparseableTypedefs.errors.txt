@@ -1,4 +1,4 @@
-tests/cases/conformance/jsdoc/bug26693.js(1,15): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/conformance/jsdoc/bug26693.js(1,15): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 tests/cases/conformance/jsdoc/bug26693.js(1,21): error TS1005: '}' expected.
 tests/cases/conformance/jsdoc/bug26693.js(2,22): error TS2307: Cannot find module 'nope'.
 
@@ -6,7 +6,7 @@ tests/cases/conformance/jsdoc/bug26693.js(2,22): error TS2307: Cannot find modul
 ==== tests/cases/conformance/jsdoc/bug26693.js (3 errors) ====
     /** @typedef {module:locale} hi */
                   ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
                         ~
 !!! error TS1005: '}' expected.
     import { nope } from 'nope';

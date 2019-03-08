@@ -1,3 +1,5 @@
+/// <reference lib="esnext.asynciterable" />
+// Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
 import cp = require("child_process");
 import Octokit = require("@octokit/rest");
 
@@ -22,7 +24,7 @@ const branchName = `user-update-${now.getFullYear()}${padNum(now.getMonth())}${p
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 runSequence([
     ["git", ["checkout", "."]], // reset any changes
-    ["node", ["./node_modules/jake/bin/cli.js", "baseline-accept"]], // accept baselines
+    ["node", ["./node_modules/gulp/bin/gulp.js", "baseline-accept"]], // accept baselines
     ["git", ["checkout", "-b", branchName]], // create a branch
     ["git", ["add", "."]], // Add all changes
     ["git", ["commit", "-m", `"Update user baselines"`]], // Commit all changes
@@ -35,7 +37,7 @@ gh.authenticate({
     type: "token",
     token: process.argv[2]
 });
-gh.pullRequests.create({
+gh.pulls.create({
     owner: process.env.TARGET_FORK,
     repo: "TypeScript",
     maintainer_can_modify: true,
@@ -50,7 +52,7 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
 }).then(r => {
     const num = r.data.number;
     console.log(`Pull request ${num} created.`);
-    return gh.pullRequests.createReviewRequest({
+    return gh.pulls.createReviewRequest({
         owner: process.env.TARGET_FORK,
         repo: "TypeScript",
         number: num,

@@ -157,11 +157,11 @@ min.nest = this.min.nest || function () { };
 >min : typeof min
 >nest : { (): void; other: typeof other; }
 >this.min.nest || function () { } : { (): void; other: typeof other; }
->this.min.nest : any
->this.min : any
->this : any
->min : any
->nest : any
+>this.min.nest : { (): void; other: typeof other; }
+>this.min : typeof min
+>this : typeof globalThis
+>min : typeof min
+>nest : { (): void; other: typeof other; }
 >function () { } : { (): void; other: typeof other; }
 
 min.nest.other = self.min.nest.other || class { };

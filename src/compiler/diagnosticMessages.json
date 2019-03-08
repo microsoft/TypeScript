@@ -659,10 +659,6 @@
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
-        "category": "Error",
-        "code": 1209
-    },
     "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1210
@@ -1014,6 +1010,22 @@
     "An identifier or keyword cannot immediately follow a numeric literal.": {
         "category": "Error",
         "code": 1351
+    },
+    "A bigint literal cannot use exponential notation.": {
+        "category": "Error",
+        "code": 1352
+    },
+    "A bigint literal must be an integer.": {
+        "category": "Error",
+        "code": 1353
+    },
+    "'readonly' type modifier is only permitted on array and tuple literal types.": {
+        "category": "Error",
+        "code": 1354
+    },
+    "A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.": {
+        "category": "Error",
+        "code": 1355
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1392,7 +1404,7 @@
         "category": "Error",
         "code": 2393
     },
-    "Overload signature is not compatible with function implementation.": {
+    "This overload signature is not compatible with its implementation signature.": {
         "category": "Error",
         "code": 2394
     },
@@ -1636,14 +1648,6 @@
         "category": "Error",
         "code": 2458
     },
-    "Type '{0}' has no property '{1}' and no string index signature.": {
-        "category": "Error",
-        "code": 2459
-    },
-    "Type '{0}' has no property '{1}'.": {
-        "category": "Error",
-        "code": 2460
-    },
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
@@ -1696,7 +1700,7 @@
         "category": "Error",
         "code": 2473
     },
-    "In 'const' enum declarations member initializer must be constant expression.": {
+    "const enum member initializers can only contain literal values and other computed enum values.": {
         "category": "Error",
         "code": 2474
     },
@@ -1760,7 +1764,7 @@
         "category": "Error",
         "code": 2492
     },
-    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
+    "Tuple type '{0}' of length '{1}' has no element at index '{2}'.": {
         "category": "Error",
         "code": 2493
     },
@@ -1776,7 +1780,7 @@
         "category": "Error",
         "code": 2496
     },
-    "Module '{0}' resolves to a non-module entity and cannot be imported using this construct.": {
+    "This module can only be referenced with ECMAScript imports/exports by turning on the '{0}' flag and referencing its default export.": {
         "category": "Error",
         "code": 2497
     },
@@ -2056,10 +2060,6 @@
         "category": "Error",
         "code": 2567
     },
-    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
-        "category": "Error",
-        "code": 2568
-    },
     "Type '{0}' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
         "category": "Error",
         "code": 2569
@@ -2096,15 +2096,15 @@
         "category": "Error",
         "code": 2577
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
         "category": "Error",
         "code": 2581
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
         "category": "Error",
         "code": 2582
     },
@@ -2131,6 +2131,26 @@
     "Cannot assign to '{0}' because it is a constant.": {
         "category": "Error",
         "code": 2588
+    },
+    "Type instantiation is excessively deep and possibly infinite.": {
+        "category": "Error",
+        "code": 2589
+    },
+    "Expression produces a union type that is too complex to represent.": {
+        "category": "Error",
+        "code": 2590
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2591
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2592
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2593
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2437,7 +2457,7 @@
         "category": "Error",
         "code": 2717
     },
-    "Duplicate declaration '{0}'.": {
+    "Duplicate property '{0}'.": {
         "category": "Error",
         "code": 2718
     },
@@ -2497,6 +2517,10 @@
         "category": "Error",
         "code": 2732
     },
+    "Property '{0}' was also declared here.": {
+        "category": "Error",
+        "code": 2733
+    },
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
         "code": 2734
@@ -2536,6 +2560,38 @@
     "No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.": {
         "category": "Error",
         "code": 2743
+    },
+    "Type parameter defaults can only reference previously declared type parameters.": {
+        "category": "Error",
+        "code": 2744
+    },
+    "This JSX tag's '{0}' prop expects type '{1}' which requires multiple children, but only a single child was provided.": {
+        "category": "Error",
+        "code": 2745
+    },
+    "This JSX tag's '{0}' prop expects a single child of type '{1}', but multiple children were provided.": {
+        "category": "Error",
+        "code": 2746
+    },
+    "'{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.": {
+        "category": "Error",
+        "code": 2747
+    },
+    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 2748
+    },
+    "'{0}' refers to a value, but is being used as a type here.": {
+        "category": "Error",
+        "code": 2749
+    },
+    "The implementation signature is declared here.": {
+        "category": "Error",
+        "code": 2750
+    },
+    "Circularity originates in type at this location.": {
+        "category": "Error",
+        "code": 2751
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2871,6 +2927,10 @@
         "category": "Error",
         "code": 4102
     },
+    "Type parameter '{0}' of exported mapped object type is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4103
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -3065,7 +3125,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
@@ -3945,6 +4005,10 @@
         "category": "Error",
         "code": 6370
     },
+    "Updating unchanged output timestamps of project '{0}'...": {
+        "category": "Message",
+        "code": 6371
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -4093,7 +4157,7 @@
         "category": "Error",
         "code": 7040
     },
-    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+    "The containing arrow function captures the global value of 'this'.": {
         "category": "Error",
         "code": 7041
     },
@@ -4261,6 +4325,10 @@
     "You cannot rename a module via a global import.": {
         "category": "Error",
         "code": 8031
+    },
+    "Qualified name '{0}' is not allowed without a leading '@param {object} {1}'.": {
+        "category": "Error",
+        "code": 8032
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -4807,5 +4875,13 @@
     "Add names to all parameters without names": {
         "category": "Message",
         "code": 95073
+    },
+    "Enable the 'experimentalDecorators' option in your configuration file": {
+        "category": "Message",
+        "code": 95074
+    },
+    "Convert to named parameters": {
+        "category": "Message",
+        "code": 95075
     }
 }

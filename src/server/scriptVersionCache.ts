@@ -308,8 +308,8 @@ namespace ts.server {
             return this._getSnapshot().version;
         }
 
-        getLineInfo(line: number): AbsolutePositionAndLineText {
-            return this._getSnapshot().index.lineNumberToInfo(line);
+        getAbsolutePositionAndLineText(oneBasedLine: number): AbsolutePositionAndLineText {
+            return this._getSnapshot().index.lineNumberToInfo(oneBasedLine);
         }
 
         lineOffsetToPosition(line: number, column: number): number {
@@ -346,6 +346,10 @@ namespace ts.server {
             else {
                 return unchangedTextChangeRange;
             }
+        }
+
+        getLineCount() {
+            return this._getSnapshot().index.getLineCount();
         }
 
         static fromString(script: string) {
@@ -400,8 +404,12 @@ namespace ts.server {
             return this.root.charOffsetToLineInfo(1, position);
         }
 
+        getLineCount() {
+            return this.root.lineCount();
+        }
+
         lineNumberToInfo(oneBasedLine: number): AbsolutePositionAndLineText {
-            const lineCount = this.root.lineCount();
+            const lineCount = this.getLineCount();
             if (oneBasedLine <= lineCount) {
                 const { position, leaf } = this.root.lineNumberToInfo(oneBasedLine, 0);
                 return { absolutePosition: position, lineText: leaf && leaf.text };

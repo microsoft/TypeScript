@@ -388,8 +388,7 @@ namespace ts.server {
                     this.inspectValuePromise!.resolve(response.result);
                     this.inspectValuePromise = undefined;
                     break;
-                case EventInitializationFailed:
-                    {
+                case EventInitializationFailed: {
                         const body: protocol.TypesInstallerInitializationFailedEventBody = {
                             message: response.message
                         };
@@ -397,8 +396,7 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case EventBeginInstallTypes:
-                    {
+                case EventBeginInstallTypes: {
                         const body: protocol.BeginInstallTypesEventBody = {
                             eventId: response.eventId,
                             packages: response.packagesToInstall,
@@ -407,8 +405,7 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case EventEndInstallTypes:
-                    {
+                case EventEndInstallTypes: {
                         if (this.telemetryEnabled) {
                             const body: protocol.TypingsInstalledTelemetryEventBody = {
                                 telemetryEventName: "typingsInstalled",
@@ -431,13 +428,11 @@ namespace ts.server {
                         this.event(body, eventName);
                         break;
                     }
-                case ActionInvalidate:
-                    {
+                case ActionInvalidate: {
                         this.projectService.updateTypingsForProject(response);
                         break;
                     }
-                case ActionSet:
-                    {
+                case ActionSet: {
                         if (this.activeRequestCount > 0) {
                             this.activeRequestCount--;
                         }
@@ -710,6 +705,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
+            // tslint:disable-next-line:ban
             setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
@@ -972,4 +968,12 @@ namespace ts.server {
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
+
+    if (Debug.isDebugging) {
+        Debug.enableDebugInfo();
+    }
+
+    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+        ts.sys.tryEnableSourceMapsForHost();
+    }
 }

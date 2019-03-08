@@ -6,7 +6,7 @@ tests/cases/conformance/types/tuple/castingTuple.ts(14,15): error TS2352: Conver
 tests/cases/conformance/types/tuple/castingTuple.ts(15,14): error TS2352: Conversion of type '[number, string]' to type '[number, string, boolean]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 tests/cases/conformance/types/tuple/castingTuple.ts(18,21): error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property '2' is missing in type '[C, D]' but required in type '[C, D, A]'.
-tests/cases/conformance/types/tuple/castingTuple.ts(20,33): error TS2339: Property '5' does not exist on type '[C, D, A]'.
+tests/cases/conformance/types/tuple/castingTuple.ts(20,33): error TS2493: Tuple type '[C, D, A]' of length '3' has no element at index '5'.
 tests/cases/conformance/types/tuple/castingTuple.ts(30,10): error TS2352: Conversion of type '[number, string]' to type '[number, number]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'string' is not comparable to type 'number'.
 tests/cases/conformance/types/tuple/castingTuple.ts(31,10): error TS2352: Conversion of type '[C, D]' to type '[A, I]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
@@ -49,7 +49,7 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var eleFromCDA1 = classCDATuple[2]; // A
     var eleFromCDA2 = classCDATuple[5]; // C | D | A
                                     ~
-!!! error TS2339: Property '5' does not exist on type '[C, D, A]'.
+!!! error TS2493: Tuple type '[C, D, A]' of length '3' has no element at index '5'.
     var t10: [E1, E2] = [E1.one, E2.one];
     var t11 = <[number, number]>t10;
     var array1 = <{}[]>emptyObjTuple;

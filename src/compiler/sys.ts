@@ -3,6 +3,16 @@ declare function clearTimeout(handle: any): void;
 
 namespace ts {
     /**
+     * djb2 hashing algorithm
+     * http://www.cse.yorku.ca/~oz/hash.html
+     */
+    /* @internal */
+    export function generateDjb2Hash(data: string): string {
+        const chars = data.split("").map(str => str.charCodeAt(0));
+        return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+    }
+
+    /**
      * Set a high stack trace limit to provide more information in case of an error.
      * Called for command-line and server use cases.
      * Not called if TypeScript is used as a library.
@@ -317,6 +327,9 @@ namespace ts {
     }
 
     /*@internal*/
+    export const ignoredPaths = ["/node_modules/.", "/.git"];
+
+    /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
         useCaseSensitiveFileNames: boolean;
@@ -361,6 +374,8 @@ namespace ts {
             else {
                 directoryWatcher = {
                     watcher: host.watchDirectory(dirName, fileName => {
+                        if (isIgnoredPath(fileName)) return;
+
                         // Call the actual callback
                         callbackCache.forEach((callbacks, rootDirName) => {
                             if (rootDirName === dirPath || (startsWith(dirPath, rootDirName) && dirPath[rootDirName.length] === directorySeparator)) {
@@ -416,7 +431,7 @@ namespace ts {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
-                    return filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
+                    return !isIgnoredPath(childFullName) && filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
                 existingChildWatches,
                 (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
@@ -441,6 +456,16 @@ namespace ts {
             function addChildDirectoryWatcher(childWatcher: ChildDirectoryWatcher) {
                 (newChildWatches || (newChildWatches = [])).push(childWatcher);
             }
+        }
+
+        function isIgnoredPath(path: string) {
+            return some(ignoredPaths, searchPath => isInPath(path, searchPath));
+        }
+
+        function isInPath(path: string, searchPath: string) {
+            if (stringContains(path, searchPath)) return true;
+            if (host.useCaseSensitiveFileNames) return false;
+            return stringContains(toCanonicalFilePath(path), searchPath);
         }
     }
 
@@ -605,7 +630,17 @@ namespace ts {
                 directoryExists,
                 createDirectory(directoryName: string) {
                     if (!nodeSystem.directoryExists(directoryName)) {
-                        _fs.mkdirSync(directoryName);
+                        // Wrapped in a try-catch to prevent crashing if we are in a race
+                        // with another copy of ourselves to create the same directory
+                        try {
+                            _fs.mkdirSync(directoryName);
+                        }
+                        catch (e) {
+                            if (e.code !== "EEXIST") {
+                                // Failed for some other reason (access denied?); still throw
+                                throw e;
+                            }
+                        }
                     }
                 },
                 getExecutingFilePath() {
@@ -622,7 +657,7 @@ namespace ts {
                 getModifiedTime,
                 setModifiedTime,
                 deleteFile,
-                createHash: _crypto ? createMD5HashUsingNativeCrypto : generateDjb2Hash,
+                createHash: _crypto ? createSHA256Hash : generateDjb2Hash,
                 createSHA256Hash: _crypto ? createSHA256Hash : undefined,
                 getMemoryUsage() {
                     if (global.gc) {
@@ -1113,21 +1148,6 @@ namespace ts {
                 catch (e) {
                     return;
                 }
-            }
-
-            /**
-             * djb2 hashing algorithm
-             * http://www.cse.yorku.ca/~oz/hash.html
-             */
-            function generateDjb2Hash(data: string): string {
-                const chars = data.split("").map(str => str.charCodeAt(0));
-                return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
-            }
-
-            function createMD5HashUsingNativeCrypto(data: string): string {
-                const hash = _crypto!.createHash("md5");
-                hash.update(data);
-                return hash.digest("hex");
             }
 
             function createSHA256Hash(data: string): string {
