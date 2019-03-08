@@ -28,10 +28,108 @@ type tup = [number, number, number, number];
 >tup : [number, number, number, number]
 
 function foo(arg: Circular<tup>): tup {
->foo : (arg: [any, any, any, any]) => [number, number, number, number]
->arg : [any, any, any, any]
+>foo : (arg: any) => [number, number, number, number]
+>arg : any
 
   return arg;
->arg : [any, any, any, any]
+>arg : any
 }
+
+// Repro from #29442
+
+type DeepMap<T extends unknown[], R> = {
+>DeepMap : DeepMap<T, R>
+
+  [K in keyof T]: T[K] extends unknown[] ? DeepMap<T[K], R> : R;
+};
+
+type tpl = [string, [string, [string]]];
+>tpl : [string, [string, [string]]]
+
+type arr = string[][];
+>arr : string[][]
+
+type t1 = DeepMap<tpl, number>;  // [number, [number, [number]]]
+>t1 : [number, [number, [number]]]
+
+type t2 = DeepMap<arr, number>;  // number[][]
+>t2 : number[][]
+
+// Repro from #29577
+
+type Transform<T> = { [K in keyof T]: Transform<T[K]> };
+>Transform : Transform<T>
+
+interface User {
+    avatar: string;
+>avatar : string
+}
+
+interface Guest {
+    displayName: string;
+>displayName : string
+}
+
+interface Product {
+    users: (User | Guest)[];
+>users : (User | Guest)[]
+}
+
+declare var product: Transform<Product>;
+>product : Transform<Product>
+
+product.users;  // (Transform<User> | Transform<Guest>)[]
+>product.users : (Transform<User> | Transform<Guest>)[]
+>product : Transform<Product>
+>users : (Transform<User> | Transform<Guest>)[]
+
+// Repro from #29702
+
+type Remap1<T> = { [P in keyof T]: Remap1<T[P]>; };
+>Remap1 : Remap1<T>
+
+type Remap2<T> = T extends object ? { [P in keyof T]: Remap2<T[P]>; } : T;
+>Remap2 : Remap2<T>
+  
+type a = Remap1<string[]>;  // string[]
+>a : string[]
+
+type b = Remap2<string[]>;  // string[]
+>b : string[]
+
+// Repro from #29992
+
+type NonOptionalKeys<T> = { [P in keyof T]: undefined extends T[P] ? never : P }[keyof T];
+>NonOptionalKeys : { [P in keyof T]: undefined extends T[P] ? never : P; }[keyof T]
+
+type Child<T> = { [P in NonOptionalKeys<T>]: T[P] }
+>Child : Child<T>
+
+export interface ListWidget {
+    "type": "list",
+>"type" : "list"
+
+    "minimum_count": number,
+>"minimum_count" : number
+
+    "maximum_count": number,
+>"maximum_count" : number
+
+    "collapsable"?: boolean, //default to false, means all expanded
+>"collapsable" : boolean
+
+    "each": Child<ListWidget>;
+>"each" : Child<ListWidget>
+}
+
+type ListChild = Child<ListWidget>
+>ListChild : Child<ListWidget>
+
+declare let x: ListChild;
+>x : Child<ListWidget>
+
+x.type;
+>x.type : any
+>x : Child<ListWidget>
+>type : any
 

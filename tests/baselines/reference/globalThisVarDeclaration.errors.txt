@@ -1,0 +1,69 @@
+tests/cases/conformance/es2019/actual.ts(8,6): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/actual.ts(9,6): error TS2339: Property 'b' does not exist on type 'Window'.
+tests/cases/conformance/es2019/actual.ts(10,8): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/actual.ts(11,8): error TS2339: Property 'b' does not exist on type 'Window'.
+tests/cases/conformance/es2019/actual.ts(12,5): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/actual.ts(13,5): error TS2339: Property 'b' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(8,6): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(9,6): error TS2339: Property 'b' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(10,8): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(11,8): error TS2339: Property 'b' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(12,5): error TS2339: Property 'a' does not exist on type 'Window'.
+tests/cases/conformance/es2019/b.js(13,5): error TS2339: Property 'b' does not exist on type 'Window'.
+
+
+==== tests/cases/conformance/es2019/b.js (6 errors) ====
+    var a = 10;
+    this.a;
+    this.b;
+    globalThis.a;
+    globalThis.b;
+    
+    // DOM access is not supported until the index signature is handled more strictly
+    self.a;
+         ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    self.b;
+         ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    window.a;
+           ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    window.b;
+           ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    top.a;
+        ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    top.b;
+        ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    
+==== tests/cases/conformance/es2019/actual.ts (6 errors) ====
+    var b = 10;
+    this.a;
+    this.b;
+    globalThis.a;
+    globalThis.b;
+    
+    // same here -- no DOM access to globalThis yet
+    self.a;
+         ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    self.b;
+         ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    window.a;
+           ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    window.b;
+           ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    top.a;
+        ~
+!!! error TS2339: Property 'a' does not exist on type 'Window'.
+    top.b;
+        ~
+!!! error TS2339: Property 'b' does not exist on type 'Window'.
+    
+    

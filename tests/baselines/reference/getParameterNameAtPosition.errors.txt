@@ -1,0 +1,20 @@
+tests/cases/compiler/getParameterNameAtPosition.ts(9,7): error TS2345: Argument of type 'Mock<[any]>' is not assignable to parameter of type 'Tester'.
+  Types of parameters 'args_1' and 'done' are incompatible.
+    Type '(...args: any[]) => any' is not assignable to type 'undefined'.
+
+
+==== tests/cases/compiler/getParameterNameAtPosition.ts (1 errors) ====
+    // Repro from #30171
+    
+    interface Mock<Y extends any[]> extends Function {
+        (...args: Y): any;
+    }
+    type Tester = (opts: any, done: (...args: any[]) => any) => any;
+    declare function cases(tester: Tester): void;
+    declare function fn<Y extends any[]>(implementation?: (...args: Y) => any): Mock<Y>;
+    cases(fn(opts => { }));
+          ~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'Mock<[any]>' is not assignable to parameter of type 'Tester'.
+!!! error TS2345:   Types of parameters 'args_1' and 'done' are incompatible.
+!!! error TS2345:     Type '(...args: any[]) => any' is not assignable to type 'undefined'.
+    

@@ -987,7 +987,7 @@ namespace ts {
                     }
                     nextSourceFileVersion(fileOrDirectoryPath);
 
-                    if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return;
+                    if (isPathIgnored(fileOrDirectoryPath)) return;
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list

@@ -610,10 +610,6 @@ namespace ts.server {
                         diagnostics: bakedDiags
                     }, ConfigFileDiagEvent);
                     break;
-                case SurveyReady:
-                    const { surveyId } = event.data;
-                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, SurveyReady);
-                    break;
                 case ProjectLanguageServiceStateEvent: {
                     const eventName: protocol.ProjectLanguageServiceStateEventName = ProjectLanguageServiceStateEvent;
                     this.event<protocol.ProjectLanguageServiceStateEventBody>({
@@ -1178,8 +1174,7 @@ namespace ts.server {
         private getRenameInfo(args: protocol.FileLocationRequestArgs): RenameInfo {
             const { file, project } = this.getFileAndProject(args);
             const position = this.getPositionInFile(args, file);
-            const preferences = this.getHostPreferences();
-            return project.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: preferences.allowRenameOfImportPath });
+            return project.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath });
         }
 
         private getProjects(args: protocol.FileRequestArgs, getScriptInfoEnsuringProjectsUptoDate?: boolean, ignoreNoProjectError?: boolean): Projects {
@@ -1234,12 +1229,12 @@ namespace ts.server {
                 { fileName: args.file, pos: position },
                 !!args.findInStrings,
                 !!args.findInComments,
-                this.getHostPreferences()
+                this.getPreferences(file)
             );
             if (!simplifiedResult) return locations;
 
             const defaultProject = this.getDefaultProject(args);
-            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getHostPreferences().allowRenameOfImportPath }), Debug.assertDefined(this.projectService.getScriptInfo(file)));
+            const renameInfo: protocol.RenameInfo = this.mapRenameInfo(defaultProject.getLanguageService().getRenameInfo(file, position, { allowRenameOfImportPath: this.getPreferences(file).allowRenameOfImportPath }), Debug.assertDefined(this.projectService.getScriptInfo(file)));
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
@@ -1659,10 +1654,10 @@ namespace ts.server {
             const end = scriptInfo.lineOffsetToPosition(args.endLine, args.endOffset);
             if (start >= 0) {
                 this.changeSeq++;
-                this.projectService.applyChangesToFile(scriptInfo, [{
+                this.projectService.applyChangesToFile(scriptInfo, singleIterator({
                     span: { start, length: end - start },
                     newText: args.insertString! // TODO: GH#18217
-                }]);
+                }));
             }
         }
 
@@ -2101,9 +2096,39 @@ namespace ts.server {
                 });
                 return this.requiredResponse(converted);
             },
+            [CommandNames.UpdateOpen]: (request: protocol.UpdateOpenRequest) => {
+                this.changeSeq++;
+                this.projectService.applyChangesInOpenFiles(
+                    request.arguments.openFiles && mapIterator(arrayIterator(request.arguments.openFiles), file => ({
+                        fileName: file.file,
+                        content: file.fileContent,
+                        scriptKind: file.scriptKindName,
+                        projectRootPath: file.projectRootPath
+                    })),
+                    request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                        fileName: file.fileName,
+                        changes: mapDefinedIterator(arrayReverseIterator(file.textChanges), change => {
+                            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file.fileName));
+                            const start = scriptInfo.lineOffsetToPosition(change.start.line, change.start.offset);
+                            const end = scriptInfo.lineOffsetToPosition(change.end.line, change.end.offset);
+                            return start >= 0 ? { span: { start, length: end - start }, newText: change.newText } : undefined;
+                        })
+                    })),
+                    request.arguments.closedFiles
+                );
+                return this.requiredResponse(/*response*/ true);
+            },
             [CommandNames.ApplyChangedToOpenFiles]: (request: protocol.ApplyChangedToOpenFilesRequest) => {
                 this.changeSeq++;
-                this.projectService.applyChangesInOpenFiles(request.arguments.openFiles, request.arguments.changedFiles!, request.arguments.closedFiles!); // TODO: GH#18217
+                this.projectService.applyChangesInOpenFiles(
+                    request.arguments.openFiles && arrayIterator(request.arguments.openFiles),
+                    request.arguments.changedFiles && mapIterator(arrayIterator(request.arguments.changedFiles), file => ({
+                        fileName: file.fileName,
+                        // apply changes in reverse order
+                        changes: arrayReverseIterator(file.changes)
+                    })),
+                    request.arguments.closedFiles
+                );
                 // TODO: report errors
                 return this.requiredResponse(/*response*/ true);
             },
