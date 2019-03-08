@@ -10175,14 +10175,14 @@ namespace ts {
             // Return a deferred type for a check that is neither definitely true nor definitely false
             const erasedCheckType = getActualTypeVariable(checkType);
             const result = <ConditionalType>createType(TypeFlags.Conditional);
-            (result as ConditionalType).root = root;
-            (result as ConditionalType).checkType = erasedCheckType;
-            (result as ConditionalType).extendsType = extendsType;
-            (result as ConditionalType).mapper = mapper;
-            (result as ConditionalType).combinedMapper = combinedMapper;
+            result.root = root;
+            result.checkType = erasedCheckType;
+            result.extendsType = extendsType;
+            result.mapper = mapper;
+            result.combinedMapper = combinedMapper;
             if (!combinedMapper) {
-                (result as ConditionalType).resolvedTrueType = trueType;
-                (result as ConditionalType).resolvedFalseType = falseType;
+                result.resolvedTrueType = trueType;
+                result.resolvedFalseType = falseType;
             }
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
