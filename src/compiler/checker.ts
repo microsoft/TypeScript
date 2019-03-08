@@ -16168,7 +16168,6 @@ namespace ts {
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
                             return declaredType;
                         }
-                        return narrowTypeByUniformEquality(type, operator, left, right, assumeTrue);
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
@@ -16179,39 +16178,6 @@ namespace ts {
                         break;
                     case SyntaxKind.CommaToken:
                         return narrowType(type, expr.right, assumeTrue);
-                }
-                return type;
-            }
-
-            function narrowTypeByUniformEquality(type: Type, operator: SyntaxKind, left: Expression, right: Expression, assumeTrue: boolean): Type {
-                if (!assumeTrue || operator !== SyntaxKind.EqualsEqualsEqualsToken) {
-                    return type;
-                }
-                const lType = getTypeOfExpression(left);
-                const rType = getTypeOfExpression(right);
-                let target, targetType;
-                let valueType;
-                if ((lType.flags & TypeFlags.TypeVariable) && (getUniformityConstraintFromTypeParameter(<TypeParameter>lType) & UniformityFlags.Equality)) {
-                    target = left;
-                    targetType = lType;
-                    valueType = rType;
-                }
-                else if ((rType.flags & TypeFlags.TypeVariable) && (getUniformityConstraintFromTypeParameter(<TypeParameter>rType) & UniformityFlags.Equality)) {
-                    target = right;
-                    targetType = rType;
-                    valueType = lType;
-                } else {
-                    return type;
-                }
-                if (!isIdentifier(target) || !isUnitType(valueType)) {
-                    return type;
-                }
-                if (type.flags & TypeFlags.Conditional) {
-                    const subst = getIntersectionType([targetType, valueType]);
-                    return getConditionalTypeInstantiation(<ConditionalType>type, createTypeMapper([<TypeVariable>targetType], [subst]));
-                }
-                if (targetType === type) {
-                    return getIntersectionType([type, valueType]);
                 }
                 return type;
             }
@@ -16272,7 +16238,8 @@ namespace ts {
                         return type;
                     }
                     const targetType = getTypeOfExpression(target);
-                    const isNarrowableUnderUniformity = (targetType.flags & TypeFlags.TypeVariable) && (getUniformityConstraintFromTypeParameter(<TypeParameter>targetType) & UniformityFlags.TypeOf);
+                    const isNarrowableUnderUniformity =
+                        (targetType.flags & TypeFlags.TypeVariable) && (getUniformityConstraintFromTypeParameter(<TypeParameter>targetType) & UniformityFlags.TypeOf);
                     if (!isNarrowableUnderUniformity) {
                         return type;
                     }
@@ -16280,12 +16247,15 @@ namespace ts {
                         if (!assumeTrue || operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
                             return type;
                         }
+                        const cond = <ConditionalType>type;
                         const substType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
                         if (!substType) {
                             return type;
                         }
                         const subst = getIntersectionType([targetType, substType]);
-                        return getConditionalTypeInstantiation(<ConditionalType>type, createTypeMapper([<TypeVariable>targetType], [subst]));
+                        const mapper = createTypeMapper([<TypeVariable>targetType], [subst]);
+                        const narrowedMapper = combineTypeMappers(cond.mapper, mapper);
+                        return instantiateType(cond, narrowedMapper);
                     }
                     if (targetType !== type) {
                         return type;
