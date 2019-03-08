@@ -917,7 +917,7 @@ namespace ts {
 
     /**
      * Deduplicates an unsorted array.
-     * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
+     * @param equalityComparer An `EqualityComparer` used to determine if two values are duplicates.
      * @param comparer An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
      */
@@ -1171,6 +1171,21 @@ namespace ts {
                 return { value: array[i - 1], done: false };
             }
         }};
+    }
+
+    export function arrayReverseIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
+        let i = array.length;
+        return {
+            next: () => {
+                if (i === 0) {
+                    return { value: undefined as never, done: true };
+                }
+                else {
+                    i--;
+                    return { value: array[i], done: false };
+                }
+            }
+        };
     }
 
     /**

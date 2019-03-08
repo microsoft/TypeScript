@@ -105,6 +105,7 @@
         "unittests/tscWatch/resolutionCache.ts",
         "unittests/tscWatch/watchEnvironment.ts",
         "unittests/tscWatch/watchApi.ts",
+        "unittests/tsserver/applyChangesToOpenFiles.ts",
         "unittests/tsserver/cachingFileSystemInformation.ts",
         "unittests/tsserver/cancellationToken.ts",
         "unittests/tsserver/compileOnSave.ts",

@@ -4423,6 +4423,7 @@ namespace ts {
         NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
         NoFixing        = 1 << 2,  // Disable type parameter fixing
+        SkippedGenericFunction = 1 << 3,
     }
 
     /**
@@ -4452,6 +4453,7 @@ namespace ts {
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
+        inferredTypeParameters?: ReadonlyArray<TypeParameter>;
     }
 
     /* @internal */

@@ -327,6 +327,9 @@ namespace ts {
     }
 
     /*@internal*/
+    export const ignoredPaths = ["/node_modules/.", "/.git"];
+
+    /*@internal*/
     export interface RecursiveDirectoryWatcherHost {
         watchDirectory: HostWatchDirectory;
         useCaseSensitiveFileNames: boolean;
@@ -371,6 +374,8 @@ namespace ts {
             else {
                 directoryWatcher = {
                     watcher: host.watchDirectory(dirName, fileName => {
+                        if (isIgnoredPath(fileName)) return;
+
                         // Call the actual callback
                         callbackCache.forEach((callbacks, rootDirName) => {
                             if (rootDirName === dirPath || (startsWith(dirPath, rootDirName) && dirPath[rootDirName.length] === directorySeparator)) {
@@ -426,7 +431,7 @@ namespace ts {
                     const childFullName = getNormalizedAbsolutePath(child, parentDir);
                     // Filter our the symbolic link directories since those arent included in recursive watch
                     // which is same behaviour when recursive: true is passed to fs.watch
-                    return filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
+                    return !isIgnoredPath(childFullName) && filePathComparer(childFullName, normalizePath(host.realpath(childFullName))) === Comparison.EqualTo ? childFullName : undefined;
                 }) : emptyArray,
                 existingChildWatches,
                 (child, childWatcher) => filePathComparer(child, childWatcher.dirName),
@@ -451,6 +456,16 @@ namespace ts {
             function addChildDirectoryWatcher(childWatcher: ChildDirectoryWatcher) {
                 (newChildWatches || (newChildWatches = [])).push(childWatcher);
             }
+        }
+
+        function isIgnoredPath(path: string) {
+            return some(ignoredPaths, searchPath => isInPath(path, searchPath));
+        }
+
+        function isInPath(path: string, searchPath: string) {
+            if (stringContains(path, searchPath)) return true;
+            if (host.useCaseSensitiveFileNames) return false;
+            return stringContains(toCanonicalFilePath(path), searchPath);
         }
     }
 
