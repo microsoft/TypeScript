@@ -14964,10 +14964,8 @@ namespace ts {
                 const uniformityConstraint = getUniformityConstraintFromTypeParameter(inference.typeParameter);
                 if (uniformityConstraint) {
                     if (!isUniformType(inferredType)) {
-                        const decl = getDeclarationOfKind<TypeParameterDeclaration>(inference.typeParameter.symbol, SyntaxKind.TypeParameter);
-                        error(decl, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(inferredType), typeToString(inference.typeParameter));
+                        error(undefined, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(inferredType), typeToString(inference.typeParameter));
                     }
-                    // jw todo
                 }
                 if (constraint) {
                     context.flags |= InferenceFlags.NoFixing;
@@ -20237,11 +20235,8 @@ namespace ts {
                 const uniformityConstraint = getUniformityConstraintFromTypeParameter(typeParameters[i]);
                 if (uniformityConstraint) {
                     if (!isUniformType(typeArgumentTypes[i])) {
-                        const decl = getDeclarationOfKind<TypeParameterDeclaration>(typeParameters[i].symbol, SyntaxKind.TypeParameter);
-                        error(decl, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArgumentTypes[i]), typeToString(typeParameters[i]));
-                        //error
+                        error(typeArgumentNodes[i], Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArgumentTypes[i]), typeToString(typeParameters[i]));
                     }
-                    // jw todo
                 }
                 if (constraint) {
                     const errorInfo = reportErrors && headMessage ? (() => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1)) : undefined;
@@ -24226,10 +24221,8 @@ namespace ts {
                         mapper = createTypeMapper(typeParameters, typeArguments);
                     }
                     if (!isUniformType(typeArguments[i])) {
-                        error(node, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArguments[i]), typeToString(typeParameters[i]));
-                        // error 
+                        error(node.typeArguments && node.typeArguments[i], Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(typeArguments[i]), typeToString(typeParameters[i]));
                     }
-                    // jw todo
                 }
                 if (constraint) {
                     if (!typeArguments) {
