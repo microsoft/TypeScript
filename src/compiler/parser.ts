@@ -2417,7 +2417,6 @@ namespace ts {
             node.name = parseIdentifier();
             node.uniformityConstraint = 0;
             node.uniformityConstraint |= parseOptional(SyntaxKind.ExclamationToken) ? UniformityFlags.TypeOf : 0;
-            node.uniformityConstraint |= parseOptional(SyntaxKind.ExclamationToken) ? UniformityFlags.Equality : 0;
             if (parseOptional(SyntaxKind.ExtendsKeyword)) {
                 // It's not uncommon for people to write improper constraints to a generic.  If the
                 // user writes a constraint that is an expression and not an actual type, then parse
