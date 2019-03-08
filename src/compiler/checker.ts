@@ -12678,7 +12678,7 @@ namespace ts {
                             const hasOptionalUnionKeys = modifiers & MappedTypeModifiers.IncludeOptional && targetConstraint.flags & TypeFlags.Union;
                             const filteredByApplicability = hasOptionalUnionKeys ? filterType(targetConstraint, t => !!isRelatedTo(t, sourceKeys)) : undefined;
                             // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
-                            // A source type T is related to a target type { [P in Q]?: X } if some Q = Q' is related to keyof T and T[Q'] is related to X.
+                            // A source type T is related to a target type { [P in Q]?: X } if some constituent Q' of Q is related to keyof T and T[Q'] is related to X.
                             if (hasOptionalUnionKeys
                                     ? !(filteredByApplicability!.flags & TypeFlags.Never)
                                     : isRelatedTo(targetConstraint, sourceKeys)) {
