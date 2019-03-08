@@ -438,6 +438,25 @@ namespace ts {
             assert.isFalse(fs.existsSync(outputFiles[project.third][ext.buildinfo]), `Expect file ${outputFiles[project.third][ext.buildinfo]} to not exist`);
         });
 
+        it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
+            const fs = outFileFs.shadow();
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host);
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(...initialExpectedDiagnostics);
+            host.clearDiagnostics();
+            builder.resetBuildContext();
+            changeCompilerVersion(host);
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(
+                // TODO:: This should build all instead
+                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.first][source.config], relSources[project.first][source.ts][part.one], relOutputFiles[project.first][ext.js]],
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.third][source.config], relSources[project.third][source.ts][part.one], relOutputFiles[project.third][ext.js]],
+            );
+        });
+
         describe("Prepend output with .tsbuildinfo", () => {
             // Prologues
             describe("Prologues", () => {

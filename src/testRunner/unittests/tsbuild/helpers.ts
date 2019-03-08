@@ -3,6 +3,17 @@ namespace ts {
         return [Diagnostics.Projects_in_this_build_Colon_0, projects.map(p => "\r\n    * " + p).join("")];
     }
 
+    export function changeCompilerVersion(host: fakes.SolutionBuilderHost) {
+        const originalReadFile = host.readFile;
+        host.readFile = path => {
+            const value = originalReadFile.call(host, path);
+            if (!value || !isBuildInfoFile(path)) return value;
+            const buildInfo = JSON.parse(value) as BuildInfo;
+            buildInfo.version = fakes.version;
+            return getBuildInfoText(buildInfo);
+        };
+    }
+
     export function replaceText(fs: vfs.FileSystem, path: string, oldText: string, newText: string) {
         if (!fs.statSync(path).isFile()) {
             throw new Error(`File ${path} does not exist`);

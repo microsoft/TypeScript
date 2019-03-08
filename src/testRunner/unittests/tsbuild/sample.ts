@@ -168,22 +168,21 @@ namespace ts {
         });
 
         describe("can detect when and what to rebuild", () => {
-            let fs: vfs.FileSystem;
-            let host: fakes.SolutionBuilderHost;
-            let builder: SolutionBuilder;
-            before(() => {
-                fs = projFs.shadow();
-                host = new fakes.SolutionBuilderHost(fs);
-                builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: true });
-            });
-            after(() => {
-                fs = undefined!;
-                host = undefined!;
-                builder = undefined!;
-            });
+            function initializeWithBuild() {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
+                builder.buildAllProjects();
+                host.clearDiagnostics();
+                tick();
+                builder.resetBuildContext();
+                return { fs, host, builder };
+            }
 
             it("Builds the project", () => {
-                host.clearDiagnostics();
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
                 builder.resetBuildContext();
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(
@@ -195,13 +194,11 @@ namespace ts {
                     [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tests/tsconfig.json", "src/tests/index.js"],
                     [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
                 );
-                tick();
             });
 
             // All three projects are up to date
             it("Detects that all projects are up to date", () => {
-                host.clearDiagnostics();
-                builder.resetBuildContext();
+                const { host, builder } = initializeWithBuild();
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
@@ -209,16 +206,13 @@ namespace ts {
                     [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
                     [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/tests/tsconfig.json", "src/tests/index.ts", "src/tests/index.js"]
                 );
-                tick();
             });
 
             // Update a file in the leaf node (tests), only it should rebuild the last one
             it("Only builds the leaf node project", () => {
-                host.clearDiagnostics();
+                const { fs, host, builder } = initializeWithBuild();
                 fs.writeFileSync("/src/tests/index.ts", "const m = 10;");
-                builder.resetBuildContext();
                 builder.buildAllProjects();
-
                 host.assertDiagnosticMessages(
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
                     [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
@@ -226,14 +220,12 @@ namespace ts {
                     [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/tests/index.ts"],
                     [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
                 );
-                tick();
             });
 
             // Update a file in the parent (without affecting types), should get fast downstream builds
             it("Detects type-only changes in upstream projects", () => {
-                host.clearDiagnostics();
+                const { fs, host, builder } = initializeWithBuild();
                 replaceText(fs, "/src/core/index.ts", "HELLO WORLD", "WELCOME PLANET");
-                builder.resetBuildContext();
                 builder.buildAllProjects();
 
                 host.assertDiagnosticMessages(
@@ -245,6 +237,19 @@ namespace ts {
                     [Diagnostics.Updating_output_timestamps_of_project_0, "/src/logic/tsconfig.json"],
                     [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/tests/tsconfig.json"],
                     [Diagnostics.Updating_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
+                );
+            });
+
+            it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
+                const { host, builder } = initializeWithBuild();
+                changeCompilerVersion(host);
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(
+                    // TODO:: This should build all instead
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/tests/tsconfig.json", "src/tests/index.ts", "src/tests/index.js"]
                 );
             });
         });
