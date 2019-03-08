@@ -617,7 +617,7 @@ namespace ts {
                         if (declarationMapText === text) return;
                         break;
                     default:
-                        Debug.assertNever(name as never);
+                        Debug.fail(`Unexpected path: ${name}`);
                 }
                 outputFiles.push({ name, text, writeByteOrderMark });
             },
