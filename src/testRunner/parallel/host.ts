@@ -538,25 +538,23 @@ namespace Harness.Parallel.Host {
 
                 let xunitReporter: import("mocha").reporters.XUnit | undefined;
                 let failedTestReporter: import("../../../scripts/failed-tests") | undefined;
-                if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
-                    if (process.env.CI === "true") {
-                        xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
-                            reporterOptions: {
-                                suiteName: "Tests",
-                                output: "./TEST-results.xml"
-                            }
-                        });
-                        patchStats(xunitReporter.stats);
-                        xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
-                    }
-                    else {
-                        failedTestReporter = new FailedTestReporter(replayRunner, {
-                            reporterOptions: {
-                                file: path.resolve(".failed-tests"),
-                                keepFailed
-                            }
-                        });
-                    }
+                if (process.env.CI === "true") {
+                    xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
+                        reporterOptions: {
+                            suiteName: "Tests",
+                            output: "./TEST-results.xml"
+                        }
+                    });
+                    patchStats(xunitReporter.stats);
+                    xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
+                }
+                else {
+                    failedTestReporter = new FailedTestReporter(replayRunner, {
+                        reporterOptions: {
+                            file: path.resolve(".failed-tests"),
+                            keepFailed
+                        }
+                    });
                 }
 
                 const savedUseColors = Base.useColors;
