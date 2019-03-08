@@ -916,7 +916,7 @@ namespace ts {
         }
     }
 
-    const assignHelper: EmitHelper = {
+    export const assignHelper: UnscopedEmitHelper = {
         name: "typescript:assign",
         scoped: false,
         priority: 1,
@@ -948,7 +948,7 @@ namespace ts {
         );
     }
 
-    const awaitHelper: EmitHelper = {
+    export const awaitHelper: UnscopedEmitHelper = {
         name: "typescript:await",
         scoped: false,
         text: `
@@ -960,7 +960,7 @@ namespace ts {
         return createCall(getHelperName("__await"), /*typeArguments*/ undefined, [expression]);
     }
 
-    const asyncGeneratorHelper: EmitHelper = {
+    export const asyncGeneratorHelper: UnscopedEmitHelper = {
         name: "typescript:asyncGenerator",
         scoped: false,
         text: `
@@ -995,7 +995,7 @@ namespace ts {
         );
     }
 
-    const asyncDelegator: EmitHelper = {
+    export const asyncDelegator: UnscopedEmitHelper = {
         name: "typescript:asyncDelegator",
         scoped: false,
         text: `
@@ -1019,7 +1019,7 @@ namespace ts {
         );
     }
 
-    const asyncValues: EmitHelper = {
+    export const asyncValues: UnscopedEmitHelper = {
         name: "typescript:asyncValues",
         scoped: false,
         text: `

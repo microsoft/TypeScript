@@ -384,8 +384,77 @@ namespace fakes {
         return text;
     }
 
+    function compareProgramBuildInfoDiagnostic(a: ts.ProgramBuildInfoDiagnostic, b: ts.ProgramBuildInfoDiagnostic) {
+        return ts.compareStringsCaseSensitive(ts.isString(a) ? a : a[0], ts.isString(b) ? b : b[0]);
+    }
+
+    export const version = "FakeTSVersion";
+
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-        createProgram = ts.createAbstractBuilder;
+        createProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+
+        readFile(path: string) {
+            const value = super.readFile(path);
+            if (!value || !ts.isBuildInfoFile(path)) return value;
+            const buildInfo = ts.getBuildInfo(value);
+            if (buildInfo.program) {
+                // Fix lib signatures
+                for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
+                    if (ts.startsWith(path, "/lib/")) {
+                        const currentValue = buildInfo.program.fileInfos[path];
+                        ts.Debug.assert(currentValue.signature === path);
+                        ts.Debug.assert(currentValue.signature === currentValue.version);
+                        const text = super.readFile(path)!;
+                        const signature = ts.generateDjb2Hash(text);
+                        buildInfo.program.fileInfos[path] = { version: signature, signature };
+                    }
+                }
+            }
+            ts.Debug.assert(buildInfo.version === version);
+            buildInfo.version = ts.version;
+            return ts.getBuildInfoText(buildInfo);
+        }
+
+        public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
+            if (!ts.isBuildInfoFile(fileName)) return super.writeFile(fileName, content, writeByteOrderMark);
+            const buildInfo = ts.getBuildInfo(content);
+            if (buildInfo.program) {
+                // Fix lib signatures
+                for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
+                    if (ts.startsWith(path, "/lib/")) {
+                        const currentValue = buildInfo.program.fileInfos[path];
+                        ts.Debug.assert(currentValue.signature === currentValue.version);
+                        buildInfo.program.fileInfos[path] = { version: path, signature: path };
+                    }
+                }
+
+                // reference Map
+                if (buildInfo.program.referencedMap) {
+                    const referencedMap: ts.MapLike<string[]> = {};
+                    for (const path of ts.getOwnKeys(buildInfo.program.referencedMap).sort()) {
+                        referencedMap[path] = buildInfo.program.referencedMap[path].sort();
+                    }
+                    buildInfo.program.referencedMap = referencedMap;
+                }
+
+                // exportedModulesMap
+                if (buildInfo.program.exportedModulesMap) {
+                    const exportedModulesMap: ts.MapLike<string[]> = {};
+                    for (const path of ts.getOwnKeys(buildInfo.program.exportedModulesMap).sort()) {
+                        exportedModulesMap[path] = buildInfo.program.exportedModulesMap[path].sort();
+                    }
+                    buildInfo.program.exportedModulesMap = exportedModulesMap;
+                }
+
+                // semanticDiagnosticsPerFile
+                if (buildInfo.program.semanticDiagnosticsPerFile) {
+                    buildInfo.program.semanticDiagnosticsPerFile.sort(compareProgramBuildInfoDiagnostic);
+                }
+            }
+            buildInfo.version = version;
+            super.writeFile(fileName, ts.getBuildInfoText(buildInfo), writeByteOrderMark);
+        }
+
         now() {
             return new Date(this.sys.vfs.time());
         }

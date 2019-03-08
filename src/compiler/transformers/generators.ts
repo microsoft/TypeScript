@@ -3240,7 +3240,7 @@ namespace ts {
     //                        entering a finally block.
     //
     // For examples of how these are used, see the comments in ./transformers/generators.ts
-    const generatorHelper: EmitHelper = {
+    export const generatorHelper: UnscopedEmitHelper = {
         name: "typescript:generator",
         scoped: false,
         priority: 6,

@@ -4338,7 +4338,7 @@ namespace ts {
         );
     }
 
-    const extendsHelper: EmitHelper = {
+    export const extendsHelper: UnscopedEmitHelper = {
         name: "typescript:extends",
         scoped: false,
         priority: 0,
@@ -4359,7 +4359,7 @@ namespace ts {
             })();`
     };
 
-    const templateObjectHelper: EmitHelper = {
+    export const templateObjectHelper: UnscopedEmitHelper = {
         name: "typescript:makeTemplateObject",
         scoped: false,
         priority: 0,

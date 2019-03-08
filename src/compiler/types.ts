@@ -428,6 +428,13 @@ namespace ts {
 
         // Enum
         EnumMember,
+        // Unparsed
+        UnparsedPrologue,
+        UnparsedPrepend,
+        UnparsedText,
+        UnparsedInternalText,
+        UnparsedSyntheticReference,
+
         // Top-level nodes
         SourceFile,
         Bundle,
@@ -2775,14 +2782,66 @@ namespace ts {
         declarationText: string;
         declarationMapPath?: string;
         declarationMapText?: string;
+        /*@internal*/ buildInfoPath?: string;
+        /*@internal*/ buildInfo?: BuildInfo;
+        /*@internal*/ oldFileOfCurrentEmit?: boolean;
     }
 
     export interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
-        fileName?: string;
+        fileName: string;
         text: string;
+        prologues: ReadonlyArray<UnparsedPrologue>;
+        helpers: ReadonlyArray<UnscopedEmitHelper> | undefined;
+
+        // References and noDefaultLibAre Dts only
+        referencedFiles: ReadonlyArray<FileReference>;
+        typeReferenceDirectives: ReadonlyArray<string> | undefined;
+        libReferenceDirectives: ReadonlyArray<FileReference>;
+        hasNoDefaultLib?: boolean;
+
         sourceMapPath?: string;
         sourceMapText?: string;
+        syntheticReferences?: ReadonlyArray<UnparsedSyntheticReference>;
+        texts: ReadonlyArray<UnparsedSourceText>;
+        /*@internal*/ oldFileOfCurrentEmit?: boolean;
+        /*@internal*/ parsedSourceMap?: RawSourceMap | false | undefined;
+        // Adding this to satisfy services, fix later
+        /*@internal*/
+        getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
+    }
+
+    export type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike;
+    export type UnparsedNode = UnparsedPrologue | UnparsedSourceText | UnparsedSyntheticReference;
+
+    export interface UnparsedSection extends Node {
+        kind: SyntaxKind;
+        data?: string;
+        parent: UnparsedSource;
+    }
+
+    export interface UnparsedPrologue extends UnparsedSection {
+        kind: SyntaxKind.UnparsedPrologue;
+        data: string;
+        parent: UnparsedSource;
+    }
+
+    export interface UnparsedPrepend extends UnparsedSection {
+        kind: SyntaxKind.UnparsedPrepend;
+        data: string;
+        parent: UnparsedSource;
+        texts: ReadonlyArray<UnparsedTextLike>;
+    }
+
+    export interface UnparsedTextLike extends UnparsedSection {
+        kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
+        parent: UnparsedSource;
+    }
+
+    export interface UnparsedSyntheticReference extends UnparsedSection {
+        kind: SyntaxKind.UnparsedSyntheticReference;
+        parent: UnparsedSource;
+        /*@internal*/ section: BundleFileHasNoDefaultLib | BundleFileReference;
     }
 
     export interface JsonSourceFile extends SourceFile {
@@ -2935,6 +2994,8 @@ namespace ts {
         /*@internal*/ getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
         /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
         /*@internal*/ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
+        /*@internal*/ getProgramBuildInfo?(): ProgramBuildInfo | undefined;
+        /*@internal*/ emitBuildInfo(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
     }
 
     /* @internal */
@@ -4587,6 +4648,8 @@ namespace ts {
         reactNamespace?: string;
         jsxFactory?: string;
         composite?: boolean;
+        incremental?: boolean;
+        tsBuildInfoFile?: string;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
@@ -4997,7 +5060,8 @@ namespace ts {
         Dts = ".d.ts",
         Js = ".js",
         Jsx = ".jsx",
-        Json = ".json"
+        Json = ".json",
+        TsBuildInfo = ".tsbuildinfo"
     }
 
     export interface ResolvedModuleWithFailedLookupLocations {
@@ -5203,6 +5267,11 @@ namespace ts {
         readonly priority?: number;                                     // Helpers with a higher priority are emitted earlier than other helpers on the node.
     }
 
+    export interface UnscopedEmitHelper extends EmitHelper {
+        readonly scoped: false;                                         // Indicates whether the helper MUST be emitted in the current scope.
+        readonly text: string;                                          // ES3-compatible raw script text, or a function yielding such a string
+    }
+
     /* @internal */
     export type UniqueNameHandler = (baseName: string, checkFn?: (name: string) => boolean, optimistic?: boolean) => string;
 
@@ -5275,9 +5344,10 @@ namespace ts {
 
         isEmitBlocked(emitFileName: string): boolean;
 
-        getPrependNodes(): ReadonlyArray<InputFiles>;
+        getPrependNodes(): ReadonlyArray<InputFiles | UnparsedSource>;
 
         writeFile: WriteFileCallback;
+        getProgramBuildInfo(): ProgramBuildInfo | undefined;
     }
 
     export interface TransformationContext {
@@ -5428,23 +5498,116 @@ namespace ts {
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T> | undefined, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
-        /*@internal*/ writeBundle(bundle: Bundle, info: BundleInfo | undefined, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
+        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
+        /*@internal*/ bundleFileInfo?: BundleFileInfo;
     }
 
-    /**
-     * When a bundle contains prepended content, we store a file on disk indicating where the non-prepended
-     * content of that file starts. On a subsequent build where there are no upstream .d.ts changes, we
-     * read the bundle info file and the original .js file to quickly re-use portion of the file
-     * that didn't originate in prepended content.
-     */
+    /*@internal*/
+    export const enum BundleFileSectionKind {
+        Prologue = "prologue",
+        EmitHelpers = "emitHelpers",
+        NoDefaultLib = "no-default-lib",
+        Reference = "reference",
+        Type = "type",
+        Lib = "lib",
+        Prepend = "prepend",
+        Text = "text",
+        Internal = "internal",
+        // comments?
+    }
+
+    /*@internal*/
+    export interface BundleFileSectionBase extends TextRange {
+        kind: BundleFileSectionKind;
+        data?: string;
+    }
+
+    /*@internal*/
+    export interface BundleFilePrologue extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.Prologue;
+        data: string;
+    }
+
+    /*@internal*/
+    export interface BundleFileEmitHelpers extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.EmitHelpers;
+        data: string;
+    }
+
+    /*@internal*/
+    export interface BundleFileHasNoDefaultLib extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.NoDefaultLib;
+    }
+
+    /*@internal*/
+    export interface BundleFileReference extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.Reference | BundleFileSectionKind.Type | BundleFileSectionKind.Lib;
+        data: string;
+    }
+
+    /*@internal*/
+    export interface BundleFilePrepend extends BundleFileSectionBase {
+        kind: BundleFileSectionKind.Prepend;
+        data: string;
+        texts: BundleFileTextLike[];
+    }
+
+    /*@internal*/
+    export type BundleFileTextLikeKind = BundleFileSectionKind.Text | BundleFileSectionKind.Internal;
+
+    /*@internal*/
+    export interface BundleFileTextLike extends BundleFileSectionBase {
+        kind: BundleFileTextLikeKind;
+    }
+
+    /*@internal*/
+    export type BundleFileSection = BundleFilePrologue | BundleFileEmitHelpers |
+        BundleFileHasNoDefaultLib | BundleFileReference | BundleFilePrepend |
+        BundleFileTextLike;
+
+    /*@internal*/
+    export interface SourceFilePrologueDirectiveExpression extends TextRange {
+        text: string;
+    }
+
+    /*@internal*/
+    export interface SourceFilePrologueDirective extends TextRange {
+        expression: SourceFilePrologueDirectiveExpression;
+    }
+
+    /*@internal*/
+    export interface SourceFilePrologueInfo {
+        file: number;
+        text: string;
+        directives: SourceFilePrologueDirective[];
+    }
+
+    /*@internal*/
+    export interface SourceFileInfo {
+        // List of helpers in own source files emitted if no prepend is present
+        helpers?: string[];
+        prologues?: SourceFilePrologueInfo[];
+    }
+
+    /*@internal*/
+    export interface BundleFileInfo {
+        sections: BundleFileSection[];
+        sources?: SourceFileInfo;
+    }
+
+    /*@internal*/
+    export interface BundleBuildInfo {
+        js?: BundleFileInfo;
+        dts?: BundleFileInfo;
+        commonSourceDirectory: string;
+        sourceFiles: ReadonlyArray<string>;
+    }
+
     /* @internal */
-    export interface BundleInfo {
-        // The offset (in characters, i.e. suitable for .substr) at which the
-        // non-prepended portion of the emitted file starts.
-        originalOffset: number;
-        // The total length of this bundle. Used to ensure we're pulling from
-        // the same source as we originally wrote.
-        totalLength: number;
+    export interface BuildInfo {
+        bundle?: BundleBuildInfo;
+        program?: ProgramBuildInfo;
+        version: string;
     }
 
     export interface PrintHandlers {
@@ -5512,6 +5675,9 @@ namespace ts {
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
         /*@internal*/ neverAsciiEscape?: boolean;
+        /*@internal*/ writeBundleFileInfo?: boolean;
+        /*@internal*/ recordInternalSection?: boolean;
+        /*@internal*/ stripInternal?: boolean;
     }
 
     /* @internal */
@@ -5554,7 +5720,7 @@ namespace ts {
         /**
          * Appends a source map.
          */
-        appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string): void;
+        appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter): void;
         /**
          * Gets the source map as a `RawSourceMap` object.
          */
@@ -5600,6 +5766,7 @@ namespace ts {
         getColumn(): number;
         getIndent(): number;
         isAtStartOfLine(): boolean;
+        getTextPosWithWriteLine?(): number;
     }
 
     export interface GetEffectiveTypeRootsHost {
@@ -5857,6 +6024,7 @@ namespace ts {
     // The above fallback to `object` when there's no args to allow `{}` (as intended), but not the number 2, for example
     // TODO: Swap to `undefined` for a cleaner API once strictNullChecks is enabled
 
+    /* @internal */
     type ConcretePragmaSpecs = typeof commentPragmas;
 
     /* @internal */

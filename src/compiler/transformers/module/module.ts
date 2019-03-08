@@ -1806,7 +1806,7 @@ namespace ts {
     };
 
     // emit helper for `import * as Name from "foo"`
-    const importStarHelper: EmitHelper = {
+    export const importStarHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportstar",
         scoped: false,
         text: `
@@ -1820,7 +1820,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     };
 
     // emit helper for `import Name from "foo"`
-    const importDefaultHelper: EmitHelper = {
+    export const importDefaultHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportdefault",
         scoped: false,
         text: `

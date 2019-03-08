@@ -2601,7 +2601,7 @@ namespace ts {
         return undefined;
     }
 
-    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
+    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile | UnparsedSource, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
             const referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
             return host.getSourceFile(referenceFileName);
@@ -3244,6 +3244,10 @@ namespace ts {
             }
         }
 
+        function getTextPosWithWriteLine() {
+            return lineStart ? output.length : (output.length + newLine.length);
+        }
+
         reset();
 
         return {
@@ -3273,7 +3277,8 @@ namespace ts {
             writeStringLiteral: write,
             writeSymbol: (s, _) => write(s),
             writeTrailingSemicolon: write,
-            writeComment: write
+            writeComment: write,
+            getTextPosWithWriteLine
         };
     }
 
@@ -3398,11 +3403,11 @@ namespace ts {
     }
 
     export interface EmitFileNames {
-        jsFilePath: string | undefined;
-        sourceMapFilePath: string | undefined;
-        declarationFilePath: string | undefined;
-        declarationMapPath: string | undefined;
-        bundleInfoPath: string | undefined;
+        jsFilePath?: string | undefined;
+        sourceMapFilePath?: string | undefined;
+        declarationFilePath?: string | undefined;
+        declarationMapPath?: string | undefined;
+        buildInfoPath?: string | undefined;
     }
 
     /**
@@ -4637,6 +4642,16 @@ namespace ts {
 
     export function isAccessExpression(node: Node): node is AccessExpression {
         return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression;
+    }
+
+    export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
+        switch (section.kind) {
+            case BundleFileSectionKind.Text:
+            case BundleFileSectionKind.Internal:
+                return true;
+            default:
+                return false;
+        }
     }
 }
 
@@ -6030,6 +6045,26 @@ namespace ts {
         return node.kind === SyntaxKind.UnparsedSource;
     }
 
+    export function isUnparsedPrepend(node: Node): node is UnparsedPrepend {
+        return node.kind === SyntaxKind.UnparsedPrepend;
+    }
+
+    export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
+        switch (node.kind) {
+            case SyntaxKind.UnparsedText:
+            case SyntaxKind.UnparsedInternalText:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isUnparsedNode(node: Node): node is UnparsedNode {
+        return isUnparsedTextLike(node) ||
+            node.kind === SyntaxKind.UnparsedPrologue ||
+            node.kind === SyntaxKind.UnparsedSyntheticReference;
+    }
+
     // JSDoc
 
     export function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression {
@@ -6785,7 +6820,7 @@ namespace ts {
     /* @internal */
     export function isDeclaration(node: Node): node is NamedDeclaration {
         if (node.kind === SyntaxKind.TypeParameter) {
-            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJSFile(node);
+            return (node.parent && node.parent.kind !== SyntaxKind.JSDocTemplateTag) || isInJSFile(node);
         }
 
         return isDeclarationKind(node.kind);
@@ -7255,6 +7290,10 @@ namespace ts {
 
     export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
         return !!(compilerOptions.declaration || compilerOptions.composite);
+    }
+
+    export function isIncrementalCompilation(options: CompilerOptions) {
+        return !!(options.incremental || options.composite);
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictBindCallApply" | "strictPropertyInitialization" | "alwaysStrict";

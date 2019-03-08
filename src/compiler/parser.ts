@@ -7762,6 +7762,7 @@ namespace ts {
         }
     }
 
+    /*@internal*/
     type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
 
     /*@internal*/

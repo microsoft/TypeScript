@@ -3587,7 +3587,7 @@ namespace ts {
         );
     }
 
-    const decorateHelper: EmitHelper = {
+    export const decorateHelper: UnscopedEmitHelper = {
         name: "typescript:decorate",
         scoped: false,
         priority: 2,
@@ -3612,7 +3612,7 @@ namespace ts {
         );
     }
 
-    const metadataHelper: EmitHelper = {
+    export const metadataHelper: UnscopedEmitHelper = {
         name: "typescript:metadata",
         scoped: false,
         priority: 3,
@@ -3637,7 +3637,7 @@ namespace ts {
         );
     }
 
-    const paramHelper: EmitHelper = {
+    export const paramHelper: UnscopedEmitHelper = {
         name: "typescript:param",
         scoped: false,
         priority: 4,
