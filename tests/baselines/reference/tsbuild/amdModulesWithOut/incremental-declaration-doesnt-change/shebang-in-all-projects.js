@@ -275,7 +275,8 @@ sourceFile:file4.ts
         }
       ]
     }
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/app/module.tsbuildinfo.baseline.txt]
@@ -530,7 +531,8 @@ sourceFile:global.ts
         }
       ]
     }
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/lib/module.tsbuildinfo.baseline.txt]

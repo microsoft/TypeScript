@@ -469,7 +469,8 @@ sourceFile:../second/second_part2.ts
         }
       ]
     }
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/2/second-output.tsbuildinfo.baseline.txt]
@@ -840,7 +841,8 @@ sourceFile:../first_part3.ts
         }
       ]
     }
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/first/bin/first-output.tsbuildinfo.baseline.txt]
@@ -1763,7 +1765,8 @@ sourceFile:../../third_part1.ts
         }
       ]
     }
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/third/thirdjs/output/third-output.tsbuildinfo.baseline.txt]

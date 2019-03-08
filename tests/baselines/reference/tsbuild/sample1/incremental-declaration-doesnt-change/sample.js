@@ -76,6 +76,7 @@ class someClass { }
       "/src/core/index.ts",
       "/src/core/some_decl.d.ts"
     ]
-  }
+  },
+  "version": "FakeTSVersion"
 }
 

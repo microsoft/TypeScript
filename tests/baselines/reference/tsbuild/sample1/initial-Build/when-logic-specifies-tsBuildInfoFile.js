@@ -236,7 +236,8 @@ exports.multiply = multiply;
       "/src/core/index.ts",
       "/src/core/some_decl.d.ts"
     ]
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/logic/index.d.ts]
@@ -451,7 +452,8 @@ sourceFile:index.ts
       "/src/core/index.ts",
       "/src/logic/index.ts"
     ]
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/logic/tsconfig.json]
@@ -563,6 +565,7 @@ exports.m = mod;
       "/src/logic/index.ts",
       "/src/tests/index.ts"
     ]
-  }
+  },
+  "version": "FakeTSVersion"
 }
 

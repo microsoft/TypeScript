@@ -5612,6 +5612,7 @@ namespace ts {
     export interface BuildInfo {
         bundle?: BundleBuildInfo;
         program?: ProgramBuildInfo;
+        version: string;
     }
 
     export interface PrintHandlers {

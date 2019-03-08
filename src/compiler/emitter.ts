@@ -200,7 +200,7 @@ namespace ts {
                 emitSkipped = true;
                 return;
             }
-            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program }), /*writeByteOrderMark*/ false);
+            writeFile(host, emitterDiagnostics, buildInfoPath, getBuildInfoText({ bundle, program, version }), /*writeByteOrderMark*/ false);
         }
 
         function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle | undefined, jsFilePath: string | undefined, sourceMapFilePath: string | undefined) {

@@ -87,7 +87,8 @@ export declare const m: typeof mod;
       "/src/core/index.ts",
       "/src/logic/index.ts"
     ]
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
 //// [/src/tests/tsconfig.tsbuildinfo]
@@ -167,6 +168,7 @@ export declare const m: typeof mod;
       "/src/logic/index.ts",
       "/src/tests/index.ts"
     ]
-  }
+  },
+  "version": "FakeTSVersion"
 }
 
