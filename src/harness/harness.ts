@@ -816,7 +816,9 @@ namespace Harness {
             compilerOptions: ts.CompilerOptions | undefined,
             // Current directory is needed for rwcRunner to be able to use currentDirectory defined in json file
             currentDirectory: string | undefined,
-            symlinks?: vfs.FileSet
+            symlinks?: vfs.FileSet,
+            plugins?: ts.ParsedCommandLine["plugins"],
+            configFileName?: string
         ): compiler.CompilationResult {
             const options: ts.CompilerOptions & HarnessOptions = compilerOptions ? ts.cloneCompilerOptions(compilerOptions) : { noResolve: false };
             options.target = options.target || ts.ScriptTarget.ES3;
@@ -857,8 +859,12 @@ namespace Harness {
             if (symlinks) {
                 fs.apply(symlinks);
             }
-            const host = new fakes.CompilerHost(fs, options);
-            const result = compiler.compileFiles(host, programFileNames, options);
+
+            const sys = new fakes.System(fs, { useFakeLoader: !!(plugins && configFileName) });
+            const host = new fakes.CompilerHost(sys, options);
+            const result = plugins && configFileName
+                ? compiler.compileProject(host, { options, fileNames: programFileNames, errors: [], plugins }, configFileName)
+                : compiler.compileFiles(host, programFileNames, options);
             result.symlinks = symlinks;
             return result;
         }

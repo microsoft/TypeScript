@@ -4712,6 +4712,16 @@ namespace ts {
                 return false;
         }
     }
+
+    export function combineCustomTransformers(left: CustomTransformers | undefined, right: CustomTransformers | undefined): CustomTransformers | undefined {
+        if (!left) return right;
+        if (!right) return left;
+        return {
+            before: concatenate(left.before, right.before),
+            after: concatenate(left.after, right.after),
+            afterDeclarations: concatenate(left.afterDeclarations, right.afterDeclarations)
+        };
+    }
 }
 
 namespace ts {

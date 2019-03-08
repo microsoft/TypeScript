@@ -5,7 +5,6 @@ declare namespace ts.server {
         data: any;
     }
 
-    type RequireResult = { module: {}, error: undefined } | { module: undefined, error: { stack?: string, message?: string } };
     export interface ServerHost extends System {
         watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
         watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
@@ -15,6 +14,5 @@ declare namespace ts.server {
         clearImmediate(timeoutId: any): void;
         gc?(): void;
         trace?(s: string): void;
-        require?(initialPath: string, moduleName: string): RequireResult;
     }
 }

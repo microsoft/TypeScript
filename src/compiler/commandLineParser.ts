@@ -2022,7 +2022,8 @@ namespace ts {
         }
     }
 
-    function isNullOrUndefined(x: any): x is null | undefined {
+    /*@internal*/
+    export function isNullOrUndefined(x: any): x is null | undefined {
         // tslint:disable-next-line:no-null-keyword
         return x === undefined || x === null;
     }
@@ -2063,6 +2064,7 @@ namespace ts {
         setConfigFileInOptions(options, sourceFile);
         let projectReferences: ProjectReference[] | undefined;
         const { fileNames, wildcardDirectories, spec } = getFileNames();
+        const plugins = getPlugins();
         return {
             options,
             fileNames,
@@ -2072,7 +2074,8 @@ namespace ts {
             errors,
             wildcardDirectories,
             compileOnSave: !!raw.compileOnSave,
-            configFileSpecs: spec
+            configFileSpecs: spec,
+            plugins
         };
 
         function getFileNames(): ExpandResult {
@@ -2162,6 +2165,36 @@ namespace ts {
             }
 
             return result;
+        }
+
+        function getPlugins() {
+            let plugins: (string | [string, any?])[] | undefined;
+            if (hasProperty(raw, "plugins") && !isNullOrUndefined(raw.plugins)) {
+                if (isArray(raw.plugins)) {
+                    for (const plugin of raw.plugins) {
+                        if (isPlugin(plugin)) {
+                            if (!plugins) {
+                                plugins = [plugin];
+                            }
+                            else {
+                                plugins.push(plugin);
+                            }
+                        }
+                        else {
+                            // TODO(rbuckton): report diagnostic
+                        }
+                    }
+                }
+                else {
+                    // TODO(rbuckton): report diagnostic
+                }
+            }
+            return plugins;
+        }
+
+        function isPlugin(plugin: any): plugin is string | [string, any] {
+            return typeof plugin === "string" ||
+                isArray(plugin) && plugin.length >= 1 && plugin.length <= 2 && typeof plugin[0] === "string";
         }
 
         function createCompilerDiagnosticOnlyIfJson(message: DiagnosticMessage, arg0?: string, arg1?: string) {

@@ -2668,6 +2668,7 @@ declare namespace ts {
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
         compileOnSave?: boolean;
+        plugins?: (string | [string, any?])[];
     }
     export enum WatchDirectoryFlags {
         None = 0,
@@ -2677,11 +2678,81 @@ declare namespace ts {
         fileNames: string[];
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
+    /**
+     * A context object passed to a plugin during activation.
+     */
+    interface CompilerPluginContext {
+        /**
+         * The running instance of the TypeScript compiler.
+         */
+        readonly ts: typeof ts;
+        /**
+         * The current CompilerHost.
+         */
+        readonly compilerHost: CompilerHost;
+        /**
+         * Configuration options for the plugin.
+         */
+        readonly options: MapLike<any>;
+    }
+    /**
+     * An optional result that can be returned from the `CompilerPluginModule.activate` hook.
+     */
+    interface CompilerPluginActivationResult {
+        diagnostics?: ReadonlyArray<Diagnostic>;
+    }
+    /**
+     * An optional result that can be returned from the `CompilerPluginModule.preEmit` hook.
+     */
+    interface CompilerPluginPreEmitResult {
+        diagnostics?: ReadonlyArray<Diagnostic>;
+        customTransformers?: CustomTransformers;
+    }
+    /**
+     * Describes the supported shape of the main module for a compiler plugin.
+     */
+    interface CompilerPluginModule {
+        /**
+         * The `activate` hook is invoked when a plugin is activated for the first time within a `Program`.
+         * @param context The current plugin context.
+         */
+        activate?(context: CompilerPluginContext): CompilerPluginActivationResult | void;
+        /**
+         * The `preEmit` hook is invoked after type check has completed and immediately before emit.
+         * @param context The current plugin context.
+         * @param program The current `Program`.
+         * @param targetSourceFile The `SourceFile` that is about to be emitted, or `undefined` when emitting all outputs.
+         * @param cancellationToken A `CancellationToken` that can be used to abort an operation when running in the language service.
+         */
+        preEmit?(context: CompilerPluginContext, program: Program, targetSourceFile?: SourceFile, cancellationToken?: CancellationToken): CompilerPluginPreEmitResult | void;
+        /**
+         * The `deactivate` hook is invoked when a plugin should be deactivated so that it can free up any shared resources.
+         * @param context The current plugin context.
+         */
+        deactivate?(context: CompilerPluginContext): void;
+    }
+    interface CompilerPlugin {
+        /** The rsolved package name for the plugin. */
+        name: string;
+        /** The path to the plugin. */
+        path: string | undefined;
+        /** The originally-specified package name for the plugin */
+        originalName?: string;
+        /** Any configuration options provided to the plugin. */
+        options?: any;
+        /** The hooks supported by the plugin. */
+        activationEvents?: string[];
+        /** Plugin dependencies that should be loaded before this plugin. */
+        pluginDependencies?: string[];
+        /** The resolved module object for the plugin. */
+        plugin: CompilerPluginModule;
+    }
     export interface CreateProgramOptions {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
         projectReferences?: ReadonlyArray<ProjectReference>;
         host?: CompilerHost;
+        plugins?: ReadonlyArray<CompilerPlugin>;
         oldProgram?: Program;
         configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
     }
@@ -4279,6 +4350,8 @@ declare namespace ts {
 }
 declare namespace ts {
     function createPrinter(printerOptions?: PrinterOptions, handlers?: PrintHandlers): Printer;
+}
+declare namespace ts {
 }
 declare namespace ts {
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;

@@ -94,17 +94,73 @@ const localize = async () => {
 const lkgPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics));
 
 const buildTsc = () => buildProject("src/tsc");
+
 task("tsc", series(lkgPreBuild, buildTsc));
 task("tsc").description = "Builds the command-line compiler";
 
 const cleanTsc = () => cleanProject("src/tsc");
 cleanTasks.push(cleanTsc);
-task("clean-tsc", cleanTsc);
+task("clean-tsc", parallel(cleanTsc));
 task("clean-tsc").description = "Cleans outputs for the command-line compiler";
 
 const watchTsc = () => watchProject("src/tsc");
 task("watch-tsc", series(lkgPreBuild, parallel(watchLib, watchDiagnostics, watchTsc)));
 task("watch-tsc").description = "Watch for changes and rebuild the command-line compiler only.";
+
+const buildApi = (() => {
+    const flattenCompiler = async () => flatten("src/compiler/tsconfig.json", "built/local/api.tsconfig.json", {
+        compilerOptions: {
+            removeComments: false,
+            stripInternal: true,
+            emitDeclarationOnly: true,
+            declaration: true,
+            declarationMap: false,
+            outFile: "api.out.js"
+        }
+    });
+
+    const buildApiOut = () => buildProject("built/local/api.tsconfig.json");
+
+    const generateApiDts = () => src("built/local/api.out.d.ts", { base: "built/local" })
+        .pipe(newer("built/local/api.d.ts"))
+        .pipe(sourcemaps.init({ loadMaps: true }))
+        .pipe(transform(content => content.replace(/^(\s*)(export )?const enum (\S+) {(\s*)$/gm, "$1$2enum $3 {$4")))
+        .pipe(transform(content => `${content}\nexport = typeof ts;\n`))
+        .pipe(prependFile(copyright))
+        .pipe(rename("api.d.ts"))
+        .pipe(dest("built/local"));
+
+    const generateApiJs = () => src(copyright)
+        .pipe(newer("built/local/api.js"))
+        .pipe(transform(content => `${content}// NOTE: 'api' only exports types used by plugins. You can access the actual api from the context\n// provided to a plugin hook.\nmodule.exports = {};`))
+        .pipe(rename("api.js"))
+        .pipe(dest("built/local"));
+
+    return series(flattenCompiler, buildApiOut, generateApiDts, generateApiJs);
+})();
+task("api", series(lkgPreBuild, buildApi));
+task("api").description = "Build the compiler plugin API";
+
+const cleanApi = async () => {
+    if (fs.existsSync("built/local/api.tsconfig.json")) {
+        await cleanProject("built/local/api.tsconfig.json");
+    }
+    await del([
+        "built/local/api.tsconfig.json",
+        "built/local/api.out.js",
+        "built/local/api.out.d.ts",
+        "built/local/tsc.d.ts"
+    ]);
+}
+cleanTasks.push(cleanApi);
+task("clean-api", cleanApi);
+task("clean-api").description = "Clean the outputs of the compiler plugin API.";
+
+const watchApi = () => watch([
+    "src/compiler/tsconfig.json",
+    "src/compiler/**/*.ts",
+], series(lkgPreBuild, buildApi));
+task("watch-api", series(lkgPreBuild, parallel(watchDiagnostics, watchApi)));
 
 // Pre-build steps when targeting the built/local compiler.
 const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagnostics, buildTsc));
@@ -377,13 +433,13 @@ task("other-outputs").description = "Builds miscelaneous scripts and documents d
 
 const buildFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("build")); };
 const buildFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("build")); };
-task("local", series(buildFoldStart, preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs), buildFoldEnd));
+task("local", series(buildFoldStart, preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs, buildApi), buildFoldEnd));
 task("local").description = "Builds the full compiler and services";
 task("local").flags = {
     "   --built": "Compile using the built version of the compiler."
 };
 
-task("watch-local", series(preBuild, parallel(watchLib, watchDiagnostics, watchTsc, watchServices, watchServer, watchLssl)));
+task("watch-local", series(preBuild, parallel(watchLib, watchDiagnostics, watchTsc, watchServices, watchServer, watchLssl, watchApi)));
 task("watch-local").description = "Watches for changes to projects in src/ (but does not execute tests).";
 task("watch-local").flags = {
     "   --built": "Compile using the built version of the compiler."

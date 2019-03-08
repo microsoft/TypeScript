@@ -1,0 +1,5 @@
+=== tests/cases/conformance/plugins/main.ts ===
+const a = undefined;
+>a : Symbol(a, Decl(main.ts, 0, 5))
+>undefined : Symbol(undefined)
+

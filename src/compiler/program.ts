@@ -725,6 +725,7 @@ namespace ts {
         const ambientModuleNameToUnmodifiedFileName = createMap<string>();
         // Todo:: Use this to report why file was included in --extendedDiagnostics
         let refFileMap: MultiMap<ts.RefFile> | undefined;
+        const pluginHost = createProgramOptions.plugins && createPluginHost(createProgramOptions.plugins);
 
         const cachedSemanticDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
@@ -910,6 +911,8 @@ namespace ts {
                     host.onReleaseOldSourceFile!(resolvedProjectReference.sourceFile, oldProgram!.getCompilerOptions(), /*hasSourceFileByPath*/ false);
                 }
             });
+
+            oldProgram.dispose();
         }
 
         // unconditionally set oldProgram to undefined to prevent it from being captured in closure
@@ -958,7 +961,8 @@ namespace ts {
             getResolvedProjectReferenceToRedirect,
             getResolvedProjectReferenceByPath,
             forEachResolvedProjectReference,
-            emitBuildInfo
+            emitBuildInfo,
+            dispose
         };
 
         verifyCompilerOptions();
@@ -966,6 +970,12 @@ namespace ts {
         performance.measure("Program", "beforeProgram", "afterProgram");
 
         return program;
+
+        function dispose() {
+            if (pluginHost) {
+                pluginHost.deactivate(host);
+            }
+        }
 
         function compareDefaultLibFiles(a: SourceFile, b: SourceFile) {
             return compareValues(getDefaultLibFilePriority(a), getDefaultLibFilePriority(b));
@@ -1544,11 +1554,18 @@ namespace ts {
         function emitWorker(program: Program, sourceFile: SourceFile | undefined, writeFileCallback: WriteFileCallback | undefined, cancellationToken: CancellationToken | undefined, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult {
             let declarationDiagnostics: ReadonlyArray<Diagnostic> = [];
 
-            if (!emitOnlyDtsFiles) {
-                if (options.noEmit) {
-                    return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
-                }
+            if (!emitOnlyDtsFiles && options.noEmit) {
+                return { diagnostics: declarationDiagnostics, sourceMaps: undefined, emittedFiles: undefined, emitSkipped: true };
+            }
 
+            let pluginDiagnostics: ReadonlyArray<Diagnostic> | undefined;
+            if (pluginHost) {
+                const result = pluginHost.preEmit(host, program, sourceFile, cancellationToken);
+                pluginDiagnostics = result.diagnostics;
+                customTransformers = combineCustomTransformers(customTransformers, result.customTransformers);
+            }
+
+            if (!emitOnlyDtsFiles) {
                 // If the noEmitOnError flag is set, then check if we have any errors so far.  If so,
                 // immediately bail out.  Note that we pass 'undefined' for 'sourceFile' so that we
                 // get any preEmit diagnostics, not just the ones
@@ -1557,7 +1574,8 @@ namespace ts {
                         ...program.getOptionsDiagnostics(cancellationToken),
                         ...program.getSyntacticDiagnostics(sourceFile, cancellationToken),
                         ...program.getGlobalDiagnostics(cancellationToken),
-                        ...program.getSemanticDiagnostics(sourceFile, cancellationToken)
+                        ...program.getSemanticDiagnostics(sourceFile, cancellationToken),
+                        ...(pluginDiagnostics || [])
                     ];
 
                     if (diagnostics.length === 0 && getEmitDeclarations(program.getCompilerOptions())) {

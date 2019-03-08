@@ -8,6 +8,7 @@ namespace fakes {
         executingFilePath?: string;
         newLine?: "\r\n" | "\n";
         env?: Record<string, string>;
+        useFakeLoader?: boolean;
     }
 
     /**
@@ -20,16 +21,29 @@ namespace fakes {
         public readonly newLine: string;
         public readonly useCaseSensitiveFileNames: boolean;
         public exitCode: number | undefined;
+        public require?: ts.System["require"];
 
         private readonly _executingFilePath: string | undefined;
         private readonly _env: Record<string, string> | undefined;
 
-        constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\r\n", env }: SystemOptions = {}) {
+        constructor(vfs: vfs.FileSystem, { executingFilePath, newLine = "\r\n", env, useFakeLoader }: SystemOptions = {}) {
             this.vfs = vfs.isReadonly ? vfs.shadow() : vfs;
             this.useCaseSensitiveFileNames = !this.vfs.ignoreCase;
             this.newLine = newLine;
             this._executingFilePath = executingFilePath;
             this._env = env;
+            if (useFakeLoader) {
+                const loader = new ModuleLoader(this.vfs);
+                this.require = (baseDir: string, moduleName: string): ts.RequireResult => {
+                    try {
+                        const modulePath = ts.resolveJSModule(moduleName, baseDir, this);
+                        return { module: loader.require(modulePath), modulePath, error: undefined };
+                    }
+                    catch (error) {
+                        return { module: undefined, modulePath: undefined, error };
+                    }
+                };
+            }
         }
 
         public write(message: string) {
@@ -372,6 +386,55 @@ namespace fakes {
             }
 
             return parsed;
+        }
+    }
+
+    type ModuleWrapper = (require: Function, module: any, exports: any, dirname: string, filename: string) => void;
+
+    interface ModuleObject {
+        exports: any;
+    }
+
+    class ModuleLoader {
+        readonly vfs: vfs.FileSystem;
+        private _modules = ts.createMap<ModuleObject>();
+
+        constructor(vfs: vfs.FileSystem) {
+            this.vfs = vfs;
+        }
+
+        require(modulePath: string) {
+            // this is a very basic loader that is only intended to load a single file for now.
+            let module = this._modules.get(modulePath);
+            if (!module) {
+                module = { exports: {} };
+                this._modules.set(modulePath, module);
+                const moduleContent = this.vfs.readFileSync(modulePath, "utf8");
+                const linkedModule = this.link(modulePath, moduleContent);
+                linkedModule(ts.notImplemented, module, module.exports, ts.getDirectoryPath(modulePath), modulePath);
+            }
+            return module.exports;
+        }
+
+        private link(modulePath: string, moduleContent: string) {
+            let vm: typeof import("vm") | undefined;
+            try {
+                vm = require("vm");
+            }
+            catch {
+                // ignore
+            }
+            return vm ? this.linkUsingNodeVM(vm, modulePath, moduleContent) :
+                this.linkUsingFunction(modulePath, moduleContent);
+        }
+
+        private linkUsingNodeVM(vm: typeof import("vm"), modulePath: string, moduleContent: string): ModuleWrapper {
+            return vm.runInThisContext(`(function (require, module, exports, __dirname, __filename) {${moduleContent}\n})`, { filename: modulePath });
+        }
+
+        private linkUsingFunction(modulePath: string, moduleContent: string): ModuleWrapper {
+            const indirectEval = eval;
+            return indirectEval(`(function (require, module, exports, __dirname, __filename) {${moduleContent}\n//# sourceURL=${modulePath}\n})`);
         }
     }
 

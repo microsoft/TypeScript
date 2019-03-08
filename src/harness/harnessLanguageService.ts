@@ -789,7 +789,7 @@ namespace Harness.LanguageService {
             return mockHash(s);
         }
 
-        require(_initialDir: string, _moduleName: string): ts.server.RequireResult {
+        require(_initialDir: string, _moduleName: string): ts.RequireResult {
             switch (_moduleName) {
                 // Adds to the Quick Info a fixed string and a string from the config file
                 // and replaces the first display part

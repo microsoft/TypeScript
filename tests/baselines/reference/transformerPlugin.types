@@ -1,0 +1,5 @@
+=== tests/cases/conformance/plugins/main.ts ===
+const a = undefined;
+>a : any
+>undefined : undefined
+

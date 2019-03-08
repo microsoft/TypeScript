@@ -3180,6 +3180,22 @@
         "category": "Error",
         "code": 5075
     },
+    "'package.json' field '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5076
+    },
+    "Plugin '{0}' could not be found: {1}.": {
+        "category": "Error",
+        "code": 5077
+    },
+    "Plugin dependencies for '{0}' could not resolved.": {
+        "category": "Error",
+        "code": 5078
+    },
+    "Plugin '{0}' failed while executing the '{1}' hook: {2}": {
+        "category": "Error",
+        "code": 5079
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",

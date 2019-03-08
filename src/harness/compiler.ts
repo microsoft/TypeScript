@@ -238,11 +238,29 @@ namespace compiler {
                     return new CompilationResult(host, compilerOptions, /*program*/ undefined, /*result*/ undefined, project.errors);
                 }
                 if (project.config) {
-                    rootFiles = project.config.fileNames;
-                    compilerOptions = project.config.options;
+                    return compileProject(host, project.config, project.file);
                 }
             }
             delete compilerOptions.project;
+        }
+
+        return compileProject(host, { options: compilerOptions, fileNames: rootFiles || [], errors: [], });
+    }
+
+    export function compileProject(host: fakes.CompilerHost, project: ts.ParsedCommandLine, configFileName?: string) {
+        const compilerOptions = { ...project.options };
+
+        let plugins: ts.CreateProgramOptions["plugins"];
+        if (project.plugins) {
+            if (!configFileName) throw new Error("Cannot load plugins without a config file.");
+            if (!host.sys.require) throw new Error("Plugins cannot be loaded if provided System does not support `require()`.");
+
+            const result = ts.getPlugins(host.sys as ts.ModuleLoaderHost, ts.getDirectoryPath(configFileName), project.plugins);
+            if (ts.some(result.diagnostics)) {
+                return new CompilationResult(host, compilerOptions, /*program*/ undefined, /*result*/ undefined, result.diagnostics);
+            }
+
+            plugins = result.plugins;
         }
 
         // establish defaults (aligns with old harness)
@@ -251,7 +269,12 @@ namespace compiler {
         if (compilerOptions.skipDefaultLibCheck === undefined) compilerOptions.skipDefaultLibCheck = true;
         if (compilerOptions.noErrorTruncation === undefined) compilerOptions.noErrorTruncation = true;
 
-        const program = ts.createProgram(rootFiles || [], compilerOptions, host);
+        const program = ts.createProgram({
+            rootNames: project.fileNames || [],
+            options: compilerOptions,
+            host,
+            plugins
+        });
         const emitResult = program.emit();
         const errors = ts.getPreEmitDiagnostics(program);
         return new CompilationResult(host, compilerOptions, program, emitResult, errors);

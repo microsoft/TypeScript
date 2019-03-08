@@ -903,10 +903,11 @@ namespace ts.server {
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
         try {
-            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
+            const modulePath = resolveJSModule(moduleName, initialDir, sys);
+            return { module: require(modulePath), modulePath, error: undefined };
         }
         catch (error) {
-            return { module: undefined, error };
+            return { module: undefined, modulePath: undefined, error };
         }
     };
 

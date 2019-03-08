@@ -162,13 +162,17 @@ class CompilerTest {
         const units = testCaseContent.testUnitData;
         this.harnessSettings = testCaseContent.settings;
         let tsConfigOptions: ts.CompilerOptions | undefined;
+        let plugins: ts.ParsedCommandLine["plugins"];
+        let tsConfigFileName: string | undefined;
         this.tsConfigFiles = [];
         if (testCaseContent.tsConfig) {
             assert.equal(testCaseContent.tsConfig.fileNames.length, 0, `list of files in tsconfig is not currently supported`);
             assert.equal(testCaseContent.tsConfig.raw.exclude, undefined, `exclude in tsconfig is not currently supported`);
 
             tsConfigOptions = ts.cloneCompilerOptions(testCaseContent.tsConfig.options);
-            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, ts.combinePaths(rootDir, tsConfigOptions.configFilePath!)));
+            plugins = testCaseContent.tsConfig.plugins;
+            tsConfigFileName = ts.combinePaths(rootDir, tsConfigOptions.configFilePath!);
+            this.tsConfigFiles.push(this.createHarnessTestFile(testCaseContent.tsConfigFileUnitData!, rootDir, tsConfigFileName));
         }
         else {
             const baseUrl = this.harnessSettings.baseUrl;
@@ -210,7 +214,9 @@ class CompilerTest {
             this.harnessSettings,
             /*options*/ tsConfigOptions,
             /*currentDirectory*/ this.harnessSettings.currentDirectory,
-            testCaseContent.symlinks
+            testCaseContent.symlinks,
+            plugins,
+            tsConfigFileName
         );
 
         this.options = this.result.options;
