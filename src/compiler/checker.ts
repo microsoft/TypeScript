@@ -14500,6 +14500,7 @@ namespace ts {
                             if (inference.priority === undefined || priority < inference.priority) {
                                 inference.candidates = undefined;
                                 inference.contraCandidates = undefined;
+                                inference.topLevel = true;
                                 inference.priority = priority;
                             }
                             if (priority === inference.priority) {
