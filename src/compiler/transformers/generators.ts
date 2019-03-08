@@ -316,7 +316,7 @@ namespace ts {
             else if (inGeneratorFunctionBody) {
                 return visitJavaScriptInGeneratorFunctionBody(node);
             }
-            else if (transformFlags & TransformFlags.Generator) {
+            else if (isFunctionLikeDeclaration(node) && node.asteriskToken) {
                 return visitGenerator(node);
             }
             else if (transformFlags & TransformFlags.ContainsGenerator) {
@@ -587,7 +587,7 @@ namespace ts {
             transformAndEmitStatements(body.statements, statementOffset);
 
             const buildResult = build();
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
             statements.push(createReturn(buildResult));
 
             // Restore previous generator state

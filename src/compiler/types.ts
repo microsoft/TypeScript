@@ -5065,38 +5065,29 @@ namespace ts {
 
         // Facts
         // - Flags used to indicate that a node or subtree contains syntax that requires transformation.
-        TypeScript = 1 << 0,
-        ContainsTypeScript = 1 << 1,
-        ContainsJsx = 1 << 2,
-        ContainsESNext = 1 << 3,
-        ContainsES2017 = 1 << 4,
-        ContainsES2016 = 1 << 5,
-        ES2015 = 1 << 6,
+        ContainsTypeScript = 1 << 0,
+        ContainsJsx = 1 << 1,
+        ContainsESNext = 1 << 2,
+        ContainsES2019 = 1 << 3,
+        ContainsES2018 = 1 << 4,
+        ContainsES2017 = 1 << 5,
+        ContainsES2016 = 1 << 6,
         ContainsES2015 = 1 << 7,
-        Generator = 1 << 8,
-        ContainsGenerator = 1 << 9,
-        DestructuringAssignment = 1 << 10,
-        ContainsDestructuringAssignment = 1 << 11,
+        ContainsGenerator = 1 << 8,
+        ContainsDestructuringAssignment = 1 << 9,
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsTypeScriptClassSyntax = 1 << 12,                // Decorators, Property Initializers, Parameter Property Initializers
-        ContainsLexicalThis = 1 << 13,
-        ContainsCapturedLexicalThis = 1 << 14,
-        ContainsLexicalThisInComputedPropertyName = 1 << 15,
-        ContainsDefaultValueAssignments = 1 << 16,
-        ContainsRestOrSpread = 1 << 17,
-        ContainsObjectRestOrSpread = 1 << 18,
-        ContainsComputedPropertyName = 1 << 19,
-        ContainsBlockScopedBinding = 1 << 20,
-        ContainsBindingPattern = 1 << 21,
-        ContainsYield = 1 << 22,
-        ContainsHoistedDeclarationOrCompletion = 1 << 23,
-        ContainsDynamicImport = 1 << 24,
-        Super = 1 << 25,
-        ContainsSuper = 1 << 26,
-        ContainsES2018 = 1 << 27,
-        ContainsES2019 = 1 << 28,
+        ContainsTypeScriptClassSyntax = 1 << 10, // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 11,
+        ContainsRestOrSpread = 1 << 12,
+        ContainsObjectRestOrSpread = 1 << 13,
+        ContainsComputedPropertyName = 1 << 14,
+        ContainsBlockScopedBinding = 1 << 15,
+        ContainsBindingPattern = 1 << 16,
+        ContainsYield = 1 << 17,
+        ContainsHoistedDeclarationOrCompletion = 1 << 18,
+        ContainsDynamicImport = 1 << 19,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -5105,40 +5096,44 @@ namespace ts {
 
         // Assertions
         // - Bitmasks that are used to assert facts about the syntax of a node and its subtree.
-        AssertTypeScript = TypeScript | ContainsTypeScript,
+        AssertTypeScript = ContainsTypeScript,
         AssertJsx = ContainsJsx,
         AssertESNext = ContainsESNext,
         AssertES2019 = ContainsES2019,
         AssertES2018 = ContainsES2018,
         AssertES2017 = ContainsES2017,
         AssertES2016 = ContainsES2016,
-        AssertES2015 = ES2015 | ContainsES2015,
-        AssertGenerator = Generator | ContainsGenerator,
-        AssertDestructuringAssignment = DestructuringAssignment | ContainsDestructuringAssignment,
+        AssertES2015 = ContainsES2015,
+        AssertGenerator = ContainsGenerator,
+        AssertDestructuringAssignment = ContainsDestructuringAssignment,
 
         // Scope Exclusions
         // - Bitmasks that exclude flags from propagating out of a specific context
         //   into the subtree flags of their container.
-        OuterExpressionExcludes = TypeScript | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
-        PropertyAccessExcludes = OuterExpressionExcludes | Super,
-        NodeExcludes = PropertyAccessExcludes | ContainsSuper,
-        ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
-        ClassExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
-        ModuleExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
+        OuterExpressionExcludes = HasComputedFlags,
+        PropertyAccessExcludes = OuterExpressionExcludes,
+        NodeExcludes = PropertyAccessExcludes,
+        ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ConstructorExcludes = NodeExcludes | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        PropertyExcludes = NodeExcludes | ContainsLexicalThis,
+        ClassExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsComputedPropertyName,
+        ModuleExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
-        ObjectLiteralExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectRestOrSpread,
+        ObjectLiteralExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsComputedPropertyName | ContainsObjectRestOrSpread,
         ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsRestOrSpread,
         VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectRestOrSpread,
         ParameterExcludes = NodeExcludes,
         CatchClauseExcludes = NodeExcludes | ContainsObjectRestOrSpread,
         BindingPatternExcludes = NodeExcludes | ContainsRestOrSpread,
 
+        // Propagating flags
+        // - Bitmasks for flags that should propagate from a child
+        PropertyNamePropagatingFlags = ContainsLexicalThis,
+
         // Masks
         // - Additional bitmasks
-        ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
     }
 
     export interface SourceMapRange extends TextRange {
