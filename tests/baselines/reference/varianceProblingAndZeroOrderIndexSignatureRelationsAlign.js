@@ -50,7 +50,7 @@ interface Any extends Type<any, any, any> {}
 
 type TypeOf<C extends Any> = C["_A"];
 
-type ToB<S extends any> = { [k in keyof S]: TypeOf<S[k]> };
+type ToB<S extends {[_ in string | number | symbol]: Any}> = { [k in keyof S]: TypeOf<S[k]> };
 type ToA<S> = { [k in keyof S]: Type<S[k]> };
 
 type NeededInfo<MyNamespaceSchema = {}> = {
