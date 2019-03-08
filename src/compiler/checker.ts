@@ -527,6 +527,7 @@ namespace ts {
         let deferredGlobalExcludeSymbol: Symbol;
         let deferredGlobalPickSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
+        let deferredGlobalCondSymbol: Symbol;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -9086,6 +9087,10 @@ namespace ts {
             return deferredGlobalPickSymbol || (deferredGlobalPickSymbol = getGlobalSymbol("Pick" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
+        function getGlobalCondSymbol(): Symbol {
+            return deferredGlobalCondSymbol || (deferredGlobalCondSymbol = getGlobalSymbol("Cond" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        }
+
         function getGlobalBigIntType(reportErrors: boolean) {
             return deferredGlobalBigIntType || (deferredGlobalBigIntType = getGlobalType("BigInt" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
@@ -16168,6 +16173,7 @@ namespace ts {
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
                             return declaredType;
                         }
+                        break;
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
@@ -16258,7 +16264,7 @@ namespace ts {
                         return instantiateType(cond, narrowedMapper);
                     }
                     if (targetType !== type) {
-                        return type;
+                        return declaredType;
                     }
                 }
                 if (operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken) {
@@ -23251,10 +23257,16 @@ namespace ts {
             const type1 = checkExpression(node.whenTrue, checkMode);
             const type2 = checkExpression(node.whenFalse, checkMode);
             if (isBinaryExpression(node.condition) && node.condition.left.kind === SyntaxKind.TypeOfExpression && isStringLiteralLike(node.condition.right)) {
-                const typeofTest = getTypeOfExpression((<TypeOfExpression>node.condition.left).expression);
-                if((typeofTest.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>typeofTest)) {
-//                    const typeNode = createConditionalTypeNode(typeofTest, extendsTypeNode, type1, type2);
-//                    return getTypeFromTypeNode(typeNode);
+                const extendsType = typeofTypesByName.get(node.condition.right.text);
+                if (extendsType !== undefined) {
+                    const typeofTest = getTypeOfExpression((<TypeOfExpression>node.condition.left).expression);
+                    if((typeofTest.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>typeofTest)) {
+                        const condTypeAlias = getGlobalCondSymbol();
+                        if (!condTypeAlias) {
+                            return errorType;
+                        }
+                        return getTypeAliasInstantiation(condTypeAlias, [typeofTest, extendsType, type1, type2]);
+                    }
                 }
             }
             return getUnionType([type1, type2], UnionReduction.Subtype);
