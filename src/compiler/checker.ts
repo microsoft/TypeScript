@@ -527,7 +527,7 @@ namespace ts {
         let deferredGlobalExcludeSymbol: Symbol;
         let deferredGlobalPickSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
-        let deferredGlobalCondSymbol: Symbol;
+        let deferredGlobalIfTypeSymbol: Symbol;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -9087,8 +9087,8 @@ namespace ts {
             return deferredGlobalPickSymbol || (deferredGlobalPickSymbol = getGlobalSymbol("Pick" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
-        function getGlobalCondSymbol(): Symbol {
-            return deferredGlobalCondSymbol || (deferredGlobalCondSymbol = getGlobalSymbol("Cond" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        function getGlobalIfTypeSymbol(): Symbol {
+            return deferredGlobalIfTypeSymbol || (deferredGlobalIfTypeSymbol = getGlobalSymbol("If" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
         function getGlobalBigIntType(reportErrors: boolean) {
@@ -23256,11 +23256,11 @@ namespace ts {
                 if (extendsType !== undefined) {
                     const typeofTest = getTypeOfExpression((<TypeOfExpression>node.condition.left).expression);
                     if((typeofTest.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>typeofTest)) {
-                        const condTypeAlias = getGlobalCondSymbol();
-                        if (!condTypeAlias) {
+                        const ifTypeAlias = getGlobalIfTypeSymbol();
+                        if (!ifTypeAlias) {
                             return errorType;
                         }
-                        return getTypeAliasInstantiation(condTypeAlias, [typeofTest, extendsType, type1, type2]);
+                        return getTypeAliasInstantiation(ifTypeAlias, [typeofTest, extendsType, type1, type2]);
                     }
                 }
             }

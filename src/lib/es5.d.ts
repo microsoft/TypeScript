@@ -1426,6 +1426,8 @@ type Pick<T, K extends keyof T> = {
     [P in K]: T[P];
 };
 
+type If<C, E, T, F> = [C] extends [E] ? T : F;
+
 /**
  * Construct a type with a set of properties K of type T
  */
