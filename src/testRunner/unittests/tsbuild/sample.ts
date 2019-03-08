@@ -245,11 +245,13 @@ namespace ts {
                 changeCompilerVersion(host);
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(
-                    // TODO:: This should build all instead
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
-                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/tests/tsconfig.json", "src/tests/index.ts", "src/tests/index.js"]
+                    [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, "src/core/tsconfig.json", fakes.version, version],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, "src/logic/tsconfig.json", fakes.version, version],
+                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, "src/tests/tsconfig.json", fakes.version, version],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
                 );
             });
         });
@@ -508,6 +510,8 @@ class someClass { }`),
 
                             // build info
                             "/src/core/tsconfig.tsbuildinfo",
+                            "/src/logic/tsconfig.tsbuildinfo",
+                            "/src/tests/tsconfig.tsbuildinfo",
                         ],
                     )
                 },
@@ -571,6 +575,7 @@ class someClass { }`),
                             "/src/logic/decls/index.d.ts",
 
                             // build info
+                            "/src/core/tsconfig.tsbuildinfo",
                             "/src/logic/tsconfig.tsbuildinfo",
                             "/src/tests/tsconfig.tsbuildinfo",
 

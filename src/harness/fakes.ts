@@ -396,7 +396,7 @@ namespace fakes {
         readFile(path: string) {
             const value = super.readFile(path);
             if (!value || !ts.isBuildInfoFile(path)) return value;
-            const buildInfo = JSON.parse(value) as ts.BuildInfo;
+            const buildInfo = ts.getBuildInfo(value);
             if (buildInfo.program) {
                 // Fix lib signatures
                 for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
@@ -417,7 +417,7 @@ namespace fakes {
 
         public writeFile(fileName: string, content: string, writeByteOrderMark: boolean) {
             if (!ts.isBuildInfoFile(fileName)) return super.writeFile(fileName, content, writeByteOrderMark);
-            const buildInfo = JSON.parse(content) as ts.BuildInfo;
+            const buildInfo = ts.getBuildInfo(content);
             if (buildInfo.program) {
                 // Fix lib signatures
                 for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {

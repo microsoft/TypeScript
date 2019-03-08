@@ -2891,10 +2891,10 @@ namespace ts {
                 return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
             };
             let buildInfo: BuildInfo | false;
-            const getBuildInfo = (getText: () => string | undefined) => {
+            const getAndCacheBuildInfo = (getText: () => string | undefined) => {
                 if (buildInfo === undefined) {
                     const result = getText();
-                    buildInfo = result !== undefined ? JSON.parse(result) as BuildInfo : false;
+                    buildInfo = result !== undefined ? getBuildInfo(result) : false;
                 }
                 return buildInfo || undefined;
             };
@@ -2908,7 +2908,7 @@ namespace ts {
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
                 declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
                 declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
-                buildInfo: { get() { return getBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
+                buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
             });
         }
         else {

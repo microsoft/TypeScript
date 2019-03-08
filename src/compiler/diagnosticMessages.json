@@ -4044,6 +4044,10 @@
         "category": "Message",
         "code": 6380
     },
+    "Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}'": {
+        "category": "Message",
+        "code": 6381
+    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",

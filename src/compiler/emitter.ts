@@ -467,6 +467,11 @@ namespace ts {
     }
 
     /*@internal*/
+    export function getBuildInfo(buildInfoText: string) {
+        return JSON.parse(buildInfoText) as BuildInfo;
+    }
+
+    /*@internal*/
     export const notImplementedResolver: EmitResolver = {
         hasGlobalName: notImplemented,
         getReferencedExportContainer: notImplemented,
@@ -560,7 +565,7 @@ namespace ts {
         // error if no source map or for now if inline sourcemap
         if ((declarationMapPath && !declarationMapText) || config.options.inlineSourceMap) return declarationMapPath || "inline sourcemap decoding";
 
-        const buildInfo = JSON.parse(buildInfoText) as BuildInfo;
+        const buildInfo = getBuildInfo(buildInfoText);
         if (!buildInfo.bundle || !buildInfo.bundle.js || (declarationText && !buildInfo.bundle.dts)) return buildInfoPath!;
         const ownPrependInput = createInputFiles(
             jsFileText,
@@ -599,7 +604,7 @@ namespace ts {
                         if (sourceMapText === text) return;
                         break;
                     case buildInfoPath:
-                        const newBuildInfo = JSON.parse(text) as BuildInfo;
+                        const newBuildInfo = getBuildInfo(text);
                         newBuildInfo.program = buildInfo.program;
                         // Update sourceFileInfo
                         const { js, dts, sourceFiles } = buildInfo.bundle!;

@@ -79,6 +79,7 @@ namespace ts {
         UpstreamOutOfDate,
         UpstreamBlocked,
         ComputingUpstream,
+        TsVersionOutputOfDate,
 
         /**
          * Projects with no outputs (i.e. "solution" files)
@@ -96,6 +97,7 @@ namespace ts {
         | Status.UpstreamOutOfDate
         | Status.UpstreamBlocked
         | Status.ComputingUpstream
+        | Status.TsVersionOutOfDate
         | Status.ContainerOnly;
 
     export namespace Status {
@@ -179,6 +181,11 @@ namespace ts {
          */
         export interface ComputingUpstream {
             type: UpToDateStatusType.ComputingUpstream;
+        }
+
+        export interface TsVersionOutOfDate {
+            type: UpToDateStatusType.TsVersionOutputOfDate;
+            version: string;
         }
 
         /**
@@ -454,6 +461,8 @@ namespace ts {
             return result;
         };
 
+        const buildInfoChecked = createFileMap<true>(toPath);
+
         // Watch state
         const builderPrograms = createFileMap<T>(toPath);
         const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
@@ -499,6 +508,7 @@ namespace ts {
             projectStatus.clear();
             missingRoots.clear();
             globalDependencyGraph = undefined;
+            buildInfoChecked.clear();
 
             diagnostics.clear();
             projectPendingBuild.clear();
@@ -842,6 +852,21 @@ namespace ts {
                     outOfDateOutputFileName: oldestOutputFileName,
                     newerInputFileName: newestInputFileName
                 };
+            }
+
+            if (!buildInfoChecked.hasKey(project.options.configFilePath as ResolvedConfigFileName)) {
+                buildInfoChecked.setValue(project.options.configFilePath as ResolvedConfigFileName, true);
+                const buildInfoPath = getOutputPathForBuildInfo(project.options);
+                if (buildInfoPath) {
+                    const value = readFileWithCache(buildInfoPath);
+                    const buildInfo = value && getBuildInfo(value);
+                    if (buildInfo && buildInfo.version !== version) {
+                        return {
+                            type: UpToDateStatusType.TsVersionOutputOfDate,
+                            version: buildInfo.version
+                        };
+                    }
+                }
             }
 
             if (usesPrepend && pseudoUpToDate) {
@@ -1220,7 +1245,8 @@ namespace ts {
             if (!buildInfoPath) return undefined;
             const content = readFileWithCache(buildInfoPath);
             if (!content) return undefined;
-            const buildInfo = JSON.parse(content) as BuildInfo;
+            const buildInfo = getBuildInfo(content);
+            if (buildInfo.version !== version) return undefined;
             return buildInfo.program && createBuildProgramUsingProgramBuildInfo(buildInfo.program) as any as T;
         }
 
@@ -1545,6 +1571,11 @@ namespace ts {
                 return formatMessage(Diagnostics.Failed_to_parse_file_0_Colon_1,
                     relName(configFileName),
                     status.reason);
+            case UpToDateStatusType.TsVersionOutputOfDate:
+                return formatMessage(Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2,
+                    relName(configFileName),
+                    status.version,
+                    version);
             case UpToDateStatusType.ContainerOnly:
                 // Don't report status on "solution" projects
             case UpToDateStatusType.ComputingUpstream:

@@ -8,7 +8,7 @@ namespace ts {
         host.readFile = path => {
             const value = originalReadFile.call(host, path);
             if (!value || !isBuildInfoFile(path)) return value;
-            const buildInfo = JSON.parse(value) as BuildInfo;
+            const buildInfo = getBuildInfo(value);
             buildInfo.version = fakes.version;
             return getBuildInfoText(buildInfo);
         };
@@ -101,7 +101,7 @@ namespace ts {
         for (const [file, jsFile, dtsFile] of buildInfoFileNames) {
             if (!fs.existsSync(file)) continue;
 
-            const buildInfo = JSON.parse(fs.readFileSync(file, "utf8")) as BuildInfo;
+            const buildInfo = getBuildInfo(fs.readFileSync(file, "utf8"));
             const bundle = buildInfo.bundle;
             if (!bundle || (!length(bundle.js && bundle.js.sections) && !length(bundle.dts && bundle.dts.sections))) continue;
 
