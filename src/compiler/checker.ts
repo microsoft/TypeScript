@@ -231,6 +231,7 @@ namespace ts {
                 getResolvedSignatureWorker(node, candidatesOutArray, agumentCount, CheckMode.Normal),
             getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, agumentCount) =>
                 getResolvedSignatureWorker(node, candidatesOutArray, agumentCount, CheckMode.IsForSignatureHelp),
+            getExpandedParameters,
             getConstantValue: nodeIn => {
                 const node = getParseTreeNode(nodeIn, canHaveConstantValue);
                 return node ? getConstantValue(node) : undefined;
