@@ -8593,7 +8593,7 @@ namespace ts {
         }
 
         function getUniformityConstraintFromTypeParameter(typeParameter: TypeParameter): UniformityFlags {
-            if(typeParameter.uniformityConstraint === undefined) {
+            if (typeParameter.uniformityConstraint === undefined) {
                 typeParameter.uniformityConstraint = getUniformityConstraintDeclaration(typeParameter);
             }
             return typeParameter.uniformityConstraint;
@@ -15064,7 +15064,7 @@ namespace ts {
                 const uniformityConstraint = getUniformityConstraintFromTypeParameter(inference.typeParameter);
                 if (uniformityConstraint) {
                     if (!isUniformType(inferredType)) {
-                        error(undefined, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(inferredType), typeToString(inference.typeParameter));
+                        error(/*location*/ undefined, Diagnostics.Type_0_does_not_satisfy_uniformity_constraint_of_type_1_Values_of_type_0_do_not_behave_identically_under_typeof, typeToString(inferredType), typeToString(inference.typeParameter));
                     }
                 }
                 if (constraint) {
@@ -16338,7 +16338,7 @@ namespace ts {
                     if (containsMatchingReference(reference, target)) {
                         return declaredType;
                     }
-                    if(!isIdentifier(target)) {
+                    if (!isIdentifier(target)) {
                         return type;
                     }
                     const targetType = getTypeOfExpression(target);
@@ -20325,11 +20325,11 @@ namespace ts {
                 return true;
             }
             if (type.flags & TypeFlags.TypeParameter) {
-                return !!getUniformityConstraintFromTypeParameter(<TypeParameter> type);
+                return !!getUniformityConstraintFromTypeParameter(<TypeParameter>type);
             }
-            return false;   
+            return false;
         }
-        
+
         function checkTypeArguments(signature: Signature, typeArgumentNodes: ReadonlyArray<TypeNode>, reportErrors: boolean, headMessage?: DiagnosticMessage): Type[] | undefined {
             const isJavascript = isInJSFile(signature.declaration);
             const typeParameters = signature.typeParameters!;
@@ -23370,7 +23370,7 @@ namespace ts {
                 const extendsType = typeofTypesByName.get(node.condition.right.text);
                 if (extendsType !== undefined) {
                     const typeofTest = getTypeOfExpression((<TypeOfExpression>node.condition.left).expression);
-                    if((typeofTest.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>typeofTest)) {
+                    if ((typeofTest.flags & TypeFlags.TypeVariable) && getUniformityConstraintFromTypeParameter(<TypeParameter>typeofTest)) {
                         const ifTypeAlias = getGlobalIfTypeSymbol();
                         if (!ifTypeAlias) {
                             return errorType;
