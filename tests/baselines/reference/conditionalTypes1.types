@@ -518,21 +518,21 @@ type Extends<T, U> = T extends U ? true : false;
 >true : true
 >false : false
 
-type If<C extends boolean, T, F> = C extends true ? T : F;
->If : If<C, T, F>
+type IfC<C extends boolean, T, F> = C extends true ? T : F;
+>IfC : IfC<C, T, F>
 >true : true
 
-type Not<C extends boolean> = If<C, false, true>;
->Not : If<C, false, true>
+type Not<C extends boolean> = IfC<C, false, true>;
+>Not : IfC<C, false, true>
 >false : false
 >true : true
 
-type And<A extends boolean, B extends boolean> = If<A, B, false>;
->And : If<A, B, false>
+type And<A extends boolean, B extends boolean> = IfC<A, B, false>;
+>And : IfC<A, B, false>
 >false : false
 
-type Or<A extends boolean, B extends boolean> = If<A, true, B>;
->Or : If<A, true, B>
+type Or<A extends boolean, B extends boolean> = IfC<A, true, B>;
+>Or : IfC<A, true, B>
 >true : true
 
 type IsString<T> = Extends<T, string>;
@@ -909,14 +909,14 @@ function f50() {
 >false : false
 >false : false
 
-    type If<S, T, U> = S extends false ? U : T;
->If : S extends false ? U : T
+    type IfC<S, T, U> = S extends false ? U : T;
+>IfC : S extends false ? U : T
 >false : false
 
-    type Omit<T extends object> = { [P in keyof T]: If<Eq<T[P], never>, never, P>; }[keyof T];
+    type Omit<T extends object> = { [P in keyof T]: IfC<Eq<T[P], never>, never, P>; }[keyof T];
 >Omit : { [P in keyof T]: (T[P] extends never ? never : false) extends false ? P : never; }[keyof T]
 
-    type Omit2<T extends object, U = never> = { [P in keyof T]: If<Eq<T[P], U>, never, P>; }[keyof T];
+    type Omit2<T extends object, U = never> = { [P in keyof T]: IfC<Eq<T[P], U>, never, P>; }[keyof T];
 >Omit2 : { [P in keyof T]: (T[P] extends U ? U extends T[P] ? true : false : false) extends false ? P : never; }[keyof T]
 
     type A = Omit<{ a: void; b: never; }>;  // 'a'
