@@ -16329,6 +16329,16 @@ namespace ts {
                 return type;
             }
 
+            function isTypeNarrowableUnderUniformity(type: Type): boolean {
+                if (type.flags & TypeFlags.TypeParameter) {
+                    return (getUniformityConstraintFromTypeParameter(<TypeParameter>type) & UniformityFlags.TypeOf) !== 0;
+                }
+                if (type.flags & TypeFlags.Intersection) {
+                    return (<IntersectionType>type).types.some(isTypeNarrowableUnderUniformity);
+                }
+                return false;
+            }
+
             function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {
                 // We have '==', '!=', '====', or !==' operator with 'typeof xxx' and string literal operands
                 const target = getReferenceCandidate(typeOfExpr.expression);
@@ -16342,8 +16352,7 @@ namespace ts {
                         return type;
                     }
                     const targetType = getTypeOfExpression(target);
-                    const isNarrowableUnderUniformity =
-                        (targetType.flags & TypeFlags.TypeParameter) && (getUniformityConstraintFromTypeParameter(<TypeParameter>targetType) & UniformityFlags.TypeOf);
+                    const isNarrowableUnderUniformity = isTypeNarrowableUnderUniformity(targetType);
                     if (!isNarrowableUnderUniformity) {
                         return type;
                     }
@@ -16360,6 +16369,14 @@ namespace ts {
                         const mapper = createTypeMapper([<TypeParameter>targetType], [subst]);
                         const narrowedMapper = combineTypeMappers(cond.mapper, mapper);
                         return instantiateType(cond, narrowedMapper);
+                    }
+                    if (assumeTrue && targetType === type) {
+                        const substType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
+                        if (substType) {
+                            const narrowed = getIntersectionType([type, substType]);
+                            return (narrowed.flags & TypeFlags.Intersection) && isEmptyIntersectionType(<IntersectionType>narrowed) ? neverType : narrowed;
+                        }
+                        return declaredType;
                     }
                     if (targetType !== type) {
                         return declaredType;
@@ -16396,6 +16413,10 @@ namespace ts {
                             if (isTypeSubtypeOf(targetType, constraint)) {
                                 return getIntersectionType([type, targetType]);
                             }
+                        }
+                        if (isTypeNarrowableUnderUniformity(type)) {
+                            const narrowed = getIntersectionType([type, targetType]);
+                            return (narrowed.flags & TypeFlags.Intersection) && isEmptyIntersectionType(<IntersectionType>narrowed) ? neverType : narrowed;
                         }
                     }
                     return type;
