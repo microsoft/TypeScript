@@ -99,13 +99,7 @@ namespace ts {
                 // outputs
                 ...outputFiles[project.first],
                 ...outputFiles[project.second],
-
-                // build info
-                outputFiles[project.third][ext.buildinfo],
-            ],
-            // These are first not present and later read new contents to generate third output
-            outputFiles[project.first][ext.buildinfo],
-            outputFiles[project.second][ext.buildinfo]
+            ]
         );
 
         let dtsChangedExpectedDiagnostics: ReadonlyArray<fakes.ExpectedDiagnostic> = [
@@ -131,12 +125,8 @@ namespace ts {
                 ...outputFiles[project.first],
                 ...outputFiles[project.second],
                 outputFiles[project.third][ext.dts],
-
-                // build info
-                outputFiles[project.third][ext.buildinfo],
             ],
             outputFiles[project.first][ext.dts], // dts changes so once read old content, and once new (to emit third)
-            outputFiles[project.first][ext.buildinfo], // since first build info changes
         );
 
         let dtsChangedExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
@@ -173,8 +163,7 @@ namespace ts {
                 ...outputFiles[project.first],
                 ...outputFiles[project.second],
                 ...outputFiles[project.third],
-            ],
-            outputFiles[project.first][ext.buildinfo], // since first build info changes
+            ]
         );
 
         let dtsUnchangedExpectedDiagnosticsDependOrdered: ReadonlyArray<fakes.ExpectedDiagnostic> = [
@@ -227,7 +216,6 @@ namespace ts {
                 value.set(path, 1);
             }
             value.set(outputFiles[project.second][ext.dts], 2); // dts changes so once read old content, and once new (to emit third)
-            value.set(outputFiles[project.second][ext.buildinfo], 2); // since first build info changes
             return value;
         }
 

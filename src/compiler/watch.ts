@@ -374,7 +374,6 @@ namespace ts {
 
     export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
         if (compilerOptions.out || compilerOptions.outFile) return undefined;
-        if (!isIncrementalCompilation(compilerOptions)) return undefined;
         const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
         if (!buildInfoPath) return undefined;
         const content = readFile(buildInfoPath);
@@ -658,7 +657,7 @@ namespace ts {
             ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
-        readBuilderProgram(compilerOptions, path => compilerHost.readFile(path));
+        builderProgram = readBuilderProgram(compilerOptions, path => compilerHost.readFile(path)) as any as T;
         synchronizeProgram();
 
         // Update the wild card directory watch

@@ -42,7 +42,7 @@ namespace ts.tscWatch {
         }
 
         function checkFileEmit(actual: Map<string>, expected: ReadonlyArray<File>) {
-            assert.equal(actual.size, expected.length, `Actual: ${JSON.stringify(arrayFrom(actual.entries()))}\nExpected: ${JSON.stringify(expected)}`);
+            assert.equal(actual.size, expected.length, `Actual: ${JSON.stringify(arrayFrom(actual.entries()), /*replacer*/ undefined, " ")}\nExpected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
             expected.forEach(file => assert.equal(actual.get(file.path), file.content, `Emit for ${file.path}`));
         }
 
@@ -93,7 +93,8 @@ namespace ts.tscWatch {
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFile.path, file1.path, file2.path]
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -115,7 +116,8 @@ namespace ts.tscWatch {
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFile.path, file1.path, file2.path]
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -170,7 +172,8 @@ namespace ts.tscWatch {
                                         file1.path,
                                         file2ReuasableError
                                     ]
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -196,7 +199,8 @@ namespace ts.tscWatch {
                                         file1.path,
                                         file2ReuasableError
                                     ]
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -228,7 +232,8 @@ namespace ts.tscWatch {
                                             { pos: 0, end: outFile.content.length, kind: BundleFileSectionKind.Text }
                                         ]
                                     },
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -294,7 +299,8 @@ namespace ts.tscWatch {
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFile.path, file1.path, file2.path]
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -315,7 +321,8 @@ namespace ts.tscWatch {
                                     referencedMap: {},
                                     exportedModulesMap: {},
                                     semanticDiagnosticsPerFile: [libFile.path, file1.path, file2.path]
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -370,7 +377,8 @@ namespace ts.tscWatch {
                                         file1.path,
                                         file2ReuasableError
                                     ]
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -395,7 +403,8 @@ namespace ts.tscWatch {
                                         file2ReuasableError,
                                         file1.path
                                     ]
-                                }
+                                },
+                                version
                             })
                         }
                     ],
@@ -435,7 +444,8 @@ namespace ts.tscWatch {
                                             { pos: 0, end: outFile.content.length, kind: BundleFileSectionKind.Text }
                                         ]
                                     },
-                                }
+                                },
+                                version
                             })
                         }
                     ],
