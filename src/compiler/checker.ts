@@ -21770,9 +21770,14 @@ namespace ts {
                 return getTypeOfParameter(signature.parameters[pos]);
             }
             if (signature.hasRestParameter) {
+                // We want to return the value undefined for an out of bounds parameter position,
+                // so we need to check bounds here before calling getIndexedAccessType (which
+                // otherwise would return the type 'undefined').
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
-                const indexType = getLiteralType(pos - paramCount);
-                return getIndexedAccessType(restType, indexType);
+                const index = pos - paramCount;
+                if (!isTupleType(restType) || restType.target.hasRestElement || index < (restType.typeArguments || emptyArray).length) {
+                    return getIndexedAccessType(restType, getLiteralType(index));
+                }
             }
             return undefined;
         }
