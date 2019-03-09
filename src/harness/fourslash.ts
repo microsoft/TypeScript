@@ -4504,6 +4504,7 @@ namespace FourSlashInterface {
             typeEntry("Required"),
             typeEntry("Readonly"),
             typeEntry("Pick"),
+            typeEntry("If"),
             typeEntry("Record"),
             typeEntry("Exclude"),
             typeEntry("Extract"),
