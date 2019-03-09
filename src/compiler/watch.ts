@@ -275,7 +275,7 @@ namespace ts {
         }
     }
 
-    export function setCreateSourceFileAsHashVersioned(compilerHost: CompilerHost, host: ProgramHost<any>) {
+    export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: ProgramHost<any>) {
         const originalGetSourceFile = compilerHost.getSourceFile;
         const computeHash = host.createHash || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
@@ -619,7 +619,7 @@ namespace ts {
         }
 
         const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
-        setCreateSourceFileAsHashVersioned(compilerHost, host);
+        setGetSourceFileAsHashVersioned(compilerHost, host);
         // Members for CompilerHost
         const getNewSourceFile = compilerHost.getSourceFile;
         compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);

@@ -451,7 +451,7 @@ namespace ts {
         let readFileWithCache = (f: string) => host.readFile(f);
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
-        setCreateSourceFileAsHashVersioned(compilerHost, host);
+        setGetSourceFileAsHashVersioned(compilerHost, host);
 
         const buildInfoChecked = createFileMap<true>(toPath);
 
