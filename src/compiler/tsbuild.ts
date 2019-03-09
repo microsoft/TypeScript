@@ -451,15 +451,7 @@ namespace ts {
         let readFileWithCache = (f: string) => host.readFile(f);
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
-        const originalGetSourceFile = compilerHost.getSourceFile;
-        const computeHash = host.createHash || generateDjb2Hash;
-        compilerHost.getSourceFile = (...args) => {
-            const result = originalGetSourceFile.call(compilerHost, ...args);
-            if (result) {
-                result.version = computeHash.call(host, result.text);
-            }
-            return result;
-        };
+        setGetSourceFileAsHashVersioned(compilerHost, host);
 
         const buildInfoChecked = createFileMap<true>(toPath);
 
@@ -1241,13 +1233,7 @@ namespace ts {
         function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
             const value = builderPrograms.getValue(proj);
             if (value) return value;
-            const buildInfoPath = getOutputPathForBuildInfo(parsed.options);
-            if (!buildInfoPath) return undefined;
-            const content = readFileWithCache(buildInfoPath);
-            if (!content) return undefined;
-            const buildInfo = getBuildInfo(content);
-            if (buildInfo.version !== version) return undefined;
-            return buildInfo.program && createBuildProgramUsingProgramBuildInfo(buildInfo.program) as any as T;
+            return readBuilderProgram(parsed.options, readFileWithCache) as any as T;
         }
 
         function updateBundle(proj: ResolvedConfigFileName): BuildResultFlags {
