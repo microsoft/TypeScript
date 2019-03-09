@@ -81,7 +81,7 @@ namespace ts.refactor.convertToNamedParameters {
         const references = flatMap(names, /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
         const groupedReferences = groupReferences(references);
 
-        if (!every(groupedReferences.declarations, decl => contains(names, decl))) {
+        if (!every(groupedReferences.declarations, /*callback*/ decl => contains(names, decl))) {
             groupedReferences.valid = false;
         }
 
@@ -241,18 +241,26 @@ namespace ts.refactor.convertToNamedParameters {
         return undefined;
     }
 
-    function isValidFunctionDeclaration(functionDeclaration: SignatureDeclaration, checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
-        if (!isValidParameterNodeArray(functionDeclaration.parameters)) return false;
+    function isValidFunctionDeclaration(
+        functionDeclaration: SignatureDeclaration,
+        checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
+        if (!isValidParameterNodeArray(functionDeclaration.parameters, checker)) return false;
         switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
-                return !!functionDeclaration.name && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
+                return !!functionDeclaration.name
+                    && !!functionDeclaration.body
+                    && !checker.isImplementationOfOverload(functionDeclaration);
             case SyntaxKind.Constructor:
                 if (isClassDeclaration(functionDeclaration.parent)) {
-                    return !!functionDeclaration.body && !!functionDeclaration.parent.name && !checker.isImplementationOfOverload(functionDeclaration);
+                    return !!functionDeclaration.body
+                        && !!functionDeclaration.parent.name
+                        && !checker.isImplementationOfOverload(functionDeclaration);
                 }
                 else {
-                    return isValidVariableDeclaration(functionDeclaration.parent.parent) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
+                    return isValidVariableDeclaration(functionDeclaration.parent.parent)
+                        && !!functionDeclaration.body
+                        && !checker.isImplementationOfOverload(functionDeclaration);
                 }
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
@@ -261,12 +269,21 @@ namespace ts.refactor.convertToNamedParameters {
         return false;
     }
 
-    function isValidParameterNodeArray(parameters: NodeArray<ParameterDeclaration>): parameters is ValidParameterNodeArray {
-        return getRefactorableParametersLength(parameters) >= minimumParameterLength && every(parameters, isValidParameterDeclaration);
+    function isValidParameterNodeArray(
+        parameters: NodeArray<ParameterDeclaration>,
+        checker: TypeChecker): parameters is ValidParameterNodeArray {
+        return getRefactorableParametersLength(parameters) >= minimumParameterLength
+            && every(parameters, /*callback*/ paramDecl => isValidParameterDeclaration(paramDecl, checker));
     }
 
-    function isValidParameterDeclaration(paramDeclaration: ParameterDeclaration): paramDeclaration is ValidParameterDeclaration {
-        return !paramDeclaration.modifiers && !paramDeclaration.decorators && isIdentifier(paramDeclaration.name);
+    function isValidParameterDeclaration(
+        parameterDeclaration: ParameterDeclaration,
+        checker: TypeChecker): parameterDeclaration is ValidParameterDeclaration {
+        if (isRestParameter(parameterDeclaration)) {
+            const type = checker.getTypeAtLocation(parameterDeclaration);
+            if (!checker.isArrayType(type) && !checker.isTupleType(type)) return false;
+        }
+        return !parameterDeclaration.modifiers && !parameterDeclaration.decorators && isIdentifier(parameterDeclaration.name);
     }
 
     function isValidVariableDeclaration(node: Node): node is ValidVariableDeclaration {
@@ -405,7 +422,7 @@ namespace ts.refactor.convertToNamedParameters {
         function isOptionalParameter(parameterDeclaration: ValidParameterDeclaration): boolean {
             if (isRestParameter(parameterDeclaration)) {
                 const type = checker.getTypeAtLocation(parameterDeclaration);
-                return checker.isTupleLikeType(type) ? false : true;
+                return checker.isTupleType(type) ? false : true;
             }
             return checker.isOptionalParameter(parameterDeclaration);
         }
