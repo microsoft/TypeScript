@@ -1637,7 +1637,7 @@ namespace ts {
 
         function emitTypeParameter(node: TypeParameterDeclaration) {
             emit(node.name);
-            if (node.uniformityConstraint) {
+            if (node.uniformityConstraint && node.uniformityConstraint & UniformityFlags.TypeOf) {
                 writePunctuation("!");
             }
             if (node.constraint) {

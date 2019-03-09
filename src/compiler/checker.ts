@@ -3994,7 +3994,8 @@ namespace ts {
                 const defaultParameter = getDefaultFromTypeParameter(type);
                 const defaultParameterNode = defaultParameter && typeToTypeNodeHelper(defaultParameter, context);
                 context.flags = savedContextFlags;
-                return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode, type.uniformityConstraint);
+                const uniformityConstraint = getUniformityConstraintDeclaration(type);
+                return createTypeParameterDeclaration(name, constraintNode, defaultParameterNode, uniformityConstraint);
             }
 
             function typeParameterToDeclaration(type: TypeParameter, context: NodeBuilderContext, constraint = getConstraintOfTypeParameter(type)): TypeParameterDeclaration {
@@ -16342,7 +16343,7 @@ namespace ts {
                     }
                     const targetType = getTypeOfExpression(target);
                     const isNarrowableUnderUniformity =
-                        (targetType.flags & TypeFlags.TypeVariable) && (getUniformityConstraintFromTypeParameter(<TypeParameter>targetType) & UniformityFlags.TypeOf);
+                        (targetType.flags & TypeFlags.TypeParameter) && (getUniformityConstraintFromTypeParameter(<TypeParameter>targetType) & UniformityFlags.TypeOf);
                     if (!isNarrowableUnderUniformity) {
                         return type;
                     }
@@ -16356,7 +16357,7 @@ namespace ts {
                             return type;
                         }
                         const subst = getIntersectionType([targetType, substType]);
-                        const mapper = createTypeMapper([<TypeVariable>targetType], [subst]);
+                        const mapper = createTypeMapper([<TypeParameter>targetType], [subst]);
                         const narrowedMapper = combineTypeMappers(cond.mapper, mapper);
                         return instantiateType(cond, narrowedMapper);
                     }

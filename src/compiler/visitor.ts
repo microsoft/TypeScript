@@ -237,7 +237,8 @@ namespace ts {
                 return updateTypeParameterDeclaration(<TypeParameterDeclaration>node,
                     visitNode((<TypeParameterDeclaration>node).name, visitor, isIdentifier),
                     visitNode((<TypeParameterDeclaration>node).constraint, visitor, isTypeNode),
-                    visitNode((<TypeParameterDeclaration>node).default, visitor, isTypeNode));
+                    visitNode((<TypeParameterDeclaration>node).default, visitor, isTypeNode),
+                    (<TypeParameterDeclaration>node).uniformityConstraint);
 
             case SyntaxKind.Parameter:
                 return updateParameter(<ParameterDeclaration>node,

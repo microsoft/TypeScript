@@ -847,7 +847,7 @@ namespace ts {
                     }
                     case SyntaxKind.TypeParameter: {
                         if (isPrivateMethodTypeParameter(input) && (input.default || input.constraint)) {
-                            return cleanup(updateTypeParameterDeclaration(input, input.name, /*constraint*/ undefined, /*defaultType*/ undefined));
+                            return cleanup(updateTypeParameterDeclaration(input, input.name, /*constraint*/ undefined, /*defaultType*/ undefined, /*uniformityConstraint*/ undefined));
                         }
                         return cleanup(visitEachChild(input, visitDeclarationSubtree, context));
                     }
