@@ -8,8 +8,11 @@ namespace ts {
      */
     /* @internal */
     export function generateDjb2Hash(data: string): string {
-        const chars = data.split("").map(str => str.charCodeAt(0));
-        return `${chars.reduce((prev, curr) => ((prev << 5) + prev) + curr, 5381)}`;
+        let acc = 5381;
+        for (let i = 0; i < data.length; i++) {
+            acc = ((acc << 5) + acc) + data.charCodeAt(i);
+        }
+        return acc.toString();
     }
 
     /**
