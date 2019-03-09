@@ -16370,14 +16370,6 @@ namespace ts {
                         const narrowedMapper = combineTypeMappers(cond.mapper, mapper);
                         return instantiateType(cond, narrowedMapper);
                     }
-                    if (assumeTrue && targetType === type) {
-                        const substType = literal.text === "function" ? globalFunctionType : typeofTypesByName.get(literal.text);
-                        if (substType) {
-                            const narrowed = getIntersectionType([type, substType]);
-                            return (narrowed.flags & TypeFlags.Intersection) && isEmptyIntersectionType(<IntersectionType>narrowed) ? neverType : narrowed;
-                        }
-                        return declaredType;
-                    }
                     if (targetType !== type) {
                         return declaredType;
                     }
