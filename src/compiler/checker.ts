@@ -10195,9 +10195,18 @@ namespace ts {
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
                 // possible (the wildcard type is assignable to and from all types). If those are not related,
                 // then no instantiations will be and we can just return the false branch type.
-                if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
-                    return falseType;
+                if (isTypeNarrowableUnderUniformity(checkType, UniformityFlags.Equality | UniformityFlags.TypeOf)) {
+                    if (!isTypeAssignableTo(getUniformInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
+                        return falseType;
+                    }
                 }
+                else {
+                    if (!isTypeAssignableTo(getPermissiveInstantiation(checkType), getPermissiveInstantiation(inferredExtendsType))) {
+                        return falseType;
+                    }
+                }
+
+
                 // Return trueType for a definitely true extends check. We check instantiations of the two
                 // types with type parameters mapped to their restrictive form, i.e. a form of the type parameter
                 // that has no constraint. This ensures that, for example, the type
@@ -10830,6 +10839,10 @@ namespace ts {
             return type.flags & TypeFlags.TypeParameter ? wildcardType : type;
         }
 
+        function unknownMapper(type: Type) {
+            return type.flags & TypeFlags.TypeParameter ? unknownType : type;
+        }
+
         function getRestrictiveTypeParameter(tp: TypeParameter) {
             return tp.constraint === unknownType ? tp : tp.restrictiveInstantiation || (
                 tp.restrictiveInstantiation = createTypeParameter(tp.symbol),
@@ -11206,6 +11219,11 @@ namespace ts {
         function getPermissiveInstantiation(type: Type) {
             return type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never) ? type :
                 type.permissiveInstantiation || (type.permissiveInstantiation = instantiateType(type, permissiveMapper));
+        }
+
+        function getUniformInstantiation(type: Type) {
+            return type.flags & (TypeFlags.Primitive | TypeFlags.AnyOrUnknown | TypeFlags.Never) ? type :
+                type.permissiveInstantiation || (type.permissiveInstantiation = instantiateType(type, unknownMapper));
         }
 
         function getRestrictiveInstantiation(type: Type) {
@@ -13927,6 +13945,16 @@ namespace ts {
             return value.base10Value === "0";
         }
 
+        function isTypeNarrowableUnderUniformity(type: Type, kind: UniformityFlags): boolean {
+            if (type.flags & TypeFlags.TypeParameter) {
+                return (getUniformityConstraintFromTypeParameter(<TypeParameter>type) & kind) !== 0;
+            }
+            if (type.flags & TypeFlags.Intersection) {
+                return (<IntersectionType>type).types.some(t => isTypeNarrowableUnderUniformity(t, kind));
+            }
+            return false;
+        }
+
         function getFalsyFlagsOfTypes(types: Type[]): TypeFlags {
             let result: TypeFlags = 0;
             for (const t of types) {
@@ -16367,16 +16395,6 @@ namespace ts {
                     return filterType(type, t => getRegularTypeOfLiteralType(t) !== regularType);
                 }
                 return type;
-            }
-
-            function isTypeNarrowableUnderUniformity(type: Type, kind: UniformityFlags): boolean {
-                if (type.flags & TypeFlags.TypeParameter) {
-                    return (getUniformityConstraintFromTypeParameter(<TypeParameter>type) & kind) !== 0;
-                }
-                if (type.flags & TypeFlags.Intersection) {
-                    return (<IntersectionType>type).types.some(t => isTypeNarrowableUnderUniformity(t, kind));
-                }
-                return false;
             }
 
             function narrowTypeByTypeof(type: Type, typeOfExpr: TypeOfExpression, operator: SyntaxKind, literal: LiteralExpression, assumeTrue: boolean): Type {
