@@ -4045,6 +4045,7 @@ namespace ts {
 
     export const enum UniformityFlags {
         TypeOf = 1 << 0,
+        Equality = 1 << 1,
     }
 
     export const enum ObjectFlags {
