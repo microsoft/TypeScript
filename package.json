@@ -136,6 +136,16 @@
         "generate-eslint": "^1.0.0",
         "generate-function": "^2.3.1",
         "generate-install": "^0.3.1",
+        "generator-code": "^1.1.48",
+        "generator-feathers": "^2.10.0",
+        "generator-generator": "^4.0.2",
+        "generator-jasmine": "^2.0.1",
+        "generator-jest": "^1.6.0",
+        "generator-license": "^5.4.0",
+        "generator-mocha": "^2.0.1",
+        "generator-node": "^2.6.0",
+        "generator-npm-init": "^1.5.0",
+        "generator-primer-module": "^1.2.1",
         "install-script": "^1.0.0",
         "installed-pod-regex": "^1.0.0",
         "instant-icons": "^1.0.0",
@@ -149,6 +159,11 @@
         "resolve-up": "^1.0.0",
         "uglify": "^0.1.5",
         "vue": "^2.6.8",
-        "yarn": "^1.13.0"
+        "yarn": "^1.13.0",
+        "yeoman-generator": "^3.2.0",
+        "yeoman-generator-asmagin": "^3.2.0",
+        "yeoman-test": "^1.9.1",
+        "yeoman-welcome": "^1.0.1",
+        "yo": "^2.0.5"
     }
 }
