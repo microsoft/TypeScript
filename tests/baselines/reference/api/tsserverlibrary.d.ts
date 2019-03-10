@@ -2279,7 +2279,8 @@ declare namespace ts {
     interface EnumType extends Type {
     }
     enum UniformityFlags {
-        TypeOf = 1
+        TypeOf = 1,
+        Equality = 2
     }
     enum ObjectFlags {
         Class = 1,
