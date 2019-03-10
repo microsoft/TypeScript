@@ -16272,7 +16272,7 @@ namespace ts {
                             return declaredType;
                         }
                         return narrowTypeByUniformEquality(type, operator, left, right, assumeTrue);
-                        
+
                     case SyntaxKind.InstanceOfKeyword:
                         return narrowTypeByInstanceof(type, expr, assumeTrue);
                     case SyntaxKind.InKeyword:
@@ -16289,7 +16289,7 @@ namespace ts {
 
             function narrowTypeByUniformEquality(type: Type, operator: SyntaxKind, left: Expression, right: Expression, assumeTrue: boolean): Type {
                 if ((operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken)) {
-                    assumeTrue = !assumeTrue
+                    assumeTrue = !assumeTrue;
                 }
                 if (!assumeTrue || operator === SyntaxKind.EqualsEqualsToken) {
                     return type;
@@ -16325,7 +16325,7 @@ namespace ts {
                 }
                 return type;
             }
-            
+
             function narrowTypeByEquality(type: Type, operator: SyntaxKind, value: Expression, assumeTrue: boolean): Type {
                 if (type.flags & TypeFlags.Any) {
                     return type;
@@ -16398,7 +16398,7 @@ namespace ts {
                     }
                     if (type.flags & TypeFlags.Conditional) {
                         if ((operator === SyntaxKind.ExclamationEqualsToken || operator === SyntaxKind.ExclamationEqualsEqualsToken)) {
-                            assumeTrue = !assumeTrue
+                            assumeTrue = !assumeTrue;
                         }
                         if (!assumeTrue || operator === SyntaxKind.EqualsEqualsToken) {
                             return type;
