@@ -4423,8 +4423,7 @@ namespace ts {
         None            =      0,  // No special inference behaviors
         NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
-        NoFixing        = 1 << 2,  // Disable type parameter fixing
-        SkippedGenericFunction = 1 << 3,
+        SkippedGenericFunction = 1 << 2, // A generic function was skipped during inference
     }
 
     /**
@@ -4447,12 +4446,14 @@ namespace ts {
     export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
 
     /* @internal */
-    export interface InferenceContext extends TypeMapper {
+    export interface InferenceContext {
         typeParameters: ReadonlyArray<TypeParameter>; // Type parameters for which inferences are made
         signature?: Signature;                        // Generic signature for which inferences are made (if any)
         inferences: InferenceInfo[];                  // Inferences made for each type parameter
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
+        mapper: TypeMapper;                           // Mapper that fixes inferences
+        nonFixingMapper: TypeMapper;                  // Mapper that doesn't fix inferences
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
         inferredTypeParameters?: ReadonlyArray<TypeParameter>; // Inferred type parameters for function result
     }
