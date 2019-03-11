@@ -10778,14 +10778,8 @@ namespace ts {
             return t => typeParameters.indexOf(t) >= index ? emptyObjectType : t;
         }
 
-        function isInferenceContext(mapper: TypeMapper): mapper is InferenceContext {
-            return !!(<InferenceContext>mapper).typeParameters;
-        }
-
-        function cloneTypeMapper(mapper: TypeMapper, extraFlags: InferenceFlags = 0): TypeMapper {
-            return mapper && isInferenceContext(mapper) ?
-                createInferenceContext(mapper.typeParameters, mapper.signature, mapper.flags | extraFlags, mapper.compareTypes, mapper.inferences) :
-                mapper;
+        function cloneInferenceContext(context: InferenceContext, extraFlags: InferenceFlags = 0): InferenceContext {
+            return createInferenceContext(context.typeParameters, context.signature, context.flags | extraFlags, context.compareTypes, context.inferences);
         }
 
         function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
@@ -11755,7 +11749,7 @@ namespace ts {
 
             if (source.typeParameters && source.typeParameters !== target.typeParameters) {
                 target = getCanonicalSignature(target);
-                source = instantiateSignatureInContextOf(source, target, /*contextualMapper*/ undefined, compareTypes);
+                source = instantiateSignatureInContextOf(source, target, /*inferenceContext*/ undefined, compareTypes);
             }
 
             const sourceCount = getParameterCount(source);
@@ -17531,7 +17525,7 @@ namespace ts {
                     while (type) {
                         const thisType = getThisTypeFromContextualType(type);
                         if (thisType) {
-                            return instantiateType(thisType, getContextualMapper(containingLiteral));
+                            return instantiateType(thisType, getInferenceContext(containingLiteral));
                         }
                         if (literal.parent.kind !== SyntaxKind.PropertyAssignment) {
                             break;
@@ -18030,9 +18024,9 @@ namespace ts {
         // return type inferences is available, instantiate those types using that mapper.
         function instantiateContextualType(contextualType: Type | undefined, node: Expression): Type | undefined {
             if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
-                const returnMapper = (<InferenceContext>getContextualMapper(node)).returnMapper;
-                if (returnMapper) {
-                    return instantiateInstantiableTypes(contextualType, returnMapper);
+                const inferenceContext = getInferenceContext(node);
+                if (inferenceContext && inferenceContext.returnMapper) {
+                    return instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
                 }
             }
             return contextualType;
@@ -18134,9 +18128,9 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualMapper(node: Node) {
-            const ancestor = findAncestor(node, n => !!n.contextualMapper);
-            return ancestor ? ancestor.contextualMapper! : identityMapper;
+        function getInferenceContext(node: Node) {
+            const ancestor = findAncestor(node, n => !!n.inferenceContext);
+            return ancestor && ancestor.inferenceContext!;
         }
 
         function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement) {
@@ -20135,19 +20129,19 @@ namespace ts {
         }
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
-        function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper?: TypeMapper, compareTypes?: TypeComparer): Signature {
+        function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, inferenceContext?: InferenceContext, compareTypes?: TypeComparer): Signature {
             const context = createInferenceContext(signature.typeParameters!, signature, InferenceFlags.None, compareTypes);
-            // We clone the contextualMapper to avoid fixing. For example, when the source signature is <T>(x: T) => T[] and
+            // We clone the inferenceContext to avoid fixing. For example, when the source signature is <T>(x: T) => T[] and
             // the contextual signature is (...args: A) => B, we want to infer the element type of A's constraint (say 'any')
             // for T but leave it possible to later infer '[any]' back to A.
             const restType = getEffectiveRestType(contextualSignature);
-            const mapper = contextualMapper && restType && restType.flags & TypeFlags.TypeParameter ? cloneTypeMapper(contextualMapper) : contextualMapper;
+            const mapper = inferenceContext && restType && restType.flags & TypeFlags.TypeParameter ? cloneInferenceContext(inferenceContext) : inferenceContext;
             const sourceSignature = mapper ? instantiateSignature(contextualSignature, mapper) : contextualSignature;
             forEachMatchingParameterType(sourceSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context.inferences, source, target);
             });
-            if (!contextualMapper) {
+            if (!inferenceContext) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
                 const signaturePredicate = getTypePredicateOfSignature(signature);
                 const contextualPredicate = getTypePredicateOfSignature(sourceSignature);
@@ -20192,7 +20186,8 @@ namespace ts {
                     // We clone the contextual mapper to avoid disturbing a resolution in progress for an
                     // outer call expression. Effectively we just want a snapshot of whatever has been
                     // inferred for any outer call expression so far.
-                    const instantiatedType = instantiateType(contextualType, cloneTypeMapper(getContextualMapper(node), InferenceFlags.NoDefault));
+                    const outerContext = getInferenceContext(node);
+                    const instantiatedType = instantiateType(contextualType, outerContext && cloneInferenceContext(outerContext, InferenceFlags.NoDefault));
                     // If the contextual type is a generic function type with a single call signature, we
                     // instantiate the type with its own type parameters and type arguments. This ensures that
                     // the type parameters are not erased to type any during type inference such that they can
@@ -20326,7 +20321,7 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined, checkMode);
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
         }
 
@@ -20360,7 +20355,7 @@ namespace ts {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    const argType = checkExpressionWithContextualType(arg, paramType, /*contextualMapper*/ undefined, checkMode);
+                    const argType = checkExpressionWithContextualType(arg, paramType, /*inferenceContext*/ undefined, checkMode);
                     // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
@@ -21855,14 +21850,14 @@ namespace ts {
             return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallbackType;
         }
 
-        function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: TypeMapper) {
+        function inferFromAnnotatedParameters(signature: Signature, context: Signature, inferenceContext: InferenceContext) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
                 if (declaration.type) {
                     const typeNode = getEffectiveTypeAnnotationNode(declaration);
                     if (typeNode) {
-                        inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
+                        inferTypes(inferenceContext.inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
                     }
                 }
             }
@@ -21870,12 +21865,12 @@ namespace ts {
             if (restType && restType.flags & TypeFlags.TypeParameter) {
                 // The contextual signature has a generic rest parameter. We first instantiate the contextual
                 // signature (without fixing type parameters) and assign types to contextually typed parameters.
-                const instantiatedContext = instantiateSignature(context, cloneTypeMapper(mapper));
+                const instantiatedContext = instantiateSignature(context, cloneInferenceContext(inferenceContext));
                 assignContextualParameterTypes(signature, instantiatedContext);
                 // We then infer from a tuple type representing the parameters that correspond to the contextual
                 // rest parameter.
                 const restPos = getParameterCount(context) - 1;
-                inferTypes((<InferenceContext>mapper).inferences, getRestTypeAtPosition(signature, restPos), restType);
+                inferTypes(inferenceContext.inferences, getRestTypeAtPosition(signature, restPos), restType);
             }
         }
 
@@ -22316,12 +22311,12 @@ namespace ts {
                     if (contextualSignature) {
                         const signature = getSignaturesOfType(type, SignatureKind.Call)[0];
                         if (isContextSensitive(node)) {
-                            const contextualMapper = getContextualMapper(node);
+                            const inferenceContext = getInferenceContext(node);
                             if (checkMode && checkMode & CheckMode.Inferential) {
-                                inferFromAnnotatedParameters(signature, contextualSignature, contextualMapper);
+                                inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
                             }
-                            const instantiatedContextualSignature = contextualMapper === identityMapper ?
-                                contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
+                            const instantiatedContextualSignature = inferenceContext ?
+                                instantiateSignature(contextualSignature, inferenceContext) : contextualSignature;
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
                         if (!getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
@@ -23328,20 +23323,20 @@ namespace ts {
             return node;
         }
 
-        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper | undefined, checkMode: CheckMode): Type {
+        function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
             const context = getContextNode(node);
             const saveContextualType = context.contextualType;
-            const saveContextualMapper = context.contextualMapper;
+            const saveInferenceContext = context.inferenceContext;
             context.contextualType = contextualType;
-            context.contextualMapper = contextualMapper;
-            const type = checkExpression(node, checkMode | CheckMode.Contextual | (contextualMapper ? CheckMode.Inferential : 0));
+            context.inferenceContext = inferenceContext;
+            const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
             // We strip literal freshness when an appropriate contextual type is present such that contextually typed
             // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
             // here would be to not mark contextually typed literals as fresh in the first place.
             const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
                 getRegularTypeOfLiteralType(type) : type;
             context.contextualType = saveContextualType;
-            context.contextualMapper = saveContextualMapper;
+            context.inferenceContext = saveInferenceContext;
             return result;
         }
 
@@ -23467,7 +23462,7 @@ namespace ts {
                     if (contextualType) {
                         const contextualSignature = getSingleCallSignature(getNonNullableType(contextualType));
                         if (contextualSignature && !contextualSignature.typeParameters) {
-                            const context = <InferenceContext>getContextualMapper(node);
+                            const context = <InferenceContext>getInferenceContext(node);
                             // We have an expression that is an argument of a generic function for which we are performing
                             // type argument inference. The expression is of a function type with a single generic call
                             // signature and a contextual function type with a single non-generic call signature. Now check
@@ -23507,7 +23502,7 @@ namespace ts {
             if (checkMode & CheckMode.Inferential) {
                 // We have skipped a generic function during inferential typing. Obtain the inference context and
                 // indicate this has occurred such that we know a second pass of inference is be needed.
-                const context = <InferenceContext>getContextualMapper(node);
+                const context = <InferenceContext>getInferenceContext(node);
                 context.flags |= InferenceFlags.SkippedGenericFunction;
             }
         }

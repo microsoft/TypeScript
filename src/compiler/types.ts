@@ -630,7 +630,7 @@ namespace ts {
         /* @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
         /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
         /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
-        /* @internal */ contextualMapper?: TypeMapper;        // Mapper for contextual type
+        /* @internal */ inferenceContext?: InferenceContext;  // Inference context for contextual type
     }
 
     export interface JSDocContainer {
@@ -4454,7 +4454,7 @@ namespace ts {
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
-        inferredTypeParameters?: ReadonlyArray<TypeParameter>;
+        inferredTypeParameters?: ReadonlyArray<TypeParameter>; // Inferred type parameters for function result
     }
 
     /* @internal */
