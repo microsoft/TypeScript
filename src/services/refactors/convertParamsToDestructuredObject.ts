@@ -185,37 +185,31 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const functionReference = entry.node;
             const parent = functionReference.parent;
             switch (parent.kind) {
-                // Function call (foo(...) or super(...))
+                // foo(...) or super(...) or new Foo(...)
                 case SyntaxKind.CallExpression:
-                    const callExpression = tryCast(parent, isCallExpression);
-                    if (callExpression && callExpression.expression === functionReference) {
-                        return callExpression;
-                    }
-                    break;
-                // Constructor call (new Foo(...))
                 case SyntaxKind.NewExpression:
-                    const newExpression = tryCast(parent, isNewExpression);
-                    if (newExpression && newExpression.expression === functionReference) {
-                        return newExpression;
+                    const callOrNewExpression = tryCast(parent, isCallOrNewExpression);
+                    if (callOrNewExpression && callOrNewExpression.expression === functionReference) {
+                        return callOrNewExpression;
                     }
                     break;
-                // Method call (x.foo(...))
+                // x.foo(...)
                 case SyntaxKind.PropertyAccessExpression:
                     const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
                     if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionReference) {
-                        const callExpression = tryCast(propertyAccessExpression.parent, isCallExpression);
-                        if (callExpression && callExpression.expression === propertyAccessExpression) {
-                            return callExpression;
+                        const callOrNewExpression = tryCast(propertyAccessExpression.parent, isCallOrNewExpression);
+                        if (callOrNewExpression && callOrNewExpression.expression === propertyAccessExpression) {
+                            return callOrNewExpression;
                         }
                     }
                     break;
-                // Method call (x["foo"](...))
+                // x["foo"](...)
                 case SyntaxKind.ElementAccessExpression:
                     const elementAccessExpression = tryCast(parent, isElementAccessExpression);
                     if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionReference) {
-                        const callExpression = tryCast(elementAccessExpression.parent, isCallExpression);
-                        if (callExpression && callExpression.expression === elementAccessExpression) {
-                            return callExpression;
+                        const callOrNewExpression = tryCast(elementAccessExpression.parent, isCallOrNewExpression);
+                        if (callOrNewExpression && callOrNewExpression.expression === elementAccessExpression) {
+                            return callOrNewExpression;
                         }
                     }
                     break;
