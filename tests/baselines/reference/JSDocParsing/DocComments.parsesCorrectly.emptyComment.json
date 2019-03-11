@@ -1,5 +1,7 @@
 {
     "kind": "JSDocComment",
     "pos": 0,
-    "end": 5
+    "end": 5,
+    "modifierFlagsCache": 0,
+    "transformFlags": 0
 }

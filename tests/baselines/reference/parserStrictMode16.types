@@ -4,7 +4,7 @@
 
 delete this;
 >delete this : boolean
->this : any
+>this : typeof globalThis
 
 delete 1;
 >delete 1 : boolean

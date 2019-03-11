@@ -1,14 +1,14 @@
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(1,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(2,5): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(3,19): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(7,1): error TS2582: Cannot find name 'suite'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(8,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(1,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(2,5): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(3,19): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(7,1): error TS2582: Cannot find name 'suite'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(8,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
 tests/cases/compiler/didYouMeanSuggestionErrors.ts(9,9): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(9,21): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(9,21): error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node`.
 tests/cases/compiler/didYouMeanSuggestionErrors.ts(10,9): error TS2584: Cannot find name 'document'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(12,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(13,19): error TS2580: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
-tests/cases/compiler/didYouMeanSuggestionErrors.ts(14,19): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(12,19): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(13,19): error TS2580: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i @types/node`.
+tests/cases/compiler/didYouMeanSuggestionErrors.ts(14,19): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 tests/cases/compiler/didYouMeanSuggestionErrors.ts(16,23): error TS2583: Cannot find name 'Map'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
 tests/cases/compiler/didYouMeanSuggestionErrors.ts(17,23): error TS2583: Cannot find name 'Set'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
 tests/cases/compiler/didYouMeanSuggestionErrors.ts(18,23): error TS2583: Cannot find name 'WeakMap'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.
@@ -22,40 +22,40 @@ tests/cases/compiler/didYouMeanSuggestionErrors.ts(24,18): error TS2583: Cannot 
 ==== tests/cases/compiler/didYouMeanSuggestionErrors.ts (19 errors) ====
     describe("my test suite", () => {
     ~~~~~~~~
-!!! error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+!!! error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
         it("should run", () => {
         ~~
-!!! error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+!!! error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
             const a = $(".thing");
                       ~
-!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.
+!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.
         });
     });
     
     suite("another suite", () => {
     ~~~~~
-!!! error TS2582: Cannot find name 'suite'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+!!! error TS2582: Cannot find name 'suite'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
         test("everything else", () => {
         ~~~~
-!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+!!! error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
             console.log(process.env);
             ~~~~~~~
 !!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
                         ~~~~~~~
-!!! error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'process'. Do you need to install type definitions for node? Try `npm i @types/node`.
             document.createElement("div");
             ~~~~~~~~
 !!! error TS2584: Cannot find name 'document'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
     
             const x = require("fs");
                       ~~~~~~~
-!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
             const y = Buffer.from([]);
                       ~~~~~~
-!!! error TS2580: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'Buffer'. Do you need to install type definitions for node? Try `npm i @types/node`.
             const z = module.exports;
                       ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
     
             const a = new Map();
                           ~~~

@@ -472,8 +472,8 @@ namespace Harness.LanguageService {
         getRenameInfo(fileName: string, position: number, options?: ts.RenameInfoOptions): ts.RenameInfo {
             return unwrapJSONCallResult(this.shim.getRenameInfo(fileName, position, options));
         }
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ts.RenameLocation[] {
-            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments));
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ts.RenameLocation[] {
+            return unwrapJSONCallResult(this.shim.findRenameLocations(fileName, position, findInStrings, findInComments, providePrefixAndSuffixTextForRename));
         }
         getDefinitionAtPosition(fileName: string, position: number): ts.DefinitionInfo[] {
             return unwrapJSONCallResult(this.shim.getDefinitionAtPosition(fileName, position));
@@ -766,6 +766,7 @@ namespace Harness.LanguageService {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            // tslint:disable-next-line:ban
             return setTimeout(callback, ms, args);
         }
 
