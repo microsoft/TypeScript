@@ -57,6 +57,21 @@ function f4<T extends any[]>(t: T) {
     f((a, b, ...x) => {});
 }
 
+declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
+
+let g0 = f5(() => "hello");
+let g1 = f5((x, y) => 42);
+let g2 = f5((x: number, y) => 42);
+let g3 = f5((x: number, y: number) => x + y);
+let g4 = f5((...args) => true);
+
+declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
+
+let g5 = pipe(() => true, b => 42);
+let g6 = pipe(x => "hello", s => s.length);
+let g7 = pipe((x, y) => 42, x => "" + x);
+let g8 = pipe((x: number, y: string) => 42, x => "" + x);
+
 // Repro from #25288
 
 declare var tuple: [number, string];
@@ -275,6 +290,21 @@ function f4(t) {
         }
     });
 }
+var g0 = f5(function () { return "hello"; });
+var g1 = f5(function (x, y) { return 42; });
+var g2 = f5(function (x, y) { return 42; });
+var g3 = f5(function (x, y) { return x + y; });
+var g4 = f5(function () {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+    }
+    return true;
+});
+var g5 = pipe(function () { return true; }, function (b) { return 42; });
+var g6 = pipe(function (x) { return "hello"; }, function (s) { return s.length; });
+var g7 = pipe(function (x, y) { return 42; }, function (x) { return "" + x; });
+var g8 = pipe(function (x, y) { return 42; }, function (x) { return "" + x; });
 (function foo(a, b) { }.apply(void 0, tuple));
 (function foo() {
     var rest = [];
@@ -309,6 +339,17 @@ declare function f2(cb: (...args: typeof t2) => void): void;
 declare const t3: [boolean, ...string[]];
 declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
 declare function f4<T extends any[]>(t: T): void;
+declare function f5<T extends any[], U>(f: (...args: T) => U): (...args: T) => U;
+declare let g0: () => string;
+declare let g1: (x: any, y: any) => number;
+declare let g2: (x: number, y: any) => number;
+declare let g3: (x: number, y: number) => number;
+declare let g4: (...args: any[]) => boolean;
+declare function pipe<A extends any[], B, C>(f: (...args: A) => B, g: (x: B) => C): (...args: A) => C;
+declare let g5: () => number;
+declare let g6: (x: any) => number;
+declare let g7: (x: any, y: any) => string;
+declare let g8: (x: number, y: string) => string;
 declare var tuple: [number, string];
 declare function take(cb: (a: number, b: string) => void): void;
 declare type ArgsUnion = [number, string] | [number, Error];

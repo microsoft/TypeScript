@@ -13,7 +13,7 @@ try { } catch (error) {
 }
 for (var key in this) { }
 >key : string
->this : any
+>this : typeof globalThis
 
 class C {
 >C : C

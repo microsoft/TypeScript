@@ -3,4 +3,4 @@
 //@Filename: file.tsx
 //// var x = </**/;
 
-verify.completions({ marker: "", exact: [...completion.globalsVars, "x", "undefined"] });
+verify.completions({ marker: "", exact: ["globalThis", ...completion.globalsVars, "x", "undefined"] });

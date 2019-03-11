@@ -86,6 +86,7 @@ node_modules/async/dir.js(42,20): error TS2695: Left side of comma operator is u
 node_modules/async/dist/async.js(3,10): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(3,35): error TS2304: Cannot find name 'define'.
 node_modules/async/dist/async.js(3,48): error TS2304: Cannot find name 'define'.
+node_modules/async/dist/async.js(4,20): error TS2339: Property 'async' does not exist on type 'typeof import("/async/node_modules/async/dist/async")'.
 node_modules/async/dist/async.js(31,18): error TS8029: JSDoc '@param' tag has name '', but there is no parameter with that name. It would match 'arguments' if it had an array type.
 node_modules/async/dist/async.js(31,28): error TS1003: Identifier expected.
 node_modules/async/dist/async.js(31,29): error TS1003: Identifier expected.

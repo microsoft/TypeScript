@@ -559,7 +559,7 @@ namespace ts.SignatureHelp {
         const parameters = (typeParameters || emptyArray).map(t => createSignatureHelpParameterForTypeParameter(t, checker, enclosingDeclaration, sourceFile, printer));
         const parameterParts = mapToDisplayParts(writer => {
             const thisParameter = candidateSignature.thisParameter ? [checker.symbolToParameterDeclaration(candidateSignature.thisParameter, enclosingDeclaration, signatureHelpNodeBuilderFlags)!] : [];
-            const params = createNodeArray([...thisParameter, ...candidateSignature.parameters.map(param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
+            const params = createNodeArray([...thisParameter, ...checker.getExpandedParameters(candidateSignature).map(param => checker.symbolToParameterDeclaration(param, enclosingDeclaration, signatureHelpNodeBuilderFlags)!)]);
             printer.writeList(ListFormat.CallExpressionArguments, params, sourceFile, writer);
         });
         return { isVariadic: false, parameters, prefix: [punctuationPart(SyntaxKind.LessThanToken)], suffix: [punctuationPart(SyntaxKind.GreaterThanToken), ...parameterParts] };
@@ -574,16 +574,7 @@ namespace ts.SignatureHelp {
                 printer.writeList(ListFormat.TypeParameters, args, sourceFile, writer);
             }
         });
-
-        const expandedParameters = checker.getExpandedParameters(candidateSignature);
-        const parameters = expandedParameters.map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer));
-
-        // If parameters are not the same as the expanded parameters, we need to reevaluate whether this a variadic signature based on the last parameter
-        if (expandedParameters !== candidateSignature.parameters) {
-            const restCandidate = lastOrUndefined(expandedParameters);
-            isVariadic = !!restCandidate && !!(getCheckFlags(restCandidate) & CheckFlags.RestParameter);
-        }
-
+        const parameters = checker.getExpandedParameters(candidateSignature).map(p => createSignatureHelpParameterForParameter(p, checker, enclosingDeclaration, sourceFile, printer));
         return { isVariadic, parameters, prefix: [...typeParameterParts, punctuationPart(SyntaxKind.OpenParenToken)], suffix: [punctuationPart(SyntaxKind.CloseParenToken)] };
     }
 

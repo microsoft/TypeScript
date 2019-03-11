@@ -1,6 +1,4 @@
 === tests/cases/conformance/types/conditional/conditionalTypes2.ts ===
-// #27118: Conditional types are now invariant in the check type.
-
 interface Covariant<T> {
     foo: T extends string ? T : number;
 >foo : T extends string ? T : number
@@ -21,7 +19,7 @@ function f1<A, B extends A>(a: Covariant<A>, b: Covariant<B>) {
 >a : Covariant<A>
 >b : Covariant<B>
 
-    a = b;  // Error
+    a = b;
 >a = b : Covariant<B>
 >a : Covariant<A>
 >b : Covariant<B>
@@ -42,7 +40,7 @@ function f2<A, B extends A>(a: Contravariant<A>, b: Contravariant<B>) {
 >a : Contravariant<A>
 >b : Contravariant<B>
 
-    b = a;  // Error
+    b = a;
 >b = a : Contravariant<A>
 >b : Contravariant<B>
 >a : Contravariant<A>
@@ -132,14 +130,14 @@ function f12(x: string | (() => string) | undefined) {
 >x : string | (() => string) | undefined
 
     const f = getFunction(x);  // () => string
->f : () => string
->getFunction(x) : () => string
+>f : Function & (() => string)
+>getFunction(x) : Function & (() => string)
 >getFunction : <T>(item: T) => Extract<T, Function>
 >x : string | (() => string) | undefined
 
     f();
 >f() : string
->f : () => string
+>f : Function & (() => string)
 }
 
 type Foo = { foo: string };
@@ -207,6 +205,71 @@ function f21<T>(x: Extract<Extract<T, Foo>, Bar>, y: Extract<T, Foo & Bar>, z: E
 >fooBat(z) : void
 >fooBat : (x: { foo: string; bat: string; }) => void
 >z : Extract2<T, Foo, Bar>
+}
+
+// Repros from #22860
+
+class Opt<T> {
+>Opt : Opt<T>
+
+    toVector(): Vector<T> {
+>toVector : () => Vector<T>
+
+        return <any>undefined;
+><any>undefined : any
+>undefined : undefined
+    }
+}
+
+interface Seq<T> {
+    tail(): Opt<Seq<T>>;
+>tail : () => Opt<Seq<T>>
+}
+
+class Vector<T> implements Seq<T> {
+>Vector : Vector<T>
+
+    tail(): Opt<Vector<T>> {
+>tail : () => Opt<Vector<T>>
+
+        return <any>undefined;
+><any>undefined : any
+>undefined : undefined
+    }
+    partition2<U extends T>(predicate:(v:T)=>v is U): [Vector<U>,Vector<Exclude<T, U>>];
+>partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>predicate : (v: T) => v is U
+>v : T
+
+    partition2(predicate:(x:T)=>boolean): [Vector<T>,Vector<T>];
+>partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>predicate : (x: T) => boolean
+>x : T
+
+    partition2<U extends T>(predicate:(v:T)=>boolean): [Vector<U>,Vector<any>] {
+>partition2 : { <U extends T>(predicate: (v: T) => v is U): [Vector<U>, Vector<Exclude<T, U>>]; (predicate: (x: T) => boolean): [Vector<T>, Vector<T>]; }
+>predicate : (v: T) => boolean
+>v : T
+
+        return <any>undefined;
+><any>undefined : any
+>undefined : undefined
+    }
+}
+
+interface A1<T> {
+    bat: B1<A1<T>>;
+>bat : B1<A1<T>>
+}
+
+interface B1<T> extends A1<T> {
+    bat: B1<B1<T>>;
+>bat : B1<B1<T>>
+
+    boom: T extends any ? true : true
+>boom : T extends any ? true : true
+>true : true
+>true : true
 }
 
 // Repro from #22899
@@ -367,48 +430,4 @@ type PCCA = ProductComplementComplement['a'];
 
 type PCCB = ProductComplementComplement['b'];
 >PCCB : Product<"b", 1>
-
-// Repros from #27118
-
-type MyElement<A> = [A] extends [[infer E]] ? E : never;
->MyElement : MyElement<A>
-
-function oops<A, B extends A>(arg: MyElement<A>): MyElement<B> {
->oops : <A, B extends A>(arg: MyElement<A>) => MyElement<B>
->arg : MyElement<A>
-
-    return arg;  // Unsound, should be error
->arg : MyElement<A>
-}
-
-type MyAcceptor<A> = [A] extends [[infer E]] ? (arg: E) => void : never;
->MyAcceptor : MyAcceptor<A>
->arg : E
-
-function oops2<A, B extends A>(arg: MyAcceptor<B>): MyAcceptor<A> {
->oops2 : <A, B extends A>(arg: MyAcceptor<B>) => MyAcceptor<A>
->arg : MyAcceptor<B>
-
-    return arg;  // Unsound, should be error
->arg : MyAcceptor<B>
-}
-
-type Dist<T> = T extends number ? number : string;
->Dist : Dist<T>
-
-type Aux<A extends { a: unknown }> = A["a"] extends number ? number : string;
->Aux : Aux<A>
->a : unknown
-
-type Nondist<T> = Aux<{a: T}>;
->Nondist : Aux<{ a: T; }>
->a : T
-
-function oops3<T>(arg: Dist<T>): Nondist<T> {
->oops3 : <T>(arg: Dist<T>) => Aux<{ a: T; }>
->arg : Dist<T>
-
-    return arg;  // Unsound, should be error
->arg : Dist<T>
-}
 

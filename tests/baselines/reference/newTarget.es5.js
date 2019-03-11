@@ -49,11 +49,17 @@ var __extends = (this && this.__extends) || (function () {
 var A = /** @class */ (function () {
     function A() {
         var _newTarget = this.constructor;
-        this.d = function _a() { var _newTarget = this && this instanceof _a ? this.constructor : void 0; return _newTarget; };
+        this.d = function _a() {
+            var _newTarget = this && this instanceof _a ? this.constructor : void 0;
+            return _newTarget;
+        };
         var a = _newTarget;
         var b = function () { return _newTarget; };
     }
-    A.c = function _a() { var _newTarget = this && this instanceof _a ? this.constructor : void 0; return _newTarget; };
+    A.c = function _a() {
+        var _newTarget = this && this instanceof _a ? this.constructor : void 0;
+        return _newTarget;
+    };
     return A;
 }());
 var B = /** @class */ (function (_super) {
@@ -78,5 +84,8 @@ var f2 = function _b() {
     var j = function () { return _newTarget; };
 };
 var O = {
-    k: function k() { var _newTarget = this && this instanceof k ? this.constructor : void 0; return _newTarget; }
+    k: function k() {
+        var _newTarget = this && this instanceof k ? this.constructor : void 0;
+        return _newTarget;
+    }
 };
