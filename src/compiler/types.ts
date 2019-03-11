@@ -3093,7 +3093,6 @@ namespace ts {
         /* @internal */
         getPromisedTypeOfPromise(promise: Type, errorNode?: Node): Type | undefined;
         getReturnTypeOfSignature(signature: Signature): Type;
-        /* @internal */ getExpandedParameters(sig: Signature): ReadonlyArray<Symbol>;
         /**
          * Gets the type of a parameter at a given position in a signature.
          * Returns `any` if the index is not valid.
@@ -3172,6 +3171,7 @@ namespace ts {
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getExpandedParameters(sig: Signature): ReadonlyArray<Symbol>;
+        /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
