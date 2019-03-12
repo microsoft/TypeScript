@@ -630,7 +630,7 @@ namespace ts {
         /* @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
         /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
         /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
-        /* @internal */ contextualMapper?: TypeMapper;        // Mapper for contextual type
+        /* @internal */ inferenceContext?: InferenceContext;  // Inference context for contextual type
     }
 
     export interface JSDocContainer {
@@ -4423,8 +4423,7 @@ namespace ts {
         None            =      0,  // No special inference behaviors
         NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
         AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
-        NoFixing        = 1 << 2,  // Disable type parameter fixing
-        SkippedGenericFunction = 1 << 3,
+        SkippedGenericFunction = 1 << 2, // A generic function was skipped during inference
     }
 
     /**
@@ -4447,14 +4446,15 @@ namespace ts {
     export type TypeComparer = (s: Type, t: Type, reportErrors?: boolean) => Ternary;
 
     /* @internal */
-    export interface InferenceContext extends TypeMapper {
-        typeParameters: ReadonlyArray<TypeParameter>; // Type parameters for which inferences are made
-        signature?: Signature;                        // Generic signature for which inferences are made (if any)
+    export interface InferenceContext {
         inferences: InferenceInfo[];                  // Inferences made for each type parameter
+        signature?: Signature;                        // Generic signature for which inferences are made (if any)
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
+        mapper: TypeMapper;                           // Mapper that fixes inferences
+        nonFixingMapper: TypeMapper;                  // Mapper that doesn't fix inferences
         returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
-        inferredTypeParameters?: ReadonlyArray<TypeParameter>;
+        inferredTypeParameters?: ReadonlyArray<TypeParameter>; // Inferred type parameters for function result
     }
 
     /* @internal */

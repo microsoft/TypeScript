@@ -10169,7 +10169,7 @@ namespace ts {
                     // types rules (i.e. proper contravariance) for inferences.
                     inferTypes(context.inferences, checkType, extendsType, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
                 }
-                combinedMapper = combineTypeMappers(mapper, context);
+                combinedMapper = combineTypeMappers(mapper, context.mapper);
             }
             // Instantiate the extends type including inferences for 'infer T' type parameters
             const inferredExtendsType = combinedMapper ? instantiateType(root.extendsType, combinedMapper) : extendsType;
@@ -10774,35 +10774,8 @@ namespace ts {
          * Maps forward-references to later types parameters to the empty object type.
          * This is used during inference when instantiating type parameter defaults.
          */
-        function createBackreferenceMapper(typeParameters: ReadonlyArray<TypeParameter>, index: number): TypeMapper {
-            return t => typeParameters.indexOf(t) >= index ? emptyObjectType : t;
-        }
-
-        function isInferenceContext(mapper: TypeMapper): mapper is InferenceContext {
-            return !!(<InferenceContext>mapper).typeParameters;
-        }
-
-        function cloneTypeMapper(mapper: TypeMapper, extraFlags: InferenceFlags = 0): TypeMapper {
-            return mapper && isInferenceContext(mapper) ?
-                createInferenceContext(mapper.typeParameters, mapper.signature, mapper.flags | extraFlags, mapper.compareTypes, mapper.inferences) :
-                mapper;
-        }
-
-        function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
-            // Filter context to only those parameters which actually have inference candidates
-            const params = [];
-            const inferences = [];
-            for (let i = 0; i < context.typeParameters.length; i++) {
-                const info = context.inferences[i];
-                if (info.candidates || info.contraCandidates) {
-                    params.push(context.typeParameters[i]);
-                    inferences.push(info);
-                }
-            }
-            if (!params.length) {
-                return undefined;
-            }
-            return createInferenceContext(params, context.signature, context.flags | InferenceFlags.NoDefault, context.compareTypes, inferences);
+        function createBackreferenceMapper(context: InferenceContext, index: number): TypeMapper {
+            return t => findIndex(context.inferences, info => info.typeParameter === t) >= index ? emptyObjectType : t;
         }
 
         function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
@@ -11755,7 +11728,7 @@ namespace ts {
 
             if (source.typeParameters && source.typeParameters !== target.typeParameters) {
                 target = getCanonicalSignature(target);
-                source = instantiateSignatureInContextOf(source, target, /*contextualMapper*/ undefined, compareTypes);
+                source = instantiateSignatureInContextOf(source, target, /*inferenceContext*/ undefined, compareTypes);
             }
 
             const sourceCount = getParameterCount(source);
@@ -14308,27 +14281,46 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(typeParameters: ReadonlyArray<TypeParameter>, signature: Signature | undefined, flags: InferenceFlags, compareTypes?: TypeComparer, baseInferences?: InferenceInfo[]): InferenceContext {
-            const inferences = baseInferences ? baseInferences.map(cloneInferenceInfo) : typeParameters.map(createInferenceInfo);
-            const context = mapper as InferenceContext;
-            context.typeParameters = typeParameters;
-            context.signature = signature;
-            context.inferences = inferences;
-            context.flags = flags;
-            context.compareTypes = compareTypes || compareTypesAssignable;
-            return context;
+        function createInferenceContext(typeParameters: ReadonlyArray<TypeParameter>, signature: Signature | undefined, flags: InferenceFlags, compareTypes?: TypeComparer): InferenceContext {
+            return createInferenceContextWorker(typeParameters.map(createInferenceInfo), signature, flags, compareTypes || compareTypesAssignable);
+        }
 
-            function mapper(t: Type): Type {
-                for (let i = 0; i < inferences.length; i++) {
-                    if (t === inferences[i].typeParameter) {
-                        if (!(context.flags & InferenceFlags.NoFixing)) {
-                            inferences[i].isFixed = true;
-                        }
-                        return getInferredType(context, i);
+        function cloneInferenceContext<T extends InferenceContext | undefined>(context: T, extraFlags: InferenceFlags = 0): InferenceContext | T & undefined {
+            return context && createInferenceContextWorker(map(context.inferences, cloneInferenceInfo), context.signature, context.flags | extraFlags, context.compareTypes);
+        }
+
+        function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
+            const inferences = filter(context.inferences, hasInferenceCandidates);
+            return inferences.length ?
+                createInferenceContextWorker(map(inferences, cloneInferenceInfo), context.signature, context.flags, context.compareTypes) :
+                undefined;
+        }
+
+        function createInferenceContextWorker(inferences: InferenceInfo[], signature: Signature | undefined, flags: InferenceFlags, compareTypes: TypeComparer): InferenceContext {
+            const context: InferenceContext = {
+                inferences,
+                signature,
+                flags,
+                compareTypes,
+                mapper: t => mapToInferredType(context, t, /*fix*/ true),
+                nonFixingMapper: t => mapToInferredType(context, t, /*fix*/ false),
+            };
+            return context;
+        }
+
+        function mapToInferredType(context: InferenceContext, t: Type, fix: boolean): Type {
+            const inferences = context.inferences;
+            for (let i = 0; i < inferences.length; i++) {
+                const inference = inferences[i];
+                if (t === inference.typeParameter) {
+                    if (fix && !inference.isFixed) {
+                        inference.isFixed = true;
+                        inference.inferredType = undefined;
                     }
+                    return getInferredType(context, i);
                 }
-                return t;
             }
+            return t;
         }
 
         function createInferenceInfo(typeParameter: TypeParameter): InferenceInfo {
@@ -14353,6 +14345,10 @@ namespace ts {
                 topLevel: inference.topLevel,
                 isFixed: inference.isFixed
             };
+        }
+
+        function getMapperFromContext<T extends InferenceContext | undefined>(context: T): TypeMapper | T & undefined {
+            return context && context.mapper;
         }
 
         // Return true if the given type could possibly reference a type parameter for which
@@ -14597,15 +14593,18 @@ namespace ts {
                                 const candidate = propagationType || source;
                                 // We make contravariant inferences only if we are in a pure contravariant position,
                                 // i.e. only if we have not descended into a bivariant position.
-                                if (contravariant && !bivariant) {
-                                    inference.contraCandidates = appendIfUnique(inference.contraCandidates, candidate);
+                                if (contravariant && !bivariant && !contains(inference.contraCandidates, candidate)) {
+                                    inference.contraCandidates = append(inference.contraCandidates, candidate);
+                                    inference.inferredType = undefined;
                                 }
-                                else {
-                                    inference.candidates = appendIfUnique(inference.candidates, candidate);
+                                else if (!contains(inference.candidates, candidate)) {
+                                    inference.candidates = append(inference.candidates, candidate);
+                                    inference.inferredType = undefined;
                                 }
                             }
-                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
+                            if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && inference.topLevel && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
                                 inference.topLevel = false;
+                                inference.inferredType = undefined;
                             }
                         }
                         return;
@@ -15035,10 +15034,7 @@ namespace ts {
                         if (defaultType) {
                             // Instantiate the default type. Any forward reference to a type
                             // parameter should be instantiated to the empty object type.
-                            inferredType = instantiateType(defaultType,
-                                combineTypeMappers(
-                                    createBackreferenceMapper(context.typeParameters, index),
-                                    context));
+                            inferredType = instantiateType(defaultType, combineTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
                         }
                         else {
                             inferredType = getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
@@ -15053,12 +15049,10 @@ namespace ts {
 
                 const constraint = getConstraintOfTypeParameter(inference.typeParameter);
                 if (constraint) {
-                    context.flags |= InferenceFlags.NoFixing;
-                    const instantiatedConstraint = instantiateType(constraint, context);
+                    const instantiatedConstraint = instantiateType(constraint, context.nonFixingMapper);
                     if (!context.compareTypes(inferredType, getTypeWithThisArgument(instantiatedConstraint, inferredType))) {
                         inference.inferredType = inferredType = instantiatedConstraint;
                     }
-                    context.flags &= ~InferenceFlags.NoFixing;
                 }
             }
 
@@ -17531,7 +17525,7 @@ namespace ts {
                     while (type) {
                         const thisType = getThisTypeFromContextualType(type);
                         if (thisType) {
-                            return instantiateType(thisType, getContextualMapper(containingLiteral));
+                            return instantiateType(thisType, getMapperFromContext(getInferenceContext(containingLiteral)));
                         }
                         if (literal.parent.kind !== SyntaxKind.PropertyAssignment) {
                             break;
@@ -18030,9 +18024,9 @@ namespace ts {
         // return type inferences is available, instantiate those types using that mapper.
         function instantiateContextualType(contextualType: Type | undefined, node: Expression): Type | undefined {
             if (contextualType && maybeTypeOfKind(contextualType, TypeFlags.Instantiable)) {
-                const returnMapper = (<InferenceContext>getContextualMapper(node)).returnMapper;
-                if (returnMapper) {
-                    return instantiateInstantiableTypes(contextualType, returnMapper);
+                const inferenceContext = getInferenceContext(node);
+                if (inferenceContext && inferenceContext.returnMapper) {
+                    return instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper);
                 }
             }
             return contextualType;
@@ -18134,9 +18128,9 @@ namespace ts {
             return undefined;
         }
 
-        function getContextualMapper(node: Node) {
-            const ancestor = findAncestor(node, n => !!n.contextualMapper);
-            return ancestor ? ancestor.contextualMapper! : identityMapper;
+        function getInferenceContext(node: Node) {
+            const ancestor = findAncestor(node, n => !!n.inferenceContext);
+            return ancestor && ancestor.inferenceContext!;
         }
 
         function getContextualJsxElementAttributesType(node: JsxOpeningLikeElement) {
@@ -20135,19 +20129,19 @@ namespace ts {
         }
 
         // Instantiate a generic signature in the context of a non-generic signature (section 3.8.5 in TypeScript spec)
-        function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, contextualMapper?: TypeMapper, compareTypes?: TypeComparer): Signature {
+        function instantiateSignatureInContextOf(signature: Signature, contextualSignature: Signature, inferenceContext?: InferenceContext, compareTypes?: TypeComparer): Signature {
             const context = createInferenceContext(signature.typeParameters!, signature, InferenceFlags.None, compareTypes);
-            // We clone the contextualMapper to avoid fixing. For example, when the source signature is <T>(x: T) => T[] and
+            // We clone the inferenceContext to avoid fixing. For example, when the source signature is <T>(x: T) => T[] and
             // the contextual signature is (...args: A) => B, we want to infer the element type of A's constraint (say 'any')
             // for T but leave it possible to later infer '[any]' back to A.
             const restType = getEffectiveRestType(contextualSignature);
-            const mapper = contextualMapper && restType && restType.flags & TypeFlags.TypeParameter ? cloneTypeMapper(contextualMapper) : contextualMapper;
+            const mapper = inferenceContext && (restType && restType.flags & TypeFlags.TypeParameter ? inferenceContext.nonFixingMapper : inferenceContext.mapper);
             const sourceSignature = mapper ? instantiateSignature(contextualSignature, mapper) : contextualSignature;
             forEachMatchingParameterType(sourceSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context.inferences, source, target);
             });
-            if (!contextualMapper) {
+            if (!inferenceContext) {
                 inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
                 const signaturePredicate = getTypePredicateOfSignature(signature);
                 const contextualPredicate = getTypePredicateOfSignature(sourceSignature);
@@ -20167,17 +20161,6 @@ namespace ts {
         }
 
         function inferTypeArguments(node: CallLikeExpression, signature: Signature, args: ReadonlyArray<Expression>, checkMode: CheckMode, context: InferenceContext): Type[] {
-            // Clear out all the inference results from the last time inferTypeArguments was called on this context
-            for (const inference of context.inferences) {
-                // As an optimization, we don't have to clear (and later recompute) inferred types
-                // for type parameters that have already been fixed on the previous call to inferTypeArguments.
-                // It would be just as correct to reset all of them. But then we'd be repeating the same work
-                // for the type parameters that were fixed, namely the work done by getInferredType.
-                if (!inference.isFixed) {
-                    inference.inferredType = undefined;
-                }
-            }
-
             if (isJsxOpeningLikeElement(node)) {
                 return inferJsxTypeArguments(node, signature, checkMode, context);
             }
@@ -20189,10 +20172,11 @@ namespace ts {
             if (node.kind !== SyntaxKind.Decorator) {
                 const contextualType = getContextualType(node);
                 if (contextualType) {
-                    // We clone the contextual mapper to avoid disturbing a resolution in progress for an
+                    // We clone the inference context to avoid disturbing a resolution in progress for an
                     // outer call expression. Effectively we just want a snapshot of whatever has been
                     // inferred for any outer call expression so far.
-                    const instantiatedType = instantiateType(contextualType, cloneTypeMapper(getContextualMapper(node), InferenceFlags.NoDefault));
+                    const outerMapper = getMapperFromContext(cloneInferenceContext(getInferenceContext(node), InferenceFlags.NoDefault));
+                    const instantiatedType = instantiateType(contextualType, outerMapper);
                     // If the contextual type is a generic function type with a single call signature, we
                     // instantiate the type with its own type parameters and type arguments. This ensures that
                     // the type parameters are not erased to type any during type inference such that they can
@@ -20209,7 +20193,7 @@ namespace ts {
                     inferTypes(context.inferences, inferenceSourceType, inferenceTargetType, InferencePriority.ReturnType);
                     // Create a type mapper for instantiating generic contextual types using the inferences made
                     // from the return type.
-                    context.returnMapper = cloneInferredPartOfContext(context);
+                    context.returnMapper = getMapperFromContext(cloneInferredPartOfContext(context));
                 }
             }
 
@@ -20326,7 +20310,7 @@ namespace ts {
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined, checkMode);
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*inferenceContext*/ undefined, checkMode);
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
         }
 
@@ -20360,7 +20344,7 @@ namespace ts {
                 const arg = args[i];
                 if (arg.kind !== SyntaxKind.OmittedExpression) {
                     const paramType = getTypeAtPosition(signature, i);
-                    const argType = checkExpressionWithContextualType(arg, paramType, /*contextualMapper*/ undefined, checkMode);
+                    const argType = checkExpressionWithContextualType(arg, paramType, /*inferenceContext*/ undefined, checkMode);
                     // If one or more arguments are still excluded (as indicated by CheckMode.SkipContextSensitive),
                     // we obtain the regular type of any object literal arguments because we may not have inferred complete
                     // parameter types yet and therefore excess property checks may yield false positives (see #17041).
@@ -21860,14 +21844,14 @@ namespace ts {
             return signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : fallbackType;
         }
 
-        function inferFromAnnotatedParameters(signature: Signature, context: Signature, mapper: TypeMapper) {
+        function inferFromAnnotatedParameters(signature: Signature, context: Signature, inferenceContext: InferenceContext) {
             const len = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             for (let i = 0; i < len; i++) {
                 const declaration = <ParameterDeclaration>signature.parameters[i].valueDeclaration;
                 if (declaration.type) {
                     const typeNode = getEffectiveTypeAnnotationNode(declaration);
                     if (typeNode) {
-                        inferTypes((<InferenceContext>mapper).inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
+                        inferTypes(inferenceContext.inferences, getTypeFromTypeNode(typeNode), getTypeAtPosition(context, i));
                     }
                 }
             }
@@ -21875,12 +21859,12 @@ namespace ts {
             if (restType && restType.flags & TypeFlags.TypeParameter) {
                 // The contextual signature has a generic rest parameter. We first instantiate the contextual
                 // signature (without fixing type parameters) and assign types to contextually typed parameters.
-                const instantiatedContext = instantiateSignature(context, cloneTypeMapper(mapper));
+                const instantiatedContext = instantiateSignature(context, inferenceContext.nonFixingMapper);
                 assignContextualParameterTypes(signature, instantiatedContext);
                 // We then infer from a tuple type representing the parameters that correspond to the contextual
                 // rest parameter.
                 const restPos = getParameterCount(context) - 1;
-                inferTypes((<InferenceContext>mapper).inferences, getRestTypeAtPosition(signature, restPos), restType);
+                inferTypes(inferenceContext.inferences, getRestTypeAtPosition(signature, restPos), restType);
             }
         }
 
@@ -22321,12 +22305,12 @@ namespace ts {
                     if (contextualSignature) {
                         const signature = getSignaturesOfType(type, SignatureKind.Call)[0];
                         if (isContextSensitive(node)) {
-                            const contextualMapper = getContextualMapper(node);
+                            const inferenceContext = getInferenceContext(node);
                             if (checkMode && checkMode & CheckMode.Inferential) {
-                                inferFromAnnotatedParameters(signature, contextualSignature, contextualMapper);
+                                inferFromAnnotatedParameters(signature, contextualSignature, inferenceContext!);
                             }
-                            const instantiatedContextualSignature = contextualMapper === identityMapper ?
-                                contextualSignature : instantiateSignature(contextualSignature, contextualMapper);
+                            const instantiatedContextualSignature = inferenceContext ?
+                                instantiateSignature(contextualSignature, inferenceContext.mapper) : contextualSignature;
                             assignContextualParameterTypes(signature, instantiatedContextualSignature);
                         }
                         if (!getReturnTypeFromAnnotation(node) && !signature.resolvedReturnType) {
@@ -23333,20 +23317,20 @@ namespace ts {
             return node;
         }
 
-        function checkExpressionWithContextualType(node: Expression, contextualType: Type, contextualMapper: TypeMapper | undefined, checkMode: CheckMode): Type {
+        function checkExpressionWithContextualType(node: Expression, contextualType: Type, inferenceContext: InferenceContext | undefined, checkMode: CheckMode): Type {
             const context = getContextNode(node);
             const saveContextualType = context.contextualType;
-            const saveContextualMapper = context.contextualMapper;
+            const saveInferenceContext = context.inferenceContext;
             context.contextualType = contextualType;
-            context.contextualMapper = contextualMapper;
-            const type = checkExpression(node, checkMode | CheckMode.Contextual | (contextualMapper ? CheckMode.Inferential : 0));
+            context.inferenceContext = inferenceContext;
+            const type = checkExpression(node, checkMode | CheckMode.Contextual | (inferenceContext ? CheckMode.Inferential : 0));
             // We strip literal freshness when an appropriate contextual type is present such that contextually typed
             // literals always preserve their literal types (otherwise they might widen during type inference). An alternative
             // here would be to not mark contextually typed literals as fresh in the first place.
             const result = maybeTypeOfKind(type, TypeFlags.Literal) && isLiteralOfContextualType(type, instantiateContextualType(contextualType, node)) ?
                 getRegularTypeOfLiteralType(type) : type;
             context.contextualType = saveContextualType;
-            context.contextualMapper = saveContextualMapper;
+            context.inferenceContext = saveInferenceContext;
             return result;
         }
 
@@ -23472,7 +23456,7 @@ namespace ts {
                     if (contextualType) {
                         const contextualSignature = getSingleCallSignature(getNonNullableType(contextualType));
                         if (contextualSignature && !contextualSignature.typeParameters) {
-                            const context = <InferenceContext>getContextualMapper(node);
+                            const context = getInferenceContext(node)!;
                             // We have an expression that is an argument of a generic function for which we are performing
                             // type argument inference. The expression is of a function type with a single generic call
                             // signature and a contextual function type with a single non-generic call signature. Now check
@@ -23488,7 +23472,7 @@ namespace ts {
                                 const strippedType = getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(signature, uniqueTypeParameters));
                                 // Infer from the stripped expression type to the contextual type starting with an empty
                                 // set of inference candidates.
-                                const inferences = map(context.typeParameters, createInferenceInfo);
+                                const inferences = map(context.inferences, info => createInferenceInfo(info.typeParameter));
                                 inferTypes(inferences, strippedType, contextualType);
                                 // If we produced some inference candidates and if the type parameters for which we produced
                                 // candidates do not already have existing inferences, we adopt the new inference candidates and
@@ -23512,7 +23496,7 @@ namespace ts {
             if (checkMode & CheckMode.Inferential) {
                 // We have skipped a generic function during inferential typing. Obtain the inference context and
                 // indicate this has occurred such that we know a second pass of inference is be needed.
-                const context = <InferenceContext>getContextualMapper(node);
+                const context = getInferenceContext(node)!;
                 context.flags |= InferenceFlags.SkippedGenericFunction;
             }
         }
@@ -23627,13 +23611,6 @@ namespace ts {
             return type;
         }
 
-        // Checks an expression and returns its type. The contextualMapper parameter serves two purposes: When
-        // contextualMapper is not undefined and not equal to the identityMapper function object it indicates that the
-        // expression is being inferentially typed (section 4.15.2 in spec) and provides the type mapper to use in
-        // conjunction with the generic contextual type. When contextualMapper is equal to the identityMapper function
-        // object, it serves as an indicator that all contained function and arrow expressions should be considered to
-        // have the wildcard function type; this form of type check is used during overload resolution to exclude
-        // contextually typed function and arrow expressions in the initial phase.
         function checkExpression(node: Expression | QualifiedName, checkMode?: CheckMode, forceTuple?: boolean): Type {
             const saveCurrentNode = currentNode;
             currentNode = node;

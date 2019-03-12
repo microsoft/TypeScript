@@ -799,3 +799,27 @@ const fn62 = pipe(
 
 );
 
+// Repro from #30297
+
+declare function foo2<T, U = T>(fn: T, a?: U, b?: U): [T, U];
+>foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
+>fn : T
+>a : U | undefined
+>b : U | undefined
+
+foo2(() => {});
+>foo2(() => {}) : [() => void, () => void]
+>foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
+>() => {} : () => void
+
+foo2(identity);
+>foo2(identity) : [<T>(value: T) => T, {}]
+>foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
+>identity : <T>(value: T) => T
+
+foo2(identity, 1);
+>foo2(identity, 1) : [<T>(value: T) => T, number]
+>foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
+>identity : <T>(value: T) => T
+>1 : 1
+
