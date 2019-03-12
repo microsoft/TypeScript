@@ -322,12 +322,11 @@ namespace ts {
             modifyFs: noop
         });
 
-        // Verify baseline with build info
+        // Verify baseline with build info + dts unChanged
         verifyOutFileScenario({
             scenario: "when final project is not composite but uses project references",
             modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, ""),
             ignoreDtsChanged: true,
-            ignoreDtsUnchanged: true,
             baselineOnly: true
         });
 

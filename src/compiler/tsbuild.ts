@@ -1012,9 +1012,9 @@ namespace ts {
                 return;
             }
 
-            const buildResult = status.type === UpToDateStatusType.OutOfDateWithPrepend ?
-                updateBundle(resolved) : // Fake that files have been built by manipulating prepend and existing output
-                buildSingleProject(resolved); // Actual build
+            const buildResult = needsBuild(status, resolved) ?
+                buildSingleProject(resolved) : // Actual build
+                updateBundle(resolved); // Fake that files have been built by manipulating prepend and existing output
             if (buildResult & BuildResultFlags.AnyErrors) return;
 
             const { referencingProjectsMap, buildQueue } = getGlobalDependencyGraph();
@@ -1424,9 +1424,10 @@ namespace ts {
                     continue;
                 }
 
-                const buildResult = status.type === UpToDateStatusType.OutOfDateWithPrepend && !options.force ?
-                    updateBundle(next) : // Fake that files have been built by manipulating prepend and existing output
-                    buildSingleProject(next); // Actual build
+                const buildResult = needsBuild(status, next) ?
+                    buildSingleProject(next) : // Actual build
+                    updateBundle(next); // Fake that files have been built by manipulating prepend and existing output
+
                 anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
             reportErrorSummary();
@@ -1438,6 +1439,15 @@ namespace ts {
             compilerHost.getSourceFile = savedGetSourceFile;
             readFileWithCache = savedReadFileWithCache;
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
+        }
+
+        function needsBuild(status: UpToDateStatus, configFile: ResolvedConfigFileName) {
+            if (status.type !== UpToDateStatusType.OutOfDateWithPrepend || options.force) return true;
+            const config = parseConfigFile(configFile);
+            return !config ||
+                config.fileNames.length === 0 ||
+                !!config.errors.length ||
+                !isIncrementalCompilation(config.options);
         }
 
         function reportParseConfigFileDiagnostic(proj: ResolvedConfigFileName) {
