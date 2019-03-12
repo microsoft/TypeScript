@@ -7026,13 +7026,23 @@ namespace ts {
                 getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
         }
 
-        function includeMixinType(type: Type, types: ReadonlyArray<Type>, index: number): Type {
+        function findMixins(types: ReadonlyArray<Type>): ReadonlyArray<boolean> {
+            const constructorTypeCount = countWhere(types, (t) => getSignaturesOfType(t, SignatureKind.Construct).length > 0);
+            const mixinFlags = map(types, isMixinConstructorType);
+            if (constructorTypeCount > 0 && constructorTypeCount === countWhere(mixinFlags, (b) => b)) {
+                const firstMixinIndex = mixinFlags.indexOf(/*searchElement*/ true);
+                mixinFlags[firstMixinIndex] = false;
+            }
+            return mixinFlags;
+        }
+
+        function includeMixinType(type: Type, types: ReadonlyArray<Type>, mixinFlags: ReadonlyArray<boolean>, index: number): Type {
             const mixedTypes: Type[] = [];
             for (let i = 0; i < types.length; i++) {
                 if (i === index) {
                     mixedTypes.push(type);
                 }
-                else if (isMixinConstructorType(types[i])) {
+                else if (mixinFlags[i]) {
                     mixedTypes.push(getReturnTypeOfSignature(getSignaturesOfType(types[i], SignatureKind.Construct)[0]));
                 }
             }
@@ -7047,7 +7057,8 @@ namespace ts {
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
             const types = type.types;
-            const mixinCount = countWhere(types, isMixinConstructorType);
+            const mixinFlags = findMixins(types);
+            const mixinCount = countWhere(mixinFlags, (b) => b);
             for (let i = 0; i < types.length; i++) {
                 const t = type.types[i];
                 // When an intersection type contains mixin constructor types, the construct signatures from
@@ -7055,12 +7066,12 @@ namespace ts {
                 // other construct signatures in the intersection type. For example, the intersection type
                 // '{ new(...args: any[]) => A } & { new(s: string) => B }' has a single construct signature
                 // 'new(s: string) => A & B'.
-                if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(t)) {
+                if (!mixinFlags[i]) {
                     let signatures = getSignaturesOfType(t, SignatureKind.Construct);
                     if (signatures.length && mixinCount > 0) {
                         signatures = map(signatures, s => {
                             const clone = cloneSignature(s);
-                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, i);
+                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, mixinFlags, i);
                             return clone;
                         });
                     }
@@ -21104,12 +21115,11 @@ namespace ts {
             const firstBase = baseTypes[0];
             if (firstBase.flags & TypeFlags.Intersection) {
                 const types = (firstBase as IntersectionType).types;
-                const mixinCount = countWhere(types, isMixinConstructorType);
+                const mixinFlags = findMixins(types);
                 let i = 0;
                 for (const intersectionMember of (firstBase as IntersectionType).types) {
-                    i++;
                     // We want to ignore mixin ctors
-                    if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(intersectionMember)) {
+                    if (!mixinFlags[i]) {
                         if (getObjectFlags(intersectionMember) & (ObjectFlags.Class | ObjectFlags.Interface)) {
                             if (intersectionMember.symbol === target) {
                                 return true;
@@ -21119,6 +21129,7 @@ namespace ts {
                             }
                         }
                     }
+                    i++;
                 }
                 return false;
             }
