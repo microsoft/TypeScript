@@ -9,12 +9,31 @@ namespace ts {
         return result.diagnostics;
     }
 
+    function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
+        const comment = currentSourceFile.text.substring(range.pos, range.end);
+        return stringContains(comment, "@internal");
+    }
+
     export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
         const parseTreeNode = getParseTreeNode(node);
+        if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
+            const paramIdx = (parseTreeNode.parent as FunctionLike).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as FunctionLike).parameters[paramIdx - 1] : undefined;
+            const text = currentSourceFile.text;
+            const commentRanges = previousSibling
+                ? concatenate(
+                    // to handle
+                    // ... parameters, /* @internal */
+                    // public param: string
+                    getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
+                    getLeadingCommentRanges(text, node.pos)
+                )
+                : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
+            return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
+        }
         const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
         return !!forEach(leadingCommentRanges, range => {
-            const comment = currentSourceFile.text.substring(range.pos, range.end);
-            return stringContains(comment, "@internal");
+            return hasInternalAnnotation(range, currentSourceFile);
         });
     }
 
@@ -1075,10 +1094,8 @@ namespace ts {
                     let parameterProperties: ReadonlyArray<PropertyDeclaration> | undefined;
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
-                        let previousSibling: Node;
                         parameterProperties = compact(flatMap(ctor.parameters, (param) => {
-                            const prev = previousSibling;
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternalParameter((previousSibling = param), prev)) return;
+                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1241,24 +1258,6 @@ namespace ts {
 
         function shouldStripInternal(node: Node) {
             return !!stripInternal && !!node && isInternalDeclaration(node, currentSourceFile);
-        }
-
-        function shouldStripInternalParameter(node: Node, previousSibling: Node | undefined) {
-            if (stripInternal && node) {
-                node = getParseTreeNode(node);
-                const text = currentSourceFile.text;
-                const commentRanges = previousSibling
-                    ? concatenate(
-                        // to handle
-                        // ... parameters, /* @internal */
-                        // public param: string
-                        getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
-                        getLeadingCommentRanges(text, node.pos)
-                    )
-                    : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
-                return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges));
-            }
-            return false;
         }
 
         function isScopeMarker(node: Node) {

@@ -8236,6 +8236,7 @@ declare namespace ts.server {
      */
     type ProjectRoot = ScriptInfo | NormalizedPath;
     abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
+        readonly projectName: string;
         readonly projectKind: ProjectKind;
         readonly projectService: ProjectService;
         private documentRegistry;
