@@ -6,6 +6,8 @@ tests/cases/conformance/externalModules/multipleExportDefault5.ts(2,22): error T
     export default function bar() { }
                             ~~~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2753 tests/cases/conformance/externalModules/multipleExportDefault5.ts:2:22: Another export default is here.
     export default class C {}
                          ~
 !!! error TS2528: A module cannot have multiple default exports.
+!!! related TS2752 tests/cases/conformance/externalModules/multipleExportDefault5.ts:1:25: The first export default is here.

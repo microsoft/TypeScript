@@ -403,13 +403,15 @@ namespace ts {
                             messageNeedsName = false;
                         }
 
-                        if (symbol.declarations && symbol.declarations.length) {
+                        let multipleDefaultExports = false;
+                        if (length(symbol.declarations)) {
                             // If the current node is a default export of some sort, then check if
                             // there are any other default exports that we need to error on.
                             // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
                             if (isDefaultExport) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                                 messageNeedsName = false;
+                                multipleDefaultExports = true;
                             }
                             else {
                                 // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
@@ -420,15 +422,26 @@ namespace ts {
                                     (node.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
                                     message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                                     messageNeedsName = false;
+                                    multipleDefaultExports = true;
                                 }
                             }
                         }
 
-                        const addError = (decl: Declaration): void => {
-                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(decl) || decl, message, messageNeedsName ? getDisplayName(decl) : undefined));
-                        };
-                        forEach(symbol.declarations, addError);
-                        addError(node);
+                        const declarationName = getNameOfDeclaration(node) || node;
+                        const relatedInformation: DiagnosticRelatedInformation[] = [];
+                        forEach(symbol.declarations, (declaration, index) => {
+                            const decl = getNameOfDeclaration(declaration) || declaration;
+                            const diag = createDiagnosticForNode(decl, message, messageNeedsName ? getDisplayName(declaration) : undefined);
+                            file.bindDiagnostics.push(
+                                multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here)) : diag
+                            );
+                            if (multipleDefaultExports) {
+                                relatedInformation.push(createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here));
+                            }
+                        });
+
+                        const diag = createDiagnosticForNode(declarationName, message, messageNeedsName ? getDisplayName(node) : undefined);
+                        file.bindDiagnostics.push(multipleDefaultExports ? addRelatedInfo(diag, ...relatedInformation) : diag);
 
                         symbol = createSymbol(SymbolFlags.None, name);
                     }
