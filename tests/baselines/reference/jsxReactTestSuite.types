@@ -47,7 +47,7 @@ declare var hasOwnProperty:any;
   {this.props.children}
 >this.props.children : any
 >this.props : any
->this : any
+>this : typeof globalThis
 >props : any
 >children : any
 
@@ -89,7 +89,7 @@ declare var hasOwnProperty:any;
     {this.props.children}
 >this.props.children : any
 >this.props : any
->this : any
+>this : typeof globalThis
 >props : any
 >children : any
 
@@ -262,7 +262,7 @@ var x =
 
     {...this.props} sound="moo" />;
 >this.props : any
->this : any
+>this : typeof globalThis
 >props : any
 >sound : string
 

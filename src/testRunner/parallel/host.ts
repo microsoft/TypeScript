@@ -7,7 +7,7 @@ namespace Harness.Parallel.Host {
         const Base = Mocha.reporters.Base;
         const color = Base.color;
         const cursor = Base.cursor;
-        const ms = require("mocha/lib/ms") as typeof import("mocha/lib/ms");
+        const ms = require("ms") as typeof import("ms");
         const readline = require("readline") as typeof import("readline");
         const os = require("os") as typeof import("os");
         const tty = require("tty") as typeof import("tty");
@@ -302,6 +302,7 @@ namespace Harness.Parallel.Host {
                                 worker.timer = undefined;
                             }
                             else {
+                                // tslint:disable-next-line:ban
                                 worker.timer = setTimeout(killChild, data.payload.duration, data.payload);
                             }
                             break;
@@ -529,31 +530,31 @@ namespace Harness.Parallel.Host {
 
                 const replayRunner = new Mocha.Runner(new Mocha.Suite(""), /*delay*/ false);
                 replayRunner.started = true;
+                const createStatsCollector = require("mocha/lib/stats-collector");
+                createStatsCollector(replayRunner); // manually init stats collector like mocha.run would
 
                 const consoleReporter = new Base(replayRunner);
                 patchStats(consoleReporter.stats);
 
                 let xunitReporter: import("mocha").reporters.XUnit | undefined;
                 let failedTestReporter: import("../../../scripts/failed-tests") | undefined;
-                if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
-                    if (process.env.CI === "true") {
-                        xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
-                            reporterOptions: {
-                                suiteName: "Tests",
-                                output: "./TEST-results.xml"
-                            }
-                        });
-                        patchStats(xunitReporter.stats);
-                        xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
-                    }
-                    else {
-                        failedTestReporter = new FailedTestReporter(replayRunner, {
-                            reporterOptions: {
-                                file: path.resolve(".failed-tests"),
-                                keepFailed
-                            }
-                        });
-                    }
+                if (process.env.CI === "true") {
+                    xunitReporter = new Mocha.reporters.XUnit(replayRunner, {
+                        reporterOptions: {
+                            suiteName: "Tests",
+                            output: "./TEST-results.xml"
+                        }
+                    });
+                    patchStats(xunitReporter.stats);
+                    xunitReporter.write(`<?xml version="1.0" encoding="UTF-8"?>\n`);
+                }
+                else {
+                    failedTestReporter = new FailedTestReporter(replayRunner, {
+                        reporterOptions: {
+                            file: path.resolve(".failed-tests"),
+                            keepFailed
+                        }
+                    });
                 }
 
                 const savedUseColors = Base.useColors;
@@ -623,6 +624,7 @@ namespace Harness.Parallel.Host {
             shimNoopTestInterface(global);
         }
 
+        // tslint:disable-next-line:ban
         setTimeout(() => startDelayed(perfData, totalCost), 0); // Do real startup on next tick, so all unit tests have been collected
     }
 }
