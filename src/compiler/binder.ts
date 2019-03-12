@@ -440,7 +440,7 @@ namespace ts {
                             }
                         });
 
-                        const diag = createDiagnosticForNode(declarationName, message, messageNeedsName ? getDisplayName(node) : undefined)
+                        const diag = createDiagnosticForNode(declarationName, message, messageNeedsName ? getDisplayName(node) : undefined);
                         file.bindDiagnostics.push(multipleDefaultExports ? addRelatedInfo(diag, ...relatedInformation) : diag);
 
                         symbol = createSymbol(SymbolFlags.None, name);
