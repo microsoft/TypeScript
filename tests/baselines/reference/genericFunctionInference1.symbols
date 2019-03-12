@@ -848,3 +848,30 @@ const fn62 = pipe(
 
 );
 
+// Repro from #30297
+
+declare function foo2<T, U = T>(fn: T, a?: U, b?: U): [T, U];
+>foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 183, 2))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 187, 22))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 187, 24))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 187, 22))
+>fn : Symbol(fn, Decl(genericFunctionInference1.ts, 187, 32))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 187, 22))
+>a : Symbol(a, Decl(genericFunctionInference1.ts, 187, 38))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 187, 24))
+>b : Symbol(b, Decl(genericFunctionInference1.ts, 187, 45))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 187, 24))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 187, 22))
+>U : Symbol(U, Decl(genericFunctionInference1.ts, 187, 24))
+
+foo2(() => {});
+>foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 183, 2))
+
+foo2(identity);
+>foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 183, 2))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 154, 13))
+
+foo2(identity, 1);
+>foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 183, 2))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 154, 13))
+
