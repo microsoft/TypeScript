@@ -32,19 +32,7 @@
 ////var ci1: I1;
 ////ci1./*2*/b;
 
-goTo.marker('1');
-verify.completionListCount(6);
-verify.completionListContains("a");
-verify.completionListContains("b");
-verify.completionListContains("c");
-verify.completionListContains("i1");
-verify.completionListContains("i2");
-verify.completionListContains("i3");
-
-goTo.marker('2');
-verify.completionListCount(5);
-verify.completionListContains("a");
-verify.completionListContains("b");
-verify.completionListContains("b1");
-verify.completionListContains("i11");
-verify.completionListContains("i12");
+verify.completions(
+    { marker: "1", exact: ["i1", "i2", "i3", "a", "b", "c"] },
+    { marker: "2", exact: ["i11", "i12", "a", "b", "b1"] },
+);

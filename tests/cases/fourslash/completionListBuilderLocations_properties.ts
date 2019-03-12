@@ -10,4 +10,4 @@
 ////    public static a/*property2*/
 ////}
 
-goTo.eachMarker(() => verify.completionListContainsClassElementKeywords());
+verify.completions({ marker: test.markers(), exact: completion.classElementKeywords, isNewIdentifierLocation: true });

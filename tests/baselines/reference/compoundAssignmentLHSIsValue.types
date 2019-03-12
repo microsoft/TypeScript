@@ -62,12 +62,12 @@ function foo() {
 
 this *= value;
 >this *= value : number
->this : any
+>this : typeof globalThis
 >value : any
 
 this += value;
 >this += value : any
->this : any
+>this : typeof globalThis
 >value : any
 
 // identifiers: module, class, enum, function
@@ -300,14 +300,14 @@ foo() += value;
 // parentheses, the containted expression is value
 (this) *= value;
 >(this) *= value : number
->(this) : any
->this : any
+>(this) : typeof globalThis
+>this : typeof globalThis
 >value : any
 
 (this) += value;
 >(this) += value : any
->(this) : any
->this : any
+>(this) : typeof globalThis
+>this : typeof globalThis
 >value : any
 
 (M) *= value;

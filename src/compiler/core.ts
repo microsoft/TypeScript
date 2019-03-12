@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.2";
+    export const versionMajorMinor = "3.4";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -14,6 +14,10 @@ namespace ts {
      */
     export interface MapLike<T> {
         [index: string]: T;
+    }
+
+    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+        " __sortedArrayBrand": any;
     }
 
     export interface SortedArray<T> extends Array<T> {
@@ -108,48 +112,111 @@ namespace ts {
     }
 
     // The global Map object. This may not be available, so we must test for it.
-    declare const Map: { new <T>(): Map<T> } | undefined;
+    declare const Map: (new <T>() => Map<T>) | undefined;
     // Internet Explorer's Map doesn't support iteration, so don't use it.
     // tslint:disable-next-line no-in-operator variable-name
     export const MapCtr = typeof Map !== "undefined" && "entries" in Map.prototype ? Map : shimMap();
 
     // Keep the class inside a function so it doesn't get compiled if it's not used.
-    function shimMap(): { new <T>(): Map<T> } {
+    export function shimMap(): new <T>() => Map<T> {
+
+        interface MapEntry<T> {
+            readonly key?: string;
+            value?: T;
+
+            // Linked list references for iterators.
+            nextEntry?: MapEntry<T>;
+            previousEntry?: MapEntry<T>;
+
+            /**
+             * Specifies if iterators should skip the next entry.
+             * This will be set when an entry is deleted.
+             * See https://github.com/Microsoft/TypeScript/pull/27292 for more information.
+             */
+            skipNext?: boolean;
+        }
 
         class MapIterator<T, U extends (string | T | [string, T])> {
-            private data: MapLike<T>;
-            private keys: ReadonlyArray<string>;
-            private index = 0;
-            private selector: (data: MapLike<T>, key: string) => U;
-            constructor(data: MapLike<T>, selector: (data: MapLike<T>, key: string) => U) {
-                this.data = data;
+            private currentEntry?: MapEntry<T>;
+            private selector: (key: string, value: T) => U;
+
+            constructor(currentEntry: MapEntry<T>, selector: (key: string, value: T) => U) {
+                this.currentEntry = currentEntry;
                 this.selector = selector;
-                this.keys = Object.keys(data);
             }
 
             public next(): { value: U, done: false } | { value: never, done: true } {
-                const index = this.index;
-                if (index < this.keys.length) {
-                    this.index++;
-                    return { value: this.selector(this.data, this.keys[index]), done: false };
+                // Navigate to the next entry.
+                while (this.currentEntry) {
+                    const skipNext = !!this.currentEntry.skipNext;
+                    this.currentEntry = this.currentEntry.nextEntry;
+
+                    if (!skipNext) {
+                        break;
+                    }
                 }
-                return { value: undefined as never, done: true };
+
+                if (this.currentEntry) {
+                    return { value: this.selector(this.currentEntry.key!, this.currentEntry.value!), done: false };
+                }
+                else {
+                    return { value: undefined as never, done: true };
+                }
             }
         }
 
         return class <T> implements Map<T> {
-            private data = createDictionaryObject<T>();
+            private data = createDictionaryObject<MapEntry<T>>();
             public size = 0;
 
+            // Linked list references for iterators.
+            // See https://github.com/Microsoft/TypeScript/pull/27292
+            // for more information.
+
+            /**
+             * The first entry in the linked list.
+             * Note that this is only a stub that serves as starting point
+             * for iterators and doesn't contain a key and a value.
+             */
+            private readonly firstEntry: MapEntry<T>;
+            private lastEntry: MapEntry<T>;
+
+            constructor() {
+                // Create a first (stub) map entry that will not contain a key
+                // and value but serves as starting point for iterators.
+                this.firstEntry = {};
+                // When the map is empty, the last entry is the same as the
+                // first one.
+                this.lastEntry = this.firstEntry;
+            }
+
             get(key: string): T | undefined {
-                return this.data[key];
+                const entry = this.data[key] as MapEntry<T> | undefined;
+                return entry && entry.value!;
             }
 
             set(key: string, value: T): this {
                 if (!this.has(key)) {
                     this.size++;
+
+                    // Create a new entry that will be appended at the
+                    // end of the linked list.
+                    const newEntry: MapEntry<T> = {
+                        key,
+                        value
+                    };
+                    this.data[key] = newEntry;
+
+                    // Adjust the references.
+                    const previousLastEntry = this.lastEntry;
+                    previousLastEntry.nextEntry = newEntry;
+                    newEntry.previousEntry = previousLastEntry;
+                    this.lastEntry = newEntry;
                 }
-                this.data[key] = value;
+                else {
+                    this.data[key].value = value;
+                }
+
                 return this;
             }
 
@@ -161,32 +228,81 @@ namespace ts {
             delete(key: string): boolean {
                 if (this.has(key)) {
                     this.size--;
+                    const entry = this.data[key];
                     delete this.data[key];
+
+                    // Adjust the linked list references of the neighbor entries.
+                    const previousEntry = entry.previousEntry!;
+                    previousEntry.nextEntry = entry.nextEntry;
+                    if (entry.nextEntry) {
+                        entry.nextEntry.previousEntry = previousEntry;
+                    }
+
+                    // When the deleted entry was the last one, we need to
+                    // adust the lastEntry reference.
+                    if (this.lastEntry === entry) {
+                        this.lastEntry = previousEntry;
+                    }
+
+                    // Adjust the forward reference of the deleted entry
+                    // in case an iterator still references it. This allows us
+                    // to throw away the entry, but when an active iterator
+                    // (which points to the current entry) continues, it will
+                    // navigate to the entry that originally came before the
+                    // current one and skip it.
+                    entry.previousEntry = undefined;
+                    entry.nextEntry = previousEntry;
+                    entry.skipNext = true;
+
                     return true;
                 }
                 return false;
             }
 
             clear(): void {
-                this.data = createDictionaryObject<T>();
+                this.data = createDictionaryObject<MapEntry<T>>();
                 this.size = 0;
+
+                // Reset the linked list. Note that we must adjust the forward
+                // references of the deleted entries to ensure iterators stuck
+                // in the middle of the list don't continue with deleted entries,
+                // but can continue with new entries added after the clear()
+                // operation.
+                const firstEntry = this.firstEntry;
+                let currentEntry = firstEntry.nextEntry;
+                while (currentEntry) {
+                    const nextEntry = currentEntry.nextEntry;
+                    currentEntry.previousEntry = undefined;
+                    currentEntry.nextEntry = firstEntry;
+                    currentEntry.skipNext = true;
+
+                    currentEntry = nextEntry;
+                }
+                firstEntry.nextEntry = undefined;
+                this.lastEntry = firstEntry;
             }
 
             keys(): Iterator<string> {
-                return new MapIterator(this.data, (_data, key) => key);
+                return new MapIterator(this.firstEntry, key => key);
             }
 
             values(): Iterator<T> {
-                return new MapIterator(this.data, (data, key) => data[key]);
+                return new MapIterator(this.firstEntry, (_key, value) => value);
             }
 
             entries(): Iterator<[string, T]> {
-                return new MapIterator(this.data, (data, key) => [key, data[key]] as [string, T]);
+                return new MapIterator(this.firstEntry, (key, value) => [key, value] as [string, T]);
             }
 
             forEach(action: (value: T, key: string) => void): void {
-                for (const key in this.data) {
-                    action(this.data[key], key);
+                const iterator = this.entries();
+                while (true) {
+                    const { value: entry, done } = iterator.next();
+                    if (done) {
+                        break;
+                    }
+
+                    action(entry[1], entry[0]);
                 }
             }
         };
@@ -511,12 +627,27 @@ namespace ts {
      * @param array The array to map.
      * @param mapfn The callback used to map the result into one or more values.
      */
-    export function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
-    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] | undefined;
-    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] | undefined {
+    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): ReadonlyArray<U> {
         let result: U[] | undefined;
         if (array) {
-            result = [];
+            for (let i = 0; i < array.length; i++) {
+                const v = mapfn(array[i], i);
+                if (v) {
+                    if (isArray(v)) {
+                        result = addRange(result, v);
+                    }
+                    else {
+                        result = append(result, v);
+                    }
+                }
+            }
+        }
+        return result || emptyArray;
+    }
+
+    export function flatMapToMutable<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] {
+        const result: U[] = [];
+        if (array) {
             for (let i = 0; i < array.length; i++) {
                 const v = mapfn(array[i], i);
                 if (v) {
@@ -786,7 +917,7 @@ namespace ts {
 
     /**
      * Deduplicates an unsorted array.
-     * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
+     * @param equalityComparer An `EqualityComparer` used to determine if two values are duplicates.
      * @param comparer An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
      */
@@ -800,8 +931,8 @@ namespace ts {
     /**
      * Deduplicates an array that has already been sorted.
      */
-    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[] {
-        if (array.length === 0) return [];
+    function deduplicateSorted<T>(array: SortedReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): SortedReadonlyArray<T> {
+        if (array.length === 0) return emptyArray as any as SortedReadonlyArray<T>;
 
         let last = array[0];
         const deduplicated: T[] = [last];
@@ -823,7 +954,7 @@ namespace ts {
             deduplicated.push(last = next);
         }
 
-        return deduplicated;
+        return deduplicated as any as SortedReadonlyArray<T>;
     }
 
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
@@ -838,8 +969,10 @@ namespace ts {
         }
     }
 
-    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>) {
-        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<string>): SortedReadonlyArray<string>;
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
+        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
     }
 
     export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
@@ -863,8 +996,11 @@ namespace ts {
     /**
      * Compacts an array, removing any falsey elements.
      */
-    export function compact<T>(array: T[]): T[];
-    export function compact<T>(array: ReadonlyArray<T>): ReadonlyArray<T>;
+    export function compact<T>(array: (T | undefined | null | false | 0 | "")[]): T[];
+    export function compact<T>(array: ReadonlyArray<T | undefined | null | false | 0 | "">): ReadonlyArray<T>;
+    // TSLint thinks these can be combined with the above - they cannot; they'd produce higher-priority inferences and prevent the falsey types from being stripped
+    export function compact<T>(array: T[]): T[]; // tslint:disable-line unified-signatures
+    export function compact<T>(array: ReadonlyArray<T>): ReadonlyArray<T>; // tslint:disable-line unified-signatures
     export function compact<T>(array: T[]): T[] {
         let result: T[] | undefined;
         if (array) {
@@ -1020,8 +1156,8 @@ namespace ts {
     /**
      * Returns a new sorted array.
      */
-    export function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): T[] {
-        return array.slice().sort(comparer);
+    export function sort<T>(array: ReadonlyArray<T>, comparer?: Comparer<T>): SortedReadonlyArray<T> {
+        return (array.length === 0 ? array : array.slice().sort(comparer)) as SortedReadonlyArray<T>;
     }
 
     export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
@@ -1037,13 +1173,28 @@ namespace ts {
         }};
     }
 
+    export function arrayReverseIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
+        let i = array.length;
+        return {
+            next: () => {
+                if (i === 0) {
+                    return { value: undefined as never, done: true };
+                }
+                else {
+                    i--;
+                    return { value: array[i], done: false };
+                }
+            }
+        };
+    }
+
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): SortedReadonlyArray<T> {
         const indices = array.map((_, i) => i);
         stableSortIndices(array, indices, comparer);
-        return indices.map(i => array[i]);
+        return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
     }
 
     export function rangeEquals<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, pos: number, end: number) {
@@ -1135,13 +1286,26 @@ namespace ts {
      * @param offset An offset into `array` at which to start the search.
      */
     export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
-        if (!array || array.length === 0) {
+        return binarySearchKey(array, keySelector(value), keySelector, keyComparer, offset);
+    }
+
+    /**
+     * Performs a binary search, finding the index at which an object with `key` occurs in `array`.
+     * If no such index is found, returns the 2's-complement of first index at which
+     * `array[index]` exceeds `key`.
+     * @param array A sorted array whose first element must be no larger than number
+     * @param key The key to be searched for in the array.
+     * @param keySelector A callback used to select the search key from each element of `array`.
+     * @param keyComparer A callback used to compare two keys in a sorted array.
+     * @param offset An offset into `array` at which to start the search.
+     */
+    export function binarySearchKey<T, U>(array: ReadonlyArray<T>, key: U, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
+        if (!some(array)) {
             return -1;
         }
 
         let low = offset || 0;
         let high = array.length - 1;
-        const key = keySelector(value);
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
             const midKey = keySelector(array[middle]);
@@ -1234,9 +1398,9 @@ namespace ts {
     }
 
     /** Shims `Array.from`. */
-    export function arrayFrom<T, U>(iterator: Iterator<T>, map: (t: T) => U): U[];
-    export function arrayFrom<T>(iterator: Iterator<T>): T[];
-    export function arrayFrom(iterator: Iterator<any>, map?: (t: any) => any): any[] {
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
+    export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
         const result: any[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(map ? map(value) : value);
@@ -1247,9 +1411,10 @@ namespace ts {
 
     export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
         for (const arg of args) {
-            for (const p in arg!) {
-                if (hasProperty(arg!, p)) {
-                    t![p] = arg![p]; // TODO: GH#23368
+            if (arg === undefined) continue;
+            for (const p in arg) {
+                if (hasProperty(arg, p)) {
+                    t[p] = arg[p];
                 }
             }
         }
@@ -1351,6 +1516,18 @@ namespace ts {
         }
 
         return result;
+    }
+
+    export function copyProperties<T1 extends T2, T2>(first: T1, second: T2) {
+        for (const id in second) {
+            if (hasOwnProperty.call(second, id)) {
+                (first as any)[id] = second[id];
+            }
+        }
+    }
+
+    export function maybeBind<T, A extends any[], R>(obj: T, fn: ((this: T, ...args: A) => R) | undefined): ((...args: A) => R) | undefined {
+        return fn ? fn.bind(obj) : undefined;
     }
 
     export interface MultiMap<T> extends Map<T[]> {
@@ -1603,7 +1780,7 @@ namespace ts {
         }
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
+            const detail = typeof member === "object" && "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
@@ -2031,7 +2208,6 @@ namespace ts {
     }
 
     /** Represents a "prefix*suffix" pattern. */
-    /* @internal */
     export interface Pattern {
         prefix: string;
         suffix: string;
@@ -2132,6 +2308,10 @@ namespace ts {
     }
 
     export function fill<T>(length: number, cb: (index: number) => T): T[] {
-        return new Array(length).fill(0).map((_, i) => cb(i));
+        const result = Array<T>(length);
+        for (let i = 0; i < length; i++) {
+            result[i] = cb(i);
+        }
+        return result;
     }
 }

@@ -87,12 +87,12 @@ void prop6;
 
 let {[symed]: prop7} = strIndexed;
 >symed : unique symbol
->prop7 : any
+>prop7 : string
 >strIndexed : { [idx: string]: string; }
 
 void prop7;
 >void prop7 : undefined
->prop7 : any
+>prop7 : string
 
 let {[symed2]: prop8} = numIndexed;
 >symed2 : symbol
@@ -105,10 +105,10 @@ void prop8;
 
 let {[symed2]: prop9} = strIndexed;
 >symed2 : symbol
->prop9 : any
+>prop9 : string
 >strIndexed : { [idx: string]: string; }
 
 void prop9;
 >void prop9 : undefined
->prop9 : any
+>prop9 : string
 

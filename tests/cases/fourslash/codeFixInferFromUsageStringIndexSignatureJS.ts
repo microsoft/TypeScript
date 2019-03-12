@@ -11,7 +11,7 @@
 ////}
 
 verify.codeFix({
-    index: 2,
+    index: 0,
     description: "Infer parameter types from usage",
     newFileContent:
 `/**

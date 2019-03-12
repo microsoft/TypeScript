@@ -8,4 +8,4 @@
 // @Filename: /project/index.ts
 ////import { } from ".//**/";
 
-verify.completionsAt("", [], { isNewIdentifierLocation: true });
+verify.completions({ marker: "", exact: [], isNewIdentifierLocation: true });

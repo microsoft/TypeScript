@@ -1,11 +1,9 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts(15,1): error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived; }'.
   Index signatures are incompatible.
-    Type 'Base' is not assignable to type 'Derived'.
-      Property 'bar' is missing in type 'Base'.
+    Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts(19,1): error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived2; }'.
   Index signatures are incompatible.
-    Type 'Base' is not assignable to type 'Derived2'.
-      Property 'baz' is missing in type 'Base'.
+    Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts(33,5): error TS2322: Type 'A<Base>' is not assignable to type '{ [x: string]: Derived; }'.
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'Derived'.
@@ -47,8 +45,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     ~
 !!! error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived; }'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'Base' is not assignable to type 'Derived'.
-!!! error TS2322:       Property 'bar' is missing in type 'Base'.
+!!! error TS2322:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts:4:34: 'bar' is declared here.
     
     var b2: { [x: string]: Derived2; }
     a = b2; // ok
@@ -56,8 +54,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     ~~
 !!! error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived2; }'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'Base' is not assignable to type 'Derived2'.
-!!! error TS2322:       Property 'baz' is missing in type 'Base'.
+!!! error TS2322:     Type 'Base' is missing the following properties from type 'Derived2': baz, bar
     
     module Generics {
         class A<T extends Base> {

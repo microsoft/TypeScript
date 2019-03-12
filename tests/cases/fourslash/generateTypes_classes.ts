@@ -8,7 +8,8 @@ verify.generateTypes(
     output:
 `export = example;
 declare class example {
-}`,
+}
+`,
 },
 
 {
@@ -28,11 +29,13 @@ declare class example {
 declare class example {
     constructor(x: any);
     x: any;
-}`,
+}
+`,
 },
 {
     value: { x: 0, export: 0 },
-    output: `export const x: number;`,
+    output: `export const x: number;
+`,
 },
 {
     value: (() => {
@@ -87,7 +90,8 @@ declare namespace example {
     namespace staticMethod {
         const staticMethodProperty: number;
     }
-}`,
+}
+`,
 },
 
 {
@@ -103,7 +107,43 @@ declare class example {
     static staticMethod(): void;
     x: any;
     method(): void;
-}`,
+}
+`,
 },
 
+{
+    // No duplicate instance members
+    value: (() => {
+        class C {
+            constructor() {
+                (this as any).x = 0;
+                (this as any).x = 1;
+                (this as any).m = 0;
+            }
+            m() {}
+        }
+        return C;
+    })(),
+    output:
+`export = example;
+declare class example {
+    x: any;
+    m(): void;
+}
+`,
+},
+
+{
+    // nontrivial prototype marks something as an instance
+    value: (() => {
+        const obj = Object.create({});
+        obj.m = function() { this.x = 0; }
+        return { obj };
+    })(),
+    output:
+`export const obj: {
+    m: Function;
+};
+`,
+},
 );

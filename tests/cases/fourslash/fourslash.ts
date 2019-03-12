@@ -124,6 +124,9 @@ declare namespace FourSlashInterface {
         symbolsInScope(range: Range): any[];
         setTypesRegistry(map: { [key: string]: void }): void;
     }
+    class plugins {
+        configurePlugin(pluginName: string, configuration: any): void;
+    }
     class goTo {
         marker(name?: string | Marker): void;
         eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
@@ -146,27 +149,6 @@ declare namespace FourSlashInterface {
         allowedClassElementKeywords: string[];
         allowedConstructorParameterKeywords: string[];
         constructor(negative?: boolean);
-        completionListCount(expectedCount: number): void;
-        completionListContains(
-            entryId: string | { name: string, source?: string },
-            text?: string,
-            documentation?: string,
-            kind?: string | { kind?: string, kindModifiers?: string },
-            spanIndex?: number,
-            hasAction?: boolean,
-            options?: UserPreferences & {
-                triggerCharacter?: string,
-                sourceDisplay?: string,
-                isRecommended?: true,
-                insertText?: string,
-                replacementSpan?: Range,
-            },
-        ): void;
-        completionListItemsCountIsGreaterThan(count: number): void;
-        completionListIsEmpty(): void;
-        completionListContainsClassElementKeywords(): void;
-        completionListContainsConstructorParameterKeywords(): void;
-        completionListAllowsNewIdentifier(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
@@ -192,25 +174,11 @@ declare namespace FourSlashInterface {
         applicableRefactorAvailableForRange(): void;
 
         refactorAvailable(name: string, actionName?: string): void;
-        refactor(options: {
-            name: string;
-            actionName: string;
-            refactors: any[];
-        }): void;
     }
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completions(...options: {
-            readonly marker?: ArrayOrSingle<string | Marker>,
-            readonly isNewIdentifierLocation?: boolean;
-            readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
-            readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
-            readonly excludes?: ArrayOrSingle<string | { name: string, source: string }>;
-            readonly preferences?: UserPreferences;
-            readonly triggerCharacter?: string;
-        }[]): void;
-        completionsAt(markerName: ArrayOrSingle<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions): void;
+        completions(...options: CompletionsOptions[]): void;
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
@@ -258,7 +226,7 @@ declare namespace FourSlashInterface {
          * For each of starts, asserts the ranges that are referenced from there.
          * This uses the 'findReferences' command instead of 'getReferencesAtPosition', so references are grouped by their definition.
          */
-        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: Array<{ definition: ReferencesDefinition, ranges: Range[] }>): void;
+        referenceGroups(starts: ArrayOrSingle<string> | ArrayOrSingle<Range>, parts: ReadonlyArray<ReferenceGroup>): void;
         singleReferenceGroup(definition: ReferencesDefinition, ranges?: Range[]): void;
         rangesAreOccurrences(isWriteAccess?: boolean): void;
         rangesWithSameTextAreRenameLocations(): void;
@@ -299,7 +267,6 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
-        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -315,14 +282,14 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         }[]): void;
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range): void;
-        renameInfoFailed(message?: string): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
+        renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
 
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
         /** Goto a marker and call `quickInfoIs`. */
-        quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string): void;
+        quickInfoAt(markerName: string | Range, expectedText?: string, expectedDocumentation?: string): void;
         /**
          * Call `quickInfoAt` for each pair in the object.
          * (If the value is an array, it is [expectedText, expectedDocumentation].)
@@ -515,6 +482,10 @@ declare namespace FourSlashInterface {
         };
     }
 
+    interface ReferenceGroup {
+        readonly definition: ReferencesDefinition;
+        readonly ranges: ReadonlyArray<Range>;
+    }
     type ReferencesDefinition = string | {
         text: string;
         range: Range;
@@ -536,25 +507,33 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
-    interface CompletionsAtOptions extends UserPreferences {
-        triggerCharacter?: string;
-        isNewIdentifierLocation?: boolean;
+    interface CompletionsOptions {
+        readonly marker?: ArrayOrSingle<string | Marker>,
+        readonly isNewIdentifierLocation?: boolean;
+        readonly isGlobalCompletion?: boolean;
+        readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
+        readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
+        readonly excludes?: ArrayOrSingle<string>;
+        readonly preferences?: UserPreferences;
+        readonly triggerCharacter?: string;
     }
-    type ExpectedCompletionEntry = string | {
-        readonly name: string,
-        readonly source?: string,
-        readonly insertText?: string,
-        readonly replacementSpan?: Range,
-        readonly hasAction?: boolean,
-        readonly isRecommended?: boolean,
-        readonly kind?: string,
+    type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;
+    interface ExpectedCompletionEntryObject {
+        readonly name: string;
+        readonly source?: string;
+        readonly insertText?: string;
+        readonly replacementSpan?: Range;
+        readonly hasAction?: boolean;
+        readonly isRecommended?: boolean;
+        readonly kind?: string;
+        readonly kindModifiers?: string;
 
         // details
-        readonly text?: string,
-        readonly documentation?: string,
+        readonly text?: string;
+        readonly documentation?: string;
         readonly tags?: ReadonlyArray<JSDocTagInfo>;
-        readonly sourceDisplay?: string,
-    };
+        readonly sourceDisplay?: string;
+    }
 
     interface VerifySignatureHelpOptions {
         marker?: ArrayOrSingle<string>;
@@ -642,6 +621,7 @@ declare namespace FourSlashInterface {
     interface GenerateTypesOptions {
         readonly name?: string;
         readonly value: unknown;
+        readonly global?: boolean;
         readonly output?: string | undefined;
         readonly outputBaseline?: string;
     }
@@ -653,11 +633,13 @@ declare namespace FourSlashInterface {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
         readonly ranges: ReadonlyArray<RenameLocationOptions>;
-    }
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
+declare var plugins: FourSlashInterface.plugins;
 declare var goTo: FourSlashInterface.goTo;
 declare var verify: FourSlashInterface.verify;
 declare var edit: FourSlashInterface.edit;
@@ -665,3 +647,25 @@ declare var debug: FourSlashInterface.debug;
 declare var format: FourSlashInterface.format;
 declare var cancellation: FourSlashInterface.cancellation;
 declare var classification: typeof FourSlashInterface.classification;
+declare namespace completion {
+    type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
+    export const globals: ReadonlyArray<Entry>;
+    export const globalKeywords: ReadonlyArray<Entry>;
+    export const insideMethodKeywords: ReadonlyArray<Entry>;
+    export const globalKeywordsPlusUndefined: ReadonlyArray<Entry>;
+    export const globalsVars: ReadonlyArray<Entry>;
+    export function globalsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
+    export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export const keywordsWithUndefined: ReadonlyArray<Entry>;
+    export const keywords: ReadonlyArray<Entry>;
+    export const typeKeywords: ReadonlyArray<Entry>;
+    export const globalTypes: ReadonlyArray<Entry>;
+    export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export const classElementKeywords: ReadonlyArray<Entry>;
+    export const constructorParameterKeywords: ReadonlyArray<Entry>;
+    export const functionMembers: ReadonlyArray<Entry>;
+    export const stringMembers: ReadonlyArray<Entry>;
+    export const functionMembersWithPrototype: ReadonlyArray<Entry>;
+    export const statementKeywordsWithTypes: ReadonlyArray<Entry>;
+    export const statementKeywords: ReadonlyArray<Entry>;
+}

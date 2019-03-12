@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
-[![VSTS Build Status](https://typescript.visualstudio.com/_apis/public/build/definitions/cf7ac146-d525-443c-b23c-0d58337efebc/4/badge)](https://typescript.visualstudio.com/TypeScript/_build/latest?definitionId=4&view=logs) 
+[![VSTS Build Status](https://dev.azure.com/typescript/TypeScript/_apis/build/status/Typescript/node10)](https://dev.azure.com/typescript/TypeScript/_build/latest?definitionId=4&view=logs) 
 [![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
 [![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
 
@@ -29,7 +29,7 @@ There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob
 * [Submit bugs](https://github.com/Microsoft/TypeScript/issues) and help us verify fixes as they are checked in.
 * Review the [source code changes](https://github.com/Microsoft/TypeScript/pulls).
 * Engage with other TypeScript users and developers on [StackOverflow](https://stackoverflow.com/questions/tagged/typescript). 
-* Join the [#typescript](https://twitter.com/#!/search/realtime/%23typescript) discussion on Twitter.
+* Join the [#typescript](https://twitter.com/search?q=%23TypeScript) discussion on Twitter.
 * [Contribute bug fixes](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md).
 * Read the language specification ([docx](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.docx?raw=true),
  [pdf](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.pdf?raw=true), [md](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)).
@@ -61,29 +61,29 @@ Change to the TypeScript directory:
 cd TypeScript
 ```
 
-Install [Jake](http://jakejs.com/) tools and dev dependencies:
+Install [Gulp](https://gulpjs.com/) tools and dev dependencies:
 
 ```bash
-npm install -g jake
+npm install -g gulp
 npm install
 ```
 
 Use one of the following to build and test:
 
 ```
-jake local            # Build the compiler into built/local 
-jake clean            # Delete the built compiler 
-jake LKG              # Replace the last known good with the built one.
+gulp local            # Build the compiler into built/local 
+gulp clean            # Delete the built compiler 
+gulp LKG              # Replace the last known good with the built one.
                       # Bootstrapping step to be executed when the built compiler reaches a stable state.
-jake tests            # Build the test infrastructure using the built compiler. 
-jake runtests         # Run tests using the built compiler and test infrastructure. 
+gulp tests            # Build the test infrastructure using the built compiler. 
+gulp runtests         # Run tests using the built compiler and test infrastructure. 
                       # You can override the host or specify a test for this command. 
-                      # Use host=<hostName> or tests=<testPath>. 
-jake runtests-browser # Runs the tests using the built run.js file. Syntax is jake runtests. Optional
-                        parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.
-jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests.
-jake lint             # Runs tslint on the TypeScript source.
-jake help             # List the above commands. 
+                      # Use --host=<hostName> or --tests=<testPath>. 
+gulp runtests-browser # Runs the tests using the built run.js file. Syntax is gulp runtests. Optional
+                        parameters '--host=', '--tests=[regex], --reporter=[list|spec|json|<more>]'.
+gulp baseline-accept  # This replaces the baseline test results with the results obtained from gulp runtests.
+gulp lint             # Runs tslint on the TypeScript source.
+gulp help             # List the above commands. 
 ```
 
 

@@ -21,7 +21,7 @@ interface TypeWriterResult {
 }
 
 class TypeWriterWalker {
-    currentSourceFile: ts.SourceFile;
+    currentSourceFile!: ts.SourceFile;
 
     private checker: ts.TypeChecker;
 

@@ -87,13 +87,13 @@ var unionWithDifferentParameterCount: { new (a: string): string; } | { new (a: s
 >a : Symbol(a, Decl(unionTypeConstructSignatures.ts, 27, 76))
 >b : Symbol(b, Decl(unionTypeConstructSignatures.ts, 27, 86))
 
-new unionWithDifferentParameterCount();// no  call signature
+new unionWithDifferentParameterCount();// needs more args
 >unionWithDifferentParameterCount : Symbol(unionWithDifferentParameterCount, Decl(unionTypeConstructSignatures.ts, 27, 3))
 
-new unionWithDifferentParameterCount("hello");// no  call signature
+new unionWithDifferentParameterCount("hello");// needs more args
 >unionWithDifferentParameterCount : Symbol(unionWithDifferentParameterCount, Decl(unionTypeConstructSignatures.ts, 27, 3))
 
-new unionWithDifferentParameterCount("hello", 10);// no  call signature
+new unionWithDifferentParameterCount("hello", 10);// ok
 >unionWithDifferentParameterCount : Symbol(unionWithDifferentParameterCount, Decl(unionTypeConstructSignatures.ts, 27, 3))
 
 var unionWithOptionalParameter1: { new (a: string, b?: number): string; } | { new (a: string, b?: number): number; };
@@ -152,11 +152,11 @@ strOrNum = new unionWithOptionalParameter3('hello'); // error no call signature
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 >unionWithOptionalParameter3 : Symbol(unionWithOptionalParameter3, Decl(unionTypeConstructSignatures.ts, 44, 3))
 
-strOrNum = new unionWithOptionalParameter3('hello', 10); // error no call signature
+strOrNum = new unionWithOptionalParameter3('hello', 10); // ok
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 >unionWithOptionalParameter3 : Symbol(unionWithOptionalParameter3, Decl(unionTypeConstructSignatures.ts, 44, 3))
 
-strOrNum = new unionWithOptionalParameter3('hello', "hello"); // error no call signature
+strOrNum = new unionWithOptionalParameter3('hello', "hello"); // wrong type
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 >unionWithOptionalParameter3 : Symbol(unionWithOptionalParameter3, Decl(unionTypeConstructSignatures.ts, 44, 3))
 
@@ -228,15 +228,15 @@ strOrNum = new unionWithRestParameter3('hello'); // error no call signature
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 >unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeConstructSignatures.ts, 64, 3))
 
-strOrNum = new unionWithRestParameter3('hello', 10); // error no call signature
+strOrNum = new unionWithRestParameter3('hello', 10); // ok
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 >unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeConstructSignatures.ts, 64, 3))
 
-strOrNum = new unionWithRestParameter3('hello', 10, 11); // error no call signature
+strOrNum = new unionWithRestParameter3('hello', 10, 11); // ok
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 >unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeConstructSignatures.ts, 64, 3))
 
-strOrNum = new unionWithRestParameter3('hello', "hello"); // error no call signature
+strOrNum = new unionWithRestParameter3('hello', "hello"); // wrong type
 >strOrNum : Symbol(strOrNum, Decl(unionTypeConstructSignatures.ts, 2, 3))
 >unionWithRestParameter3 : Symbol(unionWithRestParameter3, Decl(unionTypeConstructSignatures.ts, 64, 3))
 

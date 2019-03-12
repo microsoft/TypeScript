@@ -95,15 +95,15 @@ function c<T>(data: string | T): T {
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
->typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | T
 >'string' : "string"
 
         return JSON.parse(data);
 >JSON.parse(data) : any
->JSON.parse : (text: string, reviver?: (key: any, value: any) => any) => any
+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
 >JSON : JSON
->parse : (text: string, reviver?: (key: any, value: any) => any) => any
+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
 >data : string | (T & string)
     }
     else {
@@ -117,7 +117,7 @@ function d<T extends string>(data: string | T): never {
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
->typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | T
 >'string' : "string"
 

@@ -15,6 +15,7 @@
 
 verify.codeFix({
     description: "Annotate with type from JSDoc",
+    index: 7,
     newFileContent:
 `/**
  * @param {*} x
