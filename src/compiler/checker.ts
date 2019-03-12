@@ -23451,7 +23451,7 @@ namespace ts {
                     if (contextualType) {
                         const contextualSignature = getSingleCallSignature(getNonNullableType(contextualType));
                         if (contextualSignature && !contextualSignature.typeParameters) {
-                            const context = <InferenceContext>getInferenceContext(node);
+                            const context = getInferenceContext(node)!;
                             // We have an expression that is an argument of a generic function for which we are performing
                             // type argument inference. The expression is of a function type with a single generic call
                             // signature and a contextual function type with a single non-generic call signature. Now check
@@ -23491,7 +23491,7 @@ namespace ts {
             if (checkMode & CheckMode.Inferential) {
                 // We have skipped a generic function during inferential typing. Obtain the inference context and
                 // indicate this has occurred such that we know a second pass of inference is be needed.
-                const context = <InferenceContext>getInferenceContext(node);
+                const context = getInferenceContext(node)!;
                 context.flags |= InferenceFlags.SkippedGenericFunction;
             }
         }
