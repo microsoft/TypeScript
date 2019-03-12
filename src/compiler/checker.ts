@@ -1232,6 +1232,8 @@ namespace ts {
             let lastLocation: Node | undefined;
             let lastSelfReferenceLocation: Node | undefined;
             let propertyWithInvalidInitializer: Node | undefined;
+            let associatedDeclarationForContainingInitializer: ParameterDeclaration | BindingElement | undefined;
+            let withinDeferredContext = false;
             const errorLocation = location;
             let grandparent: Node;
             let isInExternalModule = false;
@@ -1292,6 +1294,7 @@ namespace ts {
                         }
                     }
                 }
+                withinDeferredContext = withinDeferredContext || getIsDeferredContext(location, lastLocation);
                 switch (location.kind) {
                     case SyntaxKind.SourceFile:
                         if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
@@ -1480,6 +1483,19 @@ namespace ts {
                         // js type aliases do not resolve names from their host, so skip past it
                         location = getJSDocHost(location);
                         break;
+                    case SyntaxKind.Parameter:
+                        if (lastLocation && lastLocation === (location as ParameterDeclaration).initializer) {
+                            associatedDeclarationForContainingInitializer = location as ParameterDeclaration;
+                        }
+                        break;
+                    case SyntaxKind.BindingElement:
+                        if (lastLocation && lastLocation === (location as BindingElement).initializer) {
+                            const root = getRootDeclaration(location);
+                            if (root.kind === SyntaxKind.Parameter) {
+                                associatedDeclarationForContainingInitializer = location as BindingElement;
+                            }
+                        }
+                        break;
                 }
                 if (isSelfReferenceLocation(location)) {
                     lastSelfReferenceLocation = location;
@@ -1584,8 +1600,40 @@ namespace ts {
                         error(errorLocation!, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name)); // TODO: GH#18217
                     }
                 }
+
+                // If we're in a parameter initializer, we can't reference the values of the parameter whose initializer we're within or parameters to the right
+                if (result && associatedDeclarationForContainingInitializer && !withinDeferredContext && (meaning & SymbolFlags.Value) === SymbolFlags.Value) {
+                    const candidate = getMergedSymbol(getLateBoundSymbol(result));
+                    const root = (getRootDeclaration(associatedDeclarationForContainingInitializer) as ParameterDeclaration);
+                    // A parameter initializer or binding pattern initializer within a parameter cannot refer to itself
+                    if (candidate === getSymbolOfNode(associatedDeclarationForContainingInitializer)) {
+                        error(errorLocation, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(associatedDeclarationForContainingInitializer.name));
+                    }
+                    // And it cannot refer to any declarations which come after it
+                    else if (candidate.valueDeclaration && candidate.valueDeclaration.pos > associatedDeclarationForContainingInitializer.pos && root.parent.locals && lookup(root.parent.locals, candidate.escapedName, meaning) === candidate) {
+                        error(errorLocation, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(associatedDeclarationForContainingInitializer.name), declarationNameToString(<Identifier>errorLocation));
+                    }
+                }
             }
             return result;
+        }
+
+        function getIsDeferredContext(location: Node, lastLocation: Node | undefined): boolean {
+            if (location.kind !== SyntaxKind.ArrowFunction && location.kind !== SyntaxKind.FunctionExpression) {
+                // initializers in instance property declaration of class like entities are executed in constructor and thus deferred
+                return isTypeQueryNode(location) || ((
+                    isFunctionLikeDeclaration(location) ||
+                    (location.kind === SyntaxKind.PropertyDeclaration && !hasModifier(location, ModifierFlags.Static))
+                ) && (!lastLocation || lastLocation !== (location as FunctionLike | PropertyDeclaration).name)); // A name is evaluated within the enclosing scope - so it shouldn't count as deferred
+            }
+            if (lastLocation && lastLocation === (location as FunctionExpression | ArrowFunction).name) {
+                return false;
+            }
+            // generator functions and async functions are not inlined in control flow when immediately invoked
+            if ((location as FunctionExpression | ArrowFunction).asteriskToken || hasModifier(location, ModifierFlags.Async)) {
+                return true;
+            }
+            return !getImmediatelyInvokedFunctionExpression(location);
         }
 
         function isSelfReferenceLocation(node: Node): boolean {
@@ -26076,74 +26124,6 @@ namespace ts {
             }
         }
 
-        // Check that a parameter initializer contains no references to parameters declared to the right of itself
-        function checkParameterInitializer(node: HasExpressionInitializer): void {
-            if (getRootDeclaration(node).kind !== SyntaxKind.Parameter) {
-                return;
-            }
-
-            const func = getContainingFunction(node);
-            visit(node.initializer!);
-
-            function visit(n: Node): void {
-                if (isTypeNode(n) || isDeclarationName(n)) {
-                    // do not dive in types
-                    // skip declaration names (i.e. in object literal expressions)
-                    return;
-                }
-                if (n.kind === SyntaxKind.PropertyAccessExpression) {
-                    // skip property names in property access expression
-                    return visit((<PropertyAccessExpression>n).expression);
-                }
-                else if (n.kind === SyntaxKind.Identifier) {
-                    // check FunctionLikeDeclaration.locals (stores parameters\function local variable)
-                    // if it contains entry with a specified name
-                    const symbol = resolveName(n, (<Identifier>n).escapedText, SymbolFlags.Value | SymbolFlags.Alias, /*nameNotFoundMessage*/undefined, /*nameArg*/undefined, /*isUse*/ false);
-                    if (!symbol || symbol === unknownSymbol || !symbol.valueDeclaration) {
-                        return;
-                    }
-                    if (symbol.valueDeclaration === node) {
-                        error(n, Diagnostics.Parameter_0_cannot_be_referenced_in_its_initializer, declarationNameToString(node.name));
-                        return;
-                    }
-                    // locals map for function contain both parameters and function locals
-                    // so we need to do a bit of extra work to check if reference is legal
-                    const enclosingContainer = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
-                    if (enclosingContainer === func) {
-                        if (symbol.valueDeclaration.kind === SyntaxKind.Parameter ||
-                           symbol.valueDeclaration.kind === SyntaxKind.BindingElement) {
-                            // it is ok to reference parameter in initializer if either
-                            // - parameter is located strictly on the left of current parameter declaration
-                            if (symbol.valueDeclaration.pos < node.pos) {
-                                return;
-                            }
-                            // - parameter is wrapped in function-like entity
-                            if (findAncestor(
-                                n,
-                                current => {
-                                    if (current === node.initializer) {
-                                        return "quit";
-                                    }
-                                    return isFunctionLike(current.parent) ||
-                                        // computed property names/initializers in instance property declaration of class like entities
-                                        // are executed in constructor and thus deferred
-                                        (current.parent.kind === SyntaxKind.PropertyDeclaration &&
-                                         !(hasModifier(current.parent, ModifierFlags.Static)) &&
-                                         isClassLike(current.parent.parent));
-                                    })) {
-                                return;
-                            }
-                            // fall through to report error
-                        }
-                        error(n, Diagnostics.Initializer_of_parameter_0_cannot_reference_identifier_1_declared_after_it, declarationNameToString(node.name), declarationNameToString(<Identifier>n));
-                    }
-                }
-                else {
-                    return forEachChild(n, visit);
-                }
-            }
-        }
-
         function convertAutoToAny(type: Type) {
             return type === autoType ? anyType : type === autoArrayType ? anyArrayType : type;
         }
@@ -26220,7 +26200,6 @@ namespace ts {
                     else {
                         checkTypeAssignableToAndOptionallyElaborate(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
                     }
-                    checkParameterInitializer(node);
                 }
                 return;
             }
@@ -26237,7 +26216,6 @@ namespace ts {
                         hasEntries(symbol.exports);
                     if (!isJSObjectLiteralInitializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                         checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(initializer), type, node, initializer, /*headMessage*/ undefined);
-                        checkParameterInitializer(node);
                     }
                 }
                 if (symbol.declarations.length > 1) {
