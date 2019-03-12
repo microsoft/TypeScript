@@ -32,6 +32,7 @@ namespace ts.tscWatch {
     export interface Watch {
         (): Program;
         getBuilderProgram(): EmitAndSemanticDiagnosticsBuilderProgram;
+        close(): void;
     }
 
     export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
@@ -40,6 +41,7 @@ namespace ts.tscWatch {
         const watch = createWatchProgram(compilerHost);
         const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
         result.getBuilderProgram = () => watch.getCurrentProgram();
+        result.close = () => watch.close();
         return result;
     }
 

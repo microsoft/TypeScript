@@ -6,7 +6,7 @@
 >a : any
 >this.R[c] : any
 >this.R : any
->this : any
+>this : typeof globalThis
 >R : any
 >c : any
 >a.JW||(a.e5(this,c),a.JW=_.l) : any
@@ -19,7 +19,7 @@
 >a.e5 : any
 >a : any
 >e5 : any
->this : any
+>this : typeof globalThis
 >c : any
 >a.JW=_.l : any
 >a.JW : any
@@ -29,6 +29,6 @@
 >_ : any
 >l : any
 >this.A : any
->this : any
+>this : typeof globalThis
 >A : any
 

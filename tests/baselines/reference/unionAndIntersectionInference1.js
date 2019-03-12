@@ -72,6 +72,24 @@ declare var mbp: Man & Bear;
 pigify(mbp).oinks; // OK, mbp is treated as Pig
 pigify(mbp).walks; // Ok, mbp is treated as Man
 
+// Repros from #29815
+
+interface ITest {
+  name: 'test'
+}
+
+const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
+
+const createTest = (): ITest => {
+  return { name: 'test' }
+}
+
+declare function f1<T, U>(x: T | U): T | U;
+declare function f2<T, U>(x: T & U): T & U;
+
+let x1: string = f1('a');
+let x2: string = f2('a');
+
 
 //// [unionAndIntersectionInference1.js]
 // Repro from #2264
@@ -80,7 +98,7 @@ function destructure(something, haveValue, haveY) {
     return something === y ? haveY(y) : haveValue(something);
 }
 var value = Math.random() > 0.5 ? 'hey!' : undefined;
-var result = destructure(value, function (text) { return 'string'; }, function (y) { return 'other one'; }); // text: string, y: Y
+var result = destructure(value, text => 'string', y => 'other one'); // text: string, y: Y
 // Repro from #4212
 function isVoid(value) {
     return undefined;
@@ -107,7 +125,13 @@ function baz1(value) {
 function get(x) {
     return null; // just an example
 }
-var foo;
+let foo;
 get(foo).toUpperCase(); // Ok
 pigify(mbp).oinks; // OK, mbp is treated as Pig
 pigify(mbp).walks; // Ok, mbp is treated as Man
+const createTestAsync = () => Promise.resolve().then(() => ({ name: 'test' }));
+const createTest = () => {
+    return { name: 'test' };
+};
+let x1 = f1('a');
+let x2 = f2('a');
