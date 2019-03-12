@@ -4447,9 +4447,8 @@ namespace ts {
 
     /* @internal */
     export interface InferenceContext {
-        typeParameters: ReadonlyArray<TypeParameter>; // Type parameters for which inferences are made
-        signature?: Signature;                        // Generic signature for which inferences are made (if any)
         inferences: InferenceInfo[];                  // Inferences made for each type parameter
+        signature?: Signature;                        // Generic signature for which inferences are made (if any)
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
         mapper: TypeMapper;                           // Mapper that fixes inferences

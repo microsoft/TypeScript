@@ -10774,28 +10774,8 @@ namespace ts {
          * Maps forward-references to later types parameters to the empty object type.
          * This is used during inference when instantiating type parameter defaults.
          */
-        function createBackreferenceMapper(typeParameters: ReadonlyArray<TypeParameter>, index: number): TypeMapper {
-            return t => typeParameters.indexOf(t) >= index ? emptyObjectType : t;
-        }
-
-        function cloneInferenceContext<T extends InferenceContext | undefined>(context: T, extraFlags: InferenceFlags = 0): InferenceContext | T & undefined {
-            return context && createInferenceContext(context.typeParameters, context.signature, context.flags | extraFlags, context.compareTypes, context.inferences);
-        }
-
-        function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
-            // Filter context to only those parameters which actually have inference candidates
-            const params = [];
-            const inferences = [];
-            for (let i = 0; i < context.typeParameters.length; i++) {
-                const info = context.inferences[i];
-                if (info.candidates || info.contraCandidates) {
-                    params.push(context.typeParameters[i]);
-                    inferences.push(info);
-                }
-            }
-            return params.length ?
-                createInferenceContext(params, context.signature, context.flags | InferenceFlags.NoDefault, context.compareTypes, inferences) :
-                undefined;
+        function createBackreferenceMapper(context: InferenceContext, index: number): TypeMapper {
+            return t => findIndex(context.inferences, info => info.typeParameter === t) >= index ? emptyObjectType : t;
         }
 
         function combineTypeMappers(mapper1: TypeMapper | undefined, mapper2: TypeMapper): TypeMapper;
@@ -14301,13 +14281,27 @@ namespace ts {
             }
         }
 
-        function createInferenceContext(typeParameters: ReadonlyArray<TypeParameter>, signature: Signature | undefined, flags: InferenceFlags, compareTypes?: TypeComparer, baseInferences?: InferenceInfo[]): InferenceContext {
+        function createInferenceContext(typeParameters: ReadonlyArray<TypeParameter>, signature: Signature | undefined, flags: InferenceFlags, compareTypes?: TypeComparer): InferenceContext {
+            return createInferenceContextWorker(typeParameters.map(createInferenceInfo), signature, flags, compareTypes || compareTypesAssignable);
+        }
+
+        function cloneInferenceContext<T extends InferenceContext | undefined>(context: T, extraFlags: InferenceFlags = 0): InferenceContext | T & undefined {
+            return context && createInferenceContextWorker(map(context.inferences, cloneInferenceInfo), context.signature, context.flags | extraFlags, context.compareTypes);
+        }
+
+        function cloneInferredPartOfContext(context: InferenceContext): InferenceContext | undefined {
+            const inferences = filter(context.inferences, hasInferenceCandidates);
+            return inferences.length ?
+                createInferenceContextWorker(map(inferences, cloneInferenceInfo), context.signature, context.flags, context.compareTypes) :
+                undefined;
+        }
+
+        function createInferenceContextWorker(inferences: InferenceInfo[], signature: Signature | undefined, flags: InferenceFlags, compareTypes: TypeComparer): InferenceContext {
             const context: InferenceContext = {
-                typeParameters,
+                inferences,
                 signature,
-                inferences: baseInferences ? baseInferences.map(cloneInferenceInfo) : typeParameters.map(createInferenceInfo),
                 flags,
-                compareTypes: compareTypes || compareTypesAssignable,
+                compareTypes,
                 mapper: t => mapToInferredType(context, t, /*fix*/ true),
                 nonFixingMapper: t => mapToInferredType(context, t, /*fix*/ false),
             };
@@ -15040,10 +15034,7 @@ namespace ts {
                         if (defaultType) {
                             // Instantiate the default type. Any forward reference to a type
                             // parameter should be instantiated to the empty object type.
-                            inferredType = instantiateType(defaultType,
-                                combineTypeMappers(
-                                    createBackreferenceMapper(context.typeParameters, index),
-                                    context.nonFixingMapper));
+                            inferredType = instantiateType(defaultType, combineTypeMappers(createBackreferenceMapper(context, index), context.nonFixingMapper));
                         }
                         else {
                             inferredType = getDefaultTypeArgumentType(!!(context.flags & InferenceFlags.AnyDefault));
@@ -23476,7 +23467,7 @@ namespace ts {
                                 const strippedType = getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(signature, uniqueTypeParameters));
                                 // Infer from the stripped expression type to the contextual type starting with an empty
                                 // set of inference candidates.
-                                const inferences = map(context.typeParameters, createInferenceInfo);
+                                const inferences = map(context.inferences, info => createInferenceInfo(info.typeParameter));
                                 inferTypes(inferences, strippedType, contextualType);
                                 // If we produced some inference candidates and if the type parameters for which we produced
                                 // candidates do not already have existing inferences, we adopt the new inference candidates and
