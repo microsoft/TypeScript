@@ -10017,11 +10017,15 @@ namespace ts {
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
             if (isGenericMappedType(objectType)) {
-                const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [type.indexType]);
-                const templateMapper = combineTypeMappers(objectType.mapper, mapper);
-                return type.simplified = mapType(instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper), getSimplifiedType);
+                return type.simplified = mapType(substituteIndexedMappedType(objectType, type.indexType), getSimplifiedType);
             }
             return type.simplified = type;
+        }
+
+        function substituteIndexedMappedType(objectType: MappedType, index: Type) {
+            const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
+            const templateMapper = combineTypeMappers(objectType.mapper, mapper);
+            return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, missingType = accessNode ? errorType : unknownType): Type {
@@ -17831,7 +17835,15 @@ namespace ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
             return mapType(type, t => {
-                if (t.flags & TypeFlags.StructuredType) {
+                if (isGenericMappedType(t)) {
+                    const constraint = getConstraintTypeFromMappedType(t);
+                    const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
+                    const propertyNameType = getLiteralType(unescapeLeadingUnderscores(name));
+                    if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
+                        return substituteIndexedMappedType(t, propertyNameType);
+                    }
+                }
+                else if (t.flags & TypeFlags.StructuredType) {
                     const prop = getPropertyOfType(t, name);
                     if (prop) {
                         return getTypeOfSymbol(prop);
