@@ -9,9 +9,9 @@ import baz = require("baz");
 >baz : any
 
 foo + bar + baz;
->foo + bar + baz : any
->foo + bar : any
->foo : any
->bar : any
->baz : any
+>foo + bar + baz : error
+>foo + bar : error
+>foo : error
+>bar : error
+>baz : error
 

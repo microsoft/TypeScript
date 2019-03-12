@@ -14,6 +14,11 @@
 //// let t: T<number>;
 //// t.x;
 
-verify.codeFixAvailable([{
-    description: "Add missing enum member 'c'"
-}]);
+verify.codeFixAvailable([
+    "Declare property 'y'",
+    "Add index signature for property 'y'",
+    "Declare method 'foo'",
+    "Declare property 'foo'",
+    "Add index signature for property 'foo'",
+    "Add missing enum member 'c'",
+].map(description => ({ description })));

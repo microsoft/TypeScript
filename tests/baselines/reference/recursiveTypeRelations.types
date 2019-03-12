@@ -53,18 +53,18 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
     }
     if (typeof arg == "string") {
 >typeof arg == "string" : boolean
->typeof arg : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >arg : ClassNameArg<S>
 >"string" : "string"
 
       return styles[arg];
->styles[arg] : S[keyof S]
+>styles[arg] : S[keyof S & string]
 >styles : S
->arg : keyof S
+>arg : keyof S & string
     }
     if (typeof arg == "object") {
 >typeof arg == "object" : boolean
->typeof arg : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >arg : ClassNameArg<S>
 >"object" : "object"
 

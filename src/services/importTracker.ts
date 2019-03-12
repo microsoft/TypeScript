@@ -385,7 +385,7 @@ namespace ts.FindAllReferences {
     }
 
     /** Iterates over all statements at the top level or in module declarations. Returns the first truthy result. */
-    function forEachPossibleImportOrExportStatement<T>(sourceFileLike: SourceFileLike, action: (statement: Statement) => T): T | undefined {
+    function forEachPossibleImportOrExportStatement<T>(sourceFileLike: SourceFileLike, action: (statement: Statement) => T) {
         return forEach(sourceFileLike.kind === SyntaxKind.SourceFile ? sourceFileLike.statements : sourceFileLike.body!.statements, statement => // TODO: GH#18217
             action(statement) || (isAmbientModuleDeclaration(statement) && forEach(statement.body && statement.body.statements, action)));
     }
@@ -424,7 +424,6 @@ namespace ts.FindAllReferences {
     export interface ImportedSymbol {
         kind: ImportExport.Import;
         symbol: Symbol;
-        isNamedImport: boolean;
     }
     export interface ExportedSymbol {
         kind: ImportExport.Export;
@@ -467,7 +466,7 @@ namespace ts.FindAllReferences {
                         }
 
                         const lhsSymbol = checker.getSymbolAtLocation(exportNode.name)!;
-                        return { kind: ImportExport.Import, symbol: lhsSymbol, isNamedImport: false };
+                        return { kind: ImportExport.Import, symbol: lhsSymbol };
                     }
                     else {
                         return exportInfo(symbol, getExportKindForDeclaration(exportNode));
@@ -502,11 +501,11 @@ namespace ts.FindAllReferences {
 
             function getSpecialPropertyExport(node: BinaryExpression, useLhsSymbol: boolean): ExportedSymbol | undefined {
                 let kind: ExportKind;
-                switch (getSpecialPropertyAssignmentKind(node)) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
+                switch (getAssignmentDeclarationKind(node)) {
+                    case AssignmentDeclarationKind.ExportsProperty:
                         kind = ExportKind.Named;
                         break;
-                    case SpecialPropertyAssignmentKind.ModuleExports:
+                    case AssignmentDeclarationKind.ModuleExports:
                         kind = ExportKind.ExportEquals;
                         break;
                     default:
@@ -542,7 +541,7 @@ namespace ts.FindAllReferences {
             // (All imports returned from this function will be ignored anyway if we are in rename and this is a not a named export.)
             const importedName = symbolEscapedNameNoDefault(importedSymbol);
             if (importedName === undefined || importedName === InternalSymbolName.Default || importedName === symbol.escapedName) {
-                return { kind: ImportExport.Import, symbol: importedSymbol, ...isImport };
+                return { kind: ImportExport.Import, symbol: importedSymbol };
             }
         }
 
@@ -588,22 +587,20 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function isNodeImport(node: Node): { isNamedImport: boolean } | undefined {
+    function isNodeImport(node: Node): boolean {
         const { parent } = node;
         switch (parent.kind) {
             case SyntaxKind.ImportEqualsDeclaration:
-                return (parent as ImportEqualsDeclaration).name === node && isExternalModuleImportEquals(parent as ImportEqualsDeclaration)
-                    ? { isNamedImport: false }
-                    : undefined;
+                return (parent as ImportEqualsDeclaration).name === node && isExternalModuleImportEquals(parent as ImportEqualsDeclaration);
             case SyntaxKind.ImportSpecifier:
                 // For a rename import `{ foo as bar }`, don't search for the imported symbol. Just find local uses of `bar`.
-                return (parent as ImportSpecifier).propertyName ? undefined : { isNamedImport: true };
+                return !(parent as ImportSpecifier).propertyName;
             case SyntaxKind.ImportClause:
             case SyntaxKind.NamespaceImport:
                 Debug.assert((parent as ImportClause | NamespaceImport).name === node);
-                return { isNamedImport: false };
+                return true;
             default:
-                return undefined;
+                return false;
         }
     }
 

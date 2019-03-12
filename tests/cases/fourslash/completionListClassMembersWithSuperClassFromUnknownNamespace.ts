@@ -4,6 +4,4 @@
 ////    /**/
 ////}
 
-goTo.marker("");
-verify.completionListContainsClassElementKeywords();
-verify.completionListCount(verify.allowedClassElementKeywords.length);
+verify.completions({ marker: "", includes: completion.classElementKeywords, isNewIdentifierLocation: true });

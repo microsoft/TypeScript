@@ -138,7 +138,6 @@ function handleTestConfig() {
                     case "compiler":
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
-                        runners.push(new project.ProjectRunner());
                         break;
                     case "conformance":
                         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
@@ -183,10 +182,7 @@ function handleTestConfig() {
         runners.push(new CompilerBaselineRunner(CompilerTestType.Conformance));
         runners.push(new CompilerBaselineRunner(CompilerTestType.Regressions));
 
-        // TODO: project tests don"t work in the browser yet
-        if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
-            runners.push(new project.ProjectRunner());
-        }
+        runners.push(new project.ProjectRunner());
 
         // language services
         runners.push(new FourSlashRunner(FourSlash.FourSlashTestType.Native));
@@ -196,7 +192,7 @@ function handleTestConfig() {
         // runners.push(new GeneratedFourslashRunner());
 
         // CRON-only tests
-        if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser && process.env.TRAVIS_EVENT_TYPE === "cron") {
+        if (process.env.TRAVIS_EVENT_TYPE === "cron") {
             runners.push(new UserCodeRunner());
         }
     }
@@ -230,13 +226,11 @@ function beginTests() {
 let isWorker: boolean;
 function startTestEnvironment() {
     isWorker = handleTestConfig();
-    if (Utils.getExecutionEnvironment() !== Utils.ExecutionEnvironment.Browser) {
-        if (isWorker) {
-            return Harness.Parallel.Worker.start();
-        }
-        else if (taskConfigsFolder && workerCount && workerCount > 1) {
-            return Harness.Parallel.Host.start();
-        }
+    if (isWorker) {
+        return Harness.Parallel.Worker.start();
+    }
+    else if (taskConfigsFolder && workerCount && workerCount > 1) {
+        return Harness.Parallel.Host.start();
     }
     beginTests();
 }

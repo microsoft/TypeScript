@@ -6,18 +6,18 @@ import foo, { bar } from "foo";
 import "./a";
 import "./b";
 foo(bar());
->foo(bar()) : any
->foo : any
->bar() : any
->bar : any
+>foo(bar()) : error
+>foo : error
+>bar() : error
+>bar : error
 
 === /a.ts ===
 import * as foo from "foo";
->foo : any
+>foo : error
 
 foo.bar();
->foo.bar() : any
->foo.bar : any
+>foo.bar() : error
+>foo.bar : error
 >foo : any
 >bar : any
 
@@ -26,6 +26,6 @@ import foo = require("foo");
 >foo : any
 
 foo();
->foo() : any
->foo : any
+>foo() : error
+>foo : error
 

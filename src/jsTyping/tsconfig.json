@@ -16,7 +16,6 @@
     "files": [
         "shared.ts",
         "types.ts",
-        "jsTyping.ts",
-        "semver.ts"
+        "jsTyping.ts"
     ]
 }

@@ -173,17 +173,17 @@ spreadFunc(); // error, no call signature
 
 // write-only properties get skipped
 let setterOnly = { ...{ set b (bad: number) { } } };
->setterOnly : {}
->{ ...{ set b (bad: number) { } } } : {}
+>setterOnly : { b: undefined; }
+>{ ...{ set b (bad: number) { } } } : { b: undefined; }
 >{ set b (bad: number) { } } : { b: number; }
 >b : number
 >bad : number
 
 setterOnly.b = 12; // error, 'b' does not exist
 >setterOnly.b = 12 : 12
->setterOnly.b : any
->setterOnly : {}
->b : any
+>setterOnly.b : undefined
+>setterOnly : { b: undefined; }
+>b : undefined
 >12 : 12
 
 // methods are skipped because they aren't enumerable
@@ -225,160 +225,4 @@ spreadObj.a; // error 'a' is not in {}
 >spreadObj.a : any
 >spreadObj : {}
 >a : any
-
-// generics
-function f<T, U>(t: T, u: U) {
->f : <T, U>(t: T, u: U) => any
->t : T
->u : U
-
-    return { ...t, ...u, id: 'id' };
->{ ...t, ...u, id: 'id' } : any
->t : T
->u : U
->id : string
->'id' : "id"
-}
-function override<U>(initial: U, override: U): U {
->override : <U>(initial: U, override: U) => U
->initial : U
->override : U
-
-    return { ...initial, ...override };
->{ ...initial, ...override } : any
->initial : U
->override : U
-}
-let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
->exclusive : { id: string; a: number; b: string; c: string; d: boolean; }
->id : string
->a : number
->b : string
->c : string
->d : boolean
-
-    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
->f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : any
->f : <T, U>(t: T, u: U) => any
->{ a: 1, b: 'yes' } : { a: number; b: string; }
->a : number
->1 : 1
->b : string
->'yes' : "yes"
->{ c: 'no', d: false } : { c: string; d: false; }
->c : string
->'no' : "no"
->d : false
->false : false
-
-let overlap: { id: string, a: number, b: string } =
->overlap : { id: string; a: number; b: string; }
->id : string
->a : number
->b : string
-
-    f({ a: 1 }, { a: 2, b: 'extra' })
->f({ a: 1 }, { a: 2, b: 'extra' }) : any
->f : <T, U>(t: T, u: U) => any
->{ a: 1 } : { a: number; }
->a : number
->1 : 1
->{ a: 2, b: 'extra' } : { a: number; b: string; }
->a : number
->2 : 2
->b : string
->'extra' : "extra"
-
-let overlapConflict: { id:string, a: string } =
->overlapConflict : { id: string; a: string; }
->id : string
->a : string
-
-    f({ a: 1 }, { a: 'mismatch' })
->f({ a: 1 }, { a: 'mismatch' }) : any
->f : <T, U>(t: T, u: U) => any
->{ a: 1 } : { a: number; }
->a : number
->1 : 1
->{ a: 'mismatch' } : { a: string; }
->a : string
->'mismatch' : "mismatch"
-
-let overwriteId: { id: string, a: number, c: number, d: string } =
->overwriteId : { id: string; a: number; c: number; d: string; }
->id : string
->a : number
->c : number
->d : string
-
-    f({ a: 1, id: true }, { c: 1, d: 'no' })
->f({ a: 1, id: true }, { c: 1, d: 'no' }) : any
->f : <T, U>(t: T, u: U) => any
->{ a: 1, id: true } : { a: number; id: true; }
->a : number
->1 : 1
->id : true
->true : true
->{ c: 1, d: 'no' } : { c: number; d: string; }
->c : number
->1 : 1
->d : string
->'no' : "no"
-
-// excess property checks
-type A = { a: string, b: string };
->A : A
->a : string
->b : string
-
-type Extra = { a: string, b: string, extra: string };
->Extra : Extra
->a : string
->b : string
->extra : string
-
-const extra1: A = { a: "a", b: "b", extra: "extra" };
->extra1 : A
->{ a: "a", b: "b", extra: "extra" } : { a: string; b: string; extra: string; }
->a : string
->"a" : "a"
->b : string
->"b" : "b"
->extra : string
->"extra" : "extra"
-
-const extra2 = { a: "a", b: "b", extra: "extra" };
->extra2 : { a: string; b: string; extra: string; }
->{ a: "a", b: "b", extra: "extra" } : { a: string; b: string; extra: string; }
->a : string
->"a" : "a"
->b : string
->"b" : "b"
->extra : string
->"extra" : "extra"
-
-const a1: A = { ...extra1 }; // error spans should be here
->a1 : A
->{ ...extra1 } : { a: string; b: string; }
->extra1 : A
-
-const a2: A = { ...extra2 }; // not on the symbol declarations above
->a2 : A
->{ ...extra2 } : { a: string; b: string; extra: string; }
->extra2 : { a: string; b: string; extra: string; }
-
-const extra3: Extra = { a: "a", b: "b", extra: "extra" };
->extra3 : Extra
->{ a: "a", b: "b", extra: "extra" } : { a: string; b: string; extra: string; }
->a : string
->"a" : "a"
->b : string
->"b" : "b"
->extra : string
->"extra" : "extra"
-
-const a3: A = { ...extra3 }; // same here
->a3 : A
->{ ...extra3 } : { a: string; b: string; extra: string; }
->extra3 : Extra
 

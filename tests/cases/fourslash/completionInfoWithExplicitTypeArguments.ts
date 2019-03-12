@@ -11,12 +11,4 @@
 ////declare function g<T>(x: keyof T, y: number): void;
 ////g<I>("/*g*/");
 
-goTo.marker("f");
-verify.completionListCount(2);
-verify.completionListContains("x");
-verify.completionListContains("y");
-
-goTo.marker("g");
-verify.completionListContains("x");
-verify.completionListContains("y");
-verify.completionListCount(2);
+verify.completions({ marker: test.markers(), exact: ["x", "y"] });

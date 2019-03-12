@@ -1,8 +1,8 @@
 === tests/cases/compiler/foo.js ===
 // Repro for #16585
 const x = {
->x : { [x: string]: any; bar(): void; }
->{    bar() {        setTimeout(function() { arguments }, 0);    }} : { [x: string]: any; bar(): void; }
+>x : { bar(): void; }
+>{    bar() {        setTimeout(function() { arguments }, 0);    }} : { bar(): void; }
 
     bar() {
 >bar : () => void

@@ -3,11 +3,11 @@
 // extends statement in a diffrent declaration
 
 ////interface interface1 {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|](): void;
+////    [|{| "isDefinition": true |}doStuff|](): void;
 ////}
 ////
 ////interface interface2 {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|](): void;
+////    [|{| "isDefinition": true |}doStuff|](): void;
 ////}
 ////
 ////interface interface2 extends interface1 {

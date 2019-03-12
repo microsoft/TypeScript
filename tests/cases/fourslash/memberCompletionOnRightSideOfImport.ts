@@ -2,5 +2,4 @@
 
 ////import x = M./**/
 
-goTo.marker("");
-verify.completionListIsEmpty();
+verify.completions({ marker: "", exact: undefined });

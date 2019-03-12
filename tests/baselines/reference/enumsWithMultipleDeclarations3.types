@@ -6,5 +6,5 @@ enum E {
 >E : E
 
   A
->A : E
+>A : E.A
 }

@@ -1,0 +1,37 @@
+=== tests/cases/compiler/getParameterNameAtPosition.ts ===
+// Repro from #30171
+
+interface Mock<Y extends any[]> extends Function {
+>Mock : Symbol(Mock, Decl(getParameterNameAtPosition.ts, 0, 0))
+>Y : Symbol(Y, Decl(getParameterNameAtPosition.ts, 2, 15))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    (...args: Y): any;
+>args : Symbol(args, Decl(getParameterNameAtPosition.ts, 3, 5))
+>Y : Symbol(Y, Decl(getParameterNameAtPosition.ts, 2, 15))
+}
+type Tester = (opts: any, done: (...args: any[]) => any) => any;
+>Tester : Symbol(Tester, Decl(getParameterNameAtPosition.ts, 4, 1))
+>opts : Symbol(opts, Decl(getParameterNameAtPosition.ts, 5, 15))
+>done : Symbol(done, Decl(getParameterNameAtPosition.ts, 5, 25))
+>args : Symbol(args, Decl(getParameterNameAtPosition.ts, 5, 33))
+
+declare function cases(tester: Tester): void;
+>cases : Symbol(cases, Decl(getParameterNameAtPosition.ts, 5, 64))
+>tester : Symbol(tester, Decl(getParameterNameAtPosition.ts, 6, 23))
+>Tester : Symbol(Tester, Decl(getParameterNameAtPosition.ts, 4, 1))
+
+declare function fn<Y extends any[]>(implementation?: (...args: Y) => any): Mock<Y>;
+>fn : Symbol(fn, Decl(getParameterNameAtPosition.ts, 6, 45))
+>Y : Symbol(Y, Decl(getParameterNameAtPosition.ts, 7, 20))
+>implementation : Symbol(implementation, Decl(getParameterNameAtPosition.ts, 7, 37))
+>args : Symbol(args, Decl(getParameterNameAtPosition.ts, 7, 55))
+>Y : Symbol(Y, Decl(getParameterNameAtPosition.ts, 7, 20))
+>Mock : Symbol(Mock, Decl(getParameterNameAtPosition.ts, 0, 0))
+>Y : Symbol(Y, Decl(getParameterNameAtPosition.ts, 7, 20))
+
+cases(fn(opts => { }));
+>cases : Symbol(cases, Decl(getParameterNameAtPosition.ts, 5, 64))
+>fn : Symbol(fn, Decl(getParameterNameAtPosition.ts, 6, 45))
+>opts : Symbol(opts, Decl(getParameterNameAtPosition.ts, 8, 9))
+

@@ -26,9 +26,9 @@
 verify.signatureHelp(
     { marker: "1", text: "foo1(x: number, callback: (y1: {}) => number): void" },
     { marker: "2", text: "foo2(x: number, callback: (y2: {}) => number): void" },
-    { marker: "3", text: "foo3(x: number, callback: (y3: {}) => number): void" },
+    { marker: "3", text: "callback(y3: {}): number" },
     { marker: "4", text: "foo4(x: number, callback: (y4: string) => number): void" },
-    { marker: "5", text: "foo5(x: number, callback: (y5: string) => number): void" },
+    { marker: "5", text: "callback(y5: string): number" },
 );
 
 goTo.marker('6');

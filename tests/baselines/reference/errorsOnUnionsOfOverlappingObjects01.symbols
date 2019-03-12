@@ -1,0 +1,132 @@
+=== tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 0))
+
+    a: string;
+>a : Symbol(Foo.a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 15))
+
+    b: number;
+>b : Symbol(Foo.b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 1, 14))
+
+};
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 3, 2))
+
+    b: string;
+>b : Symbol(Bar.b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 5, 15))
+}
+
+interface Other {
+>Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+
+    totallyUnrelatedProperty: number;
+>totallyUnrelatedProperty : Symbol(Other.totallyUnrelatedProperty, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 9, 17))
+}
+
+export let x = { a: '', b: '' };
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 10))
+>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 16))
+>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 23))
+
+declare function f(x: Foo | Other): any;
+>f : Symbol(f, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 32))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 15, 19))
+>Foo : Symbol(Foo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 0))
+>Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+
+f(x);
+>f : Symbol(f, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 32))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 10))
+
+f({ a: '', b: '' })
+>f : Symbol(f, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 32))
+>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 3))
+>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 10))
+
+declare function g(x: Bar | Other): any;
+>g : Symbol(g, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 19))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 20, 19))
+>Bar : Symbol(Bar, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 3, 2))
+>Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+
+g(x);
+>g : Symbol(g, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 19))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 10))
+
+g({ a: '', b: '' })
+>g : Symbol(g, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 18, 19))
+>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 3))
+>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 10))
+
+declare function h(x: Foo | Bar | Other): any;
+>h : Symbol(h, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 19))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 25, 19))
+>Foo : Symbol(Foo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 0, 0))
+>Bar : Symbol(Bar, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 3, 2))
+>Other : Symbol(Other, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 7, 1))
+
+h(x);
+>h : Symbol(h, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 19))
+>x : Symbol(x, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 13, 10))
+
+h({ a: '', b: '' })
+>h : Symbol(h, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 23, 19))
+>a : Symbol(a, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 28, 3))
+>b : Symbol(b, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 28, 10))
+
+interface CatDog { cat: any, dog: any }
+>CatDog : Symbol(CatDog, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 28, 19))
+>cat : Symbol(CatDog.cat, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 18))
+>dog : Symbol(CatDog.dog, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 28))
+
+interface ManBearPig { man: any, bear: any, pig: any }
+>ManBearPig : Symbol(ManBearPig, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 39))
+>man : Symbol(ManBearPig.man, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 22))
+>bear : Symbol(ManBearPig.bear, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 32))
+>pig : Symbol(ManBearPig.pig, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 43))
+
+interface Platypus { platypus: any }
+>Platypus : Symbol(Platypus, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 54))
+>platypus : Symbol(Platypus.platypus, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 32, 20))
+
+type ExoticAnimal =
+>ExoticAnimal : Symbol(ExoticAnimal, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 32, 36))
+
+    | CatDog
+>CatDog : Symbol(CatDog, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 28, 19))
+
+    | ManBearPig
+>ManBearPig : Symbol(ManBearPig, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 30, 39))
+
+    | Platypus;
+>Platypus : Symbol(Platypus, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 31, 54))
+
+declare function addToZoo(animal: ExoticAnimal): void;
+>addToZoo : Symbol(addToZoo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 37, 15))
+>animal : Symbol(animal, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 39, 26))
+>ExoticAnimal : Symbol(ExoticAnimal, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 32, 36))
+
+addToZoo({ dog: "Barky McBarkface" });
+>addToZoo : Symbol(addToZoo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 37, 15))
+>dog : Symbol(dog, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 41, 10))
+
+addToZoo({ man: "Manny", bear: "Coffee" });
+>addToZoo : Symbol(addToZoo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 37, 15))
+>man : Symbol(man, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 42, 10))
+>bear : Symbol(bear, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 42, 24))
+
+const manBeer = { man: "Manny", beer: "Coffee" };
+>manBeer : Symbol(manBeer, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 44, 5))
+>man : Symbol(man, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 44, 17))
+>beer : Symbol(beer, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 44, 31))
+
+addToZoo({ man: "Manny", beer: "Coffee" });
+>addToZoo : Symbol(addToZoo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 37, 15))
+>man : Symbol(man, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 45, 10))
+>beer : Symbol(beer, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 45, 24))
+
+addToZoo(manBeer);
+>addToZoo : Symbol(addToZoo, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 37, 15))
+>manBeer : Symbol(manBeer, Decl(errorsOnUnionsOfOverlappingObjects01.ts, 44, 5))
+

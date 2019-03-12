@@ -22,7 +22,7 @@ call((x: number, y: number) => x + y);
 >y : number
 
 call((x: number, y: number) => x + y, 1, 2, 3, 4, 5, 6, 7);
->call((x: number, y: number) => x + y, 1, 2, 3, 4, 5, 6, 7) : void
+>call((x: number, y: number) => x + y, 1, 2, 3, 4, 5, 6, 7) : any
 >call : <TS extends unknown[]>(handler: (...args: TS) => void, ...args: TS) => void
 >(x: number, y: number) => x + y : (x: number, y: number) => number
 >x : number

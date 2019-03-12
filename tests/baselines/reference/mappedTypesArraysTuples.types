@@ -25,13 +25,13 @@ type T12 = Required<string[]>;
 >T12 : string[]
 
 type T13 = Boxified<ReadonlyArray<string>>;
->T13 : ReadonlyArray<Box<string>>
+>T13 : readonly Box<string>[]
 
 type T14 = Partial<ReadonlyArray<string>>;
->T14 : ReadonlyArray<string | undefined>
+>T14 : readonly (string | undefined)[]
 
 type T15 = Required<ReadonlyArray<string>>;
->T15 : ReadonlyArray<string>
+>T15 : readonly string[]
 
 type T20 = Boxified<(string | undefined)[]>;
 >T20 : Box<string | undefined>[]
@@ -43,13 +43,13 @@ type T22 = Required<(string | undefined)[]>;
 >T22 : string[]
 
 type T23 = Boxified<ReadonlyArray<string | undefined>>;
->T23 : ReadonlyArray<Box<string | undefined>>
+>T23 : readonly Box<string | undefined>[]
 
 type T24 = Partial<ReadonlyArray<string | undefined>>;
->T24 : ReadonlyArray<string | undefined>
+>T24 : readonly (string | undefined)[]
 
 type T25 = Required<ReadonlyArray<string | undefined>>;
->T25 : ReadonlyArray<string>
+>T25 : readonly string[]
 
 type T30 = Boxified<Partial<string[]>>;
 >T30 : Box<string | undefined>[]
@@ -66,7 +66,25 @@ type B = { b: string };
 >b : string
 
 type T40 = Boxified<A | A[] | ReadonlyArray<A> | [A, B] | string | string[]>;
->T40 : string | Box<string>[] | Boxified<A> | Box<A>[] | ReadonlyArray<Box<A>> | [Box<A>, Box<B>]
+>T40 : string | Box<string>[] | Boxified<A> | Box<A>[] | readonly Box<A>[] | [Box<A>, Box<B>]
+
+type ReadWrite<T> = { -readonly [P in keyof T] : T[P] };
+>ReadWrite : ReadWrite<T>
+
+type T50 = Readonly<string[]>;
+>T50 : readonly string[]
+
+type T51 = Readonly<[number, number]>;
+>T51 : readonly [number, number]
+
+type T52 = Partial<Readonly<string[]>>;
+>T52 : readonly (string | undefined)[]
+
+type T53 = Readonly<Partial<string[]>>;
+>T53 : readonly (string | undefined)[]
+
+type T54 = ReadWrite<Required<T53>>;
+>T54 : string[]
 
 declare function unboxify<T>(x: Boxified<T>): T;
 >unboxify : <T>(x: Boxified<T>) => T
@@ -181,4 +199,77 @@ function f1(a: number, b: Promise<number>, c: string[], d: Promise<string[]>) {
 >c : string[]
 >d : Promise<string[]>
 }
+
+function f2<T extends any[]>(a: Boxified<T>) {
+>f2 : <T extends any[]>(a: Boxified<T>) => void
+>a : Boxified<T>
+
+    let x: Box<any> | undefined = a.pop();
+>x : Box<any> | undefined
+>a.pop() : Box<any> | undefined
+>a.pop : () => Box<any> | undefined
+>a : Boxified<T>
+>pop : () => Box<any> | undefined
+
+    let y: Box<any>[] = a.concat(a);
+>y : Box<any>[]
+>a.concat(a) : Box<any>[]
+>a.concat : { (...items: ConcatArray<Box<any>>[]): Box<any>[]; (...items: (Box<any> | ConcatArray<Box<any>>)[]): Box<any>[]; }
+>a : Boxified<T>
+>concat : { (...items: ConcatArray<Box<any>>[]): Box<any>[]; (...items: (Box<any> | ConcatArray<Box<any>>)[]): Box<any>[]; }
+>a : Boxified<T>
+}
+
+// Repro from #26163
+
+type ElementType<T> = T extends Array<infer U> ? U : never;
+>ElementType : ElementType<T>
+
+type Mapped<T> = { [K in keyof T]: T[K] };
+>Mapped : Mapped<T>
+
+type F<T> = ElementType<Mapped<T>>;
+>F : ElementType<Mapped<T>>
+
+type R1 = F<[string, number, boolean]>;  // string | number | boolean
+>R1 : string | number | boolean
+
+type R2 = ElementType<Mapped<[string, number, boolean]>>;  // string | number | boolean
+>R2 : string | number | boolean
+
+// Repro from #26163
+
+declare function acceptArray(arr: any[]): void;
+>acceptArray : (arr: any[]) => void
+>arr : any[]
+
+declare function mapArray<T extends any[]>(arr: T): Mapped<T>;
+>mapArray : <T extends any[]>(arr: T) => Mapped<T>
+>arr : T
+
+function acceptMappedArray<T extends any[]>(arr: T) {
+>acceptMappedArray : <T extends any[]>(arr: T) => void
+>arr : T
+
+    acceptArray(mapArray(arr));
+>acceptArray(mapArray(arr)) : void
+>acceptArray : (arr: any[]) => void
+>mapArray(arr) : Mapped<T>
+>mapArray : <T extends any[]>(arr: T) => Mapped<T>
+>arr : T
+}
+
+// Repro from #26163
+
+type Unconstrained<T> = ElementType<Mapped<T>>;
+>Unconstrained : ElementType<Mapped<T>>
+
+type T1 = Unconstrained<[string, number, boolean]>;  // string | number | boolean
+>T1 : string | number | boolean
+
+type Constrained<T extends any[]> = ElementType<Mapped<T>>;
+>Constrained : ElementType<Mapped<T>>
+
+type T2 = Constrained<[string, number, boolean]>;  // string | number | boolean
+>T2 : string | number | boolean
 

@@ -343,14 +343,14 @@ var r11 = foo11(r11arg);
 >r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 
 var r11a = [r11arg, r11arg2];
->r11a : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
->[r11arg, r11arg2] : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
+>r11a : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
+>[r11arg, r11arg2] : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
 >r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 >r11arg2 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 
 var r11b = [r11arg2, r11arg];
->r11b : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
->[r11arg2, r11arg] : (new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base)[]
+>r11b : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
+>[r11arg2, r11arg] : (new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base)[]
 >r11arg2 : new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
 >r11arg : new <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
 

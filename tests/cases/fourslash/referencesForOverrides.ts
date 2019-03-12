@@ -14,16 +14,16 @@
 ////
 ////	module SimpleInterfaceTest {
 ////		export interface IFoo {
-////			[|{| "isWriteAccess": true, "isDefinition": true |}ifoo|](): void;
+////			[|{| "isDefinition": true |}ifoo|](): void;
 ////		}
 ////		export interface IBar extends IFoo {
-////			[|{| "isWriteAccess": true, "isDefinition": true |}ifoo|](): void;
+////			[|{| "isDefinition": true |}ifoo|](): void;
 ////		}
 ////	}
 ////
 ////	module SimpleClassInterfaceTest {
 ////		export interface IFoo {
-////			[|{| "isWriteAccess": true, "isDefinition": true |}icfoo|](): void;
+////			[|{| "isDefinition": true |}icfoo|](): void;
 ////		}
 ////		export class Bar implements IFoo {
 ////			public [|{| "isWriteAccess": true, "isDefinition": true |}icfoo|](): void {
@@ -33,29 +33,29 @@
 ////
 ////	module Test {
 ////		export interface IBase {
-////			[|{| "isWriteAccess": true, "isDefinition": true |}field|]: string;
-////			[|{| "isWriteAccess": true, "isDefinition": true |}method|](): void;
+////			[|{| "isDefinition": true |}field|]: string;
+////			[|{| "isDefinition": true |}method|](): void;
 ////		}
 ////
 ////		export interface IBlah extends IBase {
-////			[|{| "isWriteAccess": true, "isDefinition": true |}field|]: string;
+////			[|{| "isDefinition": true |}field|]: string;
 ////		}
 ////
 ////		export interface IBlah2 extends IBlah {
-////			[|{| "isWriteAccess": true, "isDefinition": true |}field|]: string;
+////			[|{| "isDefinition": true |}field|]: string;
 ////		}
 ////
 ////		export interface IDerived extends IBlah2 {
-////			[|{| "isWriteAccess": true, "isDefinition": true |}method|](): void;
+////			[|{| "isDefinition": true |}method|](): void;
 ////		}
 ////
 ////		export class Bar implements IDerived {
-////			public [|{| "isWriteAccess": true, "isDefinition": true |}field|]: string;
+////			public [|{| "isDefinition": true |}field|]: string;
 ////			public [|{| "isWriteAccess": true, "isDefinition": true |}method|](): void { }
 ////		}
 ////
 ////		export class BarBlah extends Bar {
-////			public [|{| "isWriteAccess": true, "isDefinition": true |}field|]: string;
+////			public [|{| "isDefinition": true |}field|]: string;
 ////		}
 ////	}
 ////

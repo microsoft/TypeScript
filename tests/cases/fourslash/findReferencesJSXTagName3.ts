@@ -6,7 +6,7 @@
 ////namespace JSX {
 ////    export interface Element { }
 ////    export interface IntrinsicElements {
-////        [|{| "isWriteAccess": true, "isDefinition": true |}div|]: any;
+////        [|{| "isDefinition": true |}div|]: any;
 ////    }
 ////}
 ////

@@ -1,5 +1,4 @@
 /// <reference path='fourslash.ts' />
-
 // @allowJs: true
 // @checkJs: true
 
@@ -15,7 +14,6 @@
 // @Filename: f1.ts
 //// export class C {[|
 ////     |]x: number;
-////     static y: string;
 //// }
 
 verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
@@ -25,15 +23,15 @@ verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 verify.getAndApplyCodeFix(/*errorCode*/undefined, 0);
 
 verify.rangeIs(`
-    m2(c: C): any {
+    m2(c: C) {
         throw new Error("Method not implemented.");
     }
-    y: { [x: string]: any; };
-    m1(): any {
+    y: {};
+    m1() {
         throw new Error("Method not implemented.");
     }
     static x: any;
-    static m0(arg0: number, arg1: string, arg2: undefined[]): any {
+    static m0(arg0: number, arg1: string, arg2: undefined[]) {
         throw new Error("Method not implemented.");
     }
 `);

@@ -7,14 +7,14 @@ enum Hello {
 >Hello : Hello
 
     World
->World : Hello
+>World : Hello.World
 }
 
 enum Hello1 {
 >Hello1 : Hello1
 
     World1
->World1 : Hello1
+>World1 : Hello1.World1
 }
 
 class Foo {

@@ -6,7 +6,7 @@
 ////}
 ////
 ////interface B {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}b|]: number;
+////    [|{| "isDefinition": true |}b|]: number;
 ////    common: number;
 ////}
 ////

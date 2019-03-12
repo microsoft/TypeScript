@@ -2,7 +2,7 @@
 export module C { export interface I { } }
 export import v = C;
 >v : any
->C : any
+>C : error
 
 export module M {
 >M : typeof M

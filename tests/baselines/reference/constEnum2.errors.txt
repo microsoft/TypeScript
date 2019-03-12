@@ -1,7 +1,7 @@
-tests/cases/conformance/constEnums/constEnum2.ts(10,9): error TS2474: In 'const' enum declarations member initializer must be constant expression.
-tests/cases/conformance/constEnums/constEnum2.ts(11,9): error TS2474: In 'const' enum declarations member initializer must be constant expression.
+tests/cases/conformance/constEnums/constEnum2.ts(10,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
+tests/cases/conformance/constEnums/constEnum2.ts(11,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
 tests/cases/conformance/constEnums/constEnum2.ts(12,5): error TS1005: ',' expected.
-tests/cases/conformance/constEnums/constEnum2.ts(12,9): error TS2474: In 'const' enum declarations member initializer must be constant expression.
+tests/cases/conformance/constEnums/constEnum2.ts(12,9): error TS2474: const enum member initializers can only contain literal values and other computed enum values.
 
 
 ==== tests/cases/conformance/constEnums/constEnum2.ts (4 errors) ====
@@ -16,13 +16,13 @@ tests/cases/conformance/constEnums/constEnum2.ts(12,9): error TS2474: In 'const'
         d = 10,
         e = 199 * Math.floor(Math.random() * 1000),
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2474: In 'const' enum declarations member initializer must be constant expression.
+!!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
         f = d - (100 * Math.floor(Math.random() % 8))
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2474: In 'const' enum declarations member initializer must be constant expression.
+!!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
         g = CONST,
         ~
 !!! error TS1005: ',' expected.
             ~~~~~
-!!! error TS2474: In 'const' enum declarations member initializer must be constant expression.
+!!! error TS2474: const enum member initializers can only contain literal values and other computed enum values.
     }

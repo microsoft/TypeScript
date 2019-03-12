@@ -26,45 +26,46 @@
 ////    }
 ////}
 
-
-// Same class, everything is visible
-goTo.marker("1");
-verify.not.completionListContains('privateMethod');
-verify.not.completionListContains('privateProperty');
-verify.completionListContains('protectedMethod');
-verify.completionListContains('protectedProperty');
-verify.completionListContains('publicMethod');
-verify.completionListContains('publicProperty');
-verify.completionListContains('protectedOverriddenMethod');
-verify.completionListContains('protectedOverriddenProperty');
-
-goTo.marker("2");
-verify.not.completionListContains('privateMethod');
-verify.not.completionListContains('privateProperty');
-verify.completionListContains('protectedMethod');
-verify.completionListContains('protectedProperty');
-verify.completionListContains('publicMethod');
-verify.completionListContains('publicProperty');
-verify.completionListContains('protectedOverriddenMethod');
-verify.completionListContains('protectedOverriddenProperty');
-
-goTo.marker("3");
-verify.not.completionListContains('privateMethod');
-verify.not.completionListContains('privateProperty');
-verify.completionListContains('protectedMethod');
-verify.completionListContains('protectedProperty');
-verify.completionListContains('publicMethod');
-verify.completionListContains('publicProperty');
-verify.completionListContains('protectedOverriddenMethod');
-verify.completionListContains('protectedOverriddenProperty');
-
-// only public and protected methods of the base class are accessible through super
-goTo.marker("4");
-verify.not.completionListContains('privateMethod');
-verify.not.completionListContains('privateProperty');
-verify.completionListContains('protectedMethod');
-verify.not.completionListContains('protectedProperty');
-verify.completionListContains('publicMethod');
-verify.not.completionListContains('publicProperty');
-verify.completionListContains('protectedOverriddenMethod');
-verify.not.completionListContains('protectedOverriddenProperty');
+verify.completions(
+    {
+        // Same class, everything is visible
+        marker: ["1"],
+        exact: [
+            "prototype",
+            "protectedMethod",
+            "protectedProperty",
+            "publicMethod",
+            "publicProperty",
+            "protectedOverriddenMethod",
+            "protectedOverriddenProperty",
+            ...completion.functionMembers,
+        ],
+    },
+    {
+        marker: ["2", "3"],
+        exact: [
+            "prototype",
+            "protectedOverriddenMethod",
+            "protectedOverriddenProperty",
+            "test",
+            "protectedMethod",
+            "protectedProperty",
+            "publicMethod",
+            "publicProperty",
+            ...completion.functionMembers,
+        ],
+    },
+    {
+        // only public and protected methods of the base class are accessible through super
+        marker: "4",
+        exact: [
+            "protectedMethod",
+            "publicMethod",
+            "protectedOverriddenMethod",
+            "apply",
+            "call",
+            "bind",
+            "toString",
+        ],
+    },
+);

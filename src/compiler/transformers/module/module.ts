@@ -53,7 +53,10 @@ namespace ts {
          * @param node The SourceFile node.
          */
         function transformSourceFile(node: SourceFile) {
-            if (node.isDeclarationFile || !(isEffectiveExternalModule(node, compilerOptions) || node.transformFlags & TransformFlags.ContainsDynamicImport)) {
+            if (node.isDeclarationFile ||
+                !(isEffectiveExternalModule(node, compilerOptions) ||
+                    node.transformFlags & TransformFlags.ContainsDynamicImport ||
+                    (isJsonSourceFile(node) && hasJsonModuleEmitEnabled(compilerOptions) && (compilerOptions.out || compilerOptions.outFile)))) {
                 return node;
             }
 
@@ -97,7 +100,7 @@ namespace ts {
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -117,6 +120,7 @@ namespace ts {
         function transformAMDModule(node: SourceFile) {
             const define = createIdentifier("define");
             const moduleName = tryGetModuleNameFromFile(node, host, compilerOptions);
+            const jsonSourceFile = isJsonSourceFile(node) && node;
 
             // An AMD define function has the following shape:
             //
@@ -158,7 +162,7 @@ namespace ts {
                                     // Add the dependency array argument:
                                     //
                                     //     ["require", "exports", module1", "module2", ...]
-                                    createArrayLiteral([
+                                    createArrayLiteral(jsonSourceFile ? emptyArray : [
                                         createLiteral("require"),
                                         createLiteral("exports"),
                                         ...aliasedModuleNames,
@@ -168,7 +172,9 @@ namespace ts {
                                     // Add the module body function argument:
                                     //
                                     //     function (require, exports, module1, module2) ...
-                                    createFunctionExpression(
+                                    jsonSourceFile ?
+                                        jsonSourceFile.statements.length ? jsonSourceFile.statements[0].expression : createObjectLiteral() :
+                                        createFunctionExpression(
                                         /*modifiers*/ undefined,
                                         /*asteriskToken*/ undefined,
                                         /*name*/ undefined,
@@ -426,7 +432,7 @@ namespace ts {
 
             // End the lexical environment for the module body
             // and merge any new lexical declarations.
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -531,8 +537,8 @@ namespace ts {
             if (isImportCall(node)) {
                 return visitImportCallExpression(node);
             }
-            else if (node.transformFlags & TransformFlags.DestructuringAssignment && isBinaryExpression(node)) {
-                return visitDestructuringAssignment(node as DestructuringAssignment);
+            else if (isDestructuringAssignment(node)) {
+                return visitDestructuringAssignment(node);
             }
             else {
                 return visitEachChild(node, moduleExpressionElementVisitor, context);
@@ -1800,7 +1806,7 @@ namespace ts {
     };
 
     // emit helper for `import * as Name from "foo"`
-    const importStarHelper: EmitHelper = {
+    export const importStarHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportstar",
         scoped: false,
         text: `
@@ -1814,7 +1820,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     };
 
     // emit helper for `import Name from "foo"`
-    const importDefaultHelper: EmitHelper = {
+    export const importDefaultHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportdefault",
         scoped: false,
         text: `

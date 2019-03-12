@@ -1,5 +1,5 @@
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(14,9): error TS2459: Type '{}' has no property 's1' and no string index signature.
-tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(20,9): error TS2459: Type '{}' has no property 's1' and no string index signature.
+tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(14,9): error TS2339: Property 's1' does not exist on type '{}'.
+tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(20,9): error TS2339: Property 's1' does not exist on type '{}'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(38,9): error TS2322: Type '5' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(44,12): error TS2322: Type '5' is not assignable to type 'string'.
 tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(70,5): error TS2322: Type '5' is not assignable to type 'string'.
@@ -33,7 +33,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): err
     	var s1;
     	for ({ s1 = 5 } of [{}]) {
     	       ~~
-!!! error TS2459: Type '{}' has no property 's1' and no string index signature.
+!!! error TS2339: Property 's1' does not exist on type '{}'.
     	}
     });
     
@@ -41,7 +41,7 @@ tests/cases/compiler/shorthandPropertyAssignmentsInDestructuring.ts(111,14): err
     	var s1;
     	for ({ s1:s1 = 5 } of [{}]) {
     	       ~~
-!!! error TS2459: Type '{}' has no property 's1' and no string index signature.
+!!! error TS2339: Property 's1' does not exist on type '{}'.
     	}
     });
     

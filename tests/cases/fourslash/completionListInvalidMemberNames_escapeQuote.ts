@@ -4,9 +4,17 @@
 ////x[|./**/|];
 
 const replacementSpan = test.ranges()[0];
-verify.completionsAt("", [{ name: `"'`, insertText: `["\\"'"]`, replacementSpan }], { includeInsertTextCompletions: true });
+verify.completions({
+    marker: "",
+    exact: { name: `"'`, insertText: `["\\"'"]`, replacementSpan },
+    preferences: { includeInsertTextCompletions: true },
+});
 
-verify.completionsAt("", [{ name: `"'`, insertText: `['"\\'']`, replacementSpan }], {
-    includeInsertTextCompletions: true,
-    quotePreference: "single",
+verify.completions({
+    marker: "",
+    exact: { name: `"'`, insertText: `['"\\'']`, replacementSpan },
+    preferences: {
+        includeInsertTextCompletions: true,
+        quotePreference: "single",
+    },
 });

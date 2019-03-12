@@ -1,10 +1,8 @@
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(13,21): error TS2339: Property 'x' does not exist on type '{}'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(16,5): error TS2322: Type '{ sn?: string | number; }' is not assignable to type '{ sn: string | number; }'.
   Property 'sn' is optional in type '{ sn?: string | number; }' but required in type '{ sn: string | number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(23,1): error TS2322: Type '{ s: string; }' is not assignable to type '{ s: string; b: boolean; }'.
-  Property 'b' is missing in type '{ s: string; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2322: Type '{ b: boolean; }' is not assignable to type '{ s: string; b: boolean; }'.
-  Property 's' is missing in type '{ b: boolean; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(23,1): error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS2300: Duplicate identifier 'b'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,19): error TS2698: Spread types may only be created from object types.
@@ -13,20 +11,12 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(34,20): error TS269
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,20): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(38,19): error TS2698: Spread types may only be created from object types.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(47,12): error TS2339: Property 'b' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(47,1): error TS2322: Type '12' is not assignable to type 'undefined'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(53,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(62,14): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(65,14): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(79,37): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
-  Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(82,7): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
-  Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,7): error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
-  Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (20 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (15 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -56,13 +46,13 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,7): error TS2322
     let spread = { ...{ b: true }, ...{s: "foo" } };
     spread = { s: "foo" };  // error, missing 'b'
     ~~~~~~
-!!! error TS2322: Type '{ s: string; }' is not assignable to type '{ s: string; b: boolean; }'.
-!!! error TS2322:   Property 'b' is missing in type '{ s: string; }'.
+!!! error TS2741: Property 'b' is missing in type '{ s: string; }' but required in type '{ s: string; b: boolean; }'.
+!!! related TS2728 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:21: 'b' is declared here.
     let b = { b: false };
     spread = b; // error, missing 's'
     ~~~~~~
-!!! error TS2322: Type '{ b: boolean; }' is not assignable to type '{ s: string; b: boolean; }'.
-!!! error TS2322:   Property 's' is missing in type '{ b: boolean; }'.
+!!! error TS2741: Property 's' is missing in type '{ b: boolean; }' but required in type '{ s: string; b: boolean; }'.
+!!! related TS2728 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:36: 's' is declared here.
     
     // literal repeats are not allowed, but spread repeats are fine
     let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
@@ -101,8 +91,8 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,7): error TS2322
     // write-only properties get skipped
     let setterOnly = { ...{ set b (bad: number) { } } };
     setterOnly.b = 12; // error, 'b' does not exist
-               ~
-!!! error TS2339: Property 'b' does not exist on type '{}'.
+    ~~~~~~~~~~~~
+!!! error TS2322: Type '12' is not assignable to type 'undefined'.
     
     // methods are skipped because they aren't enumerable
     class C { p = 1; m() { } }
@@ -118,43 +108,4 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(84,7): error TS2322
     spreadObj.a; // error 'a' is not in {}
               ~
 !!! error TS2339: Property 'a' does not exist on type '{}'.
-    
-    // generics
-    function f<T, U>(t: T, u: U) {
-        return { ...t, ...u, id: 'id' };
-                 ~~~~
-!!! error TS2698: Spread types may only be created from object types.
-    }
-    function override<U>(initial: U, override: U): U {
-        return { ...initial, ...override };
-                 ~~~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
-    }
-    let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
-        f({ a: 1, b: 'yes' }, { c: 'no', d: false })
-    let overlap: { id: string, a: number, b: string } =
-        f({ a: 1 }, { a: 2, b: 'extra' })
-    let overlapConflict: { id:string, a: string } =
-        f({ a: 1 }, { a: 'mismatch' })
-    let overwriteId: { id: string, a: number, c: number, d: string } =
-        f({ a: 1, id: true }, { c: 1, d: 'no' })
-    
-    // excess property checks
-    type A = { a: string, b: string };
-    type Extra = { a: string, b: string, extra: string };
-    const extra1: A = { a: "a", b: "b", extra: "extra" };
-                                        ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
-!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
-    const extra2 = { a: "a", b: "b", extra: "extra" };
-    const a1: A = { ...extra1 }; // error spans should be here
-    const a2: A = { ...extra2 }; // not on the symbol declarations above
-          ~~
-!!! error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
-!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
-    const extra3: Extra = { a: "a", b: "b", extra: "extra" };
-    const a3: A = { ...extra3 }; // same here
-          ~~
-!!! error TS2322: Type '{ a: string; b: string; extra: string; }' is not assignable to type 'A'.
-!!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'A'.
     

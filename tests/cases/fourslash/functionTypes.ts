@@ -21,4 +21,7 @@
 ////l./*7*/prototype = Object.prototype;
 
 verify.noErrors();
-verify.completionsAt(test.markerNames(), ["apply", "call", "bind", "toString", "prototype", "length", "arguments", "caller" ]);
+verify.completions(
+    { marker: ["1", "2", "3", "4", "5", "6"], exact: completion.functionMembersWithPrototype },
+    { marker: "7", exact: ["prototype", ...completion.functionMembers] },
+);

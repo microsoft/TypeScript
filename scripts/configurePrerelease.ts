@@ -55,13 +55,13 @@ function main(): void {
 function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: string, patch: string, nightlyPatch: string): string {
     const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
-    assert(majorMinorMatch !== null, `The file seems to no longer have a string matching '${majorMinorRgx}'.`);
+    assert(majorMinorMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${majorMinorRgx}'.`);
     const parsedMajorMinor = majorMinorMatch![1];
     assert(parsedMajorMinor === majorMinor, `versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
 
     const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)(-dev)?`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
-    assert(patchMatch !== null, "The file seems to no longer have a string matching " + versionRgx.toString());
+    assert(patchMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${versionRgx.toString()}'.`);
     const parsedPatch = patchMatch![1];
     if (parsedPatch !== patch) {
         throw new Error(`patch does not match. ${tsFilePath}: '${parsedPatch}; package.json: '${patch}'`);

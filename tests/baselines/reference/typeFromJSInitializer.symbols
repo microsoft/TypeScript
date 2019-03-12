@@ -14,74 +14,74 @@ function A () {
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
 }
 var a = new A()
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >A : Symbol(A, Decl(a.js, 0, 0))
 
 a.unknown = 1
 >a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
 
 a.unknown = true
 >a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
 
 a.unknown = {}
 >a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
 
 a.unknown = 'hi'
 >a.unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >unknown : Symbol(A.unknown, Decl(a.js, 0, 15))
 
 a.unknowable = 1
 >a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
 
 a.unknowable = true
 >a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
 
 a.unknowable = {}
 >a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
 
 a.unknowable = 'hi'
 >a.unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >unknowable : Symbol(A.unknowable, Decl(a.js, 2, 23))
 
 a.empty.push(1)
 >a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
 a.empty.push(true)
 >a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
 a.empty.push({})
 >a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
 a.empty.push('hi')
 >a.empty.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a.empty : Symbol(A.empty, Decl(a.js, 3, 31))
->a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 8, 16))
+>a : Symbol(a, Decl(a.js, 6, 3), Decl(a.js, 6, 15))
 >empty : Symbol(A.empty, Decl(a.js, 3, 31))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 

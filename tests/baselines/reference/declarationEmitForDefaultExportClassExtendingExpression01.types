@@ -1,0 +1,32 @@
+=== tests/cases/compiler/declarationEmitForDefaultExportClassExtendingExpression01.ts ===
+interface Greeter {
+    getGreeting(): string;
+>getGreeting : () => string
+}
+
+interface GreeterConstructor {
+    new (): Greeter;
+}
+
+class A {
+>A : A
+
+    getGreeting() {
+>getGreeting : () => string
+
+        return 'hello';
+>'hello' : "hello"
+    }
+}
+
+const getGreeterBase = (): GreeterConstructor => A;
+>getGreeterBase : () => GreeterConstructor
+>(): GreeterConstructor => A : () => GreeterConstructor
+>A : typeof A
+
+export default class extends getGreeterBase() {
+>getGreeterBase() : Greeter
+>getGreeterBase : () => GreeterConstructor
+}
+
+

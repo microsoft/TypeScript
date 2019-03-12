@@ -11,6 +11,7 @@ verify.moveToNewFile({
 `,
 
         "/y.ts":
-`const y = x;`,
+`const y = x;
+`,
     },
 });

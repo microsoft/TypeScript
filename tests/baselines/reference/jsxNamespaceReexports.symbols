@@ -1,0 +1,31 @@
+=== tests/cases/compiler/library.ts ===
+function createElement(element: string, props: any, ...children: any[]): any {}
+>createElement : Symbol(createElement, Decl(library.ts, 0, 0))
+>element : Symbol(element, Decl(library.ts, 0, 23))
+>props : Symbol(props, Decl(library.ts, 0, 39))
+>children : Symbol(children, Decl(library.ts, 0, 51))
+
+namespace JSX {
+>JSX : Symbol(JSX, Decl(library.ts, 0, 79))
+
+  export interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(library.ts, 2, 15))
+
+    [key: string]: Record<string, any>;
+>key : Symbol(key, Decl(library.ts, 4, 5))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+  }
+}
+
+export { createElement, JSX };
+>createElement : Symbol(createElement, Decl(library.ts, 8, 8))
+>JSX : Symbol(JSX, Decl(library.ts, 8, 23))
+
+=== tests/cases/compiler/index.tsx ===
+import * as MyLib from "./library";
+>MyLib : Symbol(MyLib, Decl(index.tsx, 0, 6))
+
+const content = <my-element/>;
+>content : Symbol(content, Decl(index.tsx, 2, 5))
+>my-element : Symbol(MyLib.JSX.IntrinsicElements, Decl(library.ts, 2, 15))
+

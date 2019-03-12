@@ -49,32 +49,32 @@ var t5: [C1, F]
 >t5 : [C1, F]
 
 var e11 = t1[4]; // base
->e11 : base | C
->t1[4] : base | C
+>e11 : undefined
+>t1[4] : undefined
 >t1 : [C, base]
 >4 : 4
 
 var e21 = t2[4]; // {}
->e21 : C | D
->t2[4] : C | D
+>e21 : undefined
+>t2[4] : undefined
 >t2 : [C, D]
 >4 : 4
 
 var e31 = t3[4]; // C1
->e31 : C1 | D1
->t3[4] : C1 | D1
+>e31 : undefined
+>t3[4] : undefined
 >t3 : [C1, D1]
 >4 : 4
 
 var e41 = t4[2]; // base1
->e41 : base1 | C1
->t4[2] : base1 | C1
+>e41 : undefined
+>t4[2] : undefined
 >t4 : [base1, C1]
 >2 : 2
 
 var e51 = t5[2]; // {}
->e51 : F | C1
->t5[2] : F | C1
+>e51 : undefined
+>t5[2] : undefined
 >t5 : [C1, F]
 >2 : 2
 

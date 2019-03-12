@@ -148,7 +148,7 @@ var [,,,...c10] = [1, 2, 3, 4, "hello"];
 > : undefined
 > : undefined
 > : undefined
->c10 : (string | number)[]
+>c10 : [number, string]
 >[1, 2, 3, 4, "hello"] : [number, number, number, number, string]
 >1 : 1
 >2 : 2
@@ -159,7 +159,7 @@ var [,,,...c10] = [1, 2, 3, 4, "hello"];
 var [c11, c12, ...c13] = [1, 2, "string"];
 >c11 : number
 >c12 : number
->c13 : string[]
+>c13 : [string]
 >[1, 2, "string"] : [number, number, string]
 >1 : 1
 >2 : 2

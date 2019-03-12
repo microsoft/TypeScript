@@ -3,7 +3,6 @@
 // Repro from #25793
 
 // Gets the parameters of a function type as a tuple
-type Parameters<T extends (...args: any[]) => any> = T extends (...args: infer U) => any ? U : never;
 // Removes the first element from a tuple
 type Tail<T extends any[]> = ((...args: T) => any) extends ((head: any, ...tail: infer U) => any) ? U : never;
 

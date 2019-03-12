@@ -121,18 +121,6 @@ namespace ts {
         const buckets = createMap<Map<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
-        function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${JSON.stringify(settings.typeRoots)}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
-        }
-
-        function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): Map<DocumentRegistryEntry> {
-            let bucket = buckets.get(key);
-            if (!bucket && createIfMissing) {
-                buckets.set(key, bucket = createMap<DocumentRegistryEntry>());
-            }
-            return bucket!; // TODO: GH#18217
-        }
-
         function reportStats() {
             const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
                 const entries = buckets.get(name)!;
@@ -182,9 +170,9 @@ namespace ts {
             acquiring: boolean,
             scriptKind?: ScriptKind): SourceFile {
 
-            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ true);
+            const bucket = getOrUpdate<Map<DocumentRegistryEntry>>(buckets, key, createMap);
             let entry = bucket.get(path);
-            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target;
+            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
             if (!entry && externalCache) {
                 const sourceFile = externalCache.getDocument(key, path);
                 if (sourceFile) {
@@ -199,7 +187,7 @@ namespace ts {
 
             if (!entry) {
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget!, version, /*setNodeParents*/ false, scriptKind); // TODO: GH#18217
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, /*setNodeParents*/ false, scriptKind);
                 if (externalCache) {
                     externalCache.setDocument(key, path, sourceFile);
                 }
@@ -242,9 +230,7 @@ namespace ts {
         }
 
         function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void {
-            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ false);
-            Debug.assert(bucket !== undefined);
-
+            const bucket = Debug.assertDefined(buckets.get(key));
             const entry = bucket.get(path)!;
             entry.languageServiceRefCount--;
 
@@ -272,5 +258,9 @@ namespace ts {
             reportStats,
             getKeyForCompilationSettings
         };
+    }
+
+    function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
+        return sourceFileAffectingCompilerOptions.map(option => getCompilerOptionValue(settings, option)).join("|") as DocumentRegistryBucketKey;
     }
 }

@@ -1,3 +1,5 @@
+declare function use(x: any): any;
+
 //==== let
 for (let x in {}) {
     (function() { return x});
@@ -55,6 +57,19 @@ for (let y = 0; y < 1; ++y) {
     (() => x + y);
 }
 
+for (let y = (use(() => y), 0); y < 1; ++y) {
+}
+
+for (let y = 0; use(() => y), y < 1; ++y) {
+}
+
+for (let y = 0; y < 1; use(() => y), ++y) {
+}
+
+for (let y = (use(() => y), 0); use(() => y), y < 1; use(() => y), ++y) {
+    use(() => y);
+}
+
 //=========const
 for (const x in {}) {
     (function() { return x});
@@ -110,4 +125,14 @@ for (const y = 0; y < 1;) {
     const x = 1;
     (function() { return x + y});
     (() => x + y);
+}
+
+// https://github.com/Microsoft/TypeScript/issues/20594
+declare const sobj: { [x: string]: any };
+for (let sx in sobj) {
+    (() => sobj[sx]);
+}
+declare const iobj: { [x: number]: any };
+for (let ix in iobj) {
+    (() => iobj[ix]);
 }

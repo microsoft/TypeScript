@@ -1,0 +1,47 @@
+=== tests/cases/conformance/types/tuple/readonlyArraysAndTuples2.ts ===
+type T10 = string[];
+>T10 : Symbol(T10, Decl(readonlyArraysAndTuples2.ts, 0, 0))
+
+type T11 = Array<string>;
+>T11 : Symbol(T11, Decl(readonlyArraysAndTuples2.ts, 0, 20))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+type T12 = readonly string[];
+>T12 : Symbol(T12, Decl(readonlyArraysAndTuples2.ts, 1, 25))
+
+type T13 = ReadonlyArray<string>;
+>T13 : Symbol(T13, Decl(readonlyArraysAndTuples2.ts, 2, 29))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+type T20 = [number, number];
+>T20 : Symbol(T20, Decl(readonlyArraysAndTuples2.ts, 3, 33))
+
+type T21 = readonly [number, number];
+>T21 : Symbol(T21, Decl(readonlyArraysAndTuples2.ts, 5, 28))
+
+declare function f1(ma: string[], ra: readonly string[], mt: [string, string], rt: readonly [string, string]): readonly [string, string];
+>f1 : Symbol(f1, Decl(readonlyArraysAndTuples2.ts, 6, 37))
+>ma : Symbol(ma, Decl(readonlyArraysAndTuples2.ts, 8, 20))
+>ra : Symbol(ra, Decl(readonlyArraysAndTuples2.ts, 8, 33))
+>mt : Symbol(mt, Decl(readonlyArraysAndTuples2.ts, 8, 56))
+>rt : Symbol(rt, Decl(readonlyArraysAndTuples2.ts, 8, 78))
+
+declare const someDec: any;
+>someDec : Symbol(someDec, Decl(readonlyArraysAndTuples2.ts, 10, 13))
+
+class A {
+>A : Symbol(A, Decl(readonlyArraysAndTuples2.ts, 10, 27))
+
+  @someDec
+>someDec : Symbol(someDec, Decl(readonlyArraysAndTuples2.ts, 10, 13))
+
+  j: readonly string[] = [];
+>j : Symbol(A.j, Decl(readonlyArraysAndTuples2.ts, 12, 9))
+
+  @someDec
+>someDec : Symbol(someDec, Decl(readonlyArraysAndTuples2.ts, 10, 13))
+
+  k: readonly [string, number] = ['foo', 42];
+>k : Symbol(A.k, Decl(readonlyArraysAndTuples2.ts, 14, 28))
+}
+

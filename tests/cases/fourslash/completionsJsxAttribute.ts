@@ -8,15 +8,22 @@
 ////    interface IntrinsicElements {
 ////        div: {
 ////            /** Doc */
-////            foo: string
+////            foo: boolean;
+////            bar: string;
 ////        }
 ////    }
 ////}
 ////
 ////<div /**/></div>;
 
-goTo.marker();
-verify.completionEntryDetailIs("foo", "(JSX attribute) foo: string", "Doc", "JSX attribute", []);
+const exact: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+    { name: "foo", kind: "JSX attribute", kindModifiers: "declare", text: "(JSX attribute) foo: boolean", documentation: "Doc" },
+    { name: "bar", kind: "JSX attribute", kindModifiers: "declare", text: "(JSX attribute) bar: string" },
+];
+verify.completions({ marker: "", exact });
 edit.insert("f");
-verify.completionEntryDetailIs("foo", "(JSX attribute) foo: string", "Doc", "JSX attribute", []);
-
+verify.completions({ exact });
+edit.insert("oo ");
+verify.completions({ exact: exact[1] });
+edit.insert("b");
+verify.completions({ exact: exact[1] });

@@ -1,6 +1,5 @@
 var Accessibility = {};
 var AccessibilityTestRunner = {};
-var Animation = {};
 var ApplicationTestRunner = {};
 var Audits = {};
 var Audits2 = {};

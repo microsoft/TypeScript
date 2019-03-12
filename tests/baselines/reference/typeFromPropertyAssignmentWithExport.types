@@ -3,14 +3,14 @@
 
 export const Adapter = {};
 >Adapter : typeof Adapter
->{} : { [x: string]: any; }
+>{} : {}
 
 Adapter.prop = {};
->Adapter.prop = {} : { [x: string]: any; }
->Adapter.prop : { [x: string]: any; }
+>Adapter.prop = {} : {}
+>Adapter.prop : {}
 >Adapter : typeof Adapter
->prop : { [x: string]: any; }
->{} : { [x: string]: any; }
+>prop : {}
+>{} : {}
 
 // comment this out, and it works
 Adapter.asyncMethod = function() {}

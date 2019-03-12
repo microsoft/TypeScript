@@ -1,7 +1,7 @@
 === tests/cases/conformance/expressions/binaryOperators/inOperator/inOperatorWithInvalidOperands.ts ===
 enum E { a }
 >E : E
->a : E
+>a : E.a
 
 var x: any;
 >x : any

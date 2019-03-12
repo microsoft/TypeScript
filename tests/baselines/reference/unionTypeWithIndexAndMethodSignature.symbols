@@ -1,0 +1,24 @@
+=== tests/cases/compiler/unionTypeWithIndexAndMethodSignature.ts ===
+interface Options {
+>Options : Symbol(Options, Decl(unionTypeWithIndexAndMethodSignature.ts, 0, 0))
+
+    m(x: number): void;
+>m : Symbol(Options.m, Decl(unionTypeWithIndexAndMethodSignature.ts, 0, 19))
+>x : Symbol(x, Decl(unionTypeWithIndexAndMethodSignature.ts, 1, 6))
+
+    [key: string]: unknown;
+>key : Symbol(key, Decl(unionTypeWithIndexAndMethodSignature.ts, 2, 5))
+}
+declare function f(options: number | Options): void;
+>f : Symbol(f, Decl(unionTypeWithIndexAndMethodSignature.ts, 3, 1))
+>options : Symbol(options, Decl(unionTypeWithIndexAndMethodSignature.ts, 4, 19))
+>Options : Symbol(Options, Decl(unionTypeWithIndexAndMethodSignature.ts, 0, 0))
+
+f({
+>f : Symbol(f, Decl(unionTypeWithIndexAndMethodSignature.ts, 3, 1))
+
+    m(x) { },
+>m : Symbol(m, Decl(unionTypeWithIndexAndMethodSignature.ts, 5, 3))
+>x : Symbol(x, Decl(unionTypeWithIndexAndMethodSignature.ts, 6, 6))
+
+});

@@ -212,3 +212,4 @@ function foo14() {
     let x
 >x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 101, 7))
 }
+

@@ -1,11 +1,11 @@
 === tests/cases/conformance/salsa/mod.js ===
 // Based on a pattern from adonis
 exports.formatters = {}
->exports.formatters = {} : { [x: string]: any; }
->exports.formatters : { [x: string]: any; }
+>exports.formatters = {} : {}
+>exports.formatters : {}
 >exports : typeof import("tests/cases/conformance/salsa/mod")
->formatters : { [x: string]: any; }
->{} : { [x: string]: any; }
+>formatters : {}
+>{} : {}
 
 === tests/cases/conformance/salsa/first.js ===
 exports = require('./mod')
@@ -56,18 +56,18 @@ import * as debug from './mod'
 
 debug.formatters.j
 >debug.formatters.j : any
->debug.formatters : { [x: string]: any; }
+>debug.formatters : {}
 >debug : typeof debug
->formatters : { [x: string]: any; }
+>formatters : {}
 >j : any
 
 var one = debug.formatters.o(1)
 >one : any
 >debug.formatters.o(1) : any
 >debug.formatters.o : any
->debug.formatters : { [x: string]: any; }
+>debug.formatters : {}
 >debug : typeof debug
->formatters : { [x: string]: any; }
+>formatters : {}
 >o : any
 >1 : 1
 

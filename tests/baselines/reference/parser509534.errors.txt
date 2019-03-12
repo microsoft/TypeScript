@@ -1,15 +1,15 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts(2,14): error TS2304: Cannot find name 'require'.
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts(3,1): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts(2,14): error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts(3,1): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509534.ts (2 errors) ====
     "use strict";
     var config = require("../config");
                  ~~~~~~~
-!!! error TS2304: Cannot find name 'require'.
+!!! error TS2580: Cannot find name 'require'. Do you need to install type definitions for node? Try `npm i @types/node`.
     module.exports.route = function (server) {
     ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
      
      // General Login Page
      server.get(config.env.siteRoot + "/auth/login", function (req, res, next) {

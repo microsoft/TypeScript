@@ -69,8 +69,8 @@ declare function genericFn3<
 
 // Should be never
 const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
->result5 : any
->genericFn3({ g: "gtest", h: "htest" }, "g", "h") : any
+>result5 : unknown
+>genericFn3({ g: "gtest", h: "htest" }, "g", "h") : unknown
 >genericFn3 : <T extends { [K in keyof T]: T[K]; }, U extends keyof T, V extends keyof T>(obj: T, u: U, v: V) => T[U & V]
 >{ g: "gtest", h: "htest" } : { g: string; h: string; }
 >g : string
@@ -263,4 +263,21 @@ declare const o1Test: ExpectType<{}, O1Props>;
 
 declare const o0Test: ExpectType<{}, O0Props>;
 >o0Test : "Match"
+
+// Repro from #23005
+
+type Example<T extends Record<'a', string>> = T['a'];
+>Example : T["a"]
+
+type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
+>Res1 : "x" | "y"
+>a : "x"
+>a : "y"
+
+type Res2 = Example<{ a: "x" }>;  // "x"
+>Res2 : "x"
+>a : "x"
+
+type Res3 = Example<never>;  // never 
+>Res3 : never
 

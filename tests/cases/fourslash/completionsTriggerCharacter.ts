@@ -2,6 +2,7 @@
 
 // @jsx: preserve
 
+/////** @/*tag*/ */
 //////</*comment*/
 ////const x: "a" | "b" = "/*openQuote*/"/*closeQuote*/;
 ////const y: 'a' | 'b' = '/*openSingleQuote*/'/*closeSingleQuote*/;
@@ -29,6 +30,7 @@
 ////const divide = 1 //*divide*/
 
 verify.completions(
+    { marker: "tag", includes: ["param"], triggerCharacter: "@" },
     { marker: "comment", exact: undefined, triggerCharacter: "<" },
 
     { marker: "openQuote", exact: ["a", "b"], triggerCharacter: '"' },

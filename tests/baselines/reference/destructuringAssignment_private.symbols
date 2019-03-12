@@ -1,0 +1,47 @@
+=== tests/cases/compiler/destructuringAssignment_private.ts ===
+class C {
+>C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
+
+    private x = 0;
+>x : Symbol(C.x, Decl(destructuringAssignment_private.ts, 0, 9))
+
+    private o = [{ a: 1 }];
+>o : Symbol(C.o, Decl(destructuringAssignment_private.ts, 1, 18))
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 2, 18))
+}
+let x: number;
+>x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))
+
+([{ a: { x } }] = [{ a: new C() }]);
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 5, 3))
+>x : Symbol(x, Decl(destructuringAssignment_private.ts, 5, 8))
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 5, 20))
+>C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
+
+({ o: [{ a: x }]} = new C());
+>o : Symbol(o, Decl(destructuringAssignment_private.ts, 6, 2))
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 6, 8))
+>x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))
+>C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
+
+const nameX = "x";
+>nameX : Symbol(nameX, Decl(destructuringAssignment_private.ts, 8, 5))
+
+([{ a: { [nameX]: x } }] = [{ a: new C() }]);
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 9, 3))
+>[nameX] : Symbol([nameX], Decl(destructuringAssignment_private.ts, 9, 8))
+>nameX : Symbol(nameX, Decl(destructuringAssignment_private.ts, 8, 5))
+>x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 9, 29))
+>C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
+
+const nameO = "o";
+>nameO : Symbol(nameO, Decl(destructuringAssignment_private.ts, 11, 5))
+
+({ [nameO]: [{ a: x }]} = new C());
+>[nameO] : Symbol([nameO], Decl(destructuringAssignment_private.ts, 12, 2))
+>nameO : Symbol(nameO, Decl(destructuringAssignment_private.ts, 11, 5))
+>a : Symbol(a, Decl(destructuringAssignment_private.ts, 12, 14))
+>x : Symbol(x, Decl(destructuringAssignment_private.ts, 4, 3))
+>C : Symbol(C, Decl(destructuringAssignment_private.ts, 0, 0))
+

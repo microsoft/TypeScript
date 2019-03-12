@@ -1,0 +1,40 @@
+tests/cases/conformance/salsa/lovefield-ts.d.ts(4,19): error TS2503: Cannot find namespace 'query'.
+tests/cases/conformance/salsa/lovefield-ts.d.ts(5,24): error TS2503: Cannot find namespace 'schema'.
+tests/cases/conformance/salsa/lovefield-ts.d.ts(7,25): error TS2503: Cannot find namespace 'query'.
+tests/cases/conformance/salsa/lovefield-ts.d.ts(9,14): error TS2304: Cannot find name 'TransactionStats'.
+tests/cases/conformance/salsa/lovefield.js(3,23): error TS2694: Namespace 'lf' has no exported member 'schema'.
+tests/cases/conformance/salsa/lovefield.js(4,14): error TS2304: Cannot find name 'IThenable'.
+
+
+==== tests/cases/conformance/salsa/lovefield-ts.d.ts (4 errors) ====
+    // bug #27352, crashes from github.com/google/lovefield
+    declare namespace lf {
+      export interface Transaction {
+        attach(query: query.Builder): Promise<Array<Object>>
+                      ~~~~~
+!!! error TS2503: Cannot find namespace 'query'.
+        begin(scope: Array<schema.Table>): Promise<void>
+                           ~~~~~~
+!!! error TS2503: Cannot find namespace 'schema'.
+        commit(): Promise<void>
+        exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
+                            ~~~~~
+!!! error TS2503: Cannot find namespace 'query'.
+        rollback(): Promise<void>
+        stats(): TransactionStats
+                 ~~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'TransactionStats'.
+      }
+    }
+==== tests/cases/conformance/salsa/lovefield.js (2 errors) ====
+    lf.Transaction = function() {};
+    /**
+     * @param {!Array<!lf.schema.Table>} scope
+                          ~~~~~~
+!!! error TS2694: Namespace 'lf' has no exported member 'schema'.
+     * @return {!IThenable}
+                 ~~~~~~~~~
+!!! error TS2304: Cannot find name 'IThenable'.
+     */
+    lf.Transaction.prototype.begin = function(scope) {};
+    

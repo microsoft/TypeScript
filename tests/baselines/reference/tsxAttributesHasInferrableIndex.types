@@ -29,8 +29,8 @@ function Button(attributes: Attributes | undefined, contents: string[]) {
 >'' : ""
 }
 const b = <Button></Button>
->b : any
-><Button></Button> : any
+>b : error
+><Button></Button> : error
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
 >Button : (attributes: Attributes | undefined, contents: string[]) => string
 
