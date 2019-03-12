@@ -55,7 +55,7 @@ The TypeScript repository is relatively large. To save some time, you might want
 
 ### Using local builds
 
-Run `gulp build` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
+Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
 
 ## Contributing bug fixes
 
@@ -104,7 +104,7 @@ Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/
 Library files in `built/local/` are updated automatically by running the standard build task:
 
 ```sh
-jake
+gulp
 ```
 
 The files in `lib/` are used to bootstrap compilation and usually **should not** be updated unless publishing a new version or updating the LKG.
@@ -115,49 +115,49 @@ The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` bo
 
 ## Running the Tests
 
-To run all tests, invoke the `runtests-parallel` target using jake:
+To run all tests, invoke the `runtests-parallel` target using gulp:
 
 ```Shell
-jake runtests-parallel
+gulp runtests-parallel
 ```
 
 This will run all tests; to run only a specific subset of tests, use:
 
 ```Shell
-jake runtests tests=<regex>
+gulp runtests --tests=<regex>
 ```
 
 e.g. to run all compiler baseline tests:
 
 ```Shell
-jake runtests tests=compiler
+gulp runtests --tests=compiler
 ```
 
 or to run a specific test: `tests\cases\compiler\2dArrays.ts` 
 
 ```Shell
-jake runtests tests=2dArrays
+gulp runtests --tests=2dArrays
 ```
 
 ## Debugging the tests
 
-To debug the tests, invoke the `runtests-browser` task from jake.
+To debug the tests, invoke the `runtests-browser` task from gulp.
 You will probably only want to debug one test at a time:
 
 ```Shell
-jake runtests-browser tests=2dArrays
+gulp runtests-browser --tests=2dArrays
 ```
 
 You can specify which browser to use for debugging. Currently Chrome and IE are supported:
 
 ```Shell
-jake runtests-browser tests=2dArrays browser=chrome
+gulp runtests-browser --tests=2dArrays --browser=chrome
 ```
 
-You can debug with VS Code or Node instead with `jake runtests inspect=true`:
+You can debug with VS Code or Node instead with `gulp runtests --inspect=true`:
 
 ```Shell
-jake runtests tests=2dArrays inspect=true
+gulp runtests --tests=2dArrays --inspect=true
 ```
 
 ## Adding a Test
@@ -197,13 +197,13 @@ Compiler testcases generate baselines that track the emitted `.js`, the errors p
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
 ```Shell
-jake diff
+gulp diff
 ```
 
 After verifying that the changes in the baselines are correct, run
 
 ```Shell
-jake baseline-accept
+gulp baseline-accept
 ```
 
 to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
@@ -211,6 +211,6 @@ to establish the new baselines as the desired behavior. This will change the fil
 ## Localization
 
 All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
-If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
+If you make changes to it, run `gulp generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
 
 See [coding guidelines on diagnostic messages](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#diagnostic-messages).

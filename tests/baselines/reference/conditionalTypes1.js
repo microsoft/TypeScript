@@ -509,6 +509,8 @@ declare function f5<T extends Options, K extends string>(p: K): Extract<T, {
 }>;
 declare let x0: {
     k: "a";
+} & {
+    k: "a";
     a: number;
 };
 declare type OptionsOfKind<K extends Options["k"]> = Extract<Options, {
@@ -645,7 +647,7 @@ declare type T82 = Eq2<false, true>;
 declare type T83 = Eq2<false, false>;
 declare type Foo<T> = T extends string ? boolean : number;
 declare type Bar<T> = T extends string ? boolean : number;
-declare const convert: <U>(value: Foo<U>) => Bar<U>;
+declare const convert: <U>(value: Foo<U>) => Foo<U>;
 declare type Baz<T> = Foo<T>;
 declare const convert2: <T>(value: Foo<T>) => Foo<T>;
 declare function f31<T>(): void;

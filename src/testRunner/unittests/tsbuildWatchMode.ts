@@ -348,9 +348,9 @@ function myFunc() { return 10; }`);
             // TODO:: local change does not build logic.js because builder doesnt find any changes in input files to generate output
             // Make local change to function bar
             verifyChangeInCore(`${coreIndex.content}
-function myFunc() { return 100; }`);
+function myFunc() { return 100; }`, /*isLocal*/ true);
 
-            function verifyChangeInCore(content: string) {
+            function verifyChangeInCore(content: string, isLocal?: boolean) {
                 const outputFileStamps = getOutputFileStamps();
                 host.writeFile(coreIndex.path, content);
 
@@ -363,12 +363,14 @@ function myFunc() { return 100; }`);
                     emptyArray
                 );
                 host.checkTimeoutQueueLengthAndRun(1); // Builds logic
+                const changedLogicOutput = getOutputFileNames(SubProject.logic, "index");
                 const changedLogic = getOutputFileStamps();
                 verifyChangedFiles(
                     changedLogic,
                     changedCore,
-                    getOutputFileNames(SubProject.logic, "index"),
-                    emptyArray
+                    // Only js file is written and d.ts is modified timestamp if its local change
+                    isLocal ? [changedLogicOutput[0]] : getOutputFileNames(SubProject.logic, "index"),
+                    isLocal ? [changedLogicOutput[1]] : emptyArray
                 );
                 host.checkTimeoutQueueLength(0);
                 checkOutputErrorsIncremental(host, emptyArray);
@@ -510,7 +512,8 @@ let x: string = 10;`);
                     changeExtension(fileWithError.path, Extension.Js),
                     changeExtension(fileWithError.path, Extension.Dts),
                     changeExtension(fileWithoutError.path, Extension.Js),
-                    changeExtension(fileWithoutError.path, Extension.Dts)
+                    changeExtension(fileWithoutError.path, Extension.Dts),
+                    `${subProjectLocation}/tsconfig${Extension.TsBuildInfo}`
                 ];
 
                 function verifyDtsErrors(host: TsBuildWatchSystem, isIncremental: boolean, expectedErrors: ReadonlyArray<string>) {
@@ -570,9 +573,10 @@ let x: string = 10;`);
                     it("when fixing errors only changed file is emitted", () => {
                         const host = createSolutionWithIncrementalError();
                         fixError(host);
-                        assert.equal(host.writtenFiles.size, 2, `Expected to write only changed files: ${arrayFrom(host.writtenFiles.keys())}`);
+                        assert.equal(host.writtenFiles.size, 3, `Expected to write only changed files: ${arrayFrom(host.writtenFiles.keys())}`);
                         verifyWrittenFile(host, outputs[0]);
                         verifyWrittenFile(host, outputs[1]);
+                        verifyWrittenFile(host, outputs[4]);
                     });
 
                     it("when file with no error changes, declaration errors are reported", () => {

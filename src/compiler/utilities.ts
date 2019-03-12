@@ -401,10 +401,7 @@ namespace ts {
         return !nodeIsMissing(node);
     }
 
-    /**
-     * Prepends statements to an array while taking care of prologue directives.
-     */
-    export function addStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+    function insertStatementsAfterPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
         if (from === undefined || from.length === 0) return to;
         let statementIndex = 0;
         // skip all prologue directives to insert at the correct position
@@ -415,6 +412,46 @@ namespace ts {
         }
         to.splice(statementIndex, 0, ...from);
         return to;
+    }
+
+    function insertStatementAfterPrologue<T extends Statement>(to: T[], statement: T | undefined, isPrologueDirective: (node: Node) => boolean): T[] {
+        if (statement === undefined) return to;
+        let statementIndex = 0;
+        // skip all prologue directives to insert at the correct position
+        for (; statementIndex < to.length; ++statementIndex) {
+            if (!isPrologueDirective(to[statementIndex])) {
+                break;
+            }
+        }
+        to.splice(statementIndex, 0, statement);
+        return to;
+    }
+
+
+    function isAnyPrologueDirective(node: Node) {
+        return isPrologueDirective(node) || !!(getEmitFlags(node) & EmitFlags.CustomPrologue);
+    }
+
+    /**
+     * Prepends statements to an array while taking care of prologue directives.
+     */
+    export function insertStatementsAfterStandardPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+        return insertStatementsAfterPrologue(to, from, isPrologueDirective);
+    }
+
+    export function insertStatementsAfterCustomPrologue<T extends Statement>(to: T[], from: ReadonlyArray<T> | undefined): T[] {
+        return insertStatementsAfterPrologue(to, from, isAnyPrologueDirective);
+    }
+
+    /**
+     * Prepends statements to an array while taking care of prologue directives.
+     */
+    export function insertStatementAfterStandardPrologue<T extends Statement>(to: T[], statement: T | undefined): T[] {
+        return insertStatementAfterPrologue(to, statement, isPrologueDirective);
+    }
+
+    export function insertStatementAfterCustomPrologue<T extends Statement>(to: T[], statement: T | undefined): T[] {
+        return insertStatementAfterPrologue(to, statement, isAnyPrologueDirective);
     }
 
     /**
@@ -1434,6 +1471,11 @@ namespace ts {
                 return parent as CallExpression;
             }
         }
+    }
+
+    export function isSuperOrSuperProperty(node: Node): node is SuperExpression | SuperProperty {
+        return node.kind === SyntaxKind.SuperKeyword
+            || isSuperProperty(node);
     }
 
     /**
@@ -2514,14 +2556,15 @@ namespace ts {
     }
 
     export function getEffectiveBaseTypeNode(node: ClassLikeDeclaration | InterfaceDeclaration) {
-        if (isInJSFile(node)) {
+        const baseType = getClassExtendsHeritageElement(node);
+        if (baseType && isInJSFile(node)) {
             // Prefer an @augments tag because it may have type parameters.
             const tag = getJSDocAugmentsTag(node);
             if (tag) {
                 return tag.class;
             }
         }
-        return getClassExtendsHeritageElement(node);
+        return baseType;
     }
 
     export function getClassExtendsHeritageElement(node: ClassLikeDeclaration | InterfaceDeclaration) {
@@ -2558,7 +2601,7 @@ namespace ts {
         return undefined;
     }
 
-    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile, reference: FileReference) {
+    export function tryResolveScriptReference(host: ScriptReferenceHost, sourceFile: SourceFile | UnparsedSource, reference: FileReference) {
         if (!host.getCompilerOptions().noResolve) {
             const referenceFileName = isRootedDiskPath(reference.fileName) ? reference.fileName : combinePaths(getDirectoryPath(sourceFile.fileName), reference.fileName);
             return host.getSourceFile(referenceFileName);
@@ -3201,6 +3244,10 @@ namespace ts {
             }
         }
 
+        function getTextPosWithWriteLine() {
+            return lineStart ? output.length : (output.length + newLine.length);
+        }
+
         reset();
 
         return {
@@ -3230,7 +3277,8 @@ namespace ts {
             writeStringLiteral: write,
             writeSymbol: (s, _) => write(s),
             writeTrailingSemicolon: write,
-            writeComment: write
+            writeComment: write,
+            getTextPosWithWriteLine
         };
     }
 
@@ -3355,11 +3403,11 @@ namespace ts {
     }
 
     export interface EmitFileNames {
-        jsFilePath: string | undefined;
-        sourceMapFilePath: string | undefined;
-        declarationFilePath: string | undefined;
-        declarationMapPath: string | undefined;
-        bundleInfoPath: string | undefined;
+        jsFilePath?: string | undefined;
+        sourceMapFilePath?: string | undefined;
+        declarationFilePath?: string | undefined;
+        declarationMapPath?: string | undefined;
+        buildInfoPath?: string | undefined;
     }
 
     /**
@@ -3417,8 +3465,8 @@ namespace ts {
         return computeLineAndCharacterOfPosition(lineMap, pos).line;
     }
 
-    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration | undefined {
-        return find(node.members, (member): member is ConstructorDeclaration => isConstructorDeclaration(member) && nodeIsPresent(member.body));
+    export function getFirstConstructorWithBody(node: ClassLikeDeclaration): ConstructorDeclaration & { body: FunctionBody } | undefined {
+        return find(node.members, (member): member is ConstructorDeclaration & { body: FunctionBody } => isConstructorDeclaration(member) && nodeIsPresent(member.body));
     }
 
     function getSetAccessorValueParameter(accessor: SetAccessorDeclaration): ParameterDeclaration | undefined {
@@ -3791,8 +3839,8 @@ namespace ts {
     }
 
     export function getModifierFlags(node: Node): ModifierFlags {
-        if (node.modifierFlagsCache! & ModifierFlags.HasComputedFlags) {
-            return node.modifierFlagsCache! & ~ModifierFlags.HasComputedFlags;
+        if (node.modifierFlagsCache & ModifierFlags.HasComputedFlags) {
+            return node.modifierFlagsCache & ~ModifierFlags.HasComputedFlags;
         }
 
         const flags = getModifierFlagsNoCache(node);
@@ -4514,7 +4562,7 @@ namespace ts {
     }
 
     export function getObjectFlags(type: Type): ObjectFlags {
-        return type.flags & TypeFlags.Object ? (<ObjectType>type).objectFlags : 0;
+        return type.flags & TypeFlags.ObjectFlagsType ? (<ObjectFlagsType>type).objectFlags : 0;
     }
 
     export function typeHasCallOrConstructSignatures(type: Type, checker: TypeChecker) {
@@ -4595,6 +4643,16 @@ namespace ts {
     export function isAccessExpression(node: Node): node is AccessExpression {
         return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression;
     }
+
+    export function isBundleFileTextLike(section: BundleFileSection): section is BundleFileTextLike {
+        switch (section.kind) {
+            case BundleFileSectionKind.Text:
+            case BundleFileSectionKind.Internal:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
 
 namespace ts {
@@ -4602,6 +4660,8 @@ namespace ts {
         switch (options.target) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2019:
+                return "lib.es2019.full.d.ts";
             case ScriptTarget.ES2018:
                 return "lib.es2018.full.d.ts";
             case ScriptTarget.ES2017:
@@ -5607,6 +5667,11 @@ namespace ts {
         return node.kind === SyntaxKind.TypeAssertionExpression;
     }
 
+    export function isConstTypeReference(node: Node) {
+        return isTypeReferenceNode(node) && isIdentifier(node.typeName) &&
+            node.typeName.escapedText === "const" && !node.typeArguments;
+    }
+
     export function isParenthesizedExpression(node: Node): node is ParenthesizedExpression {
         return node.kind === SyntaxKind.ParenthesizedExpression;
     }
@@ -5978,6 +6043,26 @@ namespace ts {
 
     export function isUnparsedSource(node: Node): node is UnparsedSource {
         return node.kind === SyntaxKind.UnparsedSource;
+    }
+
+    export function isUnparsedPrepend(node: Node): node is UnparsedPrepend {
+        return node.kind === SyntaxKind.UnparsedPrepend;
+    }
+
+    export function isUnparsedTextLike(node: Node): node is UnparsedTextLike {
+        switch (node.kind) {
+            case SyntaxKind.UnparsedText:
+            case SyntaxKind.UnparsedInternalText:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isUnparsedNode(node: Node): node is UnparsedNode {
+        return isUnparsedTextLike(node) ||
+            node.kind === SyntaxKind.UnparsedPrologue ||
+            node.kind === SyntaxKind.UnparsedSyntheticReference;
     }
 
     // JSDoc
@@ -6735,7 +6820,7 @@ namespace ts {
     /* @internal */
     export function isDeclaration(node: Node): node is NamedDeclaration {
         if (node.kind === SyntaxKind.TypeParameter) {
-            return node.parent.kind !== SyntaxKind.JSDocTemplateTag || isInJSFile(node);
+            return (node.parent && node.parent.kind !== SyntaxKind.JSDocTemplateTag) || isInJSFile(node);
         }
 
         return isDeclarationKind(node.kind);
@@ -7205,6 +7290,10 @@ namespace ts {
 
     export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
         return !!(compilerOptions.declaration || compilerOptions.composite);
+    }
+
+    export function isIncrementalCompilation(options: CompilerOptions) {
+        return !!(options.incremental || options.composite);
     }
 
     export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictBindCallApply" | "strictPropertyInitialization" | "alwaysStrict";
@@ -8425,6 +8514,14 @@ namespace ts {
         const index = arr.indexOf(value);
         Debug.assert(index !== -1);
         return arr.slice(index);
+    }
+
+    export function addRelatedInfo<T extends Diagnostic>(diagnostic: T, ...relatedInformation: DiagnosticRelatedInformation[]): T {
+        if (!diagnostic.relatedInformation) {
+            diagnostic.relatedInformation = [];
+        }
+        diagnostic.relatedInformation.push(...relatedInformation);
+        return diagnostic;
     }
 
     export function minAndMax<T>(arr: ReadonlyArray<T>, getValue: (value: T) => number): { readonly min: number, readonly max: number } {

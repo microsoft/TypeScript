@@ -1,24 +1,16 @@
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(14,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(18,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
-tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(22,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(24,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
-tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(27,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(29,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyTestClass'.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(37,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyTestClass'.
-tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(53,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(61,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(83,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(87,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
-tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(91,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(93,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
-tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(96,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(98,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'p' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
 tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(106,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 't' must be of type 'this', but here has type 'MyGenericTestClass<T, U>'.
-tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(122,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 
 
-==== tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts (18 errors) ====
+==== tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts (10 errors) ====
     class MyTestClass {
         private canary: number;
         static staticCanary: number;
@@ -45,8 +37,6 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
     
         //type of 'this' in member accessor(get and set) body is the class instance type
         get prop() {
-            ~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var p = this;
             var p: MyTestClass;
                 ~
@@ -54,8 +44,6 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
             return this;
         }
         set prop(v) {
-            ~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var p = this;
             var p: MyTestClass;
                 ~
@@ -86,8 +74,6 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
         }
     
         static get staticProp() {
-                   ~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             //type of 'this' in static accessor body is constructor function type
             var p = this;
             var p: typeof MyTestClass;
@@ -96,8 +82,6 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
             return this;
         }
         static set staticProp(v: typeof MyTestClass) {
-                   ~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             //type of 'this' in static accessor body is constructor function type
             var p = this;
             var p: typeof MyTestClass;
@@ -132,8 +116,6 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
     
         //type of 'this' in member accessor(get and set) body is the class instance type
         get prop() {
-            ~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var p = this;
             var p: MyGenericTestClass<T, U>;
                 ~
@@ -141,8 +123,6 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
             return this;
         }
         set prop(v) {
-            ~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             var p = this;
             var p: MyGenericTestClass<T, U>;
                 ~
@@ -173,8 +153,6 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
         }
     
         static get staticProp() {
-                   ~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             //type of 'this' in static accessor body is constructor function type
             var p = this;
             var p: typeof MyGenericTestClass;
@@ -183,8 +161,6 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
             return this;
         }
         static set staticProp(v: typeof MyGenericTestClass) {
-                   ~~~~~~~~~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             //type of 'this' in static accessor body is constructor function type
             var p = this;
             var p: typeof MyGenericTestClass;
@@ -215,19 +191,19 @@ tests/cases/conformance/expressions/thisKeyword/typeOfThis.ts(130,16): error TS1
         this.spaaaaace = 4;
     }
     
-    //type of 'this' in a fat arrow expression param list is Any
+    //type of 'this' in a fat arrow expression param list is typeof globalThis
     var q2 = (s = this) => {
-        var s: any;
+        var s: typeof globalThis;
         s.spaaaaaaace = 4;
     
-        //type of 'this' in a fat arrow expression body is Any
-        var t: any;
+        //type of 'this' in a fat arrow expression body is typeof globalThis
+        var t: typeof globalThis;
         var t = this;
         this.spaaaaace = 4;
     }
     
-    //type of 'this' in global module is Any
-    var t: any;
+    //type of 'this' in global module is GlobalThis
+    var t: typeof globalThis;
     var t = this;
     this.spaaaaace = 4;
     
