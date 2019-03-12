@@ -1203,9 +1203,9 @@ declare namespace ts {
         dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         expression?: Expression;
     }
-    interface JsxText extends Node {
+    interface JsxText extends LiteralLikeNode {
         kind: SyntaxKind.JsxText;
-        containsOnlyWhiteSpaces: boolean;
+        containsOnlyTriviaWhiteSpaces: boolean;
         parent: JsxElement;
     }
     type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -3992,6 +3992,10 @@ declare namespace ts {
     function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
     function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
     function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
+    function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
+    function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
+    function createJsxOpeningFragment(): JsxOpeningFragment;
+    function createJsxJsxClosingFragment(): JsxClosingFragment;
     function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
     function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
     function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
