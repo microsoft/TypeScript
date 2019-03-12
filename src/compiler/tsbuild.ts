@@ -1199,7 +1199,7 @@ namespace ts {
             // Update time stamps for rest of the outputs
             newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(configFile, newestDeclarationFileContentChangedTime, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
 
-            const status: UpToDateStatus = {
+            const status: Status.UpToDate = {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime,
                 oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(configFile)
@@ -1275,7 +1275,7 @@ namespace ts {
             // Update timestamps for dts
             const newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(config, minimumDate, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
 
-            const status: UpToDateStatus = {
+            const status: Status.UpToDate = {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime,
                 oldestOutputFileName: outputFiles[0].name
@@ -1292,7 +1292,12 @@ namespace ts {
                 return reportStatus(Diagnostics.A_non_dry_build_would_update_timestamps_for_output_of_project_0, proj.options.configFilePath!);
             }
             const priorNewestUpdateTime = updateOutputTimestampsWorker(proj, minimumDate, Diagnostics.Updating_output_timestamps_of_project_0);
-            projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, { type: UpToDateStatusType.UpToDate, newestDeclarationFileContentChangedTime: priorNewestUpdateTime } as UpToDateStatus);
+            const status: Status.UpToDate = {
+                type: UpToDateStatusType.UpToDate,
+                newestDeclarationFileContentChangedTime: priorNewestUpdateTime,
+                oldestOutputFileName: getFirstProjectOutput(proj)
+            };
+            projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, status);
         }
 
         function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: FileMap<true>) {
