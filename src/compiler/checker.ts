@@ -14511,10 +14511,9 @@ namespace ts {
                 emptyObjectType;
         }
 
-        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0) {
+        function inferTypes(inferences: InferenceInfo[], originalSource: Type, originalTarget: Type, priority: InferencePriority = 0, contravariant = false) {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
-            let contravariant = false;
             let bivariant = false;
             let propagationType: Type;
             let allowComplexConstraintInference = true;
@@ -23474,7 +23473,7 @@ namespace ts {
                                 // contextual signature starting with an empty set of inference candidates.
                                 const inferences = map(context.inferences, info => createInferenceInfo(info.typeParameter));
                                 applyToParameterTypes(instantiatedSignature, contextualSignature, (source, target) => {
-                                    inferTypes(inferences, source, target);
+                                    inferTypes(inferences, source, target, /*priority*/ 0, /*contravariant*/ true);
                                 });
                                 if (some(inferences, hasInferenceCandidates)) {
                                     // We have inference candidates, indicating that one or more type parameters are referenced
