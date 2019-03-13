@@ -825,11 +825,16 @@ namespace ts {
                 }
                 if (rootNames.length) {
                     for (const parsedRef of resolvedProjectReferences) {
-                        if (parsedRef) {
-                            const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
-                            if (out) {
-                                const dtsOutfile = changeExtension(out, ".d.ts");
-                                processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                        if (!parsedRef) continue;
+                        const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
+                        if (out) {
+                            processSourceFile(changeExtension(out, ".d.ts"), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                        }
+                        else if (getEmitModuleKind(parsedRef.commandLine.options) === ModuleKind.None) {
+                            for (const fileName of parsedRef.commandLine.fileNames) {
+                                if (!fileExtensionIs(fileName, Extension.Dts) && hasTSFileExtension(fileName)) {
+                                    processSourceFile(getOutputDeclarationFileName(fileName, parsedRef.commandLine, !host.useCaseSensitiveFileNames()), /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                                }
                             }
                         }
                     }
@@ -2373,7 +2378,7 @@ namespace ts {
             const out = referencedProject.commandLine.options.outFile || referencedProject.commandLine.options.out;
             return out ?
                 changeExtension(out, Extension.Dts) :
-                getOutputDeclarationFileName(fileName, referencedProject.commandLine);
+                getOutputDeclarationFileName(fileName, referencedProject.commandLine, !host.useCaseSensitiveFileNames());
         }
 
         /**

@@ -131,6 +131,81 @@ namespace ts {
         return Extension.Js;
     }
 
+    function rootDirOfOptions(configFile: ParsedCommandLine) {
+        return configFile.options.rootDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath));
+    }
+
+    /* @internal */
+    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+        Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && hasTSFileExtension(inputFileName));
+        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
+        const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath)), relativePath);
+        return changeExtension(outputPath, Extension.Dts);
+    }
+
+    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
+        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
+        const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath)), relativePath);
+        const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
+        const outputFileName = changeExtension(outputPath, isJsonFile ?
+            Extension.Json :
+            fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ?
+                Extension.Jsx :
+                Extension.Js);
+        return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.assertDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
+            outputFileName :
+            undefined;
+    }
+
+    /*@internal*/
+    export function getAllProjectOutputs(configFile: ParsedCommandLine, ignoreCase: boolean): ReadonlyArray<string> {
+        let outputs: string[] | undefined;
+        const addOutput = (path: string | undefined) => path && (outputs || (outputs = [])).push(path);
+        if (configFile.options.outFile || configFile.options.out) {
+            const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
+            addOutput(jsFilePath);
+            addOutput(sourceMapFilePath);
+            addOutput(declarationFilePath);
+            addOutput(declarationMapPath);
+            addOutput(buildInfoPath);
+        }
+        else {
+            for (const inputFileName of configFile.fileNames) {
+                if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
+                const js = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+                addOutput(js);
+                if (fileExtensionIs(inputFileName, Extension.Json)) continue;
+                if (configFile.options.sourceMap) {
+                    addOutput(`${js}.map`);
+                }
+                if (getEmitDeclarations(configFile.options) && hasTSFileExtension(inputFileName)) {
+                    const dts = getOutputDeclarationFileName(inputFileName, configFile, ignoreCase);
+                    addOutput(dts);
+                    if (configFile.options.declarationMap) {
+                        addOutput(`${dts}.map`);
+                    }
+                }
+            }
+            addOutput(getOutputPathForBuildInfo(configFile.options));
+        }
+        return outputs || emptyArray;
+    }
+
+    /*@internal*/
+    export function getFirstProjectOutput(configFile: ParsedCommandLine, ignoreCase: boolean): string {
+        if (configFile.options.outFile || configFile.options.out) {
+            const { jsFilePath } = getOutputPathsForBundle(configFile.options, /*forceDtsPaths*/ false);
+            return Debug.assertDefined(jsFilePath, `project ${configFile.options.configFilePath} expected to have at least one output`);
+        }
+
+        for (const inputFileName of configFile.fileNames) {
+            if (fileExtensionIs(inputFileName, Extension.Dts)) continue;
+            const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
+            if (jsFilePath) return jsFilePath;
+        }
+        return Debug.fail(`project ${configFile.options.configFilePath} expected to have at least one output`);
+    }
+
     /*@internal*/
     // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
     export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile | undefined, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<Bundle | SourceFile>[], declarationTransformers?: TransformerFactory<Bundle | SourceFile>[], onlyBuildInfo?: boolean): EmitResult {

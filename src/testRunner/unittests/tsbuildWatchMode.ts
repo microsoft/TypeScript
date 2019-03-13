@@ -1137,5 +1137,46 @@ export function gfoo() {
                 });
             });
         });
+
+        it("incremental updates in verbose mode", () => {
+            const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
+            const solutionBuilder = createSolutionBuilder(host, [`${project}/${SubProject.tests}`], { verbose: true, watch: true });
+            solutionBuilder.buildAllProjects();
+            solutionBuilder.startWatching();
+            checkOutputErrorsInitial(host, emptyArray, /*disableConsoleClears*/ undefined, [
+                `Projects in this build: \r\n    * sample1/core/tsconfig.json\r\n    * sample1/logic/tsconfig.json\r\n    * sample1/tests/tsconfig.json\n\n`,
+                `Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist\n\n`,
+                `Building project '/user/username/projects/sample1/core/tsconfig.json'...\n\n`,
+                `Project 'sample1/logic/tsconfig.json' is out of date because output file 'sample1/logic/index.js' does not exist\n\n`,
+                `Building project '/user/username/projects/sample1/logic/tsconfig.json'...\n\n`,
+                `Project 'sample1/tests/tsconfig.json' is out of date because output file 'sample1/tests/index.js' does not exist\n\n`,
+                `Building project '/user/username/projects/sample1/tests/tsconfig.json'...\n\n`
+            ]);
+            verifyWatches(host);
+
+            // Make non dts change
+            host.writeFile(logic[1].path, `${logic[1].content}
+function someFn() { }`);
+            host.checkTimeoutQueueLengthAndRun(1); // build logic
+            host.checkTimeoutQueueLengthAndRun(1); // build tests
+            checkOutputErrorsIncremental(host, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
+                `Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'\n\n`,
+                `Building project '/user/username/projects/sample1/logic/tsconfig.json'...\n\n`,
+                `Project 'sample1/tests/tsconfig.json' is up to date with .d.ts files from its dependencies\n\n`,
+                `Updating output timestamps of project '/user/username/projects/sample1/tests/tsconfig.json'...\n\n`,
+            ]);
+
+            // Make dts change
+            host.writeFile(logic[1].path, `${logic[1].content}
+export function someFn() { }`);
+            host.checkTimeoutQueueLengthAndRun(1); // build logic
+            host.checkTimeoutQueueLengthAndRun(1); // build tests
+            checkOutputErrorsIncremental(host, emptyArray, /*disableConsoleClears*/ undefined, /*logsBeforeWatchDiagnostics*/ undefined, [
+                `Project 'sample1/logic/tsconfig.json' is out of date because oldest output 'sample1/logic/index.js' is older than newest input 'sample1/core'\n\n`,
+                `Building project '/user/username/projects/sample1/logic/tsconfig.json'...\n\n`,
+                `Project 'sample1/tests/tsconfig.json' is out of date because oldest output 'sample1/tests/index.js' is older than newest input 'sample1/logic/tsconfig.json'\n\n`,
+                `Building project '/user/username/projects/sample1/tests/tsconfig.json'...\n\n`,
+            ]);
+        });
     });
 }
