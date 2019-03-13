@@ -1209,6 +1209,12 @@
               </Str>
               <Disp Icon="Str" />
             </Item>
+            <Item ItemId=";Another_export_default_is_here_2753" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[Another export default is here.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
             <Item ItemId=";Argument_expression_expected_1135" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[Argument expression expected.]]></Val>
@@ -5676,6 +5682,12 @@
             <Item ItemId=";The_files_list_in_config_file_0_is_empty_18002" ItemType="0" PsrId="306" Leaf="true">
               <Str Cat="Text">
                 <Val><![CDATA[The 'files' list in config file '{0}' is empty.]]></Val>
+              </Str>
+              <Disp Icon="Str" />
+            </Item>
+            <Item ItemId=";The_first_export_default_is_here_2752" ItemType="0" PsrId="306" Leaf="true">
+              <Str Cat="Text">
+                <Val><![CDATA[The first export default is here.]]></Val>
               </Str>
               <Disp Icon="Str" />
             </Item>
