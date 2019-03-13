@@ -403,13 +403,15 @@ namespace ts {
                             messageNeedsName = false;
                         }
 
-                        if (symbol.declarations && symbol.declarations.length) {
+                        let multipleDefaultExports = false;
+                        if (length(symbol.declarations)) {
                             // If the current node is a default export of some sort, then check if
                             // there are any other default exports that we need to error on.
                             // We'll know whether we have other default exports depending on if `symbol` already has a declaration list set.
                             if (isDefaultExport) {
                                 message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                                 messageNeedsName = false;
+                                multipleDefaultExports = true;
                             }
                             else {
                                 // This is to properly report an error in the case "export default { }" is after export default of class declaration or function declaration.
@@ -420,15 +422,26 @@ namespace ts {
                                     (node.kind === SyntaxKind.ExportAssignment && !(<ExportAssignment>node).isExportEquals)) {
                                     message = Diagnostics.A_module_cannot_have_multiple_default_exports;
                                     messageNeedsName = false;
+                                    multipleDefaultExports = true;
                                 }
                             }
                         }
 
-                        const addError = (decl: Declaration): void => {
-                            file.bindDiagnostics.push(createDiagnosticForNode(getNameOfDeclaration(decl) || decl, message, messageNeedsName ? getDisplayName(decl) : undefined));
-                        };
-                        forEach(symbol.declarations, addError);
-                        addError(node);
+                        const declarationName = getNameOfDeclaration(node) || node;
+                        const relatedInformation: DiagnosticRelatedInformation[] = [];
+                        forEach(symbol.declarations, (declaration, index) => {
+                            const decl = getNameOfDeclaration(declaration) || declaration;
+                            const diag = createDiagnosticForNode(decl, message, messageNeedsName ? getDisplayName(declaration) : undefined);
+                            file.bindDiagnostics.push(
+                                multipleDefaultExports ? addRelatedInfo(diag, createDiagnosticForNode(declarationName, index === 0 ? Diagnostics.Another_export_default_is_here : Diagnostics.and_here)) : diag
+                            );
+                            if (multipleDefaultExports) {
+                                relatedInformation.push(createDiagnosticForNode(decl, Diagnostics.The_first_export_default_is_here));
+                            }
+                        });
+
+                        const diag = createDiagnosticForNode(declarationName, message, messageNeedsName ? getDisplayName(node) : undefined);
+                        file.bindDiagnostics.push(multipleDefaultExports ? addRelatedInfo(diag, ...relatedInformation) : diag);
 
                         symbol = createSymbol(SymbolFlags.None, name);
                     }
@@ -2499,8 +2512,13 @@ namespace ts {
                     declareSymbol(symbolTable, containingClass.symbol, node, SymbolFlags.Property, SymbolFlags.None, /*isReplaceableByMethod*/ true);
                     break;
                 case SyntaxKind.SourceFile:
-                    // this.foo assignment in a source file
-                    // Do not bind. It would be nice to support this someday though.
+                    // this.property = assignment in a source file -- declare symbol in exports for a module, in locals for a script
+                    if ((thisContainer as SourceFile).commonJsModuleIndicator) {
+                        declareSymbol(thisContainer.symbol.exports!, thisContainer.symbol, node, SymbolFlags.Property | SymbolFlags.ExportValue, SymbolFlags.None);
+                    }
+                    else {
+                        declareSymbolAndAddToSymbolTable(node, SymbolFlags.FunctionScopedVariable, SymbolFlags.FunctionScopedVariableExcludes);
+                    }
                     break;
 
                 default:
@@ -3088,32 +3106,24 @@ namespace ts {
 
     function computeCallExpression(node: CallExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
+        const callee = skipOuterExpressions(node.expression);
         const expression = node.expression;
 
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        if (subtreeFlags & TransformFlags.ContainsRestOrSpread
-            || (expression.transformFlags & (TransformFlags.Super | TransformFlags.ContainsSuper))) {
+        if (subtreeFlags & TransformFlags.ContainsRestOrSpread || isSuperOrSuperProperty(callee)) {
             // If the this node contains a SpreadExpression, or is a super call, then it is an ES6
             // node.
             transformFlags |= TransformFlags.AssertES2015;
-            // super property or element accesses could be inside lambdas, etc, and need a captured `this`,
-            // while super keyword for super calls (indicated by TransformFlags.Super) does not (since it can only be top-level in a constructor)
-            if (expression.transformFlags & TransformFlags.ContainsSuper) {
+            if (isSuperProperty(callee)) {
                 transformFlags |= TransformFlags.ContainsLexicalThis;
             }
         }
 
         if (expression.kind === SyntaxKind.ImportKeyword) {
             transformFlags |= TransformFlags.ContainsDynamicImport;
-
-            // A dynamic 'import()' call that contains a lexical 'this' will
-            // require a captured 'this' when emitting down-level.
-            if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
-                transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
-            }
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3186,7 +3196,7 @@ namespace ts {
         // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
         // it is ES6 syntax and its container must emit default value assignments or parameter destructuring downlevel.
         if (subtreeFlags & TransformFlags.ContainsBindingPattern || initializer || dotDotDotToken) {
-            transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsDefaultValueAssignments;
+            transformFlags |= TransformFlags.AssertES2015;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3197,7 +3207,6 @@ namespace ts {
         let transformFlags = subtreeFlags;
         const expression = node.expression;
         const expressionKind = expression.kind;
-        const expressionTransformFlags = expression.transformFlags;
 
         // If the node is synthesized, it means the emitter put the parentheses there,
         // not the user. If we didn't want them, the emitter would not have put them
@@ -3205,12 +3214,6 @@ namespace ts {
         if (expressionKind === SyntaxKind.AsExpression
             || expressionKind === SyntaxKind.TypeAssertionExpression) {
             transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        // If the expression of a ParenthesizedExpression is a destructuring assignment,
-        // then the ParenthesizedExpression is a destructuring assignment.
-        if (expressionTransformFlags & TransformFlags.DestructuringAssignment) {
-            transformFlags |= TransformFlags.DestructuringAssignment;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3236,12 +3239,6 @@ namespace ts {
                 || node.typeParameters) {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
-
-            if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
-                // A computed property name containing `this` might need to be rewritten,
-                // so propagate the ContainsLexicalThis flag upward.
-                transformFlags |= TransformFlags.ContainsLexicalThis;
-            }
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3257,12 +3254,6 @@ namespace ts {
         if (subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntax
             || node.typeParameters) {
             transformFlags |= TransformFlags.AssertTypeScript;
-        }
-
-        if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
-            // A computed property name containing `this` might need to be rewritten,
-            // so propagate the ContainsLexicalThis flag upward.
-            transformFlags |= TransformFlags.ContainsLexicalThis;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3369,7 +3360,7 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        return transformFlags & ~TransformFlags.MethodOrAccessorExcludes;
+        return propagatePropertyNameFlags(node.name, transformFlags & ~TransformFlags.MethodOrAccessorExcludes);
     }
 
     function computeAccessor(node: AccessorDeclaration, subtreeFlags: TransformFlags) {
@@ -3391,7 +3382,7 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        return transformFlags & ~TransformFlags.MethodOrAccessorExcludes;
+        return propagatePropertyNameFlags(node.name, transformFlags & ~TransformFlags.MethodOrAccessorExcludes);
     }
 
     function computePropertyDeclaration(node: PropertyDeclaration, subtreeFlags: TransformFlags) {
@@ -3405,7 +3396,7 @@ namespace ts {
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
-        return transformFlags & ~TransformFlags.NodeExcludes;
+        return propagatePropertyNameFlags(node.name, transformFlags & ~TransformFlags.PropertyExcludes);
     }
 
     function computeFunctionDeclaration(node: FunctionDeclaration, subtreeFlags: TransformFlags) {
@@ -3437,13 +3428,6 @@ namespace ts {
             // function declarations with object rest destructuring are ES2018 syntax
             if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 transformFlags |= TransformFlags.AssertES2018;
-            }
-
-            // If a FunctionDeclaration's subtree has marked the container as needing to capture the
-            // lexical this, or the function contains parameters with initializers, then this node is
-            // ES6 syntax.
-            if (subtreeFlags & TransformFlags.ES2015FunctionSyntaxMask) {
-                transformFlags |= TransformFlags.AssertES2015;
             }
 
             // If a FunctionDeclaration is generator function and is the body of a
@@ -3481,14 +3465,6 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES2018;
         }
 
-
-        // If a FunctionExpression's subtree has marked the container as needing to capture the
-        // lexical this, or the function contains parameters with initializers, then this node is
-        // ES6 syntax.
-        if (subtreeFlags & TransformFlags.ES2015FunctionSyntaxMask) {
-            transformFlags |= TransformFlags.AssertES2015;
-        }
-
         // If a FunctionExpression is generator function and is the body of a
         // transformed async function, then this node can be transformed to a
         // down-level generator.
@@ -3522,11 +3498,6 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES2018;
         }
 
-        // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
-        if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
-            transformFlags |= TransformFlags.ContainsCapturedLexicalThis;
-        }
-
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.ArrowFunctionExcludes;
     }
@@ -3536,11 +3507,10 @@ namespace ts {
 
         // If a PropertyAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
-        if (transformFlags & TransformFlags.Super) {
-            transformFlags ^= TransformFlags.Super;
+        if (node.expression.kind === SyntaxKind.SuperKeyword) {
             // super inside of an async function requires hoisting the super access (ES2017).
             // same for super inside of an async generator, which is ES2018.
-            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
+            transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3549,16 +3519,13 @@ namespace ts {
 
     function computeElementAccess(node: ElementAccessExpression, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        const expression = node.expression;
-        const expressionFlags = expression.transformFlags; // We do not want to aggregate flags from the argument expression for super/this capturing
 
         // If an ElementAccessExpression starts with a super keyword, then it is
         // ES6 syntax, and requires a lexical `this` binding.
-        if (expressionFlags & TransformFlags.Super) {
-            transformFlags &= ~TransformFlags.Super;
+        if (node.expression.kind === SyntaxKind.SuperKeyword) {
             // super inside of an async function requires hoisting the super access (ES2017).
             // same for super inside of an async generator, which is ES2018.
-            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
+            transformFlags |= TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3567,7 +3534,7 @@ namespace ts {
 
     function computeVariableDeclaration(node: VariableDeclaration, subtreeFlags: TransformFlags) {
         let transformFlags = subtreeFlags;
-        transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
+        transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern; // TODO(rbuckton): Why are these set unconditionally?
 
         // A VariableDeclaration containing ObjectRest is ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
@@ -3629,15 +3596,7 @@ namespace ts {
     }
 
     function computeExpressionStatement(node: ExpressionStatement, subtreeFlags: TransformFlags) {
-        let transformFlags = subtreeFlags;
-
-        // If the expression of an expression statement is a destructuring assignment,
-        // then we treat the statement as ES6 so that we can indicate that we do not
-        // need to hold on to the right-hand side.
-        if (node.expression.transformFlags & TransformFlags.DestructuringAssignment) {
-            transformFlags |= TransformFlags.AssertES2015;
-        }
-
+        const transformFlags = subtreeFlags;
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.NodeExcludes;
     }
@@ -3810,17 +3769,6 @@ namespace ts {
                 // This is so that they can flow through PropertyName transforms unaffected.
                 // Instead, we mark the container as ES6, so that it can properly handle the transform.
                 transformFlags |= TransformFlags.ContainsComputedPropertyName;
-                if (subtreeFlags & TransformFlags.ContainsLexicalThis) {
-                    // A computed method name like `[this.getName()](x: string) { ... }` needs to
-                    // distinguish itself from the normal case of a method body containing `this`:
-                    // `this` inside a method doesn't need to be rewritten (the method provides `this`),
-                    // whereas `this` inside a computed name *might* need to be rewritten if the class/object
-                    // is inside an arrow function:
-                    // `_this = this; () => class K { [_this.getName()]() { ... } }`
-                    // To make this distinction, use ContainsLexicalThisInComputedPropertyName
-                    // instead of ContainsLexicalThis for computed property names
-                    transformFlags |= TransformFlags.ContainsLexicalThisInComputedPropertyName;
-                }
                 break;
 
             case SyntaxKind.SpreadElement:
@@ -3833,7 +3781,7 @@ namespace ts {
 
             case SyntaxKind.SuperKeyword:
                 // This node is ES6 syntax.
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.Super;
+                transformFlags |= TransformFlags.AssertES2015;
                 excludeFlags = TransformFlags.OuterExpressionExcludes; // must be set to persist `Super`
                 break;
 
@@ -3875,12 +3823,6 @@ namespace ts {
                     transformFlags |= TransformFlags.AssertES2015;
                 }
 
-                if (subtreeFlags & TransformFlags.ContainsLexicalThisInComputedPropertyName) {
-                    // A computed property name containing `this` might need to be rewritten,
-                    // so propagate the ContainsLexicalThis flag upward.
-                    transformFlags |= TransformFlags.ContainsLexicalThis;
-                }
-
                 if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
                     // If an ObjectLiteralExpression contains a spread element, then it
                     // is an ES2018 node.
@@ -3890,14 +3832,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.ArrayLiteralExpression:
-            case SyntaxKind.NewExpression:
                 excludeFlags = TransformFlags.ArrayLiteralOrCallOrNewExcludes;
-                if (subtreeFlags & TransformFlags.ContainsRestOrSpread) {
-                    // If the this node contains a SpreadExpression, then it is an ES6
-                    // node.
-                    transformFlags |= TransformFlags.AssertES2015;
-                }
-
                 break;
 
             case SyntaxKind.DoStatement:
@@ -3912,10 +3847,6 @@ namespace ts {
                 break;
 
             case SyntaxKind.SourceFile:
-                if (subtreeFlags & TransformFlags.ContainsCapturedLexicalThis) {
-                    transformFlags |= TransformFlags.AssertES2015;
-                }
-
                 break;
 
             case SyntaxKind.ReturnStatement:
@@ -3931,6 +3862,10 @@ namespace ts {
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~excludeFlags;
+    }
+
+    function propagatePropertyNameFlags(node: PropertyName, transformFlags: TransformFlags) {
+        return transformFlags | (node.transformFlags & TransformFlags.PropertyNamePropagatingFlags);
     }
 
     /**

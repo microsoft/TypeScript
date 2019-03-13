@@ -1,0 +1,73 @@
+=== tests/cases/compiler/conditionalTypeRelaxingConstraintAssignability.ts ===
+export type ElChildren =
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+
+  | ElChildren.Void
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>Void : Symbol(ElChildren.Void, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 3, 29))
+
+  | ElChildren.Text;
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>Text : Symbol(ElChildren.Text, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 4, 31))
+
+export namespace ElChildren {
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+
+  export type Void = undefined;
+>Void : Symbol(Void, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 3, 29))
+
+  export type Text = string;
+>Text : Symbol(Text, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 4, 31))
+}
+
+type Relax<C extends ElChildren> = C extends ElChildren.Text ? ElChildren.Text : C;
+>Relax : Symbol(Relax, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 6, 1))
+>C : Symbol(C, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 11))
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>C : Symbol(C, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 11))
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>Text : Symbol(ElChildren.Text, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 4, 31))
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>Text : Symbol(ElChildren.Text, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 4, 31))
+>C : Symbol(C, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 11))
+
+export class Elem<
+>Elem : Symbol(Elem, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 83))
+
+  C extends ElChildren,
+>C : Symbol(C, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 10, 18))
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+
+  > {
+  constructor(
+    private children_: Relax<C>,
+>children_ : Symbol(Elem.children_, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 13, 14))
+>Relax : Symbol(Relax, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 6, 1))
+>C : Symbol(C, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 10, 18))
+
+  ) {
+  }
+}
+
+new Elem(undefined as ElChildren.Void);
+>Elem : Symbol(Elem, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 83))
+>undefined : Symbol(undefined)
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>Void : Symbol(ElChildren.Void, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 3, 29))
+
+new Elem('' as ElChildren.Text);
+>Elem : Symbol(Elem, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 83))
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>Text : Symbol(ElChildren.Text, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 4, 31))
+
+new Elem('' as ElChildren.Void | ElChildren.Text); // error
+>Elem : Symbol(Elem, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 83))
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>Void : Symbol(ElChildren.Void, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 3, 29))
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+>Text : Symbol(ElChildren.Text, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 4, 31))
+
+new Elem('' as ElChildren); // error
+>Elem : Symbol(Elem, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 8, 83))
+>ElChildren : Symbol(ElChildren, Decl(conditionalTypeRelaxingConstraintAssignability.ts, 0, 0), Decl(conditionalTypeRelaxingConstraintAssignability.ts, 2, 20))
+

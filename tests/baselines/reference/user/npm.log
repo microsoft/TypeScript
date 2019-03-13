@@ -623,6 +623,8 @@ node_modules/npm/lib/pack.js(177,25): error TS2339: Property 'config' does not e
 node_modules/npm/lib/pack.js(299,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/pack.js(300,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/pack.js(300,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/pack.js(320,7): error TS2531: Object is possibly 'null'.
+node_modules/npm/lib/pack.js(325,7): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/pack.js(333,15): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/pack.js(335,17): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/pack.js(336,17): error TS2339: Property 'signal' does not exist on type 'Error'.
@@ -944,6 +946,9 @@ node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(12,21): error TS2
 node_modules/npm/test/need-npm5-update/legacy-shrinkwrap.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/legacy-shrinkwrap.js(6,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/need-npm5-update/lifecycle-signal.js(8,20): error TS2307: Cannot find module 'tap'.
+node_modules/npm/test/need-npm5-update/lifecycle-signal.js(70,3): error TS2531: Object is possibly 'null'.
+node_modules/npm/test/need-npm5-update/lifecycle-signal.js(95,3): error TS2531: Object is possibly 'null'.
+node_modules/npm/test/need-npm5-update/lifecycle-signal.js(117,3): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/need-npm5-update/move-no-clobber-dest-node-modules.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/move-no-clobber-dest-node-modules.js(11,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
 node_modules/npm/test/need-npm5-update/need-only-update-save-optional/update-save.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
@@ -1712,6 +1717,7 @@ node_modules/npm/test/tap/version-from-git.js(202,7): error TS2339: Property 'lo
 node_modules/npm/test/tap/version-from-git.js(213,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-git-not-clean.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/version-git-not-clean.js(17,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/test/tap/version-git-not-clean.js(28,13): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/version-git-not-clean.js(42,17): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-lifecycle.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/version-lifecycle.js(28,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
@@ -1726,6 +1732,8 @@ node_modules/npm/test/tap/version-no-git.js(17,7): error TS2339: Property 'load'
 node_modules/npm/test/tap/version-no-package.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/version-no-tags.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/version-no-tags.js(17,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/test/tap/version-no-tags.js(23,9): error TS2531: Object is possibly 'null'.
+node_modules/npm/test/tap/version-no-tags.js(32,7): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/version-no-tags.js(34,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-no-tags.js(35,13): error TS2339: Property 'commands' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/version-sub-directory-shrinkwrap.js(8,20): error TS2307: Cannot find module 'tap'.

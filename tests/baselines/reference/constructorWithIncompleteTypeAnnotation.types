@@ -869,7 +869,7 @@ module TypeScriptAllInOne {
 >2 : 2
 >this.method1(2) : any
 >this.method1 : any
->this : any
+>this : typeof globalThis
 >method1 : any
 >2 : 2
         }

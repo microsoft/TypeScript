@@ -438,7 +438,7 @@ namespace ts {
                     )
                 );
 
-                addStatementsAfterPrologue(statements, endLexicalEnvironment());
+                insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
@@ -448,7 +448,7 @@ namespace ts {
                     enableSubstitutionForAsyncMethodsWithSuper();
                     const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
                     substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-                    addStatementsAfterPrologue(statements, [variableStatement]);
+                    insertStatementsAfterStandardPrologue(statements, [variableStatement]);
                 }
 
                 const block = createBlock(statements, /*multiLine*/ true);
@@ -750,7 +750,7 @@ namespace ts {
                 NodeFlags.Const));
     }
 
-    const awaiterHelper: EmitHelper = {
+    export const awaiterHelper: UnscopedEmitHelper = {
         name: "typescript:awaiter",
         scoped: false,
         priority: 5,

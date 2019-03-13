@@ -132,4 +132,79 @@ namespace ts.projectSystem {
             verifyRootedDirectoryWatch("c:/users/username/");
         });
     });
+
+    it(`unittests:: tsserver:: watchEnvironment:: tsserverProjectSystem recursive watch directory implementation does not watch files/directories in node_modules starting with "."`, () => {
+        const projectFolder = "/a/username/project";
+        const projectSrcFolder = `${projectFolder}/src`;
+        const configFile: File = {
+            path: `${projectFolder}/tsconfig.json`,
+            content: "{}"
+        };
+        const index: File = {
+            path: `${projectSrcFolder}/index.ts`,
+            content: `import {} from "file"`
+        };
+        const file1: File = {
+            path: `${projectSrcFolder}/file1.ts`,
+            content: ""
+        };
+        const nodeModulesExistingUnusedFile: File = {
+            path: `${projectFolder}/node_modules/someFile.d.ts`,
+            content: ""
+        };
+
+        const fileNames = [index, file1, configFile, libFile].map(file => file.path);
+        // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
+        const expectedWatchedFiles = arrayToMap(fileNames.slice(1), identity, () => 1);
+        const expectedWatchedDirectories = arrayToMap([projectFolder, projectSrcFolder, `${projectFolder}/${nodeModules}`, `${projectFolder}/${nodeModulesAtTypes}`], identity, () => 1);
+
+        const environmentVariables = createMap<string>();
+        environmentVariables.set("TSC_WATCHDIRECTORY", Tsc_WatchDirectory.NonRecursiveWatchDirectory);
+        const host = createServerHost([index, file1, configFile, libFile, nodeModulesExistingUnusedFile], { environmentVariables });
+        const projectService = createProjectService(host);
+        projectService.openClientFile(index.path);
+
+        const project = Debug.assertDefined(projectService.configuredProjects.get(configFile.path));
+        verifyProject();
+
+        const nodeModulesIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/node_modules/.cache/someFile.d.ts`,
+            content: ""
+        };
+        host.ensureFileOrFolder(nodeModulesIgnoredFileFromIgnoreDirectory);
+        host.checkTimeoutQueueLength(0);
+        verifyProject();
+
+        const nodeModulesIgnoredFile: File = {
+            path: `${projectFolder}/node_modules/.cacheFile.ts`,
+            content: ""
+        };
+        host.ensureFileOrFolder(nodeModulesIgnoredFile);
+        host.checkTimeoutQueueLength(0);
+        verifyProject();
+
+        const gitIgnoredFileFromIgnoreDirectory: File = {
+            path: `${projectFolder}/.git/someFile.d.ts`,
+            content: ""
+        };
+        host.ensureFileOrFolder(gitIgnoredFileFromIgnoreDirectory);
+        host.checkTimeoutQueueLength(0);
+        verifyProject();
+
+        const gitIgnoredFile: File = {
+            path: `${projectFolder}/.gitCache.d.ts`,
+            content: ""
+        };
+        host.ensureFileOrFolder(gitIgnoredFile);
+        host.checkTimeoutQueueLength(0);
+        verifyProject();
+
+        function verifyProject() {
+            checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
+            checkWatchedFilesDetailed(host, expectedWatchedFiles);
+            checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
+            checkProjectActualFiles(project, fileNames);
+        }
+    });
+
 }
