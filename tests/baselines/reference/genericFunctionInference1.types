@@ -823,3 +823,19 @@ foo2(identity, 1);
 >identity : <T>(value: T) => T
 >1 : 1
 
+// Repro from #30324
+
+declare function times<T>(fn: (i: number) => T): (n: number) => T[];
+>times : <T>(fn: (i: number) => T) => (n: number) => T[]
+>fn : (i: number) => T
+>i : number
+>n : number
+
+const a2 = times(identity)(5); // => [0, 1, 2, 3, 4]
+>a2 : number[]
+>times(identity)(5) : number[]
+>times(identity) : (n: number) => number[]
+>times : <T>(fn: (i: number) => T) => (n: number) => T[]
+>identity : <T>(value: T) => T
+>5 : 5
+

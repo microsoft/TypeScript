@@ -875,3 +875,19 @@ foo2(identity, 1);
 >foo2 : Symbol(foo2, Decl(genericFunctionInference1.ts, 183, 2))
 >identity : Symbol(identity, Decl(genericFunctionInference1.ts, 154, 13))
 
+// Repro from #30324
+
+declare function times<T>(fn: (i: number) => T): (n: number) => T[];
+>times : Symbol(times, Decl(genericFunctionInference1.ts, 191, 18))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 195, 23))
+>fn : Symbol(fn, Decl(genericFunctionInference1.ts, 195, 26))
+>i : Symbol(i, Decl(genericFunctionInference1.ts, 195, 31))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 195, 23))
+>n : Symbol(n, Decl(genericFunctionInference1.ts, 195, 50))
+>T : Symbol(T, Decl(genericFunctionInference1.ts, 195, 23))
+
+const a2 = times(identity)(5); // => [0, 1, 2, 3, 4]
+>a2 : Symbol(a2, Decl(genericFunctionInference1.ts, 196, 5))
+>times : Symbol(times, Decl(genericFunctionInference1.ts, 191, 18))
+>identity : Symbol(identity, Decl(genericFunctionInference1.ts, 154, 13))
+
