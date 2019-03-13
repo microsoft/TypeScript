@@ -4,13 +4,11 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarO
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(5,6): error TS2456: Type alias 'typeAlias2' circularly references itself.
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(7,18): error TS2577: Return type annotation circularly references itself.
 tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(9,6): error TS2456: Type alias 'typeAlias3' circularly references itself.
-tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(18,6): error TS2456: Type alias 'R' circularly references itself.
-tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(19,29): error TS2577: Return type annotation circularly references itself.
-tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(25,6): error TS2456: Type alias 'R2' circularly references itself.
-tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(26,15): error TS2577: Return type annotation circularly references itself.
+tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(20,3): error TS2322: Type 'number' is not assignable to type 'ReturnType<(input: Input) => ReturnType<typeof mul>>'.
+tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts(26,20): error TS2322: Type '0' is not assignable to type 'ReturnType<() => ReturnType<typeof f>>'.
 
 
-==== tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts (10 errors) ====
+==== tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarOrFunc.ts (8 errors) ====
     type typeAlias1 = typeof varOfAliasedType1;
          ~~~~~~~~~~
 !!! error TS2456: Type alias 'typeAlias1' circularly references itself.
@@ -41,20 +39,16 @@ tests/cases/conformance/types/specifyingTypes/typeQueries/circularTypeofWithVarO
     }
     
     type R = ReturnType<typeof mul>;
-         ~
-!!! error TS2456: Type alias 'R' circularly references itself.
     function mul(input: Input): R {
-                                ~
-!!! error TS2577: Return type annotation circularly references itself.
       return input.a * input.b;
+      ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'ReturnType<(input: Input) => ReturnType<typeof mul>>'.
     }
     
     // Repro from #26104
     
     type R2 = ReturnType<typeof f>;
-         ~~
-!!! error TS2456: Type alias 'R2' circularly references itself.
     function f(): R2 { return 0; }
-                  ~~
-!!! error TS2577: Return type annotation circularly references itself.
+                       ~~~~~~~~~
+!!! error TS2322: Type '0' is not assignable to type 'ReturnType<() => ReturnType<typeof f>>'.
     
