@@ -1,6 +1,6 @@
 tests/cases/compiler/callOnInstance.ts(1,18): error TS2300: Duplicate identifier 'D'.
 tests/cases/compiler/callOnInstance.ts(3,15): error TS2300: Duplicate identifier 'D'.
-tests/cases/compiler/callOnInstance.ts(7,19): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/callOnInstance.ts(7,25): error TS2554: Expected 0 arguments, but got 1.
 tests/cases/compiler/callOnInstance.ts(10,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'C' has no compatible call signatures.
 
 
@@ -16,7 +16,7 @@ tests/cases/compiler/callOnInstance.ts(10,1): error TS2349: Cannot invoke an exp
     var s1: string = D(); // OK
     
     var s2: string = (new D(1))();
-                      ~~~~~~~~
+                            ~
 !!! error TS2554: Expected 0 arguments, but got 1.
     
     declare class C { constructor(value: number); }

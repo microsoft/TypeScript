@@ -263,6 +263,7 @@ verify.completions(
             { name: "shwvar", text: "var shwvar: string" },
             { name: "shwcls", text: "class shwcls" },
             "tmp",
+            "globalThis",
             ...commonValues,
             "undefined",
             ...completion.statementKeywordsWithTypes,
@@ -272,6 +273,7 @@ verify.completions(
         exact: [
             { name: "shwcls", text: "class shwcls" },
             { name: "shwint", text: "interface shwint" },
+            "globalThis",
             ...commonTypes,
             ...completion.typeKeywords,
         ]
@@ -282,6 +284,7 @@ verify.completions(
             "Mod1",
             "iMod1",
             "tmp",
+            "globalThis",
             { name: "shwfn", text: "function shwfn(): void" },
             ...commonValues,
             { name: "shwcls", text: "class shwcls" },
@@ -295,6 +298,7 @@ verify.completions(
         exact: [
             "Mod1",
             "iMod1",
+            "globalThis",
             ...commonTypes,
             { name: "shwcls", text: "class shwcls" },
             { name: "shwint", text: "interface shwint" },

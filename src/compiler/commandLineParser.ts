@@ -15,6 +15,7 @@ namespace ts {
         ["es2016", "lib.es2016.d.ts"],
         ["es2017", "lib.es2017.d.ts"],
         ["es2018", "lib.es2018.d.ts"],
+        ["es2019", "lib.es2019.d.ts"],
         ["esnext", "lib.esnext.d.ts"],
         // Host only
         ["dom", "lib.dom.d.ts"],
@@ -38,12 +39,16 @@ namespace ts {
         ["es2017.string", "lib.es2017.string.d.ts"],
         ["es2017.intl", "lib.es2017.intl.d.ts"],
         ["es2017.typedarrays", "lib.es2017.typedarrays.d.ts"],
+        ["es2018.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["es2018.intl", "lib.es2018.intl.d.ts"],
         ["es2018.promise", "lib.es2018.promise.d.ts"],
         ["es2018.regexp", "lib.es2018.regexp.d.ts"],
-        ["esnext.array", "lib.esnext.array.d.ts"],
-        ["esnext.symbol", "lib.esnext.symbol.d.ts"],
-        ["esnext.asynciterable", "lib.esnext.asynciterable.d.ts"],
+        ["es2019.array", "lib.es2019.array.d.ts"],
+        ["es2019.string", "lib.es2019.string.d.ts"],
+        ["es2019.symbol", "lib.es2019.symbol.d.ts"],
+        ["esnext.array", "lib.es2019.array.d.ts"],
+        ["esnext.symbol", "lib.es2019.symbol.d.ts"],
+        ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
         ["esnext.intl", "lib.esnext.intl.d.ts"],
         ["esnext.bigint", "lib.esnext.bigint.d.ts"]
     ];
@@ -197,6 +202,7 @@ namespace ts {
                 es2016: ScriptTarget.ES2016,
                 es2017: ScriptTarget.ES2017,
                 es2018: ScriptTarget.ES2018,
+                es2019: ScriptTarget.ES2019,
                 esnext: ScriptTarget.ESNext,
             }),
             affectsSourceFile: true,
@@ -204,7 +210,7 @@ namespace ts {
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
-            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_or_ESNEXT,
+            description: Diagnostics.Specify_ECMAScript_target_version_Colon_ES3_default_ES5_ES2015_ES2016_ES2017_ES2018_ES2019_or_ESNEXT,
         },
         {
             name: "module",
@@ -324,6 +330,22 @@ namespace ts {
             isTSConfigOnly: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_project_compilation,
+        },
+        {
+            name: "incremental",
+            type: "boolean",
+            isTSConfigOnly: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Enable_incremental_compilation,
+        },
+        {
+            name: "tsBuildInfoFile",
+            type: "string",
+            isFilePath: true,
+            paramType: Diagnostics.FILE,
+            isTSConfigOnly: true,
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Specify_file_to_store_incremental_compilation_information,
         },
         {
             name: "removeComments",
@@ -1421,6 +1443,7 @@ namespace ts {
         return _tsconfigRootOptions;
     }
 
+    /*@internal*/
     interface JsonConversionNotifier {
         /**
          * Notifies parent option object is being set with the optionKey and a valid optionValue

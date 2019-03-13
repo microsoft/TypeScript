@@ -147,6 +147,9 @@ namespace ts {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
+            else if (isIncrementalCompilation(configParseResult.options)) {
+                performIncrementalCompilation(configParseResult);
+            }
             else {
                 performCompilation(configParseResult.fileNames, configParseResult.projectReferences, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
@@ -246,6 +249,44 @@ namespace ts {
         const program = createProgram(programOptions);
         const exitStatus = emitFilesAndReportErrors(
             program,
+            reportDiagnostic,
+            s => sys.write(s + sys.newLine),
+            createReportErrorSummary(options)
+        );
+        reportStatistics(program);
+        return sys.exit(exitStatus);
+    }
+
+    function performIncrementalCompilation(config: ParsedCommandLine) {
+        const { options, fileNames, projectReferences } = config;
+        const host = createCompilerHost(options);
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
+        enableStatistics(options);
+        const oldProgram = readBuilderProgram(options, path => host.readFile(path));
+        const configFileParsingDiagnostics = getConfigFileParsingDiagnostics(config);
+        const programOptions: CreateProgramOptions = {
+            rootNames: fileNames,
+            options,
+            projectReferences,
+            host,
+            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+        };
+        const program = createProgram(programOptions);
+        const builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(
+            program,
+            {
+                useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+                createHash: maybeBind(sys, sys.createHash),
+                writeFile: (path, data, writeByteOrderMark) => sys.writeFile(path, data, writeByteOrderMark)
+            },
+            oldProgram,
+            configFileParsingDiagnostics
+        );
+
+        const exitStatus = emitFilesAndReportErrors(
+            builderProgram,
             reportDiagnostic,
             s => sys.write(s + sys.newLine),
             createReportErrorSummary(options)

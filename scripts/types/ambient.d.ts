@@ -1,13 +1,5 @@
 import { TaskFunction } from "gulp";
 
-declare module "gulp-clone" {
-    function Clone(): NodeJS.ReadWriteStream;
-    namespace Clone {
-        export function sink() : NodeJS.ReadWriteStream & {tap: () => NodeJS.ReadWriteStream};
-    }
-    export = Clone;
-}
-
 declare module "gulp-insert" {
     export function append(text: string | Buffer): NodeJS.ReadWriteStream;
     export function prepend(text: string | Buffer): NodeJS.ReadWriteStream;
