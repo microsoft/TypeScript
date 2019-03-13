@@ -454,16 +454,6 @@ task("baseline-accept").description = "Makes the most recent test results the ne
 task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
 
-// TODO(rbuckton): Determine if 'webhost' is still in use.
-const buildWebHost = () => buildProject("tests/webhost/webtsc.tsconfig.json");
-task("webhost", series(lkgPreBuild, buildWebHost));
-task("webhost").description = "Builds the tsc web host";
-
-const cleanWebHost = () => cleanProject("tests/webhost/webtsc.tsconfig.json");
-cleanTasks.push(cleanWebHost);
-task("clean-webhost", cleanWebHost);
-task("clean-webhost").description = "Cleans the outputs of the tsc web host";
-
 const buildLoggedIO = async () => {
     mkdirp.sync("built/local/temp");
     await exec(process.execPath, ["lib/tsc", "--types", "--target", "es5", "--lib", "es5", "--outdir", "built/local/temp", "src/harness/loggedIO.ts"]);
