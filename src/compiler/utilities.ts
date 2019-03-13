@@ -3492,7 +3492,7 @@ namespace ts {
         }
     }
 
-    export function parameterIsThisKeyword(parameter: ParameterDeclaration): boolean {
+    export function parameterIsThisKeyword(parameter: ParameterDeclaration | JSDocParameterTag): boolean {
         return isThisIdentifier(parameter.name);
     }
 

@@ -14284,8 +14284,10 @@ namespace ts {
         function applyToReturnTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
             const sourceTypePredicate = getTypePredicateOfSignature(source);
             const targetTypePredicate = getTypePredicateOfSignature(target);
+            const sourcePredicateOffset = source.declaration && source.declaration.parameters[0] && parameterIsThisKeyword(source.declaration.parameters[0]) ? 1 : 0;
+            const targetPredicateOffset = target.declaration && target.declaration.parameters[0] && parameterIsThisKeyword(target.declaration.parameters[0]) ? 1 : 0;
             if (sourceTypePredicate && targetTypePredicate && sourceTypePredicate.kind === targetTypePredicate.kind &&
-                (sourceTypePredicate.kind === TypePredicateKind.This || sourceTypePredicate.parameterIndex === (<IdentifierTypePredicate>targetTypePredicate).parameterIndex)) {
+                (sourceTypePredicate.kind === TypePredicateKind.This || (sourceTypePredicate.parameterIndex - sourcePredicateOffset) === ((<IdentifierTypePredicate>targetTypePredicate).parameterIndex - targetPredicateOffset))) {
                 callback(sourceTypePredicate.type, targetTypePredicate.type);
             }
             else {
