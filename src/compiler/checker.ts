@@ -792,14 +792,6 @@ namespace ts {
             }
         }
 
-        function addRelatedInfo(diagnostic: Diagnostic, ...relatedInformation: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]]) {
-            if (!diagnostic.relatedInformation) {
-                diagnostic.relatedInformation = [];
-            }
-            diagnostic.relatedInformation.push(...relatedInformation);
-            return diagnostic;
-        }
-
         function error(location: Node | undefined, message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): Diagnostic {
             const diagnostic = location
                 ? createDiagnosticForNode(location, message, arg0, arg1, arg2, arg3)
@@ -7034,13 +7026,23 @@ namespace ts {
                 getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
         }
 
-        function includeMixinType(type: Type, types: ReadonlyArray<Type>, index: number): Type {
+        function findMixins(types: ReadonlyArray<Type>): ReadonlyArray<boolean> {
+            const constructorTypeCount = countWhere(types, (t) => getSignaturesOfType(t, SignatureKind.Construct).length > 0);
+            const mixinFlags = map(types, isMixinConstructorType);
+            if (constructorTypeCount > 0 && constructorTypeCount === countWhere(mixinFlags, (b) => b)) {
+                const firstMixinIndex = mixinFlags.indexOf(/*searchElement*/ true);
+                mixinFlags[firstMixinIndex] = false;
+            }
+            return mixinFlags;
+        }
+
+        function includeMixinType(type: Type, types: ReadonlyArray<Type>, mixinFlags: ReadonlyArray<boolean>, index: number): Type {
             const mixedTypes: Type[] = [];
             for (let i = 0; i < types.length; i++) {
                 if (i === index) {
                     mixedTypes.push(type);
                 }
-                else if (isMixinConstructorType(types[i])) {
+                else if (mixinFlags[i]) {
                     mixedTypes.push(getReturnTypeOfSignature(getSignaturesOfType(types[i], SignatureKind.Construct)[0]));
                 }
             }
@@ -7055,7 +7057,8 @@ namespace ts {
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
             const types = type.types;
-            const mixinCount = countWhere(types, isMixinConstructorType);
+            const mixinFlags = findMixins(types);
+            const mixinCount = countWhere(mixinFlags, (b) => b);
             for (let i = 0; i < types.length; i++) {
                 const t = type.types[i];
                 // When an intersection type contains mixin constructor types, the construct signatures from
@@ -7063,12 +7066,12 @@ namespace ts {
                 // other construct signatures in the intersection type. For example, the intersection type
                 // '{ new(...args: any[]) => A } & { new(s: string) => B }' has a single construct signature
                 // 'new(s: string) => A & B'.
-                if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(t)) {
+                if (!mixinFlags[i]) {
                     let signatures = getSignaturesOfType(t, SignatureKind.Construct);
                     if (signatures.length && mixinCount > 0) {
                         signatures = map(signatures, s => {
                             const clone = cloneSignature(s);
-                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, i);
+                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, mixinFlags, i);
                             return clone;
                         });
                     }
@@ -10025,11 +10028,15 @@ namespace ts {
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
             // construct the type Box<T[X]>.
             if (isGenericMappedType(objectType)) {
-                const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [type.indexType]);
-                const templateMapper = combineTypeMappers(objectType.mapper, mapper);
-                return type.simplified = mapType(instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper), getSimplifiedType);
+                return type.simplified = mapType(substituteIndexedMappedType(objectType, type.indexType), getSimplifiedType);
             }
             return type.simplified = type;
+        }
+
+        function substituteIndexedMappedType(objectType: MappedType, index: Type) {
+            const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [index]);
+            const templateMapper = combineTypeMappers(objectType.mapper, mapper);
+            return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, missingType = accessNode ? errorType : unknownType): Type {
@@ -17839,7 +17846,15 @@ namespace ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
             return mapType(type, t => {
-                if (t.flags & TypeFlags.StructuredType) {
+                if (isGenericMappedType(t)) {
+                    const constraint = getConstraintTypeFromMappedType(t);
+                    const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
+                    const propertyNameType = getLiteralType(unescapeLeadingUnderscores(name));
+                    if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
+                        return substituteIndexedMappedType(t, propertyNameType);
+                    }
+                }
+                else if (t.flags & TypeFlags.StructuredType) {
                     const prop = getPropertyOfType(t, name);
                     if (prop) {
                         return getTypeOfSymbol(prop);
@@ -20511,7 +20526,13 @@ namespace ts {
                 argCount--;
             }
 
+            let spanArray: NodeArray<Node>;
             let related: DiagnosticWithLocation | undefined;
+
+            const error = hasRestParameter || hasSpreadArgument ? hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
+                hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
+                Diagnostics.Expected_0_arguments_but_got_1_or_more : Diagnostics.Expected_0_arguments_but_got_1;
+
             if (closestSignature && getMinArgumentCount(closestSignature) > argCount && closestSignature.declaration) {
                 const paramDecl = closestSignature.declaration.parameters[closestSignature.thisParameter ? argCount + 1 : argCount];
                 if (paramDecl) {
@@ -20522,17 +20543,33 @@ namespace ts {
                     );
                 }
             }
-            if (hasRestParameter || hasSpreadArgument) {
-                const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
-                    hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
-                    Diagnostics.Expected_0_arguments_but_got_1_or_more;
-                const diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
-                return related ? addRelatedInfo(diagnostic, related) : diagnostic;
-            }
             if (min < argCount && argCount < max) {
                 return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
-            const diagnostic = createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
+
+            if (!hasSpreadArgument && argCount < min) {
+                const diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
+                return related ? addRelatedInfo(diagnostic, related) : diagnostic;
+            }
+
+            if (hasRestParameter || hasSpreadArgument) {
+                spanArray = createNodeArray(args);
+                if (hasSpreadArgument && argCount) {
+                    const nextArg = elementAt(args, getSpreadArgumentIndex(args) + 1) || undefined;
+                    spanArray = createNodeArray(args.slice(max > argCount && nextArg ? args.indexOf(nextArg) : max));
+                }
+            }
+            else {
+                spanArray = createNodeArray(args.slice(max));
+            }
+
+            spanArray.pos = first(spanArray).pos;
+            spanArray.end = last(spanArray).end;
+            if (spanArray.end === spanArray.pos) {
+                spanArray.end++;
+            }
+            const diagnostic = createDiagnosticForNodeArray(
+                getSourceFileOfNode(node), spanArray, error, paramRange, argCount);
             return related ? addRelatedInfo(diagnostic, related) : diagnostic;
         }
 
@@ -21100,12 +21137,11 @@ namespace ts {
             const firstBase = baseTypes[0];
             if (firstBase.flags & TypeFlags.Intersection) {
                 const types = (firstBase as IntersectionType).types;
-                const mixinCount = countWhere(types, isMixinConstructorType);
+                const mixinFlags = findMixins(types);
                 let i = 0;
                 for (const intersectionMember of (firstBase as IntersectionType).types) {
-                    i++;
                     // We want to ignore mixin ctors
-                    if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(intersectionMember)) {
+                    if (!mixinFlags[i]) {
                         if (getObjectFlags(intersectionMember) & (ObjectFlags.Class | ObjectFlags.Interface)) {
                             if (intersectionMember.symbol === target) {
                                 return true;
@@ -21115,6 +21151,7 @@ namespace ts {
                             }
                         }
                     }
+                    i++;
                 }
                 return false;
             }

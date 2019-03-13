@@ -322,12 +322,11 @@ namespace ts {
             modifyFs: noop
         });
 
-        // Verify baseline with build info
+        // Verify baseline with build info + dts unChanged
         verifyOutFileScenario({
             scenario: "when final project is not composite but uses project references",
             modifyFs: fs => replaceText(fs, sources[project.third][source.config], `"composite": true,`, ""),
             ignoreDtsChanged: true,
-            ignoreDtsUnchanged: true,
             baselineOnly: true
         });
 
@@ -437,7 +436,6 @@ namespace ts {
             changeCompilerVersion(host);
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
-                // TODO:: This should build all instead
                 getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                 [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, relSources[project.first][source.config], fakes.version, version],
                 [Diagnostics.Building_project_0, sources[project.first][source.config]],
@@ -843,6 +841,48 @@ ${internal} enum internalEnum { a, b, c }`);
                     baselineOnly: true
                 });
             });
+        });
+
+        it("non module projects without prepend", () => {
+            const fs = outFileFs.shadow();
+            // No prepend
+            replaceText(fs, sources[project.third][source.config], `{ "path": "../first", "prepend": true }`, `{ "path": "../first" }`);
+            replaceText(fs, sources[project.third][source.config], `{ "path": "../second", "prepend": true }`, `{ "path": "../second" }`);
+
+            // Non Modules
+            replaceText(fs, sources[project.first][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
+            replaceText(fs, sources[project.second][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
+            replaceText(fs, sources[project.third][source.config], `"composite": true,`, `"composite": true, "module": "none",`);
+
+            // Own file emit
+            replaceText(fs, sources[project.first][source.config], `"outFile": "./bin/first-output.js",`, "");
+            replaceText(fs, sources[project.second][source.config], `"outFile": "../2/second-output.js",`, "");
+            replaceText(fs, sources[project.third][source.config], `"outFile": "./thirdjs/output/third-output.js",`, "");
+
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host);
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(
+                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.first][source.config], "src/first/first_PART1.js"],
+                [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.second][source.config], "src/second/second_part1.js"],
+                [Diagnostics.Building_project_0, sources[project.second][source.config]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, relSources[project.third][source.config], "src/third/third_part1.js"],
+                [Diagnostics.Building_project_0, sources[project.third][source.config]]
+            );
+            const expectedOutputFiles = flatMap(sources, ([config, ts]) => [
+                removeFileExtension(config) + Extension.TsBuildInfo,
+                ...flatMap(ts, f => [
+                    removeFileExtension(f) + Extension.Js,
+                    removeFileExtension(f) + Extension.Js + ".map",
+                    removeFileExtension(f) + Extension.Dts,
+                    removeFileExtension(f) + Extension.Dts + ".map",
+                ])
+            ]);
+            for (const output of expectedOutputFiles) {
+                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
         });
     });
 }

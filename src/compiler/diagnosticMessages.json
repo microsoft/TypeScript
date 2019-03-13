@@ -2593,6 +2593,14 @@
         "category": "Error",
         "code": 2751
     },
+    "The first export default is here.": {
+        "category": "Error",
+        "code": 2752
+    },
+    "Another export default is here.": {
+        "category": "Error",
+        "code": 2753
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

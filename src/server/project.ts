@@ -221,7 +221,7 @@ namespace ts.server {
 
         /*@internal*/
         constructor(
-            readonly projectName: string,
+            /*@internal*/ readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: DocumentRegistry,

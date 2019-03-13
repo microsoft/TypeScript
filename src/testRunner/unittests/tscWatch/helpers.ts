@@ -53,6 +53,7 @@ namespace ts.tscWatch {
     }
 
     const elapsedRegex = /^Elapsed:: [0-9]+ms/;
+    const buildVerboseLogRegEx = /^.+ \- /;
     function checkOutputErrors(
         host: WatchedSystem,
         logsBeforeWatchDiagnostic: string[] | undefined,
@@ -87,9 +88,13 @@ namespace ts.tscWatch {
             index++;
         }
 
+        function getCleanLogString(log: string) {
+            return log.replace(elapsedRegex, "").replace(buildVerboseLogRegEx, "");
+        }
+
         function assertLog(caption: string, expected: string) {
             const actual = outputs[index];
-            assert.equal(actual.replace(elapsedRegex, ""), expected.replace(elapsedRegex, ""), getOutputAtFailedMessage(caption, expected));
+            assert.equal(getCleanLogString(actual), getCleanLogString(expected), getOutputAtFailedMessage(caption, expected));
             index++;
         }
 
