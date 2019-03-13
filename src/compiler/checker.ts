@@ -14259,7 +14259,7 @@ namespace ts {
             }
         }
 
-        function forEachMatchingParameterType(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
+        function applyToParameterTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
             const sourceCount = getParameterCount(source);
             const targetCount = getParameterCount(target);
             const sourceRestType = getEffectiveRestType(source);
@@ -14278,6 +14278,18 @@ namespace ts {
             }
             if (targetRestType) {
                 callback(getRestTypeAtPosition(source, paramCount), targetRestType);
+            }
+        }
+
+        function applyToReturnTypes(source: Signature, target: Signature, callback: (s: Type, t: Type) => void) {
+            const sourceTypePredicate = getTypePredicateOfSignature(source);
+            const targetTypePredicate = getTypePredicateOfSignature(target);
+            if (sourceTypePredicate && targetTypePredicate && sourceTypePredicate.kind === targetTypePredicate.kind &&
+                (sourceTypePredicate.kind === TypePredicateKind.This || sourceTypePredicate.parameterIndex === (<IdentifierTypePredicate>targetTypePredicate).parameterIndex)) {
+                callback(sourceTypePredicate.type, targetTypePredicate.type);
+            }
+            else {
+                callback(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
             }
         }
 
@@ -14900,17 +14912,10 @@ namespace ts {
                     const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
                     // Once we descend into a bivariant signature we remain bivariant for all nested inferences
                     bivariant = bivariant || kind === SyntaxKind.MethodDeclaration || kind === SyntaxKind.MethodSignature || kind === SyntaxKind.Constructor;
-                    forEachMatchingParameterType(source, target, inferFromContravariantTypes);
+                    applyToParameterTypes(source, target, inferFromContravariantTypes);
                     bivariant = saveBivariant;
                 }
-                const sourceTypePredicate = getTypePredicateOfSignature(source);
-                const targetTypePredicate = getTypePredicateOfSignature(target);
-                if (sourceTypePredicate && targetTypePredicate && sourceTypePredicate.kind === targetTypePredicate.kind) {
-                    inferFromTypes(sourceTypePredicate.type, targetTypePredicate.type);
-                }
-                else {
-                    inferFromTypes(getReturnTypeOfSignature(source), getReturnTypeOfSignature(target));
-                }
+                applyToReturnTypes(source, target, inferFromTypes);
             }
 
             function inferFromIndexTypes(source: Type, target: Type) {
@@ -20137,18 +20142,14 @@ namespace ts {
             const restType = getEffectiveRestType(contextualSignature);
             const mapper = inferenceContext && (restType && restType.flags & TypeFlags.TypeParameter ? inferenceContext.nonFixingMapper : inferenceContext.mapper);
             const sourceSignature = mapper ? instantiateSignature(contextualSignature, mapper) : contextualSignature;
-            forEachMatchingParameterType(sourceSignature, signature, (source, target) => {
+            applyToParameterTypes(sourceSignature, signature, (source, target) => {
                 // Type parameters from outer context referenced by source type are fixed by instantiation of the source type
                 inferTypes(context.inferences, source, target);
             });
             if (!inferenceContext) {
-                inferTypes(context.inferences, getReturnTypeOfSignature(contextualSignature), getReturnTypeOfSignature(signature), InferencePriority.ReturnType);
-                const signaturePredicate = getTypePredicateOfSignature(signature);
-                const contextualPredicate = getTypePredicateOfSignature(sourceSignature);
-                if (signaturePredicate && contextualPredicate && signaturePredicate.kind === contextualPredicate.kind &&
-                    (signaturePredicate.kind === TypePredicateKind.This || signaturePredicate.parameterIndex === (contextualPredicate as IdentifierTypePredicate).parameterIndex)) {
-                    inferTypes(context.inferences, contextualPredicate.type, signaturePredicate.type, InferencePriority.ReturnType);
-                }
+                applyToReturnTypes(contextualSignature, signature, (source, target) => {
+                    inferTypes(context.inferences, source, target, InferencePriority.ReturnType);
+                });
             }
             return getSignatureInstantiation(signature, getInferredTypes(context), isInJSFile(contextualSignature.declaration));
         }
@@ -23465,23 +23466,30 @@ namespace ts {
                             // potentially add inferred type parameters to the outer function return type.
                             const returnSignature = context.signature && getSingleCallSignature(getReturnTypeOfSignature(context.signature));
                             if (returnSignature && !returnSignature.typeParameters && !every(context.inferences, hasInferenceCandidates)) {
-                                // Instantiate the expression type with its own type parameters as type arguments. This
-                                // ensures that the type parameters are not erased to type any during type inference such
-                                // that they can be inferred as actual types.
+                                // Instantiate the signature with its own type parameters as type arguments, possibly
+                                // renaming the type parameters to ensure they have unique names.
                                 const uniqueTypeParameters = getUniqueTypeParameters(context, signature.typeParameters);
-                                const strippedType = getOrCreateTypeFromSignature(getSignatureInstantiationWithoutFillingInTypeArguments(signature, uniqueTypeParameters));
-                                // Infer from the stripped expression type to the contextual type starting with an empty
-                                // set of inference candidates.
+                                const instantiatedSignature = getSignatureInstantiationWithoutFillingInTypeArguments(signature, uniqueTypeParameters);
+                                // Infer from the parameters of the instantiated signature to the parameters of the
+                                // contextual signature starting with an empty set of inference candidates.
                                 const inferences = map(context.inferences, info => createInferenceInfo(info.typeParameter));
-                                inferTypes(inferences, strippedType, contextualType);
-                                // If we produced some inference candidates and if the type parameters for which we produced
-                                // candidates do not already have existing inferences, we adopt the new inference candidates and
-                                // add the type parameters of the expression type to the set of inferred type parameters for
-                                // the outer function return type.
-                                if (some(inferences, hasInferenceCandidates) && !hasOverlappingInferences(context.inferences, inferences)) {
-                                    mergeInferences(context.inferences, inferences);
-                                    context.inferredTypeParameters = concatenate(context.inferredTypeParameters, uniqueTypeParameters);
-                                    return strippedType;
+                                applyToParameterTypes(instantiatedSignature, contextualSignature, (source, target) => {
+                                    inferTypes(inferences, source, target);
+                                });
+                                if (some(inferences, hasInferenceCandidates)) {
+                                    // We have inference candidates, indicating that one or more type parameters are referenced
+                                    // in the parameter types of the contextual signature. Now also infer from the return type.
+                                    applyToReturnTypes(instantiatedSignature, contextualSignature, (source, target) => {
+                                        inferTypes(inferences, source, target);
+                                    });
+                                    // If the type parameters for which we produced candidates do not have any inferences yet,
+                                    // we adopt the new inference candidates and add the type parameters of the expression type
+                                    // to the set of inferred type parameters for the outer function return type.
+                                    if (!hasOverlappingInferences(context.inferences, inferences)) {
+                                        mergeInferences(context.inferences, inferences);
+                                        context.inferredTypeParameters = concatenate(context.inferredTypeParameters, uniqueTypeParameters);
+                                        return getOrCreateTypeFromSignature(instantiatedSignature);
+                                    }
                                 }
                             }
                             return getOrCreateTypeFromSignature(instantiateSignatureInContextOf(signature, contextualSignature, context));
