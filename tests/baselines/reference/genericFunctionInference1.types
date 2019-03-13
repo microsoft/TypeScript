@@ -421,6 +421,28 @@ const f50 = pipe5(list);  // No higher order inference
 >pipe5 : <A, B>(f: (a: A) => B) => { f: (a: A) => B; }
 >list : <T>(a: T) => T[]
 
+declare function wrap3<A, B, C>(f: (a: A, b1: B, b2: B) => C): (a: A, b1: B, b2: B) => C;
+>wrap3 : <A, B, C>(f: (a: A, b1: B, b2: B) => C) => (a: A, b1: B, b2: B) => C
+>f : (a: A, b1: B, b2: B) => C
+>a : A
+>b1 : B
+>b2 : B
+>a : A
+>b1 : B
+>b2 : B
+
+declare function baz<T, U extends T>(t1: T, t2: T, u: U): [T, U];
+>baz : <T, U extends T>(t1: T, t2: T, u: U) => [T, U]
+>t1 : T
+>t2 : T
+>u : U
+
+let f60 = wrap3(baz);
+>f60 : <T, U extends T>(a: T, b1: U, b2: U) => [T, U]
+>wrap3(baz) : <T, U extends T>(a: T, b1: U, b2: U) => [T, U]
+>wrap3 : <A, B, C>(f: (a: A, b1: B, b2: B) => C) => (a: A, b1: B, b2: B) => C
+>baz : <T, U extends T>(t1: T, t2: T, u: U) => [T, U]
+
 // #417
 
 function mirror<A, B>(f: (a: A) => B): (a: A) => B { return f; }
