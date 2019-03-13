@@ -2601,6 +2601,10 @@
         "category": "Error",
         "code": 2753
     },
+    "Types of constructor signature are incompatible.": {
+    "category": "Error",
+    "code": 2754
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

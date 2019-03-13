@@ -1,0 +1,9 @@
+=== tests/cases/compiler/assigningIncompatibleConstructor.ts ===
+class Foo { constructor(a: string) { } }
+>Foo : Foo
+>a : string
+
+let FooConstructor: { new(): Foo } = Foo;
+>FooConstructor : new () => Foo
+>Foo : typeof Foo
+
