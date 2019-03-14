@@ -1196,7 +1196,9 @@ namespace ts.FindAllReferences.Core {
 
         // For `export { foo as bar }`, rename `foo`, but not `bar`.
         if (!isForRenameWithPrefixAndSuffixText(state.options) || alwaysGetReferences) {
-            const exportKind = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword ? ExportKind.Default : ExportKind.Named;
+            const isDefaultExport = referenceLocation.originalKeywordKind === SyntaxKind.DefaultKeyword
+                || exportSpecifier.name.originalKeywordKind === SyntaxKind.DefaultKeyword;
+            const exportKind = isDefaultExport ? ExportKind.Default : ExportKind.Named;
             const exportSymbol = Debug.assertDefined(exportSpecifier.symbol);
             const exportInfo = Debug.assertDefined(getExportInfo(exportSymbol, exportKind, state.checker));
             searchForImportsOfExport(referenceLocation, exportSymbol, exportInfo, state);

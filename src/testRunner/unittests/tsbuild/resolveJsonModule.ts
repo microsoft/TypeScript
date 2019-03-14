@@ -1,9 +1,10 @@
 namespace ts {
     describe("unittests:: tsbuild:: with resolveJsonModule option on project resolveJsonModuleAndComposite", () => {
         let projFs: vfs.FileSystem;
+        const { time, tick } = getTime();
         const allExpectedOutputs = ["/src/dist/src/index.js", "/src/dist/src/index.d.ts", "/src/dist/src/hello.json"];
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite");
+            projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite", time);
         });
 
         after(() => {
@@ -75,6 +76,7 @@ export default hello.hello`);
             }
             host.clearDiagnostics();
             builder.resetBuildContext();
+            tick();
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
@@ -99,6 +101,7 @@ export default hello.hello`);
             }
             host.clearDiagnostics();
             builder.resetBuildContext();
+            tick();
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
@@ -108,9 +111,10 @@ export default hello.hello`);
     });
 
     describe("unittests:: tsbuild:: with resolveJsonModule option on project importJsonFromProjectReference", () => {
+        const { time, tick } = getTime();
         let projFs: vfs.FileSystem;
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/importJsonFromProjectReference");
+            projFs = loadProjectFromDisk("tests/projects/importJsonFromProjectReference", time);
         });
 
         after(() => {
@@ -136,6 +140,7 @@ export default hello.hello`);
             assert(fs.existsSync(expectedOutput), `Expect file ${expectedOutput} to exist`);
             host.clearDiagnostics();
             builder.resetBuildContext();
+            tick();
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),

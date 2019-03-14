@@ -269,7 +269,7 @@ namespace ts.FindAllReferences {
         }
 
         /**
-         * `import x = require("./x") or `import * as x from "./x"`.
+         * `import x = require("./x")` or `import * as x from "./x"`.
          * An `export =` may be imported by this syntax, so it may be a direct import.
          * If it's not a direct import, it will be in `indirectUsers`, so we don't have to do anything here.
          */
