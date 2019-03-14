@@ -5307,7 +5307,7 @@ namespace ts {
             if (reportErrors && !declarationBelongsToPrivateAmbientMember(element)) {
                 reportImplicitAny(element, anyType);
             }
-            return anyType;
+            return autoType;
         }
 
         // Return the type implied by an object binding pattern
