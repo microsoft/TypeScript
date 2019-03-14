@@ -7408,6 +7408,10 @@ interface HTMLMediaElement extends HTMLElement {
      */
     canPlayType(type: string): CanPlayTypeResult;
     /**
+     * Quickly seeks the media to the new time with precision tradeoff.
+     */
+    fastSeek(position: number): void;
+    /**
      * Resets the audio or video object and loads a new media resource.
      */
     load(): void;
