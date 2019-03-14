@@ -7784,7 +7784,10 @@ namespace ts {
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop && !(modifiers & excludeModifiers)) {
                         commonFlags &= prop.flags;
-                        propSet.set("" + getSymbolId(prop), prop);
+                        const id = "" + getSymbolId(prop);
+                        if (!propSet.has(id)) {
+                            propSet.set(id, prop);
+                        }
                         checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
                             (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
                             (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
