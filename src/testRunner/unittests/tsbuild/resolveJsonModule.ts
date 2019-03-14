@@ -132,22 +132,15 @@ export default hello.hello`);
                 [Diagnostics.Building_project_0, `/${stringsConfigFile}`],
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, mainConfigFile, "src/main/index.js"],
                 [Diagnostics.Building_project_0, `/${mainConfigFile}`],
-                [Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, "/src/strings/foo.json"],
-                [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, configFile, mainConfigFile],
-                [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, `/${configFile}`, `/${mainConfigFile}`]
             );
-            assert.isFalse(fs.existsSync(expectedOutput), `Expect file ${expectedOutput} to not exist because of errors`);
+            assert(fs.existsSync(expectedOutput), `Expect file ${expectedOutput} to exist`);
             host.clearDiagnostics();
             builder.resetBuildContext();
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, stringsConfigFile, "src/strings/foo.json", "src/strings/tsconfig.tsbuildinfo"],
-                [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, mainConfigFile, "src/main/index.js"],
-                [Diagnostics.Building_project_0, `/${mainConfigFile}`],
-                [Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, "/src/strings/foo.json"],
-                [Diagnostics.Project_0_can_t_be_built_because_its_dependency_1_has_errors, configFile, mainConfigFile],
-                [Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, `/${configFile}`, `/${mainConfigFile}`]
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, mainConfigFile, "src/main/index.ts", "src/main/index.js"],
             );
         });
     });

@@ -680,11 +680,12 @@ namespace ts {
             getCompilerOptions: () => config.options,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNewLine: () => host.getNewLine(),
-            getSourceFile: () => undefined,
-            getSourceFileByPath: () => undefined,
+            getSourceFile: returnUndefined,
+            getSourceFileByPath: returnUndefined,
             getSourceFiles: () => sourceFilesForJsEmit,
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: returnFalse,
+            getResolvedProjectReferenceToRedirect: returnUndefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 switch (name) {
                     case jsFilePath:
@@ -721,7 +722,7 @@ namespace ts {
             fileExists: f => host.fileExists(f),
             directoryExists: host.directoryExists && (f => host.directoryExists!(f)),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-            getProgramBuildInfo: () => undefined
+            getProgramBuildInfo: returnUndefined
         };
         emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(config.options));
         return outputFiles;

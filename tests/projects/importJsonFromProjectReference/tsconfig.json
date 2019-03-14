@@ -1,19 +1,20 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "rootDir": "./", 
-    "composite": true,
-    "resolveJsonModule": true,
-    "strict": true,
-    "esModuleInterop": true
-  },
-  "references": [
-    {
-      "path": "./strings/tsconfig.json"
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "rootDir": "./",
+        "composite": true,
+        "resolveJsonModule": true,
+        "strict": true,
+        "esModuleInterop": true
     },
-    {
-      "path": "./main/tsconfig.json"
-    }
-  ]
+    "references": [
+        {
+            "path": "./strings/tsconfig.json"
+        },
+        {
+            "path": "./main/tsconfig.json"
+        }
+    ],
+    "files": []
 }
