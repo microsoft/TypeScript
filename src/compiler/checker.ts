@@ -26911,7 +26911,7 @@ namespace ts {
                             // If the function has a return type, but promisedType is
                             // undefined, an error will be reported in checkAsyncFunctionReturnType
                             // so we don't need to report one here.
-                            checkTypeAssignableTo(awaitedType, promisedType, node);
+                            checkTypeAssignableToAndOptionallyElaborate(awaitedType, promisedType, node, node.expression);
                         }
                     }
                     else {
