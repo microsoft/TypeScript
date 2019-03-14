@@ -138,14 +138,27 @@ namespace ts {
     /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
         Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && hasTSFileExtension(inputFileName));
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
-        const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath)), relativePath);
+        let outputPath: string;
+        const declarationDir = configFile.options.declarationDir || configFile.options.outDir;
+        if (declarationDir) {
+            const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
+            outputPath = resolvePath(declarationDir, relativePath);
+        }
+        else {
+            outputPath = inputFileName;
+        }
         return changeExtension(outputPath, Extension.Dts);
     }
 
     function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
-        const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath)), relativePath);
+        let outputPath: string;
+        if (configFile.options.outDir) {
+            const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
+            outputPath = resolvePath(configFile.options.outDir, relativePath);
+        }
+        else {
+            outputPath = inputFileName;
+        }
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
         const outputFileName = changeExtension(outputPath, isJsonFile ?
             Extension.Json :
@@ -203,6 +216,8 @@ namespace ts {
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
             if (jsFilePath) return jsFilePath;
         }
+        const buildInfoPath = getOutputPathForBuildInfo(configFile.options);
+        if (buildInfoPath) return buildInfoPath;
         return Debug.fail(`project ${configFile.options.configFilePath} expected to have at least one output`);
     }
 
