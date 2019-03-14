@@ -3437,7 +3437,12 @@ namespace ts {
     }
 
     /** Don't call this for `--outFile`, just for `--outDir` or plain emit. `--outFile` needs additional checks. */
-    export function sourceFileMayBeEmitted(sourceFile: SourceFile, options: CompilerOptions, isSourceFileFromExternalLibrary: (file: SourceFile) => boolean, getResolvedProjectReferenceToRedirect: (fileName: string) => ResolvedProjectReference | undefined) {
+    export function sourceFileMayBeEmitted(
+        sourceFile: SourceFile,
+        options: CompilerOptions,
+        isSourceFileFromExternalLibrary: (file: SourceFile) => boolean,
+        getResolvedProjectReferenceToRedirect: (fileName: string) => ResolvedProjectReference | undefined
+    ) {
         return !(options.noEmitForJsFiles && isSourceFileJS(sourceFile)) &&
             !sourceFile.isDeclarationFile &&
             !isSourceFileFromExternalLibrary(sourceFile) &&

@@ -2741,7 +2741,7 @@ namespace ts {
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
             if (options.composite) {
-                const rootPaths = rootNames.map(r => toPath(r));
+                const rootPaths = rootNames.map(toPath);
                 for (const file of files) {
                     // Ignore declaration files
                     if (file.isDeclarationFile) continue;

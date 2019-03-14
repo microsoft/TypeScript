@@ -135,36 +135,34 @@ namespace ts {
         return configFile.options.rootDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath));
     }
 
+    function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined) {
+        return outputDir ?
+            resolvePath(
+                outputDir,
+                getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase)
+            ) :
+            inputFileName;
+    }
+
     /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
         Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && hasTSFileExtension(inputFileName));
-        let outputPath: string;
-        const declarationDir = configFile.options.declarationDir || configFile.options.outDir;
-        if (declarationDir) {
-            const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
-            outputPath = resolvePath(declarationDir, relativePath);
-        }
-        else {
-            outputPath = inputFileName;
-        }
-        return changeExtension(outputPath, Extension.Dts);
+        return changeExtension(
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
+            Extension.Dts
+        );
     }
 
     function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
-        let outputPath: string;
-        if (configFile.options.outDir) {
-            const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
-            outputPath = resolvePath(configFile.options.outDir, relativePath);
-        }
-        else {
-            outputPath = inputFileName;
-        }
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
-        const outputFileName = changeExtension(outputPath, isJsonFile ?
-            Extension.Json :
-            fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ?
-                Extension.Jsx :
-                Extension.Js);
+        const outputFileName = changeExtension(
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir),
+            isJsonFile ?
+                Extension.Json :
+                fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ?
+                    Extension.Jsx :
+                    Extension.Js
+        );
         return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.assertDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
             outputFileName :
             undefined;
