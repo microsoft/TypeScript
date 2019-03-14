@@ -670,6 +670,7 @@ namespace ts {
 
         let _jsxNamespace: __String;
         let _jsxFactoryEntity: EntityName | undefined;
+        let unmeasurableMarkerHandler: (() => void) | undefined;
 
         const subtypeRelation = createMap<RelationComparisonResult>();
         const assignableRelation = createMap<RelationComparisonResult>();
@@ -12973,6 +12974,9 @@ namespace ts {
                 }
 
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
+                    if (some(variances, v => v === Variance.Unmeasurable)) {
+                        return undefined;
+                    }
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors)) {
                         return result;
                     }
@@ -13006,6 +13010,13 @@ namespace ts {
                 }
             }
 
+            function reportUnmeasurableMarkers(p: TypeParameter) {
+                if (unmeasurableMarkerHandler && (p === markerSuperType || p === markerSubType || p === markerOtherType)) {
+                    unmeasurableMarkerHandler();
+                }
+                return p;
+            }
+
             // A type [P in S]: X is related to a type [Q in T]: Y if T is related to S and X' is
             // related to Y, where X' is an instantiation of X in which P is replaced with Q. Notice
             // that S and T are contra-variant whereas X and Y are co-variant.
@@ -13014,7 +13025,9 @@ namespace ts {
                         getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
                 if (modifiersRelated) {
                     let result: Ternary;
-                    if (result = isRelatedTo(getConstraintTypeFromMappedType(target), getConstraintTypeFromMappedType(source), reportErrors)) {
+                    const targetConstraint = getConstraintTypeFromMappedType(target);
+                    const sourceConstraint = instantiateType(getConstraintTypeFromMappedType(source), reportUnmeasurableMarkers);
+                    if (result = isRelatedTo(targetConstraint, sourceConstraint, reportErrors)) {
                         const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
                         return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), reportErrors);
                     }
@@ -13489,6 +13502,9 @@ namespace ts {
                 cache.variances = emptyArray;
                 variances = [];
                 for (const tp of typeParameters) {
+                    let unmeasurable = false;
+                    const oldHandler = unmeasurableMarkerHandler;
+                    unmeasurableMarkerHandler = () => unmeasurable = true;
                     // We first compare instantiations where the type parameter is replaced with
                     // marker types that have a known subtype relationship. From this we can infer
                     // invariance, covariance, contravariance or bivariance.
@@ -13502,6 +13518,16 @@ namespace ts {
                     // replaced with marker types that are known to be unrelated.
                     if (variance === Variance.Bivariant && isTypeAssignableTo(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
                         variance = Variance.Independent;
+                    }
+                    unmeasurableMarkerHandler = oldHandler;
+                    if (unmeasurable) {
+                        variance = Variance.Unmeasurable;
+                        const covariantID = getRelationKey(typeWithSub, typeWithSuper, assignableRelation);
+                        const contravariantID = getRelationKey(typeWithSuper, typeWithSub, assignableRelation);
+                        // We delete the results of these checks, as we want them to actually be run, see the `Unmeasurable` variance we cache,
+                        // And then fall back to a structural result.
+                        assignableRelation.delete(covariantID);
+                        assignableRelation.delete(contravariantID);
                     }
                     variances.push(variance);
                 }

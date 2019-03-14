@@ -4133,6 +4133,7 @@ namespace ts {
         Contravariant = 2,  // Contravariant
         Bivariant     = 3,  // Both covariant and contravariant
         Independent   = 4,  // Unwitnessed type parameter
+        Unmeasurable = 5,  // Variance result is unusable - relationship relies on structural comparisons which are not reflected in generic relationships
     }
 
     // Generic class and interface types
