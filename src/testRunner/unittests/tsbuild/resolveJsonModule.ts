@@ -1,9 +1,10 @@
 namespace ts {
     describe("unittests:: tsbuild:: with resolveJsonModule option", () => {
         let projFs: vfs.FileSystem;
+        const { time, tick } = getTime();
         const allExpectedOutputs = ["/src/dist/src/index.js", "/src/dist/src/index.d.ts", "/src/dist/src/hello.json"];
         before(() => {
-            projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite");
+            projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite", time);
         });
 
         after(() => {
@@ -69,7 +70,7 @@ export default hello.hello`);
             for (const output of [...allExpectedOutputs, "/src/dist/src/index.js.map"]) {
                 assert(fs.existsSync(output), `Expect file ${output} to exist`);
             }
-
+            tick();
             const newBuilder = createSolutionBuilder(host, [configFile], { verbose: true });
             newBuilder.buildAllProjects();
             host.assertDiagnosticMessages(
