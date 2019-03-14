@@ -290,7 +290,7 @@ namespace ts {
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
-    export function createProgramHost<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
+    export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
         const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
         let host: DirectoryStructureHost = system;
         host; // tslint:disable-line no-unused-expression (TODO: `host` is unused!)
