@@ -980,7 +980,7 @@ namespace ts {
             backupState: noop,
             restoreState: noop,
             getProgram: notImplemented,
-            getProgramOrUndefined: () => undefined,
+            getProgramOrUndefined: returnUndefined,
             releaseProgram: noop,
             getCompilerOptions: () => state.compilerOptions,
             getSourceFile: notImplemented,
