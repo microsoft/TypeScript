@@ -37,11 +37,11 @@ interface Input {
 }
 
 type R = ReturnType<typeof mul>;
->R : any
->mul : (input: Input) => any
+>R : ReturnType<(input: Input) => ReturnType<typeof mul>>
+>mul : (input: Input) => ReturnType<typeof mul>
 
 function mul(input: Input): R {
->mul : (input: Input) => any
+>mul : (input: Input) => ReturnType<typeof mul>
 >input : Input
 
   return input.a * input.b;
@@ -57,10 +57,10 @@ function mul(input: Input): R {
 // Repro from #26104
 
 type R2 = ReturnType<typeof f>;
->R2 : any
->f : () => any
+>R2 : ReturnType<() => ReturnType<typeof f>>
+>f : () => ReturnType<typeof f>
 
 function f(): R2 { return 0; }
->f : () => any
+>f : () => ReturnType<typeof f>
 >0 : 0
 

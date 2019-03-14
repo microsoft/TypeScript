@@ -1,7 +1,7 @@
 namespace ts {
     describe("unittests:: tsbuild:: with resolveJsonModule option", () => {
         let projFs: vfs.FileSystem;
-        const allExpectedOutputs = ["/src/tests/dist/src/index.js", "/src/tests/dist/src/index.d.ts", "/src/tests/dist/src/hello.json"];
+        const allExpectedOutputs = ["/src/dist/src/index.js", "/src/dist/src/index.d.ts", "/src/dist/src/hello.json"];
         before(() => {
             projFs = loadProjectFromDisk("tests/projects/resolveJsonModuleAndComposite");
         });
@@ -29,33 +29,53 @@ namespace ts {
         }
 
         it("with resolveJsonModule and include only", () => {
-            verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withInclude.json", [
+            verifyProjectWithResolveJsonModule("/src/tsconfig_withInclude.json", [
                 Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern,
-                "/src/tests/src/hello.json"
+                "/src/src/hello.json"
             ]);
         });
 
         it("with resolveJsonModule and include of *.json along with other include", () => {
-            verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withIncludeOfJson.json");
+            verifyProjectWithResolveJsonModule("/src/tsconfig_withIncludeOfJson.json");
         });
 
         it("with resolveJsonModule and include of *.json along with other include and file name matches ts file", () => {
             const fs = projFs.shadow();
-            fs.rimrafSync("/src/tests/src/hello.json");
-            fs.writeFileSync("/src/tests/src/index.json", JSON.stringify({ hello: "world" }));
-            fs.writeFileSync("/src/tests/src/index.ts", `import hello from "./index.json"
+            fs.rimrafSync("/src/src/hello.json");
+            fs.writeFileSync("/src/src/index.json", JSON.stringify({ hello: "world" }));
+            fs.writeFileSync("/src/src/index.ts", `import hello from "./index.json"
 
 export default hello.hello`);
-            const allExpectedOutputs = ["/src/tests/dist/src/index.js", "/src/tests/dist/src/index.d.ts", "/src/tests/dist/src/index.json"];
-            verifyProjectWithResolveJsonModuleWithFs(fs, "/src/tests/tsconfig_withIncludeOfJson.json", allExpectedOutputs);
+            const allExpectedOutputs = ["/src/dist/src/index.js", "/src/dist/src/index.d.ts", "/src/dist/src/index.json"];
+            verifyProjectWithResolveJsonModuleWithFs(fs, "/src/tsconfig_withIncludeOfJson.json", allExpectedOutputs);
         });
 
         it("with resolveJsonModule and files containing json file", () => {
-            verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withFiles.json");
+            verifyProjectWithResolveJsonModule("/src/tsconfig_withFiles.json");
         });
 
         it("with resolveJsonModule and include and files", () => {
-            verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withIncludeAndFiles.json");
+            verifyProjectWithResolveJsonModule("/src/tsconfig_withIncludeAndFiles.json");
+        });
+
+        it("with resolveJsonModule and sourceMap", () => {
+            const fs = projFs.shadow();
+            const configFile = "src/tsconfig_withFiles.json";
+            replaceText(fs, configFile, `"composite": true,`, `"composite": true, "sourceMap": true,`);
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host, [configFile], { verbose: false });
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages();
+            for (const output of [...allExpectedOutputs, "/src/dist/src/index.js.map"]) {
+                assert(fs.existsSync(output), `Expect file ${output} to exist`);
+            }
+
+            const newBuilder = createSolutionBuilder(host, [configFile], { verbose: true });
+            newBuilder.buildAllProjects();
+            host.assertDiagnosticMessages(
+                getExpectedDiagnosticForProjectsInBuild(configFile),
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFile, "src/src/index.ts", "src/dist/src/index.js"]
+            );
         });
     });
 }

@@ -276,60 +276,6 @@ namespace ts {
         return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
     }
 
-    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
-        const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
-        return changeExtension(outputPath, Extension.Dts);
-    }
-
-    function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine) {
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
-        const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
-        const newExtension = fileExtensionIs(inputFileName, Extension.Json) ? Extension.Json :
-                             fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ? Extension.Jsx : Extension.Js;
-        return changeExtension(outputPath, newExtension);
-    }
-
-    function getOutputFileNames(inputFileName: string, configFile: ParsedCommandLine): ReadonlyArray<string> {
-        // outFile is handled elsewhere; .d.ts files don't generate outputs
-        if (configFile.options.outFile || configFile.options.out || fileExtensionIs(inputFileName, Extension.Dts)) {
-            return emptyArray;
-        }
-
-        const outputs: string[] = [];
-        const js = getOutputJSFileName(inputFileName, configFile);
-        outputs.push(js);
-        if (configFile.options.sourceMap) {
-            outputs.push(`${js}.map`);
-        }
-        if (getEmitDeclarations(configFile.options) && !fileExtensionIs(inputFileName, Extension.Json)) {
-            const dts = getOutputDeclarationFileName(inputFileName, configFile);
-            outputs.push(dts);
-            if (configFile.options.declarationMap) {
-                outputs.push(`${dts}.map`);
-            }
-        }
-        return outputs;
-    }
-
-    function getOutFileOutputs(project: ParsedCommandLine, ignoreBuildInfo?: boolean): ReadonlyArray<string> {
-        Debug.assert(!!project.options.outFile || !!project.options.out, "outFile must be set");
-        const { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, buildInfoPath } = getOutputPathsForBundle(project.options, /*forceDtsPaths*/ false);
-
-        let outputs: string[] | undefined = [];
-        const addOutput = (path: string | undefined) => path && (outputs || (outputs = [])).push(path);
-        addOutput(jsFilePath);
-        addOutput(sourceMapFilePath);
-        addOutput(declarationFilePath);
-        addOutput(declarationMapPath);
-        if (!ignoreBuildInfo) addOutput(buildInfoPath);
-        return outputs || emptyArray;
-    }
-
-    function rootDirOfOptions(opts: CompilerOptions, configFileName: string) {
-        return opts.rootDir || getDirectoryPath(configFileName);
-    }
-
     function newer(date1: Date, date2: Date): Date {
         return date2 > date1 ? date2 : date1;
     }
@@ -715,7 +661,7 @@ namespace ts {
             }
 
             // Collect the expected outputs of this project
-            const outputs = getAllProjectOutputs(project);
+            const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
 
             if (outputs.length === 0) {
                 return {
@@ -1202,7 +1148,7 @@ namespace ts {
             const status: Status.UpToDate = {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime,
-                oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(configFile)
+                oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(configFile, !host.useCaseSensitiveFileNames())
             };
             diagnostics.removeKey(proj);
             projectStatus.setValue(proj, status);
@@ -1295,13 +1241,13 @@ namespace ts {
             const status: Status.UpToDate = {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: priorNewestUpdateTime,
-                oldestOutputFileName: getFirstProjectOutput(proj)
+                oldestOutputFileName: getFirstProjectOutput(proj, !host.useCaseSensitiveFileNames())
             };
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, status);
         }
 
         function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: FileMap<true>) {
-            const outputs = getAllProjectOutputs(proj);
+            const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
             if (!skipOutputs || outputs.length !== skipOutputs.getSize()) {
                 if (options.verbose) {
                     reportStatus(verboseMessage, proj.options.configFilePath!);
@@ -1337,7 +1283,7 @@ namespace ts {
                     reportParseConfigFileDiagnostic(proj);
                     continue;
                 }
-                const outputs = getAllProjectOutputs(parsed);
+                const outputs = getAllProjectOutputs(parsed, !host.useCaseSensitiveFileNames());
                 for (const output of outputs) {
                     if (host.fileExists(output)) {
                         filesToDelete.push(output);
@@ -1497,35 +1443,6 @@ namespace ts {
         }
 
         return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
-    }
-
-    export function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
-        if (project.options.outFile || project.options.out) {
-            return getOutFileOutputs(project);
-        }
-        else {
-            const outputs: string[] = [];
-            for (const inputFile of project.fileNames) {
-                outputs.push(...getOutputFileNames(inputFile, project));
-            }
-            const buildInfoPath = getOutputPathForBuildInfo(project.options);
-            if (buildInfoPath) outputs.push(buildInfoPath);
-            return outputs;
-        }
-    }
-
-    function getFirstProjectOutput(project: ParsedCommandLine): string {
-        if (project.options.outFile || project.options.out) {
-            return first(getOutFileOutputs(project));
-        }
-
-        for (const inputFile of project.fileNames) {
-            const outputs = getOutputFileNames(inputFile, project);
-            if (outputs.length) {
-                return first(outputs);
-            }
-        }
-        return Debug.fail(`project ${project.options.configFilePath} expected to have at least one output`);
     }
 
     export function formatUpToDateStatus<T>(configFileName: string, status: UpToDateStatus, relName: (fileName: string) => string, formatMessage: (message: DiagnosticMessage, ...args: string[]) => T) {

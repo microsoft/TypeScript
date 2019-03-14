@@ -703,6 +703,14 @@ namespace ts.Completions {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
+                        if (node.end === contextToken.pos &&
+                            isCallExpression(node) &&
+                            node.getChildCount(sourceFile) &&
+                            last(node.getChildren(sourceFile)).kind !== SyntaxKind.CloseParenToken) {
+                            // This is likely dot from incorrectly parsed call expression and user is starting to write spread
+                            // eg: Math.min(./**/)
+                            return undefined;
+                        }
                         break;
                     case SyntaxKind.QualifiedName:
                         node = (parent as QualifiedName).left;
@@ -1129,6 +1137,9 @@ namespace ts.Completions {
 
                     case SyntaxKind.AsKeyword:
                         return parentKind === SyntaxKind.AsExpression;
+
+                    case SyntaxKind.ExtendsKeyword:
+                        return parentKind === SyntaxKind.TypeParameter;
                 }
             }
             return false;

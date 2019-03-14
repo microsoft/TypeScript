@@ -11,6 +11,7 @@ namespace ts {
         directoryExists?(path: string): boolean;
         getDirectories?(path: string): string[];
         readDirectory?(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        realpath?(path: string): string;
 
         createDirectory?(path: string): void;
         writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
@@ -56,7 +57,8 @@ namespace ts {
             writeFile: host.writeFile && writeFile,
             addOrDeleteFileOrDirectory,
             addOrDeleteFile,
-            clearCache
+            clearCache,
+            realpath: host.realpath && realpath
         };
 
         function toPath(fileName: string) {
@@ -170,7 +172,7 @@ namespace ts {
             const rootDirPath = toPath(rootDir);
             const result = tryReadDirectory(rootDir, rootDirPath);
             if (result) {
-                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries);
+                return matchFiles(rootDir, extensions, excludes, includes, useCaseSensitiveFileNames, currentDirectory, depth, getFileSystemEntries, realpath);
             }
             return host.readDirectory!(rootDir, extensions, excludes, includes, depth);
 
@@ -181,6 +183,10 @@ namespace ts {
                 }
                 return tryReadDirectory(dir, path) || emptyFileSystemEntries;
             }
+        }
+
+        function realpath(s: string) {
+            return host.realpath ? host.realpath(s) : s;
         }
 
         function addOrDeleteFileOrDirectory(fileOrDirectory: string, fileOrDirectoryPath: Path) {
