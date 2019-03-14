@@ -291,13 +291,23 @@ namespace ts.refactor.convertToNamedParameters {
         return parameters;
     }
 
+    function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
+        if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
+            return createShorthandPropertyAssignment(name);
+        }
+        return createPropertyAssignment(name, initializer);
+    }
+
     function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
         const parameters = getRefactorableParameters(functionDeclaration.parameters);
         const hasRestParameter = isRestParameter(last(parameters));
         const nonRestArguments = hasRestParameter ? functionArguments.slice(0, parameters.length - 1) : functionArguments;
         const properties = map(nonRestArguments, (arg, i) => {
-            const property = createPropertyAssignment(getParameterName(parameters[i]), arg);
-            suppressLeadingAndTrailingTrivia(property.initializer);
+            const parameterName = getParameterName(parameters[i]);
+            const property = createPropertyOrShorthandAssignment(parameterName, arg);
+
+            suppressLeadingAndTrailingTrivia(property.name);
+            if (isPropertyAssignment(property)) suppressLeadingAndTrailingTrivia(property.initializer);
             copyComments(arg, property);
             return property;
         });
