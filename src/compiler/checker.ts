@@ -7810,7 +7810,7 @@ namespace ts {
                 }
             }
             const props = arrayFrom(propSet.values());
-            if (!props) {
+            if (props.length === 0) {
                 return undefined;
             }
             if (props.length === 1 && !(checkFlags & CheckFlags.Partial) && !indexTypes) {
