@@ -476,7 +476,9 @@ namespace fakes {
         assertDiagnosticMessages(...expectedDiagnostics: ExpectedDiagnostic[]) {
             const actual = this.diagnostics.slice().map(d => d.messageText as string);
             const expected = expectedDiagnostics.map(expectedDiagnosticToText);
-            assert.deepEqual(actual, expected, "Diagnostic arrays did not match");
+            assert.deepEqual(actual, expected, `Diagnostic arrays did not match:
+Actual: ${JSON.stringify(actual, /*replacer*/ undefined, " ")}
+Expected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
         }
 
         printDiagnostics(header = "== Diagnostics ==") {

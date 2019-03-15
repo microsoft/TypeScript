@@ -16936,6 +16936,7 @@ namespace ts {
         function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES2015 ||
                 (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.Class)) === 0 ||
+                isSourceFile(symbol.valueDeclaration) ||
                 symbol.valueDeclaration.parent.kind === SyntaxKind.CatchClause) {
                 return;
             }
@@ -26911,7 +26912,7 @@ namespace ts {
                             // If the function has a return type, but promisedType is
                             // undefined, an error will be reported in checkAsyncFunctionReturnType
                             // so we don't need to report one here.
-                            checkTypeAssignableTo(awaitedType, promisedType, node);
+                            checkTypeAssignableToAndOptionallyElaborate(awaitedType, promisedType, node, node.expression);
                         }
                     }
                     else {
@@ -29594,7 +29595,7 @@ namespace ts {
         }
 
         function isSymbolOfDeclarationWithCollidingName(symbol: Symbol): boolean {
-            if (symbol.flags & SymbolFlags.BlockScoped) {
+            if (symbol.flags & SymbolFlags.BlockScoped && !isSourceFile(symbol.valueDeclaration)) {
                 const links = getSymbolLinks(symbol);
                 if (links.isDeclarationWithCollidingName === undefined) {
                     const container = getEnclosingBlockScopeContainer(symbol.valueDeclaration);
