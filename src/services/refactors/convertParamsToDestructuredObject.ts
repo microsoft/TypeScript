@@ -273,11 +273,12 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         if (!isValidParameterNodeArray(functionDeclaration.parameters)) return false;
         switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
+                return hasNameOrDefault(functionDeclaration) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
             case SyntaxKind.MethodDeclaration:
-                return !!functionDeclaration.name && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
+                return !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
             case SyntaxKind.Constructor:
                 if (isClassDeclaration(functionDeclaration.parent)) {
-                    return !!functionDeclaration.body && !!functionDeclaration.parent.name && !checker.isImplementationOfOverload(functionDeclaration);
+                    return !!functionDeclaration.body && hasNameOrDefault(functionDeclaration.parent) && !checker.isImplementationOfOverload(functionDeclaration);
                 }
                 else {
                     return isValidVariableDeclaration(functionDeclaration.parent.parent) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
@@ -287,6 +288,14 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 return isValidVariableDeclaration(functionDeclaration.parent);
         }
         return false;
+    }
+
+    function hasNameOrDefault(functionOrClassDeclaration: FunctionDeclaration | ClassDeclaration): boolean {
+        if (!functionOrClassDeclaration.name) {
+            const defaultKeyword = findModifier(functionOrClassDeclaration, SyntaxKind.DefaultKeyword);
+            return !!defaultKeyword;
+        }
+        return true;
     }
 
     function isValidParameterNodeArray(parameters: NodeArray<ParameterDeclaration>): parameters is ValidParameterNodeArray {
@@ -457,11 +466,12 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return getTextOfIdentifierOrLiteral(paramDeclaration.name);
     }
 
-    function getClassNames(constructorDeclaration: ValidConstructor): Identifier[] {
+    function getClassNames(constructorDeclaration: ValidConstructor): (Identifier | Modifier)[] {
         switch (constructorDeclaration.parent.kind) {
             case SyntaxKind.ClassDeclaration:
                 const classDeclaration = constructorDeclaration.parent;
-                return [classDeclaration.name];
+                if (classDeclaration.name) return [classDeclaration.name];
+                return [findModifier(classDeclaration, SyntaxKind.DefaultKeyword)!];
             case SyntaxKind.ClassExpression:
                 const classExpression = constructorDeclaration.parent;
                 const variableDeclaration = constructorDeclaration.parent.parent;
@@ -474,6 +484,8 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[] {
         switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
+                if (functionDeclaration.name) return [functionDeclaration.name];
+                return [findModifier(functionDeclaration, SyntaxKind.DefaultKeyword)!];
             case SyntaxKind.MethodDeclaration:
                 return [functionDeclaration.name];
             case SyntaxKind.Constructor:
@@ -501,13 +513,12 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     }
 
     interface ValidConstructor extends ConstructorDeclaration {
-        parent: (ClassDeclaration & { name: Identifier }) | (ClassExpression & { parent: ValidVariableDeclaration });
+        parent: ClassDeclaration | (ClassExpression & { parent: ValidVariableDeclaration });
         parameters: NodeArray<ValidParameterDeclaration>;
         body: FunctionBody;
     }
 
     interface ValidFunction extends FunctionDeclaration {
-        name: Identifier;
         parameters: NodeArray<ValidParameterDeclaration>;
         body: FunctionBody;
     }
