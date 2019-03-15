@@ -321,7 +321,6 @@ function modifiers() { return this.n; }
 function restParam(...) { return this.n; }
 function optional() { return this.n; }
 function decorated() { return this.n; }
-function initializer(, C) { }
 ();
 number;
 {

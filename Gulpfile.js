@@ -12,10 +12,9 @@ const merge2 = require("merge2");
 const mkdirp = require("mkdirp");
 const { src, dest, task, parallel, series, watch } = require("gulp");
 const { append, transform } = require("gulp-insert");
-const { browserify } = require("./scripts/build/browserify");
 const { prependFile } = require("./scripts/build/prepend");
-const { exec, readJson, needsUpdate, getDiffTool, getDirSize, flatten, rm } = require("./scripts/build/utils");
-const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
+const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
+const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 const { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
 const cmdLineOptions = require("./scripts/build/options");
 
@@ -114,18 +113,8 @@ const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagno
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
 
 const buildServices = (() => {
-    // flatten the services project
-    const flattenServicesConfig = async () => flatten("src/services/tsconfig.json", "built/local/typescriptServices.tsconfig.json", {
-        compilerOptions: {
-            "removeComments": false,
-            "stripInternal": true,
-            "declarationMap": false,
-            "outFile": "typescriptServices.out.js"
-        }
-    });
-
     // build typescriptServices.out.js
-    const buildTypescriptServicesOut = () => buildProject("built/local/typescriptServices.tsconfig.json", cmdLineOptions);
+    const buildTypescriptServicesOut = () => buildProject("src/typescriptServices/tsconfig.json", cmdLineOptions);
 
     // create typescriptServices.js
     const createTypescriptServicesJs = () => src("built/local/typescriptServices.out.js")
@@ -167,13 +156,13 @@ const buildServices = (() => {
         .pipe(dest("built/local"));
 
     return series(
-        flattenServicesConfig,
         buildTypescriptServicesOut,
         createTypescriptServicesJs,
         createTypescriptServicesDts,
         createTypescriptJs,
         createTypescriptDts,
-        createTypescriptStandaloneDts);
+        createTypescriptStandaloneDts,
+    );
 })();
 task("services", series(preBuild, buildServices));
 task("services").description = "Builds the language service";
@@ -186,13 +175,13 @@ const cleanServices = async () => {
         await cleanProject("built/local/typescriptServices.tsconfig.json");
     }
     await del([
-        "built/local/typescriptServices.tsconfig.json",
         "built/local/typescriptServices.out.js",
         "built/local/typescriptServices.out.d.ts",
+        "built/local/typescriptServices.out.tsbuildinfo",
         "built/local/typescriptServices.js",
         "built/local/typescript.js",
         "built/local/typescript.d.ts",
-        "built/local/typescript_standalone.d.ts",
+        "built/local/typescript_standalone.d.ts"
     ]);
 };
 cleanTasks.push(cleanServices);
@@ -248,20 +237,8 @@ task("watch-min").flags = {
 }
 
 const buildLssl = (() => {
-    // flatten the server project
-    const flattenTsServerProject = async () => flatten("src/tsserver/tsconfig.json", "built/local/tsserverlibrary.tsconfig.json", {
-        exclude: ["src/tsserver/server.ts"],
-        compilerOptions: {
-            "removeComments": false,
-            "stripInternal": true,
-            "declaration": true,
-            "declarationMap": false,
-            "outFile": "tsserverlibrary.out.js"
-        }
-    });
-
     // build tsserverlibrary.out.js
-    const buildServerLibraryOut = () => buildProject("built/local/tsserverlibrary.tsconfig.json", cmdLineOptions);
+    const buildServerLibraryOut = () => buildProject("src/tsserverlibrary/tsconfig.json", cmdLineOptions);
 
     // create tsserverlibrary.js
     const createServerLibraryJs = () => src("built/local/tsserverlibrary.out.js")
@@ -282,10 +259,10 @@ const buildLssl = (() => {
         .pipe(dest("built/local"));
 
     return series(
-        flattenTsServerProject,
         buildServerLibraryOut,
         createServerLibraryJs,
-        createServerLibraryDts);
+        createServerLibraryDts,
+    );
 })();
 task("lssl", series(preBuild, buildLssl));
 task("lssl").description = "Builds language service server library";
@@ -298,9 +275,9 @@ const cleanLssl = async () => {
         await cleanProject("built/local/tsserverlibrary.tsconfig.json");
     }
     await del([
-        "built/local/tsserverlibrary.tsconfig.json",
         "built/local/tsserverlibrary.out.js",
         "built/local/tsserverlibrary.out.d.ts",
+        "built/local/tsserverlibrary.out.tsbuildinfo",
         "built/local/tsserverlibrary.js",
         "built/local/tsserverlibrary.d.ts",
     ]);
@@ -454,44 +431,6 @@ task("runtests-parallel").flags = {
     "   --built": "Compile using the built version of the compiler.",
 };
 
-const buildWebTestServer = () => buildProject("tests/webTestServer.tsconfig.json");
-const cleanWebTestServer = () => cleanProject("tests/webTestServer.tsconfig.json");
-cleanTasks.push(cleanWebTestServer);
-
-const browserifyTests = () => src(["built/local/run.js"], { base: "built/local" })
-    .pipe(newer("built/local/bundle.js"))
-    .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(browserify())
-    .pipe(rename("bundle.js"))
-    .pipe(sourcemaps.write(".", /**@type {*}*/({ includeContent: false, destPath: "built/local" })))
-    .pipe(dest("built/local"));
-
-const runtestsBrowser = async () => {
-    await cleanTestDirs();
-    const { tests, runners, light } = cmdLineOptions;
-    const testConfigFile = "test.config";
-    await del([testConfigFile]);
-    if (tests || runners || light) {
-        writeTestConfigFile(tests, runners, light);
-    }
-    const args = ["tests/webTestServer.js"];
-    if (cmdLineOptions.browser) {
-        args.push(cmdLineOptions.browser);
-    }
-    if (tests) {
-        args.push(JSON.stringify(tests));
-    }
-    await exec(process.execPath, args);
-};
-
-task("runtests-browser", series(preBuild, parallel(buildTests, buildServices, buildLssl, buildWebTestServer), browserifyTests, runtestsBrowser));
-task("runtests-browser").description = "Runs the tests using the built run.js file like 'gulp runtests'.";
-task("runtests-browser").flags = {
-    "-t --tests=<regex>": "pattern for tests to run",
-    "-b --browser=<browser>": "Either 'IE' or 'chrome'",
-    "   --built": "Compile using the built version of the compiler.",
-};
-
 task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true }));
 task("diff").description = "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable";
 
@@ -514,26 +453,6 @@ task("baseline-accept").description = "Makes the most recent test results the ne
 
 task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
-
-// TODO(rbuckton): Determine if 'webhost' is still in use.
-const buildWebHost = () => buildProject("tests/webhost/webtsc.tsconfig.json");
-task("webhost", series(lkgPreBuild, buildWebHost));
-task("webhost").description = "Builds the tsc web host";
-
-const cleanWebHost = () => cleanProject("tests/webhost/webtsc.tsconfig.json");
-cleanTasks.push(cleanWebHost);
-task("clean-webhost", cleanWebHost);
-task("clean-webhost").description = "Cleans the outputs of the tsc web host";
-
-// TODO(rbuckton): Determine if 'perftsc' is still in use.
-const buildPerfTsc = () => buildProject("tests/perftsc.tsconfig.json");
-task("perftsc", series(lkgPreBuild, buildPerfTsc));
-task("perftsc").description = "Builds augmented version of the compiler for perf tests";
-
-const cleanPerfTsc = () => cleanProject("tests/perftsc.tsconfig.json");
-cleanTasks.push(cleanPerfTsc);
-task("clean-perftsc", cleanPerfTsc);
-task("clean-perftsc").description = "Cleans the outputs of the perftsc project";
 
 const buildLoggedIO = async () => {
     mkdirp.sync("built/local/temp");
