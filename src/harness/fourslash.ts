@@ -4552,11 +4552,45 @@ namespace FourSlashInterface {
             ];
         }
 
+        function getInJsKeywords(keywords: ReadonlyArray<ExpectedCompletionEntryObject>): ReadonlyArray<ExpectedCompletionEntryObject> {
+            return keywords.filter(keyword => {
+                switch (keyword.name) {
+                    case "enum":
+                    case "interface":
+                    case "private":
+                    case "protected":
+                    case "public":
+                    case "abstract":
+                    case "any":
+                    case "boolean":
+                    case "declare":
+                    case "infer":
+                    case "is":
+                    case "keyof":
+                    case "module":
+                    case "namespace":
+                    case "never":
+                    case "readonly":
+                    case "number":
+                    case "object":
+                    case "string":
+                    case "symbol":
+                    case "type":
+                    case "unique":
+                    case "unknown":
+                    case "global":
+                    case "bigint":
+                        return false;
+                    default:
+                        return true;
+                }
+            });
+        }
+
         export const classElementKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
             ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"].map(keywordEntry);
 
-        export const classElementInJsKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
-            ["async", "constructor", "get", "set"].map(keywordEntry);
+        export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
         export const constructorParameterKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
             ["private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({ name, kind: "keyword" }));
@@ -4695,58 +4729,7 @@ namespace FourSlashInterface {
             }
         });
 
-        export const statementInJsKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = [
-            "break",
-            "case",
-            "catch",
-            "class",
-            "const",
-            "continue",
-            "debugger",
-            "default",
-            "delete",
-            "do",
-            "else",
-            "enum",
-            "export",
-            "extends",
-            "false",
-            "finally",
-            "for",
-            "function",
-            "if",
-            "import",
-            "in",
-            "instanceof",
-            "new",
-            "null",
-            "return",
-            "super",
-            "switch",
-            "this",
-            "throw",
-            "true",
-            "try",
-            "typeof",
-            "var",
-            "void",
-            "while",
-            "with",
-            "implements",
-            "interface",
-            "let",
-            "package",
-            "yield",
-            "as",
-            "async",
-            "await",
-            "constructor",
-            "get",
-            "require",
-            "set",
-            "from",
-            "of",
-        ].map(keywordEntry);
+        export const statementInJsKeywords = getInJsKeywords(statementKeywords);
 
         export const globalsVars: ReadonlyArray<ExpectedCompletionEntryObject> = [
             functionEntry("eval"),
@@ -4849,49 +4832,7 @@ namespace FourSlashInterface {
             ...globalKeywordsInsideFunction,
         ];
 
-        const globalInJsKeywordsInsideFunction: ReadonlyArray<ExpectedCompletionEntryObject> = [
-            "break",
-            "case",
-            "catch",
-            "class",
-            "const",
-            "continue",
-            "debugger",
-            "default",
-            "delete",
-            "do",
-            "else",
-            "export",
-            "extends",
-            "false",
-            "finally",
-            "for",
-            "function",
-            "if",
-            "import",
-            "in",
-            "instanceof",
-            "new",
-            "null",
-            "return",
-            "super",
-            "switch",
-            "this",
-            "throw",
-            "true",
-            "try",
-            "typeof",
-            "var",
-            "void",
-            "while",
-            "with",
-            "implements",
-            "let",
-            "package",
-            "yield",
-            "async",
-            "await",
-        ].map(keywordEntry);
+        const globalInJsKeywordsInsideFunction = getInJsKeywords(globalKeywordsInsideFunction);
 
         // TODO: many of these are inappropriate to always provide
         export const globalsInJsInsideFunction = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> => [
@@ -4981,56 +4922,7 @@ namespace FourSlashInterface {
             "of",
         ].map(keywordEntry);
 
-        export const globalInJsKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = [
-            "break",
-            "case",
-            "catch",
-            "class",
-            "const",
-            "continue",
-            "debugger",
-            "default",
-            "delete",
-            "do",
-            "else",
-            "export",
-            "extends",
-            "false",
-            "finally",
-            "for",
-            "function",
-            "if",
-            "import",
-            "in",
-            "instanceof",
-            "new",
-            "null",
-            "return",
-            "super",
-            "switch",
-            "this",
-            "throw",
-            "true",
-            "try",
-            "typeof",
-            "var",
-            "void",
-            "while",
-            "with",
-            "implements",
-            "let",
-            "package",
-            "yield",
-            "as",
-            "async",
-            "await",
-            "constructor",
-            "get",
-            "require",
-            "set",
-            "from",
-            "of",
-        ].map(keywordEntry);
+        export const globalInJsKeywords = getInJsKeywords(globalKeywords);
 
         export const insideMethodKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = [
             "break",
@@ -5078,49 +4970,7 @@ namespace FourSlashInterface {
             "await",
         ].map(keywordEntry);
 
-        export const insideMethodInJsKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = [
-            "break",
-            "case",
-            "catch",
-            "class",
-            "const",
-            "continue",
-            "debugger",
-            "default",
-            "delete",
-            "do",
-            "else",
-            "export",
-            "extends",
-            "false",
-            "finally",
-            "for",
-            "function",
-            "if",
-            "import",
-            "in",
-            "instanceof",
-            "new",
-            "null",
-            "return",
-            "super",
-            "switch",
-            "this",
-            "throw",
-            "true",
-            "try",
-            "typeof",
-            "var",
-            "void",
-            "while",
-            "with",
-            "implements",
-            "let",
-            "package",
-            "yield",
-            "async",
-            "await",
-        ].map(keywordEntry);
+        export const insideMethodInJsKeywords = getInJsKeywords(insideMethodKeywords);
 
         export const globalKeywordsPlusUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = (() => {
             const i = ts.findIndex(globalKeywords, x => x.name === "unique");

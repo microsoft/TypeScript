@@ -2002,7 +2002,6 @@ namespace ts.Completions {
             case SyntaxKind.ProtectedKeyword:
             case SyntaxKind.PublicKeyword:
             case SyntaxKind.ReadonlyKeyword:
-            case SyntaxKind.StaticKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.SymbolKeyword:
             case SyntaxKind.TypeKeyword:
