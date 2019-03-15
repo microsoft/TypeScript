@@ -4557,6 +4557,7 @@ namespace FourSlashInterface {
                 switch (keyword.name) {
                     case "enum":
                     case "interface":
+                    case "implements":
                     case "private":
                     case "protected":
                     case "public":

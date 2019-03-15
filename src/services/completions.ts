@@ -1989,6 +1989,7 @@ namespace ts.Completions {
             case SyntaxKind.DeclareKeyword:
             case SyntaxKind.EnumKeyword:
             case SyntaxKind.GlobalKeyword:
+            case SyntaxKind.ImplementsKeyword:
             case SyntaxKind.InferKeyword:
             case SyntaxKind.InterfaceKeyword:
             case SyntaxKind.IsKeyword:
