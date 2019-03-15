@@ -160,6 +160,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function entryToImportExport(entry: FindAllReferences.NodeEntry): Node | undefined {
         const node = entry.node;
         // import
+<<<<<<< HEAD:src/services/refactors/convertParamsToDestructuredObject.ts
         if (isImportSpecifier(node.parent)
             || isImportClause(node.parent)
             || isImportEqualsDeclaration(node.parent)
@@ -168,6 +169,13 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }
         // export
         if (isExportSpecifier(node.parent) || isExportAssignment(node.parent)) {
+=======
+        if (isImportSpecifier(node.parent) || isImportClause(node.parent)) {
+            return node;
+        }
+        // export
+        if (isExportSpecifier(node.parent)) {
+>>>>>>> 9601d15d5aef29786f2a32aa532dcc0cbbe93b62:src/services/refactors/convertToNamedParameters.ts
             return node;
         }
         return undefined;
