@@ -254,6 +254,20 @@ namespace ts {
                     [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
                 );
             });
+
+            it("rebuilds when tsconfig changes", () => {
+                const { fs, host, builder } = initializeWithBuild();
+                replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`);
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/tests/tsconfig.json"],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
+                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
+                );
+            });
         });
 
         describe("downstream-blocked compilations", () => {

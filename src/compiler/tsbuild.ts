@@ -792,6 +792,17 @@ namespace ts {
                     newerInputFileName: newestInputFileName
                 };
             }
+            else {
+                // Check tsconfig time
+                const tsconfigTime = host.getModifiedTime(project.options.configFilePath!) || missingFileModifiedTime;
+                if (oldestOutputFileTime < tsconfigTime) {
+                    return {
+                        type: UpToDateStatusType.OutOfDateWithSelf,
+                        outOfDateOutputFileName: oldestOutputFileName,
+                        newerInputFileName: project.options.configFilePath!
+                    };
+                }
+            }
 
             if (!buildInfoChecked.hasKey(project.options.configFilePath as ResolvedConfigFileName)) {
                 buildInfoChecked.setValue(project.options.configFilePath as ResolvedConfigFileName, true);
