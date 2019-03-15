@@ -11,9 +11,9 @@
 
 goTo.select("a", "b");
 edit.applyRefactor({
-    refactorName: "Convert to named parameters",
-    actionName: "Convert to named parameters",
-    actionDescription: "Convert to named parameters",
+    refactorName: "Convert parameters to destructured object",
+    actionName: "Convert parameters to destructured object",
+    actionDescription: "Convert parameters to destructured object",
     newContent: `function foo({ a, b }: { a: string; b: string; }) { }
 export = foo;`
 });
