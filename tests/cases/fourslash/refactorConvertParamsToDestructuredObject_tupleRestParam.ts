@@ -20,18 +20,18 @@
 
 goTo.select("a", "b");
 edit.applyRefactor({
-    refactorName: "Convert to named parameters",
-    actionName: "Convert to named parameters",
-    actionDescription: "Convert to named parameters",
+    refactorName: "Convert parameters to destructured object",
+    actionName: "Convert parameters to destructured object",
+    actionDescription: "Convert parameters to destructured object",
     newContent: `function fn1({ a, b, args }: { a: number; b: number; args: [number, number]; }) { }
 fn1({ a: 1, b: 2, args: [3, 4] });`
 });
 
 goTo.select("c", "d");
 edit.applyRefactor({
-    refactorName: "Convert to named parameters",
-    actionName: "Convert to named parameters",
-    actionDescription: "Convert to named parameters",
+    refactorName: "Convert parameters to destructured object",
+    actionName: "Convert parameters to destructured object",
+    actionDescription: "Convert parameters to destructured object",
     newContent: `function fn2({ a, b, args }: { a: number; b: number; args: [number, number, ...string[]]; }) { }
 fn2({ a: 1, b: 2, args: [3, 4] });
 fn2({ a: 1, b: 2, args: [3, 4, "a"] });`
@@ -39,18 +39,18 @@ fn2({ a: 1, b: 2, args: [3, 4, "a"] });`
 
 goTo.select("e", "f");
 edit.applyRefactor({
-    refactorName: "Convert to named parameters",
-    actionName: "Convert to named parameters",
-    actionDescription: "Convert to named parameters",
+    refactorName: "Convert parameters to destructured object",
+    actionName: "Convert parameters to destructured object",
+    actionDescription: "Convert parameters to destructured object",
     newContent: `function fn3({ b, c }: { b: boolean; c: []; }) { }
 fn3({ b: true, c: [] });`
 });
 
 goTo.select("g", "h");
 edit.applyRefactor({
-    refactorName: "Convert to named parameters",
-    actionName: "Convert to named parameters",
-    actionDescription: "Convert to named parameters",
+    refactorName: "Convert parameters to destructured object",
+    actionName: "Convert parameters to destructured object",
+    actionDescription: "Convert parameters to destructured object",
     newContent: `function fn4({ a, args = [] }: { a: number; args?: [...string[]]; }) { }
 fn4({ a: 2 });
 fn4({ a: 1, args: ["two", "three"] });`
