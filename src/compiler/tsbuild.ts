@@ -1178,6 +1178,7 @@ namespace ts {
         }
 
         function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            if (options.force) return undefined;
             const value = builderPrograms.getValue(proj);
             if (value) return value;
             return readBuilderProgram(parsed.options, readFileWithCache) as any as T;
