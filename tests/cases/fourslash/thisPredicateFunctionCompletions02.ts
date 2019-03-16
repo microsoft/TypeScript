@@ -12,7 +12,7 @@
 ////     contents: T;
 ////     isSundries(): this is Crate<Sundries>;
 ////     isSupplies(): this is Crate<Supplies>;
-////     isPackedTight(): this is (this & {extraContents: T});
+////     isPackedTight<U>(this: this & Crate<U>): this is {extraContents: U};
 //// }
 //// const crate: Crate<any>;
 //// if (crate.isPackedTight()) {
