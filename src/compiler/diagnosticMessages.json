@@ -3072,7 +3072,7 @@
         "category": "Error",
         "code": 5073
     },
-    "'{0}' is assignable to the constraint of type '{2}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
+    "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
         "category": "Error",
         "code": 5074
     },
