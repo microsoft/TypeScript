@@ -233,12 +233,25 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
         const node = getTouchingToken(file, startPosition);
         const functionDeclaration = getContainingFunction(node);
+
+         // don't offer refactor on top-level JSDoc
+        if (isTopLevelJSDoc(node)) return undefined;
+
         if (functionDeclaration
             && isValidFunctionDeclaration(functionDeclaration, checker)
             && rangeContainsRange(functionDeclaration, node)
             && !(functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))) return functionDeclaration;
 
         return undefined;
+    }
+
+    function isTopLevelJSDoc(node: Node): boolean {
+        const containingJSDoc = findAncestor(node, isJSDocNode);
+        if (containingJSDoc) {
+            const containingNonJSDoc = findAncestor(containingJSDoc, n => !isJSDocNode(n));
+            return !!containingNonJSDoc && isFunctionLikeDeclaration(containingNonJSDoc);
+        }
+        return false;
     }
 
     function isValidFunctionDeclaration(functionDeclaration: SignatureDeclaration, checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
