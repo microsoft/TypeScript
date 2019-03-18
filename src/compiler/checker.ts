@@ -391,7 +391,7 @@ namespace ts {
         const intersectionTypes = createMap<IntersectionType>();
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
-        const conditionalTypes = createMap<Type | undefined>();
+        const conditionalTypes = createMap<Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -10131,24 +10131,11 @@ namespace ts {
             const trueType = instantiateType(root.trueType, mapper);
             const falseType = instantiateType(root.falseType, mapper);
             const instantiationId = `${root.isDistributive ? "d" : ""}${getTypeId(checkType)}>${getTypeId(extendsType)}?${getTypeId(trueType)}:${getTypeId(falseType)}`;
-            if (conditionalTypes.has(instantiationId)) {
-                const result = conditionalTypes.get(instantiationId);
-                if (result !== undefined) {
-                    return result;
-                }
-                // Somehow the conditional type depends on itself - usually via `infer` types in the `extends` clause
-                // paired with a (potentially deferred) circularly constrained type.
-                // The conditional _must_ be deferred.
-                const deferred = getDeferredConditionalType(root, mapper, /*combinedMapper*/ undefined, checkType, extendsType, trueType, falseType);
-                conditionalTypes.set(instantiationId, deferred);
-                return deferred;
+            const result = conditionalTypes.get(instantiationId);
+            if (result) {
+                return result;
             }
-            conditionalTypes.set(instantiationId, undefined);
             const newResult = getConditionalTypeWorker(root, mapper, checkType, extendsType, trueType, falseType);
-            const cachedRecursiveResult = conditionalTypes.get(instantiationId);
-            if (cachedRecursiveResult) {
-                return cachedRecursiveResult;
-            }
             conditionalTypes.set(instantiationId, newResult);
             return newResult;
         }
