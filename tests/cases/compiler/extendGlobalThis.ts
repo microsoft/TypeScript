@@ -11,6 +11,4 @@ export {}
 import "./extention";
 
 globalThis.tests = "a-b";
-foo.bar = "test";
-
 console.log(globalThis.test.split("-"));
