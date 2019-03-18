@@ -419,34 +419,42 @@ var q1 = function (s = this) {
     this.spaaaaace = 4;
 }
 
-//type of 'this' in a fat arrow expression param list is Any
+//type of 'this' in a fat arrow expression param list is typeof globalThis
 var q2 = (s = this) => {
 >q2 : Symbol(q2, Decl(typeOfThis.ts, 161, 3))
 >s : Symbol(s, Decl(typeOfThis.ts, 161, 10), Decl(typeOfThis.ts, 162, 7))
+>this : Symbol(globalThis)
 
-    var s: any;
+    var s: typeof globalThis;
 >s : Symbol(s, Decl(typeOfThis.ts, 161, 10), Decl(typeOfThis.ts, 162, 7))
+>globalThis : Symbol(globalThis)
 
     s.spaaaaaaace = 4;
 >s : Symbol(s, Decl(typeOfThis.ts, 161, 10), Decl(typeOfThis.ts, 162, 7))
 
-    //type of 'this' in a fat arrow expression body is Any
-    var t: any;
+    //type of 'this' in a fat arrow expression body is typeof globalThis
+    var t: typeof globalThis;
 >t : Symbol(t, Decl(typeOfThis.ts, 166, 7), Decl(typeOfThis.ts, 167, 7))
+>globalThis : Symbol(globalThis)
 
     var t = this;
 >t : Symbol(t, Decl(typeOfThis.ts, 166, 7), Decl(typeOfThis.ts, 167, 7))
+>this : Symbol(globalThis)
 
     this.spaaaaace = 4;
+>this : Symbol(globalThis)
 }
 
-//type of 'this' in global module is Any
-var t: any;
+//type of 'this' in global module is GlobalThis
+var t: typeof globalThis;
 >t : Symbol(t, Decl(typeOfThis.ts, 172, 3), Decl(typeOfThis.ts, 173, 3))
+>globalThis : Symbol(globalThis)
 
 var t = this;
 >t : Symbol(t, Decl(typeOfThis.ts, 172, 3), Decl(typeOfThis.ts, 173, 3))
+>this : Symbol(globalThis)
 
 this.spaaaaace = 4;
+>this : Symbol(globalThis)
 
 

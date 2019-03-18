@@ -774,7 +774,7 @@ namespace FourSlash {
             if ("exact" in options) {
                 ts.Debug.assert(!("includes" in options) && !("excludes" in options));
                 if (options.exact === undefined) throw this.raiseError("Expected no completions");
-                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact));
+                this.verifyCompletionsAreExactly(actualCompletions.entries, toArray(options.exact), options.marker);
             }
             else {
                 if (options.includes) {
@@ -841,14 +841,14 @@ namespace FourSlash {
             }
         }
 
-        private verifyCompletionsAreExactly(actual: ReadonlyArray<ts.CompletionEntry>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>) {
+        private verifyCompletionsAreExactly(actual: ReadonlyArray<ts.CompletionEntry>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, marker?: ArrayOrSingle<string | Marker>) {
             // First pass: test that names are right. Then we'll test details.
-            assert.deepEqual(actual.map(a => a.name), expected.map(e => typeof e === "string" ? e : e.name));
+            assert.deepEqual(actual.map(a => a.name), expected.map(e => typeof e === "string" ? e : e.name), marker ? "At marker " + JSON.stringify(marker) : undefined);
 
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const name = typeof expectedCompletion === "string" ? expectedCompletion : expectedCompletion.name;
                 if (completion.name !== name) {
-                    this.raiseError(`Expected completion at index ${index} to be ${name}, got ${completion.name}`);
+                    this.raiseError(`${marker ? JSON.stringify(marker) : "" } Expected completion at index ${index} to be ${name}, got ${completion.name}`);
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
             });
@@ -939,8 +939,8 @@ namespace FourSlash {
             const startFile = this.activeFile.fileName;
             for (const fileName of files) {
                 const searchFileNames = startFile === fileName ? [startFile] : [startFile, fileName];
-                const highlights = this.getDocumentHighlightsAtCurrentPosition(searchFileNames)!;
-                if (!highlights.every(dh => ts.contains(searchFileNames, dh.fileName))) {
+                const highlights = this.getDocumentHighlightsAtCurrentPosition(searchFileNames);
+                if (highlights && !highlights.every(dh => ts.contains(searchFileNames, dh.fileName))) {
                     this.raiseError(`When asking for document highlights only in files ${searchFileNames}, got document highlights in ${unique(highlights, dh => dh.fileName)}`);
                 }
             }
@@ -1170,7 +1170,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: FourSlashInterface.RenameLocationsOptions) {
-            const { findInStrings = false, findInComments = false, ranges = this.getRanges() } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options } : options;
+            const { findInStrings = false, findInComments = false, ranges = this.getRanges(), providePrefixAndSuffixTextForRename = true } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options, providePrefixAndSuffixTextForRename: true } : options;
 
             for (const startRange of toArray(startRanges)) {
                 this.goToRangeStart(startRange);
@@ -1182,7 +1182,7 @@ Actual: ${stringify(fullActual)}`);
                 }
 
                 const references = this.languageService.findRenameLocations(
-                    this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments);
+                    this.activeFile.fileName, this.currentCaretPosition, findInStrings, findInComments, providePrefixAndSuffixTextForRename);
 
                 const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
@@ -3159,6 +3159,7 @@ ${code}
             const debug = new FourSlashInterface.Debug(state);
             const format = new FourSlashInterface.Format(state);
             const cancellation = new FourSlashInterface.Cancellation(state);
+            // tslint:disable-next-line:no-eval
             const f = eval(wrappedCode);
             f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
         }
@@ -4544,6 +4545,7 @@ namespace FourSlashInterface {
 
         export function globalTypesPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
             return [
+                { name: "globalThis", kind: "module" },
                 ...globalTypeDecls,
                 ...plus,
                 ...typeKeywords,
@@ -4785,6 +4787,7 @@ namespace FourSlashInterface {
         export const globalsInsideFunction = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> => [
             { name: "arguments", kind: "local var" },
             ...plus,
+            { name: "globalThis", kind: "module" },
             ...globalsVars,
             { name: "undefined", kind: "var" },
             ...globalKeywordsInsideFunction,
@@ -4920,13 +4923,19 @@ namespace FourSlashInterface {
         })();
 
         export const globals: ReadonlyArray<ExpectedCompletionEntryObject> = [
+            { name: "globalThis", kind: "module" },
             ...globalsVars,
             { name: "undefined", kind: "var" },
             ...globalKeywords
         ];
 
         export function globalsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
-            return [...globalsVars, ...plus, { name: "undefined", kind: "var" }, ...globalKeywords];
+            return [
+                { name: "globalThis", kind: "module" },
+                ...globalsVars,
+                ...plus,
+                { name: "undefined", kind: "var" },
+                ...globalKeywords];
         }
     }
 
@@ -5087,6 +5096,7 @@ namespace FourSlashInterface {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
         readonly ranges: ReadonlyArray<RenameLocationOptions>;
+        readonly providePrefixAndSuffixTextForRename?: boolean;
     };
     export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
 }

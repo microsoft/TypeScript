@@ -16,18 +16,20 @@ namespace ts {
         public pos: number;
         public end: number;
         public flags: NodeFlags;
+        public modifierFlagsCache: ModifierFlags;
+        public transformFlags: TransformFlags;
         public parent: Node;
         public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
         public jsDoc?: JSDoc[];
         public original?: Node;
-        public transformFlags: TransformFlags;
         private _children: Node[] | undefined;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
-            this.transformFlags = undefined!; // TODO: GH#18217
+            this.modifierFlagsCache = ModifierFlags.None;
+            this.transformFlags = TransformFlags.None;
             this.parent = undefined!;
             this.kind = kind;
         }
@@ -200,16 +202,19 @@ namespace ts {
         public pos: number;
         public end: number;
         public flags: NodeFlags;
+        public modifierFlagsCache: ModifierFlags;
+        public transformFlags: TransformFlags;
         public parent: Node;
         public symbol!: Symbol;
         public jsDocComments?: JSDoc[];
-        public transformFlags!: TransformFlags;
 
         constructor(pos: number, end: number) {
             // Set properties in same order as NodeObject
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
+            this.modifierFlagsCache = ModifierFlags.None;
+            this.transformFlags = TransformFlags.None;
             this.parent = undefined!;
         }
 
@@ -1153,7 +1158,7 @@ namespace ts {
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
-                throw new Error("Could not find file: '" + fileName + "'.");
+                throw new Error(`Could not find sourceFile: '${fileName}' in ${program && JSON.stringify(program.getSourceFiles().map(f => f.fileName))}.`);
             }
             return sourceFile;
         }
@@ -1549,7 +1554,7 @@ namespace ts {
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }
 
-        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined {
+        function findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): RenameLocation[] | undefined {
             synchronizeHostData();
             const sourceFile = getValidSourceFile(fileName);
             const node = getTouchingPropertyName(sourceFile, position);
@@ -1559,7 +1564,8 @@ namespace ts {
                     ({ fileName: sourceFile.fileName, textSpan: createTextSpanFromNode(node.tagName, sourceFile) }));
             }
             else {
-                return getReferencesWorker(node, position, { findInStrings, findInComments, isForRename: true }, FindAllReferences.toRenameLocation);
+                return getReferencesWorker(node, position, { findInStrings, findInComments, providePrefixAndSuffixTextForRename, isForRename: true },
+                    (entry, originalNode, checker) => FindAllReferences.toRenameLocation(entry, originalNode, checker, providePrefixAndSuffixTextForRename || false));
             }
         }
 
@@ -1792,7 +1798,7 @@ namespace ts {
             const span = createTextSpanFromBounds(start, end);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
+            return flatMap(deduplicate<number>(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
                 return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext, preferences });
             });

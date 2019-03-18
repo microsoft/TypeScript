@@ -8,4 +8,5 @@ module _this { //Error
 }
 var f = () => this;
 >f : Symbol(f, Decl(collisionThisExpressionAndModuleInGlobal.ts, 4, 3))
+>this : Symbol(globalThis)
 

@@ -2,15 +2,21 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 26,
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTemplateTag",
             "pos": 8,
             "end": 21,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 17,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "template"
             },
             "typeParameters": {
@@ -18,10 +24,14 @@
                     "kind": "TypeParameter",
                     "pos": 18,
                     "end": 19,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 18,
                         "end": 19,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "escapedText": "K"
                     }
                 },
@@ -29,10 +39,14 @@
                     "kind": "TypeParameter",
                     "pos": 20,
                     "end": 21,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "name": {
                         "kind": "Identifier",
                         "pos": 20,
                         "end": 21,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "escapedText": "V"
                     }
                 },

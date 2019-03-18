@@ -34,7 +34,7 @@ verify.completions(
     {
         marker: "unique",
         exact: [
-            ...completion.globalsVars, "undefined",
+            "globalThis", ...completion.globalsVars, "undefined",
             { name: "unique", source: "/a", sourceDisplay: "./a", text: "(alias) const unique: 0\nexport unique", hasAction: true },
             ...completion.globalKeywords.filter(e => e.name !== "unique"),
         ],

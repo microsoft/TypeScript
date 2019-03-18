@@ -94,9 +94,9 @@ function test3(items: string[] | number[]) {
 >items : Symbol(items, Decl(callsOnComplexSignatures.tsx, 36, 15))
 
     items.forEach(item => console.log(item));
->items.forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>items.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >items : Symbol(items, Decl(callsOnComplexSignatures.tsx, 36, 15))
->forEach : Symbol(forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(callsOnComplexSignatures.tsx, 37, 18))
 >console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >console : Symbol(console, Decl(lib.dom.d.ts, --, --))

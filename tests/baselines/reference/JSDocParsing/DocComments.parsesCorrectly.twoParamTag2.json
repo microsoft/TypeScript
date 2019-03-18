@@ -2,31 +2,43 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 60,
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 34,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22
+                    "end": 22,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0
                 }
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 24,
                 "end": 29,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "name1"
             },
             "isNameFirst": false,
@@ -36,26 +48,36 @@
             "kind": "JSDocParameterTag",
             "pos": 34,
             "end": 58,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 35,
                 "end": 40,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 41,
                 "end": 49,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 42,
-                    "end": 48
+                    "end": 48,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0
                 }
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 50,
                 "end": 55,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "name2"
             },
             "isNameFirst": false,

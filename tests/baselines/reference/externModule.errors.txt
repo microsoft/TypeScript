@@ -1,6 +1,6 @@
 tests/cases/compiler/externModule.ts(1,1): error TS2304: Cannot find name 'declare'.
 tests/cases/compiler/externModule.ts(1,9): error TS1005: ';' expected.
-tests/cases/compiler/externModule.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/compiler/externModule.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 tests/cases/compiler/externModule.ts(1,16): error TS1005: ';' expected.
 tests/cases/compiler/externModule.ts(3,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/compiler/externModule.ts(4,10): error TS2391: Function implementation is missing or not immediately following the declaration.
@@ -21,7 +21,7 @@ tests/cases/compiler/externModule.ts(37,3): error TS2552: Cannot find name 'XDat
             ~~~~~~
 !!! error TS1005: ';' expected.
             ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
                    ~
 !!! error TS1005: ';' expected.
         export class XDate {

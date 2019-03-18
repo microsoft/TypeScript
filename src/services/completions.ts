@@ -703,6 +703,14 @@ namespace ts.Completions {
                     case SyntaxKind.PropertyAccessExpression:
                         propertyAccessToConvert = parent as PropertyAccessExpression;
                         node = propertyAccessToConvert.expression;
+                        if (node.end === contextToken.pos &&
+                            isCallExpression(node) &&
+                            node.getChildCount(sourceFile) &&
+                            last(node.getChildren(sourceFile)).kind !== SyntaxKind.CloseParenToken) {
+                            // This is likely dot from incorrectly parsed call expression and user is starting to write spread
+                            // eg: Math.min(./**/)
+                            return undefined;
+                        }
                         break;
                     case SyntaxKind.QualifiedName:
                         node = (parent as QualifiedName).left;
@@ -882,7 +890,9 @@ namespace ts.Completions {
                         }
 
                         // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
-                        if (!isTypeLocation && symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
+                        if (!isTypeLocation &&
+                            symbol.declarations &&
+                            symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
                             addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node));
                         }
 
@@ -1030,7 +1040,7 @@ namespace ts.Completions {
 
             // Need to insert 'this.' before properties of `this` type, so only do that if `includeInsertTextCompletions`
             if (preferences.includeCompletionsWithInsertText && scopeNode.kind !== SyntaxKind.SourceFile) {
-                const thisType = typeChecker.tryGetThisTypeAt(scopeNode);
+                const thisType = typeChecker.tryGetThisTypeAt(scopeNode, /*includeGlobalThis*/ false);
                 if (thisType) {
                     for (const symbol of getPropertiesForCompletion(thisType, typeChecker)) {
                         symbolToOriginInfoMap[getSymbolId(symbol)] = { kind: SymbolOriginInfoKind.ThisType };
@@ -1129,6 +1139,9 @@ namespace ts.Completions {
 
                     case SyntaxKind.AsKeyword:
                         return parentKind === SyntaxKind.AsExpression;
+
+                    case SyntaxKind.ExtendsKeyword:
+                        return parentKind === SyntaxKind.TypeParameter;
                 }
             }
             return false;

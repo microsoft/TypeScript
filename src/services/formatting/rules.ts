@@ -442,7 +442,7 @@ namespace ts.formatting {
             case SyntaxKind.ForInStatement:
             // "in" keyword in [P in keyof T]: T[P]
             case SyntaxKind.TypeParameter:
-                return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword;
+                return context.currentTokenSpan.kind === SyntaxKind.InKeyword || context.nextTokenSpan.kind === SyntaxKind.InKeyword || context.currentTokenSpan.kind === SyntaxKind.EqualsToken || context.nextTokenSpan.kind === SyntaxKind.EqualsToken;
             // Technically, "of" is not a binary operator, but format it the same way as "in"
             case SyntaxKind.ForOfStatement:
                 return context.currentTokenSpan.kind === SyntaxKind.OfKeyword || context.nextTokenSpan.kind === SyntaxKind.OfKeyword;
