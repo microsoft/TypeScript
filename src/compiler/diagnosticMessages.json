@@ -4927,7 +4927,7 @@
         "category": "Message",
         "code": 95074
     },
-    "Convert to named parameters": {
+    "Convert parameters to destructured object": {
         "category": "Message",
         "code": 95075
     }

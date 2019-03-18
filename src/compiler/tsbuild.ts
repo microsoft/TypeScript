@@ -339,7 +339,7 @@ namespace ts {
 
     function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
         const host = createProgramHost(system, createProgram) as SolutionBuilderHostBase<T>;
-        host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
+        host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : returnUndefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
         host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
@@ -660,14 +660,15 @@ namespace ts {
                 }
             }
 
-            // Collect the expected outputs of this project
-            const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
-
-            if (outputs.length === 0) {
+            // Container if no files are specified in the project
+            if (!project.fileNames.length && !canJsonReportNoInutFiles(project.raw)) {
                 return {
                     type: UpToDateStatusType.ContainerOnly
                 };
             }
+
+            // Collect the expected outputs of this project
+            const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
 
             // Now see if all outputs are newer than the newest input
             let oldestOutputFileName = "(none)";
@@ -1177,6 +1178,7 @@ namespace ts {
         }
 
         function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            if (options.force) return undefined;
             const value = builderPrograms.getValue(proj);
             if (value) return value;
             return readBuilderProgram(parsed.options, readFileWithCache) as any as T;

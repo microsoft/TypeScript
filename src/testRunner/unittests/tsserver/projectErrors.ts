@@ -216,7 +216,7 @@ namespace ts.projectSystem {
                 },
                 startGroup: noop,
                 endGroup: noop,
-                getLogFileName: () => undefined
+                getLogFileName: returnUndefined
             };
             return {
                 errorLogger,

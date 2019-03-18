@@ -3405,7 +3405,7 @@ namespace ts {
     export const nullTransformationContext: TransformationContext = {
         enableEmitNotification: noop,
         enableSubstitution: noop,
-        endLexicalEnvironment: () => undefined,
+        endLexicalEnvironment: returnUndefined,
         getCompilerOptions: notImplemented,
         getEmitHost: notImplemented,
         getEmitResolver: notImplemented,

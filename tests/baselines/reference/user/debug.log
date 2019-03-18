@@ -5,8 +5,8 @@ node_modules/debug/dist/debug.js(3,165): error TS2539: Cannot assign to '_typeof
 node_modules/debug/dist/debug.js(8,21): error TS2304: Cannot find name 'define'.
 node_modules/debug/dist/debug.js(8,46): error TS2304: Cannot find name 'define'.
 node_modules/debug/dist/debug.js(9,5): error TS2304: Cannot find name 'define'.
-node_modules/debug/dist/debug.js(33,33): error TS2554: Expected 1 arguments, but got 2.
-node_modules/debug/dist/debug.js(34,27): error TS2554: Expected 1 arguments, but got 2.
+node_modules/debug/dist/debug.js(33,38): error TS2554: Expected 1 arguments, but got 2.
+node_modules/debug/dist/debug.js(34,32): error TS2554: Expected 1 arguments, but got 2.
 node_modules/debug/dist/debug.js(36,21): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/debug/dist/debug.js(89,38): error TS2339: Property 'length' does not exist on type 'string | number'.
   Property 'length' does not exist on type 'number'.

@@ -890,7 +890,9 @@ namespace ts.Completions {
                         }
 
                         // If the module is merged with a value, we must get the type of the class and add its propertes (for inherited static methods).
-                        if (!isTypeLocation && symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
+                        if (!isTypeLocation &&
+                            symbol.declarations &&
+                            symbol.declarations.some(d => d.kind !== SyntaxKind.SourceFile && d.kind !== SyntaxKind.ModuleDeclaration && d.kind !== SyntaxKind.EnumDeclaration)) {
                             addTypeProperties(typeChecker.getTypeOfSymbolAtLocation(symbol, node));
                         }
 

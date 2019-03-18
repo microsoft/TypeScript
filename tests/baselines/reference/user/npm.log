@@ -368,7 +368,7 @@ node_modules/npm/lib/install.js(745,32): error TS2339: Property 'config' does no
 node_modules/npm/lib/install.js(751,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(768,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(770,20): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install.js(771,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/npm/lib/install.js(771,53): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/npm/lib/install.js(890,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(897,26): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(899,25): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
@@ -378,7 +378,7 @@ node_modules/npm/lib/install.js(905,27): error TS2345: Argument of type '{ actio
 node_modules/npm/lib/install.js(948,8): error TS2454: Variable 'previousPath' is used before being assigned.
 node_modules/npm/lib/install.js(985,53): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(1007,53): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install/access-error.js(4,18): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/npm/lib/install/access-error.js(4,60): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/npm/lib/install/action/build.js(10,50): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(39,40): error TS2339: Property 'limit' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(81,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
@@ -483,7 +483,7 @@ node_modules/npm/lib/logout.js(16,7): error TS2339: Property 'config' does not e
 node_modules/npm/lib/logout.js(17,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/logout.js(23,26): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/logout.js(28,11): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/logout.js(38,10): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/npm/lib/logout.js(39,29): error TS2554: Expected 0-1 arguments, but got 3.
 node_modules/npm/lib/ls.js(37,30): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(88,18): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(89,18): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1490,7 +1490,7 @@ node_modules/npm/test/tap/prepublish-only.js(5,20): error TS2307: Cannot find mo
 node_modules/npm/test/tap/prepublish-only.js(6,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/prepublish.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/process-logger.js(2,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/process-logger.js(7,24): error TS2554: Expected 1-3 arguments, but got 4.
+node_modules/npm/test/tap/process-logger.js(7,61): error TS2554: Expected 1-3 arguments, but got 4.
 node_modules/npm/test/tap/process-logger.js(8,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/test/tap/process-logger.js(9,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/test/tap/process-logger.js(10,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
