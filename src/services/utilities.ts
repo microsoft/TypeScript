@@ -1667,8 +1667,8 @@ namespace ts {
     export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {
         let next: Symbol = symbol;
         while (isAliasSymbol(next) || (isTransientSymbol(next) && next.target)) {
-            if (isTransientSymbol(next)) {
-                next = next.target!;
+            if (isTransientSymbol(next) && next.target) {
+                next = next.target;
             }
             else {
                 next = skipAlias(next, checker);

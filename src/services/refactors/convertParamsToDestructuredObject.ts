@@ -159,14 +159,14 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
     function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undefined {
         const node = entry.node;
-        // import
+
         if (isImportSpecifier(node.parent)
             || isImportClause(node.parent)
             || isImportEqualsDeclaration(node.parent)
             || isNamespaceImport(node.parent)) {
             return node;
         }
-        // export
+        
         if (isExportSpecifier(node.parent) || isExportAssignment(node.parent)) {
             return node;
         }
