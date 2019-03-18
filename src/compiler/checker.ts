@@ -394,6 +394,7 @@ namespace ts {
         const conditionalTypes = createMap<Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
+        const isEmptyIntersectionCache = createMap<boolean | undefined>();
 
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
         const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
@@ -9281,6 +9282,45 @@ namespace ts {
             return false;
         }
 
+        function checkForUnsatisfiedTypeVariableConstraint(typeSet: Type[]) {
+            const nonVariablePart = filter(typeSet, t => !(t.flags & TypeFlags.TypeVariable));
+            if (!length(nonVariablePart)) {
+                return false;
+            }
+            const variables = filter(typeSet, t => !!(t.flags & TypeFlags.TypeVariable));
+            for (const toCheck of nonVariablePart) {
+                for (const variable of variables) {
+                    const constraint = getConstraintOfType(variable);
+                    if (constraint && (constraint.flags & TypeFlags.Primitive || (constraint.flags & TypeFlags.Union && (constraint as UnionType).objectFlags & ObjectFlags.PrimitiveUnion))) {
+                        if (!isTypeSubtypeOf(toCheck, constraint) && !isTypeSubtypeOf(constraint, toCheck)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        function isEmptyIntersectionType(type: IntersectionType) {
+            const id = "" + getTypeId(type);
+            if (isEmptyIntersectionCache.has(id)) {
+                const result = isEmptyIntersectionCache.get(id);
+                // If type ends up checking its own emptiness, assume it's non-empty
+                if (result === undefined) {
+                    isEmptyIntersectionCache.set(id, false);
+                    return false;
+                }
+                return result;
+            }
+            isEmptyIntersectionCache.set(id, undefined);
+            const result = isEmptyIntersectionTypeWorker(type);
+            if (isEmptyIntersectionCache.get(id) !== undefined) {
+                return isEmptyIntersectionCache.get(id);
+            }
+            isEmptyIntersectionCache.set(id, result);
+            return result;
+        }
+
         // Return true if the given intersection type contains
         // more than one unit type or,
         // an object type and a nullable type (null or undefined), or
@@ -9289,8 +9329,9 @@ namespace ts {
         // a symbol-like type and a type known to be non-symbol-like, or
         // a void-like type and a type known to be non-void-like, or
         // a non-primitive type and a type known to be primitive.
-        function isEmptyIntersectionType(type: IntersectionType) {
+        function isEmptyIntersectionTypeWorker(type: IntersectionType) {
             let combined: TypeFlags = 0;
+            const propsSeenCounts = createUnderscoreEscapedMap<number>();
             for (const t of type.types) {
                 if (t.flags & TypeFlags.Unit && combined & TypeFlags.Unit) {
                     return true;
@@ -9305,6 +9346,27 @@ namespace ts {
                     combined & TypeFlags.VoidLike && combined & (TypeFlags.DisjointDomains & ~TypeFlags.VoidLike)) {
                     return true;
                 }
+                if (combined & TypeFlags.Object && !(t.flags & TypeFlags.Primitive)) {
+                    for (const prop of getPropertiesOfType(t)) {
+                        propsSeenCounts.set(prop.escapedName, (propsSeenCounts.get(prop.escapedName) || 0) + 1);
+                    }
+                }
+            }
+            // We only want to look into props which appeared on multiple types within the intersection
+            if (combined & TypeFlags.Object) {
+                const symbols = propsSeenCounts.entries();
+                for (let status = symbols.next(); !status.done; status = symbols.next()) {
+                    const {value: [name, count]} = status;
+                    if (count < 2) continue;
+                    const property = getPropertyOfUnionOrIntersectionType(type, name)!;
+                    const propType = getTypeOfSymbol(property);
+                    if (propType.flags & TypeFlags.Never || (propType.flags & TypeFlags.Intersection && isEmptyIntersectionType(propType as IntersectionType))) {
+                        return true;
+                    }
+                }
+            }
+            if (combined & TypeFlags.TypeVariable && checkForUnsatisfiedTypeVariableConstraint(type.types)) {
+                return true;
             }
             return false;
         }

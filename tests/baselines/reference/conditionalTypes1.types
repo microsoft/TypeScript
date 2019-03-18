@@ -122,7 +122,7 @@ type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
 >k : "b"
 
 type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
->T13 : ({ k: "a"; } & { k: "a"; a: number; }) | ({ k: "b"; } & { k: "a"; a: number; }) | ({ k: "a"; } & { k: "b"; b: string; }) | ({ k: "b"; } & { k: "b"; b: string; })
+>T13 : ({ k: "a"; } & { k: "a"; a: number; }) | ({ k: "b"; } & { k: "b"; b: string; })
 >k : "a"
 >k : "b"
 
