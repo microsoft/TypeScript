@@ -100,7 +100,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     continue;
                 }
                 if (contains(functionSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
-                    const importOrExportReference = entryToImportExport(entry);
+                    const importOrExportReference = entryToImportOrExport(entry);
                     if (importOrExportReference) {
                         continue;
                     }
@@ -119,7 +119,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 }
                 // if the refactored function is a constructor, we must also check if the references to its class are valid
                 if (isConstructor && contains(classSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
-                    const importOrExportReference = entryToImportExport(entry);
+                    const importOrExportReference = entryToImportOrExport(entry);
                     if (importOrExportReference) {
                         continue;
                     }
@@ -157,7 +157,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }
     }
 
-    function entryToImportExport(entry: FindAllReferences.NodeEntry): Node | undefined {
+    function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undefined {
         const node = entry.node;
         // import
         if (isImportSpecifier(node.parent)
