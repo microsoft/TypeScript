@@ -422,7 +422,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         function isOptionalParameter(parameterDeclaration: ValidParameterDeclaration): boolean {
             if (isRestParameter(parameterDeclaration)) {
                 const type = checker.getTypeAtLocation(parameterDeclaration);
-                return checker.isTupleType(type) ? false : true;
+                return !checker.isTupleType(type);
             }
             return checker.isOptionalParameter(parameterDeclaration);
         }
