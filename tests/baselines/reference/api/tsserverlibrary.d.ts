@@ -355,40 +355,45 @@ declare namespace ts {
         ShorthandPropertyAssignment = 276,
         SpreadAssignment = 277,
         EnumMember = 278,
-        SourceFile = 279,
-        Bundle = 280,
-        UnparsedSource = 281,
-        InputFiles = 282,
-        JSDocTypeExpression = 283,
-        JSDocAllType = 284,
-        JSDocUnknownType = 285,
-        JSDocNullableType = 286,
-        JSDocNonNullableType = 287,
-        JSDocOptionalType = 288,
-        JSDocFunctionType = 289,
-        JSDocVariadicType = 290,
-        JSDocComment = 291,
-        JSDocTypeLiteral = 292,
-        JSDocSignature = 293,
-        JSDocTag = 294,
-        JSDocAugmentsTag = 295,
-        JSDocClassTag = 296,
-        JSDocCallbackTag = 297,
-        JSDocEnumTag = 298,
-        JSDocParameterTag = 299,
-        JSDocReturnTag = 300,
-        JSDocThisTag = 301,
-        JSDocTypeTag = 302,
-        JSDocTemplateTag = 303,
-        JSDocTypedefTag = 304,
-        JSDocPropertyTag = 305,
-        SyntaxList = 306,
-        NotEmittedStatement = 307,
-        PartiallyEmittedExpression = 308,
-        CommaListExpression = 309,
-        MergeDeclarationMarker = 310,
-        EndOfDeclarationMarker = 311,
-        Count = 312,
+        UnparsedPrologue = 279,
+        UnparsedPrepend = 280,
+        UnparsedText = 281,
+        UnparsedInternalText = 282,
+        UnparsedSyntheticReference = 283,
+        SourceFile = 284,
+        Bundle = 285,
+        UnparsedSource = 286,
+        InputFiles = 287,
+        JSDocTypeExpression = 288,
+        JSDocAllType = 289,
+        JSDocUnknownType = 290,
+        JSDocNullableType = 291,
+        JSDocNonNullableType = 292,
+        JSDocOptionalType = 293,
+        JSDocFunctionType = 294,
+        JSDocVariadicType = 295,
+        JSDocComment = 296,
+        JSDocTypeLiteral = 297,
+        JSDocSignature = 298,
+        JSDocTag = 299,
+        JSDocAugmentsTag = 300,
+        JSDocClassTag = 301,
+        JSDocCallbackTag = 302,
+        JSDocEnumTag = 303,
+        JSDocParameterTag = 304,
+        JSDocReturnTag = 305,
+        JSDocThisTag = 306,
+        JSDocTypeTag = 307,
+        JSDocTemplateTag = 308,
+        JSDocTypedefTag = 309,
+        JSDocPropertyTag = 310,
+        SyntaxList = 311,
+        NotEmittedStatement = 312,
+        PartiallyEmittedExpression = 313,
+        CommaListExpression = 314,
+        MergeDeclarationMarker = 315,
+        EndOfDeclarationMarker = 316,
+        Count = 317,
         FirstAssignment = 59,
         LastAssignment = 71,
         FirstCompoundAssignment = 60,
@@ -414,10 +419,10 @@ declare namespace ts {
         FirstBinaryOperator = 28,
         LastBinaryOperator = 71,
         FirstNode = 148,
-        FirstJSDocNode = 283,
-        LastJSDocNode = 305,
-        FirstJSDocTagNode = 294,
-        LastJSDocTagNode = 305
+        FirstJSDocNode = 288,
+        LastJSDocNode = 310,
+        FirstJSDocTagNode = 299,
+        LastJSDocTagNode = 310,
     }
     enum NodeFlags {
         None = 0,
@@ -446,7 +451,7 @@ declare namespace ts {
         ReachabilityCheckFlags = 384,
         ReachabilityAndEmitFlags = 1408,
         ContextFlags = 12679168,
-        TypeExcludesFlags = 20480
+        TypeExcludesFlags = 20480,
     }
     enum ModifierFlags {
         None = 0,
@@ -997,6 +1002,14 @@ declare namespace ts {
     interface NoSubstitutionTemplateLiteral extends LiteralExpression {
         kind: SyntaxKind.NoSubstitutionTemplateLiteral;
     }
+    enum TokenFlags {
+        None = 0,
+        Scientific = 16,
+        Octal = 32,
+        HexSpecifier = 64,
+        BinarySpecifier = 128,
+        OctalSpecifier = 256,
+    }
     interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
     }
@@ -1190,9 +1203,9 @@ declare namespace ts {
         dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
         expression?: Expression;
     }
-    interface JsxText extends Node {
+    interface JsxText extends LiteralLikeNode {
         kind: SyntaxKind.JsxText;
-        containsOnlyWhiteSpaces: boolean;
+        containsOnlyTriviaWhiteSpaces: boolean;
         parent: JsxElement;
     }
     type JsxChild = JsxText | JsxExpression | JsxElement | JsxSelfClosingElement | JsxFragment;
@@ -1737,10 +1750,44 @@ declare namespace ts {
     }
     interface UnparsedSource extends Node {
         kind: SyntaxKind.UnparsedSource;
-        fileName?: string;
+        fileName: string;
         text: string;
+        prologues: ReadonlyArray<UnparsedPrologue>;
+        helpers: ReadonlyArray<UnscopedEmitHelper> | undefined;
+        referencedFiles: ReadonlyArray<FileReference>;
+        typeReferenceDirectives: ReadonlyArray<string> | undefined;
+        libReferenceDirectives: ReadonlyArray<FileReference>;
+        hasNoDefaultLib?: boolean;
         sourceMapPath?: string;
         sourceMapText?: string;
+        syntheticReferences?: ReadonlyArray<UnparsedSyntheticReference>;
+        texts: ReadonlyArray<UnparsedSourceText>;
+    }
+    type UnparsedSourceText = UnparsedPrepend | UnparsedTextLike;
+    type UnparsedNode = UnparsedPrologue | UnparsedSourceText | UnparsedSyntheticReference;
+    interface UnparsedSection extends Node {
+        kind: SyntaxKind;
+        data?: string;
+        parent: UnparsedSource;
+    }
+    interface UnparsedPrologue extends UnparsedSection {
+        kind: SyntaxKind.UnparsedPrologue;
+        data: string;
+        parent: UnparsedSource;
+    }
+    interface UnparsedPrepend extends UnparsedSection {
+        kind: SyntaxKind.UnparsedPrepend;
+        data: string;
+        parent: UnparsedSource;
+        texts: ReadonlyArray<UnparsedTextLike>;
+    }
+    interface UnparsedTextLike extends UnparsedSection {
+        kind: SyntaxKind.UnparsedText | SyntaxKind.UnparsedInternalText;
+        parent: UnparsedSource;
+    }
+    interface UnparsedSyntheticReference extends UnparsedSection {
+        kind: SyntaxKind.UnparsedSyntheticReference;
+        parent: UnparsedSource;
     }
     interface JsonSourceFile extends SourceFile {
         statements: NodeArray<JsonObjectExpressionStatement>;
@@ -2014,7 +2061,7 @@ declare namespace ts {
         WriteTypeParametersOrArguments = 1,
         UseOnlyExternalAliasing = 2,
         AllowAnyNodeKind = 4,
-        UseAliasDefinedOutsideCurrentScope = 8
+        UseAliasDefinedOutsideCurrentScope = 8,
     }
     enum TypePredicateKind {
         This = 0,
@@ -2092,7 +2139,7 @@ declare namespace ts {
         ExportHasLocal = 944,
         BlockScoped = 418,
         PropertyOrAccessor = 98308,
-        ClassMember = 106500
+        ClassMember = 106500,
     }
     interface Symbol {
         flags: SymbolFlags;
@@ -2200,7 +2247,7 @@ declare namespace ts {
         Instantiable = 63176704,
         StructuredOrInstantiable = 66846720,
         Narrowable = 133970943,
-        NotUnionOrUnit = 67637251
+        NotUnionOrUnit = 67637251,
     }
     type DestructuringPattern = BindingPattern | ObjectLiteralExpression | ArrayLiteralExpression;
     interface Type {
@@ -2247,7 +2294,7 @@ declare namespace ts {
         MarkerType = 8192,
         JSLiteral = 16384,
         FreshLiteral = 32768,
-        ClassOrInterface = 3
+        ClassOrInterface = 3,
     }
     interface ObjectType extends Type {
         objectFlags: ObjectFlags;
@@ -2495,6 +2542,8 @@ declare namespace ts {
         reactNamespace?: string;
         jsxFactory?: string;
         composite?: boolean;
+        incremental?: boolean;
+        tsBuildInfoFile?: string;
         removeComments?: boolean;
         rootDir?: string;
         rootDirs?: string[];
@@ -2671,7 +2720,8 @@ declare namespace ts {
         Dts = ".d.ts",
         Js = ".js",
         Jsx = ".jsx",
-        Json = ".json"
+        Json = ".json",
+        TsBuildInfo = ".tsbuildinfo"
     }
     interface ResolvedModuleWithFailedLookupLocations {
         readonly resolvedModule: ResolvedModuleFull | undefined;
@@ -2744,13 +2794,17 @@ declare namespace ts {
         NoHoisting = 2097152,
         HasEndOfDeclarationMarker = 4194304,
         Iterator = 8388608,
-        NoAsciiEscaping = 16777216
+        NoAsciiEscaping = 16777216,
     }
     interface EmitHelper {
         readonly name: string;
         readonly scoped: boolean;
         readonly text: string | ((node: EmitHelperUniqueNameCallback) => string);
         readonly priority?: number;
+    }
+    interface UnscopedEmitHelper extends EmitHelper {
+        readonly scoped: false;
+        readonly text: string;
     }
     type EmitHelperUniqueNameCallback = (name: string) => string;
     enum EmitHint {
@@ -3451,6 +3505,9 @@ declare namespace ts {
     function isSourceFile(node: Node): node is SourceFile;
     function isBundle(node: Node): node is Bundle;
     function isUnparsedSource(node: Node): node is UnparsedSource;
+    function isUnparsedPrepend(node: Node): node is UnparsedPrepend;
+    function isUnparsedTextLike(node: Node): node is UnparsedTextLike;
+    function isUnparsedNode(node: Node): node is UnparsedNode;
     function isJSDocTypeExpression(node: Node): node is JSDocTypeExpression;
     function isJSDocAllType(node: JSDocAllType): node is JSDocAllType;
     function isJSDocUnknownType(node: Node): node is JSDocUnknownType;
@@ -3670,7 +3727,7 @@ declare namespace ts {
     function createLiteral(value: number | PseudoBigInt): NumericLiteral;
     function createLiteral(value: boolean): BooleanLiteral;
     function createLiteral(value: string | number | PseudoBigInt | boolean): PrimaryExpression;
-    function createNumericLiteral(value: string): NumericLiteral;
+    function createNumericLiteral(value: string, numericLiteralFlags?: TokenFlags): NumericLiteral;
     function createBigIntLiteral(value: string): BigIntLiteral;
     function createStringLiteral(text: string): StringLiteral;
     function createRegularExpressionLiteral(text: string): RegularExpressionLiteral;
@@ -3935,6 +3992,10 @@ declare namespace ts {
     function createJsxClosingElement(tagName: JsxTagNameExpression): JsxClosingElement;
     function updateJsxClosingElement(node: JsxClosingElement, tagName: JsxTagNameExpression): JsxClosingElement;
     function createJsxFragment(openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
+    function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
+    function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean): JsxText;
+    function createJsxOpeningFragment(): JsxOpeningFragment;
+    function createJsxJsxClosingFragment(): JsxClosingFragment;
     function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment): JsxFragment;
     function createJsxAttribute(name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
     function updateJsxAttribute(node: JsxAttribute, name: Identifier, initializer: StringLiteral | JsxExpression): JsxAttribute;
@@ -3986,10 +4047,10 @@ declare namespace ts {
     function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>): CommaListExpression;
     function createBundle(sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource | InputFiles>): Bundle;
     function createUnparsedSourceFile(text: string): UnparsedSource;
-    function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
+    function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
     function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
     function createInputFiles(javascriptText: string, declarationText: string): InputFiles;
-    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined): InputFiles;
+    function createInputFiles(readFileText: (path: string) => string | undefined, javascriptPath: string, javascriptMapPath: string | undefined, declarationPath: string, declarationMapPath: string | undefined, buildInfoPath: string | undefined): InputFiles;
     function createInputFiles(javascriptText: string, declarationText: string, javascriptMapPath: string | undefined, javascriptMapText: string | undefined, declarationMapPath: string | undefined, declarationMapText: string | undefined): InputFiles;
     function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends?: ReadonlyArray<UnparsedSource>): Bundle;
     function createImmediatelyInvokedFunctionExpression(statements: ReadonlyArray<Statement>): CallExpression;
@@ -5712,6 +5773,7 @@ declare namespace ts.server.protocol {
         OpenExternalProject = "openExternalProject",
         OpenExternalProjects = "openExternalProjects",
         CloseExternalProject = "closeExternalProject",
+        UpdateOpen = "updateOpen",
         GetOutliningSpans = "getOutliningSpans",
         TodoComments = "todoComments",
         Indentation = "indentation",
@@ -6779,6 +6841,30 @@ declare namespace ts.server.protocol {
      * no body field is required.
      */
     interface CloseExternalProjectResponse extends Response {
+    }
+    /**
+     * Request to synchronize list of open files with the client
+     */
+    interface UpdateOpenRequest extends Request {
+        command: CommandTypes.UpdateOpen;
+        arguments: UpdateOpenRequestArgs;
+    }
+    /**
+     * Arguments to UpdateOpenRequest
+     */
+    interface UpdateOpenRequestArgs {
+        /**
+         * List of newly open files
+         */
+        openFiles?: OpenRequestArgs[];
+        /**
+         * List of open files files that were changes
+         */
+        changedFiles?: FileCodeEdits[];
+        /**
+         * List of files that were closed
+         */
+        closedFiles?: string[];
     }
     /**
      * Request to set compiler options for inferred projects.
@@ -8619,6 +8705,7 @@ declare namespace ts.server {
          */
         private onConfigFileChangeForOpenScriptInfo;
         private removeProject;
+        private assignOrphanScriptInfosToInferredProject;
         /**
          * Remove this file from the set of open, non-configured files.
          * @param info The file that has been closed or newly configured
@@ -8737,6 +8824,9 @@ declare namespace ts.server {
          */
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
         private findExternalProjectContainingOpenScriptInfo;
+        private getOrCreateOpenScriptInfo;
+        private assignProjectToOpenedScriptInfo;
+        private cleanupAfterOpeningFile;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
         private removeOrphanConfiguredProjects;
         private removeOrphanScriptInfos;

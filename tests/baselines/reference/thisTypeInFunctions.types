@@ -137,7 +137,7 @@ let impl: I = {
 >explicitVoid2 : () => any
 >() => this.a : () => any
 >this.a : any
->this : any
+>this : typeof globalThis
 >a : any
 
     explicitVoid1() { return 12; },
@@ -431,7 +431,7 @@ let unboundToSpecified: (this: { y: number }, x: number) => number = x => x + th
 >x + this.y : any
 >x : number
 >this.y : any
->this : any
+>this : typeof globalThis
 >y : any
 
 let specifiedToSpecified: (this: {y: number}, x: number) => number = explicitStructural;
@@ -580,43 +580,43 @@ c.explicitProperty = m => m;
 // this inside lambdas refer to outer scope
 // the outer-scoped lambda at top-level is still just `any`
 c.explicitC = m => m + this.n;
->c.explicitC = m => m + this.n : (this: C, m: number) => any
+>c.explicitC = m => m + this.n : (this: C, m: number) => number
 >c.explicitC : (this: C, m: number) => number
 >c : C
 >explicitC : (this: C, m: number) => number
->m => m + this.n : (this: C, m: number) => any
+>m => m + this.n : (this: C, m: number) => number
 >m : number
->m + this.n : any
+>m + this.n : number
 >m : number
->this.n : any
->this : any
->n : any
+>this.n : number
+>this : typeof globalThis
+>n : number
 
 c.explicitThis = m => m + this.n;
->c.explicitThis = m => m + this.n : (this: C, m: number) => any
+>c.explicitThis = m => m + this.n : (this: C, m: number) => number
 >c.explicitThis : (this: C, m: number) => number
 >c : C
 >explicitThis : (this: C, m: number) => number
->m => m + this.n : (this: C, m: number) => any
+>m => m + this.n : (this: C, m: number) => number
 >m : number
->m + this.n : any
+>m + this.n : number
 >m : number
->this.n : any
->this : any
->n : any
+>this.n : number
+>this : typeof globalThis
+>n : number
 
 c.explicitProperty = m => m + this.n;
->c.explicitProperty = m => m + this.n : (this: { n: number; }, m: number) => any
+>c.explicitProperty = m => m + this.n : (this: { n: number; }, m: number) => number
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->m => m + this.n : (this: { n: number; }, m: number) => any
+>m => m + this.n : (this: { n: number; }, m: number) => number
 >m : number
->m + this.n : any
+>m + this.n : number
 >m : number
->this.n : any
->this : any
->n : any
+>this.n : number
+>this : typeof globalThis
+>n : number
 
 //NOTE: this=C here, I guess?
 c.explicitThis = explicitCFunction;

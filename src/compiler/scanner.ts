@@ -623,13 +623,15 @@ namespace ts {
 
     const shebangTriviaRegex = /^#!.*/;
 
-    function isShebangTrivia(text: string, pos: number) {
+    /*@internal*/
+    export function isShebangTrivia(text: string, pos: number) {
         // Shebangs check must only be done at the start of the file
         Debug.assert(pos === 0);
         return shebangTriviaRegex.test(text);
     }
 
-    function scanShebangTrivia(text: string, pos: number) {
+    /*@internal*/
+    export function scanShebangTrivia(text: string, pos: number) {
         const shebang = shebangTriviaRegex.exec(text)![0];
         pos = pos + shebang.length;
         return pos;
@@ -2011,6 +2013,7 @@ namespace ts {
                 pos++;
             }
 
+            tokenValue = text.substring(startPos, pos);
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 

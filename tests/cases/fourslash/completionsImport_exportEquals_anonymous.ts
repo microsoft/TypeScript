@@ -14,7 +14,7 @@ goTo.marker("0");
 const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForModuleExports: true };
 const exportEntry: FourSlashInterface.ExpectedCompletionEntryObject = { name: "fooBar", source: "/src/foo-bar", sourceDisplay: "./foo-bar", text: "(property) export=: 0", kind: "property", hasAction: true };
 verify.completions(
-    { marker: "0", exact: ["undefined", exportEntry, ...completion.statementKeywordsWithTypes], preferences },
+    { marker: "0", exact: ["globalThis", "undefined", exportEntry, ...completion.statementKeywordsWithTypes], preferences },
     { marker: "1", includes: exportEntry, preferences }
 );
 verify.applyCodeActionFromCompletion("0", {

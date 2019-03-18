@@ -9,6 +9,34 @@ namespace ts {
         return result.diagnostics;
     }
 
+    function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
+        const comment = currentSourceFile.text.substring(range.pos, range.end);
+        return stringContains(comment, "@internal");
+    }
+
+    export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
+        const parseTreeNode = getParseTreeNode(node);
+        if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
+            const paramIdx = (parseTreeNode.parent as FunctionLike).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as FunctionLike).parameters[paramIdx - 1] : undefined;
+            const text = currentSourceFile.text;
+            const commentRanges = previousSibling
+                ? concatenate(
+                    // to handle
+                    // ... parameters, /* @internal */
+                    // public param: string
+                    getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
+                    getLeadingCommentRanges(text, node.pos)
+                )
+                : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
+            return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
+        }
+        const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
+        return !!forEach(leadingCommentRanges, range => {
+            return hasInternalAnnotation(range, currentSourceFile);
+        });
+    }
+
     const declarationEmitNodeBuilderFlags =
         NodeBuilderFlags.MultilineObjectLiterals |
         NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
@@ -61,7 +89,7 @@ namespace ts {
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[] | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: ReadonlyArray<string> | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -207,8 +235,14 @@ namespace ts {
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
-                        return createUnparsedSourceFile(prepend, "dts");
+                        const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
+                        hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
+                        collectReferences(sourceFile, refs);
+                        recordTypeReferenceDirectivesIfNecessary(sourceFile.typeReferenceDirectives);
+                        collectLibs(sourceFile, libs);
+                        return sourceFile;
                     }
+                    return prepend;
                 }));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
@@ -311,8 +345,8 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile, ret: Map<SourceFile>) {
-            if (noResolve || isSourceFileJS(sourceFile)) return ret;
+        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<SourceFile>) {
+            if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = tryResolveScriptReference(host, sourceFile, f);
                 if (elem) {
@@ -322,7 +356,7 @@ namespace ts {
             return ret;
         }
 
-        function collectLibs(sourceFile: SourceFile, ret: Map<boolean>) {
+        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<boolean>) {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {
@@ -1060,8 +1094,8 @@ namespace ts {
                     let parameterProperties: ReadonlyArray<PropertyDeclaration> | undefined;
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
-                        parameterProperties = compact(flatMap(ctor.parameters, param => {
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier)) return;
+                        parameterProperties = compact(flatMap(ctor.parameters, (param) => {
+                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1222,19 +1256,8 @@ namespace ts {
             errorNameNode = undefined;
         }
 
-        function hasInternalAnnotation(range: CommentRange) {
-            const comment = currentSourceFile.text.substring(range.pos, range.end);
-            return stringContains(comment, "@internal");
-        }
-
         function shouldStripInternal(node: Node) {
-            if (stripInternal && node) {
-                const leadingCommentRanges = getLeadingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile);
-                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
-                    return true;
-                }
-            }
-            return false;
+            return !!stripInternal && !!node && isInternalDeclaration(node, currentSourceFile);
         }
 
         function isScopeMarker(node: Node) {
