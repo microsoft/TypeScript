@@ -1614,6 +1614,9 @@ namespace ts {
     /** Do nothing and return true */
     export function returnTrue(): true { return true; }
 
+    /** Do nothing and return undefined */
+    export function returnUndefined(): undefined { return undefined; }
+
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }
 

@@ -659,16 +659,32 @@ namespace ts.server {
                 }
             }
 
-            if (fileRequest && this.logger.hasLevel(LogLevel.verbose)) {
-                try {
-                    const { file, project } = this.getFileAndProject(fileRequest);
-                    const scriptInfo = project.getScriptInfoForNormalizedPath(file);
-                    if (scriptInfo) {
-                        const text = getSnapshotText(scriptInfo.getSnapshot());
-                        msg += `\n\nFile text of ${fileRequest.file}:${indent(text)}\n`;
+            if (this.logger.hasLevel(LogLevel.verbose)) {
+                if (fileRequest) {
+                    try {
+                        const { file, project } = this.getFileAndProject(fileRequest);
+                        const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+                        if (scriptInfo) {
+                            const text = getSnapshotText(scriptInfo.getSnapshot());
+                            msg += `\n\nFile text of ${fileRequest.file}:${indent(text)}\n`;
+                        }
                     }
+                    catch { } // tslint:disable-line no-empty
                 }
-                catch {} // tslint:disable-line no-empty
+
+                if (err.message && err.message.indexOf(`Could not find sourceFile:`) !== -1) {
+                    msg += `\n\nProjects::\n`;
+                    let counter = 0;
+                    const addProjectInfo = (project: Project) => {
+                        msg += `\nProject '${project.projectName}' (${ProjectKind[project.projectKind]}) ${counter}\n`;
+                        msg += project.filesToString(/*writeProjectFileNames*/ true);
+                        msg += "\n-----------------------------------------------\n";
+                        counter++;
+                    };
+                    this.projectService.externalProjects.forEach(addProjectInfo);
+                    this.projectService.configuredProjects.forEach(addProjectInfo);
+                    this.projectService.inferredProjects.forEach(addProjectInfo);
+                }
             }
 
             this.logger.msg(msg, Msg.Err);

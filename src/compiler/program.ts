@@ -979,7 +979,7 @@ namespace ts {
 
         function getCommonSourceDirectory() {
             if (commonSourceDirectory === undefined) {
-                const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary));
+                const emittedFiles = filter(files, file => sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary, getResolvedProjectReferenceToRedirect));
                 if (options.rootDir && checkSourceFilesBelongToPath(emittedFiles, options.rootDir)) {
                     // If a rootDir is specified use it as the commonSourceDirectory
                     commonSourceDirectory = getNormalizedAbsolutePath(options.rootDir, currentDirectory);
@@ -1425,6 +1425,7 @@ namespace ts {
                 getSourceFiles: program.getSourceFiles,
                 getLibFileFromReference: program.getLibFileFromReference,
                 isSourceFileFromExternalLibrary,
+                getResolvedProjectReferenceToRedirect,
                 writeFile: writeFileCallback || (
                     (fileName, data, writeByteOrderMark, onError, sourceFiles) => host.writeFile(fileName, data, writeByteOrderMark, onError, sourceFiles)),
                 isEmitBlocked,
@@ -2740,13 +2741,14 @@ namespace ts {
 
             // List of collected files is complete; validate exhautiveness if this is a project with a file list
             if (options.composite) {
-                const sourceFiles = files.filter(f => !f.isDeclarationFile);
-                if (rootNames.length < sourceFiles.length) {
-                    const normalizedRootNames = rootNames.map(r => normalizePath(r).toLowerCase());
-                    for (const file of sourceFiles.map(f => normalizePath(f.path).toLowerCase())) {
-                        if (normalizedRootNames.indexOf(file) === -1) {
-                            programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file));
-                        }
+                const rootPaths = rootNames.map(toPath);
+                for (const file of files) {
+                    // Ignore declaration files
+                    if (file.isDeclarationFile) continue;
+                    // Ignore json file thats from project reference
+                    if (isJsonSourceFile(file) && getResolvedProjectReferenceToRedirect(file.fileName)) continue;
+                    if (rootPaths.indexOf(file.path) === -1) {
+                        programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file.fileName));
                     }
                 }
             }
@@ -3158,7 +3160,7 @@ namespace ts {
             readFile: f => directoryStructureHost.readFile(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
             getCurrentDirectory: () => host.getCurrentDirectory(),
-            onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic || (() => undefined),
+            onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic || returnUndefined,
             trace: host.trace ? (s) => host.trace!(s) : undefined
         };
     }

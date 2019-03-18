@@ -339,7 +339,7 @@ namespace ts {
 
     function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
         const host = createProgramHost(system, createProgram) as SolutionBuilderHostBase<T>;
-        host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
+        host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : returnUndefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
         host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
@@ -347,13 +347,13 @@ namespace ts {
         return host;
     }
 
-    export function createSolutionBuilderHost<T extends BuilderProgram = BuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
+    export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
         const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
         host.reportErrorSummary = reportErrorSummary;
         return host;
     }
 
-    export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = SemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
+    export function createSolutionBuilderWithWatchHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
         const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost<T>;
         const watchHost = createWatchHost(system, reportWatchStatus);
         copyProperties(host, watchHost);
@@ -660,14 +660,15 @@ namespace ts {
                 }
             }
 
-            // Collect the expected outputs of this project
-            const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
-
-            if (outputs.length === 0) {
+            // Container if no files are specified in the project
+            if (!project.fileNames.length && !canJsonReportNoInutFiles(project.raw)) {
                 return {
                     type: UpToDateStatusType.ContainerOnly
                 };
             }
+
+            // Collect the expected outputs of this project
+            const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
 
             // Now see if all outputs are newer than the newest input
             let oldestOutputFileName = "(none)";

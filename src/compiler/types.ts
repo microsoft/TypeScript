@@ -3171,6 +3171,7 @@ namespace ts {
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getExpandedParameters(sig: Signature): ReadonlyArray<Symbol>;
+        /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
@@ -5337,6 +5338,7 @@ namespace ts {
         getCurrentDirectory(): string;
 
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
+        getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
         getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
         getCommonSourceDirectory(): string;
