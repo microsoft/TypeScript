@@ -21,7 +21,7 @@ import * as MyLib from "./library";
 >MyLib : typeof MyLib
 
 const content = <my-element/>;
->content : error
-><my-element/> : error
+>content : any
+><my-element/> : any
 >my-element : any
 

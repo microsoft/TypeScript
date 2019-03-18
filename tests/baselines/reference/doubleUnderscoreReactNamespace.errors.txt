@@ -1,4 +1,4 @@
-tests/cases/compiler/index.tsx(7,15): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/compiler/index.tsx(7,23): error TS2554: Expected 1 arguments, but got 2.
 
 
 ==== tests/cases/compiler/index.tsx (1 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/index.tsx(7,15): error TS2554: Expected 1 arguments, but go
     declare var __foot: any;
     
     const thing = <__foot />;
-                  ~~~~~~~~~~
+                          
 !!! error TS2554: Expected 1 arguments, but got 2.
     
     export {}
