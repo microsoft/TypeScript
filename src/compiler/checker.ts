@@ -7812,10 +7812,10 @@ namespace ts {
                     }
                 }
             }
-            const props = arrayFrom(propSet.values());
-            if (props.length === 0) {
+            if (!propSet.size) {
                 return undefined;
             }
+            const props = arrayFrom(propSet.values());
             if (props.length === 1 && !(checkFlags & CheckFlags.Partial) && !indexTypes) {
                 return props[0];
             }
