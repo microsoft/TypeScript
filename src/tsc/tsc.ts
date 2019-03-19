@@ -13,7 +13,7 @@ namespace ts {
     }
 
     let reportDiagnostic = createDiagnosticReporter(sys);
-    function updateReportDiagnostic(options?: CompilerOptions) {
+    function updateReportDiagnostic(options: CompilerOptions | BuildOptions) {
         if (shouldBePretty(options)) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
@@ -23,7 +23,7 @@ namespace ts {
         return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
     }
 
-    function shouldBePretty(options?: CompilerOptions) {
+    function shouldBePretty(options: CompilerOptions | BuildOptions) {
         if (!options || typeof options.pretty === "undefined") {
             return defaultIsPretty();
         }
@@ -192,7 +192,7 @@ namespace ts {
         }
 
         // Update to pretty if host supports it
-        updateReportDiagnostic();
+        updateReportDiagnostic(buildOptions);
         if (projects.length === 0) {
             printVersion();
             printHelp(buildOpts, "--build ");
@@ -209,8 +209,8 @@ namespace ts {
 
         // Use default createProgram
         const buildHost = buildOptions.watch ?
-            createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
-            createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
+            createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createWatchStatusReporter(buildOptions)) :
+            createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createReportErrorSummary(buildOptions));
         updateCreateProgram(buildHost);
         buildHost.afterProgramEmitAndDiagnostics = (program: BuilderProgram) => reportStatistics(program.getProgram());
 
@@ -316,7 +316,7 @@ namespace ts {
         };
     }
 
-    function createWatchStatusReporter(options?: CompilerOptions) {
+    function createWatchStatusReporter(options: CompilerOptions | BuildOptions) {
         return ts.createWatchStatusReporter(sys, shouldBePretty(options));
     }
 
