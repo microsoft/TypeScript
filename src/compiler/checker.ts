@@ -1477,6 +1477,15 @@ namespace ts {
                         if (location.parent && isClassElement(location.parent)) {
                             location = location.parent;
                         }
+                        //
+                        //  type T = number;
+                        //  @decorator((arg: T) => {}) // <-- type T should be resolved in the container, not the class
+                        //  class C<T> {
+                        //  }
+                        //
+                        if (location.parent && isClassLike(location.parent)) {
+                            location = location.parent;
+                        }
                         break;
                     case SyntaxKind.JSDocTypedefTag:
                     case SyntaxKind.JSDocCallbackTag:

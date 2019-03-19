@@ -1,0 +1,35 @@
+=== tests/cases/conformance/decorators/class/decoratorOnClass10.ts ===
+// https://github.com/Microsoft/TypeScript/issues/28603
+type T = number;
+>T : Symbol(T, Decl(decoratorOnClass10.ts, 0, 0))
+
+type U = number;
+>U : Symbol(U, Decl(decoratorOnClass10.ts, 1, 16))
+
+declare function decorator(fn: (param: T) => T): any;
+>decorator : Symbol(decorator, Decl(decoratorOnClass10.ts, 2, 16))
+>fn : Symbol(fn, Decl(decoratorOnClass10.ts, 3, 27))
+>param : Symbol(param, Decl(decoratorOnClass10.ts, 3, 32))
+>T : Symbol(T, Decl(decoratorOnClass10.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnClass10.ts, 0, 0))
+
+@decorator((param: T) => param)
+>decorator : Symbol(decorator, Decl(decoratorOnClass10.ts, 2, 16))
+>param : Symbol(param, Decl(decoratorOnClass10.ts, 5, 12))
+>T : Symbol(T, Decl(decoratorOnClass10.ts, 0, 0))
+>param : Symbol(param, Decl(decoratorOnClass10.ts, 5, 12))
+
+class C<T> {
+>C : Symbol(C, Decl(decoratorOnClass10.ts, 3, 53))
+>T : Symbol(T, Decl(decoratorOnClass10.ts, 6, 8))
+
+    @decorator((param: U) => param)
+>decorator : Symbol(decorator, Decl(decoratorOnClass10.ts, 2, 16))
+>param : Symbol(param, Decl(decoratorOnClass10.ts, 7, 16))
+>U : Symbol(U, Decl(decoratorOnClass10.ts, 1, 16))
+>param : Symbol(param, Decl(decoratorOnClass10.ts, 7, 16))
+
+    method<U>() {}
+>method : Symbol(C.method, Decl(decoratorOnClass10.ts, 6, 12))
+>U : Symbol(U, Decl(decoratorOnClass10.ts, 8, 11))
+}

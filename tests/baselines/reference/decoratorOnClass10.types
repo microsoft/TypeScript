@@ -1,0 +1,33 @@
+=== tests/cases/conformance/decorators/class/decoratorOnClass10.ts ===
+// https://github.com/Microsoft/TypeScript/issues/28603
+type T = number;
+>T : number
+
+type U = number;
+>U : number
+
+declare function decorator(fn: (param: T) => T): any;
+>decorator : (fn: (param: number) => number) => any
+>fn : (param: number) => number
+>param : number
+
+@decorator((param: T) => param)
+>decorator((param: T) => param) : any
+>decorator : (fn: (param: number) => number) => any
+>(param: T) => param : (param: number) => number
+>param : number
+>param : number
+
+class C<T> {
+>C : C<T>
+
+    @decorator((param: U) => param)
+>decorator((param: U) => param) : any
+>decorator : (fn: (param: number) => number) => any
+>(param: U) => param : (param: number) => number
+>param : number
+>param : number
+
+    method<U>() {}
+>method : <U>() => void
+}
