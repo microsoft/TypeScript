@@ -52,5 +52,77 @@ class B extends A {
 
         // destructuring assign with element access
         ({ f: super["x"] } = { f });
+
+        // property access in arrow
+        (() => super.x());
+
+        // element access in arrow
+        (() => super["x"]());
+
+        // property access in async arrow
+        (async () => super.x());
+
+        // element access in async arrow
+        (async () => super["x"]());
+    }
+
+    async property_access_only_read_only() {
+        // call with property access
+        super.x();
+
+        // property access (read)
+        const a = super.x;
+
+        // property access in arrow
+        (() => super.x());
+
+        // property access in async arrow
+        (async () => super.x());
+    }
+
+    async property_access_only_write_only() {
+        const f = () => {};
+
+        // property access (assign)
+        super.x = f;
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+
+        // property access (assign) in arrow
+        (() => super.x = f);
+
+        // property access (assign) in async arrow
+        (async () => super.x = f);
+    }
+
+    async element_access_only_read_only() {
+        // call with element access
+        super["x"]();
+
+        // element access (read)
+        const a = super["x"];
+
+        // element access in arrow
+        (() => super["x"]());
+
+        // element access in async arrow
+        (async () => super["x"]());
+    }
+
+    async element_access_only_write_only() {
+        const f = () => {};
+
+        // element access (assign)
+        super["x"] = f;
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+
+        // element access (assign) in arrow
+        (() => super["x"] = f);
+
+        // element access (assign) in async arrow
+        (async () => super["x"] = f);
     }
 }
