@@ -420,8 +420,10 @@ namespace ts {
 
             const savedCapturedSuperProperties = capturedSuperProperties;
             const savedHasSuperElementAccess = hasSuperElementAccess;
-            capturedSuperProperties = createUnderscoreEscapedMap<true>();
-            hasSuperElementAccess = false;
+            if (!isArrowFunction) {
+                capturedSuperProperties = createUnderscoreEscapedMap<true>();
+                hasSuperElementAccess = false;
+            }
 
             let result: ConciseBody;
             if (!isArrowFunction) {
@@ -446,9 +448,11 @@ namespace ts {
 
                 if (emitSuperHelpers) {
                     enableSubstitutionForAsyncMethodsWithSuper();
-                    const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
-                    substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-                    insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+                    if (hasEntries(capturedSuperProperties)) {
+                        const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
+                        substitutedSuperAccessors[getNodeId(variableStatement)] = true;
+                        insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+                    }
                 }
 
                 const block = createBlock(statements, /*multiLine*/ true);
@@ -485,8 +489,10 @@ namespace ts {
             }
 
             enclosingFunctionParameterNames = savedEnclosingFunctionParameterNames;
-            capturedSuperProperties = savedCapturedSuperProperties;
-            hasSuperElementAccess = savedHasSuperElementAccess;
+            if (!isArrowFunction) {
+                capturedSuperProperties = savedCapturedSuperProperties;
+                hasSuperElementAccess = savedHasSuperElementAccess;
+            }
             return result;
         }
 
