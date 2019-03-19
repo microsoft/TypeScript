@@ -25347,7 +25347,7 @@ namespace ts {
             }
 
             if (!compilerOptions.experimentalDecorators) {
-                error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_to_remove_this_warning);
+                error(node, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning);
             }
 
             const firstDecorator = node.decorators[0];
