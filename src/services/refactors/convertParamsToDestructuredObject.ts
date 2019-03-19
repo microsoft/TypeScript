@@ -233,12 +233,25 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
         const node = getTouchingToken(file, startPosition);
         const functionDeclaration = getContainingFunction(node);
+
+         // don't offer refactor on top-level JSDoc
+        if (isTopLevelJSDoc(node)) return undefined;
+
         if (functionDeclaration
             && isValidFunctionDeclaration(functionDeclaration, checker)
             && rangeContainsRange(functionDeclaration, node)
             && !(functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))) return functionDeclaration;
 
         return undefined;
+    }
+
+    function isTopLevelJSDoc(node: Node): boolean {
+        const containingJSDoc = findAncestor(node, isJSDocNode);
+        if (containingJSDoc) {
+            const containingNonJSDoc = findAncestor(containingJSDoc, n => !isJSDocNode(n));
+            return !!containingNonJSDoc && isFunctionLikeDeclaration(containingNonJSDoc);
+        }
+        return false;
     }
 
     function isValidFunctionDeclaration(
@@ -308,13 +321,23 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return parameters;
     }
 
+    function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
+        if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
+            return createShorthandPropertyAssignment(name);
+        }
+        return createPropertyAssignment(name, initializer);
+    }
+
     function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
         const parameters = getRefactorableParameters(functionDeclaration.parameters);
         const hasRestParameter = isRestParameter(last(parameters));
         const nonRestArguments = hasRestParameter ? functionArguments.slice(0, parameters.length - 1) : functionArguments;
         const properties = map(nonRestArguments, (arg, i) => {
-            const property = createPropertyAssignment(getParameterName(parameters[i]), arg);
-            suppressLeadingAndTrailingTrivia(property.initializer);
+            const parameterName = getParameterName(parameters[i]);
+            const property = createPropertyOrShorthandAssignment(parameterName, arg);
+
+            suppressLeadingAndTrailingTrivia(property.name);
+            if (isPropertyAssignment(property)) suppressLeadingAndTrailingTrivia(property.initializer);
             copyComments(arg, property);
             return property;
         });
