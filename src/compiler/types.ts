@@ -3171,6 +3171,7 @@ namespace ts {
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getExpandedParameters(sig: Signature): ReadonlyArray<Symbol>;
+        /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
@@ -3251,6 +3252,8 @@ namespace ts {
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
 
+        /* @internal */ isArrayType(type: Type): boolean;
+        /* @internal */ isTupleType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ getObjectFlags(type: Type): ObjectFlags;
 

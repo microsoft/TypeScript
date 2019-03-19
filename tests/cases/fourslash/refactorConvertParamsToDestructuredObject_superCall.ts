@@ -19,7 +19,7 @@ edit.applyRefactor({
 }
 class B extends A { 
     constructor(a: string, b: string, c: string) {
-        super({ a: a, b: b });
+        super({ a, b });
     }
 }`
 });
