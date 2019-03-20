@@ -586,23 +586,26 @@ namespace ts.FindAllReferences.Core {
         }
         else {
             const search = state.createSearch(node, symbol, /*comingFrom*/ undefined, { allSearchSymbols: node ? populateSearchSymbolSet(symbol, node, checker, !!options.isForRename, !!options.providePrefixAndSuffixTextForRename, !!options.implementations) : [symbol] });
-
-            // Try to get the smallest valid scope that we can limit our search to;
-            // otherwise we'll need to search globally (i.e. include each file).
-            const scope = getSymbolScope(symbol);
-            if (scope) {
-                getReferencesInContainer(scope, scope.getSourceFile(), search, state, /*addReferencesHere*/ !(isSourceFile(scope) && !contains(sourceFiles, scope)));
-            }
-            else {
-                // Global search
-                for (const sourceFile of state.sourceFiles) {
-                    state.cancellationToken.throwIfCancellationRequested();
-                    searchForName(sourceFile, search, state);
-                }
-            }
+            getReferencesInContainerOrFiles(symbol, state, search);
         }
 
         return result;
+    }
+
+    function getReferencesInContainerOrFiles(symbol: Symbol, state: State, search: Search): void {
+        // Try to get the smallest valid scope that we can limit our search to;
+        // otherwise we'll need to search globally (i.e. include each file).
+        const scope = getSymbolScope(symbol);
+        if (scope) {
+            getReferencesInContainer(scope, scope.getSourceFile(), search, state, /*addReferencesHere*/ !(isSourceFile(scope) && !contains(state.sourceFiles, scope)));
+        }
+        else {
+            // Global search
+            for (const sourceFile of state.sourceFiles) {
+                state.cancellationToken.throwIfCancellationRequested();
+                searchForName(sourceFile, search, state);
+            }
+        }
     }
 
     function getSpecialSearchKind(node: Node): SpecialSearchKind {
@@ -1293,8 +1296,24 @@ namespace ts.FindAllReferences.Core {
             const classExtending = tryGetClassByExtendingIdentifier(referenceLocation);
             if (classExtending) {
                 findSuperConstructorAccesses(classExtending, pusher());
+                findInheritedConstructorReferences(classExtending, state);
+                // TODO: check if class doesn't override constructor
+                // TODO: get class symbol
+                // TODO: construct seach with `state.createSearch`
+                // TODO: figure out what getReferences function to call
             }
         }
+    }
+
+    function hasOwnConstructor(classDeclaration: ClassLikeDeclaration): boolean {
+        return !!getClassConstructorSymbol(classDeclaration.symbol);
+    }
+
+    function findInheritedConstructorReferences(classDeclaration: ClassLikeDeclaration, state: State): void { // TODO: move this
+        if (hasOwnConstructor(classDeclaration)) return undefined;
+        const classSymbol = classDeclaration.symbol;
+        const search = state.createSearch(/*location*/ undefined, classSymbol, /*comingFrom*/ undefined);
+        getReferencesInContainerOrFiles(classSymbol, state, search);
     }
 
     function addClassStaticThisReferences(referenceLocation: Node, search: Search, state: State): void {
@@ -1325,35 +1344,48 @@ namespace ts.FindAllReferences.Core {
      * Reference the constructor and all calls to `new this()`.
      */
     function findOwnConstructorReferences(classSymbol: Symbol, sourceFile: SourceFile, addNode: (node: Node) => void): void {
-        for (const decl of classSymbol.members!.get(InternalSymbolName.Constructor)!.declarations) {
-            const ctrKeyword = findChildOfKind(decl, SyntaxKind.ConstructorKeyword, sourceFile)!;
-            Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
-            addNode(ctrKeyword);
+        const constructorSymbol = getClassConstructorSymbol(classSymbol);
+        if (constructorSymbol) {
+            for (const decl of constructorSymbol.declarations) {
+                const ctrKeyword = findChildOfKind(decl, SyntaxKind.ConstructorKeyword, sourceFile)!;
+                Debug.assert(decl.kind === SyntaxKind.Constructor && !!ctrKeyword);
+                addNode(ctrKeyword);
+            }
         }
 
-        classSymbol.exports!.forEach(member => {
-            const decl = member.valueDeclaration;
-            if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
-                const body = (<MethodDeclaration>decl).body;
-                if (body) {
-                    forEachDescendantOfKind(body, SyntaxKind.ThisKeyword, thisKeyword => {
-                        if (isNewExpressionTarget(thisKeyword)) {
-                            addNode(thisKeyword);
-                        }
-                    });
+        if (classSymbol.exports) {
+            classSymbol.exports.forEach(member => {
+                const decl = member.valueDeclaration;
+                if (decl && decl.kind === SyntaxKind.MethodDeclaration) {
+                    const body = (<MethodDeclaration>decl).body;
+                    if (body) {
+                        forEachDescendantOfKind(body, SyntaxKind.ThisKeyword, thisKeyword => {
+                            if (isNewExpressionTarget(thisKeyword)) {
+                                addNode(thisKeyword);
+                            }
+                        });
+                    }
                 }
-            }
-        });
+            });
+        }
+    }
+
+    function getClassConstructorSymbol(classSymbol: Symbol): Symbol | undefined {
+        const classMembers = classSymbol.members;
+        if (classMembers) {
+            return classMembers.get(InternalSymbolName.Constructor);
+        }
+        return undefined;
     }
 
     /** Find references to `super` in the constructor of an extending class.  */
-    function findSuperConstructorAccesses(cls: ClassLikeDeclaration, addNode: (node: Node) => void): void {
-        const ctr = cls.symbol.members!.get(InternalSymbolName.Constructor);
-        if (!ctr) {
+    function findSuperConstructorAccesses(classDeclaration: ClassLikeDeclaration, addNode: (node: Node) => void): void {
+        const constructor = getClassConstructorSymbol(classDeclaration.symbol);
+        if (!constructor) {
             return;
         }
 
-        for (const decl of ctr.declarations) {
+        for (const decl of constructor.declarations) {
             Debug.assert(decl.kind === SyntaxKind.Constructor);
             const body = (<ConstructorDeclaration>decl).body;
             if (body) {
