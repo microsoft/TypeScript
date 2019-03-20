@@ -1,11 +1,27 @@
 /// <reference path="fourslash.ts" />
 
-////class A {
-////    [|constructor|]() {}
-////}
-////class B extends A { }  
-////var b = new [|B|]();
-////var x = new [|A|]();
+// @Filename: f.ts
 
-const [aCtr, bNew, aNew] = test.ranges();
-verify.referenceGroups(aCtr, [{ definition: "class A", ranges: [aCtr, aNew] }, { definition: "class B", ranges: [bNew]}]);
+////class A {
+////    [|constructor|](s: string) {}
+////}
+////class B extends A { }
+////class C extends B {
+////    constructor() {
+////        [|super|]("");
+////    }
+////}
+////class D extends B { }
+////class E implements A { }
+////const a = new [|A|]("a");
+////const b = new [|B|]("b");
+////const c = new C();
+////const d = new [|D|]("d");
+////const e = new E();
+
+verify.noErrors();
+const [aCtr, cSuper, aNew, bNew, dNew] = test.ranges();
+verify.referenceGroups(aCtr, [
+    { definition: "class A", ranges: [aCtr, aNew] },
+    { definition: "class B", ranges: [cSuper, bNew]},
+    { definition: "class D", ranges: [dNew]}]);
