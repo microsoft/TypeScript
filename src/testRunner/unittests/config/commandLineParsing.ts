@@ -365,6 +365,23 @@ namespace ts {
                     }
                 });
         });
+
+        it("parse --incremental", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--incremental", "0.ts"],
+                {
+                    errors: [{
+                        messageText: "Option 'incremental' can only be specified in 'tsconfig.json' file.",
+                        category: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.category,
+                        code: Diagnostics.Option_0_can_only_be_specified_in_tsconfig_json_file.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
+                    fileNames: ["0.ts"],
+                    options: {}
+                });
+        });
     });
 
     describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
@@ -453,6 +470,23 @@ namespace ts {
                     errors: [],
                     projects: ["src", "tests"],
                     buildOptions: { force: true, verbose: true }
+                });
+        });
+
+        it("parse build with --incremental ", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--incremental", "tests"],
+                {
+                    errors: [{
+                        messageText: "Unknown build option '--incremental'.",
+                        category: Diagnostics.Unknown_build_option_0.category,
+                        code: Diagnostics.Unknown_build_option_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined,
+                    }],
+                    projects: ["tests"],
+                    buildOptions: { }
                 });
         });
 
