@@ -1338,11 +1338,14 @@ namespace ts {
             let decorators: (ReadonlyArray<Decorator> | undefined)[] | undefined;
             if (node) {
                 const parameters = node.parameters;
-                for (let i = 0; i < parameters.length; i++) {
-                    const parameter = parameters[i];
+                const firstParameterIsThis = parameters.length > 0 && parameterIsThisKeyword(parameters[0]);
+                const firstParameterOffset = firstParameterIsThis ? 1 : 0;
+                const numParameters = firstParameterIsThis ? parameters.length - 1 : parameters.length;
+                for (let i = 0; i < numParameters; i++) {
+                    const parameter = parameters[i + firstParameterOffset];
                     if (decorators || parameter.decorators) {
                         if (!decorators) {
-                            decorators = new Array(parameters.length);
+                            decorators = new Array(numParameters);
                         }
 
                         decorators[i] = parameter.decorators;
