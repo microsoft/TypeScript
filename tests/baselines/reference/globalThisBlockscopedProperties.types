@@ -41,3 +41,13 @@ globalThis['z'] // should error, no property 'z'
 >globalThis : typeof globalThis
 >'z' : "z"
 
+globalThis.Float64Array
+>globalThis.Float64Array : Float64ArrayConstructor
+>globalThis : typeof globalThis
+>Float64Array : Float64ArrayConstructor
+
+globalThis.Infinity
+>globalThis.Infinity : number
+>globalThis : typeof globalThis
+>Infinity : number
+

@@ -8,6 +8,8 @@ globalThis.z // should error, no property 'z'
 globalThis['x'] // ok
 globalThis['y'] // should error, no property 'y'
 globalThis['z'] // should error, no property 'z'
+globalThis.Float64Array
+globalThis.Infinity
 
 
 //// [globalThisBlockscopedProperties.js]
@@ -20,3 +22,5 @@ globalThis.z; // should error, no property 'z'
 globalThis['x']; // ok
 globalThis['y']; // should error, no property 'y'
 globalThis['z']; // should error, no property 'z'
+globalThis.Float64Array;
+globalThis.Infinity;

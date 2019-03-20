@@ -22,4 +22,6 @@ tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts(9,12): error T
     globalThis['z'] // should error, no property 'z'
                ~~~
 !!! error TS2339: Property 'z' does not exist on type 'typeof globalThis'.
+    globalThis.Float64Array
+    globalThis.Infinity
     
