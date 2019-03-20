@@ -1,0 +1,5 @@
+=== tests/cases/compiler/invalidIncremental.ts ===
+const x = 10;
+>x : Symbol(x, Decl(invalidIncremental.ts, 0, 5))
+
+

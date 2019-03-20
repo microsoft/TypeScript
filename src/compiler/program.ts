@@ -2722,6 +2722,10 @@ namespace ts {
                 createDiagnosticForOptionName(Diagnostics.Option_paths_cannot_be_used_without_specifying_baseUrl_option, "paths");
             }
 
+            if (options.incremental && !options.configFilePath) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_speicified_when_using_tsconfig));
+            }
+
             if (options.composite) {
                 if (options.declaration === false) {
                     createDiagnosticForOptionName(Diagnostics.Composite_projects_may_not_disable_declaration_emit, "declaration");

@@ -30,6 +30,7 @@ namespace ts {
         listEmittedFiles?: boolean;
         listFiles?: boolean;
         pretty?: boolean;
+        incremental?: boolean;
 
         traceResolution?: boolean;
         /* @internal */ diagnostics?: boolean;
@@ -363,7 +364,7 @@ namespace ts {
     function getCompilerOptionsOfBuildOptions(buildOptions: BuildOptions): CompilerOptions {
         const result = {} as CompilerOptions;
         commonOptionsWithBuild.forEach(option => {
-            result[option.name] = buildOptions[option.name];
+            if (hasProperty(buildOptions, option.name)) result[option.name] = buildOptions[option.name];
         });
         return result;
     }
