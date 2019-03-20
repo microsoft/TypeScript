@@ -1296,23 +1296,8 @@ namespace ts.FindAllReferences.Core {
             if (classExtending) {
                 findSuperConstructorAccesses(classExtending, pusher());
                 findInheritedConstructorReferences(classExtending, state);
-                // TODO: check if class doesn't override constructor
-                // TODO: get class symbol
-                // TODO: construct seach with `state.createSearch`
-                // TODO: figure out what getReferences function to call
             }
         }
-    }
-
-    function hasOwnConstructor(classDeclaration: ClassLikeDeclaration): boolean {
-        return !!getClassConstructorSymbol(classDeclaration.symbol);
-    }
-
-    function findInheritedConstructorReferences(classDeclaration: ClassLikeDeclaration, state: State): void { // TODO: move this
-        if (hasOwnConstructor(classDeclaration)) return undefined;
-        const classSymbol = classDeclaration.symbol;
-        const search = state.createSearch(/*location*/ undefined, classSymbol, /*comingFrom*/ undefined);
-        getReferencesInContainerOrFiles(classSymbol, state, search);
     }
 
     function addClassStaticThisReferences(referenceLocation: Node, search: Search, state: State): void {
@@ -1395,6 +1380,17 @@ namespace ts.FindAllReferences.Core {
                 });
             }
         }
+    }
+
+    function hasOwnConstructor(classDeclaration: ClassLikeDeclaration): boolean {
+        return !!getClassConstructorSymbol(classDeclaration.symbol);
+    }
+
+    function findInheritedConstructorReferences(classDeclaration: ClassLikeDeclaration, state: State): void {
+        if (hasOwnConstructor(classDeclaration)) return undefined;
+        const classSymbol = classDeclaration.symbol;
+        const search = state.createSearch(/*location*/ undefined, classSymbol, /*comingFrom*/ undefined);
+        getReferencesInContainerOrFiles(classSymbol, state, search);
     }
 
     function addImplementationReferences(refNode: Node, addReference: (node: Node) => void, state: State): void {
