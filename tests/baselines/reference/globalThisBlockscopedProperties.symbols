@@ -1,0 +1,37 @@
+=== tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts ===
+var x = 1
+>x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
+
+const y = 2
+>y : Symbol(y, Decl(globalThisBlockscopedProperties.ts, 1, 5))
+
+let z = 3
+>z : Symbol(z, Decl(globalThisBlockscopedProperties.ts, 2, 3))
+
+globalThis.x // ok
+>globalThis.x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
+>globalThis : Symbol(globalThis)
+>x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
+
+globalThis.y // should error, no property 'y'
+>globalThis.y : Symbol(y, Decl(globalThisBlockscopedProperties.ts, 1, 5))
+>globalThis : Symbol(globalThis)
+>y : Symbol(y, Decl(globalThisBlockscopedProperties.ts, 1, 5))
+
+globalThis.z // should error, no property 'z'
+>globalThis.z : Symbol(z, Decl(globalThisBlockscopedProperties.ts, 2, 3))
+>globalThis : Symbol(globalThis)
+>z : Symbol(z, Decl(globalThisBlockscopedProperties.ts, 2, 3))
+
+globalThis['x'] // ok
+>globalThis : Symbol(globalThis)
+>'x' : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
+
+globalThis['y'] // should error, no property 'y'
+>globalThis : Symbol(globalThis)
+>'y' : Symbol(y, Decl(globalThisBlockscopedProperties.ts, 1, 5))
+
+globalThis['z'] // should error, no property 'z'
+>globalThis : Symbol(globalThis)
+>'z' : Symbol(z, Decl(globalThisBlockscopedProperties.ts, 2, 3))
+

@@ -1,0 +1,43 @@
+=== tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts ===
+var x = 1
+>x : number
+>1 : 1
+
+const y = 2
+>y : 2
+>2 : 2
+
+let z = 3
+>z : number
+>3 : 3
+
+globalThis.x // ok
+>globalThis.x : number
+>globalThis : typeof globalThis
+>x : number
+
+globalThis.y // should error, no property 'y'
+>globalThis.y : 2
+>globalThis : typeof globalThis
+>y : 2
+
+globalThis.z // should error, no property 'z'
+>globalThis.z : number
+>globalThis : typeof globalThis
+>z : number
+
+globalThis['x'] // ok
+>globalThis['x'] : number
+>globalThis : typeof globalThis
+>'x' : "x"
+
+globalThis['y'] // should error, no property 'y'
+>globalThis['y'] : 2
+>globalThis : typeof globalThis
+>'y' : "y"
+
+globalThis['z'] // should error, no property 'z'
+>globalThis['z'] : number
+>globalThis : typeof globalThis
+>'z' : "z"
+
