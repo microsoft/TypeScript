@@ -4552,8 +4552,46 @@ namespace FourSlashInterface {
             ];
         }
 
+        function getInJsKeywords(keywords: ReadonlyArray<ExpectedCompletionEntryObject>): ReadonlyArray<ExpectedCompletionEntryObject> {
+            return keywords.filter(keyword => {
+                switch (keyword.name) {
+                    case "enum":
+                    case "interface":
+                    case "implements":
+                    case "private":
+                    case "protected":
+                    case "public":
+                    case "abstract":
+                    case "any":
+                    case "boolean":
+                    case "declare":
+                    case "infer":
+                    case "is":
+                    case "keyof":
+                    case "module":
+                    case "namespace":
+                    case "never":
+                    case "readonly":
+                    case "number":
+                    case "object":
+                    case "string":
+                    case "symbol":
+                    case "type":
+                    case "unique":
+                    case "unknown":
+                    case "global":
+                    case "bigint":
+                        return false;
+                    default:
+                        return true;
+                }
+            });
+        }
+
         export const classElementKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
             ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"].map(keywordEntry);
+
+        export const classElementInJsKeywords = getInJsKeywords(classElementKeywords);
 
         export const constructorParameterKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
             ["private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntryObject => ({ name, kind: "keyword" }));
@@ -4692,6 +4730,8 @@ namespace FourSlashInterface {
             }
         });
 
+        export const statementInJsKeywords = getInJsKeywords(statementKeywords);
+
         export const globalsVars: ReadonlyArray<ExpectedCompletionEntryObject> = [
             functionEntry("eval"),
             functionEntry("parseInt"),
@@ -4793,6 +4833,18 @@ namespace FourSlashInterface {
             ...globalKeywordsInsideFunction,
         ];
 
+        const globalInJsKeywordsInsideFunction = getInJsKeywords(globalKeywordsInsideFunction);
+
+        // TODO: many of these are inappropriate to always provide
+        export const globalsInJsInsideFunction = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> => [
+            { name: "arguments", kind: "local var" },
+            { name: "globalThis", kind: "module" },
+            ...globalsVars,
+            ...plus,
+            { name: "undefined", kind: "var" },
+            ...globalInJsKeywordsInsideFunction,
+        ];
+
         // TODO: many of these are inappropriate to always provide
         export const globalKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = [
             "break",
@@ -4871,6 +4923,8 @@ namespace FourSlashInterface {
             "of",
         ].map(keywordEntry);
 
+        export const globalInJsKeywords = getInJsKeywords(globalKeywords);
+
         export const insideMethodKeywords: ReadonlyArray<ExpectedCompletionEntryObject> = [
             "break",
             "case",
@@ -4917,6 +4971,8 @@ namespace FourSlashInterface {
             "await",
         ].map(keywordEntry);
 
+        export const insideMethodInJsKeywords = getInJsKeywords(insideMethodKeywords);
+
         export const globalKeywordsPlusUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = (() => {
             const i = ts.findIndex(globalKeywords, x => x.name === "unique");
             return [...globalKeywords.slice(0, i), keywordEntry("undefined"), ...globalKeywords.slice(i)];
@@ -4929,6 +4985,13 @@ namespace FourSlashInterface {
             ...globalKeywords
         ];
 
+        export const globalsInJs: ReadonlyArray<ExpectedCompletionEntryObject> = [
+            { name: "globalThis", kind: "module" },
+            ...globalsVars,
+            { name: "undefined", kind: "var" },
+            ...globalInJsKeywords
+        ];
+
         export function globalsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
             return [
                 { name: "globalThis", kind: "module" },
@@ -4936,6 +4999,15 @@ namespace FourSlashInterface {
                 ...plus,
                 { name: "undefined", kind: "var" },
                 ...globalKeywords];
+        }
+
+        export function globalsInJsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
+            return [
+                { name: "globalThis", kind: "module" },
+                ...globalsVars,
+                ...plus,
+                { name: "undefined", kind: "var" },
+                ...globalInJsKeywords];
         }
     }
 
