@@ -1355,11 +1355,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function getClassConstructorSymbol(classSymbol: Symbol): Symbol | undefined {
-        const classMembers = classSymbol.members;
-        if (classMembers) {
-            return classMembers.get(InternalSymbolName.Constructor);
-        }
-        return undefined;
+        return classSymbol.members && classSymbol.members.get(InternalSymbolName.Constructor);
     }
 
     /** Find references to `super` in the constructor of an extending class.  */
@@ -1387,7 +1383,7 @@ namespace ts.FindAllReferences.Core {
     }
 
     function findInheritedConstructorReferences(classDeclaration: ClassLikeDeclaration, state: State): void {
-        if (hasOwnConstructor(classDeclaration)) return undefined;
+        if (hasOwnConstructor(classDeclaration)) return;
         const classSymbol = classDeclaration.symbol;
         const search = state.createSearch(/*location*/ undefined, classSymbol, /*comingFrom*/ undefined);
         getReferencesInContainerOrFiles(classSymbol, state, search);
