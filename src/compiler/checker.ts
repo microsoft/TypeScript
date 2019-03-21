@@ -7087,11 +7087,47 @@ namespace ts {
                     }
                     constructSignatures = concatenate(constructSignatures, signatures);
                 }
+
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
                 stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
                 numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
             }
+
+            callSignatures = intersectCallSignatures(callSignatures);
+
             setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
+        }
+
+        function intersectCallSignatures(callSignatures: ReadonlyArray<Signature>): ReadonlyArray<Signature> {
+            // Overloads that differ only be return type make no sense. So:
+            // 1. Group all the call signatures by their parameter types. Each group is an overload.
+            // 2. Create a new signature for each group where the return type is the intersection
+            //    of the return types of the signatures in that group.
+            const groups: Signature[][] = [];
+
+            callSignatures.forEach((callSignature) => {
+                const matchingGroup = find(groups, (group) => {
+                    const candidate = group[0];
+                    const candidateParameters = candidate.parameters;
+                    const thisCallParameters = callSignature.parameters;
+                    return candidateParameters.length === thisCallParameters.length &&
+                           every(thisCallParameters, (parameter, index) => isTypeIdenticalTo(getTypeOfParameter(parameter), getTypeOfParameter(candidateParameters[index])));
+                });
+                if (matchingGroup === undefined) {
+                    groups.push([callSignature]);
+                } else {
+                    matchingGroup.push(callSignature);
+                }
+            });
+
+            return groups.map((signatures) => {
+                if (signatures.length === 1) {
+                    return signatures[0];
+                }
+                const clone = cloneSignature(signatures[0]);
+                clone.resolvedReturnType = getIntersectionType(signatures.map(signature => getReturnTypeOfSignature(signature)));
+                return clone;
+            });
         }
 
         /**
