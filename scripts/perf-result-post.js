@@ -7,6 +7,7 @@ const fs = require("fs");
 const requester = process.env.requesting_user;
 const source = process.env.source_issue;
 const postedComment = process.env.status_comment;
+console.log(`Loading fragment from ${process.argv[3]}...`);
 const outputTableText = fs.readFileSync(process.argv[3], { encoding: "utf8" });
 
 const gh = new Octokit();
@@ -24,7 +25,7 @@ The results of the perf run you requested are in! Here they are:
 ${outputTableText}`
 }).then(async data => {
     console.log(`Results posted!`);
-    const newCommentUrl = data.data.url;
+    const newCommentUrl = data.data.html_url;
     const comment = await gh.issues.getComment({
         owner: "Microsoft",
         repo: "TypeScript",
