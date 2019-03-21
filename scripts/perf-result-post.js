@@ -1,0 +1,44 @@
+// @ts-check
+/// <reference lib="esnext.asynciterable" />
+// Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
+const Octokit = require("@octokit/rest");
+const fs = require("fs");
+
+const requester = process.env.requesting_user;
+const source = process.env.source_issue;
+const postedComment = process.env.status_comment;
+const outputTableText = fs.readFileSync(process.argv[3], { encoding: "utf8" });
+
+const gh = new Octokit();
+gh.authenticate({
+    type: "token",
+    token: process.argv[2]
+});
+gh.issues.createComment({
+    number: +source,
+    owner: "Microsoft",
+    repo: "TypeScript",
+    body: `@${requester}
+The results of the perf run you requested are in! Here they are:
+
+${outputTableText}`
+}).then(async data => {
+    console.log(`Results posted!`);
+    const newCommentUrl = data.data.url;
+    const comment = await gh.issues.getComment({
+        owner: "Microsoft",
+        repo: "TypeScript",
+        comment_id: +postedComment
+    });
+    const newBody = `${comment.data.body}
+
+Update: [The results are in!](${newCommentUrl})`;
+    return await gh.issues.updateComment({
+        owner: "Microsoft",
+        repo: "TypeScript",
+        comment_id: +postedComment,
+        body: newBody
+    });
+}).catch(e => {
+    console.error(e);
+});
