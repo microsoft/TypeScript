@@ -1,16 +1,16 @@
 //// [for-of33.ts]
-class StringIterator {
+class _StringIterator {
     [Symbol.iterator]() {
         return v;
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new _StringIterator) { }
 
 //// [for-of33.js]
-class StringIterator {
+class _StringIterator {
     [Symbol.iterator]() {
         return v;
     }
 }
-for (var v of new StringIterator) { }
+for (var v of new _StringIterator) { }

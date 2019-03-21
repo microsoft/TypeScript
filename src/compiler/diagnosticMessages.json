@@ -3915,6 +3915,10 @@
         "category": "Message",
         "code": 6217
     },
+    "Enable strict checking of generator types.": {
+        "category": "Message",
+        "code": 6218
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4271,6 +4275,10 @@
     "Parameter has a name but no type. Did you mean '{0}: {1}'?": {
         "category": "Error",
         "code": 7051
+    },
+    "Generator implicitly has type '{0}' because it does not yield or return any values. Consider supplying a return type.": {
+        "category": "Error",
+        "code": 7052
     },
 
     "You cannot rename this element.": {

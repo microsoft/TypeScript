@@ -13,7 +13,7 @@ class Baz { z: number }
 >z : number
 
 function* g3() {
->g3 : () => IterableIterator<Bar | Baz>
+>g3 : () => Generator<Bar | Baz, void, unknown>
 
     yield;
 >yield : any
@@ -29,13 +29,13 @@ function* g3() {
 >Baz : typeof Baz
 
     yield *[new Bar];
->yield *[new Bar] : any
+>yield *[new Bar] : void | Bar
 >[new Bar] : Bar[]
 >new Bar : Bar
 >Bar : typeof Bar
 
     yield *[new Baz];
->yield *[new Baz] : any
+>yield *[new Baz] : void | Baz
 >[new Baz] : Baz[]
 >new Baz : Baz
 >Baz : typeof Baz

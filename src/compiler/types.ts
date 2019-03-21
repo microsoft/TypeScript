@@ -4234,13 +4234,21 @@ namespace ts {
         regularType: ResolvedType;  // Regular version of fresh type
     }
 
+    /* @internal */
+    export interface IterationTypes {
+        yieldType?: Type;
+        returnType?: Type;
+        nextType?: Type;
+    }
+
     // Just a place to cache element types of iterables and iterators
     /* @internal */
     export interface IterableOrIteratorType extends ObjectType, UnionType {
-        iteratedTypeOfIterable?: Type;
-        iteratedTypeOfIterator?: Type;
-        iteratedTypeOfAsyncIterable?: Type;
-        iteratedTypeOfAsyncIterator?: Type;
+        iterationTypesOfIterable?: IterationTypes;
+        iterationTypesOfIterator?: IterationTypes;
+        iterationTypesOfAsyncIterable?: IterationTypes;
+        iterationTypesOfAsyncIterator?: IterationTypes;
+        iterationTypesOfIteratorResult?: IterationTypes;
     }
 
     /* @internal */

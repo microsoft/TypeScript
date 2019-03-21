@@ -1,4 +1,11 @@
-interface Generator extends Iterator<any> { }
+/// <reference lib="es2015.iterable" />
+
+interface Generator<TYield = unknown, TReturn = void, TNext = unknown> {
+    next(value?: TNext): IteratorResult<TYield, TReturn>;
+    return(value: TReturn): IteratorResult<TYield, TReturn>;
+    throw(e: unknown): IteratorResult<TYield, TReturn>;
+    [Symbol.iterator](): Generator<TYield, TReturn, TNext>;
+}
 
 interface GeneratorFunction {
     /**

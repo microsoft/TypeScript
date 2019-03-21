@@ -14,7 +14,7 @@ function* g(): IterableIterator<Foo> {
 >yield : any
 
     yield * [new Baz];
->yield * [new Baz] : any
+>yield * [new Baz] : void | Baz
 >[new Baz] : Baz[]
 >new Baz : Baz
 >Baz : typeof Baz

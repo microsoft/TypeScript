@@ -8,10 +8,17 @@ interface SymbolConstructor {
     readonly iterator: symbol;
 }
 
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
+interface IteratorYieldResult<TYield> {
+    done: false;
+    value: TYield;
 }
+
+interface IteratorReturnResult<TReturn> {
+    done: true;
+    value: TReturn;
+}
+
+type IteratorResult<T, TReturn = T | void> = IteratorYieldResult<T> | IteratorReturnResult<TReturn>;
 
 interface Iterator<T> {
     next(value?: any): IteratorResult<T>;

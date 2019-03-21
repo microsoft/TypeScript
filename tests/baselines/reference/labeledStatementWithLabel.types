@@ -5,7 +5,7 @@ label: function fn() { }
 
 label: function* gen() { }
 >label : any
->gen : () => IterableIterator<any>
+>gen : () => Generator<never, void, unknown>
 
 label: async function gen1() { }
 >label : any

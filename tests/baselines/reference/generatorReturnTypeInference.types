@@ -1,0 +1,203 @@
+=== tests/cases/conformance/generators/generatorReturnTypeInference.ts ===
+declare const iterableIterator: IterableIterator<number>;
+>iterableIterator : IterableIterator<number>
+
+declare const generator: Generator<number, string, boolean>;
+>generator : Generator<number, string, boolean>
+
+declare const never: never;
+>never : never
+
+// 'yield' iteration type inference
+function* g001() { // Generator<undefined, void, unknown>
+>g001 : () => Generator<undefined, void, unknown>
+
+    yield;
+>yield : any
+}
+
+function* g002() { // Generator<number, void, unknown>
+>g002 : () => Generator<number, void, unknown>
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+}
+
+function* g003() { // Generator<never, void, unknown>
+>g003 : () => Generator<never, void, unknown>
+
+    yield* [];
+>yield* [] : void
+>[] : never[]
+}
+
+function* g004() { // Generator<number, void, unknown>
+>g004 : () => Generator<number, void, unknown>
+
+    yield* iterableIterator;
+>yield* iterableIterator : number | void
+>iterableIterator : IterableIterator<number>
+}
+
+function* g005() { // Generator<number, void, boolean>
+>g005 : () => Generator<number, void, boolean>
+
+    yield* generator;
+>yield* generator : string
+>generator : Generator<number, string, boolean>
+}
+
+function* g006() { // Generator<1 | 2, void, unknown>
+>g006 : () => Generator<1 | 2, void, unknown>
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+
+    yield 2;
+>yield 2 : any
+>2 : 2
+}
+
+function* g007() { // Generator<never, void, unknown>
+>g007 : () => Generator<never, void, unknown>
+
+    yield never;
+>yield never : any
+>never : never
+}
+
+// 'return' iteration type inference
+function* g102() { // Generator<never, number, unknown>
+>g102 : () => Generator<never, number, unknown>
+
+    return 1;
+>1 : 1
+}
+
+function* g103() { // Generator<never, 1 | 2, unknown>
+>g103 : () => Generator<never, 1 | 2, unknown>
+
+    if (Math.random()) return 1;
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>1 : 1
+
+    return 2;
+>2 : 2
+}
+
+function* g104() { // Generator<never, never, unknown>
+>g104 : () => Generator<never, never, unknown>
+
+    return never;
+>never : never
+}
+
+// 'next' iteration type inference
+function* g201() { // Generator<number, void, string>
+>g201 : () => Generator<number, void, string>
+
+    let a: string = yield 1;
+>a : string
+>yield 1 : any
+>1 : 1
+}
+
+function* g202() { // Generator<1 | 2, void, string & number>
+>g202 : () => Generator<1 | 2, void, string & number>
+
+    let a: string = yield 1;
+>a : string
+>yield 1 : any
+>1 : 1
+
+    let b: number = yield 2;
+>b : number
+>yield 2 : any
+>2 : 2
+}
+
+// mixed iteration types inference
+
+function* g301() { // Generator<undefined, void, unknown>
+>g301 : () => Generator<undefined, void, unknown>
+
+    yield;
+>yield : any
+
+    return;
+}
+
+function* g302() { // Generator<number, void, unknown>
+>g302 : () => Generator<number, void, unknown>
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+
+    return;
+}
+
+function* g303() { // Generator<undefined, string, unknown>
+>g303 : () => Generator<undefined, string, unknown>
+
+    yield;
+>yield : any
+
+    return "a";
+>"a" : "a"
+}
+
+function* g304() { // Generator<number, string, unknown>
+>g304 : () => Generator<number, string, unknown>
+
+    yield 1;
+>yield 1 : any
+>1 : 1
+
+    return "a";
+>"a" : "a"
+}
+
+function* g305() { // Generator<1 | 2, "a" | "b", unknown>
+>g305 : () => Generator<1 | 2, "a" | "b", unknown>
+
+    if (Math.random()) yield 1;
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>yield 1 : any
+>1 : 1
+
+    yield 2;
+>yield 2 : any
+>2 : 2
+
+    if (Math.random()) return "a";
+>Math.random() : number
+>Math.random : () => number
+>Math : Math
+>random : () => number
+>"a" : "a"
+
+    return "b";
+>"b" : "b"
+}
+
+function* g306() { // Generator<number, boolean, "hi">
+>g306 : () => Generator<number, boolean, "hi">
+
+    const a: "hi" = yield 1;
+>a : "hi"
+>yield 1 : any
+>1 : 1
+
+    return true;
+>true : true
+}
+

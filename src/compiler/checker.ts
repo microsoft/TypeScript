@@ -7,6 +7,20 @@ namespace ts {
     let nextMergeId = 1;
     let nextFlowId = 1;
 
+    const enum IterationTypesCacheKind {
+        Iterable,
+        Iterator,
+        AsyncIterable,
+        AsyncIterator,
+        IteratorResult,
+    }
+
+    const enum IterationTypeKind {
+        Yield,
+        Return,
+        Next,
+    }
+
     export function getNodeId(node: Node): number {
         if (!node.id) {
             node.id = nextNodeId;
@@ -528,9 +542,13 @@ namespace ts {
         let deferredGlobalIterableType: GenericType;
         let deferredGlobalIteratorType: GenericType;
         let deferredGlobalIterableIteratorType: GenericType;
+        let deferredGlobalGeneratorType: GenericType;
+        let deferredGlobalIteratorYieldResultType: GenericType;
+        let deferredGlobalIteratorReturnResultType: GenericType;
         let deferredGlobalAsyncIterableType: GenericType;
         let deferredGlobalAsyncIteratorType: GenericType;
         let deferredGlobalAsyncIterableIteratorType: GenericType;
+        let deferredGlobalAsyncGeneratorType: GenericType;
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
@@ -9256,6 +9274,10 @@ namespace ts {
             return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
+        function getGlobalAsyncGeneratorType(reportErrors: boolean) {
+            return deferredGlobalAsyncGeneratorType || (deferredGlobalAsyncGeneratorType = getGlobalType("AsyncGenerator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+        }
+
         function getGlobalIterableType(reportErrors: boolean) {
             return deferredGlobalIterableType || (deferredGlobalIterableType = getGlobalType("Iterable" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
@@ -9266,6 +9288,18 @@ namespace ts {
 
         function getGlobalIterableIteratorType(reportErrors: boolean) {
             return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalGeneratorType(reportErrors: boolean) {
+            return deferredGlobalGeneratorType || (deferredGlobalGeneratorType = getGlobalType("Generator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalIteratorYieldResultType(reportErrors: boolean) {
+            return deferredGlobalIteratorYieldResultType || (deferredGlobalIteratorYieldResultType = getGlobalType("IteratorYieldResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+        }
+
+        function getGlobalIteratorReturnResultType(reportErrors: boolean) {
+            return deferredGlobalIteratorReturnResultType || (deferredGlobalIteratorReturnResultType = getGlobalType("IteratorReturnResult" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalTypeOrUndefined(name: __String, arity = 0): ObjectType | undefined {
@@ -9304,16 +9338,16 @@ namespace ts {
             return createTypeFromGenericGlobalType(getGlobalAsyncIterableType(/*reportErrors*/ true), [iteratedType]);
         }
 
-        function createAsyncIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalAsyncIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
+        function createAsyncGeneratorType(yieldType: Type, returnType: Type, nextType: Type) {
+            return createTypeFromGenericGlobalType(getGlobalAsyncGeneratorType(/*reportErrors*/ true), [yieldType, returnType, nextType]);
         }
 
         function createIterableType(iteratedType: Type): Type {
             return createTypeFromGenericGlobalType(getGlobalIterableType(/*reportErrors*/ true), [iteratedType]);
         }
 
-        function createIterableIteratorType(iteratedType: Type): Type {
-            return createTypeFromGenericGlobalType(getGlobalIterableIteratorType(/*reportErrors*/ true), [iteratedType]);
+        function createGeneratorType(yieldType: Type, returnType: Type, nextType: Type) {
+            return createTypeFromGenericGlobalType(getGlobalGeneratorType(/*reportErrors*/ true), [yieldType, returnType, nextType]);
         }
 
         function createArrayType(elementType: Type, readonly?: boolean): ObjectType {
@@ -14259,6 +14293,25 @@ namespace ts {
             return type;
         }
 
+        function getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(type: Type | undefined, contextualSignatureReturnType: Type | undefined, isAsync: boolean) {
+            if (type && isUnitType(type)) {
+                const contextualType = !contextualSignatureReturnType ? undefined :
+                    isAsync ? getPromisedTypeOfPromise(contextualSignatureReturnType) :
+                    contextualSignatureReturnType;
+                type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
+            }
+            return type;
+        }
+
+        function getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(type: Type | undefined, contextualSignatureReturnType: Type | undefined, kind: IterationTypeKind, isAsyncGenerator: boolean) {
+            if (type && isUnitType(type)) {
+                const contextualType = !contextualSignatureReturnType ? undefined :
+                    getIterationTypeOfGeneratorFunctionReturnType(kind, contextualSignatureReturnType, isAsyncGenerator);
+                type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
+            }
+            return type;
+        }
+
         /**
          * Check if a Type was written as a tuple type literal.
          * Prefer using isTupleLikeType() unless the use of `elementTypes` is required.
@@ -14902,7 +14955,8 @@ namespace ts {
         }
 
         function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): Symbol | undefined {
-            return getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties).next().value;
+            const result = getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties).next();
+            if (!result.done) return result.value;
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
@@ -18116,7 +18170,7 @@ namespace ts {
                 if (contextualReturnType) {
                     return node.asteriskToken
                         ? contextualReturnType
-                        : getIteratedTypeOfGenerator(contextualReturnType, (functionFlags & FunctionFlags.Async) !== 0);
+                        : getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, contextualReturnType, (functionFlags & FunctionFlags.Async) !== 0);
                 }
             }
 
@@ -18545,6 +18599,10 @@ namespace ts {
                 case SyntaxKind.AwaitExpression:
                     return getContextualTypeForAwaitOperand(<AwaitExpression>parent);
                 case SyntaxKind.CallExpression:
+                    if ((<CallExpression>parent).expression.kind === SyntaxKind.ImportKeyword) {
+                        return stringType;
+                    }
+                    /* falls through */
                 case SyntaxKind.NewExpression:
                     return getContextualTypeForArgument(<CallExpression | NewExpression>parent, node);
                 case SyntaxKind.TypeAssertionExpression:
@@ -22467,104 +22525,118 @@ namespace ts {
             }
 
             const functionFlags = getFunctionFlags(func);
-            let type: Type;
-            if (func.body.kind !== SyntaxKind.Block) {
-                type = checkExpressionCached(func.body, checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
-                if (functionFlags & FunctionFlags.Async) {
+            const isAsync = (functionFlags & FunctionFlags.Async) !== 0;
+            const isGenerator = (functionFlags & FunctionFlags.Generator) !== 0;
+
+            let returnType: Type | undefined;
+            let yieldType: Type | undefined;
+            let nextType: Type | undefined;
+            let fallbackReturnType: Type = voidType;
+            if (func.body.kind !== SyntaxKind.Block) { // Async or normal arrow function
+                returnType = checkExpressionCached(func.body, checkMode && checkMode & ~CheckMode.SkipGenericFunctions);
+                if (isAsync) {
                     // From within an async function you can return either a non-promise value or a promise. Any
                     // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
                     // return type of the body should be unwrapped to its awaited type, which we will wrap in
                     // the native Promise<T> type later in this function.
-                    type = checkAwaitedType(type, /*errorNode*/ func, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
+                    returnType = checkAwaitedType(returnType, /*errorNode*/ func, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
                 }
             }
-            else {
-                let types = checkAndAggregateReturnExpressionTypes(func, checkMode);
-                if (functionFlags & FunctionFlags.Generator) { // Generator or AsyncGenerator function
-                    types = concatenate(checkAndAggregateYieldOperandTypes(func, checkMode), types);
-                    if (!types || types.length === 0) {
-                        const iterableIteratorAny = functionFlags & FunctionFlags.Async
-                            ? createAsyncIterableIteratorType(anyType) // AsyncGenerator function
-                            : createIterableIteratorType(anyType); // Generator function
-                        if (noImplicitAny) {
-                            error(func.asteriskToken,
-                                Diagnostics.Generator_implicitly_has_type_0_because_it_does_not_yield_any_values_Consider_supplying_a_return_type, typeToString(iterableIteratorAny));
-                        }
-                        return iterableIteratorAny;
-                    }
+            else if (isGenerator) { // Generator or AsyncGenerator function
+                const returnTypes = checkAndAggregateReturnExpressionTypes(func, checkMode);
+                const { yieldTypes, nextTypes } = checkAndAggregateYieldOperandTypes(func, checkMode);
+                yieldType = some(yieldTypes) ? getUnionType(yieldTypes, UnionReduction.Subtype) : undefined;
+                if (!returnTypes) {
+                    fallbackReturnType = neverType;
                 }
-                else {
-                    if (!types) {
-                        // For an async function, the return type will not be never, but rather a Promise for never.
-                        return functionFlags & FunctionFlags.Async
-                            ? createPromiseReturnType(func, neverType) // Async function
-                            : neverType; // Normal function
-                    }
-                    if (types.length === 0) {
-                        // For an async function, the return type will not be void, but rather a Promise for void.
-                        return functionFlags & FunctionFlags.Async
-                            ? createPromiseReturnType(func, voidType) // Async function
-                            : voidType; // Normal function
-                    }
+                else if (returnTypes.length > 0) {
+                    returnType = getUnionType(returnTypes, UnionReduction.Subtype);
+                }
+                nextType = some(nextTypes) ? getIntersectionType(nextTypes) : undefined;
+            }
+            else { // Async or normal function
+                const types = checkAndAggregateReturnExpressionTypes(func, checkMode);
+                if (!types) {
+                    // For an async function, the return type will not be never, but rather a Promise for never.
+                    return functionFlags & FunctionFlags.Async
+                        ? createPromiseReturnType(func, neverType) // Async function
+                        : neverType; // Normal function
+                }
+                if (types.length === 0) {
+                    // For an async function, the return type will not be void, but rather a Promise for void.
+                    return functionFlags & FunctionFlags.Async
+                        ? createPromiseReturnType(func, voidType) // Async function
+                        : voidType; // Normal function
                 }
 
                 // Return a union of the return expression types.
-                type = getUnionType(types, UnionReduction.Subtype);
+                returnType = getUnionType(types, UnionReduction.Subtype);
             }
 
-            const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
-            if (!contextualSignature) {
-                reportErrorsFromWidening(func, type);
-            }
-
-            if (isUnitType(type)) {
-                let contextualType = !contextualSignature ? undefined :
-                    contextualSignature === getSignatureFromDeclaration(func) ? type :
-                    getReturnTypeOfSignature(contextualSignature);
-                if (contextualType) {
-                    switch (functionFlags & FunctionFlags.AsyncGenerator) {
-                        case FunctionFlags.AsyncGenerator:
-                            contextualType = getIteratedTypeOfGenerator(contextualType, /*isAsyncGenerator*/ true);
-                            break;
-                        case FunctionFlags.Generator:
-                            contextualType = getIteratedTypeOfGenerator(contextualType, /*isAsyncGenerator*/ false);
-                            break;
-                        case FunctionFlags.Async:
-                            contextualType = getPromisedTypeOfPromise(contextualType);
-                            break;
+            if (returnType || yieldType || nextType) {
+                const contextualSignature = getContextualSignatureForFunctionLikeDeclaration(func);
+                if (!contextualSignature) {
+                    if (yieldType) reportErrorsFromWidening(func, yieldType);
+                    if (returnType) reportErrorsFromWidening(func, returnType);
+                    if (nextType) reportErrorsFromWidening(func, nextType);
+                }
+                if (returnType && isUnitType(returnType) ||
+                    yieldType && isUnitType(yieldType) ||
+                    nextType && isUnitType(nextType)) {
+                    const contextualType = !contextualSignature ? undefined :
+                        contextualSignature === getSignatureFromDeclaration(func) ? isGenerator ? undefined : returnType :
+                        getReturnTypeOfSignature(contextualSignature);
+                    if (isGenerator) {
+                        yieldType = getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(yieldType, contextualType, IterationTypeKind.Yield, isAsync);
+                        returnType = getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(returnType, contextualType, IterationTypeKind.Return, isAsync);
+                        nextType = getWidenedLiteralLikeTypeForContextualIterationTypeIfNeeded(nextType, contextualType, IterationTypeKind.Next, isAsync);
+                    }
+                    else {
+                        returnType = getWidenedLiteralLikeTypeForContextualReturnTypeIfNeeded(returnType, contextualType, isAsync);
                     }
                 }
-                type = getWidenedLiteralLikeTypeForContextualType(type, contextualType);
+
+                if (yieldType) yieldType = getWidenedType(yieldType);
+                if (returnType) returnType = getWidenedType(returnType);
+                if (nextType) nextType = getWidenedType(nextType);
             }
 
-            const widenedType = getWidenedType(type);
-            switch (functionFlags & FunctionFlags.AsyncGenerator) {
-                case FunctionFlags.AsyncGenerator:
-                    return createAsyncIterableIteratorType(widenedType);
-                case FunctionFlags.Generator:
-                    return createIterableIteratorType(widenedType);
-                case FunctionFlags.Async:
-                    // From within an async function you can return either a non-promise value or a promise. Any
-                    // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
-                    // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
-                    return createPromiseType(widenedType);
-                default:
-                    return widenedType;
+            if (isGenerator) {
+                return createGeneratorReturnType(yieldType || neverType, returnType || fallbackReturnType, nextType || unknownType, isAsync);
+            }
+            else {
+                // From within an async function you can return either a non-promise value or a promise. Any
+                // Promise/A+ compatible implementation will always assimilate any foreign promise, so the
+                // return type of the body is awaited type of the body, wrapped in a native Promise<T> type.
+                return isAsync
+                    ? createPromiseType(returnType || fallbackReturnType)
+                    : returnType || fallbackReturnType;
             }
         }
 
-        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode | undefined): Type[] {
-            const aggregatedTypes: Type[] = [];
+        function createGeneratorReturnType(yieldType: Type, returnType: Type, nextType: Type, isAsyncGenerator: boolean) {
+            return isAsyncGenerator
+                ? createAsyncGeneratorType(yieldType, returnType, nextType)
+                : createGeneratorType(yieldType, returnType, nextType);
+        }
+
+        function checkAndAggregateYieldOperandTypes(func: FunctionLikeDeclaration, checkMode: CheckMode | undefined) {
+            const yieldTypes: Type[] = [];
+            const nextTypes: Type[] = [];
             const isAsync = (getFunctionFlags(func) & FunctionFlags.Async) !== 0;
             forEachYieldExpression(<Block>func.body, yieldExpression => {
-                pushIfUnique(aggregatedTypes, getYieldedTypeOfYieldExpression(yieldExpression, isAsync, checkMode));
+                const yieldExpressionType = yieldExpression.expression ? checkExpression(yieldExpression.expression, checkMode) : undefinedWideningType;
+                pushIfUnique(yieldTypes, getYieldedTypeOfYieldExpression(yieldExpression, yieldExpressionType, isAsync));
+                const nextType = yieldExpression.asteriskToken
+                    ? getIterationTypeOfIterable(IterationTypeKind.Next, yieldExpressionType, yieldExpression.expression, isAsync, /*allowSyncIterables*/ true, /*checkAssignability*/ false)
+                    : getContextualType(yieldExpression);
+                if (nextType) pushIfUnique(nextTypes, nextType);
             });
-            return aggregatedTypes;
+            return { yieldTypes, nextTypes };
         }
 
-        function getYieldedTypeOfYieldExpression(node: YieldExpression, isAsync: boolean, checkMode?: CheckMode): Type | undefined {
+        function getYieldedTypeOfYieldExpression(node: YieldExpression, expressionType: Type, isAsync: boolean): Type | undefined {
             const errorNode = node.expression || node;
-            const expressionType = node.expression ? checkExpression(node.expression, checkMode) : undefinedWideningType;
             // A `yield*` expression effectively yields everything that its operand yields
             const yieldedType = node.asteriskToken ? checkIteratedTypeOrElementType(expressionType, errorNode, /*allowStringInput*/ false, isAsync) : expressionType;
             return !isAsync ? yieldedType : getAwaitedType(yieldedType, errorNode, node.asteriskToken
@@ -22821,9 +22893,12 @@ namespace ts {
         }
 
         function getReturnOrPromisedType(node: FunctionLikeDeclaration | MethodSignature, functionFlags: FunctionFlags) {
+            const isGenerator = !!(functionFlags & FunctionFlags.Generator);
+            const isAsync = !!(functionFlags & FunctionFlags.Async);
             const type = getReturnTypeFromAnnotation(node);
-            return type && ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) ?
-                getAwaitedType(type) || errorType : type;
+            return type && isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, type, isAsync) || errorType :
+                type && isAsync ? getAwaitedType(type) || errorType :
+                type;
         }
 
         function checkFunctionExpressionOrObjectLiteralMethodDeferred(node: ArrowFunction | FunctionExpression | MethodDeclaration) {
@@ -22831,11 +22906,7 @@ namespace ts {
 
             const functionFlags = getFunctionFlags(node);
             const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
-
-            if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
-                // return is not necessary in the body of generators
-                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
-            }
+            checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
 
             if (node.body) {
                 if (!getEffectiveReturnTypeNode(node)) {
@@ -23760,17 +23831,26 @@ namespace ts {
             }
 
             const isAsync = (functionFlags & FunctionFlags.Async) !== 0;
-            const yieldedType = getYieldedTypeOfYieldExpression(node, isAsync)!; // TODO: GH#18217
+            const yieldExpressionType = node.expression ? checkExpression(node.expression) : undefinedWideningType;
+            const yieldedType = getYieldedTypeOfYieldExpression(node, yieldExpressionType, isAsync)!; // TODO: GH#18217
             // There is no point in doing an assignability check if the function
             // has no explicit return type because the return type is directly computed
             // from the yield expressions.
             const returnType = getReturnTypeFromAnnotation(func);
             if (returnType) {
-                const signatureElementType = getIteratedTypeOfGenerator(returnType, isAsync) || anyType;
+                const signatureElementType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, isAsync) || anyType;
                 checkTypeAssignableToAndOptionallyElaborate(yieldedType, signatureElementType, node.expression || node, node.expression);
             }
 
-            // Both yield and yield* expressions have type 'any'
+            if (node.asteriskToken) {
+                return getIterationTypeOfIterable(IterationTypeKind.Return, yieldExpressionType, node.expression, isAsync, /*allowSyncIterables*/ true, /*checkAssignability*/ false)
+                    || anyType;
+            }
+            else if (returnType) {
+                return getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, isAsync)
+                    || anyType;
+            }
+
             return anyType;
         }
 
@@ -24465,18 +24545,17 @@ namespace ts {
                             error(returnTypeNode, Diagnostics.A_generator_cannot_have_a_void_type_annotation);
                         }
                         else {
-                            const generatorElementType = getIteratedTypeOfGenerator(returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
-                            const iterableIteratorInstantiation = functionFlags & FunctionFlags.Async
-                                ? createAsyncIterableIteratorType(generatorElementType) // AsyncGenerator function
-                                : createIterableIteratorType(generatorElementType); // Generator function
-
-                            // Naively, one could check that IterableIterator<any> is assignable to the return type annotation.
+                            // Naively, one could check that Generator<any, any, any> is assignable to the return type annotation.
                             // However, that would not catch the error in the following case.
                             //
                             //    interface BadGenerator extends Iterable<number>, Iterator<string> { }
                             //    function* g(): BadGenerator { } // Iterable and Iterator have different types!
                             //
-                            checkTypeAssignableTo(iterableIteratorInstantiation, returnType, returnTypeNode);
+                            const generatorYieldType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Yield, returnType, (functionFlags & FunctionFlags.Async) !== 0) || anyType;
+                            const generatorReturnType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, (functionFlags & FunctionFlags.Async) !== 0) || generatorYieldType;
+                            const generatorNextType = getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Next, returnType, (functionFlags & FunctionFlags.Async) !== 0) || unknownType;
+                            const generatorInstantiation = createGeneratorReturnType(generatorYieldType, generatorReturnType, generatorNextType, !!(functionFlags & FunctionFlags.Async));
+                            checkTypeAssignableTo(generatorInstantiation, returnType, returnTypeNode);
                         }
                     }
                     else if ((functionFlags & FunctionFlags.AsyncGenerator) === FunctionFlags.Async) {
@@ -26010,11 +26089,7 @@ namespace ts {
 
             const body = node.kind === SyntaxKind.MethodSignature ? undefined : node.body;
             checkSourceElement(body);
-
-            if ((functionFlags & FunctionFlags.Generator) === 0) { // Async function or normal function
-                const returnOrPromisedType = getReturnOrPromisedType(node, functionFlags);
-                checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, returnOrPromisedType);
-            }
+            checkAllCodePathsInNonVoidFunctionReturnOrThrow(node, getReturnOrPromisedType(node, functionFlags));
 
             if (produceDiagnostics && !getEffectiveReturnTypeNode(node)) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
@@ -26937,7 +27012,7 @@ namespace ts {
             // downlevelIteration is requested.
             if (uplevelIteration || downlevelIteration || allowAsyncIterables) {
                 // We only report errors for an invalid iterable type in ES2015 or higher.
-                const iteratedType = getIteratedTypeOfIterable(inputType, uplevelIteration ? errorNode : undefined, allowAsyncIterables, /*allowSyncIterables*/ true, checkAssignability);
+                const iteratedType = getIterationTypeOfIterable(IterationTypeKind.Yield, inputType, uplevelIteration ? errorNode : undefined, allowAsyncIterables, /*allowSyncIterables*/ true, checkAssignability);
                 if (iteratedType || uplevelIteration) {
                     return iteratedType;
                 }
@@ -26988,7 +27063,7 @@ namespace ts {
                     // want to say that number is not an array type. But if the input was just
                     // number and string input is allowed, we want to say that number is not an
                     // array type or a string type.
-                    const isIterable = !!getIteratedTypeOfIterable(inputType, /* errorNode */ undefined, allowAsyncIterables, /*allowSyncIterables*/ true, checkAssignability);
+                    const isIterable = !!getIterationTypeOfIterable(IterationTypeKind.Yield, inputType, /* errorNode */ undefined, allowAsyncIterables, /*allowSyncIterables*/ true, checkAssignability);
                     const diagnostic = !allowStringInput || hasStringConstituent
                         ? downlevelIteration
                             ? Diagnostics.Type_0_is_not_an_array_type_or_does_not_have_a_Symbol_iterator_method_that_returns_an_iterator
@@ -27019,33 +27094,31 @@ namespace ts {
         }
 
         /**
-         * We want to treat type as an iterable, and get the type it is an iterable of. The iterable
-         * must have the following structure (annotated with the names of the variables below):
+         * Gets the requested "iteration type" from an `Iterable`-like or `AsyncIterable`-like type.
          *
-         *     { // iterable
-         *         [Symbol.iterator]: { // iteratorMethod
-         *             (): Iterator<T>
-         *         }
-         *     }
+         * We pick either `TYield`, `TReturn`, or `TNext` (as specified by `kind`) per the following rules:
          *
-         * For an async iterable, we expect the following structure:
+         * - If `allowSyncIterables` is `true` and `type` matches:
+         *   - `{[Symbol.iterator]():{next(value?: TNext)}`
+         *   - `{[Symbol.iterator]():{return(value?: TReturn)}`
+         *   - `{[Symbol.iterator]():{next(): {done: false, value: TYield}}`
+         *   - `{[Symbol.iterator]():{next(): {done: true, value: TReturn}}`
          *
-         *     { // iterable
-         *         [Symbol.asyncIterator]: { // iteratorMethod
-         *             (): AsyncIterator<T>
-         *         }
-         *     }
+         * - If `allowAsyncIterables` is `true` and `type` matches:
+         *   - `{[Symbol.asyncIterator](): {next(value?: TNext | PromiseLike<TNext>)}}`
+         *   - `{[Symbol.asyncIterator](): {return(value?: TReturn | PromiseLike<TReturn>)}}`
+         *   - `{[Symbol.asyncIterator](): {next(): PromiseLike<{done: false, value: TYield}>}}`
+         *   - `{[Symbol.asyncIterator](): {next(): PromiseLike<{done: true, value: TReturn}>}}`
          *
-         * T is the type we are after. At every level that involves analyzing return types
-         * of signatures, we union the return types of all the signatures.
+         * At every level that involves analyzing return types of signatures, we union the return types of all the signatures.
          *
          * Another thing to note is that at any step of this process, we could run into a dead end,
          * meaning either the property is missing, or we run into the anyType. If either of these things
-         * happens, we return undefined to signal that we could not find the iterated type. If a property
-         * is missing, and the previous step did not result in 'any', then we also give an error if the
+         * happens, we return `undefined` to signal that we could not find the iteration type. If a property
+         * is missing, and the previous step did not result in `any`, then we also give an error if the
          * caller requested it. Then the caller can decide what to do in the case where there is no iterated
-         * type. This is different from returning anyType, because that would signify that we have matched the
-         * whole pattern and that T (above) is 'any'.
+         * type. This is different from returning `anyType`, because that would signify that we have matched the
+         * whole pattern and that the type we picked (`TYield`, `TReturn`, or `TNext`) is `any`.
          *
          * For a **for-of** statement, `yield*` (in a normal generator), spread, array
          * destructuring, or normal generator we will only ever look for a `[Symbol.iterator]()`
@@ -27056,42 +27129,64 @@ namespace ts {
          * For a **for-await-of** statement or a `yield*` in an async generator we will look for
          * the `[Symbol.asyncIterator]()` method first, and then the `[Symbol.iterator]()` method.
          */
-        function getIteratedTypeOfIterable(type: Type, errorNode: Node | undefined, allowAsyncIterables: boolean, allowSyncIterables: boolean, checkAssignability: boolean): Type | undefined {
+        function getIterationTypeOfIterable(kind: IterationTypeKind.Yield, type: Type, errorNode: Node | undefined, allowAsyncIterables: boolean, allowSyncIterables: boolean, checkAssignability: boolean): Type | undefined;
+        function getIterationTypeOfIterable(kind: IterationTypeKind, type: Type, errorNode: Node | undefined, allowAsyncIterables: boolean, allowSyncIterables: boolean, checkAssignability: false): Type | undefined;
+        function getIterationTypeOfIterable(kind: IterationTypeKind, type: Type, errorNode: Node | undefined, allowAsyncIterables: boolean, allowSyncIterables: boolean, checkAssignability: boolean): Type | undefined {
+            Debug.assert(kind === IterationTypeKind.Yield || !checkAssignability, "Cannot check assignability when 'kind' is not 'Yield'.");
             if (isTypeAny(type)) {
                 return undefined;
             }
 
-            return mapType(type, getIteratedType);
+            return mapType(type, getIterationType);
 
-            function getIteratedType(type: Type) {
+            function getIterationType(type: Type) {
                 const typeAsIterable = <IterableOrIteratorType>type;
+                let cachedType: Type | undefined;
                 if (allowAsyncIterables) {
-                    if (typeAsIterable.iteratedTypeOfAsyncIterable) {
-                        return typeAsIterable.iteratedTypeOfAsyncIterable;
+                    if (cachedType = getCachedIterationType(typeAsIterable, IterationTypesCacheKind.AsyncIterable, kind)) {
+                        return cachedType;
                     }
 
-                    // As an optimization, if the type is an instantiation of the global `AsyncIterable<T>`
-                    // or the global `AsyncIterableIterator<T>` then just grab its type argument.
-                    if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
-                        isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
-                        return typeAsIterable.iteratedTypeOfAsyncIterable = (<GenericType>type).typeArguments![0];
+                    // As an optimization, if the type is an instantiation of one of the global `AsyncIterable<T>`,
+                    // `AsyncIterableIterator<T>`, or `AsyncGenerator<TYield, TReturn, TNext>` types, then just grab its type argument.
+                    let typeArgument: Type | undefined;
+                    if (isReferenceToType(type, getGlobalAsyncGeneratorType(/*reportErrors*/ false))) {
+                        typeArgument = (<GenericType>type).typeArguments![getTypeArgumentIndexFromIterationTypeKind(kind)];
+                    }
+                    else if (kind === IterationTypeKind.Yield) {
+                        if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
+                            isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
+                            typeArgument = (<GenericType>type).typeArguments![0];
+                        }
+                    }
+                    if (typeArgument) {
+                        return setCachedIterationType(typeAsIterable, IterationTypesCacheKind.AsyncIterable, kind, typeArgument);
                     }
                 }
 
                 if (allowSyncIterables) {
-                    if (typeAsIterable.iteratedTypeOfIterable) {
+                    if (cachedType = getCachedIterationType(typeAsIterable, IterationTypesCacheKind.Iterable, kind)) {
                         return allowAsyncIterables
-                            ? typeAsIterable.iteratedTypeOfAsyncIterable = getAwaitedType(typeAsIterable.iteratedTypeOfIterable)
-                            : typeAsIterable.iteratedTypeOfIterable;
+                            ? setCachedIterationType(typeAsIterable, IterationTypesCacheKind.AsyncIterable, kind, getAwaitedType(cachedType))
+                            : cachedType;
                     }
 
-                    // As an optimization, if the type is an instantiation of the global `Iterable<T>` or
-                    // `IterableIterator<T>` then just grab its type argument.
-                    if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
-                        isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
+                    // As an optimization, if the type is an instantiation of one of the global `Iterable<T>`,
+                    // `IterableIterator<T>`, or `Generator<TYield, TReturn, TNext>` types, then just grab its type argument.
+                    let typeArgument: Type | undefined;
+                    if (isReferenceToType(type, getGlobalGeneratorType(/*reportErrors*/ false))) {
+                        typeArgument = (<GenericType>type).typeArguments![getTypeArgumentIndexFromIterationTypeKind(kind)];
+                    }
+                    else if (kind === IterationTypeKind.Yield) {
+                        if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
+                            isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
+                            typeArgument = (<GenericType>type).typeArguments![0];
+                        }
+                    }
+                    if (typeArgument) {
                         return allowAsyncIterables
-                            ? typeAsIterable.iteratedTypeOfAsyncIterable = getAwaitedType((<GenericType>type).typeArguments![0])
-                            : typeAsIterable.iteratedTypeOfIterable = (<GenericType>type).typeArguments![0];
+                            ? setCachedIterationType(typeAsIterable, IterationTypesCacheKind.AsyncIterable, kind, getAwaitedType(typeArgument))
+                            : setCachedIterationType(typeAsIterable, IterationTypesCacheKind.Iterable, kind, typeArgument);
                     }
                 }
 
@@ -27112,20 +27207,20 @@ namespace ts {
                 }
 
                 const returnType = getUnionType(map(signatures, getReturnTypeOfSignature), UnionReduction.Subtype);
-                const iteratedType = getIteratedTypeOfIterator(returnType, errorNode, /*isAsyncIterator*/ !!asyncMethodType);
-                if (checkAssignability && errorNode && iteratedType) {
+                const iterationType = getIterationTypeOfIterator(kind, returnType, errorNode, /*isAsyncIterator*/ !!asyncMethodType);
+                if (checkAssignability && errorNode && iterationType && kind === IterationTypeKind.Yield) {
                     // If `checkAssignability` was specified, we were called from
                     // `checkIteratedTypeOrElementType`. As such, we need to validate that
                     // the type passed in is actually an Iterable.
                     checkTypeAssignableTo(type, asyncMethodType
-                        ? createAsyncIterableType(iteratedType)
-                        : createIterableType(iteratedType), errorNode);
+                        ? createAsyncIterableType(iterationType)
+                        : createIterableType(iterationType), errorNode);
                 }
 
-                if (iteratedType) {
+                if (iterationType) {
                     return allowAsyncIterables
-                        ? typeAsIterable.iteratedTypeOfAsyncIterable = asyncMethodType ? iteratedType : getAwaitedType(iteratedType)
-                        : typeAsIterable.iteratedTypeOfIterable = iteratedType;
+                        ? setCachedIterationType(typeAsIterable, IterationTypesCacheKind.AsyncIterable, kind, asyncMethodType ? iterationType : getAwaitedType(iterationType))
+                        : setCachedIterationType(typeAsIterable, IterationTypesCacheKind.Iterable, kind, iterationType);
                 }
             }
         }
@@ -27136,48 +27231,206 @@ namespace ts {
                 : Diagnostics.Type_0_must_have_a_Symbol_iterator_method_that_returns_an_iterator, typeToString(type));
         }
 
+        function isIteratorResult(type: Type, kind: IterationTypeKind.Yield | IterationTypeKind.Return) {
+            // From https://tc39.github.io/ecma262/#sec-iteratorresult-interface:
+            // > [done] is the result status of an iterator `next` method call. If the end of the iterator was reached `done` is `true`.
+            // > If the end was not reached `done` is `false` and a value is available.
+            // > If a `done` property (either own or inherited) does not exist, it is consider to have the value `false`.
+            const doneType = getTypeOfPropertyOfType(type, "done" as __String) || falseType;
+            return isTypeAssignableTo(kind === IterationTypeKind.Yield ? falseType : trueType, doneType);
+        }
+
         /**
-         * This function has very similar logic as getIteratedTypeOfIterable, except that it operates on
-         * Iterators instead of Iterables. Here is the structure:
-         *
-         *  { // iterator
-         *      next: { // nextMethod
-         *          (): { // nextResult
-         *              value: T // nextValue
-         *          }
-         *      }
-         *  }
-         *
-         * For an async iterator, we expect the following structure:
-         *
-         *  { // iterator
-         *      next: { // nextMethod
-         *          (): PromiseLike<{ // nextResult
-         *              value: T // nextValue
-         *          }>
-         *      }
-         *  }
+         * Determines whether `type` is an `IteratorResult`-like type whose `done` property could be `false`.
          */
-        function getIteratedTypeOfIterator(type: Type, errorNode: Node | undefined, isAsyncIterator: boolean): Type | undefined {
-            if (isTypeAny(type)) {
+        function isYieldIteratorResult(type: Type) {
+            return isIteratorResult(type, IterationTypeKind.Yield);
+        }
+
+        /**
+         * Determines whether `type` is an `IteratorResult`-like type whose `done` property could be `true`.
+         */
+        function isReturnIteratorResult(type: Type) {
+            return isIteratorResult(type, IterationTypeKind.Return);
+        }
+
+        /**
+         * Gets the iteration type of an `IteratorResult`-like type.
+         *
+         * We pick either `TYield` or `TReturn` (as specified by `kind`) if `type` matches:
+         * - `{done: false, value: TYield}`
+         * - `{done: true, value: TReturn}`
+         */
+        function getIterationTypeOfIteratorResult(kind: IterationTypeKind.Yield | IterationTypeKind.Return, type: Type, errorNode: Node | undefined, isAsyncIterator: boolean) {
+            const typeAsIterationCache = type as IterableOrIteratorType;
+
+            let cachedType: Type | undefined;
+            if (cachedType = getCachedIterationType(typeAsIterationCache, IterationTypesCacheKind.IteratorResult, kind)) {
+                return cachedType;
+            }
+
+            // As an optimization, if the type is an instantiation of one of the global `IteratorYieldResult<TYield>`
+            // or `IteratorReturnResult<TReturn>` types, then just grab its type argument.
+            const getGeneratorResultType = kind === IterationTypeKind.Yield ? getGlobalIteratorYieldResultType : getGlobalIteratorReturnResultType;
+            if (isReferenceToType(type, getGeneratorResultType(/*reportErrors*/ false))) {
+                const typeArgument = (type as GenericType).typeArguments![0];
+                return setCachedIterationType(typeAsIterationCache, IterationTypesCacheKind.IteratorResult, kind, typeArgument);
+            }
+
+            // Choose any constituents that can produce the requested iteration type.
+            const filteredType = filterType(type, kind === IterationTypeKind.Yield ? isYieldIteratorResult : isReturnIteratorResult);
+            let iterationType = filteredType !== neverType ? getTypeOfPropertyOfType(filteredType, "value" as __String) : undefined;
+            if (!iterationType) {
+                if (kind === IterationTypeKind.Return) {
+                    // From https://tc39.github.io/ecma262/#sec-iteratorresult-interface:
+                    // > ... If the iterator does not have a return value, `value` is `undefined`. In that case, the
+                    // > `value` property may be absent from the conforming object if it does not inherit an explicit
+                    // > `value` property.
+                    iterationType = voidType;
+                }
+                else {
+                    if (errorNode) {
+                        error(errorNode, isAsyncIterator
+                            ? Diagnostics.The_type_returned_by_the_next_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property
+                            : Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
+                    }
+                    return undefined;
+                }
+            }
+
+            return setCachedIterationType(typeAsIterationCache, IterationTypesCacheKind.IteratorResult, kind, iterationType);
+        }
+
+        /**
+         * Gets the return-type of the `next` method of an `Iterator`-like or `AsyncIterator`-like type:
+         *
+         * - If `isAsyncIterator` is `false`, we pick `T` if `type` matches:
+         *   - `{next(): T}`
+         *
+         * - If `isAsyncIterator` is `true`, we pick `T` if `type` matches:
+         *   - `{next(): PromiseLike<T>}`
+         */
+        function getReturnTypeFromNextMethodOfIterator(type: Type, errorNode: Node | undefined, isAsyncIterator: boolean) {
+            // Both async and non-async iterators must have a `next` method.
+            const nextMethod = getTypeOfPropertyOfType(type, "next" as __String);
+            if (isTypeAny(nextMethod)) {
+                return anyType;
+            }
+
+            const nextMethodSignatures = nextMethod ? getSignaturesOfType(nextMethod, SignatureKind.Call) : emptyArray;
+            if (nextMethodSignatures.length === 0) {
+                if (errorNode) {
+                    error(errorNode, isAsyncIterator
+                        ? Diagnostics.An_async_iterator_must_have_a_next_method
+                        : Diagnostics.An_iterator_must_have_a_next_method);
+                }
+                return errorType;
+            }
+
+            let nextReturnType: Type | undefined = getUnionType(map(nextMethodSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
+            if (isTypeAny(nextReturnType)) {
+                return anyType;
+            }
+
+            // For an async iterator, we must get the awaited type of the return type.
+            if (isAsyncIterator) {
+                nextReturnType = getAwaitedTypeOfPromise(nextReturnType, errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property);
+                if (isTypeAny(nextReturnType)) {
+                    return anyType;
+                }
+            }
+
+            return nextReturnType;
+        }
+
+        /**
+         * Gets the "yield" iteration type of an `Iterator`-like or `AsyncIterator`-like type:
+         *
+         * - If `isAsyncIterator` is `false`, we pick `T` if `type` matches:
+         *   - `{next(): {done: false, value: T}}`
+         *
+         * - If `isAsyncIterator` is `true`, we pick `T` if `type` matches:
+         *   - `{next(): PromiseLike<{done: false, value: T}>}`
+         */
+        function getYieldIterationTypeOfIterator(type: Type, errorNode: Node | undefined, isAsyncIterator: boolean) {
+            const iteratorResultType = getReturnTypeFromNextMethodOfIterator(type, errorNode, isAsyncIterator);
+            if (isTypeAny(iteratorResultType)) {
                 return undefined;
             }
 
-            const typeAsIterator = <IterableOrIteratorType>type;
-            if (isAsyncIterator ? typeAsIterator.iteratedTypeOfAsyncIterator : typeAsIterator.iteratedTypeOfIterator) {
-                return isAsyncIterator ? typeAsIterator.iteratedTypeOfAsyncIterator : typeAsIterator.iteratedTypeOfIterator;
+            return iteratorResultType && getIterationTypeOfIteratorResult(IterationTypeKind.Yield, iteratorResultType, errorNode, isAsyncIterator);
+        }
+
+        /**
+         * Gets the "return" iteration type from the `return` method of an `Iterator`-like or `AsyncIterator`-like type:
+         *
+         * - If `isAsyncIterator` is `false`, we pick `T` if `type` matches:
+         *   - `{return(value: T)}`
+         *
+         * - If `isAsyncIterator` is `false`, we pick `T` if `type` matches:
+         *   - `{return(value: T | PromiseLike<T>)}`
+         */
+        function getReturnIterationTypeFromReturnMethodOfIterator(type: Type, errorNode: Node | undefined, isAsyncIterator: boolean) {
+            // Both async and non-async iterators may have a `return` method.
+            const returnMethod = getTypeOfPropertyOfType(type, "return" as __String);
+            if (isTypeAny(returnMethod)) {
+                return undefined;
             }
 
-            // As an optimization, if the type is an instantiation of the global `Iterator<T>` (for
-            // a non-async iterator) or the global `AsyncIterator<T>` (for an async-iterator) then
-            // just grab its type argument.
-            const getIteratorType = isAsyncIterator ? getGlobalAsyncIteratorType : getGlobalIteratorType;
-            if (isReferenceToType(type, getIteratorType(/*reportErrors*/ false))) {
-                return isAsyncIterator
-                    ? typeAsIterator.iteratedTypeOfAsyncIterator = (<GenericType>type).typeArguments![0]
-                    : typeAsIterator.iteratedTypeOfIterator = (<GenericType>type).typeArguments![0];
+            const returnMethodSignatures = returnMethod ? getSignaturesOfType(returnMethod, SignatureKind.Call) : emptyArray;
+            if (returnMethodSignatures.length === 0) {
+                return undefined;
             }
 
+            let returnType: Type | undefined = getTypeWithFacts(getUnionType(map(returnMethodSignatures, getTypeOfFirstParameterOfSignature)), TypeFacts.NEUndefinedOrNull);
+            if (isTypeAny(returnType)) {
+                return undefined;
+            }
+
+            if (isAsyncIterator) {
+                returnType = getAwaitedTypeOfPromise(returnType, errorNode);
+                if (isTypeAny(returnType)) {
+                    return undefined;
+                }
+            }
+
+            return returnType;
+        }
+
+        /**
+         * Gets the "return" iteration type of an `Iterator`-like or `AsyncIterator`-like type:
+         *
+         * - If `isAsyncIterator` is `false`, we pick `T` if `type` matches:
+         *   - `{return(value: T)}`
+         *   - `{next(): {done: true, value: T}}`
+         *
+         * - If `isAsyncIterator` is `true`, we pick `T` if `type` matches:
+         *   - `{return(value: T | PromiseLike<T>)}`
+         *   - `{next(): PromiseLike<{done: true, value: T}>}`
+         */
+        function getReturnIterationTypeOfIterator(type: Type, errorNode: Node | undefined, isAsyncIterator: boolean) {
+            let returnType = getReturnIterationTypeFromReturnMethodOfIterator(type, errorNode, isAsyncIterator);
+            if (!returnType) {
+                const iteratorResultType = getReturnTypeFromNextMethodOfIterator(type, errorNode, isAsyncIterator);
+                if (isTypeAny(iteratorResultType)) {
+                    return undefined;
+                }
+
+                returnType = iteratorResultType && getIterationTypeOfIteratorResult(IterationTypeKind.Return, iteratorResultType, errorNode, isAsyncIterator);
+            }
+            return returnType;
+        }
+
+        /**
+         * Gets the "next" iteration type of an `Iterator`-like or `AsyncIterator`-like type:
+         *
+         * - If `isAsyncIterator` is `false`, we pick `T` if `type` matches:
+         *   - `{next(value?: T)}`
+         *
+         * - If `isAsyncIterator` is `true`, we pick `T` if `type` matches:
+         *   - `{next(value?: T | PromiseLike<T>)}`
+         */
+        function getNextIterationTypeOfIterator(type: Type, errorNode: Node | undefined, isAsyncIterator: boolean) {
             // Both async and non-async iterators must have a `next` method.
             const nextMethod = getTypeOfPropertyOfType(type, "next" as __String);
             if (isTypeAny(nextMethod)) {
@@ -27194,47 +27447,92 @@ namespace ts {
                 return undefined;
             }
 
-            let nextResult: Type | undefined = getUnionType(map(nextMethodSignatures, getReturnTypeOfSignature), UnionReduction.Subtype);
-            if (isTypeAny(nextResult)) {
-                return undefined;
+            let nextParameterTypes: Type[] | undefined;
+            for (const signature of nextMethodSignatures) {
+                const type = signature.parameters.length > 0 ? getTypeAtPosition(signature, 0) : undefined;
+                if (type) nextParameterTypes = append(nextParameterTypes, type);
             }
 
-            // For an async iterator, we must get the awaited type of the return type.
+            // If no signature for `next()` takes an argument, then return `unknownType` instead.
+            if (!nextParameterTypes) {
+                return unknownType;
+            }
+
+            let nextType: Type | undefined = getTypeWithFacts(getUnionType(nextParameterTypes), TypeFacts.NEUndefinedOrNull);
+            if (isTypeAny(nextType)) {
+                return undefined;
+            }
             if (isAsyncIterator) {
-                nextResult = getAwaitedTypeOfPromise(nextResult, errorNode, Diagnostics.The_type_returned_by_the_next_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property);
-                if (isTypeAny(nextResult)) {
+                nextType = getAwaitedTypeOfPromise(nextType, errorNode);
+                if (isTypeAny(nextType)) {
                     return undefined;
                 }
             }
-
-            const nextValue = nextResult && getTypeOfPropertyOfType(nextResult, "value" as __String);
-            if (!nextValue) {
-                if (errorNode) {
-                    error(errorNode, isAsyncIterator
-                        ? Diagnostics.The_type_returned_by_the_next_method_of_an_async_iterator_must_be_a_promise_for_a_type_with_a_value_property
-                        : Diagnostics.The_type_returned_by_the_next_method_of_an_iterator_must_have_a_value_property);
-                }
-                return undefined;
-            }
-
-            return isAsyncIterator
-                ? typeAsIterator.iteratedTypeOfAsyncIterator = nextValue
-                : typeAsIterator.iteratedTypeOfIterator = nextValue;
+            return nextType;
         }
 
         /**
-         * A generator may have a return type of `Iterator<T>`, `Iterable<T>`, or
-         * `IterableIterator<T>`. An async generator may have a return type of `AsyncIterator<T>`,
-         * `AsyncIterable<T>`, or `AsyncIterableIterator<T>`. This function can be used to extract
-         * the iterated type from this return type for contextual typing and verifying signatures.
+         * Gets the specified "iteration type" from an `Iterator`-like or `AsyncIterator`-like type.
+         *
+         * We pick either pick either `TYield`, `TReturn`, or `TNext` (as specified by `kind`) per the following rules:
+         *
+         * - If `isAsyncIterator` is `false` and `type` matches:
+         *   - `{next(value?: TNext)}`
+         *   - `{return(value?: TReturn)}`
+         *   - `{next(): {done: false, value: TYield}}`
+         *   - `{next(): {done: true, value: TReturn}}`
+         *
+         * - If `isAsyncIterator` is `true` and `type` matches:
+         *   - `{next(value?: TNext | PromiseLike<TNext>)}`
+         *   - `{return(value?: TReturn | PromiseLike<TReturn>)}`
+         *   - `{next(): PromiseLike<{done: false, value: TYield}>}`
+         *   - `{next(): PromiseLike<{done: true, value: TReturn}>}`
          */
-        function getIteratedTypeOfGenerator(returnType: Type, isAsyncGenerator: boolean): Type | undefined {
+        function getIterationTypeOfIterator(kind: IterationTypeKind, type: Type, errorNode: Node | undefined, isAsyncIterator: boolean): Type | undefined {
+            if (isTypeAny(type)) {
+                return undefined;
+            }
+
+            const typeAsIterator = <IterableOrIteratorType>type;
+            const cacheKind = isAsyncFunction ? IterationTypesCacheKind.AsyncIterator : IterationTypesCacheKind.Iterator;
+            let cacheType: Type | undefined;
+            if (cacheType = getCachedIterationType(typeAsIterator, cacheKind, kind)) {
+                return cacheType;
+            }
+
+            // As an optimization, if the type is an instantiation of the global `Iterator<T>` (for
+            // a non-async iterator) or the global `AsyncIterator<T>` (for an async-iterator) then
+            // just grab its type argument.
+            const getIteratorType = kind === IterationTypeKind.Yield ? (isAsyncIterator ? getGlobalAsyncIteratorType : getGlobalIteratorType) : undefined;
+            const getIterableIteratorType = kind === IterationTypeKind.Yield ? (isAsyncIterator ? getGlobalAsyncIterableIteratorType : getGlobalIterableIteratorType) : undefined;
+            const getGeneratorType = isAsyncIterator ? getGlobalAsyncGeneratorType : getGlobalGeneratorType;
+            if (getIteratorType && isReferenceToType(type, getIteratorType(/*reportErrors*/ false)) ||
+                getIterableIteratorType && isReferenceToType(type, getIterableIteratorType(/*reportErrors*/ false)) ||
+                isReferenceToType(type, getGeneratorType(/*reportErrors*/ false))) {
+                const typeArgument = (<GenericType>type).typeArguments![getTypeArgumentIndexFromIterationTypeKind(kind)];
+                return setCachedIterationType(typeAsIterator, cacheKind, kind, typeArgument);
+            }
+
+            const iterationType =
+                kind === IterationTypeKind.Yield ? getYieldIterationTypeOfIterator(type, errorNode, isAsyncIterator) :
+                kind === IterationTypeKind.Return ? getReturnIterationTypeOfIterator(type, errorNode, isAsyncIterator) :
+                getNextIterationTypeOfIterator(type, errorNode, isAsyncIterator);
+
+            return setCachedIterationType(typeAsIterator, cacheKind, kind, iterationType);
+        }
+
+        /**
+         * Gets the requested "iteration type" from a type that is either `Iterable`-like, `Iterator`-like,
+         * `IterableIterator`-like, or `Generator`-like (for a non-async generator); or `AsyncIterable`-like,
+         * `AsyncIterator`-like, `AsyncIterableIterator`-like, or `Generator`-like.
+         */
+        function getIterationTypeOfGeneratorFunctionReturnType(kind: IterationTypeKind, returnType: Type, isAsyncGenerator: boolean): Type | undefined {
             if (isTypeAny(returnType)) {
                 return undefined;
             }
 
-            return getIteratedTypeOfIterable(returnType, /*errorNode*/ undefined, /*allowAsyncIterables*/ isAsyncGenerator, /*allowSyncIterables*/ !isAsyncGenerator, /*checkAssignability*/ false)
-                || getIteratedTypeOfIterator(returnType, /*errorNode*/ undefined, isAsyncGenerator);
+            return getIterationTypeOfIterable(kind, returnType, /*errorNode*/ undefined, /*allowAsyncIterables*/ isAsyncGenerator, /*allowSyncIterables*/ !isAsyncGenerator, /*checkAssignability*/ false)
+                || getIterationTypeOfIterator(kind, returnType, /*errorNode*/ undefined, isAsyncGenerator);
         }
 
         function checkBreakOrContinueStatement(node: BreakOrContinueStatement) {
@@ -27244,10 +27542,16 @@ namespace ts {
             // TODO: Check that target label is valid
         }
 
+        function unwrapReturnType(returnType: Type, functionFlags: FunctionFlags) {
+            const isGenerator = !!(functionFlags & FunctionFlags.Generator);
+            const isAsync = !!(functionFlags & FunctionFlags.Async);
+            return isGenerator ? getIterationTypeOfGeneratorFunctionReturnType(IterationTypeKind.Return, returnType, isAsync) || errorType :
+                isAsync ? getPromisedTypeOfPromise(returnType) || errorType :
+                returnType;
+        }
+
         function isUnwrappedReturnTypeVoidOrAny(func: SignatureDeclaration, returnType: Type): boolean {
-            const unwrappedReturnType = (getFunctionFlags(func) & FunctionFlags.AsyncGenerator) === FunctionFlags.Async
-                ? getPromisedTypeOfPromise(returnType) // Async function
-                : returnType; // AsyncGenerator function, Generator function, or normal function
+            const unwrappedReturnType = unwrapReturnType(returnType, getFunctionFlags(func));
             return !!unwrappedReturnType && maybeTypeOfKind(unwrappedReturnType, TypeFlags.Void | TypeFlags.AnyOrUnknown);
         }
 
@@ -27266,17 +27570,9 @@ namespace ts {
             const signature = getSignatureFromDeclaration(func);
             const returnType = getReturnTypeOfSignature(signature);
             const functionFlags = getFunctionFlags(func);
-            const isGenerator = functionFlags & FunctionFlags.Generator;
             if (strictNullChecks || node.expression || returnType.flags & TypeFlags.Never) {
                 const exprType = node.expression ? checkExpressionCached(node.expression) : undefinedType;
-                if (isGenerator) { // AsyncGenerator function or Generator function
-                    // A generator does not need its return expressions checked against its return type.
-                    // Instead, the yield expressions are checked against the element type.
-                    // TODO: Check return types of generators when return type tracking is added
-                    // for generators.
-                    return;
-                }
-                else if (func.kind === SyntaxKind.SetAccessor) {
+                if (func.kind === SyntaxKind.SetAccessor) {
                     if (node.expression) {
                         error(node, Diagnostics.Setters_cannot_return_a_value);
                     }
@@ -27287,22 +27583,19 @@ namespace ts {
                     }
                 }
                 else if (getReturnTypeFromAnnotation(func)) {
-                    if (functionFlags & FunctionFlags.Async) { // Async function
-                        const promisedType = getPromisedTypeOfPromise(returnType);
-                        const awaitedType = checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member);
-                        if (promisedType) {
-                            // If the function has a return type, but promisedType is
-                            // undefined, an error will be reported in checkAsyncFunctionReturnType
-                            // so we don't need to report one here.
-                            checkTypeAssignableToAndOptionallyElaborate(awaitedType, promisedType, node, node.expression);
-                        }
-                    }
-                    else {
-                        checkTypeAssignableToAndOptionallyElaborate(exprType, returnType, node, node.expression);
+                    const unwrappedReturnType = unwrapReturnType(returnType, functionFlags);
+                    const unwrappedExprType = functionFlags & FunctionFlags.Async
+                        ? checkAwaitedType(exprType, node, Diagnostics.The_return_type_of_an_async_function_must_either_be_a_valid_promise_or_must_not_contain_a_callable_then_member)
+                        : exprType;
+                    if (unwrappedReturnType) {
+                        // If the function has a return type, but promisedType is
+                        // undefined, an error will be reported in checkAsyncFunctionReturnType
+                        // so we don't need to report one here.
+                        checkTypeAssignableToAndOptionallyElaborate(unwrappedExprType, unwrappedReturnType, node, node.expression);
                     }
                 }
             }
-            else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType) && !isGenerator) {
+            else if (func.kind !== SyntaxKind.Constructor && compilerOptions.noImplicitReturns && !isUnwrappedReturnTypeVoidOrAny(func, returnType)) {
                 // The function has a return type, but the return statement doesn't have an expression.
                 error(node, Diagnostics.Not_all_code_paths_return_a_value);
             }
@@ -32214,5 +32507,51 @@ namespace ts {
         export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
         export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;
         // tslint:enable variable-name
+    }
+
+    function getCacheKeyFromIterationTypesCacheKind(cacheKind: IterationTypesCacheKind) {
+        switch (cacheKind) {
+            case IterationTypesCacheKind.Iterable: return "iterationTypesOfIterable";
+            case IterationTypesCacheKind.Iterator: return "iterationTypesOfIterator";
+            case IterationTypesCacheKind.AsyncIterable: return "iterationTypesOfAsyncIterable";
+            case IterationTypesCacheKind.AsyncIterator: return "iterationTypesOfAsyncIterator";
+            case IterationTypesCacheKind.IteratorResult: return "iterationTypesOfIteratorResult";
+        }
+    }
+
+    function getCacheKeyFromIterationTypeKind(typeKind: IterationTypeKind) {
+        switch (typeKind) {
+            case IterationTypeKind.Yield: return "yieldType";
+            case IterationTypeKind.Return: return "returnType";
+            case IterationTypeKind.Next: return "nextType";
+        }
+    }
+
+    function getTypeArgumentIndexFromIterationTypeKind(typeKind: IterationTypeKind) {
+        switch (typeKind) {
+            case IterationTypeKind.Yield: return 0;
+            case IterationTypeKind.Return: return 1;
+            case IterationTypeKind.Next: return 2;
+        }
+    }
+
+    function getCachedIterationTypes(type: IterableOrIteratorType, cacheKind: IterationTypesCacheKind, create: true): IterationTypes;
+    function getCachedIterationTypes(type: IterableOrIteratorType, cacheKind: IterationTypesCacheKind, create: boolean): IterationTypes | undefined;
+    function getCachedIterationTypes(type: IterableOrIteratorType, cacheKind: IterationTypesCacheKind, create: boolean) {
+        const key = getCacheKeyFromIterationTypesCacheKind(cacheKind);
+        return type[key] || (create ? type[key] = {} : undefined);
+    }
+
+    function getCachedIterationType(typeAsIterableOrIterator: IterableOrIteratorType, cacheKind: IterationTypesCacheKind, typeKind: IterationTypeKind) {
+        const iterationTypes = getCachedIterationTypes(typeAsIterableOrIterator, cacheKind, /*create*/ false);
+        return iterationTypes && iterationTypes[getCacheKeyFromIterationTypeKind(typeKind)];
+    }
+
+    function setCachedIterationType(typeAsIterableOrIterator: IterableOrIteratorType, cacheKind: IterationTypesCacheKind, typeKind: IterationTypeKind, type: Type | undefined) {
+        if (type) {
+            const iterationTypes = getCachedIterationTypes(typeAsIterableOrIterator, cacheKind, /*create*/ true);
+            iterationTypes[getCacheKeyFromIterationTypeKind(typeKind)] = type;
+            return type;
+        }
     }
 }

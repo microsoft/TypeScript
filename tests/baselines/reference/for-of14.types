@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of14.ts ===
-class StringIterator {
->StringIterator : StringIterator
+class _StringIterator {
+>_StringIterator : _StringIterator
 
     next() {
 >next : () => string
@@ -13,8 +13,8 @@ class StringIterator {
 var v: string;
 >v : string
 
-for (v of new StringIterator) { } // Should fail because the iterator is not iterable
+for (v of new _StringIterator) { } // Should fail because the iterator is not iterable
 >v : string
->new StringIterator : StringIterator
->StringIterator : typeof StringIterator
+>new _StringIterator : _StringIterator
+>_StringIterator : typeof _StringIterator
 

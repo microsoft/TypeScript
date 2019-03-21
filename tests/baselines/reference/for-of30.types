@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of30.ts ===
-class StringIterator {
->StringIterator : StringIterator
+class _StringIterator {
+>_StringIterator : _StringIterator
 
     next() {
 >next : () => { done: boolean; value: string; }
@@ -17,11 +17,11 @@ class StringIterator {
 >"" : ""
         }
     }
-    
+
     return = 0;
 >return : number
 >0 : 0
-    
+
     [Symbol.iterator]() {
 >[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
@@ -33,8 +33,8 @@ class StringIterator {
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new _StringIterator) { }
 >v : string
->new StringIterator : StringIterator
->StringIterator : typeof StringIterator
+>new _StringIterator : _StringIterator
+>_StringIterator : typeof _StringIterator
 

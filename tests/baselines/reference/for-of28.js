@@ -1,17 +1,17 @@
 //// [for-of28.ts]
-class StringIterator {
+class _StringIterator {
     next: any;
     [Symbol.iterator]() {
         return this;
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new _StringIterator) { }
 
 //// [for-of28.js]
-class StringIterator {
+class _StringIterator {
     [Symbol.iterator]() {
         return this;
     }
 }
-for (var v of new StringIterator) { }
+for (var v of new _StringIterator) { }

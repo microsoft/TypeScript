@@ -1,23 +1,23 @@
 //// [for-of30.ts]
-class StringIterator {
+class _StringIterator {
     next() {
         return {
             done: false,
             value: ""
         }
     }
-    
+
     return = 0;
-    
+
     [Symbol.iterator]() {
         return this;
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new _StringIterator) { }
 
 //// [for-of30.js]
-class StringIterator {
+class _StringIterator {
     constructor() {
         this.return = 0;
     }
@@ -31,4 +31,4 @@ class StringIterator {
         return this;
     }
 }
-for (var v of new StringIterator) { }
+for (var v of new _StringIterator) { }

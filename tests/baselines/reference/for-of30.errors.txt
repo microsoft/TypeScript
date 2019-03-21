@@ -1,32 +1,32 @@
-tests/cases/conformance/es6/for-ofStatements/for-of30.ts(16,15): error TS2322: Type 'StringIterator' is not assignable to type 'Iterable<string>'.
+tests/cases/conformance/es6/for-ofStatements/for-of30.ts(16,15): error TS2322: Type '_StringIterator' is not assignable to type 'Iterable<string>'.
   Types of property '[Symbol.iterator]' are incompatible.
-    Type '() => StringIterator' is not assignable to type '() => Iterator<string>'.
-      Type 'StringIterator' is not assignable to type 'Iterator<string>'.
+    Type '() => _StringIterator' is not assignable to type '() => Iterator<string>'.
+      Type '_StringIterator' is not assignable to type 'Iterator<string>'.
         Types of property 'return' are incompatible.
-          Type 'number' is not assignable to type '(value?: any) => IteratorResult<string>'.
+          Type 'number' is not assignable to type '(value?: any) => IteratorResult<string, string | void>'.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of30.ts (1 errors) ====
-    class StringIterator {
+    class _StringIterator {
         next() {
             return {
                 done: false,
                 value: ""
             }
         }
-        
+    
         return = 0;
-        
+    
         [Symbol.iterator]() {
             return this;
         }
     }
     
-    for (var v of new StringIterator) { }
-                  ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'StringIterator' is not assignable to type 'Iterable<string>'.
+    for (var v of new _StringIterator) { }
+                  ~~~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '_StringIterator' is not assignable to type 'Iterable<string>'.
 !!! error TS2322:   Types of property '[Symbol.iterator]' are incompatible.
-!!! error TS2322:     Type '() => StringIterator' is not assignable to type '() => Iterator<string>'.
-!!! error TS2322:       Type 'StringIterator' is not assignable to type 'Iterator<string>'.
+!!! error TS2322:     Type '() => _StringIterator' is not assignable to type '() => Iterator<string>'.
+!!! error TS2322:       Type '_StringIterator' is not assignable to type 'Iterator<string>'.
 !!! error TS2322:         Types of property 'return' are incompatible.
-!!! error TS2322:           Type 'number' is not assignable to type '(value?: any) => IteratorResult<string>'.
+!!! error TS2322:           Type 'number' is not assignable to type '(value?: any) => IteratorResult<string, string | void>'.

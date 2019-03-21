@@ -1,9 +1,9 @@
 ﻿//@target: ES6
 //@noImplicitAny: true
-class StringIterator {
+class _StringIterator {
     [Symbol.iterator]() {
         return v;
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new _StringIterator) { }

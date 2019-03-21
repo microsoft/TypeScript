@@ -1,8 +1,8 @@
 === tests/cases/conformance/es6/yieldExpressions/YieldStarExpression4_es6.ts ===
 function *g() {
->g : () => IterableIterator<any>
+>g : () => Generator<any, void, unknown>
 
     yield * [];
->yield * [] : any
+>yield * [] : void
 >[] : undefined[]
 }

@@ -1,5 +1,5 @@
 //// [for-of15.ts]
-class StringIterator {
+class _StringIterator {
     next() {
         return "";
     }
@@ -9,10 +9,10 @@ class StringIterator {
 }
 
 var v: string;
-for (v of new StringIterator) { } // Should fail
+for (v of new _StringIterator) { } // Should fail
 
 //// [for-of15.js]
-class StringIterator {
+class _StringIterator {
     next() {
         return "";
     }
@@ -21,4 +21,4 @@ class StringIterator {
     }
 }
 var v;
-for (v of new StringIterator) { } // Should fail
+for (v of new _StringIterator) { } // Should fail
