@@ -2723,7 +2723,7 @@ namespace ts {
             }
 
             if (options.incremental && !options.configFilePath) {
-                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_speicified_when_using_tsconfig));
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_when_using_tsconfig));
             }
 
             if (options.composite) {

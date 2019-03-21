@@ -3072,7 +3072,7 @@
         "category": "Error",
         "code": 5073
     },
-    "Option '--incremental' can only be speicified when using tsconfig.": {
+    "Option '--incremental' can only be specified when using tsconfig.": {
         "category": "Error",
         "code": 5074
     },
