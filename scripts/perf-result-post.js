@@ -9,6 +9,8 @@ const source = process.env.source_issue;
 const postedComment = process.env.status_comment;
 console.log(`Loading fragment from ${process.argv[3]}...`);
 const outputTableText = fs.readFileSync(process.argv[3], { encoding: "utf8" });
+console.log(`Fragment contents:
+${outputTableText}`);
 
 const gh = new Octokit();
 gh.authenticate({
@@ -42,4 +44,5 @@ Update: [The results are in!](${newCommentUrl})`;
     });
 }).catch(e => {
     console.error(e);
+    process.exit(1);
 });
