@@ -1,0 +1,144 @@
+=== tests/cases/compiler/intersectionOfCallsWithSameParameters.ts ===
+interface One {
+    overload(id: string): { one: number };
+>overload : (id: string) => { one: number; }
+>id : string
+>one : number
+
+    intersect(id: string): { one: number };
+>intersect : (id: string) => { one: number; }
+>id : string
+>one : number
+}
+
+interface Two {
+    overload(id: number): { two: number };
+>overload : (id: number) => { two: number; }
+>id : number
+>two : number
+
+    intersect(id: string): { two: number };
+>intersect : (id: string) => { two: number; }
+>id : string
+>two : number
+}
+
+class Both implements One, Two {
+>Both : Both
+
+    overload(id: number): { two: number };
+>overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
+>id : number
+>two : number
+
+    overload(id: string): { one: number };
+>overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
+>id : string
+>one : number
+
+    overload(id: string | number): { one: number, two: number } {
+>overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
+>id : string | number
+>one : number
+>two : number
+
+        return {
+>{            one: 1,            two: 2        } : { one: number; two: number; }
+
+            one: 1,
+>one : number
+>1 : 1
+
+            two: 2
+>two : number
+>2 : 2
+
+        };
+    }
+
+    intersect(id: string): { one: number, two: number } {
+>intersect : (id: string) => { one: number; two: number; }
+>id : string
+>one : number
+>two : number
+
+        return {
+>{            one: 1,            two: 2        } : { one: number; two: number; }
+
+            one: 1,
+>one : number
+>1 : 1
+
+            two: 2
+>two : number
+>2 : 2
+
+        };
+    }
+}
+
+const b = new Both();
+>b : Both
+>new Both() : Both
+>Both : typeof Both
+
+const intersect: { one: number, two: number } = b.intersect('test');
+>intersect : { one: number; two: number; }
+>one : number
+>two : number
+>b.intersect('test') : { one: number; two: number; }
+>b.intersect : (id: string) => { one: number; two: number; }
+>b : Both
+>intersect : (id: string) => { one: number; two: number; }
+>'test' : "test"
+
+const overloadA: { one: number } = b.overload('test');
+>overloadA : { one: number; }
+>one : number
+>b.overload('test') : { one: number; }
+>b.overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
+>b : Both
+>overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
+>'test' : "test"
+
+const overloadB: { two: number } = b.overload(4);
+>overloadB : { two: number; }
+>two : number
+>b.overload(4) : { two: number; }
+>b.overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
+>b : Both
+>overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
+>4 : 4
+
+const bAs: One & Two = b;
+>bAs : One & Two
+>b : Both
+
+const asIntersect: { one: number, two: number } = bAs.intersect('test');
+>asIntersect : { one: number; two: number; }
+>one : number
+>two : number
+>bAs.intersect('test') : { one: number; } & { two: number; }
+>bAs.intersect : ((id: string) => { one: number; }) & ((id: string) => { two: number; })
+>bAs : One & Two
+>intersect : ((id: string) => { one: number; }) & ((id: string) => { two: number; })
+>'test' : "test"
+
+const asOverloadA: { one: number } = bAs.overload('test');
+>asOverloadA : { one: number; }
+>one : number
+>bAs.overload('test') : { one: number; }
+>bAs.overload : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
+>bAs : One & Two
+>overload : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
+>'test' : "test"
+
+const asOverloadB: { two: number } = bAs.overload(4);
+>asOverloadB : { two: number; }
+>two : number
+>bAs.overload(4) : { two: number; }
+>bAs.overload : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
+>bAs : One & Two
+>overload : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
+>4 : 4
+

@@ -1,0 +1,131 @@
+=== tests/cases/compiler/intersectionOfCallsWithSameParameters.ts ===
+interface One {
+>One : Symbol(One, Decl(intersectionOfCallsWithSameParameters.ts, 0, 0))
+
+    overload(id: string): { one: number };
+>overload : Symbol(One.overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 1, 13))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 1, 27))
+
+    intersect(id: string): { one: number };
+>intersect : Symbol(One.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 1, 42))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 2, 14))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 2, 28))
+}
+
+interface Two {
+>Two : Symbol(Two, Decl(intersectionOfCallsWithSameParameters.ts, 3, 1))
+
+    overload(id: number): { two: number };
+>overload : Symbol(Two.overload, Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 6, 13))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 6, 27))
+
+    intersect(id: string): { two: number };
+>intersect : Symbol(Two.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 6, 42))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 7, 14))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 7, 28))
+}
+
+class Both implements One, Two {
+>Both : Symbol(Both, Decl(intersectionOfCallsWithSameParameters.ts, 8, 1))
+>One : Symbol(One, Decl(intersectionOfCallsWithSameParameters.ts, 0, 0))
+>Two : Symbol(Two, Decl(intersectionOfCallsWithSameParameters.ts, 3, 1))
+
+    overload(id: number): { two: number };
+>overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 11, 13))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 11, 27))
+
+    overload(id: string): { one: number };
+>overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 12, 13))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 12, 27))
+
+    overload(id: string | number): { one: number, two: number } {
+>overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 13, 13))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 13, 36))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 13, 49))
+
+        return {
+            one: 1,
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 14, 16))
+
+            two: 2
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 15, 19))
+
+        };
+    }
+
+    intersect(id: string): { one: number, two: number } {
+>intersect : Symbol(Both.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 18, 5))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 20, 14))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 20, 28))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 20, 41))
+
+        return {
+            one: 1,
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 21, 16))
+
+            two: 2
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 22, 19))
+
+        };
+    }
+}
+
+const b = new Both();
+>b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
+>Both : Symbol(Both, Decl(intersectionOfCallsWithSameParameters.ts, 8, 1))
+
+const intersect: { one: number, two: number } = b.intersect('test');
+>intersect : Symbol(intersect, Decl(intersectionOfCallsWithSameParameters.ts, 29, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 29, 18))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 29, 31))
+>b.intersect : Symbol(Both.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 18, 5))
+>b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
+>intersect : Symbol(Both.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 18, 5))
+
+const overloadA: { one: number } = b.overload('test');
+>overloadA : Symbol(overloadA, Decl(intersectionOfCallsWithSameParameters.ts, 30, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 30, 18))
+>b.overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
+>b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
+>overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
+
+const overloadB: { two: number } = b.overload(4);
+>overloadB : Symbol(overloadB, Decl(intersectionOfCallsWithSameParameters.ts, 31, 5))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 31, 18))
+>b.overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
+>b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
+>overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
+
+const bAs: One & Two = b;
+>bAs : Symbol(bAs, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
+>One : Symbol(One, Decl(intersectionOfCallsWithSameParameters.ts, 0, 0))
+>Two : Symbol(Two, Decl(intersectionOfCallsWithSameParameters.ts, 3, 1))
+>b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
+
+const asIntersect: { one: number, two: number } = bAs.intersect('test');
+>asIntersect : Symbol(asIntersect, Decl(intersectionOfCallsWithSameParameters.ts, 33, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 33, 20))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 33, 33))
+>bAs.intersect : Symbol(intersect, Decl(intersectionOfCallsWithSameParameters.ts, 1, 42), Decl(intersectionOfCallsWithSameParameters.ts, 6, 42))
+>bAs : Symbol(bAs, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
+>intersect : Symbol(intersect, Decl(intersectionOfCallsWithSameParameters.ts, 1, 42), Decl(intersectionOfCallsWithSameParameters.ts, 6, 42))
+
+const asOverloadA: { one: number } = bAs.overload('test');
+>asOverloadA : Symbol(asOverloadA, Decl(intersectionOfCallsWithSameParameters.ts, 34, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 34, 20))
+>bAs.overload : Symbol(overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
+>bAs : Symbol(bAs, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
+>overload : Symbol(overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
+
+const asOverloadB: { two: number } = bAs.overload(4);
+>asOverloadB : Symbol(asOverloadB, Decl(intersectionOfCallsWithSameParameters.ts, 35, 5))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 35, 20))
+>bAs.overload : Symbol(overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
+>bAs : Symbol(bAs, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
+>overload : Symbol(overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
+
