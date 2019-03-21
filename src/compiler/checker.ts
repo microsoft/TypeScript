@@ -2352,19 +2352,12 @@ namespace ts {
             }
 
             if (moduleNotFoundError) {
-                // For relative paths, see if this was possibly a projectReference redirect
-                if (pathIsRelative(moduleReference)) {
-                    const sourceFile = getSourceFileOfNode(location);
-                    const redirects = sourceFile.redirectedReferences;
-                    if (redirects) {
-                        const normalizedTargetPath = getNormalizedAbsolutePath(moduleReference, getDirectoryPath(sourceFile.fileName));
-                        for (const ext of [Extension.Ts, Extension.Tsx]) {
-                            const probePath = normalizedTargetPath + ext;
-                            if (redirects.indexOf(probePath) >= 0) {
-                                error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, moduleReference, probePath);
-                                return undefined;
-                            }
-                        }
+                // See if this was possibly a projectReference redirect
+                if (resolvedModule) {
+                    const redirect = host.getProjectReferenceRedirect(resolvedModule.resolvedFileName);
+                    if (redirect) {
+                        error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect, resolvedModule.resolvedFileName);
+                        return undefined;
                     }
                 }
 

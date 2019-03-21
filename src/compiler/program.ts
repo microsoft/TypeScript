@@ -2268,7 +2268,6 @@ namespace ts {
             if (refFile) {
                 const redirect = getProjectReferenceRedirect(fileName);
                 if (redirect) {
-                    ((refFile.redirectedReferences || (refFile.redirectedReferences = [])) as string[]).push(fileName);
                     fileName = redirect;
                     // Once we start redirecting to a file, we can potentially come back to it
                     // via a back-reference from another file in the .d.ts folder. If that happens we'll
