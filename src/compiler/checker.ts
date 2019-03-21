@@ -7087,18 +7087,19 @@ namespace ts {
                     }
                     constructSignatures = concatenate(constructSignatures, signatures);
                 }
-
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
                 stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
                 numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
             }
-
             callSignatures = intersectCallSignatures(callSignatures);
-
             setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
         function intersectCallSignatures(callSignatures: ReadonlyArray<Signature>): ReadonlyArray<Signature> {
+            if (callSignatures.length === 0) {
+                return callSignatures;
+            }
+
             // Overloads that differ only be return type make no sense. So:
             // 1. Group all the call signatures by their parameter types. Each group is an overload.
             // 2. Create a new signature for each group where the return type is the intersection
@@ -7115,7 +7116,8 @@ namespace ts {
                 });
                 if (matchingGroup === undefined) {
                     groups.push([callSignature]);
-                } else {
+                }
+                else {
                     matchingGroup.push(callSignature);
                 }
             });
