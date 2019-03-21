@@ -99,7 +99,19 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     groupedReferences.valid = false;
                     continue;
                 }
-                if (contains(functionSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
+
+                /* We compare symbols because in some cases find all references wil return a reference that may or may not be to the refactored function.
+                Example from the refactorConvertParamsToDestructuredObject_methodCallUnion.ts test:
+                    class A { foo(a: number, b: number) { return a + b; } }
+                    class B { foo(c: number, d: number) { return c + d; } }
+                    declare const ab: A | B;
+                    ab.foo(1, 2);
+                Find all references will return `ab.foo(1, 2)` as a reference to A's `foo` but we could be calling B's `foo`.
+                When looking for constructor calls, however, the symbol on the constructor call reference is going to be the corresponding class symbol.
+                So we need to add a special case for this because when calling a constructor of a class through one of its subclasses,
+                the symbols are going to be different.
+                */
+                if (contains(functionSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer) || isNewExpressionTarget(entry.node)) {
                     const decl = entryToDeclaration(entry);
                     if (decl) {
                         groupedReferences.declarations.push(decl);
