@@ -63,7 +63,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeReferences: Map<true> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
+        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -701,12 +701,12 @@ namespace ts {
             }
         }
 
-        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement) {
+        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement | ExportAssignment) {
             // Exported top-level member indicates moduleness
             return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
         }
 
-        function needsScopeMarker(result: LateVisibilityPaintedStatement) {
+        function needsScopeMarker(result: LateVisibilityPaintedStatement | ExportAssignment) {
             return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
         }
 
@@ -1228,8 +1228,6 @@ namespace ts {
                         return preserveJsDoc(updateEnumMember(m, m.name, constValue !== undefined ? createLiteral(constValue) : undefined), m);
                     }))));
                 }
-                case SyntaxKind.ExportAssignment:
-                    return;
             }
             // Anything left unhandled is an error, so this should be unreachable
             return Debug.assertNever(input, `Unhandled top-level node in declaration emit: ${(ts as any).SyntaxKind[(input as any).kind]}`);
