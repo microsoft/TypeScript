@@ -1,6 +1,5 @@
 tests/cases/compiler/c.ts(7,5): error TS2367: This condition will always return 'false' since the types 'import("tests/cases/compiler/a").F' and 'import("tests/cases/compiler/b").F' have no overlap.
-tests/cases/compiler/c.ts(11,1): error TS2322: Type 'import("tests/cases/compiler/b").F' is not assignable to type 'import("tests/cases/compiler/a").F'.
-  Property 'foo1' is missing in type 'F'.
+tests/cases/compiler/c.ts(11,1): error TS2741: Property 'foo1' is missing in type 'F' but required in type 'F'.
 
 
 ==== tests/cases/compiler/a.ts (0 errors) ====
@@ -28,6 +27,6 @@ tests/cases/compiler/c.ts(11,1): error TS2322: Type 'import("tests/cases/compile
     
     a = b
     ~
-!!! error TS2322: Type 'import("tests/cases/compiler/b").F' is not assignable to type 'import("tests/cases/compiler/a").F'.
-!!! error TS2322:   Property 'foo1' is missing in type 'F'.
+!!! error TS2741: Property 'foo1' is missing in type 'F' but required in type 'F'.
+!!! related TS2728 tests/cases/compiler/a.ts:2:5: 'foo1' is declared here.
     
