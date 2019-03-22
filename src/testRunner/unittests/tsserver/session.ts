@@ -8,7 +8,7 @@ namespace ts.server {
         newLine: "\n",
         useCaseSensitiveFileNames: true,
         write(s): void { lastWrittenToHost = s; },
-        readFile: () => undefined,
+        readFile: returnUndefined,
         writeFile: noop,
         resolvePath(): string { return undefined!; }, // TODO: GH#18217
         fileExists: () => false,

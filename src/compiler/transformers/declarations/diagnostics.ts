@@ -26,7 +26,8 @@ namespace ts {
         | ImportEqualsDeclaration
         | TypeAliasDeclaration
         | ConstructorDeclaration
-        | IndexSignatureDeclaration;
+        | IndexSignatureDeclaration
+        | PropertyAccessExpression;
 
     export function canProduceDiagnostics(node: Node): node is DeclarationDiagnosticProducing {
         return isVariableDeclaration(node) ||
@@ -46,7 +47,8 @@ namespace ts {
             isImportEqualsDeclaration(node) ||
             isTypeAliasDeclaration(node) ||
             isConstructorDeclaration(node) ||
-            isIndexSignatureDeclaration(node);
+            isIndexSignatureDeclaration(node) ||
+            isPropertyAccessExpression(node);
     }
 
     export function createGetSymbolAccessibilityDiagnosticForNodeName(node: DeclarationDiagnosticProducing) {
@@ -123,7 +125,7 @@ namespace ts {
     }
 
     export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined {
-        if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
+        if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isPropertyAccessExpression(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
             return getVariableDeclarationTypeVisibilityError;
         }
         else if (isSetAccessor(node) || isGetAccessor(node)) {
@@ -164,7 +166,7 @@ namespace ts {
             }
             // This check is to ensure we don't report error on constructor parameter property as that error would be reported during parameter emit
             // The only exception here is if the constructor was marked as private. we are not emitting the constructor parameters at all.
-            else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertySignature ||
+            else if (node.kind === SyntaxKind.PropertyDeclaration || node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.PropertySignature ||
                 (node.kind === SyntaxKind.Parameter && hasModifier(node.parent, ModifierFlags.Private))) {
                 // TODO(jfreeman): Deal with computed properties in error reporting.
                 if (hasModifier(node, ModifierFlags.Static)) {
@@ -387,6 +389,10 @@ namespace ts {
 
                 case SyntaxKind.InterfaceDeclaration:
                     diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1;
+                    break;
+
+                case SyntaxKind.MappedType:
+                    diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_mapped_object_type_is_using_private_name_1;
                     break;
 
                 case SyntaxKind.ConstructorType:

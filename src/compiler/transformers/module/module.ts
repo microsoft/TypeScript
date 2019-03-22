@@ -100,7 +100,7 @@ namespace ts {
             append(statements, visitNode(currentModuleInfo.externalHelpersImportDeclaration, sourceElementVisitor, isStatement));
             addRange(statements, visitNodes(node.statements, sourceElementVisitor, isStatement, statementOffset));
             addExportEqualsIfNeeded(statements, /*emitAsReturn*/ false);
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const updated = updateSourceFileNode(node, setTextRange(createNodeArray(statements), node.statements));
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -432,7 +432,7 @@ namespace ts {
 
             // End the lexical environment for the module body
             // and merge any new lexical declarations.
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const body = createBlock(statements, /*multiLine*/ true);
             if (currentModuleInfo.hasExportStarsToExportValues && !compilerOptions.importHelpers) {
@@ -537,8 +537,8 @@ namespace ts {
             if (isImportCall(node)) {
                 return visitImportCallExpression(node);
             }
-            else if (node.transformFlags & TransformFlags.DestructuringAssignment && isBinaryExpression(node)) {
-                return visitDestructuringAssignment(node as DestructuringAssignment);
+            else if (isDestructuringAssignment(node)) {
+                return visitDestructuringAssignment(node);
             }
             else {
                 return visitEachChild(node, moduleExpressionElementVisitor, context);
@@ -1806,7 +1806,7 @@ namespace ts {
     };
 
     // emit helper for `import * as Name from "foo"`
-    const importStarHelper: EmitHelper = {
+    export const importStarHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportstar",
         scoped: false,
         text: `
@@ -1820,7 +1820,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     };
 
     // emit helper for `import Name from "foo"`
-    const importDefaultHelper: EmitHelper = {
+    export const importDefaultHelper: UnscopedEmitHelper = {
         name: "typescript:commonjsimportdefault",
         scoped: false,
         text: `

@@ -705,6 +705,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
+            // tslint:disable-next-line:ban
             setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;

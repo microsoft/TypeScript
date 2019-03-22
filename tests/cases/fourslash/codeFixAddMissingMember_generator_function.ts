@@ -14,7 +14,7 @@ verify.codeFixAll({
     *method() {
         yield* this.y();
     }
-    *y(): any {
+    *y() {
         throw new Error("Method not implemented.");
     }
 }`,
