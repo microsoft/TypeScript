@@ -124,10 +124,10 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                 return { nodes: [node], containsString: false, areOperatorsValid: true };
             }
 
-            const nodeOperatorValid = node.operatorToken.kind === SyntaxKind.PlusToken;
-            const isPlus = leftOperatorValid && nodeOperatorValid && rightOperatorValid;
+            const currentOperatorValid = node.operatorToken.kind === SyntaxKind.PlusToken;
+            const areOperatorsValid = leftOperatorValid && currentOperatorValid && rightOperatorValid;
 
-            return { nodes: leftNodes.concat(rightNodes), containsString: true, areOperatorsValid: isPlus };
+            return { nodes: leftNodes.concat(rightNodes), containsString: true, areOperatorsValid };
         }
 
         return { nodes: [node as Expression], containsString: isStringLiteral(node), areOperatorsValid: true };
@@ -179,10 +179,10 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     const octalToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 8));
 
     function decodeRawString(content: string) {
-        const outerQuotes = /"((.|\s)*)"/;
-        const unicodeEscape = /\\u([\d\w]+)/gi;
-        const unicodeEscapeWithBraces = /\\u\{([\d\w]+\})/gi;
-        const hexEscape = /\\x([\d\w]+)/gi;
+        const outerQuotes = /["']((.|\s)*)["']/;
+        const unicodeEscape = /\\u(\w+)/gi;
+        const unicodeEscapeWithBraces = /\\u\{(\w+)\}/gi;
+        const hexEscape = /\\x(\w+)/gi;
         const octalEscape = /\\([0-7]+)/g;
 
         return content.replace(outerQuotes, (_match, grp) => grp)

@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// const foo = /*x*/4/*y*/2 - 6 * 4 + 23 / 12 +" years old"
+//// const foo = "/*x*/f/*y*/oobar is " + 42 * 6 / 4 + " years old"
 
 goTo.select("x", "y");
 edit.applyRefactor({
@@ -8,5 +8,5 @@ edit.applyRefactor({
     actionName: "Convert to template literal",
     actionDescription: "Convert to template literal",
     newContent:
-`const foo = \`\${42 - 6 * 4 + 23 / 12} years old\``,
+`const foo = \`foobar is \${42 * 6 / 4} years old\``,
 });
