@@ -275,7 +275,7 @@ namespace ts.codefix {
         inJs: boolean,
         preferences: UserPreferences,
     ): void {
-        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, !isInterfaceDeclaration(typeDecl));
+        const methodDeclaration = createMethodFromCallExpression(context, callExpression, token.text, inJs, makeStatic, preferences, typeDecl);
         const containingMethodDeclaration = getAncestor(callExpression, SyntaxKind.MethodDeclaration);
 
         if (containingMethodDeclaration && containingMethodDeclaration.parent === typeDecl) {

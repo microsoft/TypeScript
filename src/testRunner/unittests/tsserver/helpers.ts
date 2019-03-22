@@ -57,14 +57,14 @@ namespace ts.projectSystem {
 
     export const nullLogger: server.Logger = {
         close: noop,
-        hasLevel: () => false,
-        loggingEnabled: () => false,
+        hasLevel: returnFalse,
+        loggingEnabled: returnFalse,
         perftrc: noop,
         info: noop,
         msg: noop,
         startGroup: noop,
         endGroup: noop,
-        getLogFileName: () => undefined,
+        getLogFileName: returnUndefined,
     };
 
     export function createHasErrorMessageLogger() {
@@ -78,6 +78,21 @@ namespace ts.projectSystem {
             }
         };
         return { logger, hasErrorMsg: () => hasErrorMsg };
+    }
+
+    export function createLoggerWritingToConsole(): server.Logger {
+        const { close, startGroup, endGroup, getLogFileName } = nullLogger;
+        return {
+            close,
+            hasLevel: returnTrue,
+            loggingEnabled: returnTrue,
+            perftrc: s => console.log(s),
+            info: s => console.log(s),
+            msg: (s, type) => console.log(`${type}:: ${s}`),
+            startGroup,
+            endGroup,
+            getLogFileName
+        };
     }
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {

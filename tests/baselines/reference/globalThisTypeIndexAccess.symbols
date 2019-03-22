@@ -1,0 +1,5 @@
+=== tests/cases/conformance/es2019/globalThisTypeIndexAccess.ts ===
+declare const w_e: (typeof globalThis)["globalThis"]
+>w_e : Symbol(w_e, Decl(globalThisTypeIndexAccess.ts, 0, 13))
+>globalThis : Symbol(globalThis)
+

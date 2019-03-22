@@ -3,9 +3,7 @@ language: node_js
 node_js:
   - 'node'
   - '10'
-  - '6'
-
-sudo: false
+  - '8'
 
 env:
   - workerCount=3 timeout=600000

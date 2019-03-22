@@ -4,4 +4,5 @@ class _this {
 }
 var f = () => this;
 >f : Symbol(f, Decl(collisionThisExpressionAndClassInGlobal.ts, 2, 3))
+>this : Symbol(globalThis)
 

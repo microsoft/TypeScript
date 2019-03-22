@@ -47,6 +47,6 @@ verify.completions(
     { marker: "10", exact: completion.classElementKeywords, isGlobalCompletion: false, isNewIdentifierLocation: true },
     { marker: "13", exact: globals, isGlobalCompletion: false },
     { marker: "15", exact: globals, isGlobalCompletion: true, isNewIdentifierLocation: true },
-    { marker: "16", exact: [...x, ...completion.globalsVars, "undefined"], isGlobalCompletion: false },
+    { marker: "16", exact: [...x, "globalThis", ...completion.globalsVars, "undefined"], isGlobalCompletion: false },
     { marker: "17", exact: completion.globalKeywordsPlusUndefined, isGlobalCompletion: false },
 );

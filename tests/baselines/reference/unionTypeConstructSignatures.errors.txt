@@ -21,7 +21,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(49,12): erro
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(55,49): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(56,12): error TS2555: Expected at least 1 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(59,12): error TS2554: Expected 2 arguments, but got 1.
-tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(61,12): error TS2554: Expected 2 arguments, but got 3.
+tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(61,53): error TS2554: Expected 2 arguments, but got 3.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(62,49): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(63,12): error TS2554: Expected 2 arguments, but got 0.
 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(69,49): error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
@@ -145,7 +145,7 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
 !!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:58:95: An argument for 'b' was not provided.
     strOrNum = new unionWithRestParameter2('hello', 10); // error no call signature
     strOrNum = new unionWithRestParameter2('hello', 10, 11); // error no call signature
-               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                                        ~~
 !!! error TS2554: Expected 2 arguments, but got 3.
     strOrNum = new unionWithRestParameter2('hello', "hello"); // error no call signature
                                                     ~~~~~~~

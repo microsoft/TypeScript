@@ -12,7 +12,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(63,110): e
   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(65,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(66,6): error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(67,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(67,10): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(68,1): error TS2684: The 'this' context of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
   Types of property 'y' are incompatible.
     Type 'string' is not assignable to type 'number'.
@@ -20,16 +20,16 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(69,1): err
   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' but required in type '{ y: number; }'.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(72,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(73,13): error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(74,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(74,17): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(75,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(76,16): error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(77,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(77,20): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(78,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(79,16): error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(80,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(80,20): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(81,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(82,20): error TS2345: Argument of type '"wrong type 3"' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(83,1): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(83,24): error TS2554: Expected 1 arguments, but got 2.
 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(86,5): error TS2322: Type '(this: { y: number; }, x: number) => number' is not assignable to type '(this: void, x: number) => number'.
   The 'this' types of each signature are incompatible.
     Type 'void' is not assignable to type '{ y: number; }'.
@@ -189,7 +189,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
     ok.f(13, 'too many arguments');
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+             ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     wrongPropertyType.f(13);
     ~~~~~~~~~~~~~~~~~
@@ -211,7 +211,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                 ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
     c.explicitC(13, 'too many arguments');
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitThis(); // not enough arguments
     ~~~~~~~~~~~~~~~~
@@ -221,7 +221,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                    ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
     c.explicitThis(14, 'too many arguments 2');
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.implicitThis(); // not enough arguments
     ~~~~~~~~~~~~~~~~
@@ -231,7 +231,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                    ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
     c.implicitThis(14, 'too many arguments 2');
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                       ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     c.explicitProperty(); // not enough arguments
     ~~~~~~~~~~~~~~~~~~~~
@@ -241,7 +241,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
                        ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 3"' is not assignable to parameter of type 'number'.
     c.explicitProperty(15, 'too many arguments 3');
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 2.
     
     // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.

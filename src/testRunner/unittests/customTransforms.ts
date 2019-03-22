@@ -95,6 +95,68 @@ namespace ts {
             module: ModuleKind.ES2015,
             emitDecoratorMetadata: true,
             experimentalDecorators: true
-         });
+        });
+
+        emitsCorrectly("sourceMapExternalSourceFiles",
+            [
+                {
+                    file: "source.ts",
+                    // The text of length 'changed' is made to be on two lines so we know the line map change
+                    text: `\`multi
+                    line\`
+'change'`
+                },
+            ],
+            {
+                before: [
+                    context => node => visitNode(node, function visitor(node: Node): Node {
+                        if (isStringLiteral(node) && node.text === "change") {
+                            const text = "'changed'";
+                            const lineMap = computeLineStarts(text);
+                            setSourceMapRange(node, {
+                                pos: 0, end: text.length, source: {
+                                    text,
+                                    fileName: "another.html",
+                                    lineMap,
+                                    getLineAndCharacterOfPosition: pos => computeLineAndCharacterOfPosition(lineMap, pos)
+                                }
+                            });
+                            return node;
+                        }
+                        return visitEachChild(node, visitor, context);
+                    })
+                ]
+            },
+            { sourceMap: true }
+        );
+
+        emitsCorrectly("skipTriviaExternalSourceFiles",
+            [
+                {
+                    file: "source.ts",
+                    // The source file contains preceding trivia (e.g. whitespace) to try to confuse the `skipSourceTrivia` function.
+                    text: "         original;"
+                },
+            ],
+            {
+                before: [
+                    context => node => visitNode(node, function visitor(node: Node): Node {
+                        if (isIdentifier(node) && node.text === "original") {
+                            const newNode = createIdentifier("changed");
+                            setSourceMapRange(newNode, {
+                              pos: 0,
+                              end: 7,
+                              // Do not provide a custom skipTrivia function for `source`.
+                              source: createSourceMapSource("another.html", "changed;")
+                            });
+                            return newNode;
+                        }
+                        return visitEachChild(node, visitor, context);
+                    })
+                ]
+            },
+            { sourceMap: true }
+        );
+
     });
 }
