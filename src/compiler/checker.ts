@@ -7123,6 +7123,9 @@ namespace ts {
                 let stringIndexInfo: IndexInfo | undefined;
                 if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
+                    if (symbol === globalThisSymbol) {
+                        members = createSymbolTable(arrayFrom(members.values()).filter(p => !(p.flags & SymbolFlags.BlockScoped)))
+                    }
                 }
                 setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
                 if (symbol.flags & SymbolFlags.Class) {
@@ -9872,9 +9875,6 @@ namespace ts {
                 if (prop) {
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
-                        if (objectType.symbol === globalThisSymbol && prop.flags & SymbolFlags.BlockScoped) {
-                            error(accessExpression.argumentExpression, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
-                        }
                         if (isAssignmentTarget(accessExpression) && (isReferenceToReadonlyEntity(accessExpression, prop) || isReferenceThroughNamespaceImport(accessExpression))) {
                             error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, symbolToString(prop));
                             return missingType;
@@ -19538,9 +19538,6 @@ namespace ts {
                 propType = indexInfo.type;
             }
             else {
-                if (leftType.symbol === globalThisSymbol && prop.flags & SymbolFlags.BlockScoped) {
-                    reportNonexistentProperty(right, leftType);
-                }
                 checkPropertyNotUsedBeforeDeclaration(prop, node, right);
                 markPropertyAsReferenced(prop, node, left.kind === SyntaxKind.ThisKeyword);
                 getNodeLinks(node).resolvedSymbol = prop;

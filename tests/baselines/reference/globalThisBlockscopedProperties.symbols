@@ -14,14 +14,10 @@ globalThis.x // ok
 >x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
 
 globalThis.y // should error, no property 'y'
->globalThis.y : Symbol(y, Decl(globalThisBlockscopedProperties.ts, 1, 5))
 >globalThis : Symbol(globalThis)
->y : Symbol(y, Decl(globalThisBlockscopedProperties.ts, 1, 5))
 
 globalThis.z // should error, no property 'z'
->globalThis.z : Symbol(z, Decl(globalThisBlockscopedProperties.ts, 2, 3))
 >globalThis : Symbol(globalThis)
->z : Symbol(z, Decl(globalThisBlockscopedProperties.ts, 2, 3))
 
 globalThis['x'] // ok
 >globalThis : Symbol(globalThis)
@@ -29,19 +25,33 @@ globalThis['x'] // ok
 
 globalThis['y'] // should error, no property 'y'
 >globalThis : Symbol(globalThis)
->'y' : Symbol(y, Decl(globalThisBlockscopedProperties.ts, 1, 5))
 
 globalThis['z'] // should error, no property 'z'
 >globalThis : Symbol(globalThis)
->'z' : Symbol(z, Decl(globalThisBlockscopedProperties.ts, 2, 3))
 
-globalThis.Float64Array
+globalThis.Float64Array // ok
 >globalThis.Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >globalThis : Symbol(globalThis)
 >Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
-globalThis.Infinity
+globalThis.Infinity // ok
 >globalThis.Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
 >globalThis : Symbol(globalThis)
 >Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+
+declare let test1: (typeof globalThis)['x'] // ok
+>test1 : Symbol(test1, Decl(globalThisBlockscopedProperties.ts, 12, 11))
+>globalThis : Symbol(globalThis)
+
+declare let test2: (typeof globalThis)['y'] // error
+>test2 : Symbol(test2, Decl(globalThisBlockscopedProperties.ts, 13, 11))
+>globalThis : Symbol(globalThis)
+
+declare let test3: (typeof globalThis)['z'] // error
+>test3 : Symbol(test3, Decl(globalThisBlockscopedProperties.ts, 14, 11))
+>globalThis : Symbol(globalThis)
+
+declare let themAll: keyof typeof globalThis
+>themAll : Symbol(themAll, Decl(globalThisBlockscopedProperties.ts, 15, 11))
+>globalThis : Symbol(globalThis)
 
