@@ -2217,6 +2217,7 @@ namespace ts {
     function getNextJSDocCommentLocation(node: Node) {
         const parent = node.parent;
         if (parent.kind === SyntaxKind.PropertyAssignment ||
+            parent.kind === SyntaxKind.ExportAssignment ||
             parent.kind === SyntaxKind.PropertyDeclaration ||
             parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
             getNestedModuleDeclaration(parent) ||
