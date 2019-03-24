@@ -4930,5 +4930,9 @@
     "Convert parameters to destructured object": {
         "category": "Message",
         "code": 95075
+    },
+    "Extract type": {
+        "category": "Message",
+        "code": 95076
     }
 }
