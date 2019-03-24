@@ -1,144 +1,203 @@
 === tests/cases/compiler/intersectionOfCallsWithSameParameters.ts ===
 interface One {
-    overload(id: string): { one: number };
->overload : (id: string) => { one: number; }
+    differentParameterType(id: string): { one: number };
+>differentParameterType : (id: string) => { one: number; }
 >id : string
 >one : number
 
-    intersect(id: string): { one: number };
->intersect : (id: string) => { one: number; }
+    differentNumberOfParameters(id: string): { one: number };
+>differentNumberOfParameters : (id: string) => { one: number; }
+>id : string
+>one : number
+
+    differentTypeParameterDefault<T = number>(id: string): { one: number };
+>differentTypeParameterDefault : <T = number>(id: string) => { one: number; }
+>id : string
+>one : number
+
+    differentTypeParameterConstraint<T extends { one: number }>(id: string): { one: number };
+>differentTypeParameterConstraint : <T extends { one: number; }>(id: string) => { one: number; }
+>one : number
+>id : string
+>one : number
+
+    same1(id: string): { one: number };
+>same1 : (id: string) => { one: number; }
+>id : string
+>one : number
+
+    same2<T>(id: string): { one: number };
+>same2 : <T>(id: string) => { one: number; }
+>id : string
+>one : number
+
+    same3<T extends { one: number }>(id: string): { one: number };
+>same3 : <T extends { one: number; }>(id: string) => { one: number; }
+>one : number
+>id : string
+>one : number
+
+    same4<T = number>(id: string): { one: number };
+>same4 : <T = number>(id: string) => { one: number; }
+>id : string
+>one : number
+
+    same5<T1 extends { one: number }, T2 = number>(id: string): { one: number };
+>same5 : <T1 extends { one: number; }, T2 = number>(id: string) => { one: number; }
+>one : number
 >id : string
 >one : number
 }
 
 interface Two {
-    overload(id: number): { two: number };
->overload : (id: number) => { two: number; }
+    differentParameterType(id: number): { two: number };
+>differentParameterType : (id: number) => { two: number; }
 >id : number
 >two : number
 
-    intersect(id: string): { two: number };
->intersect : (id: string) => { two: number; }
+    differentNumberOfParameters(id: string, second: string): { two: number };
+>differentNumberOfParameters : (id: string, second: string) => { two: number; }
+>id : string
+>second : string
+>two : number
+
+    differentTypeParameterDefault<T = string>(id: string): { two: number };
+>differentTypeParameterDefault : <T = string>(id: string) => { two: number; }
+>id : string
+>two : number
+
+    differentTypeParameterConstraint<T extends { two: number }>(id: string): { two: number };
+>differentTypeParameterConstraint : <T extends { two: number; }>(id: string) => { two: number; }
+>two : number
+>id : string
+>two : number
+
+    same1(id: string): { two: number };
+>same1 : (id: string) => { two: number; }
+>id : string
+>two : number
+
+    same2<T>(id: string): { two: number };
+>same2 : <T>(id: string) => { two: number; }
+>id : string
+>two : number
+
+    same3<T extends { one: number }>(id: string): { two: number };
+>same3 : <T extends { one: number; }>(id: string) => { two: number; }
+>one : number
+>id : string
+>two : number
+
+    same4<T = number>(id: string): { two: number };
+>same4 : <T = number>(id: string) => { two: number; }
+>id : string
+>two : number
+
+    same5<T1 extends { one: number }, T2 = number>(id: string): { two: number };
+>same5 : <T1 extends { one: number; }, T2 = number>(id: string) => { two: number; }
+>one : number
 >id : string
 >two : number
 }
 
-class Both implements One, Two {
->Both : Both
+const i: One & Two = <any>{};
+>i : One & Two
+><any>{} : any
+>{} : {}
 
-    overload(id: number): { two: number };
->overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
->id : number
->two : number
-
-    overload(id: string): { one: number };
->overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
->id : string
->one : number
-
-    overload(id: string | number): { one: number, two: number } {
->overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
->id : string | number
+// These lines should type check; the return type should be intersected.
+const same1: { one: number, two: number } = i.same1('test');
+>same1 : { one: number; two: number; }
 >one : number
 >two : number
-
-        return {
->{            one: 1,            two: 2        } : { one: number; two: number; }
-
-            one: 1,
->one : number
->1 : 1
-
-            two: 2
->two : number
->2 : 2
-
-        };
-    }
-
-    intersect(id: string): { one: number, two: number } {
->intersect : (id: string) => { one: number; two: number; }
->id : string
->one : number
->two : number
-
-        return {
->{            one: 1,            two: 2        } : { one: number; two: number; }
-
-            one: 1,
->one : number
->1 : 1
-
-            two: 2
->two : number
->2 : 2
-
-        };
-    }
-}
-
-const b = new Both();
->b : Both
->new Both() : Both
->Both : typeof Both
-
-const intersect: { one: number, two: number } = b.intersect('test');
->intersect : { one: number; two: number; }
->one : number
->two : number
->b.intersect('test') : { one: number; two: number; }
->b.intersect : (id: string) => { one: number; two: number; }
->b : Both
->intersect : (id: string) => { one: number; two: number; }
+>i.same1('test') : { one: number; } & { two: number; }
+>i.same1 : ((id: string) => { one: number; }) & ((id: string) => { two: number; })
+>i : One & Two
+>same1 : ((id: string) => { one: number; }) & ((id: string) => { two: number; })
 >'test' : "test"
 
-const overloadA: { one: number } = b.overload('test');
->overloadA : { one: number; }
->one : number
->b.overload('test') : { one: number; }
->b.overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
->b : Both
->overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
->'test' : "test"
-
-const overloadB: { two: number } = b.overload(4);
->overloadB : { two: number; }
->two : number
->b.overload(4) : { two: number; }
->b.overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
->b : Both
->overload : { (id: number): { two: number; }; (id: string): { one: number; }; }
->4 : 4
-
-const bAs: One & Two = b;
->bAs : One & Two
->b : Both
-
-const asIntersect: { one: number, two: number } = bAs.intersect('test');
->asIntersect : { one: number; two: number; }
+const same2: { one: number, two: number } = i.same2<number>('test');
+>same2 : { one: number; two: number; }
 >one : number
 >two : number
->bAs.intersect('test') : { one: number; } & { two: number; }
->bAs.intersect : ((id: string) => { one: number; }) & ((id: string) => { two: number; })
->bAs : One & Two
->intersect : ((id: string) => { one: number; }) & ((id: string) => { two: number; })
+>i.same2<number>('test') : { one: number; } & { two: number; }
+>i.same2 : (<T>(id: string) => { one: number; }) & (<T>(id: string) => { two: number; })
+>i : One & Two
+>same2 : (<T>(id: string) => { one: number; }) & (<T>(id: string) => { two: number; })
 >'test' : "test"
 
-const asOverloadA: { one: number } = bAs.overload('test');
->asOverloadA : { one: number; }
+const same3: { one: number, two: number } = i.same3<{ one:number }>('test');
+>same3 : { one: number; two: number; }
 >one : number
->bAs.overload('test') : { one: number; }
->bAs.overload : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
->bAs : One & Two
->overload : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
+>two : number
+>i.same3<{ one:number }>('test') : { one: number; } & { two: number; }
+>i.same3 : (<T extends { one: number; }>(id: string) => { one: number; }) & (<T extends { one: number; }>(id: string) => { two: number; })
+>i : One & Two
+>same3 : (<T extends { one: number; }>(id: string) => { one: number; }) & (<T extends { one: number; }>(id: string) => { two: number; })
+>one : number
 >'test' : "test"
 
-const asOverloadB: { two: number } = bAs.overload(4);
->asOverloadB : { two: number; }
+const same4: { one: number, two: number } = i.same4('test');
+>same4 : { one: number; two: number; }
+>one : number
 >two : number
->bAs.overload(4) : { two: number; }
->bAs.overload : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
->bAs : One & Two
->overload : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
->4 : 4
+>i.same4('test') : { one: number; } & { two: number; }
+>i.same4 : (<T = number>(id: string) => { one: number; }) & (<T = number>(id: string) => { two: number; })
+>i : One & Two
+>same4 : (<T = number>(id: string) => { one: number; }) & (<T = number>(id: string) => { two: number; })
+>'test' : "test"
+
+const same5: { one: number, two: number } = i.same5<{ one:number }, string>('test');
+>same5 : { one: number; two: number; }
+>one : number
+>two : number
+>i.same5<{ one:number }, string>('test') : { one: number; } & { two: number; }
+>i.same5 : (<T1 extends { one: number; }, T2 = number>(id: string) => { one: number; }) & (<T1 extends { one: number; }, T2 = number>(id: string) => { two: number; })
+>i : One & Two
+>same5 : (<T1 extends { one: number; }, T2 = number>(id: string) => { one: number; }) & (<T1 extends { one: number; }, T2 = number>(id: string) => { two: number; })
+>one : number
+>'test' : "test"
+
+// These lines should not, because the functions should become overloads rather
+// than the return types intersected.
+const differentParameterType: { one: number, two: number } = i.differentParameterType('test');
+>differentParameterType : { one: number; two: number; }
+>one : number
+>two : number
+>i.differentParameterType('test') : { one: number; }
+>i.differentParameterType : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
+>i : One & Two
+>differentParameterType : ((id: string) => { one: number; }) & ((id: number) => { two: number; })
+>'test' : "test"
+
+const differentNumberOfParameters: { one: number, two: number } = i.differentNumberOfParameters('test');
+>differentNumberOfParameters : { one: number; two: number; }
+>one : number
+>two : number
+>i.differentNumberOfParameters('test') : { one: number; }
+>i.differentNumberOfParameters : ((id: string) => { one: number; }) & ((id: string, second: string) => { two: number; })
+>i : One & Two
+>differentNumberOfParameters : ((id: string) => { one: number; }) & ((id: string, second: string) => { two: number; })
+>'test' : "test"
+
+const differentTypeParameterDefault: { one: number, two: number } = i.differentTypeParameterDefault('test');
+>differentTypeParameterDefault : { one: number; two: number; }
+>one : number
+>two : number
+>i.differentTypeParameterDefault('test') : { one: number; }
+>i.differentTypeParameterDefault : (<T = number>(id: string) => { one: number; }) & (<T = string>(id: string) => { two: number; })
+>i : One & Two
+>differentTypeParameterDefault : (<T = number>(id: string) => { one: number; }) & (<T = string>(id: string) => { two: number; })
+>'test' : "test"
+
+const differentTypeParameterConstraint: { one: number, two: number } = i.differentTypeParameterConstraint<{ one: number }>('test');
+>differentTypeParameterConstraint : { one: number; two: number; }
+>one : number
+>two : number
+>i.differentTypeParameterConstraint<{ one: number }>('test') : { one: number; }
+>i.differentTypeParameterConstraint : (<T extends { one: number; }>(id: string) => { one: number; }) & (<T extends { two: number; }>(id: string) => { two: number; })
+>i : One & Two
+>differentTypeParameterConstraint : (<T extends { one: number; }>(id: string) => { one: number; }) & (<T extends { two: number; }>(id: string) => { two: number; })
+>one : number
+>'test' : "test"
 

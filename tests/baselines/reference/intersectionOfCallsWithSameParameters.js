@@ -1,66 +1,59 @@
 //// [intersectionOfCallsWithSameParameters.ts]
 interface One {
-    overload(id: string): { one: number };
-    intersect(id: string): { one: number };
+    differentParameterType(id: string): { one: number };
+    differentNumberOfParameters(id: string): { one: number };
+    differentTypeParameterDefault<T = number>(id: string): { one: number };
+    differentTypeParameterConstraint<T extends { one: number }>(id: string): { one: number };
+
+    same1(id: string): { one: number };
+    same2<T>(id: string): { one: number };
+    same3<T extends { one: number }>(id: string): { one: number };
+    same4<T = number>(id: string): { one: number };
+    same5<T1 extends { one: number }, T2 = number>(id: string): { one: number };
 }
 
 interface Two {
-    overload(id: number): { two: number };
-    intersect(id: string): { two: number };
+    differentParameterType(id: number): { two: number };
+    differentNumberOfParameters(id: string, second: string): { two: number };
+    differentTypeParameterDefault<T = string>(id: string): { two: number };
+    differentTypeParameterConstraint<T extends { two: number }>(id: string): { two: number };
+
+    same1(id: string): { two: number };
+    same2<T>(id: string): { two: number };
+    same3<T extends { one: number }>(id: string): { two: number };
+    same4<T = number>(id: string): { two: number };
+    same5<T1 extends { one: number }, T2 = number>(id: string): { two: number };
 }
 
-class Both implements One, Two {
-    overload(id: number): { two: number };
-    overload(id: string): { one: number };
-    overload(id: string | number): { one: number, two: number } {
-        return {
-            one: 1,
-            two: 2
-        };
-    }
+const i: One & Two = <any>{};
 
-    intersect(id: string): { one: number, two: number } {
-        return {
-            one: 1,
-            two: 2
-        };
-    }
-}
+// These lines should type check; the return type should be intersected.
+const same1: { one: number, two: number } = i.same1('test');
+const same2: { one: number, two: number } = i.same2<number>('test');
+const same3: { one: number, two: number } = i.same3<{ one:number }>('test');
+const same4: { one: number, two: number } = i.same4('test');
+const same5: { one: number, two: number } = i.same5<{ one:number }, string>('test');
 
-const b = new Both();
-const intersect: { one: number, two: number } = b.intersect('test');
-const overloadA: { one: number } = b.overload('test');
-const overloadB: { two: number } = b.overload(4);
-const bAs: One & Two = b;
-const asIntersect: { one: number, two: number } = bAs.intersect('test');
-const asOverloadA: { one: number } = bAs.overload('test');
-const asOverloadB: { two: number } = bAs.overload(4);
+// These lines should not, because the functions should become overloads rather
+// than the return types intersected.
+const differentParameterType: { one: number, two: number } = i.differentParameterType('test');
+const differentNumberOfParameters: { one: number, two: number } = i.differentNumberOfParameters('test');
+const differentTypeParameterDefault: { one: number, two: number } = i.differentTypeParameterDefault('test');
+const differentTypeParameterConstraint: { one: number, two: number } = i.differentTypeParameterConstraint<{ one: number }>('test');
 
 
 //// [intersectionOfCallsWithSameParameters.js]
 "use strict";
-var Both = /** @class */ (function () {
-    function Both() {
-    }
-    Both.prototype.overload = function (id) {
-        return {
-            one: 1,
-            two: 2
-        };
-    };
-    Both.prototype.intersect = function (id) {
-        return {
-            one: 1,
-            two: 2
-        };
-    };
-    return Both;
-}());
-var b = new Both();
-var intersect = b.intersect('test');
-var overloadA = b.overload('test');
-var overloadB = b.overload(4);
-var bAs = b;
-var asIntersect = bAs.intersect('test');
-var asOverloadA = bAs.overload('test');
-var asOverloadB = bAs.overload(4);
+var i = {};
+// These lines should type check; the return type should be intersected.
+var same1 = i.same1('test');
+var same2 = i.same2('test');
+var same3 = i.same3('test');
+var same4 = i.same4('test');
+var same5 = i.same5('test');
+// These lines should not, because the functions should become overloads rather
+// than the return types intersected.
+var differentParameterType = i.differentParameterType('test');
+var differentNumberOfParameters = i.differentNumberOfParameters('test');
+var differentTypeParameterDefault = i.differentTypeParameterDefault('test');
+var differentTypeParameterConstraint = i.differentTypeParameterConstraint('test');

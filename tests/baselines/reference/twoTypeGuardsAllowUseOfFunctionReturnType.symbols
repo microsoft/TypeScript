@@ -1,0 +1,69 @@
+=== tests/cases/compiler/twoTypeGuardsAllowUseOfFunctionReturnType.ts ===
+interface Opacity {
+>Opacity : Symbol(Opacity, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 0, 0))
+
+    readonly opacity: number;
+>opacity : Symbol(Opacity.opacity, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 0, 19))
+
+    getStratum(id: string): { opacity: number };
+>getStratum : Symbol(Opacity.getStratum, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 1, 29))
+>id : Symbol(id, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 2, 15))
+>opacity : Symbol(opacity, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 2, 29))
+}
+
+interface Layer {
+>Layer : Symbol(Layer, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 3, 1))
+
+    readonly layer: string;
+>layer : Symbol(Layer.layer, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 5, 17))
+
+    getStratum(id: string): { layer: string };
+>getStratum : Symbol(Layer.getStratum, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 6, 27))
+>id : Symbol(id, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 7, 15))
+>layer : Symbol(layer, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 7, 29))
+}
+
+function hasOpacity(x: any): x is Opacity {
+>hasOpacity : Symbol(hasOpacity, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 8, 1))
+>x : Symbol(x, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 10, 20))
+>x : Symbol(x, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 10, 20))
+>Opacity : Symbol(Opacity, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 0, 0))
+
+    return 'opacity' in x;
+>x : Symbol(x, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 10, 20))
+}
+
+function hasLayer(x: any): x is Layer {
+>hasLayer : Symbol(hasLayer, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 12, 1))
+>x : Symbol(x, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 14, 18))
+>x : Symbol(x, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 14, 18))
+>Layer : Symbol(Layer, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 3, 1))
+
+    return 'layer' in x;
+>x : Symbol(x, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 14, 18))
+}
+
+const foo = {};
+>foo : Symbol(foo, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 18, 5))
+
+if (hasOpacity(foo) && hasLayer(foo)) {
+>hasOpacity : Symbol(hasOpacity, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 8, 1))
+>foo : Symbol(foo, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 18, 5))
+>hasLayer : Symbol(hasLayer, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 12, 1))
+>foo : Symbol(foo, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 18, 5))
+
+    foo.getStratum('user').opacity = 0.5;
+>foo.getStratum('user').opacity : Symbol(opacity, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 2, 29))
+>foo.getStratum : Symbol(getStratum, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 1, 29), Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 6, 27))
+>foo : Symbol(foo, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 18, 5))
+>getStratum : Symbol(getStratum, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 1, 29), Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 6, 27))
+>opacity : Symbol(opacity, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 2, 29))
+
+    foo.getStratum('user').layer = 'test';
+>foo.getStratum('user').layer : Symbol(layer, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 7, 29))
+>foo.getStratum : Symbol(getStratum, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 1, 29), Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 6, 27))
+>foo : Symbol(foo, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 18, 5))
+>getStratum : Symbol(getStratum, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 1, 29), Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 6, 27))
+>layer : Symbol(layer, Decl(twoTypeGuardsAllowUseOfFunctionReturnType.ts, 7, 29))
+}
+

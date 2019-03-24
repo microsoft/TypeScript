@@ -1,0 +1,77 @@
+=== tests/cases/compiler/twoTypeGuardsAllowUseOfFunctionReturnType.ts ===
+interface Opacity {
+    readonly opacity: number;
+>opacity : number
+
+    getStratum(id: string): { opacity: number };
+>getStratum : (id: string) => { opacity: number; }
+>id : string
+>opacity : number
+}
+
+interface Layer {
+    readonly layer: string;
+>layer : string
+
+    getStratum(id: string): { layer: string };
+>getStratum : (id: string) => { layer: string; }
+>id : string
+>layer : string
+}
+
+function hasOpacity(x: any): x is Opacity {
+>hasOpacity : (x: any) => x is Opacity
+>x : any
+
+    return 'opacity' in x;
+>'opacity' in x : boolean
+>'opacity' : "opacity"
+>x : any
+}
+
+function hasLayer(x: any): x is Layer {
+>hasLayer : (x: any) => x is Layer
+>x : any
+
+    return 'layer' in x;
+>'layer' in x : boolean
+>'layer' : "layer"
+>x : any
+}
+
+const foo = {};
+>foo : {}
+>{} : {}
+
+if (hasOpacity(foo) && hasLayer(foo)) {
+>hasOpacity(foo) && hasLayer(foo) : boolean
+>hasOpacity(foo) : boolean
+>hasOpacity : (x: any) => x is Opacity
+>foo : {}
+>hasLayer(foo) : boolean
+>hasLayer : (x: any) => x is Layer
+>foo : Opacity
+
+    foo.getStratum('user').opacity = 0.5;
+>foo.getStratum('user').opacity = 0.5 : 0.5
+>foo.getStratum('user').opacity : number
+>foo.getStratum('user') : { opacity: number; } & { layer: string; }
+>foo.getStratum : ((id: string) => { opacity: number; }) & ((id: string) => { layer: string; })
+>foo : Opacity & Layer
+>getStratum : ((id: string) => { opacity: number; }) & ((id: string) => { layer: string; })
+>'user' : "user"
+>opacity : number
+>0.5 : 0.5
+
+    foo.getStratum('user').layer = 'test';
+>foo.getStratum('user').layer = 'test' : "test"
+>foo.getStratum('user').layer : string
+>foo.getStratum('user') : { opacity: number; } & { layer: string; }
+>foo.getStratum : ((id: string) => { opacity: number; }) & ((id: string) => { layer: string; })
+>foo : Opacity & Layer
+>getStratum : ((id: string) => { opacity: number; }) & ((id: string) => { layer: string; })
+>'user' : "user"
+>layer : string
+>'test' : "test"
+}
+

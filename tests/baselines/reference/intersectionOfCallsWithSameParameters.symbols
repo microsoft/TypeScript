@@ -2,130 +2,202 @@
 interface One {
 >One : Symbol(One, Decl(intersectionOfCallsWithSameParameters.ts, 0, 0))
 
-    overload(id: string): { one: number };
->overload : Symbol(One.overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15))
->id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 1, 13))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 1, 27))
+    differentParameterType(id: string): { one: number };
+>differentParameterType : Symbol(One.differentParameterType, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 1, 27))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 1, 41))
 
-    intersect(id: string): { one: number };
->intersect : Symbol(One.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 1, 42))
->id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 2, 14))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 2, 28))
+    differentNumberOfParameters(id: string): { one: number };
+>differentNumberOfParameters : Symbol(One.differentNumberOfParameters, Decl(intersectionOfCallsWithSameParameters.ts, 1, 56))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 2, 32))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 2, 46))
+
+    differentTypeParameterDefault<T = number>(id: string): { one: number };
+>differentTypeParameterDefault : Symbol(One.differentTypeParameterDefault, Decl(intersectionOfCallsWithSameParameters.ts, 2, 61))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 3, 34))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 3, 46))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 3, 60))
+
+    differentTypeParameterConstraint<T extends { one: number }>(id: string): { one: number };
+>differentTypeParameterConstraint : Symbol(One.differentTypeParameterConstraint, Decl(intersectionOfCallsWithSameParameters.ts, 3, 75))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 4, 37))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 4, 48))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 4, 64))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 4, 78))
+
+    same1(id: string): { one: number };
+>same1 : Symbol(One.same1, Decl(intersectionOfCallsWithSameParameters.ts, 4, 93))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 6, 10))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 6, 24))
+
+    same2<T>(id: string): { one: number };
+>same2 : Symbol(One.same2, Decl(intersectionOfCallsWithSameParameters.ts, 6, 39))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 7, 10))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 7, 13))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 7, 27))
+
+    same3<T extends { one: number }>(id: string): { one: number };
+>same3 : Symbol(One.same3, Decl(intersectionOfCallsWithSameParameters.ts, 7, 42))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 8, 10))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 8, 21))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 8, 37))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 8, 51))
+
+    same4<T = number>(id: string): { one: number };
+>same4 : Symbol(One.same4, Decl(intersectionOfCallsWithSameParameters.ts, 8, 66))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 9, 10))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 9, 22))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 9, 36))
+
+    same5<T1 extends { one: number }, T2 = number>(id: string): { one: number };
+>same5 : Symbol(One.same5, Decl(intersectionOfCallsWithSameParameters.ts, 9, 51))
+>T1 : Symbol(T1, Decl(intersectionOfCallsWithSameParameters.ts, 10, 10))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 10, 22))
+>T2 : Symbol(T2, Decl(intersectionOfCallsWithSameParameters.ts, 10, 37))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 10, 51))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 10, 65))
 }
 
 interface Two {
->Two : Symbol(Two, Decl(intersectionOfCallsWithSameParameters.ts, 3, 1))
+>Two : Symbol(Two, Decl(intersectionOfCallsWithSameParameters.ts, 11, 1))
 
-    overload(id: number): { two: number };
->overload : Symbol(Two.overload, Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
->id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 6, 13))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 6, 27))
+    differentParameterType(id: number): { two: number };
+>differentParameterType : Symbol(Two.differentParameterType, Decl(intersectionOfCallsWithSameParameters.ts, 13, 15))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 14, 27))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 14, 41))
 
-    intersect(id: string): { two: number };
->intersect : Symbol(Two.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 6, 42))
->id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 7, 14))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 7, 28))
+    differentNumberOfParameters(id: string, second: string): { two: number };
+>differentNumberOfParameters : Symbol(Two.differentNumberOfParameters, Decl(intersectionOfCallsWithSameParameters.ts, 14, 56))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 15, 32))
+>second : Symbol(second, Decl(intersectionOfCallsWithSameParameters.ts, 15, 43))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 15, 62))
+
+    differentTypeParameterDefault<T = string>(id: string): { two: number };
+>differentTypeParameterDefault : Symbol(Two.differentTypeParameterDefault, Decl(intersectionOfCallsWithSameParameters.ts, 15, 77))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 16, 34))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 16, 46))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 16, 60))
+
+    differentTypeParameterConstraint<T extends { two: number }>(id: string): { two: number };
+>differentTypeParameterConstraint : Symbol(Two.differentTypeParameterConstraint, Decl(intersectionOfCallsWithSameParameters.ts, 16, 75))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 17, 37))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 17, 48))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 17, 64))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 17, 78))
+
+    same1(id: string): { two: number };
+>same1 : Symbol(Two.same1, Decl(intersectionOfCallsWithSameParameters.ts, 17, 93))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 19, 10))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 19, 24))
+
+    same2<T>(id: string): { two: number };
+>same2 : Symbol(Two.same2, Decl(intersectionOfCallsWithSameParameters.ts, 19, 39))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 20, 10))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 20, 13))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 20, 27))
+
+    same3<T extends { one: number }>(id: string): { two: number };
+>same3 : Symbol(Two.same3, Decl(intersectionOfCallsWithSameParameters.ts, 20, 42))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 21, 10))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 21, 21))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 21, 37))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 21, 51))
+
+    same4<T = number>(id: string): { two: number };
+>same4 : Symbol(Two.same4, Decl(intersectionOfCallsWithSameParameters.ts, 21, 66))
+>T : Symbol(T, Decl(intersectionOfCallsWithSameParameters.ts, 22, 10))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 22, 22))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 22, 36))
+
+    same5<T1 extends { one: number }, T2 = number>(id: string): { two: number };
+>same5 : Symbol(Two.same5, Decl(intersectionOfCallsWithSameParameters.ts, 22, 51))
+>T1 : Symbol(T1, Decl(intersectionOfCallsWithSameParameters.ts, 23, 10))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 23, 22))
+>T2 : Symbol(T2, Decl(intersectionOfCallsWithSameParameters.ts, 23, 37))
+>id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 23, 51))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 23, 65))
 }
 
-class Both implements One, Two {
->Both : Symbol(Both, Decl(intersectionOfCallsWithSameParameters.ts, 8, 1))
+const i: One & Two = <any>{};
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
 >One : Symbol(One, Decl(intersectionOfCallsWithSameParameters.ts, 0, 0))
->Two : Symbol(Two, Decl(intersectionOfCallsWithSameParameters.ts, 3, 1))
+>Two : Symbol(Two, Decl(intersectionOfCallsWithSameParameters.ts, 11, 1))
 
-    overload(id: number): { two: number };
->overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
->id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 11, 13))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 11, 27))
+// These lines should type check; the return type should be intersected.
+const same1: { one: number, two: number } = i.same1('test');
+>same1 : Symbol(same1, Decl(intersectionOfCallsWithSameParameters.ts, 29, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 29, 14))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 29, 27))
+>i.same1 : Symbol(same1, Decl(intersectionOfCallsWithSameParameters.ts, 4, 93), Decl(intersectionOfCallsWithSameParameters.ts, 17, 93))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>same1 : Symbol(same1, Decl(intersectionOfCallsWithSameParameters.ts, 4, 93), Decl(intersectionOfCallsWithSameParameters.ts, 17, 93))
 
-    overload(id: string): { one: number };
->overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
->id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 12, 13))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 12, 27))
+const same2: { one: number, two: number } = i.same2<number>('test');
+>same2 : Symbol(same2, Decl(intersectionOfCallsWithSameParameters.ts, 30, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 30, 14))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 30, 27))
+>i.same2 : Symbol(same2, Decl(intersectionOfCallsWithSameParameters.ts, 6, 39), Decl(intersectionOfCallsWithSameParameters.ts, 19, 39))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>same2 : Symbol(same2, Decl(intersectionOfCallsWithSameParameters.ts, 6, 39), Decl(intersectionOfCallsWithSameParameters.ts, 19, 39))
 
-    overload(id: string | number): { one: number, two: number } {
->overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
->id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 13, 13))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 13, 36))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 13, 49))
+const same3: { one: number, two: number } = i.same3<{ one:number }>('test');
+>same3 : Symbol(same3, Decl(intersectionOfCallsWithSameParameters.ts, 31, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 31, 14))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 31, 27))
+>i.same3 : Symbol(same3, Decl(intersectionOfCallsWithSameParameters.ts, 7, 42), Decl(intersectionOfCallsWithSameParameters.ts, 20, 42))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>same3 : Symbol(same3, Decl(intersectionOfCallsWithSameParameters.ts, 7, 42), Decl(intersectionOfCallsWithSameParameters.ts, 20, 42))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 31, 53))
 
-        return {
-            one: 1,
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 14, 16))
+const same4: { one: number, two: number } = i.same4('test');
+>same4 : Symbol(same4, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 32, 14))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 32, 27))
+>i.same4 : Symbol(same4, Decl(intersectionOfCallsWithSameParameters.ts, 8, 66), Decl(intersectionOfCallsWithSameParameters.ts, 21, 66))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>same4 : Symbol(same4, Decl(intersectionOfCallsWithSameParameters.ts, 8, 66), Decl(intersectionOfCallsWithSameParameters.ts, 21, 66))
 
-            two: 2
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 15, 19))
+const same5: { one: number, two: number } = i.same5<{ one:number }, string>('test');
+>same5 : Symbol(same5, Decl(intersectionOfCallsWithSameParameters.ts, 33, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 33, 14))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 33, 27))
+>i.same5 : Symbol(same5, Decl(intersectionOfCallsWithSameParameters.ts, 9, 51), Decl(intersectionOfCallsWithSameParameters.ts, 22, 51))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>same5 : Symbol(same5, Decl(intersectionOfCallsWithSameParameters.ts, 9, 51), Decl(intersectionOfCallsWithSameParameters.ts, 22, 51))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 33, 53))
 
-        };
-    }
+// These lines should not, because the functions should become overloads rather
+// than the return types intersected.
+const differentParameterType: { one: number, two: number } = i.differentParameterType('test');
+>differentParameterType : Symbol(differentParameterType, Decl(intersectionOfCallsWithSameParameters.ts, 37, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 37, 31))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 37, 44))
+>i.differentParameterType : Symbol(differentParameterType, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 13, 15))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>differentParameterType : Symbol(differentParameterType, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 13, 15))
 
-    intersect(id: string): { one: number, two: number } {
->intersect : Symbol(Both.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 18, 5))
->id : Symbol(id, Decl(intersectionOfCallsWithSameParameters.ts, 20, 14))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 20, 28))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 20, 41))
+const differentNumberOfParameters: { one: number, two: number } = i.differentNumberOfParameters('test');
+>differentNumberOfParameters : Symbol(differentNumberOfParameters, Decl(intersectionOfCallsWithSameParameters.ts, 38, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 38, 36))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 38, 49))
+>i.differentNumberOfParameters : Symbol(differentNumberOfParameters, Decl(intersectionOfCallsWithSameParameters.ts, 1, 56), Decl(intersectionOfCallsWithSameParameters.ts, 14, 56))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>differentNumberOfParameters : Symbol(differentNumberOfParameters, Decl(intersectionOfCallsWithSameParameters.ts, 1, 56), Decl(intersectionOfCallsWithSameParameters.ts, 14, 56))
 
-        return {
-            one: 1,
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 21, 16))
+const differentTypeParameterDefault: { one: number, two: number } = i.differentTypeParameterDefault('test');
+>differentTypeParameterDefault : Symbol(differentTypeParameterDefault, Decl(intersectionOfCallsWithSameParameters.ts, 39, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 39, 38))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 39, 51))
+>i.differentTypeParameterDefault : Symbol(differentTypeParameterDefault, Decl(intersectionOfCallsWithSameParameters.ts, 2, 61), Decl(intersectionOfCallsWithSameParameters.ts, 15, 77))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>differentTypeParameterDefault : Symbol(differentTypeParameterDefault, Decl(intersectionOfCallsWithSameParameters.ts, 2, 61), Decl(intersectionOfCallsWithSameParameters.ts, 15, 77))
 
-            two: 2
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 22, 19))
-
-        };
-    }
-}
-
-const b = new Both();
->b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
->Both : Symbol(Both, Decl(intersectionOfCallsWithSameParameters.ts, 8, 1))
-
-const intersect: { one: number, two: number } = b.intersect('test');
->intersect : Symbol(intersect, Decl(intersectionOfCallsWithSameParameters.ts, 29, 5))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 29, 18))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 29, 31))
->b.intersect : Symbol(Both.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 18, 5))
->b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
->intersect : Symbol(Both.intersect, Decl(intersectionOfCallsWithSameParameters.ts, 18, 5))
-
-const overloadA: { one: number } = b.overload('test');
->overloadA : Symbol(overloadA, Decl(intersectionOfCallsWithSameParameters.ts, 30, 5))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 30, 18))
->b.overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
->b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
->overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
-
-const overloadB: { two: number } = b.overload(4);
->overloadB : Symbol(overloadB, Decl(intersectionOfCallsWithSameParameters.ts, 31, 5))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 31, 18))
->b.overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
->b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
->overload : Symbol(Both.overload, Decl(intersectionOfCallsWithSameParameters.ts, 10, 32), Decl(intersectionOfCallsWithSameParameters.ts, 11, 42), Decl(intersectionOfCallsWithSameParameters.ts, 12, 42))
-
-const bAs: One & Two = b;
->bAs : Symbol(bAs, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
->One : Symbol(One, Decl(intersectionOfCallsWithSameParameters.ts, 0, 0))
->Two : Symbol(Two, Decl(intersectionOfCallsWithSameParameters.ts, 3, 1))
->b : Symbol(b, Decl(intersectionOfCallsWithSameParameters.ts, 28, 5))
-
-const asIntersect: { one: number, two: number } = bAs.intersect('test');
->asIntersect : Symbol(asIntersect, Decl(intersectionOfCallsWithSameParameters.ts, 33, 5))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 33, 20))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 33, 33))
->bAs.intersect : Symbol(intersect, Decl(intersectionOfCallsWithSameParameters.ts, 1, 42), Decl(intersectionOfCallsWithSameParameters.ts, 6, 42))
->bAs : Symbol(bAs, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
->intersect : Symbol(intersect, Decl(intersectionOfCallsWithSameParameters.ts, 1, 42), Decl(intersectionOfCallsWithSameParameters.ts, 6, 42))
-
-const asOverloadA: { one: number } = bAs.overload('test');
->asOverloadA : Symbol(asOverloadA, Decl(intersectionOfCallsWithSameParameters.ts, 34, 5))
->one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 34, 20))
->bAs.overload : Symbol(overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
->bAs : Symbol(bAs, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
->overload : Symbol(overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
-
-const asOverloadB: { two: number } = bAs.overload(4);
->asOverloadB : Symbol(asOverloadB, Decl(intersectionOfCallsWithSameParameters.ts, 35, 5))
->two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 35, 20))
->bAs.overload : Symbol(overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
->bAs : Symbol(bAs, Decl(intersectionOfCallsWithSameParameters.ts, 32, 5))
->overload : Symbol(overload, Decl(intersectionOfCallsWithSameParameters.ts, 0, 15), Decl(intersectionOfCallsWithSameParameters.ts, 5, 15))
+const differentTypeParameterConstraint: { one: number, two: number } = i.differentTypeParameterConstraint<{ one: number }>('test');
+>differentTypeParameterConstraint : Symbol(differentTypeParameterConstraint, Decl(intersectionOfCallsWithSameParameters.ts, 40, 5))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 40, 41))
+>two : Symbol(two, Decl(intersectionOfCallsWithSameParameters.ts, 40, 54))
+>i.differentTypeParameterConstraint : Symbol(differentTypeParameterConstraint, Decl(intersectionOfCallsWithSameParameters.ts, 3, 75), Decl(intersectionOfCallsWithSameParameters.ts, 16, 75))
+>i : Symbol(i, Decl(intersectionOfCallsWithSameParameters.ts, 26, 5))
+>differentTypeParameterConstraint : Symbol(differentTypeParameterConstraint, Decl(intersectionOfCallsWithSameParameters.ts, 3, 75), Decl(intersectionOfCallsWithSameParameters.ts, 16, 75))
+>one : Symbol(one, Decl(intersectionOfCallsWithSameParameters.ts, 40, 107))
 

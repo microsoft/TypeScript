@@ -1,0 +1,61 @@
+tests/cases/compiler/intersectionOfCallsWithSameParameters.ts(38,7): error TS2741: Property 'two' is missing in type '{ one: number; }' but required in type '{ one: number; two: number; }'.
+tests/cases/compiler/intersectionOfCallsWithSameParameters.ts(39,7): error TS2741: Property 'two' is missing in type '{ one: number; }' but required in type '{ one: number; two: number; }'.
+tests/cases/compiler/intersectionOfCallsWithSameParameters.ts(40,7): error TS2741: Property 'two' is missing in type '{ one: number; }' but required in type '{ one: number; two: number; }'.
+tests/cases/compiler/intersectionOfCallsWithSameParameters.ts(41,7): error TS2741: Property 'two' is missing in type '{ one: number; }' but required in type '{ one: number; two: number; }'.
+
+
+==== tests/cases/compiler/intersectionOfCallsWithSameParameters.ts (4 errors) ====
+    interface One {
+        differentParameterType(id: string): { one: number };
+        differentNumberOfParameters(id: string): { one: number };
+        differentTypeParameterDefault<T = number>(id: string): { one: number };
+        differentTypeParameterConstraint<T extends { one: number }>(id: string): { one: number };
+    
+        same1(id: string): { one: number };
+        same2<T>(id: string): { one: number };
+        same3<T extends { one: number }>(id: string): { one: number };
+        same4<T = number>(id: string): { one: number };
+        same5<T1 extends { one: number }, T2 = number>(id: string): { one: number };
+    }
+    
+    interface Two {
+        differentParameterType(id: number): { two: number };
+        differentNumberOfParameters(id: string, second: string): { two: number };
+        differentTypeParameterDefault<T = string>(id: string): { two: number };
+        differentTypeParameterConstraint<T extends { two: number }>(id: string): { two: number };
+    
+        same1(id: string): { two: number };
+        same2<T>(id: string): { two: number };
+        same3<T extends { one: number }>(id: string): { two: number };
+        same4<T = number>(id: string): { two: number };
+        same5<T1 extends { one: number }, T2 = number>(id: string): { two: number };
+    }
+    
+    const i: One & Two = <any>{};
+    
+    // These lines should type check; the return type should be intersected.
+    const same1: { one: number, two: number } = i.same1('test');
+    const same2: { one: number, two: number } = i.same2<number>('test');
+    const same3: { one: number, two: number } = i.same3<{ one:number }>('test');
+    const same4: { one: number, two: number } = i.same4('test');
+    const same5: { one: number, two: number } = i.same5<{ one:number }, string>('test');
+    
+    // These lines should not, because the functions should become overloads rather
+    // than the return types intersected.
+    const differentParameterType: { one: number, two: number } = i.differentParameterType('test');
+          ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'two' is missing in type '{ one: number; }' but required in type '{ one: number; two: number; }'.
+!!! related TS2728 tests/cases/compiler/intersectionOfCallsWithSameParameters.ts:38:46: 'two' is declared here.
+    const differentNumberOfParameters: { one: number, two: number } = i.differentNumberOfParameters('test');
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'two' is missing in type '{ one: number; }' but required in type '{ one: number; two: number; }'.
+!!! related TS2728 tests/cases/compiler/intersectionOfCallsWithSameParameters.ts:39:51: 'two' is declared here.
+    const differentTypeParameterDefault: { one: number, two: number } = i.differentTypeParameterDefault('test');
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'two' is missing in type '{ one: number; }' but required in type '{ one: number; two: number; }'.
+!!! related TS2728 tests/cases/compiler/intersectionOfCallsWithSameParameters.ts:40:53: 'two' is declared here.
+    const differentTypeParameterConstraint: { one: number, two: number } = i.differentTypeParameterConstraint<{ one: number }>('test');
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2741: Property 'two' is missing in type '{ one: number; }' but required in type '{ one: number; two: number; }'.
+!!! related TS2728 tests/cases/compiler/intersectionOfCallsWithSameParameters.ts:41:56: 'two' is declared here.
+    

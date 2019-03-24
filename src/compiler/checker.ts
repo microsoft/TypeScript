@@ -7095,25 +7095,58 @@ namespace ts {
             setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
+        function callSignaturesAreIdenticalExceptReturnType(a: Signature, b: Signature): boolean {
+            const parametersA = a.parameters;
+            const parametersB = b.parameters;
+
+            if (parametersA.length !== parametersB.length) {
+                return false;
+            }
+
+            if (!every(parametersA, (parameter, i) => isTypeIdenticalTo(getTypeOfParameter(parameter), getTypeOfParameter(parametersB[i])))) {
+                return false;
+            }
+
+            // Parameter types are identical, now check type parameters.
+            const typesA = a.typeParameters;
+            const typesB = b.typeParameters;
+
+            if (typesA === undefined || typesB === undefined) {
+                return typesA === typesB;
+            }
+
+            if (typesA.length !== typesB.length) {
+                return false;
+            }
+
+            return every(typesA, (parameter, i) => {
+                const constraintA = getConstraintOfTypeParameter(parameter);
+                const constraintB = getConstraintOfTypeParameter(typesB[i]);
+                const sameConstraints = (constraintA === undefined && constraintB === undefined) ||
+                                        (constraintA !== undefined && constraintB !== undefined && isTypeIdenticalTo(constraintA, constraintB));
+
+                const defaultA = parameter.default;
+                const defaultB = typesB[i].default;
+                const sameDefaults = (defaultA === undefined && defaultB === undefined) ||
+                                     (defaultA !== undefined && defaultB !== undefined && isTypeIdenticalTo(defaultA, defaultB));
+
+                return sameConstraints && sameDefaults;
+            });
+        }
+
         function intersectCallSignatures(callSignatures: ReadonlyArray<Signature>): ReadonlyArray<Signature> {
             if (callSignatures.length === 0) {
                 return callSignatures;
             }
 
-            // Overloads that differ only be return type make no sense. So:
-            // 1. Group all the call signatures by their parameter types. Each group is an overload.
+            // Overloads that differ only by return type are not usable, so:
+            // 1. Group all the call signatures by their type parameters + parameter types. Each group is an overload.
             // 2. Create a new signature for each group where the return type is the intersection
             //    of the return types of the signatures in that group.
             const groups: Signature[][] = [];
 
             callSignatures.forEach((callSignature) => {
-                const matchingGroup = find(groups, (group) => {
-                    const candidate = group[0];
-                    const candidateParameters = candidate.parameters;
-                    const thisCallParameters = callSignature.parameters;
-                    return candidateParameters.length === thisCallParameters.length &&
-                           every(thisCallParameters, (parameter, index) => isTypeIdenticalTo(getTypeOfParameter(parameter), getTypeOfParameter(candidateParameters[index])));
-                });
+                const matchingGroup = find(groups, (group) => callSignaturesAreIdenticalExceptReturnType(callSignature, group[0]));
                 if (matchingGroup === undefined) {
                     groups.push([callSignature]);
                 }
