@@ -7124,7 +7124,7 @@ namespace ts {
                 if (symbol.exports) {
                     members = getExportsOfSymbol(symbol);
                     if (symbol === globalThisSymbol) {
-                        members = createSymbolTable(arrayFrom(members.values()).filter(p => !(p.flags & SymbolFlags.BlockScoped)))
+                        members = createSymbolTable(arrayFrom(members.values()).filter(p => !(p.flags & SymbolFlags.BlockScoped)));
                     }
                 }
                 setStructuredTypeMembers(type, members, emptyArray, emptyArray, undefined, undefined);
