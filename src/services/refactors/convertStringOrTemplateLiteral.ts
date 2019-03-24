@@ -175,27 +175,20 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return createTemplateExpression(head, templateSpans);
     }
 
-    const hexToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 16));
     const octalToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 8));
 
     function decodeRawString(content: string) {
         const outerQuotes = /["']((.|\s)*)["']/;
-        const unicodeEscape = /\\u(\w+)/gi;
-        const unicodeEscapeWithBraces = /\\u\{(\w+)\}/gi;
-        const hexEscape = /\\x(\w+)/gi;
-        const octalEscape = /\\([0-7]+)/g;
+        const octalEscape = /\\((?:[1-7][0-7]{0,2}|[0-7]{2,3}))/g;
 
         return content.replace(outerQuotes, (_match, grp) => grp)
-                      .replace(unicodeEscape, hexToUnicode)
-                      .replace(unicodeEscapeWithBraces, hexToUnicode)
-                      .replace(hexEscape, hexToUnicode)
                       .replace(octalEscape, octalToUnicode);
 
     }
 
     function escapeText(content: string) {
         return content.replace("`", "\`")       // back-tick
-                      .replace("\${", `$\\{`);  // placeholder alike beginning
+                      .replace("${", "$\\{");  // placeholder alike beginning
     }
 
 }

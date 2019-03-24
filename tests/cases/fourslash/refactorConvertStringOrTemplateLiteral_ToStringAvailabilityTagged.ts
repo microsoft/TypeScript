@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// function tag(literals: TemplateStringsArray, ...placeholders: string[]) { return "tagged" }
+//// function tag(literals: TemplateStringsArray, ...placeholders: any[]) { return "tagged" }
 //// const alpha = tag/*z*/`/*y*/foobar`
 //// const beta = tag/*x*/`/*w*/foobar ${/*v*/4/*u*/2}`
 
