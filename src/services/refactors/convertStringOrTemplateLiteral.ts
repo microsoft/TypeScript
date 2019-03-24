@@ -83,8 +83,12 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return text.length === 0 ? [expression] : [expression, createStringLiteral(text)];
     }
 
+    function isNotEqualsOperator(node: BinaryExpression) {
+        return node.operatorToken.kind !== SyntaxKind.EqualsToken;
+    }
+
     function getParentBinaryExpression(expr: Node) {
-        while (isBinaryExpression(expr.parent)) {
+        while (isBinaryExpression(expr.parent) && isNotEqualsOperator(expr.parent)) {
             expr = expr.parent;
         }
         return expr;
