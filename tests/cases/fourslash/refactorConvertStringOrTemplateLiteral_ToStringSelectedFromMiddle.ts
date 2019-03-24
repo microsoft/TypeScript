@@ -12,3 +12,4 @@ edit.applyRefactor({
 `const age = 42
 const foo = "foobar is " + age + " years old " + false`,
 });
+

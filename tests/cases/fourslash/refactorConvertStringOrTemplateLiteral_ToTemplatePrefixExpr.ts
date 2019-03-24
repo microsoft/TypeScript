@@ -10,3 +10,4 @@ edit.applyRefactor({
     newContent:
 `const foo = \`\${42 - 6 * 4 + 23 / 12} years old\``,
 });
+

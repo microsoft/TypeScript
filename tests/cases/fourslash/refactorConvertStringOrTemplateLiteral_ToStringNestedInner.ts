@@ -12,3 +12,4 @@ edit.applyRefactor({
 `const age = 42
 const foo = \`foobar is a \${ age < 18 ? 'child' : "grown-up " + (age > 40 ? 'who needs probably assistance' : '') }\``,
 });
+

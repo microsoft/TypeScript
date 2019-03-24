@@ -22,3 +22,4 @@ verify.refactorAvailable("Convert string concatenation or template literal", "Co
 goTo.select("r", "q");
 verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to string concatenation");
 verify.refactorAvailable("Convert string concatenation or template literal", "Convert to template literal");
+

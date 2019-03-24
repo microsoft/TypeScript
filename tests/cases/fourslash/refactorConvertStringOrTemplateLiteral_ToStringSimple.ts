@@ -10,3 +10,4 @@ edit.applyRefactor({
     newContent:
 `const foo = "foobar rocks"`,
 });
+

@@ -14,19 +14,21 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const { file, startPosition } = context;
         const node = getNodeOrParentOfParentheses(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node);
-        const actions: RefactorActionInfo[] = [];
+        const refactorInfo: ApplicableRefactorInfo = { name: refactorName, description: refactorDescription, actions: [] };
 
         if ((isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && isStringConcatenationValid(maybeBinary)) {
-            actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
+            refactorInfo.actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
+            return [refactorInfo];
         }
 
         const templateLiteral = findAncestor(node, n => isTemplateLiteral(n));
 
         if (templateLiteral && !isTaggedTemplateExpression(templateLiteral.parent)) {
-            actions.push({ name: toStringConcatenationActionName, description: toStringConcatenationDescription });
+            refactorInfo.actions.push({ name: toStringConcatenationActionName, description: toStringConcatenationDescription });
+            return [refactorInfo];
         }
 
-        return [{ name: refactorName, description: refactorDescription, actions }];
+        return emptyArray;
     }
 
     function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {
@@ -137,46 +139,35 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return { nodes: [node as Expression], containsString: isStringLiteral(node), areOperatorsValid: true };
     }
 
-    function createHead(nodes: ReadonlyArray<Expression>): [number, TemplateHead] {
-        let begin = 0;
+    function concatConsecutiveString(index: number, nodes: ReadonlyArray<Expression>): [number, string] {
         let text = "";
 
-        while (begin < nodes.length && isStringLiteral(nodes[begin])) {
-            const next = nodes[begin] as StringLiteral;
-            text = text + decodeRawString(next.getText());
-            begin++;
+        while (index < nodes.length && isStringLiteral(nodes[index])) {
+            text = text + decodeRawString(nodes[index].getText());
+            index++;
         }
 
         text = escapeText(text);
-        return [begin, createTemplateHead(text)];
+        return [index, text];
     }
 
     function nodesToTemplate(nodes: ReadonlyArray<Expression>) {
         const templateSpans: TemplateSpan[] = [];
-        const [begin, head] = createHead(nodes);
+        const [begin, headText] = concatConsecutiveString(0, nodes);
+        const templateHead = createTemplateHead(headText);
 
-        if (begin === nodes.length) {
-            return createNoSubstitutionTemplateLiteral(head.text);
-        }
+        if (begin === nodes.length) return createNoSubstitutionTemplateLiteral(headText);
 
         for (let i = begin; i < nodes.length; i++) {
-            let current = nodes[i];
-            let text = "";
+            const expression = isParenthesizedExpression(nodes[i]) ? (nodes[i] as ParenthesizedExpression).expression : nodes[i];
+            const [newIndex, subsequentText] = concatConsecutiveString(i + 1, nodes);
+            i = newIndex - 1;
 
-            while (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
-                const next = nodes[i + 1] as StringLiteral;
-                text = text + decodeRawString(next.getText());
-                i++;
-            }
-
-            text = escapeText(text);
-            const templatePart = i === nodes.length - 1 ? createTemplateTail(text) : createTemplateMiddle(text);
-
-            if (isParenthesizedExpression(current)) current = current.expression;
-            templateSpans.push(createTemplateSpan(current, templatePart));
+            const templatePart = i === nodes.length - 1 ? createTemplateTail(subsequentText) : createTemplateMiddle(subsequentText);
+            templateSpans.push(createTemplateSpan(expression, templatePart));
         }
 
-        return createTemplateExpression(head, templateSpans);
+        return createTemplateExpression(templateHead, templateSpans);
     }
 
     const octalToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 8));
@@ -196,3 +187,4 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     }
 
 }
+
