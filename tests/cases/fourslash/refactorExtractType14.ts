@@ -1,16 +1,13 @@
 /// <reference path='fourslash.ts' />
 
-//// var x: /*a*/{ a?: number, b?: string }/*b*/ = { };
+//// type A<T = /*a*/boolean/*b*/> = string | number | T
 
 goTo.select("a", "b");
 edit.applyRefactor({
     refactorName: "Extract type",
     actionName: "Extract type",
     actionDescription: "Extract type",
-    newContent: `type /*RENAME*/NewType = {
-    a?: number;
-    b?: string;
-};
+    newContent: `type /*RENAME*/NewType = boolean;
 
-var x: NewType = { };`,
+type A<T = NewType> = string | number | T`,
 });

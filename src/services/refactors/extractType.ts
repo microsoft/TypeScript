@@ -11,13 +11,17 @@ namespace ts.refactor {
             Debug.assert(actionName === refactorName);
             const { file } = context;
             const { selection, firstStatement } = Debug.assertDefined(getRangeToExtract(context));
+
+            const name = getUniqueName("NewType", file);
+            const newTypeNode = generateTypeAlias(name, selection);
             const edits = textChanges.ChangeTracker.with(context, changes => {
-                const name = getUniqueName("NewType", file);
-                changes.insertNodeBefore(file, firstStatement, generateTypeAlias(name, selection), /* blankLineBetween */ true);
+                changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
                 changes.replaceNode(file, selection, createTypeReferenceNode(name, /* typeArguments */ undefined));
             });
 
-            return { edits, renameFilename: undefined, renameLocation: undefined };
+            const renameFilename = file.fileName;
+            const renameLocation = getRenameLocation(edits, renameFilename, name, /*preferLastLocation*/ false);
+            return { edits, renameFilename, renameLocation };
         }
     });
 
