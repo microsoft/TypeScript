@@ -33,7 +33,9 @@ namespace ts.refactor {
         const selection = findAncestor(current, (node => node.parent && rangeContainsSkipTrivia(range, node, file) && !rangeContainsSkipTrivia(range, node.parent, file)));
         if (!selection || isInJSFile(selection) || !isTypeNode(selection)) return undefined;
         const firstStatement = Debug.assertDefined((findAncestor(selection, n => isStatement(n) && !isBlock(n)))) as Statement;
-        const typeParameters = collectionTypeArguments(context.program.getTypeChecker(), selection, firstStatement, file);
+        const typeParameters = checkAndCollectionTypeArguments(context.program.getTypeChecker(), selection, firstStatement, file);
+        if (!typeParameters) return undefined;
+
         return { selection, firstStatement, typeParameters };
     }
 
@@ -41,18 +43,29 @@ namespace ts.refactor {
         return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
     }
 
-    function collectionTypeArguments(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): string[] {
+    function checkAndCollectionTypeArguments(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): string[] | undefined {
+        let hasError = false;
         const result: string[] = [];
         visitor(selection);
-        return result;
+        return hasError ? undefined : result;
 
         function visitor(node: Node) {
             if (isTypeReferenceNode(node)) {
                 if (isIdentifier(node.typeName)) {
                     const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
-                    if (symbol && rangeContainsSkipTrivia(statement, first(symbol.declarations), file) && !rangeContainsSkipTrivia(selection, first(symbol.declarations), file)) {
-                        result.push(node.typeName.text);
+                    if (symbol) {
+                        const declaration = first(symbol.declarations);
+                        if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
+                            result.push(node.typeName.text);
+                        }
                     }
+                }
+            }
+            else if (isInferTypeNode(node)) {
+                const conditionalTypeNode = findAncestor(node, isConditionalTypeNode);
+                if (!conditionalTypeNode || !rangeContainsSkipTrivia(selection, conditionalTypeNode, file)) {
+                    hasError = true;
+                    return;
                 }
             }
             forEachChild(node, visitor);
