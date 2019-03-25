@@ -165,6 +165,9 @@ namespace ts {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfFilesAndCompilerOptions(commandLine.fileNames, commandLineOptions);
             }
+            else if (isIncrementalCompilation(commandLineOptions)) {
+                performIncrementalCompilation(commandLine);
+            }
             else {
                 performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);
             }
@@ -265,34 +268,22 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
         enableStatistics(options);
-        const oldProgram = readBuilderProgram(options, path => host.readFile(path));
         const configFileParsingDiagnostics = getConfigFileParsingDiagnostics(config);
-        const programOptions: CreateProgramOptions = {
-            rootNames: fileNames,
-            options,
-            projectReferences,
-            host,
-            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
-        };
-        const program = createProgram(programOptions);
         const builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(
-            program,
-            {
-                useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-                createHash: maybeBind(sys, sys.createHash),
-                writeFile: (path, data, writeByteOrderMark) => sys.writeFile(path, data, writeByteOrderMark)
-            },
-            oldProgram,
-            configFileParsingDiagnostics
+            fileNames,
+            options,
+            host,
+            readBuilderProgram(options, path => host.readFile(path)),
+            configFileParsingDiagnostics,
+            projectReferences
         );
-
         const exitStatus = emitFilesAndReportErrors(
             builderProgram,
             reportDiagnostic,
             s => sys.write(s + sys.newLine),
             createReportErrorSummary(options)
         );
-        reportStatistics(program);
+        reportStatistics(builderProgram.getProgram());
         return sys.exit(exitStatus);
     }
 

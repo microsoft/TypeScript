@@ -1,6 +1,0 @@
-=== tests/cases/compiler/invalidIncremental.ts ===
-const x = 10;
->x : 10
->10 : 10
-
-

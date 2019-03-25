@@ -1,8 +1,0 @@
-error TS5074: Option '--incremental' can only be specified when using tsconfig.
-
-
-!!! error TS5074: Option '--incremental' can only be specified when using tsconfig.
-==== tests/cases/compiler/invalidIncremental.ts (0 errors) ====
-    const x = 10;
-    
-    
