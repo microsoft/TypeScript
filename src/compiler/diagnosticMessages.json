@@ -4934,5 +4934,13 @@
     "Extract type": {
         "category": "Message",
         "code": 95076
+    },
+    "Extract to type alias": {
+        "category": "Message",
+        "code": 95077
+    },
+    "Extract to typedef": {
+        "category": "Message",
+        "code": 95078
     }
 }
