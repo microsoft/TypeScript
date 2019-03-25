@@ -367,8 +367,8 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    new (pattern: RegExp, flags?: string): RegExp;
-    (pattern: RegExp, flags?: string): RegExp;
+    new (pattern: RegExp | string, flags?: string): RegExp;
+    (pattern: RegExp | string, flags?: string): RegExp;
 }
 
 interface String {
