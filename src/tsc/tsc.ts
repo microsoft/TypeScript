@@ -13,7 +13,7 @@ namespace ts {
     }
 
     let reportDiagnostic = createDiagnosticReporter(sys);
-    function updateReportDiagnostic(options?: CompilerOptions) {
+    function updateReportDiagnostic(options: CompilerOptions | BuildOptions) {
         if (shouldBePretty(options)) {
             reportDiagnostic = createDiagnosticReporter(sys, /*pretty*/ true);
         }
@@ -23,7 +23,7 @@ namespace ts {
         return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
     }
 
-    function shouldBePretty(options?: CompilerOptions) {
+    function shouldBePretty(options: CompilerOptions | BuildOptions) {
         if (!options || typeof options.pretty === "undefined") {
             return defaultIsPretty();
         }
@@ -147,6 +147,9 @@ namespace ts {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfConfigFile(configParseResult, commandLineOptions);
             }
+            else if (isIncrementalCompilation(configParseResult.options)) {
+                performIncrementalCompilation(configParseResult);
+            }
             else {
                 performCompilation(configParseResult.fileNames, configParseResult.projectReferences, configParseResult.options, getConfigFileParsingDiagnostics(configParseResult));
             }
@@ -189,7 +192,7 @@ namespace ts {
         }
 
         // Update to pretty if host supports it
-        updateReportDiagnostic();
+        updateReportDiagnostic(buildOptions);
         if (projects.length === 0) {
             printVersion();
             printHelp(buildOpts, "--build ");
@@ -204,9 +207,10 @@ namespace ts {
             reportWatchModeWithoutSysSupport();
         }
 
+        // Use default createProgram
         const buildHost = buildOptions.watch ?
-            createSolutionBuilderWithWatchHost(sys, createEmitAndSemanticDiagnosticsBuilderProgram, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
-            createSolutionBuilderHost(sys, createAbstractBuilder, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
+            createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createWatchStatusReporter(buildOptions)) :
+            createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createReportErrorSummary(buildOptions));
         updateCreateProgram(buildHost);
         buildHost.afterProgramEmitAndDiagnostics = (program: BuilderProgram) => reportStatistics(program.getProgram());
 
@@ -254,6 +258,44 @@ namespace ts {
         return sys.exit(exitStatus);
     }
 
+    function performIncrementalCompilation(config: ParsedCommandLine) {
+        const { options, fileNames, projectReferences } = config;
+        const host = createCompilerHost(options);
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
+        enableStatistics(options);
+        const oldProgram = readBuilderProgram(options, path => host.readFile(path));
+        const configFileParsingDiagnostics = getConfigFileParsingDiagnostics(config);
+        const programOptions: CreateProgramOptions = {
+            rootNames: fileNames,
+            options,
+            projectReferences,
+            host,
+            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+        };
+        const program = createProgram(programOptions);
+        const builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(
+            program,
+            {
+                useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
+                createHash: maybeBind(sys, sys.createHash),
+                writeFile: (path, data, writeByteOrderMark) => sys.writeFile(path, data, writeByteOrderMark)
+            },
+            oldProgram,
+            configFileParsingDiagnostics
+        );
+
+        const exitStatus = emitFilesAndReportErrors(
+            builderProgram,
+            reportDiagnostic,
+            s => sys.write(s + sys.newLine),
+            createReportErrorSummary(options)
+        );
+        reportStatistics(program);
+        return sys.exit(exitStatus);
+    }
+
     function updateCreateProgram<T extends BuilderProgram>(host: { createProgram: CreateProgram<T>; }) {
         const compileUsingBuilder = host.createProgram;
         host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
@@ -274,7 +316,7 @@ namespace ts {
         };
     }
 
-    function createWatchStatusReporter(options?: CompilerOptions) {
+    function createWatchStatusReporter(options: CompilerOptions | BuildOptions) {
         return ts.createWatchStatusReporter(sys, shouldBePretty(options));
     }
 

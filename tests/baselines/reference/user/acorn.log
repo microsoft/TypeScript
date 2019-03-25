@@ -55,6 +55,7 @@ node_modules/acorn/dist/acorn.es.js(5292,12): error TS2339: Property 'parseExpre
 node_modules/acorn/dist/acorn.js(3,9): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/acorn.js(3,34): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/acorn.js(3,47): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/acorn.js(4,19): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/dist/acorn")'.
 node_modules/acorn/dist/acorn.js(42,1): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/acorn/dist/acorn.js(42,32): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/acorn/dist/acorn.js(416,56): error TS2339: Property 'push' does not exist on type '(token: any) => any'.
@@ -128,6 +129,9 @@ node_modules/acorn/dist/acorn_loose.es.js(263,47): error TS2339: Property 'end' 
 node_modules/acorn/dist/acorn_loose.js(3,9): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/acorn_loose.js(3,34): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/acorn_loose.js(3,47): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/acorn_loose.js(4,19): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/dist/acorn_loose")'.
+node_modules/acorn/dist/acorn_loose.js(4,54): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/dist/acorn_loose")'.
+node_modules/acorn/dist/acorn_loose.js(4,79): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/dist/acorn_loose")'.
 node_modules/acorn/dist/acorn_loose.js(89,10): error TS2339: Property 'next' does not exist on type 'LooseParser'.
 node_modules/acorn/dist/acorn_loose.js(118,16): error TS2339: Property 'lookAhead' does not exist on type 'LooseParser'.
 node_modules/acorn/dist/acorn_loose.js(119,44): error TS2339: Property 'next' does not exist on type 'LooseParser'.
@@ -152,6 +156,8 @@ node_modules/acorn/dist/walk.es.js(155,41): error TS2339: Property 'node' does n
 node_modules/acorn/dist/walk.js(3,9): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/walk.js(3,34): error TS2304: Cannot find name 'define'.
 node_modules/acorn/dist/walk.js(3,47): error TS2304: Cannot find name 'define'.
+node_modules/acorn/dist/walk.js(4,19): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/dist/walk")'.
+node_modules/acorn/dist/walk.js(4,54): error TS2339: Property 'acorn' does not exist on type 'typeof import("/acorn/node_modules/acorn/dist/walk")'.
 node_modules/acorn/dist/walk.js(161,41): error TS2339: Property 'node' does not exist on type 'never'.
 
 

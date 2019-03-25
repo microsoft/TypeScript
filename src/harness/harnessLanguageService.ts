@@ -766,6 +766,7 @@ namespace Harness.LanguageService {
         }
 
         setTimeout(callback: (...args: any[]) => void, ms: number, ...args: any[]): any {
+            // tslint:disable-next-line:ban
             return setTimeout(callback, ms, args);
         }
 

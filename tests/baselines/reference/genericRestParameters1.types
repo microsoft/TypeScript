@@ -462,8 +462,8 @@ let x22 = call(f15, "hello", 42);  // string | number
 >42 : 42
 
 let x23 = call(f16, "hello", 42);  // unknown
->x23 : unknown
->call(f16, "hello", 42) : unknown
+>x23 : string | number
+>call(f16, "hello", 42) : string | number
 >call : <T extends unknown[], U>(f: (...args: T) => U, ...args: T) => U
 >f16 : <A, B>(a: A, b: B) => A | B
 >"hello" : "hello"

@@ -3,31 +3,43 @@
     "pos": 1,
     "end": 9,
     "flags": "JSDoc",
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "type": {
         "kind": "ParenthesizedType",
         "pos": 1,
         "end": 8,
         "flags": "JSDoc",
+        "modifierFlagsCache": 0,
+        "transformFlags": 0,
         "type": {
             "kind": "ArrayType",
             "pos": 2,
             "end": 7,
             "flags": "JSDoc",
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "elementType": {
                 "kind": "ArrayType",
                 "pos": 2,
                 "end": 5,
                 "flags": "JSDoc",
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "elementType": {
                     "kind": "TypeReference",
                     "pos": 2,
                     "end": 3,
                     "flags": "JSDoc",
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0,
                     "typeName": {
                         "kind": "Identifier",
                         "pos": 2,
                         "end": 3,
                         "flags": "JSDoc",
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "escapedText": "a"
                     }
                 }

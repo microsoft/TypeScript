@@ -274,7 +274,17 @@ namespace ts.codefix {
             return !!merged;
         }));
         const tag = createJSDocComment(comments.join("\n"), createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
-        changes.insertJsdocCommentBefore(sourceFile, parent, tag);
+        const jsDocNode = parent.kind === SyntaxKind.ArrowFunction ? getJsDocNodeForArrowFunction(parent) : parent;
+        jsDocNode.jsDoc = parent.jsDoc;
+        jsDocNode.jsDocCache = parent.jsDocCache;
+        changes.insertJsdocCommentBefore(sourceFile, jsDocNode, tag);
+    }
+
+    function getJsDocNodeForArrowFunction(signature: ArrowFunction): HasJSDoc {
+        if (signature.parent.kind === SyntaxKind.PropertyDeclaration) {
+            return <HasJSDoc>signature.parent;
+        }
+        return <HasJSDoc>signature.parent.parent;
     }
 
     function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
@@ -292,30 +302,6 @@ namespace ts.codefix {
             case SyntaxKind.JSDocReturnTag:
                 return createJSDocReturnTag((newTag as JSDocReturnTag).typeExpression, oldTag.comment);
         }
-    }
-
-    function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
-        const checker = program.getTypeChecker();
-        let typeIsAccessible = true;
-        const notAccessible = () => { typeIsAccessible = false; };
-        const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
-            trackSymbol: (symbol, declaration, meaning) => {
-                // TODO: GH#18217
-                typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning!, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
-            },
-            reportInaccessibleThisError: notAccessible,
-            reportPrivateInBaseOfClassExpression: notAccessible,
-            reportInaccessibleUniqueSymbolError: notAccessible,
-            moduleResolverHost: {
-                readFile: host.readFile,
-                fileExists: host.fileExists,
-                directoryExists: host.directoryExists,
-                getSourceFiles: program.getSourceFiles,
-                getCurrentDirectory: program.getCurrentDirectory,
-                getCommonSourceDirectory: program.getCommonSourceDirectory,
-            }
-        });
-        return typeIsAccessible ? res : undefined;
     }
 
     function getReferences(token: PropertyName | Token<SyntaxKind.ConstructorKeyword>, program: Program, cancellationToken: CancellationToken): ReadonlyArray<Identifier> {

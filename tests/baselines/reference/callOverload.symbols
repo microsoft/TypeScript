@@ -1,0 +1,39 @@
+=== tests/cases/conformance/expressions/functionCalls/callOverload.ts ===
+declare function fn(x: any): void;
+>fn : Symbol(fn, Decl(callOverload.ts, 0, 0))
+>x : Symbol(x, Decl(callOverload.ts, 0, 20))
+
+declare function takeTwo(x: any, y: any): void;
+>takeTwo : Symbol(takeTwo, Decl(callOverload.ts, 0, 34))
+>x : Symbol(x, Decl(callOverload.ts, 1, 25))
+>y : Symbol(y, Decl(callOverload.ts, 1, 32))
+
+declare function withRest(a: any, ...args: Array<any>): void;
+>withRest : Symbol(withRest, Decl(callOverload.ts, 1, 47))
+>a : Symbol(a, Decl(callOverload.ts, 2, 26))
+>args : Symbol(args, Decl(callOverload.ts, 2, 33))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var n: number[];
+>n : Symbol(n, Decl(callOverload.ts, 3, 3))
+
+fn(1) // no error
+>fn : Symbol(fn, Decl(callOverload.ts, 0, 0))
+
+fn(1, 2, 3, 4)
+>fn : Symbol(fn, Decl(callOverload.ts, 0, 0))
+
+takeTwo(1, 2, 3, 4)
+>takeTwo : Symbol(takeTwo, Decl(callOverload.ts, 0, 34))
+
+withRest('a', ...n); // no error
+>withRest : Symbol(withRest, Decl(callOverload.ts, 1, 47))
+>n : Symbol(n, Decl(callOverload.ts, 3, 3))
+
+withRest();
+>withRest : Symbol(withRest, Decl(callOverload.ts, 1, 47))
+
+withRest(...n); 
+>withRest : Symbol(withRest, Decl(callOverload.ts, 1, 47))
+>n : Symbol(n, Decl(callOverload.ts, 3, 3))
+

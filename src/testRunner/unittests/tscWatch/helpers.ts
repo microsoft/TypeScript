@@ -32,6 +32,7 @@ namespace ts.tscWatch {
     export interface Watch {
         (): Program;
         getBuilderProgram(): EmitAndSemanticDiagnosticsBuilderProgram;
+        close(): void;
     }
 
     export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
@@ -40,6 +41,7 @@ namespace ts.tscWatch {
         const watch = createWatchProgram(compilerHost);
         const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
         result.getBuilderProgram = () => watch.getCurrentProgram();
+        result.close = () => watch.close();
         return result;
     }
 
@@ -51,6 +53,7 @@ namespace ts.tscWatch {
     }
 
     const elapsedRegex = /^Elapsed:: [0-9]+ms/;
+    const buildVerboseLogRegEx = /^.+ \- /;
     function checkOutputErrors(
         host: WatchedSystem,
         logsBeforeWatchDiagnostic: string[] | undefined,
@@ -85,9 +88,13 @@ namespace ts.tscWatch {
             index++;
         }
 
+        function getCleanLogString(log: string) {
+            return log.replace(elapsedRegex, "").replace(buildVerboseLogRegEx, "");
+        }
+
         function assertLog(caption: string, expected: string) {
             const actual = outputs[index];
-            assert.equal(actual.replace(elapsedRegex, ""), expected.replace(elapsedRegex, ""), getOutputAtFailedMessage(caption, expected));
+            assert.equal(getCleanLogString(actual), getCleanLogString(expected), getOutputAtFailedMessage(caption, expected));
             index++;
         }
 

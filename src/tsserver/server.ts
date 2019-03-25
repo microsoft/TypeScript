@@ -705,6 +705,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
+            // tslint:disable-next-line:ban
             setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
@@ -967,4 +968,12 @@ namespace ts.server {
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
+
+    if (Debug.isDebugging) {
+        Debug.enableDebugInfo();
+    }
+
+    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+        ts.sys.tryEnableSourceMapsForHost();
+    }
 }
