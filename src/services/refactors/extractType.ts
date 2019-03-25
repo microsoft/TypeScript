@@ -5,27 +5,29 @@ namespace ts.refactor {
     const extractToTypeDef = "Extract to typedef";
     registerRefactor(refactorName, {
         getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
-            if (!getRangeToExtract(context)) return emptyArray;
-            const isJs = isSourceFileJS(context.file);
+            const info = getRangeToExtract(context);
+            if (!info) return emptyArray;
 
             return [{
                 name: refactorName,
                 description: getLocaleSpecificMessage(Diagnostics.Extract_type),
-                actions: [isJs ? {
+                actions: [info.isJS ? {
                     name: extractToTypeDef, description: getLocaleSpecificMessage(Diagnostics.Extract_to_typedef)
                 } : {
-                    name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
-                }]
+                        name: extractToTypeAlias, description: getLocaleSpecificMessage(Diagnostics.Extract_to_type_alias)
+                    }]
             }];
         },
         getEditsForAction(context, actionName): RefactorEditInfo {
             Debug.assert(actionName === extractToTypeAlias || actionName === extractToTypeDef);
             const { file } = context;
             const info = Debug.assertDefined(getRangeToExtract(context));
-            const isJS = isSourceFileJS(file);
+            Debug.assert(actionName === extractToTypeAlias && !info.isJS || actionName === extractToTypeDef && info.isJS);
 
             const name = getUniqueName("NewType", file);
-            const edits = textChanges.ChangeTracker.with(context, changes => isJS ? doTypedefChange(changes, file, name, info) : doTypeAliasChange(changes, file, name, info));
+            const edits = textChanges.ChangeTracker.with(context, changes => info.isJS ?
+                doTypedefChange(changes, file, name, info.firstStatement, info.selection) :
+                doTypeAliasChange(changes, file, name, info.firstStatement, info.selection, info.typeParameters));
 
             const renameFilename = file.fileName;
             const renameLocation = getRenameLocation(edits, renameFilename, name, /*preferLastLocation*/ false);
@@ -33,7 +35,9 @@ namespace ts.refactor {
         }
     });
 
-    interface Info { selection: TypeNode; firstStatement: Statement | Statement & HasJSDoc; typeParameters: ReadonlyArray<string>; }
+    interface TypeAliasInfo { isJS: false; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<string>; }
+    interface TypedefInfo { isJS: true; selection: TypeNode; firstStatement: Statement & HasJSDoc; }
+    type Info = TypeAliasInfo | TypedefInfo;
     function getRangeToExtract(context: RefactorContext): Info | undefined {
         const { file, startPosition } = context;
         const isJS = isSourceFileJS(file);
@@ -43,13 +47,22 @@ namespace ts.refactor {
         const selection = findAncestor(current, (node => node.parent && rangeContainsSkipTrivia(range, node, file) && !rangeContainsSkipTrivia(range, node.parent, file)));
         if (!selection || !isTypeNode(selection)) return undefined;
 
-        const firstStatement = Debug.assertDefined((findAncestor(selection, isJS ? isStatementButNotBlockAndHasJSDoc : isStatementButNotBlock)));
+        if (isJS) {
+            return {
+                isJS,
+                selection,
+                firstStatement: Debug.assertDefined((findAncestor(selection, isStatementButNotBlockAndHasJSDoc))),
+            };
+        }
+        else {
+            const firstStatement = Debug.assertDefined((findAncestor(selection, isStatementButNotBlock)));
 
-        // typeparam tag is not supported yet
-        const typeParameters = isJS ? [] : checkAndCollectionTypeArguments(context.program.getTypeChecker(), selection, firstStatement, file);
-        if (!typeParameters) return undefined;
+            // typeparam tag is not supported yet
+            const typeParameters = isJS ? [] : checkAndCollectionTypeArguments(context.program.getTypeChecker(), selection, firstStatement, file);
+            if (!typeParameters) return undefined;
 
-        return { selection, firstStatement, typeParameters };
+            return { isJS, selection, firstStatement, typeParameters };
+        }
     }
 
     function isStatementButNotBlock(n: Node): n is Statement {
@@ -93,8 +106,7 @@ namespace ts.refactor {
         }
     }
 
-    function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: Info) {
-        const { firstStatement, selection, typeParameters } = info;
+    function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<string>) {
         const newTypeNode = createTypeAliasDeclaration(
             /* decorators */ undefined,
             /* monifiers */ undefined,
@@ -106,9 +118,7 @@ namespace ts.refactor {
         changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id, /* typeArguments */ undefined))));
     }
 
-    function doTypedefChange (changes: textChanges.ChangeTracker, file: SourceFile, name: string, info: Info) {
-        const { firstStatement, selection } = info;
-
+    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: HasJSDoc, selection: TypeNode) {
         const node = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag);
         node.tagName = createIdentifier("typedef"); // TODO: jsdoc factory https://github.com/Microsoft/TypeScript/pull/29539
         node.fullName = createIdentifier(name);
