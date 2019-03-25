@@ -102,6 +102,10 @@ namespace ts.refactor {
                     return;
                 }
             }
+            else if (isTypePredicateNode(node) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
+                hasError = true;
+                return;
+            }
             forEachChild(node, visitor);
         }
     }
