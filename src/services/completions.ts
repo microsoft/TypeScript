@@ -30,6 +30,7 @@ namespace ts.Completions {
         ConstructorParameterKeywords,   // Keywords at constructor parameter
         FunctionLikeBodyKeywords,       // Keywords at function like body
         TypeKeywords,
+        Last = TypeKeywords
     }
 
     const enum GlobalsSearch { Continue, Success, Fail }
@@ -77,7 +78,7 @@ namespace ts.Completions {
     }
 
     function completionInfoFromData(sourceFile: SourceFile, typeChecker: TypeChecker, compilerOptions: CompilerOptions, log: Log, completionData: CompletionData, preferences: UserPreferences): CompletionInfo | undefined {
-        const { symbols, completionKind, isInSnippetScope, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, literals, symbolToOriginInfoMap, recommendedCompletion, isJsxInitializer } = completionData;
+        const { symbols, completionKind, isInSnippetScope, isNewIdentifierLocation, location, propertyAccessToConvert, keywordFilters, literals, symbolToOriginInfoMap, recommendedCompletion, isJsxInitializer, insideJsDocTagTypeExpression } = completionData;
 
         if (location && location.parent && isJsxClosingElement(location.parent)) {
             // In the TypeScript JSX element, if such element is not defined. When users query for completion at closing tag,
@@ -113,7 +114,7 @@ namespace ts.Completions {
 
         if (keywordFilters !== KeywordCompletionFilters.None) {
             const entryNames = arrayToSet(entries, e => e.name);
-            for (const keywordEntry of getKeywordCompletions(keywordFilters)) {
+            for (const keywordEntry of getKeywordCompletions(keywordFilters, !insideJsDocTagTypeExpression && isSourceFileJS(sourceFile))) {
                 if (!entryNames.has(keywordEntry.name)) {
                     entries.push(keywordEntry);
                 }
@@ -510,6 +511,7 @@ namespace ts.Completions {
         readonly recommendedCompletion: Symbol | undefined;
         readonly previousToken: Node | undefined;
         readonly isJsxInitializer: IsJsxInitializer;
+        readonly insideJsDocTagTypeExpression: boolean;
     }
     type Request = { readonly kind: CompletionDataKind.JsDocTagName | CompletionDataKind.JsDocTag } | { readonly kind: CompletionDataKind.JsDocParameterName, tag: JSDocParameterTag };
 
@@ -837,7 +839,22 @@ namespace ts.Completions {
         const literals = mapDefined(contextualType && (contextualType.isUnion() ? contextualType.types : [contextualType]), t => t.isLiteral() ? t.value : undefined);
 
         const recommendedCompletion = previousToken && contextualType && getRecommendedCompletion(previousToken, contextualType, typeChecker);
-        return { kind: CompletionDataKind.Data, symbols, completionKind, isInSnippetScope, propertyAccessToConvert, isNewIdentifierLocation, location, keywordFilters, literals, symbolToOriginInfoMap, recommendedCompletion, previousToken, isJsxInitializer };
+        return {
+            kind: CompletionDataKind.Data,
+            symbols,
+            completionKind,
+            isInSnippetScope,
+            propertyAccessToConvert,
+            isNewIdentifierLocation,
+            location,
+            keywordFilters,
+            literals,
+            symbolToOriginInfoMap,
+            recommendedCompletion,
+            previousToken,
+            isJsxInitializer,
+            insideJsDocTagTypeExpression
+        };
 
         type JSDocTagWithTypeExpression = JSDocParameterTag | JSDocPropertyTag | JSDocReturnTag | JSDocTypeTag | JSDocTypedefTag;
 
@@ -1929,7 +1946,18 @@ namespace ts.Completions {
         }
         return res;
     });
-    function getKeywordCompletions(keywordFilter: KeywordCompletionFilters): ReadonlyArray<CompletionEntry> {
+
+    function getKeywordCompletions(keywordFilter: KeywordCompletionFilters, filterOutTsOnlyKeywords: boolean): ReadonlyArray<CompletionEntry> {
+        if (!filterOutTsOnlyKeywords) return getTypescriptKeywordCompletions(keywordFilter);
+
+        const index = keywordFilter + KeywordCompletionFilters.Last + 1;
+        return _keywordCompletions[index] ||
+            (_keywordCompletions[index] = getTypescriptKeywordCompletions(keywordFilter)
+                .filter(entry => !isTypeScriptOnlyKeyword(stringToToken(entry.name)!))
+            );
+    }
+
+    function getTypescriptKeywordCompletions(keywordFilter: KeywordCompletionFilters): ReadonlyArray<CompletionEntry> {
         return _keywordCompletions[keywordFilter] || (_keywordCompletions[keywordFilter] = allKeywordsCompletions().filter(entry => {
             const kind = stringToToken(entry.name)!;
             switch (keywordFilter) {
@@ -1952,6 +1980,40 @@ namespace ts.Completions {
                     return Debug.assertNever(keywordFilter);
             }
         }));
+    }
+
+    function isTypeScriptOnlyKeyword(kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.AbstractKeyword:
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.BigIntKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.DeclareKeyword:
+            case SyntaxKind.EnumKeyword:
+            case SyntaxKind.GlobalKeyword:
+            case SyntaxKind.ImplementsKeyword:
+            case SyntaxKind.InferKeyword:
+            case SyntaxKind.InterfaceKeyword:
+            case SyntaxKind.IsKeyword:
+            case SyntaxKind.KeyOfKeyword:
+            case SyntaxKind.ModuleKeyword:
+            case SyntaxKind.NamespaceKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.PrivateKeyword:
+            case SyntaxKind.ProtectedKeyword:
+            case SyntaxKind.PublicKeyword:
+            case SyntaxKind.ReadonlyKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.TypeKeyword:
+            case SyntaxKind.UniqueKeyword:
+            case SyntaxKind.UnknownKeyword:
+                return true;
+            default:
+                return false;
+        }
     }
 
     function isInterfaceOrTypeLiteralCompletionKeyword(kind: SyntaxKind): boolean {

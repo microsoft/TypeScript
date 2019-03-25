@@ -391,7 +391,7 @@ namespace ts {
         const intersectionTypes = createMap<IntersectionType>();
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
-        const conditionalTypes = createMap<Type | undefined>();
+        const conditionalTypes = createMap<Type>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -1474,7 +1474,14 @@ namespace ts {
                         //       @y method(x, y) {} // <-- decorator y should be resolved at the class declaration, not the method.
                         //   }
                         //
-                        if (location.parent && isClassElement(location.parent)) {
+
+                        // class Decorators are resolved outside of the class to avoid referencing type parameters of that class.
+                        //
+                        //   type T = number;
+                        //   declare function y(x: T): any;
+                        //   @param(1 as T) // <-- T should resolve to the type alias outside of class C
+                        //   class C<T> {}
+                        if (location.parent && (isClassElement(location.parent) || location.parent.kind === SyntaxKind.ClassDeclaration)) {
                             location = location.parent;
                         }
                         break;
@@ -2345,19 +2352,12 @@ namespace ts {
             }
 
             if (moduleNotFoundError) {
-                // For relative paths, see if this was possibly a projectReference redirect
-                if (pathIsRelative(moduleReference)) {
-                    const sourceFile = getSourceFileOfNode(location);
-                    const redirects = sourceFile.redirectedReferences;
-                    if (redirects) {
-                        const normalizedTargetPath = getNormalizedAbsolutePath(moduleReference, getDirectoryPath(sourceFile.fileName));
-                        for (const ext of [Extension.Ts, Extension.Tsx]) {
-                            const probePath = normalizedTargetPath + ext;
-                            if (redirects.indexOf(probePath) >= 0) {
-                                error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, moduleReference, probePath);
-                                return undefined;
-                            }
-                        }
+                // See if this was possibly a projectReference redirect
+                if (resolvedModule) {
+                    const redirect = host.getProjectReferenceRedirect(resolvedModule.resolvedFileName);
+                    if (redirect) {
+                        error(errorNode, Diagnostics.Output_file_0_has_not_been_built_from_source_file_1, redirect, resolvedModule.resolvedFileName);
+                        return undefined;
                     }
                 }
 
@@ -5474,9 +5474,6 @@ namespace ts {
                 }
                 return type;
             }
-            if (declaration.kind === SyntaxKind.ExportAssignment) {
-                return widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
-            }
 
             // Handle variable, parameter or property
             if (!pushTypeResolution(symbol, TypeSystemPropertyName.Type)) {
@@ -5487,7 +5484,10 @@ namespace ts {
                 return reportCircularityError(symbol);
             }
             let type: Type | undefined;
-            if (isInJSFile(declaration) &&
+            if (declaration.kind === SyntaxKind.ExportAssignment) {
+                type = widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
+            }
+            else if (isInJSFile(declaration) &&
                 (isCallExpression(declaration) || isBinaryExpression(declaration) || isPropertyAccessExpression(declaration) && isBinaryExpression(declaration.parent))) {
                 type = getWidenedTypeFromAssignmentDeclaration(symbol);
             }
@@ -7772,7 +7772,7 @@ namespace ts {
         }
 
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol | undefined {
-            let props: Symbol[] | undefined;
+            const propSet = createMap<Symbol>();
             let indexTypes: Type[] | undefined;
             const isUnion = containingType.flags & TypeFlags.Union;
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
@@ -7787,7 +7787,10 @@ namespace ts {
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop && !(modifiers & excludeModifiers)) {
                         commonFlags &= prop.flags;
-                        props = appendIfUnique(props, prop);
+                        const id = "" + getSymbolId(prop);
+                        if (!propSet.has(id)) {
+                            propSet.set(id, prop);
+                        }
                         checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
                             (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
                             (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
@@ -7809,9 +7812,10 @@ namespace ts {
                     }
                 }
             }
-            if (!props) {
+            if (!propSet.size) {
                 return undefined;
             }
+            const props = arrayFrom(propSet.values());
             if (props.length === 1 && !(checkFlags & CheckFlags.Partial) && !indexTypes) {
                 return props[0];
             }
@@ -10131,24 +10135,11 @@ namespace ts {
             const trueType = instantiateType(root.trueType, mapper);
             const falseType = instantiateType(root.falseType, mapper);
             const instantiationId = `${root.isDistributive ? "d" : ""}${getTypeId(checkType)}>${getTypeId(extendsType)}?${getTypeId(trueType)}:${getTypeId(falseType)}`;
-            if (conditionalTypes.has(instantiationId)) {
-                const result = conditionalTypes.get(instantiationId);
-                if (result !== undefined) {
-                    return result;
-                }
-                // Somehow the conditional type depends on itself - usually via `infer` types in the `extends` clause
-                // paired with a (potentially deferred) circularly constrained type.
-                // The conditional _must_ be deferred.
-                const deferred = getDeferredConditionalType(root, mapper, /*combinedMapper*/ undefined, checkType, extendsType, trueType, falseType);
-                conditionalTypes.set(instantiationId, deferred);
-                return deferred;
+            const result = conditionalTypes.get(instantiationId);
+            if (result) {
+                return result;
             }
-            conditionalTypes.set(instantiationId, undefined);
             const newResult = getConditionalTypeWorker(root, mapper, checkType, extendsType, trueType, falseType);
-            const cachedRecursiveResult = conditionalTypes.get(instantiationId);
-            if (cachedRecursiveResult) {
-                return cachedRecursiveResult;
-            }
             conditionalTypes.set(instantiationId, newResult);
             return newResult;
         }

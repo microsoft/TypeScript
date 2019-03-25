@@ -99,12 +99,23 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     groupedReferences.valid = false;
                     continue;
                 }
-                if (contains(functionSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
+
+                /* We compare symbols because in some cases find all references wil return a reference that may or may not be to the refactored function.
+                Example from the refactorConvertParamsToDestructuredObject_methodCallUnion.ts test:
+                    class A { foo(a: number, b: number) { return a + b; } }
+                    class B { foo(c: number, d: number) { return c + d; } }
+                    declare const ab: A | B;
+                    ab.foo(1, 2);
+                Find all references will return `ab.foo(1, 2)` as a reference to A's `foo` but we could be calling B's `foo`.
+                When looking for constructor calls, however, the symbol on the constructor call reference is going to be the corresponding class symbol.
+                So we need to add a special case for this because when calling a constructor of a class through one of its subclasses,
+                the symbols are going to be different.
+                */
+                if (contains(functionSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer) || isNewExpressionTarget(entry.node)) {
                     const importOrExportReference = entryToImportOrExport(entry);
                     if (importOrExportReference) {
                         continue;
                     }
-
                     const decl = entryToDeclaration(entry);
                     if (decl) {
                         groupedReferences.declarations.push(decl);
@@ -253,12 +264,25 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
         const node = getTouchingToken(file, startPosition);
         const functionDeclaration = getContainingFunction(node);
+
+         // don't offer refactor on top-level JSDoc
+        if (isTopLevelJSDoc(node)) return undefined;
+
         if (functionDeclaration
             && isValidFunctionDeclaration(functionDeclaration, checker)
             && rangeContainsRange(functionDeclaration, node)
             && !(functionDeclaration.body && rangeContainsRange(functionDeclaration.body, node))) return functionDeclaration;
 
         return undefined;
+    }
+
+    function isTopLevelJSDoc(node: Node): boolean {
+        const containingJSDoc = findAncestor(node, isJSDocNode);
+        if (containingJSDoc) {
+            const containingNonJSDoc = findAncestor(containingJSDoc, n => !isJSDocNode(n));
+            return !!containingNonJSDoc && isFunctionLikeDeclaration(containingNonJSDoc);
+        }
+        return false;
     }
 
     function isValidFunctionDeclaration(
@@ -333,13 +357,23 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return parameters;
     }
 
+    function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
+        if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
+            return createShorthandPropertyAssignment(name);
+        }
+        return createPropertyAssignment(name, initializer);
+    }
+
     function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
         const parameters = getRefactorableParameters(functionDeclaration.parameters);
         const hasRestParameter = isRestParameter(last(parameters));
         const nonRestArguments = hasRestParameter ? functionArguments.slice(0, parameters.length - 1) : functionArguments;
         const properties = map(nonRestArguments, (arg, i) => {
-            const property = createPropertyAssignment(getParameterName(parameters[i]), arg);
-            suppressLeadingAndTrailingTrivia(property.initializer);
+            const parameterName = getParameterName(parameters[i]);
+            const property = createPropertyOrShorthandAssignment(parameterName, arg);
+
+            suppressLeadingAndTrailingTrivia(property.name);
+            if (isPropertyAssignment(property)) suppressLeadingAndTrailingTrivia(property.initializer);
             copyComments(arg, property);
             return property;
         });
