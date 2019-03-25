@@ -48,6 +48,7 @@ namespace ts.refactor {
         if (!selection || !isTypeNode(selection)) return undefined;
 
         if (isJS) {
+            // typeparam tag is not supported yet
             return {
                 isJS,
                 selection,
@@ -56,9 +57,7 @@ namespace ts.refactor {
         }
         else {
             const firstStatement = Debug.assertDefined((findAncestor(selection, isStatementButNotBlock)));
-
-            // typeparam tag is not supported yet
-            const typeParameters = isJS ? [] : checkAndCollectionTypeArguments(context.program.getTypeChecker(), selection, firstStatement, file);
+            const typeParameters = checkAndCollectionTypeArguments(context.program.getTypeChecker(), selection, firstStatement, file);
             if (!typeParameters) return undefined;
 
             return { isJS, selection, firstStatement, typeParameters };
