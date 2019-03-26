@@ -275,7 +275,7 @@ namespace ts {
         }
     }
 
-    export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: ProgramHost<any>) {
+    export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
         const originalGetSourceFile = compilerHost.getSourceFile;
         const computeHash = host.createHash || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {

@@ -263,6 +263,7 @@ namespace ts {
         const host = createCompilerHost(options);
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        setGetSourceFileAsHashVersioned(host, sys);
         changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
         enableStatistics(options);
         const oldProgram = readBuilderProgram(options, path => host.readFile(path));
