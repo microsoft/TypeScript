@@ -260,40 +260,16 @@ namespace ts {
 
     function performIncrementalCompilation(config: ParsedCommandLine) {
         const { options, fileNames, projectReferences } = config;
-        const host = createCompilerHost(options);
-        const currentDirectory = host.getCurrentDirectory();
-        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
-        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
         enableStatistics(options);
-        const oldProgram = readBuilderProgram(options, path => host.readFile(path));
-        const configFileParsingDiagnostics = getConfigFileParsingDiagnostics(config);
-        const programOptions: CreateProgramOptions = {
+        return sys.exit(ts.performIncrementalCompilation({
             rootNames: fileNames,
             options,
-            projectReferences,
-            host,
             configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
-        };
-        const program = createProgram(programOptions);
-        const builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(
-            program,
-            {
-                useCaseSensitiveFileNames: () => sys.useCaseSensitiveFileNames,
-                createHash: maybeBind(sys, sys.createHash),
-                writeFile: (path, data, writeByteOrderMark) => sys.writeFile(path, data, writeByteOrderMark)
-            },
-            oldProgram,
-            configFileParsingDiagnostics
-        );
-
-        const exitStatus = emitFilesAndReportErrors(
-            builderProgram,
+            projectReferences,
             reportDiagnostic,
-            s => sys.write(s + sys.newLine),
-            createReportErrorSummary(options)
-        );
-        reportStatistics(program);
-        return sys.exit(exitStatus);
+            reportErrorSummary: createReportErrorSummary(options),
+            afterProgramEmitAndDiagnostics: builderProgram => reportStatistics(builderProgram.getProgram())
+        }));
     }
 
     function updateCreateProgram<T extends BuilderProgram>(host: { createProgram: CreateProgram<T>; }) {
