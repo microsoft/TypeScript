@@ -11181,7 +11181,7 @@ namespace ts {
                 }
                 else {
                     const sub = instantiateType((<SubstitutionType>type).substitute, mapper);
-                    if (sub.flags & TypeFlags.AnyOrUnknown || isTypeSubtypeOf(maybeVariable, sub)) {
+                    if (sub.flags & TypeFlags.AnyOrUnknown || isTypeSubtypeOf(getRestrictiveInstantiation(maybeVariable), getRestrictiveInstantiation(sub))) {
                         return maybeVariable;
                     }
                     return sub;
