@@ -263,28 +263,16 @@ namespace ts {
 
     function performIncrementalCompilation(config: ParsedCommandLine) {
         const { options, fileNames, projectReferences } = config;
-        const host = createCompilerHost(options);
-        const currentDirectory = host.getCurrentDirectory();
-        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
-        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
         enableStatistics(options);
-        const configFileParsingDiagnostics = getConfigFileParsingDiagnostics(config);
-        const builderProgram = createEmitAndSemanticDiagnosticsBuilderProgram(
-            fileNames,
+        return sys.exit(ts.performIncrementalCompilation({
+            rootNames: fileNames,
             options,
-            host,
-            readBuilderProgram(options, path => host.readFile(path)),
-            configFileParsingDiagnostics,
-            projectReferences
-        );
-        const exitStatus = emitFilesAndReportErrors(
-            builderProgram,
+            configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+            projectReferences,
             reportDiagnostic,
-            s => sys.write(s + sys.newLine),
-            createReportErrorSummary(options)
-        );
-        reportStatistics(builderProgram.getProgram());
-        return sys.exit(exitStatus);
+            reportErrorSummary: createReportErrorSummary(options),
+            afterProgramEmitAndDiagnostics: builderProgram => reportStatistics(builderProgram.getProgram())
+        }));
     }
 
     function updateCreateProgram<T extends BuilderProgram>(host: { createProgram: CreateProgram<T>; }) {
