@@ -261,7 +261,7 @@ namespace ts {
     function performIncrementalCompilation(config: ParsedCommandLine) {
         const { options, fileNames, projectReferences } = config;
         enableStatistics(options);
-       const exitStatus = ts.performIncrementalCompilation({
+        return sys.exit(ts.performIncrementalCompilation({
             rootNames: fileNames,
             options,
             configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
@@ -269,8 +269,7 @@ namespace ts {
             reportDiagnostic,
             reportErrorSummary: createReportErrorSummary(options),
             afterProgramEmitAndDiagnostics: builderProgram => reportStatistics(builderProgram.getProgram())
-        });
-        return sys.exit(exitStatus);
+        }));
     }
 
     function updateCreateProgram<T extends BuilderProgram>(host: { createProgram: CreateProgram<T>; }) {

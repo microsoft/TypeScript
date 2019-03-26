@@ -26,10 +26,26 @@ namespace ts.tscWatch {
             it("with tsc", () => {
                 verifyIncrementalWatchEmitWorker({
                     input,
-                    emitAndReportErrors: ,
-                    verifyErrors
+                    emitAndReportErrors: incrementalBuild,
+                    verifyErrors: checkNormalBuildErrors
                 });
             });
+        }
+
+        function incrementalBuild(configFile: string, host: WatchedSystem) {
+            const reportDiagnostic = createDiagnosticReporter(host);
+            const config = parseConfigFileWithSystem(configFile, {}, host, reportDiagnostic);
+            if (config) {
+                performIncrementalCompilation({
+                    rootNames: config.fileNames,
+                    options: config.options,
+                    projectReferences: config.projectReferences,
+                    configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+                    reportDiagnostic,
+                    system: host
+                });
+            }
+            return { close: noop };
         }
 
         interface VerifyIncrementalWatchEmitWorkerInput {
@@ -83,10 +99,10 @@ namespace ts.tscWatch {
         }
         function verifyBuild({ host, writtenFiles, emitAndReportErrors, verifyErrors, expectedEmit, expectedErrors }: VerifyBuildWorker) {
             writtenFiles.clear();
-            const watch = emitAndReportErrors("tsconfig.json", host);
+            const result = emitAndReportErrors("tsconfig.json", host);
             checkFileEmit(writtenFiles, expectedEmit);
             verifyErrors(host, expectedErrors);
-            watch.close();
+            result.close();
         }
 
         function checkFileEmit(actual: Map<string>, expected: ReadonlyArray<File>) {

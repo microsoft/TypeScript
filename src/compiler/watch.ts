@@ -392,7 +392,7 @@ namespace ts {
         return host;
     }
 
-    export interface IncrementalProgramOptions<T extends BuilderProgram> {
+    interface IncrementalProgramOptions<T extends BuilderProgram> {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
         configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
@@ -400,7 +400,7 @@ namespace ts {
         host?: CompilerHost;
         createProgram?: CreateProgram<T>;
     }
-    export function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+    function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
         rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
     }: IncrementalProgramOptions<T>): T {
         host = host || createIncrementalCompilerHost(options);
@@ -427,11 +427,11 @@ namespace ts {
         const exitStatus = emitFilesAndReportErrors(
             builderProgram,
             input.reportDiagnostic || createDiagnosticReporter(system),
-            s => host!.trace && host!.trace!(s),
+            s => host.trace && host.trace(s),
             input.reportErrorSummary || input.options.pretty ? errorCount => system.write(getErrorSummaryText(errorCount, system.newLine)) : undefined
         );
         if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
-        return exitStatus;        
+        return exitStatus;
     }
 }
 
