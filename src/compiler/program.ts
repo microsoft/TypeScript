@@ -74,12 +74,7 @@ namespace ts {
     // TODO(shkamat): update this after reworking ts build API
     export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
         const existingDirectories = createMap<boolean>();
-        function getCanonicalFileName(fileName: string): string {
-            // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
-            // otherwise use toLowerCase as a canonical form.
-            return system.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
-        }
-
+        const getCanonicalFileName = createGetCanonicalFileName(system.useCaseSensitiveFileNames);
         function getSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void): SourceFile | undefined {
             let text: string | undefined;
             try {
