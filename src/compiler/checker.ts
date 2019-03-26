@@ -20255,7 +20255,7 @@ namespace ts {
 
         function getArrayifiedType(type: Type) {
             if (forEachType(type, t => !(t.flags & (TypeFlags.Any | TypeFlags.Instantiable) || isArrayType(t) || isTupleType(t)))) {
-                return createArrayType(getIndexTypeOfType(type, IndexKind.Number) || errorType);
+                return createArrayType(getIndexedAccessType(type, numberType));
             }
             return type;
         }
