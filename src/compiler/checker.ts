@@ -16185,7 +16185,7 @@ namespace ts {
                 let propType;
                 return isMatchingReference(reference, expr.expression) &&
                 (isDiscriminantProperty(computedType, name) ||
-                 ((computedType.flags & TypeFlags.UnionOrIntersection) === 0) &&
+                 ((computedType.flags & TypeFlags.Union) === 0) &&
                  (propType = getTypeOfPropertyOfType(computedType, name))
                  && isUnitType(propType));
             }
