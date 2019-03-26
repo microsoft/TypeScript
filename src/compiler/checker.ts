@@ -16184,7 +16184,10 @@ namespace ts {
                 }
                 let propType;
                 return isMatchingReference(reference, expr.expression) &&
-                    (isDiscriminantProperty(computedType, name) || (propType = getTypeOfPropertyOfType(computedType, name)) && isUnitType(propType));
+                (isDiscriminantProperty(computedType, name) ||
+                 ((computedType.flags & TypeFlags.UnionOrIntersection) === 0) &&
+                 (propType = getTypeOfPropertyOfType(computedType, name))
+                 && isUnitType(propType));
             }
 
             function narrowTypeByDiscriminant(type: Type, access: AccessExpression, narrowType: (t: Type) => Type): Type {
