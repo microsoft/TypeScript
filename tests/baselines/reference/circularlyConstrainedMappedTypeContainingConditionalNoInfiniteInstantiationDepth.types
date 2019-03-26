@@ -79,7 +79,7 @@ type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
 >ComponentType : ComponentType<P>
 
 export type Shared<
->Shared : Shared<InjectedProps, DecorationTargetProps>
+>Shared : any
 
     InjectedProps,
     DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>

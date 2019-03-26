@@ -1,0 +1,97 @@
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(33,13): error TS2456: Type alias 'Shared' circularly references itself.
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(35,35): error TS2313: Type parameter 'DecorationTargetProps' has a circular constraint.
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(35,35): error TS2315: Type 'Shared' is not generic.
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(37,15): error TS2313: Type parameter 'P' has a circular constraint.
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(37,76): error TS2536: Type 'P' cannot be used to index type 'InjectedProps'.
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(37,101): error TS2536: Type 'P' cannot be used to index type 'DecorationTargetProps'.
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(37,128): error TS2536: Type 'P' cannot be used to index type 'DecorationTargetProps'.
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(63,55): error TS2344: Type 'string | number | symbol' does not satisfy the constraint 'keyof GetProps<C>'.
+  Type 'string' is not assignable to type 'keyof GetProps<C>'.
+tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts(63,61): error TS2315: Type 'Shared' is not generic.
+
+
+==== tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts (9 errors) ====
+    declare class Component<P> {
+        constructor(props: Readonly<P>);
+        constructor(props: P, context?: any);
+        readonly props: Readonly<P> & Readonly<{ children?: {} }>;
+    }
+    interface ComponentClass<P = {}> {
+        new (props: P, context?: any): Component<P>;
+        propTypes?: WeakValidationMap<P>;
+        defaultProps?: Partial<P>;
+        displayName?: string;
+    }
+    interface FunctionComponent<P = {}> {
+        (props: P & { children?: {} }, context?: any): {} | null;
+        propTypes?: WeakValidationMap<P>;
+        defaultProps?: Partial<P>;
+        displayName?: string;
+    }
+    
+    export declare const nominalTypeHack: unique symbol;
+    export interface Validator<T> {
+        (props: object, propName: string, componentName: string, location: string, propFullName: string): Error | null;
+        [nominalTypeHack]?: T;
+    }
+    type WeakValidationMap<T> = {
+        [K in keyof T]?: null extends T[K]
+            ? Validator<T[K] | null | undefined>
+            : undefined extends T[K]
+            ? Validator<T[K] | null | undefined>
+            : Validator<T[K]>
+    };
+    type ComponentType<P = {}> = ComponentClass<P> | FunctionComponent<P>;
+    
+    export type Shared<
+                ~~~~~~
+!!! error TS2456: Type alias 'Shared' circularly references itself.
+        InjectedProps,
+        DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'DecorationTargetProps' has a circular constraint.
+                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Shared' is not generic.
+        > = {
+            [P in Extract<keyof InjectedProps, keyof DecorationTargetProps>]?: InjectedProps[P] extends DecorationTargetProps[P] ? DecorationTargetProps[P] : never;
+                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'P' has a circular constraint.
+!!! related TS2751 tests/cases/compiler/circularlyConstrainedMappedTypeContainingConditionalNoInfiniteInstantiationDepth.ts:35:35: Circularity originates in type at this location.
+                                                                               ~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'P' cannot be used to index type 'InjectedProps'.
+                                                                                                        ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'P' cannot be used to index type 'DecorationTargetProps'.
+                                                                                                                                   ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2536: Type 'P' cannot be used to index type 'DecorationTargetProps'.
+        };
+    
+    // Infers prop type from component C
+    export type GetProps<C> = C extends ComponentType<infer P> ? P : never;
+    
+    export type ConnectedComponentClass<
+        C extends ComponentType<any>,
+        P
+    > = ComponentClass<P> & {
+        WrappedComponent: C;
+    };
+    
+    export type Matching<InjectedProps, DecorationTargetProps> = {
+        [P in keyof DecorationTargetProps]: P extends keyof InjectedProps
+            ? InjectedProps[P] extends DecorationTargetProps[P]
+                ? DecorationTargetProps[P]
+                : InjectedProps[P]
+            : DecorationTargetProps[P];
+    };
+    
+    export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+    
+    export type InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> =
+        <C extends ComponentType<Matching<TInjectedProps, GetProps<C>>>>(
+            component: C
+        ) => ConnectedComponentClass<C, Omit<GetProps<C>, keyof Shared<TInjectedProps, GetProps<C>>> & TNeedsProps>;
+                                                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2344: Type 'string | number | symbol' does not satisfy the constraint 'keyof GetProps<C>'.
+!!! error TS2344:   Type 'string' is not assignable to type 'keyof GetProps<C>'.
+                                                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2315: Type 'Shared' is not generic.
+    
