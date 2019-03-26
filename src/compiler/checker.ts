@@ -16175,14 +16175,16 @@ namespace ts {
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
-                if (!(computedType.flags & TypeFlags.Union) || !isAccessExpression(expr)) {
+                if (!isAccessExpression(expr)) {
                     return false;
                 }
                 const name = getAccessedPropertyName(expr);
                 if (name === undefined) {
                     return false;
                 }
-                return isMatchingReference(reference, expr.expression) && isDiscriminantProperty(computedType, name);
+                let propType;
+                return isMatchingReference(reference, expr.expression) &&
+                    (isDiscriminantProperty(computedType, name) || (propType = getTypeOfPropertyOfType(computedType, name)) && isUnitType(propType));
             }
 
             function narrowTypeByDiscriminant(type: Type, access: AccessExpression, narrowType: (t: Type) => Type): Type {
@@ -16250,10 +16252,10 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
-                        if (isMatchingReferenceDiscriminant(left, declaredType)) {
+                        if (isMatchingReferenceDiscriminant(left, type)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (isMatchingReferenceDiscriminant(right, declaredType)) {
+                        if (isMatchingReferenceDiscriminant(right, type)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {

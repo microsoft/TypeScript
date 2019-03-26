@@ -92,3 +92,141 @@ function foo2(x: A | B): any {
     x;  // never
 >x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 20, 14))
 }
+
+// Repro from #30557
+
+interface TypeA {
+>TypeA : Symbol(TypeA, Decl(discriminantsAndTypePredicates.ts, 30, 1))
+
+    Name: "TypeA";
+>Name : Symbol(TypeA.Name, Decl(discriminantsAndTypePredicates.ts, 34, 17))
+
+    Value1: "Cool stuff!";
+>Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+}
+
+interface TypeB {
+>TypeB : Symbol(TypeB, Decl(discriminantsAndTypePredicates.ts, 37, 1))
+
+    Name: "TypeB";
+>Name : Symbol(TypeB.Name, Decl(discriminantsAndTypePredicates.ts, 39, 17))
+
+    Value2: 0;
+>Value2 : Symbol(TypeB.Value2, Decl(discriminantsAndTypePredicates.ts, 40, 18))
+}
+
+type Type = TypeA | TypeB;
+>Type : Symbol(Type, Decl(discriminantsAndTypePredicates.ts, 42, 1))
+>TypeA : Symbol(TypeA, Decl(discriminantsAndTypePredicates.ts, 30, 1))
+>TypeB : Symbol(TypeB, Decl(discriminantsAndTypePredicates.ts, 37, 1))
+
+declare function isType(x: unknown): x is Type;
+>isType : Symbol(isType, Decl(discriminantsAndTypePredicates.ts, 44, 26))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 46, 24))
+>x : Symbol(x, Decl(discriminantsAndTypePredicates.ts, 46, 24))
+>Type : Symbol(Type, Decl(discriminantsAndTypePredicates.ts, 42, 1))
+
+function WorksProperly(data: Type) {
+>WorksProperly : Symbol(WorksProperly, Decl(discriminantsAndTypePredicates.ts, 46, 47))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 48, 23))
+>Type : Symbol(Type, Decl(discriminantsAndTypePredicates.ts, 42, 1))
+
+    if (data.Name === "TypeA") {
+>data.Name : Symbol(Name, Decl(discriminantsAndTypePredicates.ts, 34, 17), Decl(discriminantsAndTypePredicates.ts, 39, 17))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 48, 23))
+>Name : Symbol(Name, Decl(discriminantsAndTypePredicates.ts, 34, 17), Decl(discriminantsAndTypePredicates.ts, 39, 17))
+
+	// TypeA
+	const value1 = data.Value1;
+>value1 : Symbol(value1, Decl(discriminantsAndTypePredicates.ts, 51, 6))
+>data.Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 48, 23))
+>Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+    }
+}
+
+function DoesNotWork(data: unknown) {
+>DoesNotWork : Symbol(DoesNotWork, Decl(discriminantsAndTypePredicates.ts, 53, 1))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 55, 21))
+
+    if (isType(data)) {
+>isType : Symbol(isType, Decl(discriminantsAndTypePredicates.ts, 44, 26))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 55, 21))
+
+	if (data.Name === "TypeA") {
+>data.Name : Symbol(Name, Decl(discriminantsAndTypePredicates.ts, 34, 17), Decl(discriminantsAndTypePredicates.ts, 39, 17))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 55, 21))
+>Name : Symbol(Name, Decl(discriminantsAndTypePredicates.ts, 34, 17), Decl(discriminantsAndTypePredicates.ts, 39, 17))
+
+	    // TypeA
+	    const value1 = data.Value1;
+>value1 : Symbol(value1, Decl(discriminantsAndTypePredicates.ts, 59, 10))
+>data.Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 55, 21))
+>Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+	}
+    }
+}
+
+function narrowToNever(data: Type): "Cool stuff!" | 0 {
+>narrowToNever : Symbol(narrowToNever, Decl(discriminantsAndTypePredicates.ts, 62, 1))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 64, 23))
+>Type : Symbol(Type, Decl(discriminantsAndTypePredicates.ts, 42, 1))
+
+    if (data.Name === "TypeA") {
+>data.Name : Symbol(Name, Decl(discriminantsAndTypePredicates.ts, 34, 17), Decl(discriminantsAndTypePredicates.ts, 39, 17))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 64, 23))
+>Name : Symbol(Name, Decl(discriminantsAndTypePredicates.ts, 34, 17), Decl(discriminantsAndTypePredicates.ts, 39, 17))
+
+        return data.Value1;
+>data.Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 64, 23))
+>Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+    }
+    if (data.Name === "TypeB") {
+>data.Name : Symbol(TypeB.Name, Decl(discriminantsAndTypePredicates.ts, 39, 17))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 64, 23))
+>Name : Symbol(TypeB.Name, Decl(discriminantsAndTypePredicates.ts, 39, 17))
+
+        return data.Value2;
+>data.Value2 : Symbol(TypeB.Value2, Decl(discriminantsAndTypePredicates.ts, 40, 18))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 64, 23))
+>Value2 : Symbol(TypeB.Value2, Decl(discriminantsAndTypePredicates.ts, 40, 18))
+    }
+    return data;
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 64, 23))
+}
+
+function narrowToNeverUnknown(data: unknown): "Cool stuff!" | 0 {
+>narrowToNeverUnknown : Symbol(narrowToNeverUnknown, Decl(discriminantsAndTypePredicates.ts, 72, 1))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 74, 30))
+
+    if (isType(data)) {
+>isType : Symbol(isType, Decl(discriminantsAndTypePredicates.ts, 44, 26))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 74, 30))
+
+        if (data.Name === "TypeA") {
+>data.Name : Symbol(Name, Decl(discriminantsAndTypePredicates.ts, 34, 17), Decl(discriminantsAndTypePredicates.ts, 39, 17))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 74, 30))
+>Name : Symbol(Name, Decl(discriminantsAndTypePredicates.ts, 34, 17), Decl(discriminantsAndTypePredicates.ts, 39, 17))
+
+            return data.Value1;
+>data.Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 74, 30))
+>Value1 : Symbol(TypeA.Value1, Decl(discriminantsAndTypePredicates.ts, 35, 18))
+        }
+        if (data.Name === "TypeB") {
+>data.Name : Symbol(TypeB.Name, Decl(discriminantsAndTypePredicates.ts, 39, 17))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 74, 30))
+>Name : Symbol(TypeB.Name, Decl(discriminantsAndTypePredicates.ts, 39, 17))
+
+            return data.Value2;
+>data.Value2 : Symbol(TypeB.Value2, Decl(discriminantsAndTypePredicates.ts, 40, 18))
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 74, 30))
+>Value2 : Symbol(TypeB.Value2, Decl(discriminantsAndTypePredicates.ts, 40, 18))
+        }
+        return data;
+>data : Symbol(data, Decl(discriminantsAndTypePredicates.ts, 74, 30))
+    }
+}
+

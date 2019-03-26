@@ -88,3 +88,145 @@ function foo2(x: A | B): any {
     x;  // never
 >x : never
 }
+
+// Repro from #30557
+
+interface TypeA {
+    Name: "TypeA";
+>Name : "TypeA"
+
+    Value1: "Cool stuff!";
+>Value1 : "Cool stuff!"
+}
+
+interface TypeB {
+    Name: "TypeB";
+>Name : "TypeB"
+
+    Value2: 0;
+>Value2 : 0
+}
+
+type Type = TypeA | TypeB;
+>Type : Type
+
+declare function isType(x: unknown): x is Type;
+>isType : (x: unknown) => x is Type
+>x : unknown
+
+function WorksProperly(data: Type) {
+>WorksProperly : (data: Type) => void
+>data : Type
+
+    if (data.Name === "TypeA") {
+>data.Name === "TypeA" : boolean
+>data.Name : "TypeA" | "TypeB"
+>data : Type
+>Name : "TypeA" | "TypeB"
+>"TypeA" : "TypeA"
+
+	// TypeA
+	const value1 = data.Value1;
+>value1 : "Cool stuff!"
+>data.Value1 : "Cool stuff!"
+>data : TypeA
+>Value1 : "Cool stuff!"
+    }
+}
+
+function DoesNotWork(data: unknown) {
+>DoesNotWork : (data: unknown) => void
+>data : unknown
+
+    if (isType(data)) {
+>isType(data) : boolean
+>isType : (x: unknown) => x is Type
+>data : unknown
+
+	if (data.Name === "TypeA") {
+>data.Name === "TypeA" : boolean
+>data.Name : "TypeA" | "TypeB"
+>data : Type
+>Name : "TypeA" | "TypeB"
+>"TypeA" : "TypeA"
+
+	    // TypeA
+	    const value1 = data.Value1;
+>value1 : "Cool stuff!"
+>data.Value1 : "Cool stuff!"
+>data : TypeA
+>Value1 : "Cool stuff!"
+	}
+    }
+}
+
+function narrowToNever(data: Type): "Cool stuff!" | 0 {
+>narrowToNever : (data: Type) => 0 | "Cool stuff!"
+>data : Type
+
+    if (data.Name === "TypeA") {
+>data.Name === "TypeA" : boolean
+>data.Name : "TypeA" | "TypeB"
+>data : Type
+>Name : "TypeA" | "TypeB"
+>"TypeA" : "TypeA"
+
+        return data.Value1;
+>data.Value1 : "Cool stuff!"
+>data : TypeA
+>Value1 : "Cool stuff!"
+    }
+    if (data.Name === "TypeB") {
+>data.Name === "TypeB" : boolean
+>data.Name : "TypeB"
+>data : TypeB
+>Name : "TypeB"
+>"TypeB" : "TypeB"
+
+        return data.Value2;
+>data.Value2 : 0
+>data : TypeB
+>Value2 : 0
+    }
+    return data;
+>data : never
+}
+
+function narrowToNeverUnknown(data: unknown): "Cool stuff!" | 0 {
+>narrowToNeverUnknown : (data: unknown) => 0 | "Cool stuff!"
+>data : unknown
+
+    if (isType(data)) {
+>isType(data) : boolean
+>isType : (x: unknown) => x is Type
+>data : unknown
+
+        if (data.Name === "TypeA") {
+>data.Name === "TypeA" : boolean
+>data.Name : "TypeA" | "TypeB"
+>data : Type
+>Name : "TypeA" | "TypeB"
+>"TypeA" : "TypeA"
+
+            return data.Value1;
+>data.Value1 : "Cool stuff!"
+>data : TypeA
+>Value1 : "Cool stuff!"
+        }
+        if (data.Name === "TypeB") {
+>data.Name === "TypeB" : boolean
+>data.Name : "TypeB"
+>data : TypeB
+>Name : "TypeB"
+>"TypeB" : "TypeB"
+
+            return data.Value2;
+>data.Value2 : 0
+>data : TypeB
+>Value2 : 0
+        }
+        return data;
+>data : never
+    }
+}
+
