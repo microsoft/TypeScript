@@ -20264,15 +20264,15 @@ namespace ts {
                         getArrayifiedType(checkExpressionWithContextualType((<SpreadElement>arg).expression, restType, context, CheckMode.Normal));
                 }
             }
-            const contextualType = getIndexedAccessType(restType, numberType);
-            const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
             const types = [];
             let spreadIndex = -1;
             for (let i = index; i < argCount; i++) {
+                const contextualType = getIndexedAccessType(restType, getLiteralType(i - index));
                 const argType = checkExpressionWithContextualType(args[i], contextualType, context, CheckMode.Normal);
                 if (spreadIndex < 0 && isSpreadArgument(args[i])) {
                     spreadIndex = i - index;
                 }
+                const hasPrimitiveContextualType = maybeTypeOfKind(contextualType, TypeFlags.Primitive | TypeFlags.Index);
                 types.push(hasPrimitiveContextualType ? getRegularTypeOfLiteralType(argType) : getWidenedLiteralType(argType));
             }
             return spreadIndex < 0 ?
