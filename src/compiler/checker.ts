@@ -15831,6 +15831,7 @@ namespace ts {
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string | undefined;
             let flowDepth = 0;
+            let firstDiscriminable: UnionType | undefined;
             if (flowAnalysisDisabled) {
                 return errorType;
             }
@@ -16174,20 +16175,14 @@ namespace ts {
                 return result;
             }
 
-            function isMatchingInFlowDiscriminant(expr: Expression, computedType: Type) {
-                if (!isAccessExpression(expr)) {
-                    return false;
+            function getTypeToDiscriminate(computedType: Type): Type {
+                if (firstDiscriminable) {
+                    return firstDiscriminable;
                 }
-                const name = getAccessedPropertyName(expr);
-                if (name === undefined) {
-                    return false;
+                if (declaredType.flags & TypeFlags.Union) {
+                    return firstDiscriminable = <UnionType>declaredType;
                 }
-                let propType;
-                return isMatchingReference(reference, expr.expression) &&
-                    ((computedType.flags & TypeFlags.Union) ?
-                     isDiscriminantProperty(computedType, name) :
-                     (propType = getTypeOfPropertyOfType(computedType, name)) &&
-                     isUnitType(propType));
+                return (computedType.flags & TypeFlags.Union) ? (firstDiscriminable = <UnionType>computedType) : declaredType;
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
@@ -16266,10 +16261,10 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
-                        if (isMatchingReferenceDiscriminant(left, declaredType) || isMatchingInFlowDiscriminant(left, type)) {
+                        if (isMatchingReferenceDiscriminant(left, getTypeToDiscriminate(type))) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (isMatchingReferenceDiscriminant(right, declaredType) || isMatchingInFlowDiscriminant(right, type)) {
+                        if (isMatchingReferenceDiscriminant(right, getTypeToDiscriminate(type))) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
