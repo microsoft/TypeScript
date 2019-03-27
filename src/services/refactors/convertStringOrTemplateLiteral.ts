@@ -33,7 +33,16 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {
         const node = getTokenAtPosition(file, startPosition);
-        if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) return node.parent.parent;
+        const nestedBinary = getParentBinaryExpression(node);
+        const isNonStringBinary = !isStringConcatenationValid(nestedBinary);
+
+        if (
+            isNonStringBinary &&
+            isParenthesizedExpression(nestedBinary.parent) &&
+            isBinaryExpression(nestedBinary.parent.parent)
+        ) {
+            return nestedBinary.parent.parent;
+        }
         return node;
     }
 
