@@ -90,8 +90,8 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         function groupReferences(referenceEntries: ReadonlyArray<FindAllReferences.Entry>): GroupedReferences {
             const classReferences: ClassReferences = { accessExpressions: [], typeUsages: [] };
             const groupedReferences: GroupedReferences = { functionCalls: [], declarations: [], classReferences, valid: true };
-            const functionSymbols = map(functionNames, checker.getSymbolAtLocation);
-            const classSymbols = map(classNames, checker.getSymbolAtLocation);
+            const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
+            const classSymbols = map(classNames, getSymbolTargetAtLocation);
             const isConstructor = isConstructorDeclaration(functionDeclaration);
 
             for (const entry of referenceEntries) {
@@ -111,7 +111,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                 So we need to add a special case for this because when calling a constructor of a class through one of its subclasses,
                 the symbols are going to be different.
                 */
-                if (contains(functionSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer) || isNewExpressionTarget(entry.node)) {
+                if (contains(functionSymbols, getSymbolTargetAtLocation(entry.node)) || isNewExpressionTarget(entry.node)) {
                     const importOrExportReference = entryToImportOrExport(entry);
                     if (importOrExportReference) {
                         continue;
@@ -129,7 +129,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     }
                 }
                 // if the refactored function is a constructor, we must also check if the references to its class are valid
-                if (isConstructor && contains(classSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
+                if (isConstructor && contains(classSymbols, getSymbolTargetAtLocation(entry.node))) {
                     const importOrExportReference = entryToImportOrExport(entry);
                     if (importOrExportReference) {
                         continue;
@@ -163,8 +163,9 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             return groupedReferences;
         }
 
-        function symbolComparer(a: Symbol, b: Symbol): boolean {
-            return getSymbolTarget(a, checker) === getSymbolTarget(b, checker);
+        function getSymbolTargetAtLocation(node: Node) {
+            const symbol = checker.getSymbolAtLocation(node);
+            return symbol && getSymbolTarget(symbol, checker);
         }
     }
 
@@ -291,23 +292,26 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         if (!isValidParameterNodeArray(functionDeclaration.parameters, checker)) return false;
         switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
-                return hasNameOrDefault(functionDeclaration) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
+                return hasNameOrDefault(functionDeclaration) && isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.MethodDeclaration:
-                return !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
+                return isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.Constructor:
                 if (isClassDeclaration(functionDeclaration.parent)) {
-                    return !!functionDeclaration.body && hasNameOrDefault(functionDeclaration.parent) && !checker.isImplementationOfOverload(functionDeclaration);
+                    return hasNameOrDefault(functionDeclaration.parent) && isSingleImplementation(functionDeclaration, checker);
                 }
                 else {
                     return isValidVariableDeclaration(functionDeclaration.parent.parent)
-                        && !!functionDeclaration.body
-                        && !checker.isImplementationOfOverload(functionDeclaration);
+                        && isSingleImplementation(functionDeclaration, checker);
                 }
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
                 return isValidVariableDeclaration(functionDeclaration.parent);
         }
         return false;
+    }
+
+    function isSingleImplementation(functionDeclaration: FunctionLikeDeclaration, checker: TypeChecker): boolean {
+        return !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
     }
 
     function hasNameOrDefault(functionOrClassDeclaration: FunctionDeclaration | ClassDeclaration): boolean {
@@ -517,7 +521,12 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             case SyntaxKind.ClassDeclaration:
                 const classDeclaration = constructorDeclaration.parent;
                 if (classDeclaration.name) return [classDeclaration.name];
-                return [findModifier(classDeclaration, SyntaxKind.DefaultKeyword)!];
+                // If the class declaration doesn't have a name, it should have a default modifier.
+                // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
+                const defaultModifier = Debug.assertDefined(
+                    findModifier(classDeclaration, SyntaxKind.DefaultKeyword),
+                    "Nameless class declaration should be a default export");
+                return [defaultModifier];
             case SyntaxKind.ClassExpression:
                 const classExpression = constructorDeclaration.parent;
                 const variableDeclaration = constructorDeclaration.parent.parent;
@@ -531,11 +540,18 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
                 if (functionDeclaration.name) return [functionDeclaration.name];
-                return [findModifier(functionDeclaration, SyntaxKind.DefaultKeyword)!];
+                // If the function declaration doesn't have a name, it should have a default modifier.
+                // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
+                const defaultModifier = Debug.assertDefined(
+                    findModifier(functionDeclaration, SyntaxKind.DefaultKeyword),
+                    "Nameless function declaration should be a default export");
+                return [defaultModifier];
             case SyntaxKind.MethodDeclaration:
                 return [functionDeclaration.name];
             case SyntaxKind.Constructor:
-                const ctrKeyword = findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile())!;
+                const ctrKeyword = Debug.assertDefined(
+                    findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()),
+                    "Constructor declaration should have constructor keyword");
                 if (functionDeclaration.parent.kind === SyntaxKind.ClassExpression) {
                     const variableDeclaration = functionDeclaration.parent.parent;
                     return [variableDeclaration.name, ctrKeyword];
