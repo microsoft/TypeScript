@@ -16269,7 +16269,7 @@ namespace ts {
                         if (isMatchingReferenceDiscriminant(left, declaredType) || isMatchingInFlowDiscriminant(left, type)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (isMatchingReferenceDiscriminant(left, declaredType) || isMatchingInFlowDiscriminant(left, type)) {
+                        if (isMatchingReferenceDiscriminant(right, declaredType) || isMatchingInFlowDiscriminant(right, type)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
