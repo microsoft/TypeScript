@@ -82,7 +82,7 @@ namespace ts {
          * @param node A PropertyAccessExpression
          */
         function substitutePropertyAccessExpression(node: PropertyAccessExpression): Expression {
-            if (isPrivateName(node.name)) {
+            if (isPrivateIdentifier(node.name)) {
                 return node;
             }
             const literalName = trySubstituteReservedName(node.name);

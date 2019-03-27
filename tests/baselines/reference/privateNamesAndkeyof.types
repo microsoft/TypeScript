@@ -1,6 +1,4 @@
 === tests/cases/conformance/classes/members/privateNames/privateNamesAndkeyof.ts ===
-// @target es6
-
 class A {
 >A : A
 

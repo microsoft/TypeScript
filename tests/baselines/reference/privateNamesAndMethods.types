@@ -50,9 +50,9 @@ class A {
 >this : this
 >30 : 30
 
-        this.#bar(30);
->this.#bar(30) : Promise<void>
->this.#bar : (a: number) => Promise<void>
+        this.#baz(30);
+>this.#baz(30) : AsyncGenerator<never, number, unknown>
+>this.#baz : (a: number) => AsyncGenerator<never, number, unknown>
 >this : this
 >30 : 30
 

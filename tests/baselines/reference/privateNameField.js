@@ -1,6 +1,4 @@
 //// [privateNameField.ts]
-// @target es6
-
 class A {
     #name: string;
     constructor(name: string) {
@@ -8,18 +6,21 @@ class A {
     }
 }
 
-tests/cases/conformance/classes/members/privateNames/privateNameField.js(5,15): error TS1003: Identifier expected.
 
-
-==== tests/cases/conformance/classes/members/privateNames/privateNameField.js (1 errors) ====
-    "use strict";
-    // @target es6
-    var A = /** @class */ (function () {
-        function A(name) {
-            this. = name;
-                  ~
-!!! error TS1003: Identifier expected.
-        }
-        return A;
-    }());
-    
+//// [privateNameField.js]
+"use strict";
+var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+        throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+};
+var _name;
+class A {
+    constructor(name) {
+        _name.set(this, void 0);
+        __classPrivateFieldSet(this, _name, name);
+    }
+}
+_name = new WeakMap();

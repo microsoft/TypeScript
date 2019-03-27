@@ -1907,7 +1907,7 @@ namespace ts {
                             if (ch === CharacterCodes.backslash) {
                                 tokenValue += scanIdentifierParts();
                             }
-                            return token = SyntaxKind.PrivateName;
+                            return token = SyntaxKind.PrivateIdentifier;
                         }
                         error(Diagnostics.Invalid_character);
                         // no `pos++` because already advanced past the '#'

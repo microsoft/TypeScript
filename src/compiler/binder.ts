@@ -359,15 +359,15 @@ namespace ts {
                 if (isWellKnownSymbolSyntactically(name)) {
                     return getPropertyNameForKnownSymbolName(idText(name.name));
                 }
-                if (isPrivateName(name)) {
+                if (isPrivateIdentifier(name)) {
                     // containingClass exists because private names only allowed inside classes
-                    const containingClass = getContainingClass(name.parent);
+                    const containingClass = getContainingClass(node);
                     if (!containingClass) {
-                        // we're in a case where there's a private name outside a class (invalid)
+                        // we can get here in cases where there is already a parse error.
                         return undefined;
                     }
                     const containingClassSymbol = containingClass.symbol;
-                    return getPropertyNameForPrivateNameDescription(containingClassSymbol, name.escapedText);
+                    return getSymbolNameForPrivateIdentifier(containingClassSymbol, name.escapedText);
                 }
                 return isPropertyNameLiteral(name) ? getEscapedTextOfIdentifierOrLiteral(name) : undefined;
             }
@@ -425,10 +425,6 @@ namespace ts {
 
             const isDefaultExport = hasModifier(node, ModifierFlags.Default);
 
-            // need this before getDeclarationName
-            if (isNamedDeclaration(node)) {
-                node.name.parent = node;
-            }
             // The exported symbol for an export default function/class node is always named "default"
             const name = isDefaultExport && parent ? InternalSymbolName.Default : getDeclarationName(node);
 
@@ -481,6 +477,10 @@ namespace ts {
                         symbolTable.set(name, symbol = createSymbol(SymbolFlags.None, name));
                     }
                     else if (!(includes & SymbolFlags.Variable && symbol.flags & SymbolFlags.Assignment)) {
+                        // Assignment declarations are allowed to merge with variables, no matter what other flags they have.
+                        if (isNamedDeclaration(node)) {
+                            node.name.parent = node;
+                        }
                         // Report errors every position with duplicate declaration
                         // Report errors on previous encountered declarations
                         let message = symbol.flags & SymbolFlags.BlockScopedVariable
@@ -2037,7 +2037,7 @@ namespace ts {
 
         // The binder visits every node, so this is a good place to check for
         // the reserved private name (there is only one)
-        function checkPrivateName(node: PrivateName) {
+        function checkPrivateIdentifier(node: PrivateIdentifier) {
             if (node.escapedText === "#constructor") {
                 // Report error only if there are no parse errors in file
                 if (!file.parseDiagnostics.length) {
@@ -2319,8 +2319,8 @@ namespace ts {
                         node.flowNode = currentFlow;
                     }
                     return checkStrictModeIdentifier(<Identifier>node);
-                case SyntaxKind.PrivateName:
-                    return checkPrivateName(node as PrivateName);
+                case SyntaxKind.PrivateIdentifier:
+                    return checkPrivateIdentifier(node as PrivateIdentifier);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const expr = node as PropertyAccessExpression | ElementAccessExpression;
@@ -2680,6 +2680,12 @@ namespace ts {
 
         function bindThisPropertyAssignment(node: BindablePropertyAssignmentExpression | PropertyAccessExpression | LiteralLikeElementAccessExpression) {
             Debug.assert(isInJSFile(node));
+            // private identifiers *must* be declared (even in JS files)
+            const hasPrivateIdentifier = (isBinaryExpression(node) && isPropertyAccessExpression(node.left) && isPrivateIdentifier(node.left.name))
+                || (isPropertyAccessExpression(node) && isPrivateIdentifier(node.name));
+            if (hasPrivateIdentifier) {
+                return;
+            }
             const thisContainer = getThisContainer(node, /*includeArrowFunctions*/ false);
             switch (thisContainer.kind) {
                 case SyntaxKind.FunctionDeclaration:
@@ -2982,7 +2988,12 @@ namespace ts {
             }
             else {
                 const s = forEachIdentifierInEntityName(e.expression, parent, action);
-                return action(getNameOrArgument(e), s && s.exports && s.exports.get(getElementOrPropertyAccessName(e)), s);
+                const name = getNameOrArgument(e);
+                // unreachable
+                if (isPrivateIdentifier(name)) {
+                    Debug.fail("unexpected PrivateIdentifier");
+                }
+                return action(name, s && s.exports && s.exports.get(getElementOrPropertyAccessName(e)), s);
             }
         }
 
@@ -4153,6 +4164,10 @@ namespace ts {
             case SyntaxKind.ContinueStatement:
             case SyntaxKind.BreakStatement:
                 transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion;
+                break;
+
+            case SyntaxKind.PrivateIdentifier:
+                transformFlags |= TransformFlags.ContainsClassFields;
                 break;
         }
 

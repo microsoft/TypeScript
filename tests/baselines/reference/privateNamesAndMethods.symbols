@@ -44,8 +44,8 @@ class A {
 >this.#bar : Symbol(A.#bar, Decl(privateNamesAndMethods.ts, 1, 22))
 >this : Symbol(A, Decl(privateNamesAndMethods.ts, 0, 0))
 
-        this.#bar(30);
->this.#bar : Symbol(A.#bar, Decl(privateNamesAndMethods.ts, 1, 22))
+        this.#baz(30);
+>this.#baz : Symbol(A.#baz, Decl(privateNamesAndMethods.ts, 2, 28))
 >this : Symbol(A, Decl(privateNamesAndMethods.ts, 0, 0))
 
         this.#quux = this.#quux + 1;

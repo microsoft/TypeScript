@@ -1,17 +1,16 @@
 //// [privateNamesNotAllowedAsParameters.ts]
-// @target es6
-
 class A {
     setFoo(#foo: string) {}
 }
 
 
 //// [privateNamesNotAllowedAsParameters.js]
-// @target es6
-var A = /** @class */ (function () {
-    function A() {
+var _foo;
+class A {
+    constructor() {
+        _foo.set(this, void 0);
     }
-    A.prototype.setFoo = function () { };
-    return A;
-}());
+    setFoo() { }
+}
+_foo = new WeakMap();
 { }
