@@ -16174,7 +16174,7 @@ namespace ts {
                 return result;
             }
 
-            function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
+            function isMatchingInFlowDiscriminant(expr: Expression, computedType: Type) {
                 if (!isAccessExpression(expr)) {
                     return false;
                 }
@@ -16184,10 +16184,21 @@ namespace ts {
                 }
                 let propType;
                 return isMatchingReference(reference, expr.expression) &&
-                (isDiscriminantProperty(computedType, name) ||
-                 ((computedType.flags & TypeFlags.Union) === 0) &&
-                 (propType = getTypeOfPropertyOfType(computedType, name))
-                 && isUnitType(propType));
+                    ((computedType.flags & TypeFlags.Union) ?
+                     isDiscriminantProperty(computedType, name) :
+                     (propType = getTypeOfPropertyOfType(computedType, name)) &&
+                     isUnitType(propType));
+            }
+
+            function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
+                if (!(computedType.flags & TypeFlags.Union) || !isAccessExpression(expr)) {
+                    return false;
+                }
+                const name = getAccessedPropertyName(expr);
+                if (name === undefined) {
+                    return false;
+                }
+                return isMatchingReference(reference, expr.expression) && isDiscriminantProperty(computedType, name);
             }
 
             function narrowTypeByDiscriminant(type: Type, access: AccessExpression, narrowType: (t: Type) => Type): Type {
@@ -16255,10 +16266,10 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
-                        if (isMatchingReferenceDiscriminant(left, type)) {
+                        if (isMatchingReferenceDiscriminant(left, declaredType) || isMatchingInFlowDiscriminant(left, type)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (isMatchingReferenceDiscriminant(right, type)) {
+                        if (isMatchingReferenceDiscriminant(left, declaredType) || isMatchingInFlowDiscriminant(left, type)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
