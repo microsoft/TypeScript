@@ -792,6 +792,15 @@ namespace ts {
                     newerInputFileName: newestInputFileName
                 };
             }
+            else {
+                // Check tsconfig time
+                const configStatus = checkConfigFileUpToDateStatus(project.options.configFilePath!, oldestOutputFileTime, oldestOutputFileName);
+                if (configStatus) return configStatus;
+
+                // Check extended config time
+                const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(configFile, oldestOutputFileTime, oldestOutputFileName));
+                if (extendedConfigStatus) return extendedConfigStatus;
+            }
 
             if (!buildInfoChecked.hasKey(project.options.configFilePath as ResolvedConfigFileName)) {
                 buildInfoChecked.setValue(project.options.configFilePath as ResolvedConfigFileName, true);
@@ -826,6 +835,18 @@ namespace ts {
                 newestOutputFileName,
                 oldestOutputFileName
             };
+        }
+
+        function checkConfigFileUpToDateStatus(configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
+            // Check tsconfig time
+            const tsconfigTime = host.getModifiedTime(configFile) || missingFileModifiedTime;
+            if (oldestOutputFileTime < tsconfigTime) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithSelf,
+                    outOfDateOutputFileName: oldestOutputFileName,
+                    newerInputFileName: configFile
+                };
+            }
         }
 
         function invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel) {
@@ -1178,6 +1199,7 @@ namespace ts {
         }
 
         function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            if (options.force) return undefined;
             const value = builderPrograms.getValue(proj);
             if (value) return value;
             return readBuilderProgram(parsed.options, readFileWithCache) as any as T;

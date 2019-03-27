@@ -2740,12 +2740,6 @@ namespace ts {
         /* @internal */ resolvedModules?: Map<ResolvedModuleFull | undefined>;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective | undefined>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
-        /**
-         * When a file's references are redirected due to project reference directives,
-         * the original names of the references are stored in this array
-         */
-        /* @internal*/
-        redirectedReferences?: ReadonlyArray<string>;
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
         /* @internal */ patternAmbientModules?: PatternAmbientModule[];
@@ -3074,6 +3068,7 @@ namespace ts {
         getSourceFiles(): ReadonlyArray<SourceFile>;
         getSourceFile(fileName: string): SourceFile | undefined;
         getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective | undefined>;
+        getProjectReferenceRedirect(fileName: string): string | undefined;
 
         readonly redirectTargetsMap: RedirectTargetsMap;
     }
@@ -3171,6 +3166,7 @@ namespace ts {
         getResolvedSignature(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getResolvedSignatureForSignatureHelp(node: CallLikeExpression, candidatesOutArray?: Signature[], argumentCount?: number): Signature | undefined;
         /* @internal */ getExpandedParameters(sig: Signature): ReadonlyArray<Symbol>;
+        /* @internal */ hasEffectiveRestParameter(sig: Signature): boolean;
         getSignatureFromDeclaration(declaration: SignatureDeclaration): Signature | undefined;
         isImplementationOfOverload(node: SignatureDeclaration): boolean | undefined;
         isUndefinedSymbol(symbol: Symbol): boolean;
@@ -3251,6 +3247,8 @@ namespace ts {
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
 
+        /* @internal */ isArrayType(type: Type): boolean;
+        /* @internal */ isTupleType(type: Type): boolean;
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ getObjectFlags(type: Type): ObjectFlags;
 
@@ -4312,8 +4310,10 @@ namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        resolvedTrueType?: Type;
-        resolvedFalseType?: Type;
+        trueType: Type;
+        falseType: Type;
+        /* @internal */
+        resolvedInferredTrueType?: Type; // The `trueType` instantiated with the `combinedMapper`, if present
         /* @internal */
         resolvedDefaultConstraint?: Type;
         /* @internal */

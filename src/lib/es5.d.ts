@@ -2,8 +2,8 @@
 /// ECMAScript APIs
 /////////////////////////////
 
-declare const NaN: number;
-declare const Infinity: number;
+declare var NaN: number;
+declare var Infinity: number;
 
 /**
   * Evaluates JavaScript code and executes it.
@@ -244,7 +244,7 @@ interface ObjectConstructor {
 /**
   * Provides functionality common to all JavaScript objects.
   */
-declare const Object: ObjectConstructor;
+declare var Object: ObjectConstructor;
 
 /**
   * Creates a new function.
@@ -293,7 +293,7 @@ interface FunctionConstructor {
     readonly prototype: Function;
 }
 
-declare const Function: FunctionConstructor;
+declare var Function: FunctionConstructor;
 
 /**
  * Extracts the type of the 'this' parameter of a function type, or 'unknown' if the function type has no 'this' parameter.
@@ -504,7 +504,7 @@ interface StringConstructor {
 /**
   * Allows manipulation and formatting of text strings and determination and location of substrings within strings.
   */
-declare const String: StringConstructor;
+declare var String: StringConstructor;
 
 interface Boolean {
     /** Returns the primitive value of the specified object. */
@@ -517,7 +517,7 @@ interface BooleanConstructor {
     readonly prototype: Boolean;
 }
 
-declare const Boolean: BooleanConstructor;
+declare var Boolean: BooleanConstructor;
 
 interface Number {
     /**
@@ -579,7 +579,7 @@ interface NumberConstructor {
 }
 
 /** An object that represents a number of any kind. All JavaScript numbers are 64-bit floating-point numbers. */
-declare const Number: NumberConstructor;
+declare var Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
@@ -703,7 +703,7 @@ interface Math {
     tan(x: number): number;
 }
 /** An intrinsic object that provides basic mathematics functionality and constants. */
-declare const Math: Math;
+declare var Math: Math;
 
 /** Enables basic storage and retrieval of dates and times. */
 interface Date {
@@ -884,7 +884,7 @@ interface DateConstructor {
     now(): number;
 }
 
-declare const Date: DateConstructor;
+declare var Date: DateConstructor;
 
 interface RegExpMatchArray extends Array<string> {
     index?: number;
@@ -947,7 +947,7 @@ interface RegExpConstructor {
     lastMatch: string;
 }
 
-declare const RegExp: RegExpConstructor;
+declare var RegExp: RegExpConstructor;
 
 interface Error {
     name: string;
@@ -961,7 +961,7 @@ interface ErrorConstructor {
     readonly prototype: Error;
 }
 
-declare const Error: ErrorConstructor;
+declare var Error: ErrorConstructor;
 
 interface EvalError extends Error {
 }
@@ -972,7 +972,7 @@ interface EvalErrorConstructor {
     readonly prototype: EvalError;
 }
 
-declare const EvalError: EvalErrorConstructor;
+declare var EvalError: EvalErrorConstructor;
 
 interface RangeError extends Error {
 }
@@ -983,7 +983,7 @@ interface RangeErrorConstructor {
     readonly prototype: RangeError;
 }
 
-declare const RangeError: RangeErrorConstructor;
+declare var RangeError: RangeErrorConstructor;
 
 interface ReferenceError extends Error {
 }
@@ -994,7 +994,7 @@ interface ReferenceErrorConstructor {
     readonly prototype: ReferenceError;
 }
 
-declare const ReferenceError: ReferenceErrorConstructor;
+declare var ReferenceError: ReferenceErrorConstructor;
 
 interface SyntaxError extends Error {
 }
@@ -1005,7 +1005,7 @@ interface SyntaxErrorConstructor {
     readonly prototype: SyntaxError;
 }
 
-declare const SyntaxError: SyntaxErrorConstructor;
+declare var SyntaxError: SyntaxErrorConstructor;
 
 interface TypeError extends Error {
 }
@@ -1016,7 +1016,7 @@ interface TypeErrorConstructor {
     readonly prototype: TypeError;
 }
 
-declare const TypeError: TypeErrorConstructor;
+declare var TypeError: TypeErrorConstructor;
 
 interface URIError extends Error {
 }
@@ -1027,7 +1027,7 @@ interface URIErrorConstructor {
     readonly prototype: URIError;
 }
 
-declare const URIError: URIErrorConstructor;
+declare var URIError: URIErrorConstructor;
 
 interface JSON {
     /**
@@ -1056,7 +1056,7 @@ interface JSON {
 /**
   * An intrinsic object that provides functions to convert JavaScript values to and from the JavaScript Object Notation (JSON) format.
   */
-declare const JSON: JSON;
+declare var JSON: JSON;
 
 
 /////////////////////////////
@@ -1345,7 +1345,7 @@ interface ArrayConstructor {
     readonly prototype: Array<any>;
 }
 
-declare const Array: ArrayConstructor;
+declare var Array: ArrayConstructor;
 
 interface TypedPropertyDescriptor<T> {
     enumerable?: boolean;
@@ -1504,7 +1504,7 @@ interface ArrayBufferConstructor {
     new(byteLength: number): ArrayBuffer;
     isView(arg: any): arg is ArrayBufferView;
 }
-declare const ArrayBuffer: ArrayBufferConstructor;
+declare var ArrayBuffer: ArrayBufferConstructor;
 
 interface ArrayBufferView {
     /**
@@ -1654,7 +1654,7 @@ interface DataView {
 interface DataViewConstructor {
     new(buffer: ArrayBufferLike, byteOffset?: number, byteLength?: number): DataView;
 }
-declare const DataView: DataViewConstructor;
+declare var DataView: DataViewConstructor;
 
 /**
   * A typed array of 8-bit integer values. The contents are initialized to 0. If the requested
@@ -1929,7 +1929,7 @@ interface Int8ArrayConstructor {
 
 
 }
-declare const Int8Array: Int8ArrayConstructor;
+declare var Int8Array: Int8ArrayConstructor;
 
 /**
   * A typed array of 8-bit unsigned integer values. The contents are initialized to 0. If the
@@ -2204,7 +2204,7 @@ interface Uint8ArrayConstructor {
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8Array;
 
 }
-declare const Uint8Array: Uint8ArrayConstructor;
+declare var Uint8Array: Uint8ArrayConstructor;
 
 /**
   * A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.
@@ -2478,7 +2478,7 @@ interface Uint8ClampedArrayConstructor {
       */
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint8ClampedArray;
 }
-declare const Uint8ClampedArray: Uint8ClampedArrayConstructor;
+declare var Uint8ClampedArray: Uint8ClampedArrayConstructor;
 
 /**
   * A typed array of 16-bit signed integer values. The contents are initialized to 0. If the
@@ -2753,7 +2753,7 @@ interface Int16ArrayConstructor {
 
 
 }
-declare const Int16Array: Int16ArrayConstructor;
+declare var Int16Array: Int16ArrayConstructor;
 
 /**
   * A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the
@@ -3029,7 +3029,7 @@ interface Uint16ArrayConstructor {
 
 
 }
-declare const Uint16Array: Uint16ArrayConstructor;
+declare var Uint16Array: Uint16ArrayConstructor;
 /**
   * A typed array of 32-bit signed integer values. The contents are initialized to 0. If the
   * requested number of bytes could not be allocated an exception is raised.
@@ -3303,7 +3303,7 @@ interface Int32ArrayConstructor {
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Int32Array;
 
 }
-declare const Int32Array: Int32ArrayConstructor;
+declare var Int32Array: Int32ArrayConstructor;
 
 /**
   * A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the
@@ -3577,7 +3577,7 @@ interface Uint32ArrayConstructor {
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Uint32Array;
 
 }
-declare const Uint32Array: Uint32ArrayConstructor;
+declare var Uint32Array: Uint32ArrayConstructor;
 
 /**
   * A typed array of 32-bit float values. The contents are initialized to 0. If the requested number
@@ -3853,7 +3853,7 @@ interface Float32ArrayConstructor {
 
 
 }
-declare const Float32Array: Float32ArrayConstructor;
+declare var Float32Array: Float32ArrayConstructor;
 
 /**
   * A typed array of 64-bit float values. The contents are initialized to 0. If the requested
@@ -4128,7 +4128,7 @@ interface Float64ArrayConstructor {
     from<T>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => number, thisArg?: any): Float64Array;
 
 }
-declare const Float64Array: Float64ArrayConstructor;
+declare var Float64Array: Float64ArrayConstructor;
 
 /////////////////////////////
 /// ECMAScript Internationalization API

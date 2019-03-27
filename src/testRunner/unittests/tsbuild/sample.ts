@@ -168,14 +168,14 @@ namespace ts {
         });
 
         describe("can detect when and what to rebuild", () => {
-            function initializeWithBuild() {
+            function initializeWithBuild(opts?: BuildOptions) {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
                 builder.buildAllProjects();
                 host.clearDiagnostics();
                 tick();
-                builder.resetBuildContext();
+                builder.resetBuildContext(opts ? { ...opts, verbose: true } : undefined);
                 return { fs, host, builder };
             }
 
@@ -252,6 +252,65 @@ namespace ts {
                     [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
                     [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, "src/tests/tsconfig.json", fakes.version, version],
                     [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
+                );
+            });
+
+            it("rebuilds from start if --f is passed", () => {
+                const { host, builder } = initializeWithBuild({ force: true });
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/logic/tsconfig.json"],
+                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                    [Diagnostics.Project_0_is_up_to_date_with_d_ts_files_from_its_dependencies, "src/tests/tsconfig.json"],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
+                );
+            });
+
+            it("rebuilds when tsconfig changes", () => {
+                const { fs, host, builder } = initializeWithBuild();
+                replaceText(fs, "/src/tests/tsconfig.json", `"composite": true`, `"composite": true, "target": "es3"`);
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/tests/tsconfig.json"],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
+                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
+                );
+            });
+
+            it("rebuilds when extended config file changes", () => {
+                const fs = projFs.shadow();
+                fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: { target: "es3" } }));
+                replaceText(fs, "/src/tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
+                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tests/tsconfig.json", "src/tests/index.js"],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
+                );
+                host.clearDiagnostics();
+                tick();
+                builder.resetBuildContext();
+                fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: {} }));
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
+                    [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, "src/tests/tsconfig.json", "src/tests/index.js", "src/tests/tsconfig.base.json"],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
+                    [Diagnostics.Updating_unchanged_output_timestamps_of_project_0, "/src/tests/tsconfig.json"]
                 );
             });
         });

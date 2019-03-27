@@ -690,9 +690,15 @@ namespace ts {
                     /* parameters */ [],
                     /* type */ undefined,
                     /* equalsGreaterThanToken */ undefined,
-                    createPropertyAccess(
-                        createSuper(),
-                        name
+                    setEmitFlags(
+                        createPropertyAccess(
+                            setEmitFlags(
+                                createSuper(),
+                                EmitFlags.NoSubstitution
+                            ),
+                            name
+                        ),
+                        EmitFlags.NoSubstitution
                     )
                 )
             ));
@@ -717,9 +723,16 @@ namespace ts {
                             /* type */ undefined,
                             /* equalsGreaterThanToken */ undefined,
                             createAssignment(
-                                createPropertyAccess(
-                                    createSuper(),
-                                    name),
+                                setEmitFlags(
+                                    createPropertyAccess(
+                                        setEmitFlags(
+                                            createSuper(),
+                                            EmitFlags.NoSubstitution
+                                        ),
+                                        name
+                                    ),
+                                    EmitFlags.NoSubstitution
+                                ),
                                 createIdentifier("v")
                             )
                         )
