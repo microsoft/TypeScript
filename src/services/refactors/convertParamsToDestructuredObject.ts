@@ -264,7 +264,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
         const node = getTouchingToken(file, startPosition);
-        const functionDeclaration = getContainingFunction(node);
+        const functionDeclaration = getContainingFunctionDeclaration(node);
 
          // don't offer refactor on top-level JSDoc
         if (isTopLevelJSDoc(node)) return undefined;
@@ -287,7 +287,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     }
 
     function isValidFunctionDeclaration(
-        functionDeclaration: SignatureDeclaration,
+        functionDeclaration: FunctionLikeDeclaration,
         checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
         if (!isValidParameterNodeArray(functionDeclaration.parameters, checker)) return false;
         switch (functionDeclaration.kind) {
