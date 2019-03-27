@@ -6,5 +6,5 @@ const obj = {
 
 //// [privateNameInObjectLiteral-1.js]
 var obj = {
-    #foo: 1
+    : 1
 };

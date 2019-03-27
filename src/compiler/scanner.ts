@@ -1906,6 +1906,11 @@ namespace ts {
                         pos++;
                         return token = SyntaxKind.Unknown;
                     case CharacterCodes.hash:
+                        if (pos !== 0 && text[pos + 1] === "!") {
+                            error(Diagnostics.can_only_be_used_at_the_start_of_a_file);
+                            pos++;
+                            return token = SyntaxKind.Unknown;
+                        }
                         pos++;
                         if (isIdentifierStart(ch = text.charCodeAt(pos), languageVersion)) {
                             pos++;
@@ -1914,10 +1919,10 @@ namespace ts {
                             if (ch === CharacterCodes.backslash) {
                                 tokenValue += scanIdentifierParts();
                             }
-                            return token = SyntaxKind.PrivateName;
+                            return token = SyntaxKind.PrivateIdentifier;
                         }
                         error(Diagnostics.Invalid_character);
-                        // no `pos++` because already advanced at beginning of this `case` statement
+                        // no `pos++` because already advanced past the '#'
                         return token = SyntaxKind.Unknown;
                     default:
                         if (isIdentifierStart(ch, languageVersion)) {

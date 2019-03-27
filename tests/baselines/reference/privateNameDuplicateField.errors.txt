@@ -1,9 +1,7 @@
-tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(5,5): error TS2300: Duplicate identifier '#foo'.
+tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts(3,5): error TS2300: Duplicate identifier '#foo'.
 
 
 ==== tests/cases/conformance/classes/members/privateNames/privateNameDuplicateField.ts (1 errors) ====
-    // @target es6
-    
     class A {
         #foo = "foo";
         #foo = "foo";

@@ -65,7 +65,7 @@ namespace ts.codefix {
     function collectExportRenames(sourceFile: SourceFile, checker: TypeChecker, identifiers: Identifiers): ExportRenames {
         const res = createMap<string>();
         forEachExportReference(sourceFile, node => {
-            const { text, originalKeywordKind } = node.name as Identifier;
+            const { text, originalKeywordKind } = cast(node.name, isIdentifier);
             if (!res.has(text) && (originalKeywordKind !== undefined && isNonContextualKeyword(originalKeywordKind)
                 || checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ true))) {
                 // Unconditionally add an underscore in case `text` is a keyword.

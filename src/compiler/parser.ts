@@ -11,6 +11,7 @@ namespace ts {
     let NodeConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let TokenConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let IdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
+    let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
     let SourceFileConstructor: new (kind: SyntaxKind, pos?: number, end?: number) => Node;
 
     export function createNode(kind: SyntaxKind, pos?: number, end?: number): Node {
@@ -19,6 +20,9 @@ namespace ts {
         }
         else if (kind === SyntaxKind.Identifier) {
             return new (IdentifierConstructor || (IdentifierConstructor = objectAllocator.getIdentifierConstructor()))(kind, pos, end);
+        }
+        else if (kind === SyntaxKind.PrivateIdentifier) {
+            return new (PrivateIdentifierConstructor || (PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor()))(kind, pos, end);
         }
         else if (!isNodeKind(kind)) {
             return new (TokenConstructor || (TokenConstructor = objectAllocator.getTokenConstructor()))(kind, pos, end);
@@ -596,6 +600,7 @@ namespace ts {
         let NodeConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let TokenConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let IdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
+        let PrivateIdentifierConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
         let SourceFileConstructor: new (kind: SyntaxKind, pos: number, end: number) => Node;
 
         let sourceFile: SourceFile;
@@ -606,6 +611,7 @@ namespace ts {
         let sourceText: string;
         let nodeCount: number;
         let identifiers: Map<string>;
+        let privateIdentifiers: Map<string>;
         let identifierCount: number;
 
         let parsingContext: ParsingContext;
@@ -794,6 +800,7 @@ namespace ts {
             NodeConstructor = objectAllocator.getNodeConstructor();
             TokenConstructor = objectAllocator.getTokenConstructor();
             IdentifierConstructor = objectAllocator.getIdentifierConstructor();
+            PrivateIdentifierConstructor = objectAllocator.getPrivateIdentifierConstructor();
             SourceFileConstructor = objectAllocator.getSourceFileConstructor();
 
             sourceText = _sourceText;
@@ -802,6 +809,7 @@ namespace ts {
             parseDiagnostics = [];
             parsingContext = 0;
             identifiers = createMap<string>();
+            privateIdentifiers = createMap<string>();
             identifierCount = 0;
             nodeCount = 0;
 
@@ -1311,6 +1319,7 @@ namespace ts {
             const p = pos! >= 0 ? pos! : scanner.getStartPos();
             return isNodeKind(kind) || kind === SyntaxKind.Unknown ? new NodeConstructor(kind, p, p) :
                 kind === SyntaxKind.Identifier ? new IdentifierConstructor(kind, p, p) :
+                kind === SyntaxKind.PrivateIdentifier ? new PrivateIdentifierConstructor(kind, p, p) :
                 new TokenConstructor(kind, p, p);
         }
 
@@ -1434,8 +1443,8 @@ namespace ts {
             if (allowComputedPropertyNames && token() === SyntaxKind.OpenBracketToken) {
                 return parseComputedPropertyName();
             }
-            if (token() === SyntaxKind.PrivateName) {
-                return parsePrivateName();
+            if (token() === SyntaxKind.PrivateIdentifier) {
+                return parsePrivateIdentifier();
             }
             return parseIdentifierName();
         }
@@ -1460,15 +1469,19 @@ namespace ts {
             return finishNode(node);
         }
 
-        function createPrivateName(): PrivateName {
-                const node = createNode(SyntaxKind.PrivateName) as PrivateName;
-                node.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
-                nextToken();
-                return finishNode(node);
+        function internPrivateIdentifier(text: string): string {
+            let privateIdentifier = privateIdentifiers.get(text);
+            if (privateIdentifier === undefined) {
+                privateIdentifiers.set(text, privateIdentifier = text);
+            }
+            return privateIdentifier;
         }
 
-        function parsePrivateName(): PrivateName {
-            return createPrivateName();
+        function parsePrivateIdentifier(): PrivateIdentifier {
+            const node = createNode(SyntaxKind.PrivateIdentifier) as PrivateIdentifier;
+            node.escapedText = escapeLeadingUnderscores(internPrivateIdentifier(scanner.getTokenText()));
+            nextToken();
+            return finishNode(node);
         }
 
         function parseContextualModifier(t: SyntaxKind): boolean {
@@ -2232,7 +2245,7 @@ namespace ts {
                     break;
                 }
                 dotPos = scanner.getStartPos();
-                entity = createQualifiedName(entity, parseRightSideOfDot(allowReservedWords, /* allowPrivateNames */ false) as Identifier);
+                entity = createQualifiedName(entity, parseRightSideOfDot(allowReservedWords, /* allowPrivateIdentifiers */ false) as Identifier);
             }
             return entity;
         }
@@ -2244,7 +2257,7 @@ namespace ts {
             return finishNode(node);
         }
 
-        function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateNames: boolean): Identifier | PrivateName {
+        function parseRightSideOfDot(allowIdentifierNames: boolean, allowPrivateIdentifiers: boolean): Identifier | PrivateIdentifier {
             // Technically a keyword is valid here as all identifiers and keywords are identifier names.
             // However, often we'll encounter this in error situations when the identifier or keyword
             // is actually starting another valid construct.
@@ -2275,8 +2288,9 @@ namespace ts {
                 }
             }
 
-            if (allowPrivateNames && token() === SyntaxKind.PrivateName) {
-                return parsePrivateName();
+            if (token() === SyntaxKind.PrivateIdentifier) {
+                const node = parsePrivateIdentifier();
+                return allowPrivateIdentifiers ? node : createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ true, Diagnostics.Identifier_expected);
             }
 
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
@@ -4353,7 +4367,7 @@ namespace ts {
             node.expression = expression;
             parseExpectedToken(SyntaxKind.DotToken, Diagnostics.super_must_be_followed_by_an_argument_list_or_member_access);
             // private names will never work with `super` (`super.#foo`), but that's a semantic error, not syntactic
-            node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateNames*/ true);
+            node.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ true);
             return finishNode(node);
         }
 
@@ -4524,7 +4538,7 @@ namespace ts {
             while (parseOptional(SyntaxKind.DotToken)) {
                 const propertyAccess: JsxTagNamePropertyAccess = <JsxTagNamePropertyAccess>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
                 propertyAccess.expression = expression;
-                propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateNames*/ true);
+                propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ false);
                 expression = finishNode(propertyAccess);
             }
             return expression;
@@ -4641,7 +4655,7 @@ namespace ts {
             const propertyAccess = <PropertyAccessExpression>createNode(SyntaxKind.PropertyAccessExpression, expression.pos);
             propertyAccess.expression = expression;
             propertyAccess.questionDotToken = questionDotToken;
-            propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateNames*/ true);
+            propertyAccess.name = parseRightSideOfDot(/*allowIdentifierNames*/ true, /*allowPrivateIdentifiers*/ !questionDotToken);
             if (questionDotToken || expression.flags & NodeFlags.OptionalChain) {
                 propertyAccess.flags |= NodeFlags.OptionalChain;
             }

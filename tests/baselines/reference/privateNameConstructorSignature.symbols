@@ -1,0 +1,42 @@
+=== tests/cases/conformance/classes/members/privateNames/privateNameConstructorSignature.ts ===
+interface D {
+>D : Symbol(D, Decl(privateNameConstructorSignature.ts, 0, 0))
+
+    x: number;
+>x : Symbol(D.x, Decl(privateNameConstructorSignature.ts, 0, 13))
+}
+class C {
+>C : Symbol(C, Decl(privateNameConstructorSignature.ts, 2, 1), Decl(privateNameConstructorSignature.ts, 11, 1))
+
+    #x;
+>#x : Symbol(C.#x, Decl(privateNameConstructorSignature.ts, 3, 9))
+
+    static test() {
+>test : Symbol(C.test, Decl(privateNameConstructorSignature.ts, 4, 7))
+
+        new C().#x = 10;
+>new C().#x : Symbol(C.#x, Decl(privateNameConstructorSignature.ts, 3, 9))
+>C : Symbol(C, Decl(privateNameConstructorSignature.ts, 2, 1), Decl(privateNameConstructorSignature.ts, 11, 1))
+
+        const y = new C();
+>y : Symbol(y, Decl(privateNameConstructorSignature.ts, 7, 13))
+>C : Symbol(C, Decl(privateNameConstructorSignature.ts, 2, 1), Decl(privateNameConstructorSignature.ts, 11, 1))
+
+        const z = new y();
+>z : Symbol(z, Decl(privateNameConstructorSignature.ts, 8, 13))
+>y : Symbol(y, Decl(privateNameConstructorSignature.ts, 7, 13))
+
+        z.x = 123;
+>z.x : Symbol(D.x, Decl(privateNameConstructorSignature.ts, 0, 13))
+>z : Symbol(z, Decl(privateNameConstructorSignature.ts, 8, 13))
+>x : Symbol(D.x, Decl(privateNameConstructorSignature.ts, 0, 13))
+    }
+}
+interface C {
+>C : Symbol(C, Decl(privateNameConstructorSignature.ts, 2, 1), Decl(privateNameConstructorSignature.ts, 11, 1))
+
+    new (): D;
+>D : Symbol(D, Decl(privateNameConstructorSignature.ts, 0, 0))
+}
+
+

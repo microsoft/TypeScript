@@ -115,7 +115,7 @@ namespace ts {
         return node;
     }
 
-    function createLiteralFromNode(sourceNode: Exclude<PropertyNameLiteral, PrivateName>): StringLiteral {
+    function createLiteralFromNode(sourceNode: PropertyNameLiteral): StringLiteral {
         const node = createStringLiteral(getTextOfIdentifierOrLiteral(sourceNode));
         node.textSourceNode = sourceNode;
         return node;
@@ -213,6 +213,13 @@ namespace ts {
         name.original = node;
         nextAutoGenerateId++;
         return name;
+    }
+
+    // Private names
+    export function createPrivateIdentifier(text: string): PrivateIdentifier {
+        const node = createSynthesizedNode(SyntaxKind.PrivateIdentifier) as PrivateIdentifier;
+        node.escapedText = escapeLeadingUnderscores(text);
+        return node;
     }
 
     // Punctuation
@@ -1056,7 +1063,7 @@ namespace ts {
             : node;
     }
 
-    export function createPropertyAccess(expression: Expression, name: string | Identifier | PrivateName) {
+    export function createPropertyAccess(expression: Expression, name: string | Identifier | PrivateIdentifier) {
         const node = <PropertyAccessExpression>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
         node.expression = parenthesizeForAccess(expression);
         node.name = asName(name);
@@ -1064,7 +1071,7 @@ namespace ts {
         return node;
     }
 
-    export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateName) {
+    export function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier) {
         if (isOptionalChain(node)) {
             return updatePropertyAccessChain(node, expression, node.questionDotToken, name);
         }
@@ -1076,7 +1083,7 @@ namespace ts {
             : node;
     }
 
-    export function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateName) {
+    export function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier) {
         const node = <PropertyAccessChain>createSynthesizedNode(SyntaxKind.PropertyAccessExpression);
         node.flags |= NodeFlags.OptionalChain;
         node.expression = parenthesizeForAccess(expression);
@@ -1086,7 +1093,7 @@ namespace ts {
         return node;
     }
 
-    export function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateName) {
+    export function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier) {
         Debug.assert(!!(node.flags & NodeFlags.OptionalChain), "Cannot update a PropertyAccessExpression using updatePropertyAccessChain. Use updatePropertyAccess instead.");
         // Because we are updating an existing PropertyAccessChain we want to inherit its emitFlags
         // instead of using the default from createPropertyAccess
@@ -2888,7 +2895,9 @@ namespace ts {
             templateObjectHelper,
             generatorHelper,
             importStarHelper,
-            importDefaultHelper
+            importDefaultHelper,
+            classPrivateFieldGetHelper,
+            classPrivateFieldSetHelper
         ], helper => helper.name));
     }
 
@@ -3279,7 +3288,7 @@ namespace ts {
 
     // Utilities
 
-    function asName<T extends Identifier | PrivateName | BindingName | PropertyName | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
+    function asName<T extends Identifier | PrivateIdentifier | BindingName | PropertyName | EntityName | ThisTypeNode | undefined>(name: string | T): T | Identifier {
         return isString(name) ? createIdentifier(name) : name;
     }
 
@@ -3684,7 +3693,7 @@ namespace ts {
         }
         else {
             const expression = setTextRange(
-                (isIdentifier(memberName) || isPrivateName(memberName))
+                (isIdentifier(memberName) || isPrivateIdentifier(memberName))
                     ? createPropertyAccess(target, memberName)
                     : createElementAccess(target, memberName),
                 memberName
@@ -4148,7 +4157,7 @@ namespace ts {
         }
     }
 
-    export function createExpressionForPropertyName(memberName: Exclude<PropertyName, PrivateName>): Expression {
+    export function createExpressionForPropertyName(memberName: Exclude<PropertyName, PrivateIdentifier>): Expression {
         if (isIdentifier(memberName)) {
             return createLiteral(memberName);
         }
@@ -4160,17 +4169,14 @@ namespace ts {
         }
     }
 
-    /**
-     * accessor declaration that can be converted to an expression (`name` field cannot be a `PrivateName`)
-     */
-    type ExpressionableAccessorDeclaration = AccessorDeclaration & {name: Exclude<PropertyName, PrivateName>};
-
     export function createExpressionForObjectLiteralElementLike(node: ObjectLiteralExpression, property: ObjectLiteralElementLike, receiver: Expression): Expression | undefined {
+        if (property.name && isPrivateIdentifier(property.name)) {
+            Debug.failBadSyntaxKind(property.name, "Private identifiers are not allowed in object literals.");
+        }
         switch (property.kind) {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
-                // type assertion `as ExpressionableAccessorDeclaration` is safe because PrivateNames are not allowed in object literals
-                return createExpressionForAccessorDeclaration(node.properties, property as ExpressionableAccessorDeclaration, receiver, !!node.multiLine);
+                return createExpressionForAccessorDeclaration(node.properties, property as AccessorDeclaration & { name: Exclude<PropertyName, PrivateIdentifier>; }, receiver, !!node.multiLine);
             case SyntaxKind.PropertyAssignment:
                 return createExpressionForPropertyAssignment(property, receiver);
             case SyntaxKind.ShorthandPropertyAssignment:
@@ -4180,7 +4186,7 @@ namespace ts {
         }
     }
 
-    function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: ExpressionableAccessorDeclaration, receiver: Expression, multiLine: boolean) {
+    function createExpressionForAccessorDeclaration(properties: NodeArray<Declaration>, property: AccessorDeclaration & { name: Exclude<PropertyName, PrivateIdentifier>; }, receiver: Expression, multiLine: boolean) {
         const { firstAccessor, getAccessor, setAccessor } = getAllAccessorDeclarations(properties, property);
         if (property === firstAccessor) {
             const properties: ObjectLiteralElementLike[] = [];
@@ -5394,7 +5400,7 @@ namespace ts {
     /**
      * Gets the property name of a BindingOrAssignmentElement
      */
-    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): PropertyName | undefined {
+    export function getPropertyNameOfBindingOrAssignmentElement(bindingElement: BindingOrAssignmentElement): Exclude<PropertyName, PrivateIdentifier> | undefined {
         switch (bindingElement.kind) {
             case SyntaxKind.BindingElement:
                 // `a` in `let { a: b } = ...`
@@ -5403,6 +5409,9 @@ namespace ts {
                 // `1` in `let { 1: b } = ...`
                 if (bindingElement.propertyName) {
                     const propertyName = bindingElement.propertyName;
+                    if (isPrivateIdentifier(propertyName)) {
+                        return Debug.failBadSyntaxKind(propertyName);
+                    }
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -5417,6 +5426,9 @@ namespace ts {
                 // `1` in `({ 1: b } = ...)`
                 if (bindingElement.name) {
                     const propertyName = bindingElement.name;
+                    if (isPrivateIdentifier(propertyName)) {
+                        return Debug.failBadSyntaxKind(propertyName);
+                    }
                     return isComputedPropertyName(propertyName) && isStringOrNumericLiteral(propertyName.expression)
                         ? propertyName.expression
                         : propertyName;
@@ -5426,6 +5438,9 @@ namespace ts {
 
             case SyntaxKind.SpreadAssignment:
                 // `a` in `({ ...a } = ...)`
+                if (bindingElement.name && isPrivateIdentifier(bindingElement.name)) {
+                    return Debug.failBadSyntaxKind(bindingElement.name);
+                }
                 return bindingElement.name;
         }
 

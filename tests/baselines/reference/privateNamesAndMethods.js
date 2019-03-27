@@ -15,7 +15,7 @@ class A {
     constructor () {
         this.#foo(30);
         this.#bar(30);
-        this.#bar(30);
+        this.#baz(30);
         this.#quux = this.#quux + 1;
         this.#quux++;
  }
@@ -35,7 +35,7 @@ class A {
     constructor() {
         this.#foo(30);
         this.#bar(30);
-        this.#bar(30);
+        this.#baz(30);
         this.#quux = this.#quux + 1;
         this.#quux++;
     }
@@ -44,6 +44,7 @@ class A {
     async *#baz(a) {
         return 3;
     }
+    #_quux;
     get #quux() {
         return this.#_quux;
     }

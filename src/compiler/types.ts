@@ -201,9 +201,9 @@ namespace ts {
         AmpersandEqualsToken,
         BarEqualsToken,
         CaretEqualsToken,
-        // Identifiers and PrivateNames
+        // Identifiers and PrivateIdentifiers
         Identifier,
-        PrivateName,
+        PrivateIdentifier,
         // Reserved words
         BreakKeyword,
         CaseKeyword,
@@ -819,11 +819,11 @@ namespace ts {
 
     export type EntityName = Identifier | QualifiedName;
 
-    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateName;
+    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
 
     export type DeclarationName =
         | Identifier
-        | PrivateName
+        | PrivateIdentifier
         | StringLiteralLike
         | NumericLiteral
         | ComputedPropertyName
@@ -875,8 +875,8 @@ namespace ts {
         expression: Expression;
     }
 
-    export interface PrivateName extends PrimaryExpression, Declaration {
-        kind: SyntaxKind.PrivateName;
+    export interface PrivateIdentifier extends Node {
+        kind: SyntaxKind.PrivateIdentifier;
         // escaping not strictly necessary
         // avoids gotchas in transforms and utils
         escapedText: __String;
@@ -993,6 +993,11 @@ namespace ts {
         exclamationToken?: ExclamationToken;
         type?: TypeNode;
         initializer?: Expression;           // Optional initializer
+    }
+
+    /*@internal*/
+    export interface PrivateIdentifierPropertyDeclaration extends PropertyDeclaration {
+        name: PrivateIdentifier;
     }
 
     export interface ObjectLiteralElement extends NamedDeclaration {
@@ -1325,7 +1330,7 @@ namespace ts {
 
     export interface StringLiteral extends LiteralExpression, Declaration {
         kind: SyntaxKind.StringLiteral;
-        /* @internal */ textSourceNode?: Identifier | PrivateName | StringLiteralLike | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
+        /* @internal */ textSourceNode?: Identifier | StringLiteralLike | NumericLiteral; // Allows a StringLiteral to get its text from another node (used by transforms).
         /** Note: this is only set when synthesizing a node, not during parsing. */
         /* @internal */ singleQuote?: boolean;
     }
@@ -1827,7 +1832,12 @@ namespace ts {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         questionDotToken?: QuestionDotToken;
-        name: Identifier | PrivateName;
+        name: Identifier | PrivateIdentifier;
+    }
+
+    /*@internal*/
+    export interface PrivateIdentifierPropertyAccessExpression extends PropertyAccessExpression {
+        name: PrivateIdentifier;
     }
 
     export interface PropertyAccessChain extends PropertyAccessExpression {
@@ -1847,6 +1857,7 @@ namespace ts {
     export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
         _propertyAccessExpressionLikeQualifiedNameBrand?: any;
         expression: EntityNameExpression;
+        name: Identifier;
     }
 
     export interface ElementAccessExpression extends MemberExpression {
@@ -1905,6 +1916,7 @@ namespace ts {
     /** @internal */
     export interface WellKnownSymbolExpression extends PropertyAccessExpression {
         expression: Identifier & { escapedText: "Symbol" };
+        name: Identifier;
     }
     /** @internal */
     export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: BindableStaticNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
@@ -3298,7 +3310,7 @@ namespace ts {
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
-        getPropertyForPrivateName(apparentType: Type, leftType: Type, right: PrivateName, errorNode: Node | undefined): Symbol | undefined;
+        getPrivateIdentifierPropertyOfType(leftType: Type, name: string, location: Node): Symbol | undefined;
         /* @internal */ getTypeOfPropertyOfType(type: Type, propertyName: string): Type | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
@@ -4138,6 +4150,7 @@ namespace ts {
         AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
         ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
         ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
+        ContainsClassWithPrivateIdentifiers = 0x04000000,  // Marked on all block-scoped containers containing a class with private identifiers.
     }
 
     /* @internal */
@@ -5665,8 +5678,10 @@ namespace ts {
         AsyncValues = 1 << 15,          // __asyncValues (used by ES2017 for..await..of transformation)
         ExportStar = 1 << 16,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
         MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
+        ClassPrivateFieldGet = 1 << 18, // __classPrivateFieldGet (used by the class private field transformation)
+        ClassPrivateFieldSet = 1 << 19, // __classPrivateFieldSet (used by the class private field transformation)
         FirstEmitHelper = Extends,
-        LastEmitHelper = MakeTemplateObject,
+        LastEmitHelper = ClassPrivateFieldSet,
 
         // Helpers included by ES2015 for..of
         ForOfIncludes = Values,

@@ -11,7 +11,7 @@ class A {
 >a : number
 
     static async *#baz(a: number) {
->#baz : (a: number) => AsyncIterableIterator<number>
+>#baz : (a: number) => AsyncGenerator<never, number, unknown>
 >a : number
 
         return 3;

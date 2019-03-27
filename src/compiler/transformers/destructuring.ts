@@ -538,8 +538,7 @@ namespace ts {
         const propertyNames: Expression[] = [];
         let computedTempVariableOffset = 0;
         for (let i = 0; i < elements.length - 1; i++) {
-            // can safely assume property name is not a PrivateName because PrivateNames are not allowed in object literals
-            const propertyName = getPropertyNameOfBindingOrAssignmentElement(elements[i]) as Exclude<PropertyName, PrivateName>;
+            const propertyName = getPropertyNameOfBindingOrAssignmentElement(elements[i]);
             if (propertyName) {
                 if (isComputedPropertyName(propertyName)) {
                     const temp = computedTempVariables[computedTempVariableOffset];

@@ -1,12 +1,11 @@
-tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(10,3): error TS2339: Property '#foo' does not exist on type 'C<number>'.
-tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(10,3): error TS18012: Property '#foo' is not accessible outside class 'C<T>' because it has a private name.
+tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(10,3): error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
 tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(11,1): error TS2322: Type 'C<string>' is not assignable to type 'C<number>'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts(12,1): error TS2322: Type 'C<number>' is not assignable to type 'C<string>'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts (4 errors) ====
+==== tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasses.ts (3 errors) ====
     class C<T> {
         #foo: T;
         bar(x: C<T>) { return x.#foo; }          // OK
@@ -18,9 +17,7 @@ tests/cases/conformance/classes/members/privateNames/privateNamesInGenericClasse
     declare let b: C<string>;
     a.#foo;                                   // Error
       ~~~~
-!!! error TS2339: Property '#foo' does not exist on type 'C<number>'.
-      ~~~~
-!!! error TS18012: Property '#foo' is not accessible outside class 'C<T>' because it has a private name.
+!!! error TS18013: Property '#foo' is not accessible outside class 'C' because it has a private identifier.
     a = b;                                    // Error
     ~
 !!! error TS2322: Type 'C<string>' is not assignable to type 'C<number>'.

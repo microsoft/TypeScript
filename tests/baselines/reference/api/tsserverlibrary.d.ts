@@ -153,7 +153,7 @@ declare namespace ts {
         BarEqualsToken = 73,
         CaretEqualsToken = 74,
         Identifier = 75,
-        PrivateName = 76,
+        PrivateIdentifier = 76,
         BreakKeyword = 77,
         CaseKeyword = 78,
         CatchKeyword = 79,
@@ -549,8 +549,8 @@ declare namespace ts {
         right: Identifier;
     }
     export type EntityName = Identifier | QualifiedName;
-    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateName;
-    export type DeclarationName = Identifier | PrivateName | StringLiteralLike | NumericLiteral | ComputedPropertyName | ElementAccessExpression | BindingPattern | EntityNameExpression;
+    export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | PrivateIdentifier;
+    export type DeclarationName = Identifier | PrivateIdentifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | ElementAccessExpression | BindingPattern | EntityNameExpression;
     export interface Declaration extends Node {
         _declarationBrand: any;
     }
@@ -565,8 +565,8 @@ declare namespace ts {
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
-    export interface PrivateName extends PrimaryExpression, Declaration {
-        kind: SyntaxKind.PrivateName;
+    export interface PrivateIdentifier extends Node {
+        kind: SyntaxKind.PrivateIdentifier;
         escapedText: __String;
     }
     export interface Decorator extends Node {
@@ -1094,7 +1094,7 @@ declare namespace ts {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
         questionDotToken?: QuestionDotToken;
-        name: Identifier | PrivateName;
+        name: Identifier | PrivateIdentifier;
     }
     export interface PropertyAccessChain extends PropertyAccessExpression {
         _optionalChainBrand: any;
@@ -1106,6 +1106,7 @@ declare namespace ts {
     export interface PropertyAccessEntityNameExpression extends PropertyAccessExpression {
         _propertyAccessExpressionLikeQualifiedNameBrand?: any;
         expression: EntityNameExpression;
+        name: Identifier;
     }
     export interface ElementAccessExpression extends MemberExpression {
         kind: SyntaxKind.ElementAccessExpression;
@@ -1982,7 +1983,7 @@ declare namespace ts {
         getDeclaredTypeOfSymbol(symbol: Symbol): Type;
         getPropertiesOfType(type: Type): Symbol[];
         getPropertyOfType(type: Type, propertyName: string): Symbol | undefined;
-        getPropertyForPrivateName(apparentType: Type, leftType: Type, right: PrivateName, errorNode: Node | undefined): Symbol | undefined;
+        getPrivateIdentifierPropertyOfType(leftType: Type, name: string, location: Node): Symbol | undefined;
         getIndexInfoOfType(type: Type, kind: IndexKind): IndexInfo | undefined;
         getSignaturesOfType(type: Type, kind: SignatureKind): readonly Signature[];
         getIndexTypeOfType(type: Type, kind: IndexKind): Type | undefined;
@@ -3392,9 +3393,9 @@ declare namespace ts {
      * @returns The unescaped identifier text.
      */
     function unescapeLeadingUnderscores(identifier: __String): string;
-    function idText(identifierOrPrivateName: Identifier | PrivateName): string;
+    function idText(identifierOrPrivateIdentifier: Identifier | PrivateIdentifier): string;
     function symbolName(symbol: Symbol): string;
-    function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateName | undefined;
+    function getNameOfJSDocTypedef(declaration: JSDocTypedefTag): Identifier | PrivateIdentifier | undefined;
     function getNameOfDeclaration(declaration: Declaration | Expression): DeclarationName | undefined;
     /**
      * Gets the JSDoc parameter tags for the node if present.
@@ -3482,10 +3483,10 @@ declare namespace ts {
     function isTemplateMiddle(node: Node): node is TemplateMiddle;
     function isTemplateTail(node: Node): node is TemplateTail;
     function isIdentifier(node: Node): node is Identifier;
-    function isIdentifierOrPrivateName(node: Node): node is Identifier | PrivateName;
+    function isIdentifierOrPrivateIdentifier(node: Node): node is Identifier | PrivateIdentifier;
     function isQualifiedName(node: Node): node is QualifiedName;
     function isComputedPropertyName(node: Node): node is ComputedPropertyName;
-    function isPrivateName(node: Node): node is PrivateName;
+    function isPrivateIdentifier(node: Node): node is PrivateIdentifier;
     function isTypeParameterDeclaration(node: Node): node is TypeParameterDeclaration;
     function isParameter(node: Node): node is ParameterDeclaration;
     function isDecorator(node: Node): node is Decorator;
@@ -3879,6 +3880,7 @@ declare namespace ts {
     function createFileLevelUniqueName(text: string): Identifier;
     /** Create a unique name generated for a node. */
     function getGeneratedNameForNode(node: Node | undefined): Identifier;
+    function createPrivateIdentifier(text: string): PrivateIdentifier;
     function createToken<TKind extends SyntaxKind>(token: TKind): Token<TKind>;
     function createSuper(): SuperExpression;
     function createThis(): ThisExpression & Token<SyntaxKind.ThisKeyword>;
@@ -3973,10 +3975,10 @@ declare namespace ts {
     function updateArrayLiteral(node: ArrayLiteralExpression, elements: readonly Expression[]): ArrayLiteralExpression;
     function createObjectLiteral(properties?: readonly ObjectLiteralElementLike[], multiLine?: boolean): ObjectLiteralExpression;
     function updateObjectLiteral(node: ObjectLiteralExpression, properties: readonly ObjectLiteralElementLike[]): ObjectLiteralExpression;
-    function createPropertyAccess(expression: Expression, name: string | Identifier | PrivateName): PropertyAccessExpression;
-    function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateName): PropertyAccessExpression;
-    function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateName): PropertyAccessChain;
-    function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateName): PropertyAccessChain;
+    function createPropertyAccess(expression: Expression, name: string | Identifier | PrivateIdentifier): PropertyAccessExpression;
+    function updatePropertyAccess(node: PropertyAccessExpression, expression: Expression, name: Identifier | PrivateIdentifier): PropertyAccessExpression;
+    function createPropertyAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, name: string | Identifier | PrivateIdentifier): PropertyAccessChain;
+    function updatePropertyAccessChain(node: PropertyAccessChain, expression: Expression, questionDotToken: QuestionDotToken | undefined, name: Identifier | PrivateIdentifier): PropertyAccessChain;
     function createElementAccess(expression: Expression, index: number | Expression): ElementAccessExpression;
     function updateElementAccess(node: ElementAccessExpression, expression: Expression, argumentExpression: Expression): ElementAccessExpression;
     function createElementAccessChain(expression: Expression, questionDotToken: QuestionDotToken | undefined, index: number | Expression): ElementAccessChain;
@@ -4877,7 +4879,7 @@ declare namespace ts {
     interface Identifier {
         readonly text: string;
     }
-    interface PrivateName {
+    interface PrivateIdentifier {
         readonly text: string;
     }
     interface Symbol {

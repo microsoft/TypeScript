@@ -1,6 +1,4 @@
 //// [privateNameDuplicateField.ts]
-// @target es6
-
 class A {
     #foo = "foo";
     #foo = "foo";
@@ -9,11 +7,11 @@ class A {
 
 //// [privateNameDuplicateField.js]
 "use strict";
-// @target es6
-var A = /** @class */ (function () {
-    function A() {
-        this.#foo = "foo";
-        this.#foo = "foo";
+var _foo, _foo_1;
+class A {
+    constructor() {
+        _foo_1.set(this, "foo");
+        _foo_1.set(this, "foo");
     }
-    return A;
-}());
+}
+_foo = new WeakMap(), _foo_1 = new WeakMap();

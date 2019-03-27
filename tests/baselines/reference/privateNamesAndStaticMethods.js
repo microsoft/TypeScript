@@ -45,6 +45,7 @@ class A {
     static async *#baz(a) {
         return 3;
     }
+    static #_quux;
     static get #quux() {
         return this.#_quux;
     }

@@ -1,6 +1,4 @@
 === tests/cases/conformance/classes/members/privateNames/privateNameNotAllowedOutsideClass.ts ===
-// @target es6
-
 const #foo = 3;
 >3 : 3
 

@@ -8,6 +8,6 @@ const obj = {
 
 //// [privateNameInObjectLiteral-2.js]
 var obj = {
-    #foo: function () {
+    : function () {
     }
 };
