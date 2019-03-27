@@ -15,3 +15,11 @@ goTo.select("v", "u");
 verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to string concatenation");
 verify.refactorAvailable("Convert string concatenation or template literal", "Convert to template literal");
 
+edit.applyRefactor({
+    refactorName: "Convert string concatenation or template literal",
+    actionName: "Convert to template literal",
+    actionDescription: "Convert to template literal",
+    newContent:
+`let foo = ""
+foo = \`Mr Bar is\${42} years old\``,
+});

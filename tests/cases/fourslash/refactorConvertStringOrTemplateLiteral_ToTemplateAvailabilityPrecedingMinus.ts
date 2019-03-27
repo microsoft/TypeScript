@@ -23,3 +23,11 @@ goTo.select("r", "q");
 verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to string concatenation");
 verify.refactorAvailable("Convert string concatenation or template literal", "Convert to template literal");
 
+edit.applyRefactor({
+    refactorName: "Convert string concatenation or template literal",
+    actionName: "Convert to template literal",
+    actionDescription: "Convert to template literal",
+    newContent:
+`const age = 22
+const foo = \`\${age * 4 - 2 / 4} years old\``,
+});
