@@ -69,12 +69,20 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, maybeBinary, templateLiteral));
     }
 
+    const templateSpanToExpressions = (file: SourceFile) => (templateSpan: TemplateSpan): Expression[] => {
+        const { expression, literal } = templateSpan;
+        const text = literal.text;
+        copyTrailingAsLeadingComments(templateSpan, expression, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+        return text.length === 0 ? [expression] : [expression, createStringLiteral(text)];
+    };
+
     function getEditsForToStringConcatenation(context: RefactorContext, node: Node) {
         const templateLiteral = findAncestor(node, n => isTemplateLiteral(n))! as TemplateLiteral;
 
         if (isTemplateExpression(templateLiteral)) {
             const { head, templateSpans } = templateLiteral;
-            const arrayOfNodes = templateSpans.map(templateSpanToExpressions)
+            const spanToExpressionWithComment = templateSpanToExpressions(context.file);
+            const arrayOfNodes = templateSpans.map(spanToExpressionWithComment)
                                               .reduce((accumulator, nextArray) => accumulator.concat(nextArray));
 
             if (head.text.length !== 0) arrayOfNodes.unshift(createStringLiteral(head.text));
@@ -86,12 +94,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             const stringLiteral = createStringLiteral(templateLiteral.text);
             return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, node, stringLiteral));
         }
-    }
-
-    function templateSpanToExpressions(templateSpan: TemplateSpan): Expression[] {
-        const { expression, literal } = templateSpan;
-        const text = literal.text;
-        return text.length === 0 ? [expression] : [expression, createStringLiteral(text)];
     }
 
     function isNotEqualsOperator(node: BinaryExpression) {
