@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// const foo = "/*x*/O/*y*/ctal \43";
+//// const foo = "/*x*/U/*y*/nicode \u0023 \u{0023} " + "Hex \x23 " + "Octal \43";
 
 goTo.select("x", "y");
 edit.applyRefactor({
@@ -8,6 +8,6 @@ edit.applyRefactor({
     actionName: "Convert to template literal",
     actionDescription: "Convert to template literal",
     newContent:
-"const foo = `Octal #`;",
+"const foo = `Unicode # # Hex # Octal #`;",
 });
 

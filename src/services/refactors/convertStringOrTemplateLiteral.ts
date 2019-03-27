@@ -183,13 +183,20 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return createTemplateExpression(templateHead, templateSpans);
     }
 
+    const hexToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 16));
     const octalToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 8));
 
     function decodeRawString(content: string) {
         const outerQuotes = /["']((.|\s)*)["']/;
+        const unicodeEscape = /\\u([a-fA-F0-9]{4})/gi;
+        const unicodeEscapeWithBraces = /\\u\{([0-9a-fA-F]{1,})\}/gi;
+        const hexEscape = /\\x([a-fA-F0-9]{2})/gi;
         const octalEscape = /\\((?:[1-7][0-7]{0,2}|[0-7]{2,3}))/g;
 
         return content.replace(outerQuotes, (_match, grp) => grp)
+                      .replace(unicodeEscape, hexToUnicode)
+                      .replace(unicodeEscapeWithBraces, hexToUnicode)
+                      .replace(hexEscape, hexToUnicode)
                       .replace(octalEscape, octalToUnicode);
 
     }
