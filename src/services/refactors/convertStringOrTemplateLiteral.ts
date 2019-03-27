@@ -79,8 +79,8 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
             if (head.text.length !== 0) arrayOfNodes.unshift(createStringLiteral(head.text));
 
-            const binaryExpression = arrayToTree(arrayOfNodes);
-            return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, templateLiteral, binaryExpression));
+            const singleExpressionOrBinary = makeSingleExpressionOrBinary(arrayOfNodes);
+            return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, templateLiteral, singleExpressionOrBinary));
         }
         else {
             const stringLiteral = createStringLiteral(templateLiteral.text);
@@ -105,20 +105,24 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return expr;
     }
 
-    function arrayToTree(nodes: ReadonlyArray<Expression>, accumulator?: BinaryExpression): BinaryExpression {
-        if (nodes.length === 0) return accumulator!;
-
-        if (!accumulator) {
+    function makeSingleExpressionOrBinary(nodes: ReadonlyArray<Expression>): Expression {
+        if (nodes.length > 1) {
             const left = nodes[0];
             const right = nodes[1];
 
             const binary = createBinary(left, SyntaxKind.PlusToken, right);
-            return arrayToTree(nodes.slice(2), binary);
+            return arrayToTree(nodes, 2, binary);
         }
 
-        const right = nodes[0];
+        return nodes[0];
+    }
+
+    function arrayToTree(nodes: ReadonlyArray<Expression>, index: number, accumulator: BinaryExpression): Expression {
+        if (nodes.length === index) return accumulator;
+
+        const right = nodes[index];
         const binary = createBinary(accumulator, SyntaxKind.PlusToken, right);
-        return arrayToTree(nodes.slice(1), binary);
+        return arrayToTree(nodes, index + 1, binary);
     }
 
     function isStringConcatenationValid(node: Node): boolean {
