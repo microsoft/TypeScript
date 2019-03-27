@@ -4310,8 +4310,10 @@ namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        resolvedTrueType?: Type;
-        resolvedFalseType?: Type;
+        trueType: Type;
+        falseType: Type;
+        /* @internal */
+        resolvedInferredTrueType?: Type; // The `trueType` instantiated with the `combinedMapper`, if present
         /* @internal */
         resolvedDefaultConstraint?: Type;
         /* @internal */

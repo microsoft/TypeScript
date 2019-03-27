@@ -3492,8 +3492,8 @@ namespace ts {
                     context.inferTypeParameters = (<ConditionalType>type).root.inferTypeParameters;
                     const extendsTypeNode = typeToTypeNodeHelper((<ConditionalType>type).extendsType, context);
                     context.inferTypeParameters = saveInferTypeParameters;
-                    const trueTypeNode = typeToTypeNodeHelper(getTrueTypeFromConditionalType(<ConditionalType>type), context);
-                    const falseTypeNode = typeToTypeNodeHelper(getFalseTypeFromConditionalType(<ConditionalType>type), context);
+                    const trueTypeNode = typeToTypeNodeHelper((<ConditionalType>type).trueType, context);
+                    const falseTypeNode = typeToTypeNodeHelper((<ConditionalType>type).falseType, context);
                     context.approximateLength += 15;
                     return createConditionalTypeNode(checkTypeNode, extendsTypeNode, trueTypeNode, falseTypeNode);
                 }
@@ -7477,6 +7477,10 @@ namespace ts {
         }
 
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
+            return hasNonCircularBaseConstraint(type) ? getConstraintFromIndexedAccess(type) : undefined;
+        }
+
+        function getConstraintFromIndexedAccess(type: IndexedAccessType) {
             const objectType = getConstraintOfType(type.objectType) || type.objectType;
             if (objectType !== type.objectType) {
                 const constraint = getIndexedAccessType(objectType, type.indexType, /*accessNode*/ undefined, errorType);
@@ -7488,24 +7492,14 @@ namespace ts {
             return baseConstraint && baseConstraint !== type ? baseConstraint : undefined;
         }
 
-        function getDefaultConstraintOfTrueBranchOfConditionalType(root: ConditionalRoot, combinedMapper: TypeMapper | undefined, mapper: TypeMapper | undefined) {
-            const rootTrueType = root.trueType;
-            const rootTrueConstraint = !(rootTrueType.flags & TypeFlags.Substitution)
-                ? rootTrueType
-                : instantiateType(((<SubstitutionType>rootTrueType).substitute), combinedMapper || mapper).flags & TypeFlags.AnyOrUnknown
-                    ? (<SubstitutionType>rootTrueType).typeVariable
-                    : getIntersectionType([(<SubstitutionType>rootTrueType).substitute, (<SubstitutionType>rootTrueType).typeVariable]);
-            return instantiateType(rootTrueConstraint, combinedMapper || mapper);
-        }
-
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
             if (!type.resolvedDefaultConstraint) {
                 // An `any` branch of a conditional type would normally be viral - specifically, without special handling here,
                 // a conditional type with a single branch of type `any` would be assignable to anything, since it's constraint would simplify to
                 // just `any`. This result is _usually_ unwanted - so instead here we elide an `any` branch from the constraint type,
                 // in effect treating `any` like `never` rather than `unknown` in this location.
-                const trueConstraint = getDefaultConstraintOfTrueBranchOfConditionalType(type.root, type.combinedMapper, type.mapper);
-                const falseConstraint = getFalseTypeFromConditionalType(type);
+                const trueConstraint = getInferredTrueTypeFromConditionalType(type);
+                const falseConstraint = type.falseType;
                 type.resolvedDefaultConstraint = isTypeAny(trueConstraint) ? falseConstraint : isTypeAny(falseConstraint) ? trueConstraint : getUnionType([trueConstraint, falseConstraint]);
             }
             return type.resolvedDefaultConstraint;
@@ -7537,8 +7531,12 @@ namespace ts {
             return undefined;
         }
 
-        function getConstraintOfConditionalType(type: ConditionalType) {
+        function getConstraintFromConditionalType(type: ConditionalType) {
             return getConstraintOfDistributiveConditionalType(type) || getDefaultConstraintOfConditionalType(type);
+        }
+
+        function getConstraintOfConditionalType(type: ConditionalType) {
+            return hasNonCircularBaseConstraint(type) ? getConstraintFromConditionalType(type) : undefined;
         }
 
         function getUnionConstraintOfIntersection(type: IntersectionType, targetIsUnion: boolean) {
@@ -7617,7 +7615,7 @@ namespace ts {
                     if (!pushTypeResolution(t, TypeSystemPropertyName.ImmediateBaseConstraint)) {
                         return circularConstraintType;
                     }
-                    if (constraintDepth === 50) {
+                    if (constraintDepth >= 50) {
                         // We have reached 50 recursive invocations of getImmediateBaseConstraint and there is a
                         // very high likelyhood we're dealing with an infinite generic type that perpetually generates
                         // new type identities as we descend into it. We stop the recursion here and mark this type
@@ -7684,8 +7682,11 @@ namespace ts {
                     return baseIndexedAccess && baseIndexedAccess !== errorType ? getBaseConstraint(baseIndexedAccess) : undefined;
                 }
                 if (t.flags & TypeFlags.Conditional) {
-                    const constraint = getConstraintOfConditionalType(<ConditionalType>t);
-                    return constraint && getBaseConstraint(constraint);
+                    const constraint = getConstraintFromConditionalType(<ConditionalType>t);
+                    constraintDepth++; // Penalize repeating conditional types (this captures the recursion within getConstraintFromConditionalType and carries it forward)
+                    const result = constraint && getBaseConstraint(constraint);
+                    constraintDepth--;
+                    return result;
                 }
                 if (t.flags & TypeFlags.Substitution) {
                     return getBaseConstraint((<SubstitutionType>t).substitute);
@@ -8866,6 +8867,9 @@ namespace ts {
         }
 
         function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
+            if (substitute.flags & TypeFlags.AnyOrUnknown) {
+                return typeVariable;
+            }
             const result = <SubstitutionType>createType(TypeFlags.Substitution);
             result.typeVariable = typeVariable;
             result.substitute = substitute;
@@ -10161,7 +10165,7 @@ namespace ts {
             // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
             if (falseType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(trueType), getActualTypeVariable(checkType))) {
                 if (checkType.flags & TypeFlags.Any || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
-                    return getDefaultConstraintOfTrueBranchOfConditionalType(root, /*combinedMapper*/ undefined, mapper);
+                    return trueType;
                 }
                 else if (isIntersectionEmpty(checkType, extendsType)) { // Always false
                     return neverType;
@@ -10172,7 +10176,7 @@ namespace ts {
                     return neverType;
                 }
                 else if (checkType.flags & TypeFlags.Any || isIntersectionEmpty(checkType, extendsType)) { // Always false
-                    return falseType; // TODO: Intersect negated `extends` type here
+                    return falseType;
                 }
             }
 
@@ -10227,21 +10231,15 @@ namespace ts {
             result.extendsType = extendsType;
             result.mapper = mapper;
             result.combinedMapper = combinedMapper;
-            if (!combinedMapper) {
-                result.resolvedTrueType = trueType;
-                result.resolvedFalseType = falseType;
-            }
+            result.trueType = trueType;
+            result.falseType = falseType;
             result.aliasSymbol = root.aliasSymbol;
             result.aliasTypeArguments = instantiateTypes(root.aliasTypeArguments, mapper!); // TODO: GH#18217
             return result;
         }
 
-        function getTrueTypeFromConditionalType(type: ConditionalType) {
-            return type.resolvedTrueType || (type.resolvedTrueType = instantiateType(type.root.trueType, type.mapper));
-        }
-
-        function getFalseTypeFromConditionalType(type: ConditionalType) {
-            return type.resolvedFalseType || (type.resolvedFalseType = instantiateType(type.root.falseType, type.mapper));
+        function getInferredTrueTypeFromConditionalType(type: ConditionalType) {
+            return type.resolvedInferredTrueType || (type.resolvedInferredTrueType = instantiateType(type.root.trueType, type.combinedMapper || type.mapper));
         }
 
         function getInferTypeParameters(node: ConditionalTypeNode): TypeParameter[] | undefined {
@@ -11182,7 +11180,11 @@ namespace ts {
                     return getSubstitutionType(maybeVariable as TypeVariable, instantiateType((<SubstitutionType>type).substitute, mapper));
                 }
                 else {
-                    return maybeVariable;
+                    const sub = instantiateType((<SubstitutionType>type).substitute, mapper);
+                    if (sub.flags & TypeFlags.AnyOrUnknown || isTypeSubtypeOf(getRestrictiveInstantiation(maybeVariable), getRestrictiveInstantiation(sub))) {
+                        return maybeVariable;
+                    }
+                    return sub;
                 }
             }
             return type;
@@ -11728,6 +11730,15 @@ namespace ts {
         type ErrorReporter = (message: DiagnosticMessage, arg0?: string, arg1?: string) => void;
 
         /**
+         * Returns true if `s` is `(...args: any[]) => any` or `(this: any, ...args: any[]) => any`
+         */
+        function isAnySignature(s: Signature) {
+            return !s.typeParameters && (!s.thisParameter || isTypeAny(getTypeOfParameter(s.thisParameter))) && s.parameters.length === 1 &&
+                s.hasRestParameter && (getTypeOfParameter(s.parameters[0]) === anyArrayType || isTypeAny(getTypeOfParameter(s.parameters[0]))) &&
+                isTypeAny(getReturnTypeOfSignature(s));
+        }
+
+        /**
          * See signatureRelatedTo, compareSignaturesIdentical
          */
         function compareSignaturesRelated(source: Signature,
@@ -11739,6 +11750,10 @@ namespace ts {
             compareTypes: TypeComparer): Ternary {
             // TODO (drosen): De-duplicate code between related functions.
             if (source === target) {
+                return Ternary.True;
+            }
+
+            if (isAnySignature(target)) {
                 return Ternary.True;
             }
 
@@ -12706,8 +12721,8 @@ namespace ts {
                         if ((<ConditionalType>source).root.isDistributive === (<ConditionalType>target).root.isDistributive) {
                             if (result = isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType, /*reportErrors*/ false)) {
                                 if (result &= isRelatedTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType, /*reportErrors*/ false)) {
-                                    if (result &= isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), /*reportErrors*/ false)) {
-                                        if (result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), /*reportErrors*/ false)) {
+                                    if (result &= isRelatedTo((<ConditionalType>source).trueType, (<ConditionalType>target).trueType, /*reportErrors*/ false)) {
+                                        if (result &= isRelatedTo((<ConditionalType>source).falseType, (<ConditionalType>target).falseType, /*reportErrors*/ false)) {
                                             return result;
                                         }
                                     }
@@ -12828,7 +12843,7 @@ namespace ts {
                             return result;
                         }
                     }
-                    const constraint = getConstraintOfType(<TypeParameter>source);
+                    const constraint = getConstraintOfType(<TypeVariable>source);
                     if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
                         // A type variable with no constraint is not related to the non-primitive object type.
                         if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
@@ -12860,8 +12875,8 @@ namespace ts {
                         // and Y1 is related to Y2.
                         if (isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
                             (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
-                            if (result = isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
-                                result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
+                            if (result = isRelatedTo((<ConditionalType>source).trueType, (<ConditionalType>target).trueType, reportErrors)) {
+                                result &= isRelatedTo((<ConditionalType>source).falseType, (<ConditionalType>target).falseType, reportErrors);
                             }
                             if (result) {
                                 errorInfo = saveErrorInfo;
@@ -14696,12 +14711,12 @@ namespace ts {
                 else if (source.flags & TypeFlags.Conditional && target.flags & TypeFlags.Conditional) {
                     inferFromTypes((<ConditionalType>source).checkType, (<ConditionalType>target).checkType);
                     inferFromTypes((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType);
-                    inferFromTypes(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target));
-                    inferFromTypes(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target));
+                    inferFromTypes((<ConditionalType>source).trueType, (<ConditionalType>target).trueType);
+                    inferFromTypes((<ConditionalType>source).falseType, (<ConditionalType>target).falseType);
                 }
                 else if (target.flags & TypeFlags.Conditional && !contravariant) {
-                    inferFromTypes(source, getTrueTypeFromConditionalType(<ConditionalType>target));
-                    inferFromTypes(source, getFalseTypeFromConditionalType(<ConditionalType>target));
+                    inferFromTypes(source, (<ConditionalType>target).trueType);
+                    inferFromTypes(source, (<ConditionalType>target).falseType);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     for (const t of (<UnionOrIntersectionType>target).types) {
