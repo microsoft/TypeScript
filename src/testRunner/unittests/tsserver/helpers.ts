@@ -64,7 +64,7 @@ namespace ts.projectSystem {
         msg: noop,
         startGroup: noop,
         endGroup: noop,
-        getLogFileName: () => undefined,
+        getLogFileName: returnUndefined,
     };
 
     export function createHasErrorMessageLogger() {

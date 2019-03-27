@@ -6,7 +6,7 @@ var obj = {
     [this.bar]: 0
 >[this.bar] : number
 >this.bar : any
->this : any
+>this : typeof globalThis
 >bar : any
 >0 : 0
 }

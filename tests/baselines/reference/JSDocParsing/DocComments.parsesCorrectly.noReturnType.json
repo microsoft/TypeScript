@@ -2,15 +2,21 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 20,
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocReturnTag",
             "pos": 8,
             "end": 15,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 15,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "return"
             }
         },

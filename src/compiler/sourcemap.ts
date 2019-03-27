@@ -140,7 +140,7 @@ namespace ts {
             exit();
         }
 
-        function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string) {
+        function appendSourceMap(generatedLine: number, generatedCharacter: number, map: RawSourceMap, sourceMapPath: string, start?: LineAndCharacter, end?: LineAndCharacter) {
             Debug.assert(generatedLine >= pendingGeneratedLine, "generatedLine cannot backtrack");
             Debug.assert(generatedCharacter >= 0, "generatedCharacter cannot be negative");
             enter();
@@ -149,6 +149,17 @@ namespace ts {
             let nameIndexToNewNameIndexMap: number[] | undefined;
             const mappingIterator = decodeMappings(map.mappings);
             for (let { value: raw, done } = mappingIterator.next(); !done; { value: raw, done } = mappingIterator.next()) {
+                if (end && (
+                    raw.generatedLine > end.line ||
+                    (raw.generatedLine === end.line && raw.generatedCharacter > end.character))) {
+                    break;
+                }
+
+                if (start && (
+                    raw.generatedLine < start.line ||
+                    (start.line === raw.generatedLine && raw.generatedCharacter < start.character))) {
+                    continue;
+                }
                 // Then reencode all the updated mappings into the overall map
                 let newSourceIndex: number | undefined;
                 let newSourceLine: number | undefined;
@@ -178,8 +189,10 @@ namespace ts {
                     }
                 }
 
-                const newGeneratedLine = raw.generatedLine + generatedLine;
-                const newGeneratedCharacter = raw.generatedLine === 0 ? raw.generatedCharacter + generatedCharacter : raw.generatedCharacter;
+                const rawGeneratedLine = raw.generatedLine - (start ? start.line : 0);
+                const newGeneratedLine = rawGeneratedLine + generatedLine;
+                const rawGeneratedCharacter = start && start.line === raw.generatedLine ? raw.generatedCharacter - start.character : raw.generatedCharacter;
+                const newGeneratedCharacter = rawGeneratedLine === 0 ? rawGeneratedCharacter + generatedCharacter : rawGeneratedCharacter;
                 addMapping(newGeneratedLine, newGeneratedCharacter, newSourceIndex, newSourceLine, newSourceCharacter, newNameIndex);
             }
             exit();

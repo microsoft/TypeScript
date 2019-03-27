@@ -9,7 +9,7 @@ type T02 = Exclude<string | number | (() => void), Function>;  // string | numbe
 >T02 : string | number
 
 type T03 = Extract<string | number | (() => void), Function>;  // () => void
->T03 : () => void
+>T03 : Function & (() => void)
 
 type T04 = NonNullable<string | number | undefined>;  // string | number
 >T04 : string | number
@@ -113,7 +113,7 @@ type T10 = Exclude<Options, { k: "a" | "b" }>;  // { k: "c", c: boolean }
 >k : "a" | "b"
 
 type T11 = Extract<Options, { k: "a" | "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
->T11 : { k: "a"; a: number; } | { k: "b"; b: string; }
+>T11 : ({ k: "a" | "b"; } & { k: "a"; a: number; }) | ({ k: "a" | "b"; } & { k: "b"; b: string; })
 >k : "a" | "b"
 
 type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
@@ -122,7 +122,7 @@ type T12 = Exclude<Options, { k: "a" } | { k: "b" }>;  // { k: "c", c: boolean }
 >k : "b"
 
 type T13 = Extract<Options, { k: "a" } | { k: "b" }>;  // { k: "a", a: number } | { k: "b", b: string }
->T13 : { k: "a"; a: number; } | { k: "b"; b: string; }
+>T13 : ({ k: "a"; } & { k: "a"; a: number; }) | ({ k: "b"; } & { k: "a"; a: number; }) | ({ k: "a"; } & { k: "b"; b: string; }) | ({ k: "b"; } & { k: "b"; b: string; })
 >k : "a"
 >k : "b"
 
@@ -140,8 +140,8 @@ declare function f5<T extends Options, K extends string>(p: K): Extract<T, { k: 
 >k : K
 
 let x0 = f5("a");  // { k: "a", a: number }
->x0 : { k: "a"; a: number; }
->f5("a") : { k: "a"; a: number; }
+>x0 : { k: "a"; } & { k: "a"; a: number; }
+>f5("a") : { k: "a"; } & { k: "a"; a: number; }
 >f5 : <T extends Options, K extends string>(p: K) => Extract<T, { k: K; }>
 >"a" : "a"
 
@@ -150,13 +150,13 @@ type OptionsOfKind<K extends Options["k"]> = Extract<Options, { k: K }>;
 >k : K
 
 type T16 = OptionsOfKind<"a" | "b">;  // { k: "a", a: number } | { k: "b", b: string }
->T16 : { k: "a"; a: number; } | { k: "b"; b: string; }
+>T16 : ({ k: "a" | "b"; } & { k: "a"; a: number; }) | ({ k: "a" | "b"; } & { k: "b"; b: string; })
 
 type Select<T, K extends keyof T, V extends T[K]> = Extract<T, { [P in K]: V }>;
 >Select : Extract<T, { [P in K]: V; }>
 
 type T17 = Select<Options, "k", "a" | "b">;  // // { k: "a", a: number } | { k: "b", b: string }
->T17 : { k: "a"; a: number; } | { k: "b"; b: string; }
+>T17 : ({ k: "a" | "b"; } & { k: "a"; a: number; }) | ({ k: "a" | "b"; } & { k: "b"; b: string; })
 
 type TypeName<T> =
 >TypeName : TypeName<T>
@@ -779,8 +779,8 @@ type Bar<T> = T extends string ? boolean : number;
 >Bar : Bar<T>
 
 const convert = <U>(value: Foo<U>): Bar<U> => value;
->convert : <U>(value: Foo<U>) => Bar<U>
-><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Bar<U>
+>convert : <U>(value: Foo<U>) => Foo<U>
+><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Foo<U>
 >value : Foo<U>
 >value : Foo<U>
 
@@ -832,7 +832,7 @@ function f33<T, U>() {
 >T1 : Foo<T & U>
 
     type T2 = Bar<T & U>;
->T2 : Bar<T & U>
+>T2 : Foo<T & U>
 
     var z: T1;
 >z : Foo<T & U>
