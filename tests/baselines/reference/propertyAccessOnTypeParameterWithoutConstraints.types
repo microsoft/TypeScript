@@ -66,17 +66,17 @@ var a: {
 }
 var r3: string = a().toString();
 >r3 : string
->a().toString() : string
->a().toString : () => string
->a() : {}
+>a().toString() : any
+>a().toString : any
+>a() : unknown
 >a : <T>() => T
->toString : () => string
+>toString : any
 
 var r3b: string = a()['toString']();
 >r3b : string
->a()['toString']() : string
->a()['toString'] : () => string
->a() : {}
+>a()['toString']() : any
+>a()['toString'] : any
+>a() : unknown
 >a : <T>() => T
 >'toString' : "toString"
 

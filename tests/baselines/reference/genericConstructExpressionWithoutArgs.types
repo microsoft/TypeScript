@@ -15,8 +15,8 @@ class C<T> {
 }
 
 var c = new C // C<any>
->c : C<{}>
->new C : C<{}>
+>c : C<unknown>
+>new C : C<unknown>
 >C : typeof C
 
 var c2 = new C<number> // error, type params are actually part of the arg list so you need both

@@ -8,6 +8,6 @@
 
 verify.quickInfos({
     1: "var x1: SS<number>",
-    2: "var x2: SS<{}>",
-    3: "var x3: SS<{}>"
+    2: "var x2: SS<unknown>",
+    3: "var x3: SS<unknown>"
 });
