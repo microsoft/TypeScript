@@ -19,8 +19,8 @@ var r = foo(1); // ok
 >1 : 1
 
 var r2 = foo(null); // {}
->r2 : unknown
->foo(null) : unknown
+>r2 : any
+>foo(null) : any
 >foo : <T, U extends T>(t: T) => U
 >null : null
 
