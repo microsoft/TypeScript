@@ -105,6 +105,13 @@ namespace ts.refactor {
                 hasError = true;
                 return;
             }
+            else if (isTypeQueryNode(node) && isIdentifier(node.exprName)) {
+                const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /* excludeGlobals */ false);
+                if (symbol && rangeContainsSkipTrivia(statement, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selection, symbol.valueDeclaration, file)) {
+                    hasError = true;
+                    return;
+                }
+            }
             forEachChild(node, visitor);
         }
     }
