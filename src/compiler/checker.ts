@@ -12533,8 +12533,8 @@ namespace ts {
 
             // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
             function findMatchingDiscriminantType(source: Type, target: Type) {
-                if (target.flags & TypeFlags.Union) {
-                    const sourceProperties = getPropertiesOfObjectType(source);
+                if (target.flags & TypeFlags.Union && source.flags & (TypeFlags.Intersection | TypeFlags.Object)) {
+                    const sourceProperties = getPropertiesOfType(source);
                     if (sourceProperties) {
                         const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
                         if (sourcePropertiesFiltered) {
