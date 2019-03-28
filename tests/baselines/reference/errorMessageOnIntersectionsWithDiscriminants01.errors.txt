@@ -1,0 +1,25 @@
+tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts(8,1): error TS2322: Type 'A' is not assignable to type 'B'.
+  Type '{ test: true; } & { foo: 1; }' is not assignable to type 'B'.
+    Type '{ test: true; } & { foo: 1; }' is not assignable to type '{ test: false; } & { bar: 1; }'.
+      Type '{ test: true; } & { foo: 1; }' is not assignable to type '{ test: false; }'.
+        Types of property 'test' are incompatible.
+          Type 'true' is not assignable to type 'false'.
+
+
+==== tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts (1 errors) ====
+    export type Common = { test: true } | { test: false };
+    export type A = Common & { foo: 1 };
+    export type B = Common & { bar: 1 };
+    
+    declare const a: A;
+    declare let b: B;
+    
+    b = a;
+    ~
+!!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! error TS2322:   Type '{ test: true; } & { foo: 1; }' is not assignable to type 'B'.
+!!! error TS2322:     Type '{ test: true; } & { foo: 1; }' is not assignable to type '{ test: false; } & { bar: 1; }'.
+!!! error TS2322:       Type '{ test: true; } & { foo: 1; }' is not assignable to type '{ test: false; }'.
+!!! error TS2322:         Types of property 'test' are incompatible.
+!!! error TS2322:           Type 'true' is not assignable to type 'false'.
+    
