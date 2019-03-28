@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// const foo = /* C0 */ /*x*/"/*y*/foo" /* C1 */ + " is" /* C2 */ + 42 /* C3 */ + " and bar" /* C4 */ + " is" /* C5 */ + 52/* C6 */
+//// const foo = /* C0 */ /*x*/"/*y*/foo" + /* C1 */ " is" + /* C2 */ 42 + /* C3 */ " and bar" + /* C4 */ " is" + /* C5 */ 52/* C6 */
 
 goTo.select("x", "y");
 edit.applyRefactor({
