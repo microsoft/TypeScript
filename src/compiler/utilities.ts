@@ -1330,6 +1330,10 @@ namespace ts {
         return findAncestor(node.parent, isFunctionLike);
     }
 
+    export function getContainingFunctionDeclaration(node: Node): FunctionLikeDeclaration | undefined {
+        return findAncestor(node.parent, isFunctionLikeDeclaration);
+    }
+
     export function getContainingClass(node: Node): ClassLikeDeclaration | undefined {
         return findAncestor(node.parent, isClassLike);
     }
