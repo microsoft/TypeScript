@@ -119,7 +119,7 @@ namespace ts.refactor {
     function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<string>) {
         const newTypeNode = createTypeAliasDeclaration(
             /* decorators */ undefined,
-            /* monifiers */ undefined,
+            /* modifiers */ undefined,
             name,
             typeParameters.map(id => createTypeParameterDeclaration(id)),
             selection
