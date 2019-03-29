@@ -35,7 +35,7 @@ namespace ts.refactor {
         }
     });
 
-    interface Info { isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<string>; }
+    interface Info { isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<TypeParameterDeclaration>; }
 
     function getRangeToExtract(context: RefactorContext): Info | undefined {
         const { file, startPosition } = context;
@@ -66,9 +66,9 @@ namespace ts.refactor {
         return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
     }
 
-    function checkAndCollectionTypeArguments(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): string[] | undefined {
+    function checkAndCollectionTypeArguments(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): TypeParameterDeclaration[] | undefined {
         let hasError = false;
-        const result: string[] = [];
+        const result: TypeParameterDeclaration[] = [];
         visitor(selection);
         return hasError ? undefined : result;
 
@@ -77,9 +77,9 @@ namespace ts.refactor {
                 if (isIdentifier(node.typeName)) {
                     const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
                     if (symbol) {
-                        const declaration = first(symbol.declarations);
+                        const declaration = cast(first(symbol.declarations), isTypeParameterDeclaration);
                         if (rangeContainsSkipTrivia(statement, declaration, file) && !rangeContainsSkipTrivia(selection, declaration, file)) {
-                            result.push(node.typeName.text);
+                            result.push(declaration);
                         }
                     }
                 }
@@ -106,38 +106,41 @@ namespace ts.refactor {
         }
     }
 
-    function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<string>) {
+    function doTypeAliasChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<TypeParameterDeclaration>) {
         const newTypeNode = createTypeAliasDeclaration(
             /* decorators */ undefined,
             /* modifiers */ undefined,
             name,
-            typeParameters.map(id => createTypeParameterDeclaration(id)),
+            typeParameters.map(id => updateTypeParameterDeclaration(id, id.name, id.constraint, /* defaultType */ undefined)),
             selection
         );
         changes.insertNodeBefore(file, firstStatement, newTypeNode, /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id, /* typeArguments */ undefined))));
+        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 
-    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<string>) {
+    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<TypeParameterDeclaration>) {
         const node = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag);
         node.tagName = createIdentifier("typedef"); // TODO: jsdoc factory https://github.com/Microsoft/TypeScript/pull/29539
         node.fullName = createIdentifier(name);
         node.name = node.fullName;
         node.typeExpression = createJSDocTypeExpression(selection);
 
-        const tags: JSDocTag[] = [node];
-        if (length(typeParameters)) {
+        const templates: JSDocTemplateTag[] = [];
+        forEach(typeParameters, typeParameter => {
+            const constraint = getEffectiveConstraintOfTypeParameter(typeParameter);
+
             const template = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag);
             template.tagName = createIdentifier("template");
-            template.typeParameters = createNodeArray(typeParameters.map(id => {
-                const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
-                typeParameter.name = createIdentifier(id);
-                return typeParameter;
-            }));
-            tags.unshift(template);
-        }
+            template.constraint = constraint && cast(constraint, isJSDocTypeExpression);
 
-        changes.insertNodeBefore(file, firstStatement, createJSDocComment(/* comment */ undefined, createNodeArray(tags)), /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id, /* typeArguments */ undefined))));
+            const parameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+            parameter.name = typeParameter.name;
+            template.typeParameters = createNodeArray([parameter]);
+
+            templates.push(template);
+        });
+
+        changes.insertNodeBefore(file, firstStatement, createJSDocComment(/* comment */ undefined, createNodeArray(concatenate<JSDocTag>(templates, [node]))), /* blankLineBetween */ true);
+        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id.name, /* typeArguments */ undefined))));
     }
 }

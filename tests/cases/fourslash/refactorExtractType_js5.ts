@@ -3,8 +3,8 @@
 // @allowJs: true
 // @Filename: a.js
 //// /**
-////  * @template T
-////  * @template U
+////  * @template {number} T
+////  * @template {string} U
 ////  * @param {T} b 
 ////  * @param {U} c
 ////  * @returns {/*a*/T | U/*b*/}
@@ -18,14 +18,14 @@ edit.applyRefactor({
     actionName: "Extract to typedef",
     actionDescription: "Extract to typedef",
     newContent: `/**
- * @template T
- * @template U
+ * @template {number} T
+ * @template {string} U
  * @typedef {T | U} /*RENAME*/NewType
  */
 
 /**
- * @template T
- * @template U
+ * @template {number} T
+ * @template {string} U
  * @param {T} b 
  * @param {U} c
  * @returns {NewType<T, U>}
