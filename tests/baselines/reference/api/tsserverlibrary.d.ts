@@ -6748,6 +6748,8 @@ declare namespace ts.server.protocol {
         command: CommandTypes.ConfigurePlugin;
         arguments: ConfigurePluginRequestArguments;
     }
+    interface ConfigurePluginResponse extends Response {
+    }
     /**
      *  Information found in an "open" request.
      */
