@@ -792,7 +792,7 @@ namespace ts {
                             state,
                             // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
                             // Otherwise just affected file
-                            affected.emitBuildInfo(writeFile || host.writeFile, cancellationToken),
+                            affected.emitBuildInfo(writeFile || maybeBind(host, host.writeFile), cancellationToken),
                             affected,
                             /*isPendingEmitFile*/ false,
                             /*isBuildInfoEmit*/ true
@@ -820,7 +820,7 @@ namespace ts {
                 state,
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
                 // Otherwise just affected file
-                Debug.assertDefined(state.program).emit(affected === state.program ? undefined : affected as SourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers),
+                Debug.assertDefined(state.program).emit(affected === state.program ? undefined : affected as SourceFile, writeFile || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers),
                 affected,
                 isPendingEmitFile
             );
@@ -862,7 +862,7 @@ namespace ts {
                     };
                 }
             }
-            return Debug.assertDefined(state.program).emit(targetSourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+            return Debug.assertDefined(state.program).emit(targetSourceFile, writeFile || maybeBind(host, host.writeFile), cancellationToken, emitOnlyDtsFiles, customTransformers);
         }
 
         /**

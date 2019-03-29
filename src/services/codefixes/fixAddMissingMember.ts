@@ -12,7 +12,7 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const info = getInfo(context.sourceFile, context.span.start, context.program.getTypeChecker());
+            const info = getInfo(context.sourceFile, context.span.start, context.program.getTypeChecker(), context.program);
             if (!info) return undefined;
 
             if (info.kind === InfoKind.Enum) {
@@ -37,7 +37,7 @@ namespace ts.codefix {
 
             return createCombinedCodeActions(textChanges.ChangeTracker.with(context, changes => {
                 eachDiagnostic(context, errorCodes, diag => {
-                    const info = getInfo(diag.file, diag.start, checker);
+                    const info = getInfo(diag.file, diag.start, checker, context.program);
                     if (!info || !addToSeen(seen, getNodeId(info.parentDeclaration) + "#" + info.token.text)) {
                         return;
                     }
@@ -113,7 +113,7 @@ namespace ts.codefix {
     }
     type Info = EnumInfo | ClassOrInterfaceInfo;
 
-    function getInfo(tokenSourceFile: SourceFile, tokenPos: number, checker: TypeChecker): Info | undefined {
+    function getInfo(tokenSourceFile: SourceFile, tokenPos: number, checker: TypeChecker, program: Program): Info | undefined {
         // The identifier of the missing property. eg:
         // this.missing = 1;
         //      ^^^^^^^
@@ -131,7 +131,7 @@ namespace ts.codefix {
 
         // Prefer to change the class instead of the interface if they are merged
         const classOrInterface = find(symbol.declarations, isClassLike) || find(symbol.declarations, isInterfaceDeclaration);
-        if (classOrInterface) {
+        if (classOrInterface && !program.isSourceFileFromExternalLibrary(classOrInterface.getSourceFile())) {
             const makeStatic = ((leftExpressionType as TypeReference).target || leftExpressionType) !== checker.getDeclaredTypeOfSymbol(symbol);
             const declSourceFile = classOrInterface.getSourceFile();
             const inJs = isSourceFileJS(declSourceFile);
@@ -139,7 +139,7 @@ namespace ts.codefix {
             return { kind: InfoKind.ClassOrInterface, token, parentDeclaration: classOrInterface, makeStatic, declSourceFile, inJs, call };
         }
         const enumDeclaration = find(symbol.declarations, isEnumDeclaration);
-        if (enumDeclaration) {
+        if (enumDeclaration && !program.isSourceFileFromExternalLibrary(enumDeclaration.getSourceFile())) {
             return { kind: InfoKind.Enum, token, parentDeclaration: enumDeclaration };
         }
         return undefined;

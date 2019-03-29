@@ -165,6 +165,9 @@ namespace ts {
                 reportWatchModeWithoutSysSupport();
                 createWatchOfFilesAndCompilerOptions(commandLine.fileNames, commandLineOptions);
             }
+            else if (isIncrementalCompilation(commandLineOptions)) {
+                performIncrementalCompilation(commandLine);
+            }
             else {
                 performCompilation(commandLine.fileNames, /*references*/ undefined, commandLineOptions);
             }
