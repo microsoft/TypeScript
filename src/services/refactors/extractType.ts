@@ -69,7 +69,7 @@ namespace ts.refactor {
     }
 
     function isStatementButNotBlockAndHasJSDoc(n: Node): n is (Statement & HasJSDoc) {
-        return isStatementButNotBlock && hasJSDocNodes(n);
+        return isStatementButNotBlock(n) && hasJSDocNodes(n);
     }
 
     function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
