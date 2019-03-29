@@ -136,6 +136,13 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Show_verbose_diagnostic_information
         },
+        {
+            name: "incremental",
+            shortName: "i",
+            type: "boolean",
+            category: Diagnostics.Basic_Options,
+            description: Diagnostics.Enable_incremental_compilation,
+        },
     ];
 
     /* @internal */
@@ -332,18 +339,10 @@ namespace ts {
             description: Diagnostics.Enable_project_compilation,
         },
         {
-            name: "incremental",
-            type: "boolean",
-            isTSConfigOnly: true,
-            category: Diagnostics.Basic_Options,
-            description: Diagnostics.Enable_incremental_compilation,
-        },
-        {
             name: "tsBuildInfoFile",
             type: "string",
             isFilePath: true,
             paramType: Diagnostics.FILE,
-            isTSConfigOnly: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Specify_file_to_store_incremental_compilation_information,
         },
