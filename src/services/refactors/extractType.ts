@@ -76,7 +76,7 @@ namespace ts.refactor {
         return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
     }
 
-    function checkAndCollectTypeArguments(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): string[] | undefined {
+    function checkAndCollectionTypeArguments(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): string[] | undefined {
         let hasError = false;
         const result: string[] = [];
         visitor(selection);
@@ -95,7 +95,7 @@ namespace ts.refactor {
                 }
             }
             else if (isInferTypeNode(node)) {
-                const conditionalTypeNode = findAncestor(node, isConditionalTypeNode);
+                const conditionalTypeNode = findAncestor(node, n => isConditionalTypeNode(n) && rangeContainsSkipTrivia(n.extendsType, node, file));
                 if (!conditionalTypeNode || !rangeContainsSkipTrivia(selection, conditionalTypeNode, file)) {
                     hasError = true;
                     return;
