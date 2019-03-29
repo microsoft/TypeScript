@@ -12864,7 +12864,7 @@ namespace ts {
                     let localResult: Ternary | undefined;
                     if (skipTrue || (localResult = isRelatedTo(source, instantiateType(c.trueType, distributionMapper), /*reportErrors*/ false))) {
                         if (!skipFalse) {
-                            localResult = (localResult || -1) & isRelatedTo(source, instantiateType(c.falseType, distributionMapper), /*reportErrors*/ false);
+                            localResult = (localResult || Ternary.Maybe) & isRelatedTo(source, instantiateType(c.falseType, distributionMapper), /*reportErrors*/ false);
                         }
                     }
                     if (localResult) {
