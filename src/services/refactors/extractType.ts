@@ -26,7 +26,7 @@ namespace ts.refactor {
 
             const name = getUniqueName("NewType", file);
             const edits = textChanges.ChangeTracker.with(context, changes => info.isJS ?
-                doTypedefChange(changes, file, name, info.firstStatement, info.selection) :
+                doTypedefChange(changes, file, name, info.firstStatement, info.selection, info.typeParameters) :
                 doTypeAliasChange(changes, file, name, info.firstStatement, info.selection, info.typeParameters));
 
             const renameFilename = file.fileName;
@@ -35,9 +35,8 @@ namespace ts.refactor {
         }
     });
 
-    interface TypeAliasInfo { isJS: false; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<string>; }
-    interface TypedefInfo { isJS: true; selection: TypeNode; firstStatement: Statement & HasJSDoc; }
-    type Info = TypeAliasInfo | TypedefInfo;
+    interface Info { isJS: boolean; selection: TypeNode; firstStatement: Statement; typeParameters: ReadonlyArray<string>; }
+
     function getRangeToExtract(context: RefactorContext): Info | undefined {
         const { file, startPosition } = context;
         const isJS = isSourceFileJS(file);
@@ -47,21 +46,12 @@ namespace ts.refactor {
         const selection = findAncestor(current, (node => node.parent && rangeContainsSkipTrivia(range, node, file) && !rangeContainsSkipTrivia(range, node.parent, file)));
         if (!selection || !isTypeNode(selection)) return undefined;
 
-        if (isJS) {
-            // typeparam tag is not supported yet
-            return {
-                isJS,
-                selection,
-                firstStatement: Debug.assertDefined((findAncestor(selection, isStatementButNotBlockAndHasJSDoc))),
-            };
-        }
-        else {
-            const firstStatement = Debug.assertDefined((findAncestor(selection, isStatementButNotBlock)));
-            const typeParameters = checkAndCollectionTypeArguments(context.program.getTypeChecker(), selection, firstStatement, file);
-            if (!typeParameters) return undefined;
+        const checker = context.program.getTypeChecker();
+        const firstStatement = Debug.assertDefined(isJS ? findAncestor(selection, isStatementButNotBlockAndHasJSDoc) : findAncestor(selection, isStatementButNotBlock));
+        const typeParameters = checkAndCollectionTypeArguments(checker, selection, firstStatement, file);
+        if (!typeParameters) return undefined;
 
-            return { isJS, selection, firstStatement, typeParameters };
-        }
+        return { isJS, selection, firstStatement, typeParameters };
     }
 
     function isStatementButNotBlock(n: Node): n is Statement {
@@ -128,14 +118,26 @@ namespace ts.refactor {
         changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id, /* typeArguments */ undefined))));
     }
 
-    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: HasJSDoc, selection: TypeNode) {
+    function doTypedefChange(changes: textChanges.ChangeTracker, file: SourceFile, name: string, firstStatement: Statement, selection: TypeNode, typeParameters: ReadonlyArray<string>) {
         const node = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag);
         node.tagName = createIdentifier("typedef"); // TODO: jsdoc factory https://github.com/Microsoft/TypeScript/pull/29539
         node.fullName = createIdentifier(name);
         node.name = node.fullName;
         node.typeExpression = createJSDocTypeExpression(selection);
 
-        changes.insertNodeBefore(file, firstStatement, createJSDocComment(/* comment */ undefined, createNodeArray([node])), /* blankLineBetween */ true);
-        changes.replaceNode(file, selection, createTypeReferenceNode(name, /* typeArguments */ undefined));
+        const tags: JSDocTag[] = [node];
+        if (length(typeParameters)) {
+            const template = <JSDocTemplateTag>createNode(SyntaxKind.JSDocTemplateTag);
+            template.tagName = createIdentifier("template");
+            template.typeParameters = createNodeArray(typeParameters.map(id => {
+                const typeParameter = <TypeParameterDeclaration>createNode(SyntaxKind.TypeParameter);
+                typeParameter.name = createIdentifier(id);
+                return typeParameter;
+            }));
+            tags.unshift(template);
+        }
+
+        changes.insertNodeBefore(file, firstStatement, createJSDocComment(/* comment */ undefined, createNodeArray(tags)), /* blankLineBetween */ true);
+        changes.replaceNode(file, selection, createTypeReferenceNode(name, typeParameters.map(id => createTypeReferenceNode(id, /* typeArguments */ undefined))));
     }
 }
