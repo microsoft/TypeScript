@@ -73,6 +73,8 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             const lastComment = trailingCommentRanges[trailingCommentRanges.length - 1];
             const trailingRange = { pos: trailingCommentRanges[0].pos, end: lastComment.end };
 
+            // since suppressTrailingTrivia(maybeBinary) does not work, the trailing comment is removed manually
+            // otherwise it would have the trailing comment twice
             return textChanges.ChangeTracker.with(context, t => {
                 t.deleteRange(file, trailingRange);
                 t.replaceNode(file, maybeBinary, templateLiteral);
@@ -81,7 +83,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         else {
             return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
         }
-
     }
 
     const templateSpanToExpressions = (file: SourceFile) => (templateSpan: TemplateSpan): Expression[] => {
@@ -147,31 +148,36 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return containsString && areOperatorsValid;
     }
 
-    function treeToArray(node: Node): { nodes: ReadonlyArray<Expression>, operators: Token<BinaryOperator>[], containsString: boolean, areOperatorsValid: boolean} {
-        if (isBinaryExpression(node)) {
-            const { nodes: leftNodes, operators: leftOperator, containsString: leftHasString, areOperatorsValid: leftOperatorValid } = treeToArray(node.left);
-            const { nodes: rightNodes, containsString: rightHasString, areOperatorsValid: rightOperatorValid } = treeToArray(node.right);
+    function treeToArray(current: Node): { nodes: Expression[], operators: Token<BinaryOperator>[], containsString: boolean, areOperatorsValid: boolean} {
+        if (isBinaryExpression(current)) {
+            const { nodes, operators, containsString: leftHasString, areOperatorsValid: leftOperatorValid } = treeToArray(current.left);
 
-            if (!leftHasString && !rightHasString) {
-                return { nodes: [node], operators: [], containsString: false, areOperatorsValid: true };
+            if (!leftHasString && !isStringLiteral(current.right)) {
+                return { nodes: [current], operators: [], containsString: false, areOperatorsValid: true };
             }
 
-            const currentOperatorValid = node.operatorToken.kind === SyntaxKind.PlusToken;
-            const areOperatorsValid = leftOperatorValid && currentOperatorValid && rightOperatorValid;
-            leftOperator.push(node.operatorToken);
+            const currentOperatorValid = current.operatorToken.kind === SyntaxKind.PlusToken;
+            const areOperatorsValid = leftOperatorValid && currentOperatorValid;
 
-            return { nodes: leftNodes.concat(rightNodes), operators: leftOperator, containsString: true, areOperatorsValid };
+            nodes.push(current.right);
+            operators.push(current.operatorToken);
+
+            return { nodes, operators, containsString: true, areOperatorsValid };
         }
 
-        return { nodes: [node as Expression], operators: [], containsString: isStringLiteral(node), areOperatorsValid: true };
+        return { nodes: [current as Expression], operators: [], containsString: isStringLiteral(current), areOperatorsValid: true };
     }
 
+    // to copy comments following the operator
+    // "foo" + /* comment */ "bar"
     const copyTrailingOperatorComments = (operators: Token<BinaryOperator>[], file: SourceFile) => (index: number, targetNode: Node) => {
         if (index < operators.length) {
              copyTrailingComments(operators[index], targetNode, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
     };
 
+    // to copy comments following the string
+    // "foo" /* comment */ + "bar" /* comment */ + "bar2"
     const copyCommentFromMultiNode = (nodes: ReadonlyArray<Expression>, file: SourceFile, copyOperatorComments: (index: number, targetNode: Node) => void) =>
     (indexes: number[], targetNode: Node) => {
         while (indexes.length > 0) {
@@ -198,8 +204,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     function nodesToTemplate({nodes, operators}: {nodes: ReadonlyArray<Expression>, operators: Token<BinaryOperator>[]}, file: SourceFile) {
         const copyOperatorComments = copyTrailingOperatorComments(operators, file);
         const copyCommentFromStringLiterals = copyCommentFromMultiNode(nodes, file, copyOperatorComments);
-
-        const templateSpans: TemplateSpan[] = [];
         const [begin, headText, headIndexes] = concatConsecutiveString(0, nodes);
 
         if (begin === nodes.length) {
@@ -208,34 +212,39 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             return noSubstitutionTemplateLiteral;
         }
 
+        const templateSpans: TemplateSpan[] = [];
         const templateHead = createTemplateHead(headText);
         copyCommentFromStringLiterals(headIndexes, templateHead);
 
         for (let i = begin; i < nodes.length; i++) {
-            let currentNode = nodes[i];
-
-            if (isParenthesizedExpression(currentNode)) {
-                copyCommentsWhenParenthesized(currentNode);
-                currentNode = currentNode.expression;
-            }
-
+            const currentNode = getExpressionFromParenthesesOrExpression(nodes[i]);
             copyOperatorComments(i, currentNode);
+
             const [newIndex, subsequentText, stringIndexes] = concatConsecutiveString(i + 1, nodes);
             i = newIndex - 1;
 
             const templatePart = i === nodes.length - 1 ? createTemplateTail(subsequentText) : createTemplateMiddle(subsequentText);
             copyCommentFromStringLiterals(stringIndexes, templatePart);
-
             templateSpans.push(createTemplateSpan(currentNode, templatePart));
         }
 
         return createTemplateExpression(templateHead, templateSpans);
     }
 
+    // to copy comments following the opening & closing parentheses
+    // "foo" + ( /* comment */ 5 + 5 ) /* comment */ + "bar"
     function copyCommentsWhenParenthesized(node: ParenthesizedExpression) {
         const file = node.getSourceFile();
         copyTrailingComments(node, node.expression, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         copyTrailingAsLeadingComments(node.expression, node.expression, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+    }
+
+    function getExpressionFromParenthesesOrExpression(node: Expression) {
+        if (isParenthesizedExpression(node)) {
+            copyCommentsWhenParenthesized(node);
+            node = node.expression;
+        }
+        return node;
     }
 
     const hexToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 16));
