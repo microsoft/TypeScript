@@ -2152,6 +2152,10 @@
         "category": "Error",
         "code": 2593
     },
+    "Type '{0}' cannot be indexed by type '{1}'.": {
+        "category": "Error",
+        "code": 2594
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
