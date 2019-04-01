@@ -19518,6 +19518,21 @@ namespace ts {
             return type;
         }
 
+        function checkNonNullNonVoidType(
+            type: Type,
+            node: Node,
+            nullDiagnostic?: DiagnosticMessage,
+            undefinedDiagnostic?: DiagnosticMessage,
+            nullOrUndefinedDiagnostic?: DiagnosticMessage,
+            voidDiagnostic?: DiagnosticMessage
+        ): Type {
+            const nonNullType = checkNonNullType(type, node, nullDiagnostic, undefinedDiagnostic, nullOrUndefinedDiagnostic);
+            if (nonNullType !== errorType && nonNullType.flags & TypeFlags.Void) {
+                error(node, voidDiagnostic || Diagnostics.Object_is_possibly_undefined);
+            }
+            return nonNullType;
+        }
+
         function checkPropertyAccessExpression(node: PropertyAccessExpression) {
             return checkPropertyAccessExpressionOrQualifiedName(node, node.expression, node.name);
         }
@@ -26258,7 +26273,7 @@ namespace ts {
                 if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
                     const initializerType = checkExpressionCached(node.initializer);
                     if (strictNullChecks && node.name.elements.length === 0) {
-                        checkNonNullType(initializerType, node);
+                        checkNonNullNonVoidType(initializerType, node);
                     }
                     else {
                         checkTypeAssignableToAndOptionallyElaborate(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
