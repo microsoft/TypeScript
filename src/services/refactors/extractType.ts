@@ -91,11 +91,7 @@ namespace ts.refactor {
                     return;
                 }
             }
-            else if (isTypePredicateNode(node) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
-                hasError = true;
-                return;
-            }
-            else if (isThisTypeNode(node) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
+            else if ((isTypePredicateNode(node) || isThisTypeNode(node)) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
                 hasError = true;
                 return;
             }
