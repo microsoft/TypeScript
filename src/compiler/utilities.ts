@@ -11,6 +11,15 @@ namespace ts {
     }
 }
 
+/** @internal */
+interface String {
+    /**
+     * We explicitly patch `codePointAt` onto the global `String` - we only attempt to use it if
+     * the global environment supports unicode regular expressions, even though we don't yet target es6.
+     */
+    codePointAt(idx: number): number;
+}
+
 /* @internal */
 namespace ts {
     export const resolvingEmptyArray: never[] = [] as never[];
@@ -4970,6 +4979,22 @@ namespace ts {
         return getCombinedFlags(node, n => n.flags);
     }
 
+    let supportsUnicodeRE: boolean | undefined;
+    let flagEmojiRegExp: RegExp | undefined;
+    function getHostSupportsUnicodeRegex() {
+        if (typeof supportsUnicodeRE !== "undefined") {
+            return supportsUnicodeRE;
+        }
+        try {
+            // Capture 1 is just language, capture 2 is unicode region indicator
+            flagEmojiRegExp = new RegExp(`^([a-z]+)[_\-]([\u{1F1E6}-\u{1F1FF}]+)$`, "ui");
+        }
+        catch {
+            return supportsUnicodeRE = false;
+        }
+        return supportsUnicodeRE = true;
+    }
+
     /**
      * Checks to see if the locale is in the appropriate format,
      * and if it is, attempts to set the appropriate language.
@@ -4979,16 +5004,34 @@ namespace ts {
         sys: { getExecutingFilePath(): string, resolvePath(path: string): string, fileExists(fileName: string): boolean, readFile(fileName: string): string | undefined },
         errors?: Push<Diagnostic>) {
         const matchResult = /^([a-z]+)([_\-]([a-z]+))?$/.exec(locale.toLowerCase());
-
+        let regionalIndicatorMatchResult: RegExpExecArray | undefined | null;
         if (!matchResult) {
+            if (getHostSupportsUnicodeRegex()) {
+                // Match an optional language code and a dash followed by two region indicator unicode codepoints (which correspond to a region and usually an emoji flag)
+                regionalIndicatorMatchResult = flagEmojiRegExp!.exec(locale);
+            }
+        }
+
+        let language: string | undefined;
+        let territory: string | undefined;
+        if (matchResult) {
+            language = matchResult[1];
+            territory = matchResult[3];
+        }
+        else if (regionalIndicatorMatchResult) {
+            language = regionalIndicatorMatchResult[1].toLowerCase();
+            territory = "";
+            for (let i = 0; i < regionalIndicatorMatchResult[2].length; i += 2) {
+                territory += String.fromCharCode(regionalIndicatorMatchResult[2].codePointAt(i) - 0x1f1e6 + "a".charCodeAt(0));
+            }
+            locale = `${language}-${territory}`; // Update `locale` since setUILocale _probably_ can't handle unicode region indicators for territories
+        }
+        else {
             if (errors) {
                 errors.push(createCompilerDiagnostic(Diagnostics.Locale_must_be_of_the_form_language_or_language_territory_For_example_0_or_1, "en", "ja-jp"));
             }
             return;
         }
-
-        const language = matchResult[1];
-        const territory = matchResult[3];
 
         // First try the entire locale, then fall back to just language if that's all we have.
         // Either ways do not fail, and fallback to the English diagnostic strings.
