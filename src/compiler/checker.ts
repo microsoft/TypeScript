@@ -19518,17 +19518,10 @@ namespace ts {
             return type;
         }
 
-        function checkNonNullNonVoidType(
-            type: Type,
-            node: Node,
-            nullDiagnostic?: DiagnosticMessage,
-            undefinedDiagnostic?: DiagnosticMessage,
-            nullOrUndefinedDiagnostic?: DiagnosticMessage,
-            voidDiagnostic?: DiagnosticMessage
-        ): Type {
-            const nonNullType = checkNonNullType(type, node, nullDiagnostic, undefinedDiagnostic, nullOrUndefinedDiagnostic);
+        function checkNonNullNonVoidType(type: Type, node: Node): Type {
+            const nonNullType = checkNonNullType(type, node);
             if (nonNullType !== errorType && nonNullType.flags & TypeFlags.Void) {
-                error(node, voidDiagnostic || Diagnostics.Object_is_possibly_undefined);
+                error(node, Diagnostics.Object_is_possibly_undefined);
             }
             return nonNullType;
         }
