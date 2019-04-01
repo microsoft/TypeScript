@@ -7783,7 +7783,6 @@ namespace ts {
                     const typeReferenceDirectives = context.typeReferenceDirectives;
                     const libReferenceDirectives = context.libReferenceDirectives;
                     forEach(toArray(entryOrList), (arg: PragmaPseudoMap["reference"]) => {
-                        // TODO: GH#18217
                         const { types, lib, path } = arg.arguments;
                         if (arg.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
@@ -7806,7 +7805,7 @@ namespace ts {
                 case "amd-dependency": {
                     context.amdDependencies = map(
                         toArray(entryOrList),
-                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x.arguments.name, path: x.arguments.path })); // TODO: GH#18217
+                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x.arguments.name, path: x.arguments.path }));
                     break;
                 }
                 case "amd-module": {
@@ -7828,7 +7827,7 @@ namespace ts {
                 case "ts-check": {
                     // _last_ of either nocheck or check in a file is the "winner"
                     forEach(toArray(entryOrList), entry => {
-                        if (!context.checkJsDirective || entry.range.pos > context.checkJsDirective.pos) { // TODO: GH#18217
+                        if (!context.checkJsDirective || entry.range.pos > context.checkJsDirective.pos) {
                             context.checkJsDirective = {
                                 enabled: key === "ts-check",
                                 end: entry.range.end,
