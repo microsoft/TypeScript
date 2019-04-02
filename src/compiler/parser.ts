@@ -7749,17 +7749,17 @@ namespace ts {
 
         context.pragmas = createMap() as PragmaMap;
         for (const pragma of pragmas) {
-            if (context.pragmas.has(pragma!.name)) { // TODO: GH#18217
-                const currentValue = context.pragmas.get(pragma!.name);
+            if (context.pragmas.has(pragma.name)) {
+                const currentValue = context.pragmas.get(pragma.name);
                 if (currentValue instanceof Array) {
-                    currentValue.push(pragma!.args);
+                    currentValue.push(pragma.args);
                 }
                 else {
-                    context.pragmas.set(pragma!.name, [currentValue, pragma!.args]);
+                    context.pragmas.set(pragma.name, [currentValue, pragma.args]);
                 }
                 continue;
             }
-            context.pragmas.set(pragma!.name, pragma!.args);
+            context.pragmas.set(pragma.name, pragma.args);
         }
     }
 
@@ -7783,9 +7783,8 @@ namespace ts {
                     const typeReferenceDirectives = context.typeReferenceDirectives;
                     const libReferenceDirectives = context.libReferenceDirectives;
                     forEach(toArray(entryOrList), (arg: PragmaPseudoMap["reference"]) => {
-                        // TODO: GH#18217
-                        const { types, lib, path } = arg!.arguments;
-                        if (arg!.arguments["no-default-lib"]) {
+                        const { types, lib, path } = arg.arguments;
+                        if (arg.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
                         }
                         else if (types) {
@@ -7798,7 +7797,7 @@ namespace ts {
                             referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value });
                         }
                         else {
-                            reportDiagnostic(arg!.range.pos, arg!.range.end - arg!.range.pos, Diagnostics.Invalid_reference_directive_syntax);
+                            reportDiagnostic(arg.range.pos, arg.range.end - arg.range.pos, Diagnostics.Invalid_reference_directive_syntax);
                         }
                     });
                     break;
@@ -7806,7 +7805,7 @@ namespace ts {
                 case "amd-dependency": {
                     context.amdDependencies = map(
                         toArray(entryOrList),
-                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path })); // TODO: GH#18217
+                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x.arguments.name, path: x.arguments.path }));
                     break;
                 }
                 case "amd-module": {
@@ -7814,13 +7813,13 @@ namespace ts {
                         for (const entry of entryOrList) {
                             if (context.moduleName) {
                                 // TODO: It's probably fine to issue this diagnostic on all instances of the pragma
-                                reportDiagnostic(entry!.range.pos, entry!.range.end - entry!.range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
+                                reportDiagnostic(entry.range.pos, entry.range.end - entry.range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
                             }
-                            context.moduleName = (entry as PragmaPseudoMap["amd-module"])!.arguments.name;
+                            context.moduleName = (entry as PragmaPseudoMap["amd-module"]).arguments.name;
                         }
                     }
                     else {
-                        context.moduleName = (entryOrList as PragmaPseudoMap["amd-module"])!.arguments.name;
+                        context.moduleName = (entryOrList as PragmaPseudoMap["amd-module"]).arguments.name;
                     }
                     break;
                 }
@@ -7828,11 +7827,11 @@ namespace ts {
                 case "ts-check": {
                     // _last_ of either nocheck or check in a file is the "winner"
                     forEach(toArray(entryOrList), entry => {
-                        if (!context.checkJsDirective || entry!.range.pos > context.checkJsDirective.pos) { // TODO: GH#18217
+                        if (!context.checkJsDirective || entry.range.pos > context.checkJsDirective.pos) {
                             context.checkJsDirective = {
                                 enabled: key === "ts-check",
-                                end: entry!.range.end,
-                                pos: entry!.range.pos
+                                end: entry.range.end,
+                                pos: entry.range.pos
                             };
                         }
                     });
