@@ -9877,7 +9877,7 @@ namespace ts {
             return false;
         }
 
-        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, cacheSymbol: boolean) {
+        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, writing: boolean, cacheSymbol: boolean) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = isTypeUsableAsPropertyName(indexType) ?
                 getPropertyNameFromType(indexType) :
@@ -9928,7 +9928,7 @@ namespace ts {
                 if (indexInfo) {
                     const isAssignment = accessExpression && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression));
                     if (isAssignment && maybeTypeOfKind(originalObjectType, TypeFlags.Instantiable)) {
-                        error(accessExpression, Diagnostics.Type_0_cannot_be_indexed_by_type_1, typeToString(originalObjectType), typeToString(indexType));
+                        error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
                         return undefined;
                     }
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
@@ -9937,6 +9937,9 @@ namespace ts {
                     }
                     else if (isAssignment && indexInfo.isReadonly) {
                         error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
+                    }
+                    else if (writing && indexInfo.isReadonly) {
+                        return undefined;
                     }
                     return indexInfo.type;
                 }
@@ -10081,11 +10084,11 @@ namespace ts {
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, writing?: boolean): Type {
-            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, writing) || (accessNode ? errorType : unknownType);
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression): Type {
+            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, /*writing*/ false) || (accessNode ? errorType : unknownType);
         }
 
-        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, writing?: boolean): Type | undefined {
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, writing = false): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -10114,7 +10117,7 @@ namespace ts {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
                 for (const t of (<UnionType>indexType).types) {
-                    const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, accessNode, /*cacheSymbol*/ false);
+                    const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, accessNode, writing, /*cacheSymbol*/ false);
                     if (propType) {
                         propTypes.push(propType);
                     }
@@ -10132,7 +10135,7 @@ namespace ts {
                 }
                 return writing ? getIntersectionType(propTypes) : getUnionType(propTypes);
             }
-            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, accessNode, /*cacheSymbol*/ true);
+            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, accessNode, writing, /*cacheSymbol*/ true);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -12828,8 +12831,8 @@ namespace ts {
                         if (indexType.flags & TypeFlags.StructuredOrInstantiable) {
                             const keyType = getLowerBoundOfKeyType(indexType, /*isIndexType*/ true);
                             if (keyType !== indexType && !(keyType.flags & TypeFlags.Never)) {
-                                const targetType = getIndexedAccessType(objectType, keyType, /*accessNode*/ undefined, /*writing*/ true);
-                                if (result = isRelatedTo(source, targetType, reportErrors)) {
+                                const targetType = getIndexedAccessTypeOrUndefined(objectType, keyType, /*accessNode*/ undefined, /*writing*/ true);
+                                if (targetType && (result = isRelatedTo(source, targetType, reportErrors))) {
                                     return result;
                                 }
                             }
@@ -12837,8 +12840,8 @@ namespace ts {
                         else {
                             const constraint = getConstraintOfType(objectType);
                             if (constraint) {
-                                const targetType = getIndexedAccessType(constraint, indexType, /*accessNode*/ undefined, /*writing*/ true);
-                                if (result = isRelatedTo(source, targetType, reportErrors)) {
+                                const targetType = getIndexedAccessTypeOrUndefined(constraint, indexType, /*accessNode*/ undefined, /*writing*/ true);
+                                if (targetType && (result = isRelatedTo(source, targetType, reportErrors))) {
                                     return result;
                                 }
                             }
@@ -19986,7 +19989,7 @@ namespace ts {
             }
 
             const effectiveIndexType = isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType;
-            const indexedAccessType = getIndexedAccessType(objectType, effectiveIndexType, node, isAssignmentTarget(node));
+            const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, node, isAssignmentTarget(node)) || errorType;
             return checkIndexedAccessIndexType(indexedAccessType, node);
         }
 
