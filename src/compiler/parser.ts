@@ -3695,7 +3695,7 @@ namespace ts {
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) {
+            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (contextFlags & NodeFlags.InConditionalWhenTrue || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                 return undefined;
             }
@@ -3747,7 +3747,9 @@ namespace ts {
             const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
             node.condition = leftOperand;
             node.questionToken = questionToken;
-            node.whenTrue = doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher);
+            node.whenTrue = doInsideOfContext(
+                NodeFlags.InConditionalWhenTrue,
+                () => doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher));
             node.colonToken = parseExpectedToken(SyntaxKind.ColonToken);
             node.whenFalse = nodeIsPresent(node.colonToken)
                 ? parseAssignmentExpressionOrHigher()
