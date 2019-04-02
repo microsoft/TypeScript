@@ -104,9 +104,9 @@ node_modules/uglify-js/lib/propmangle.js(146,29): error TS2554: Expected 0 argum
 node_modules/uglify-js/lib/scope.js(104,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(159,29): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/scope.js(194,47): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/scope.js(409,29): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/scope.js(466,30): error TS2554: Expected 0 arguments, but got 1.
-node_modules/uglify-js/lib/scope.js(491,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(405,29): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(462,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/uglify-js/lib/scope.js(487,30): error TS2554: Expected 0 arguments, but got 1.
 node_modules/uglify-js/lib/sourcemap.js(55,25): error TS2304: Cannot find name 'MOZ_SourceMap'.
 node_modules/uglify-js/lib/sourcemap.js(61,23): error TS2304: Cannot find name 'MOZ_SourceMap'.
 node_modules/uglify-js/tools/exit.js(7,32): error TS2339: Property 'bufferSize' does not exist on type 'WriteStream'.
