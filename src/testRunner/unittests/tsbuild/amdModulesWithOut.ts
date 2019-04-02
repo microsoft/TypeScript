@@ -233,7 +233,14 @@ ${internal} export enum internalEnum { a, b, c }`);
                     ],
                     lastProjectOutputJs: outputFiles[project.app][ext.js],
                     initialBuild: {
-                        modifyFs
+                        modifyFs,
+                        expectedDiagnostics: [
+                            getExpectedDiagnosticForProjectsInBuild("src/lib/tsconfig.json", "src/app/tsconfig.json"),
+                            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/lib/tsconfig.json", "src/module.js"],
+                            [Diagnostics.Building_project_0, sources[project.lib][source.config]],
+                            [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/app/tsconfig.json", "src/app/module.js"],
+                            [Diagnostics.Building_project_0, sources[project.app][source.config]],
+                        ]
                     },
                     outputFiles: [
                         ...libOutputFile,
