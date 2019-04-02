@@ -553,7 +553,6 @@ namespace ts {
         /* @internal */ Ambient                       = 1 << 22, // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
         /* @internal */ InWithStatement               = 1 << 23, // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
         JsonFile                                      = 1 << 24, // If node was parsed in a Json
-        /* @internal */ InConditionalWhenTrue         = 1 << 25, // If node was parsed in the true side of a ConditionalExpression
 
         BlockScoped = Let | Const,
 

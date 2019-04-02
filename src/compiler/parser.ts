@@ -3693,9 +3693,11 @@ namespace ts {
             //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
             //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
+            //  - "a ? (b): function() {}" will too, since function() is a valid JSDoc function type.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (contextFlags & NodeFlags.InConditionalWhenTrue || token() !== SyntaxKind.OpenBraceToken)) {
+            const hasJSDocFunctionType = node.type && isJSDocFunctionType(node.type);
+            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                 return undefined;
             }
@@ -3747,9 +3749,7 @@ namespace ts {
             const node = <ConditionalExpression>createNode(SyntaxKind.ConditionalExpression, leftOperand.pos);
             node.condition = leftOperand;
             node.questionToken = questionToken;
-            node.whenTrue = doInsideOfContext(
-                NodeFlags.InConditionalWhenTrue,
-                () => doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher));
+            node.whenTrue = doOutsideOfContext(disallowInAndDecoratorContext, parseAssignmentExpressionOrHigher);
             node.colonToken = parseExpectedToken(SyntaxKind.ColonToken);
             node.whenFalse = nodeIsPresent(node.colonToken)
                 ? parseAssignmentExpressionOrHigher()
