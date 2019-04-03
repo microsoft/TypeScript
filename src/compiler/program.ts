@@ -193,7 +193,8 @@ namespace ts {
             getDirectories: (path: string) => system.getDirectories(path),
             realpath,
             readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth),
-            createDirectory: d => system.createDirectory(d)
+            createDirectory: d => system.createDirectory(d),
+            createHash: maybeBind(system, system.createHash)
         };
         return compilerHost;
     }
@@ -315,7 +316,10 @@ namespace ts {
         };
     }
 
-    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
+    // tslint:disable unified-signatures
+    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+    /*@internal*/ export function getPreEmitDiagnostics(program: BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+    export function getPreEmitDiagnostics(program: Program | BuilderProgram, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
         const diagnostics = [
             ...program.getConfigFileParsingDiagnostics(),
             ...program.getOptionsDiagnostics(cancellationToken),
@@ -330,6 +334,7 @@ namespace ts {
 
         return sortAndDeduplicateDiagnostics(diagnostics);
     }
+    // tslint:enable unified-signatures
 
     export interface FormatDiagnosticsHost {
         getCurrentDirectory(): string;
@@ -2729,6 +2734,9 @@ namespace ts {
                 if (!isIncrementalCompilation(options)) {
                     createDiagnosticForOptionName(Diagnostics.Option_0_cannot_be_specified_without_specifying_option_1_or_option_2, "tsBuildInfoFile", "incremental", "composite");
                 }
+            }
+            else if (options.incremental && !options.outFile && !options.out && !options.configFilePath) {
+                programDiagnostics.add(createCompilerDiagnostic(Diagnostics.Option_incremental_can_only_be_specified_using_tsconfig_emitting_to_single_file_or_when_option_tsBuildInfoFile_is_specified));
             }
 
             verifyProjectReferences();
