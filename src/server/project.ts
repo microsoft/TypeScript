@@ -958,6 +958,9 @@ namespace ts.server {
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
+            if (this.program !== oldProgram) {
+                this.print();
+            }
             return hasNewProgram;
         }
 
