@@ -19710,12 +19710,6 @@ namespace ts {
                     case SyntaxKind.ExpressionWithTypeArguments:
                     case SyntaxKind.HeritageClause:
                         return false;
-                    case SyntaxKind.ExpressionWithTypeArguments:
-                    case SyntaxKind.HeritageClause:
-                    case SyntaxKind.ComputedPropertyName:
-                    case SyntaxKind.GetAccessor:
-                    case SyntaxKind.SetAccessor:
-                        return false;
                     default:
                         return isExpressionNode(node) ? false : "quit";
                 }
