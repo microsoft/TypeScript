@@ -2412,6 +2412,7 @@ namespace ts.server {
             },
             [CommandNames.ConfigurePlugin]: (request: protocol.ConfigurePluginRequest) => {
                 this.configurePlugin(request.arguments);
+                this.doOutput(/*info*/ undefined, CommandNames.ConfigurePlugin, request.seq, /*success*/ true);
                 return this.notRequired();
             }
         });
