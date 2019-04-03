@@ -1119,7 +1119,8 @@ namespace ts {
                     return !findAncestor(usage, n => isComputedPropertyName(n) && n.parent.parent === declaration);
                 }
                 else if (isPropertyDeclaration(declaration)) {
-                    return isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage);
+                    // still might be illegal if a self-referencing property initializer (eg private x = this.x)
+                    return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage);
                 }
                 return true;
             }
@@ -1199,7 +1200,7 @@ namespace ts {
             function isPropertyImmediatelyReferencedWithinDeclaration(declaration: PropertyDeclaration, usage: Node) {
                 // always legal if usage is after declaration
                 if (usage.end > declaration.end) {
-                    return true;
+                    return false;
                 }
 
                 // still might be legal if usage is deferred (e.g. x: any = () => this.x)
@@ -1227,7 +1228,7 @@ namespace ts {
                     }
                 });
 
-                return ancestorChangingReferenceScope !== undefined;
+                return ancestorChangingReferenceScope === undefined;
             }
         }
 
