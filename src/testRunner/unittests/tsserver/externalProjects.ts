@@ -54,7 +54,7 @@ namespace ts.projectSystem {
             const f1 = {
                 path: "/a/file1.ts",
                 content: "let x = [1, 2];"
-            }
+            };
             const p1 = { projectFileName: "/a/proj1.csproj", rootFiles: [toExternalFile(f1.path)], options: {} };
 
             const host = createServerHost([f1]);
@@ -62,13 +62,13 @@ namespace ts.projectSystem {
                 assert.equal(moduleName, "myplugin");
                 return {
                     module: () => ({
-                        create(info: ts.server.PluginCreateInfo) {
+                        create(info: server.PluginCreateInfo) {
                             const proxy = Harness.LanguageService.makeDefaultProxy(info);
                             proxy.getSemanticDiagnostics = filename => {
                                 const prev = info.languageService.getSemanticDiagnostics(filename);
-                                const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
+                                const sourceFile: SourceFile = info.project.getSourceFile(toPath(filename, /*basePath*/ undefined, createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
                                 prev.push({
-                                    category: ts.DiagnosticCategory.Warning,
+                                    category: DiagnosticCategory.Warning,
                                     file: sourceFile,
                                     code: 9999,
                                     length: 3,
