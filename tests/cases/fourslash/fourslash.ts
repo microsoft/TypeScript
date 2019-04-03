@@ -282,8 +282,8 @@ declare namespace FourSlashInterface {
             text: string;
             textSpan?: TextSpan;
         }[]): void;
-        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range): void;
-        renameInfoFailed(message?: string): void;
+        renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range, allowRenameOfImportPath?: boolean): void;
+        renameInfoFailed(message?: string, allowRenameOfImportPath?: boolean): void;
         renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
 
         /** Verify the quick info available at the current marker. */
@@ -633,7 +633,8 @@ declare namespace FourSlashInterface {
         readonly findInStrings?: boolean;
         readonly findInComments?: boolean;
         readonly ranges: ReadonlyArray<RenameLocationOptions>;
-    }
+        readonly providePrefixAndSuffixTextForRename?: boolean;
+    };
     type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
 }
 declare function verifyOperationIsCancelled(f: any): void;
@@ -649,22 +650,29 @@ declare var classification: typeof FourSlashInterface.classification;
 declare namespace completion {
     type Entry = FourSlashInterface.ExpectedCompletionEntryObject;
     export const globals: ReadonlyArray<Entry>;
+    export const globalsInJs: ReadonlyArray<Entry>;
     export const globalKeywords: ReadonlyArray<Entry>;
+    export const globalInJsKeywords: ReadonlyArray<Entry>;
     export const insideMethodKeywords: ReadonlyArray<Entry>;
+    export const insideMethodInJsKeywords: ReadonlyArray<Entry>;
     export const globalKeywordsPlusUndefined: ReadonlyArray<Entry>;
     export const globalsVars: ReadonlyArray<Entry>;
     export function globalsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
+    export function globalsInJsInsideFunction(plus: ReadonlyArray<Entry>): ReadonlyArray<Entry>;
     export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
+    export function globalsInJsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
     export const keywordsWithUndefined: ReadonlyArray<Entry>;
     export const keywords: ReadonlyArray<Entry>;
     export const typeKeywords: ReadonlyArray<Entry>;
     export const globalTypes: ReadonlyArray<Entry>;
     export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<Entry>;
     export const classElementKeywords: ReadonlyArray<Entry>;
+    export const classElementInJsKeywords: ReadonlyArray<Entry>;
     export const constructorParameterKeywords: ReadonlyArray<Entry>;
     export const functionMembers: ReadonlyArray<Entry>;
     export const stringMembers: ReadonlyArray<Entry>;
     export const functionMembersWithPrototype: ReadonlyArray<Entry>;
     export const statementKeywordsWithTypes: ReadonlyArray<Entry>;
     export const statementKeywords: ReadonlyArray<Entry>;
+    export const statementInJsKeywords: ReadonlyArray<Entry>;
 }

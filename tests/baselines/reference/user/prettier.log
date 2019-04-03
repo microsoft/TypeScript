@@ -10,6 +10,8 @@ src/cli/util.js(454,16): error TS2339: Property 'type' does not exist on type 'n
 src/cli/util.js(455,16): error TS2339: Property 'oppositeDescription' does not exist on type 'never'.
 src/cli/util.js(456,17): error TS2339: Property 'name' does not exist on type 'never'.
 src/common/parser-create-error.js(8,9): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
+src/config/resolve-config.js(12,11): error TS2571: Object is of type 'unknown'.
+src/config/resolve-config.js(13,12): error TS2571: Object is of type 'unknown'.
 src/config/resolve-config.js(75,32): error TS2345: Argument of type '{ sync: false; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
   Property 'cache' is missing in type '{ sync: false; }' but required in type '{ cache: boolean; sync: boolean; }'.
 src/config/resolve-config.js(82,32): error TS2345: Argument of type '{ sync: true; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
@@ -34,7 +36,7 @@ src/language-handlebars/parser-glimmer.js(27,26): error TS2345: Argument of type
         Type '(() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]' is not assignable to type 'ASTPluginBuilder[]'.
           Type '() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; }' is not assignable to type 'ASTPluginBuilder'.
             Property 'name' is missing in type '{ visitor: { Program(node: any): void; ElementNode(node: any): void; }; }' but required in type 'ASTPlugin'.
-src/language-handlebars/printer-glimmer.js(270,7): error TS2554: Expected 0-1 arguments, but got 2.
+src/language-handlebars/printer-glimmer.js(270,30): error TS2554: Expected 0-1 arguments, but got 2.
 src/language-js/printer-estree.js(99,9): error TS2741: Property 'parts' is missing in type '{ type: string; }' but required in type '{ type: string; parts: any; }'.
 src/language-js/printer-estree.js(302,9): error TS2345: Argument of type '{ type: string; parts: any; } | { type: string; contents: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
   Type '{ type: string; parts: any; }' is missing the following properties from type 'ConcatArray<never>': length, join, slice
@@ -51,8 +53,8 @@ src/language-js/printer-estree.js(3647,5): error TS2345: Argument of type '"" | 
   Type '{ type: string; parts: any; }' is not assignable to type 'string'.
 src/language-js/printer-estree.js(3651,16): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
 src/language-js/printer-estree.js(3693,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
-src/language-js/printer-estree.js(3995,14): error TS2554: Expected 0-2 arguments, but got 3.
-src/language-js/printer-estree.js(5034,9): error TS2554: Expected 0-1 arguments, but got 2.
+src/language-js/printer-estree.js(3998,9): error TS2554: Expected 0-2 arguments, but got 3.
+src/language-js/printer-estree.js(5034,55): error TS2554: Expected 0-1 arguments, but got 2.
 src/language-js/printer-estree.js(5070,7): error TS2345: Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
   Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
     Types of property 'slice' are incompatible.

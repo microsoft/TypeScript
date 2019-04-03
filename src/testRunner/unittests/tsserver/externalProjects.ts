@@ -161,7 +161,7 @@ namespace ts.projectSystem {
             checkNumberOfInferredProjects(projectService, 0);
 
             externalFiles[0].content = "let x =1;";
-            projectService.applyChangesInOpenFiles(externalFiles, [], []);
+            projectService.applyChangesInOpenFiles(arrayIterator(externalFiles));
         });
 
         it("external project that included config files", () => {
@@ -790,9 +790,7 @@ namespace ts.projectSystem {
                 rootFiles: [{ fileName: tsconfig.path }, { fileName: jsFilePath }],
                 options: { allowJs: false }
             }]);
-            service.applyChangesInOpenFiles([
-                { fileName: jsFilePath, scriptKind: ScriptKind.JS, content: "" }
-            ], /*changedFiles*/ undefined, /*closedFiles*/ undefined);
+            service.applyChangesInOpenFiles(singleIterator({ fileName: jsFilePath, scriptKind: ScriptKind.JS, content: "" }));
             checkNumberOfProjects(service, { configuredProjects: 1, inferredProjects: 1 });
             checkProjectActualFiles(configProject, [tsconfig.path]);
             const inferredProject = service.inferredProjects[0];

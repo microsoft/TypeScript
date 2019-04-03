@@ -8,6 +8,9 @@ wrapper((array: [any]) => {
 >array : Symbol(array, Decl(emitCapturingThisInTupleDestructuring1.ts, 1, 9))
 
     [this.test, this.test1, this.test2] = array;  // even though there is a compiler error, we should still emit lexical capture for "this"
+>this : Symbol(globalThis)
+>this : Symbol(globalThis)
+>this : Symbol(globalThis)
 >array : Symbol(array, Decl(emitCapturingThisInTupleDestructuring1.ts, 1, 9))
 
 });

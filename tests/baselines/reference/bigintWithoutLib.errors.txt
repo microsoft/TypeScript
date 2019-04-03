@@ -6,7 +6,7 @@ tests/cases/compiler/bigintWithoutLib.ts(7,30): error TS2737: BigInt literals ar
 tests/cases/compiler/bigintWithoutLib.ts(8,13): error TS2304: Cannot find name 'BigInt'.
 tests/cases/compiler/bigintWithoutLib.ts(8,31): error TS2737: BigInt literals are not available when targeting lower than ESNext.
 tests/cases/compiler/bigintWithoutLib.ts(9,1): error TS2322: Type 'Object' is not assignable to type 'bigint'.
-tests/cases/compiler/bigintWithoutLib.ts(11,13): error TS2554: Expected 0 arguments, but got 1.
+tests/cases/compiler/bigintWithoutLib.ts(11,32): error TS2554: Expected 0 arguments, but got 1.
 tests/cases/compiler/bigintWithoutLib.ts(15,18): error TS2304: Cannot find name 'BigInt64Array'.
 tests/cases/compiler/bigintWithoutLib.ts(15,38): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
 tests/cases/compiler/bigintWithoutLib.ts(16,19): error TS2552: Cannot find name 'BigInt64Array'. Did you mean 'bigIntArray'?
@@ -73,7 +73,7 @@ tests/cases/compiler/bigintWithoutLib.ts(49,22): error TS2339: Property 'getBigU
 !!! error TS2322: Type 'Object' is not assignable to type 'bigint'.
     let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
     stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
-                ~~~~~~~~~~~~~~~~~~~~~
+                                   ~
 !!! error TS2554: Expected 0 arguments, but got 1.
     stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred as {}
     

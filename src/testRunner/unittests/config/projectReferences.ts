@@ -85,7 +85,7 @@ namespace ts {
 
         // We shouldn't have any errors about invalid tsconfig files in these tests
         assert(config && !error, flattenDiagnosticMessageText(error && error.messageText, "\n"));
-        const file = parseJsonConfigFileContent(config, parseConfigHostFromCompilerHost(host), getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
+        const file = parseJsonConfigFileContent(config, parseConfigHostFromCompilerHostLike(host), getDirectoryPath(entryPointConfigFileName), {}, entryPointConfigFileName);
         file.options.configFilePath = entryPointConfigFileName;
         const prog = createProgram({
             rootNames: file.fileNames,
@@ -278,6 +278,28 @@ namespace ts {
                 "/beta": {
                     files: { "/beta/b.ts": "import { m } from '../alpha/a'" },
                     references: ["../alpha"]
+                }
+            };
+            testProjectReferences(spec, "/beta/tsconfig.json", program => {
+                assertHasError("Issues a useful error", program.getSemanticDiagnostics(), Diagnostics.Output_file_0_has_not_been_built_from_source_file_1);
+            });
+        });
+
+        it("issues a nice error when the input file is missing when module reference is not relative", () => {
+            const spec: TestSpecification = {
+                "/alpha": {
+                    files: { "/alpha/a.ts": "export const m: number = 3;" },
+                    references: []
+                },
+                "/beta": {
+                    files: { "/beta/b.ts": "import { m } from '@alpha/a'" },
+                    references: ["../alpha"],
+                    options: {
+                        baseUrl: "./",
+                        paths: {
+                            "@alpha/*": ["/alpha/*"]
+                        }
+                    }
                 }
             };
             testProjectReferences(spec, "/beta/tsconfig.json", program => {
