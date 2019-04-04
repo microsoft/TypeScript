@@ -469,3 +469,5 @@ const Test1 = connect(
 )(TestComponent);
 >TestComponent : Symbol(TestComponent, Decl(reactReduxLikeDeferredInferenceAllowsAssignment.ts, 134, 1))
 
+export {};
+
