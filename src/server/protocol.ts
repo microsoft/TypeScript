@@ -1392,6 +1392,9 @@ namespace ts.server.protocol {
         arguments: ConfigurePluginRequestArguments;
     }
 
+    export interface ConfigurePluginResponse extends Response {
+    }
+
     /**
      *  Information found in an "open" request.
      */

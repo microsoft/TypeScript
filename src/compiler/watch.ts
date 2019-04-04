@@ -121,6 +121,14 @@ namespace ts {
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
     }
 
+    export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
+        if (program.getCompilerOptions().listFiles) {
+            forEach(program.getSourceFiles(), file => {
+                writeFileName(file.fileName);
+            });
+        }
+    }
+
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
@@ -152,12 +160,7 @@ namespace ts {
                 const filepath = getNormalizedAbsolutePath(file, currentDir);
                 writeFileName(`TSFILE: ${filepath}`);
             });
-
-            if (program.getCompilerOptions().listFiles) {
-                forEach(program.getSourceFiles(), file => {
-                    writeFileName(file.fileName);
-                });
-            }
+            listFiles(program, writeFileName);
         }
 
         if (reportSummary) {
