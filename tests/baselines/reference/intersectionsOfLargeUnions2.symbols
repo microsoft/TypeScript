@@ -5,7 +5,7 @@ declare global {
 >global : Symbol(global, Decl(intersectionsOfLargeUnions2.ts, 0, 0))
 
     interface ElementTagNameMap {
->ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 2, 16))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(intersectionsOfLargeUnions2.ts, 2, 16))
 
         [index: number]: HTMLElement
 >index : Symbol(index, Decl(intersectionsOfLargeUnions2.ts, 4, 9))
@@ -44,11 +44,11 @@ export function assertNodeTagName<
 
     T extends keyof ElementTagNameMap,
 >T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 17, 34))
->ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 2, 16))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
 
     U extends ElementTagNameMap[T]>(node: Node | null, tagName: T): node is U {
 >U : Symbol(U, Decl(intersectionsOfLargeUnions2.ts, 18, 38))
->ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 2, 16))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
 >T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 17, 34))
 >node : Symbol(node, Decl(intersectionsOfLargeUnions2.ts, 19, 36))
 >Node : Symbol(Node, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
@@ -81,11 +81,11 @@ export function assertNodeProperty<
 
     T extends keyof ElementTagNameMap,
 >T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 27, 35))
->ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 2, 16))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
 
     P extends keyof ElementTagNameMap[T],
 >P : Symbol(P, Decl(intersectionsOfLargeUnions2.ts, 28, 38))
->ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --), Decl(intersectionsOfLargeUnions2.ts, 2, 16))
+>ElementTagNameMap : Symbol(ElementTagNameMap, Decl(lib.dom.d.ts, --, --))
 >T : Symbol(T, Decl(intersectionsOfLargeUnions2.ts, 27, 35))
 
     V extends HTMLElementTagNameMap[T][P]>(node: Node | null, tagName: T, prop: P, value: V) {
