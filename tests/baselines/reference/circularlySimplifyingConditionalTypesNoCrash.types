@@ -90,3 +90,6 @@ const myStoreConnect: Connect = function(
 
     );
 };
+
+export {};
+
