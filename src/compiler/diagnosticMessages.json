@@ -847,6 +847,10 @@
         "category": "Error",
         "code": 1257
     },
+    "Definite assignment assertions can only be used along with a type annotation.": {
+        "category": "Error",
+        "code": 1258
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300

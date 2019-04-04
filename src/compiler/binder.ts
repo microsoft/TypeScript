@@ -2710,8 +2710,7 @@ namespace ts {
             }
             else {
                 const s = forEachIdentifierInEntityName(e.expression, parent, action);
-                if (!s || !s.exports) return Debug.fail();
-                return action(e.name, s.exports.get(e.name.escapedText), s);
+                return action(e.name, s && s.exports && s.exports.get(e.name.escapedText), s);
             }
         }
 

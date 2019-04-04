@@ -234,10 +234,11 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
         incrementalDtsUnchangedBuild?: BuildState;
         incrementalHeaderChangedBuild?: BuildState;
         baselineOnly?: true;
+        verifyDiagnostics?: true;
     }
 
     export function verifyTsbuildOutput({
-        scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly,
+        scenario, projFs, time, tick, proj, rootNames, outputFiles, baselineOnly, verifyDiagnostics,
         expectedMapFileNames, expectedBuildInfoFilesForSectionBaselines, lastProjectOutputJs,
         initialBuild, incrementalDtsChangedBuild, incrementalDtsUnchangedBuild, incrementalHeaderChangedBuild
     }: VerifyTsBuildInput) {
@@ -264,7 +265,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                 host = undefined!;
             });
             describe("initialBuild", () => {
-                if (!baselineOnly) {
+                if (!baselineOnly || verifyDiagnostics) {
                     it(`verify diagnostics`, () => {
                         host.assertDiagnosticMessages(...(initialBuild.expectedDiagnostics || emptyArray));
                     });
