@@ -445,5 +445,13 @@ var x = 0;`, {
                 }
             }
         });
+
+        transpilesCorrectly("Supports readonly keyword for arrays", "let x: readonly string[];", {
+            options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        });
+
+        transpilesCorrectly("Supports 'as const' arrays", `([] as const).forEach(k => console.log(k));`, {
+            options: { compilerOptions: { module: ModuleKind.CommonJS } }
+        });
     });
 }
