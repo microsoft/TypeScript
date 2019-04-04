@@ -1,15 +1,18 @@
+tests/cases/compiler/indexSignatureAndMappedType.ts(6,5): error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, T>'.
 tests/cases/compiler/indexSignatureAndMappedType.ts(15,5): error TS2322: Type 'Record<K, U>' is not assignable to type '{ [key: string]: T; }'.
   Type 'U' is not assignable to type 'T'.
 tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, U>'.
 
 
-==== tests/cases/compiler/indexSignatureAndMappedType.ts (2 errors) ====
+==== tests/cases/compiler/indexSignatureAndMappedType.ts (3 errors) ====
     // A mapped type { [P in K]: X }, where K is a generic type, is related to
     // { [key: string]: Y } if X is related to Y.
     
     function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
         x = y;
         y = x;  // Error
+        ~
+!!! error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, T>'.
     }
     
     function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
