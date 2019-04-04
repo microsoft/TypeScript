@@ -9797,6 +9797,8 @@ namespace ts {
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
+                type.flags & TypeFlags.Never ? keyofConstraintType :
+                type.flags & TypeFlags.Unknown ? neverType :
                 type.flags & TypeFlags.Any ? keyofConstraintType :
                 stringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
                 getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromProperties(type, TypeFlags.UniqueESSymbol)]) :
