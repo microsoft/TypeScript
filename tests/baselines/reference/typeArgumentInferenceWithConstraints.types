@@ -300,15 +300,15 @@ function someGenerics7<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c
 someGenerics7(n => n, n => n, n => n); // Valid, types of n are <any, string, any> respectively
 >someGenerics7(n => n, n => n, n => n) : void
 >someGenerics7 : <A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 >n => n : (n: string) => string
 >n : string
 >n : string
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 someGenerics7<number, string, number>(n => n, n => n, n => n);
 >someGenerics7<number, string, number>(n => n, n => n, n => n) : void

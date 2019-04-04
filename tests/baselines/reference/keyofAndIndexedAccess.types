@@ -1523,8 +1523,8 @@ declare function one<T>(handler: (t: T) => void): T
 >t : T
 
 var empty = one(() => {}) // inferred as {}, expected
->empty : {}
->one(() => {}) : {}
+>empty : unknown
+>one(() => {}) : unknown
 >one : <T>(handler: (t: T) => void) => T
 >() => {} : () => void
 
@@ -1537,8 +1537,8 @@ declare function on<T>(handlerHash: Handlers<T>): T
 >handlerHash : Handlers<T>
 
 var hashOfEmpty1 = on({ test: () => {} });  // {}
->hashOfEmpty1 : { test: {}; }
->on({ test: () => {} }) : { test: {}; }
+>hashOfEmpty1 : { test: unknown; }
+>on({ test: () => {} }) : { test: unknown; }
 >on : <T>(handlerHash: Handlers<T>) => T
 >{ test: () => {} } : { test: () => void; }
 >test : () => void
@@ -1575,8 +1575,8 @@ declare class Component1<Data, Computed> {
 }
 
 let c1 = new Component1({
->c1 : Component1<{ hello: string; }, {}>
->new Component1({    data: {        hello: ""    }}) : Component1<{ hello: string; }, {}>
+>c1 : Component1<{ hello: string; }, unknown>
+>new Component1({    data: {        hello: ""    }}) : Component1<{ hello: string; }, unknown>
 >Component1 : typeof Component1
 >{    data: {        hello: ""    }} : { data: { hello: string; }; }
 
@@ -1593,7 +1593,7 @@ let c1 = new Component1({
 c1.get("hello");
 >c1.get("hello") : string
 >c1.get : <K extends "hello">(key: K) => { hello: string; }[K]
->c1 : Component1<{ hello: string; }, {}>
+>c1 : Component1<{ hello: string; }, unknown>
 >get : <K extends "hello">(key: K) => { hello: string; }[K]
 >"hello" : "hello"
 
