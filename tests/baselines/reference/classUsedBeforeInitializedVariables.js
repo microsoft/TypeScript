@@ -55,8 +55,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var Test = /** @class */ (function () {
     function Test() {
-        var _this = this;
         var _a, _b, _c;
+        var _this = this;
         this.p1 = 0;
         this.p2 = this.p1;
         this.p3 = this.p4;
