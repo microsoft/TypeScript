@@ -706,6 +706,13 @@ namespace ts {
             Signature = 1 << 0,  // Obtaining contextual signature
         }
 
+        const enum AccessFlags {
+            None = 0,
+            NoIndexSignatures = 1 << 0,
+            Writing = 1 << 1,
+            CacheSymbol = 1 << 2,
+        }
+
         const enum CallbackCheck {
             None,
             Bivariant,
@@ -9796,16 +9803,16 @@ namespace ts {
             return numberIndexInfo !== enumNumberIndexInfo ? numberIndexInfo : undefined;
         }
 
-        function getIndexType(type: Type, stringsOnly = keyofStringsOnly): Type {
-            return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
-                type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly))) :
+        function getIndexType(type: Type, stringsOnly = keyofStringsOnly, noIndexSignatures?: boolean): Type {
+            return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
+                type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any ? keyofConstraintType :
-                stringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
-                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromProperties(type, TypeFlags.UniqueESSymbol)]) :
-                getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromProperties(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
+                stringsOnly ? !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
+                !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromProperties(type, TypeFlags.UniqueESSymbol)]) :
+                !noIndexSignatures && getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromProperties(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
                 getLiteralTypeFromProperties(type, TypeFlags.StringOrNumberLiteralOrUnique);
         }
 
@@ -9877,7 +9884,7 @@ namespace ts {
             return false;
         }
 
-        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, writing: boolean, cacheSymbol: boolean) {
+        function getPropertyTypeForIndexType(originalObjectType: Type, objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, accessFlags: AccessFlags) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = isTypeUsableAsPropertyName(indexType) ?
                 getPropertyNameFromType(indexType) :
@@ -9896,7 +9903,7 @@ namespace ts {
                             error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, symbolToString(prop));
                             return undefined;
                         }
-                        if (cacheSymbol) {
+                        if (accessFlags & AccessFlags.CacheSymbol) {
                             getNodeLinks(accessNode!).resolvedSymbol = prop;
                         }
                     }
@@ -9926,19 +9933,22 @@ namespace ts {
                 const indexInfo = isTypeAssignableToKind(indexType, TypeFlags.NumberLike) && getIndexInfoOfType(objectType, IndexKind.Number) ||
                     getIndexInfoOfType(objectType, IndexKind.String);
                 if (indexInfo) {
-                    const isAssignment = accessExpression && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression));
-                    if (isAssignment && maybeTypeOfKind(originalObjectType, TypeFlags.Instantiable)) {
-                        error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
+                    if (accessFlags & AccessFlags.NoIndexSignatures) {
+                        if (accessExpression) {
+                            error(accessExpression, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(indexType), typeToString(originalObjectType));
+                        }
                         return undefined;
                     }
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
                         const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
+                        return indexInfo.type;
                     }
-                    else if (isAssignment && indexInfo.isReadonly) {
-                        error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
-                    }
-                    else if (writing && indexInfo.isReadonly) {
+                    if (indexInfo.isReadonly && (accessFlags & AccessFlags.Writing || accessExpression && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression)))) {
+                        if (accessExpression) {
+                            error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
+                            return indexInfo.type;
+                        }
                         return undefined;
                     }
                     return indexInfo.type;
@@ -10085,10 +10095,10 @@ namespace ts {
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression): Type {
-            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, /*writing*/ false) || (accessNode ? errorType : unknownType);
+            return getIndexedAccessTypeOrUndefined(objectType, indexType, accessNode, AccessFlags.None) || (accessNode ? errorType : unknownType);
         }
 
-        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, writing = false): Type | undefined {
+        function getIndexedAccessTypeOrUndefined(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, accessFlags = AccessFlags.None): Type | undefined {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -10117,7 +10127,7 @@ namespace ts {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
                 for (const t of (<UnionType>indexType).types) {
-                    const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, accessNode, writing, /*cacheSymbol*/ false);
+                    const propType = getPropertyTypeForIndexType(objectType, apparentObjectType, t, accessNode, accessFlags);
                     if (propType) {
                         propTypes.push(propType);
                     }
@@ -10133,9 +10143,9 @@ namespace ts {
                 if (wasMissingProp) {
                     return undefined;
                 }
-                return writing ? getIntersectionType(propTypes) : getUnionType(propTypes);
+                return accessFlags & AccessFlags.Writing ? getIntersectionType(propTypes) : getUnionType(propTypes);
             }
-            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, accessNode, writing, /*cacheSymbol*/ true);
+            return getPropertyTypeForIndexType(objectType, apparentObjectType, indexType, accessNode, accessFlags | AccessFlags.CacheSymbol);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -12831,7 +12841,7 @@ namespace ts {
                         if (indexType.flags & TypeFlags.StructuredOrInstantiable) {
                             const keyType = getLowerBoundOfKeyType(indexType, /*isIndexType*/ true);
                             if (keyType !== indexType && !(keyType.flags & TypeFlags.Never)) {
-                                const targetType = getIndexedAccessTypeOrUndefined(objectType, keyType, /*accessNode*/ undefined, /*writing*/ true);
+                                const targetType = getIndexedAccessTypeOrUndefined(objectType, keyType, /*accessNode*/ undefined, AccessFlags.Writing);
                                 if (targetType && (result = isRelatedTo(source, targetType, reportErrors))) {
                                     return result;
                                 }
@@ -12840,7 +12850,7 @@ namespace ts {
                         else {
                             const constraint = getConstraintOfType(objectType);
                             if (constraint) {
-                                const targetType = getIndexedAccessTypeOrUndefined(constraint, indexType, /*accessNode*/ undefined, /*writing*/ true);
+                                const targetType = getIndexedAccessTypeOrUndefined(constraint, indexType, /*accessNode*/ undefined, AccessFlags.Writing | AccessFlags.NoIndexSignatures);
                                 if (targetType && (result = isRelatedTo(source, targetType, reportErrors))) {
                                     return result;
                                 }
@@ -12859,7 +12869,7 @@ namespace ts {
                         }
                         if (!isGenericMappedType(source)) {
                             const targetConstraint = getConstraintTypeFromMappedType(target);
-                            const sourceKeys = getIndexType(source);
+                            const sourceKeys = getIndexType(source, /*stringsOnly*/ undefined, /*noIndexSignatures*/ true);
                             const hasOptionalUnionKeys = modifiers & MappedTypeModifiers.IncludeOptional && targetConstraint.flags & TypeFlags.Union;
                             const filteredByApplicability = hasOptionalUnionKeys ? filterType(targetConstraint, t => !!isRelatedTo(t, sourceKeys)) : undefined;
                             // A source type T is related to a target type { [P in Q]: X } if Q is related to keyof T and T[Q] is related to X.
@@ -19989,7 +19999,10 @@ namespace ts {
             }
 
             const effectiveIndexType = isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType;
-            const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, node, isAssignmentTarget(node)) || errorType;
+            const accessFlags = isAssignmentTarget(node) ?
+                AccessFlags.Writing | (isGenericObjectType(objectType) ? AccessFlags.NoIndexSignatures : 0) :
+                AccessFlags.None;
+            const indexedAccessType = getIndexedAccessTypeOrUndefined(objectType, effectiveIndexType, node, accessFlags) || errorType;
             return checkIndexedAccessIndexType(indexedAccessType, node);
         }
 
