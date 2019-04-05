@@ -603,6 +603,12 @@ namespace ts {
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Emit_the_source_alongside_the_sourcemaps_within_a_single_file_requires_inlineSourceMap_or_sourceMap_to_be_set
         },
+        {
+            name: "allowUmdGlobalAccess",
+            type: "boolean",
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
+        },
 
         // Experimental
         {
