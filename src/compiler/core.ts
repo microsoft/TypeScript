@@ -2317,4 +2317,29 @@ namespace ts {
         }
         return result;
     }
+
+    export function cartesianProduct<T>(arrays: readonly T[][]) {
+        const result: T[][] = [];
+        cartesianProductWorker(arrays, result, /*outer*/ undefined, 0);
+        return result;
+    }
+
+    function cartesianProductWorker<T>(arrays: readonly (readonly T[])[], result: (readonly T[])[], outer: readonly T[] | undefined, index: number) {
+        for (const element of arrays[index]) {
+            let inner: T[];
+            if (outer) {
+                inner = outer.slice();
+                inner.push(element);
+            }
+            else {
+                inner = [element];
+            }
+            if (index === arrays.length - 1) {
+                result.push(inner);
+            }
+            else {
+                cartesianProductWorker(arrays, result, inner, index + 1);
+            }
+        }
+    }
 }
