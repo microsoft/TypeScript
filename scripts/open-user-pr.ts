@@ -20,7 +20,7 @@ function padNum(number: number) {
 const userName = process.env.GH_USERNAME;
 const reviewers = ["weswigham", "sandersn", "RyanCavanaugh"]
 const now = new Date();
-const branchName = `user-update-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}`;
+const branchName = `user-update-${process.env.TARGET_FORK}-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
 runSequence([
     ["git", ["checkout", "."]], // reset any changes
@@ -43,7 +43,7 @@ gh.pulls.create({
     maintainer_can_modify: true,
     title: `🤖 User test baselines have changed`,
     head: `${userName}:${branchName}`,
-    base: "master",
+    base: process.env.TARGET_BRANCH || "master",
     body:
 `Please review the diff and merge if no changes are unexpected.
 You can view the build log [here](https://typescript.visualstudio.com/TypeScript/_build/index?buildId=${process.env.BUILD_BUILDID}&_a=summary).
