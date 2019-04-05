@@ -305,7 +305,7 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                         actualReadFileMap = undefined!;
                         host = undefined!;
                     });
-                    if (!baselineOnly) {
+                    if (!baselineOnly || verifyDiagnostics) {
                         it(`verify diagnostics`, () => {
                             host.assertDiagnosticMessages(...(incrementalExpectedDiagnostics || emptyArray));
                         });

@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "declaration": true,
+    "outDir": "obj",
+    "incremental": true,
+    "lib": ["es5", "es2015.promise"]
+  }
+}
