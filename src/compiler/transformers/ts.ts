@@ -3049,6 +3049,10 @@ namespace ts {
          * @param node The import declaration node.
          */
         function visitImportDeclaration(node: ImportDeclaration): VisitResult<Statement> {
+            if (compilerOptions.disableImportOptimizations) {
+                return node;
+            }
+
             if (!node.importClause) {
                 // Do not elide a side-effect only import declaration.
                 //  import "foo";
@@ -3073,6 +3077,10 @@ namespace ts {
          * @param node The import clause node.
          */
         function visitImportClause(node: ImportClause): VisitResult<ImportClause> {
+            if (compilerOptions.disableImportOptimizations) {
+                return node;
+            }
+
             // Elide the import clause if we elide both its name and its named bindings.
             const name = resolver.isReferencedAliasDeclaration(node) ? node.name : undefined;
             const namedBindings = visitNode(node.namedBindings, visitNamedImportBindings, isNamedImportBindings);
@@ -3085,6 +3093,10 @@ namespace ts {
          * @param node The named import bindings node.
          */
         function visitNamedImportBindings(node: NamedImportBindings): VisitResult<NamedImportBindings> {
+            if (compilerOptions.disableImportOptimizations) {
+                return node;
+            }
+
             if (node.kind === SyntaxKind.NamespaceImport) {
                 // Elide a namespace import if it is not referenced.
                 return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
@@ -3102,6 +3114,10 @@ namespace ts {
          * @param node The import specifier node.
          */
         function visitImportSpecifier(node: ImportSpecifier): VisitResult<ImportSpecifier> {
+            if (compilerOptions.disableImportOptimizations) {
+                return node;
+            }
+
             // Elide an import specifier if it is not referenced.
             return resolver.isReferencedAliasDeclaration(node) ? node : undefined;
         }
@@ -3113,6 +3129,10 @@ namespace ts {
          * @param node The export assignment node.
          */
         function visitExportAssignment(node: ExportAssignment): VisitResult<Statement> {
+            if (compilerOptions.disableImportOptimizations) {
+                return node;
+            }
+
             // Elide the export assignment if it does not reference a value.
             return resolver.isValueAliasDeclaration(node)
                 ? visitEachChild(node, visitor, context)

@@ -575,6 +575,12 @@ namespace ts {
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Do_not_resolve_the_real_path_of_symlinks,
         },
+        {
+            name: "disableImportOptimizations",
+            type: "boolean",
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Do_not_optimize_imports,
+        },
 
         // Source Maps
         {

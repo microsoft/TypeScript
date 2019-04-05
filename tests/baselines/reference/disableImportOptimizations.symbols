@@ -1,0 +1,29 @@
+=== tests/cases/compiler/disableImportOptimizations1.ts ===
+export class ClassWithSideEffect {
+>ClassWithSideEffect : Symbol(ClassWithSideEffect, Decl(disableImportOptimizations1.ts, 0, 0))
+
+  static someValue = ClassWithSideEffect.initValue();
+>someValue : Symbol(ClassWithSideEffect.someValue, Decl(disableImportOptimizations1.ts, 0, 34))
+>ClassWithSideEffect.initValue : Symbol(ClassWithSideEffect.initValue, Decl(disableImportOptimizations1.ts, 1, 53))
+>ClassWithSideEffect : Symbol(ClassWithSideEffect, Decl(disableImportOptimizations1.ts, 0, 0))
+>initValue : Symbol(ClassWithSideEffect.initValue, Decl(disableImportOptimizations1.ts, 1, 53))
+
+  static initValue(): string {
+>initValue : Symbol(ClassWithSideEffect.initValue, Decl(disableImportOptimizations1.ts, 1, 53))
+
+    console.log("We have a side-effect here!");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+
+    return "something";
+  }
+}
+
+=== tests/cases/compiler/disableImportOptimizations2.ts ===
+import { ClassWithSideEffect } from "./disableImportOptimizations1"; //Import gets removed without disableImportOptimizations
+>ClassWithSideEffect : Symbol(ClassWithSideEffect, Decl(disableImportOptimizations2.ts, 0, 8))
+
+export class OtherClass {
+>OtherClass : Symbol(OtherClass, Decl(disableImportOptimizations2.ts, 0, 68))
+}

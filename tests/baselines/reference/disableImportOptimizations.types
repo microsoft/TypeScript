@@ -1,0 +1,33 @@
+=== tests/cases/compiler/disableImportOptimizations1.ts ===
+export class ClassWithSideEffect {
+>ClassWithSideEffect : ClassWithSideEffect
+
+  static someValue = ClassWithSideEffect.initValue();
+>someValue : string
+>ClassWithSideEffect.initValue() : string
+>ClassWithSideEffect.initValue : () => string
+>ClassWithSideEffect : typeof ClassWithSideEffect
+>initValue : () => string
+
+  static initValue(): string {
+>initValue : () => string
+
+    console.log("We have a side-effect here!");
+>console.log("We have a side-effect here!") : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
+>"We have a side-effect here!" : "We have a side-effect here!"
+
+    return "something";
+>"something" : "something"
+  }
+}
+
+=== tests/cases/compiler/disableImportOptimizations2.ts ===
+import { ClassWithSideEffect } from "./disableImportOptimizations1"; //Import gets removed without disableImportOptimizations
+>ClassWithSideEffect : typeof ClassWithSideEffect
+
+export class OtherClass {
+>OtherClass : OtherClass
+}
