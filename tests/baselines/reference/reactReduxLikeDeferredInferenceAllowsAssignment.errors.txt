@@ -223,3 +223,5 @@ tests/cases/compiler/reactReduxLikeDeferredInferenceAllowsAssignment.ts(76,50): 
       mapDispatchToProps
     )(TestComponent);
     
+    export {};
+    
