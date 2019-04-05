@@ -1,7 +1,9 @@
-tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(8,5): error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
-  Type '{ test: string; arg: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
-tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(9,5): error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
-  Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(8,24): error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
+  Type '{ test: string; arg: A; }' is not assignable to type '{ test: string; }'.
+    Object literal may only specify known properties, and 'arg' does not exist in type '{ test: string; }'.
+tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(9,25): error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
+  Type '{ test: string; arg: A; arr: A; }' is not assignable to type '{ test: string; }'.
+    Object literal may only specify known properties, and 'arg' does not exist in type '{ test: string; }'.
 
 
 ==== tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts (2 errors) ====
@@ -13,12 +15,14 @@ tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(9,
     
     function testFunc2<A extends object>(a: A, sa: Something<A>) {
         sa = { test: 'hi', arg: a }; // not excess (but currently still not assignable)
-        ~~
+                           ~~~~~~
 !!! error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
-!!! error TS2322:   Type '{ test: string; arg: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+!!! error TS2322:   Type '{ test: string; arg: A; }' is not assignable to type '{ test: string; }'.
+!!! error TS2322:     Object literal may only specify known properties, and 'arg' does not exist in type '{ test: string; }'.
         sa = { test: 'bye', arg: a, arr: a } // excess
-        ~~
+                            ~~~~~~
 !!! error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
-!!! error TS2322:   Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+!!! error TS2322:   Type '{ test: string; arg: A; arr: A; }' is not assignable to type '{ test: string; }'.
+!!! error TS2322:     Object literal may only specify known properties, and 'arg' does not exist in type '{ test: string; }'.
     }
     

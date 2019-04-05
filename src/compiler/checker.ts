@@ -12159,7 +12159,7 @@ namespace ts {
                 }
             }
 
-            function isUnionOrIntersectionTypeWithoutNullableConstituents(type: Type): boolean {
+            function shouldTargetTypeCheckPropertiesForExcessMembers(type: Type): boolean {
                 if (!(type.flags & TypeFlags.UnionOrIntersection)) {
                     return false;
                 }
@@ -12167,7 +12167,7 @@ namespace ts {
                 // check if we still will have compound type if we ignore nullable components.
                 let seenNonNullable = false;
                 for (const t of (<UnionOrIntersectionType>type).types) {
-                    if (t.flags & TypeFlags.Nullable) {
+                    if (t.flags & TypeFlags.Nullable || !(t.flags & TypeFlags.Object)) {
                         continue;
                     }
                     if (seenNonNullable) {
@@ -12244,7 +12244,7 @@ namespace ts {
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
-                    if (isUnionOrIntersectionTypeWithoutNullableConstituents(target) && !discriminantType) {
+                    if (shouldTargetTypeCheckPropertiesForExcessMembers(target) && !discriminantType) {
                         source = getRegularTypeOfObjectLiteral(source);
                     }
                 }
