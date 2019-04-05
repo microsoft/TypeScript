@@ -1130,6 +1130,10 @@ namespace ts {
                     // still might be illegal if the usage is within a computed property name in the class (eg class A { static p = "a"; [A.p]() {} })
                     return !findAncestor(usage, n => isComputedPropertyName(n) && n.parent.parent === declaration);
                 }
+                else if (isPropertyDeclaration(declaration)) {
+                    // still might be illegal if a self-referencing property initializer (eg private x = this.x)
+                    return !isPropertyImmediatelyReferencedWithinDeclaration(declaration, usage);
+                }
                 return true;
             }
 
@@ -1203,6 +1207,40 @@ namespace ts {
                     }
                     return false;
                 });
+            }
+
+            function isPropertyImmediatelyReferencedWithinDeclaration(declaration: PropertyDeclaration, usage: Node) {
+                // always legal if usage is after declaration
+                if (usage.end > declaration.end) {
+                    return false;
+                }
+
+                // still might be legal if usage is deferred (e.g. x: any = () => this.x)
+                // otherwise illegal if immediately referenced within the declaration (e.g. x: any = this.x)
+                const ancestorChangingReferenceScope = findAncestor(usage, (node: Node) => {
+                    if (node === declaration) {
+                        return "quit";
+                    }
+
+                    switch (node.kind) {
+                        case SyntaxKind.ArrowFunction:
+                        case SyntaxKind.PropertyDeclaration:
+                            return true;
+                        case SyntaxKind.Block:
+                            switch (node.parent.kind) {
+                                case SyntaxKind.GetAccessor:
+                                case SyntaxKind.MethodDeclaration:
+                                case SyntaxKind.SetAccessor:
+                                    return true;
+                                default:
+                                    return false;
+                            }
+                        default:
+                            return false;
+                    }
+                });
+
+                return ancestorChangingReferenceScope === undefined;
             }
         }
 
