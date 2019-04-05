@@ -392,6 +392,7 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const conditionalTypes = createMap<Type>();
+        const substitutionTypes = createMap<SubstitutionType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
@@ -8870,9 +8871,15 @@ namespace ts {
             if (substitute.flags & TypeFlags.AnyOrUnknown) {
                 return typeVariable;
             }
+            const id = `${getTypeId(typeVariable)}>${getTypeId(substitute)}`;
+            const cached = substitutionTypes.get(id);
+            if (cached) {
+                return cached;
+            }
             const result = <SubstitutionType>createType(TypeFlags.Substitution);
             result.typeVariable = typeVariable;
             result.substitute = substitute;
+            substitutionTypes.set(id, result);
             return result;
         }
 
