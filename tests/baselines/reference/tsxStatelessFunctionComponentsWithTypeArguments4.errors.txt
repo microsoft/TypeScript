@@ -1,6 +1,6 @@
-tests/cases/conformance/jsx/file.tsx(9,15): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: {}; a: number; }'.
-tests/cases/conformance/jsx/file.tsx(10,15): error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: {}; }'.
-  Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }' but required in type '{ b: {}; a: {}; }'.
+tests/cases/conformance/jsx/file.tsx(9,15): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: unknown; a: number; }'.
+tests/cases/conformance/jsx/file.tsx(10,15): error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
+  Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }' but required in type '{ b: unknown; a: unknown; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -14,11 +14,11 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2322: Type 'T & { ignore-pr
     function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
         let a0 = <OverloadComponent a={arg1.b}/>
                   ~~~~~~~~~~~~~~~~~
-!!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: {}; a: number; }'.
+!!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: unknown; a: number; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:49: 'b' is declared here.
         let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
                   ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: {}; }'.
-!!! error TS2322:   Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }' but required in type '{ b: {}; a: {}; }'.
+!!! error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
+!!! error TS2322:   Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }' but required in type '{ b: unknown; a: unknown; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:55: 'a' is declared here.
     }

@@ -314,7 +314,7 @@ function f23<T extends unknown>(x: T) {
 >x : Symbol(x, Decl(unknownType1.ts, 118, 32))
 }
 
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
 >f24 : Symbol(f24, Decl(unknownType1.ts, 120, 1))
@@ -328,7 +328,7 @@ function f24(x: { [x: string]: unknown }) {
 >x : Symbol(x, Decl(unknownType1.ts, 124, 13))
 >a : Symbol(a, Decl(unknownType1.ts, 126, 9))
 
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
 >x : Symbol(x, Decl(unknownType1.ts, 124, 13))
 
     x = 123;  // Error
