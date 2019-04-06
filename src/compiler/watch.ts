@@ -398,8 +398,8 @@ namespace ts {
     interface IncrementalProgramOptions<T extends BuilderProgram> {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
-        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
-        projectReferences?: ReadonlyArray<ProjectReference>;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined;
+        projectReferences?: ReadonlyArray<ProjectReference> | undefined;
         host?: CompilerHost;
         createProgram?: CreateProgram<T>;
     }
@@ -415,11 +415,11 @@ namespace ts {
     export interface IncrementalCompilationOptions {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
-        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
-        projectReferences?: ReadonlyArray<ProjectReference>;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined;
+        projectReferences?: ReadonlyArray<ProjectReference> | undefined;
         host?: CompilerHost;
         reportDiagnostic?: DiagnosticReporter;
-        reportErrorSummary?: ReportEmitErrorSummary;
+        reportErrorSummary?: ReportEmitErrorSummary | undefined;
         afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
         system?: System;
     }
@@ -531,7 +531,7 @@ namespace ts {
         options: CompilerOptions;
 
         /** Project References */
-        projectReferences?: ReadonlyArray<ProjectReference>;
+        projectReferences?: ReadonlyArray<ProjectReference> | undefined;
     }
 
     /**
@@ -542,7 +542,7 @@ namespace ts {
         configFileName: string;
 
         /** Options to extend */
-        optionsToExtend?: CompilerOptions;
+        optionsToExtend?: CompilerOptions | undefined;
 
         /**
          * Used to generate source file names from the config file and its include, exclude, files rules
@@ -556,7 +556,7 @@ namespace ts {
      */
     /*@internal*/
     export interface WatchCompilerHostOfConfigFile<T extends BuilderProgram> extends WatchCompilerHost<T> {
-        optionsToExtend?: CompilerOptions;
+        optionsToExtend?: CompilerOptions | undefined;
         configFileParsingResult?: ParsedCommandLine;
     }
 
@@ -611,7 +611,7 @@ namespace ts {
         interface FilePresentOnHost {
             version: string;
             sourceFile: SourceFile;
-            fileWatcher: FileWatcher;
+            fileWatcher: FileWatcher | undefined;
         }
         type FileMissingOnHost = false;
         interface FilePresenceUnknownOnHost {

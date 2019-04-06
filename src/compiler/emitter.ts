@@ -478,12 +478,12 @@ namespace ts {
         }
 
         interface SourceMapOptions {
-            sourceMap?: boolean;
+            sourceMap?: boolean | undefined;
             inlineSourceMap?: boolean;
             inlineSources?: boolean;
-            sourceRoot?: string;
-            mapRoot?: string;
-            extendedDiagnostics?: boolean;
+            sourceRoot?: string | undefined;
+            mapRoot?: string | undefined;
+            extendedDiagnostics?: boolean | undefined;
         }
 
         function shouldEmitSourceMaps(mapOptions: SourceMapOptions, sourceFileOrBundle: SourceFile | Bundle) {

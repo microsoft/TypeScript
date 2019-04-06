@@ -27704,7 +27704,7 @@ namespace ts {
                     if (isIdentifier(propName)) {
                         const type = getTypeOfSymbol(getSymbolOfNode(member));
                         if (!(type.flags & TypeFlags.AnyOrUnknown || getFalsyFlags(type) & TypeFlags.Undefined)) {
-                            if (!constructor || !isPropertyInitializedInConstructor(propName, type, constructor)) {
+                            if ((<PropertyDeclaration>member).questionToken === undefined && (!constructor || !isPropertyInitializedInConstructor(propName, type, constructor))) {
                                 error(member.name, Diagnostics.Property_0_has_no_initializer_and_is_not_definitely_assigned_in_the_constructor, declarationNameToString(propName));
                             }
                         }

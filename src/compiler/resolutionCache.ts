@@ -27,7 +27,7 @@ namespace ts {
     interface ResolutionWithFailedLookupLocations {
         readonly failedLookupLocations: ReadonlyArray<string>;
         isInvalidated?: boolean;
-        refCount?: number;
+        refCount?: number | undefined;
     }
 
     interface ResolutionWithResolvedFileName {
@@ -52,7 +52,7 @@ namespace ts {
         projectName?: string;
         getGlobalCache?(): string | undefined;
         writeLog(s: string): void;
-        maxNumberOfFilesToIterateForInvalidation?: number;
+        maxNumberOfFilesToIterateForInvalidation?: number | undefined;
         getCurrentProgram(): Program | undefined;
     }
 
@@ -62,7 +62,7 @@ namespace ts {
         /** ref count keeping this directory watch alive */
         refCount: number;
         /** is the directory watched being non recursive */
-        nonRecursive?: boolean;
+        nonRecursive: boolean | undefined;
     }
 
     interface DirectoryOfFailedLookupWatch {

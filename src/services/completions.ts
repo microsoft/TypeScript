@@ -379,7 +379,7 @@ namespace ts.Completions {
 
     export interface CompletionEntryIdentifier {
         name: string;
-        source?: string;
+        source: string | undefined;
     }
 
     export function getCompletionEntryDetails(

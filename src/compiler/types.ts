@@ -620,16 +620,16 @@ namespace ts {
         /* @internal */ transformFlags: TransformFlags;                  // Flags for transforms, possibly undefined
         decorators?: NodeArray<Decorator>;                               // Array of decorators (in document order)
         modifiers?: ModifiersArray;                                      // Array of modifiers
-        /* @internal */ id?: number;                                     // Unique id (used to look up NodeLinks)
+        /* @internal */ id?: number | undefined;                         // Unique id (used to look up NodeLinks)
         parent: Node;                                                    // Parent node (initialized by binding)
         /* @internal */ original?: Node | undefined;                     // The original node if this is an updated node.
         /* @internal */ symbol: Symbol;                                  // Symbol declared by node (initialized by binding)
         /* @internal */ locals?: SymbolTable;                            // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;                            // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;                            // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ flowNode?: FlowNode;                             // Associated FlowNode (initialized by binding)
+        /* @internal */ flowNode?: FlowNode | undefined;                  // Associated FlowNode (initialized by binding)
         /* @internal */ emitNode?: EmitNode;                             // Associated EmitNode (initialized by transforms)
-        /* @internal */ contextualType?: Type;                           // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ contextualType?: Type | undefined;                // Used to temporarily assign a contextual type during overload resolution
         /* @internal */ inferenceContext?: InferenceContext | undefined; // Inference context for contextual type
     }
 
@@ -1160,7 +1160,7 @@ namespace ts {
     }
 
     export interface NodeWithTypeArguments extends TypeNode {
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments: NodeArray<TypeNode> | undefined;
     }
 
     export type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
@@ -2722,7 +2722,7 @@ namespace ts {
 
         // File-level diagnostics reported by the binder.
         /* @internal */ bindDiagnostics: DiagnosticWithLocation[];
-        /* @internal */ bindSuggestionDiagnostics?: DiagnosticWithLocation[];
+        /* @internal */ bindSuggestionDiagnostics?: DiagnosticWithLocation[] | undefined;
 
         // File-level JSDoc diagnostics reported by the JSDoc parser
         /* @internal */ jsDocDiagnostics?: DiagnosticWithLocation[];
@@ -2737,7 +2737,7 @@ namespace ts {
         // Stores a mapping 'external module reference text' -> 'resolved file name' | undefined
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
-        /* @internal */ resolvedModules?: Map<ResolvedModuleFull | undefined>;
+        /* @internal */ resolvedModules: Map<ResolvedModuleFull | undefined> | undefined;
         /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective | undefined>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
         // Identifier only if `declare global`
@@ -2747,7 +2747,7 @@ namespace ts {
         /* @internal */ checkJsDirective?: CheckJsDirective;
         /* @internal */ version: string;
         /* @internal */ pragmas: ReadonlyPragmaMap;
-        /* @internal */ localJsxNamespace?: __String;
+        /* @internal */ localJsxNamespace?: __String | undefined;
         /* @internal */ localJsxFactory: EntityName | undefined;
 
         /*@internal*/ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
@@ -3056,9 +3056,9 @@ namespace ts {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
         diagnostics: ReadonlyArray<Diagnostic>;
-        emittedFiles?: string[]; // Array of files the compiler wrote to disk
-        /* @internal */ sourceMaps?: SourceMapEmitResult[];  // Array of sourceMapData if compiler emitted sourcemaps
-        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
+        emittedFiles: string[] | undefined; // Array of files the compiler wrote to disk
+        /* @internal */ sourceMaps: SourceMapEmitResult[] | undefined;  // Array of sourceMapData if compiler emitted sourcemaps
+        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit | undefined;
     }
 
     /* @internal */
@@ -3862,7 +3862,7 @@ namespace ts {
         flags: NodeCheckFlags;           // Set of flags specific to Node
         resolvedType?: Type;              // Cached type of type node
         resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
-        resolvedSignature?: Signature;    // Cached signature of signature node or call expression
+        resolvedSignature: Signature | undefined;    // Cached signature of signature node or call expression
         resolvedSymbol: Symbol | undefined;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
@@ -4523,8 +4523,8 @@ namespace ts {
 
     export interface Diagnostic extends DiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
-        reportsUnnecessary?: {};
-        source?: string;
+        reportsUnnecessary?: {} | undefined;
+        source?: string | undefined;
         relatedInformation?: DiagnosticRelatedInformation[] | undefined;
     }
     export interface DiagnosticRelatedInformation {
@@ -4656,7 +4656,7 @@ namespace ts {
         rootDirs?: string[];
         skipLibCheck?: boolean;
         skipDefaultLibCheck?: boolean;
-        sourceMap?: boolean;
+        sourceMap?: boolean | undefined;
         sourceRoot?: string;
         strict?: boolean;
         strictFunctionTypes?: boolean;  // Always combine with strict property
@@ -4799,10 +4799,10 @@ namespace ts {
     export interface CreateProgramOptions {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
-        projectReferences?: ReadonlyArray<ProjectReference>;
-        host?: CompilerHost;
-        oldProgram?: Program;
-        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference> | undefined;
+        host: CompilerHost | undefined;
+        oldProgram?: Program | undefined;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined;
     }
 
     /* @internal */
@@ -4995,7 +4995,7 @@ namespace ts {
         // to determine location of bundled typings for node module
         readFile(fileName: string): string | undefined;
         trace?(s: string): void;
-        directoryExists?(directoryName: string): boolean;
+        directoryExists?: ((directoryName: string) => boolean) | undefined;
         /**
          * Resolve a symbolic link.
          * @see https://nodejs.org/api/fs.html#fs_fs_realpathsync_path_options
@@ -5117,7 +5117,7 @@ namespace ts {
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
-        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
+        /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean | undefined;
         createHash?(data: string): string;
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesnt use compilerHost as base
@@ -5209,7 +5209,7 @@ namespace ts {
         fileName: string;
         text: string;
         /* @internal */ lineMap: ReadonlyArray<number>;
-        skipTrivia?: (pos: number) => number;
+        skipTrivia?: ((pos: number) => number) | undefined;
     }
 
     /* @internal */
@@ -5501,7 +5501,7 @@ namespace ts {
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T> | undefined, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
         /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
-        /*@internal*/ bundleFileInfo?: BundleFileInfo;
+        /*@internal*/ bundleFileInfo?: BundleFileInfo | undefined;
     }
 
     /*@internal*/
@@ -5594,21 +5594,21 @@ namespace ts {
     /*@internal*/
     export interface BundleFileInfo {
         sections: BundleFileSection[];
-        sources?: SourceFileInfo;
+        sources?: SourceFileInfo | undefined;
     }
 
     /*@internal*/
     export interface BundleBuildInfo {
-        js?: BundleFileInfo;
-        dts?: BundleFileInfo;
+        js?: BundleFileInfo | undefined;
+        dts?: BundleFileInfo | undefined;
         commonSourceDirectory: string;
         sourceFiles: ReadonlyArray<string>;
     }
 
     /* @internal */
     export interface BuildInfo {
-        bundle?: BundleBuildInfo;
-        program?: ProgramBuildInfo;
+        bundle?: BundleBuildInfo | undefined;
+        program?: ProgramBuildInfo | undefined;
         version: string;
     }
 
@@ -5665,16 +5665,16 @@ namespace ts {
     }
 
     export interface PrinterOptions {
-        removeComments?: boolean;
-        newLine?: NewLineKind;
-        omitTrailingSemicolon?: boolean;
-        noEmitHelpers?: boolean;
+        removeComments?: boolean | undefined;
+        newLine?: NewLineKind | undefined;
+        omitTrailingSemicolon?: boolean | undefined;
+        noEmitHelpers?: boolean | undefined;
         /*@internal*/ module?: CompilerOptions["module"];
         /*@internal*/ target?: CompilerOptions["target"];
-        /*@internal*/ sourceMap?: boolean;
-        /*@internal*/ inlineSourceMap?: boolean;
-        /*@internal*/ inlineSources?: boolean;
-        /*@internal*/ extendedDiagnostics?: boolean;
+        /*@internal*/ sourceMap?: boolean | undefined;
+        /*@internal*/ inlineSourceMap?: boolean | undefined;
+        /*@internal*/ inlineSources?: boolean | undefined;
+        /*@internal*/ extendedDiagnostics?: boolean | undefined;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
         /*@internal*/ neverAsciiEscape?: boolean;
         /*@internal*/ writeBundleFileInfo?: boolean;
@@ -5688,7 +5688,7 @@ namespace ts {
         file: string;
         sourceRoot?: string | null;
         sources: string[];
-        sourcesContent?: (string | null)[] | null;
+        sourcesContent?: (string | null)[] | null | undefined;
         mappings: string;
         names?: string[] | null;
     }
@@ -6048,8 +6048,8 @@ namespace ts {
     export interface UserPreferences {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
-        readonly includeCompletionsForModuleExports?: boolean;
-        readonly includeCompletionsWithInsertText?: boolean;
+        readonly includeCompletionsForModuleExports?: boolean | undefined;
+        readonly includeCompletionsWithInsertText?: boolean | undefined;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";

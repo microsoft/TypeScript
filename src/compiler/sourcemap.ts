@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts {
     export interface SourceMapGeneratorOptions {
-        extendedDiagnostics?: boolean;
+        extendedDiagnostics?: boolean | undefined;
     }
 
     export function createSourceMapGenerator(host: EmitHost, file: string, sourceRoot: string, sourcesDirectoryPath: string, generatorOptions: SourceMapGeneratorOptions): SourceMapGenerator {
@@ -349,10 +349,10 @@ namespace ts {
     export interface Mapping {
         generatedLine: number;
         generatedCharacter: number;
-        sourceIndex?: number;
-        sourceLine?: number;
-        sourceCharacter?: number;
-        nameIndex?: number;
+        sourceIndex?: number | undefined;
+        sourceLine?: number | undefined;
+        sourceCharacter?: number | undefined;
+        nameIndex?: number | undefined;
     }
 
     export interface SourceMapping extends Mapping {

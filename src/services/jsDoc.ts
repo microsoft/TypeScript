@@ -337,7 +337,7 @@ namespace ts.JsDoc {
 
     interface CommentOwnerInfo {
         readonly commentOwner: Node;
-        readonly parameters?: ReadonlyArray<ParameterDeclaration>;
+        readonly parameters?: ReadonlyArray<ParameterDeclaration> | undefined;
     }
     function getCommentOwnerInfo(tokenAtPos: Node): CommentOwnerInfo | undefined {
         return forEachAncestor(tokenAtPos, getCommentOwnerInfoWorker);

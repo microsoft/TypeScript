@@ -756,7 +756,7 @@ declare namespace ts {
         kind: SyntaxKind.ConstructorType;
     }
     interface NodeWithTypeArguments extends TypeNode {
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments: NodeArray<TypeNode> | undefined;
     }
     type TypeReferenceType = TypeReferenceNode | ExpressionWithTypeArguments;
     interface TypeReferenceNode extends NodeWithTypeArguments {
@@ -1909,7 +1909,7 @@ declare namespace ts {
         emitSkipped: boolean;
         /** Contains declaration emit diagnostics */
         diagnostics: ReadonlyArray<Diagnostic>;
-        emittedFiles?: string[];
+        emittedFiles: string[] | undefined;
     }
     interface TypeChecker {
         getTypeOfSymbolAtLocation(symbol: Symbol, node: Node): Type;
@@ -2445,8 +2445,8 @@ declare namespace ts {
     }
     interface Diagnostic extends DiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
-        reportsUnnecessary?: {};
-        source?: string;
+        reportsUnnecessary?: {} | undefined;
+        source?: string | undefined;
         relatedInformation?: DiagnosticRelatedInformation[] | undefined;
     }
     interface DiagnosticRelatedInformation {
@@ -2549,7 +2549,7 @@ declare namespace ts {
         rootDirs?: string[];
         skipLibCheck?: boolean;
         skipDefaultLibCheck?: boolean;
-        sourceMap?: boolean;
+        sourceMap?: boolean | undefined;
         sourceRoot?: string;
         strict?: boolean;
         strictFunctionTypes?: boolean;
@@ -2651,16 +2651,16 @@ declare namespace ts {
     interface CreateProgramOptions {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
-        projectReferences?: ReadonlyArray<ProjectReference>;
-        host?: CompilerHost;
-        oldProgram?: Program;
-        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference> | undefined;
+        host: CompilerHost | undefined;
+        oldProgram?: Program | undefined;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic> | undefined;
     }
     interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
         readFile(fileName: string): string | undefined;
         trace?(s: string): void;
-        directoryExists?(directoryName: string): boolean;
+        directoryExists?: ((directoryName: string) => boolean) | undefined;
         /**
          * Resolve a symbolic link.
          * @see https://nodejs.org/api/fs.html#fs_fs_realpathsync_path_options
@@ -2763,7 +2763,7 @@ declare namespace ts {
     interface SourceMapSource {
         fileName: string;
         text: string;
-        skipTrivia?: (pos: number) => number;
+        skipTrivia?: ((pos: number) => number) | undefined;
     }
     enum EmitFlags {
         None = 0,
@@ -2976,10 +2976,10 @@ declare namespace ts {
         substituteNode?(hint: EmitHint, node: Node): Node;
     }
     interface PrinterOptions {
-        removeComments?: boolean;
-        newLine?: NewLineKind;
-        omitTrailingSemicolon?: boolean;
-        noEmitHelpers?: boolean;
+        removeComments?: boolean | undefined;
+        newLine?: NewLineKind | undefined;
+        omitTrailingSemicolon?: boolean | undefined;
+        noEmitHelpers?: boolean | undefined;
     }
     interface GetEffectiveTypeRootsHost {
         directoryExists?(directoryName: string): boolean;
@@ -3066,8 +3066,8 @@ declare namespace ts {
     interface UserPreferences {
         readonly disableSuggestions?: boolean;
         readonly quotePreference?: "auto" | "double" | "single";
-        readonly includeCompletionsForModuleExports?: boolean;
-        readonly includeCompletionsWithInsertText?: boolean;
+        readonly includeCompletionsForModuleExports?: boolean | undefined;
+        readonly includeCompletionsWithInsertText?: boolean | undefined;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
@@ -4306,7 +4306,7 @@ declare namespace ts {
         /**
          * If provided this would be used this hash instead of actual file shape text for detecting changes
          */
-        createHash?: (data: string) => string;
+        createHash?: ((data: string) => string) | undefined;
         /**
          * When emit or emitNextAffectedFile are called without writeFile,
          * this callback if present would be used to write files
@@ -4490,7 +4490,7 @@ declare namespace ts {
         /** Compiler options */
         options: CompilerOptions;
         /** Project References */
-        projectReferences?: ReadonlyArray<ProjectReference>;
+        projectReferences?: ReadonlyArray<ProjectReference> | undefined;
     }
     /**
      * Host to create watch with config file
@@ -4499,7 +4499,7 @@ declare namespace ts {
         /** Name of the config file to compile */
         configFileName: string;
         /** Options to extend */
-        optionsToExtend?: CompilerOptions;
+        optionsToExtend?: CompilerOptions | undefined;
         /**
          * Used to generate source file names from the config file and its include, exclude, files rules
          * and also to cache the directory stucture
@@ -4934,7 +4934,7 @@ declare namespace ts {
         spans: TextSpan[];
         nameSpan: TextSpan | undefined;
         /** Present if non-empty */
-        childItems?: NavigationTree[];
+        childItems?: NavigationTree[] | undefined;
     }
     interface TodoCommentDescriptor {
         text: string;
@@ -4963,7 +4963,7 @@ declare namespace ts {
          * If the user accepts the code fix, the editor should send the action back in a `applyAction` request.
          * This allows the language service to have side effects (e.g. installing dependencies) upon a code fix.
          */
-        commands?: CodeActionCommand[];
+        commands?: CodeActionCommand[] | undefined;
     }
     interface CodeFixAction extends CodeAction {
         /** Short name to identify the fix, for use by telemetry. */
@@ -4972,7 +4972,7 @@ declare namespace ts {
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
-        fixId?: {};
+        fixId?: {} | undefined;
         fixAllDescription?: string;
     }
     interface CombinedCodeActions {
@@ -5034,8 +5034,8 @@ declare namespace ts {
      */
     interface RefactorEditInfo {
         edits: FileTextChanges[];
-        renameFilename?: string;
-        renameLocation?: number;
+        renameFilename?: string | undefined;
+        renameLocation?: number | undefined;
         commands?: CodeActionCommand[];
     }
     interface TextInsertion {
@@ -5199,7 +5199,7 @@ declare namespace ts {
     }
     interface JSDocTagInfo {
         name: string;
-        text?: string;
+        text: string | undefined;
     }
     interface QuickInfo {
         kind: ScriptElementKind;
@@ -5216,7 +5216,7 @@ declare namespace ts {
          * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
-        fileToRename?: string;
+        fileToRename?: string | undefined;
         displayName: string;
         fullDisplayName: string;
         kind: ScriptElementKind;
@@ -5275,28 +5275,28 @@ declare namespace ts {
     interface CompletionEntry {
         name: string;
         kind: ScriptElementKind;
-        kindModifiers?: string;
+        kindModifiers: string | undefined;
         sortText: string;
-        insertText?: string;
+        insertText?: string | undefined;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
          * It will be set if the required span differs from the one generated by the default replacement behavior.
          */
-        replacementSpan?: TextSpan;
-        hasAction?: true;
-        source?: string;
-        isRecommended?: true;
+        replacementSpan?: TextSpan | undefined;
+        hasAction?: true | undefined;
+        source?: string | undefined;
+        isRecommended?: true | undefined;
     }
     interface CompletionEntryDetails {
         name: string;
         kind: ScriptElementKind;
         kindModifiers: string;
         displayParts: SymbolDisplayPart[];
-        documentation?: SymbolDisplayPart[];
-        tags?: JSDocTagInfo[];
-        codeActions?: CodeAction[];
-        source?: SymbolDisplayPart[];
+        documentation?: SymbolDisplayPart[] | undefined;
+        tags?: JSDocTagInfo[] | undefined;
+        codeActions?: CodeAction[] | undefined;
+        source?: SymbolDisplayPart[] | undefined;
     }
     interface OutliningSpan {
         /** The span of the document to actually collapse. */
@@ -6047,7 +6047,7 @@ declare namespace ts.server.protocol {
         /**
          * The list of normalized file name in the project, including 'lib.d.ts'
          */
-        fileNames?: string[];
+        fileNames: string[] | undefined;
         /**
          * Indicates if the project has a active language service instance
          */
@@ -6538,11 +6538,11 @@ declare namespace ts.server.protocol {
         /**
          * Should text at specified location be found/changed in comments?
          */
-        findInComments?: boolean;
+        findInComments?: boolean | undefined;
         /**
          * Should text at specified location be found/changed in strings?
          */
-        findInStrings?: boolean;
+        findInStrings?: boolean | undefined;
     }
     /**
      * Rename request; value of command field is "rename". Return
@@ -6567,7 +6567,7 @@ declare namespace ts.server.protocol {
          * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
-        fileToRename?: string;
+        fileToRename?: string | undefined;
         /**
          * Display name of the item to be renamed.
          */
@@ -6758,17 +6758,17 @@ declare namespace ts.server.protocol {
          * Used when a version of the file content is known to be more up to date than the one on disk.
          * Then the known content will be used upon opening instead of the disk copy
          */
-        fileContent?: string;
+        fileContent?: string | undefined;
         /**
          * Used to specify the script kind of the file explicitly. It could be one of the following:
          *      "TS", "JS", "TSX", "JSX"
          */
-        scriptKindName?: ScriptKindName;
+        scriptKindName?: ScriptKindName | undefined;
         /**
          * Used to limit the searching for project config file. If given the searching will stop at this
          * root path; otherwise it will go all the way up to the dist root path.
          */
-        projectRootPath?: string;
+        projectRootPath?: string | undefined;
     }
     type ScriptKindName = "TS" | "JS" | "TSX" | "JSX";
     /**
@@ -7077,7 +7077,7 @@ declare namespace ts.server.protocol {
         /** Text changes to apply to each file as part of the code action */
         changes: FileCodeEdits[];
         /** A command is an opaque object that should be passed to `ApplyCodeActionCommandRequestArgs` without modification.  */
-        commands?: {}[];
+        commands?: {}[] | undefined;
     }
     interface CombinedCodeActions {
         changes: ReadonlyArray<FileCodeEdits>;
@@ -7090,9 +7090,9 @@ declare namespace ts.server.protocol {
          * If present, one may call 'getCombinedCodeFix' with this fixId.
          * This may be omitted to indicate that the code fix can't be applied in a group.
          */
-        fixId?: {};
+        fixId?: {} | undefined;
         /** Should be present if and only if 'fixId' is. */
-        fixAllDescription?: string;
+        fixAllDescription?: string | undefined;
     }
     /**
      * Format and format on key response message.
@@ -7166,7 +7166,7 @@ declare namespace ts.server.protocol {
     }
     interface CompletionEntryIdentifier {
         name: string;
-        source?: string;
+        source?: string | undefined;
     }
     /**
      * Completion entry details request; value of command field is
@@ -7217,13 +7217,13 @@ declare namespace ts.server.protocol {
          * This is used to support bracketed completions; If `name` might be "a-b" but `insertText` would be `["a-b"]`,
          * coupled with `replacementSpan` to replace a dotted access with a bracket access.
          */
-        insertText?: string;
+        insertText?: string | undefined;
         /**
          * An optional span that indicates the text to be replaced by this completion item.
          * If present, this span should be used instead of the default one.
          * It will be set if the required span differs from the one generated by the default replacement behavior.
          */
-        replacementSpan?: TextSpan;
+        replacementSpan?: TextSpan | undefined;
         /**
          * Indicates whether commiting this completion entry will require additional code actions to be
          * made to avoid errors. The CompletionEntryDetails will have these actions.
@@ -7238,7 +7238,7 @@ declare namespace ts.server.protocol {
          * This will be set when we know the user should write an expression with a certain type and that type is an enum or constructable class.
          * Then either that enum/class or a namespace containing it will be the recommended symbol.
          */
-        isRecommended?: true;
+        isRecommended?: true | undefined;
     }
     /**
      * Additional completion entry details, available on demand
@@ -7267,11 +7267,11 @@ declare namespace ts.server.protocol {
         /**
          * JSDoc tags for the symbol.
          */
-        tags?: JSDocTagInfo[];
+        tags?: JSDocTagInfo[] | undefined;
         /**
          * The associated code actions for this entry
          */
-        codeActions?: CodeAction[];
+        codeActions?: CodeAction[] | undefined;
         /**
          * Human-readable description of the `source` from the CompletionEntry.
          */

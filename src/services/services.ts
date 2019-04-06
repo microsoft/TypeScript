@@ -206,7 +206,7 @@ namespace ts {
         public transformFlags: TransformFlags;
         public parent: Node;
         public symbol!: Symbol;
-        public jsDocComments?: JSDoc[];
+        public jsDocComments?: JSDoc[] | undefined;
 
         constructor(pos: number, end: number) {
             // Set properties in same order as NodeObject
@@ -453,7 +453,7 @@ namespace ts {
     class SignatureObject implements Signature {
         checker: TypeChecker;
         declaration!: SignatureDeclaration;
-        typeParameters?: TypeParameter[];
+        typeParameters: TypeParameter[] | undefined;
         parameters!: Symbol[];
         thisParameter!: Symbol;
         resolvedReturnType!: Type;
@@ -465,11 +465,11 @@ namespace ts {
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
-        documentationComment?: SymbolDisplayPart[];
+        documentationComment: SymbolDisplayPart[] | undefined;
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
-        jsDocTags?: JSDocTagInfo[];
+        jsDocTags: JSDocTagInfo[] | undefined;
 
         constructor(checker: TypeChecker) {
             this.checker = checker;
@@ -563,7 +563,7 @@ namespace ts {
         public syntacticDiagnostics!: DiagnosticWithLocation[];
         public parseDiagnostics!: DiagnosticWithLocation[];
         public bindDiagnostics!: DiagnosticWithLocation[];
-        public bindSuggestionDiagnostics?: DiagnosticWithLocation[];
+        public bindSuggestionDiagnostics!: DiagnosticWithLocation[];
 
         public isDeclarationFile!: boolean;
         public isDefaultLib!: boolean;
@@ -579,13 +579,13 @@ namespace ts {
         public languageVariant!: LanguageVariant;
         public identifiers!: Map<string>;
         public nameTable: UnderscoreEscapedMap<number> | undefined;
-        public resolvedModules: Map<ResolvedModuleFull> | undefined;
+        public resolvedModules: Map<ResolvedModuleFull | undefined> | undefined;
         public resolvedTypeReferenceDirectiveNames!: Map<ResolvedTypeReferenceDirective>;
         public imports!: ReadonlyArray<StringLiteralLike>;
         public moduleAugmentations!: StringLiteral[];
         private namedDeclarations: Map<Declaration[]> | undefined;
         public ambientModuleNames!: string[];
-        public checkJsDirective: CheckJsDirective | undefined;
+        public checkJsDirective?: CheckJsDirective;
         public possiblyContainDynamicImport?: boolean;
         public pragmas!: PragmaMap;
         public localJsxFactory: EntityName | undefined;
@@ -780,7 +780,7 @@ namespace ts {
 
     class SourceMapSourceObject implements SourceMapSource {
         lineMap!: number[];
-        constructor(public fileName: string, public text: string, public skipTrivia?: (pos: number) => number) { }
+        constructor(public fileName: string, public text: string, public skipTrivia?: ((pos: number) => number)) { }
 
         public getLineAndCharacterOfPosition(pos: number): LineAndCharacter {
             return getLineAndCharacterOfPosition(this, pos);

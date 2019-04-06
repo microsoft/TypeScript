@@ -2,9 +2,9 @@
 namespace ts {
     export interface ReusableDiagnostic extends ReusableDiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
-        reportsUnnecessary?: {};
-        source?: string;
-        relatedInformation?: ReusableDiagnosticRelatedInformation[];
+        reportsUnnecessary?: {} | undefined;
+        source?: string | undefined;
+        relatedInformation?: ReusableDiagnosticRelatedInformation[] | undefined;
     }
 
     export interface ReusableDiagnosticRelatedInformation {
@@ -20,7 +20,7 @@ namespace ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        next?: ReusableDiagnosticMessageChain;
+        next?: ReusableDiagnosticMessageChain | undefined;
     }
 
     export interface ReusableBuilderProgramState extends ReusableBuilderState {
@@ -52,7 +52,7 @@ namespace ts {
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldState?: Map<true>;
+        semanticDiagnosticsFromOldState?: Map<true> | undefined;
         /**
          * program corresponding to this state
          */
@@ -116,11 +116,11 @@ namespace ts {
         /**
          * whether this program has cleaned semantic diagnostics cache for lib files
          */
-        cleanedDiagnosticsOfLibFiles?: boolean;
+        cleanedDiagnosticsOfLibFiles: boolean | undefined;
         /**
          * True if the semantic diagnostics were copied from the old state
          */
-        semanticDiagnosticsFromOldState?: Map<true>;
+        semanticDiagnosticsFromOldState: Map<true> | undefined;
         /**
          * program corresponding to this state
          */
@@ -148,7 +148,7 @@ namespace ts {
         /**
          * true if program has been emitted
          */
-        programEmitComplete?: true;
+        programEmitComplete: true | undefined;
     }
 
     function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined): boolean {
@@ -1038,7 +1038,7 @@ namespace ts {
         /**
          * If provided this would be used this hash instead of actual file shape text for detecting changes
          */
-        createHash?: (data: string) => string;
+        createHash?: ((data: string) => string) | undefined;
         /**
          * When emit or emitNextAffectedFile are called without writeFile,
          * this callback if present would be used to write files
