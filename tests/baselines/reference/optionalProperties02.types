@@ -1,7 +1,7 @@
 === tests/cases/conformance/types/typeRelationships/comparable/optionalProperties02.ts ===
 interface Foo {
     a?: string;
->a : string | undefined
+>a : string
 
     b: string;
 >b : string

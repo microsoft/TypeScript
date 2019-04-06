@@ -4,7 +4,7 @@ interface Foo {
 >a : number
 
     b?: number;
->b : number | undefined
+>b : number
 
     f(): number;
 >f : () => number
@@ -75,7 +75,7 @@ class Bar {
 >a : number
 
     b?: number;
->b : number | undefined
+>b : number
 
     c? = 2;
 >c : number | undefined
@@ -200,7 +200,7 @@ class Base {
 >Base : Base
 
     a?: number;
->a : number | undefined
+>a : number
 
     f?(): number;
 >f : (() => number) | undefined

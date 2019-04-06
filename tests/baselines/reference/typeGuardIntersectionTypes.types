@@ -118,8 +118,8 @@ declare function log(s: string): void;
 
 // Supported beast features
 interface Beast     { wings?: boolean; legs?: number }
->wings : boolean | undefined
->legs : number | undefined
+>wings : boolean
+>legs : number
 
 interface Legged    { legs: number; }
 >legs : number

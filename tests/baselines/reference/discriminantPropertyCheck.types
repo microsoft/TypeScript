@@ -320,10 +320,10 @@ const f = (_a: string, _b: string): void => {};
 
 interface A {
   a?: string;
->a : string | undefined
+>a : string
 
   b?: string;
->b : string | undefined
+>b : string
 }
 
 interface B {
@@ -343,14 +343,14 @@ const u: U = {} as any;
 >{} : {}
 
 u.a && u.b && f(u.a, u.b);
->u.a && u.b && f(u.a, u.b) : void | "" | undefined
->u.a && u.b : string | undefined
->u.a : string | undefined
+>u.a && u.b && f(u.a, u.b) : void | ""
+>u.a && u.b : string
+>u.a : string
 >u : U
->a : string | undefined
->u.b : string | undefined
+>a : string
+>u.b : string
 >u : U
->b : string | undefined
+>b : string
 >f(u.a, u.b) : void
 >f : (_a: string, _b: string) => void
 >u.a : string
@@ -361,14 +361,14 @@ u.a && u.b && f(u.a, u.b);
 >b : string
 
 u.b && u.a && f(u.a, u.b);
->u.b && u.a && f(u.a, u.b) : void | "" | undefined
->u.b && u.a : string | undefined
->u.b : string | undefined
+>u.b && u.a && f(u.a, u.b) : void | ""
+>u.b && u.a : string
+>u.b : string
 >u : U
->b : string | undefined
->u.a : string | undefined
+>b : string
+>u.a : string
 >u : U
->a : string | undefined
+>a : string
 >f(u.a, u.b) : void
 >f : (_a: string, _b: string) => void
 >u.a : string

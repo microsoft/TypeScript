@@ -226,7 +226,7 @@ xyz;
 
 interface TestObject {
   type?: 'object';
->type : "object" | undefined
+>type : "object"
 
   items: {
 >items : { [k: string]: TestGeneric; }

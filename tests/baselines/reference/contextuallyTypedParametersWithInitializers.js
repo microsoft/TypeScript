@@ -100,7 +100,7 @@ declare const f13: ({ foo }: {
     foo: any;
 }) => any;
 declare const f14: ({ foo }: {
-    foo?: number | undefined;
+    foo?: number;
 }) => number;
 declare const f20: (foo?: number) => number;
 declare const f21: (foo?: any) => any;

@@ -254,7 +254,7 @@ interface Foo {
 >a : string
 
     b?: number;
->b : number | undefined
+>b : number
 }
 
 function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>) {
@@ -435,7 +435,7 @@ c.setState({ c: true });  // Error
 
 type T2 = { a?: number, [key: string]: any };
 >T2 : T2
->a : number | undefined
+>a : number
 >key : string
 
 let x1: T2 = { a: 'no' };  // Error

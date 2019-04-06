@@ -3,10 +3,10 @@ namespace JSX {
     export interface Element {}
     export interface IntrinsicClassAttributes<TClass, TOther=never> {
         ref?: TClass;
->ref : TClass | undefined
+>ref : TClass
 
         item?: TOther;
->item : TOther | undefined
+>item : TOther
     }
     export interface ElementClass extends Element {}
     export interface ElementAttributesProperty { props: {}; }

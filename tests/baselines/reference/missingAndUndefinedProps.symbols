@@ -1,0 +1,61 @@
+=== tests/cases/compiler/missingAndUndefinedProps.ts ===
+interface Foo {
+>Foo : Symbol(Foo, Decl(missingAndUndefinedProps.ts, 0, 0))
+
+    x?: number;
+>x : Symbol(Foo.x, Decl(missingAndUndefinedProps.ts, 0, 15))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(missingAndUndefinedProps.ts, 2, 1))
+
+    x?: number;
+>x : Symbol(Bar.x, Decl(missingAndUndefinedProps.ts, 4, 15))
+}
+
+interface Foo2 {
+>Foo2 : Symbol(Foo2, Decl(missingAndUndefinedProps.ts, 6, 1))
+
+    x: number | undefined;
+>x : Symbol(Foo2.x, Decl(missingAndUndefinedProps.ts, 8, 16))
+}
+
+const foo: Foo = { x: undefined }; // should error
+>foo : Symbol(foo, Decl(missingAndUndefinedProps.ts, 12, 5))
+>Foo : Symbol(Foo, Decl(missingAndUndefinedProps.ts, 0, 0))
+>x : Symbol(x, Decl(missingAndUndefinedProps.ts, 12, 18))
+>undefined : Symbol(undefined)
+
+const foo2: Foo2 = { x: undefined }; // ok
+>foo2 : Symbol(foo2, Decl(missingAndUndefinedProps.ts, 13, 5))
+>Foo2 : Symbol(Foo2, Decl(missingAndUndefinedProps.ts, 6, 1))
+>x : Symbol(x, Decl(missingAndUndefinedProps.ts, 13, 20))
+>undefined : Symbol(undefined)
+
+const foo3: Foo2 = {  }; // should error
+>foo3 : Symbol(foo3, Decl(missingAndUndefinedProps.ts, 14, 5))
+>Foo2 : Symbol(Foo2, Decl(missingAndUndefinedProps.ts, 6, 1))
+
+const foo4: Foo = {  }; // ok
+>foo4 : Symbol(foo4, Decl(missingAndUndefinedProps.ts, 15, 5))
+>Foo : Symbol(Foo, Decl(missingAndUndefinedProps.ts, 0, 0))
+
+const foo5: Foo2 = foo; // should error
+>foo5 : Symbol(foo5, Decl(missingAndUndefinedProps.ts, 16, 5))
+>Foo2 : Symbol(Foo2, Decl(missingAndUndefinedProps.ts, 6, 1))
+>foo : Symbol(foo, Decl(missingAndUndefinedProps.ts, 12, 5))
+
+const foo6: Foo = foo2; // should error
+>foo6 : Symbol(foo6, Decl(missingAndUndefinedProps.ts, 17, 5))
+>Foo : Symbol(Foo, Decl(missingAndUndefinedProps.ts, 0, 0))
+>foo2 : Symbol(foo2, Decl(missingAndUndefinedProps.ts, 13, 5))
+
+declare const something: Bar;
+>something : Symbol(something, Decl(missingAndUndefinedProps.ts, 19, 13))
+>Bar : Symbol(Bar, Decl(missingAndUndefinedProps.ts, 2, 1))
+
+let f: Foo = something;
+>f : Symbol(f, Decl(missingAndUndefinedProps.ts, 20, 3))
+>Foo : Symbol(Foo, Decl(missingAndUndefinedProps.ts, 0, 0))
+>something : Symbol(something, Decl(missingAndUndefinedProps.ts, 19, 13))
+

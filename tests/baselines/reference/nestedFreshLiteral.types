@@ -1,11 +1,11 @@
 === tests/cases/compiler/nestedFreshLiteral.ts ===
 interface CSSProps  {
   color?: string
->color : string | undefined
+>color : string
 }
 interface NestedCSSProps {
   nested?: NestedSelector
->nested : NestedSelector | undefined
+>nested : NestedSelector
 }
 interface NestedSelector  {
   prop: CSSProps;

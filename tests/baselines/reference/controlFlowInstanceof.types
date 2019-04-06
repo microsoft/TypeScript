@@ -211,7 +211,7 @@ function foo(x: A | undefined) {
 
 interface X {
     x?: string;
->x : string | undefined
+>x : string
 }
 
 class Y {

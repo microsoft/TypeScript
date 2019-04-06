@@ -382,14 +382,14 @@ function test5() {
 
         interface P1 {
             p?: boolean;
->p : boolean | undefined
+>p : boolean
 
             c?: string;
->c : string | undefined
+>c : string
         }
         interface P2 {
             p?: boolean;
->p : boolean | undefined
+>p : boolean
 
             c?: any;
 >c : any

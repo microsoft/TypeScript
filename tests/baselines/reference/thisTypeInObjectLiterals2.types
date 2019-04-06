@@ -81,7 +81,7 @@ type Point = {
 >y : number
 
     z?: number;
->z : number | undefined
+>z : number
 
     moveBy(dx: number, dy: number, dz?: number): void;
 >moveBy : (dx: number, dy: number, dz?: number | undefined) => void
@@ -404,10 +404,10 @@ type ObjectDescriptor<D, M> = {
 >ObjectDescriptor : ObjectDescriptor<D, M>
 
     data?: D;
->data : D | undefined
+>data : D
 
     methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
->methods : (M & ThisType<D & M>) | undefined
+>methods : M & ThisType<D & M>
 }
 
 declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
@@ -461,10 +461,10 @@ type ObjectDescriptor2<D, M> = ThisType<D & M> & {
 >ObjectDescriptor2 : ObjectDescriptor2<D, M>
 
     data?: D;
->data : D | undefined
+>data : D
 
     methods?: M;
->methods : M | undefined
+>methods : M
 }
 
 declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
@@ -517,7 +517,7 @@ type PropDesc<T> = {
 >PropDesc : PropDesc<T>
 
     value?: T;
->value : T | undefined
+>value : T
 
     get?(): T;
 >get : (() => T) | undefined
@@ -693,13 +693,13 @@ type VueOptions<D, M, P> = ThisType<D & M & P> & {
 >VueOptions : VueOptions<D, M, P>
 
     data?: D | (() => D);
->data : D | (() => D) | undefined
+>data : D | (() => D)
 
     methods?: M;
->methods : M | undefined
+>methods : M
 
     computed?: Accessors<P>;
->computed : Accessors<P> | undefined
+>computed : Accessors<P>
 }
 
 declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;

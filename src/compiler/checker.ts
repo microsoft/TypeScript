@@ -5022,7 +5022,7 @@ namespace ts {
             // Use type from type annotation if one is present
             const declaredType = tryGetTypeFromEffectiveTypeNode(declaration);
             if (declaredType) {
-                return addOptionality(declaredType, isOptional);
+                return addOptionality(declaredType, isOptional && isParameter(declaration));
             }
 
             if ((noImplicitAny || isInJSFile(declaration)) &&
@@ -9880,7 +9880,7 @@ namespace ts {
                             getNodeLinks(accessNode!).resolvedSymbol = prop;
                         }
                     }
-                    const propType = getTypeOfSymbol(prop);
+                    const propType = addOptionality(getTypeOfSymbol(prop), !!(prop.flags & SymbolFlags.Optional));
                     return accessExpression && getAssignmentTargetKind(accessExpression) !== AssignmentKind.Definite ?
                         getFlowTypeOfReference(accessExpression, propType) :
                         propType;
@@ -19585,6 +19585,7 @@ namespace ts {
                 getControlFlowContainer(node) === getControlFlowContainer(prop.valueDeclaration)) {
                 assumeUninitialized = true;
             }
+            propType = addOptionality(propType, prop !== undefined && !!(prop.flags & SymbolFlags.Optional));
             const flowType = getFlowTypeOfReference(node, propType, assumeUninitialized ? getOptionalType(propType) : propType);
             if (assumeUninitialized && !(getFalsyFlags(propType) & TypeFlags.Undefined) && getFalsyFlags(flowType) & TypeFlags.Undefined) {
                 error(right, Diagnostics.Property_0_is_used_before_being_assigned, symbolToString(prop!)); // TODO: GH#18217

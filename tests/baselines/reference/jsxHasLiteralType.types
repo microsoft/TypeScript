@@ -4,7 +4,7 @@ import * as React from "react";
 
 interface Props {
     x?: "a" | "b";
->x : "a" | "b" | undefined
+>x : "a" | "b"
 }
 class MyComponent<P extends Props = Props> extends React.Component<P, {}> {}
 >MyComponent : MyComponent<P>

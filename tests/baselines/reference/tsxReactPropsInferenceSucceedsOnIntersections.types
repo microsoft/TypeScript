@@ -9,7 +9,7 @@ export type ButtonProps<T = {}> = React.ButtonHTMLAttributes<HTMLButtonElement> 
 >React : any
 
     outline?: boolean;
->outline : boolean | undefined
+>outline : boolean
 
 } & T;
 

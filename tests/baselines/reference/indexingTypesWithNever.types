@@ -130,16 +130,16 @@ type P3 = { a: string; b: number; c?: boolean };
 >P3 : P3
 >a : string
 >b : number
->c : boolean | undefined
+>c : boolean
 
 type P2 = { a: string; c?: boolean };
 >P2 : P2
 >a : string
->c : boolean | undefined
+>c : boolean
 
 type P1 = { c?: boolean };
 >P1 : P1
->c : boolean | undefined
+>c : boolean
 
 type P0 = {};
 >P0 : P0
@@ -197,13 +197,13 @@ declare const p0Test: ExpectType<{}, P0Props>;
 
 type O3 = { a?: string; b?: number; c: boolean };
 >O3 : O3
->a : string | undefined
->b : number | undefined
+>a : string
+>b : number
 >c : boolean
 
 type O2 = { a?: string; c: boolean };
 >O2 : O2
->a : string | undefined
+>a : string
 >c : boolean
 
 type O1 = { c: boolean };
@@ -250,13 +250,13 @@ type O0Props = OptionalProps<O0>; // expect {}
 >O0Props : OptionalProps<O0>
 
 declare const o3Test: ExpectType<{ a?: string; b?: number }, O3Props>;
->o3Test : "Match"
->a : string | undefined
->b : number | undefined
+>o3Test : "Did not match"
+>a : string
+>b : number
 
 declare const o2Test: ExpectType<{ a?: string }, O2Props>;
->o2Test : "Match"
->a : string | undefined
+>o2Test : "Did not match"
+>a : string
 
 declare const o1Test: ExpectType<{}, O1Props>;
 >o1Test : "Match"

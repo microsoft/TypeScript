@@ -31,7 +31,7 @@ export interface Validator<T> {
 >null : null
 
     [nominalTypeHack]?: T;
->[nominalTypeHack] : T | undefined
+>[nominalTypeHack] : T
 >nominalTypeHack : unique symbol
 }
 
@@ -93,23 +93,23 @@ interface Props {
 >bool : boolean
 
     shape: {
->shape : { foo: string; bar?: boolean | undefined; baz?: any; }
+>shape : { foo: string; bar?: boolean; baz?: any; }
 
         foo: string;
 >foo : string
 
         bar?: boolean;
->bar : boolean | undefined
+>bar : boolean
 
         baz?: any
 >baz : any
 
     };
     oneOfType: string | boolean | {
->oneOfType : string | boolean | { foo?: string | undefined; bar: number; }
+>oneOfType : string | boolean | { foo?: string; bar: number; }
 
         foo?: string;
->foo : string | undefined
+>foo : string
 
         bar: number;
 >bar : number

@@ -9,9 +9,9 @@ const Foo = (props: any) => undefined;
 >undefined : undefined
 
 function Greet(x: {name?: string}) {
->Greet : (x: { name?: string | undefined; }) => undefined
->x : { name?: string | undefined; }
->name : string | undefined
+>Greet : (x: { name?: string; }) => undefined
+>x : { name?: string; }
+>name : string
 
 	return undefined;
 >undefined : undefined
@@ -26,5 +26,5 @@ const foo = <Foo />;
 const G = <Greet />;
 >G : JSX.Element
 ><Greet /> : JSX.Element
->Greet : (x: { name?: string | undefined; }) => undefined
+>Greet : (x: { name?: string; }) => undefined
 

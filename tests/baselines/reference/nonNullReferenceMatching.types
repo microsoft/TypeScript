@@ -8,14 +8,14 @@ type ThumbProps = {
 >ThumbProps : ThumbProps
 
     elementRef?: ElementRef;
->elementRef : ElementRef | undefined
+>elementRef : ElementRef
 }
 
 type ComponentProps = {
 >ComponentProps : ComponentProps
 
     thumbYProps?: ThumbProps;
->thumbYProps : ThumbProps | undefined
+>thumbYProps : ThumbProps
 
     thumbXProps: ThumbProps;
 >thumbXProps : ThumbProps

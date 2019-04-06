@@ -607,7 +607,7 @@ declare namespace ts {
         propertyName?: PropertyName;
         dotDotDotToken?: DotDotDotToken;
         name: BindingName;
-        initializer?: Expression;
+        initializer: Expression | undefined;
     }
     interface PropertySignature extends TypeElement, JSDocContainer {
         kind: SyntaxKind.PropertySignature;
@@ -1369,7 +1369,7 @@ declare namespace ts {
     interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         name?: PropertyName;
-        questionToken?: QuestionToken;
+        questionToken?: QuestionToken | undefined;
     }
     interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.InterfaceDeclaration;
@@ -2254,8 +2254,8 @@ declare namespace ts {
         flags: TypeFlags;
         symbol: Symbol;
         pattern?: DestructuringPattern;
-        aliasSymbol?: Symbol;
-        aliasTypeArguments?: ReadonlyArray<Type>;
+        aliasSymbol?: Symbol | undefined;
+        aliasTypeArguments?: ReadonlyArray<Type> | undefined;
     }
     interface LiteralType extends Type {
         value: string | number | PseudoBigInt;
@@ -2311,8 +2311,8 @@ declare namespace ts {
         declaredProperties: Symbol[];
         declaredCallSignatures: Signature[];
         declaredConstructSignatures: Signature[];
-        declaredStringIndexInfo?: IndexInfo;
-        declaredNumberIndexInfo?: IndexInfo;
+        declaredStringIndexInfo: IndexInfo | undefined;
+        declaredNumberIndexInfo: IndexInfo | undefined;
     }
     /**
      * Type references (ObjectFlags.Reference). When a class or interface has type parameters or
@@ -2326,7 +2326,7 @@ declare namespace ts {
      */
     interface TypeReference extends ObjectType {
         target: GenericType;
-        typeArguments?: ReadonlyArray<Type>;
+        typeArguments: ReadonlyArray<Type> | undefined;
     }
     interface GenericType extends InterfaceType, TypeReference {
     }
@@ -2334,7 +2334,7 @@ declare namespace ts {
         minLength: number;
         hasRestElement: boolean;
         readonly: boolean;
-        associatedNames?: __String[];
+        associatedNames: __String[] | undefined;
     }
     interface TupleTypeReference extends TypeReference {
         target: TupleType;
@@ -2372,11 +2372,11 @@ declare namespace ts {
         trueType: Type;
         falseType: Type;
         isDistributive: boolean;
-        inferTypeParameters?: TypeParameter[];
-        outerTypeParameters?: TypeParameter[];
-        instantiations?: Map<Type>;
-        aliasSymbol?: Symbol;
-        aliasTypeArguments?: Type[];
+        inferTypeParameters: TypeParameter[] | undefined;
+        outerTypeParameters: TypeParameter[] | undefined;
+        instantiations: Map<Type> | undefined;
+        aliasSymbol: Symbol | undefined;
+        aliasTypeArguments: Type[] | undefined;
     }
     interface ConditionalType extends InstantiableType {
         root: ConditionalRoot;
@@ -2394,8 +2394,8 @@ declare namespace ts {
         Construct = 1
     }
     interface Signature {
-        declaration?: SignatureDeclaration | JSDocSignature;
-        typeParameters?: ReadonlyArray<TypeParameter>;
+        declaration: SignatureDeclaration | JSDocSignature | undefined;
+        typeParameters?: ReadonlyArray<TypeParameter> | undefined;
         parameters: ReadonlyArray<Symbol>;
     }
     enum IndexKind {
@@ -2405,7 +2405,7 @@ declare namespace ts {
     interface IndexInfo {
         type: Type;
         isReadonly: boolean;
-        declaration?: IndexSignatureDeclaration;
+        declaration: IndexSignatureDeclaration | undefined;
     }
     enum InferencePriority {
         NakedTypeVariable = 1,
@@ -2441,13 +2441,13 @@ declare namespace ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        next?: DiagnosticMessageChain;
+        next: DiagnosticMessageChain | undefined;
     }
     interface Diagnostic extends DiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         source?: string;
-        relatedInformation?: DiagnosticRelatedInformation[];
+        relatedInformation?: DiagnosticRelatedInformation[] | undefined;
     }
     interface DiagnosticRelatedInformation {
         category: DiagnosticCategory;

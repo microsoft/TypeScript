@@ -10,8 +10,8 @@ declare class Component<P> {
 >context : any
 
     readonly props: Readonly<P> & Readonly<{ children?: {} }>;
->props : Readonly<P> & Readonly<{ children?: {} | undefined; }>
->children : {} | undefined
+>props : Readonly<P> & Readonly<{ children?: {}; }>
+>children : {}
 }
 interface ComponentClass<P = {}> {
     new (props: P, context?: any): Component<P>;
@@ -19,29 +19,29 @@ interface ComponentClass<P = {}> {
 >context : any
 
     propTypes?: WeakValidationMap<P>;
->propTypes : WeakValidationMap<P> | undefined
+>propTypes : WeakValidationMap<P>
 
     defaultProps?: Partial<P>;
->defaultProps : Partial<P> | undefined
+>defaultProps : Partial<P>
 
     displayName?: string;
->displayName : string | undefined
+>displayName : string
 }
 interface FunctionComponent<P = {}> {
     (props: P & { children?: {} }, context?: any): {} | null;
->props : P & { children?: {} | undefined; }
->children : {} | undefined
+>props : P & { children?: {}; }
+>children : {}
 >context : any
 >null : null
 
     propTypes?: WeakValidationMap<P>;
->propTypes : WeakValidationMap<P> | undefined
+>propTypes : WeakValidationMap<P>
 
     defaultProps?: Partial<P>;
->defaultProps : Partial<P> | undefined
+>defaultProps : Partial<P>
 
     displayName?: string;
->displayName : string | undefined
+>displayName : string
 }
 
 export declare const nominalTypeHack: unique symbol;
@@ -57,7 +57,7 @@ export interface Validator<T> {
 >null : null
 
     [nominalTypeHack]?: T;
->[nominalTypeHack] : T | undefined
+>[nominalTypeHack] : T
 >nominalTypeHack : unique symbol
 }
 type WeakValidationMap<T> = {

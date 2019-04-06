@@ -15,7 +15,7 @@ class C1 {
 >null : null
 
     d?: number;
->d : number | undefined
+>d : number
 }
 
 // No strict initialization checks in ambient contexts
@@ -34,7 +34,7 @@ declare class C2 {
 >null : null
 
     d?: number;
->d : number | undefined
+>d : number
 }
 
 // No strict initialization checks for static members
@@ -53,7 +53,7 @@ class C3 {
 >null : null
 
     static d?: number;
->d : number | undefined
+>d : number
 }
 
 // Initializer satisfies strict initialization check
@@ -178,7 +178,7 @@ abstract class C9 {
 >null : null
 
     abstract d?: number;
->d : number | undefined
+>d : number
 }
 
 // Properties with non-undefined types must be assigned before they can be accessed
@@ -194,7 +194,7 @@ class C10 {
 >b : number
 
     c?: number;
->c : number | undefined
+>c : number
 
     constructor() {
         let x = this.a;  // Error

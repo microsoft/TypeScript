@@ -7,10 +7,10 @@ interface ActionsObject<State> {
 
 interface Options<State, Actions> {
     state?: State;
->state : State | undefined
+>state : State
 
     view?: (state: State, actions: Actions) => any;
->view : ((state: State, actions: Actions) => any) | undefined
+>view : (state: State, actions: Actions) => any
 >state : State
 >actions : Actions
 
@@ -77,15 +77,15 @@ const y = foo({
 
 interface Options2<State, Actions> {
     state?: State;
->state : State | undefined
+>state : State
 
     view?: (state: State, actions: Actions) => any;
->view : ((state: State, actions: Actions) => any) | undefined
+>view : (state: State, actions: Actions) => any
 >state : State
 >actions : Actions
 
     actions?: Actions;
->actions : Actions | undefined
+>actions : Actions
 }
 
 declare function app2<State, Actions extends ActionsObject<State>>(obj: Options2<State, Actions>): void;

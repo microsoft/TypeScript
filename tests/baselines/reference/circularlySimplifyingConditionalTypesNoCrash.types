@@ -13,7 +13,7 @@ type Shared< // Circularly self constraining type, defered thanks to mapping
 
 interface ComponentClass<P> {
     defaultProps?: Partial<P>; // Inference target is also mapped _and_ optional
->defaultProps : Partial<P> | undefined
+>defaultProps : Partial<P>
 }
 
 interface InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> {

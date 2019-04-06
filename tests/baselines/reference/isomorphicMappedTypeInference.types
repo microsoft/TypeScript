@@ -381,7 +381,7 @@ type Foo = {
 >Foo : Foo
 
     a?: number;
->a : number | undefined
+>a : number
 
     readonly b: string;
 >b : string
@@ -398,8 +398,8 @@ function f10(foo: Foo) {
 >foo : Foo
 
     let y = clone(foo);  // { a?: number, b: string }
->y : { a?: number | undefined; b: string; }
->clone(foo) : { a?: number | undefined; b: string; }
+>y : { a?: number; b: string; }
+>clone(foo) : { a?: number; b: string; }
 >clone : <T>(obj: { readonly [P in keyof T]: T[P]; }) => T
 >foo : Foo
 

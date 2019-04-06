@@ -1557,10 +1557,10 @@ var hashOfEmpty2 = on({ test: (x: boolean) => {} });  // { test: boolean }
 
 interface Options1<Data, Computed> {
     data?: Data
->data : Data | undefined
+>data : Data
 
     computed?: Computed;
->computed : Computed | undefined
+>computed : Computed
 }
 
 declare class Component1<Data, Computed> {
@@ -1601,10 +1601,10 @@ c1.get("hello");
 
 interface Options2<Data, Computed> {
     data?: Data
->data : Data | undefined
+>data : Data
 
     computed?: Computed;
->computed : Computed | undefined
+>computed : Computed
 }
 
 declare class Component2<Data, Computed> {

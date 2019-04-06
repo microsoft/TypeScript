@@ -1,0 +1,50 @@
+tests/cases/compiler/missingAndUndefinedProps.ts(13,7): error TS2322: Type '{ x: undefined; }' is not assignable to type 'Foo'.
+  Types of property 'x' are incompatible.
+    Type 'undefined' is not assignable to type 'number'.
+tests/cases/compiler/missingAndUndefinedProps.ts(15,7): error TS2741: Property 'x' is missing in type '{}' but required in type 'Foo2'.
+tests/cases/compiler/missingAndUndefinedProps.ts(17,7): error TS2322: Type 'Foo' is not assignable to type 'Foo2'.
+  Property 'x' is optional in type 'Foo' but required in type 'Foo2'.
+tests/cases/compiler/missingAndUndefinedProps.ts(18,7): error TS2322: Type 'Foo2' is not assignable to type 'Foo'.
+  Types of property 'x' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/missingAndUndefinedProps.ts (4 errors) ====
+    interface Foo {
+        x?: number;
+    }
+    
+    interface Bar {
+        x?: number;
+    }
+    
+    interface Foo2 {
+        x: number | undefined;
+    }
+    
+    const foo: Foo = { x: undefined }; // should error
+          ~~~
+!!! error TS2322: Type '{ x: undefined; }' is not assignable to type 'Foo'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'number'.
+    const foo2: Foo2 = { x: undefined }; // ok
+    const foo3: Foo2 = {  }; // should error
+          ~~~~
+!!! error TS2741: Property 'x' is missing in type '{}' but required in type 'Foo2'.
+!!! related TS2728 tests/cases/compiler/missingAndUndefinedProps.ts:10:5: 'x' is declared here.
+    const foo4: Foo = {  }; // ok
+    const foo5: Foo2 = foo; // should error
+          ~~~~
+!!! error TS2322: Type 'Foo' is not assignable to type 'Foo2'.
+!!! error TS2322:   Property 'x' is optional in type 'Foo' but required in type 'Foo2'.
+    const foo6: Foo = foo2; // should error
+          ~~~~
+!!! error TS2322: Type 'Foo2' is not assignable to type 'Foo'.
+!!! error TS2322:   Types of property 'x' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+    
+    declare const something: Bar;
+    let f: Foo = something;
+    

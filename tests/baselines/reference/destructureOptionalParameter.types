@@ -40,7 +40,7 @@ interface QueryMetadataFactory {
 >read : any
 
         descendants?: boolean;
->descendants : boolean | undefined
+>descendants : boolean
 
         read?: any;
 >read : any
@@ -52,7 +52,7 @@ interface QueryMetadataFactory {
 >read : any
 
         descendants?: boolean;
->descendants : boolean | undefined
+>descendants : boolean
 
         read?: any;
 >read : any

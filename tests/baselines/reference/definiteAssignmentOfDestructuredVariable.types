@@ -2,7 +2,7 @@
 // https://github.com/Microsoft/TypeScript/issues/20994
 interface Options {
     a?: number | object;
->a : number | object | undefined
+>a : number | object
 
     b: () => void;
 >b : () => void
@@ -18,7 +18,7 @@ class C<T extends Options> {
 >method : () => void
 
         let { a, b } = this.foo;
->a : T["a"]
+>a : T["a"] | undefined
 >b : T["b"]
 >this.foo : { [P in keyof T]: T[P]; }
 >this : this

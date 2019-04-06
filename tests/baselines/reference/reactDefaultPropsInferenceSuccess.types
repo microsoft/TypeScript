@@ -6,11 +6,11 @@ import React from 'react';
 
 interface BaseProps {
   when?: ((value: string) => boolean) | "a" | "b";
->when : "a" | "b" | ((value: string) => boolean) | undefined
+>when : "a" | "b" | ((value: string) => boolean)
 >value : string
 
   error?: boolean;
->error : boolean | undefined
+>error : boolean
 }
 
 interface Props extends BaseProps {

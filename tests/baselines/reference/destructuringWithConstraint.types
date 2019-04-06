@@ -3,7 +3,7 @@
 
 interface Props {
     foo?: boolean;
->foo : boolean | undefined
+>foo : boolean
 }
 
 function foo<P extends Props>(props: Readonly<P>) {

@@ -20,8 +20,8 @@ namespace ts {
         public transformFlags: TransformFlags;
         public parent: Node;
         public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
-        public jsDoc?: JSDoc[];
-        public original?: Node;
+        public jsDoc: JSDoc[] | undefined;
+        public original: Node | undefined;
         private _children: Node[] | undefined;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
@@ -290,11 +290,11 @@ namespace ts {
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no doc comment, then the empty array will be returned.
-        documentationComment?: SymbolDisplayPart[];
+        documentationComment: SymbolDisplayPart[] | undefined;
 
         // Undefined is used to indicate the value has not been computed. If, after computing, the
         // symbol has no JSDoc tags, then the empty array will be returned.
-        tags?: JSDocTagInfo[];
+        tags: JSDocTagInfo[] | undefined;
 
         constructor(flags: SymbolFlags, name: __String) {
             this.flags = flags;
@@ -374,7 +374,7 @@ namespace ts {
     class TypeObject implements Type {
         checker: TypeChecker;
         flags: TypeFlags;
-        objectFlags?: ObjectFlags;
+        objectFlags: ObjectFlags | undefined;
         id!: number;
         symbol!: Symbol;
         constructor(checker: TypeChecker, flags: TypeFlags) {

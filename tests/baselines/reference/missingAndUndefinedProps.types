@@ -1,0 +1,51 @@
+=== tests/cases/compiler/missingAndUndefinedProps.ts ===
+interface Foo {
+    x?: number;
+>x : number
+}
+
+interface Bar {
+    x?: number;
+>x : number
+}
+
+interface Foo2 {
+    x: number | undefined;
+>x : number | undefined
+}
+
+const foo: Foo = { x: undefined }; // should error
+>foo : Foo
+>{ x: undefined } : { x: undefined; }
+>x : undefined
+>undefined : undefined
+
+const foo2: Foo2 = { x: undefined }; // ok
+>foo2 : Foo2
+>{ x: undefined } : { x: undefined; }
+>x : undefined
+>undefined : undefined
+
+const foo3: Foo2 = {  }; // should error
+>foo3 : Foo2
+>{  } : {}
+
+const foo4: Foo = {  }; // ok
+>foo4 : Foo
+>{  } : {}
+
+const foo5: Foo2 = foo; // should error
+>foo5 : Foo2
+>foo : Foo
+
+const foo6: Foo = foo2; // should error
+>foo6 : Foo
+>foo2 : Foo2
+
+declare const something: Bar;
+>something : Bar
+
+let f: Foo = something;
+>f : Foo
+>something : Bar
+

@@ -7,7 +7,7 @@ interface Foo {
 >required2 : string
 
   optional?: string;
->optional : string | undefined
+>optional : string
 }
 
 const foo1 = { required1: "hello" } as Foo;

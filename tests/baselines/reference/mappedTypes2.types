@@ -98,16 +98,16 @@ interface Shape {
 
 interface PartialShape {
     name?: string;
->name : string | undefined
+>name : string
 
     width?: number;
->width : number | undefined
+>width : number
 
     height?: number;
->height : number | undefined
+>height : number
 
     location?: Point;
->location : Point | undefined
+>location : Point
 }
 
 interface ReadonlyShape {

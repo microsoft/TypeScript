@@ -617,20 +617,20 @@ namespace ts {
         kind: SyntaxKind;
         flags: NodeFlags;
         /* @internal */ modifierFlagsCache: ModifierFlags;
-        /* @internal */ transformFlags: TransformFlags;       // Flags for transforms, possibly undefined
-        decorators?: NodeArray<Decorator>;                    // Array of decorators (in document order)
-        modifiers?: ModifiersArray;                           // Array of modifiers
-        /* @internal */ id?: number;                          // Unique id (used to look up NodeLinks)
-        parent: Node;                                         // Parent node (initialized by binding)
-        /* @internal */ original?: Node;                      // The original node if this is an updated node.
-        /* @internal */ symbol: Symbol;                       // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable;                 // Locals associated with node (initialized by binding)
-        /* @internal */ nextContainer?: Node;                 // Next container in declaration order (initialized by binding)
-        /* @internal */ localSymbol?: Symbol;                 // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ flowNode?: FlowNode;                  // Associated FlowNode (initialized by binding)
-        /* @internal */ emitNode?: EmitNode;                  // Associated EmitNode (initialized by transforms)
-        /* @internal */ contextualType?: Type;                // Used to temporarily assign a contextual type during overload resolution
-        /* @internal */ inferenceContext?: InferenceContext;  // Inference context for contextual type
+        /* @internal */ transformFlags: TransformFlags;                  // Flags for transforms, possibly undefined
+        decorators?: NodeArray<Decorator>;                               // Array of decorators (in document order)
+        modifiers?: ModifiersArray;                                      // Array of modifiers
+        /* @internal */ id?: number;                                     // Unique id (used to look up NodeLinks)
+        parent: Node;                                                    // Parent node (initialized by binding)
+        /* @internal */ original?: Node | undefined;                     // The original node if this is an updated node.
+        /* @internal */ symbol: Symbol;                                  // Symbol declared by node (initialized by binding)
+        /* @internal */ locals?: SymbolTable;                            // Locals associated with node (initialized by binding)
+        /* @internal */ nextContainer?: Node;                            // Next container in declaration order (initialized by binding)
+        /* @internal */ localSymbol?: Symbol;                            // Local symbol declared by node (initialized by binding only for exported nodes)
+        /* @internal */ flowNode?: FlowNode;                             // Associated FlowNode (initialized by binding)
+        /* @internal */ emitNode?: EmitNode;                             // Associated EmitNode (initialized by transforms)
+        /* @internal */ contextualType?: Type;                           // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ inferenceContext?: InferenceContext | undefined; // Inference context for contextual type
     }
 
     export interface JSDocContainer {
@@ -774,7 +774,7 @@ namespace ts {
         /*@internal*/ autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
-        /*@internal*/ typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration>; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
+        /*@internal*/ typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined; // Only defined on synthesized nodes. Though not syntactically valid, used in emitting diagnostics, quickinfo, and signature help.
         /*@internal*/ jsdocDotPos?: number;                       // Identifier occurs in JSDoc-style generic: Id.<T>
     }
 
@@ -919,7 +919,7 @@ namespace ts {
         propertyName?: PropertyName;        // Binding property name (in object binding pattern)
         dotDotDotToken?: DotDotDotToken;    // Present on rest element (in object binding pattern)
         name: BindingName;                  // Declared binding element name
-        initializer?: Expression;           // Optional initializer
+        initializer: Expression | undefined;           // Optional initializer
     }
 
     /*@internal*/
@@ -2177,7 +2177,7 @@ namespace ts {
     export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
         name?: PropertyName;
-        questionToken?: QuestionToken;
+        questionToken?: QuestionToken | undefined;
     }
 
     export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
@@ -2754,7 +2754,7 @@ namespace ts {
         /* @internal */ version: string;
         /* @internal */ pragmas: ReadonlyPragmaMap;
         /* @internal */ localJsxNamespace?: __String;
-        /* @internal */ localJsxFactory?: EntityName;
+        /* @internal */ localJsxFactory: EntityName | undefined;
 
         /*@internal*/ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
@@ -3513,14 +3513,14 @@ namespace ts {
     /* @internal */
     export interface SymbolVisibilityResult {
         accessibility: SymbolAccessibility;
-        aliasesToMakeVisible?: LateVisibilityPaintedStatement[]; // aliases that need to have this symbol visible
+        aliasesToMakeVisible?: LateVisibilityPaintedStatement[] | undefined; // aliases that need to have this symbol visible
         errorSymbolName?: string; // Optional symbol name that results in error
         errorNode?: Node; // optional node that results in error
     }
 
     /* @internal */
     export interface SymbolAccessibilityResult extends SymbolVisibilityResult {
-        errorModuleName?: string; // If the symbol is not visible from module, module's name
+        errorModuleName?: string | undefined; // If the symbol is not visible from module, module's name
     }
 
     /* @internal */
@@ -3690,11 +3690,11 @@ namespace ts {
         members?: SymbolTable;                  // Class, interface or object literal instance members
         exports?: SymbolTable;                  // Module exports
         globalExports?: SymbolTable;            // Conditional global UMD exports
-        /* @internal */ id?: number;            // Unique id (used to look up SymbolLinks)
-        /* @internal */ mergeId?: number;       // Merge id (used to look up merged symbol)
-        /* @internal */ parent?: Symbol;        // Parent symbol
+        /* @internal */ id?: number | undefined;            // Unique id (used to look up SymbolLinks)
+        /* @internal */ mergeId?: number | undefined;       // Merge id (used to look up merged symbol)
+        /* @internal */ parent?: Symbol | undefined;        // Parent symbol
         /* @internal */ exportSymbol?: Symbol;  // Exported symbol associated with this symbol
-        /* @internal */ nameType?: Type;        // Type associated with a late-bound symbol
+        /* @internal */ nameType?: Type | undefined;    // Type associated with a late-bound symbol
         /* @internal */ constEnumOnlyModule?: boolean; // True if module contains only const enums or other modules with only const enums
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
@@ -3703,9 +3703,9 @@ namespace ts {
 
     /* @internal */
     export interface SymbolLinks {
-        immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
+        immediateTarget?: Symbol | undefined // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                    // Resolved (non-alias) target of an alias
-        type?: Type;                        // Type of value symbol
+        type?: Type | undefined              // Type of value symbol
         uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
@@ -3726,7 +3726,7 @@ namespace ts {
         typeParametersChecked?: boolean;    // True if type parameters of merged class and interface declarations have been checked.
         isDeclarationWithCollidingName?: boolean;   // True if symbol is block scoped redeclaration
         bindingElement?: BindingElement;    // Binding element associated with property symbol
-        exportsSomeValue?: boolean;         // True if module exports some value (not just types)
+        exportsSomeValue?: boolean | undefined; // True if module exports some value (not just types)
         enumKind?: EnumKind;                // Enum declaration classification
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
@@ -3865,10 +3865,10 @@ namespace ts {
         resolvedType?: Type;              // Cached type of type node
         resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
-        resolvedSymbol?: Symbol;          // Cached name resolution result
+        resolvedSymbol: Symbol | undefined;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
-        enumMemberValue?: string | number;  // Constant value of enum member
+        enumMemberValue: string | number | undefined;  // Constant value of enum member
         isVisible?: boolean;              // Is this node visible
         containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
         hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
@@ -3876,7 +3876,7 @@ namespace ts {
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
+        superCall: SuperCall | undefined  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
@@ -3979,8 +3979,8 @@ namespace ts {
         /* @internal */ checker: TypeChecker;
         symbol: Symbol;                  // Symbol associated with type (if any)
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
-        aliasSymbol?: Symbol;            // Alias associated with type
-        aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
+        aliasSymbol?: Symbol | undefined;            // Alias associated with type
+        aliasTypeArguments?: ReadonlyArray<Type> | undefined;     // Alias type arguments (if any)
         /* @internal */ aliasTypeArgumentsContainsMarker?: boolean;   // Alias type arguments (if any)
         /* @internal */
         permissiveInstantiation?: Type;  // Instantiation with type parameters mapped to wildcard type
@@ -4080,12 +4080,12 @@ namespace ts {
     // Object types (TypeFlags.ObjectType)
     export interface ObjectType extends Type {
         objectFlags: ObjectFlags;
-        /* @internal */ members?: SymbolTable;             // Properties by name
-        /* @internal */ properties?: Symbol[];             // Properties
-        /* @internal */ callSignatures?: ReadonlyArray<Signature>;      // Call signatures of type
-        /* @internal */ constructSignatures?: ReadonlyArray<Signature>; // Construct signatures of type
-        /* @internal */ stringIndexInfo?: IndexInfo;      // String indexing info
-        /* @internal */ numberIndexInfo?: IndexInfo;      // Numeric indexing info
+        /* @internal */ members: SymbolTable | undefined;             // Properties by name
+        /* @internal */ properties: Symbol[] | undefined;             // Properties
+        /* @internal */ callSignatures: ReadonlyArray<Signature> | undefined;      // Call signatures of type
+        /* @internal */ constructSignatures: ReadonlyArray<Signature> | undefined; // Construct signatures of type
+        /* @internal */ stringIndexInfo: IndexInfo | undefined;      // String indexing info
+        /* @internal */ numberIndexInfo: IndexInfo | undefined;      // Numeric indexing info
     }
 
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
@@ -4107,8 +4107,8 @@ namespace ts {
         declaredProperties: Symbol[];                   // Declared members
         declaredCallSignatures: Signature[];            // Declared call signatures
         declaredConstructSignatures: Signature[];       // Declared construct signatures
-        declaredStringIndexInfo?: IndexInfo; // Declared string indexing info
-        declaredNumberIndexInfo?: IndexInfo; // Declared numeric indexing info
+        declaredStringIndexInfo: IndexInfo | undefined; // Declared string indexing info
+        declaredNumberIndexInfo: IndexInfo | undefined; // Declared numeric indexing info
     }
 
     /**
@@ -4123,7 +4123,7 @@ namespace ts {
      */
     export interface TypeReference extends ObjectType {
         target: GenericType;    // Type reference target
-        typeArguments?: ReadonlyArray<Type>;  // Type reference type arguments (undefined if none)
+        typeArguments: ReadonlyArray<Type> | undefined;  // Type reference type arguments (undefined if none)
     }
 
     /* @internal */
@@ -4147,7 +4147,7 @@ namespace ts {
         minLength: number;
         hasRestElement: boolean;
         readonly: boolean;
-        associatedNames?: __String[];
+        associatedNames: __String[] | undefined;
     }
 
     export interface TupleTypeReference extends TypeReference {
@@ -4233,7 +4233,7 @@ namespace ts {
     export interface IterableOrIteratorType extends ObjectType, UnionType {
         iteratedTypeOfIterable?: Type;
         iteratedTypeOfIterator?: Type;
-        iteratedTypeOfAsyncIterable?: Type;
+        iteratedTypeOfAsyncIterable: Type | undefined;
         iteratedTypeOfAsyncIterator?: Type;
     }
 
@@ -4300,11 +4300,11 @@ namespace ts {
         trueType: Type;
         falseType: Type;
         isDistributive: boolean;
-        inferTypeParameters?: TypeParameter[];
-        outerTypeParameters?: TypeParameter[];
-        instantiations?: Map<Type>;
-        aliasSymbol?: Symbol;
-        aliasTypeArguments?: Type[];
+        inferTypeParameters: TypeParameter[] | undefined;
+        outerTypeParameters: TypeParameter[] | undefined;
+        instantiations: Map<Type> | undefined;
+        aliasSymbol: Symbol | undefined;
+        aliasTypeArguments: Type[] | undefined;
     }
 
     // T extends U ? X : Y (TypeFlags.Conditional)
@@ -4317,9 +4317,9 @@ namespace ts {
         /* @internal */
         resolvedDefaultConstraint?: Type;
         /* @internal */
-        mapper?: TypeMapper;
+        mapper: TypeMapper | undefined;
         /* @internal */
-        combinedMapper?: TypeMapper;
+        combinedMapper: TypeMapper | undefined;
     }
 
     // Type parameter substitution (TypeFlags.Substitution)
@@ -4346,19 +4346,19 @@ namespace ts {
     }
 
     export interface Signature {
-        declaration?: SignatureDeclaration | JSDocSignature; // Originating declaration
-        typeParameters?: ReadonlyArray<TypeParameter>;   // Type parameters (undefined if non-generic)
+        declaration: SignatureDeclaration | JSDocSignature | undefined; // Originating declaration
+        typeParameters?: ReadonlyArray<TypeParameter> | undefined;   // Type parameters (undefined if non-generic)
         parameters: ReadonlyArray<Symbol>;               // Parameters
         /* @internal */
-        thisParameter?: Symbol;             // symbol of this-type parameter
+        thisParameter: Symbol | undefined;             // symbol of this-type parameter
         /* @internal */
         // See comment in `instantiateSignature` for why these are set lazily.
-        resolvedReturnType?: Type;          // Lazily set by `getReturnTypeOfSignature`.
+        resolvedReturnType: Type | undefined;          // Lazily set by `getReturnTypeOfSignature`.
         /* @internal */
         // Lazily set by `getTypePredicateOfSignature`.
         // `undefined` indicates a type predicate that has not yet been computed.
         // Uses a special `noTypePredicate` sentinel value to indicate that there is no type predicate. This looks like a TypePredicate at runtime to avoid polymorphism.
-        resolvedTypePredicate?: TypePredicate;
+        resolvedTypePredicate: TypePredicate | undefined;
         /* @internal */
         minArgumentCount: number;           // Number of non-optional parameters
         /* @internal */
@@ -4366,9 +4366,9 @@ namespace ts {
         /* @internal */
         hasLiteralTypes: boolean;           // True if specialized
         /* @internal */
-        target?: Signature;                 // Instantiation target
+        target?: Signature | undefined;      // Instantiation target
         /* @internal */
-        mapper?: TypeMapper;                // Instantiation mapper
+        mapper?: TypeMapper | undefined;    // Instantiation mapper
         /* @internal */
         unionSignatures?: Signature[];      // Underlying signatures of a union signature
         /* @internal */
@@ -4389,7 +4389,7 @@ namespace ts {
     export interface IndexInfo {
         type: Type;
         isReadonly: boolean;
-        declaration?: IndexSignatureDeclaration;
+        declaration: IndexSignatureDeclaration | undefined;
     }
 
     /* @internal */
@@ -4412,8 +4412,8 @@ namespace ts {
         typeParameter: TypeParameter;            // Type parameter for which inferences are being made
         candidates: Type[] | undefined;          // Candidates in covariant positions (or undefined)
         contraCandidates: Type[] | undefined;    // Candidates in contravariant positions (or undefined)
-        inferredType?: Type;                     // Cache for resolved inferred type
-        priority?: InferencePriority;            // Priority of current inference set
+        inferredType: Type | undefined;          // Cache for resolved inferred type
+        priority: InferencePriority | undefined  // Priority of current inference set
         topLevel: boolean;                       // True if all inferences are to top level occurrences
         isFixed: boolean;                        // True if inferences are fixed
     }
@@ -4448,21 +4448,21 @@ namespace ts {
     /* @internal */
     export interface InferenceContext {
         inferences: InferenceInfo[];                  // Inferences made for each type parameter
-        signature?: Signature;                        // Generic signature for which inferences are made (if any)
+        signature: Signature | undefined;             // Generic signature for which inferences are made (if any)
         flags: InferenceFlags;                        // Inference flags
         compareTypes: TypeComparer;                   // Type comparer function
         mapper: TypeMapper;                           // Mapper that fixes inferences
         nonFixingMapper: TypeMapper;                  // Mapper that doesn't fix inferences
-        returnMapper?: TypeMapper;                    // Type mapper for inferences from return types (if any)
+        returnMapper?: TypeMapper | undefined;         // Type mapper for inferences from return types (if any)
         inferredTypeParameters?: ReadonlyArray<TypeParameter>; // Inferred type parameters for function result
     }
 
     /* @internal */
     export interface WideningContext {
-        parent?: WideningContext;       // Parent context
-        propertyName?: __String;        // Name of property in parent
-        siblings?: Type[];              // Types of siblings
-        resolvedProperties?: Symbol[];  // Properties occurring in sibling object literals
+        parent: WideningContext | undefined;       // Parent context
+        propertyName: __String | undefined;        // Name of property in parent
+        siblings: Type[] | undefined;              // Types of siblings
+        resolvedProperties: Symbol[] | undefined;  // Properties occurring in sibling object literals
     }
 
     /* @internal */
@@ -4518,14 +4518,14 @@ namespace ts {
         messageText: string;
         category: DiagnosticCategory;
         code: number;
-        next?: DiagnosticMessageChain;
+        next: DiagnosticMessageChain | undefined;
     }
 
     export interface Diagnostic extends DiagnosticRelatedInformation {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         source?: string;
-        relatedInformation?: DiagnosticRelatedInformation[];
+        relatedInformation?: DiagnosticRelatedInformation[] | undefined;
     }
     export interface DiagnosticRelatedInformation {
         category: DiagnosticCategory;
@@ -5792,7 +5792,7 @@ namespace ts {
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
         reportLikelyUnsafeImportRequiredError?(specifier: string): void;
-        moduleResolverHost?: ModuleSpecifierResolutionHost & { getSourceFiles(): ReadonlyArray<SourceFile>, getCommonSourceDirectory(): string };
+        moduleResolverHost?: ModuleSpecifierResolutionHost & { getSourceFiles(): ReadonlyArray<SourceFile>, getCommonSourceDirectory(): string } | undefined;
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }

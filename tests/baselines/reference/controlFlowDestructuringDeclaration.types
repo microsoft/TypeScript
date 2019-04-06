@@ -115,7 +115,7 @@ function f5() {
 
     let { x }: { x?: string | number } = { x: 1 };
 >x : string | number | undefined
->x : string | number | undefined
+>x : string | number
 >{ x: 1 } : { x: number; }
 >x : number
 >1 : 1
@@ -150,7 +150,7 @@ function f6() {
 
     let { x }: { x?: string | number } = {};
 >x : string | number | undefined
->x : string | number | undefined
+>x : string | number
 >{} : {}
 
     x;

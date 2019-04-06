@@ -176,13 +176,13 @@ export type DiagnosticSeverity = 1 | 2 | 3 | 4;
 
 export interface Diagnostic {
 	severity?: DiagnosticSeverity;
->severity : 1 | 2 | 3 | 4 | undefined
+>severity : DiagnosticSeverity
 
 	code?: number | string;
->code : string | number | undefined
+>code : string | number
 
 	source?: string;
->source : string | undefined
+>source : string
 
 	message: string;
 >message : string
