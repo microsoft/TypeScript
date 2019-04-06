@@ -3701,9 +3701,9 @@ namespace ts {
 
     /* @internal */
     export interface SymbolLinks {
-        immediateTarget?: Symbol | undefined // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
+        immediateTarget?: Symbol | undefined; // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
         target?: Symbol;                    // Resolved (non-alias) target of an alias
-        type?: Type | undefined              // Type of value symbol
+        type?: Type | undefined;            // Type of value symbol
         uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
         resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
@@ -3874,7 +3874,7 @@ namespace ts {
         resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
         resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
         hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall: SuperCall | undefined  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
+        superCall: SuperCall | undefined; // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
@@ -4413,7 +4413,7 @@ namespace ts {
         candidates: Type[] | undefined;          // Candidates in covariant positions (or undefined)
         contraCandidates: Type[] | undefined;    // Candidates in contravariant positions (or undefined)
         inferredType: Type | undefined;          // Cache for resolved inferred type
-        priority: InferencePriority | undefined  // Priority of current inference set
+        priority: InferencePriority | undefined; // Priority of current inference set
         topLevel: boolean;                       // True if all inferences are to top level occurrences
         isFixed: boolean;                        // True if inferences are fixed
     }
