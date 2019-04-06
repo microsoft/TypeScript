@@ -230,7 +230,7 @@ namespace ts.BuilderState {
 
         // Create the reference map, and set the file infos
         for (const sourceFile of newProgram.getSourceFiles()) {
-            const version = sourceFile.version;
+            const version = Debug.assertDefined(sourceFile.version, "Program intended to be used with Builder should have source files with versions set");
             const oldInfo = useOldState ? oldState!.fileInfos.get(sourceFile.path) : undefined;
             if (referencedMap) {
                 const newReferences = getReferencedFiles(newProgram, sourceFile, getCanonicalFileName);

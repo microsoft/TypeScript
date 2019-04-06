@@ -1,0 +1,4 @@
+=== tests/cases/compiler/a.js ===
+exports.a.b.c = 0;
+>exports : Symbol("tests/cases/compiler/a", Decl(a.js, 0, 0))
+

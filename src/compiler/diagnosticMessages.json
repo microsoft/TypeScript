@@ -847,6 +847,10 @@
         "category": "Error",
         "code": 1257
     },
+    "Definite assignment assertions can only be used along with a type annotation.": {
+        "category": "Error",
+        "code": 1258
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -3072,6 +3076,10 @@
         "category": "Error",
         "code": 5073
     },
+    "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option `--tsBuildInfoFile` is specified.": {
+        "category": "Error",
+        "code": 5074
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -4927,7 +4935,7 @@
         "category": "Message",
         "code": 95074
     },
-    "Convert to named parameters": {
+    "Convert parameters to destructured object": {
         "category": "Message",
         "code": 95075
     }
