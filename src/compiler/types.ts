@@ -5950,26 +5950,18 @@ namespace ts {
     /* @internal */
     export interface PragmaDefinition<T1 extends string = string, T2 extends string = string, T3 extends string = string, T4 extends string = string> {
         args?:
-            | [PragmaArgumentSpecification<T1>]
-            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>]
-            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>]
-            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>, PragmaArgumentSpecification<T4>];
+            | readonly [PragmaArgumentSpecification<T1>]
+            | readonly [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>]
+            | readonly [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>]
+            | readonly [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>, PragmaArgumentSpecification<T4>];
         // If not present, defaults to PragmaKindFlags.Default
         kind?: PragmaKindFlags;
-    }
-
-    /**
-     * This function only exists to cause exact types to be inferred for all the literals within `commentPragmas`
-     */
-    /* @internal */
-    function _contextuallyTypePragmas<T extends {[name: string]: PragmaDefinition<K1, K2, K3, K4>}, K1 extends string, K2 extends string, K3 extends string, K4 extends string>(args: T): T {
-        return args;
     }
 
     // While not strictly a type, this is here because `PragmaMap` needs to be here to be used with `SourceFile`, and we don't
     //  fancy effectively defining it twice, once in value-space and once in type-space
     /* @internal */
-    export const commentPragmas = _contextuallyTypePragmas({
+    export const commentPragmas = {
         "reference": {
             args: [
                 { name: "types", optional: true, captureSpan: true },
@@ -5997,7 +5989,7 @@ namespace ts {
             args: [{ name: "factory" }],
             kind: PragmaKindFlags.MultiLine
         },
-    });
+    } as const;
 
     /* @internal */
     type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends {captureSpan: true} ? {value: string, pos: number, end: number} : string;
@@ -6008,29 +6000,29 @@ namespace ts {
             ? {[K in TName]?: PragmaArgTypeMaybeCapture<TDesc>}
             : {[K in TName]: PragmaArgTypeMaybeCapture<TDesc>};
 
+    /* @internal */
+    type UnionToIntersection<U> =
+            (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+
+    /* @internal */
+    type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpecification<any>[]> = {
+        [K in keyof T]: PragmaArgTypeOptional<T[K], T[K] extends {name: infer TName} ? TName extends string ? TName : never : never>
+    }[Extract<keyof T, number>]; // The mapped type maps over only the tuple members, but this reindex gets _all_ members - by extracting only `number` keys, we get only the tuple members
+
     /**
      * Maps a pragma definition into the desired shape for its arguments object
-     * Maybe the below is a good argument for types being iterable on struture in some way.
      */
     /* @internal */
-    type PragmaArgumentType<T extends PragmaDefinition> =
-        T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>, PragmaArgumentSpecification<infer TName3>, PragmaArgumentSpecification<infer TName4>] }
-            ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2> & PragmaArgTypeOptional<T["args"][2], TName3> & PragmaArgTypeOptional<T["args"][2], TName4>
-            : T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>, PragmaArgumentSpecification<infer TName3>] }
-                ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2> & PragmaArgTypeOptional<T["args"][2], TName3>
-                : T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>] }
-                    ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2>
-                    : T extends { args: [PragmaArgumentSpecification<infer TName>] }
-                        ? PragmaArgTypeOptional<T["args"][0], TName>
-                        : object;
-    // The above fallback to `object` when there's no args to allow `{}` (as intended), but not the number 2, for example
-    // TODO: Swap to `undefined` for a cleaner API once strictNullChecks is enabled
+    type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> =
+        ConcretePragmaSpecs[KPrag] extends { args: readonly PragmaArgumentSpecification<any>[] }
+            ? UnionToIntersection<ArgumentDefinitionToFieldUnion<ConcretePragmaSpecs[KPrag]["args"]>>
+            : never;
 
     /* @internal */
     type ConcretePragmaSpecs = typeof commentPragmas;
 
     /* @internal */
-    export type PragmaPseudoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
+    export type PragmaPseudoMap = {[K in keyof ConcretePragmaSpecs]: {arguments: PragmaArgumentType<K>, range: CommentRange}};
 
     /* @internal */
     export type PragmaPseudoMapEntry = {[K in keyof PragmaPseudoMap]: {name: K, args: PragmaPseudoMap[K]}}[keyof PragmaPseudoMap];
