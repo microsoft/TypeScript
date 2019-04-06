@@ -11,7 +11,7 @@ namespace ts {
     export interface RefactorContext extends textChanges.TextChangesContext {
         file: SourceFile;
         startPosition: number;
-        endPosition?: number;
+        endPosition?: number | undefined;
         program: Program;
         cancellationToken?: CancellationToken;
         preferences: UserPreferences;

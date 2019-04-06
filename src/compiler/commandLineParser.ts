@@ -1332,7 +1332,7 @@ namespace ts {
      * Read tsconfig.json file
      * @param fileName The path to the config file
      */
-    export function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): { config?: any; error?: Diagnostic } {
+    export function readConfigFile(fileName: string, readFile: (path: string) => string | undefined): { config: any; error: Diagnostic | undefined } {
         const textOrDiagnostic = tryReadFile(fileName, readFile);
         return isString(textOrDiagnostic) ? parseConfigFileTextToJson(fileName, textOrDiagnostic) : { config: {}, error: textOrDiagnostic };
     }
@@ -1342,7 +1342,7 @@ namespace ts {
      * @param fileName The path to the config file
      * @param jsonText The text of the config file
      */
-    export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config?: any; error?: Diagnostic } {
+    export function parseConfigFileTextToJson(fileName: string, jsonText: string): { config: any; error: Diagnostic | undefined } {
         const jsonSourceFile = parseJsonText(fileName, jsonText);
         return {
             config: convertToObject(jsonSourceFile, jsonSourceFile.parseDiagnostics),
@@ -2138,7 +2138,7 @@ namespace ts {
         /**
          * Note that the case of the config path has not yet been normalized, as no files have been imported into the project yet
          */
-        extendedConfigPath?: string;
+        extendedConfigPath?: string | undefined;
     }
 
     function isSuccessfulParsedTsconfig(value: ParsedTsconfig) {

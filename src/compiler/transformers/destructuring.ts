@@ -10,7 +10,7 @@ namespace ts {
         createArrayBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ArrayBindingOrAssignmentPattern;
         createObjectBindingOrAssignmentPattern: (elements: BindingOrAssignmentElement[]) => ObjectBindingOrAssignmentPattern;
         createArrayBindingOrAssignmentElement: (node: Identifier) => BindingOrAssignmentElement;
-        visitor?: (node: Node) => VisitResult<Node>;
+        visitor?: ((node: Node) => VisitResult<Node>) | undefined;
     }
 
     export const enum FlattenLevel {
@@ -167,7 +167,7 @@ namespace ts {
         hoistTempVariables = false,
         skipInitializer?: boolean): VariableDeclaration[] {
         let pendingExpressions: Expression[] | undefined;
-        const pendingDeclarations: { pendingExpressions?: Expression[], name: BindingName, value: Expression, location?: TextRange, original?: Node; }[] = [];
+        const pendingDeclarations: { pendingExpressions: Expression[] | undefined, name: BindingName, value: Expression, location: TextRange | undefined, original: Node | undefined; }[] = [];
         const declarations: VariableDeclaration[] = [];
         const flattenContext: FlattenContext = {
             context,

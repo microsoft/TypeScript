@@ -5,7 +5,7 @@ namespace ts {
     export interface SymbolAccessibilityDiagnostic {
         errorNode: Node;
         diagnosticMessage: DiagnosticMessage;
-        typeName?: DeclarationName | QualifiedName;
+        typeName?: DeclarationName | QualifiedName | undefined;
     }
 
     export type DeclarationDiagnosticProducing =

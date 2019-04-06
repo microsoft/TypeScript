@@ -302,7 +302,7 @@ namespace ts {
     }
 
     export interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
-        reportErrorSummary?: ReportEmitErrorSummary;
+        reportErrorSummary?: ReportEmitErrorSummary | undefined;
     }
 
     export interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {

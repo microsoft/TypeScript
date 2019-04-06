@@ -2,7 +2,7 @@ namespace ts {
     export interface EmitOutput {
         outputFiles: OutputFile[];
         emitSkipped: boolean;
-        /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
+        /* @internal */ exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
     }
 
     export interface OutputFile {
@@ -68,11 +68,11 @@ namespace ts {
         /**
          * Cache of all files excluding default library file for the current program
          */
-        allFilesExcludingDefaultLibraryFile?: ReadonlyArray<SourceFile>;
+        allFilesExcludingDefaultLibraryFile?: ReadonlyArray<SourceFile> | undefined;
         /**
          * Cache of all the file names
          */
-        allFileNames?: ReadonlyArray<string>;
+        allFileNames?: ReadonlyArray<string> | undefined;
     }
 
     export function cloneMapOrUndefined<T>(map: ReadonlyMap<T> | undefined) {

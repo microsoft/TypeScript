@@ -30,7 +30,7 @@ namespace ts.FindAllReferences {
 
     export const enum ImportExport { Import, Export }
 
-    interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
+    interface AmbientModuleDeclaration extends ModuleDeclaration { body: ModuleBlock | undefined; }
     type SourceFileLike = SourceFile | AmbientModuleDeclaration;
     // Identifier for the case of `const x = require("y")`.
     type Importer = AnyImportOrReExport | ValidImportTypeNode | Identifier;

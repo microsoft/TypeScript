@@ -2897,7 +2897,7 @@ namespace ts.server.protocol {
         tabSize?: number;
         newLineCharacter?: string;
         convertTabsToSpaces?: boolean;
-        indentStyle?: IndentStyle | ts.IndentStyle;
+        indentStyle?: IndentStyle | ts.IndentStyle | undefined;
     }
 
     export interface FormatCodeSettings extends EditorSettings {

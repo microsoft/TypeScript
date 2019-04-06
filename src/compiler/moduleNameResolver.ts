@@ -44,7 +44,7 @@ namespace ts {
          *  - string if original Path if it is symbolic link to the resolved path
          *  - true if path is not a symbolic link - this indicates that the originalPath calculation is already done and needs to be skipped
          */
-        originalPath?: string | true;
+        originalPath?: string | true | undefined;
     }
 
     /** Result of trying to resolve a module at a file. Needs to have 'packageId' added later. */
@@ -241,7 +241,7 @@ namespace ts {
      * Returns the path to every node_modules/@types directory from some ancestor directory.
      * Returns undefined if there are none.
      */
-    function getDefaultTypeRoots(currentDirectory: string, host: { directoryExists?: (directoryName: string) => boolean }): string[] | undefined {
+    function getDefaultTypeRoots(currentDirectory: string, host: Pick<GetEffectiveTypeRootsHost, 'directoryExists'>): string[] | undefined {
         if (!host.directoryExists) {
             return [combinePaths(currentDirectory, nodeModulesAtTypes)];
             // And if it doesn't exist, tough.

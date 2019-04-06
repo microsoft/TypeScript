@@ -284,7 +284,7 @@ namespace ts.server {
     /*@internal*/
     export interface SourceMapFileWatcher {
         watcher: FileWatcher;
-        sourceInfos?: Map<true>;
+        sourceInfos?: Map<true> | undefined;
     }
 
     export class ScriptInfo {
@@ -313,18 +313,18 @@ namespace ts.server {
         mTime?: number;
 
         /*@internal*/
-        sourceFileLike?: SourceFileLike;
+        sourceFileLike: SourceFileLike | undefined;
 
         /*@internal*/
-        sourceMapFilePath?: Path | SourceMapFileWatcher | false;
+        sourceMapFilePath: Path | SourceMapFileWatcher | false | undefined;
 
         // Present on sourceMapFile info
         /*@internal*/
-        declarationInfoPath?: Path;
+        declarationInfoPath: Path | undefined;
         /*@internal*/
-        sourceInfos?: Map<true>;
+        sourceInfos: Map<true> | undefined;
         /*@internal*/
-        documentPositionMapper?: DocumentPositionMapper | false;
+        documentPositionMapper: DocumentPositionMapper | false | undefined;
 
         constructor(
             private readonly host: ServerHost,

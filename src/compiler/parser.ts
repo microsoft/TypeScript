@@ -7716,7 +7716,7 @@ namespace ts {
     export interface PragmaContext {
         languageVersion: ScriptTarget;
         pragmas?: PragmaMap;
-        checkJsDirective?: CheckJsDirective;
+        checkJsDirective?: CheckJsDirective | undefined;
         referencedFiles: FileReference[];
         typeReferenceDirectives: FileReference[];
         libReferenceDirectives: FileReference[];

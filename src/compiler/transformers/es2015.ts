@@ -92,7 +92,7 @@ namespace ts {
          * set of non-labeled jumps that should be interpreted as local
          * i.e. if converted loop contains normal loop or switch statement then inside this loop break should be treated as local jump
          */
-        allowedNonLabeledJumps?: Jump;
+        allowedNonLabeledJumps?: Jump | undefined;
 
         /*
          * alias for 'arguments' object from the calling code stack frame

@@ -4153,7 +4153,7 @@ namespace ts {
         }
     }
 
-    export function directoryProbablyExists(directoryName: string, host: { directoryExists?: (directoryName: string) => boolean }): boolean {
+    export function directoryProbablyExists(directoryName: string, host: Pick<ModuleResolutionHost,  'directoryExists'>): boolean {
         // if host does not support 'directoryExists' assume that directory will exist
         return !host.directoryExists || host.directoryExists(directoryName);
     }
@@ -7255,7 +7255,7 @@ namespace ts {
         return compilerOptions.target || ScriptTarget.ES3;
     }
 
-    export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"], target?: CompilerOptions["target"]}) {
+    export function getEmitModuleKind(compilerOptions: {module?: CompilerOptions["module"] | undefined, target?: CompilerOptions["target"]}) {
         return typeof compilerOptions.module === "number" ?
             compilerOptions.module :
             getEmitScriptTarget(compilerOptions) >= ScriptTarget.ES2015 ? ModuleKind.ES2015 : ModuleKind.CommonJS;

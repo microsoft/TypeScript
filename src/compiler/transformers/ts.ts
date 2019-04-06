@@ -1325,7 +1325,7 @@ namespace ts {
          */
         interface AllDecorators {
             decorators: ReadonlyArray<Decorator> | undefined;
-            parameters?: ReadonlyArray<ReadonlyArray<Decorator> | undefined>;
+            parameters?: ReadonlyArray<ReadonlyArray<Decorator> | undefined> | undefined;
         }
 
         /**

@@ -280,8 +280,8 @@ namespace ts.server {
     }
 
     export interface OpenConfiguredProjectResult {
-        configFileName?: NormalizedPath;
-        configFileErrors?: ReadonlyArray<Diagnostic>;
+        configFileName: NormalizedPath | undefined;
+        configFileErrors: ReadonlyArray<Diagnostic> | undefined;
     }
 
     interface FilePropertyReader<T> {
@@ -358,7 +358,7 @@ namespace ts.server {
          * inferred project and will be impacted by change in the status of the config file
          * The watcher is present only when there is no open configured project for the config file
          */
-        configFileWatcherForRootOfInferredProject?: FileWatcher;
+        configFileWatcherForRootOfInferredProject?: FileWatcher | undefined;
     }
 
     export interface ProjectServiceOptions {
@@ -511,9 +511,9 @@ namespace ts.server {
         public readonly useInferredProjectPerProjectRoot: boolean;
         public readonly typingsInstaller: ITypingsInstaller;
         private readonly globalCacheLocationDirectoryPath: Path | undefined;
-        public readonly throttleWaitMilliseconds?: number;
-        private readonly eventHandler?: ProjectServiceEventHandler;
-        private readonly suppressDiagnosticEvents?: boolean;
+        public readonly throttleWaitMilliseconds?: number | undefined;
+        private readonly eventHandler?: ProjectServiceEventHandler | undefined;
+        private readonly suppressDiagnosticEvents?: boolean | undefined;
 
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
@@ -522,7 +522,7 @@ namespace ts.server {
 
         public readonly typesMapLocation: string | undefined;
 
-        public readonly syntaxOnly?: boolean;
+        public readonly syntaxOnly?: boolean | undefined;
 
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects = createMap<true>();

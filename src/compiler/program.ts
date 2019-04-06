@@ -205,7 +205,7 @@ namespace ts {
         readFile(fileName: string, encoding?: string): string | undefined;
         directoryExists?(directory: string): boolean;
         createDirectory?(directory: string): void;
-        writeFile?: WriteFileCallback;
+        writeFile?: WriteFileCallback | undefined;
     }
 
     /*@internal*/

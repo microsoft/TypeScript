@@ -632,7 +632,7 @@ namespace ts {
     export interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
         isDefinition: boolean;
-        isInString?: true;
+        isInString?: true | undefined;
     }
 
     export interface ImplementationLocation extends DocumentSpan {
@@ -654,7 +654,7 @@ namespace ts {
 
     export interface HighlightSpan {
         fileName?: string;
-        isInString?: true;
+        isInString?: true | undefined;
         textSpan: TextSpan;
         kind: HighlightSpanKind;
     }
@@ -825,8 +825,8 @@ namespace ts {
         kindModifiers: string;
         textSpan: TextSpan;
         displayParts?: SymbolDisplayPart[];
-        documentation?: SymbolDisplayPart[];
-        tags?: JSDocTagInfo[];
+        documentation?: SymbolDisplayPart[] | undefined;
+        tags?: JSDocTagInfo[] | undefined;
     }
 
     export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;

@@ -618,24 +618,24 @@ namespace ts {
         flags: NodeFlags;
         /* @internal */ modifierFlagsCache: ModifierFlags;
         /* @internal */ transformFlags: TransformFlags;                  // Flags for transforms, possibly undefined
-        decorators?: NodeArray<Decorator>;                               // Array of decorators (in document order)
-        modifiers?: ModifiersArray;                                      // Array of modifiers
+        decorators?: NodeArray<Decorator> | undefined;                   // Array of decorators (in document order)
+        modifiers?: ModifiersArray | undefined;                          // Array of modifiers
         /* @internal */ id?: number | undefined;                         // Unique id (used to look up NodeLinks)
         parent: Node;                                                    // Parent node (initialized by binding)
         /* @internal */ original?: Node | undefined;                     // The original node if this is an updated node.
         /* @internal */ symbol: Symbol;                                  // Symbol declared by node (initialized by binding)
-        /* @internal */ locals?: SymbolTable;                            // Locals associated with node (initialized by binding)
+        /* @internal */ locals?: SymbolTable | undefined;                // Locals associated with node (initialized by binding)
         /* @internal */ nextContainer?: Node;                            // Next container in declaration order (initialized by binding)
         /* @internal */ localSymbol?: Symbol;                            // Local symbol declared by node (initialized by binding only for exported nodes)
-        /* @internal */ flowNode?: FlowNode | undefined;                  // Associated FlowNode (initialized by binding)
-        /* @internal */ emitNode?: EmitNode;                             // Associated EmitNode (initialized by transforms)
-        /* @internal */ contextualType?: Type | undefined;                // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ flowNode?: FlowNode | undefined;                 // Associated FlowNode (initialized by binding)
+        /* @internal */ emitNode?: EmitNode | undefined;                 // Associated EmitNode (initialized by transforms)
+        /* @internal */ contextualType?: Type | undefined                // Used to temporarily assign a contextual type during overload resolution
         /* @internal */ inferenceContext?: InferenceContext | undefined; // Inference context for contextual type
     }
 
     export interface JSDocContainer {
-        /* @internal */ jsDoc?: JSDoc[];                      // JSDoc that directly precedes this node
-        /* @internal */ jsDocCache?: ReadonlyArray<JSDocTag>; // Cache for getJSDocTags
+        /* @internal */ jsDoc?: JSDoc[] | undefined;                      // JSDoc that directly precedes this node
+        /* @internal */ jsDocCache?: ReadonlyArray<JSDocTag> | undefined; // Cache for getJSDocTags
     }
 
     export type HasJSDoc =
@@ -710,7 +710,7 @@ namespace ts {
     export type MutableNodeArray<T extends Node> = NodeArray<T> & T[];
 
     export interface NodeArray<T extends Node> extends ReadonlyArray<T>, TextRange {
-        hasTrailingComma?: boolean;
+        hasTrailingComma: boolean | undefined;
         /* @internal */ transformFlags: TransformFlags;   // Flags for transforms, possibly undefined
     }
 
@@ -770,7 +770,7 @@ namespace ts {
          * Text of identifier, but if the identifier begins with two underscores, this will begin with three.
          */
         escapedText: __String;
-        originalKeywordKind?: SyntaxKind;                         // Original syntaxKind which get set so that we can report an error later
+        originalKeywordKind?: SyntaxKind | undefined;               // Original syntaxKind which get set so that we can report an error later
         /*@internal*/ autoGenerateFlags?: GeneratedIdentifierFlags; // Specifies whether to auto-generate the text for an identifier.
         /*@internal*/ autoGenerateId?: number;                    // Ensures unique generated identifiers get unique names, but clones get the same name.
         isInJSDocNamespace?: boolean;                             // if the node is a member in a JSDoc namespace
@@ -806,7 +806,7 @@ namespace ts {
     }
 
     export interface NamedDeclaration extends Declaration {
-        name?: DeclarationName;
+        name?: DeclarationName | undefined;
     }
 
     /* @internal */
@@ -821,7 +821,7 @@ namespace ts {
     }
 
     export interface DeclarationStatement extends NamedDeclaration, Statement {
-        name?: Identifier | StringLiteral | NumericLiteral;
+        name?: Identifier | StringLiteral | NumericLiteral | undefined;
     }
 
     export interface ComputedPropertyName extends Node {
@@ -847,8 +847,8 @@ namespace ts {
         parent: DeclarationWithTypeParameterChildren | InferTypeNode;
         name: Identifier;
         /** Note: Consider calling `getEffectiveConstraintOfTypeParameter` */
-        constraint?: TypeNode;
-        default?: TypeNode;
+        constraint: TypeNode | undefined;
+        default: TypeNode | undefined;
 
         // For error recovery purposes.
         expression?: Expression;
@@ -856,11 +856,11 @@ namespace ts {
 
     export interface SignatureDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SignatureDeclaration["kind"];
-        name?: PropertyName;
-        typeParameters?: NodeArray<TypeParameterDeclaration>;
+        name?: PropertyName | undefined;
+        typeParameters: NodeArray<TypeParameterDeclaration> | undefined;
         parameters: NodeArray<ParameterDeclaration>;
-        type?: TypeNode;
-        /* @internal */ typeArguments?: NodeArray<TypeNode>; // Used for quick info, replaces typeParameters for instantiated signatures
+        type: TypeNode | undefined;
+        /* @internal */ typeArguments: NodeArray<TypeNode> | undefined; // Used for quick info, replaces typeParameters for instantiated signatures
     }
 
     export type SignatureDeclaration =
@@ -893,8 +893,8 @@ namespace ts {
         parent: VariableDeclarationList | CatchClause;
         name: BindingName;                    // Declared variable name
         exclamationToken?: ExclamationToken;  // Optional definite assignment assertion
-        type?: TypeNode;                      // Optional type annotation
-        initializer?: Expression;             // Optional initializer
+        type: TypeNode | undefined;           // Optional type annotation
+        initializer: Expression | undefined; // Optional initializer
     }
 
     export interface VariableDeclarationList extends Node {
@@ -906,18 +906,18 @@ namespace ts {
     export interface ParameterDeclaration extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.Parameter;
         parent: SignatureDeclaration;
-        dotDotDotToken?: DotDotDotToken;    // Present on rest parameter
+        dotDotDotToken?: DotDotDotToken | undefined;  // Present on rest parameter
         name: BindingName;                  // Declared parameter name.
-        questionToken?: QuestionToken;      // Present on optional parameter
-        type?: TypeNode;                    // Optional type annotation
-        initializer?: Expression;           // Optional initializer
+        questionToken?: QuestionToken | undefined  // Present on optional parameter
+        type: TypeNode | undefined;        // Optional type annotation
+        initializer: Expression | undefined;   // Optional initializer
     }
 
     export interface BindingElement extends NamedDeclaration {
         kind: SyntaxKind.BindingElement;
         parent: BindingPattern;
-        propertyName?: PropertyName;        // Binding property name (in object binding pattern)
-        dotDotDotToken?: DotDotDotToken;    // Present on rest element (in object binding pattern)
+        propertyName: PropertyName | undefined;        // Binding property name (in object binding pattern)
+        dotDotDotToken: DotDotDotToken | undefined;    // Present on rest element (in object binding pattern)
         name: BindingName;                  // Declared binding element name
         initializer: Expression | undefined;           // Optional initializer
     }
@@ -928,19 +928,19 @@ namespace ts {
     export interface PropertySignature extends TypeElement, JSDocContainer {
         kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
-        questionToken?: QuestionToken;      // Present on optional property
-        type?: TypeNode;                    // Optional type annotation
-        initializer?: Expression;           // Optional initializer
+        questionToken: QuestionToken | undefined; // Present on optional property
+        type: TypeNode | undefined                // Optional type annotation
+        initializer: Expression | undefined;      // Optional initializer
     }
 
     export interface PropertyDeclaration extends ClassElement, JSDocContainer {
         kind: SyntaxKind.PropertyDeclaration;
         parent: ClassLikeDeclaration;
         name: PropertyName;
-        questionToken?: QuestionToken;      // Present for use with reporting a grammar error
-        exclamationToken?: ExclamationToken;
-        type?: TypeNode;
-        initializer?: Expression;           // Optional initializer
+        questionToken: QuestionToken | undefined;  // Present for use with reporting a grammar error
+        exclamationToken: ExclamationToken | undefined;
+        type: TypeNode | undefined;
+        initializer: Expression | undefined;       // Optional initializer
     }
 
     export interface ObjectLiteralElement extends NamedDeclaration {
@@ -961,7 +961,7 @@ namespace ts {
         parent: ObjectLiteralExpression;
         kind: SyntaxKind.PropertyAssignment;
         name: PropertyName;
-        questionToken?: QuestionToken;
+        questionToken: QuestionToken | undefined;
         initializer: Expression;
     }
 
@@ -974,7 +974,7 @@ namespace ts {
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
         // it is grammar error to appear in actual object initializer
         equalsToken?: Token<SyntaxKind.EqualsToken>;
-        objectAssignmentInitializer?: Expression;
+        objectAssignmentInitializer: Expression | undefined;
     }
 
     export interface SpreadAssignment extends ObjectLiteralElement, JSDocContainer {
@@ -1027,10 +1027,10 @@ namespace ts {
     export interface FunctionLikeDeclarationBase extends SignatureDeclarationBase {
         _functionLikeDeclarationBrand: any;
 
-        asteriskToken?: AsteriskToken;
-        questionToken?: QuestionToken;
-        exclamationToken?: ExclamationToken;
-        body?: Block | Expression;
+        asteriskToken: AsteriskToken | undefined;
+        questionToken: QuestionToken | undefined;
+        exclamationToken: ExclamationToken | undefined;
+        body: Block | Expression | undefined;
     }
 
     export type FunctionLikeDeclaration =
@@ -1046,8 +1046,8 @@ namespace ts {
 
     export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
-        name?: Identifier;
-        body?: FunctionBody;
+        name?: Identifier | undefined;
+        body: FunctionBody | undefined;
     }
 
     export interface MethodSignature extends SignatureDeclarationBase, TypeElement {
@@ -1069,13 +1069,13 @@ namespace ts {
         kind: SyntaxKind.MethodDeclaration;
         parent: ClassLikeDeclaration | ObjectLiteralExpression;
         name: PropertyName;
-        body?: FunctionBody;
+        body: FunctionBody | undefined;
     }
 
     export interface ConstructorDeclaration extends FunctionLikeDeclarationBase, ClassElement, JSDocContainer {
         kind: SyntaxKind.Constructor;
         parent: ClassLikeDeclaration;
-        body?: FunctionBody;
+        body: FunctionBody | undefined;
         /* @internal */ returnFlowNode?: FlowNode;
     }
 
@@ -1091,7 +1091,7 @@ namespace ts {
         kind: SyntaxKind.GetAccessor;
         parent: ClassLikeDeclaration | ObjectLiteralExpression;
         name: PropertyName;
-        body?: FunctionBody;
+        body: FunctionBody | undefined;
     }
 
     // See the comment on MethodDeclaration for the intuition behind SetAccessorDeclaration being a
@@ -1100,7 +1100,7 @@ namespace ts {
         kind: SyntaxKind.SetAccessor;
         parent: ClassLikeDeclaration | ObjectLiteralExpression;
         name: PropertyName;
-        body?: FunctionBody;
+        body: FunctionBody | undefined;
     }
 
     export type AccessorDeclaration = GetAccessorDeclaration | SetAccessorDeclaration;
@@ -1132,9 +1132,9 @@ namespace ts {
 
     export interface ImportTypeNode extends NodeWithTypeArguments {
         kind: SyntaxKind.ImportType;
-        isTypeOf?: boolean;
+        isTypeOf: boolean | undefined;
         argument: TypeNode;
-        qualifier?: EntityName;
+        qualifier: EntityName | undefined;
     }
 
     /* @internal */
@@ -1257,10 +1257,10 @@ namespace ts {
 
     export interface MappedTypeNode extends TypeNode, Declaration {
         kind: SyntaxKind.MappedType;
-        readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
+        readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined;
         typeParameter: TypeParameterDeclaration;
-        questionToken?: QuestionToken | PlusToken | MinusToken;
-        type?: TypeNode;
+        questionToken: QuestionToken | PlusToken | MinusToken | undefined;
+        type: TypeNode | undefined;
     }
 
     export interface LiteralTypeNode extends TypeNode {
@@ -1391,8 +1391,8 @@ namespace ts {
 
     export interface YieldExpression extends Expression {
         kind: SyntaxKind.YieldExpression;
-        asteriskToken?: AsteriskToken;
-        expression?: Expression;
+        asteriskToken: AsteriskToken | undefined;
+        expression: Expression | undefined;
     }
 
     export interface SyntheticExpression extends Expression {
@@ -1620,7 +1620,7 @@ namespace ts {
 
     export interface FunctionExpression extends PrimaryExpression, FunctionLikeDeclarationBase, JSDocContainer {
         kind: SyntaxKind.FunctionExpression;
-        name?: Identifier;
+        name?: Identifier | undefined;
         body: FunctionBody;  // Required, whereas the member inherited from FunctionDeclaration is optional
     }
 
@@ -1793,7 +1793,7 @@ namespace ts {
     export interface CallExpression extends LeftHandSideExpression, Declaration {
         kind: SyntaxKind.CallExpression;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments: NodeArray<TypeNode> | undefined;
         arguments: NodeArray<Expression>;
     }
 
@@ -1818,14 +1818,14 @@ namespace ts {
     export interface NewExpression extends PrimaryExpression, Declaration {
         kind: SyntaxKind.NewExpression;
         expression: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
-        arguments?: NodeArray<Expression>;
+        typeArguments: NodeArray<TypeNode> | undefined;
+        arguments: NodeArray<Expression> | undefined;
     }
 
     export interface TaggedTemplateExpression extends MemberExpression {
         kind: SyntaxKind.TaggedTemplateExpression;
         tag: LeftHandSideExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments: NodeArray<TypeNode> | undefined;
         template: TemplateLiteral;
     }
 
@@ -1886,7 +1886,7 @@ namespace ts {
         kind: SyntaxKind.JsxOpeningElement;
         parent: JsxElement;
         tagName: JsxTagNameExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments: NodeArray<TypeNode> | undefined;
         attributes: JsxAttributes;
     }
 
@@ -1894,7 +1894,7 @@ namespace ts {
     export interface JsxSelfClosingElement extends PrimaryExpression {
         kind: SyntaxKind.JsxSelfClosingElement;
         tagName: JsxTagNameExpression;
-        typeArguments?: NodeArray<TypeNode>;
+        typeArguments: NodeArray<TypeNode> | undefined;
         attributes: JsxAttributes;
     }
 
@@ -1923,7 +1923,7 @@ namespace ts {
         parent: JsxAttributes;
         name: Identifier;
         /// JSX attribute initializers are optional; <X y /> is sugar for <X y={true} />
-        initializer?: StringLiteral | JsxExpression;
+        initializer?: StringLiteral | JsxExpression | undefined;
     }
 
     export interface JsxSpreadAttribute extends ObjectLiteralElement {
@@ -1941,8 +1941,8 @@ namespace ts {
     export interface JsxExpression extends Expression {
         kind: SyntaxKind.JsxExpression;
         parent: JsxElement | JsxAttributeLike;
-        dotDotDotToken?: Token<SyntaxKind.DotDotDotToken>;
-        expression?: Expression;
+        dotDotDotToken: Token<SyntaxKind.DotDotDotToken> | undefined;
+        expression: Expression | undefined;
     }
 
     export interface JsxText extends LiteralLikeNode {
@@ -2027,7 +2027,7 @@ namespace ts {
         kind: SyntaxKind.IfStatement;
         expression: Expression;
         thenStatement: Statement;
-        elseStatement?: Statement;
+        elseStatement: Statement | undefined;
     }
 
     export interface IterationStatement extends Statement {
@@ -2048,9 +2048,9 @@ namespace ts {
 
     export interface ForStatement extends IterationStatement {
         kind: SyntaxKind.ForStatement;
-        initializer?: ForInitializer;
-        condition?: Expression;
-        incrementor?: Expression;
+        initializer: ForInitializer | undefined;
+        condition: Expression | undefined;
+        incrementor: Expression | undefined;
     }
 
     export type ForInOrOfStatement = ForInStatement | ForOfStatement;
@@ -2063,26 +2063,26 @@ namespace ts {
 
     export interface ForOfStatement extends IterationStatement {
         kind: SyntaxKind.ForOfStatement;
-        awaitModifier?: AwaitKeywordToken;
+        awaitModifier: AwaitKeywordToken | undefined;
         initializer: ForInitializer;
         expression: Expression;
     }
 
     export interface BreakStatement extends Statement {
         kind: SyntaxKind.BreakStatement;
-        label?: Identifier;
+        label: Identifier | undefined;
     }
 
     export interface ContinueStatement extends Statement {
         kind: SyntaxKind.ContinueStatement;
-        label?: Identifier;
+        label: Identifier | undefined;
     }
 
     export type BreakOrContinueStatement = BreakStatement | ContinueStatement;
 
     export interface ReturnStatement extends Statement {
         kind: SyntaxKind.ReturnStatement;
-        expression?: Expression;
+        expression: Expression | undefined;
     }
 
     export interface WithStatement extends Statement {
@@ -2127,20 +2127,20 @@ namespace ts {
 
     export interface ThrowStatement extends Statement {
         kind: SyntaxKind.ThrowStatement;
-        expression?: Expression;
+        expression: Expression | undefined;
     }
 
     export interface TryStatement extends Statement {
         kind: SyntaxKind.TryStatement;
         tryBlock: Block;
-        catchClause?: CatchClause;
-        finallyBlock?: Block;
+        catchClause: CatchClause | undefined;
+        finallyBlock: Block | undefined;
     }
 
     export interface CatchClause extends Node {
         kind: SyntaxKind.CatchClause;
         parent: TryStatement;
-        variableDeclaration?: VariableDeclaration;
+        variableDeclaration: VariableDeclaration | undefined;
         block: Block;
     }
 
@@ -2151,16 +2151,16 @@ namespace ts {
 
     export interface ClassLikeDeclarationBase extends NamedDeclaration, JSDocContainer {
         kind: SyntaxKind.ClassDeclaration | SyntaxKind.ClassExpression;
-        name?: Identifier;
-        typeParameters?: NodeArray<TypeParameterDeclaration>;
-        heritageClauses?: NodeArray<HeritageClause>;
+        name?: Identifier | undefined;
+        typeParameters: NodeArray<TypeParameterDeclaration> | undefined;
+        heritageClauses: NodeArray<HeritageClause> | undefined;
         members: NodeArray<ClassElement>;
     }
 
     export interface ClassDeclaration extends ClassLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.ClassDeclaration;
         /** May be undefined in `export default class { ... }`. */
-        name?: Identifier;
+        name: Identifier | undefined;
     }
 
     export interface ClassExpression extends ClassLikeDeclarationBase, PrimaryExpression {
@@ -2171,20 +2171,20 @@ namespace ts {
 
     export interface ClassElement extends NamedDeclaration {
         _classElementBrand: any;
-        name?: PropertyName;
+        name?: PropertyName | undefined;
     }
 
     export interface TypeElement extends NamedDeclaration {
         _typeElementBrand: any;
-        name?: PropertyName;
+        name?: PropertyName | undefined;
         questionToken?: QuestionToken | undefined;
     }
 
     export interface InterfaceDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.InterfaceDeclaration;
         name: Identifier;
-        typeParameters?: NodeArray<TypeParameterDeclaration>;
-        heritageClauses?: NodeArray<HeritageClause>;
+        typeParameters: NodeArray<TypeParameterDeclaration> | undefined;
+        heritageClauses: NodeArray<HeritageClause> | undefined;
         members: NodeArray<TypeElement>;
     }
 
@@ -2198,7 +2198,7 @@ namespace ts {
     export interface TypeAliasDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.TypeAliasDeclaration;
         name: Identifier;
-        typeParameters?: NodeArray<TypeParameterDeclaration>;
+        typeParameters: NodeArray<TypeParameterDeclaration> | undefined;
         type: TypeNode;
     }
 
@@ -2208,7 +2208,7 @@ namespace ts {
         // This does include ComputedPropertyName, but the parser will give an error
         // if it parses a ComputedPropertyName in an EnumMember
         name: PropertyName;
-        initializer?: Expression;
+        initializer: Expression | undefined;
     }
 
     export interface EnumDeclaration extends DeclarationStatement, JSDocContainer {
@@ -2222,13 +2222,13 @@ namespace ts {
     export type ModuleBody = NamespaceBody | JSDocNamespaceBody;
 
     /* @internal */
-    export interface AmbientModuleDeclaration extends ModuleDeclaration { body?: ModuleBlock; }
+    export interface AmbientModuleDeclaration extends ModuleDeclaration { body: ModuleBlock | undefined; }
 
     export interface ModuleDeclaration extends DeclarationStatement, JSDocContainer {
         kind: SyntaxKind.ModuleDeclaration;
         parent: ModuleBody | SourceFile;
         name: ModuleName;
-        body?: ModuleBody | JSDocNamespaceDeclaration;
+        body: ModuleBody | JSDocNamespaceDeclaration | undefined;
     }
 
     export type NamespaceBody = ModuleBlock | NamespaceDeclaration;
@@ -2242,7 +2242,7 @@ namespace ts {
 
     export interface JSDocNamespaceDeclaration extends ModuleDeclaration {
         name: Identifier;
-        body?: JSDocNamespaceBody;
+        body: JSDocNamespaceBody | undefined;
     }
 
     export interface ModuleBlock extends Node, Statement {
@@ -2281,7 +2281,7 @@ namespace ts {
     export interface ImportDeclaration extends Statement {
         kind: SyntaxKind.ImportDeclaration;
         parent: SourceFile | ModuleBlock;
-        importClause?: ImportClause;
+        importClause: ImportClause | undefined;
         /** If this is not a StringLiteral it will be a grammar error. */
         moduleSpecifier: Expression;
     }
@@ -2297,8 +2297,8 @@ namespace ts {
     export interface ImportClause extends NamedDeclaration {
         kind: SyntaxKind.ImportClause;
         parent: ImportDeclaration;
-        name?: Identifier; // Default binding
-        namedBindings?: NamedImportBindings;
+        name: Identifier | undefined; // Default binding
+        namedBindings: NamedImportBindings | undefined;
     }
 
     export interface NamespaceImport extends NamedDeclaration {
@@ -2316,9 +2316,9 @@ namespace ts {
         kind: SyntaxKind.ExportDeclaration;
         parent: SourceFile | ModuleBlock;
         /** Will not be assigned in the case of `export * from "foo";` */
-        exportClause?: NamedExports;
+        exportClause: NamedExports | undefined;
         /** If this is not a StringLiteral it will be a grammar error. */
-        moduleSpecifier?: Expression;
+        moduleSpecifier: Expression | undefined;
     }
 
     export interface NamedImports extends Node {
@@ -2338,14 +2338,14 @@ namespace ts {
     export interface ImportSpecifier extends NamedDeclaration {
         kind: SyntaxKind.ImportSpecifier;
         parent: NamedImports;
-        propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
-        name: Identifier;           // Declared name
+        propertyName: Identifier | undefined;  // Name preceding "as" keyword (or undefined when "as" is absent)
+        name: Identifier;                      // Declared name
     }
 
     export interface ExportSpecifier extends NamedDeclaration {
         kind: SyntaxKind.ExportSpecifier;
         parent: NamedExports;
-        propertyName?: Identifier;  // Name preceding "as" keyword (or undefined when "as" is absent)
+        propertyName: Identifier | undefined;  // Name preceding "as" keyword (or undefined when "as" is absent)
         name: Identifier;           // Declared name
     }
 
@@ -2358,7 +2358,7 @@ namespace ts {
     export interface ExportAssignment extends DeclarationStatement {
         kind: SyntaxKind.ExportAssignment;
         parent: SourceFile;
-        isExportEquals?: boolean;
+        isExportEquals: boolean | undefined;
         expression: Expression;
     }
 
@@ -2373,7 +2373,7 @@ namespace ts {
     export type CommentKind = SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia;
 
     export interface CommentRange extends TextRange {
-        hasTrailingNewLine?: boolean;
+        hasTrailingNewLine?: boolean | undefined;
         kind: CommentKind;
     }
 
@@ -2430,14 +2430,14 @@ namespace ts {
     export interface JSDoc extends Node {
         kind: SyntaxKind.JSDocComment;
         parent: HasJSDoc;
-        tags?: NodeArray<JSDocTag>;
-        comment?: string;
+        tags: NodeArray<JSDocTag> | undefined;
+        comment: string | undefined;
     }
 
     export interface JSDocTag extends Node {
         parent: JSDoc | JSDocTypeLiteral;
         tagName: Identifier;
-        comment?: string;
+        comment: string | undefined;
     }
 
     export interface JSDocUnknownTag extends JSDocTag {
@@ -2475,27 +2475,27 @@ namespace ts {
 
     export interface JSDocReturnTag extends JSDocTag {
         kind: SyntaxKind.JSDocReturnTag;
-        typeExpression?: JSDocTypeExpression;
+        typeExpression: JSDocTypeExpression | undefined;
     }
 
     export interface JSDocTypeTag extends JSDocTag {
         kind: SyntaxKind.JSDocTypeTag;
-        typeExpression?: JSDocTypeExpression;
+        typeExpression: JSDocTypeExpression | undefined;
     }
 
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
         parent: JSDoc;
         kind: SyntaxKind.JSDocTypedefTag;
-        fullName?: JSDocNamespaceDeclaration | Identifier;
-        name?: Identifier;
-        typeExpression?: JSDocTypeExpression | JSDocTypeLiteral;
+        fullName?: JSDocNamespaceDeclaration | Identifier | undefined;
+        name?: Identifier | undefined;
+        typeExpression?: JSDocTypeExpression | JSDocTypeLiteral | undefined;
     }
 
     export interface JSDocCallbackTag extends JSDocTag, NamedDeclaration {
         parent: JSDoc;
         kind: SyntaxKind.JSDocCallbackTag;
-        fullName?: JSDocNamespaceDeclaration | Identifier;
-        name?: Identifier;
+        fullName?: JSDocNamespaceDeclaration | Identifier | undefined;
+        name?: Identifier | undefined;
         typeExpression: JSDocSignature;
     }
 
@@ -2509,7 +2509,7 @@ namespace ts {
     export interface JSDocPropertyLikeTag extends JSDocTag, Declaration {
         parent: JSDoc;
         name: EntityName;
-        typeExpression?: JSDocTypeExpression;
+        typeExpression: JSDocTypeExpression | undefined;
         /** Whether the property name came before the type -- non-standard for JSDoc, but Typescript-like */
         isNameFirst: boolean;
         isBracketed: boolean;
@@ -2705,7 +2705,7 @@ namespace ts {
          * This is intended to be the first top-level import/export,
          * but could be arbitrarily nested (e.g. `import.meta`).
          */
-        /* @internal */ externalModuleIndicator?: Node;
+        /* @internal */ externalModuleIndicator?: Node | undefined;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator?: Node;
         // JS identifier-declarations that are intended to merge with globals
@@ -2742,7 +2742,7 @@ namespace ts {
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
         // Identifier only if `declare global`
         /* @internal */ moduleAugmentations: ReadonlyArray<StringLiteral | Identifier>;
-        /* @internal */ patternAmbientModules?: PatternAmbientModule[];
+        /* @internal */ patternAmbientModules?: PatternAmbientModule[] | undefined;
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective?: CheckJsDirective;
         /* @internal */ version: string;
@@ -2750,7 +2750,7 @@ namespace ts {
         /* @internal */ localJsxNamespace?: __String | undefined;
         /* @internal */ localJsxFactory: EntityName | undefined;
 
-        /*@internal*/ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
+        /*@internal*/ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit | undefined;
     }
 
     /*@internal*/
@@ -2768,17 +2768,17 @@ namespace ts {
 
     export interface InputFiles extends Node {
         kind: SyntaxKind.InputFiles;
-        javascriptPath?: string;
+        javascriptPath: string | undefined;
         javascriptText: string;
-        javascriptMapPath?: string;
-        javascriptMapText?: string;
-        declarationPath?: string;
+        javascriptMapPath: string | undefined;
+        javascriptMapText: string | undefined;
+        declarationPath: string | undefined;
         declarationText: string;
-        declarationMapPath?: string;
-        declarationMapText?: string;
-        /*@internal*/ buildInfoPath?: string;
-        /*@internal*/ buildInfo?: BuildInfo;
-        /*@internal*/ oldFileOfCurrentEmit?: boolean;
+        declarationMapPath: string | undefined;
+        declarationMapText: string | undefined;
+        /*@internal*/ buildInfoPath: string | undefined;
+        /*@internal*/ buildInfo: BuildInfo | undefined;
+        /*@internal*/ oldFileOfCurrentEmit: boolean | undefined;
     }
 
     export interface UnparsedSource extends Node {
@@ -2794,11 +2794,11 @@ namespace ts {
         libReferenceDirectives: ReadonlyArray<FileReference>;
         hasNoDefaultLib?: boolean;
 
-        sourceMapPath?: string;
+        sourceMapPath: string | undefined;
         sourceMapText?: string;
-        syntheticReferences?: ReadonlyArray<UnparsedSyntheticReference>;
+        syntheticReferences: ReadonlyArray<UnparsedSyntheticReference> | undefined;
         texts: ReadonlyArray<UnparsedSourceText>;
-        /*@internal*/ oldFileOfCurrentEmit?: boolean;
+        /*@internal*/ oldFileOfCurrentEmit: boolean | undefined;
         /*@internal*/ parsedSourceMap?: RawSourceMap | false | undefined;
         // Adding this to satisfy services, fix later
         /*@internal*/
@@ -4589,7 +4589,7 @@ namespace ts {
         build?: boolean;
         charset?: string;
         checkJs?: boolean;
-        /* @internal */ configFilePath?: string;
+        /* @internal */ configFilePath?: string | undefined;
         /** configFile is set as non enumerable property so as to avoid checking of json source files */
         /* @internal */ readonly configFile?: TsConfigSourceFile;
         declaration?: boolean;
@@ -4618,7 +4618,7 @@ namespace ts {
         locale?: string;
         mapRoot?: string;
         maxNodeModuleJsDepth?: number;
-        module?: ModuleKind;
+        module?: ModuleKind | undefined;
         moduleResolution?: ModuleResolutionKind;
         newLine?: NewLineKind;
         noEmit?: boolean;
@@ -4667,7 +4667,7 @@ namespace ts {
         suppressExcessPropertyErrors?: boolean;
         suppressImplicitAnyIndexErrors?: boolean;
         /* @internal */ suppressOutputPathCheck?: boolean;
-        target?: ScriptTarget; // TODO: GH#18217 frequently asserted as defined
+        target?: ScriptTarget | undefined; // TODO: GH#18217 frequently asserted as defined
         traceResolution?: boolean;
         resolveJsonModule?: boolean;
         types?: string[];
@@ -4687,8 +4687,8 @@ namespace ts {
          */
         enableAutoDiscovery?: boolean;
         enable?: boolean;
-        include?: string[];
-        exclude?: string[];
+        include?: string[] | undefined;
+        exclude?: string[] | undefined;
         [option: string]: string[] | boolean | undefined;
     }
 
@@ -4761,7 +4761,7 @@ namespace ts {
         options: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
         fileNames: string[];
-        projectReferences?: ReadonlyArray<ProjectReference>;
+        projectReferences?: ReadonlyArray<ProjectReference> | undefined;
         raw?: any;
         errors: Diagnostic[];
         wildcardDirectories?: MapLike<WatchDirectoryFlags>;
@@ -4780,13 +4780,13 @@ namespace ts {
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
-        includeSpecs?: ReadonlyArray<string>;
+        includeSpecs?: ReadonlyArray<string> | undefined;
         /**
          * Present to report errors (user specified specs), validatedExcludeSpecs are used for file name matching
          */
-        excludeSpecs?: ReadonlyArray<string>;
-        validatedIncludeSpecs?: ReadonlyArray<string>;
-        validatedExcludeSpecs?: ReadonlyArray<string>;
+        excludeSpecs?: ReadonlyArray<string> | undefined;
+        validatedIncludeSpecs?: ReadonlyArray<string> | undefined;
+        validatedExcludeSpecs?: ReadonlyArray<string> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
 
@@ -5026,13 +5026,13 @@ namespace ts {
      */
     export interface ResolvedModuleFull extends ResolvedModule {
         /* @internal */
-        readonly originalPath?: string;
+        readonly originalPath?: string | undefined;
         /**
          * Extension of resolvedFileName. This must match what's at the end of resolvedFileName.
          * This is optional for backwards-compatibility, but will be added if not provided.
          */
         extension: Extension;
-        packageId?: PackageId;
+        packageId?: PackageId | undefined;
     }
 
     /**
@@ -5076,7 +5076,7 @@ namespace ts {
         primary: boolean;
         // The location of the .d.ts file we located, or undefined if resolution failed
         resolvedFileName: string | undefined;
-        packageId?: PackageId;
+        packageId?: PackageId | undefined;
         /** True if `resolvedFileName` comes from `node_modules`. */
         isExternalLibraryImport?: boolean;
     }
@@ -5216,14 +5216,14 @@ namespace ts {
     export interface EmitNode {
         annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
         flags: EmitFlags;                        // Flags that customize emit
-        leadingComments?: SynthesizedComment[];  // Synthesized leading comments
-        trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
+        leadingComments?: SynthesizedComment[] | undefined;  // Synthesized leading comments
+        trailingComments?: SynthesizedComment[] | undefined; // Synthesized trailing comments
         commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
-        sourceMapRange?: SourceMapRange;         // The text range to use when emitting leading or trailing source mappings
+        sourceMapRange?: SourceMapRange | undefined;  // The text range to use when emitting leading or trailing source mappings
         tokenSourceMapRanges?: (SourceMapRange | undefined)[]; // The text range to use when emitting source mappings for tokens
         constantValue?: string | number;         // The constant value of an expression
         externalHelpersModuleName?: Identifier;  // The local name for an imported helpers module
-        helpers?: EmitHelper[];                  // Emit helpers for the node
+        helpers?: EmitHelper[] | undefined;      // Emit helpers for the node
         startsOnNewLine?: boolean;               // If the node should begin on a new line
     }
 
@@ -5772,7 +5772,7 @@ namespace ts {
     }
 
     export interface GetEffectiveTypeRootsHost {
-        directoryExists?(directoryName: string): boolean;
+        directoryExists?: ((directoryName: string) => boolean) | undefined;
         getCurrentDirectory?(): string;
     }
     /** @internal */

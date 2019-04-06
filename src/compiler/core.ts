@@ -125,8 +125,8 @@ namespace ts {
             value?: T;
 
             // Linked list references for iterators.
-            nextEntry?: MapEntry<T>;
-            previousEntry?: MapEntry<T>;
+            nextEntry?: MapEntry<T> | undefined;
+            previousEntry?: MapEntry<T> | undefined;
 
             /**
              * Specifies if iterators should skip the next entry.
@@ -137,7 +137,7 @@ namespace ts {
         }
 
         class MapIterator<T, U extends (string | T | [string, T])> {
-            private currentEntry?: MapEntry<T>;
+            private currentEntry?: MapEntry<T> | undefined;
             private selector: (key: string, value: T) => U;
 
             constructor(currentEntry: MapEntry<T>, selector: (key: string, value: T) => U) {

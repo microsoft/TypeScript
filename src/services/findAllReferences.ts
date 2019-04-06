@@ -44,7 +44,7 @@ namespace ts.FindAllReferences {
          * The options controls the behavior for the whole rename operation; it cannot be changed on a per-file basis.
          * Default is false for backwards compatibility.
          */
-        readonly providePrefixAndSuffixTextForRename?: boolean;
+        readonly providePrefixAndSuffixTextForRename?: boolean | undefined;
     }
 
     export function findReferencedSymbols(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, sourceFile: SourceFile, position: number): ReferencedSymbol[] | undefined {
@@ -649,7 +649,7 @@ namespace ts.FindAllReferences.Core {
      */
     interface Search {
         /** If coming from an export, we will not recursively search for the imported symbol (since that's where we came from). */
-        readonly comingFrom?: ImportExport;
+        readonly comingFrom?: ImportExport | undefined;
 
         readonly symbol: Symbol;
         readonly text: string;
