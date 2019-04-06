@@ -18,10 +18,7 @@ function padNum(number: number) {
 }
 
 const userName = process.env.GH_USERNAME;
-const reviewers = ["weswigham", "sandersn", "RyanCavanaugh"];
-if (process.env.requesting_user && reviewers.indexOf(process.env.requesting_user) === -1) {
-    reviewers.push(process.env.requesting_user);
-}
+const reviewers = process.env.requesting_user ? [process.env.requesting_user] : ["weswigham", "sandersn", "RyanCavanaugh"];
 const now = new Date();
 const branchName = `user-update-${process.env.TARGET_FORK}-${now.getFullYear()}${padNum(now.getMonth())}${padNum(now.getDay())}${process.env.TARGET_BRANCH ? "-" + process.env.TARGET_BRANCH : ""}`;
 const remoteUrl = `https://${process.argv[2]}@github.com/${userName}/TypeScript.git`;
@@ -55,13 +52,15 @@ cc ${reviewers.map(r => "@" + r).join(" ")}`,
 }).then(async r => {
     const num = r.data.number;
     console.log(`Pull request ${num} created.`);
-    await gh.pulls.createReviewRequest({
-        owner: process.env.TARGET_FORK,
-        repo: "TypeScript",
-        number: num,
-        reviewers,
-    });
-    if (process.env.source_issue) {
+    if (!process.env.source_issue) {
+        await gh.pulls.createReviewRequest({
+            owner: process.env.TARGET_FORK,
+            repo: "TypeScript",
+            number: num,
+            reviewers,
+        });
+    }
+    else {
         await gh.issues.createComment({
             number: +process.env.source_issue,
             owner: "Microsoft",
