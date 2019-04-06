@@ -286,3 +286,5 @@ const Test1 = connect(
 )(TestComponent);
 >TestComponent : typeof TestComponent
 
+export {};
+

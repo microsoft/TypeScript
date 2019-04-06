@@ -1,5 +1,5 @@
 tests/cases/compiler/recursiveBaseCheck5.ts(1,11): error TS2310: Type 'I1<T>' recursively references itself as a base type.
-tests/cases/compiler/recursiveBaseCheck5.ts(4,9): error TS2339: Property 'blah' does not exist on type 'X<{}, {}>'.
+tests/cases/compiler/recursiveBaseCheck5.ts(4,9): error TS2339: Property 'blah' does not exist on type 'X<unknown, unknown>'.
 
 
 ==== tests/cases/compiler/recursiveBaseCheck5.ts (2 errors) ====
@@ -10,4 +10,4 @@ tests/cases/compiler/recursiveBaseCheck5.ts(4,9): error TS2339: Property 'blah' 
     class X<T, U> implements I2<T> { }
     (new X).blah;
             ~~~~
-!!! error TS2339: Property 'blah' does not exist on type 'X<{}, {}>'.
+!!! error TS2339: Property 'blah' does not exist on type 'X<unknown, unknown>'.

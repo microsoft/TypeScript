@@ -197,8 +197,8 @@ namespace ts {
             dtsUnchangedExpectedReadFilesDependOrdered = undefined!;
         });
 
-        function createSolutionBuilder(host: fakes.SolutionBuilderHost) {
-            return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true });
+        function createSolutionBuilder(host: fakes.SolutionBuilderHost, baseOptions?: BuildOptions) {
+            return ts.createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: true, ...(baseOptions || {}) });
         }
 
         function getInitialExpectedReadFiles(additionalSourceFiles?: ReadonlyArray<string>) {
@@ -444,6 +444,49 @@ namespace ts {
                 [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, relSources[project.third][source.config], fakes.version, version],
                 [Diagnostics.Building_project_0, sources[project.third][source.config]],
             );
+        });
+
+        it("rebuilds completely when command line incremental flag changes between non dts changes", () => {
+            const fs = outFileFs.shadow();
+            // Make non composite third project
+            replaceText(fs, sources[project.third][source.config], `"composite": true,`, "");
+
+            // Build with command line incremental
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host, { incremental: true });
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(...initialExpectedDiagnostics);
+            host.clearDiagnostics();
+            tick();
+
+            // Make non incremental build with change in file that doesnt affect dts
+            appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);");
+            builder.resetBuildContext({ verbose: true });
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                [Diagnostics.Project_0_is_out_of_date_because_output_of_its_dependency_1_has_changed, relSources[project.third][source.config], "src/first"],
+                [Diagnostics.Building_project_0, sources[project.third][source.config]]
+            );
+            host.clearDiagnostics();
+            tick();
+
+            // Make incremental build with change in file that doesnt affect dts
+            appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);");
+            builder.resetBuildContext({ verbose: true, incremental: true });
+            builder.buildAllProjects();
+            // Builds completely because tsbuildinfo is old.
+            host.assertDiagnosticMessages(
+                getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
+                [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
+                [Diagnostics.Building_project_0, sources[project.first][source.config]],
+                [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, relSources[project.second][source.config], relSources[project.second][source.ts][part.one], relOutputFiles[project.second][ext.js]],
+                [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.third][source.config], relOutputFiles[project.third][ext.buildinfo], "src/first"],
+                [Diagnostics.Building_project_0, sources[project.third][source.config]]
+            );
+            host.clearDiagnostics();
         });
 
         describe("Prepend output with .tsbuildinfo", () => {

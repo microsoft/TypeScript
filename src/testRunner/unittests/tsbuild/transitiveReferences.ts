@@ -65,6 +65,8 @@ export const b = new A();`);
             const expectedFileTraces = [
                 ...getLibs(),
                 "/src/a.ts",
+                ...getLibs(),
+                "/src/b.ts"
             ];
             verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
                 allExpectedOutputs,
