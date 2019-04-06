@@ -629,7 +629,7 @@ namespace ts {
         /* @internal */ localSymbol?: Symbol;                            // Local symbol declared by node (initialized by binding only for exported nodes)
         /* @internal */ flowNode?: FlowNode | undefined;                 // Associated FlowNode (initialized by binding)
         /* @internal */ emitNode?: EmitNode | undefined;                 // Associated EmitNode (initialized by transforms)
-        /* @internal */ contextualType?: Type | undefined                // Used to temporarily assign a contextual type during overload resolution
+        /* @internal */ contextualType?: Type | undefined;               // Used to temporarily assign a contextual type during overload resolution
         /* @internal */ inferenceContext?: InferenceContext | undefined; // Inference context for contextual type
     }
 
@@ -908,7 +908,7 @@ namespace ts {
         parent: SignatureDeclaration;
         dotDotDotToken?: DotDotDotToken | undefined;  // Present on rest parameter
         name: BindingName;                  // Declared parameter name.
-        questionToken?: QuestionToken | undefined  // Present on optional parameter
+        questionToken?: QuestionToken | undefined; // Present on optional parameter
         type: TypeNode | undefined;        // Optional type annotation
         initializer: Expression | undefined;   // Optional initializer
     }
@@ -929,7 +929,7 @@ namespace ts {
         kind: SyntaxKind.PropertySignature;
         name: PropertyName;                 // Declared property name
         questionToken: QuestionToken | undefined; // Present on optional property
-        type: TypeNode | undefined                // Optional type annotation
+        type: TypeNode | undefined;               // Optional type annotation
         initializer: Expression | undefined;      // Optional initializer
     }
 

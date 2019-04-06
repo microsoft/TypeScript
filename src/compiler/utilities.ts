@@ -4153,7 +4153,7 @@ namespace ts {
         }
     }
 
-    export function directoryProbablyExists(directoryName: string, host: Pick<ModuleResolutionHost,  'directoryExists'>): boolean {
+    export function directoryProbablyExists(directoryName: string, host: Pick<ModuleResolutionHost, "directoryExists">): boolean {
         // if host does not support 'directoryExists' assume that directory will exist
         return !host.directoryExists || host.directoryExists(directoryName);
     }

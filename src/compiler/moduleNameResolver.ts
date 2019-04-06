@@ -241,7 +241,7 @@ namespace ts {
      * Returns the path to every node_modules/@types directory from some ancestor directory.
      * Returns undefined if there are none.
      */
-    function getDefaultTypeRoots(currentDirectory: string, host: Pick<GetEffectiveTypeRootsHost, 'directoryExists'>): string[] | undefined {
+    function getDefaultTypeRoots(currentDirectory: string, host: Pick<GetEffectiveTypeRootsHost, "directoryExists">): string[] | undefined {
         if (!host.directoryExists) {
             return [combinePaths(currentDirectory, nodeModulesAtTypes)];
             // And if it doesn't exist, tough.
