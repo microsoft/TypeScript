@@ -4505,7 +4505,7 @@ namespace ts {
         category: DiagnosticCategory;
         code: number;
         message: string;
-        reportsUnnecessary?: {};
+        reportsUnnecessary?: {} | undefined;
     }
 
     /**
