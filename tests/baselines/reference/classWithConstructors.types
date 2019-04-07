@@ -113,8 +113,8 @@ module Generics {
 >C2 : typeof C2
 
     var c4 = new C2(''); // ok
->c4 : C2<string, {}>
->new C2('') : C2<string, {}>
+>c4 : C2<string, unknown>
+>new C2('') : C2<string, unknown>
 >C2 : typeof C2
 >'' : ""
 
@@ -135,14 +135,14 @@ module Generics {
 >D : typeof D
 
     var d2 = new D(1); // ok
->d2 : D<number, {}>
->new D(1) : D<number, {}>
+>d2 : D<number, unknown>
+>new D(1) : D<number, unknown>
 >D : typeof D
 >1 : 1
 
     var d3 = new D(''); // ok
->d3 : D<string, {}>
->new D('') : D<string, {}>
+>d3 : D<string, unknown>
+>new D('') : D<string, unknown>
 >D : typeof D
 >'' : ""
 }

@@ -1,7 +1,8 @@
-tests/cases/compiler/redefineArray.ts(1,1): error TS2588: Cannot assign to 'Array' because it is a constant.
+tests/cases/compiler/redefineArray.ts(1,1): error TS2741: Property 'isArray' is missing in type '(n: number, s: string) => number' but required in type 'ArrayConstructor'.
 
 
 ==== tests/cases/compiler/redefineArray.ts (1 errors) ====
     Array = function (n:number, s:string) {return n;};
     ~~~~~
-!!! error TS2588: Cannot assign to 'Array' because it is a constant.
+!!! error TS2741: Property 'isArray' is missing in type '(n: number, s: string) => number' but required in type 'ArrayConstructor'.
+!!! related TS2728 /.ts/lib.es5.d.ts:1364:5: 'isArray' is declared here.

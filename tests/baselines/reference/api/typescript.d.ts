@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.4";
+    const versionMajorMinor = "3.5";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -2382,8 +2382,8 @@ declare namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        resolvedTrueType?: Type;
-        resolvedFalseType?: Type;
+        trueType: Type;
+        falseType: Type;
     }
     interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;

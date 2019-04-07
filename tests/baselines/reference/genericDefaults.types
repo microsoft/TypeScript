@@ -62,7 +62,7 @@ declare function f01<T>(a?: T): T;
 
 // inference
 f01();
->f01() : {}
+>f01() : unknown
 >f01 : <T>(a?: T) => T
 
 f01(a);
@@ -126,7 +126,7 @@ declare function f03<T = T>(a?: T): T;
 
 // inference
 f03();
->f03() : {}
+>f03() : unknown
 >f03 : <T = T>(a?: T) => T
 
 f03(a);
@@ -166,7 +166,7 @@ declare function f04<T, U = B>(a?: T, b?: U): [T, U];
 
 // inference
 f04();
->f04() : [{}, B]
+>f04() : [unknown, B]
 >f04 : <T, U = B>(a?: T, b?: U) => [T, U]
 
 f04(a);
@@ -241,7 +241,7 @@ declare function f05<T, U = T>(a?: T, b?: U): [T, U];
 
 // inference
 f05();
->f05() : [{}, {}]
+>f05() : [unknown, unknown]
 >f05 : <T, U = T>(a?: T, b?: U) => [T, U]
 
 f05(a);
@@ -404,7 +404,7 @@ declare function f07<T, U = B, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 
 // inference
 f07();
->f07() : [{}, B, B]
+>f07() : [unknown, B, B]
 >f07 : <T, U = B, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 
 f07(a, b);
@@ -627,7 +627,7 @@ declare function f09<T, U extends T = T>(a?: T, b?: U): [T, U];
 
 // inference
 f09();
->f09() : [{}, {}]
+>f09() : [unknown, unknown]
 >f09 : <T, U extends T = T>(a?: T, b?: U) => [T, U]
 
 f09(a);
@@ -780,7 +780,7 @@ declare function f11<T, U = T | B>(a?: T, b?: U): [T, U];
 
 // inference
 f11();
->f11() : [{}, {} | B]
+>f11() : [unknown, unknown]
 >f11 : <T, U = B | T>(a?: T, b?: U) => [T, U]
 
 f11(a);
@@ -852,7 +852,7 @@ declare function f12<T, U = T & B>(a?: T, b?: U): [T, U];
 
 // inference
 f12();
->f12() : [{}, B]
+>f12() : [unknown, B]
 >f12 : <T, U = T & B>(a?: T, b?: U) => [T, U]
 
 f12(a);
@@ -918,7 +918,7 @@ declare function f13<T = U, U = B>(a?: T, b?: U): [T, U];
 
 // inference
 f13();
->f13() : [{}, B]
+>f13() : [unknown, B]
 >f13 : <T = U, U = B>(a?: T, b?: U) => [T, U]
 
 f13(a);
@@ -985,11 +985,11 @@ declare function f14<T, U = V, V = C>(a?: T, b?: U, c?: V): [T, U, V];
 
 // inference
 f14();
->f14() : [{}, {}, C]
+>f14() : [unknown, unknown, C]
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
 
 f14(a);
->f14(a) : [A, {}, C]
+>f14(a) : [A, unknown, C]
 >f14 : <T, U = V, V = C>(a?: T, b?: U, c?: V) => [T, U, V]
 >a : A
 
@@ -1089,7 +1089,7 @@ declare function f15<T = U, U = T>(a?: T, b?: U): [T, U];
 
 // inference
 f15();
->f15() : [{}, {}]
+>f15() : [unknown, unknown]
 >f15 : <T = U, U = T>(a?: T, b?: U) => [T, U]
 
 f15(a);
@@ -1144,11 +1144,11 @@ declare function f16<T, U = V, V = U>(a?: T, b?: U, c?: V): [T, U, V];
 
 // no inference
 f16();
->f16() : [{}, {}, {}]
+>f16() : [unknown, unknown, unknown]
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 
 f16(a);
->f16(a) : [A, {}, {}]
+>f16(a) : [A, unknown, unknown]
 >f16 : <T, U = V, V = U>(a?: T, b?: U, c?: V) => [T, U, V]
 >a : A
 
@@ -1241,7 +1241,7 @@ declare function f17<T = U, U = T | B>(a?: T, b?: U): [T, U];
 
 // inference
 f17();
->f17() : [{}, {} | B]
+>f17() : [unknown, unknown]
 >f17 : <T = U, U = B | T>(a?: T, b?: U) => [T, U]
 
 f17(a);
@@ -1314,11 +1314,11 @@ declare function f18<T, U = V, V = U | C>(a?: T, b?: U, c?: V): [T, U, V];
 
 // inference
 f18();
->f18() : [{}, {}, {} | C]
+>f18() : [unknown, unknown, unknown]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 
 f18(a);
->f18(a) : [A, {}, {} | C]
+>f18(a) : [A, unknown, unknown]
 >f18 : <T, U = V, V = C | U>(a?: T, b?: U, c?: V) => [T, U, V]
 >a : A
 
@@ -1432,7 +1432,7 @@ declare function f19<T = U, U = T & B>(a?: T, b?: U): [T, U];
 
 // inference
 f19();
->f19() : [{}, B]
+>f19() : [unknown, B]
 >f19 : <T = U, U = T & B>(a?: T, b?: U) => [T, U]
 
 f19(a);
@@ -1505,11 +1505,11 @@ declare function f20<T, U = V, V = U & C>(a?: T, b?: U, c?: V): [T, U, V];
 
 // inference
 f20();
->f20() : [{}, {}, C]
+>f20() : [unknown, unknown, C]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 
 f20(a);
->f20(a) : [A, {}, C]
+>f20(a) : [A, unknown, C]
 >f20 : <T, U = V, V = U & C>(a?: T, b?: U, c?: V) => [T, U, V]
 >a : A
 
@@ -1843,8 +1843,8 @@ declare class Derived01<T> extends Base01<T> { }
 >Base01 : Base01<T>
 
 const Derived01c00 = new Derived01();
->Derived01c00 : Derived01<{}>
->new Derived01() : Derived01<{}>
+>Derived01c00 : Derived01<unknown>
+>new Derived01() : Derived01<unknown>
 >Derived01 : typeof Derived01
 
 const Derived01c01 = new Derived01(1);

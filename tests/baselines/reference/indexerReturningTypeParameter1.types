@@ -8,8 +8,8 @@ var a: f;
 >a : f
 
 var r = a.groupBy();
->r : { [key: string]: {}[]; }
->a.groupBy() : { [key: string]: {}[]; }
+>r : { [key: string]: unknown[]; }
+>a.groupBy() : { [key: string]: unknown[]; }
 >a.groupBy : <T>() => { [key: string]: T[]; }
 >a : f
 >groupBy : <T>() => { [key: string]: T[]; }
@@ -29,8 +29,8 @@ var a2: c;
 >a2 : c
 
 var r2 = a2.groupBy();
->r2 : { [key: string]: {}[]; }
->a2.groupBy() : { [key: string]: {}[]; }
+>r2 : { [key: string]: unknown[]; }
+>a2.groupBy() : { [key: string]: unknown[]; }
 >a2.groupBy : <T>() => { [key: string]: T[]; }
 >a2 : c
 >groupBy : <T>() => { [key: string]: T[]; }

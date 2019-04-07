@@ -121,6 +121,14 @@ namespace ts {
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
     }
 
+    export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
+        if (program.getCompilerOptions().listFiles) {
+            forEach(program.getSourceFiles(), file => {
+                writeFileName(file.fileName);
+            });
+        }
+    }
+
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
@@ -152,12 +160,7 @@ namespace ts {
                 const filepath = getNormalizedAbsolutePath(file, currentDir);
                 writeFileName(`TSFILE: ${filepath}`);
             });
-
-            if (program.getCompilerOptions().listFiles) {
-                forEach(program.getSourceFiles(), file => {
-                    writeFileName(file.fileName);
-                });
-            }
+            listFiles(program, writeFileName);
         }
 
         if (reportSummary) {
@@ -275,7 +278,7 @@ namespace ts {
         }
     }
 
-    export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: ProgramHost<any>) {
+    export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
         const originalGetSourceFile = compilerHost.getSourceFile;
         const computeHash = host.createHash || generateDjb2Hash;
         compilerHost.getSourceFile = (...args) => {
@@ -382,6 +385,56 @@ namespace ts {
         if (buildInfo.version !== version) return undefined;
         if (!buildInfo.program) return undefined;
         return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
+    }
+
+    export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+        const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
+        host.createHash = maybeBind(system, system.createHash);
+        setGetSourceFileAsHashVersioned(host, system);
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
+        return host;
+    }
+
+    interface IncrementalProgramOptions<T extends BuilderProgram> {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        createProgram?: CreateProgram<T>;
+    }
+    function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+        rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
+    }: IncrementalProgramOptions<T>): T {
+        host = host || createIncrementalCompilerHost(options);
+        createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
+        const oldProgram = readBuilderProgram(options, path => host!.readFile(path)) as any as T;
+        return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
+    }
+
+    export interface IncrementalCompilationOptions {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        reportDiagnostic?: DiagnosticReporter;
+        reportErrorSummary?: ReportEmitErrorSummary;
+        afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
+        system?: System;
+    }
+    export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
+        const system = input.system || sys;
+        const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
+        const builderProgram = createIncrementalProgram(input);
+        const exitStatus = emitFilesAndReportErrors(
+            builderProgram,
+            input.reportDiagnostic || createDiagnosticReporter(system),
+            s => host.trace && host.trace(s),
+            input.reportErrorSummary || input.options.pretty ? errorCount => system.write(getErrorSummaryText(errorCount, system.newLine)) : undefined
+        );
+        if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
+        return exitStatus;
     }
 }
 
