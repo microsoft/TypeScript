@@ -1134,7 +1134,7 @@ namespace ts {
             function moduleNameResolvesToAmbientModuleInNonModifiedFile(moduleName: string): boolean {
                 const resolutionToFile = getResolvedModule(oldSourceFile!, moduleName);
                 const resolvedFile = resolutionToFile && oldProgram!.getSourceFile(resolutionToFile.resolvedFileName);
-                if (resolutionToFile && resolvedFile && !resolvedFile.externalModuleIndicator) {
+                if (resolutionToFile && resolvedFile) {
                     // In the old program, we resolved to an ambient module that was in the same
                     //   place as we expected to find an actual module file.
                     // We actually need to return 'false' here even though this seems like a 'true' case

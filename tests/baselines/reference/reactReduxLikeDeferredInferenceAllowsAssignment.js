@@ -144,6 +144,8 @@ const Test1 = connect(
   mapDispatchToProps
 )(TestComponent);
 
+export {};
+
 
 //// [reactReduxLikeDeferredInferenceAllowsAssignment.js]
 "use strict";
@@ -196,6 +198,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var _this = this;
+exports.__esModule = true;
 var simpleAction = function (payload) { return ({
     type: "SIMPLE_ACTION",
     payload: payload
