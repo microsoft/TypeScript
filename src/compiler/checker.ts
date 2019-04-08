@@ -7236,7 +7236,7 @@ namespace ts {
         // because of constraints on type parameters (e.g. 'keyof T' for a constrained T).
         // The isIndexType flag indicates that the type is the index type of an indexed
         // access that is the target of an assignment.
-        function getLowerBoundOfKeyType(type: Type, isIndexType: boolean): Type {
+        function getLowerBoundOfKeyType(type: Type): Type {
             if (type.flags & (TypeFlags.Any | TypeFlags.Primitive)) {
                 return type;
             }
@@ -7246,7 +7246,7 @@ namespace ts {
             if (type.flags & TypeFlags.Conditional) {
                 if ((<ConditionalType>type).root.isDistributive) {
                     const checkType = (<ConditionalType>type).checkType;
-                    const constraint = getLowerBoundOfKeyType(checkType, isIndexType);
+                    const constraint = getLowerBoundOfKeyType(checkType);
                     if (constraint !== checkType) {
                         const mapper = makeUnaryTypeMapper((<ConditionalType>type).root.checkType, constraint);
                         return getConditionalTypeInstantiation(<ConditionalType>type, combineTypeMappers(mapper, (<ConditionalType>type).mapper));
@@ -7255,13 +7255,10 @@ namespace ts {
                 return type;
             }
             if (type.flags & TypeFlags.Union) {
-                return getUnionType(sameMap((<UnionType>type).types, t => getLowerBoundOfKeyType(t, isIndexType)));
+                return getUnionType(sameMap((<UnionType>type).types, getLowerBoundOfKeyType));
             }
             if (type.flags & TypeFlags.Intersection) {
-                return getIntersectionType(sameMap((<UnionType>type).types, t => getLowerBoundOfKeyType(t, isIndexType)));
-            }
-            if (isIndexType && type.flags & TypeFlags.Instantiable) {
-                return getLowerBoundOfKeyType(getConstraintOfType(type) || neverType, isIndexType);
+                return getIntersectionType(sameMap((<UnionType>type).types, getLowerBoundOfKeyType));
             }
             return neverType;
         }
@@ -7294,7 +7291,7 @@ namespace ts {
                 }
             }
             else {
-                forEachType(getLowerBoundOfKeyType(constraintType, /*isIndexType*/ false), addMemberForKeyType);
+                forEachType(getLowerBoundOfKeyType(constraintType), addMemberForKeyType);
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
 
@@ -12879,27 +12876,18 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
-                    // A type S is related to a type T[K], where T and K aren't both type variables, if S is related to C,
-                    // where C is the base constraint of T[K]
+                    // A type S is related to a type T[K] if S is related to C, where C is the base
+                    // constraint of T[K] for writing.
                     if (relation !== identityRelation) {
                         const objectType = (<IndexedAccessType>target).objectType;
                         const indexType = (<IndexedAccessType>target).indexType;
-                        if (indexType.flags & TypeFlags.StructuredOrInstantiable) {
-                            const keyType = getLowerBoundOfKeyType(indexType, /*isIndexType*/ true);
-                            if (keyType !== indexType && !(keyType.flags & TypeFlags.Never)) {
-                                const targetType = getIndexedAccessTypeOrUndefined(objectType, keyType, /*accessNode*/ undefined, AccessFlags.Writing);
-                                if (targetType && (result = isRelatedTo(source, targetType, reportErrors))) {
-                                    return result;
-                                }
-                            }
-                        }
-                        else {
-                            const constraint = getConstraintOfType(objectType);
-                            if (constraint) {
-                                const targetType = getIndexedAccessTypeOrUndefined(constraint, indexType, /*accessNode*/ undefined, AccessFlags.Writing | AccessFlags.NoIndexSignatures);
-                                if (targetType && (result = isRelatedTo(source, targetType, reportErrors))) {
-                                    return result;
-                                }
+                        const baseObjectType = getBaseConstraintOfType(objectType) || objectType;
+                        const baseIndexType = getBaseConstraintOfType(indexType) || indexType;
+                        if (!isGenericObjectType(baseObjectType) && !isGenericIndexType(baseIndexType)) {
+                            const accessFlags = AccessFlags.Writing | (baseObjectType !== objectType ? AccessFlags.NoIndexSignatures : 0);
+                            const constraint = getIndexedAccessTypeOrUndefined(baseObjectType, baseIndexType, /*accessNode*/ undefined, accessFlags);
+                            if (constraint && (result = isRelatedTo(source, constraint, reportErrors))) {
+                                return result;
                             }
                         }
                     }
