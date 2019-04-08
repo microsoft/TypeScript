@@ -64,11 +64,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(122,5): error TS2322: Type '42' is not assignable to type 'keyof T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(123,5): error TS2322: Type '"hello"' is not assignable to type 'keyof T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(140,5): error TS2322: Type '42' is not assignable to type 'T[K]'.
-  Type '42' is not assignable to type 'T[string]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(141,5): error TS2322: Type '"hello"' is not assignable to type 'T[K]'.
-  Type '"hello"' is not assignable to type 'T[string]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
-  Type 'number[]' is not assignable to type 'T[string]'.
 
 
 ==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (41 errors) ====
@@ -317,15 +314,12 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
         t[k] = 42;  // Error
         ~~~~
 !!! error TS2322: Type '42' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type '42' is not assignable to type 'T[string]'.
         t[k] = "hello";  // Error
         ~~~~
 !!! error TS2322: Type '"hello"' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type '"hello"' is not assignable to type 'T[string]'.
         t[k] = [10, 20];  // Error
         ~~~~
 !!! error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type 'number[]' is not assignable to type 'T[string]'.
     }
     
     // Repro from #28839

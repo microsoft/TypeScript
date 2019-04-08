@@ -11,25 +11,16 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(18,5): error TS232
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(19,5): error TS2322: Type '{ [key: string]: number; }' is not assignable to type 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(26,7): error TS2339: Property 'x' does not exist on type 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(27,5): error TS2322: Type '1' is not assignable to type 'T[keyof T]'.
-  Type '1' is not assignable to type 'T[string] & T[number]'.
-    Type '1' is not assignable to type 'T[string]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(31,5): error TS2322: Type '{ [key: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(45,3): error TS7017: Element implicitly has an 'any' type because type 'Item' has no index signature.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(46,3): error TS2322: Type '123' is not assignable to type 'string & number'.
   Type '123' is not assignable to type 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(47,3): error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
-  Type '123' is not assignable to type 'T["a"] & T["b"]'.
-    Type '123' is not assignable to type 'T["a"]'.
-      Type '123' is not assignable to type 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(48,3): error TS2322: Type '123' is not assignable to type 'T[K]'.
-  Type '123' is not assignable to type 'T["a"] & T["b"]'.
-    Type '123' is not assignable to type 'T["a"]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(60,7): error TS2339: Property 'foo' does not exist on type 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(61,3): error TS2536: Type 'string' cannot be used to index type 'T'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(62,3): error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
-  Type '123' is not assignable to type 'T[string]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(63,3): error TS2322: Type '123' is not assignable to type 'T[K]'.
-  Type '123' is not assignable to type 'T[string]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(103,5): error TS2322: Type '123' is not assignable to type 'Type[K]'.
   Type '123' is not assignable to type '123 & "some string"'.
     Type '123' is not assignable to type '"some string"'.
@@ -88,8 +79,6 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(103,5): error TS23
         c[k] = 1; // Error, cannot write to index signature through constraint
         ~~~~
 !!! error TS2322: Type '1' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   Type '1' is not assignable to type 'T[string] & T[number]'.
-!!! error TS2322:     Type '1' is not assignable to type 'T[string]'.
     }
     
     function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
@@ -119,14 +108,9 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(103,5): error TS23
       obj[k3] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   Type '123' is not assignable to type 'T["a"] & T["b"]'.
-!!! error TS2322:     Type '123' is not assignable to type 'T["a"]'.
-!!! error TS2322:       Type '123' is not assignable to type 'string'.
       obj[k4] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type '123' is not assignable to type 'T["a"] & T["b"]'.
-!!! error TS2322:     Type '123' is not assignable to type 'T["a"]'.
     }
     
     type Dict = Record<string, number>;
@@ -147,11 +131,9 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(103,5): error TS23
       obj[k2] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
-!!! error TS2322:   Type '123' is not assignable to type 'T[string]'.
       obj[k3] = 123;  // Error
       ~~~~~~~
 !!! error TS2322: Type '123' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type '123' is not assignable to type 'T[string]'.
     }
     
     // Repro from #27895
