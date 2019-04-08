@@ -4605,6 +4605,8 @@ namespace ts {
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
+        /** Changes the implicit type from `any` to `unknown`. */
+        implicitUnknown?: boolean;
         importHelpers?: boolean;
         /*@internal*/init?: boolean;
         inlineSourceMap?: boolean;

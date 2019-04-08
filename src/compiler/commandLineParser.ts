@@ -397,6 +397,13 @@ namespace ts {
             description: Diagnostics.Raise_error_on_expressions_and_declarations_with_an_implied_any_type
         },
         {
+            name: "implicitUnknown",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Strict_Type_Checking_Options,
+            description: Diagnostics.Use_unknown_as_implicit_type
+        },
+        {
             name: "strictNullChecks",
             type: "boolean",
             affectsSemanticDiagnostics: true,

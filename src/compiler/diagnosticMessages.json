@@ -3899,6 +3899,10 @@
         "category": "Message",
         "code": 6217
     },
+    "Use unknown as implicit type.": {
+        "category": "Message",
+        "code": 6218
+    },
 
     "Projects to reference": {
         "category": "Message",

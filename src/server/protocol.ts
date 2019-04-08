@@ -2956,6 +2956,8 @@ namespace ts.server.protocol {
         emitDecoratorMetadata?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
+        /** Changes the implicit type from `any` to `unknown`. */
+        implicitUnknown?: boolean;
         importHelpers?: boolean;
         inlineSourceMap?: boolean;
         inlineSources?: boolean;

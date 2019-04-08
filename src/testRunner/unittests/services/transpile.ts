@@ -260,6 +260,10 @@ var x = 0;`, {
             options: { compilerOptions: { forceConsistentCasingInFileNames: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
+        transpilesCorrectly("Supports setting 'implicitUnknown'", "x;", {
+            options: { compilerOptions: { implicitUnknown: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
         transpilesCorrectly("Supports setting 'isolatedModules'", "x;", {
             options: { compilerOptions: { isolatedModules: true }, fileName: "input.js", reportDiagnostics: true }
         });
@@ -310,6 +314,10 @@ var x = 0;`, {
 
         transpilesCorrectly("Supports setting 'noImplicitAny'", "x;", {
             options: { compilerOptions: { noImplicitAny: true }, fileName: "input.js", reportDiagnostics: true }
+        });
+
+        transpilesCorrectly("Supports setting 'noImplicitAny' and 'implicitUnknown'", "x;", {
+            options: { compilerOptions: { noImplicitAny: true, implicitUnknown: true }, fileName: "input.js", reportDiagnostics: true }
         });
 
         transpilesCorrectly("Supports setting 'noImplicitReturns'", "x;", {
