@@ -29,7 +29,7 @@ namespace ts.server {
                     process.env.USERPROFILE ||
                     (process.env.HOMEDRIVE && process.env.HOMEPATH && normalizeSlashes(process.env.HOMEDRIVE + process.env.HOMEPATH)) ||
                     os.tmpdir();
-                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), versionMajorMinor);
+                return combinePaths(combinePaths(normalizeSlashes(basePath), "Microsoft/TypeScript"), version);
             }
             case "openbsd":
             case "freebsd":
@@ -37,7 +37,7 @@ namespace ts.server {
             case "linux":
             case "android": {
                 const cacheLocation = getNonWindowsCacheLocation(process.platform === "darwin");
-                return combinePaths(combinePaths(cacheLocation, "typescript"), versionMajorMinor);
+                return combinePaths(combinePaths(cacheLocation, "typescript"), version);
             }
             default:
                 return Debug.fail(`unsupported platform '${process.platform}'`);
