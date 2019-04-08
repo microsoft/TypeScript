@@ -194,20 +194,20 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
 }
 
 function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
->f4 : <K extends string>(a: { [key: string]: number; }[K], b: number) => void
->a : { [key: string]: number; }[K]
+>f4 : <K extends string>(a: number, b: number) => void
+>a : number
 >key : string
 >b : number
 
   a = b;
 >a = b : number
->a : { [key: string]: number; }[K]
+>a : number
 >b : number
 
   b = a;
->b = a : { [key: string]: number; }[K]
+>b = a : number
 >b : number
->a : { [key: string]: number; }[K]
+>a : number
 }
 
 type Item = { a: string, b: number };
@@ -277,7 +277,7 @@ function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
 
   obj[k2] = 123;
 >obj[k2] = 123 : 123
->obj[k2] : Record<string, number>[K]
+>obj[k2] : number
 >obj : Record<string, number>
 >k2 : K
 >123 : 123
