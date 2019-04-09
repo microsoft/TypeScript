@@ -1318,11 +1318,11 @@ namespace ts.server {
             this.projectService.openClientFileWithNormalizedPath(fileName, fileContent, scriptKind, /*hasMixedContent*/ false, projectRootPath);
         }
 
-        private getPosition(args: protocol.FileLocationRequestArgs, scriptInfo: ScriptInfo): number {
+        private getPosition(args: protocol.Location & { position?: number }, scriptInfo: ScriptInfo): number {
             return args.position !== undefined ? args.position : scriptInfo.lineOffsetToPosition(args.line, args.offset);
         }
 
-        private getPositionInFile(args: protocol.FileLocationRequestArgs, file: NormalizedPath): number {
+        private getPositionInFile(args: protocol.Location & { position?: number }, file: NormalizedPath): number {
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             return this.getPosition(args, scriptInfo);
         }
@@ -2059,6 +2059,62 @@ namespace ts.server {
             this.projectService.configurePlugin(args);
         }
 
+        private getSelectionRange(args: protocol.SelectionRangeRequestArgs): protocol.SelectionRange[] {
+            const { locations } = args;
+            const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
+
+            const sourceFile = languageService.getNonBoundSourceFile(file);
+            const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
+            const fullTextSpan = this.toLocationTextSpan(
+                createTextSpan(sourceFile.getFullStart(), sourceFile.getEnd() - sourceFile.getFullStart()),
+                scriptInfo);
+
+            return map(locations, location => {
+                const pos = this.getPosition(location, scriptInfo);
+                let selectionRange: protocol.SelectionRange = { textSpan: fullTextSpan };
+                // Skip top-level SyntaxList
+                let current: Node | undefined = sourceFile.getChildAt(0);
+                while (true) {
+                    const children = current && current.getChildren(sourceFile);
+                    if (!children || !children.length) break;
+                    for (let i = 0; i < children.length; i++) {
+                        const prevNode: Node | undefined = children[i - 1];
+                        const node: Node = children[i];
+                        const nextNode: Node | undefined = children[i + 1];
+                        if (node.getStart(sourceFile) > pos) {
+                            current = undefined;
+                            break;
+                        }
+                        // Blocks are effectively redundant with SyntaxLists; dive in without adding to the list
+                        if (isBlock(node)) {
+                            current = node;
+                            break;
+                        }
+                        if (positionBelongsToNode(node, pos, sourceFile)) {
+                            // Blocks with braces should be selected from brace to brace, non-inclusive
+                            const isBetweenBraces = isSyntaxList(node)
+                                && prevNode && prevNode.kind === SyntaxKind.OpenBraceToken
+                                && nextNode && nextNode.kind === SyntaxKind.CloseBraceToken;
+                            const start = isBetweenBraces ? prevNode.getEnd() : node.getStart();
+                            const end = isBetweenBraces ? nextNode.getStart() : node.getEnd();
+                            const textSpan = this.toLocationTextSpan(createTextSpan(start, end - start), scriptInfo);
+                            current = node;
+                            // Skip ranges that are identical to the parent
+                            if (selectionRange.textSpan.start !== textSpan.start || selectionRange.textSpan.end !== textSpan.end) {
+                                selectionRange = {
+                                    textSpan,
+                                    parent: selectionRange,
+                                };
+                                Object.defineProperty(selectionRange, "__debugKind", { value: formatSyntaxKind(node.kind) });
+                            }
+                            break;
+                        }
+                    }
+                }
+                return selectionRange;
+            });
+        }
+
         getCanonicalFileName(fileName: string) {
             const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             return normalizePath(name);
@@ -2414,6 +2470,9 @@ namespace ts.server {
                 this.configurePlugin(request.arguments);
                 this.doOutput(/*info*/ undefined, CommandNames.ConfigurePlugin, request.seq, /*success*/ true);
                 return this.notRequired();
+            },
+            [CommandNames.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
+                return this.requiredResponse(this.getSelectionRange(request.arguments));
             }
         });
 
