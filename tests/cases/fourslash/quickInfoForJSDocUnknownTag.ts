@@ -37,4 +37,13 @@
 ////function b/*4*/oo() {
 ////    return '2';
 ////}
+/////**
+//// * @func
+//// * @example    x y
+//// *             12345
+//// *                b
+//// */
+////function go/*5*/o() {
+////    return '2';
+////}
 verify.baselineQuickInfo();
