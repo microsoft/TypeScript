@@ -221,5 +221,63 @@
         }
       ]
     }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts",
+      "position": 426
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 424,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "goo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "func"
+        },
+        {
+          "name": "example",
+          "text": "x y\n12345\n   b"
+        }
+      ]
+    }
   }
 ]

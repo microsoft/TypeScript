@@ -6441,7 +6441,6 @@ namespace ts {
                                     // for malformed examples like `/** @param {string} x @returns {number} the length */`
                                     state = JSDocState.BeginningOfLine;
                                     margin = undefined;
-                                    // indent++;
                                 }
                                 else {
                                     pushComment(scanner.getTokenText());
@@ -6536,7 +6535,7 @@ namespace ts {
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(stop?: boolean): number {
+                function skipWhitespaceOrAsterisk(): number {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
                             return 0; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
@@ -6546,9 +6545,6 @@ namespace ts {
                     let precedingLineBreak = scanner.hasPrecedingLineBreak();
                     let seenLineBreak = false;
                     let indent = 0;
-                    // if you HAVE seen a newline (resetIndent is true), then don't read whitespace trivia after a newline-whitespace-asterisk sequence. Just stop.
-                    // UNLESS (ugh) there is only whitespace-newline after it, in which case, fine.
-                    // so this needs lookahead SOME HOW.
                     while ((precedingLineBreak && token() === SyntaxKind.AsteriskToken) || token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (token() === SyntaxKind.NewLineTrivia) {
                             scanner.getTokenText()
@@ -6566,16 +6562,16 @@ namespace ts {
                         }
                         nextJSDocToken();
                     }
-                    return stop && seenLineBreak ? indent : 0;
+                    return seenLineBreak ? indent : 0;
                 }
 
-                function parseTag(indent: number) {
+                function parseTag(margin: number) {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const start = scanner.getTokenPos();
                     nextJSDocToken();
 
                     const tagName = parseJSDocIdentifierName(/*message*/ undefined);
-                    const margin = skipWhitespaceOrAsterisk(/*stop*/ true);
+                    const indent = skipWhitespaceOrAsterisk();
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
@@ -6596,7 +6592,7 @@ namespace ts {
                         case "arg":
                         case "argument":
                         case "param":
-                            return parseParameterOrPropertyTag(start, tagName, PropertyLikeParse.Parameter, indent);
+                            return parseParameterOrPropertyTag(start, tagName, PropertyLikeParse.Parameter, margin);
                         case "return":
                         case "returns":
                             tag = parseReturnTag(start, tagName);
@@ -6608,10 +6604,10 @@ namespace ts {
                             tag = parseTypeTag(start, tagName);
                             break;
                         case "typedef":
-                            tag = parseTypedefTag(start, tagName, indent);
+                            tag = parseTypedefTag(start, tagName, margin);
                             break;
                         case "callback":
-                            tag = parseCallbackTag(start, tagName, indent);
+                            tag = parseCallbackTag(start, tagName, margin);
                             break;
                         default:
                             tag = parseUnknownTag(start, tagName);
@@ -6620,7 +6616,10 @@ namespace ts {
 
                     if (!tag.comment) {
                         // some tags, like typedef and callback, have already parsed their comments earlier
-                        tag.comment = parseTagComments(indent + (margin !== 0 ? 0 : tag.end - tag.pos), margin);
+                        if (!indent) {
+                            margin += tag.end - tag.pos;
+                        }
+                        tag.comment = parseTagComments(margin, indent);
                     }
                     return tag;
                 }
