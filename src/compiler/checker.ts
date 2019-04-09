@@ -7234,8 +7234,6 @@ namespace ts {
         // Return the lower bound of the key type in a mapped type. Intuitively, the lower
         // bound includes those keys that are known to always be present, for example because
         // because of constraints on type parameters (e.g. 'keyof T' for a constrained T).
-        // The isIndexType flag indicates that the type is the index type of an indexed
-        // access that is the target of an assignment.
         function getLowerBoundOfKeyType(type: Type): Type {
             if (type.flags & (TypeFlags.Any | TypeFlags.Primitive)) {
                 return type;
