@@ -6535,34 +6535,29 @@ namespace ts {
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(): number {
+                function skipWhitespaceOrAsterisk(): string {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
-                            return 0; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
+                            return ""; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
                         }
                     }
 
                     let precedingLineBreak = scanner.hasPrecedingLineBreak();
                     let seenLineBreak = false;
-                    let indent = 0;
+                    let indentText = "";
                     while ((precedingLineBreak && token() === SyntaxKind.AsteriskToken) || token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+                        indentText += scanner.getTokenText();
                         if (token() === SyntaxKind.NewLineTrivia) {
-                            scanner.getTokenText()
-                            seenLineBreak = true;
-                            indent = 0;
                             precedingLineBreak = true;
+                            seenLineBreak = true;
+                            indentText = "";
                         }
                         else if (token() === SyntaxKind.AsteriskToken) {
                             precedingLineBreak = false;
-                            indent++;
-                        }
-                        else {
-                            Debug.assert(token() === SyntaxKind.WhitespaceTrivia);
-                            indent += scanner.getTokenText().length;
                         }
                         nextJSDocToken();
                     }
-                    return seenLineBreak ? indent : 0;
+                    return seenLineBreak ? indentText : "";
                 }
 
                 function parseTag(margin: number) {
@@ -6571,7 +6566,7 @@ namespace ts {
                     nextJSDocToken();
 
                     const tagName = parseJSDocIdentifierName(/*message*/ undefined);
-                    const indent = skipWhitespaceOrAsterisk();
+                    const indentText = skipWhitespaceOrAsterisk();
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
@@ -6616,15 +6611,15 @@ namespace ts {
 
                     if (!tag.comment) {
                         // some tags, like typedef and callback, have already parsed their comments earlier
-                        if (!indent) {
+                        if (!indentText) {
                             margin += tag.end - tag.pos;
                         }
-                        tag.comment = parseTagComments(margin, indent);
+                        tag.comment = parseTagComments(margin, indentText.slice(margin));
                     }
                     return tag;
                 }
 
-                function parseTagComments(indent: number, initialMargin?: number): string | undefined {
+                function parseTagComments(indent: number, initialMargin?: string): string | undefined {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
@@ -6636,15 +6631,9 @@ namespace ts {
                         indent += text.length;
                     }
                     if (initialMargin) {
-                        // change state and push a comment
-                        let initialWhitespace = "";
-                        for (var i = 0; i < initialMargin - indent; i++) {
-                            initialWhitespace += " ";
-                        }
-                        if (initialWhitespace) {
-                            pushComment(initialWhitespace);
-                            state = JSDocState.SavingComments;
-                        }
+                        // jump straight to saving comments if there is some initial indentation
+                        pushComment(initialMargin);
+                        state = JSDocState.SavingComments;
                     }
                     let tok = token() as JsDocSyntaxKind;
                     loop: while (true) {
