@@ -1744,6 +1744,14 @@ namespace ts.server {
             };
         }
 
+        private locationsAreEqual(a: protocol.Location, b: protocol.Location): boolean {
+            return a.line === b.line && a.offset === b.offset;
+        }
+
+        private locationTextSpansAreEqual(a: protocol.TextSpan, b: protocol.TextSpan): boolean {
+            return this.locationsAreEqual(a.start, b.start) && this.locationsAreEqual(a.end, b.end);
+        }
+
         private getNavigationTree(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.NavigationTree | NavigationTree | undefined {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const tree = languageService.getNavigationTree(file);
@@ -2066,12 +2074,22 @@ namespace ts.server {
             const sourceFile = languageService.getNonBoundSourceFile(file);
             const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
             const fullTextSpan = this.toLocationTextSpan(
-                createTextSpan(sourceFile.getFullStart(), sourceFile.getEnd() - sourceFile.getFullStart()),
+                createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd()),
                 scriptInfo);
 
             return map(locations, location => {
                 const pos = this.getPosition(location, scriptInfo);
                 let selectionRange: protocol.SelectionRange = { textSpan: fullTextSpan };
+                const pushSelectionRange = (textSpan: protocol.TextSpan, syntaxKind?: SyntaxKind): void => {
+                    // Skip ranges that are identical to the parent
+                    if (!this.locationTextSpansAreEqual(textSpan, selectionRange.textSpan)) {
+                        selectionRange = { textSpan, parent: selectionRange };
+                        if (syntaxKind) {
+                            Object.defineProperty(selectionRange, "__debugKind", { value: formatSyntaxKind(syntaxKind) });
+                        }
+                    }
+                };
+
                 // Skip top-level SyntaxList
                 let current: Node | undefined = sourceFile.getChildAt(0);
                 while (true) {
@@ -2097,16 +2115,37 @@ namespace ts.server {
                                 && nextNode && nextNode.kind === SyntaxKind.CloseBraceToken;
                             const start = isBetweenBraces ? prevNode.getEnd() : node.getStart();
                             const end = isBetweenBraces ? nextNode.getStart() : node.getEnd();
-                            const textSpan = this.toLocationTextSpan(createTextSpan(start, end - start), scriptInfo);
-                            current = node;
-                            // Skip ranges that are identical to the parent
-                            if (selectionRange.textSpan.start !== textSpan.start || selectionRange.textSpan.end !== textSpan.end) {
-                                selectionRange = {
-                                    textSpan,
-                                    parent: selectionRange,
-                                };
-                                Object.defineProperty(selectionRange, "__debugKind", { value: formatSyntaxKind(node.kind) });
+                            const textSpan = this.toLocationTextSpan(createTextSpanFromBounds(start, end), scriptInfo);
+                            pushSelectionRange(textSpan, node.kind);
+
+                            // Mapped types _look_ like ObjectTypes with a single member,
+                            // but in fact don’t contain a SyntaxList or a node containing
+                            // the “key/value” pair like ObjectTypes do, but it seems intuitive
+                            // that the selection would snap to those points. The philosophy
+                            // of choosing a selection range is not so much about what the
+                            // syntax currently _is_ as what the syntax might easily become
+                            // if the user is making a selection; e.g., we synthesize a selection
+                            // around the “key/value” pair not because there’s a node there, but
+                            // because it allows the mapped type to become an object type with a
+                            // few keystrokes.
+                            if (isMappedTypeNode(node)) {
+                                const openBraceToken = Debug.assertDefined(node.getFirstToken());
+                                const firstNonBraceToken = Debug.assertDefined(node.getChildAt(1));
+                                const closeBraceToken = Debug.assertDefined(node.getLastToken());
+                                Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
+                                Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
+                                const spanWithoutBraces = this.toLocationTextSpan(createTextSpanFromBounds(
+                                    openBraceToken.getEnd(),
+                                    closeBraceToken.getStart(),
+                                ), scriptInfo);
+                                const spanWithoutBracesOrTrivia = this.toLocationTextSpan(createTextSpanFromBounds(
+                                    firstNonBraceToken.getStart(),
+                                    closeBraceToken.getFullStart(),
+                                ), scriptInfo);
+                                pushSelectionRange(spanWithoutBraces);
+                                pushSelectionRange(spanWithoutBracesOrTrivia);
                             }
+                            current = node;
                             break;
                         }
                     }
