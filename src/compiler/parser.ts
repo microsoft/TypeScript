@@ -6536,16 +6536,19 @@ namespace ts {
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(): void {
+                function skipWhitespaceOrAsterisk(): boolean {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
-                            return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
+                            return false; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
                         }
                     }
 
                     let precedingLineBreak = scanner.hasPrecedingLineBreak();
+                    let resetIndent = false;
                     while ((precedingLineBreak && token() === SyntaxKind.AsteriskToken) || token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (token() === SyntaxKind.NewLineTrivia) {
+                            // TODO: Flip a bit here
+                            resetIndent = true
                             precedingLineBreak = true;
                         }
                         else if (token() === SyntaxKind.AsteriskToken) {
@@ -6553,6 +6556,7 @@ namespace ts {
                         }
                         nextJSDocToken();
                     }
+                    return resetIndent;
                 }
 
                 function parseTag(indent: number) {
@@ -6561,7 +6565,7 @@ namespace ts {
                     nextJSDocToken();
 
                     const tagName = parseJSDocIdentifierName(/*message*/ undefined);
-                    skipWhitespaceOrAsterisk();
+                    const skippedNewline = skipWhitespaceOrAsterisk();
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
@@ -6606,7 +6610,7 @@ namespace ts {
 
                     if (!tag.comment) {
                         // some tags, like typedef and callback, have already parsed their comments earlier
-                        tag.comment = parseTagComments(indent + tag.end - tag.pos);
+                        tag.comment = parseTagComments(indent + (!!skippedNewline ? 0 : tag.end - tag.pos));
                     }
                     return tag;
                 }
@@ -6646,7 +6650,7 @@ namespace ts {
                                     const whitespace = scanner.getTokenText();
                                     // if the whitespace crosses the margin, take only the whitespace that passes the margin
                                     if (margin !== undefined && indent + whitespace.length > margin) {
-                                        comments.push(whitespace.slice(margin - indent - 1));
+                                        comments.push(whitespace.slice(margin - indent));
                                     }
                                     indent += whitespace.length;
                                 }

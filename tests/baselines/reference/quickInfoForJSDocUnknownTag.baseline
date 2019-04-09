@@ -1,0 +1,112 @@
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts",
+      "position": 64
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 62,
+        "length": 3
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "example",
+          "text": "if (true) {\n    foo()\n}"
+        }
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoForJSDocUnknownTag.ts",
+      "position": 134
+    },
+    "quickInfo": {
+      "kind": "function",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 132,
+        "length": 4
+      },
+      "displayParts": [
+        {
+          "text": "function",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "foo2",
+          "kind": "functionName"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "string",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": [],
+      "tags": [
+        {
+          "name": "example",
+          "text": "{\n    foo()\n}"
+        }
+      ]
+    }
+  }
+]
