@@ -6441,7 +6441,7 @@ namespace ts {
                                     // for malformed examples like `/** @param {string} x @returns {number} the length */`
                                     state = JSDocState.BeginningOfLine;
                                     margin = undefined;
-                                    indent++;
+                                    // indent++;
                                 }
                                 else {
                                     pushComment(scanner.getTokenText());
@@ -6536,27 +6536,37 @@ namespace ts {
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(): boolean {
+                function skipWhitespaceOrAsterisk(stop?: boolean): number {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
-                            return false; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
+                            return 0; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
                         }
                     }
 
                     let precedingLineBreak = scanner.hasPrecedingLineBreak();
-                    let resetIndent = false;
+                    let seenLineBreak = false;
+                    let indent = 0;
+                    // if you HAVE seen a newline (resetIndent is true), then don't read whitespace trivia after a newline-whitespace-asterisk sequence. Just stop.
+                    // UNLESS (ugh) there is only whitespace-newline after it, in which case, fine.
+                    // so this needs lookahead SOME HOW.
                     while ((precedingLineBreak && token() === SyntaxKind.AsteriskToken) || token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (token() === SyntaxKind.NewLineTrivia) {
-                            // TODO: Flip a bit here
-                            resetIndent = true
+                            scanner.getTokenText()
+                            seenLineBreak = true;
+                            indent = 0;
                             precedingLineBreak = true;
                         }
                         else if (token() === SyntaxKind.AsteriskToken) {
                             precedingLineBreak = false;
+                            indent++;
+                        }
+                        else {
+                            Debug.assert(token() === SyntaxKind.WhitespaceTrivia);
+                            indent += scanner.getTokenText().length;
                         }
                         nextJSDocToken();
                     }
-                    return resetIndent;
+                    return stop && seenLineBreak ? indent : 0;
                 }
 
                 function parseTag(indent: number) {
@@ -6565,7 +6575,7 @@ namespace ts {
                     nextJSDocToken();
 
                     const tagName = parseJSDocIdentifierName(/*message*/ undefined);
-                    const skippedNewline = skipWhitespaceOrAsterisk();
+                    const margin = skipWhitespaceOrAsterisk(/*stop*/ true);
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
@@ -6610,12 +6620,12 @@ namespace ts {
 
                     if (!tag.comment) {
                         // some tags, like typedef and callback, have already parsed their comments earlier
-                        tag.comment = parseTagComments(indent + (!!skippedNewline ? 0 : tag.end - tag.pos));
+                        tag.comment = parseTagComments(indent + (margin !== 0 ? 0 : tag.end - tag.pos), margin);
                     }
                     return tag;
                 }
 
-                function parseTagComments(indent: number): string | undefined {
+                function parseTagComments(indent: number, initialMargin?: number): string | undefined {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
@@ -6625,6 +6635,17 @@ namespace ts {
                         }
                         comments.push(text);
                         indent += text.length;
+                    }
+                    if (initialMargin) {
+                        // change state and push a comment
+                        let initialWhitespace = "";
+                        for (var i = 0; i < initialMargin - indent; i++) {
+                            initialWhitespace += " ";
+                        }
+                        if (initialWhitespace) {
+                            pushComment(initialWhitespace);
+                            state = JSDocState.SavingComments;
+                        }
                     }
                     let tok = token() as JsDocSyntaxKind;
                     loop: while (true) {

@@ -18,5 +18,23 @@
 ////function fo/*2*/o2() {
 ////    return '2';
 ////}
-
+/////**
+//// * @example
+//// *   x y
+//// *   12345
+//// *      b
+//// */
+////function m/*3*/oo() {
+////    return '2';
+////}
+/////**
+//// * @func
+//// * @example
+//// *   x y
+//// *   12345
+//// *      b
+//// */
+////function b/*4*/oo() {
+////    return '2';
+////}
 verify.baselineQuickInfo();
