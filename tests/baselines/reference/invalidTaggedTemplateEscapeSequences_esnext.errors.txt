@@ -11,7 +11,7 @@ tests/cases/conformance/es2018/invalidTaggedTemplateEscapeSequences_esnext.ts(8,
     const a = tag`123`
     const b = tag`123 ${100}`
     const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
-    const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
+    const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`; // should error with NoSubstitutionTemplate
                   
 !!! error TS1125: Hexadecimal digit expected.
                                     

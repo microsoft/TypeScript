@@ -6,7 +6,7 @@ function tag (str: any, ...args: any[]): any {
 const a = tag`123`
 const b = tag`123 ${100}`
 const x = tag`\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
-const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`;
+const y = `\u{hello} ${ 100 } \xtraordinary ${ 200 } wonderful ${ 300 } \uworld`; // should error with NoSubstitutionTemplate
 const z = tag`\u{hello} \xtraordinary wonderful \uworld` // should work with Tagged NoSubstitutionTemplate
 
 const a1 = tag`${ 100 }\0` // \0
@@ -40,7 +40,7 @@ function tag(str) {
 var a = tag(__makeTemplateObject(["123"], ["123"]));
 var b = tag(__makeTemplateObject(["123 ", ""], ["123 ", ""]), 100);
 var x = tag(__makeTemplateObject([undefined, undefined, " wonderful ", undefined], ["\\u{hello} ", " \\xtraordinary ", " wonderful ", " \\uworld"]), 100, 200, 300);
-var y = "hello} " + 100 + " traordinary " + 200 + " wonderful " + 300 + " world";
+var y = "hello} " + 100 + " traordinary " + 200 + " wonderful " + 300 + " world"; // should error with NoSubstitutionTemplate
 var z = tag(__makeTemplateObject([undefined], ["\\u{hello} \\xtraordinary wonderful \\uworld"])); // should work with Tagged NoSubstitutionTemplate
 var a1 = tag(__makeTemplateObject(["", "\0"], ["", "\\0"]), 100); // \0
 var a2 = tag(__makeTemplateObject(["", undefined], ["", "\\00"]), 100); // \\00
