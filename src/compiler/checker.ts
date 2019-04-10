@@ -13201,7 +13201,8 @@ namespace ts {
                                 }
                                 return Ternary.False;
                             }
-                            const related = isRelatedTo(getTypeOfSymbol(sourceProp), getTypeOfSymbol(targetProp), reportErrors);
+                            // If the target comes from a partial union prop, allow `undefined` in the target type
+                            const related = isRelatedTo(getTypeOfSymbol(sourceProp), addOptionality(getTypeOfSymbol(targetProp), !!(getCheckFlags(targetProp) & CheckFlags.Partial)), reportErrors);
                             if (!related) {
                                 if (reportErrors) {
                                     reportError(Diagnostics.Types_of_property_0_are_incompatible, symbolToString(targetProp));
