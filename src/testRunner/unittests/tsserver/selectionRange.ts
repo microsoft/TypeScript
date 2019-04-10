@@ -194,5 +194,112 @@ type X<T, P> = IsExactlyAny<P> extends true ? T : ({ [K in keyof P]: IsExactlyAn
                                                                     end: { line: 2, offset: 184 } } } } } } } } } } } } } },
             ]);
         });
+
+        it.skip("works for object types", () => {
+            const getSelectionRange = setup("/file.js", `
+type X = {
+    foo?: string;
+    readonly bar: number;
+}`);
+            const locations = getSelectionRange([
+                {
+                    line: 3,
+                    offset: 5,
+                },
+                {
+                    line: 4,
+                    offset: 5,
+                },
+                {
+                    line: 4,
+                    offset: 14,
+                },
+            ]);
+
+            const allMembersUp: protocol.SelectionRange = {
+                textSpan: { // all members + whitespace (just inside braces)
+                    start: { line: 2, offset: 11 },
+                    end: { line: 5, offset: 1 } },
+                parent: {
+                    textSpan: { // add braces
+                        start: { line: 2, offset: 10 },
+                        end: { line: 5, offset: 2 } },
+                    parent: {
+                        textSpan: { // whole TypeAliasDeclaration
+                            start: { line: 2, offset: 1 },
+                            end: { line: 5, offset: 2 } },
+                        parent: {
+                            textSpan: { // SourceFile
+                                start: { line: 1, offset: 1 },
+                                end: { line: 5, offset: 2 } } } } } };
+
+            const readonlyBarUp: protocol.SelectionRange = {
+                textSpan: { // readonly bar
+                    start: { line: 4, offset: 5 },
+                    end: { line: 4, offset: 17 } },
+                parent: {
+                    textSpan: { // readonly bar: number;
+                        start: { line: 4, offset: 5 },
+                        end: { line: 4, offset: 26 } },
+                    parent: allMembersUp } };
+
+            assert.deepEqual(locations, [
+                {
+                    textSpan: { // foo
+                        start: { line: 3, offset: 5 },
+                        end: { line: 3, offset: 8 } },
+                    parent: {
+                        textSpan: { // foo?
+                            start: { line: 3, offset: 5 },
+                            end: { line: 3, offset: 9 } },
+                        parent: {
+                            textSpan: { // foo?: string;
+                                start: { line: 3, offset: 5 },
+                                end: { line: 3, offset: 18 } },
+                            parent: allMembersUp } } },
+                {
+                    textSpan: { // readonly
+                        start: { line: 4, offset: 5 },
+                        end: { line: 4, offset: 13 } },
+                    parent: readonlyBarUp },
+                {
+                    textSpan: { // bar
+                        start: { line: 4, offset: 14 },
+                        end: { line: 4, offset: 17 } },
+                    parent: readonlyBarUp },
+            ]);
+        });
+
+        it("works for string literals and template strings", () => {
+            // tslint:disable-next-line:no-invalid-template-strings
+            const getSelectionRange = setup("/file.ts", "`a b ${\n  'c'\n} d`");
+            const locations = getSelectionRange([{ line: 2, offset: 4 }]);
+            assert.deepEqual(locations, [
+                {
+                    textSpan: { // c
+                        start: { line: 2, offset: 4 },
+                        end: { line: 2, offset: 5 } },
+                    parent: {
+                        textSpan: { // 'c'
+                            start: { line: 2, offset: 3 },
+                            end: { line: 2, offset: 6 } },
+                        // parent: {
+                        //     textSpan: { // just inside braces
+                        //         start: { line: 1, offset: 8 },
+                        //         end: { line: 3, offset: 1 } },
+                            parent: {
+                                textSpan: { // whole TemplateSpan: ${ ... }
+                                    start: { line: 1, offset: 6 },
+                                    end: { line: 3, offset: 2 } },
+                                parent: {
+                                    textSpan: { // whole template string without backticks
+                                        start: { line: 1, offset: 2 },
+                                        end: { line: 3, offset: 4 } },
+                                    parent: {
+                                        textSpan: { // whole template string
+                                            start: { line: 1, offset: 1 },
+                                            end: { line: 3, offset: 5 } } } } } } }
+            ]);
+        });
     });
 }

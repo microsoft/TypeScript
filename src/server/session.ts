@@ -2080,8 +2080,9 @@ namespace ts.server {
             return map(locations, location => {
                 const pos = this.getPosition(location, scriptInfo);
                 let selectionRange: protocol.SelectionRange = { textSpan: fullTextSpan };
-                const pushSelectionRange = (textSpan: protocol.TextSpan, syntaxKind?: SyntaxKind): void => {
+                const pushSelectionRange = (start: number, end: number, syntaxKind?: SyntaxKind): void => {
                     // Skip ranges that are identical to the parent
+                    const textSpan = this.toLocationTextSpan(createTextSpanFromBounds(start, end), scriptInfo);
                     if (!this.locationTextSpansAreEqual(textSpan, selectionRange.textSpan)) {
                         selectionRange = { textSpan, parent: selectionRange };
                         if (syntaxKind) {
@@ -2092,6 +2093,7 @@ namespace ts.server {
 
                 // Skip top-level SyntaxList
                 let current: Node | undefined = sourceFile.getChildAt(0);
+                let isInTemplateSpan = false;
                 while (true) {
                     const children = current && current.getChildren(sourceFile);
                     if (!children || !children.length) break;
@@ -2103,20 +2105,32 @@ namespace ts.server {
                             current = undefined;
                             break;
                         }
-                        // Blocks are effectively redundant with SyntaxLists; dive in without adding to the list
-                        if (isBlock(node)) {
+                        // Blocks are effectively redundant with SyntaxLists.
+                        // TemplateSpans are an unintuitive grouping of two things which
+                        // should be considered independently.
+                        // Dive in without pushing a selection range.
+                        const nodeIsTemplateSpan = isTemplateSpan(node);
+                        const nodeIsTemplateSpanList = prevNode && isTemplateHead(prevNode);
+                        if (isBlock(node) || nodeIsTemplateSpan || nodeIsTemplateSpanList) {
+                            isInTemplateSpan = nodeIsTemplateSpan;
                             current = node;
                             break;
                         }
                         if (positionBelongsToNode(node, pos, sourceFile)) {
+                            // Synthesize a stop for '${ ... }' since '${' and '}' actually belong to siblings.
+                            if (isInTemplateSpan && nextNode && isTemplateMiddleOrTemplateTail(nextNode)) {
+                                const start = node.getFullStart() - "${".length;
+                                const end = nextNode.getStart() + "}".length;
+                                pushSelectionRange(start, end, node.kind);
+                            }
+
                             // Blocks with braces should be selected from brace to brace, non-inclusive
                             const isBetweenBraces = isSyntaxList(node)
                                 && prevNode && prevNode.kind === SyntaxKind.OpenBraceToken
                                 && nextNode && nextNode.kind === SyntaxKind.CloseBraceToken;
                             const start = isBetweenBraces ? prevNode.getEnd() : node.getStart();
                             const end = isBetweenBraces ? nextNode.getStart() : node.getEnd();
-                            const textSpan = this.toLocationTextSpan(createTextSpanFromBounds(start, end), scriptInfo);
-                            pushSelectionRange(textSpan, node.kind);
+                            pushSelectionRange(start, end, node.kind);
 
                             // Mapped types _look_ like ObjectTypes with a single member,
                             // but in fact don’t contain a SyntaxList or a node containing
@@ -2134,17 +2148,19 @@ namespace ts.server {
                                 const closeBraceToken = Debug.assertDefined(node.getLastToken());
                                 Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
                                 Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
-                                const spanWithoutBraces = this.toLocationTextSpan(createTextSpanFromBounds(
-                                    openBraceToken.getEnd(),
-                                    closeBraceToken.getStart(),
-                                ), scriptInfo);
-                                const spanWithoutBracesOrTrivia = this.toLocationTextSpan(createTextSpanFromBounds(
-                                    firstNonBraceToken.getStart(),
-                                    closeBraceToken.getFullStart(),
-                                ), scriptInfo);
-                                pushSelectionRange(spanWithoutBraces);
-                                pushSelectionRange(spanWithoutBracesOrTrivia);
+                                const spanWithoutBraces = [openBraceToken.getEnd(), closeBraceToken.getStart()] as const;
+                                const spanWithoutBracesOrTrivia = [firstNonBraceToken.getStart(), closeBraceToken.getFullStart()] as const;
+                                pushSelectionRange(...spanWithoutBraces);
+                                pushSelectionRange(...spanWithoutBracesOrTrivia);
                             }
+
+                            // String literals should have a stop both inside and outside their quotes.
+                            if (isStringLiteral(node) || isTemplateLiteral(node)) {
+                                pushSelectionRange(start + 1, end - 1);
+                            }
+
+                            // If we’ve made it here, we’ve already used `isInTemplateSpan` as much as we need
+                            isInTemplateSpan = false;
                             current = node;
                             break;
                         }
