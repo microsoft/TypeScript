@@ -9848,7 +9848,7 @@ namespace ts {
             return type.flags & TypeFlags.Union ? getIntersectionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 type.flags & TypeFlags.Intersection ? getUnionType(map((<IntersectionType>type).types, t => getIndexType(t, stringsOnly, noIndexSignatures))) :
                 maybeTypeOfKind(type, TypeFlags.InstantiableNonPrimitive) ? getIndexTypeForGenericType(<InstantiableType | UnionOrIntersectionType>type, stringsOnly) :
-                getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
+                getObjectFlags(type) & ObjectFlags.Mapped ? filterType(getConstraintTypeFromMappedType(<MappedType>type), t => !(noIndexSignatures && t.flags & (TypeFlags.Any | TypeFlags.String | TypeFlags.Number))) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any ? keyofConstraintType :
                 stringsOnly ? !noIndexSignatures && getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
