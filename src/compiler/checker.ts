@@ -1953,7 +1953,21 @@ namespace ts {
                 const file = find(moduleSymbol.declarations, isSourceFile);
                 const hasSyntheticDefault = canHaveSyntheticDefault(file, moduleSymbol, dontResolveAlias);
                 if (!exportDefaultSymbol && !hasSyntheticDefault) {
-                    error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
+                    if (hasExportAssignmentSymbol(moduleSymbol)) {
+                        const compilerOptionName = moduleKind >= ModuleKind.ES2015 ? "allowSyntheticDefaultImports" : "esModuleInterop";
+                        const exportEqualsSymbol = moduleSymbol.exports!.get(InternalSymbolName.ExportEquals);
+                        const exportAssignment = exportEqualsSymbol!.valueDeclaration;
+                        const err = error(node.name, Diagnostics.Module_0_can_only_be_default_imported_using_the_1_flag, symbolToString(moduleSymbol), compilerOptionName);
+
+                        addRelatedInfo(err, createDiagnosticForNode(
+                            exportAssignment,
+                            Diagnostics.This_module_is_declared_with_using_export_and_can_only_be_used_with_a_default_import_when_using_the_0_flag,
+                            compilerOptionName
+                        ));
+                    }
+                    else {
+                        error(node.name, Diagnostics.Module_0_has_no_default_export, symbolToString(moduleSymbol));
+                    }
                 }
                 else if (hasSyntheticDefault) {
                     // per emit behavior, a synthetic default overrides a "real" .default member if `__esModule` is not present
