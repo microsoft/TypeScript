@@ -6441,7 +6441,6 @@ namespace ts {
                                     // for malformed examples like `/** @param {string} x @returns {number} the length */`
                                     state = JSDocState.BeginningOfLine;
                                     margin = undefined;
-                                    indent++;
                                 }
                                 else {
                                     pushComment(scanner.getTokenText());
@@ -6536,32 +6535,38 @@ namespace ts {
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(): void {
+                function skipWhitespaceOrAsterisk(): string {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
-                            return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
+                            return ""; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
                         }
                     }
 
                     let precedingLineBreak = scanner.hasPrecedingLineBreak();
+                    let seenLineBreak = false;
+                    let indentText = "";
                     while ((precedingLineBreak && token() === SyntaxKind.AsteriskToken) || token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+                        indentText += scanner.getTokenText();
                         if (token() === SyntaxKind.NewLineTrivia) {
                             precedingLineBreak = true;
+                            seenLineBreak = true;
+                            indentText = "";
                         }
                         else if (token() === SyntaxKind.AsteriskToken) {
                             precedingLineBreak = false;
                         }
                         nextJSDocToken();
                     }
+                    return seenLineBreak ? indentText : "";
                 }
 
-                function parseTag(indent: number) {
+                function parseTag(margin: number) {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const start = scanner.getTokenPos();
                     nextJSDocToken();
 
                     const tagName = parseJSDocIdentifierName(/*message*/ undefined);
-                    skipWhitespaceOrAsterisk();
+                    const indentText = skipWhitespaceOrAsterisk();
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
@@ -6582,7 +6587,7 @@ namespace ts {
                         case "arg":
                         case "argument":
                         case "param":
-                            return parseParameterOrPropertyTag(start, tagName, PropertyLikeParse.Parameter, indent);
+                            return parseParameterOrPropertyTag(start, tagName, PropertyLikeParse.Parameter, margin);
                         case "return":
                         case "returns":
                             tag = parseReturnTag(start, tagName);
@@ -6594,10 +6599,10 @@ namespace ts {
                             tag = parseTypeTag(start, tagName);
                             break;
                         case "typedef":
-                            tag = parseTypedefTag(start, tagName, indent);
+                            tag = parseTypedefTag(start, tagName, margin);
                             break;
                         case "callback":
-                            tag = parseCallbackTag(start, tagName, indent);
+                            tag = parseCallbackTag(start, tagName, margin);
                             break;
                         default:
                             tag = parseUnknownTag(start, tagName);
@@ -6606,12 +6611,15 @@ namespace ts {
 
                     if (!tag.comment) {
                         // some tags, like typedef and callback, have already parsed their comments earlier
-                        tag.comment = parseTagComments(indent + tag.end - tag.pos);
+                        if (!indentText) {
+                            margin += tag.end - tag.pos;
+                        }
+                        tag.comment = parseTagComments(margin, indentText.slice(margin));
                     }
                     return tag;
                 }
 
-                function parseTagComments(indent: number): string | undefined {
+                function parseTagComments(indent: number, initialMargin?: string): string | undefined {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
@@ -6621,6 +6629,11 @@ namespace ts {
                         }
                         comments.push(text);
                         indent += text.length;
+                    }
+                    if (initialMargin) {
+                        // jump straight to saving comments if there is some initial indentation
+                        pushComment(initialMargin);
+                        state = JSDocState.SavingComments;
                     }
                     let tok = token() as JsDocSyntaxKind;
                     loop: while (true) {
@@ -6646,7 +6659,7 @@ namespace ts {
                                     const whitespace = scanner.getTokenText();
                                     // if the whitespace crosses the margin, take only the whitespace that passes the margin
                                     if (margin !== undefined && indent + whitespace.length > margin) {
-                                        comments.push(whitespace.slice(margin - indent - 1));
+                                        comments.push(whitespace.slice(margin - indent));
                                     }
                                     indent += whitespace.length;
                                 }
