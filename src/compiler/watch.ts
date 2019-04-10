@@ -121,6 +121,14 @@ namespace ts {
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
     }
 
+    export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
+        if (program.getCompilerOptions().listFiles) {
+            forEach(program.getSourceFiles(), file => {
+                writeFileName(file.fileName);
+            });
+        }
+    }
+
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
@@ -129,7 +137,6 @@ namespace ts {
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;
         addRange(diagnostics, program.getSyntacticDiagnostics());
-        let reportSemanticDiagnostics = false;
 
         // If we didn't have any syntactic errors, then also try getting the global and
         // semantic errors.
@@ -138,17 +145,13 @@ namespace ts {
             addRange(diagnostics, program.getGlobalDiagnostics());
 
             if (diagnostics.length === configFileParsingDiagnosticsLength) {
-                reportSemanticDiagnostics = true;
+                addRange(diagnostics, program.getSemanticDiagnostics());
             }
         }
 
         // Emit and report any errors we ran into.
         const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit(/*targetSourceFile*/ undefined, writeFile);
         addRange(diagnostics, emitDiagnostics);
-
-        if (reportSemanticDiagnostics) {
-            addRange(diagnostics, program.getSemanticDiagnostics());
-        }
 
         sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
         if (writeFileName) {
@@ -157,12 +160,7 @@ namespace ts {
                 const filepath = getNormalizedAbsolutePath(file, currentDir);
                 writeFileName(`TSFILE: ${filepath}`);
             });
-
-            if (program.getCompilerOptions().listFiles) {
-                forEach(program.getSourceFiles(), file => {
-                    writeFileName(file.fileName);
-                });
-            }
+            listFiles(program, writeFileName);
         }
 
         if (reportSummary) {
@@ -280,10 +278,22 @@ namespace ts {
         }
     }
 
+    export function setGetSourceFileAsHashVersioned(compilerHost: CompilerHost, host: { createHash?(data: string): string; }) {
+        const originalGetSourceFile = compilerHost.getSourceFile;
+        const computeHash = host.createHash || generateDjb2Hash;
+        compilerHost.getSourceFile = (...args) => {
+            const result = originalGetSourceFile.call(compilerHost, ...args);
+            if (result) {
+                result.version = computeHash.call(host, result.text);
+            }
+            return result;
+        };
+    }
+
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
-    export function createProgramHost<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T>): ProgramHost<T> {
+    export function createProgramHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined): ProgramHost<T> {
         const getDefaultLibLocation = memoize(() => getDirectoryPath(normalizePath(system.getExecutingFilePath())));
         let host: DirectoryStructureHost = system;
         host; // tslint:disable-line no-unused-expression (TODO: `host` is unused!)
@@ -305,7 +315,7 @@ namespace ts {
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
             onCachedDirectoryStructureHostCreate: cacheHost => host = cacheHost || system,
             createHash: maybeBind(system, system.createHash),
-            createProgram
+            createProgram: createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>
         };
     }
 
@@ -314,7 +324,7 @@ namespace ts {
      */
     function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram: CreateProgram<T> | undefined, reportDiagnostic: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHost<T> {
         const writeFileName = (s: string) => system.write(s + system.newLine);
-        const result = createProgramHost(system, createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>) as WatchCompilerHost<T>;
+        const result = createProgramHost(system, createProgram) as WatchCompilerHost<T>;
         copyProperties(result, createWatchHost(system, reportWatchStatus));
         result.afterProgramCreate = builderProgram => {
             const compilerOptions = builderProgram.getCompilerOptions();
@@ -363,6 +373,68 @@ namespace ts {
         host.options = options;
         host.projectReferences = projectReferences;
         return host;
+    }
+
+    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
+        if (compilerOptions.out || compilerOptions.outFile) return undefined;
+        const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
+        if (!buildInfoPath) return undefined;
+        const content = readFile(buildInfoPath);
+        if (!content) return undefined;
+        const buildInfo = getBuildInfo(content);
+        if (buildInfo.version !== version) return undefined;
+        if (!buildInfo.program) return undefined;
+        return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
+    }
+
+    export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+        const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
+        host.createHash = maybeBind(system, system.createHash);
+        setGetSourceFileAsHashVersioned(host, system);
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
+        return host;
+    }
+
+    interface IncrementalProgramOptions<T extends BuilderProgram> {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        createProgram?: CreateProgram<T>;
+    }
+    function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+        rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
+    }: IncrementalProgramOptions<T>): T {
+        host = host || createIncrementalCompilerHost(options);
+        createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
+        const oldProgram = readBuilderProgram(options, path => host!.readFile(path)) as any as T;
+        return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
+    }
+
+    export interface IncrementalCompilationOptions {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        reportDiagnostic?: DiagnosticReporter;
+        reportErrorSummary?: ReportEmitErrorSummary;
+        afterProgramEmitAndDiagnostics?(program: EmitAndSemanticDiagnosticsBuilderProgram): void;
+        system?: System;
+    }
+    export function performIncrementalCompilation(input: IncrementalCompilationOptions) {
+        const system = input.system || sys;
+        const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
+        const builderProgram = createIncrementalProgram(input);
+        const exitStatus = emitFilesAndReportErrors(
+            builderProgram,
+            input.reportDiagnostic || createDiagnosticReporter(system),
+            s => host.trace && host.trace(s),
+            input.reportErrorSummary || input.options.pretty ? errorCount => system.write(getErrorSummaryText(errorCount, system.newLine)) : undefined
+        );
+        if (input.afterProgramEmitAndDiagnostics) input.afterProgramEmitAndDiagnostics(builderProgram);
+        return exitStatus;
     }
 }
 
@@ -494,6 +566,9 @@ namespace ts {
         /** Gets the existing program without synchronizing with changes on host */
         /*@internal*/
         getCurrentProgram(): T;
+        /** Closes the watch */
+        /*@internal*/
+        close(): void;
     }
 
     /**
@@ -524,8 +599,6 @@ namespace ts {
         }
     }
 
-    const initialVersion = 1;
-
     /**
      * Creates the watch from the host for root files and compiler options
      */
@@ -536,13 +609,14 @@ namespace ts {
     export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
     export function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfFilesAndCompilerOptions<T> & WatchCompilerHostOfConfigFile<T>): WatchOfFilesAndCompilerOptions<T> | WatchOfConfigFile<T> {
         interface FilePresentOnHost {
-            version: number;
+            version: string;
             sourceFile: SourceFile;
             fileWatcher: FileWatcher;
         }
-        type FileMissingOnHost = number;
+        type FileMissingOnHost = false;
         interface FilePresenceUnknownOnHost {
-            version: number;
+            version: false;
+            fileWatcher?: FileWatcher;
         }
         type FileMayBePresentOnHost = FilePresentOnHost | FilePresenceUnknownOnHost;
         type HostFileInfo = FilePresentOnHost | FileMissingOnHost | FilePresenceUnknownOnHost;
@@ -592,11 +666,13 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
+        let configFileWatcher: FileWatcher | undefined;
         if (configFileName) {
-            watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, WatchType.ConfigFile);
+            configFileWatcher = watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, WatchType.ConfigFile);
         }
 
         const compilerHost = createCompilerHostFromProgramHost(host, () => compilerOptions, directoryStructureHost) as CompilerHost & ResolutionCacheHost;
+        setGetSourceFileAsHashVersioned(compilerHost, host);
         // Members for CompilerHost
         const getNewSourceFile = compilerHost.getSourceFile;
         compilerHost.getSourceFile = (fileName, ...args) => getVersionedSourceFileByPath(fileName, toPath(fileName), ...args);
@@ -634,27 +710,50 @@ namespace ts {
             ((typeDirectiveNames, containingFile, redirectedReference) => resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference));
         const userProvidedResolution = !!host.resolveModuleNames || !!host.resolveTypeReferenceDirectives;
 
+        builderProgram = readBuilderProgram(compilerOptions, path => compilerHost.readFile(path)) as any as T;
         synchronizeProgram();
 
         // Update the wild card directory watch
         watchConfigFileWildCardDirectories();
 
         return configFileName ?
-            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram } :
-            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, updateRootFileNames };
+            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, close } :
+            { getCurrentProgram: getCurrentBuilderProgram, getProgram: synchronizeProgram, updateRootFileNames, close };
+
+        function close() {
+            resolutionCache.clear();
+            clearMap(sourceFilesCache, value => {
+                if (value && value.fileWatcher) {
+                    value.fileWatcher.close();
+                    value.fileWatcher = undefined;
+                }
+            });
+            if (configFileWatcher) {
+                configFileWatcher.close();
+                configFileWatcher = undefined;
+            }
+            if (watchedWildcardDirectories) {
+                clearMap(watchedWildcardDirectories, closeFileWatcherOf);
+                watchedWildcardDirectories = undefined!;
+            }
+            if (missingFilesMap) {
+                clearMap(missingFilesMap, closeFileWatcher);
+                missingFilesMap = undefined!;
+            }
+        }
 
         function getCurrentBuilderProgram() {
             return builderProgram;
         }
 
         function getCurrentProgram() {
-            return builderProgram && builderProgram.getProgram();
+            return builderProgram && builderProgram.getProgramOrUndefined();
         }
 
         function synchronizeProgram() {
             writeLog(`Synchronizing program`);
 
-            const program = getCurrentProgram();
+            const program = getCurrentBuilderProgram();
             if (hasChangedCompilerOptions) {
                 newLine = updateNewLine();
                 if (program && changesAffectModuleResolution(program.getCompilerOptions(), compilerOptions)) {
@@ -671,7 +770,7 @@ namespace ts {
                 }
             }
             else {
-                createNewProgram(program, hasInvalidatedResolution);
+                createNewProgram(hasInvalidatedResolution);
             }
 
             if (host.afterProgramCreate) {
@@ -681,13 +780,13 @@ namespace ts {
             return builderProgram;
         }
 
-        function createNewProgram(program: Program, hasInvalidatedResolution: HasInvalidatedResolution) {
+        function createNewProgram(hasInvalidatedResolution: HasInvalidatedResolution) {
             // Compile the program
             writeLog("CreatingProgramWith::");
             writeLog(`  roots: ${JSON.stringify(rootFileNames)}`);
             writeLog(`  options: ${JSON.stringify(compilerOptions)}`);
 
-            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !program;
+            const needsUpdateInTypeRootWatch = hasChangedCompilerOptions || !getCurrentProgram();
             hasChangedCompilerOptions = false;
             hasChangedConfigFileParsingErrors = false;
             resolutionCache.startCachingPerDirectoryResolution();
@@ -731,19 +830,19 @@ namespace ts {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
-        function isFileMissingOnHost(hostSourceFile: HostFileInfo): hostSourceFile is FileMissingOnHost {
-            return typeof hostSourceFile === "number";
+        function isFileMissingOnHost(hostSourceFile: HostFileInfo | undefined): hostSourceFile is FileMissingOnHost {
+            return typeof hostSourceFile === "boolean";
         }
 
-        function isFilePresentOnHost(hostSourceFile: FileMayBePresentOnHost): hostSourceFile is FilePresentOnHost {
-            return !!(hostSourceFile as FilePresentOnHost).sourceFile;
+        function isFilePresenceUnknownOnHost(hostSourceFile: FileMayBePresentOnHost): hostSourceFile is FilePresenceUnknownOnHost {
+            return typeof (hostSourceFile as FilePresenceUnknownOnHost).version === "boolean";
         }
 
         function fileExists(fileName: string) {
             const path = toPath(fileName);
             // If file is missing on host from cache, we can definitely say file doesnt exist
             // otherwise we need to ensure from the disk
-            if (isFileMissingOnHost(sourceFilesCache.get(path)!)) {
+            if (isFileMissingOnHost(sourceFilesCache.get(path))) {
                 return true;
             }
 
@@ -751,44 +850,39 @@ namespace ts {
         }
 
         function getVersionedSourceFileByPath(fileName: string, path: Path, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {
-            const hostSourceFile = sourceFilesCache.get(path)!;
+            const hostSourceFile = sourceFilesCache.get(path);
             // No source file on the host
             if (isFileMissingOnHost(hostSourceFile)) {
                 return undefined;
             }
 
             // Create new source file if requested or the versions dont match
-            if (!hostSourceFile || shouldCreateNewSourceFile || !isFilePresentOnHost(hostSourceFile) || hostSourceFile.version.toString() !== hostSourceFile.sourceFile.version) {
+            if (hostSourceFile === undefined || shouldCreateNewSourceFile || isFilePresenceUnknownOnHost(hostSourceFile)) {
                 const sourceFile = getNewSourceFile(fileName, languageVersion, onError);
                 if (hostSourceFile) {
-                    if (shouldCreateNewSourceFile) {
-                        hostSourceFile.version++;
-                    }
-
                     if (sourceFile) {
                         // Set the source file and create file watcher now that file was present on the disk
                         (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
-                        sourceFile.version = hostSourceFile.version.toString();
-                        if (!(hostSourceFile as FilePresentOnHost).fileWatcher) {
-                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
+                        hostSourceFile.version = sourceFile.version;
+                        if (!hostSourceFile.fileWatcher) {
+                            hostSourceFile.fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
                         }
                     }
                     else {
                         // There is no source file on host any more, close the watch, missing file paths will track it
-                        if (isFilePresentOnHost(hostSourceFile)) {
+                        if (hostSourceFile.fileWatcher) {
                             hostSourceFile.fileWatcher.close();
                         }
-                        sourceFilesCache.set(path, hostSourceFile.version);
+                        sourceFilesCache.set(path, false);
                     }
                 }
                 else {
                     if (sourceFile) {
-                        sourceFile.version = initialVersion.toString();
                         const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
-                        sourceFilesCache.set(path, { sourceFile, version: initialVersion, fileWatcher });
+                        sourceFilesCache.set(path, { sourceFile, version: sourceFile.version, fileWatcher });
                     }
                     else {
-                        sourceFilesCache.set(path, initialVersion);
+                        sourceFilesCache.set(path, false);
                     }
                 }
                 return sourceFile;
@@ -801,17 +895,17 @@ namespace ts {
             if (hostSourceFile !== undefined) {
                 if (isFileMissingOnHost(hostSourceFile)) {
                     // The next version, lets set it as presence unknown file
-                    sourceFilesCache.set(path, { version: Number(hostSourceFile) + 1 });
+                    sourceFilesCache.set(path, { version: false });
                 }
                 else {
-                    hostSourceFile.version++;
+                    (hostSourceFile as FilePresenceUnknownOnHost).version = false;
                 }
             }
         }
 
         function getSourceVersion(path: Path): string | undefined {
             const hostSourceFile = sourceFilesCache.get(path);
-            return !hostSourceFile || isFileMissingOnHost(hostSourceFile) ? undefined : hostSourceFile.version.toString();
+            return !hostSourceFile || !hostSourceFile.version ? undefined : hostSourceFile.version;
         }
 
         function onReleaseOldSourceFile(oldSourceFile: SourceFile, _oldOptions: CompilerOptions, hasSourceFileByPath: boolean) {
@@ -820,14 +914,14 @@ namespace ts {
             // remove the cached entry.
             // Note we arent deleting entry if file became missing in new program or
             // there was version update and new source file was created.
-            if (hostSourceFileInfo) {
+            if (hostSourceFileInfo !== undefined) {
                 // record the missing file paths so they can be removed later if watchers arent tracking them
                 if (isFileMissingOnHost(hostSourceFileInfo)) {
                     (missingFilePathsRequestedForRelease || (missingFilePathsRequestedForRelease = [])).push(oldSourceFile.path);
                 }
                 else if ((hostSourceFileInfo as FilePresentOnHost).sourceFile === oldSourceFile) {
-                    if ((hostSourceFileInfo as FilePresentOnHost).fileWatcher) {
-                        (hostSourceFileInfo as FilePresentOnHost).fileWatcher.close();
+                    if (hostSourceFileInfo.fileWatcher) {
+                        hostSourceFileInfo.fileWatcher.close();
                     }
                     sourceFilesCache.delete(oldSourceFile.resolvedPath);
                     if (!hasSourceFileByPath) {
@@ -924,7 +1018,7 @@ namespace ts {
             updateCachedSystemWithFile(fileName, path, eventKind);
 
             // Update the source file cache
-            if (eventKind === FileWatcherEventKind.Deleted && sourceFilesCache.get(path)) {
+            if (eventKind === FileWatcherEventKind.Deleted && sourceFilesCache.has(path)) {
                 resolutionCache.invalidateResolutionOfFile(path);
             }
             resolutionCache.removeResolutionsFromProjectReferenceRedirects(path);
@@ -987,7 +1081,7 @@ namespace ts {
                     }
                     nextSourceFileVersion(fileOrDirectoryPath);
 
-                    if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return;
+                    if (isPathIgnored(fileOrDirectoryPath)) return;
 
                     // If the the added or created file or directory is not supported file name, ignore the file
                     // But when watched directory is added/removed, we need to reload the file list

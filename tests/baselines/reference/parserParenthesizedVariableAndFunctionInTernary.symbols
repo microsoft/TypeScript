@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/parserParenthesizedVariableAndFunctionInTernary.ts ===
+let a: any;
+>a : Symbol(a, Decl(parserParenthesizedVariableAndFunctionInTernary.ts, 0, 3))
+
+const c = true ? (a) : function() {};
+>c : Symbol(c, Decl(parserParenthesizedVariableAndFunctionInTernary.ts, 1, 5))
+>a : Symbol(a, Decl(parserParenthesizedVariableAndFunctionInTernary.ts, 0, 3))
+

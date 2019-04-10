@@ -1,0 +1,14 @@
+tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts(4,17): error TS1003: Identifier expected.
+tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts(4,17): error TS2680: A 'this' parameter must be the first parameter.
+
+
+==== tests/cases/conformance/decorators/class/method/parameter/decoratorOnClassMethodThisParameter.ts (2 errors) ====
+    declare function dec(target: Object, propertyKey: string | symbol, parameterIndex: number): void;
+    
+    class C {
+        method(@dec this: C) {}
+                    ~~~~
+!!! error TS1003: Identifier expected.
+                    ~~~~~~~
+!!! error TS2680: A 'this' parameter must be the first parameter.
+    }

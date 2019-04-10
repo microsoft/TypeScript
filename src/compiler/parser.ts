@@ -1097,6 +1097,10 @@ namespace ts {
             return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
         }
 
+        function reScanLessThanToken(): SyntaxKind {
+            return currentToken = scanner.reScanLessThanToken();
+        }
+
         function scanJsxIdentifier(): SyntaxKind {
             return currentToken = scanner.scanJsxIdentifier();
         }
@@ -2292,7 +2296,7 @@ namespace ts {
         function parseTypeReference(): TypeReferenceNode {
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
-            if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.LessThanToken) {
+            if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
             return finishNode(node);
@@ -2978,6 +2982,7 @@ namespace ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ReadonlyKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.UniqueKeyword:
                 case SyntaxKind.VoidKeyword:
@@ -3067,7 +3072,7 @@ namespace ts {
             return finishNode(postfix);
         }
 
-        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword) {
+        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword) {
             const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
             parseExpected(operator);
             node.operator = operator;
@@ -3089,6 +3094,7 @@ namespace ts {
             switch (operator) {
                 case SyntaxKind.KeyOfKeyword:
                 case SyntaxKind.UniqueKeyword:
+                case SyntaxKind.ReadonlyKeyword:
                     return parseTypeOperator(operator);
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
@@ -3703,9 +3709,11 @@ namespace ts {
             //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
             //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
+            //  - "a ? (b): function() {}" will too, since function() is a valid JSDoc function type.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) {
+            const hasJSDocFunctionType = node.type && isJSDocFunctionType(node.type);
+            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                 return undefined;
             }
@@ -4266,7 +4274,8 @@ namespace ts {
 
         function parseJsxText(): JsxText {
             const node = <JsxText>createNode(SyntaxKind.JsxText);
-            node.containsOnlyWhiteSpaces = currentToken === SyntaxKind.JsxTextAllWhiteSpaces;
+            node.text = scanner.getTokenValue();
+            node.containsOnlyTriviaWhiteSpaces = currentToken === SyntaxKind.JsxTextAllWhiteSpaces;
             currentToken = scanner.scanJsxToken();
             return finishNode(node);
         }
@@ -4539,7 +4548,8 @@ namespace ts {
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
-                if (token() === SyntaxKind.LessThanToken) {
+                // handle 'foo<<T>()'
+                if (token() === SyntaxKind.LessThanToken || token() === SyntaxKind.LessThanLessThanToken) {
                     // See if this is the start of a generic invocation.  If so, consume it and
                     // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
                     // part of an arithmetic expression.  Break out so we consume it higher in the
@@ -4581,9 +4591,10 @@ namespace ts {
         }
 
         function parseTypeArgumentsInExpression() {
-            if (!parseOptional(SyntaxKind.LessThanToken)) {
+            if (reScanLessThanToken() !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
+            nextToken();
 
             const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
             if (!parseExpected(SyntaxKind.GreaterThanToken)) {
@@ -7756,20 +7767,21 @@ namespace ts {
 
         context.pragmas = createMap() as PragmaMap;
         for (const pragma of pragmas) {
-            if (context.pragmas.has(pragma!.name)) { // TODO: GH#18217
-                const currentValue = context.pragmas.get(pragma!.name);
+            if (context.pragmas.has(pragma.name)) {
+                const currentValue = context.pragmas.get(pragma.name);
                 if (currentValue instanceof Array) {
-                    currentValue.push(pragma!.args);
+                    currentValue.push(pragma.args);
                 }
                 else {
-                    context.pragmas.set(pragma!.name, [currentValue, pragma!.args]);
+                    context.pragmas.set(pragma.name, [currentValue, pragma.args]);
                 }
                 continue;
             }
-            context.pragmas.set(pragma!.name, pragma!.args);
+            context.pragmas.set(pragma.name, pragma.args);
         }
     }
 
+    /*@internal*/
     type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
 
     /*@internal*/
@@ -7789,9 +7801,8 @@ namespace ts {
                     const typeReferenceDirectives = context.typeReferenceDirectives;
                     const libReferenceDirectives = context.libReferenceDirectives;
                     forEach(toArray(entryOrList), (arg: PragmaPseudoMap["reference"]) => {
-                        // TODO: GH#18217
-                        const { types, lib, path } = arg!.arguments;
-                        if (arg!.arguments["no-default-lib"]) {
+                        const { types, lib, path } = arg.arguments;
+                        if (arg.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
                         }
                         else if (types) {
@@ -7804,7 +7815,7 @@ namespace ts {
                             referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value });
                         }
                         else {
-                            reportDiagnostic(arg!.range.pos, arg!.range.end - arg!.range.pos, Diagnostics.Invalid_reference_directive_syntax);
+                            reportDiagnostic(arg.range.pos, arg.range.end - arg.range.pos, Diagnostics.Invalid_reference_directive_syntax);
                         }
                     });
                     break;
@@ -7812,7 +7823,7 @@ namespace ts {
                 case "amd-dependency": {
                     context.amdDependencies = map(
                         toArray(entryOrList),
-                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path })); // TODO: GH#18217
+                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x.arguments.name, path: x.arguments.path }));
                     break;
                 }
                 case "amd-module": {
@@ -7820,13 +7831,13 @@ namespace ts {
                         for (const entry of entryOrList) {
                             if (context.moduleName) {
                                 // TODO: It's probably fine to issue this diagnostic on all instances of the pragma
-                                reportDiagnostic(entry!.range.pos, entry!.range.end - entry!.range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
+                                reportDiagnostic(entry.range.pos, entry.range.end - entry.range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
                             }
-                            context.moduleName = (entry as PragmaPseudoMap["amd-module"])!.arguments.name;
+                            context.moduleName = (entry as PragmaPseudoMap["amd-module"]).arguments.name;
                         }
                     }
                     else {
-                        context.moduleName = (entryOrList as PragmaPseudoMap["amd-module"])!.arguments.name;
+                        context.moduleName = (entryOrList as PragmaPseudoMap["amd-module"]).arguments.name;
                     }
                     break;
                 }
@@ -7834,11 +7845,11 @@ namespace ts {
                 case "ts-check": {
                     // _last_ of either nocheck or check in a file is the "winner"
                     forEach(toArray(entryOrList), entry => {
-                        if (!context.checkJsDirective || entry!.range.pos > context.checkJsDirective.pos) { // TODO: GH#18217
+                        if (!context.checkJsDirective || entry.range.pos > context.checkJsDirective.pos) {
                             context.checkJsDirective = {
                                 enabled: key === "ts-check",
-                                end: entry!.range.end,
-                                pos: entry!.range.pos
+                                end: entry.range.end,
+                                pos: entry.range.pos
                             };
                         }
                     });

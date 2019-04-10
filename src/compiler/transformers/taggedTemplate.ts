@@ -95,7 +95,7 @@ namespace ts {
         context.requestEmitHelper(templateObjectHelper);
         return createCall(
             getHelperName("__makeTemplateObject"),
-        /*typeArguments*/ undefined,
+            /*typeArguments*/ undefined,
             [
                 cooked,
                 raw
@@ -103,14 +103,14 @@ namespace ts {
         );
     }
 
-    const templateObjectHelper: EmitHelper = {
+    export const templateObjectHelper: UnscopedEmitHelper = {
         name: "typescript:makeTemplateObject",
         scoped: false,
         priority: 0,
         text: `
-        var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
-            if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-            return cooked;
-        };`
+            var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+                if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+                return cooked;
+            };`
     };
 }

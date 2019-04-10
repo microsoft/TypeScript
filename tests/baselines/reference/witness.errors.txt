@@ -1,4 +1,5 @@
 tests/cases/conformance/types/witness/witness.ts(4,21): error TS2372: Parameter 'pInit' cannot be referenced in its initializer.
+tests/cases/conformance/types/witness/witness.ts(8,14): error TS2729: Property 'x' is used before its initialization.
 tests/cases/conformance/types/witness/witness.ts(28,12): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/witness/witness.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
 tests/cases/conformance/types/witness/witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -12,9 +13,11 @@ tests/cases/conformance/types/witness/witness.ts(39,5): error TS2403: Subsequent
 tests/cases/conformance/types/witness/witness.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
 tests/cases/conformance/types/witness/witness.ts(57,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
 tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
+tests/cases/conformance/types/witness/witness.ts(121,14): error TS2729: Property 'n' is used before its initialization.
+tests/cases/conformance/types/witness/witness.ts(128,19): error TS2729: Property 'q' is used before its initialization.
 
 
-==== tests/cases/conformance/types/witness/witness.ts (14 errors) ====
+==== tests/cases/conformance/types/witness/witness.ts (17 errors) ====
     // Initializers
     var varInit = varInit; // any
     var pInit: any;
@@ -25,6 +28,9 @@ tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequen
     }
     class InitClass {
         x = this.x;
+                 ~
+!!! error TS2729: Property 'x' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/types/witness/witness.ts:8:5: 'x' is declared here.
         fn() {
             var y = this.x;
             var y: any;
@@ -164,6 +170,9 @@ tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequen
     // Property access of class instance type
     class C2 {
         n = this.n; // n: any
+                 ~
+!!! error TS2729: Property 'n' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/types/witness/witness.ts:121:5: 'n' is declared here.
     }
     var c2inst = new C2().n;
     var c2inst: any;
@@ -171,6 +180,9 @@ tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequen
     // Constructor function property access
     class C3 {
         static q = C3.q;
+                      ~
+!!! error TS2729: Property 'q' is used before its initialization.
+!!! related TS2728 tests/cases/conformance/types/witness/witness.ts:128:12: 'q' is declared here.
     }
     var qq = C3.q;
     var qq: any;
