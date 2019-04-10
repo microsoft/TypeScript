@@ -2199,11 +2199,6 @@ namespace ts {
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
-        function parseNoSubstitutionTemplate() {
-            reScanTemplateHeadOrNoSubstitutionTemplate();
-            return <NoSubstitutionTemplateLiteral>parseLiteralNode();
-        }
-
         function parseTemplateExpression(isTaggedTemplate?: boolean): TemplateExpression {
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
@@ -4540,7 +4535,7 @@ namespace ts {
             tagExpression.tag = tag;
             tagExpression.typeArguments = typeArguments;
             tagExpression.template = token() === SyntaxKind.NoSubstitutionTemplateLiteral
-                ? parseNoSubstitutionTemplate()
+                ? (reScanTemplateHeadOrNoSubstitutionTemplate(), <NoSubstitutionTemplateLiteral>parseLiteralNode())
                 : parseTemplateExpression(/*isTaggedTemplate*/ true);
             return finishNode(tagExpression);
         }
