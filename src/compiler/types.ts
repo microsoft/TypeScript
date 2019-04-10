@@ -1674,6 +1674,7 @@ namespace ts {
         OctalSpecifier = 1 << 8,    // e.g. `0o777`
         /* @internal */
         ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
+        /* @internal */
         ContainsInvalidEscape = 1 << 10,    // e.g. `\uhello`
         /* @internal */
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,

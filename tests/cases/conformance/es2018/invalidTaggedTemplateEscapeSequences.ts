@@ -1,4 +1,4 @@
-function tag (str: any, ...args: any[]): string {
+function tag (str: any, ...args: any[]): any {
   return str
 }
 

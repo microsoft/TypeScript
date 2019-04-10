@@ -1090,10 +1090,20 @@ namespace ts {
         }
 
         function reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind {
+            if (isTaggedTemplate) {
+                let lastError: DiagnosticWithLocation | undefined
+                while ((lastError = lastOrUndefined(parseDiagnostics)) && scanner.getTokenPos() < lastError.start) {
+                    parseDiagnostics.pop()
+                }
+            }
             return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
         }
 
         function reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind {
+            let lastError: DiagnosticWithLocation | undefined
+            while ((lastError = lastOrUndefined(parseDiagnostics)) && scanner.getTokenPos() < lastError.start) {
+                parseDiagnostics.pop()
+            }
             return currentToken = scanner.reScanTemplateHeadOrNoSubstitutionTemplate();
         }
 

@@ -1,5 +1,5 @@
 //// [invalidTaggedTemplateEscapeSequences_es2015.ts]
-function tag (str: any, ...args: any[]): string {
+function tag (str: any, ...args: any[]): any {
   return str
 }
 
