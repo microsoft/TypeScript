@@ -49,8 +49,12 @@ namespace ts {
                 return node;
             }
 
-            const visited = visitEachChild(node, visitor, context);
+            currentSourceFile = node;
+            const visited = visitSourceFile(node);
             addEmitHelpers(visited, context.readEmitHelpers());
+
+            currentSourceFile = undefined!;
+            taggedTemplateStringDeclarations = undefined!;
             return visited;
         }
 
@@ -257,6 +261,15 @@ namespace ts {
 
         function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
+        }
+
+        function visitSourceFile(node: SourceFile): SourceFile {
+            const visited = visitEachChild(node, visitor, context);
+            const statement = concatenate(visited.statements, taggedTemplateStringDeclarations && [
+                createVariableStatement(/*modifiers*/ undefined,
+                    createVariableDeclarationList(taggedTemplateStringDeclarations))
+            ]);
+            return updateSourceFileNode(visited, setTextRange(createNodeArray(statement), node.statements));
         }
 
         function visitTaggedTemplateExpression (node: TaggedTemplateExpression) {

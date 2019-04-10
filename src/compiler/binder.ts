@@ -3682,13 +3682,13 @@ namespace ts {
             case SyntaxKind.TemplateMiddle:
             case SyntaxKind.TemplateTail:
                 if ((<NoSubstitutionTemplateLiteral | TemplateHead | TemplateMiddle | TemplateTail>node).templateFlags) {
-                    transformFlags |= TransformFlags.AssertESNext;
+                    transformFlags |= TransformFlags.AssertES2018;
                     break;
                 }
                 // falls through
             case SyntaxKind.TaggedTemplateExpression:
                 if (hasInvalidEscape((<TaggedTemplateExpression>node).template)) {
-                    transformFlags |= TransformFlags.AssertESNext;
+                    transformFlags |= TransformFlags.AssertES2018;
                     break;
                 }
                 // falls through
