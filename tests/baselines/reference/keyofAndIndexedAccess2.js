@@ -35,6 +35,11 @@ function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: numbe
     a[k] = 1;
 }
 
+function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
+    a = b;  // Error, index signature doesn't imply properties are present
+    b = a;
+}
+
 function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
   a = b;
   b = a;
@@ -138,6 +143,10 @@ function f3(a, b, k) {
     b = a;
     a[k];
     a[k] = 1;
+}
+function f3b(a, b, k) {
+    a = b; // Error, index signature doesn't imply properties are present
+    b = a;
 }
 function f4(a, b) {
     a = b;
