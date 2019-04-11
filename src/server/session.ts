@@ -112,6 +112,32 @@ namespace ts.server {
         return edits.every(edit => textSpanEnd(edit.span) < pos);
     }
 
+    function getGroupBounds<T>(array: ArrayLike<T>, index: number, predicate: (element: T) => boolean): [number, number] {
+        let first = index;
+        let last = index;
+        let i = index;
+        while (i > 0) {
+            const element = array[--i];
+            if (predicate(element)) {
+                first = i;
+            }
+            else {
+                break;
+            }
+        }
+        i = index;
+        while (i < array.length - 1) {
+            const element = array[++i];
+            if (predicate(element)) {
+                last = i;
+            }
+            else {
+                break;
+            }
+        }
+        return [first, last];
+    }
+
     // CommandNames used to be exposed before TS 2.4 as a namespace
     // In TS 2.4 we switched to an enum, keep this for backward compatibility
     // The var assignment ensures that even though CommandTypes are a const enum
@@ -2071,6 +2097,7 @@ namespace ts.server {
             const { locations } = args;
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
 
+            const isImport = or(isImportDeclaration, isImportEqualsDeclaration);
             const sourceFile = languageService.getNonBoundSourceFile(file);
             const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
             const fullTextSpan = this.toLocationTextSpan(
@@ -2092,36 +2119,40 @@ namespace ts.server {
                 };
 
                 // Skip top-level SyntaxList
-                let current: Node | undefined = sourceFile.getChildAt(0);
-                let isInTemplateSpan = false;
-                while (true) {
-                    const children = current && current.getChildren(sourceFile);
-                    if (!children || !children.length) break;
+                let parentNode = sourceFile.getChildAt(0);
+                outer: while (true) {
+                    const children = parentNode.getChildren(sourceFile);
+                    if (!children.length) break;
                     for (let i = 0; i < children.length; i++) {
                         const prevNode: Node | undefined = children[i - 1];
                         const node: Node = children[i];
                         const nextNode: Node | undefined = children[i + 1];
                         if (node.getStart(sourceFile) > pos) {
-                            current = undefined;
-                            break;
+                            break outer;
                         }
-                        // Blocks are effectively redundant with SyntaxLists.
-                        // TemplateSpans are an unintuitive grouping of two things which
-                        // should be considered independently.
-                        // Dive in without pushing a selection range.
-                        const nodeIsTemplateSpan = isTemplateSpan(node);
-                        const nodeIsTemplateSpanList = prevNode && isTemplateHead(prevNode);
-                        if (isBlock(node) || nodeIsTemplateSpan || nodeIsTemplateSpanList) {
-                            isInTemplateSpan = nodeIsTemplateSpan;
-                            current = node;
-                            break;
-                        }
+
                         if (positionBelongsToNode(node, pos, sourceFile)) {
+                            // Blocks are effectively redundant with SyntaxLists.
+                            // TemplateSpans, along with the SyntaxLists containing them,
+                            // are a somewhat unintuitive grouping of things that should be
+                            // considered independently. Dive in without pushing a selection range.
+                            if (isBlock(node) || isTemplateSpan(node) || prevNode && isTemplateHead(prevNode)) {
+                                parentNode = node;
+                                break;
+                            }
+
                             // Synthesize a stop for '${ ... }' since '${' and '}' actually belong to siblings.
-                            if (isInTemplateSpan && nextNode && isTemplateMiddleOrTemplateTail(nextNode)) {
+                            if (isTemplateSpan(parentNode) && nextNode && isTemplateMiddleOrTemplateTail(nextNode)) {
                                 const start = node.getFullStart() - "${".length;
                                 const end = nextNode.getStart() + "}".length;
                                 pushSelectionRange(start, end, node.kind);
+                            }
+                            // Synthesize a stop for group of adjacent imports
+                            else if (isImport(node)) {
+                                const [firstImportIndex, lastImportIndex] = getGroupBounds(children, i, isImport);
+                                pushSelectionRange(
+                                    children[firstImportIndex].getStart(),
+                                    children[lastImportIndex].getEnd());
                             }
 
                             // Blocks with braces should be selected from brace to brace, non-inclusive
@@ -2155,13 +2186,11 @@ namespace ts.server {
                             }
 
                             // String literals should have a stop both inside and outside their quotes.
-                            if (isStringLiteral(node) || isTemplateLiteral(node)) {
+                            else if (isStringLiteral(node) || isTemplateLiteral(node)) {
                                 pushSelectionRange(start + 1, end - 1);
                             }
 
-                            // If we’ve made it here, we’ve already used `isInTemplateSpan` as much as we need
-                            isInTemplateSpan = false;
-                            current = node;
+                            parentNode = node;
                             break;
                         }
                     }

@@ -301,5 +301,45 @@ type X = {
                                             end: { line: 3, offset: 5 } } } } } } }
             ]);
         });
+
+        it.skip("works for ES2015 import lists", () => {
+            const getSelectionRange = setup("/file.ts", `
+import { x as y, z } from './z';
+import { b } from './';
+
+console.log(1);`);
+
+            const locations = getSelectionRange([{ line: 2, offset: 10 }]);
+            assert.deepEqual(locations, [
+                {
+                    textSpan: { // x
+                        start: { line: 2, offset: 10 },
+                        end: { line: 2, offset: 11 } },
+                    parent: {
+                        textSpan: { // x as y
+                            start: { line: 2, offset: 10 },
+                            end: { line: 2, offset: 16 } },
+                        parent: {
+                            textSpan: { // x as y, z
+                                start: { line: 2, offset: 10 },
+                                end: { line: 2, offset: 19 } },
+                            parent: {
+                                textSpan: { // { x as y, z }
+                                    start: { line: 2, offset: 8 },
+                                    end: { line: 2, offset: 21 } },
+                                parent: {
+                                    textSpan: { // import { x as y, z } from './z';
+                                        start: { line: 2, offset: 1 },
+                                        end: { line: 2, offset: 33 } },
+                                    parent: {
+                                        textSpan: { // all imports
+                                            start: { line: 2, offset: 1 },
+                                            end: { line: 3, offset: 24 } },
+                                        parent: {
+                                            textSpan: { // SourceFile
+                                                start: { line: 1, offset: 1 },
+                                                end: { line: 5, offset: 16 } } } } } } } } }
+            ]);
+        });
     });
 }
