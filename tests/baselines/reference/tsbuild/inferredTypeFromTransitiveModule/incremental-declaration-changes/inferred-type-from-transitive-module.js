@@ -21,6 +21,11 @@ exports.default = foo()(function foobar() {
 });
 
 
+//// [/src/obj/index.d.ts]
+import { LazyAction } from './bundling';
+export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex")>;
+
+
 //// [/src/obj/tsconfig.tsbuildinfo]
 {
   "program": {

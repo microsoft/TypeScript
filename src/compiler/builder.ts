@@ -241,10 +241,7 @@ namespace ts {
                 oldCompilerOptions.declarationDir !== compilerOptions.declarationDir ||
                 (oldCompilerOptions.outFile || oldCompilerOptions.out) !== (compilerOptions.outFile || compilerOptions.out))) {
             // Add all files to affectedFilesPendingEmit since emit changed
-            state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, newProgram.getSourceFiles().map(f => f.path));
-            if (state.affectedFilesPendingEmitIndex === undefined) {
-                state.affectedFilesPendingEmitIndex = 0;
-            }
+            addToAffectedFilesPendingEmit(state, newProgram.getSourceFiles().map(f => f.path));
             Debug.assert(state.seenAffectedFiles === undefined);
             state.seenAffectedFiles = createMap<true>();
         }
@@ -343,6 +340,7 @@ namespace ts {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
                         cleanSemanticDiagnosticsOfAffectedFile(state, affectedFile);
+                        handleDtsMayChangeOfAffectedFile(state, affectedFile)
                         return affectedFile;
                     }
                     seenAffectedFiles.set(affectedFile.path, true);
@@ -433,80 +431,7 @@ namespace ts {
 
         // If there was change in signature for the changed file,
         // then delete the semantic diagnostics for files that are affected by using exports of this module
-
-        if (!state.exportedModulesMap || state.affectedFiles!.length === 1 || !state.changedFilesSet.has(affectedFile.path)) {
-            return;
-        }
-
-        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
-        const seenFileAndExportsOfFile = createMap<true>();
-        // Go through exported modules from cache first
-        // If exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
-            exportedModules &&
-            exportedModules.has(affectedFile.path) &&
-            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile)
-        )) {
-            return;
-        }
-
-        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
-            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
-            exportedModules.has(affectedFile.path) &&
-            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile)
-        );
-    }
-
-    /**
-     * removes the semantic diagnostics of files referencing referencedPath and
-     * returns true if there are no more semantic diagnostics from old state
-     */
-    function removeSemanticDiagnosticsOfFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Map<true>) {
-        return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
-            referencesInFile.has(referencedPath) && removeSemanticDiagnosticsOfFileAndExportsOfFile(state, filePath as Path, seenFileAndExportsOfFile)
-        );
-    }
-
-    /**
-     * Removes semantic diagnostics of file and anything that exports this file
-     */
-    function removeSemanticDiagnosticsOfFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Map<true>): boolean {
-        if (!addToSeen(seenFileAndExportsOfFile, filePath)) {
-            return false;
-        }
-
-        if (removeSemanticDiagnosticsOf(state, filePath)) {
-            // If there are no more diagnostics from old cache, done
-            return true;
-        }
-
-        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
-        // Go through exported modules from cache first
-        // If exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
-            exportedModules &&
-            exportedModules.has(filePath) &&
-            removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile)
-        )) {
-            return true;
-        }
-
-        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
-        if (forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
-            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
-            exportedModules.has(filePath) &&
-            removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile)
-        )) {
-            return true;
-        }
-
-        // Remove diagnostics of files that import this file (without going to exports of referencing files)
-        return !!forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
-            referencesInFile.has(filePath) &&
-            !seenFileAndExportsOfFile.has(referencingFilePath) && // Not already removed diagnostic file
-            removeSemanticDiagnosticsOf(state, referencingFilePath as Path) // Dont add to seen since this is not yet done with the export removal
-        );
+        forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, removeSemanticDiagnosticsOf);
     }
 
     /**
@@ -521,6 +446,114 @@ namespace ts {
         state.semanticDiagnosticsPerFile!.delete(path);
         return !state.semanticDiagnosticsFromOldState.size;
     }
+
+    /**
+     *  Add files, that are referencing modules that export entities from affected file as pending emit since dts may change
+     *  Similar to cleanSemanticDiagnosticsOfAffectedFile
+     */
+    function handleDtsMayChangeOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile) {
+        // If not dts emit, nothing more to do
+        if (!getEmitDeclarations(state.compilerOptions)) {
+            return;
+        }
+
+        // If affected files is everything except default librarry, then nothing more to do
+        if (state.allFilesExcludingDefaultLibraryFile === state.affectedFiles) {
+            return;
+        }
+
+        // If there was change in signature (dts output) for the changed file,
+        // then only we need to handle pending file emit
+        if (!state.exportedModulesMap || state.affectedFiles!.length === 1 || !state.changedFilesSet.has(affectedFile.path)) {
+            return;
+        }
+
+        forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, filePath) => {
+            addToAffectedFilesPendingEmit(state, [filePath]);
+            return false;
+        });
+    }
+
+    /**
+     * Iterate on referencing modules that export entities from affected file
+     */
+    function forEachReferencingModulesOfExportOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
+        // If there was change in signature (dts output) for the changed file,
+        // then only we need to handle pending file emit
+        if (!state.exportedModulesMap || state.affectedFiles!.length === 1 || !state.changedFilesSet.has(affectedFile.path)) {
+            return;
+        }
+
+        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+        const seenFileAndExportsOfFile = createMap<true>();
+        // Go through exported modules from cache first
+        // If exported modules has path, all files referencing file exported from are affected
+        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
+            exportedModules &&
+            exportedModules.has(affectedFile.path) &&
+            forEachFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile, fn)
+        )) {
+            return;
+        }
+
+        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
+        forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
+            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
+            exportedModules.has(affectedFile.path) &&
+            forEachFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile, fn)
+        );
+    }
+
+    /**
+     * Iterate on files referencing referencedPath
+     */
+    function forEachFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Map<true>, fn: (state: BuilderProgramState, filePath: Path) => boolean) {
+        return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
+            referencesInFile.has(referencedPath) && forEachFileAndExportsOfFile(state, filePath as Path, seenFileAndExportsOfFile, fn)
+        );
+    }
+
+    /**
+     * fn on file and iterate on anything that exports this file
+     */
+    function forEachFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Map<true>, fn: (state: BuilderProgramState, filePath: Path) => boolean): boolean {
+        if (!addToSeen(seenFileAndExportsOfFile, filePath)) {
+            return false;
+        }
+
+        if (fn(state, filePath)) {
+            // If there are no more diagnostics from old cache, done
+            return true;
+        }
+
+        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+        // Go through exported modules from cache first
+        // If exported modules has path, all files referencing file exported from are affected
+        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
+            exportedModules &&
+            exportedModules.has(filePath) &&
+            forEachFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile, fn)
+        )) {
+            return true;
+        }
+
+        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
+        if (forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
+            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
+            exportedModules.has(filePath) &&
+            forEachFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile, fn)
+        )) {
+            return true;
+        }
+
+        // Remove diagnostics of files that import this file (without going to exports of referencing files)
+        return !!forEachEntry(state.referencedMap!, (referencesInFile, referencingFilePath) =>
+            referencesInFile.has(filePath) &&
+            !seenFileAndExportsOfFile.has(referencingFilePath) && // Not already removed diagnostic file
+            fn(state, referencingFilePath as Path) // Dont add to seen since this is not yet done with the export removal
+        );
+    }
+
 
     /**
      * This is called after completing operation on the next affected file.
@@ -929,14 +962,7 @@ namespace ts {
 
             // In case of emit builder, cache the files to be emitted
             if (affectedFilesPendingEmit) {
-                state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, affectedFilesPendingEmit);
-                // affectedFilesPendingEmitIndex === undefined
-                // - means the emit state.affectedFilesPendingEmit was undefined before adding current affected files
-                //   so start from 0 as array would be affectedFilesPendingEmit
-                // else, continue to iterate from existing index, the current set is appended to existing files
-                if (state.affectedFilesPendingEmitIndex === undefined) {
-                    state.affectedFilesPendingEmitIndex = 0;
-                }
+                addToAffectedFilesPendingEmit(state, affectedFilesPendingEmit);
             }
 
             let diagnostics: Diagnostic[] | undefined;
@@ -944,6 +970,17 @@ namespace ts {
                 diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken));
             }
             return diagnostics || emptyArray;
+        }
+    }
+
+    function addToAffectedFilesPendingEmit(state: BuilderProgramState, affectedFilesPendingEmit: readonly Path[]) {
+        state.affectedFilesPendingEmit = concatenate(state.affectedFilesPendingEmit, affectedFilesPendingEmit);
+        // affectedFilesPendingEmitIndex === undefined
+        // - means the emit state.affectedFilesPendingEmit was undefined before adding current affected files
+        //   so start from 0 as array would be affectedFilesPendingEmit
+        // else, continue to iterate from existing index, the current set is appended to existing files
+        if (state.affectedFilesPendingEmitIndex === undefined) {
+            state.affectedFilesPendingEmitIndex = 0;
         }
     }
 
