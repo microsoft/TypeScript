@@ -2155,12 +2155,14 @@ namespace ts.server {
                                     children[lastImportIndex].getEnd());
                             }
 
-                            // Blocks with braces should be selected from brace to brace, non-inclusive
-                            const isBetweenBraces = isSyntaxList(node)
+                            // Blocks with braces on separate lines should be selected from brace to brace,
+                            // including whitespace but not including the braces themselves.
+                            const isBetweenMultiLineBraces = isSyntaxList(node)
                                 && prevNode && prevNode.kind === SyntaxKind.OpenBraceToken
-                                && nextNode && nextNode.kind === SyntaxKind.CloseBraceToken;
-                            const start = isBetweenBraces ? prevNode.getEnd() : node.getStart();
-                            const end = isBetweenBraces ? nextNode.getStart() : node.getEnd();
+                                && nextNode && nextNode.kind === SyntaxKind.CloseBraceToken
+                                && !positionsAreOnSameLine(prevNode.getStart(), nextNode.getStart(), sourceFile);
+                            const start = isBetweenMultiLineBraces ? prevNode.getEnd() : node.getStart();
+                            const end = isBetweenMultiLineBraces ? nextNode.getStart() : node.getEnd();
                             pushSelectionRange(start, end, node.kind);
 
                             // Mapped types _look_ like ObjectTypes with a single member,

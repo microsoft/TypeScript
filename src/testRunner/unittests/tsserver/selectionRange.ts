@@ -199,21 +199,13 @@ type X<T, P> = IsExactlyAny<P> extends true ? T : ({ [K in keyof P]: IsExactlyAn
             const getSelectionRange = setup("/file.js", `
 type X = {
     foo?: string;
-    readonly bar: number;
+    readonly bar: { x: number };
 }`);
             const locations = getSelectionRange([
-                {
-                    line: 3,
-                    offset: 5,
-                },
-                {
-                    line: 4,
-                    offset: 5,
-                },
-                {
-                    line: 4,
-                    offset: 14,
-                },
+                { line: 3, offset: 5 },
+                { line: 4, offset: 5 },
+                { line: 4, offset: 14 },
+                { line: 4, offset: 27 },
             ]);
 
             const allMembersUp: protocol.SelectionRange = {
@@ -238,9 +230,9 @@ type X = {
                     start: { line: 4, offset: 5 },
                     end: { line: 4, offset: 17 } },
                 parent: {
-                    textSpan: { // readonly bar: number;
+                    textSpan: { // readonly bar: { x: number };
                         start: { line: 4, offset: 5 },
-                        end: { line: 4, offset: 26 } },
+                        end: { line: 4, offset: 33 } },
                     parent: allMembersUp } };
 
             assert.deepEqual(locations, [
@@ -267,6 +259,19 @@ type X = {
                         start: { line: 4, offset: 14 },
                         end: { line: 4, offset: 17 } },
                     parent: readonlyBarUp },
+                {
+                    textSpan: { // number
+                        start: { line: 4, offset: 24 },
+                        end: { line: 4, offset: 30 } },
+                    parent: {
+                        textSpan: { // x: number
+                            start: { line: 4, offset: 21 },
+                            end: { line: 4, offset: 30 } },
+                        parent: {
+                            textSpan: { // { x: number }
+                                start: { line: 4, offset: 19 },
+                                end: { line: 4, offset: 32 } },
+                            parent: readonlyBarUp } } },
             ]);
         });
 
@@ -313,7 +318,7 @@ type X = {
             ]);
         });
 
-        it.skip("works for ES2015 import lists", () => {
+        it("works for ES2015 import lists", () => {
             const getSelectionRange = setup("/file.ts", `
 import { x as y, z } from './z';
 import { b } from './';
