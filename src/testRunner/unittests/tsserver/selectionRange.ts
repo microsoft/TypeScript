@@ -164,38 +164,34 @@ type X<T, P> = IsExactlyAny<P> extends true ? T : ({ [K in keyof P]: IsExactlyAn
                                     textSpan: { // [K in keyof P]: IsExactlyAny<P[K]> extends true ? K extends keyof T ? T[K] : P[K] : P[K];
                                         start: { line: 2, offset: 54 },
                                         end: { line: 2, offset: 143 } },
-                                    parent: { // same as above + whitespace
-                                        textSpan: {
-                                            start: { line: 2, offset: 53 },
-                                            end: { line: 2, offset: 144 } },
+                                    parent: {
+                                        textSpan: { // MappedType: same as above + braces
+                                            start: { line: 2, offset: 52 },
+                                            end: { line: 2, offset: 145 } },
                                         parent: {
-                                            textSpan: { // MappedType: same as above + braces
+                                            textSpan: { // IntersectionType: { [K in keyof P]: ... } & Pick<T, Exclude<keyof T, keyof P>>
                                                 start: { line: 2, offset: 52 },
-                                                end: { line: 2, offset: 145 } },
+                                                end: { line: 2, offset: 182 } },
                                             parent: {
-                                                textSpan: { // IntersectionType: { [K in keyof P]: ... } & Pick<T, Exclude<keyof T, keyof P>>
-                                                    start: { line: 2, offset: 52 },
-                                                    end: { line: 2, offset: 182 } },
+                                                textSpan: { // same as above + parens
+                                                    start: { line: 2, offset: 51 },
+                                                    end: { line: 2, offset: 183 } },
                                                 parent: {
-                                                    textSpan: { // same as above + parens
-                                                        start: { line: 2, offset: 51 },
+                                                    textSpan: { // Whole TypeNode of TypeAliasDeclaration
+                                                        start: { line: 2, offset: 16 },
                                                         end: { line: 2, offset: 183 } },
                                                     parent: {
-                                                        textSpan: { // Whole TypeNode of TypeAliasDeclaration
-                                                            start: { line: 2, offset: 16 },
+                                                        textSpan: { // Whole TypeAliasDeclaration
+                                                            start: { line: 2, offset: 1 },
                                                             end: { line: 2, offset: 183 } },
                                                         parent: {
-                                                            textSpan: { // Whole TypeAliasDeclaration
-                                                                start: { line: 2, offset: 1 },
-                                                                end: { line: 2, offset: 183 } },
-                                                            parent: {
-                                                                textSpan: { // SourceFile
-                                                                    start: { line: 1, offset: 1 },
-                                                                    end: { line: 2, offset: 184 } } } } } } } } } } } } } },
+                                                            textSpan: { // SourceFile
+                                                                start: { line: 1, offset: 1 },
+                                                                end: { line: 2, offset: 184 } } } } } } } } } } } } },
             ]);
         });
 
-        it.skip("works for object types", () => {
+        it("works for object types", () => {
             const getSelectionRange = setup("/file.js", `
 type X = {
     foo?: string;

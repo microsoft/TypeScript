@@ -21,6 +21,7 @@
         "typingsCache.ts",
         "project.ts",
         "editorServices.ts",
+        "selectionRange.ts",
         "session.ts",
         "scriptVersionCache.ts"
     ]
