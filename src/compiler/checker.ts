@@ -7475,7 +7475,11 @@ namespace ts {
 
         function getPossiblePropertiesOfUnionType(type: UnionType): Symbol[] {
             // The following is for effects - getUnionOrIntersectionProperty will cache all the possible union properties into `type`
-            void map(flatMap(type.types, getPropertiesOfType), p => getUnionOrIntersectionProperty(type, p.escapedName));
+            for (const t of type.types) {
+                for (const p of getPropertiesOfType(t)) {
+                    void getUnionOrIntersectionProperty(type, p.escapedName);
+                }
+            }
             // And we can then (uniquely) fetch them out of the cache, instead of as a result of the above call.
             return !type.propertyCache ? emptyArray : arrayFrom(type.propertyCache.values());
         }
