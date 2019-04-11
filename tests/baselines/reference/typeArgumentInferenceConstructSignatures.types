@@ -259,15 +259,15 @@ var someGenerics6: someGenerics6;
 new someGenerics6(n => n, n => n, n => n);
 >new someGenerics6(n => n, n => n, n => n) : any
 >someGenerics6 : someGenerics6
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 new someGenerics6<number>(n => n, n => n, n => n);
 >new someGenerics6<number>(n => n, n => n, n => n) : any
@@ -324,15 +324,15 @@ var someGenerics7: someGenerics7;
 new someGenerics7(n => n, n => n, n => n);
 >new someGenerics7(n => n, n => n, n => n) : any
 >someGenerics7 : someGenerics7
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
->n => n : (n: {}) => {}
->n : {}
->n : {}
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
+>n => n : (n: unknown) => unknown
+>n : unknown
+>n : unknown
 
 new someGenerics7<number, string, number>(n => n, n => n, n => n);
 >new someGenerics7<number, string, number>(n => n, n => n, n => n) : any

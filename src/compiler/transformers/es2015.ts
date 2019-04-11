@@ -145,30 +145,6 @@ namespace ts {
         loopOutParameters: LoopOutParameter[];
     }
 
-    const enum SuperCaptureResult {
-        /**
-         * A capture may have been added for calls to 'super', but
-         * the caller should emit subsequent statements normally.
-         */
-        NoReplacement,
-        /**
-         * A call to 'super()' got replaced with a capturing statement like:
-         *
-         *  var _this = _super.call(...) || this;
-         *
-         * Callers should skip the current statement.
-         */
-        ReplaceSuperCapture,
-        /**
-         * A call to 'super()' got replaced with a capturing statement like:
-         *
-         *  return _super.call(...) || this;
-         *
-         * Callers should skip the current statement and avoid any returns of '_this'.
-         */
-        ReplaceWithReturn,
-    }
-
     type LoopConverter = (node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convertedLoopBodyStatements: Statement[] | undefined) => Statement;
 
     // Facts we track as we traverse the tree
@@ -192,14 +168,14 @@ namespace ts {
         ForStatement = 1 << 10,                 // Enclosing block-scoped container is a ForStatement
         ForInOrForOfStatement = 1 << 11,        // Enclosing block-scoped container is a ForInStatement or ForOfStatement
         ConstructorWithCapturedSuper = 1 << 12, // Enclosed in a constructor that captures 'this' for use with 'super'
-        ComputedPropertyName = 1 << 13,         // Enclosed in a computed property name
         // NOTE: do not add more ancestor flags without also updating AncestorFactsMask below.
+        // NOTE: when adding a new ancestor flag, be sure to update the subtree flags below.
 
         //
         // Ancestor masks
         //
 
-        AncestorFactsMask = (ComputedPropertyName << 1) - 1,
+        AncestorFactsMask = (ConstructorWithCapturedSuper << 1) - 1,
 
         // We are always in *some* kind of block scope, but only specific block-scope containers are
         // top-level or Blocks.
@@ -212,14 +188,14 @@ namespace ts {
 
         // Functions, methods, and accessors are both new lexical scopes and new block scopes.
         FunctionIncludes = Function | TopLevel,
-        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper | ComputedPropertyName,
+        FunctionExcludes = BlockScopeExcludes & ~TopLevel | ArrowFunction | AsyncFunctionBody | CapturesThis | NonStaticClassElement | ConstructorWithCapturedSuper,
 
         AsyncFunctionBodyIncludes = FunctionIncludes | AsyncFunctionBody,
         AsyncFunctionBodyExcludes = FunctionExcludes & ~NonStaticClassElement,
 
         // Arrow functions are lexically scoped to their container, but are new block scopes.
         ArrowFunctionIncludes = ArrowFunction | TopLevel,
-        ArrowFunctionExcludes = BlockScopeExcludes & ~TopLevel | ConstructorWithCapturedSuper | ComputedPropertyName,
+        ArrowFunctionExcludes = BlockScopeExcludes & ~TopLevel | ConstructorWithCapturedSuper,
 
         // Constructors are both new lexical scopes and new block scopes. Constructors are also
         // always considered non-static members of a class.
@@ -248,23 +224,21 @@ namespace ts {
         IterationStatementBlockIncludes = IterationStatementBlock,
         IterationStatementBlockExcludes = BlockScopeExcludes,
 
-        // Computed property names track subtree flags differently than their containing members.
-        ComputedPropertyNameIncludes = ComputedPropertyName,
-        ComputedPropertyNameExcludes = None,
-
         //
         // Subtree facts
         //
-        NewTarget = 1 << 14,                        // Contains a 'new.target' meta-property
-        NewTargetInComputedPropertyName = 1 << 15,  // Contains a 'new.target' meta-property in a computed property name.
 
+        NewTarget = 1 << 13,                            // Contains a 'new.target' meta-property
+        CapturedLexicalThis = 1 << 14,                  // Contains a lexical `this` reference captured by an arrow function.
 
         //
         // Subtree masks
         //
 
         SubtreeFactsMask = ~AncestorFactsMask,
-        PropagateNewTargetMask = NewTarget | NewTargetInComputedPropertyName,
+
+        ArrowFunctionSubtreeExcludes = None,
+        FunctionSubtreeExcludes = NewTarget | CapturedLexicalThis,
     }
 
     export function transformES2015(context: TransformationContext) {
@@ -368,13 +342,6 @@ namespace ts {
             else {
                 return node;
             }
-        }
-
-        function functionBodyVisitor(node: Block): Block {
-            if (shouldVisitNode(node)) {
-                return visitBlock(node, /*isFunctionBody*/ true);
-            }
-            return node;
         }
 
         function callExpressionVisitor(node: Node): VisitResult<Node> {
@@ -528,22 +495,23 @@ namespace ts {
 
         function visitSourceFile(node: SourceFile): SourceFile {
             const ancestorFacts = enterSubtree(HierarchyFacts.SourceFileExcludes, HierarchyFacts.SourceFileIncludes);
+            const prologue: Statement[] = [];
             const statements: Statement[] = [];
             startLexicalEnvironment();
-            let statementOffset: number | undefined = addStandardPrologue(statements, node.statements, /*ensureUseStrict*/ false);
-            addCaptureThisForNodeIfNeeded(statements, node);
-            statementOffset = addCustomPrologue(statements, node.statements, statementOffset, visitor);
+            let statementOffset = addStandardPrologue(prologue, node.statements, /*ensureUseStrict*/ false);
+            statementOffset = addCustomPrologue(prologue, node.statements, statementOffset, visitor);
             addRange(statements, visitNodes(node.statements, visitor, isStatement, statementOffset));
             if (taggedTemplateStringDeclarations) {
                 statements.push(
                     createVariableStatement(/*modifiers*/ undefined,
                         createVariableDeclarationList(taggedTemplateStringDeclarations)));
             }
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            mergeLexicalEnvironment(prologue, endLexicalEnvironment());
+            insertCaptureThisForNodeIfNeeded(prologue, node);
             exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
             return updateSourceFileNode(
                 node,
-                setTextRange(createNodeArray(statements), node.statements)
+                setTextRange(createNodeArray(concatenate(prologue, statements)), node.statements)
             );
         }
 
@@ -596,6 +564,9 @@ namespace ts {
         }
 
         function visitThisKeyword(node: Node): Node {
+            if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
+                hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
+            }
             if (convertedLoopState) {
                 if (hierarchyFacts & HierarchyFacts.ArrowFunction) {
                     // if the enclosing function is an ArrowFunction then we use the captured 'this' keyword.
@@ -847,7 +818,7 @@ namespace ts {
             setEmitFlags(statement, EmitFlags.NoComments | EmitFlags.NoTokenSourceMaps);
             statements.push(statement);
 
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
             const block = createBlock(setTextRange(createNodeArray(statements), /*location*/ node.members), /*multiLine*/ true);
             setEmitFlags(block, EmitFlags.NoComments);
@@ -904,7 +875,7 @@ namespace ts {
             }
 
             statements.push(constructorFunction);
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
         }
 
@@ -925,6 +896,28 @@ namespace ts {
                 || <ParameterDeclaration[]>[];
         }
 
+        function createDefaultConstructorBody(node: ClassDeclaration | ClassExpression, isDerivedClass: boolean) {
+            // We must be here because the user didn't write a constructor
+            // but we needed to call 'super(...args)' anyway as per 14.5.14 of the ES2016 spec.
+            // If that's the case we can just immediately return the result of a 'super()' call.
+            const statements: Statement[] = [];
+            resumeLexicalEnvironment();
+            mergeLexicalEnvironment(statements, endLexicalEnvironment());
+
+            if (isDerivedClass) {
+                // return _super !== null && _super.apply(this, arguments) || this;
+                statements.push(createReturn(createDefaultSuperCallOrThis()));
+            }
+
+            const statementsArray = createNodeArray(statements);
+            setTextRange(statementsArray, node.members);
+
+            const block = createBlock(statementsArray, /*multiLine*/ true);
+            setTextRange(block, node);
+            setEmitFlags(block, EmitFlags.NoComments);
+            return block;
+        }
+
         /**
          * Transforms the body of a constructor declaration of a class.
          *
@@ -934,82 +927,153 @@ namespace ts {
          * @param hasSynthesizedSuper A value indicating whether the constructor starts with a
          *                            synthesized `super` call.
          */
-        function transformConstructorBody(constructor: ConstructorDeclaration | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments | undefined, hasSynthesizedSuper: boolean) {
-            const statements: Statement[] = [];
-            resumeLexicalEnvironment();
-
-            let statementOffset = -1;
-            if (hasSynthesizedSuper) {
-                // If a super call has already been synthesized,
-                // we're going to assume that we should just transform everything after that.
-                // The assumption is that no prior step in the pipeline has added any prologue directives.
-                statementOffset = 0;
-            }
-            else if (constructor) {
-                statementOffset = addStandardPrologue(statements, constructor.body!.statements, /*ensureUseStrict*/ false);
-            }
-
-            if (constructor) {
-                addDefaultValueAssignmentsIfNeeded(statements, constructor);
-                addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
-                if (!hasSynthesizedSuper) {
-                    // If no super call has been synthesized, emit custom prologue directives.
-                    statementOffset = addCustomPrologue(statements, constructor.body!.statements, statementOffset, visitor);
-                }
-                Debug.assert(statementOffset >= 0, "statementOffset not initialized correctly!");
-
-            }
-
+        function transformConstructorBody(constructor: ConstructorDeclaration & { body: FunctionBody } | undefined, node: ClassDeclaration | ClassExpression, extendsClauseElement: ExpressionWithTypeArguments | undefined, hasSynthesizedSuper: boolean) {
             // determine whether the class is known syntactically to be a derived class (e.g. a
             // class that extends a value that is not syntactically known to be `null`).
             const isDerivedClass = !!extendsClauseElement && skipOuterExpressions(extendsClauseElement.expression).kind !== SyntaxKind.NullKeyword;
-            const superCaptureStatus = declareOrCaptureOrReturnThisForConstructorIfNeeded(statements, constructor, isDerivedClass, hasSynthesizedSuper, statementOffset);
 
-            // The last statement expression was replaced. Skip it.
-            if (superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture || superCaptureStatus === SuperCaptureResult.ReplaceWithReturn) {
-                statementOffset++;
+            // When the subclass does not have a constructor, we synthesize a *default* constructor using the following
+            // representation:
+            //
+            // ```
+            // // es2015 (source)
+            // class C extends Base { }
+            //
+            // // es5 (transformed)
+            // var C = (function (_super) {
+            //     function C() {
+            //         return _super.apply(this, arguments) || this;
+            //     }
+            //     return C;
+            // })(Base);
+            // ```
+            if (!constructor) return createDefaultConstructorBody(node, isDerivedClass);
+
+            // The prologue will contain all leading standard and custom prologue statements added by this transform
+            const prologue: Statement[] = [];
+            const statements: Statement[] = [];
+            resumeLexicalEnvironment();
+
+            // If a super call has already been synthesized,
+            // we're going to assume that we should just transform everything after that.
+            // The assumption is that no prior step in the pipeline has added any prologue directives.
+            let statementOffset = 0;
+            if (!hasSynthesizedSuper) statementOffset = addStandardPrologue(prologue, constructor.body.statements, /*ensureUseStrict*/ false);
+            addDefaultValueAssignmentsIfNeeded(statements, constructor);
+            addRestParameterIfNeeded(statements, constructor, hasSynthesizedSuper);
+            if (!hasSynthesizedSuper) statementOffset = addCustomPrologue(statements, constructor.body.statements, statementOffset, visitor);
+
+            // If the first statement is a call to `super()`, visit the statement directly
+            let superCallExpression: Expression | undefined;
+            if (hasSynthesizedSuper) {
+                superCallExpression = createDefaultSuperCallOrThis();
             }
-
-            if (constructor) {
-                if (superCaptureStatus === SuperCaptureResult.ReplaceSuperCapture) {
-                    hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
+            else if (isDerivedClass && statementOffset < constructor.body.statements.length) {
+                const firstStatement = constructor.body.statements[statementOffset];
+                if (isExpressionStatement(firstStatement) && isSuperCall(firstStatement.expression)) {
+                    superCallExpression = visitImmediateSuperCallInBody(firstStatement.expression);
                 }
-
-                addRange(statements, visitNodes(constructor.body!.statements, visitor, isStatement, /*start*/ statementOffset));
             }
 
-            // Return `_this` unless we're sure enough that it would be pointless to add a return statement.
-            // If there's a constructor that we can tell returns in enough places, then we *do not* want to add a return.
-            if (isDerivedClass
-                && superCaptureStatus !== SuperCaptureResult.ReplaceWithReturn
-                && !(constructor && isSufficientlyCoveredByReturnStatements(constructor.body!))) {
-                statements.push(
-                    createReturn(
-                        createFileLevelUniqueName("_this")
-                    )
-                );
+            if (superCallExpression) {
+                hierarchyFacts |= HierarchyFacts.ConstructorWithCapturedSuper;
+                statementOffset++; // skip this statement, we will add it after visiting the rest of the body.
             }
 
-            addStatementsAfterPrologue(statements, endLexicalEnvironment());
+            // visit the remaining statements
+            addRange(statements, visitNodes(constructor.body.statements, visitor, isStatement, /*start*/ statementOffset));
 
-            if (constructor) {
-                prependCaptureNewTargetIfNeeded(statements, constructor, /*copyOnWrite*/ false);
+            mergeLexicalEnvironment(prologue, endLexicalEnvironment());
+            insertCaptureNewTargetIfNeeded(prologue, constructor, /*copyOnWrite*/ false);
+
+            if (isDerivedClass) {
+                if (superCallExpression && statementOffset === constructor.body.statements.length && !(constructor.body.transformFlags & TransformFlags.ContainsLexicalThis)) {
+                    // If the subclass constructor does *not* contain `this` and *ends* with a `super()` call, we will use the
+                    // following representation:
+                    //
+                    // ```
+                    // // es2015 (source)
+                    // class C extends Base {
+                    //     constructor() {
+                    //         super("foo");
+                    //     }
+                    // }
+                    //
+                    // // es5 (transformed)
+                    // var C = (function (_super) {
+                    //     function C() {
+                    //         return _super.call(this, "foo") || this;
+                    //     }
+                    //     return C;
+                    // })(Base);
+                    // ```
+                    const superCall = cast(cast(superCallExpression, isBinaryExpression).left, isCallExpression);
+                    const returnStatement = createReturn(superCallExpression);
+                    setCommentRange(returnStatement, getCommentRange(superCall));
+                    setEmitFlags(superCall, EmitFlags.NoComments);
+                    statements.push(returnStatement);
+                }
+                else {
+                    // Otherwise, we will use the following transformed representation for calls to `super()` in a constructor:
+                    //
+                    // ```
+                    // // es2015 (source)
+                    // class C extends Base {
+                    //     constructor() {
+                    //         super("foo");
+                    //         this.x = 1;
+                    //     }
+                    // }
+                    //
+                    // // es5 (transformed)
+                    // var C = (function (_super) {
+                    //     function C() {
+                    //         var _this = _super.call(this, "foo") || this;
+                    //         _this.x = 1;
+                    //         return _this;
+                    //     }
+                    //     return C;
+                    // })(Base);
+                    // ```
+
+                    // Since the `super()` call was the first statement, we insert the `this` capturing call to
+                    // `super()` at the top of the list of `statements` (after any pre-existing custom prologues).
+                    insertCaptureThisForNode(statements, constructor, superCallExpression || createActualThis());
+
+                    if (!isSufficientlyCoveredByReturnStatements(constructor.body)) {
+                        statements.push(createReturn(createFileLevelUniqueName("_this")));
+                    }
+                }
+            }
+            else {
+                // If a class is not derived from a base class or does not have a call to `super()`, `this` is only
+                // captured when necessitated by an arrow function capturing the lexical `this`:
+                //
+                // ```
+                // // es2015
+                // class C {}
+                //
+                // // es5
+                // var C = (function () {
+                //     function C() {
+                //     }
+                //     return C;
+                // })();
+                // ```
+                insertCaptureThisForNodeIfNeeded(prologue, constructor);
             }
 
             const block = createBlock(
                 setTextRange(
                     createNodeArray(
-                        statements
+                        concatenate(prologue, statements)
                     ),
-                    /*location*/ constructor ? constructor.body!.statements : node.members
+                    /*location*/ constructor.body.statements
                 ),
                 /*multiLine*/ true
             );
 
-            setTextRange(block, constructor ? constructor.body : node);
-            if (!constructor) {
-                setEmitFlags(block, EmitFlags.NoComments);
-            }
+            setTextRange(block, constructor.body);
 
             return block;
         }
@@ -1041,104 +1105,6 @@ namespace ts {
             }
 
             return false;
-        }
-
-        /**
-         * Declares a `_this` variable for derived classes and for when arrow functions capture `this`.
-         *
-         * @returns The new statement offset into the `statements` array.
-         */
-        function declareOrCaptureOrReturnThisForConstructorIfNeeded(
-                    statements: Statement[],
-                    ctor: ConstructorDeclaration | undefined,
-                    isDerivedClass: boolean,
-                    hasSynthesizedSuper: boolean,
-                    statementOffset: number) {
-            // If this isn't a derived class, just capture 'this' for arrow functions if necessary.
-            if (!isDerivedClass) {
-                if (ctor) {
-                    addCaptureThisForNodeIfNeeded(statements, ctor);
-                }
-                return SuperCaptureResult.NoReplacement;
-            }
-
-            // We must be here because the user didn't write a constructor
-            // but we needed to call 'super(...args)' anyway as per 14.5.14 of the ES2016 spec.
-            // If that's the case we can just immediately return the result of a 'super()' call.
-            if (!ctor) {
-                statements.push(createReturn(createDefaultSuperCallOrThis()));
-                return SuperCaptureResult.ReplaceWithReturn;
-            }
-
-            // The constructor exists, but it and the 'super()' call it contains were generated
-            // for something like property initializers.
-            // Create a captured '_this' variable and assume it will subsequently be used.
-            if (hasSynthesizedSuper) {
-                captureThisForNode(statements, ctor, createDefaultSuperCallOrThis());
-                enableSubstitutionsForCapturedThis();
-                return SuperCaptureResult.ReplaceSuperCapture;
-            }
-
-            // Most of the time, a 'super' call will be the first real statement in a constructor body.
-            // In these cases, we'd like to transform these into a *single* statement instead of a declaration
-            // followed by an assignment statement for '_this'. For instance, if we emitted without an initializer,
-            // we'd get:
-            //
-            //      var _this;
-            //      _this = _super.call(...) || this;
-            //
-            // instead of
-            //
-            //      var _this = _super.call(...) || this;
-            //
-            // Additionally, if the 'super()' call is the last statement, we should just avoid capturing
-            // entirely and immediately return the result like so:
-            //
-            //      return _super.call(...) || this;
-            //
-            let firstStatement: Statement | undefined;
-            let superCallExpression: Expression | undefined;
-
-            const ctorStatements = ctor.body!.statements;
-            if (statementOffset < ctorStatements.length) {
-                firstStatement = ctorStatements[statementOffset];
-
-                if (firstStatement.kind === SyntaxKind.ExpressionStatement && isSuperCall((firstStatement as ExpressionStatement).expression)) {
-                    superCallExpression = visitImmediateSuperCallInBody((firstStatement as ExpressionStatement).expression as CallExpression);
-                }
-            }
-
-            // Return the result if we have an immediate super() call on the last statement,
-            // but only if the constructor itself doesn't use 'this' elsewhere.
-            if (superCallExpression
-                && statementOffset === ctorStatements.length - 1
-                && !(ctor.transformFlags & (TransformFlags.ContainsLexicalThis | TransformFlags.ContainsCapturedLexicalThis))) {
-                const returnStatement = createReturn(superCallExpression);
-
-                if (superCallExpression.kind !== SyntaxKind.BinaryExpression
-                    || (superCallExpression as BinaryExpression).left.kind !== SyntaxKind.CallExpression) {
-                    Debug.fail("Assumed generated super call would have form 'super.call(...) || this'.");
-                }
-
-                // Shift comments from the original super call to the return statement.
-                setCommentRange(returnStatement, getCommentRange(
-                    setEmitFlags(
-                        (superCallExpression as BinaryExpression).left,
-                        EmitFlags.NoComments)));
-
-                statements.push(returnStatement);
-                return SuperCaptureResult.ReplaceWithReturn;
-            }
-
-            // Perform the capture.
-            captureThisForNode(statements, ctor, superCallExpression || createActualThis());
-
-            // If we're actually replacing the original statement, we need to signal this to the caller.
-            if (superCallExpression) {
-                return SuperCaptureResult.ReplaceSuperCapture;
-            }
-
-            return SuperCaptureResult.NoReplacement;
         }
 
         function createActualThis() {
@@ -1214,14 +1180,9 @@ namespace ts {
             }
         }
 
-        /**
-         * Gets a value indicating whether we need to add default value assignments for a
-         * function-like node.
-         *
-         * @param node A function-like node.
-         */
-        function shouldAddDefaultValueAssignments(node: FunctionLikeDeclaration): boolean {
-            return (node.transformFlags & TransformFlags.ContainsDefaultValueAssignments) !== 0;
+        function hasDefaultValueOrBindingPattern(node: ParameterDeclaration) {
+            return node.initializer !== undefined
+                || isBindingPattern(node.name);
         }
 
         /**
@@ -1231,11 +1192,12 @@ namespace ts {
          * @param statements The statements for the new function body.
          * @param node A function-like node.
          */
-        function addDefaultValueAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): void {
-            if (!shouldAddDefaultValueAssignments(node)) {
-                return;
+        function addDefaultValueAssignmentsIfNeeded(statements: Statement[], node: FunctionLikeDeclaration): boolean {
+            if (!some(node.parameters, hasDefaultValueOrBindingPattern)) {
+                return false;
             }
 
+            let added = false;
             for (const parameter of node.parameters) {
                 const { name, initializer, dotDotDotToken } = parameter;
 
@@ -1246,12 +1208,14 @@ namespace ts {
                 }
 
                 if (isBindingPattern(name)) {
-                    addDefaultValueAssignmentForBindingPattern(statements, parameter, name, initializer);
+                    added = insertDefaultValueAssignmentForBindingPattern(statements, parameter, name, initializer) || added;
                 }
                 else if (initializer) {
-                    addDefaultValueAssignmentForInitializer(statements, parameter, name, initializer);
+                    insertDefaultValueAssignmentForInitializer(statements, parameter, name, initializer);
+                    added = true;
                 }
             }
+            return added;
         }
 
         /**
@@ -1262,14 +1226,13 @@ namespace ts {
          * @param name The name of the parameter.
          * @param initializer The initializer for the parameter.
          */
-        function addDefaultValueAssignmentForBindingPattern(statements: Statement[], parameter: ParameterDeclaration, name: BindingPattern, initializer: Expression | undefined): void {
-            const temp = getGeneratedNameForNode(parameter);
-
+        function insertDefaultValueAssignmentForBindingPattern(statements: Statement[], parameter: ParameterDeclaration, name: BindingPattern, initializer: Expression | undefined): boolean {
             // In cases where a binding pattern is simply '[]' or '{}',
             // we usually don't want to emit a var declaration; however, in the presence
             // of an initializer, we must emit that expression to preserve side effects.
             if (name.elements.length > 0) {
-                statements.push(
+                insertStatementAfterCustomPrologue(
+                    statements,
                     setEmitFlags(
                         createVariableStatement(
                             /*modifiers*/ undefined,
@@ -1279,27 +1242,31 @@ namespace ts {
                                     visitor,
                                     context,
                                     FlattenLevel.All,
-                                    temp
+                                    getGeneratedNameForNode(parameter)
                                 )
                             )
                         ),
                         EmitFlags.CustomPrologue
                     )
                 );
+                return true;
             }
             else if (initializer) {
-                statements.push(
+                insertStatementAfterCustomPrologue(
+                    statements,
                     setEmitFlags(
                         createExpressionStatement(
                             createAssignment(
-                                temp,
+                                getGeneratedNameForNode(parameter),
                                 visitNode(initializer, visitor, isExpression)
                             )
                         ),
                         EmitFlags.CustomPrologue
                     )
                 );
+                return true;
             }
+            return false;
         }
 
         /**
@@ -1310,7 +1277,7 @@ namespace ts {
          * @param name The name of the parameter.
          * @param initializer The initializer for the parameter.
          */
-        function addDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
+        function insertDefaultValueAssignmentForInitializer(statements: Statement[], parameter: ParameterDeclaration, name: Identifier, initializer: Expression): void {
             initializer = visitNode(initializer, visitor, isExpression);
             const statement = createIf(
                 createTypeCheck(getSynthesizedClone(name), "undefined"),
@@ -1339,7 +1306,7 @@ namespace ts {
             startOnNewLine(statement);
             setTextRange(statement, parameter);
             setEmitFlags(statement, EmitFlags.NoTokenSourceMaps | EmitFlags.NoTrailingSourceMap | EmitFlags.CustomPrologue | EmitFlags.NoComments);
-            statements.push(statement);
+            insertStatementAfterCustomPrologue(statements, statement);
         }
 
         /**
@@ -1363,10 +1330,11 @@ namespace ts {
          *                                          part of a constructor declaration with a
          *                                          synthesized call to `super`
          */
-        function addRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): void {
+        function addRestParameterIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, inConstructorWithSynthesizedSuper: boolean): boolean {
+            const prologueStatements: Statement[] = [];
             const parameter = lastOrUndefined(node.parameters);
             if (!shouldAddRestParameter(parameter, inConstructorWithSynthesizedSuper)) {
-                return;
+                return false;
             }
 
             // `declarationName` is the name of the local declaration for the parameter.
@@ -1379,7 +1347,7 @@ namespace ts {
             const temp = createLoopVariable();
 
             // var param = [];
-            statements.push(
+            prologueStatements.push(
                 setEmitFlags(
                     setTextRange(
                         createVariableStatement(
@@ -1438,11 +1406,11 @@ namespace ts {
 
             setEmitFlags(forStatement, EmitFlags.CustomPrologue);
             startOnNewLine(forStatement);
-            statements.push(forStatement);
+            prologueStatements.push(forStatement);
 
             if (parameter.name.kind !== SyntaxKind.Identifier) {
                 // do the actual destructuring of the rest parameter if necessary
-                statements.push(
+                prologueStatements.push(
                     setEmitFlags(
                         setTextRange(
                             createVariableStatement(
@@ -1457,21 +1425,27 @@ namespace ts {
                     )
                 );
             }
+
+            insertStatementsAfterCustomPrologue(statements, prologueStatements);
+            return true;
         }
 
         /**
          * Adds a statement to capture the `this` of a function declaration if it is needed.
+         * NOTE: This must be executed *after* the subtree has been visited.
          *
          * @param statements The statements for the new function body.
          * @param node A node.
          */
-        function addCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): void {
-            if (node.transformFlags & TransformFlags.ContainsCapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
-                captureThisForNode(statements, node, createThis());
+        function insertCaptureThisForNodeIfNeeded(statements: Statement[], node: Node): boolean {
+            if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis && node.kind !== SyntaxKind.ArrowFunction) {
+                insertCaptureThisForNode(statements, node, createThis());
+                return true;
             }
+            return false;
         }
 
-        function captureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
+        function insertCaptureThisForNode(statements: Statement[], node: Node, initializer: Expression | undefined): void {
             enableSubstitutionsForCapturedThis();
             const captureThisStatement = createVariableStatement(
                 /*modifiers*/ undefined,
@@ -1485,10 +1459,10 @@ namespace ts {
             );
             setEmitFlags(captureThisStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
             setSourceMapRange(captureThisStatement, node);
-            statements.push(captureThisStatement);
+            insertStatementAfterCustomPrologue(statements, captureThisStatement);
         }
 
-        function prependCaptureNewTargetIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, copyOnWrite: boolean): Statement[] {
+        function insertCaptureNewTargetIfNeeded(statements: Statement[], node: FunctionLikeDeclaration, copyOnWrite: boolean): Statement[] {
             if (hierarchyFacts & HierarchyFacts.NewTarget) {
                 let newTarget: Expression;
                 switch (node.kind) {
@@ -1548,11 +1522,13 @@ namespace ts {
                     ])
                 );
 
+                setEmitFlags(captureNewTargetStatement, EmitFlags.NoComments | EmitFlags.CustomPrologue);
+
                 if (copyOnWrite) {
-                    return [captureNewTargetStatement, ...statements];
+                    statements = statements.slice();
                 }
 
-                statements.unshift(captureNewTargetStatement);
+                insertStatementAfterCustomPrologue(statements, captureNewTargetStatement);
             }
 
             return statements;
@@ -1612,7 +1588,6 @@ namespace ts {
          * @param member The MethodDeclaration node.
          */
         function transformClassMethodDeclarationToStatement(receiver: LeftHandSideExpression, member: MethodDeclaration, container: Node) {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const commentRange = getCommentRange(member);
             const sourceMapRange = getSourceMapRange(member);
             const memberName = createMemberAccessForPropertyName(receiver, visitNode(member.name, visitor, isPropertyName), /*location*/ member.name);
@@ -1634,8 +1609,6 @@ namespace ts {
             // No source map should be emitted for this statement to align with the
             // old emitter.
             setEmitFlags(statement, EmitFlags.NoSourceMap);
-
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return statement;
         }
 
@@ -1662,8 +1635,6 @@ namespace ts {
          * @param receiver The receiver for the member.
          */
         function transformAccessorsToExpression(receiver: LeftHandSideExpression, { firstAccessor, getAccessor, setAccessor }: AllAccessorDeclarations, container: Node, startsOnNewLine: boolean): Expression {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
-
             // To align with source maps in the old emitter, the receiver and property name
             // arguments are both mapped contiguously to the accessor name.
             const target = getMutableClone(receiver);
@@ -1711,7 +1682,6 @@ namespace ts {
                 startOnNewLine(call);
             }
 
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return call;
         }
 
@@ -1722,8 +1692,9 @@ namespace ts {
          */
         function visitArrowFunction(node: ArrowFunction) {
             if (node.transformFlags & TransformFlags.ContainsLexicalThis) {
-                enableSubstitutionsForCapturedThis();
+                hierarchyFacts |= HierarchyFacts.CapturedLexicalThis;
             }
+
             const savedConvertedLoopState = convertedLoopState;
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.ArrowFunctionExcludes, HierarchyFacts.ArrowFunctionIncludes);
@@ -1739,7 +1710,14 @@ namespace ts {
             setTextRange(func, node);
             setOriginalNode(func, node);
             setEmitFlags(func, EmitFlags.CapturesThis);
-            exitSubtree(ancestorFacts, HierarchyFacts.None, HierarchyFacts.None);
+
+            if (hierarchyFacts & HierarchyFacts.CapturedLexicalThis) {
+                enableSubstitutionsForCapturedThis();
+            }
+
+            // If an arrow function contains
+            exitSubtree(ancestorFacts, HierarchyFacts.ArrowFunctionSubtreeExcludes, HierarchyFacts.None);
+
             convertedLoopState = savedConvertedLoopState;
             return func;
         }
@@ -1757,14 +1735,12 @@ namespace ts {
             convertedLoopState = undefined;
 
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags & TransformFlags.ES2015
-                ? transformFunctionBody(node)
-                : visitFunctionBodyDownLevel(node);
+            const body = transformFunctionBody(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
                 ? getLocalName(node)
                 : node.name;
 
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updateFunctionExpression(
                 node,
@@ -1788,14 +1764,12 @@ namespace ts {
             convertedLoopState = undefined;
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags & TransformFlags.ES2015
-                ? transformFunctionBody(node)
-                : visitFunctionBodyDownLevel(node);
+            const body = transformFunctionBody(node);
             const name = hierarchyFacts & HierarchyFacts.NewTarget
                 ? getLocalName(node)
                 : node.name;
 
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updateFunctionDeclaration(
                 node,
@@ -1829,7 +1803,7 @@ namespace ts {
                 name = getGeneratedNameForNode(node);
             }
 
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return setOriginalNode(
                 setTextRange(
@@ -1859,7 +1833,7 @@ namespace ts {
             let statementsLocation: TextRange;
             let closeBraceLocation: TextRange | undefined;
 
-            const leadingStatements: Statement[] = [];
+            const prologue: Statement[] = [];
             const statements: Statement[] = [];
             const body = node.body!;
             let statementOffset: number | undefined;
@@ -1868,16 +1842,15 @@ namespace ts {
             if (isBlock(body)) {
                 // ensureUseStrict is false because no new prologue-directive should be added.
                 // addStandardPrologue will put already-existing directives at the beginning of the target statement-array
-                statementOffset = addStandardPrologue(leadingStatements, body.statements, /*ensureUseStrict*/ false);
+                statementOffset = addStandardPrologue(prologue, body.statements, /*ensureUseStrict*/ false);
             }
 
-            addCaptureThisForNodeIfNeeded(leadingStatements, node);
-            addDefaultValueAssignmentsIfNeeded(leadingStatements, node);
-            addRestParameterIfNeeded(leadingStatements, node, /*inConstructorWithSynthesizedSuper*/ false);
+            multiLine = addDefaultValueAssignmentsIfNeeded(statements, node) || multiLine;
+            multiLine = addRestParameterIfNeeded(statements, node, /*inConstructorWithSynthesizedSuper*/ false) || multiLine;
 
             if (isBlock(body)) {
                 // addCustomPrologue puts already-existing directives at the beginning of the target statement-array
-                statementOffset = addCustomPrologue(leadingStatements, body.statements, statementOffset, visitor);
+                statementOffset = addCustomPrologue(statements, body.statements, statementOffset, visitor);
 
                 statementsLocation = body.statements;
                 addRange(statements, visitNodes(body.statements, visitor, isStatement, statementOffset));
@@ -1918,16 +1891,22 @@ namespace ts {
                 closeBraceLocation = body;
             }
 
-            const lexicalEnvironment = context.endLexicalEnvironment();
-            addStatementsAfterPrologue(statements, lexicalEnvironment);
-            prependCaptureNewTargetIfNeeded(statements, node, /*copyOnWrite*/ false);
+            mergeLexicalEnvironment(prologue, endLexicalEnvironment());
+            insertCaptureNewTargetIfNeeded(prologue, node, /*copyOnWrite*/ false);
+            insertCaptureThisForNodeIfNeeded(prologue, node);
 
             // If we added any final generated statements, this must be a multi-line block
-            if (some(leadingStatements) || some(lexicalEnvironment)) {
+            if (some(prologue)) {
                 multiLine = true;
             }
 
-            const block = createBlock(setTextRange(createNodeArray([...leadingStatements, ...statements]), statementsLocation), multiLine);
+            statements.unshift(...prologue);
+            if (isBlock(body) && arrayIsEqualTo(statements, body.statements)) {
+                // no changes were made, preserve the tree
+                return body;
+            }
+
+            const block = createBlock(setTextRange(createNodeArray(statements), statementsLocation), multiLine);
             setTextRange(block, node.body);
             if (!multiLine && singleLine) {
                 setEmitFlags(block, EmitFlags.SingleLine);
@@ -1939,19 +1918,6 @@ namespace ts {
 
             setOriginalNode(block, node.body);
             return block;
-        }
-
-        function visitFunctionBodyDownLevel(node: FunctionDeclaration | FunctionExpression | AccessorDeclaration) {
-            const updated = visitFunctionBody(node.body, functionBodyVisitor, context)!;
-            return updateBlock(
-                updated,
-                setTextRange(
-                    createNodeArray(
-                        prependCaptureNewTargetIfNeeded(updated.statements as MutableNodeArray<Statement>, node, /*copyOnWrite*/ true)
-                    ),
-                    /*location*/ updated.statements
-                )
-            );
         }
 
         function visitBlock(node: Block, isFunctionBody: boolean): Block {
@@ -2074,7 +2040,7 @@ namespace ts {
          * @param node A VariableDeclarationList node.
          */
         function visitVariableDeclarationList(node: VariableDeclarationList): VariableDeclarationList {
-            if (node.transformFlags & TransformFlags.ES2015) {
+            if (node.flags & NodeFlags.BlockScoped || node.transformFlags & TransformFlags.ContainsBindingPattern) {
                 if (node.flags & NodeFlags.BlockScoped) {
                     enableSubstitutionsForBlockScopedBindings();
                 }
@@ -3104,7 +3070,7 @@ namespace ts {
             }
 
             copyOutParameters(currentState.loopOutParameters, LoopOutParameterFlags.Body, CopyDirection.ToOutParameter, statements);
-            addStatementsAfterPrologue(statements, lexicalEnvironment);
+            insertStatementsAfterStandardPrologue(statements, lexicalEnvironment);
 
             const loopBody = createBlock(statements, /*multiLine*/ true);
             if (isBlock(statement)) setOriginalNode(loopBody, statement);
@@ -3426,7 +3392,6 @@ namespace ts {
          * @param receiver The receiver for the assignment.
          */
         function transformObjectLiteralMethodDeclarationToExpression(method: MethodDeclaration, receiver: Expression, container: Node, startsOnNewLine: boolean) {
-            const ancestorFacts = enterSubtree(HierarchyFacts.None, HierarchyFacts.None);
             const expression = createAssignment(
                 createMemberAccessForPropertyName(
                     receiver,
@@ -3438,7 +3403,6 @@ namespace ts {
             if (startsOnNewLine) {
                 startOnNewLine(expression);
             }
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTarget : HierarchyFacts.None);
             return expression;
         }
 
@@ -3509,16 +3473,14 @@ namespace ts {
             const ancestorFacts = enterSubtree(HierarchyFacts.FunctionExcludes, HierarchyFacts.FunctionIncludes);
             let updated: AccessorDeclaration;
             const parameters = visitParameterList(node.parameters, visitor, context);
-            const body = node.transformFlags & (TransformFlags.ContainsCapturedLexicalThis | TransformFlags.ContainsES2015)
-                ? transformFunctionBody(node)
-                : visitFunctionBodyDownLevel(node);
+            const body = transformFunctionBody(node);
             if (node.kind === SyntaxKind.GetAccessor) {
                 updated = updateGetAccessor(node, node.decorators, node.modifiers, node.name, parameters, node.type, body);
             }
             else {
                 updated = updateSetAccessor(node, node.decorators, node.modifiers, node.name, parameters, body);
             }
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, HierarchyFacts.None);
+            exitSubtree(ancestorFacts, HierarchyFacts.FunctionSubtreeExcludes, HierarchyFacts.None);
             convertedLoopState = savedConvertedLoopState;
             return updated;
         }
@@ -3539,10 +3501,7 @@ namespace ts {
         }
 
         function visitComputedPropertyName(node: ComputedPropertyName) {
-            const ancestorFacts = enterSubtree(HierarchyFacts.ComputedPropertyNameExcludes, HierarchyFacts.ComputedPropertyNameIncludes);
-            const updated = visitEachChild(node, visitor, context);
-            exitSubtree(ancestorFacts, HierarchyFacts.PropagateNewTargetMask, hierarchyFacts & HierarchyFacts.PropagateNewTargetMask ? HierarchyFacts.NewTargetInComputedPropertyName : HierarchyFacts.None);
-            return updated;
+            return visitEachChild(node, visitor, context);
         }
 
         /**
@@ -3561,7 +3520,7 @@ namespace ts {
          * @param node An ArrayLiteralExpression node.
          */
         function visitArrayLiteralExpression(node: ArrayLiteralExpression): Expression {
-            if (node.transformFlags & TransformFlags.ES2015) {
+            if (some(node.elements, isSpreadElement)) {
                 // We are here because we contain a SpreadElementExpression.
                 return transformAndSpreadElements(node.elements, /*needsUniqueCopy*/ true, !!node.multiLine, /*hasTrailingComma*/ !!node.elements.hasTrailingComma);
             }
@@ -3578,7 +3537,10 @@ namespace ts {
                 return visitTypeScriptClassWrapper(node);
             }
 
-            if (node.transformFlags & TransformFlags.ES2015) {
+            const expression = skipOuterExpressions(node.expression);
+            if (expression.kind === SyntaxKind.SuperKeyword ||
+                isSuperProperty(expression) ||
+                some(node.arguments, isSpreadElement)) {
                 return visitCallExpressionWithPotentialCapturedThisAssignment(node, /*assignToCapturedThis*/ true);
             }
 
@@ -3774,7 +3736,7 @@ namespace ts {
 
                     resultingCall = createFunctionApply(
                         visitNode(target, callExpressionVisitor, isExpression),
-                        visitNode(thisArg, visitor, isExpression),
+                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
                         transformAndSpreadElements(node.arguments, /*needsUniqueCopy*/ false, /*multiLine*/ false, /*hasTrailingComma*/ false)
                     );
                 }
@@ -3790,19 +3752,17 @@ namespace ts {
                     //      _super.prototype.m.call(this, a)
                     resultingCall = createFunctionCall(
                         visitNode(target, callExpressionVisitor, isExpression),
-                        visitNode(thisArg, visitor, isExpression),
+                        node.expression.kind === SyntaxKind.SuperKeyword ? thisArg : visitNode(thisArg, visitor, isExpression),
                         visitNodes(node.arguments, visitor, isExpression),
                         /*location*/ node
                     );
                 }
 
                 if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                    const actualThis = createThis();
-                    setEmitFlags(actualThis, EmitFlags.NoSubstitution);
                     const initializer =
                         createLogicalOr(
                             resultingCall,
-                            actualThis
+                            createActualThis()
                         );
                     resultingCall = assignToCapturedThis
                         ? createAssignment(createFileLevelUniqueName("_this"), initializer)
@@ -3820,7 +3780,7 @@ namespace ts {
          * @param node A NewExpression node.
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
-            if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
+            if (some(node.arguments, isSpreadElement)) {
                 // We are here because we contain a SpreadElementExpression.
                 // [source]
                 //      new C(...a)
@@ -4132,12 +4092,7 @@ namespace ts {
 
         function visitMetaProperty(node: MetaProperty) {
             if (node.keywordToken === SyntaxKind.NewKeyword && node.name.escapedText === "target") {
-                if (hierarchyFacts & HierarchyFacts.ComputedPropertyName) {
-                    hierarchyFacts |= HierarchyFacts.NewTargetInComputedPropertyName;
-                }
-                else {
-                    hierarchyFacts |= HierarchyFacts.NewTarget;
-                }
+                hierarchyFacts |= HierarchyFacts.NewTarget;
                 return createFileLevelUniqueName("_newTarget");
             }
             return node;
@@ -4383,7 +4338,7 @@ namespace ts {
         );
     }
 
-    const extendsHelper: EmitHelper = {
+    export const extendsHelper: UnscopedEmitHelper = {
         name: "typescript:extends",
         scoped: false,
         priority: 0,
@@ -4404,7 +4359,7 @@ namespace ts {
             })();`
     };
 
-    const templateObjectHelper: EmitHelper = {
+    export const templateObjectHelper: UnscopedEmitHelper = {
         name: "typescript:makeTemplateObject",
         scoped: false,
         priority: 0,

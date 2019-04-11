@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.4";
+    export const versionMajorMinor = "3.5";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -917,7 +917,7 @@ namespace ts {
 
     /**
      * Deduplicates an unsorted array.
-     * @param equalityComparer An optional `EqualityComparer` used to determine if two values are duplicates.
+     * @param equalityComparer An `EqualityComparer` used to determine if two values are duplicates.
      * @param comparer An optional `Comparer` used to sort entries before comparison, though the
      * result will remain in the original order in `array`.
      */
@@ -1173,6 +1173,21 @@ namespace ts {
         }};
     }
 
+    export function arrayReverseIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
+        let i = array.length;
+        return {
+            next: () => {
+                if (i === 0) {
+                    return { value: undefined as never, done: true };
+                }
+                else {
+                    i--;
+                    return { value: array[i], done: false };
+                }
+            }
+        };
+    }
+
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
@@ -1396,9 +1411,10 @@ namespace ts {
 
     export function assign<T extends object>(t: T, ...args: (T | undefined)[]) {
         for (const arg of args) {
-            for (const p in arg!) {
-                if (hasProperty(arg!, p)) {
-                    t![p] = arg![p]; // TODO: GH#23368
+            if (arg === undefined) continue;
+            for (const p in arg) {
+                if (hasProperty(arg, p)) {
+                    t[p] = arg[p];
                 }
             }
         }
@@ -1597,6 +1613,9 @@ namespace ts {
 
     /** Do nothing and return true */
     export function returnTrue(): true { return true; }
+
+    /** Do nothing and return undefined */
+    export function returnUndefined(): undefined { return undefined; }
 
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }

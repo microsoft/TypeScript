@@ -1,1 +1,1 @@
-declare const NaN: number;
+declare var NaN: number;

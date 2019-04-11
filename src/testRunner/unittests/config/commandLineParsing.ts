@@ -365,6 +365,26 @@ namespace ts {
                     }
                 });
         });
+
+        it("parse --incremental", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--incremental", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: { incremental: true }
+                });
+        });
+
+        it("parse --tsBuildInfoFile", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: { tsBuildInfoFile: "build.tsbuildinfo" }
+                });
+        });
     });
 
     describe("unittests:: config:: commandLineParsing:: parseBuildOptions", () => {
@@ -453,6 +473,33 @@ namespace ts {
                     errors: [],
                     projects: ["src", "tests"],
                     buildOptions: { force: true, verbose: true }
+                });
+        });
+
+        it("parse build with --incremental", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--incremental", "tests"],
+                {
+                    errors: [],
+                    projects: ["tests"],
+                    buildOptions: { incremental: true }
+                });
+        });
+
+        it("parse build with --tsBuildInfoFile", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "tests"],
+                {
+                    errors: [{
+                        messageText: "Unknown build option '--tsBuildInfoFile'.",
+                        category: Diagnostics.Unknown_build_option_0.category,
+                        code: Diagnostics.Unknown_build_option_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined
+                    }],
+                    projects: ["build.tsbuildinfo", "tests"],
+                    buildOptions: { }
                 });
         });
 

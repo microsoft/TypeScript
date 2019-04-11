@@ -673,8 +673,8 @@ function f22<T>(x: T extends (infer U)[] ? U[] : never) {
 >x : T extends (infer U)[] ? U[] : never
 
     let e = x[0];  // {}
->e : {}
->x[0] : {}
+>e : unknown
+>x[0] : unknown
 >x : T extends (infer U)[] ? U[] : never
 >0 : 0
 }
@@ -779,8 +779,8 @@ type Bar<T> = T extends string ? boolean : number;
 >Bar : Bar<T>
 
 const convert = <U>(value: Foo<U>): Bar<U> => value;
->convert : <U>(value: Foo<U>) => Bar<U>
-><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Bar<U>
+>convert : <U>(value: Foo<U>) => Foo<U>
+><U>(value: Foo<U>): Bar<U> => value : <U>(value: Foo<U>) => Foo<U>
 >value : Foo<U>
 >value : Foo<U>
 
@@ -832,7 +832,7 @@ function f33<T, U>() {
 >T1 : Foo<T & U>
 
     type T2 = Bar<T & U>;
->T2 : Bar<T & U>
+>T2 : Foo<T & U>
 
     var z: T1;
 >z : Foo<T & U>

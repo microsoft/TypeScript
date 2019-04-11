@@ -4,11 +4,11 @@ tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(21,6): error
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(22,13): error TS1255: A definite assignment assertion '!' is not permitted in this context.
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(28,6): error TS1255: A definite assignment assertion '!' is not permitted in this context.
 tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(34,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(68,10): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(69,10): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(70,10): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(75,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
-tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(76,15): error TS1255: A definite assignment assertion '!' is not permitted in this context.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(68,10): error TS1258: Definite assignment assertions can only be used along with a type annotation.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(69,10): error TS1258: Definite assignment assertions can only be used along with a type annotation.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(70,10): error TS1258: Definite assignment assertions can only be used along with a type annotation.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(75,15): error TS1258: Definite assignment assertions can only be used along with a type annotation.
+tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(76,15): error TS1258: Definite assignment assertions can only be used along with a type annotation.
 
 
 ==== tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts (11 errors) ====
@@ -93,21 +93,21 @@ tests/cases/conformance/controlFlow/definiteAssignmentAssertions.ts(76,15): erro
     function f4() {
         let a!;
              ~
-!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+!!! error TS1258: Definite assignment assertions can only be used along with a type annotation.
         let b! = 1;
              ~
-!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+!!! error TS1258: Definite assignment assertions can only be used along with a type annotation.
         let c!: number = 1;
              ~
-!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+!!! error TS1258: Definite assignment assertions can only be used along with a type annotation.
     }
     
     // Definite assignment assertion not permitted in ambient context
     
     declare let v1!: number;
                   ~
-!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+!!! error TS1258: Definite assignment assertions can only be used along with a type annotation.
     declare var v2!: number;
                   ~
-!!! error TS1255: A definite assignment assertion '!' is not permitted in this context.
+!!! error TS1258: Definite assignment assertions can only be used along with a type annotation.
     

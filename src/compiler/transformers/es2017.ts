@@ -420,8 +420,10 @@ namespace ts {
 
             const savedCapturedSuperProperties = capturedSuperProperties;
             const savedHasSuperElementAccess = hasSuperElementAccess;
-            capturedSuperProperties = createUnderscoreEscapedMap<true>();
-            hasSuperElementAccess = false;
+            if (!isArrowFunction) {
+                capturedSuperProperties = createUnderscoreEscapedMap<true>();
+                hasSuperElementAccess = false;
+            }
 
             let result: ConciseBody;
             if (!isArrowFunction) {
@@ -438,7 +440,7 @@ namespace ts {
                     )
                 );
 
-                addStatementsAfterPrologue(statements, endLexicalEnvironment());
+                insertStatementsAfterStandardPrologue(statements, endLexicalEnvironment());
 
                 // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
                 // This step isn't needed if we eventually transform this to ES5.
@@ -446,9 +448,11 @@ namespace ts {
 
                 if (emitSuperHelpers) {
                     enableSubstitutionForAsyncMethodsWithSuper();
-                    const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
-                    substitutedSuperAccessors[getNodeId(variableStatement)] = true;
-                    addStatementsAfterPrologue(statements, [variableStatement]);
+                    if (hasEntries(capturedSuperProperties)) {
+                        const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
+                        substitutedSuperAccessors[getNodeId(variableStatement)] = true;
+                        insertStatementsAfterStandardPrologue(statements, [variableStatement]);
+                    }
                 }
 
                 const block = createBlock(statements, /*multiLine*/ true);
@@ -485,8 +489,10 @@ namespace ts {
             }
 
             enclosingFunctionParameterNames = savedEnclosingFunctionParameterNames;
-            capturedSuperProperties = savedCapturedSuperProperties;
-            hasSuperElementAccess = savedHasSuperElementAccess;
+            if (!isArrowFunction) {
+                capturedSuperProperties = savedCapturedSuperProperties;
+                hasSuperElementAccess = savedHasSuperElementAccess;
+            }
             return result;
         }
 
@@ -684,9 +690,15 @@ namespace ts {
                     /* parameters */ [],
                     /* type */ undefined,
                     /* equalsGreaterThanToken */ undefined,
-                    createPropertyAccess(
-                        createSuper(),
-                        name
+                    setEmitFlags(
+                        createPropertyAccess(
+                            setEmitFlags(
+                                createSuper(),
+                                EmitFlags.NoSubstitution
+                            ),
+                            name
+                        ),
+                        EmitFlags.NoSubstitution
                     )
                 )
             ));
@@ -711,9 +723,16 @@ namespace ts {
                             /* type */ undefined,
                             /* equalsGreaterThanToken */ undefined,
                             createAssignment(
-                                createPropertyAccess(
-                                    createSuper(),
-                                    name),
+                                setEmitFlags(
+                                    createPropertyAccess(
+                                        setEmitFlags(
+                                            createSuper(),
+                                            EmitFlags.NoSubstitution
+                                        ),
+                                        name
+                                    ),
+                                    EmitFlags.NoSubstitution
+                                ),
                                 createIdentifier("v")
                             )
                         )
@@ -750,7 +769,7 @@ namespace ts {
                 NodeFlags.Const));
     }
 
-    const awaiterHelper: EmitHelper = {
+    export const awaiterHelper: UnscopedEmitHelper = {
         name: "typescript:awaiter",
         scoped: false,
         priority: 5,

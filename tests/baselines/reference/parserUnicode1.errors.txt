@@ -11,13 +11,13 @@ tests/cases/conformance/parser/ecmascript5/parserUnicode1.ts(10,5): error TS2552
         $ERROR('#6.1: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
         ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:984:15: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:984:13: 'Error' is declared here.
       }
     }
     catch (e) {
         $ERROR('#6.2: var \\u0078x = 1; xx === 6. Actual: ' + (xx));
         ~~~~~~
 !!! error TS2552: Cannot find name '$ERROR'. Did you mean 'Error'?
-!!! related TS2728 /.ts/lib.es5.d.ts:984:15: 'Error' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:984:13: 'Error' is declared here.
     
     }

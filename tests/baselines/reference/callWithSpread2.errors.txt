@@ -1,26 +1,28 @@
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(22,1): error TS2556: Expected 1 arguments, but got 2 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(23,1): error TS2556: Expected 0 arguments, but got 1 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(26,5): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(23,13): error TS2556: Expected 1 arguments, but got 2 or more.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(24,7): error TS2556: Expected 0 arguments, but got 1 or more.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(27,5): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(27,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(28,13): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(28,5): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(29,13): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(29,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(30,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(30,13): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(31,11): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'number'.
   Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(31,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(32,1): error TS2556: Expected 1-3 arguments, but got 0 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(33,1): error TS2556: Expected 1-3 arguments, but got 0 or more.
-tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(34,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(32,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(33,8): error TS2556: Expected 1-3 arguments, but got 0 or more.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(34,8): error TS2556: Expected 1-3 arguments, but got 0 or more.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(35,8): error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(36,14): error TS2556: Expected 2-4 arguments, but got 1 or more.
 
 
-==== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts (11 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts (12 errors) ====
     declare function all(a?: number, b?: number): void;
     declare function weird(a?: number | string, b?: number | string): void;
     declare function prefix(s: string, a?: number, b?: number): void;
     declare function rest(s: string, a?: number, b?: number,  ...rest: number[]): void;
     declare function normal(s: string): void;
     declare function thunk(): string;
+    declare function prefix2(s: string, n: number, a?: number, b?: number): void;
     
     declare var ns: number[];
     declare var mixed: (number | string)[];
@@ -37,10 +39,10 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(34,8): erro
     
     // extra arguments
     normal("g", ...ns)
-    ~~~~~~~~~~~~~~~~~~
+                ~~~~~
 !!! error TS2556: Expected 1 arguments, but got 2 or more.
     thunk(...ns)
-    ~~~~~~~~~~~~
+          ~~~~~
 !!! error TS2556: Expected 0 arguments, but got 1 or more.
     
     // bad
@@ -66,14 +68,18 @@ tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts(34,8): erro
               ~~~~~~~~
 !!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
     prefix(...ns) // required parameters are required
-    ~~~~~~~~~~~~~
+           ~~~~~
 !!! error TS2556: Expected 1-3 arguments, but got 0 or more.
 !!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts:3:25: An argument for 's' was not provided.
     prefix(...mixed)
-    ~~~~~~~~~~~~~~~~
+           ~~~~~~~~
 !!! error TS2556: Expected 1-3 arguments, but got 0 or more.
 !!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts:3:25: An argument for 's' was not provided.
     prefix(...tuple)
            ~~~~~~~~
 !!! error TS2345: Argument of type 'number' is not assignable to parameter of type 'string'.
+    prefix2("g", ...ns);
+                 ~~~~~
+!!! error TS2556: Expected 2-4 arguments, but got 1 or more.
+!!! related TS6210 tests/cases/conformance/expressions/functionCalls/callWithSpread2.ts:7:37: An argument for 'n' was not provided.
     

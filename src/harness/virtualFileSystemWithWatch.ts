@@ -826,7 +826,7 @@ interface Array<T> {}`
                     });
                 }
                 return { directories, files };
-            });
+            }, path => this.realpath(path));
         }
 
         watchDirectory(directoryName: string, cb: DirectoryWatcherCallback, recursive: boolean): FileWatcher {
