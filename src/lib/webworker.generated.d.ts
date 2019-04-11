@@ -44,7 +44,6 @@ interface BlobPropertyBag {
 }
 
 interface CacheQueryOptions {
-    cacheName?: string;
     ignoreMethod?: boolean;
     ignoreSearch?: boolean;
     ignoreVary?: boolean;
@@ -177,9 +176,9 @@ interface ExtendableMessageEventInit extends ExtendableEventInit {
 interface FetchEventInit extends ExtendableEventInit {
     clientId?: string;
     preloadResponse?: Promise<any>;
+    replacesClientId?: string;
     request: Request;
     resultingClientId?: string;
-    targetClientId?: string;
 }
 
 interface FilePropertyBag extends BlobPropertyBag {
@@ -213,6 +212,11 @@ interface IDBObjectStoreParameters {
 interface IDBVersionChangeEventInit extends EventInit {
     newVersion?: number | null;
     oldVersion?: number;
+}
+
+interface ImageEncodeOptions {
+    quality?: number;
+    type?: string;
 }
 
 interface JsonWebKey {
@@ -251,6 +255,10 @@ interface MessageEventInit extends EventInit {
 interface MidiPermissionDescriptor extends PermissionDescriptor {
     name: "midi";
     sysex?: boolean;
+}
+
+interface MultiCacheQueryOptions extends CacheQueryOptions {
+    cacheName?: string;
 }
 
 interface NavigationPreloadState {
@@ -294,7 +302,8 @@ interface Pbkdf2Params extends Algorithm {
 
 interface PerformanceObserverInit {
     buffered?: boolean;
-    entryTypes: string[];
+    entryTypes?: string[];
+    type?: string;
 }
 
 interface PermissionDescriptor {
@@ -306,6 +315,10 @@ interface PipeOptions {
     preventCancel?: boolean;
     preventClose?: boolean;
     signal?: AbortSignal;
+}
+
+interface PostMessageOptions {
+    transfer?: any[];
 }
 
 interface ProgressEventInit extends EventInit {
@@ -647,6 +660,43 @@ declare var CacheStorage: {
     new(): CacheStorage;
 };
 
+interface CanvasCompositing {
+    globalAlpha: number;
+    globalCompositeOperation: string;
+}
+
+interface CanvasDrawImage {
+    drawImage(image: CanvasImageSource, dx: number, dy: number): void;
+    drawImage(image: CanvasImageSource, dx: number, dy: number, dw: number, dh: number): void;
+    drawImage(image: CanvasImageSource, sx: number, sy: number, sw: number, sh: number, dx: number, dy: number, dw: number, dh: number): void;
+}
+
+interface CanvasDrawPath {
+    beginPath(): void;
+    clip(fillRule?: CanvasFillRule): void;
+    clip(path: Path2D, fillRule?: CanvasFillRule): void;
+    fill(fillRule?: CanvasFillRule): void;
+    fill(path: Path2D, fillRule?: CanvasFillRule): void;
+    isPointInPath(x: number, y: number, fillRule?: CanvasFillRule): boolean;
+    isPointInPath(path: Path2D, x: number, y: number, fillRule?: CanvasFillRule): boolean;
+    isPointInStroke(x: number, y: number): boolean;
+    isPointInStroke(path: Path2D, x: number, y: number): boolean;
+    stroke(): void;
+    stroke(path: Path2D): void;
+}
+
+interface CanvasFillStrokeStyles {
+    fillStyle: string | CanvasGradient | CanvasPattern;
+    strokeStyle: string | CanvasGradient | CanvasPattern;
+    createLinearGradient(x0: number, y0: number, x1: number, y1: number): CanvasGradient;
+    createPattern(image: CanvasImageSource, repetition: string): CanvasPattern | null;
+    createRadialGradient(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number): CanvasGradient;
+}
+
+interface CanvasFilters {
+    filter: string;
+}
+
 /** An opaque object describing a gradient. It is returned by the methods CanvasRenderingContext2D.createLinearGradient() or CanvasRenderingContext2D.createRadialGradient(). */
 interface CanvasGradient {
     /**
@@ -664,6 +714,19 @@ declare var CanvasGradient: {
     new(): CanvasGradient;
 };
 
+interface CanvasImageData {
+    createImageData(sw: number, sh: number): ImageData;
+    createImageData(imagedata: ImageData): ImageData;
+    getImageData(sx: number, sy: number, sw: number, sh: number): ImageData;
+    putImageData(imagedata: ImageData, dx: number, dy: number): void;
+    putImageData(imagedata: ImageData, dx: number, dy: number, dirtyX: number, dirtyY: number, dirtyWidth: number, dirtyHeight: number): void;
+}
+
+interface CanvasImageSmoothing {
+    imageSmoothingEnabled: boolean;
+    imageSmoothingQuality: ImageSmoothingQuality;
+}
+
 interface CanvasPath {
     arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): void;
     arcTo(x1: number, y1: number, x2: number, y2: number, radius: number): void;
@@ -674,6 +737,16 @@ interface CanvasPath {
     moveTo(x: number, y: number): void;
     quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): void;
     rect(x: number, y: number, w: number, h: number): void;
+}
+
+interface CanvasPathDrawingStyles {
+    lineCap: CanvasLineCap;
+    lineDashOffset: number;
+    lineJoin: CanvasLineJoin;
+    lineWidth: number;
+    miterLimit: number;
+    getLineDash(): number[];
+    setLineDash(segments: number[]): void;
 }
 
 /** An opaque object describing a pattern, based on an image, a canvas, or a video, created by the CanvasRenderingContext2D.createPattern() method. */
@@ -690,8 +763,51 @@ declare var CanvasPattern: {
     new(): CanvasPattern;
 };
 
+interface CanvasRect {
+    clearRect(x: number, y: number, w: number, h: number): void;
+    fillRect(x: number, y: number, w: number, h: number): void;
+    strokeRect(x: number, y: number, w: number, h: number): void;
+}
+
+interface CanvasShadowStyles {
+    shadowBlur: number;
+    shadowColor: string;
+    shadowOffsetX: number;
+    shadowOffsetY: number;
+}
+
+interface CanvasState {
+    restore(): void;
+    save(): void;
+}
+
+interface CanvasText {
+    fillText(text: string, x: number, y: number, maxWidth?: number): void;
+    measureText(text: string): TextMetrics;
+    strokeText(text: string, x: number, y: number, maxWidth?: number): void;
+}
+
+interface CanvasTextDrawingStyles {
+    direction: CanvasDirection;
+    font: string;
+    textAlign: CanvasTextAlign;
+    textBaseline: CanvasTextBaseline;
+}
+
+interface CanvasTransform {
+    getTransform(): DOMMatrix;
+    resetTransform(): void;
+    rotate(angle: number): void;
+    scale(x: number, y: number): void;
+    setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+    setTransform(transform?: DOMMatrix2DInit): void;
+    transform(a: number, b: number, c: number, d: number, e: number, f: number): void;
+    translate(x: number, y: number): void;
+}
+
 /** The Client interface represents an executable context such as a Worker, or a SharedWorker. Window clients are represented by the more-specific WindowClient. You can get Client/WindowClient objects from methods such as Clients.matchAll() and Clients.get(). */
 interface Client {
+    readonly frameType: FrameType;
     readonly id: string;
     readonly type: ClientTypes;
     readonly url: string;
@@ -1087,7 +1203,8 @@ interface DedicatedWorkerGlobalScopeEventMap extends WorkerGlobalScopeEventMap {
 interface DedicatedWorkerGlobalScope extends WorkerGlobalScope {
     onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
     close(): void;
-    postMessage(message: any, transfer?: Transferable[]): void;
+    postMessage(message: any, transfer: Transferable[]): void;
+    postMessage(message: any, options?: PostMessageOptions): void;
     addEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof DedicatedWorkerGlobalScopeEventMap>(type: K, listener: (this: DedicatedWorkerGlobalScope, ev: DedicatedWorkerGlobalScopeEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -1331,9 +1448,9 @@ declare var ExtendableMessageEvent: {
 interface FetchEvent extends ExtendableEvent {
     readonly clientId: string;
     readonly preloadResponse: Promise<any>;
+    readonly replacesClientId: string;
     readonly request: Request;
     readonly resultingClientId: string;
-    readonly targetClientId: string;
     respondWith(r: Response | Promise<Response>): void;
 }
 
@@ -2081,14 +2198,8 @@ interface MessagePort extends EventTarget {
      * Disconnects the port, so that it is no longer active.
      */
     close(): void;
-    /**
-     * Posts a message through the channel. Objects listed in transfer are
-     * transferred, not just cloned, meaning that they are no longer usable on the sending side.
-     * Throws a "DataCloneError" DOMException if
-     * transfer contains duplicate objects or port, or if message
-     * could not be cloned.
-     */
-    postMessage(message: any, transfer?: Transferable[]): void;
+    postMessage(message: any, transfer: Transferable[]): void;
+    postMessage(message: any, options?: PostMessageOptions): void;
     /**
      * Begins dispatching messages received on the port.
      */
@@ -2231,6 +2342,62 @@ interface OES_vertex_array_object {
     readonly VERTEX_ARRAY_BINDING_OES: GLenum;
 }
 
+interface OffscreenCanvas extends EventTarget {
+    /**
+     * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
+     * They can be set, to replace the bitmap with a
+     * new, transparent black bitmap of the specified dimensions (effectively resizing
+     * it).
+     */
+    height: number;
+    width: number;
+    /**
+     * Returns a promise that will fulfill with a new Blob object representing a file
+     * containing the image in the OffscreenCanvas object.
+     * The argument, if provided, is a dictionary that controls the encoding options of the image
+     * file to be created. The type
+     * field specifies the file format and has a default value of "image/png"; that type
+     * is also used if the requested type isn't supported. If the image format supports variable
+     * quality (such as "image/jpeg"), then the quality field is a number in the range 0.0
+     * to 1.0 inclusive indicating the desired quality level for the resulting image.
+     */
+    convertToBlob(options?: ImageEncodeOptions): Promise<Blob>;
+    /**
+     * Returns an object that exposes an API for drawing on the OffscreenCanvas
+     * object. contextId specifies the desired API: "2d" or "webgl". options is handled by that
+     * API.
+     * This specification defines the "2d" context below,
+     * which is similar but distinct from the "2d"
+     * context that is created from a canvas element. There is also a specification that
+     * defines a "webgl" context. [WEBGL]
+     * Returns null if the canvas has already been initialized with another context type (e.g.,
+     * trying to get a "2d" context after getting a
+     * "webgl" context).
+     */
+    getContext(contextId: OffscreenRenderingContextId, options?: any): OffscreenRenderingContext | null;
+    /**
+     * Returns a newly created ImageBitmap object with the image in the
+     * OffscreenCanvas object. The image in the OffscreenCanvas object is
+     * replaced with a new blank image.
+     */
+    transferToImageBitmap(): ImageBitmap;
+}
+
+declare var OffscreenCanvas: {
+    prototype: OffscreenCanvas;
+    new(width: number, height: number): OffscreenCanvas;
+};
+
+interface OffscreenCanvasRenderingContext2D extends CanvasState, CanvasTransform, CanvasCompositing, CanvasImageSmoothing, CanvasFillStrokeStyles, CanvasShadowStyles, CanvasFilters, CanvasRect, CanvasDrawPath, CanvasText, CanvasDrawImage, CanvasImageData, CanvasPathDrawingStyles, CanvasTextDrawingStyles, CanvasPath {
+    readonly canvas: OffscreenCanvas;
+    commit(): void;
+}
+
+declare var OffscreenCanvasRenderingContext2D: {
+    prototype: OffscreenCanvasRenderingContext2D;
+    new(): OffscreenCanvasRenderingContext2D;
+};
+
 /** Of the Canvas 2D API is used to declare a path that can then be used on a CanvasRenderingContext2D object. The path methods of the CanvasRenderingContext2D interface are also present on this interface, which gives you the convenience of being able to retain and replay your path whenever desired. */
 interface Path2D extends CanvasPath {
     addPath(path: Path2D, transform?: DOMMatrix2DInit): void;
@@ -2305,13 +2472,14 @@ declare var PerformanceMeasure: {
 
 interface PerformanceObserver {
     disconnect(): void;
-    observe(options: PerformanceObserverInit): void;
+    observe(options?: PerformanceObserverInit): void;
     takeRecords(): PerformanceEntryList;
 }
 
 declare var PerformanceObserver: {
     prototype: PerformanceObserver;
     new(callback: PerformanceObserverCallback): PerformanceObserver;
+    readonly supportedEntryTypes: ReadonlyArray<string>;
 };
 
 interface PerformanceObserverEntryList {
@@ -2655,7 +2823,8 @@ interface ServiceWorker extends EventTarget, AbstractWorker {
     onstatechange: ((this: ServiceWorker, ev: Event) => any) | null;
     readonly scriptURL: string;
     readonly state: ServiceWorkerState;
-    postMessage(message: any, transfer?: Transferable[]): void;
+    postMessage(message: any, transfer: Transferable[]): void;
+    postMessage(message: any, options?: PostMessageOptions): void;
     addEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -4462,7 +4631,8 @@ interface WritableStreamErrorCallback {
 
 declare var onmessage: ((this: DedicatedWorkerGlobalScope, ev: MessageEvent) => any) | null;
 declare function close(): void;
-declare function postMessage(message: any, transfer?: Transferable[]): void;
+declare function postMessage(message: any, transfer: Transferable[]): void;
+declare function postMessage(message: any, options?: PostMessageOptions): void;
 /**
  * Dispatches a synthetic event event to target and returns true
  * if either event's cancelable attribute value is false or its preventDefault() method was not invoked, and false otherwise.
@@ -4512,7 +4682,8 @@ type HeadersInit = Headers | string[][] | Record<string, string>;
 type BodyInit = Blob | BufferSource | FormData | URLSearchParams | ReadableStream<Uint8Array> | string;
 type RequestInfo = Request | string;
 type DOMHighResTimeStamp = number;
-type CanvasImageSource = ImageBitmap;
+type CanvasImageSource = ImageBitmap | OffscreenCanvas;
+type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | WebGLRenderingContext;
 type MessageEventSource = MessagePort | ServiceWorker;
 type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
 type TimerHandler = string | Function;
@@ -4542,16 +4713,25 @@ type FormDataEntryValue = File | string;
 type IDBValidKey = number | string | Date | BufferSource | IDBArrayKey;
 type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
 type BinaryType = "blob" | "arraybuffer";
+type CanvasDirection = "ltr" | "rtl" | "inherit";
+type CanvasFillRule = "nonzero" | "evenodd";
+type CanvasLineCap = "butt" | "round" | "square";
+type CanvasLineJoin = "round" | "bevel" | "miter";
+type CanvasTextAlign = "start" | "end" | "left" | "right" | "center";
+type CanvasTextBaseline = "top" | "hanging" | "middle" | "alphabetic" | "ideographic" | "bottom";
 type ClientTypes = "window" | "worker" | "sharedworker" | "all";
 type EndingType = "transparent" | "native";
+type FrameType = "auxiliary" | "top-level" | "nested" | "none";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "pending" | "done";
 type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
+type ImageSmoothingQuality = "low" | "medium" | "high";
 type KeyFormat = "raw" | "spki" | "pkcs8" | "jwk";
 type KeyType = "public" | "private" | "secret";
 type KeyUsage = "encrypt" | "decrypt" | "sign" | "verify" | "deriveKey" | "deriveBits" | "wrapKey" | "unwrapKey";
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
+type OffscreenRenderingContextId = "2d" | "webgl";
 type PermissionName = "geolocation" | "notifications" | "push" | "midi" | "camera" | "microphone" | "speaker" | "device-info" | "background-sync" | "bluetooth" | "persistent-storage" | "ambient-light-sensor" | "accelerometer" | "gyroscope" | "magnetometer" | "clipboard";
 type PermissionState = "granted" | "denied" | "prompt";
 type PushEncryptionKeyName = "p256dh" | "auth";
