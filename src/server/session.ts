@@ -2136,7 +2136,7 @@ namespace ts.server {
                             // TemplateSpans, along with the SyntaxLists containing them,
                             // are a somewhat unintuitive grouping of things that should be
                             // considered independently. Dive in without pushing a selection range.
-                            if (isBlock(node) || isTemplateSpan(node) || prevNode && isTemplateHead(prevNode)) {
+                            if (isBlock(node) || isTemplateSpan(node) || isTemplateHead(node) || prevNode && isTemplateHead(prevNode)) {
                                 parentNode = node;
                                 break;
                             }

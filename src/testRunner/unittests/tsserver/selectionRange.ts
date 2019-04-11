@@ -273,7 +273,10 @@ type X = {
         it("works for string literals and template strings", () => {
             // tslint:disable-next-line:no-invalid-template-strings
             const getSelectionRange = setup("/file.ts", "`a b ${\n  'c'\n} d`");
-            const locations = getSelectionRange([{ line: 2, offset: 4 }]);
+            const locations = getSelectionRange([
+                { line: 2, offset: 4 },
+                { line: 1, offset: 4 },
+            ]);
             assert.deepEqual(locations, [
                 {
                     textSpan: { // c
@@ -298,7 +301,15 @@ type X = {
                                     parent: {
                                         textSpan: { // whole template string
                                             start: { line: 1, offset: 1 },
-                                            end: { line: 3, offset: 5 } } } } } } }
+                                            end: { line: 3, offset: 5 } } } } } } },
+                {
+                    textSpan: { // whole template string without backticks
+                        start: { line: 1, offset: 2 },
+                        end: { line: 3, offset: 4 } },
+                    parent: {
+                        textSpan: { // whole template string
+                            start: { line: 1, offset: 1 },
+                            end: { line: 3, offset: 5 } } } },
             ]);
         });
 
