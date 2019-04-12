@@ -4279,7 +4279,8 @@ namespace ts {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
-        simplified?: Type;
+        simplifiedForReading?: Type;
+        simplifiedForWriting?: Type;
     }
 
     export type TypeVariable = TypeParameter | IndexedAccessType;

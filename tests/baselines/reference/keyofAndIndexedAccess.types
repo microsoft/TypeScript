@@ -1794,7 +1794,7 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 >key : K
 
     stringMap[x]; // Should be OK.
->stringMap[x] : { [oldId: string]: string; }[T[K]]
+>stringMap[x] : string
 >stringMap : { [oldId: string]: string; }
 >x : T[K]
 }
