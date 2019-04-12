@@ -602,7 +602,7 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 >d : boolean
 
     f({ a: 1, b: 'yes' }, { c: 'no', d: false })
->f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { a: number; b: string; } & { c: string; d: false; } & { id: string; }
+>f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { a: number; b: string; } & { c: string; d: boolean; } & { id: string; }
 >f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >{ a: 1, b: 'yes' } : { a: number; b: string; }
 >a : number

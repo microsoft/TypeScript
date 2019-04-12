@@ -308,8 +308,11 @@ node_modules/bluebird/js/release/util.js(367,25): error TS2304: Cannot find name
 node_modules/bluebird/js/release/util.js(367,51): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/release/util.js(368,25): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/release/util.js(376,24): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/util.js(381,9): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
-node_modules/bluebird/js/release/util.js(381,21): error TS2339: Property 'toFastProperties' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/util.js(383,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/util.js(383,33): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/util.js(383,54): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/util.js(386,9): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/util.js(386,21): error TS2339: Property 'toFastProperties' does not exist on type 'typeof ret'.
 
 
 
