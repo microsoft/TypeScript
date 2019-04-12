@@ -10250,7 +10250,7 @@ namespace ts {
 
         function getConditionalTypeWorker(root: ConditionalRoot, mapper: TypeMapper | undefined, checkType: Type, extendsType: Type, trueType: Type, falseType: Type) {
             // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
-            if (falseType.flags & TypeFlags.Never && getActualTypeVariable(trueType) === getActualTypeVariable(checkType)) {
+            if (falseType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(trueType), getActualTypeVariable(checkType))) {
                 if (checkType.flags & TypeFlags.Any || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
                     return trueType;
                 }
@@ -10258,7 +10258,7 @@ namespace ts {
                     return neverType;
                 }
             }
-            else if (trueType.flags & TypeFlags.Never && getActualTypeVariable(falseType) === getActualTypeVariable(checkType)) {
+            else if (trueType.flags & TypeFlags.Never && isTypeIdenticalTo(getActualTypeVariable(falseType), getActualTypeVariable(checkType))) {
                 if (!(checkType.flags & TypeFlags.Any) && isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
                     return neverType;
                 }
@@ -12840,7 +12840,7 @@ namespace ts {
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
-                    const variances = getAliasVariances(source.aliasSymbol);
+                    const variances = relation === identityRelation ? emptyArray : getAliasVariances(source.aliasSymbol);
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances);
                     if (varianceResult !== undefined) {
                         return varianceResult;
@@ -13023,7 +13023,7 @@ namespace ts {
                         // We have type references to the same generic type, and the type references are not marker
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
-                        const variances = getVariances((<TypeReference>source).target);
+                        const variances = relation === identityRelation ? emptyArray : getVariances((<TypeReference>source).target);
                         const varianceResult = relateVariances((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, variances);
                         if (varianceResult !== undefined) {
                             return varianceResult;
@@ -13080,6 +13080,9 @@ namespace ts {
 
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors)) {
+                        return result;
+                    }
+                    if (relation === identityRelation) {
                         return result;
                     }
                     const allowStructuralFallback = (targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances)) || isNonGeneric(source) || isNonGeneric(target);
