@@ -7474,14 +7474,19 @@ namespace ts {
         }
 
         function getPossiblePropertiesOfUnionType(type: UnionType): Symbol[] {
-            // The following is for effects - getUnionOrIntersectionProperty will cache all the possible union properties into `type`
+            const properties = createSymbolTable();
             for (const t of type.types) {
                 for (const p of getPropertiesOfType(t)) {
-                    void getUnionOrIntersectionProperty(type, p.escapedName);
+                    if (!properties.has(p.escapedName)) {
+                        const prop = getUnionOrIntersectionProperty(type, p.escapedName);
+                        if (prop) {
+                            properties.set(p.escapedName, prop);
+                        }
+                    }
                 }
             }
-            // And we can then (uniquely) fetch them out of the cache, instead of as a result of the above call.
-            return !type.propertyCache ? emptyArray : arrayFrom(type.propertyCache.values());
+            // We can't simply use the property cache here, since that will contain cached apparent type members :(
+            return !properties.size ? emptyArray : arrayFrom(properties.values());
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
