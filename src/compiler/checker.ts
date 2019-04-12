@@ -7474,19 +7474,22 @@ namespace ts {
         }
 
         function getPossiblePropertiesOfUnionType(type: UnionType): Symbol[] {
-            const properties = createSymbolTable();
+            if (type.possiblePropertyCache) {
+                return type.possiblePropertyCache.size ? arrayFrom(type.possiblePropertyCache.values()) : emptyArray;
+            }
+            type.possiblePropertyCache = createSymbolTable();
             for (const t of type.types) {
                 for (const p of getPropertiesOfType(t)) {
-                    if (!properties.has(p.escapedName)) {
+                    if (!type.possiblePropertyCache.has(p.escapedName)) {
                         const prop = getUnionOrIntersectionProperty(type, p.escapedName);
                         if (prop) {
-                            properties.set(p.escapedName, prop);
+                            type.possiblePropertyCache.set(p.escapedName, prop);
                         }
                     }
                 }
             }
-            // We can't simply use the property cache here, since that will contain cached apparent type members :(
-            return !properties.size ? emptyArray : arrayFrom(properties.values());
+            // We can't simply use the normal property cache here, since that will contain cached apparent type members :(
+            return type.possiblePropertyCache.size ? arrayFrom(type.possiblePropertyCache.values()) : emptyArray;
         }
 
         function getPropertiesOfType(type: Type): Symbol[] {
