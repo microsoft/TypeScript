@@ -12840,7 +12840,7 @@ namespace ts {
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
                     !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
-                    const variances = relation === identityRelation ? emptyArray : getAliasVariances(source.aliasSymbol);
+                    const variances = getAliasVariances(source.aliasSymbol);
                     const varianceResult = relateVariances(source.aliasTypeArguments, target.aliasTypeArguments, variances);
                     if (varianceResult !== undefined) {
                         return varianceResult;
@@ -13023,7 +13023,7 @@ namespace ts {
                         // We have type references to the same generic type, and the type references are not marker
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
-                        const variances = relation === identityRelation ? emptyArray : getVariances((<TypeReference>source).target);
+                        const variances = getVariances((<TypeReference>source).target);
                         const varianceResult = relateVariances((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, variances);
                         if (varianceResult !== undefined) {
                             return varianceResult;
