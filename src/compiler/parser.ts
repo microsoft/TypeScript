@@ -1089,13 +1089,7 @@ namespace ts {
             return currentToken = scanner.reScanSlashToken();
         }
 
-        function reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind {
-            if (isTaggedTemplate) {
-                let lastError: DiagnosticWithLocation | undefined;
-                while ((lastError = lastOrUndefined(parseDiagnostics)) && scanner.getTokenPos() < lastError.start) {
-                    parseDiagnostics.pop();
-                }
-            }
+        function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
             return currentToken = scanner.reScanTemplateToken(isTaggedTemplate);
         }
 
@@ -2209,7 +2203,7 @@ namespace ts {
             return allowIdentifierNames ? parseIdentifierName() : parseIdentifier();
         }
 
-        function parseTemplateExpression(isTaggedTemplate?: boolean): TemplateExpression {
+        function parseTemplateExpression(isTaggedTemplate: boolean): TemplateExpression {
             const template = <TemplateExpression>createNode(SyntaxKind.TemplateExpression);
 
             template.head = parseTemplateHead(isTaggedTemplate);
@@ -2228,7 +2222,7 @@ namespace ts {
             return finishNode(template);
         }
 
-        function parseTemplateSpan(isTaggedTemplate?: boolean): TemplateSpan {
+        function parseTemplateSpan(isTaggedTemplate: boolean): TemplateSpan {
             const span = <TemplateSpan>createNode(SyntaxKind.TemplateSpan);
             span.expression = allowInAnd(parseExpression);
 
@@ -2249,7 +2243,7 @@ namespace ts {
             return <LiteralExpression>parseLiteralLikeNode(token());
         }
 
-        function parseTemplateHead(isTaggedTemplate?: boolean): TemplateHead {
+        function parseTemplateHead(isTaggedTemplate: boolean): TemplateHead {
             if (isTaggedTemplate) {
                 reScanTemplateHeadOrNoSubstitutionTemplate();
             }
@@ -4697,7 +4691,7 @@ namespace ts {
                     }
                     break;
                 case SyntaxKind.TemplateHead:
-                    return parseTemplateExpression();
+                    return parseTemplateExpression(/* isTaggedTemplate */ false);
             }
 
             return parseIdentifier(Diagnostics.Expression_expected);

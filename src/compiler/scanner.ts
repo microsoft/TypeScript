@@ -27,7 +27,7 @@ namespace ts {
         getTokenFlags(): TokenFlags;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
-        reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind;
+        reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
@@ -1141,7 +1141,7 @@ namespace ts {
          * Sets the current 'tokenValue' and returns a NoSubstitutionTemplateLiteral or
          * a literal component of a TemplateExpression.
          */
-        function scanTemplateAndSetTokenValue(isTaggedTemplate?: boolean): SyntaxKind {
+        function scanTemplateAndSetTokenValue(isTaggedTemplate: boolean): SyntaxKind {
             const startedWithBacktick = text.charCodeAt(pos) === CharacterCodes.backtick;
 
             pos++;
@@ -1244,16 +1244,10 @@ namespace ts {
                     return "\"";
                 case CharacterCodes.u:
                     if (isTaggedTemplate) {
-                        // '\u'
-                        if (pos < end && !isHexDigit(text.charCodeAt(pos)) && text.charCodeAt(pos) !== CharacterCodes.openBrace) {
-                            tokenFlags |= TokenFlags.ContainsInvalidEscape;
-                            return text.substring(start, pos);
-                        }
-
-                        // '\u0' or '\u00' or '\u000'
-                        for (let i = 0; i < 3; i++) {
-                            if (pos + i + 1 < end && isHexDigit(text.charCodeAt(pos + i)) &&  !isHexDigit(text.charCodeAt(pos + i + 1)) && text.charCodeAt(pos + i + 1) !== CharacterCodes.openBrace) {
-                                pos += i;
+                        // '\u' or '\u0' or '\u00' or '\u000'
+                        for (let escapePos = pos; escapePos < pos + 4; escapePos++) {
+                            if (escapePos < end && !isHexDigit(text.charCodeAt(escapePos)) && text.charCodeAt(escapePos) !== CharacterCodes.openBrace) {
+                                pos = escapePos;
                                 tokenFlags |= TokenFlags.ContainsInvalidEscape;
                                 return text.substring(start, pos);
                             }
@@ -1577,7 +1571,7 @@ namespace ts {
                         tokenValue = scanString();
                         return token = SyntaxKind.StringLiteral;
                     case CharacterCodes.backtick:
-                        return token = scanTemplateAndSetTokenValue();
+                        return token = scanTemplateAndSetTokenValue(/* isTaggedTemplate */ false);
                     case CharacterCodes.percent:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.equals) {
                             return pos += 2, token = SyntaxKind.PercentEqualsToken;
@@ -1997,7 +1991,7 @@ namespace ts {
         /**
          * Unconditionally back up and scan a template expression portion.
          */
-        function reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind {
+        function reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind {
             Debug.assert(token === SyntaxKind.CloseBraceToken, "'reScanTemplateToken' should only be called on a '}'");
             pos = tokenPos;
             return token = scanTemplateAndSetTokenValue(isTaggedTemplate);

@@ -3153,7 +3153,7 @@ declare namespace ts {
         isUnterminated(): boolean;
         reScanGreaterToken(): SyntaxKind;
         reScanSlashToken(): SyntaxKind;
-        reScanTemplateToken(isTaggedTemplate?: boolean): SyntaxKind;
+        reScanTemplateToken(isTaggedTemplate: boolean): SyntaxKind;
         reScanTemplateHeadOrNoSubstitutionTemplate(): SyntaxKind;
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
