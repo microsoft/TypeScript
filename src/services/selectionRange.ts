@@ -13,9 +13,9 @@ namespace ts.SelectionRange {
             const children = parentNode.getChildren(sourceFile);
             if (!children.length) break;
             for (let i = 0; i < children.length; i++) {
-                const prevNode: Node | undefined = children[i - 1];
+                let prevNode: Node | undefined = children[i - 1];
                 const node: Node = children[i];
-                const nextNode: Node | undefined = children[i + 1];
+                let nextNode: Node | undefined = children[i + 1];
                 if (node.getStart(sourceFile) > pos) {
                     break outer;
                 }
@@ -28,6 +28,26 @@ namespace ts.SelectionRange {
                     if (isBlock(node) || isTemplateSpan(node) || isTemplateHead(node) || prevNode && isTemplateHead(prevNode)) {
                         parentNode = node;
                         break;
+                    }
+
+                    const siblingExpansionRule = getSiblingExpansionRule(parentNode);
+                    let expansionCandidate: SyntaxKind | [SyntaxKind, SyntaxKind] | undefined;
+                    while ((prevNode || nextNode) && (expansionCandidate = siblingExpansionRule.shift())) {
+                        if (isArray(expansionCandidate)
+                            && prevNode && prevNode.kind === expansionCandidate[0]
+                            && nextNode && nextNode.kind === expansionCandidate[1]) {
+                            pushSelectionRange(prevNode.getStart(), nextNode.getEnd());
+                            prevNode = children[children.indexOf(prevNode) - 1];
+                            nextNode = children[children.indexOf(nextNode) + 1];
+                        }
+                        else if (prevNode && prevNode.kind === expansionCandidate) {
+                            pushSelectionRange(prevNode.getStart(), node.getEnd());
+                            prevNode = children[children.indexOf(prevNode) - 1];
+                        }
+                        else if (nextNode && nextNode.kind === expansionCandidate) {
+                            pushSelectionRange(node.getStart(), nextNode.getEnd());
+                            nextNode = children[children.indexOf(nextNode) + 1];
+                        }
                     }
 
                     // Synthesize a stop for '${ ... }' since '${' and '}' actually belong to siblings.
@@ -103,15 +123,24 @@ namespace ts.SelectionRange {
         }
     }
 
-    // function getSiblingExpansionRule<T extends Node>(parentNode: T): (SyntaxKind | SyntaxKind[])[] | undefined {
-    //     switch (parentNode.kind) {
-    //         case SyntaxKind.BindingElement: return [SyntaxKind.Identifier, SyntaxKind.DotDotDotToken];
-    //         case SyntaxKind.Parameter: return [SyntaxKind.Identifier, SyntaxKind.DotDotDotToken, SyntaxKind.QuestionToken];
-    //         case SyntaxKind.PropertySignature: return [SyntaxKind.Identifier, SyntaxKind.QuestionToken, SyntaxKind.SyntaxList];
-    //         case SyntaxKind.ElementAccessExpression: return [[SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken]];
-    //         case SyntaxKind.IndexedAccessType: return [[SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken]];
-    //     }
-    // }
+    function getSiblingExpansionRule<T extends Node>(parentNode: T): (SyntaxKind | [SyntaxKind, SyntaxKind])[] {
+        switch (parentNode.kind) {
+            case SyntaxKind.BindingElement: return [SyntaxKind.Identifier, SyntaxKind.DotDotDotToken];
+            case SyntaxKind.Parameter: return [SyntaxKind.Identifier, SyntaxKind.DotDotDotToken, SyntaxKind.QuestionToken];
+            case SyntaxKind.PropertySignature: return [SyntaxKind.Identifier, SyntaxKind.QuestionToken, SyntaxKind.SyntaxList];
+            case SyntaxKind.ElementAccessExpression: return [[SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken]];
+            case SyntaxKind.MappedType: return [
+                SyntaxKind.TypeParameter,
+                [SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken],
+                SyntaxKind.MinusToken,
+                SyntaxKind.PlusToken,
+                SyntaxKind.ReadonlyKeyword,
+                SyntaxKind.MinusToken,
+                SyntaxKind.PlusToken,
+            ];
+            default: return [];
+        }
+    }
 
     function getGroupBounds<T>(array: ArrayLike<T>, index: number, predicate: (element: T) => boolean): [number, number] {
         let first = index;

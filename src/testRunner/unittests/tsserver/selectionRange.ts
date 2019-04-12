@@ -231,44 +231,45 @@ type X = {
                         end: { line: 4, offset: 33 } },
                     parent: allMembersUp } };
 
-            assert.deepEqual(locations, [
-                {
-                    textSpan: { // foo
+            assert.deepEqual(locations![0], {
+                textSpan: { // foo
+                    start: { line: 3, offset: 5 },
+                    end: { line: 3, offset: 8 } },
+                parent: {
+                    textSpan: { // foo?
                         start: { line: 3, offset: 5 },
-                        end: { line: 3, offset: 8 } },
+                        end: { line: 3, offset: 9 } },
                     parent: {
-                        textSpan: { // foo?
+                        textSpan: { // foo?: string;
                             start: { line: 3, offset: 5 },
-                            end: { line: 3, offset: 9 } },
-                        parent: {
-                            textSpan: { // foo?: string;
-                                start: { line: 3, offset: 5 },
-                                end: { line: 3, offset: 18 } },
-                            parent: allMembersUp } } },
-                {
-                    textSpan: { // readonly
-                        start: { line: 4, offset: 5 },
-                        end: { line: 4, offset: 13 } },
-                    parent: readonlyBarUp },
-                {
-                    textSpan: { // bar
-                        start: { line: 4, offset: 14 },
-                        end: { line: 4, offset: 17 } },
-                    parent: readonlyBarUp },
-                {
-                    textSpan: { // number
-                        start: { line: 4, offset: 24 },
+                            end: { line: 3, offset: 18 } },
+                        parent: allMembersUp } } });
+
+            assert.deepEqual(locations![1], {
+                textSpan: { // readonly
+                    start: { line: 4, offset: 5 },
+                    end: { line: 4, offset: 13 } },
+                parent: readonlyBarUp });
+
+            assert.deepEqual(locations![2], {
+                textSpan: { // bar
+                    start: { line: 4, offset: 14 },
+                    end: { line: 4, offset: 17 } },
+                parent: readonlyBarUp });
+
+            assert.deepEqual(locations![3], {
+                textSpan: { // number
+                    start: { line: 4, offset: 24 },
+                    end: { line: 4, offset: 30 } },
+                parent: {
+                    textSpan: { // x: number
+                        start: { line: 4, offset: 21 },
                         end: { line: 4, offset: 30 } },
                     parent: {
-                        textSpan: { // x: number
-                            start: { line: 4, offset: 21 },
-                            end: { line: 4, offset: 30 } },
-                        parent: {
-                            textSpan: { // { x: number }
-                                start: { line: 4, offset: 19 },
-                                end: { line: 4, offset: 32 } },
-                            parent: readonlyBarUp } } },
-            ]);
+                        textSpan: { // { x: number }
+                            start: { line: 4, offset: 19 },
+                            end: { line: 4, offset: 32 } },
+                        parent: readonlyBarUp.parent } } });
         });
 
         it("works for string literals and template strings", () => {
