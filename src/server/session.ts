@@ -1744,14 +1744,6 @@ namespace ts.server {
             };
         }
 
-        private locationsAreEqual(a: protocol.Location, b: protocol.Location): boolean {
-            return a.line === b.line && a.offset === b.offset;
-        }
-
-        private locationTextSpansAreEqual(a: protocol.TextSpan, b: protocol.TextSpan): boolean {
-            return this.locationsAreEqual(a.start, b.start) && this.locationsAreEqual(a.end, b.end);
-        }
-
         private getNavigationTree(args: protocol.FileRequestArgs, simplifiedResult: boolean): protocol.NavigationTree | NavigationTree | undefined {
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const tree = languageService.getNavigationTree(file);
@@ -2067,31 +2059,26 @@ namespace ts.server {
             this.projectService.configurePlugin(args);
         }
 
-        private getSelectionRange(args: protocol.SelectionRangeRequestArgs): protocol.SelectionRange[] {
+        private getSelectionRange(args: protocol.SelectionRangeRequestArgs, simplifiedResult: boolean) {
             const { locations } = args;
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
-
-
-            const sourceFile = languageService.getNonBoundSourceFile(file);
             const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
 
             return map(locations, location => {
                 const pos = this.getPosition(location, scriptInfo);
-                let selectionRange: protocol.SelectionRange | undefined;
-                const pushSelectionRange = (start: number, end: number, syntaxKind?: SyntaxKind): void => {
-                    // Skip ranges that are identical to the parent
-                    const textSpan = this.toLocationTextSpan(createTextSpanFromBounds(start, end), scriptInfo);
-                    if (!selectionRange || !this.locationTextSpansAreEqual(textSpan, selectionRange.textSpan)) {
-                        selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
-                        if (syntaxKind) {
-                            Object.defineProperty(selectionRange, "__debugKind", { value: formatSyntaxKind(syntaxKind) });
-                        }
-                    }
-                };
-
-                getSelectionRange(pos, sourceFile, pushSelectionRange);
-                return selectionRange!;
+                const selectionRange = languageService.getSelectionRange(file, pos);
+                return simplifiedResult ? this.mapSelectionRange(selectionRange, scriptInfo) : selectionRange;
             });
+        }
+
+        private mapSelectionRange(selectionRange: SelectionRange, scriptInfo: ScriptInfo): protocol.SelectionRange {
+            const result: protocol.SelectionRange = {
+                textSpan: this.toLocationTextSpan(selectionRange.textSpan, scriptInfo),
+            };
+            if (selectionRange.parent) {
+                result.parent = this.mapSelectionRange(selectionRange.parent, scriptInfo);
+            }
+            return result;
         }
 
         getCanonicalFileName(fileName: string) {
@@ -2451,8 +2438,11 @@ namespace ts.server {
                 return this.notRequired();
             },
             [CommandNames.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
-                return this.requiredResponse(this.getSelectionRange(request.arguments));
-            }
+                return this.requiredResponse(this.getSelectionRange(request.arguments, /*simplifiedResult*/ true));
+            },
+            [CommandNames.SelectionRangeFull]: (request: protocol.SelectionRangeRequest) => {
+                return this.requiredResponse(this.getSelectionRange(request.arguments, /*simplifiedResult*/ false));
+            },
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {

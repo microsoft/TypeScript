@@ -1,9 +1,11 @@
 /* @internal */
-namespace ts.server {
+namespace ts.SelectionRange {
     const isImport = or(isImportDeclaration, isImportEqualsDeclaration);
 
-    export function getSelectionRange(pos: number, sourceFile: SourceFile, pushSelectionRange: (start: number, end: number, kind?: SyntaxKind) => void) {
-        pushSelectionRange(sourceFile.getFullStart(), sourceFile.getEnd(), SyntaxKind.SourceFile);
+    export function getSelectionRange(pos: number, sourceFile: SourceFile): ts.SelectionRange {
+        let selectionRange: SelectionRange = {
+            textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd())
+        };
 
         // Skip top-level SyntaxList
         let parentNode = sourceFile.getChildAt(0);
@@ -86,7 +88,30 @@ namespace ts.server {
                 }
             }
         }
+
+        return selectionRange;
+
+        function pushSelectionRange(start: number, end: number, syntaxKind?: SyntaxKind): void {
+            // Skip ranges that are identical to the parent
+            const textSpan = createTextSpanFromBounds(start, end);
+            if (!selectionRange || !textSpansEqual(textSpan, selectionRange.textSpan)) {
+                selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
+                if (syntaxKind) {
+                    Object.defineProperty(selectionRange, "__debugKind", { value: formatSyntaxKind(syntaxKind) });
+                }
+            }
+        }
     }
+
+    // function getSiblingExpansionRule<T extends Node>(parentNode: T): (SyntaxKind | SyntaxKind[])[] | undefined {
+    //     switch (parentNode.kind) {
+    //         case SyntaxKind.BindingElement: return [SyntaxKind.Identifier, SyntaxKind.DotDotDotToken];
+    //         case SyntaxKind.Parameter: return [SyntaxKind.Identifier, SyntaxKind.DotDotDotToken, SyntaxKind.QuestionToken];
+    //         case SyntaxKind.PropertySignature: return [SyntaxKind.Identifier, SyntaxKind.QuestionToken, SyntaxKind.SyntaxList];
+    //         case SyntaxKind.ElementAccessExpression: return [[SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken]];
+    //         case SyntaxKind.IndexedAccessType: return [[SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken]];
+    //     }
+    // }
 
     function getGroupBounds<T>(array: ArrayLike<T>, index: number, predicate: (element: T) => boolean): [number, number] {
         let first = index;

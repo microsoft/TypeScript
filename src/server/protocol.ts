@@ -132,6 +132,8 @@ namespace ts.server.protocol {
         GetEditsForFileRenameFull = "getEditsForFileRename-full",
         ConfigurePlugin = "configurePlugin",
         SelectionRange = "selectionRange",
+        /* @internal */
+        SelectionRangeFull = "selectionRange-full",
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
