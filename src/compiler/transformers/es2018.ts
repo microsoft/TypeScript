@@ -130,7 +130,6 @@ namespace ts {
                         hasSuperElementAccess = true;
                     }
                     return visitEachChild(node, visitor, context);
-                
                 default:
                     return visitEachChild(node, visitor, context);
             }
