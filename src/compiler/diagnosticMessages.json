@@ -2605,6 +2605,10 @@
         "category": "Error",
         "code": 2753
     },
+    "'super' may not use type arguments.": {
+        "category": "Error",
+        "code": 2754
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

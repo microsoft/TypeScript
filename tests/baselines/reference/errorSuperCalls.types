@@ -91,10 +91,8 @@ class Derived<T> extends Base<T> {
     //super call with type arguments 
     constructor() {
         super<string>();
->super<string>() : any
->super : any
->super : Base<T>
-> : any
+>super<string>() : void
+>super : typeof Base
 
         super();
 >super() : void
