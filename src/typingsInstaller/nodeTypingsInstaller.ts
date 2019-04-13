@@ -29,13 +29,14 @@ namespace ts.server.typingsInstaller {
     }
 
     /** Used if `--npmLocation` is not passed. */
-    function getDefaultNPMLocation(processName: string) {
+    function getDefaultNPMLocation(processName: string, host: InstallTypingHost): string {
         if (path.basename(processName).indexOf("node") === 0) {
-            return `"${path.join(path.dirname(process.argv[0]), "npm")}"`;
+            const npmPath = path.join(path.dirname(process.argv[0]), "npm");
+            if (host.fileExists(npmPath)) {
+                return `"${npmPath}"`;
+            }
         }
-        else {
-            return "npm";
-        }
+        return "npm";
     }
 
     interface TypesRegistryFile {
@@ -87,7 +88,7 @@ namespace ts.server.typingsInstaller {
                 typesMapLocation ? toPath(typesMapLocation, "", createGetCanonicalFileName(sys.useCaseSensitiveFileNames)) : toPath("typesMap.json", __dirname, createGetCanonicalFileName(sys.useCaseSensitiveFileNames)),
                 throttleLimit,
                 log);
-            this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0]);
+            this.npmPath = npmLocation !== undefined ? npmLocation : getDefaultNPMLocation(process.argv[0], this.installTypingHost);
 
             // If the NPM path contains spaces and isn't wrapped in quotes, do so.
             if (stringContains(this.npmPath, " ") && this.npmPath[0] !== `"`) {
