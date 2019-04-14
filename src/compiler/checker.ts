@@ -540,6 +540,7 @@ namespace ts {
         let flowLoopStart = 0;
         let flowLoopCount = 0;
         let sharedFlowCount = 0;
+        let flowNodeCount = -1;
         let flowAnalysisDisabled = false;
 
         const emptyStringType = getLiteralType("");
@@ -15979,14 +15980,18 @@ namespace ts {
             return resultType;
 
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
-                if (flowDepth === 2000) {
-                    // We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
-                    // and disable further control flow analysis in the containing function or module body.
-                    flowAnalysisDisabled = true;
-                    reportFlowControlError(reference);
+                if (flowDepth === 2000 || flowNodeCount === 500000) {
+                    // We have made 2000 recursive invocations or visited 500000 control flow nodes while analyzing
+                    // the containing function or module body, the limit at which we consider the function or module
+                    // body is too complex and disable further control flow analysis.
+                    if (!flowAnalysisDisabled) {
+                        flowAnalysisDisabled = true;
+                        reportFlowControlError(reference);
+                    }
                     return errorType;
                 }
                 flowDepth++;
+                if (flowNodeCount >= 0) flowNodeCount++;
                 while (true) {
                     const flags = flow.flags;
                     if (flags & FlowFlags.Shared) {
@@ -26026,8 +26031,11 @@ namespace ts {
                 checkGrammarStatementInAmbientContext(node);
             }
             if (isFunctionOrModuleBlock(node)) {
+                const saveFlowNodeCount = flowNodeCount;
                 const saveFlowAnalysisDisabled = flowAnalysisDisabled;
+                flowNodeCount = 0;
                 forEach(node.statements, checkSourceElement);
+                flowNodeCount = saveFlowNodeCount;
                 flowAnalysisDisabled = saveFlowAnalysisDisabled;
             }
             else {
@@ -28861,7 +28869,9 @@ namespace ts {
 
         function checkSourceFile(node: SourceFile) {
             performance.mark("beforeCheck");
+            flowNodeCount = 0;
             checkSourceFileWorker(node);
+            flowNodeCount = -1;
             performance.mark("afterCheck");
             performance.measure("Check", "beforeCheck", "afterCheck");
         }
