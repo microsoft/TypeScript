@@ -1,4 +1,4 @@
-tests/cases/compiler/largeControlFlowGraph.ts(3,1): error TS2563: The containing function or module body is too large for control flow analysis.
+tests/cases/compiler/largeControlFlowGraph.ts(3,1): error TS2563: The containing function or module body is too complex for control flow analysis.
 
 
 ==== tests/cases/compiler/largeControlFlowGraph.ts (1 errors) ====
@@ -6,7 +6,7 @@ tests/cases/compiler/largeControlFlowGraph.ts(3,1): error TS2563: The containing
     // we gracefully handle this, possibly by issuing an error.
     const data = [];
     ~~~~~
-!!! error TS2563: The containing function or module body is too large for control flow analysis.
+!!! error TS2563: The containing function or module body is too complex for control flow analysis.
     data[0] = 0;
     data[0] = 0;
     data[0] = 0;
