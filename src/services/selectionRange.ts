@@ -2,7 +2,7 @@
 namespace ts.SelectionRange {
     const isImport = or(isImportDeclaration, isImportEqualsDeclaration);
 
-    export function getSelectionRange(pos: number, sourceFile: SourceFile): ts.SelectionRange {
+    export function getSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {
         let selectionRange: SelectionRange = {
             textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd())
         };
@@ -10,12 +10,12 @@ namespace ts.SelectionRange {
         // Skip top-level SyntaxList
         let parentNode = sourceFile.getChildAt(0);
         outer: while (true) {
-            const children = parentNode.getChildren(sourceFile);
+            const children = getSelectionChildren(parentNode);
             if (!children.length) break;
             for (let i = 0; i < children.length; i++) {
-                let prevNode: Node | undefined = children[i - 1];
+                const prevNode: Node | undefined = children[i - 1];
                 const node: Node = children[i];
-                let nextNode: Node | undefined = children[i + 1];
+                const nextNode: Node | undefined = children[i + 1];
                 if (node.getStart(sourceFile) > pos) {
                     break outer;
                 }
@@ -28,26 +28,6 @@ namespace ts.SelectionRange {
                     if (isBlock(node) || isTemplateSpan(node) || isTemplateHead(node) || prevNode && isTemplateHead(prevNode)) {
                         parentNode = node;
                         break;
-                    }
-
-                    const siblingExpansionRule = getSiblingExpansionRule(parentNode);
-                    let expansionCandidate: SyntaxKind | [SyntaxKind, SyntaxKind] | undefined;
-                    while ((prevNode || nextNode) && (expansionCandidate = siblingExpansionRule.shift())) {
-                        if (isArray(expansionCandidate)
-                            && prevNode && prevNode.kind === expansionCandidate[0]
-                            && nextNode && nextNode.kind === expansionCandidate[1]) {
-                            pushSelectionRange(prevNode.getStart(), nextNode.getEnd());
-                            prevNode = children[children.indexOf(prevNode) - 1];
-                            nextNode = children[children.indexOf(nextNode) + 1];
-                        }
-                        else if (prevNode && prevNode.kind === expansionCandidate) {
-                            pushSelectionRange(prevNode.getStart(), node.getEnd());
-                            prevNode = children[children.indexOf(prevNode) - 1];
-                        }
-                        else if (nextNode && nextNode.kind === expansionCandidate) {
-                            pushSelectionRange(node.getStart(), nextNode.getEnd());
-                            nextNode = children[children.indexOf(nextNode) + 1];
-                        }
                     }
 
                     // Synthesize a stop for '${ ... }' since '${' and '}' actually belong to siblings.
@@ -74,32 +54,8 @@ namespace ts.SelectionRange {
                     const end = isBetweenMultiLineBraces ? nextNode.getStart() : node.getEnd();
                     pushSelectionRange(start, end, node.kind);
 
-                    // Mapped types _look_ like ObjectTypes with a single member,
-                    // but in fact don’t contain a SyntaxList or a node containing
-                    // the “key/value” pair like ObjectTypes do, but it seems intuitive
-                    // that the selection would snap to those points. The philosophy
-                    // of choosing a selection range is not so much about what the
-                    // syntax currently _is_ as what the syntax might easily become
-                    // if the user is making a selection; e.g., we synthesize a selection
-                    // around the “key/value” pair not because there’s a node there, but
-                    // because it allows the mapped type to become an object type with a
-                    // few keystrokes.
-                    if (isMappedTypeNode(node)) {
-                        const openBraceToken = Debug.assertDefined(node.getFirstToken());
-                        const firstNonBraceToken = Debug.assertDefined(node.getChildAt(1));
-                        const closeBraceToken = Debug.assertDefined(node.getLastToken());
-                        Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
-                        Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
-                        const spanWithoutBraces = [openBraceToken.getEnd(), closeBraceToken.getStart()] as const;
-                        const spanWithoutBracesOrTrivia = [firstNonBraceToken.getStart(), closeBraceToken.getFullStart()] as const;
-                        if (!positionsAreOnSameLine(openBraceToken.getStart(), closeBraceToken.getEnd(), sourceFile)) {
-                            pushSelectionRange(...spanWithoutBraces);
-                        }
-                        pushSelectionRange(...spanWithoutBracesOrTrivia);
-                    }
-
                     // String literals should have a stop both inside and outside their quotes.
-                    else if (isStringLiteral(node) || isTemplateLiteral(node)) {
+                    if (isStringLiteral(node) || isTemplateLiteral(node)) {
                         pushSelectionRange(start + 1, end - 1);
                     }
 
@@ -123,23 +79,49 @@ namespace ts.SelectionRange {
         }
     }
 
-    function getSiblingExpansionRule<T extends Node>(parentNode: T): (SyntaxKind | [SyntaxKind, SyntaxKind])[] {
-        switch (parentNode.kind) {
-            case SyntaxKind.BindingElement: return [SyntaxKind.Identifier, SyntaxKind.DotDotDotToken];
-            case SyntaxKind.Parameter: return [SyntaxKind.Identifier, SyntaxKind.DotDotDotToken, SyntaxKind.QuestionToken];
-            case SyntaxKind.PropertySignature: return [SyntaxKind.Identifier, SyntaxKind.QuestionToken, SyntaxKind.SyntaxList];
-            case SyntaxKind.ElementAccessExpression: return [[SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken]];
-            case SyntaxKind.MappedType: return [
-                SyntaxKind.TypeParameter,
-                [SyntaxKind.OpenBracketToken, SyntaxKind.CloseBracketToken],
-                SyntaxKind.MinusToken,
-                SyntaxKind.PlusToken,
-                SyntaxKind.ReadonlyKeyword,
-                SyntaxKind.MinusToken,
-                SyntaxKind.PlusToken,
+    function getSelectionChildren(node: Node): ReadonlyArray<Node> {
+        // Mapped types _look_ like ObjectTypes with a single member,
+        // but in fact don’t contain a SyntaxList or a node containing
+        // the “key/value” pair like ObjectTypes do, but it seems intuitive
+        // that the selection would snap to those points. The philosophy
+        // of choosing a selection range is not so much about what the
+        // syntax currently _is_ as what the syntax might easily become
+        // if the user is making a selection; e.g., we synthesize a selection
+        // around the “key/value” pair not because there’s a node there, but
+        // because it allows the mapped type to become an object type with a
+        // few keystrokes.
+        if (isMappedTypeNode(node)) {
+            const [openBraceToken, ...children] = node.getChildren();
+            const closeBraceToken = Debug.assertDefined(children.pop());
+            Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
+            Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
+            const colonTokenIndex = findIndex(children, child => child.kind === SyntaxKind.ColonToken);
+            const typeNodeIndex = node.type && children.indexOf(node.type);
+            const leftChildren = children.slice(0, colonTokenIndex);
+            const colonToken = Debug.assertDefined(children[colonTokenIndex]);
+            const rightChildren = children.slice(colonTokenIndex + 1, typeNodeIndex && (typeNodeIndex + 1));
+            // Possible semicolon
+            const extraChildren = typeNodeIndex && typeNodeIndex > -1 ? children.slice(typeNodeIndex + 1) : [];
+            const syntaxList = createSyntaxList([
+                createSyntaxList(leftChildren),
+                colonToken,
+                createSyntaxList(rightChildren),
+                createSyntaxList(extraChildren),
+            ]);
+            return [
+                openBraceToken,
+                syntaxList,
+                closeBraceToken,
             ];
-            default: return [];
         }
+        return node.getChildren();
+    }
+
+    function createSyntaxList(children: Node[]): SyntaxList {
+        Debug.assertGreaterThanOrEqual(children.length, 1);
+        const syntaxList = createNode(SyntaxKind.SyntaxList, children[0].pos, last(children).end) as SyntaxList;
+        syntaxList._children = children;
+        return syntaxList;
     }
 
     function getGroupBounds<T>(array: ArrayLike<T>, index: number, predicate: (element: T) => boolean): [number, number] {

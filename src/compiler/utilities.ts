@@ -7624,6 +7624,7 @@ namespace ts {
         return root + pathComponents.slice(1).join(directorySeparator);
     }
 
+
 }
 
 /* @internal */
