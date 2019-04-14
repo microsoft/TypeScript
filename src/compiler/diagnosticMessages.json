@@ -2044,7 +2044,7 @@
         "category": "Error",
         "code": 2562
     },
-    "The containing function or module body is too large for control flow analysis.": {
+    "The containing function or module body is too complex for control flow analysis.": {
         "category": "Error",
         "code": 2563
     },

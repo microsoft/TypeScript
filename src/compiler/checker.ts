@@ -15954,7 +15954,7 @@ namespace ts {
             const block = <Block | ModuleBlock | SourceFile>findAncestor(node, isFunctionOrModuleBlock);
             const sourceFile = getSourceFileOfNode(node);
             const span = getSpanOfTokenAtPosition(sourceFile, block.statements.pos);
-            diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_large_for_control_flow_analysis));
+            diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_complex_for_control_flow_analysis));
         }
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
