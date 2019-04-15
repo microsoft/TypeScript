@@ -191,35 +191,37 @@ type X<T, P> = IsExactlyAny<P> extends true ? T : ({ [K in keyof P]: IsExactlyAn
             ]);
         });
 
-        it.skip("works for object types", () => {
+        it("works for object types", () => {
             const getSelectionRange = setup("/file.js", `
 type X = {
     foo?: string;
     readonly bar: { x: number };
+    meh
 }`);
             const locations = getSelectionRange([
                 { line: 3, offset: 5 },
                 { line: 4, offset: 5 },
                 { line: 4, offset: 14 },
                 { line: 4, offset: 27 },
+                { line: 5, offset: 5 },
             ]);
 
             const allMembersUp: protocol.SelectionRange = {
                 textSpan: { // all members + whitespace (just inside braces)
                     start: { line: 2, offset: 11 },
-                    end: { line: 5, offset: 1 } },
+                    end: { line: 6, offset: 1 } },
                 parent: {
                     textSpan: { // add braces
                         start: { line: 2, offset: 10 },
-                        end: { line: 5, offset: 2 } },
+                        end: { line: 6, offset: 2 } },
                     parent: {
                         textSpan: { // whole TypeAliasDeclaration
                             start: { line: 2, offset: 1 },
-                            end: { line: 5, offset: 2 } },
+                            end: { line: 6, offset: 2 } },
                         parent: {
                             textSpan: { // SourceFile
                                 start: { line: 1, offset: 1 },
-                                end: { line: 5, offset: 2 } } } } } };
+                                end: { line: 6, offset: 2 } } } } } };
 
             const readonlyBarUp: protocol.SelectionRange = {
                 textSpan: { // readonly bar
@@ -270,6 +272,12 @@ type X = {
                             start: { line: 4, offset: 19 },
                             end: { line: 4, offset: 32 } },
                         parent: readonlyBarUp.parent } } });
+
+            assert.deepEqual(locations![4], {
+                textSpan: { // meh
+                    start: { line: 5, offset: 5 },
+                    end: { line: 5, offset: 8 } },
+                parent: allMembersUp });
         });
 
         it("works for string literals and template strings", () => {
@@ -355,7 +363,7 @@ console.log(1);`);
             ]);
         });
 
-        it.skip("works for complex mapped types", () => {
+        it("works for complex mapped types", () => {
             const getSelectionRange = setup("/file.ts", `
 type M = { -readonly [K in keyof any]-?: any };`);
 
@@ -368,38 +376,99 @@ type M = { -readonly [K in keyof any]-?: any };`);
                 { line: 2, offset: 39 }, // ?
             ]);
 
+            const leftOfColonUp: protocol.SelectionRange = {
+                textSpan: { // -readonly [K in keyof any]-?
+                    start: { line: 2, offset: 12 },
+                    end: { line: 2, offset: 40 } },
+                parent: {
+                    textSpan: { // -readonly [K in keyof any]-?: any
+                        start: { line: 2, offset: 12 },
+                        end: { line: 2, offset: 45 } },
+                    parent: {
+                        textSpan: { // { -readonly [K in keyof any]-?: any }
+                            start: { line: 2, offset: 10 },
+                            end: { line: 2, offset: 47 } },
+                        parent: {
+                            textSpan: { // whole line
+                                start: { line: 2, offset: 1 },
+                                end: { line: 2, offset: 48 } },
+                            parent: {
+                                textSpan: { // SourceFile
+                                    start: { line: 1, offset: 1 },
+                                    end: { line: 2, offset: 48 } } } } } } };
+
             assert.deepEqual(locations![0], {
-                textSpan: { // -
+                textSpan: { // - (in -readonly)
                     start: { line: 2, offset: 12 },
                     end: { line: 2, offset: 13 } },
                 parent: {
                     textSpan: { // -readonly
                         start: { line: 2, offset: 12 },
                         end: { line: 2, offset: 21 } },
+                    parent: leftOfColonUp },
+            });
+
+            assert.deepEqual(locations![1], {
+                textSpan: { // readonly
+                    start: { line: 2, offset: 13 },
+                    end: { line: 2, offset: 21 } },
+                parent: {
+                    textSpan: { // -readonly
+                        start: { line: 2, offset: 12 },
+                        end: { line: 2, offset: 21 } },
+                    parent: leftOfColonUp },
+            });
+
+            assert.deepEqual(locations![2], {
+                textSpan: { // [
+                    start: { line: 2, offset: 22 },
+                    end: { line: 2, offset: 23 } },
+                parent: {
+                    textSpan: { // [K in keyof any]
+                        start: { line: 2, offset: 22 },
+                        end: { line: 2, offset: 38 } },
+                    parent: leftOfColonUp }
+            });
+
+            assert.deepEqual(locations![3], {
+                textSpan: { // keyof
+                    start: { line: 2, offset: 28 },
+                    end: { line: 2, offset: 33 } },
+                parent: {
+                    textSpan: { // keyof any
+                        start: { line: 2, offset: 28 },
+                        end: { line: 2, offset: 37 } },
                     parent: {
-                        textSpan: { // -readonly [K in keyof any]
-                            start: { line: 2, offset: 12 },
-                            end: { line: 2, offset: 38 } },
+                        textSpan: { // K in keyof any
+                            start: { line: 2, offset: 23 },
+                            end: { line: 2, offset: 37 } },
                         parent: {
-                            textSpan: { // -readonly [K in keyof any]-?
-                                start: { line: 2, offset: 12 },
-                                end: { line: 2, offset: 40 } },
-                            parent: {
-                                textSpan: { // -readonly [K in keyof any]-?: any
-                                    start: { line: 2, offset: 12 },
-                                    end: { line: 2, offset: 45 } },
-                                parent: {
-                                    textSpan: { // { -readonly [K in keyof any]-?: any }
-                                        start: { line: 2, offset: 10 },
-                                        end: { line: 2, offset: 47 } },
-                                    parent: {
-                                        textSpan: { // whole line
-                                            start: { line: 2, offset: 1 },
-                                            end: { line: 2, offset: 48 } },
-                                        parent: {
-                                            textSpan: { // SourceFile
-                                                start: { line: 1, offset: 1 },
-                                                end: { line: 2, offset: 48 } } } } } } } } }
+                            textSpan: { // [K in keyof any]
+                                start: { line: 2, offset: 22 },
+                                end: { line: 2, offset: 38 } },
+                            parent: leftOfColonUp } } },
+            });
+
+            assert.deepEqual(locations![4], {
+                textSpan: { // - (in -?)
+                    start: { line: 2, offset: 38 },
+                    end: { line: 2, offset: 39 } },
+                parent: {
+                    textSpan: { // -?
+                        start: { line: 2, offset: 38 },
+                        end: { line: 2, offset: 40 } },
+                    parent: leftOfColonUp },
+            });
+
+            assert.deepEqual(locations![5], {
+                textSpan: { // ?
+                    start: { line: 2, offset: 39 },
+                    end: { line: 2, offset: 40 } },
+                parent: {
+                    textSpan: { // -?
+                        start: { line: 2, offset: 38 },
+                        end: { line: 2, offset: 40 } },
+                    parent: leftOfColonUp },
             });
         });
     });
