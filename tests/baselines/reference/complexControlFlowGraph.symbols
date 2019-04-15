@@ -1,0 +1,839 @@
+=== tests/cases/compiler/complexControlFlowGraph.ts ===
+// Repro from #29926
+
+const foo = function (this: any) {
+>foo : Symbol(foo, Decl(complexControlFlowGraph.ts, 2, 5))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+  var a, b, c, d, ab, bc, cd, da, blocks = this.blocks;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+  if (this.first) {
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+    a = blocks[0] - 1;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+    a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+    d = ((a & 0xefcdab89) | (~a & 0x98badcfe)) + blocks[1] + 271733878;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+    d = (d << 7) | (d >>> 25);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+    c = ((d & a) | (~d & 0xefcdab89)) + blocks[2] - 1732584194;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+    c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+    b = ((c & d) | (~c & a)) + blocks[3] - 271733879;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+    b = (b << 19) | (b >>> 13);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  } else {
+    a = this.h0;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+    b = this.h1;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+    c = this.h2;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+    d = this.h3;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+    a += ((b & c) | (~b & d)) + blocks[0];
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+    a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+    d += ((a & b) | (~a & c)) + blocks[1];
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+    d = (d << 7) | (d >>> 25);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+    c += ((d & a) | (~d & b)) + blocks[2];
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+    c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+    b += ((c & d) | (~c & a)) + blocks[3];
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+    b = (b << 19) | (b >>> 13);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+  }
+  
+  a += ((b & c) | (~b & d)) + blocks[4];
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  d += ((a & b) | (~a & c)) + blocks[5];
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 7) | (d >>> 25);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  c += ((d & a) | (~d & b)) + blocks[6];
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  b += ((c & d) | (~c & a)) + blocks[7];
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 19) | (b >>> 13);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  a += ((b & c) | (~b & d)) + blocks[8];
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  d += ((a & b) | (~a & c)) + blocks[9];
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 7) | (d >>> 25);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  c += ((d & a) | (~d & b)) + blocks[10];
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  b += ((c & d) | (~c & a)) + blocks[11];
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 19) | (b >>> 13);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  a += ((b & c) | (~b & d)) + blocks[12];
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  d += ((a & b) | (~a & c)) + blocks[13];
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 7) | (d >>> 25);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  c += ((d & a) | (~d & b)) + blocks[14];
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  b += ((c & d) | (~c & a)) + blocks[15];
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 19) | (b >>> 13);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  bc = b & c;
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  a += (bc | (b & d) | (c & d)) + blocks[0] + 1518500249;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  ab = a & b;
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  d += (ab | (a & c) | bc) + blocks[4] + 1518500249;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 5) | (d >>> 27);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  da = d & a;
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  c += (da | (d & b) | ab) + blocks[8] + 1518500249;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 9) | (c >>> 23);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  cd = c & d;
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  b += (cd | (c & a) | da) + blocks[12] + 1518500249;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 13) | (b >>> 19);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  bc = b & c;
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  a += (bc | (b & d) | cd) + blocks[1] + 1518500249;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  ab = a & b;
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  d += (ab | (a & c) | bc) + blocks[5] + 1518500249;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 5) | (d >>> 27);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  da = d & a;
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  c += (da | (d & b) | ab) + blocks[9] + 1518500249;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 9) | (c >>> 23);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  cd = c & d;
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  b += (cd | (c & a) | da) + blocks[13] + 1518500249;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 13) | (b >>> 19);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  bc = b & c;
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  a += (bc | (b & d) | cd) + blocks[2] + 1518500249;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  ab = a & b;
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  d += (ab | (a & c) | bc) + blocks[6] + 1518500249;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 5) | (d >>> 27);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  da = d & a;
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  c += (da | (d & b) | ab) + blocks[10] + 1518500249;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 9) | (c >>> 23);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  cd = c & d;
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  b += (cd | (c & a) | da) + blocks[14] + 1518500249;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 13) | (b >>> 19);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  bc = b & c;
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  a += (bc | (b & d) | cd) + blocks[3] + 1518500249;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>cd : Symbol(cd, Decl(complexControlFlowGraph.ts, 3, 25))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  ab = a & b;
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  d += (ab | (a & c) | bc) + blocks[7] + 1518500249;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 5) | (d >>> 27);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  da = d & a;
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  c += (da | (d & b) | ab) + blocks[11] + 1518500249;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>ab : Symbol(ab, Decl(complexControlFlowGraph.ts, 3, 17))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 9) | (c >>> 23);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  b += ((c & d) | (c & a) | da) + blocks[15] + 1518500249;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 13) | (b >>> 19);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  bc = b ^ c;
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  a += (bc ^ d) + blocks[0] + 1859775393;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  d += (bc ^ a) + blocks[8] + 1859775393;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 9) | (d >>> 23);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  da = d ^ a;
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  c += (da ^ b) + blocks[4] + 1859775393;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  b += (da ^ c) + blocks[12] + 1859775393;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 15) | (b >>> 17);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  bc = b ^ c;
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  a += (bc ^ d) + blocks[2] + 1859775393;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  d += (bc ^ a) + blocks[10] + 1859775393;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 9) | (d >>> 23);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  da = d ^ a;
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  c += (da ^ b) + blocks[6] + 1859775393;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  b += (da ^ c) + blocks[14] + 1859775393;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 15) | (b >>> 17);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  bc = b ^ c;
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  a += (bc ^ d) + blocks[1] + 1859775393;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  d += (bc ^ a) + blocks[9] + 1859775393;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 9) | (d >>> 23);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  da = d ^ a;
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  c += (da ^ b) + blocks[5] + 1859775393;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  b += (da ^ c) + blocks[13] + 1859775393;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 15) | (b >>> 17);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  bc = b ^ c;
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  a += (bc ^ d) + blocks[3] + 1859775393;
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  a = (a << 3) | (a >>> 29);
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  d += (bc ^ a) + blocks[11] + 1859775393;
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>bc : Symbol(bc, Decl(complexControlFlowGraph.ts, 3, 21))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  d = (d << 9) | (d >>> 23);
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+  da = d ^ a;
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+  c += (da ^ b) + blocks[7] + 1859775393;
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  c = (c << 11) | (c >>> 21);
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+  b += (da ^ c) + blocks[15] + 1859775393;
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>da : Symbol(da, Decl(complexControlFlowGraph.ts, 3, 29))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+>blocks : Symbol(blocks, Decl(complexControlFlowGraph.ts, 3, 33))
+
+  b = (b << 15) | (b >>> 17);
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+  if (this.first) {
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+    this.h0 = a + 1732584193 << 0;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+    this.h1 = b - 271733879 << 0;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+    this.h2 = c - 1732584194 << 0;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+    this.h3 = d + 271733878 << 0;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+
+    this.first = false;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+
+  } else {
+    this.h0 = this.h0 + a << 0;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>a : Symbol(a, Decl(complexControlFlowGraph.ts, 3, 5))
+
+    this.h1 = this.h1 + b << 0;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>b : Symbol(b, Decl(complexControlFlowGraph.ts, 3, 8))
+
+    this.h2 = this.h2 + c << 0;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>c : Symbol(c, Decl(complexControlFlowGraph.ts, 3, 11))
+
+    this.h3 = this.h3 + d << 0;
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>this : Symbol(this, Decl(complexControlFlowGraph.ts, 2, 22))
+>d : Symbol(d, Decl(complexControlFlowGraph.ts, 3, 14))
+  }
+};
+
