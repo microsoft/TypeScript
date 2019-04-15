@@ -1,0 +1,42 @@
+=== tests/cases/compiler/objectFromEntries.ts ===
+const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
+>o : any
+>Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]) : any
+>Object.fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>Object : ObjectConstructor
+>fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>[['a', 1], ['b', 2], ['c', 3]] : [string, number][]
+>['a', 1] : [string, number]
+>'a' : "a"
+>1 : 1
+>['b', 2] : [string, number]
+>'b' : "b"
+>2 : 2
+>['c', 3] : [string, number]
+>'c' : "c"
+>3 : 3
+
+const o2 = Object.fromEntries(new URLSearchParams());
+>o2 : any
+>Object.fromEntries(new URLSearchParams()) : any
+>Object.fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>Object : ObjectConstructor
+>fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>new URLSearchParams() : URLSearchParams
+>URLSearchParams : { new (init?: string | URLSearchParams | string[][] | Record<string, string>): URLSearchParams; prototype: URLSearchParams; }
+
+const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
+>o3 : any
+>Object.fromEntries(new Map([[Symbol("key"), "value"]])) : any
+>Object.fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>Object : ObjectConstructor
+>fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>new Map([[Symbol("key"), "value"]]) : Map<symbol, string>
+>Map : MapConstructor
+>[[Symbol("key"), "value"]] : [symbol, string][]
+>[Symbol("key"), "value"] : [symbol, string]
+>Symbol("key") : symbol
+>Symbol : SymbolConstructor
+>"key" : "key"
+>"value" : "value"
+

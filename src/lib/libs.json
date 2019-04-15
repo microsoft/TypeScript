@@ -35,6 +35,7 @@
         "es2018.promise",
         "es2018.intl",
         "es2019.array",
+        "es2019.object",
         "es2019.string",
         "es2019.symbol",
         "esnext.bigint",
