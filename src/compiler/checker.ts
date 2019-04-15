@@ -23777,7 +23777,7 @@ namespace ts {
             else if (node.transformFlags & TransformFlags.ContainsEitherNumberLiterals) {
                 const flags = node.transformFlags & TransformFlags.ContainsEitherNumberLiterals;
                 if (flags === TransformFlags.ContainsEitherNumberLiterals) {
-                    return errorType;
+                    return bigintType; // Return `bigintType` when both literals are present, since the errorType is just going to remove completions for dependent statements
                 }
                 if (flags === TransformFlags.ContainsNumberLiteral) {
                     return numberType;

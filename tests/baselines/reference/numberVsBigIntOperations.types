@@ -203,10 +203,10 @@ bigInt = 1n - 2n; num = 1 - 2; 1 - 2n; 1n - 2;
 >1 - 2 : number
 >1 : 1
 >2 : 2
->1 - 2n : any
+>1 - 2n : bigint
 >1 : 1
 >2n : 2n
->1n - 2 : any
+>1n - 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -221,10 +221,10 @@ bigInt = 1n * 2n; num = 1 * 2; 1 * 2n; 1n * 2;
 >1 * 2 : number
 >1 : 1
 >2 : 2
->1 * 2n : any
+>1 * 2n : bigint
 >1 : 1
 >2n : 2n
->1n * 2 : any
+>1n * 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -239,10 +239,10 @@ bigInt = 1n / 2n; num = 1 / 2; 1 / 2n; 1n / 2;
 >1 / 2 : number
 >1 : 1
 >2 : 2
->1 / 2n : any
+>1 / 2n : bigint
 >1 : 1
 >2n : 2n
->1n / 2 : any
+>1n / 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -257,10 +257,10 @@ bigInt = 1n % 2n; num = 1 % 2; 1 % 2n; 1n % 2;
 >1 % 2 : number
 >1 : 1
 >2 : 2
->1 % 2n : any
+>1 % 2n : bigint
 >1 : 1
 >2n : 2n
->1n % 2 : any
+>1n % 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -275,10 +275,10 @@ bigInt = 1n ** 2n; num = 1 ** 2; 1 ** 2n; 1n ** 2;
 >1 ** 2 : number
 >1 : 1
 >2 : 2
->1 ** 2n : any
+>1 ** 2n : bigint
 >1 : 1
 >2n : 2n
->1n ** 2 : any
+>1n ** 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -293,10 +293,10 @@ bigInt = 1n & 2n; num = 1 & 2; 1 & 2n; 1n & 2;
 >1 & 2 : number
 >1 : 1
 >2 : 2
->1 & 2n : any
+>1 & 2n : bigint
 >1 : 1
 >2n : 2n
->1n & 2 : any
+>1n & 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -311,10 +311,10 @@ bigInt = 1n | 2n; num = 1 | 2; 1 | 2n; 1n | 2;
 >1 | 2 : number
 >1 : 1
 >2 : 2
->1 | 2n : any
+>1 | 2n : bigint
 >1 : 1
 >2n : 2n
->1n | 2 : any
+>1n | 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -329,10 +329,10 @@ bigInt = 1n ^ 2n; num = 1 ^ 2; 1 ^ 2n; 1n ^ 2;
 >1 ^ 2 : number
 >1 : 1
 >2 : 2
->1 ^ 2n : any
+>1 ^ 2n : bigint
 >1 : 1
 >2n : 2n
->1n ^ 2 : any
+>1n ^ 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -347,10 +347,10 @@ bigInt = 1n << 2n; num = 1 << 2; 1 << 2n; 1n << 2;
 >1 << 2 : number
 >1 : 1
 >2 : 2
->1 << 2n : any
+>1 << 2n : bigint
 >1 : 1
 >2n : 2n
->1n << 2 : any
+>1n << 2 : bigint
 >1n : 1n
 >2 : 2
 
@@ -365,10 +365,10 @@ bigInt = 1n >> 2n; num = 1 >> 2; 1 >> 2n; 1n >> 2;
 >1 >> 2 : number
 >1 : 1
 >2 : 2
->1 >> 2n : any
+>1 >> 2n : bigint
 >1 : 1
 >2n : 2n
->1n >> 2 : any
+>1n >> 2 : bigint
 >1n : 1n
 >2 : 2
 
