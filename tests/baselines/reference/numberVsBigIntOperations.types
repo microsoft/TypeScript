@@ -565,10 +565,10 @@ num = "3" & 5; num = 2 ** false; // should error, but infer number
 >false : false
 
 "3" & 5n; 2n ** false; // should error, result in any
->"3" & 5n : any
+>"3" & 5n : bigint
 >"3" : "3"
 >5n : 5n
->2n ** false : any
+>2n ** false : bigint
 >2n : 2n
 >false : false
 

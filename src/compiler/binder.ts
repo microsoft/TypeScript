@@ -3163,7 +3163,19 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES2016;
         }
 
-        node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
+        let optimizationFlags: TransformFlags = 0;
+        if (isNumericArithmeticOperator(operatorTokenKind)) {
+            const lhs = skipOuterExpressions(node.left);
+            const rhs = skipOuterExpressions(node.right);
+            if (lhs.kind === SyntaxKind.NumericLiteral || rhs.kind === SyntaxKind.NumericLiteral || lhs.transformFlags & TransformFlags.ContainsNumberLiteral || rhs.transformFlags & TransformFlags.ContainsNumberLiteral) {
+                optimizationFlags |= TransformFlags.ContainsNumberLiteral;
+            }
+            if (lhs.kind === SyntaxKind.BigIntLiteral || rhs.kind === SyntaxKind.BigIntLiteral || lhs.transformFlags & TransformFlags.ContainsBigIntLiteral || rhs.transformFlags & TransformFlags.ContainsBigIntLiteral) {
+                optimizationFlags |= TransformFlags.ContainsBigIntLiteral;
+            }
+        }
+
+        node.transformFlags = transformFlags | optimizationFlags | TransformFlags.HasComputedFlags;
         return transformFlags & ~TransformFlags.NodeExcludes;
     }
 

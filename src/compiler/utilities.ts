@@ -3900,6 +3900,11 @@ namespace ts {
             || token === SyntaxKind.ExclamationToken;
     }
 
+    // This does not include `+` since that is also used for string concatenation
+    export function isNumericArithmeticOperator(token: SyntaxKind): boolean {
+        return token >= SyntaxKind.FirstNumericArithmeticOperator && token <= SyntaxKind.LastNumericArithmeticOperator;
+    }
+
     export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }

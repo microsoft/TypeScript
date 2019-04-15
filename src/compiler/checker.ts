@@ -23772,6 +23772,18 @@ namespace ts {
             else if (isAssertionExpression(expr) && !isConstTypeReference(expr.type)) {
                 return getTypeFromTypeNode((<TypeAssertion>expr).type);
             }
+            else if (node.transformFlags & TransformFlags.ContainsEitherNumberLiterals) {
+                const flags = node.transformFlags & TransformFlags.ContainsEitherNumberLiterals;
+                if (flags === TransformFlags.ContainsEitherNumberLiterals) {
+                    return errorType;
+                }
+                if (flags === TransformFlags.ContainsNumberLiteral) {
+                    return numberType;
+                }
+                if (flags === TransformFlags.ContainsBigIntLiteral) {
+                    return bigintType;
+                }
+            }
             // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
             // should have a parameter that indicates whether full error checking is required such that
             // we can perform the optimizations locally.

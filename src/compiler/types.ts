@@ -513,6 +513,8 @@ namespace ts {
         LastJSDocTagNode = JSDocPropertyTag,
         /* @internal */ FirstContextualKeyword = AbstractKeyword,
         /* @internal */ LastContextualKeyword = OfKeyword,
+        /* @internal */ FirstNumericArithmeticOperator = MinusToken,
+        /* @internal */ LastNumericArithmeticOperator = TildeToken,
     }
 
     export const enum NodeFlags {
@@ -5155,6 +5157,10 @@ namespace ts {
         ContainsHoistedDeclarationOrCompletion = 1 << 18,
         ContainsDynamicImport = 1 << 19,
 
+        // Control Flow Optimization Markers
+        ContainsBigIntLiteral = 1 << 20,
+        ContainsNumberLiteral = 1 << 21,
+
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
         // It is a good reminder of how much room we have left
@@ -5200,6 +5206,7 @@ namespace ts {
 
         // Masks
         // - Additional bitmasks
+        ContainsEitherNumberLiterals = ContainsBigIntLiteral | ContainsNumberLiteral,
     }
 
     export interface SourceMapRange extends TextRange {
