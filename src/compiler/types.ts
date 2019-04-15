@@ -181,6 +181,7 @@ namespace ts {
         QuestionToken,
         ColonToken,
         AtToken,
+        // BacktickToken, // TODO: Sure would be nice! But only JSDoc would use it, which would be super confusing
         // Assignments
         EqualsToken,
         PlusEqualsToken,

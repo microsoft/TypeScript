@@ -2093,14 +2093,7 @@ namespace ts {
                 case CharacterCodes.dot:
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.backtick:
-                    if (pos < end && text.charCodeAt(pos) !== CharacterCodes.backtick && text.charCodeAt(pos) !== CharacterCodes.carriageReturn && text.charCodeAt(pos) !== CharacterCodes.lineFeed) {
-                        while (pos < end && text.charCodeAt(pos) !== CharacterCodes.backtick) {
-                            pos++;
-                        }
-                        tokenValue = text.substring(tokenPos + 1, pos);
-                        pos++;
-                        return token = SyntaxKind.NoSubstitutionTemplateLiteral;
-                    }
+                    return token = SyntaxKind.NoSubstitutionTemplateLiteral;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

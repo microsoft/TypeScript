@@ -6337,7 +6337,14 @@ namespace ts {
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
                 if (!mayOmitBraces || hasBrace) {
-                    parseExpected(SyntaxKind.CloseBraceToken);
+                    // parseExpected(SyntaxKind.CloseBraceToken); // TODO: need a parseExpectedJSDoc (and rename -> parseOptionalJSDoc)
+                    if (token() === SyntaxKind.CloseBraceToken) {
+                        nextJSDocToken();
+                    }
+                    else {
+                        parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(SyntaxKind.CloseBraceToken));
+                    }
+
                 }
 
                 fixupParentReferences(result);
@@ -6722,13 +6729,17 @@ namespace ts {
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
-                    if (token() === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                        // a markdown-quoted name: `arg` is not legal jsdoc, but occurs in the wild
-                        return { name: createIdentifier(/*isIdentifier*/ true), isBracketed: false };
-                    }
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
-                    const isBracketed = parseOptional(SyntaxKind.OpenBracketToken);
+                    const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
+                    if (isBracketed) {
+                        skipWhitespace();
+                    }
+                    // a markdown-quoted name: `arg` is not legal jsdoc, but occurs in the wild
+                    const isBackquoted = parseOptionalJsdoc(SyntaxKind.NoSubstitutionTemplateLiteral);
                     const name = parseJSDocEntityName();
+                    if (isBackquoted) {
+                        parseExpectedToken(SyntaxKind.NoSubstitutionTemplateLiteral);
+                    }
                     if (isBracketed) {
                         skipWhitespace();
 
@@ -7101,10 +7112,6 @@ namespace ts {
                     return result;
                 }
 
-                function nextJSDocToken(): JsDocSyntaxKind {
-                    return currentToken = scanner.scanJSDocToken();
-                }
-
                 function parseOptionalJsdoc(t: JsDocSyntaxKind): boolean {
                     if (token() === t) {
                         nextJSDocToken();
@@ -7145,6 +7152,10 @@ namespace ts {
                     nextJSDocToken();
                     return result;
                 }
+            }
+
+            function nextJSDocToken(): JsDocSyntaxKind {
+                return currentToken = scanner.scanJSDocToken();
             }
         }
     }
