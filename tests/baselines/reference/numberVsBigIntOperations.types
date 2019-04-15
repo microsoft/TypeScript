@@ -38,10 +38,10 @@ bigInt -= 1n; bigInt -= 2; num -= 1n; num -= 2;
 >bigInt -= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt -= 2 : any
+>bigInt -= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num -= 1n : any
+>num -= 1n : bigint
 >num : number
 >1n : 1n
 >num -= 2 : number
@@ -52,10 +52,10 @@ bigInt *= 1n; bigInt *= 2; num *= 1n; num *= 2;
 >bigInt *= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt *= 2 : any
+>bigInt *= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num *= 1n : any
+>num *= 1n : bigint
 >num : number
 >1n : 1n
 >num *= 2 : number
@@ -66,10 +66,10 @@ bigInt /= 1n; bigInt /= 2; num /= 1n; num /= 2;
 >bigInt /= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt /= 2 : any
+>bigInt /= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num /= 1n : any
+>num /= 1n : bigint
 >num : number
 >1n : 1n
 >num /= 2 : number
@@ -80,10 +80,10 @@ bigInt %= 1n; bigInt %= 2; num %= 1n; num %= 2;
 >bigInt %= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt %= 2 : any
+>bigInt %= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num %= 1n : any
+>num %= 1n : bigint
 >num : number
 >1n : 1n
 >num %= 2 : number
@@ -94,10 +94,10 @@ bigInt **= 1n; bigInt **= 2; num **= 1n; num **= 2;
 >bigInt **= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt **= 2 : any
+>bigInt **= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num **= 1n : any
+>num **= 1n : bigint
 >num : number
 >1n : 1n
 >num **= 2 : number
@@ -108,10 +108,10 @@ bigInt <<= 1n; bigInt <<= 2; num <<= 1n; num <<= 2;
 >bigInt <<= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt <<= 2 : any
+>bigInt <<= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num <<= 1n : any
+>num <<= 1n : bigint
 >num : number
 >1n : 1n
 >num <<= 2 : number
@@ -122,10 +122,10 @@ bigInt >>= 1n; bigInt >>= 2; num >>= 1n; num >>= 2;
 >bigInt >>= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt >>= 2 : any
+>bigInt >>= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num >>= 1n : any
+>num >>= 1n : bigint
 >num : number
 >1n : 1n
 >num >>= 2 : number
@@ -136,10 +136,10 @@ bigInt &= 1n; bigInt &= 2; num &= 1n; num &= 2;
 >bigInt &= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt &= 2 : any
+>bigInt &= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num &= 1n : any
+>num &= 1n : bigint
 >num : number
 >1n : 1n
 >num &= 2 : number
@@ -150,10 +150,10 @@ bigInt ^= 1n; bigInt ^= 2; num ^= 1n; num ^= 2;
 >bigInt ^= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt ^= 2 : any
+>bigInt ^= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num ^= 1n : any
+>num ^= 1n : bigint
 >num : number
 >1n : 1n
 >num ^= 2 : number
@@ -164,10 +164,10 @@ bigInt |= 1n; bigInt |= 2; num |= 1n; num |= 2;
 >bigInt |= 1n : bigint
 >bigInt : bigint
 >1n : 1n
->bigInt |= 2 : any
+>bigInt |= 2 : bigint
 >bigInt : bigint
 >2 : 2
->num |= 1n : any
+>num |= 1n : bigint
 >num : number
 >1n : 1n
 >num |= 2 : number
@@ -591,7 +591,7 @@ bigIntOrNumber + bigIntOrNumber; // should error, result in any
 >bigIntOrNumber : number | bigint
 
 bigIntOrNumber << bigIntOrNumber; // should error, result in any
->bigIntOrNumber << bigIntOrNumber : any
+>bigIntOrNumber << bigIntOrNumber : bigint
 >bigIntOrNumber : number | bigint
 >bigIntOrNumber : number | bigint
 

@@ -23146,6 +23146,7 @@ namespace ts {
                         const leftOk = checkArithmeticOperandType(left, leftType, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type);
                         const rightOk = checkArithmeticOperandType(right, rightType, Diagnostics.The_right_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type);
                         let resultType: Type;
+                        let skipAssignmentError = false;
                         // If both are any or unknown, allow operation; assume it will resolve to number
                         if ((isTypeAssignableToKind(leftType, TypeFlags.AnyOrUnknown) && isTypeAssignableToKind(rightType, TypeFlags.AnyOrUnknown)) ||
                             // Or, if neither could be bigint, implicit coercion results in a number result
@@ -23164,9 +23165,10 @@ namespace ts {
                         }
                         else {
                             reportOperatorError();
-                            resultType = errorType;
+                            resultType = bigintType;
+                            skipAssignmentError = true;
                         }
-                        if (leftOk && rightOk) {
+                        if (leftOk && rightOk && !skipAssignmentError) {
                             checkAssignmentOperator(resultType);
                         }
                         return resultType;
