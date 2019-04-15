@@ -541,7 +541,7 @@ namespace ts {
         let flowLoopCount = 0;
         let sharedFlowCount = 0;
         let flowNodeCount = -1;
-        let flowAnalysisDisabled = false;
+        let flowAnalysisErrors = false;
 
         const emptyStringType = getLiteralType("");
         const zeroType = getLiteralType(0);
@@ -15950,17 +15950,14 @@ namespace ts {
             return false;
         }
 
-        function reportFlowControlError(node: Node) {
-            const block = <Block | ModuleBlock | SourceFile>findAncestor(node, isFunctionOrModuleBlock);
-            const sourceFile = getSourceFileOfNode(node);
-            const span = getSpanOfTokenAtPosition(sourceFile, block.statements.pos);
-            diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_complex_for_control_flow_analysis));
+        function getContainingBlock(node: Node) {
+            return <Block | ModuleBlock | SourceFile>findAncestor(node, isFunctionOrModuleBlock);
         }
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string | undefined;
             let flowDepth = 0;
-            if (flowAnalysisDisabled) {
+            if (flowAnalysisErrors && getNodeLinks(getContainingBlock(reference)).flags & NodeCheckFlags.FlowAnalysisError) {
                 return errorType;
             }
             if (!reference.flowNode || !couldBeUninitialized && !(declaredType.flags & TypeFlags.Narrowable)) {
@@ -15984,9 +15981,14 @@ namespace ts {
                     // We have made 2000 recursive invocations or visited 500000 control flow nodes while analyzing
                     // the containing function or module body, the limit at which we consider the function or module
                     // body is too complex and disable further control flow analysis.
-                    if (!flowAnalysisDisabled) {
-                        flowAnalysisDisabled = true;
-                        reportFlowControlError(reference);
+                    const block = getContainingBlock(reference);
+                    const nodeLinks = getNodeLinks(block);
+                    if (!(nodeLinks.flags & NodeCheckFlags.FlowAnalysisError)) {
+                        nodeLinks.flags |= NodeCheckFlags.FlowAnalysisError;
+                        const sourceFile = getSourceFileOfNode(block);
+                        const span = getSpanOfTokenAtPosition(sourceFile, block.statements.pos);
+                        diagnostics.add(createFileDiagnostic(sourceFile, span.start, span.length, Diagnostics.The_containing_function_or_module_body_is_too_complex_for_control_flow_analysis));
+                        flowAnalysisErrors = true;
                     }
                     return errorType;
                 }
@@ -26032,11 +26034,9 @@ namespace ts {
             }
             if (isFunctionOrModuleBlock(node)) {
                 const saveFlowNodeCount = flowNodeCount;
-                const saveFlowAnalysisDisabled = flowAnalysisDisabled;
                 flowNodeCount = 0;
                 forEach(node.statements, checkSourceElement);
                 flowNodeCount = saveFlowNodeCount;
-                flowAnalysisDisabled = saveFlowAnalysisDisabled;
             }
             else {
                 forEach(node.statements, checkSourceElement);
