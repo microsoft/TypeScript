@@ -811,11 +811,6 @@ namespace ts {
                 }
             }
 
-            // Mark seen emitted files if there are pending files to be emitted
-            if (state.affectedFilesPendingEmit && state.program !== affected) {
-                (state.seenEmittedFiles || (state.seenEmittedFiles = createMap())).set((affected as SourceFile).path, true);
-            }
-
             return toAffectedFileResult(
                 state,
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
