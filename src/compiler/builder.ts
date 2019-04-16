@@ -339,7 +339,6 @@ namespace ts {
                     if (!seenAffectedFiles.has(affectedFile.path)) {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
-                        cleanSemanticDiagnosticsOfAffectedFile(state, affectedFile);
                         handleDtsMayChangeOfAffectedFile(state, affectedFile, cancellationToken, computeHash);
                         return affectedFile;
                     }
@@ -407,31 +406,51 @@ namespace ts {
     }
 
     /**
-     * Remove the semantic diagnostics cached from old state for affected File and the files that are referencing modules that export entities from affected file
+     *  Handles sematic diagnostics and dts emit for affectedFile and files, that are referencing modules that export entities from affected file
+     *  This is because even though js emit doesnt change, dts emit / type used can change resulting in need for dts emit and js change
+     *  Similar to cleanSemanticDiagnosticsOfAffectedFile
      */
-    function cleanSemanticDiagnosticsOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile) {
-        if (removeSemanticDiagnosticsOf(state, affectedFile.path)) {
-            // If there are no more diagnostics from old cache, done
+    function handleDtsMayChangeOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash) {
+        removeSemanticDiagnosticsOf(state, affectedFile.path);
+
+        // If affected files is everything except default librarry, then nothing more to do
+        if (state.allFilesExcludingDefaultLibraryFile === state.affectedFiles) {
+            if (!state.cleanedDiagnosticsOfLibFiles) {
+                state.cleanedDiagnosticsOfLibFiles = true;
+                const program = Debug.assertDefined(state.program);
+                const options = program.getCompilerOptions();
+                forEach(program.getSourceFiles(), f =>
+                    program.isSourceFileDefaultLibrary(f) &&
+                    !skipTypeChecking(f, options) &&
+                    removeSemanticDiagnosticsOf(state, f.path)
+                );
+            }
             return;
         }
 
-        // Clean lib file diagnostics if its all files excluding default files to emit
-        if (state.allFilesExcludingDefaultLibraryFile === state.affectedFiles && !state.cleanedDiagnosticsOfLibFiles) {
-            state.cleanedDiagnosticsOfLibFiles = true;
+        forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, path) => handleDtsMayChangeOf(state, path, cancellationToken, computeHash));
+    }
+
+    /**
+     * Handle the dts may change, so they need to be added to pending emit if dts emit is enabled,
+     * Also we need to make sure signature is updated for these files
+     */
+    function handleDtsMayChangeOf(state: BuilderProgramState, path: Path, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash) {
+        removeSemanticDiagnosticsOf(state, path);
+
+        if (!state.changedFilesSet.has(path)) {
             const program = Debug.assertDefined(state.program);
-            const options = program.getCompilerOptions();
-            if (forEach(program.getSourceFiles(), f =>
-                program.isSourceFileDefaultLibrary(f) &&
-                !skipTypeChecking(f, options) &&
-                removeSemanticDiagnosticsOf(state, f.path)
-            )) {
-                return;
+            const sourceFile = program.getSourceFileByPath(path);
+            if (sourceFile) {
+                BuilderState.updateShapeSignature(state, program, sourceFile, Debug.assertDefined(state.currentAffectedFilesSignatures), cancellationToken, computeHash, state.currentAffectedFilesExportedModulesMap);
+                // If not dts emit, nothing more to do
+                if (getEmitDeclarations(state.compilerOptions)) {
+                    addToAffectedFilesPendingEmit(state, [path]);
+                }
             }
         }
 
-        // If there was change in signature for the changed file,
-        // then delete the semantic diagnostics for files that are affected by using exports of this module
-        forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, removeSemanticDiagnosticsOf);
+        return false;
     }
 
     /**
@@ -445,45 +464,6 @@ namespace ts {
         state.semanticDiagnosticsFromOldState.delete(path);
         state.semanticDiagnosticsPerFile!.delete(path);
         return !state.semanticDiagnosticsFromOldState.size;
-    }
-
-    /**
-     *  Add files, that are referencing modules that export entities from affected file as pending emit since dts may change
-     *  Similar to cleanSemanticDiagnosticsOfAffectedFile
-     */
-    function handleDtsMayChangeOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash) {
-
-        // If affected files is everything except default librarry, then nothing more to do
-        if (state.allFilesExcludingDefaultLibraryFile === state.affectedFiles) {
-            return;
-        }
-
-        // If there was change in signature (dts output) for the changed file,
-        // then only we need to handle pending file emit
-        if (!state.exportedModulesMap || state.affectedFiles!.length === 1 || !state.changedFilesSet.has(affectedFile.path)) {
-            return;
-        }
-
-        forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, path) => handleDtsMayChangeOf(state, path, cancellationToken, computeHash));
-    }
-
-    /**
-     * Handle the dts may change, so they need to be added to pending emit if dts emit is enabled,
-     * Also we need to make sure signature is updated for these files
-     */
-    function handleDtsMayChangeOf(state: BuilderProgramState, path: Path, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash) {
-        if (!state.changedFilesSet.has(path)) {
-            const program = Debug.assertDefined(state.program);
-            const sourceFile = program.getSourceFileByPath(path);
-            if (sourceFile) {
-                BuilderState.updateShapeSignature(state, program, sourceFile, Debug.assertDefined(state.currentAffectedFilesSignatures), cancellationToken, computeHash, state.currentAffectedFilesExportedModulesMap);
-                // If not dts emit, nothing more to do
-                if (getEmitDeclarations(state.compilerOptions)) {
-                    addToAffectedFilesPendingEmit(state, [path]);
-                }
-            }
-        }
-        return false;
     }
 
     /**
