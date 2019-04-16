@@ -340,7 +340,7 @@ namespace ts {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
                         cleanSemanticDiagnosticsOfAffectedFile(state, affectedFile);
-                        handleDtsMayChangeOfAffectedFile(state, affectedFile)
+                        handleDtsMayChangeOfAffectedFile(state, affectedFile, cancellationToken, computeHash);
                         return affectedFile;
                     }
                     seenAffectedFiles.set(affectedFile.path, true);
@@ -451,11 +451,7 @@ namespace ts {
      *  Add files, that are referencing modules that export entities from affected file as pending emit since dts may change
      *  Similar to cleanSemanticDiagnosticsOfAffectedFile
      */
-    function handleDtsMayChangeOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile) {
-        // If not dts emit, nothing more to do
-        if (!getEmitDeclarations(state.compilerOptions)) {
-            return;
-        }
+    function handleDtsMayChangeOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash) {
 
         // If affected files is everything except default librarry, then nothing more to do
         if (state.allFilesExcludingDefaultLibraryFile === state.affectedFiles) {
@@ -468,10 +464,26 @@ namespace ts {
             return;
         }
 
-        forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, filePath) => {
-            addToAffectedFilesPendingEmit(state, [filePath]);
-            return false;
-        });
+        forEachReferencingModulesOfExportOfAffectedFile(state, affectedFile, (state, path) => handleDtsMayChangeOf(state, path, cancellationToken, computeHash));
+    }
+
+    /**
+     * Handle the dts may change, so they need to be added to pending emit if dts emit is enabled,
+     * Also we need to make sure signature is updated for these files
+     */
+    function handleDtsMayChangeOf(state: BuilderProgramState, path: Path, cancellationToken: CancellationToken | undefined, computeHash: BuilderState.ComputeHash) {
+        if (!state.changedFilesSet.has(path)) {
+            const program = Debug.assertDefined(state.program);
+            const sourceFile = program.getSourceFileByPath(path);
+            if (sourceFile) {
+                BuilderState.updateShapeSignature(state, program, sourceFile, Debug.assertDefined(state.currentAffectedFilesSignatures), cancellationToken, computeHash, state.currentAffectedFilesExportedModulesMap);
+                // If not dts emit, nothing more to do
+                if (getEmitDeclarations(state.compilerOptions)) {
+                    addToAffectedFilesPendingEmit(state, [path]);
+                }
+            }
+        }
+        return false;
     }
 
     /**

@@ -52,7 +52,7 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
       },
       "/src/index.ts": {
         "version": "-11602502901",
-        "signature": "18468008756"
+        "signature": "6256067474"
       }
     },
     "options": {
