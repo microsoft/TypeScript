@@ -14709,15 +14709,30 @@ namespace ts {
                     inferFromTypes(source, (<ConditionalType>target).falseType);
                 }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
+                    // We infer from types that are not naked type variables first so that inferences we
+                    // make from nested naked type variables and given slightly higher priority by virtue
+                    // of being first in the candidates array.
+                    let typeVariableCount = 0;
                     for (const t of (<UnionOrIntersectionType>target).types) {
-                        const savePriority = priority;
-                        // Inferences directly to naked type variables are given lower priority as they are
-                        // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
-                        // we want to infer string for T, not Promise<string> | string.
                         if (getInferenceInfoForType(t)) {
-                            priority |= InferencePriority.NakedTypeVariable;
+                            typeVariableCount++;
                         }
-                        inferFromTypes(source, t);
+                        else {
+                            inferFromTypes(source, t);
+                        }
+                    }
+                    // Inferences directly to naked type variables are given lower priority as they are
+                    // less specific. For example, when inferring from Promise<string> to T | Promise<T>,
+                    // we want to infer string for T, not Promise<string> | string. For intersection types
+                    // we only infer to single naked type variables.
+                    if (target.flags & TypeFlags.Union ? typeVariableCount !== 0 : typeVariableCount === 1) {
+                        const savePriority = priority;
+                        priority |= InferencePriority.NakedTypeVariable;
+                        for (const t of (<UnionOrIntersectionType>target).types) {
+                            if (getInferenceInfoForType(t)) {
+                                inferFromTypes(source, t);
+                            }
+                        }
                         priority = savePriority;
                     }
                 }
