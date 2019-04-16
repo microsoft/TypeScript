@@ -3752,7 +3752,7 @@ namespace ts {
         HasLiteralType    = 1 << 7,         // Synthetic property with at least one literal type in constituents
         ContainsPublic    = 1 << 8,         // Synthetic property with public constituent(s)
         ContainsProtected = 1 << 9,         // Synthetic property with protected constituent(s)
-        ContainsPrivate   = 1 << 10,         // Synthetic property with private constituent(s)
+        ContainsPrivate   = 1 << 10,        // Synthetic property with private constituent(s)
         ContainsStatic    = 1 << 11,        // Synthetic property with static constituent(s)
         Late              = 1 << 12,        // Late-bound symbol for a computed property with a dynamic name
         ReverseMapped     = 1 << 13,        // Property of reverse-inferred homomorphic mapped type
