@@ -932,6 +932,20 @@ namespace ts {
             : node;
     }
 
+    export function createInlineTypeAliasDeclaration(name: Identifier | string, type: TypeNode) {
+        const node = createSynthesizedNode(SyntaxKind.InlineTypeAliasDeclaration) as InlineTypeAliasDeclaration;
+        node.name = asName(name);
+        node.type = type;
+        return node;
+    }
+
+    export function updateInlineTypeAliasDeclaration(node: InlineTypeAliasDeclaration, name: Identifier | string, type: TypeNode) {
+        return node.name !== name
+            || node.type !== type
+            ? updateNode(createInlineTypeAliasDeclaration(name, type), node)
+            : node;
+    }
+
     // Binding Patterns
 
     export function createObjectBindingPattern(elements: ReadonlyArray<BindingElement>) {

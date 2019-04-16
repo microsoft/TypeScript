@@ -1,0 +1,66 @@
+=== tests/cases/conformance/types/inlineTypeAliases/inlineTypeAliases.ts ===
+export declare const x: type T = { x: T };
+>x : type T = { x: T; }
+>x : T
+
+export const y = (null as type T = { x: T });
+>y : type T = { x: T; }
+>(null as type T = { x: T }) : type T = { x: T; }
+>null as type T = { x: T } : type T = { x: T; }
+>null : null
+>x : T
+
+export function f() {
+>f : () => type T = { x: T; }
+
+    return (null as any as (type T = {x: T})).x;
+>(null as any as (type T = {x: T})).x : type T = { x: T; }
+>(null as any as (type T = {x: T})) : type T = { x: T; }
+>null as any as (type T = {x: T}) : type T = { x: T; }
+>null as any : any
+>null : null
+>x : T
+>x : type T = { x: T; }
+}
+
+export declare const xx: type T = ({ x: {y: T} } & {y: string})["x"];
+>xx : type _a = { y: _a; }
+>x : type _a = { y: _a; }
+>y : type _a = { y: _a; }
+>y : string
+
+export const yy = (null as any as type T = ({ x: {y: T} } & {y: string})["x"]);
+>yy : type _a = { y: _a; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]) : type _a = { y: _a; }
+>null as any as type T = ({ x: {y: T} } & {y: string})["x"] : type _a = { y: _a; }
+>null as any : any
+>null : null
+>x : type _a = { y: _a; }
+>y : type _a = { y: _a; }
+>y : string
+
+export function ff() {
+>ff : () => type _a = { y: _a; }
+
+    return (null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y.y;
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y.y : type _a = { y: _a; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y : type _a = { y: _a; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y : type _a = { y: _a; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y : type _a = { y: _a; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y : type _a = { y: _a; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y : type _a = { y: _a; }
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]) : type _a = { y: _a; }
+>null as any as type T = ({ x: {y: T} } & {y: string})["x"] : type _a = { y: _a; }
+>null as any : any
+>null : null
+>x : type _a = { y: _a; }
+>y : type _a = { y: _a; }
+>y : string
+>y : type _a = { y: _a; }
+>y : type _a = { y: _a; }
+>y : type _a = { y: _a; }
+>y : type _a = { y: _a; }
+>y : type _a = { y: _a; }
+>y : type _a = { y: _a; }
+}
+

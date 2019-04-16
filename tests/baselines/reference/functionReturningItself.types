@@ -1,7 +1,7 @@
 === tests/cases/compiler/functionReturningItself.ts ===
 function somefn() {
->somefn : () => typeof somefn
+>somefn : type default_1 = () => default_1
 
     return somefn;
->somefn : () => typeof somefn
+>somefn : type default_1 = () => default_1
 }

@@ -435,6 +435,11 @@ namespace ts {
                 return updateLiteralTypeNode(<LiteralTypeNode>node,
                     visitNode((<LiteralTypeNode>node).literal, visitor, isExpression));
 
+            case SyntaxKind.InlineTypeAliasDeclaration:
+                return updateInlineTypeAliasDeclaration(<InlineTypeAliasDeclaration>node,
+                    visitNode((<InlineTypeAliasDeclaration>node).name, visitor, isIdentifier),
+                    visitNode((<InlineTypeAliasDeclaration>node).type, visitor, isTypeNode));
+
             // Binding patterns
 
             case SyntaxKind.ObjectBindingPattern:

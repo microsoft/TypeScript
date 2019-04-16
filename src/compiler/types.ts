@@ -320,6 +320,7 @@ namespace ts {
         MappedType,
         LiteralType,
         ImportType,
+        InlineTypeAliasDeclaration,
         // Binding patterns
         ObjectBindingPattern,
         ArrayBindingPattern,
@@ -495,7 +496,7 @@ namespace ts {
         FirstFutureReservedWord = ImplementsKeyword,
         LastFutureReservedWord = YieldKeyword,
         FirstTypeNode = TypePredicate,
-        LastTypeNode = ImportType,
+        LastTypeNode = InlineTypeAliasDeclaration,
         FirstPunctuation = OpenBraceToken,
         LastPunctuation = CaretEqualsToken,
         FirstToken = Unknown,
@@ -2201,6 +2202,12 @@ namespace ts {
         kind: SyntaxKind.TypeAliasDeclaration;
         name: Identifier;
         typeParameters?: NodeArray<TypeParameterDeclaration>;
+        type: TypeNode;
+    }
+
+    export interface InlineTypeAliasDeclaration extends TypeNode, Declaration, JSDocContainer {
+        kind: SyntaxKind.InlineTypeAliasDeclaration;
+        name: Identifier;
         type: TypeNode;
     }
 

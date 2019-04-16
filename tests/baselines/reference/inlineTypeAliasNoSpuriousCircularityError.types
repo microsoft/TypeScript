@@ -1,0 +1,8 @@
+=== tests/cases/conformance/types/inlineTypeAliases/inlineTypeAliasNoSpuriousCircularityError.ts ===
+type Something<T> = type Q = T extends number ? {x: Q} : never;
+>Something : T extends number ? type _a = { x: T extends number ? _a : never; } : never
+>x : Q
+
+type Foo = Something<number>;
+>Foo : type _a = { x: T extends number ? _a : never; }
+

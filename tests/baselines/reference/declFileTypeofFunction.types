@@ -1,71 +1,71 @@
 === tests/cases/compiler/declFileTypeofFunction.ts ===
 function f(n: typeof f): string;
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
+>n : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
+>f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
 
 function f(n: typeof g): string;
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
+>n : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
+>g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
 
 function f() { return undefined; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
 >undefined : undefined
 
 function g(n: typeof g): number;
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->n : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
+>n : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
+>g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
 
 function g(n: typeof f): number;
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
->n : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
->f : { (n: typeof f): string; (n: { (n: typeof g): number; (n: typeof f): number; }): string; }
+>g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
+>n : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
+>f : type default_1 = { (n: default_1): string; (n: type default_2 = { (n: default_2): number; (n: default_1): number; }): string; }
 
 function g() { return undefined; }
->g : { (n: typeof g): number; (n: { (n: typeof f): string; (n: typeof g): string; }): number; }
+>g : type default_1 = { (n: default_1): number; (n: type default_2 = { (n: default_2): string; (n: default_1): string; }): number; }
 >undefined : undefined
 
 var b: () => typeof b;
->b : () => any
->b : () => any
+>b : type _a = () => _a
+>b : type _a = () => _a
 
 function b1() {
->b1 : () => typeof b1
+>b1 : type default_1 = () => default_1
 
     return b1;
->b1 : () => typeof b1
+>b1 : type default_1 = () => default_1
 }
 
 function foo(): typeof foo {
->foo : () => typeof foo
->foo : () => typeof foo
+>foo : type default_1 = () => default_1
+>foo : type default_1 = () => default_1
 
     return null;
 >null : null
 }
 var foo1: typeof foo;
->foo1 : () => typeof foo
->foo : () => typeof foo
+>foo1 : type default_1 = () => default_1
+>foo : type default_1 = () => default_1
 
 var foo2 = foo;
->foo2 : () => typeof foo
->foo : () => typeof foo
+>foo2 : type default_1 = () => default_1
+>foo : type default_1 = () => default_1
 
 var foo3 = function () {
->foo3 : () => any
->function () {    return foo3;} : () => any
+>foo3 : type _a = () => _a
+>function () {    return foo3;} : type _a = () => _a
 
     return foo3;
->foo3 : () => any
+>foo3 : type _a = () => _a
 }
 var x = () => {
->x : () => any
->() => {    return x;} : () => any
+>x : type _a = () => _a
+>() => {    return x;} : type _a = () => _a
 
     return x;
->x : () => any
+>x : type _a = () => _a
 }
 
 function foo5(x: number) {

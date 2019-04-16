@@ -1,0 +1,63 @@
+=== tests/cases/conformance/types/inlineTypeAliases/inlineTypeAliases.ts ===
+export declare const x: type T = { x: T };
+>x : Symbol(x, Decl(inlineTypeAliases.ts, 0, 20))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 0, 23))
+>x : Symbol(x, Decl(inlineTypeAliases.ts, 0, 34))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 0, 23))
+
+export const y = (null as type T = { x: T });
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 2, 12))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 2, 25))
+>x : Symbol(x, Decl(inlineTypeAliases.ts, 2, 36))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 2, 25))
+
+export function f() {
+>f : Symbol(f, Decl(inlineTypeAliases.ts, 2, 45))
+
+    return (null as any as (type T = {x: T})).x;
+>(null as any as (type T = {x: T})).x : Symbol(x, Decl(inlineTypeAliases.ts, 5, 38))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 5, 28))
+>x : Symbol(x, Decl(inlineTypeAliases.ts, 5, 38))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 5, 28))
+>x : Symbol(x, Decl(inlineTypeAliases.ts, 5, 38))
+}
+
+export declare const xx: type T = ({ x: {y: T} } & {y: string})["x"];
+>xx : Symbol(xx, Decl(inlineTypeAliases.ts, 8, 20))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 8, 24))
+>x : Symbol(x, Decl(inlineTypeAliases.ts, 8, 36))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 8, 41))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 8, 24))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 8, 52))
+
+export const yy = (null as any as type T = ({ x: {y: T} } & {y: string})["x"]);
+>yy : Symbol(yy, Decl(inlineTypeAliases.ts, 10, 12))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 10, 33))
+>x : Symbol(x, Decl(inlineTypeAliases.ts, 10, 45))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 10, 50))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 10, 33))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 10, 61))
+
+export function ff() {
+>ff : Symbol(ff, Decl(inlineTypeAliases.ts, 10, 79))
+
+    return (null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y.y;
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y.y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y.y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y.y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y.y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y.y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>(null as any as type T = ({ x: {y: T} } & {y: string})["x"]).y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 13, 26))
+>x : Symbol(x, Decl(inlineTypeAliases.ts, 13, 38))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>T : Symbol(T, Decl(inlineTypeAliases.ts, 13, 26))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 54))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+>y : Symbol(y, Decl(inlineTypeAliases.ts, 13, 43))
+}
+

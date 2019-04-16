@@ -542,7 +542,8 @@ namespace ts {
                 || isInterfaceDeclaration(node)
                 || isFunctionLike(node)
                 || isIndexSignatureDeclaration(node)
-                || isMappedTypeNode(node);
+                || isMappedTypeNode(node)
+                || isInlineTypeAlias(node);
         }
 
         function checkEntityNameVisibility(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node) {

@@ -25,10 +25,10 @@ class C {
 >x : string
 
     protected foo() { return this.foo; }
->foo : () => any
->this.foo : () => any
+>foo : type foo_1 = () => foo_1
+>this.foo : type foo_1 = () => foo_1
 >this : this
->foo : () => any
+>foo : type foo_1 = () => foo_1
 
     protected static x: string;
 >x : string
@@ -51,17 +51,17 @@ class C {
 >x : string
 
     protected static foo() { return this.foo; }
->foo : () => typeof C.foo
->this.foo : () => typeof C.foo
+>foo : type foo_1 = () => foo_1
+>this.foo : type foo_1 = () => foo_1
 >this : typeof C
->foo : () => typeof C.foo
+>foo : type foo_1 = () => foo_1
 
     protected static bar() { this.foo(); }
 >bar : () => void
->this.foo() : () => typeof C.foo
->this.foo : () => typeof C.foo
+>this.foo() : type foo_1 = () => foo_1
+>this.foo : type foo_1 = () => foo_1
 >this : typeof C
->foo : () => typeof C.foo
+>foo : type foo_1 = () => foo_1
 
     protected bar() {
 >bar : () => void
@@ -76,10 +76,10 @@ class C {
 >x : C
 
                 var x1 = x.foo;
->x1 : () => any
->x.foo : () => any
+>x1 : type foo_1 = () => foo_1
+>x.foo : type foo_1 = () => foo_1
 >x : C
->foo : () => any
+>foo : type foo_1 = () => foo_1
 
                 var x2 = x.bar;
 >x2 : () => void
@@ -118,10 +118,10 @@ class C {
 >bar : () => void
 
                 var sx4 = C.foo;
->sx4 : () => typeof C.foo
->C.foo : () => typeof C.foo
+>sx4 : type foo_1 = () => foo_1
+>C.foo : type foo_1 = () => foo_1
 >C : typeof C
->foo : () => typeof C.foo
+>foo : type foo_1 = () => foo_1
 
                 let y = new C();
 >y : C
@@ -129,10 +129,10 @@ class C {
 >C : typeof C
 
                 var y1 = y.foo;
->y1 : () => any
->y.foo : () => any
+>y1 : type foo_1 = () => foo_1
+>y.foo : type foo_1 = () => foo_1
 >y : C
->foo : () => any
+>foo : type foo_1 = () => foo_1
 
                 var y2 = y.bar;
 >y2 : () => void

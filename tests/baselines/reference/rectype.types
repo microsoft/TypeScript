@@ -6,33 +6,33 @@ module M {
 >i : I
 
     export function f(p: I) { return f };
->f : (p: I) => typeof f
+>f : type default_1 = (p: I) => default_1
 >p : I
->f : (p: I) => typeof f
+>f : type default_1 = (p: I) => default_1
 
     var i:I;
 >i : I
 
     f(i);
->f(i) : (p: I) => typeof f
->f : (p: I) => typeof f
+>f(i) : type default_1 = (p: I) => default_1
+>f : type default_1 = (p: I) => default_1
 >i : I
 
     f(f(i));
->f(f(i)) : (p: I) => typeof f
->f : (p: I) => typeof f
->f(i) : (p: I) => typeof f
->f : (p: I) => typeof f
+>f(f(i)) : type default_1 = (p: I) => default_1
+>f : type default_1 = (p: I) => default_1
+>f(i) : type default_1 = (p: I) => default_1
+>f : type default_1 = (p: I) => default_1
 >i : I
 
     f((f(f(i))));
->f((f(f(i)))) : (p: I) => typeof f
->f : (p: I) => typeof f
->(f(f(i))) : (p: I) => typeof f
->f(f(i)) : (p: I) => typeof f
->f : (p: I) => typeof f
->f(i) : (p: I) => typeof f
->f : (p: I) => typeof f
+>f((f(f(i)))) : type default_1 = (p: I) => default_1
+>f : type default_1 = (p: I) => default_1
+>(f(f(i))) : type default_1 = (p: I) => default_1
+>f(f(i)) : type default_1 = (p: I) => default_1
+>f : type default_1 = (p: I) => default_1
+>f(i) : type default_1 = (p: I) => default_1
+>f : type default_1 = (p: I) => default_1
 >i : I
 }
 

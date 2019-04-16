@@ -3606,6 +3606,12 @@ namespace ts {
                         ? symbolToTypeNode(type.symbol, context, SymbolFlags.Type)
                         : createTypeReferenceNode(createIdentifier("?"), /*typeArguments*/ undefined);
                 }
+                if (context.visitedTypes && context.visitedTypes.has("" + getTypeId(type))) {
+                    // _Within_ an alias symbol declaration, references to the alias type should be the alias name
+                    // If this is done, we need to mark the type as needing to preserve the alias when we get back up to it.
+                    context.visitedTypes.set("" + getTypeId(type), true);
+                    return createTypeReferenceNode(getNameForInlineTypeAliasCreation(type), /*typeArguments*/ undefined);
+                }
                 if (!inTypeAlias && type.aliasSymbol && (context.flags & NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope || isTypeSymbolAccessible(type.aliasSymbol, context.enclosingDeclaration))) {
                     const typeArgumentNodes = mapToTypeNodes(type.aliasTypeArguments, context);
                     if (isReservedMemberName(type.aliasSymbol.escapedName) && !(type.aliasSymbol.flags & SymbolFlags.Class)) return createTypeReferenceNode(createIdentifier(""), typeArgumentNodes);
@@ -3715,7 +3721,7 @@ namespace ts {
                             // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                             // of types allows us to catch circular references to instantiations of the same anonymous type
                             if (!context.visitedTypes) {
-                                context.visitedTypes = createMap<true>();
+                                context.visitedTypes = createMap<boolean>();
                             }
                             if (!context.symbolDepth) {
                                 context.symbolDepth = createMap<number>();
@@ -3726,8 +3732,12 @@ namespace ts {
                                 return createElidedInformationPlaceholder(context);
                             }
                             context.symbolDepth.set(id, depth + 1);
-                            context.visitedTypes.set(typeId, true);
-                            const result = createTypeNodeFromObjectType(type);
+                            context.visitedTypes.set(typeId, false);
+                            let result = createTypeNodeFromObjectType(type);
+                            if (context.visitedTypes.get(typeId) === true) {
+                                // Circular reference is required - emit an inline type alias
+                                result = createInlineTypeAliasDeclaration(getNameForInlineTypeAliasCreation(type), result);
+                            }
                             context.visitedTypes.delete(typeId);
                             context.symbolDepth.set(id, depth);
                             return result;
@@ -3750,6 +3760,15 @@ namespace ts {
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration!)); // TODO: GH#18217 // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
+                }
+
+                function getNameForInlineTypeAliasCreation(type: Type): Identifier {
+                    // If it was originally made using an inline type alias, reuse that name, otherwise
+                    // get a generated name for the (usually anonymous) type node which contains the
+                    // circular reference
+                    return type.aliasSymbol && some(type.aliasSymbol.declarations, isInlineTypeAlias)
+                        ? createIdentifier(unescapeLeadingUnderscores(type.aliasSymbol.escapedName))
+                        : getGeneratedNameForNode(type.symbol.declarations[0]);
                 }
 
                 function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
@@ -4632,7 +4651,11 @@ namespace ts {
 
             // State
             encounteredError: boolean;
-            visitedTypes: Map<true> | undefined;
+            /**
+             * Entry is set to `false` when first encountered, and `true` if a circular reference
+             * was emitted (and thus needs to has its a name emitted)
+             */
+            visitedTypes: Map<boolean> | undefined;
             symbolDepth: Map<number> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
             approximateLength: number;
@@ -4723,6 +4746,8 @@ namespace ts {
 
             function determineIfDeclarationIsVisible() {
                 switch (node.kind) {
+                    case SyntaxKind.InlineTypeAliasDeclaration:
+                    return true; // Always consider inline type alias declaration as "visible" when they were reachable (since they can only be referenced from a child)
                     case SyntaxKind.JSDocCallbackTag:
                     case SyntaxKind.JSDocTypedefTag:
                         // Top-level jsdoc type aliases are considered exported
@@ -6339,8 +6364,8 @@ namespace ts {
                     return errorType;
                 }
 
-                const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
-                    isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
+                const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration | InlineTypeAliasDeclaration>find(symbol.declarations, d =>
+                    isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration || d.kind === SyntaxKind.InlineTypeAliasDeclaration);
                 const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
@@ -10673,7 +10698,7 @@ namespace ts {
         }
 
         function getAliasSymbolForTypeNode(node: TypeNode) {
-            return isTypeAlias(node.parent) ? getSymbolOfNode(node.parent) : undefined;
+            return isTypeAlias(node.parent) || isInlineTypeAlias(node.parent) ? getSymbolOfNode(node.parent) : undefined;
         }
 
         function getTypeArgumentsForAliasSymbol(symbol: Symbol | undefined) {
@@ -10682,6 +10707,14 @@ namespace ts {
 
         function isNonGenericObjectType(type: Type) {
             return !!(type.flags & TypeFlags.Object) && !isGenericMappedType(type);
+        }
+
+        function getTypeFromInlineTypeAliasDeclaration(node: InlineTypeAliasDeclaration): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                links.resolvedType = getDeclaredTypeOfTypeAlias(node.symbol);
+            }
+            return links.resolvedType;
         }
 
         /**
@@ -10985,6 +11018,8 @@ namespace ts {
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
                 case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
+                case SyntaxKind.InlineTypeAliasDeclaration:
+                    return getTypeFromInlineTypeAliasDeclaration(<InlineTypeAliasDeclaration>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -11251,7 +11286,7 @@ namespace ts {
                         return !!tp.isThisType;
                     case SyntaxKind.Identifier:
                         return !tp.isThisType && isPartOfTypeNode(node) && maybeTypeParameterReference(node) &&
-                            getTypeFromTypeNode(<TypeNode>node) === tp;
+                            getSymbolAtLocation(node) === tp.symbol;
                     case SyntaxKind.TypeQuery:
                         return true;
                 }

@@ -98,6 +98,8 @@ namespace ts {
         HasLocals = 1 << 5,
         IsInterface = 1 << 6,
         IsObjectLiteralOrClassExpressionMethod = 1 << 7,
+        // Indicates that the container isn't stored as a local/export in its parent, but is stored as a local within itself
+        IsSelfContained = 1 << 8,
     }
 
     let flowNodeCreated: <T extends FlowNode>(node: T) => T = identity;
@@ -502,6 +504,15 @@ namespace ts {
             }
         }
 
+        function bindSelfContainedDeclaration(node: Declaration) {
+            switch (node.kind) {
+                case SyntaxKind.InlineTypeAliasDeclaration:
+                    return declareSymbolAndAddToSymbolTable(node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                default:
+                    return Debug.fail("Unhandled self-containing declaration kind");
+            }
+        }
+
         // All container nodes are kept on a linked list in declaration order. This list is used by
         // the getLocalNameOfContainer function in the type checker to validate that the local name
         // used for a container is unique.
@@ -539,6 +550,10 @@ namespace ts {
                     container.locals = createSymbolTable();
                 }
                 addToContainerChain(container);
+                if (containerFlags & ContainerFlags.IsSelfContained) {
+                    // We have to bind self-contained structures _after_ setting up the container symbol tables, but _before_ binding children
+                    bindSelfContainedDeclaration(<Declaration>container);
+                }
             }
             else if (containerFlags & ContainerFlags.IsBlockScopedContainer) {
                 blockScopeContainer = node;
@@ -1483,6 +1498,9 @@ namespace ts {
                 case SyntaxKind.MappedType:
                     return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
 
+                case SyntaxKind.InlineTypeAliasDeclaration:
+                    return ContainerFlags.IsContainer | ContainerFlags.HasLocals | ContainerFlags.IsSelfContained;
+
                 case SyntaxKind.SourceFile:
                     return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals;
 
@@ -1601,6 +1619,7 @@ namespace ts {
                 case SyntaxKind.JSDocTypedefTag:
                 case SyntaxKind.JSDocCallbackTag:
                 case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.InlineTypeAliasDeclaration:
                 case SyntaxKind.MappedType:
                     // All the children of these container types are never visible through another
                     // symbol (i.e. through another symbol's 'exports' or 'members').  Instead,
@@ -2183,6 +2202,8 @@ namespace ts {
                     return;
                 case SyntaxKind.TypePredicate:
                     break; // Binding the children will handle everything
+                case SyntaxKind.InlineTypeAliasDeclaration:
+                    break; // Container binding should have handled everything
                 case SyntaxKind.TypeParameter:
                     return bindTypeParameter(node as TypeParameterDeclaration);
                 case SyntaxKind.Parameter:
@@ -3751,6 +3772,7 @@ namespace ts {
             case SyntaxKind.ParenthesizedType:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.InlineTypeAliasDeclaration:
             case SyntaxKind.ThisType:
             case SyntaxKind.TypeOperator:
             case SyntaxKind.IndexedAccessType:
@@ -3920,6 +3942,7 @@ namespace ts {
             case SyntaxKind.IndexSignature:
             case SyntaxKind.InterfaceDeclaration:
             case SyntaxKind.TypeAliasDeclaration:
+            case SyntaxKind.InlineTypeAliasDeclaration:
                 return TransformFlags.TypeExcludes;
             case SyntaxKind.ObjectLiteralExpression:
                 return TransformFlags.ObjectLiteralExcludes;

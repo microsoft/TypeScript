@@ -2155,6 +2155,10 @@ namespace ts {
         return isJSDocTypeAlias(node) || isTypeAliasDeclaration(node);
     }
 
+    export function isInlineTypeAlias(node: Node): node is InlineTypeAliasDeclaration {
+        return node.kind === SyntaxKind.InlineTypeAliasDeclaration;
+    }
+
     function getSourceOfAssignment(node: Node): Node | undefined {
         return isExpressionStatement(node) &&
             node.expression && isBinaryExpression(node.expression) &&
@@ -6733,6 +6737,7 @@ namespace ts {
             || kind === SyntaxKind.PropertySignature
             || kind === SyntaxKind.SetAccessor
             || kind === SyntaxKind.ShorthandPropertyAssignment
+            || kind === SyntaxKind.InlineTypeAliasDeclaration
             || kind === SyntaxKind.TypeAliasDeclaration
             || kind === SyntaxKind.TypeParameter
             || kind === SyntaxKind.VariableDeclaration

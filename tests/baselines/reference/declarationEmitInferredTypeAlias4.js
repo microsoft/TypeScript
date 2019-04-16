@@ -13,6 +13,6 @@ function f() {
 
 
 //// [declarationEmitInferredTypeAlias4.d.ts]
-declare function f<A>(): A[] | {
-    x: A[] | any;
+declare function f<A>(): A[] | type _a = {
+    x: A[] | _a;
 };

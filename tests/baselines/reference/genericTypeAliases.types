@@ -175,46 +175,46 @@ p.tag = "test";
 >"test" : "test"
 
 function f<A>() {
->f : <A>() => A[] | { x: A[] | any; }
+>f : <A>() => A[] | type _a = { x: A[] | _a; }
 
     type Foo<T> = T | { x: Foo<T> };
->Foo : T | { x: T | any; }
->x : T | { x: T | any; }
+>Foo : T | type _a = { x: T | _a; }
+>x : T | type _a = { x: T | _a; }
 
     var x: Foo<A[]>;
->x : A[] | { x: A[] | any; }
+>x : A[] | type _a = { x: A[] | _a; }
 
     return x;
->x : A[] | { x: A[] | any; }
+>x : A[] | type _a = { x: A[] | _a; }
 }
 
 function g<B>() {
->g : <B>() => B[] | { x: B[] | any; }
+>g : <B>() => B[] | type _a = { x: B[] | _a; }
 
     type Bar<U> = U | { x: Bar<U> };
->Bar : U | { x: U | any; }
->x : U | { x: U | any; }
+>Bar : U | type _a = { x: U | _a; }
+>x : U | type _a = { x: U | _a; }
 
     var x: Bar<B[]>;
->x : B[] | { x: B[] | any; }
+>x : B[] | type _a = { x: B[] | _a; }
 
     return x;
->x : B[] | { x: B[] | any; }
+>x : B[] | type _a = { x: B[] | _a; }
 }
 
 // Deeply instantiated generics
 var a = f<string>();
->a : string[] | { x: string[] | any; }
->f<string>() : string[] | { x: string[] | any; }
->f : <A>() => A[] | { x: A[] | any; }
+>a : string[] | type _a = { x: string[] | _a; }
+>f<string>() : string[] | type _a = { x: string[] | _a; }
+>f : <A>() => A[] | type _a = { x: A[] | _a; }
 
 var b = g<string>();
->b : string[] | { x: string[] | any; }
->g<string>() : string[] | { x: string[] | any; }
->g : <B>() => B[] | { x: B[] | any; }
+>b : string[] | type _a = { x: string[] | _a; }
+>g<string>() : string[] | type _a = { x: string[] | _a; }
+>g : <B>() => B[] | type _a = { x: B[] | _a; }
 
 a = b;
->a = b : string[] | { x: string[] | any; }
->a : string[] | { x: string[] | any; }
->b : string[] | { x: string[] | any; }
+>a = b : string[] | type _a = { x: string[] | _a; }
+>a : string[] | type _a = { x: string[] | _a; }
+>b : string[] | type _a = { x: string[] | _a; }
 

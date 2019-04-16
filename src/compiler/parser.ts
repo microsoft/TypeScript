@@ -204,6 +204,9 @@ namespace ts {
                     visitNode(cbNode, (<MappedTypeNode>node).type);
             case SyntaxKind.LiteralType:
                 return visitNode(cbNode, (<LiteralTypeNode>node).literal);
+            case SyntaxKind.InlineTypeAliasDeclaration:
+                return visitNode(cbNode, (<InlineTypeAliasDeclaration>node).name) ||
+                visitNode(cbNode, (<InlineTypeAliasDeclaration>node).type);
             case SyntaxKind.ObjectBindingPattern:
             case SyntaxKind.ArrayBindingPattern:
                 return visitNodes(cbNode, cbNodes, (<BindingPattern>node).elements);
@@ -3030,6 +3033,7 @@ namespace ts {
                 case SyntaxKind.DotDotDotToken:
                 case SyntaxKind.InferKeyword:
                 case SyntaxKind.ImportKeyword:
+                case SyntaxKind.TypeKeyword:
                     return true;
                 case SyntaxKind.FunctionKeyword:
                     return !inStartOfParameter;
@@ -3119,6 +3123,8 @@ namespace ts {
                     return parseTypeOperator(operator);
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
+                case SyntaxKind.TypeKeyword:
+                    return parseInlineTypeAliasDeclaration();
             }
             return parsePostfixTypeOrHigher();
         }
@@ -5993,6 +5999,15 @@ namespace ts {
             parseExpected(SyntaxKind.EqualsToken);
             node.type = parseType();
             parseSemicolon();
+            return finishNode(node);
+        }
+
+        function parseInlineTypeAliasDeclaration(): InlineTypeAliasDeclaration {
+            const node = <InlineTypeAliasDeclaration>createNode(SyntaxKind.InlineTypeAliasDeclaration);
+            parseExpected(SyntaxKind.TypeKeyword);
+            node.name = parseIdentifier();
+            parseExpected(SyntaxKind.EqualsToken);
+            node.type = parseType();
             return finishNode(node);
         }
 
