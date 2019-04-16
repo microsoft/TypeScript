@@ -33,7 +33,7 @@ namespace ts.server.typingsInstaller {
         if (path.basename(processName).indexOf("node") === 0) {
             const npmPath = path.join(path.dirname(process.argv[0]), "npm");
             if (!validateDefaultNpmLocation) {
-                return npmPath
+                return npmPath;
             }
             if (host.fileExists(npmPath)) {
                 return `"${npmPath}"`;
