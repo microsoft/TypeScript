@@ -43,7 +43,6 @@ node_modules/bluebird/js/release/debuggability.js(182,18): error TS2339: Propert
 node_modules/bluebird/js/release/debuggability.js(187,30): error TS2339: Property 'global' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(197,14): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(199,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
-  Type 'IArguments' is missing the following properties from type '["multipleResolves", MultipleResolveListener]': 0, 1, pop, push, and 28 more.
 node_modules/bluebird/js/release/debuggability.js(202,19): error TS2339: Property 'global' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(209,31): error TS2339: Property 'global' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(211,31): error TS2339: Property 'global' does not exist on type 'typeof ret'.

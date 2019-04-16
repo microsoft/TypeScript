@@ -30,7 +30,6 @@ node_modules/npm/bin/npm-cli.js(132,17): error TS2339: Property 'config' does no
 node_modules/npm/bin/npm-cli.js(134,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(136,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(140,32): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?]'.
-  Type 'IArguments' is missing the following properties from type '[any?]': pop, push, concat, join, and 26 more.
 node_modules/npm/html/static/toc.js(3,40): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/access.js(58,46): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/access.js(65,18): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
@@ -61,7 +60,6 @@ node_modules/npm/lib/auth/legacy.js(35,16): error TS2339: Property 'config' does
 node_modules/npm/lib/auth/legacy.js(69,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/oauth.js(5,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/oauth.js(6,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, any?, any?]'.
-  Type 'IArguments' is missing the following properties from type '[any?, any?, any?, any?]': pop, push, concat, join, and 26 more.
 node_modules/npm/lib/auth/saml.js(5,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/saml.js(6,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, any?, any?]'.
 node_modules/npm/lib/auth/sso.js(7,21): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -840,7 +838,6 @@ node_modules/npm/lib/utils/metrics.js(62,7): error TS2339: Property 'load' does 
 node_modules/npm/lib/utils/metrics.js(64,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics.js(65,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/output.js(6,30): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, ...any[]]'.
-  Type 'IArguments' is missing the following properties from type '[any?, ...any[]]': pop, push, concat, join, and 26 more.
 node_modules/npm/lib/utils/perf.js(9,12): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/perf.js(10,12): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/read-local-package.js(7,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
