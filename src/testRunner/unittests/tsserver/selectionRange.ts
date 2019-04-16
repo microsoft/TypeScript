@@ -533,6 +533,78 @@ function f(p, q?, ...r: any[] = []) {}`);
             });
         });
 
+        it("works for binding elements", () => {
+            const getSelectionRange = setup("/file.ts", `
+const { x, y: a, ...zs = {} } = {};`);
+            const locations = getSelectionRange([
+                { line: 2, offset: 9 },  // x
+                { line: 2, offset: 15 }, // a
+                { line: 2, offset: 21 }, // zs
+            ]);
+
+            // Don’t care about checking first two locations, because
+            // they’re pretty boring, just want to make sure they don’t cause a crash
+            assert.deepEqual(locations![2], {
+                textSpan: { // zs
+                    start: { line: 2, offset: 21 },
+                    end: { line: 2, offset: 23 } },
+                parent: {
+                    textSpan: { // ...zs
+                        start: { line: 2, offset: 18 },
+                        end: { line: 2, offset: 23 } },
+                    parent: {
+                        textSpan: { // ...zs = {}
+                            start: { line: 2, offset: 18 },
+                            end: { line: 2, offset: 28 } },
+                        parent: {
+                            textSpan: { // x, y: a, ...zs = {}
+                                start: { line: 2, offset: 9 },
+                                end: { line: 2, offset: 28 } },
+                            parent: {
+                                textSpan: { // { x, y: a, ...zs = {} }
+                                    start: { line: 2, offset: 7 },
+                                    end: { line: 2, offset: 30 } },
+                                parent: {
+                                    textSpan: { // { x, y: a, ...zs = {} } = {}
+                                        start: { line: 2, offset: 7 },
+                                        end: { line: 2, offset: 35 } },
+                                    parent: {
+                                        textSpan: { // whole line
+                                            start: { line: 2, offset: 1 },
+                                            end: { line: 2, offset: 36 } },
+                                        parent: {
+                                            textSpan: {
+                                                start: { line: 1, offset: 1 },
+                                                end: { line: 2, offset: 36 } } } } } } } } },
+            });
+        });
+
+        it("consumes all whitespace in a multi-line function parameter list", () => {
+            const getSelectionRange = setup("/file.ts", `
+function f(
+    a,
+    b
+) {}`);
+            const locations = getSelectionRange([{ line: 4, offset: 5 }]); // b
+            assert.deepEqual(locations, [{
+                textSpan: { // b
+                    start: { line: 4, offset: 5 },
+                    end: { line: 4, offset: 6 } },
+                parent: { // all params and whitespace inside parens
+                    textSpan: {
+                        start: { line: 2, offset: 12 },
+                        end: { line: 5, offset: 1 } },
+                    parent: {
+                        textSpan: { // whole function declaration
+                            start: { line: 2, offset: 1 },
+                            end: { line: 5, offset: 5 } },
+                        parent: {
+                            textSpan: { // SourceFile
+                                start: { line: 1, offset: 1 },
+                                end: { line: 5, offset: 5 } } } } }
+            }]);
+        });
+
         it("snaps to nodes directly behind the cursor instead of trivia ahead of the cursor", () => {
             const getSelectionRange = setup("/file.ts", `let x: string`);
             const locations = getSelectionRange([{ line: 1, offset: 4 }]);

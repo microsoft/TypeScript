@@ -21,8 +21,13 @@ namespace ts.SelectionRange {
                     // Blocks are effectively redundant with SyntaxLists.
                     // TemplateSpans, along with the SyntaxLists containing them,
                     // are a somewhat unintuitive grouping of things that should be
-                    // considered independently. Dive in without pushing a selection range.
-                    if (isBlock(node) || isTemplateSpan(node) || isTemplateHead(node) || prevNode && isTemplateHead(prevNode)) {
+                    // considered independently. A VariableStatement’s children are just
+                    // a VaraiableDeclarationList and a semicolon.
+                    // Dive in without pushing a selection range.
+                    if (isBlock(node)
+                        || isTemplateSpan(node) || isTemplateHead(node)
+                        || prevNode && isTemplateHead(prevNode)
+                        || isVariableDeclarationList(node) && isVariableStatement(parentNode)) {
                         parentNode = node;
                         break;
                     }
@@ -34,14 +39,14 @@ namespace ts.SelectionRange {
                         pushSelectionRange(start, end, node.kind);
                     }
 
-                    // Blocks with braces on separate lines should be selected from brace to brace,
-                    // including whitespace but not including the braces themselves.
-                    const isBetweenMultiLineBraces = isSyntaxList(node)
-                        && prevNode && prevNode.kind === SyntaxKind.OpenBraceToken
-                        && nextNode && nextNode.kind === SyntaxKind.CloseBraceToken
+                    // Blocks with braces, brackets, parens, or JSX tags on separate lines should be
+                    // selected from open to close, including whitespace but not including the braces/etc. themselves.
+                    const isBetweenMultiLineBookends = isSyntaxList(node)
+                        && isListOpener(prevNode)
+                        && isListCloser(nextNode)
                         && !positionsAreOnSameLine(prevNode.getStart(), nextNode.getStart(), sourceFile);
-                    const start = isBetweenMultiLineBraces ? prevNode.getEnd() : node.getStart();
-                    const end = isBetweenMultiLineBraces ? nextNode.getStart() : node.getEnd();
+                    const start = isBetweenMultiLineBookends ? prevNode.getEnd() : node.getStart();
+                    const end = isBetweenMultiLineBookends ? nextNode.getStart() : node.getEnd();
                     pushSelectionRange(start, end, node.kind);
 
                     // String literals should have a stop both inside and outside their quotes.
@@ -156,6 +161,11 @@ namespace ts.SelectionRange {
             return splitChildren(groupedWithQuestionToken, ({ kind }) => kind === SyntaxKind.EqualsToken);
         }
 
+        // Pivot on '='
+        if (isBindingElement(node)) {
+            return splitChildren(node.getChildren(), ({ kind }) => kind === SyntaxKind.EqualsToken);
+        }
+
         return node.getChildren();
     }
 
@@ -225,5 +235,21 @@ namespace ts.SelectionRange {
         const syntaxList = createNode(SyntaxKind.SyntaxList, children[0].pos, last(children).end) as SyntaxList;
         syntaxList._children = children;
         return syntaxList;
+    }
+
+    function isListOpener(token: Node | undefined): token is Node {
+        const kind = token && token.kind;
+        return kind === SyntaxKind.OpenBraceToken
+            || kind === SyntaxKind.OpenBracketToken
+            || kind === SyntaxKind.OpenParenToken
+            || kind === SyntaxKind.JsxOpeningElement;
+    }
+
+    function isListCloser(token: Node | undefined): token is Node {
+        const kind = token && token.kind;
+        return kind === SyntaxKind.CloseBraceToken
+            || kind === SyntaxKind.CloseBracketToken
+            || kind === SyntaxKind.CloseParenToken
+            || kind === SyntaxKind.JsxClosingElement;
     }
 }
