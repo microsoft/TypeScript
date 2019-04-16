@@ -4189,6 +4189,14 @@ namespace ts {
 
         function parseSuperExpression(): MemberExpression {
             const expression = parseTokenNode<PrimaryExpression>();
+            if (token() === SyntaxKind.LessThanToken) {
+                const startPos = getNodePos();
+                const typeArguments = tryParse(parseTypeArgumentsInExpression);
+                if (typeArguments !== undefined) {
+                    parseErrorAt(startPos, getNodePos(), Diagnostics.super_may_not_use_type_arguments);
+                }
+            }
+
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.DotToken || token() === SyntaxKind.OpenBracketToken) {
                 return expression;
             }
@@ -7797,7 +7805,7 @@ namespace ts {
                     const referencedFiles = context.referencedFiles;
                     const typeReferenceDirectives = context.typeReferenceDirectives;
                     const libReferenceDirectives = context.libReferenceDirectives;
-                    forEach(toArray(entryOrList), (arg: PragmaPseudoMap["reference"]) => {
+                    forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
                         const { types, lib, path } = arg.arguments;
                         if (arg.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
@@ -7819,8 +7827,8 @@ namespace ts {
                 }
                 case "amd-dependency": {
                     context.amdDependencies = map(
-                        toArray(entryOrList),
-                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x.arguments.name, path: x.arguments.path }));
+                        toArray(entryOrList) as PragmaPseudoMap["amd-dependency"][],
+                        x => ({ name: x.arguments.name, path: x.arguments.path }));
                     break;
                 }
                 case "amd-module": {

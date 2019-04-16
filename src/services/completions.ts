@@ -1912,8 +1912,8 @@ namespace ts.Completions {
             return undefined;
         }
 
-        const validIdentiferResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
-        if (isIdentifierText(name, target)) return validIdentiferResult;
+        const validIdentifierResult: CompletionEntryDisplayNameForSymbol = { name, needsConvertPropertyAccess: false };
+        if (isIdentifierText(name, target)) return validIdentifierResult;
         switch (kind) {
             case CompletionKind.MemberLike:
                 return undefined;
@@ -1926,7 +1926,7 @@ namespace ts.Completions {
                 return name.charCodeAt(0) === CharacterCodes.space ? undefined : { name, needsConvertPropertyAccess: true };
             case CompletionKind.None:
             case CompletionKind.String:
-                return validIdentiferResult;
+                return validIdentifierResult;
             default:
                 Debug.assertNever(kind);
         }

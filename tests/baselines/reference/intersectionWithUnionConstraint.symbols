@@ -112,3 +112,21 @@ type NoErrorHere<T extends PropertyKey> = T
 >PropertyKey : Symbol(PropertyKey, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 33, 17))
 
+// Repro from #30331
+
+type a<T> = T extends Array<infer U> ? U : never;
+>a : Symbol(a, Decl(intersectionWithUnionConstraint.ts, 33, 43))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
+>U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
+
+type b<T> = { [K in a<T> & keyof T ]: 42 };
+>b : Symbol(b, Decl(intersectionWithUnionConstraint.ts, 37, 49))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 38, 7))
+>K : Symbol(K, Decl(intersectionWithUnionConstraint.ts, 38, 15))
+>a : Symbol(a, Decl(intersectionWithUnionConstraint.ts, 33, 43))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 38, 7))
+>T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 38, 7))
+
