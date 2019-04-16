@@ -6607,12 +6607,11 @@ namespace ts {
          * unique symbol type which we can then use as the name of the member. This allows users
          * to define custom symbols that can be used in the members of an object type.
          *
-         * @param parent The containing symbol for the member.
          * @param earlySymbols The early-bound symbols of the parent.
          * @param lateSymbols The late-bound symbols of the parent.
          * @param decl The member to bind.
          */
-        function lateBindMember(parent: Symbol, earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration) {
+        function lateBindMember(earlySymbols: SymbolTable | undefined, lateSymbols: SymbolTable, decl: LateBoundDeclaration) {
             Debug.assert(!!decl.symbol, "The member is expected to have a symbol.");
             const links = getNodeLinks(decl);
             if (!links.resolvedSymbol) {
@@ -6643,6 +6642,7 @@ namespace ts {
                     }
                     lateSymbol.nameType = type;
                     addDeclarationToLateBoundSymbol(lateSymbol, decl, symbolFlags);
+                    const parent = getSymbolOfNode(decl.parent);
                     if (lateSymbol.parent) {
                         Debug.assert(lateSymbol.parent === parent, "Existing symbol parent should match new one");
                     }
@@ -6650,6 +6650,15 @@ namespace ts {
                         lateSymbol.parent = parent;
                     }
                     return links.resolvedSymbol = lateSymbol;
+                }
+            }
+            else {
+                const type = checkComputedPropertyName(decl.name);
+                if (isTypeUsableAsPropertyName(type)) {
+                    const memberName = getPropertyNameFromType(type);
+                    if (!lateSymbols.has(memberName)) {
+                        lateSymbols.set(memberName, links.resolvedSymbol);
+                    }
                 }
             }
             return links.resolvedSymbol;
@@ -6675,7 +6684,7 @@ namespace ts {
                     if (members) {
                         for (const member of members) {
                             if (isStatic === hasStaticModifier(member) && hasLateBindableName(member)) {
-                                lateBindMember(symbol, earlySymbols, lateSymbols, member);
+                                lateBindMember(earlySymbols, lateSymbols, member);
                             }
                         }
                     }
