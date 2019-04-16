@@ -54,3 +54,55 @@ const myReducer2 = combineReducers({
 
 });
 
+// Repro from #30942
+
+declare function withH<T, U>(handlerCreators: HandleCreatorsFactory<T, U>): U;
+>withH : Symbol(withH, Decl(genericFunctionInference2.ts, 14, 3))
+>T : Symbol(T, Decl(genericFunctionInference2.ts, 18, 23))
+>U : Symbol(U, Decl(genericFunctionInference2.ts, 18, 25))
+>handlerCreators : Symbol(handlerCreators, Decl(genericFunctionInference2.ts, 18, 29))
+>HandleCreatorsFactory : Symbol(HandleCreatorsFactory, Decl(genericFunctionInference2.ts, 20, 28))
+>T : Symbol(T, Decl(genericFunctionInference2.ts, 18, 23))
+>U : Symbol(U, Decl(genericFunctionInference2.ts, 18, 25))
+>U : Symbol(U, Decl(genericFunctionInference2.ts, 18, 25))
+
+type Props = { out: number }
+>Props : Symbol(Props, Decl(genericFunctionInference2.ts, 18, 78))
+>out : Symbol(out, Decl(genericFunctionInference2.ts, 20, 14))
+
+type HandleCreatorsFactory<T, U> = (initialProps: T) => { [P in keyof U]: (props: T) => U[P] };
+>HandleCreatorsFactory : Symbol(HandleCreatorsFactory, Decl(genericFunctionInference2.ts, 20, 28))
+>T : Symbol(T, Decl(genericFunctionInference2.ts, 22, 27))
+>U : Symbol(U, Decl(genericFunctionInference2.ts, 22, 29))
+>initialProps : Symbol(initialProps, Decl(genericFunctionInference2.ts, 22, 36))
+>T : Symbol(T, Decl(genericFunctionInference2.ts, 22, 27))
+>P : Symbol(P, Decl(genericFunctionInference2.ts, 22, 59))
+>U : Symbol(U, Decl(genericFunctionInference2.ts, 22, 29))
+>props : Symbol(props, Decl(genericFunctionInference2.ts, 22, 75))
+>T : Symbol(T, Decl(genericFunctionInference2.ts, 22, 27))
+>U : Symbol(U, Decl(genericFunctionInference2.ts, 22, 29))
+>P : Symbol(P, Decl(genericFunctionInference2.ts, 22, 59))
+
+const enhancer4 = withH((props: Props) => ({
+>enhancer4 : Symbol(enhancer4, Decl(genericFunctionInference2.ts, 24, 5))
+>withH : Symbol(withH, Decl(genericFunctionInference2.ts, 14, 3))
+>props : Symbol(props, Decl(genericFunctionInference2.ts, 24, 25))
+>Props : Symbol(Props, Decl(genericFunctionInference2.ts, 18, 78))
+
+    onChange: (props) => (e: any) => {},
+>onChange : Symbol(onChange, Decl(genericFunctionInference2.ts, 24, 44))
+>props : Symbol(props, Decl(genericFunctionInference2.ts, 25, 15))
+>e : Symbol(e, Decl(genericFunctionInference2.ts, 25, 26))
+
+    onSubmit: (props) => (e: any) => {},
+>onSubmit : Symbol(onSubmit, Decl(genericFunctionInference2.ts, 25, 40))
+>props : Symbol(props, Decl(genericFunctionInference2.ts, 26, 15))
+>e : Symbol(e, Decl(genericFunctionInference2.ts, 26, 26))
+
+}));
+
+enhancer4.onChange(null);
+>enhancer4.onChange : Symbol(onChange, Decl(genericFunctionInference2.ts, 24, 44))
+>enhancer4 : Symbol(enhancer4, Decl(genericFunctionInference2.ts, 24, 5))
+>onChange : Symbol(onChange, Decl(genericFunctionInference2.ts, 24, 44))
+
