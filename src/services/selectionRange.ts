@@ -17,7 +17,7 @@ namespace ts.SelectionRange {
                     break outer;
                 }
 
-                if (positionBelongsToNode(node, pos, sourceFile)) {
+                if (positionShouldSnapToNode(pos, node, nextNode, sourceFile)) {
                     // Blocks are effectively redundant with SyntaxLists.
                     // TemplateSpans, along with the SyntaxLists containing them,
                     // are a somewhat unintuitive grouping of things that should be
@@ -69,6 +69,28 @@ namespace ts.SelectionRange {
         }
     }
 
+    /**
+     * Like `ts.positionBelongsToNode`, except positions immediately after nodes
+     * count too, unless that position belongs to the next node. In effect, makes
+     * selections able to snap to preceding tokens when the cursor is on the tail
+     * end of them with only whitespace ahead.
+     * @param pos The position to check.
+     * @param node The candidate node to snap to.
+     * @param nextNode The next sibling node in the tree.
+     * @param sourceFile The source file containing the nodes.
+     */
+    function positionShouldSnapToNode(pos: number, node: Node, nextNode: Node | undefined, sourceFile: SourceFile) {
+        if (positionBelongsToNode(node, pos, sourceFile)) {
+            return true;
+        }
+        const nodeEnd = node.getEnd();
+        const nextNodeStart = nextNode && nextNode.getStart();
+        if (nodeEnd === pos) {
+            return pos !== nextNodeStart;
+        }
+        return false;
+    }
+
     const isImport = or(isImportDeclaration, isImportEqualsDeclaration);
 
     /**
@@ -100,34 +122,38 @@ namespace ts.SelectionRange {
             const closeBraceToken = Debug.assertDefined(children.pop());
             Debug.assertEqual(openBraceToken.kind, SyntaxKind.OpenBraceToken);
             Debug.assertEqual(closeBraceToken.kind, SyntaxKind.CloseBraceToken);
-            const [leftOfColon, ...rest] = splitChildren(children, child => child.kind === SyntaxKind.ColonToken);
             // Group `-/+readonly` and `-/+?`
-            const leftChildren = groupChildren(getChildrenOrSingleNode(leftOfColon), child =>
+            const groupedWithPlusMinusTokens = groupChildren(children, child =>
                 child === node.readonlyToken || child.kind === SyntaxKind.ReadonlyKeyword ||
                 child === node.questionToken || child.kind === SyntaxKind.QuestionToken);
+            // Group type parameter with surrounding brackets
+            const groupedWithBrackets = groupChildren(groupedWithPlusMinusTokens, ({ kind }) =>
+                kind === SyntaxKind.OpenBracketToken ||
+                kind === SyntaxKind.TypeParameter ||
+                kind === SyntaxKind.CloseBracketToken
+            );
             return [
                 openBraceToken,
-                createSyntaxList([
-                    // Group type parameter with surrounding brackets
-                    createSyntaxList(groupChildren(leftChildren, ({ kind }) =>
-                        kind === SyntaxKind.OpenBracketToken ||
-                        kind === SyntaxKind.TypeParameter ||
-                        kind === SyntaxKind.CloseBracketToken
-                    )),
-                    ...rest,
-                ]),
+                // Pivot on `:`
+                createSyntaxList(splitChildren(groupedWithBrackets, ({ kind }) => kind === SyntaxKind.ColonToken)),
                 closeBraceToken,
             ];
         }
 
-        // Split e.g. `readonly foo?: string` into left and right sides of the colon,
-        // the group `readonly foo` without the QuestionToken.
+        // Group modifiers and property name, then pivot on `:`.
         if (isPropertySignature(node)) {
-            const [leftOfColon, ...rest] = splitChildren(node.getChildren(), child => child.kind === SyntaxKind.ColonToken);
-            return [
-                createSyntaxList(groupChildren(getChildrenOrSingleNode(leftOfColon), child => child !== node.questionToken)),
-                ...rest,
-            ];
+            const children = groupChildren(node.getChildren(), child =>
+                child === node.name || contains(node.modifiers, child));
+            return splitChildren(children, ({ kind }) => kind === SyntaxKind.ColonToken);
+        }
+
+        // Group the parameter name with its `...`, then that group with its `?`, then pivot on `=`.
+        if (isParameter(node)) {
+            const groupedDotDotDotAndName = groupChildren(node.getChildren(), child =>
+                child === node.dotDotDotToken || child === node.name);
+            const groupedWithQuestionToken = groupChildren(groupedDotDotDotAndName, child =>
+                child === groupedDotDotDotAndName[0] || child === node.questionToken);
+            return splitChildren(groupedWithQuestionToken, ({ kind }) => kind === SyntaxKind.EqualsToken);
         }
 
         return node.getChildren();
@@ -192,10 +218,6 @@ namespace ts.SelectionRange {
             rightChildren.length ? createSyntaxList(rightChildren) : undefined,
         ]);
         return separateLastToken ? result.concat(lastToken) : result;
-    }
-
-    function getChildrenOrSingleNode(node: Node): Node[] {
-        return isSyntaxList(node) ? node.getChildren() : [node];
     }
 
     function createSyntaxList(children: Node[]): SyntaxList {

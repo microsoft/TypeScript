@@ -471,5 +471,75 @@ type M = { -readonly [K in keyof any]-?: any };`);
                     parent: leftOfColonUp },
             });
         });
+
+        it("works for parameters", () => {
+            const getSelectionRange = setup("/file.ts", `
+function f(p, q?, ...r: any[] = []) {}`);
+
+            const locations = getSelectionRange([
+                { line: 2, offset: 12 }, // p
+                { line: 2, offset: 15 }, // q
+                { line: 2, offset: 19 }, // ...
+            ]);
+
+            const allParamsUp: protocol.SelectionRange = {
+                textSpan: { // just inside parens
+                    start: { line: 2, offset: 12 },
+                    end: { line: 2, offset: 35 } },
+                parent: {
+                    textSpan: {
+                        start: { line: 2, offset: 1 },
+                        end: { line: 2, offset: 39 } },
+                    parent: {
+                        textSpan: {
+                            start: { line: 1, offset: 1 },
+                            end: { line: 2, offset: 39 } } } } };
+
+            assert.deepEqual(locations![0], {
+                textSpan: { // p
+                    start: { line: 2, offset: 12 },
+                    end: { line: 2, offset: 13 } },
+                parent: allParamsUp,
+            });
+
+            assert.deepEqual(locations![1], {
+                textSpan: { // q
+                    start: { line: 2, offset: 15 },
+                    end: { line: 2, offset: 16 } },
+                parent: {
+                    textSpan: { // q?
+                        start: { line: 2, offset: 15 },
+                        end: { line: 2, offset: 17 } },
+                    parent: allParamsUp },
+            });
+
+            assert.deepEqual(locations![2], {
+                textSpan: { // ...
+                    start: { line: 2, offset: 19 },
+                    end: { line: 2, offset: 22 } },
+                parent: {
+                    textSpan: { // ...r
+                        start: { line: 2, offset: 19 },
+                        end: { line: 2, offset: 23 } },
+                    parent: {
+                        textSpan: { // ...r: any[]
+                            start: { line: 2, offset: 19 },
+                            end: { line: 2, offset: 30 } },
+                        parent: {
+                            textSpan: { // ...r: any[] = []
+                                start: { line: 2, offset: 19 },
+                                end: { line: 2, offset: 35 } },
+                            parent: allParamsUp } } },
+            });
+        });
+
+        it("snaps to nodes directly behind the cursor instead of trivia ahead of the cursor", () => {
+            const getSelectionRange = setup("/file.ts", `let x: string`);
+            const locations = getSelectionRange([{ line: 1, offset: 4 }]);
+            assert.deepEqual(locations![0].textSpan, {
+                start: { line: 1, offset: 1 },
+                end: { line: 1, offset: 4 },
+            });
+        });
     });
 }
