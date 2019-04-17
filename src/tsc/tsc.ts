@@ -330,6 +330,9 @@ namespace ts {
             reportCountStatistic("Identifiers", program.getIdentifierCount());
             reportCountStatistic("Symbols", program.getSymbolCount());
             reportCountStatistic("Types", program.getTypeCount());
+            reportCountStatistic("Assignability cache size", program.getAssignabilityCacheSize());
+            reportCountStatistic("Identity cache size", program.getIdentityCacheSize());
+            reportCountStatistic("Subtype cache size", program.getSubtypeCacheSize());
 
             if (memoryUsed >= 0) {
                 reportStatisticalValue("Memory used", Math.round(memoryUsed / 1000) + "K");

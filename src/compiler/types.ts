@@ -2961,6 +2961,9 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+        /* @internal */ getAssignabilityCacheSize(): number;
+        /* @internal */ getIdentityCacheSize(): number;
+        /* @internal */ getSubtypeCacheSize(): number;
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective | undefined>;
@@ -3246,6 +3249,9 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+        /* @internal */ getAssignabilityCacheSize(): number;
+        /* @internal */ getIdentityCacheSize(): number;
+        /* @internal */ getSubtypeCacheSize(): number;
 
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
