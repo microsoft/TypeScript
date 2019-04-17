@@ -27,8 +27,8 @@ exports.multiply = multiply;
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "/lib/lib.d.ts",
-        "signature": "/lib/lib.d.ts"
+        "version": "-15964756381",
+        "signature": "-15964756381"
       },
       "/src/core/anothermodule.ts": {
         "version": "-2676574883",

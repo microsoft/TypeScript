@@ -397,19 +397,6 @@ namespace fakes {
             const value = super.readFile(path);
             if (!value || !ts.isBuildInfoFile(path)) return value;
             const buildInfo = ts.getBuildInfo(value);
-            if (buildInfo.program) {
-                // Fix lib signatures
-                for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
-                    if (ts.startsWith(path, "/lib/")) {
-                        const currentValue = buildInfo.program.fileInfos[path];
-                        ts.Debug.assert(currentValue.signature === path);
-                        ts.Debug.assert(currentValue.signature === currentValue.version);
-                        const text = super.readFile(path)!;
-                        const signature = ts.generateDjb2Hash(text);
-                        buildInfo.program.fileInfos[path] = { version: signature, signature };
-                    }
-                }
-            }
             ts.Debug.assert(buildInfo.version === version);
             buildInfo.version = ts.version;
             return ts.getBuildInfoText(buildInfo);
@@ -419,15 +406,6 @@ namespace fakes {
             if (!ts.isBuildInfoFile(fileName)) return super.writeFile(fileName, content, writeByteOrderMark);
             const buildInfo = ts.getBuildInfo(content);
             if (buildInfo.program) {
-                // Fix lib signatures
-                for (const path of ts.getOwnKeys(buildInfo.program.fileInfos)) {
-                    if (ts.startsWith(path, "/lib/")) {
-                        const currentValue = buildInfo.program.fileInfos[path];
-                        ts.Debug.assert(currentValue.signature === currentValue.version);
-                        buildInfo.program.fileInfos[path] = { version: path, signature: path };
-                    }
-                }
-
                 // reference Map
                 if (buildInfo.program.referencedMap) {
                     const referencedMap: ts.MapLike<string[]> = {};
