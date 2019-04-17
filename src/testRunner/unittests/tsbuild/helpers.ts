@@ -62,29 +62,24 @@ namespace ts {
         }
     }
 
+    const libContent = `${TestFSWithWatch.libFile.content}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };`;
+
     export function loadProjectFromDisk(root: string, time?: vfs.FileSystemOptions["time"]): vfs.FileSystem {
         const resolver = vfs.createResolver(Harness.IO);
         const fs = new vfs.FileSystem(/*ignoreCase*/ true, {
             files: {
-                ["/lib"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), "built/local"), resolver),
                 ["/src"]: new vfs.Mount(vpath.resolve(Harness.IO.getWorkspaceRoot(), root), resolver)
             },
             cwd: "/",
             meta: { defaultLibLocation: "/lib" },
             time
         });
+        fs.mkdirSync("/lib");
+        fs.writeFileSync("/lib/lib.d.ts", libContent);
         fs.makeReadonly();
         return fs;
-    }
-
-    export function getLibs() {
-        return [
-            "/lib/lib.d.ts",
-            "/lib/lib.es5.d.ts",
-            "/lib/lib.dom.d.ts",
-            "/lib/lib.webworker.importscripts.d.ts",
-            "/lib/lib.scripthost.d.ts"
-        ];
     }
 
     function generateSourceMapBaselineFiles(fs: vfs.FileSystem, mapFileNames: ReadonlyArray<string>) {

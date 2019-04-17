@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "composite": true,
-    "target": "esnext",
     "moduleResolution": "node",
     "module": "commonjs",
     "resolveJsonModule": true,

@@ -399,14 +399,14 @@ export class cNew {}`);
                 const builder = createSolutionBuilder(host, ["/src/tests"], { listFiles: true });
                 builder.buildAllProjects();
                 assert.deepEqual(host.traces, [
-                    ...getLibs(),
+                    "/lib/lib.d.ts",
                     "/src/core/anotherModule.ts",
                     "/src/core/index.ts",
                     "/src/core/some_decl.d.ts",
-                    ...getLibs(),
+                    "/lib/lib.d.ts",
                     ...getCoreOutputs(),
                     "/src/logic/index.ts",
-                    ...getLibs(),
+                    "/lib/lib.d.ts",
                     ...getCoreOutputs(),
                     "/src/logic/index.d.ts",
                     "/src/tests/index.ts"
