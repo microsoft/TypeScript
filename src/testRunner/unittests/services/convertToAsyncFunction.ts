@@ -348,6 +348,14 @@ interface Array<T> {}`
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
 }`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_arrayBindingPattern", `
+function [#|f|](): Promise<void>{
+    return fetch('https://typescriptlang.org').then(([result]) => { console.log(result) });
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_objectBindingPattern", `
+function [#|f|](): Promise<void>{
+    return fetch('https://typescriptlang.org').then(({ result }) => { console.log(result) });
+}`);
     _testConvertToAsyncFunction("convertToAsyncFunction_basicNoReturnTypeAnnotation", `
 function [#|f|]() {
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
