@@ -720,6 +720,47 @@ class someClass { }`),
                     "/src/tests/tsconfig.tsbuildinfo",
                 ]
             });
+
+            verifyTsbuildOutput({
+                scenario: "when declaration option changes",
+                projFs: () => projFs,
+                time,
+                tick,
+                proj: "sample1",
+                rootNames: ["/src/core"],
+                expectedMapFileNames: emptyArray,
+                lastProjectOutputJs: "/src/core/index.js",
+                initialBuild: {
+                    modifyFs: fs => fs.writeFileSync("/src/core/tsconfig.json", `{
+    "compilerOptions": {
+        "incremental": true,
+        "skipDefaultLibCheck": true
+    }
+}`),
+                    expectedDiagnostics: [
+                        getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json"),
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                        [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    ]
+                },
+                incrementalDtsChangedBuild: {
+                    modifyFs: fs => replaceText(fs, "/src/core/tsconfig.json", `"incremental": true,`, `"incremental": true, "declaration": true,`),
+                    expectedDiagnostics: [
+                        getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json"),
+                        [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.d.ts"],
+                        [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
+                    ]
+                },
+                outputFiles: [
+                    "/src/core/anotherModule.js",
+                    "/src/core/anotherModule.d.ts",
+                    "/src/core/index.js",
+                    "/src/core/index.d.ts",
+                    "/src/core/tsconfig.tsbuildinfo",
+                ],
+                baselineOnly: true,
+                verifyDiagnostics: true
+            });
         });
     });
 }
