@@ -340,9 +340,10 @@ namespace ts {
             const checkTime = performance.getDuration("Check");
             const emitTime = performance.getDuration("Emit");
             if (compilerOptions.extendedDiagnostics) {
-                reportCountStatistic("Assignability cache size", program.getAssignabilityCacheSize());
-                reportCountStatistic("Identity cache size", program.getIdentityCacheSize());
-                reportCountStatistic("Subtype cache size", program.getSubtypeCacheSize());
+                const caches = program.getRelationCacheSizes();
+                reportCountStatistic("Assignability cache size", caches.assignable);
+                reportCountStatistic("Identity cache size", caches.identity);
+                reportCountStatistic("Subtype cache size", caches.subtype);
                 performance.forEachMeasure((name, duration) => reportTimeStatistic(`${name} time`, duration));
             }
             else {
