@@ -30,13 +30,9 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
 {
   "program": {
     "fileInfos": {
-      "/lib/lib.es5.d.ts": {
-        "version": "/lib/lib.es5.d.ts",
-        "signature": "/lib/lib.es5.d.ts"
-      },
-      "/lib/lib.es2015.promise.d.ts": {
-        "version": "/lib/lib.es2015.promise.d.ts",
-        "signature": "/lib/lib.es2015.promise.d.ts"
+      "/lib/lib.d.ts": {
+        "version": "-15964756381",
+        "signature": "-15964756381"
       },
       "/src/bar.ts": {
         "version": "747071916",
@@ -45,6 +41,10 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
       "/src/bundling.ts": {
         "version": "-21659820217",
         "signature": "-40032907372"
+      },
+      "/src/global.d.ts": {
+        "version": "-9780226215",
+        "signature": "-9780226215"
       },
       "/src/lazyindex.ts": {
         "version": "-6956449754",
@@ -60,10 +60,6 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
       "declaration": true,
       "outDir": "/src/obj",
       "incremental": true,
-      "lib": [
-        "lib.es5.d.ts",
-        "lib.es2015.promise.d.ts"
-      ],
       "configFilePath": "/src/tsconfig.json"
     },
     "referencedMap": {
@@ -85,10 +81,10 @@ export declare const lazyBar: LazyAction<() => void, typeof import("./lazyIndex"
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "/lib/lib.es2015.promise.d.ts",
-      "/lib/lib.es5.d.ts",
+      "/lib/lib.d.ts",
       "/src/bar.ts",
       "/src/bundling.ts",
+      "/src/global.d.ts",
       "/src/index.ts",
       "/src/lazyindex.ts"
     ]
