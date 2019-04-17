@@ -196,8 +196,8 @@ namespace ts.codefix {
                     allVarNames.push({ identifier: synthName.identifier, symbol });
                     addNameToFrequencyMap(collidingSymbolMap, ident.text, symbol);
                 }
-                // we only care about identifiers that are parameters and declarations (don't care about other uses)
-                else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent))) {
+                // we only care about identifiers that are parameters, declarations, or binding elements (don't care about other uses)
+                else if (node.parent && (isParameter(node.parent) || isVariableDeclaration(node.parent) || isBindingElement(node.parent))) {
                     const originalName = node.text;
                     const collidingSymbols = collidingSymbolMap.get(originalName);
 
