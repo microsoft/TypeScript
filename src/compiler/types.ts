@@ -3247,7 +3247,7 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
-        /* @internal */ getRelationCacheSizes():  { assignable: number, identity: number, subtype: number };
+        /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
 
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
