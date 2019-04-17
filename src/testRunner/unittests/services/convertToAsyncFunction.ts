@@ -356,6 +356,16 @@ function [#|f|](): Promise<void>{
 function [#|f|](): Promise<void>{
     return fetch('https://typescriptlang.org').then(({ result }) => { console.log(result) });
 }`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_arrayBindingPatternRename", `
+function [#|f|](): Promise<void>{
+    const result = getResult();
+    return fetch('https://typescriptlang.org').then(([result]) => { console.log(result) });
+}`);
+        _testConvertToAsyncFunction("convertToAsyncFunction_objectBindingPatternRename", `
+function [#|f|](): Promise<void>{
+    const result = getResult();
+    return fetch('https://typescriptlang.org').then(({ result }) => { console.log(result) });
+}`);
     _testConvertToAsyncFunction("convertToAsyncFunction_basicNoReturnTypeAnnotation", `
 function [#|f|]() {
     return fetch('https://typescriptlang.org').then(result => { console.log(result) });
