@@ -14960,9 +14960,11 @@ namespace ts {
                     }
                     // If no inferences can be made to K's constraint, infer from a union of the property types
                     // in the source to the template type X.
-                    const indexInfo = getIndexInfoOfType(source, IndexKind.String) || getNonEnumNumberIndexInfo(source);
-                    const sourcePropsType = indexInfo && indexInfo.type || getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol));
-                    inferFromTypes(sourcePropsType, getTemplateTypeFromMappedType(target));
+                    const propTypes = map(getPropertiesOfType(source), getTypeOfSymbol);
+                    const stringIndexType = getIndexTypeOfType(source, IndexKind.String);
+                    const numberIndexInfo = getNonEnumNumberIndexInfo(source);
+                    const numberIndexType = numberIndexInfo && numberIndexInfo.type;
+                    inferFromTypes(getUnionType(append(append(propTypes, stringIndexType), numberIndexType)), getTemplateTypeFromMappedType(target));
                     return true;
                 }
                 return false;
