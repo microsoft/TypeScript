@@ -21,49 +21,13 @@ type A = HKT<number>[typeof sym];
 {
   "program": {
     "fileInfos": {
-      "/lib/lib.es5.d.ts": {
-        "version": "/lib/lib.es5.d.ts",
-        "signature": "/lib/lib.es5.d.ts"
+      "/lib/lib.d.ts": {
+        "version": "-15964756381",
+        "signature": "-15964756381"
       },
-      "/lib/lib.es2015.d.ts": {
-        "version": "/lib/lib.es2015.d.ts",
-        "signature": "/lib/lib.es2015.d.ts"
-      },
-      "/lib/lib.es2015.core.d.ts": {
-        "version": "/lib/lib.es2015.core.d.ts",
-        "signature": "/lib/lib.es2015.core.d.ts"
-      },
-      "/lib/lib.es2015.collection.d.ts": {
-        "version": "/lib/lib.es2015.collection.d.ts",
-        "signature": "/lib/lib.es2015.collection.d.ts"
-      },
-      "/lib/lib.es2015.generator.d.ts": {
-        "version": "/lib/lib.es2015.generator.d.ts",
-        "signature": "/lib/lib.es2015.generator.d.ts"
-      },
-      "/lib/lib.es2015.iterable.d.ts": {
-        "version": "/lib/lib.es2015.iterable.d.ts",
-        "signature": "/lib/lib.es2015.iterable.d.ts"
-      },
-      "/lib/lib.es2015.promise.d.ts": {
-        "version": "/lib/lib.es2015.promise.d.ts",
-        "signature": "/lib/lib.es2015.promise.d.ts"
-      },
-      "/lib/lib.es2015.proxy.d.ts": {
-        "version": "/lib/lib.es2015.proxy.d.ts",
-        "signature": "/lib/lib.es2015.proxy.d.ts"
-      },
-      "/lib/lib.es2015.reflect.d.ts": {
-        "version": "/lib/lib.es2015.reflect.d.ts",
-        "signature": "/lib/lib.es2015.reflect.d.ts"
-      },
-      "/lib/lib.es2015.symbol.d.ts": {
-        "version": "/lib/lib.es2015.symbol.d.ts",
-        "signature": "/lib/lib.es2015.symbol.d.ts"
-      },
-      "/lib/lib.es2015.symbol.wellknown.d.ts": {
-        "version": "/lib/lib.es2015.symbol.wellknown.d.ts",
-        "signature": "/lib/lib.es2015.symbol.wellknown.d.ts"
+      "/src/src/globals.d.ts": {
+        "version": "-1994196675",
+        "signature": "-1994196675"
       },
       "/src/src/hkt.ts": {
         "version": "675797797",
@@ -76,9 +40,6 @@ type A = HKT<number>[typeof sym];
     },
     "options": {
       "rootDir": "/src/src",
-      "lib": [
-        "lib.es2015.d.ts"
-      ],
       "incremental": true,
       "configFilePath": "/src/tsconfig.json"
     },
@@ -93,17 +54,8 @@ type A = HKT<number>[typeof sym];
       ]
     },
     "semanticDiagnosticsPerFile": [
-      "/lib/lib.es2015.collection.d.ts",
-      "/lib/lib.es2015.core.d.ts",
-      "/lib/lib.es2015.d.ts",
-      "/lib/lib.es2015.generator.d.ts",
-      "/lib/lib.es2015.iterable.d.ts",
-      "/lib/lib.es2015.promise.d.ts",
-      "/lib/lib.es2015.proxy.d.ts",
-      "/lib/lib.es2015.reflect.d.ts",
-      "/lib/lib.es2015.symbol.d.ts",
-      "/lib/lib.es2015.symbol.wellknown.d.ts",
-      "/lib/lib.es5.d.ts",
+      "/lib/lib.d.ts",
+      "/src/src/globals.d.ts",
       "/src/src/hkt.ts",
       "/src/src/main.ts"
     ]
