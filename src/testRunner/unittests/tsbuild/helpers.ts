@@ -285,8 +285,10 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                     let newFs: vfs.FileSystem;
                     let actualReadFileMap: Map<number>;
                     let host: fakes.SolutionBuilderHost;
+                    let beforeBuildTime: number;
+                    let afterBuildTime: number;
                     before(() => {
-                        assert.equal(fs.statSync(lastProjectOutputJs).mtimeMs, firstBuildTime, "First build timestamp is correct");
+                        beforeBuildTime = fs.statSync(lastProjectOutputJs).mtimeMs;
                         tick();
                         newFs = fs.shadow();
                         tick();
@@ -298,12 +300,16 @@ Mismatch Actual(path, actual, expected): ${JSON.stringify(arrayFrom(mapDefinedIt
                             expectedBuildInfoFilesForSectionBaselines,
                             modifyFs: incrementalModifyFs,
                         }));
-                        assert.equal(newFs.statSync(lastProjectOutputJs).mtimeMs, time(), "Second build timestamp is correct");
+                        afterBuildTime = newFs.statSync(lastProjectOutputJs).mtimeMs;
                     });
                     after(() => {
                         newFs = undefined!;
                         actualReadFileMap = undefined!;
                         host = undefined!;
+                    });
+                    it("verify build output times", () => {
+                        assert.equal(beforeBuildTime, firstBuildTime, "First build timestamp is correct");
+                        assert.equal(afterBuildTime, time(), "Second build timestamp is correct");
                     });
                     if (!baselineOnly || verifyDiagnostics) {
                         it(`verify diagnostics`, () => {

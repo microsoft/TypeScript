@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "lib": [
+      "es2015"
+    ],
+    "incremental": true
+  }
+}
