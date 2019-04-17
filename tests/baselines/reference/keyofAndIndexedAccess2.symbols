@@ -388,3 +388,40 @@ function get123<K extends keyof Type>(): Type[K] {
     return 123;  // Error
 }
 
+// Repros from #30938
+
+function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
+>fn : Symbol(fn, Decl(keyofAndIndexedAccess2.ts, 108, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 12))
+>elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 112, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 112, 51))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 112, 77))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 12))
+>cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 112, 86))
+>element : Symbol(element, Decl(keyofAndIndexedAccess2.ts, 112, 92))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 12))
+
+    cb(param.elements[0]);
+>cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 112, 86))
+>param.elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 112, 23), Decl(keyofAndIndexedAccess2.ts, 112, 51))
+>param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 112, 77))
+>elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 112, 23), Decl(keyofAndIndexedAccess2.ts, 112, 51))
+}
+
+function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
+>fn2 : Symbol(fn2, Decl(keyofAndIndexedAccess2.ts, 114, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 116, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 116, 38))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 116, 13))
+>cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 116, 47))
+>element : Symbol(element, Decl(keyofAndIndexedAccess2.ts, 116, 53))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 116, 13))
+
+    cb(param[0]);
+>cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 116, 47))
+>param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 116, 38))
+}
+

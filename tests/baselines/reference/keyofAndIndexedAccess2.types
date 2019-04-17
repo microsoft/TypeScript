@@ -423,3 +423,37 @@ function get123<K extends keyof Type>(): Type[K] {
 >123 : 123
 }
 
+// Repros from #30938
+
+function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
+>fn : <T extends { elements: string[]; } | { elements: number[]; }>(param: T, cb: (element: T["elements"][number]) => void) => void
+>elements : string[]
+>elements : number[]
+>param : T
+>cb : (element: T["elements"][number]) => void
+>element : T["elements"][number]
+
+    cb(param.elements[0]);
+>cb(param.elements[0]) : void
+>cb : (element: T["elements"][number]) => void
+>param.elements[0] : string | number
+>param.elements : string[] | number[]
+>param : T
+>elements : string[] | number[]
+>0 : 0
+}
+
+function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
+>fn2 : <T extends string[]>(param: T, cb: (element: T[number]) => void) => void
+>param : T
+>cb : (element: T[number]) => void
+>element : T[number]
+
+    cb(param[0]);
+>cb(param[0]) : void
+>cb : (element: T[number]) => void
+>param[0] : string
+>param : T
+>0 : 0
+}
+
