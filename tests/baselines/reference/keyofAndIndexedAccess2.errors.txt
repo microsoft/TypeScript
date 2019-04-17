@@ -188,3 +188,10 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
 !!! error TS2322:     Type '123' is not assignable to type '"some string"'.
     }
     
+    // Repro from #30920
+    
+    type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
+    type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
+    type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
+    type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
+    
