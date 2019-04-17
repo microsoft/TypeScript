@@ -457,7 +457,6 @@ export namespace PetitDom {
 
         "main": HTMLMainElement;
 >"main" : Symbol(DomElements["main"], Decl(index.d.ts, 157, 79))
->HTMLMainElement : Symbol(HTMLMainElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
     }
 }
 
