@@ -15021,12 +15021,11 @@ namespace ts {
                     }
                     // If no inferences can be made to K's constraint, infer from a union of the property types
                     // in the source to the template type X.
-                    const valueTypes = compact([
-                        getIndexTypeOfType(source, IndexKind.String),
-                        getIndexTypeOfType(source, IndexKind.Number),
-                        ...map(getPropertiesOfType(source), getTypeOfSymbol)
-                    ]);
-                    inferFromTypes(getUnionType(valueTypes), getTemplateTypeFromMappedType(target));
+                    const propTypes = map(getPropertiesOfType(source), getTypeOfSymbol);
+                    const stringIndexType = getIndexTypeOfType(source, IndexKind.String);
+                    const numberIndexInfo = getNonEnumNumberIndexInfo(source);
+                    const numberIndexType = numberIndexInfo && numberIndexInfo.type;
+                    inferFromTypes(getUnionType(append(append(propTypes, stringIndexType), numberIndexType)), getTemplateTypeFromMappedType(target));
                     return true;
                 }
                 return false;
