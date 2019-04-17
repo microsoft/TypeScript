@@ -236,10 +236,7 @@ namespace ts {
             }
         });
 
-        if (oldCompilerOptions &&
-            (oldCompilerOptions.outDir !== compilerOptions.outDir ||
-                oldCompilerOptions.declarationDir !== compilerOptions.declarationDir ||
-                (oldCompilerOptions.outFile || oldCompilerOptions.out) !== (compilerOptions.outFile || compilerOptions.out))) {
+        if (oldCompilerOptions && compilerOptionsAffectEmit(compilerOptions, oldCompilerOptions)) {
             // Add all files to affectedFilesPendingEmit since emit changed
             addToAffectedFilesPendingEmit(state, newProgram.getSourceFiles().map(f => f.path));
             Debug.assert(state.seenAffectedFiles === undefined);
