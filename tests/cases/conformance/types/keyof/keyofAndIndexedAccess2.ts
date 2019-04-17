@@ -110,3 +110,13 @@ interface Type {
 function get123<K extends keyof Type>(): Type[K] {
     return 123;  // Error
 }
+
+// Repros from #30938
+
+function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
+    cb(param.elements[0]);
+}
+
+function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
+    cb(param[0]);
+}
