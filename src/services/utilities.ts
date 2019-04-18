@@ -1729,7 +1729,7 @@ namespace ts {
                     node.initializer);
             }
         }
-        else if (renameMap && checker && isIdentifier(node) && !(node.parent && node.parent.parent && isBindingElement(node.parent) && isObjectBindingPattern(node.parent.parent))) {
+        else if (renameMap && checker && isIdentifier(node)) {
             const symbol = checker.getSymbolAtLocation(node);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
