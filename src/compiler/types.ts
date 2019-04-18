@@ -4383,7 +4383,7 @@ namespace ts {
         /* @internal */
         erasedSignatureCache?: Signature;   // Erased version of signature (to any) (deferred)
         /* @internal */
-        constrainedSignatureCache?: Signature; // Erased version of signature (to constraints) (deferred)
+        baseSignatureCache?: Signature; // Erased version of signature (to constraints) (deferred)
         /* @internal */
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */

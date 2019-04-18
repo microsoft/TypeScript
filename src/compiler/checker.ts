@@ -8564,9 +8564,9 @@ namespace ts {
             return instantiateSignature(signature, createTypeEraser(signature.typeParameters!), /*eraseTypeParameters*/ true);
         }
 
-        function getConstrainedSignature(signature: Signature): Signature {
+        function getBaseSignature(signature: Signature): Signature {
             return signature.typeParameters ?
-                signature.constrainedSignatureCache || (signature.constrainedSignatureCache = getBaseSignature(signature)) :
+                signature.baseSignatureCache || (signature.baseSignatureCache = createBaseSignature(signature)) :
                 signature;
         }
 
@@ -8589,7 +8589,7 @@ namespace ts {
                 isInJSFile(signature.declaration));
         }
 
-        function getBaseSignature(signature: Signature) {
+        function createBaseSignature(signature: Signature) {
             const typeParameters = signature.typeParameters;
             if (typeParameters) {
                 const typeEraser = createTypeEraser(typeParameters);
@@ -13922,8 +13922,8 @@ namespace ts {
             }
             // Spec 1.0 Section 3.8.3 & 3.8.4:
             // M and N (the signatures) are instantiated using type Any as the type argument for all type parameters declared by M and N
-            source = getConstrainedSignature(source);
-            target = getConstrainedSignature(target);
+            source = getBaseSignature(source);
+            target = getBaseSignature(target);
             let result = Ternary.True;
 
             if (!ignoreThisTypes) {
