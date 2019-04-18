@@ -110,3 +110,10 @@ interface Type {
 function get123<K extends keyof Type>(): Type[K] {
     return 123;  // Error
 }
+
+// Repro from #30920
+
+type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
+type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
+type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
+type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
