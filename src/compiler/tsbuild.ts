@@ -411,8 +411,6 @@ namespace ts {
         const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
         const projectPendingBuild = createFileMap<ConfigFileProgramReloadLevel>(toPath);
         const projectErrorsReported = createFileMap<true>(toPath);
-        const invalidatedProjectQueue = [] as ResolvedConfigFileName[];
-        let nextProjectToBuild = 0;
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
         const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(host, options);
@@ -456,8 +454,6 @@ namespace ts {
             diagnostics.clear();
             projectPendingBuild.clear();
             projectErrorsReported.clear();
-            invalidatedProjectQueue.length = 0;
-            nextProjectToBuild = 0;
             if (timerToBuildInvalidatedProject) {
                 clearTimeout(timerToBuildInvalidatedProject);
                 timerToBuildInvalidatedProject = undefined;
@@ -498,8 +494,8 @@ namespace ts {
         }
 
         function startWatching() {
-            const graph = getGlobalDependencyGraph();
-            for (const resolved of graph.buildQueue) {
+            const { buildQueue } = getGlobalDependencyGraph();
+            for (const resolved of buildQueue) {
                 // Watch this file
                 watchConfigFile(resolved);
 
@@ -855,10 +851,10 @@ namespace ts {
         }
 
         function invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel) {
-            invalidateResolvedProject(resolveProjectName(configFileName), reloadLevel);
+            invalidateResolvedProject(resolveProjectName(configFileName), reloadLevel || ConfigFileProgramReloadLevel.None);
         }
 
-        function invalidateResolvedProject(resolved: ResolvedConfigFileName, reloadLevel?: ConfigFileProgramReloadLevel) {
+        function invalidateResolvedProject(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
                 configFileCache.removeKey(resolved);
                 globalDependencyGraph = undefined;
@@ -872,28 +868,24 @@ namespace ts {
         /**
          * return true if new addition
          */
-        function addProjToQueue(proj: ResolvedConfigFileName, reloadLevel?: ConfigFileProgramReloadLevel) {
+        function addProjToQueue(proj: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
             const value = projectPendingBuild.getValue(proj);
             if (value === undefined) {
-                projectPendingBuild.setValue(proj, reloadLevel || ConfigFileProgramReloadLevel.None);
-                invalidatedProjectQueue.push(proj);
+                projectPendingBuild.setValue(proj, reloadLevel);
             }
-            else if (value < (reloadLevel || ConfigFileProgramReloadLevel.None)) {
-                projectPendingBuild.setValue(proj, reloadLevel || ConfigFileProgramReloadLevel.None);
+            else if (value < reloadLevel) {
+                projectPendingBuild.setValue(proj, reloadLevel);
             }
         }
 
         function getNextInvalidatedProject() {
-            if (nextProjectToBuild < invalidatedProjectQueue.length) {
-                const project = invalidatedProjectQueue[nextProjectToBuild];
-                nextProjectToBuild++;
-                const reloadLevel = projectPendingBuild.getValue(project)!;
-                projectPendingBuild.removeKey(project);
-                if (!projectPendingBuild.getSize()) {
-                    invalidatedProjectQueue.length = 0;
-                    nextProjectToBuild = 0;
+            const { buildQueue } = getGlobalDependencyGraph();
+            for (const project of buildQueue) {
+                const reloadLevel = projectPendingBuild.getValue(project);
+                if (reloadLevel !== undefined) {
+                    projectPendingBuild.removeKey(project);
+                    return { project, reloadLevel };
                 }
-                return { project, reloadLevel };
             }
         }
 
@@ -990,15 +982,20 @@ namespace ts {
                 updateBundle(resolved); // Fake that files have been built by manipulating prepend and existing output
             if (buildResult & BuildResultFlags.AnyErrors) return;
 
-            const { referencingProjectsMap, buildQueue } = getGlobalDependencyGraph();
-            const referencingProjects = referencingProjectsMap.getValue(resolved);
-            if (!referencingProjects) return;
+            // Only composite projects can be referenced by other projects
+            if (!proj.options.composite) return;
+            const { buildQueue } = getGlobalDependencyGraph();
 
             // Always use build order to queue projects
             for (let index = buildQueue.indexOf(resolved) + 1; index < buildQueue.length; index++) {
                 const project = buildQueue[index];
-                const prepend = referencingProjects.getValue(project);
-                if (prepend !== undefined) {
+                if (projectPendingBuild.hasKey(project)) continue;
+
+                const config = parseConfigFile(project);
+                if (!config || !config.projectReferences) continue;
+                for (const ref of config.projectReferences) {
+                    const resolvedRefPath = resolveProjectName(ref.path);
+                    if (resolvedRefPath !== resolved) continue;
                     // If the project is referenced with prepend, always build downstream projects,
                     // If declaration output is changed, build the project
                     // otherwise mark the project UpToDateWithUpstreamTypes so it updates output time stamps
@@ -1013,7 +1010,7 @@ namespace ts {
                         }
                     }
                     else if (status && status.type === UpToDateStatusType.UpToDate) {
-                        if (prepend) {
+                        if (ref.prepend) {
                             projectStatus.setValue(project, {
                                 type: UpToDateStatusType.OutOfDateWithPrepend,
                                 outOfDateOutputFileName: status.oldestOutputFileName,
@@ -1024,7 +1021,8 @@ namespace ts {
                             status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
                         }
                     }
-                    addProjToQueue(project);
+                    addProjToQueue(project, ConfigFileProgramReloadLevel.None);
+                    break;
                 }
             }
         }
@@ -1341,9 +1339,9 @@ namespace ts {
 
         function getFilesToClean(): string[] {
             // Get the same graph for cleaning we'd use for building
-            const graph = getGlobalDependencyGraph();
+            const { buildQueue } = getGlobalDependencyGraph();
             const filesToDelete: string[] = [];
-            for (const proj of graph.buildQueue) {
+            for (const proj of buildQueue) {
                 const parsed = parseConfigFile(proj);
                 if (parsed === undefined) {
                     // File has gone missing; fine to ignore here
@@ -1403,10 +1401,10 @@ namespace ts {
                     loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
             }
 
-            const graph = getGlobalDependencyGraph();
-            reportBuildQueue(graph);
+            const { buildQueue } = getGlobalDependencyGraph();
+            reportBuildQueue(buildQueue);
             let anyFailed = false;
-            for (const next of graph.buildQueue) {
+            for (const next of buildQueue) {
                 const proj = parseConfigFile(next);
                 if (proj === undefined) {
                     reportParseConfigFileDiagnostic(next);
@@ -1494,9 +1492,9 @@ namespace ts {
         /**
          * Report the build ordering inferred from the current project graph if we're in verbose mode
          */
-        function reportBuildQueue(graph: DependencyGraph) {
+        function reportBuildQueue(buildQueue: readonly ResolvedConfigFileName[]) {
             if (options.verbose) {
-                reportStatus(Diagnostics.Projects_in_this_build_Colon_0, graph.buildQueue.map(s => "\r\n    * " + relName(s)).join(""));
+                reportStatus(Diagnostics.Projects_in_this_build_Colon_0, buildQueue.map(s => "\r\n    * " + relName(s)).join(""));
             }
         }
 
