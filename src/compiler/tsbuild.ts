@@ -13,8 +13,6 @@ namespace ts {
 
     interface DependencyGraph {
         buildQueue: ResolvedConfigFileName[];
-        /** value in config File map is true if project is referenced using prepend */
-        referencingProjectsMap: ConfigFileMap<ConfigFileMap<boolean>>;
     }
 
     export interface BuildOptions extends OptionsBase {
@@ -1032,14 +1030,12 @@ namespace ts {
             const permanentMarks = createFileMap<true>(toPath);
             const circularityReportStack: string[] = [];
             const buildOrder: ResolvedConfigFileName[] = [];
-            const referencingProjectsMap = createFileMap<ConfigFileMap<boolean>>(toPath);
             for (const root of roots) {
                 visit(root);
             }
 
             return {
                 buildQueue: buildOrder,
-                referencingProjectsMap
             };
 
             function visit(projPath: ResolvedConfigFileName, inCircularContext?: boolean) {
@@ -1061,9 +1057,6 @@ namespace ts {
                     for (const ref of parsed.projectReferences) {
                         const resolvedRefPath = resolveProjectName(ref.path);
                         visit(resolvedRefPath, inCircularContext || ref.circular);
-                        // Get projects referencing resolvedRefPath and add projPath to it
-                        const referencingProjects = getOrCreateValueFromConfigFileMap(referencingProjectsMap, resolvedRefPath, () => createFileMap(toPath));
-                        referencingProjects.setValue(projPath, !!ref.prepend);
                     }
                 }
 
