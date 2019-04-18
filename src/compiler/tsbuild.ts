@@ -194,27 +194,22 @@ namespace ts {
         }
     }
 
-    interface FileMap<T, U extends string = string, V extends Path = Path> {
-        setValue(fileName: U, value: T): void;
-        getValue(fileName: U): T | undefined;
-        hasKey(fileName: U): boolean;
-        removeKey(fileName: U): void;
-        forEach(action: (value: T, key: V) => void): void;
+    interface ConfigFileMap<T> {
+        setValue(fileName: ResolvedConfigFileName, value: T): void;
+        getValue(fileName: ResolvedConfigFileName): T | undefined;
+        hasKey(fileName: ResolvedConfigFileName): boolean;
+        removeKey(fileName: ResolvedConfigFileName): void;
+        forEach(action: (value: T, key: ResolvedConfigFilePath) => void): void;
         getSize(): number;
         clear(): void;
     }
 
     type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
-    type ConfigFileMap<T> = FileMap<T, ResolvedConfigFileName, ResolvedConfigFilePath>;
-    type ToResolvedConfigFilePath = (fileName: ResolvedConfigFileName) => ResolvedConfigFilePath;
-    type ToPath = (fileName: string) => Path;
 
     /**
      * A FileMap maintains a normalized-key to value relationship
      */
-    function createFileMap<T>(toPath: ToResolvedConfigFilePath): ConfigFileMap<T>;
-    function createFileMap<T, U extends string = string, V extends Path = Path>(toPath: ToPath): FileMap<T, U, V>;
-    function createFileMap<T, U extends string = string, V extends Path = Path>(toPath: (fileName: U) => V): FileMap<T, U, V> {
+    function createFileMap<T>(toPath: (fileName: ResolvedConfigFileName) => ResolvedConfigFilePath): ConfigFileMap<T> {
         // tslint:disable-next-line:no-null-keyword
         const lookup = createMap<T>();
 
@@ -228,23 +223,23 @@ namespace ts {
             clear
         };
 
-        function forEach(action: (value: T, key: V) => void) {
+        function forEach(action: (value: T, key: ResolvedConfigFilePath) => void) {
             lookup.forEach(action);
         }
 
-        function hasKey(fileName: U) {
+        function hasKey(fileName: ResolvedConfigFileName) {
             return lookup.has(toPath(fileName));
         }
 
-        function removeKey(fileName: U) {
+        function removeKey(fileName: ResolvedConfigFileName) {
             lookup.delete(toPath(fileName));
         }
 
-        function setValue(fileName: U, value: T) {
+        function setValue(fileName: ResolvedConfigFileName, value: T) {
             lookup.set(toPath(fileName), value);
         }
 
-        function getValue(fileName: U): T | undefined {
+        function getValue(fileName: ResolvedConfigFileName): T | undefined {
             return lookup.get(toPath(fileName));
         }
 
@@ -1132,7 +1127,7 @@ namespace ts {
 
             // Actual Emit
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = createFileMap<string>(toPath as ToPath);
+            const emittedOutputs = createMap<string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(name)) {
@@ -1146,7 +1141,7 @@ namespace ts {
                     }
                 }
 
-                emittedOutputs.setValue(name, name);
+                emittedOutputs.set(toPath(name), name);
                 writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
@@ -1235,9 +1230,9 @@ namespace ts {
             // Actual Emit
             Debug.assert(!!outputFiles.length);
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = createFileMap<string>(toPath as ToPath);
+            const emittedOutputs = createMap<string>();
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
-                emittedOutputs.setValue(name, name);
+                emittedOutputs.set(toPath(name), name);
                 writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
             const emitDiagnostics = emitterDiagnostics.getDiagnostics();
@@ -1280,15 +1275,15 @@ namespace ts {
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, status);
         }
 
-        function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: FileMap<string>) {
+        function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: Map<string>) {
             const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
-            if (!skipOutputs || outputs.length !== skipOutputs.getSize()) {
+            if (!skipOutputs || outputs.length !== skipOutputs.size) {
                 if (options.verbose) {
                     reportStatus(verboseMessage, proj.options.configFilePath!);
                 }
                 const now = host.now ? host.now() : new Date();
                 for (const file of outputs) {
-                    if (skipOutputs && skipOutputs.hasKey(file)) {
+                    if (skipOutputs && skipOutputs.has(toPath(file))) {
                         continue;
                     }
 
