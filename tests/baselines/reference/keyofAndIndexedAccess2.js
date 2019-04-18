@@ -109,6 +109,7 @@ function get123<K extends keyof Type>(): Type[K] {
     return 123;  // Error
 }
 
+<<<<<<< HEAD
 // Repros from #30938
 
 function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
@@ -118,6 +119,14 @@ function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(par
 function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
     cb(param[0]);
 }
+=======
+// Repro from #30920
+
+type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
+type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
+type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
+type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
+>>>>>>> master
 
 
 //// [keyofAndIndexedAccess2.js]

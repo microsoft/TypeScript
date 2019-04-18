@@ -1,24 +1,20 @@
-//// [/src/core/index.js]
-"use strict";
-exports.__esModule = true;
-exports.someString = "HELLO WORLD";
-function leftPad(s, n) { return s + n; }
-exports.leftPad = leftPad;
-function multiply(a, b) { return a * b; }
-exports.multiply = multiply;
-var someClass = /** @class */ (function () {
-    function someClass() {
+//// [/src/core/anotherModule.d.ts]
+export declare const World = "hello";
+
+
+//// [/src/core/index.d.ts]
+export declare const someString: string;
+export declare function leftPad(s: string, n: number): string;
+export declare function multiply(a: number, b: number): number;
+
+
+//// [/src/core/tsconfig.json]
+{
+    "compilerOptions": {
+        "incremental": true, "declaration": true,
+        "skipDefaultLibCheck": true
     }
-    return someClass;
-}());
-
-
-//// [/src/core/index.ts]
-export const someString: string = "HELLO WORLD";
-export function leftPad(s: string, n: number) { return s + n; }
-export function multiply(a: number, b: number) { return a * b; }
-
-class someClass { }
+}
 
 //// [/src/core/tsconfig.tsbuildinfo]
 {
@@ -30,11 +26,11 @@ class someClass { }
       },
       "/src/core/anothermodule.ts": {
         "version": "-2676574883",
-        "signature": "25219880154"
+        "signature": "-8396256275"
       },
       "/src/core/index.ts": {
-        "version": "-16698397488",
-        "signature": "11051732871"
+        "version": "-18749805970",
+        "signature": "1874987148"
       },
       "/src/core/some_decl.d.ts": {
         "version": "-9253692965",
@@ -42,9 +38,8 @@ class someClass { }
       }
     },
     "options": {
-      "composite": true,
+      "incremental": true,
       "declaration": true,
-      "declarationMap": true,
       "skipDefaultLibCheck": true,
       "configFilePath": "/src/core/tsconfig.json"
     },
