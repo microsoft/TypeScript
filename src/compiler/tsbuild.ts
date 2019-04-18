@@ -206,51 +206,6 @@ namespace ts {
 
     type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
 
-    /**
-     * A FileMap maintains a normalized-key to value relationship
-     */
-    function createFileMap<T>(toPath: (fileName: ResolvedConfigFileName) => ResolvedConfigFilePath): ConfigFileMap<T> {
-        // tslint:disable-next-line:no-null-keyword
-        const lookup = createMap<T>();
-
-        return {
-            setValue,
-            getValue,
-            removeKey,
-            forEach,
-            hasKey,
-            getSize,
-            clear
-        };
-
-        function forEach(action: (value: T, key: ResolvedConfigFilePath) => void) {
-            lookup.forEach(action);
-        }
-
-        function hasKey(fileName: ResolvedConfigFileName) {
-            return lookup.has(toPath(fileName));
-        }
-
-        function removeKey(fileName: ResolvedConfigFileName) {
-            lookup.delete(toPath(fileName));
-        }
-
-        function setValue(fileName: ResolvedConfigFileName, value: T) {
-            lookup.set(toPath(fileName), value);
-        }
-
-        function getValue(fileName: ResolvedConfigFileName): T | undefined {
-            return lookup.get(toPath(fileName));
-        }
-
-        function getSize() {
-            return lookup.size;
-        }
-
-        function clear() {
-            lookup.clear();
-        }
-    }
 
     function getOrCreateValueFromConfigFileMap<T>(configFileMap: ConfigFileMap<T>, resolved: ResolvedConfigFileName, createT: () => T): T {
         const existingValue = configFileMap.getValue(resolved);
@@ -378,10 +333,11 @@ namespace ts {
         // State of the solution
         let options = defaultOptions;
         let baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
+        const resolvedConfigFilePaths = createMap<ResolvedConfigFilePath>();
         type ConfigFileCacheEntry = ParsedCommandLine | Diagnostic;
-        const configFileCache = createFileMap<ConfigFileCacheEntry>(toPath);
+        const configFileCache = createFileMap<ConfigFileCacheEntry>();
         /** Map from config file name to up-to-date status */
-        const projectStatus = createFileMap<UpToDateStatus>(toPath);
+        const projectStatus = createFileMap<UpToDateStatus>();
         let buildOrder: readonly ResolvedConfigFileName[] | undefined;
         const writeFileName = host.trace ? (s: string) => host.trace!(s) : undefined;
         let readFileWithCache = (f: string) => host.readFile(f);
@@ -393,21 +349,21 @@ namespace ts {
         compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
         let moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
 
-        const buildInfoChecked = createFileMap<true>(toPath);
+        const buildInfoChecked = createFileMap<true>();
 
         // Watch state
-        const builderPrograms = createFileMap<T>(toPath);
-        const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
-        const projectPendingBuild = createFileMap<ConfigFileProgramReloadLevel>(toPath);
-        const projectErrorsReported = createFileMap<true>(toPath);
+        const builderPrograms = createFileMap<T>();
+        const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>();
+        const projectPendingBuild = createFileMap<ConfigFileProgramReloadLevel>();
+        const projectErrorsReported = createFileMap<true>();
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
         const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(host, options);
 
         // Watches for the solution
-        const allWatchedWildcardDirectories = createFileMap<Map<WildcardDirectoryWatcher>>(toPath);
-        const allWatchedInputFiles = createFileMap<Map<FileWatcher>>(toPath);
-        const allWatchedConfigFiles = createFileMap<FileWatcher>(toPath);
+        const allWatchedWildcardDirectories = createFileMap<Map<WildcardDirectoryWatcher>>();
+        const allWatchedInputFiles = createFileMap<Map<FileWatcher>>();
+        const allWatchedConfigFiles = createFileMap<FileWatcher>();
 
         return {
             buildAllProjects,
@@ -423,15 +379,67 @@ namespace ts {
             startWatching
         };
 
-        function toPath(fileName: ResolvedConfigFileName): ResolvedConfigFilePath;
-        function toPath(fileName: string): Path;
         function toPath(fileName: string) {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
+        function toResolvedConfigFilePath(fileName: ResolvedConfigFileName): ResolvedConfigFilePath {
+            const path = resolvedConfigFilePaths.get(fileName);
+            if (path !== undefined) return path;
+
+            const resolvedPath = toPath(fileName) as ResolvedConfigFilePath;
+            resolvedConfigFilePaths.set(fileName, resolvedPath);
+            return resolvedPath;
+        }
+
+
+        // TODO remove this and use normal map so we arent transforming paths constantly
+        function createFileMap<T>(): ConfigFileMap<T> {
+            const lookup = createMap<T>();
+            return {
+                setValue,
+                getValue,
+                removeKey,
+                forEach,
+                hasKey,
+                getSize,
+                clear
+            };
+
+            function forEach(action: (value: T, key: ResolvedConfigFilePath) => void) {
+                lookup.forEach(action);
+            }
+
+            function hasKey(fileName: ResolvedConfigFileName) {
+                return lookup.has(toResolvedConfigFilePath(fileName));
+            }
+
+            function removeKey(fileName: ResolvedConfigFileName) {
+                lookup.delete(toResolvedConfigFilePath(fileName));
+            }
+
+            function setValue(fileName: ResolvedConfigFileName, value: T) {
+                lookup.set(toResolvedConfigFilePath(fileName), value);
+            }
+
+            function getValue(fileName: ResolvedConfigFileName): T | undefined {
+                return lookup.get(toResolvedConfigFilePath(fileName));
+            }
+
+            function getSize() {
+                return lookup.size;
+            }
+
+            function clear() {
+                lookup.clear();
+            }
+        }
+
+
         function resetBuildContext(opts = defaultOptions) {
             options = opts;
             baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
+            resolvedConfigFilePaths.clear();
             configFileCache.clear();
             projectStatus.clear();
             buildOrder = undefined;
@@ -998,8 +1006,8 @@ namespace ts {
         }
 
         function createBuildOrder(roots: readonly ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
-            const temporaryMarks = createFileMap<true>(toPath);
-            const permanentMarks = createFileMap<true>(toPath);
+            const temporaryMarks = createFileMap<true>();
+            const permanentMarks = createFileMap<true>();
             const circularityReportStack: string[] = [];
             let buildOrder: ResolvedConfigFileName[] | undefined;
             for (const root of roots) {
