@@ -382,8 +382,6 @@ namespace ts {
         let baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
         type ConfigFileCacheEntry = ParsedCommandLine | Diagnostic;
         const configFileCache = createFileMap<ConfigFileCacheEntry>(toPath);
-        /** Map from output file name to its pre-build timestamp */
-        const unchangedOutputs = createFileMap<Date>(toPath as ToPath);
         /** Map from config file name to up-to-date status */
         const projectStatus = createFileMap<UpToDateStatus>(toPath);
         let buildOrder: readonly ResolvedConfigFileName[] | undefined;
@@ -438,7 +436,6 @@ namespace ts {
             options = opts;
             baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
             configFileCache.clear();
-            unchangedOutputs.clear();
             projectStatus.clear();
             buildOrder = undefined;
             buildInfoChecked.clear();
@@ -697,14 +694,8 @@ namespace ts {
                 // had its file touched but not had its contents changed - this allows us
                 // to skip a downstream typecheck
                 if (isDeclarationFile(output)) {
-                    const unchangedTime = unchangedOutputs.getValue(output);
-                    if (unchangedTime !== undefined) {
-                        newestDeclarationFileContentChangedTime = newer(unchangedTime, newestDeclarationFileContentChangedTime);
-                    }
-                    else {
-                        const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
-                        newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
-                    }
+                    const outputModifiedTime = host.getModifiedTime(output) || missingFileModifiedTime;
+                    newestDeclarationFileContentChangedTime = newer(newestDeclarationFileContentChangedTime, outputModifiedTime);
                 }
             }
 
@@ -1161,7 +1152,6 @@ namespace ts {
                 writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
-                    unchangedOutputs.setValue(name, priorChangeTime);
                 }
             });
 
