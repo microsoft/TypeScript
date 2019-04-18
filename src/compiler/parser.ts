@@ -3087,14 +3087,15 @@ namespace ts {
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
-            parseOptional(operator);
+            const leadingToken = parseOptionalToken(operator);
             let type = parseConstituentType();
+            const startPos = leadingToken ? leadingToken.pos : type.pos;
             if (token() === operator) {
                 const types = [type];
                 while (parseOptional(operator)) {
                     types.push(parseConstituentType());
                 }
-                const node = <UnionOrIntersectionTypeNode>createNode(kind, type.pos);
+                const node = <UnionOrIntersectionTypeNode>createNode(kind, startPos);
                 node.types = createNodeArray(types, type.pos);
                 type = finishNode(node);
             }
