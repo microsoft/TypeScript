@@ -39,7 +39,7 @@ namespace ts.SelectionRange {
                     if (isTemplateSpan(parentNode) && nextNode && isTemplateMiddleOrTemplateTail(nextNode)) {
                         const start = node.getFullStart() - "${".length;
                         const end = nextNode.getStart() + "}".length;
-                        pushSelectionRange(start, end, node.kind);
+                        pushSelectionRange(start, end);
                     }
 
                     // Blocks with braces, brackets, parens, or JSX tags on separate lines should be
@@ -54,7 +54,7 @@ namespace ts.SelectionRange {
                     if (isNumber(jsDocCommentStart)) {
                         pushSelectionRange(jsDocCommentStart, end);
                     }
-                    pushSelectionRange(start, end, node.kind);
+                    pushSelectionRange(start, end);
 
                     // String literals should have a stop both inside and outside their quotes.
                     if (isStringLiteral(node) || isTemplateLiteral(node)) {
@@ -69,14 +69,11 @@ namespace ts.SelectionRange {
 
         return selectionRange;
 
-        function pushSelectionRange(start: number, end: number, syntaxKind?: SyntaxKind): void {
+        function pushSelectionRange(start: number, end: number): void {
             // Skip ranges that are identical to the parent
             const textSpan = createTextSpanFromBounds(start, end);
             if (!selectionRange || !textSpansEqual(textSpan, selectionRange.textSpan)) {
                 selectionRange = { textSpan, ...selectionRange && { parent: selectionRange } };
-                if (syntaxKind) {
-                    Object.defineProperty(selectionRange, "__debugKind", { value: formatSyntaxKind(syntaxKind) });
-                }
             }
         }
     }
