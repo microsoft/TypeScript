@@ -390,7 +390,6 @@ namespace ts {
         const unchangedOutputs = createFileMap<Date>(toPath as ToPath);
         /** Map from config file name to up-to-date status */
         const projectStatus = createFileMap<UpToDateStatus>(toPath);
-        const missingRoots = createMap<true>();
         let globalDependencyGraph: DependencyGraph | undefined;
         const writeFileName = host.trace ? (s: string) => host.trace!(s) : undefined;
         let readFileWithCache = (f: string) => host.readFile(f);
@@ -445,7 +444,6 @@ namespace ts {
             configFileCache.clear();
             unchangedOutputs.clear();
             projectStatus.clear();
-            missingRoots.clear();
             globalDependencyGraph = undefined;
             buildInfoChecked.clear();
 
