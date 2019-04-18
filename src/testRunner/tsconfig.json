@@ -141,7 +141,7 @@
         "unittests/tsserver/reload.ts",
         "unittests/tsserver/rename.ts",
         "unittests/tsserver/resolutionCache.ts",
-        "unittests/tsserver/selectionRange.ts",
+        "unittests/tsserver/smartSelection.ts",
         "unittests/tsserver/session.ts",
         "unittests/tsserver/skipLibCheck.ts",
         "unittests/tsserver/symLinks.ts",
