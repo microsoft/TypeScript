@@ -14,15 +14,22 @@ namespace ts.codefix {
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker(), context)),
     });
 
+    const enum SynthBindingNameKind {
+        Identifier,
+        BindingPattern,
+    }
+
     type SynthBindingName = SynthBindingPattern | SynthIdentifier;
 
     interface SynthBindingPattern {
+        readonly kind: SynthBindingNameKind.BindingPattern;
         readonly elements: ReadonlyArray<SynthBindingName>;
         readonly bindingPattern: BindingPattern;
         readonly types: Type[];
     }
 
     interface SynthIdentifier {
+        readonly kind: SynthBindingNameKind.Identifier;
         readonly identifier: Identifier;
         readonly types: Type[];
         numberOfAssignmentsOriginal: number; // number of times the variable should be assigned in the refactor
@@ -212,7 +219,7 @@ namespace ts.codefix {
                     else {
                         const identifier = getSynthesizedDeepClone(node);
                         identsToRenameMap.set(symbolIdString, identifier);
-                        synthNamesMap.set(symbolIdString, { identifier, types: [], numberOfAssignmentsOriginal: allVarNames.filter(elem => elem.identifier.text === node.text).length/*, numberOfAssignmentsSynthesized: 0*/ });
+                        synthNamesMap.set(symbolIdString, createSynthIdentifier(identifier, [], allVarNames.filter(elem => elem.identifier.text === node.text).length/*, numberOfAssignmentsSynthesized: 0*/));
                         if ((isParameter(node.parent) && isExpressionOrCallOnTypePromise(node.parent.parent)) || isVariableDeclaration(node.parent)) {
                             allVarNames.push({ identifier, symbol });
                             addNameToFrequencyMap(collidingSymbolMap, originalName, symbol);
@@ -269,7 +276,7 @@ namespace ts.codefix {
         const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
         const numberOfAssignmentsOriginal = 0;
         const identifier = numVarsSameName === 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
-        return { identifier, types: [], numberOfAssignmentsOriginal };
+        return createSynthIdentifier(identifier, [], numberOfAssignmentsOriginal);
     }
 
     // dispatch function to recursively build the refactoring
@@ -321,11 +328,7 @@ namespace ts.codefix {
                 });
             }
             else {
-                possibleNameForVarDecl = createUniqueSynthName({
-                    identifier: createOptimisticUniqueName("result"),
-                    types: prevArgName.types,
-                    numberOfAssignmentsOriginal: 0
-                });
+                possibleNameForVarDecl = createSynthIdentifier(createOptimisticUniqueName("result"), prevArgName.types);
             }
 
             possibleNameForVarDecl.numberOfAssignmentsOriginal = 2; // Try block and catch block
@@ -372,8 +375,7 @@ namespace ts.codefix {
 
     function createUniqueSynthName(prevArgName: SynthIdentifier): SynthIdentifier {
         const renamedPrevArg = createOptimisticUniqueName(prevArgName.identifier.text);
-        const newSynthName = { identifier: renamedPrevArg, types: [], numberOfAssignmentsOriginal: 0 };
-        return newSynthName;
+        return createSynthIdentifier(renamedPrevArg);
     }
 
     function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthBindingName): ReadonlyArray<Statement> {
@@ -618,7 +620,7 @@ namespace ts.codefix {
                 return [getMappedBindingNameOrDefault(element.name)];
             });
 
-            return { elements, bindingPattern: bindingName, types: [] };
+            return createSynthBindingPattern(bindingName, elements);
         }
 
         function getMapEntryOrDefault(identifier: Identifier): SynthIdentifier {
@@ -626,11 +628,11 @@ namespace ts.codefix {
             const symbol = getSymbol(originalNode);
 
             if (!symbol) {
-                return { identifier, types, numberOfAssignmentsOriginal };
+                return createSynthIdentifier(identifier, types, numberOfAssignmentsOriginal);
             }
 
             const mapEntry = transformer.synthNamesMap.get(getSymbolId(symbol).toString());
-            return mapEntry || { identifier, types, numberOfAssignmentsOriginal };
+            return mapEntry || createSynthIdentifier(identifier, types, numberOfAssignmentsOriginal);
         }
 
         function getSymbol(node: Node): Symbol | undefined {
@@ -656,11 +658,19 @@ namespace ts.codefix {
         return isSynthIdentifier(bindingName) ? bindingName.identifier : bindingName.bindingPattern;
     }
 
+    function createSynthIdentifier(identifier: Identifier, types: Type[] = [], numberOfAssignmentsOriginal = 0): SynthIdentifier {
+        return { kind: SynthBindingNameKind.Identifier, identifier, types, numberOfAssignmentsOriginal };
+    }
+
+    function createSynthBindingPattern(bindingPattern: BindingPattern, elements: ReadonlyArray<SynthBindingName> = emptyArray, types: Type[] = []): SynthBindingPattern {
+        return { kind: SynthBindingNameKind.BindingPattern, bindingPattern, elements, types };
+    }
+
     function isSynthIdentifier(bindingName: SynthBindingName): bindingName is SynthIdentifier {
-        return "identifier" in bindingName;
+        return bindingName.kind === SynthBindingNameKind.Identifier;
     }
 
     function isSynthBindingPattern(bindingName: SynthBindingName): bindingName is SynthBindingPattern {
-        return "elements" in bindingName;
+        return bindingName.kind === SynthBindingNameKind.BindingPattern;
     }
 }
