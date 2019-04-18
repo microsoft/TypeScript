@@ -2087,8 +2087,8 @@ namespace ts {
             };
         }
 
-        function getSelectionRange(fileName: string, position: number): SelectionRange {
-            return SelectionRange.getSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
+        function getSmartSelectionRange(fileName: string, position: number): SelectionRange {
+            return SmartSelectionRange.getSmartSelectionRange(position, syntaxTreeCache.getCurrentSourceFile(fileName));
         }
 
         function getApplicableRefactors(fileName: string, positionOrRange: number | TextRange, preferences: UserPreferences = emptyOptions): ApplicableRefactorInfo[] {
@@ -2138,7 +2138,7 @@ namespace ts {
             getBreakpointStatementAtPosition,
             getNavigateToItems,
             getRenameInfo,
-            getSelectionRange,
+            getSmartSelectionRange,
             findRenameLocations,
             getNavigationBarItems,
             getNavigationTree,

@@ -1,6 +1,6 @@
 /* @internal */
-namespace ts.SelectionRange {
-    export function getSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {
+namespace ts.SmartSelectionRange {
+    export function getSmartSelectionRange(pos: number, sourceFile: SourceFile): SelectionRange {
         let selectionRange: SelectionRange = {
             textSpan: createTextSpanFromBounds(sourceFile.getFullStart(), sourceFile.getEnd())
         };

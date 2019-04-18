@@ -424,7 +424,7 @@ namespace ts.server {
             return renameInfo;
         }
 
-        getSelectionRange() {
+        getSmartSelectionRange() {
             return notImplemented();
         }
 

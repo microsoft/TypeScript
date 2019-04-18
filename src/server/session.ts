@@ -2059,14 +2059,14 @@ namespace ts.server {
             this.projectService.configurePlugin(args);
         }
 
-        private getSelectionRange(args: protocol.SelectionRangeRequestArgs, simplifiedResult: boolean) {
+        private getSmartSelectionRange(args: protocol.SelectionRangeRequestArgs, simplifiedResult: boolean) {
             const { locations } = args;
             const { file, languageService } = this.getFileAndLanguageServiceForSyntacticOperation(args);
             const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(file));
 
             return map(locations, location => {
                 const pos = this.getPosition(location, scriptInfo);
-                const selectionRange = languageService.getSelectionRange(file, pos);
+                const selectionRange = languageService.getSmartSelectionRange(file, pos);
                 return simplifiedResult ? this.mapSelectionRange(selectionRange, scriptInfo) : selectionRange;
             });
         }
@@ -2438,10 +2438,10 @@ namespace ts.server {
                 return this.notRequired();
             },
             [CommandNames.SelectionRange]: (request: protocol.SelectionRangeRequest) => {
-                return this.requiredResponse(this.getSelectionRange(request.arguments, /*simplifiedResult*/ true));
+                return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ true));
             },
             [CommandNames.SelectionRangeFull]: (request: protocol.SelectionRangeRequest) => {
-                return this.requiredResponse(this.getSelectionRange(request.arguments, /*simplifiedResult*/ false));
+                return this.requiredResponse(this.getSmartSelectionRange(request.arguments, /*simplifiedResult*/ false));
             },
         });
 

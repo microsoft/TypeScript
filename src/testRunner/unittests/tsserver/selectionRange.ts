@@ -4,7 +4,7 @@ namespace ts.projectSystem {
         const host = createServerHost([file, libFile]);
         const session = createSession(host);
         openFilesForSession([file], session);
-        return function getSelectionRange(locations: protocol.SelectionRangeRequestArgs["locations"]) {
+        return function getSmartSelectionRange(locations: protocol.SelectionRangeRequestArgs["locations"]) {
             return executeSessionRequest<protocol.SelectionRangeRequest, protocol.SelectionRangeResponse>(
                 session,
                 CommandNames.SelectionRange,
@@ -14,7 +14,7 @@ namespace ts.projectSystem {
 
     describe("unittests:: tsserver:: selectionRange", () => {
         it("works for simple JavaScript", () => {
-            const getSelectionRange = setup("/file.js", `
+            const getSmartSelectionRange = setup("/file.js", `
 class Foo {
     bar(a, b) {
         if (a === b) {
@@ -24,7 +24,7 @@ class Foo {
     }
 }`);
 
-            const locations = getSelectionRange([
+            const locations = getSmartSelectionRange([
                 {
                     line: 4,
                     offset: 13,
@@ -87,14 +87,14 @@ class Foo {
         });
 
         it("works for simple TypeScript", () => {
-            const getSelectionRange = setup("/file.ts", `
+            const getSmartSelectionRange = setup("/file.ts", `
 export interface IService {
     _serviceBrand: any;
 
     open(host: number, data: any): Promise<any>;
     bar(): void
 }`);
-            const locations = getSelectionRange([
+            const locations = getSmartSelectionRange([
                 { line: 5, offset: 12 }, // ho/**/st
                 { line: 6, offset: 16 }, // void/**/
             ]);
@@ -136,10 +136,10 @@ export interface IService {
         });
 
         it("works for complex TypeScript", () => {
-            const getSelectionRange = setup("/file.ts", `
+            const getSmartSelectionRange = setup("/file.ts", `
 type X<T, P> = IsExactlyAny<P> extends true ? T : ({ [K in keyof P]: IsExactlyAny<P[K]> extends true ? K extends keyof T ? T[K] : P[K] : P[K]; } & Pick<T, Exclude<keyof T, keyof P>>)
 `);
-            const locations = getSelectionRange([
+            const locations = getSmartSelectionRange([
                 {
                     line: 2,
                     offset: 133,
@@ -195,13 +195,13 @@ type X<T, P> = IsExactlyAny<P> extends true ? T : ({ [K in keyof P]: IsExactlyAn
         });
 
         it("works for object types", () => {
-            const getSelectionRange = setup("/file.js", `
+            const getSmartSelectionRange = setup("/file.js", `
 type X = {
     foo?: string;
     readonly bar: { x: number };
     meh
 }`);
-            const locations = getSelectionRange([
+            const locations = getSmartSelectionRange([
                 { line: 3, offset: 5 },
                 { line: 4, offset: 5 },
                 { line: 4, offset: 14 },
@@ -285,8 +285,8 @@ type X = {
 
         it("works for string literals and template strings", () => {
             // tslint:disable-next-line:no-invalid-template-strings
-            const getSelectionRange = setup("/file.ts", "`a b ${\n  'c'\n} d`");
-            const locations = getSelectionRange([
+            const getSmartSelectionRange = setup("/file.ts", "`a b ${\n  'c'\n} d`");
+            const locations = getSmartSelectionRange([
                 { line: 2, offset: 4 },
                 { line: 1, offset: 4 },
             ]);
@@ -327,13 +327,13 @@ type X = {
         });
 
         it("works for ES2015 import lists", () => {
-            const getSelectionRange = setup("/file.ts", `
+            const getSmartSelectionRange = setup("/file.ts", `
 import { x as y, z } from './z';
 import { b } from './';
 
 console.log(1);`);
 
-            const locations = getSelectionRange([{ line: 2, offset: 10 }]);
+            const locations = getSmartSelectionRange([{ line: 2, offset: 10 }]);
             assert.deepEqual(locations, [
                 {
                     textSpan: { // x
@@ -367,10 +367,10 @@ console.log(1);`);
         });
 
         it("works for complex mapped types", () => {
-            const getSelectionRange = setup("/file.ts", `
+            const getSmartSelectionRange = setup("/file.ts", `
 type M = { -readonly [K in keyof any]-?: any };`);
 
-            const locations = getSelectionRange([
+            const locations = getSmartSelectionRange([
                 { line: 2, offset: 12 }, // -readonly
                 { line: 2, offset: 14 }, // eadonly
                 { line: 2, offset: 22 }, // [
@@ -476,10 +476,10 @@ type M = { -readonly [K in keyof any]-?: any };`);
         });
 
         it("works for parameters", () => {
-            const getSelectionRange = setup("/file.ts", `
+            const getSmartSelectionRange = setup("/file.ts", `
 function f(p, q?, ...r: any[] = []) {}`);
 
-            const locations = getSelectionRange([
+            const locations = getSmartSelectionRange([
                 { line: 2, offset: 12 }, // p
                 { line: 2, offset: 15 }, // q
                 { line: 2, offset: 19 }, // ...
@@ -537,9 +537,9 @@ function f(p, q?, ...r: any[] = []) {}`);
         });
 
         it("works for binding elements", () => {
-            const getSelectionRange = setup("/file.ts", `
+            const getSmartSelectionRange = setup("/file.ts", `
 const { x, y: a, ...zs = {} } = {};`);
-            const locations = getSelectionRange([
+            const locations = getSmartSelectionRange([
                 { line: 2, offset: 9 },  // x
                 { line: 2, offset: 15 }, // a
                 { line: 2, offset: 21 }, // zs
@@ -578,12 +578,12 @@ const { x, y: a, ...zs = {} } = {};`);
         });
 
         it("consumes all whitespace in a multi-line function parameter list", () => {
-            const getSelectionRange = setup("/file.ts", `
+            const getSmartSelectionRange = setup("/file.ts", `
 function f(
     a,
     b
 ) {}`);
-            const locations = getSelectionRange([{ line: 4, offset: 5 }]); // b
+            const locations = getSmartSelectionRange([{ line: 4, offset: 5 }]); // b
             assert.deepEqual(locations, [{
                 textSpan: { // b
                     start: { line: 4, offset: 5 },
@@ -604,8 +604,8 @@ function f(
         });
 
         it("snaps to nodes directly behind the cursor instead of trivia ahead of the cursor", () => {
-            const getSelectionRange = setup("/file.ts", `let x: string`);
-            const locations = getSelectionRange([{ line: 1, offset: 4 }]);
+            const getSmartSelectionRange = setup("/file.ts", `let x: string`);
+            const locations = getSmartSelectionRange([{ line: 1, offset: 4 }]);
             assert.deepEqual(locations![0].textSpan, {
                 start: { line: 1, offset: 1 },
                 end: { line: 1, offset: 4 },
@@ -613,7 +613,7 @@ function f(
         });
 
         it("creates a stop for JSDoc ranges", () => {
-            const getSelectionRange = setup("/file.js", "" +
+            const getSmartSelectionRange = setup("/file.js", "" +
 `// Not a JSDoc comment
 /**
  * @param {number} x The number to square
@@ -621,7 +621,7 @@ function f(
 function square(x) {
     return x * x;
 }`);
-            const locations = getSelectionRange([{ line: 5, offset: 10 }]); // square(x)
+            const locations = getSmartSelectionRange([{ line: 5, offset: 10 }]); // square(x)
             assert.deepEqual(locations, [{
                 textSpan: { // square
                     start: { line: 5 , offset: 10 },
@@ -641,8 +641,8 @@ function square(x) {
         });
 
         it("skips lone VariableDeclarations in a declaration list", () => {
-            const getSelectionRange = setup("/file.ts", `const x = 3;`);
-            const locations = getSelectionRange([{ line: 1, offset: 7 }]); // x
+            const getSmartSelectionRange = setup("/file.ts", `const x = 3;`);
+            const locations = getSmartSelectionRange([{ line: 1, offset: 7 }]); // x
             assert.deepEqual(locations, [{
                 textSpan: {
                     start: { line: 1, offset: 7 },
