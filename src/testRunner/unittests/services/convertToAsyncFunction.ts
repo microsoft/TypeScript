@@ -622,6 +622,39 @@ function [#|innerPromise|](): Promise<string> {
 `
         );
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRetBinding1", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(({ blob }) => blob.byteOffset).catch(({ message }) => 'Error ' + message);
+    }).then(blob => {
+        return blob.toString();
+    });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRetBinding2", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(blob => blob.byteOffset).catch(err => 'Error');
+    }).then(({ x }) => {
+        return x.toString();
+    });
+}
+`
+        );
+
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRetBinding3", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(({ blob }) => blob.byteOffset).catch(({ message }) => 'Error ' + message);
+    }).then(([x, y]) => {
+        return (x || y).toString();
+    });
+}
+`
+        );
+
         _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn01", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org").then(resp => console.log(resp));
