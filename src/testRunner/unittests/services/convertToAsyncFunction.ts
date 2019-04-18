@@ -655,6 +655,17 @@ function [#|innerPromise|](): Promise<string> {
 `
         );
 
+        _testConvertToAsyncFunction("convertToAsyncFunction_InnerPromiseRetBinding4", `
+function [#|innerPromise|](): Promise<string> {
+    return fetch("https://typescriptlang.org").then(resp => {
+        return resp.blob().then(({ blob }: { blob: { byteOffset: number } }) => [0, blob.byteOffset]).catch(({ message }: Error) => ['Error ', message]);
+    }).then(([x, y]) => {
+        return (x || y).toString();
+    });
+}
+`
+        );
+
         _testConvertToAsyncFunctionFailed("convertToAsyncFunction_VarReturn01", `
 function [#|f|]() {
     let blob = fetch("https://typescriptlang.org").then(resp => console.log(resp));
@@ -1220,6 +1231,12 @@ const { length } = [#|function|] () {
     _testConvertToAsyncFunction("convertToAsyncFunction_catchBlockUniqueParams", `
 function [#|f|]() {
 	return Promise.resolve().then(x => 1).catch(x => "a").then(x => !!x);
+}
+`);
+
+    _testConvertToAsyncFunction("convertToAsyncFunction_catchBlockUniqueParamsBindingPattern", `
+function [#|f|]() {
+	return Promise.resolve().then(() => ({ x: 3 })).catch(() => ({ x: "a" })).then(({ x }) => !!x);
 }
 `);
 
