@@ -1006,8 +1006,8 @@ namespace ts {
         }
 
         function createBuildOrder(roots: readonly ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
-            const temporaryMarks = createFileMap<true>();
-            const permanentMarks = createFileMap<true>();
+            const temporaryMarks = createMap<true>();
+            const permanentMarks = createMap<true>();
             const circularityReportStack: string[] = [];
             let buildOrder: ResolvedConfigFileName[] | undefined;
             for (const root of roots) {
@@ -1016,11 +1016,12 @@ namespace ts {
 
             return buildOrder || emptyArray;
 
-            function visit(projPath: ResolvedConfigFileName, inCircularContext?: boolean) {
+            function visit(configFileName: ResolvedConfigFileName, inCircularContext?: boolean) {
+                const projPath = toResolvedConfigFilePath(configFileName);
                 // Already visited
-                if (permanentMarks.hasKey(projPath)) return;
+                if (permanentMarks.has(projPath)) return;
                 // Circular
-                if (temporaryMarks.hasKey(projPath)) {
+                if (temporaryMarks.has(projPath)) {
                     if (!inCircularContext) {
                         // TODO:: Do we report this as error?
                         reportStatus(Diagnostics.Project_references_may_not_form_a_circular_graph_Cycle_detected_Colon_0, circularityReportStack.join("\r\n"));
@@ -1028,9 +1029,9 @@ namespace ts {
                     return;
                 }
 
-                temporaryMarks.setValue(projPath, true);
-                circularityReportStack.push(projPath);
-                const parsed = parseConfigFile(projPath);
+                temporaryMarks.set(projPath, true);
+                circularityReportStack.push(configFileName);
+                const parsed = parseConfigFile(configFileName);
                 if (parsed && parsed.projectReferences) {
                     for (const ref of parsed.projectReferences) {
                         const resolvedRefPath = resolveProjectName(ref.path);
@@ -1039,8 +1040,8 @@ namespace ts {
                 }
 
                 circularityReportStack.pop();
-                permanentMarks.setValue(projPath, true);
-                (buildOrder || (buildOrder = [])).push(projPath);
+                permanentMarks.set(projPath, true);
+                (buildOrder || (buildOrder = [])).push(configFileName);
             }
         }
 
