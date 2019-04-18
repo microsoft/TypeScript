@@ -207,17 +207,17 @@ namespace ts {
     type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
 
 
-    function getOrCreateValueFromConfigFileMap<T>(configFileMap: ConfigFileMap<T>, resolved: ResolvedConfigFileName, createT: () => T): T {
-        const existingValue = configFileMap.getValue(resolved);
+    function getOrCreateValueFromConfigFileMap<T>(configFileMap: Map<T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
+        const existingValue = configFileMap.get(resolved);
         let newValue: T | undefined;
         if (!existingValue) {
             newValue = createT();
-            configFileMap.setValue(resolved, newValue);
+            configFileMap.set(resolved, newValue);
         }
         return existingValue || newValue!;
     }
 
-    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ConfigFileMap<Map<T>>, resolved: ResolvedConfigFileName): Map<T> {
+    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: Map<Map<T>>, resolved: ResolvedConfigFilePath): Map<T> {
         return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
     }
 
@@ -361,9 +361,9 @@ namespace ts {
         const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(host, options);
 
         // Watches for the solution
-        const allWatchedWildcardDirectories = createFileMap<Map<WildcardDirectoryWatcher>>();
-        const allWatchedInputFiles = createFileMap<Map<FileWatcher>>();
-        const allWatchedConfigFiles = createFileMap<FileWatcher>();
+        const allWatchedWildcardDirectories = createMap<Map<WildcardDirectoryWatcher>>();
+        const allWatchedInputFiles = createMap<Map<FileWatcher>>();
+        const allWatchedConfigFiles = createMap<FileWatcher>();
 
         return {
             buildAllProjects,
@@ -489,28 +489,29 @@ namespace ts {
 
         function startWatching() {
             for (const resolved of getBuildOrder()) {
+                const resolvedPath = toResolvedConfigFilePath(resolved);
                 // Watch this file
-                watchConfigFile(resolved);
+                watchConfigFile(resolved, resolvedPath);
 
                 const cfg = parseConfigFile(resolved);
                 if (cfg) {
                     // Update watchers for wildcard directories
-                    watchWildCardDirectories(resolved, cfg);
+                    watchWildCardDirectories(resolved, resolvedPath, cfg);
 
                     // Watch input files
-                    watchInputFiles(resolved, cfg);
+                    watchInputFiles(resolved, resolvedPath, cfg);
                 }
             }
 
         }
 
-        function watchConfigFile(resolved: ResolvedConfigFileName) {
-            if (options.watch && !allWatchedConfigFiles.hasKey(resolved)) {
-                allWatchedConfigFiles.setValue(resolved, watchFile(
+        function watchConfigFile(resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath) {
+            if (options.watch && !allWatchedConfigFiles.has(resolvedPath)) {
+                allWatchedConfigFiles.set(resolvedPath, watchFile(
                     hostWithWatch,
                     resolved,
                     () => {
-                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
+                        invalidateProjectAndScheduleBuilds(resolvedPath, ConfigFileProgramReloadLevel.Full);
                     },
                     PollingInterval.High,
                     WatchType.ConfigFile,
@@ -519,10 +520,10 @@ namespace ts {
             }
         }
 
-        function watchWildCardDirectories(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+        function watchWildCardDirectories(resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
             if (!options.watch) return;
             updateWatchingWildcardDirectories(
-                getOrCreateValueMapFromConfigFileMap(allWatchedWildcardDirectories, resolved),
+                getOrCreateValueMapFromConfigFileMap(allWatchedWildcardDirectories, resolvedPath),
                 createMapFromTemplate(parsed.configFileSpecs!.wildcardDirectories),
                 (dir, flags) => {
                     return watchDirectory(
@@ -540,7 +541,7 @@ namespace ts {
                                 return;
                             }
 
-                            invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Partial);
+                            invalidateProjectAndScheduleBuilds(resolvedPath, ConfigFileProgramReloadLevel.Partial);
                         },
                         flags,
                         WatchType.WildcardDirectory,
@@ -550,16 +551,16 @@ namespace ts {
             );
         }
 
-        function watchInputFiles(resolved: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+        function watchInputFiles(resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
             if (!options.watch) return;
             mutateMap(
-                getOrCreateValueMapFromConfigFileMap(allWatchedInputFiles, resolved),
+                getOrCreateValueMapFromConfigFileMap(allWatchedInputFiles, resolvedPath),
                 arrayToMap(parsed.fileNames, toPath),
                 {
                     createNewValue: (path, input) => watchFilePath(
                         hostWithWatch,
                         input,
-                        () => invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.None),
+                        () => invalidateProjectAndScheduleBuilds(resolvedPath, ConfigFileProgramReloadLevel.None),
                         PollingInterval.Low,
                         path as Path,
                         WatchType.SourceFile,
@@ -602,9 +603,9 @@ namespace ts {
             return comparePaths(file1, file2, currentDirectory, !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
         }
 
-        function invalidateProjectAndScheduleBuilds(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
+        function invalidateProjectAndScheduleBuilds(resolvedPath: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
             reportFileChangeDetected = true;
-            invalidateResolvedProject(resolved, reloadLevel);
+            invalidateResolvedProject(resolvedPath, reloadLevel);
             scheduleBuildInvalidatedProject();
         }
 
@@ -830,10 +831,10 @@ namespace ts {
         }
 
         function invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel) {
-            invalidateResolvedProject(resolveProjectName(configFileName), reloadLevel || ConfigFileProgramReloadLevel.None);
+            invalidateResolvedProject(toResolvedConfigFilePath(resolveProjectName(configFileName)), reloadLevel || ConfigFileProgramReloadLevel.None);
         }
 
-        function invalidateResolvedProject(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
+        function invalidateResolvedProject(resolved: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
                 configFileCache.removeKey(resolved);
                 buildOrder = undefined;
@@ -928,17 +929,18 @@ namespace ts {
                 return;
             }
 
+            const resolvedPath = toResolvedConfigFilePath(resolved);
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
-                watchConfigFile(resolved);
-                watchWildCardDirectories(resolved, proj);
-                watchInputFiles(resolved, proj);
+                watchConfigFile(resolved, resolvedPath);
+                watchWildCardDirectories(resolved, resolvedPath, proj);
+                watchInputFiles(resolved, resolvedPath, proj);
             }
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
                 const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(resolved), proj.options, parseConfigFileHost);
                 updateErrorForNoInputFiles(result, resolved, proj.configFileSpecs!, proj.errors, canJsonReportNoInutFiles(proj.raw));
                 proj.fileNames = result.fileNames;
-                watchInputFiles(resolved, proj);
+                watchInputFiles(resolved, resolvedPath, proj);
             }
 
             const status = getUpToDateStatus(proj);
