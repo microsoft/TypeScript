@@ -34,3 +34,8 @@ type Example<T, U> = { [K in keyof T]: K extends keyof U ? UnexpectedError<K> : 
 
 type UnexpectedError<T extends PropertyKey> = T
 type NoErrorHere<T extends PropertyKey> = T
+
+// Repro from #30331
+
+type a<T> = T extends Array<infer U> ? U : never;
+type b<T> = { [K in a<T> & keyof T ]: 42 };

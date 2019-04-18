@@ -1,5 +1,4 @@
 tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts(2,5): error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type '[Bar, Bar]'.
-  Type 'FooIterator' is missing the following properties from type '[Bar, Bar]': 0, 1, length, pop, and 26 more.
 tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts(2,12): error TS2449: Class 'FooIteratorIterator' used before its declaration.
 
 
@@ -8,7 +7,6 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts(2,12): error
     fun(...new FooIteratorIterator);
         ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type '[Bar, Bar]'.
-!!! error TS2345:   Type 'FooIterator' is missing the following properties from type '[Bar, Bar]': 0, 1, length, pop, and 26 more.
                ~~~~~~~~~~~~~~~~~~~
 !!! error TS2449: Class 'FooIteratorIterator' used before its declaration.
 !!! related TS2728 tests/cases/conformance/es6/destructuring/iterableArrayPattern16.ts:18:7: 'FooIteratorIterator' is declared here.

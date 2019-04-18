@@ -76,8 +76,11 @@ type K06 = keyof null;  // never
 >K06 : never
 >null : null
 
-type K07 = keyof never;  // never
->K07 : never
+type K07 = keyof never;  // string | number | symbol
+>K07 : string | number | symbol
+
+type K08 = keyof unknown; // never
+>K08 : never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 >K10 : "name" | "width" | "height" | "visible"
@@ -1794,7 +1797,7 @@ function updateIds2<T extends { [x: string]: string }, K extends keyof T>(
 >key : K
 
     stringMap[x]; // Should be OK.
->stringMap[x] : { [oldId: string]: string; }[T[K]]
+>stringMap[x] : string
 >stringMap : { [oldId: string]: string; }
 >x : T[K]
 }
