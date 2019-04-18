@@ -337,61 +337,6 @@ namespace ts {
             });
         });
 
-        describe("project invalidation", () => {
-            it("invalidates projects correctly", () => {
-                const fs = projFs.shadow();
-                const host = new fakes.SolutionBuilderHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
-
-                builder.buildAllProjects();
-                host.assertDiagnosticMessages(/*empty*/);
-
-                // Update a timestamp in the middle project
-                tick();
-                appendText(fs, "/src/logic/index.ts", "function foo() {}");
-                const originalWriteFile = fs.writeFileSync;
-                const writtenFiles = createMap<true>();
-                fs.writeFileSync = (path, data, encoding) => {
-                    writtenFiles.set(path, true);
-                    originalWriteFile.call(fs, path, data, encoding);
-                };
-                // Because we haven't reset the build context, the builder should assume there's nothing to do right now
-                const status = builder.getUpToDateStatusOfFile(builder.resolveProjectName("/src/logic"));
-                assert.equal(status.type, UpToDateStatusType.UpToDate, "Project should be assumed to be up-to-date");
-                verifyInvalidation(/*expectedToWriteTests*/ false);
-
-                // Rebuild this project
-                fs.writeFileSync("/src/logic/index.ts", `${fs.readFileSync("/src/logic/index.ts")}
-export class cNew {}`);
-                verifyInvalidation(/*expectedToWriteTests*/ true);
-
-                function verifyInvalidation(expectedToWriteTests: boolean) {
-                    // Rebuild this project
-                    tick();
-                    builder.invalidateProject("/src/logic");
-                    builder.buildInvalidatedProject();
-                    // The file should be updated
-                    assert.isTrue(writtenFiles.has("/src/logic/index.js"), "JS file should have been rebuilt");
-                    assert.equal(fs.statSync("/src/logic/index.js").mtimeMs, time(), "JS file should have been rebuilt");
-                    assert.isFalse(writtenFiles.has("/src/tests/index.js"), "Downstream JS file should *not* have been rebuilt");
-                    assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should *not* have been rebuilt");
-                    writtenFiles.clear();
-
-                    // Build downstream projects should update 'tests', but not 'core'
-                    tick();
-                    builder.buildInvalidatedProject();
-                    if (expectedToWriteTests) {
-                        assert.isTrue(writtenFiles.has("/src/tests/index.js"), "Downstream JS file should have been rebuilt");
-                    }
-                    else {
-                        assert.equal(writtenFiles.size, 0, "Should not write any new files");
-                    }
-                    assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have new timestamp");
-                    assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
-                }
-            });
-        });
-
         describe("lists files", () => {
             it("listFiles", () => {
                 const fs = projFs.shadow();

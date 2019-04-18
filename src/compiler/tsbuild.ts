@@ -306,10 +306,13 @@ namespace ts {
         buildAllProjects(): ExitStatus;
         cleanAllProjects(): ExitStatus;
 
+        // Currently used for testing but can be made public if needed:
+        /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
+
+        // Testing only
+
         // TODO:: All the below ones should technically only be in watch mode. but thats for later time
         /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
-        /*@internal*/ getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
-        /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
 
         /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildInvalidatedProject(): void;
@@ -413,7 +416,6 @@ namespace ts {
 
         return {
             buildAllProjects,
-            getUpToDateStatusOfFile,
             cleanAllProjects,
             resetBuildContext,
             getBuildOrder,
@@ -603,12 +605,8 @@ namespace ts {
             scheduleBuildInvalidatedProject();
         }
 
-        function getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus {
-            return getUpToDateStatus(parseConfigFile(configFileName));
-        }
-
         function getBuildOrder() {
-            return buildOrder || (buildOrder = createBuildOrder(resolveProjectNames(rootNames)));
+            return buildOrder || (buildOrder = createBuildOrder(rootNames.map(resolveProjectName)));
         }
 
         function getUpToDateStatus(project: ParsedCommandLine | undefined): UpToDateStatus {
@@ -1004,7 +1002,7 @@ namespace ts {
             }
         }
 
-        function createBuildOrder(roots: ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
+        function createBuildOrder(roots: readonly ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
             const temporaryMarks = createFileMap<true>(toPath);
             const permanentMarks = createFileMap<true>(toPath);
             const circularityReportStack: string[] = [];
@@ -1342,10 +1340,6 @@ namespace ts {
 
         function resolveProjectName(name: string): ResolvedConfigFileName {
             return resolveConfigFileProjectName(resolvePath(host.getCurrentDirectory(), name));
-        }
-
-        function resolveProjectNames(configFileNames: ReadonlyArray<string>): ResolvedConfigFileName[] {
-            return configFileNames.map(resolveProjectName);
         }
 
         function buildAllProjects(): ExitStatus {
