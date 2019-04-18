@@ -11,10 +11,6 @@ namespace ts {
         message(diag: DiagnosticMessage, ...args: string[]): void;
     }
 
-    interface DependencyGraph {
-        buildQueue: ResolvedConfigFileName[];
-    }
-
     export interface BuildOptions extends OptionsBase {
         dry?: boolean;
         force?: boolean;
@@ -313,7 +309,7 @@ namespace ts {
         // TODO:: All the below ones should technically only be in watch mode. but thats for later time
         /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
         /*@internal*/ getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
-        /*@internal*/ getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph;
+        /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
 
         /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildInvalidatedProject(): void;
@@ -390,7 +386,7 @@ namespace ts {
         const unchangedOutputs = createFileMap<Date>(toPath as ToPath);
         /** Map from config file name to up-to-date status */
         const projectStatus = createFileMap<UpToDateStatus>(toPath);
-        let globalDependencyGraph: DependencyGraph | undefined;
+        let buildOrder: readonly ResolvedConfigFileName[] | undefined;
         const writeFileName = host.trace ? (s: string) => host.trace!(s) : undefined;
         let readFileWithCache = (f: string) => host.readFile(f);
         let projectCompilerOptions = baseCompilerOptions;
@@ -422,7 +418,7 @@ namespace ts {
             getUpToDateStatusOfFile,
             cleanAllProjects,
             resetBuildContext,
-            getBuildGraph,
+            getBuildOrder,
 
             invalidateProject,
             buildInvalidatedProject,
@@ -444,7 +440,7 @@ namespace ts {
             configFileCache.clear();
             unchangedOutputs.clear();
             projectStatus.clear();
-            globalDependencyGraph = undefined;
+            buildOrder = undefined;
             buildInfoChecked.clear();
 
             diagnostics.clear();
@@ -490,8 +486,7 @@ namespace ts {
         }
 
         function startWatching() {
-            const { buildQueue } = getGlobalDependencyGraph();
-            for (const resolved of buildQueue) {
+            for (const resolved of getBuildOrder()) {
                 // Watch this file
                 watchConfigFile(resolved);
 
@@ -615,12 +610,8 @@ namespace ts {
             return getUpToDateStatus(parseConfigFile(configFileName));
         }
 
-        function getBuildGraph(configFileNames: ReadonlyArray<string>) {
-            return createDependencyGraph(resolveProjectNames(configFileNames));
-        }
-
-        function getGlobalDependencyGraph() {
-            return globalDependencyGraph || (globalDependencyGraph = getBuildGraph(rootNames));
+        function getBuildOrder() {
+            return buildOrder || (buildOrder = createBuildOrder(resolveProjectNames(rootNames)));
         }
 
         function getUpToDateStatus(project: ParsedCommandLine | undefined): UpToDateStatus {
@@ -853,7 +844,7 @@ namespace ts {
         function invalidateResolvedProject(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
                 configFileCache.removeKey(resolved);
-                globalDependencyGraph = undefined;
+                buildOrder = undefined;
             }
             projectStatus.removeKey(resolved);
             diagnostics.removeKey(resolved);
@@ -875,8 +866,7 @@ namespace ts {
         }
 
         function getNextInvalidatedProject() {
-            const { buildQueue } = getGlobalDependencyGraph();
-            for (const project of buildQueue) {
+            for (const project of getBuildOrder()) {
                 const reloadLevel = projectPendingBuild.getValue(project);
                 if (reloadLevel !== undefined) {
                     projectPendingBuild.removeKey(project);
@@ -923,7 +913,7 @@ namespace ts {
         function reportErrorSummary() {
             if (options.watch || (host as SolutionBuilderHost<T>).reportErrorSummary) {
                 // Report errors from the other projects
-                getGlobalDependencyGraph().buildQueue.forEach(project => {
+                getBuildOrder().forEach(project => {
                     if (!projectErrorsReported.hasKey(project)) {
                         reportErrors(diagnostics.getValue(project) || emptyArray);
                     }
@@ -980,11 +970,11 @@ namespace ts {
 
             // Only composite projects can be referenced by other projects
             if (!proj.options.composite) return;
-            const { buildQueue } = getGlobalDependencyGraph();
+            const buildOrder = getBuildOrder();
 
             // Always use build order to queue projects
-            for (let index = buildQueue.indexOf(resolved) + 1; index < buildQueue.length; index++) {
-                const project = buildQueue[index];
+            for (let index = buildOrder.indexOf(resolved) + 1; index < buildOrder.length; index++) {
+                const project = buildOrder[index];
                 if (projectPendingBuild.hasKey(project)) continue;
 
                 const config = parseConfigFile(project);
@@ -1023,18 +1013,16 @@ namespace ts {
             }
         }
 
-        function createDependencyGraph(roots: ResolvedConfigFileName[]): DependencyGraph {
+        function createBuildOrder(roots: ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
             const temporaryMarks = createFileMap<true>(toPath);
             const permanentMarks = createFileMap<true>(toPath);
             const circularityReportStack: string[] = [];
-            const buildOrder: ResolvedConfigFileName[] = [];
+            let buildOrder: ResolvedConfigFileName[] | undefined;
             for (const root of roots) {
                 visit(root);
             }
 
-            return {
-                buildQueue: buildOrder,
-            };
+            return buildOrder || emptyArray;
 
             function visit(projPath: ResolvedConfigFileName, inCircularContext?: boolean) {
                 // Already visited
@@ -1060,7 +1048,7 @@ namespace ts {
 
                 circularityReportStack.pop();
                 permanentMarks.setValue(projPath, true);
-                buildOrder.push(projPath);
+                (buildOrder || (buildOrder = [])).push(projPath);
             }
         }
 
@@ -1330,9 +1318,8 @@ namespace ts {
 
         function getFilesToClean(): string[] {
             // Get the same graph for cleaning we'd use for building
-            const { buildQueue } = getGlobalDependencyGraph();
             const filesToDelete: string[] = [];
-            for (const proj of buildQueue) {
+            for (const proj of getBuildOrder()) {
                 const parsed = parseConfigFile(proj);
                 if (parsed === undefined) {
                     // File has gone missing; fine to ignore here
@@ -1392,10 +1379,10 @@ namespace ts {
                     loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
             }
 
-            const { buildQueue } = getGlobalDependencyGraph();
-            reportBuildQueue(buildQueue);
+            const buildOrder = getBuildOrder();
+            reportBuildQueue(buildOrder);
             let anyFailed = false;
-            for (const next of buildQueue) {
+            for (const next of buildOrder) {
                 const proj = parseConfigFile(next);
                 if (proj === undefined) {
                     reportParseConfigFileDiagnostic(next);

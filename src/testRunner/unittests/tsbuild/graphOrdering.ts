@@ -38,18 +38,16 @@ namespace ts {
         });
 
         function checkGraphOrdering(rootNames: string[], expectedBuildSet: string[]) {
-            const builder = createSolutionBuilder(host!, rootNames, { dry: true, force: false, verbose: false });
+            const builder = createSolutionBuilder(host!, rootNames.map(getProjectFileName), { dry: true, force: false, verbose: false });
+            const buildQueue = builder.getBuildOrder();
 
-            const projFileNames = rootNames.map(getProjectFileName);
-            const graph = builder.getBuildGraph(projFileNames);
-
-            assert.deepEqual(graph.buildQueue, expectedBuildSet.map(getProjectFileName));
+            assert.deepEqual(buildQueue, expectedBuildSet.map(getProjectFileName));
 
             for (const dep of deps) {
                 const child = getProjectFileName(dep[0]);
-                if (graph.buildQueue.indexOf(child) < 0) continue;
+                if (buildQueue.indexOf(child) < 0) continue;
                 const parent = getProjectFileName(dep[1]);
-                assert.isAbove(graph.buildQueue.indexOf(child), graph.buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
+                assert.isAbove(buildQueue.indexOf(child), buildQueue.indexOf(parent), `Expecting child ${child} to be built after parent ${parent}`);
             }
         }
 
