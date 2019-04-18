@@ -8566,13 +8566,8 @@ namespace ts {
 
         function getConstrainedSignature(signature: Signature): Signature {
             return signature.typeParameters ?
-                signature.constrainedSignatureCache || (signature.constrainedSignatureCache = createConstrainedSignature(signature)) :
+                signature.constrainedSignatureCache || (signature.constrainedSignatureCache = getBaseSignature(signature)) :
                 signature;
-        }
-
-        function createConstrainedSignature(signature: Signature) {
-            // Create an instantiation of the signature where all type arguments are their base constraint
-            return instantiateSignature(signature, t => contains(signature.typeParameters, t) ? getBaseConstraintOfType(t) || unknownType : t, /*eraseTypeParameters*/ true);
         }
 
         function getCanonicalSignature(signature: Signature): Signature {
