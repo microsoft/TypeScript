@@ -568,18 +568,13 @@ const { x, y: a, ...zs = {} } = {};`);
                                     start: { line: 2, offset: 7 },
                                     end: { line: 2, offset: 30 } },
                                 parent: {
-                                    textSpan: { // { x, y: a, ...zs = {} } = {}
-                                        start: { line: 2, offset: 7 },
-                                        end: { line: 2, offset: 35 } },
+                                    textSpan: { // whole line
+                                        start: { line: 2, offset: 1 },
+                                        end: { line: 2, offset: 36 } },
                                     parent: {
-                                        textSpan: { // whole line
-                                            start: { line: 2, offset: 1 },
-                                            end: { line: 2, offset: 36 } },
-                                        parent: {
-                                            textSpan: {
-                                                start: { line: 1, offset: 1 },
-                                                end: { line: 2, offset: 36 } } } } } } } } },
-            });
+                                        textSpan: {
+                                            start: { line: 1, offset: 1 },
+                                            end: { line: 2, offset: 36 } } } } } } } } });
         });
 
         it("consumes all whitespace in a multi-line function parameter list", () => {
@@ -643,6 +638,19 @@ function square(x) {
                             textSpan: { // SourceFile
                                 start: { line: 1, offset: 1 },
                                 end: { line: 7, offset: 2 } } } } } }]);
+        });
+
+        it("skips lone VariableDeclarations in a declaration list", () => {
+            const getSelectionRange = setup("/file.ts", `const x = 3;`);
+            const locations = getSelectionRange([{ line: 1, offset: 7 }]); // x
+            assert.deepEqual(locations, [{
+                textSpan: {
+                    start: { line: 1, offset: 7 },
+                    end: { line: 1, offset: 8 } },
+                parent: {
+                    textSpan: {
+                        start: { line: 1, offset: 1 },
+                        end: { line: 1, offset: 13 } } } }]);
         });
     });
 }

@@ -18,16 +18,19 @@ namespace ts.SelectionRange {
                 }
 
                 if (positionShouldSnapToNode(pos, node, nextNode)) {
-                    // Blocks are effectively redundant with SyntaxLists.
-                    // TemplateSpans, along with the SyntaxLists containing them,
-                    // are a somewhat unintuitive grouping of things that should be
-                    // considered independently. A VariableStatement’s children are just
-                    // a VaraiableDeclarationList and a semicolon.
+                    // 1. Blocks are effectively redundant with SyntaxLists.
+                    // 2. TemplateSpans, along with the SyntaxLists containing them, are a somewhat unintuitive grouping
+                    //    of things that should be considered independently.
+                    // 3. A VariableStatement’s children are just a VaraiableDeclarationList and a semicolon.
+                    // 4. A lone VariableDeclaration in a VaraibleDeclaration feels redundant with the VariableStatement.
+                    //
                     // Dive in without pushing a selection range.
                     if (isBlock(node)
                         || isTemplateSpan(node) || isTemplateHead(node)
                         || prevNode && isTemplateHead(prevNode)
-                        || isVariableDeclarationList(node) && isVariableStatement(parentNode)) {
+                        || isVariableDeclarationList(node) && isVariableStatement(parentNode)
+                        || isSyntaxList(node) && isVariableDeclarationList(parentNode)
+                        || isVariableDeclaration(node) && isSyntaxList(parentNode) && children.length === 1) {
                         parentNode = node;
                         break;
                     }
