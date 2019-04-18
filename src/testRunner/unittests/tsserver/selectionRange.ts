@@ -92,44 +92,47 @@ export interface IService {
     _serviceBrand: any;
 
     open(host: number, data: any): Promise<any>;
+    bar(): void
 }`);
             const locations = getSelectionRange([
-                {
-                    line: 5,
-                    offset: 12,
-                },
+                { line: 5, offset: 12 }, // ho/**/st
+                { line: 6, offset: 16 }, // void/**/
             ]);
 
-            assert.deepEqual(locations, [
-                {
-                    textSpan: { // host
+            assert.deepEqual(locations![0], {
+                textSpan: { // host
+                    start: { line: 5, offset: 10 },
+                    end: { line: 5, offset: 14 } },
+                parent: {
+                    textSpan: { // host: number
                         start: { line: 5, offset: 10 },
-                        end: { line: 5, offset: 14 } },
+                        end: { line: 5, offset: 22 } },
                     parent: {
-                        textSpan: { // host: number
+                        textSpan: { // host: number, data: any
                             start: { line: 5, offset: 10 },
-                            end: { line: 5, offset: 22 } },
+                            end: { line: 5, offset: 33 } },
                         parent: {
-                            textSpan: { // host: number, data: any
-                                start: { line: 5, offset: 10 },
-                                end: { line: 5, offset: 33 } },
+                            textSpan: { // open(host: number, data: any): Promise<any>;
+                                start: { line: 5, offset: 5 },
+                                end: { line: 5, offset: 49 } },
                             parent: {
-                                textSpan: { // open(host: number, data: any): Promise<any>;
-                                    start: { line: 5, offset: 5 },
-                                    end: { line: 5, offset: 49 } },
+                                textSpan: { // SyntaxList + whitespace (body of interface)
+                                    start: { line: 2, offset: 28 },
+                                    end: { line: 7, offset: 1 } },
                                 parent: {
-                                    textSpan: { // SyntaxList + whitespace (body of interface)
-                                        start: { line: 2, offset: 28 },
-                                        end: { line: 6, offset: 1 } },
+                                    textSpan: { // InterfaceDeclaration
+                                        start: { line: 2, offset: 1 },
+                                        end: { line: 7, offset: 2 } },
                                     parent: {
-                                        textSpan: { // InterfaceDeclaration
-                                            start: { line: 2, offset: 1 },
-                                            end: { line: 6, offset: 2 } },
-                                        parent: {
-                                            textSpan: { // SourceFile
-                                                start: { line: 1, offset: 1 },
-                                                end: { line: 6, offset: 2 } } } } } } } } },
-            ]);
+                                        textSpan: { // SourceFile
+                                            start: { line: 1, offset: 1 },
+                                            end: { line: 7, offset: 2 } } } } } } } } });
+
+            // Ensures positions after a zero-width node work, because ts.positionBelongsToNode
+            // treats them strangely.
+            assert.deepEqual(locations![1].textSpan, { // void
+                start: { line: 6, offset: 12 },
+                end: { line: 6, offset: 16 }});
         });
 
         it("works for complex TypeScript", () => {
@@ -612,6 +615,34 @@ function f(
                 start: { line: 1, offset: 1 },
                 end: { line: 1, offset: 4 },
             });
+        });
+
+        it("creates a stop for JSDoc ranges", () => {
+            const getSelectionRange = setup("/file.js", "" +
+`// Not a JSDoc comment
+/**
+ * @param {number} x The number to square
+ */
+function square(x) {
+    return x * x;
+}`);
+            const locations = getSelectionRange([{ line: 5, offset: 10 }]); // square(x)
+            assert.deepEqual(locations, [{
+                textSpan: { // square
+                    start: { line: 5 , offset: 10 },
+                    end: { line: 5, offset: 16 } },
+                parent: { // whole function declaration
+                    textSpan: {
+                        start: { line: 5, offset: 1 },
+                        end: { line: 7, offset: 2 } },
+                    parent: {
+                        textSpan: { // add JSDoc
+                            start: { line: 2, offset: 1 },
+                            end: { line: 7, offset: 2 } },
+                        parent: {
+                            textSpan: { // SourceFile
+                                start: { line: 1, offset: 1 },
+                                end: { line: 7, offset: 2 } } } } } }]);
         });
     });
 }

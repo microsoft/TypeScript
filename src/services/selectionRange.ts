@@ -17,7 +17,7 @@ namespace ts.SelectionRange {
                     break outer;
                 }
 
-                if (positionShouldSnapToNode(pos, node, nextNode, sourceFile)) {
+                if (positionShouldSnapToNode(pos, node, nextNode)) {
                     // Blocks are effectively redundant with SyntaxLists.
                     // TemplateSpans, along with the SyntaxLists containing them,
                     // are a somewhat unintuitive grouping of things that should be
@@ -45,8 +45,12 @@ namespace ts.SelectionRange {
                         && isListOpener(prevNode)
                         && isListCloser(nextNode)
                         && !positionsAreOnSameLine(prevNode.getStart(), nextNode.getStart(), sourceFile);
+                    const jsDocCommentStart = hasJSDocNodes(node) && node.jsDoc![0].getStart();
                     const start = isBetweenMultiLineBookends ? prevNode.getEnd() : node.getStart();
                     const end = isBetweenMultiLineBookends ? nextNode.getStart() : node.getEnd();
+                    if (isNumber(jsDocCommentStart)) {
+                        pushSelectionRange(jsDocCommentStart, end);
+                    }
                     pushSelectionRange(start, end, node.kind);
 
                     // String literals should have a stop both inside and outside their quotes.
@@ -84,8 +88,12 @@ namespace ts.SelectionRange {
      * @param nextNode The next sibling node in the tree.
      * @param sourceFile The source file containing the nodes.
      */
-    function positionShouldSnapToNode(pos: number, node: Node, nextNode: Node | undefined, sourceFile: SourceFile) {
-        if (positionBelongsToNode(node, pos, sourceFile)) {
+    function positionShouldSnapToNode(pos: number, node: Node, nextNode: Node | undefined) {
+        // Can’t use 'ts.positionBelongsToNode()' here because it cleverly accounts
+        // for missing nodes, which can’t really be considered when deciding what
+        // to select.
+        Debug.assert(node.pos <= pos);
+        if (pos < node.end) {
             return true;
         }
         const nodeEnd = node.getEnd();
