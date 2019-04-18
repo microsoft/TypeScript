@@ -1,0 +1,42 @@
+=== tests/cases/compiler/unionOfClassCalls.ts ===
+declare class Test<T> {
+>Test : Symbol(Test, Decl(unionOfClassCalls.ts, 0, 0))
+>T : Symbol(T, Decl(unionOfClassCalls.ts, 0, 19))
+
+    obj: T;
+>obj : Symbol(Test.obj, Decl(unionOfClassCalls.ts, 0, 23))
+>T : Symbol(T, Decl(unionOfClassCalls.ts, 0, 19))
+
+    get<K extends keyof T>(k: K): T[K];
+>get : Symbol(Test.get, Decl(unionOfClassCalls.ts, 1, 11))
+>K : Symbol(K, Decl(unionOfClassCalls.ts, 2, 8))
+>T : Symbol(T, Decl(unionOfClassCalls.ts, 0, 19))
+>k : Symbol(k, Decl(unionOfClassCalls.ts, 2, 27))
+>K : Symbol(K, Decl(unionOfClassCalls.ts, 2, 8))
+>T : Symbol(T, Decl(unionOfClassCalls.ts, 0, 19))
+>K : Symbol(K, Decl(unionOfClassCalls.ts, 2, 8))
+}
+
+interface A { t: "A" }
+>A : Symbol(A, Decl(unionOfClassCalls.ts, 3, 1))
+>t : Symbol(A.t, Decl(unionOfClassCalls.ts, 5, 13))
+
+interface B { t: "B" }
+>B : Symbol(B, Decl(unionOfClassCalls.ts, 5, 22))
+>t : Symbol(B.t, Decl(unionOfClassCalls.ts, 6, 13))
+
+declare const tmp: Test<A> | Test<B>;
+>tmp : Symbol(tmp, Decl(unionOfClassCalls.ts, 8, 13))
+>Test : Symbol(Test, Decl(unionOfClassCalls.ts, 0, 0))
+>A : Symbol(A, Decl(unionOfClassCalls.ts, 3, 1))
+>Test : Symbol(Test, Decl(unionOfClassCalls.ts, 0, 0))
+>B : Symbol(B, Decl(unionOfClassCalls.ts, 5, 22))
+
+switch (tmp.get('t')) {
+>tmp.get : Symbol(Test.get, Decl(unionOfClassCalls.ts, 1, 11), Decl(unionOfClassCalls.ts, 1, 11))
+>tmp : Symbol(tmp, Decl(unionOfClassCalls.ts, 8, 13))
+>get : Symbol(Test.get, Decl(unionOfClassCalls.ts, 1, 11), Decl(unionOfClassCalls.ts, 1, 11))
+
+    case 'A': break;
+    case 'B': break;
+}

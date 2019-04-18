@@ -1,0 +1,34 @@
+=== tests/cases/compiler/unionOfClassCalls.ts ===
+declare class Test<T> {
+>Test : Test<T>
+
+    obj: T;
+>obj : T
+
+    get<K extends keyof T>(k: K): T[K];
+>get : <K extends keyof T>(k: K) => T[K]
+>k : K
+}
+
+interface A { t: "A" }
+>t : "A"
+
+interface B { t: "B" }
+>t : "B"
+
+declare const tmp: Test<A> | Test<B>;
+>tmp : Test<A> | Test<B>
+
+switch (tmp.get('t')) {
+>tmp.get('t') : "A" | "B"
+>tmp.get : (<K extends "t">(k: K) => A[K]) | (<K extends "t">(k: K) => B[K])
+>tmp : Test<A> | Test<B>
+>get : (<K extends "t">(k: K) => A[K]) | (<K extends "t">(k: K) => B[K])
+>'t' : "t"
+
+    case 'A': break;
+>'A' : "A"
+
+    case 'B': break;
+>'B' : "B"
+}

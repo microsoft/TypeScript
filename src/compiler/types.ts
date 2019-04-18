@@ -4381,7 +4381,9 @@ namespace ts {
         /* @internal */
         unionSignatures?: Signature[];      // Underlying signatures of a union signature
         /* @internal */
-        erasedSignatureCache?: Signature;   // Erased version of signature (deferred)
+        erasedSignatureCache?: Signature;   // Erased version of signature (to any) (deferred)
+        /* @internal */
+        constrainedSignatureCache?: Signature;// Erased version of signature (to constraints) (deferred)
         /* @internal */
         canonicalSignatureCache?: Signature; // Canonical version of signature (deferred)
         /* @internal */
