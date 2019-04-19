@@ -12,7 +12,7 @@ namespace ts.projectSystem {
         };
     }
 
-    describe("unittests:: tsserver:: selectionRange", () => {
+    describe("unittests:: tsserver:: smartSelection", () => {
         it("works for simple JavaScript", () => {
             const getSmartSelectionRange = setup("/file.js", `
 class Foo {
@@ -651,6 +651,37 @@ function square(x) {
                     textSpan: {
                         start: { line: 1, offset: 1 },
                         end: { line: 1, offset: 13 } } } }]);
+        });
+
+        it("never returns empty ranges", () => {
+            const getSmartSelectionRange = setup("/file.ts", `
+class HomePage {
+    componentDidMount() {
+        if (this.props.username) {
+            return '';
+        }
+    }
+}`);
+            const locations = getSmartSelectionRange([
+                { line: 3, offset: 23 }, // componentDidMount(/**/)
+                { line: 4, offset: 32 }, // username/**/)
+                { line: 5, offset: 21 }, // return '/**/'
+            ]);
+
+            assert.deepEqual(locations![0].textSpan, { // this.props.username
+                start: { line: 3, offset: 23 },
+                end: { line: 3, offset: 24 },
+            });
+
+            assert.deepEqual(locations![1].textSpan, { // this.props.username
+                start: { line: 4, offset: 32 },
+                end: { line: 4, offset: 33 },
+            });
+
+            assert.deepEqual(locations![2].textSpan, { // ''
+                start: { line: 5, offset: 20 },
+                end: { line: 5, offset: 22 },
+            });
         });
     });
 }
