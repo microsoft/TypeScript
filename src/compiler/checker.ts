@@ -13121,16 +13121,6 @@ namespace ts {
                 }
                 return Ternary.False;
 
-                function isNonGeneric(type: Type) {
-                    // If we're already in identity relationship checking, we should use `isRelatedTo`
-                    // to catch the `Maybe` from an excessively deep type (which we then assume means
-                    // that the type could possibly contain a generic)
-                    if (relation === identityRelation) {
-                        return isRelatedTo(type, getPermissiveInstantiation(type)) === Ternary.True;
-                    }
-                    return isTypeIdenticalTo(type, getPermissiveInstantiation(type));
-                }
-
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
                     if (some(variances, v => v === Variance.Unmeasurable)) {
                         return undefined;
@@ -13138,7 +13128,7 @@ namespace ts {
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors)) {
                         return result;
                     }
-                    const allowStructuralFallback = (targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances)) || isNonGeneric(source) || isNonGeneric(target);
+                    const allowStructuralFallback = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
                     varianceCheckFailed = !allowStructuralFallback;
                     // The type arguments did not relate appropriately, but it may be because we have no variance
                     // information (in which case typeArgumentsRelatedTo defaulted to covariance for all type
