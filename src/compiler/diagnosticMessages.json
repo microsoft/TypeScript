@@ -4946,5 +4946,9 @@
     "Convert parameters to destructured object": {
         "category": "Message",
         "code": 95075
+    },
+    "Allow accessing UMD globals from modules.": {
+        "category": "Message",
+        "code": 95076
     }
 }
