@@ -6614,7 +6614,7 @@ namespace ts {
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
                         case "author":
-                            tag = parseAuthorTag(start, tagName, indent);
+                            tag = parseAuthorTag(start, tagName, margin);
                             break;
                         case "augments":
                         case "extends":
@@ -6934,7 +6934,7 @@ namespace ts {
                                 break loop;
                         }
 
-                        token = nextJSDocToken();
+                        token = nextTokenJSDoc();
                     }
 
                     if (seenLessThan && seenGreaterThan) {
