@@ -11927,7 +11927,7 @@ namespace ts {
                 // with respect to T.
                 const sourceSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(sourceType));
                 const targetSig = callbackCheck ? undefined : getSingleCallSignature(getNonNullableType(targetType));
-                const callbacks = sourceSig && targetSig && !signatureHasTypePredicate(sourceSig) && !signatureHasTypePredicate(targetSig) &&
+                const callbacks = sourceSig && targetSig &&
                     (getFalsyFlags(sourceType) & TypeFlags.Nullable) === (getFalsyFlags(targetType) & TypeFlags.Nullable);
                 const related = callbacks ?
                     // TODO: GH#18217 It will work if they're both `undefined`, but not if only one is
@@ -11958,7 +11958,8 @@ namespace ts {
                 if (targetTypePredicate) {
                     const sourceTypePredicate = getTypePredicateOfSignature(source);
                     if (sourceTypePredicate) {
-                        result &= compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, reportErrors, errorReporter, compareTypes);
+                        result &= callbackCheck === CallbackCheck.Bivariant && compareTypePredicateRelatedTo(targetTypePredicate, sourceTypePredicate, /*reportErrors*/ false, undefined, compareTypes) ||
+                            compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, reportErrors, errorReporter, compareTypes);
                     }
                     else if (isIdentifierTypePredicate(targetTypePredicate)) {
                         if (reportErrors) {
@@ -13394,10 +13395,11 @@ namespace ts {
                 if (getObjectFlags(source) & ObjectFlags.Instantiated && getObjectFlags(target) & ObjectFlags.Instantiated && source.symbol === target.symbol) {
                     // We have instantiations of the same anonymous type (which typically will be the type of a
                     // method). Simply do a pairwise comparison of the signatures in the two signature lists instead
-                    // of the much more expensive N * M comparison matrix we explore below. We erase type parameters
-                    // as they are known to always be the same.
+                    // of the much more expensive N * M comparison matrix we explore below. We instantiate type
+                    // parameters to their constraints because, whereas the type parameters are known to be the same,
+                    // the constraints might differ if they reference outer type parameters.
                     for (let i = 0; i < targetSignatures.length; i++) {
-                        const related = signatureRelatedTo(sourceSignatures[i], targetSignatures[i], /*erase*/ true, reportErrors);
+                        const related = signatureRelatedTo(getBaseSignature(sourceSignatures[i]), getBaseSignature(targetSignatures[i]), /*erase*/ false, reportErrors);
                         if (!related) {
                             return Ternary.False;
                         }
