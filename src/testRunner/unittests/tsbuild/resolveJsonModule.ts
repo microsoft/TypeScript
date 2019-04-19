@@ -64,7 +64,7 @@ export default hello.hello`);
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"composite": true,`, `"composite": true, "sourceMap": true,`);
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host, [configFile], { verbose: true });
+            let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
@@ -75,7 +75,7 @@ export default hello.hello`);
                 assert(fs.existsSync(output), `Expect file ${output} to exist`);
             }
             host.clearDiagnostics();
-            builder.resetBuildContext();
+            builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
@@ -89,7 +89,7 @@ export default hello.hello`);
             const configFile = "src/tsconfig_withFiles.json";
             replaceText(fs, configFile, `"outDir": "dist",`, "");
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host, [configFile], { verbose: true });
+            let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
@@ -100,7 +100,7 @@ export default hello.hello`);
                 assert(fs.existsSync(output), `Expect file ${output} to exist`);
             }
             host.clearDiagnostics();
-            builder.resetBuildContext();
+            builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
@@ -128,7 +128,7 @@ export default hello.hello`);
             const stringsConfigFile = "src/strings/tsconfig.json";
             const mainConfigFile = "src/main/tsconfig.json";
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host, [configFile], { verbose: true });
+            let builder = createSolutionBuilder(host, [configFile], { verbose: true });
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),
@@ -139,7 +139,7 @@ export default hello.hello`);
             );
             assert(fs.existsSync(expectedOutput), `Expect file ${expectedOutput} to exist`);
             host.clearDiagnostics();
-            builder.resetBuildContext();
+            builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
             builder.buildAllProjects();
             host.assertDiagnosticMessages(

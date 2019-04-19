@@ -388,7 +388,7 @@ namespace ts {
                 ...outputFiles[project.third]
             ];
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host);
+            let builder = createSolutionBuilder(host);
             builder.buildAllProjects();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             // Verify they exist
@@ -398,7 +398,7 @@ namespace ts {
             // Delete bundle info
             host.clearDiagnostics();
             host.deleteFile(outputFiles[project.first][ext.buildinfo]);
-            builder.resetBuildContext();
+            builder = createSolutionBuilder(host);
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
@@ -428,11 +428,11 @@ namespace ts {
         it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
             const fs = outFileFs.shadow();
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host);
+            let builder = createSolutionBuilder(host);
             builder.buildAllProjects();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             host.clearDiagnostics();
-            builder.resetBuildContext();
+            builder = createSolutionBuilder(host);
             changeCompilerVersion(host);
             builder.buildAllProjects();
             host.assertDiagnosticMessages(
@@ -453,7 +453,7 @@ namespace ts {
 
             // Build with command line incremental
             const host = new fakes.SolutionBuilderHost(fs);
-            const builder = createSolutionBuilder(host, { incremental: true });
+            let builder = createSolutionBuilder(host, { incremental: true });
             builder.buildAllProjects();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             host.clearDiagnostics();
@@ -461,7 +461,7 @@ namespace ts {
 
             // Make non incremental build with change in file that doesnt affect dts
             appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);");
-            builder.resetBuildContext({ verbose: true });
+            builder = createSolutionBuilder(host, { verbose: true });
             builder.buildAllProjects();
             host.assertDiagnosticMessages(getExpectedDiagnosticForProjectsInBuild(relSources[project.first][source.config], relSources[project.second][source.config], relSources[project.third][source.config]),
                 [Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2, relSources[project.first][source.config], relOutputFiles[project.first][ext.js], relSources[project.first][source.ts][part.one]],
@@ -475,7 +475,7 @@ namespace ts {
 
             // Make incremental build with change in file that doesnt affect dts
             appendText(fs, relSources[project.first][source.ts][part.one], "console.log(s);");
-            builder.resetBuildContext({ verbose: true, incremental: true });
+            builder = createSolutionBuilder(host, { verbose: true, incremental: true });
             builder.buildAllProjects();
             // Builds completely because tsbuildinfo is old.
             host.assertDiagnosticMessages(

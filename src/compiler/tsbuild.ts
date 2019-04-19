@@ -260,7 +260,6 @@ namespace ts {
 
         // Currently used for testing but can be made public if needed:
         /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
-        /*@internal*/ resetBuildContext(opts?: BuildOptions): void;
 
         // Testing only
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
@@ -337,8 +336,8 @@ namespace ts {
         const parseConfigFileHost = parseConfigHostFromCompilerHostLike(host);
 
         // State of the solution
-        let options = defaultOptions;
-        let baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
+        const options = defaultOptions;
+        const baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
         const resolvedConfigFilePaths = createMap<ResolvedConfigFilePath>();
         type ConfigFileCacheEntry = ParsedCommandLine | Diagnostic;
         const configFileCache = createMap() as ConfigFileMap<ConfigFileCacheEntry>;
@@ -380,7 +379,6 @@ namespace ts {
                 buildAllProjects,
                 cleanAllProjects,
                 getBuildOrder,
-                resetBuildContext,
                 getUpToDateStatusOfProject,
                 invalidateProject,
                 buildInvalidatedProject,
@@ -397,29 +395,6 @@ namespace ts {
             const resolvedPath = toPath(fileName) as ResolvedConfigFilePath;
             resolvedConfigFilePaths.set(fileName, resolvedPath);
             return resolvedPath;
-        }
-
-        function resetBuildContext(opts?: BuildOptions) {
-            options = opts || defaultOptions;
-            baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
-            resolvedConfigFilePaths.clear();
-            configFileCache.clear();
-            projectStatus.clear();
-            buildOrder = undefined;
-            buildInfoChecked.clear();
-
-            diagnostics.clear();
-            projectPendingBuild.clear();
-            projectErrorsReported.clear();
-            if (timerToBuildInvalidatedProject) {
-                clearTimeout(timerToBuildInvalidatedProject);
-                timerToBuildInvalidatedProject = undefined;
-            }
-            reportFileChangeDetected = false;
-            clearMap(allWatchedWildcardDirectories, wildCardWatches => clearMap(wildCardWatches, closeFileWatcherOf));
-            clearMap(allWatchedInputFiles, inputFileWatches => clearMap(inputFileWatches, closeFileWatcher));
-            clearMap(allWatchedConfigFiles, closeFileWatcher);
-            builderPrograms.clear();
         }
 
         function isParsedCommandLine(entry: ConfigFileCacheEntry): entry is ParsedCommandLine {

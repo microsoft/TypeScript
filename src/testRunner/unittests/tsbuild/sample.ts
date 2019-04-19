@@ -171,11 +171,11 @@ namespace ts {
             function initializeWithBuild(opts?: BuildOptions) {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
+                let builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
                 builder.buildAllProjects();
                 host.clearDiagnostics();
                 tick();
-                builder.resetBuildContext(opts ? { ...opts, verbose: true } : undefined);
+                builder = createSolutionBuilder(host, ["/src/tests"], { ...(opts || {}), verbose: true });
                 return { fs, host, builder };
             }
 
@@ -183,7 +183,6 @@ namespace ts {
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
-                builder.resetBuildContext();
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
@@ -288,7 +287,7 @@ namespace ts {
                 fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: { target: "es3" } }));
                 replaceText(fs, "/src/tests/tsconfig.json", `"references": [`, `"extends": "./tsconfig.base.json", "references": [`);
                 const host = new fakes.SolutionBuilderHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
+                let builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(
                     getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
@@ -301,7 +300,7 @@ namespace ts {
                 );
                 host.clearDiagnostics();
                 tick();
-                builder.resetBuildContext();
+                builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
                 fs.writeFileSync("/src/tests/tsconfig.base.json", JSON.stringify({ compilerOptions: {} }));
                 builder.buildAllProjects();
                 host.assertDiagnosticMessages(
