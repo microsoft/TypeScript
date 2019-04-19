@@ -356,7 +356,7 @@ namespace ts {
         const buildInfoChecked = createMap() as ConfigFileMap<true>;
 
         // Watch state
-        const builderPrograms = createFileMap<T>();
+        const builderPrograms = createMap() as ConfigFileMap<T>;
         const diagnostics = createMap() as ConfigFileMap<ReadonlyArray<Diagnostic>>;
         const projectPendingBuild = createMap() as ConfigFileMap<ConfigFileProgramReloadLevel>;
         const projectErrorsReported = createMap() as ConfigFileMap<true>;
@@ -394,57 +394,6 @@ namespace ts {
             const resolvedPath = toPath(fileName) as ResolvedConfigFilePath;
             resolvedConfigFilePaths.set(fileName, resolvedPath);
             return resolvedPath;
-        }
-
-
-        // TODO remove this and use normal map so we arent transforming paths constantly
-        function createFileMap<T>(): {
-            setValue(fileName: ResolvedConfigFileName, value: T): void;
-            getValue(fileName: ResolvedConfigFileName): T | undefined;
-            hasKey(fileName: ResolvedConfigFileName): boolean;
-            removeKey(fileName: ResolvedConfigFileName): void;
-            forEach(action: (value: T, key: ResolvedConfigFilePath) => void): void;
-            getSize(): number;
-            clear(): void;
-        } {
-            const lookup = createMap<T>();
-            return {
-                setValue,
-                getValue,
-                removeKey,
-                forEach,
-                hasKey,
-                getSize,
-                clear
-            };
-
-            function forEach(action: (value: T, key: ResolvedConfigFilePath) => void) {
-                lookup.forEach(action);
-            }
-
-            function hasKey(fileName: ResolvedConfigFileName) {
-                return lookup.has(toResolvedConfigFilePath(fileName));
-            }
-
-            function removeKey(fileName: ResolvedConfigFileName) {
-                lookup.delete(toResolvedConfigFilePath(fileName));
-            }
-
-            function setValue(fileName: ResolvedConfigFileName, value: T) {
-                lookup.set(toResolvedConfigFilePath(fileName), value);
-            }
-
-            function getValue(fileName: ResolvedConfigFileName): T | undefined {
-                return lookup.get(toResolvedConfigFilePath(fileName));
-            }
-
-            function getSize() {
-                return lookup.size;
-            }
-
-            function clear() {
-                lookup.clear();
-            }
         }
 
         function resetBuildContext(opts = defaultOptions) {
@@ -1116,7 +1065,7 @@ namespace ts {
                 configFile.fileNames,
                 configFile.options,
                 compilerHost,
-                getOldProgram(proj, configFile),
+                getOldProgram(resolvedPath, configFile),
                 configFile.errors,
                 configFile.projectReferences
             );
@@ -1194,7 +1143,7 @@ namespace ts {
             };
             diagnostics.delete(resolvedPath);
             projectStatus.set(resolvedPath, status);
-            afterProgramCreate(proj, program);
+            afterProgramCreate(resolvedPath, program);
             projectCompilerOptions = baseCompilerOptions;
             return resultFlags;
 
@@ -1204,7 +1153,7 @@ namespace ts {
                 // List files if any other build error using program (emit errors already report files)
                 if (writeFileName) listFiles(program, writeFileName);
                 projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
-                afterProgramCreate(proj, program);
+                afterProgramCreate(resolvedPath, program);
                 projectCompilerOptions = baseCompilerOptions;
                 return resultFlags;
             }
@@ -1216,19 +1165,19 @@ namespace ts {
             }
         }
 
-        function afterProgramCreate(proj: ResolvedConfigFileName, program: T) {
+        function afterProgramCreate(proj: ResolvedConfigFilePath, program: T) {
             if (host.afterProgramEmitAndDiagnostics) {
                 host.afterProgramEmitAndDiagnostics(program);
             }
             if (options.watch) {
                 program.releaseProgram();
-                builderPrograms.setValue(proj, program);
+                builderPrograms.set(proj, program);
             }
         }
 
-        function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+        function getOldProgram(proj: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
             if (options.force) return undefined;
-            const value = builderPrograms.getValue(proj);
+            const value = builderPrograms.get(proj);
             if (value) return value;
             return readBuilderProgram(parsed.options, readFileWithCache) as any as T;
         }
