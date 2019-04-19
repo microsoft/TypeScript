@@ -588,6 +588,13 @@ namespace ts {
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Do_not_resolve_the_real_path_of_symlinks,
         },
+        {
+            name: "allowUmdGlobalAccess",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
+        },
 
         // Source Maps
         {
