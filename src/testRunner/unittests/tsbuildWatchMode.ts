@@ -17,12 +17,13 @@ namespace ts.tscWatch {
     }
 
     export function createSolutionBuilder(system: WatchedSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
-        const host = createSolutionBuilderWithWatchHost(system);
-        return ts.createSolutionBuilder(host, rootNames, defaultOptions || { watch: true });
+        const host = createSolutionBuilderHost(system);
+        return ts.createSolutionBuilder(host, rootNames, defaultOptions || {});
     }
 
-    function createSolutionBuilderWithWatch(host: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
-        const solutionBuilder = createSolutionBuilder(host, rootNames, defaultOptions);
+    function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
+        const host = createSolutionBuilderWithWatchHost(system);
+        const solutionBuilder = ts.createSolutionBuilderWithWatch(host, rootNames, defaultOptions || { watch: true });
         solutionBuilder.buildAllProjects();
         solutionBuilder.startWatching();
         return solutionBuilder;
@@ -1140,9 +1141,7 @@ export function gfoo() {
 
         it("incremental updates in verbose mode", () => {
             const host = createTsBuildWatchSystem(allFiles, { currentDirectory: projectsLocation });
-            const solutionBuilder = createSolutionBuilder(host, [`${project}/${SubProject.tests}`], { verbose: true, watch: true });
-            solutionBuilder.buildAllProjects();
-            solutionBuilder.startWatching();
+            createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`], { verbose: true, watch: true });
             checkOutputErrorsInitial(host, emptyArray, /*disableConsoleClears*/ undefined, [
                 `Projects in this build: \r\n    * sample1/core/tsconfig.json\r\n    * sample1/logic/tsconfig.json\r\n    * sample1/tests/tsconfig.json\n\n`,
                 `Project 'sample1/core/tsconfig.json' is out of date because output file 'sample1/core/anotherModule.js' does not exist\n\n`,

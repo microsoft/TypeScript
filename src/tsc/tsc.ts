@@ -183,6 +183,9 @@ namespace ts {
 
     function performBuild(args: string[]) {
         const { buildOptions, projects, errors } = parseBuildCommand(args);
+        // Update to pretty if host supports it
+        updateReportDiagnostic(buildOptions);
+
         if (errors.length > 0) {
             errors.forEach(reportDiagnostic);
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
@@ -194,8 +197,6 @@ namespace ts {
             return sys.exit(ExitStatus.Success);
         }
 
-        // Update to pretty if host supports it
-        updateReportDiagnostic(buildOptions);
         if (projects.length === 0) {
             printVersion();
             printHelp(buildOpts, "--build ");
@@ -210,24 +211,21 @@ namespace ts {
             reportWatchModeWithoutSysSupport();
         }
 
-        // Use default createProgram
-        const buildHost = buildOptions.watch ?
-            createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createWatchStatusReporter(buildOptions)) :
-            createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createReportErrorSummary(buildOptions));
-        updateCreateProgram(buildHost);
-        buildHost.afterProgramEmitAndDiagnostics = (program: BuilderProgram) => reportStatistics(program.getProgram());
-
-        const builder = createSolutionBuilder(buildHost, projects, buildOptions);
-        if (buildOptions.clean) {
-            return sys.exit(builder.cleanAllProjects());
-        }
-
         if (buildOptions.watch) {
+            const buildHost = createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createWatchStatusReporter(buildOptions));
+            updateCreateProgram(buildHost);
+            buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
+            const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions);
             builder.buildAllProjects();
-            return (builder as SolutionBuilderWithWatch).startWatching();
+            return builder.startWatching();
         }
-
-        return sys.exit(builder.buildAllProjects());
+        else {
+            const buildHost = createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createReportErrorSummary(buildOptions));
+            updateCreateProgram(buildHost);
+            buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
+            const builder = createSolutionBuilder(buildHost, projects, buildOptions);
+            return sys.exit(buildOptions.clean ? builder.cleanAllProjects() : builder.buildAllProjects());
+        }
     }
 
     function createReportErrorSummary(options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {

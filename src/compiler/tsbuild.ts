@@ -236,7 +236,6 @@ namespace ts {
     export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
-        deleteFile(fileName: string): void;
 
         reportDiagnostic: DiagnosticReporter; // Technically we want to move it out and allow steps of actions on Solution, but for now just merge stuff in build host here
         reportSolutionBuilderStatus: DiagnosticReporter;
@@ -246,10 +245,11 @@ namespace ts {
         afterProgramEmitAndDiagnostics?(program: T): void;
 
         // For testing
-        now?(): Date;
+        /*@internal*/ now?(): Date;
     }
 
     export interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
+        deleteFile(fileName: string): void;
         reportErrorSummary?: ReportEmitErrorSummary;
     }
 
@@ -262,17 +262,16 @@ namespace ts {
 
         // Currently used for testing but can be made public if needed:
         /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
+        /*@internal*/ resetBuildContext(opts?: BuildOptions): void;
 
         // Testing only
-
-        // TODO:: All the below ones should technically only be in watch mode. but thats for later time
+        /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
         /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildInvalidatedProject(): void;
-
-        /*@internal*/ resetBuildContext(opts?: BuildOptions): void;
     }
 
-    export interface SolutionBuilderWithWatch extends SolutionBuilder {
+    export interface SolutionBuilderWithWatch {
+        buildAllProjects(): ExitStatus;
         /*@internal*/ startWatching(): void;
     }
 
@@ -291,7 +290,6 @@ namespace ts {
         const host = createProgramHost(system, createProgram) as SolutionBuilderHostBase<T>;
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : returnUndefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
-        host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
         host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
         host.reportSolutionBuilderStatus = reportSolutionBuilderStatus || createBuilderStatusReporter(system);
         return host;
@@ -299,6 +297,7 @@ namespace ts {
 
     export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
         const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
+        host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
         host.reportErrorSummary = reportErrorSummary;
         return host;
     }
@@ -318,16 +317,23 @@ namespace ts {
         return result;
     }
 
+    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
+        return createSolutionBuilderWorker(/*watch*/ false, host, rootNames, defaultOptions);
+    }
+
+    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch {
+        return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions);
+    }
+
     /**
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
-     * TODO: use SolutionBuilderWithWatchHost => watchedSolution
-     *  use SolutionBuilderHost => Solution
      */
-    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder;
-    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch;
-    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch {
-        const hostWithWatch = host as SolutionBuilderWithWatchHost<T>;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder | SolutionBuilderWithWatch {
+        const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
+        const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         const parseConfigFileHost = parseConfigHostFromCompilerHostLike(host);
@@ -360,24 +366,27 @@ namespace ts {
         const projectErrorsReported = createMap() as ConfigFileMap<true>;
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
-        const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(host, options);
+        const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(hostWithWatch, options);
 
         // Watches for the solution
         const allWatchedWildcardDirectories = createMap() as ConfigFileMap<Map<WildcardDirectoryWatcher>>;
         const allWatchedInputFiles = createMap() as ConfigFileMap<Map<FileWatcher>>;
         const allWatchedConfigFiles = createMap() as ConfigFileMap<FileWatcher>;
 
-        return {
-            buildAllProjects,
-            cleanAllProjects,
-            resetBuildContext,
-            getBuildOrder,
-
-            invalidateProject,
-            buildInvalidatedProject,
-
-            startWatching
-        };
+        return watch ?
+            {
+                buildAllProjects,
+                startWatching
+            } :
+            {
+                buildAllProjects,
+                cleanAllProjects,
+                getBuildOrder,
+                resetBuildContext,
+                getUpToDateStatusOfProject,
+                invalidateProject,
+                buildInvalidatedProject,
+            };
 
         function toPath(fileName: string) {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -392,8 +401,8 @@ namespace ts {
             return resolvedPath;
         }
 
-        function resetBuildContext(opts = defaultOptions) {
-            options = opts;
+        function resetBuildContext(opts?: BuildOptions) {
+            options = opts || defaultOptions;
             baseCompilerOptions = getCompilerOptionsOfBuildOptions(options);
             resolvedConfigFilePaths.clear();
             configFileCache.clear();
@@ -462,7 +471,7 @@ namespace ts {
         }
 
         function watchConfigFile(resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath) {
-            if (options.watch && !allWatchedConfigFiles.has(resolvedPath)) {
+            if (watch && !allWatchedConfigFiles.has(resolvedPath)) {
                 allWatchedConfigFiles.set(resolvedPath, watchFile(
                     hostWithWatch,
                     resolved,
@@ -477,7 +486,7 @@ namespace ts {
         }
 
         function watchWildCardDirectories(resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
-            if (!options.watch) return;
+            if (!watch) return;
             updateWatchingWildcardDirectories(
                 getOrCreateValueMapFromConfigFileMap(allWatchedWildcardDirectories, resolvedPath),
                 createMapFromTemplate(parsed.configFileSpecs!.wildcardDirectories),
@@ -508,7 +517,7 @@ namespace ts {
         }
 
         function watchInputFiles(resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, parsed: ParsedCommandLine) {
-            if (!options.watch) return;
+            if (!watch) return;
             mutateMap(
                 getOrCreateValueMapFromConfigFileMap(allWatchedInputFiles, resolvedPath),
                 arrayToMap(parsed.fileNames, toPath),
@@ -565,8 +574,14 @@ namespace ts {
             scheduleBuildInvalidatedProject();
         }
 
+        function getUpToDateStatusOfProject(project: string): UpToDateStatus {
+            const configFileName = resolveProjectName(project);
+            const configFilePath = toResolvedConfigFilePath(configFileName);
+            return getUpToDateStatus(parseConfigFile(configFileName, configFilePath), configFilePath);
+        }
+
         function getBuildOrder() {
-            return buildOrder || (buildOrder = createBuildOrder(rootNames.map(resolveProjectName)));
+            return buildOrder || (buildOrder = createBuildOrder(resolveProjectNames(rootNames)));
         }
 
         function getUpToDateStatus(project: ParsedCommandLine | undefined, resolvedPath: ResolvedConfigFilePath): UpToDateStatus {
@@ -851,7 +866,7 @@ namespace ts {
             if (buildProject) {
                 buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
                 if (hasPendingInvalidatedProjects()) {
-                    if (options.watch && !timerToBuildInvalidatedProject) {
+                    if (watch && !timerToBuildInvalidatedProject) {
                         scheduleBuildInvalidatedProject();
                     }
                 }
@@ -862,7 +877,7 @@ namespace ts {
         }
 
         function reportErrorSummary() {
-            if (options.watch || (host as SolutionBuilderHost<T>).reportErrorSummary) {
+            if (watch || host.reportErrorSummary) {
                 // Report errors from the other projects
                 getBuildOrder().forEach(project => {
                     const projectPath = toResolvedConfigFilePath(project);
@@ -872,11 +887,11 @@ namespace ts {
                 });
                 let totalErrors = 0;
                 diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
-                if (options.watch) {
+                if (watch) {
                     reportWatchStatus(getWatchErrorSummaryDiagnosticMessage(totalErrors), totalErrors);
                 }
                 else {
-                    (host as SolutionBuilderHost<T>).reportErrorSummary!(totalErrors);
+                    host.reportErrorSummary!(totalErrors);
                 }
             }
         }
@@ -1165,7 +1180,7 @@ namespace ts {
             if (host.afterProgramEmitAndDiagnostics) {
                 host.afterProgramEmitAndDiagnostics(program);
             }
-            if (options.watch) {
+            if (watch) {
                 program.releaseProgram();
                 builderPrograms.set(proj, program);
             }
@@ -1312,8 +1327,12 @@ namespace ts {
             return resolveConfigFileProjectName(resolvePath(host.getCurrentDirectory(), name));
         }
 
+        function resolveProjectNames(configFileNames: ReadonlyArray<string>): ResolvedConfigFileName[] {
+            return configFileNames.map(resolveProjectName);
+        }
+
         function buildAllProjects(): ExitStatus {
-            if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
+            if (watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
             // TODO:: In watch mode as well to use caches for incremental build once we can invalidate caches correctly and have right api
             // Override readFile for json files and output .d.ts to cache the text
             const savedReadFileWithCache = readFileWithCache;
