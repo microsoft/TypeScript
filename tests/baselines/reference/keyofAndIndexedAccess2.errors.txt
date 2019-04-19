@@ -25,9 +25,17 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(68,3): error TS232
 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS2322: Type '123' is not assignable to type 'Type[K]'.
   Type '123' is not assignable to type '123 & "some string"'.
     Type '123' is not assignable to type '"some string"'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(126,1): error TS2322: Type 'Demo<{ b: string; }>' is not assignable to type 'Demo<{ a: number; }>'.
+  Property 'a' is missing in type '{ b: string; }' but required in type '{ a: number; }'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(128,1): error TS2322: Type 'Demo<{ a: number; }>' is not assignable to type 'Demo<{ b: string; }>'.
+  Property 'b' is missing in type '{ a: number; }' but required in type '{ b: string; }'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(130,1): error TS2322: Type 'Demo<{ a: number; }>' is not assignable to type 'Demo<{ a: number; b: string; }>'.
+  Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(131,1): error TS2322: Type 'Demo<{ b: string; }>' is not assignable to type 'Demo<{ a: number; b: string; }>'.
+  Property 'a' is missing in type '{ b: string; }' but required in type '{ a: number; b: string; }'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts (23 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts (27 errors) ====
     function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
         obj[k0] = 1;
         obj[k0] = 2;
@@ -194,4 +202,35 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
     type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
     type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
     type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
+    
+    // Repro from 31006
+    
+    type Demo<T> = <K extends keyof T>(key: K, val: T[K]) => void;
+    
+    declare let da: Demo<{ a: number }>;
+    declare let db: Demo<{ b: string }>;
+    declare let dc: Demo<{ a: number, b: string }>;
+    
+    da = db;  // Error
+    ~~
+!!! error TS2322: Type 'Demo<{ b: string; }>' is not assignable to type 'Demo<{ a: number; }>'.
+!!! error TS2322:   Property 'a' is missing in type '{ b: string; }' but required in type '{ a: number; }'.
+!!! related TS2728 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:122:24: 'a' is declared here.
+    da = dc;
+    db = da;  // Error
+    ~~
+!!! error TS2322: Type 'Demo<{ a: number; }>' is not assignable to type 'Demo<{ b: string; }>'.
+!!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but required in type '{ b: string; }'.
+!!! related TS2728 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:123:24: 'b' is declared here.
+    db = dc;
+    dc = da;  // Error
+    ~~
+!!! error TS2322: Type 'Demo<{ a: number; }>' is not assignable to type 'Demo<{ a: number; b: string; }>'.
+!!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+!!! related TS2728 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:124:35: 'b' is declared here.
+    dc = db;  // Error
+    ~~
+!!! error TS2322: Type 'Demo<{ b: string; }>' is not assignable to type 'Demo<{ a: number; b: string; }>'.
+!!! error TS2322:   Property 'a' is missing in type '{ b: string; }' but required in type '{ a: number; b: string; }'.
+!!! related TS2728 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:124:24: 'a' is declared here.
     

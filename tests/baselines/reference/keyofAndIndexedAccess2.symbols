@@ -434,3 +434,56 @@ type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 >Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 115, 20))
 >V : Symbol(V, Decl(keyofAndIndexedAccess2.ts, 115, 9))
 
+// Repro from 31006
+
+type Demo<T> = <K extends keyof T>(key: K, val: T[K]) => void;
+>Demo : Symbol(Demo, Decl(keyofAndIndexedAccess2.ts, 115, 69))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 10))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 119, 16))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 10))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 119, 35))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 119, 16))
+>val : Symbol(val, Decl(keyofAndIndexedAccess2.ts, 119, 42))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 10))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 119, 16))
+
+declare let da: Demo<{ a: number }>;
+>da : Symbol(da, Decl(keyofAndIndexedAccess2.ts, 121, 11))
+>Demo : Symbol(Demo, Decl(keyofAndIndexedAccess2.ts, 115, 69))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 121, 22))
+
+declare let db: Demo<{ b: string }>;
+>db : Symbol(db, Decl(keyofAndIndexedAccess2.ts, 122, 11))
+>Demo : Symbol(Demo, Decl(keyofAndIndexedAccess2.ts, 115, 69))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 122, 22))
+
+declare let dc: Demo<{ a: number, b: string }>;
+>dc : Symbol(dc, Decl(keyofAndIndexedAccess2.ts, 123, 11))
+>Demo : Symbol(Demo, Decl(keyofAndIndexedAccess2.ts, 115, 69))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 123, 22))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 123, 33))
+
+da = db;  // Error
+>da : Symbol(da, Decl(keyofAndIndexedAccess2.ts, 121, 11))
+>db : Symbol(db, Decl(keyofAndIndexedAccess2.ts, 122, 11))
+
+da = dc;
+>da : Symbol(da, Decl(keyofAndIndexedAccess2.ts, 121, 11))
+>dc : Symbol(dc, Decl(keyofAndIndexedAccess2.ts, 123, 11))
+
+db = da;  // Error
+>db : Symbol(db, Decl(keyofAndIndexedAccess2.ts, 122, 11))
+>da : Symbol(da, Decl(keyofAndIndexedAccess2.ts, 121, 11))
+
+db = dc;
+>db : Symbol(db, Decl(keyofAndIndexedAccess2.ts, 122, 11))
+>dc : Symbol(dc, Decl(keyofAndIndexedAccess2.ts, 123, 11))
+
+dc = da;  // Error
+>dc : Symbol(dc, Decl(keyofAndIndexedAccess2.ts, 123, 11))
+>da : Symbol(da, Decl(keyofAndIndexedAccess2.ts, 121, 11))
+
+dc = db;  // Error
+>dc : Symbol(dc, Decl(keyofAndIndexedAccess2.ts, 123, 11))
+>db : Symbol(db, Decl(keyofAndIndexedAccess2.ts, 122, 11))
+
