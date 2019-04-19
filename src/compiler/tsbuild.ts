@@ -357,9 +357,9 @@ namespace ts {
 
         // Watch state
         const builderPrograms = createFileMap<T>();
-        const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>();
+        const diagnostics = createMap() as ConfigFileMap<ReadonlyArray<Diagnostic>>;
         const projectPendingBuild = createMap() as ConfigFileMap<ConfigFileProgramReloadLevel>;
-        const projectErrorsReported = createFileMap<true>();
+        const projectErrorsReported = createMap() as ConfigFileMap<true>;
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
         const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(host, options);
@@ -852,7 +852,7 @@ namespace ts {
                 buildOrder = undefined;
             }
             projectStatus.delete(resolved);
-            diagnostics.removeKey(resolved);
+            diagnostics.delete(resolved);
 
             addProjToQueue(resolved, reloadLevel);
         }
@@ -920,8 +920,9 @@ namespace ts {
             if (options.watch || (host as SolutionBuilderHost<T>).reportErrorSummary) {
                 // Report errors from the other projects
                 getBuildOrder().forEach(project => {
-                    if (!projectErrorsReported.hasKey(project)) {
-                        reportErrors(diagnostics.getValue(project) || emptyArray);
+                    const projectPath = toResolvedConfigFilePath(project);
+                    if (!projectErrorsReported.has(projectPath)) {
+                        reportErrors(diagnostics.get(projectPath) || emptyArray);
                     }
                 });
                 let totalErrors = 0;
@@ -1191,7 +1192,7 @@ namespace ts {
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime,
                 oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(configFile, !host.useCaseSensitiveFileNames())
             };
-            diagnostics.removeKey(proj);
+            diagnostics.delete(resolvedPath);
             projectStatus.set(resolvedPath, status);
             afterProgramCreate(proj, program);
             projectCompilerOptions = baseCompilerOptions;
@@ -1284,7 +1285,7 @@ namespace ts {
                 oldestOutputFileName: outputFiles[0].name
             };
 
-            diagnostics.removeKey(proj);
+            diagnostics.delete(resolvedPath);
             projectStatus.set(resolvedPath, status);
             projectCompilerOptions = baseCompilerOptions;
             return BuildResultFlags.DeclarationOutputUnchanged;
@@ -1465,8 +1466,8 @@ namespace ts {
 
         function reportAndStoreErrors(proj: ResolvedConfigFilePath, errors: ReadonlyArray<Diagnostic>) {
             reportErrors(errors);
-            projectErrorsReported.setValue(proj, true);
-            diagnostics.setValue(proj, errors);
+            projectErrorsReported.set(proj, true);
+            diagnostics.set(proj, errors);
         }
 
         function reportErrors(errors: ReadonlyArray<Diagnostic>) {
