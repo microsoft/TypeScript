@@ -195,7 +195,6 @@ namespace ts {
     }
 
     type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
-
     interface FileMap<T, U extends Path = Path> extends Map<T> {
         get(key: U): T | undefined;
         has(key: U): boolean;
@@ -208,7 +207,6 @@ namespace ts {
         delete(key: U): boolean;
         clear(): void;
     }
-
     type ConfigFileMap<T> = FileMap<T, ResolvedConfigFilePath>;
 
     function getOrCreateValueFromConfigFileMap<T>(configFileMap: ConfigFileMap<T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
@@ -811,10 +809,13 @@ namespace ts {
                 configFileCache.delete(resolved);
                 buildOrder = undefined;
             }
+            clearProjectStatus(resolved);
+            addProjToQueue(resolved, reloadLevel);
+        }
+
+        function clearProjectStatus(resolved: ResolvedConfigFilePath) {
             projectStatus.delete(resolved);
             diagnostics.delete(resolved);
-
-            addProjToQueue(resolved, reloadLevel);
         }
 
         /**
@@ -896,87 +897,121 @@ namespace ts {
             }
         }
 
-        function buildSingleInvalidatedProject(resolved: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
-            const resolvedPath = toResolvedConfigFilePath(resolved);
-            const proj = parseConfigFile(resolved, resolvedPath);
-            if (!proj) {
-                reportParseConfigFileDiagnostic(resolvedPath);
+        function buildSingleInvalidatedProject(project: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
+            const projectPath = toResolvedConfigFilePath(project);
+            const config = parseConfigFile(project, projectPath);
+            if (!config) {
+                reportParseConfigFileDiagnostic(projectPath);
                 return;
             }
 
             if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
-                watchConfigFile(resolved, resolvedPath);
-                watchWildCardDirectories(resolved, resolvedPath, proj);
-                watchInputFiles(resolved, resolvedPath, proj);
+                watchConfigFile(project, projectPath);
+                watchWildCardDirectories(project, projectPath, config);
+                watchInputFiles(project, projectPath, config);
             }
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
-                const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(resolved), proj.options, parseConfigFileHost);
-                updateErrorForNoInputFiles(result, resolved, proj.configFileSpecs!, proj.errors, canJsonReportNoInutFiles(proj.raw));
-                proj.fileNames = result.fileNames;
-                watchInputFiles(resolved, resolvedPath, proj);
+                const result = getFileNamesFromConfigSpecs(config.configFileSpecs!, getDirectoryPath(project), config.options, parseConfigFileHost);
+                updateErrorForNoInputFiles(result, project, config.configFileSpecs!, config.errors, canJsonReportNoInutFiles(config.raw));
+                config.fileNames = result.fileNames;
+                watchInputFiles(project, projectPath, config);
             }
 
-            const status = getUpToDateStatus(proj, resolvedPath);
-            verboseReportProjectStatus(resolved, status);
+            const status = getUpToDateStatus(config, projectPath);
+            verboseReportProjectStatus(project, status);
+            if (status.type === UpToDateStatusType.UpToDate && !options.force) {
+                reportAndStoreErrors(projectPath, config.errors);
+                // Up to date, skip
+                if (options.dry) {
+                    // In a dry build, inform the user of this fact
+                    reportStatus(Diagnostics.Project_0_is_up_to_date, project);
+                }
+                return;
+            }
+
+            if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes && !options.force) {
+                reportAndStoreErrors(projectPath, config.errors);
+                // Fake that files have been built by updating output file stamps
+                updateOutputTimestamps(config, projectPath);
+                return;
+            }
 
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, resolved, status.upstreamProjectName);
+                reportAndStoreErrors(projectPath, config.errors);
+                if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, project, status.upstreamProjectName);
                 return;
             }
 
-            if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
-                // Fake that files have been built by updating output file stamps
-                updateOutputTimestamps(proj, resolvedPath);
+            if (status.type === UpToDateStatusType.ContainerOnly) {
+                reportAndStoreErrors(projectPath, config.errors);
+                // Do nothing
                 return;
             }
 
-            const buildResult = needsBuild(status, proj) ?
-                buildSingleProject(resolved, resolvedPath) : // Actual build
-                updateBundle(resolved, resolvedPath); // Fake that files have been built by manipulating prepend and existing output
-            if (buildResult & BuildResultFlags.AnyErrors) return;
-
+            const buildResult = needsBuild(status, config) ?
+                buildSingleProject(project, projectPath) : // Actual build
+                updateBundle(project, projectPath); // Fake that files have been built by manipulating prepend and existing output
             // Only composite projects can be referenced by other projects
-            if (!proj.options.composite) return;
-            const buildOrder = getBuildOrder();
+            if (!(buildResult & BuildResultFlags.AnyErrors) && config.options.composite) {
+                queueReferencingProjects(project, projectPath, !(buildResult & BuildResultFlags.DeclarationOutputUnchanged));
+            }
+        }
 
+        function queueReferencingProjects(project: ResolvedConfigFileName, projectPath: ResolvedConfigFilePath, declarationOutputChanged: boolean) {
             // Always use build order to queue projects
-            for (let index = buildOrder.indexOf(resolved) + 1; index < buildOrder.length; index++) {
-                const project = buildOrder[index];
-                const projectPath = toResolvedConfigFilePath(project);
-                if (projectPendingBuild.has(projectPath)) continue;
+            const buildOrder = getBuildOrder();
+            for (let index = buildOrder.indexOf(project) + 1; index < buildOrder.length; index++) {
+                const nextProject = buildOrder[index];
+                const nextProjectPath = toResolvedConfigFilePath(nextProject);
+                if (projectPendingBuild.has(nextProjectPath)) continue;
 
-                const config = parseConfigFile(project, projectPath);
-                if (!config || !config.projectReferences) continue;
-                for (const ref of config.projectReferences) {
+                const nextProjectConfig = parseConfigFile(nextProject, nextProjectPath);
+                if (!nextProjectConfig || !nextProjectConfig.projectReferences) continue;
+                for (const ref of nextProjectConfig.projectReferences) {
                     const resolvedRefPath = resolveProjectName(ref.path);
-                    if (toResolvedConfigFilePath(resolvedRefPath) !== resolvedPath) continue;
+                    if (toResolvedConfigFilePath(resolvedRefPath) !== projectPath) continue;
                     // If the project is referenced with prepend, always build downstream projects,
                     // If declaration output is changed, build the project
                     // otherwise mark the project UpToDateWithUpstreamTypes so it updates output time stamps
-                    const status = projectStatus.get(projectPath);
-                    if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
-                        if (status && (status.type === UpToDateStatusType.UpToDate || status.type === UpToDateStatusType.UpToDateWithUpstreamTypes || status.type === UpToDateStatusType.OutOfDateWithPrepend)) {
-                            projectStatus.set(projectPath, {
-                                type: UpToDateStatusType.OutOfDateWithUpstream,
-                                outOfDateOutputFileName: status.type === UpToDateStatusType.OutOfDateWithPrepend ? status.outOfDateOutputFileName : status.oldestOutputFileName,
-                                newerProjectName: resolved
-                            });
+                    const status = projectStatus.get(nextProjectPath);
+                    if (status) {
+                        switch (status.type) {
+                            case UpToDateStatusType.UpToDate:
+                                if (!declarationOutputChanged) {
+                                    if (ref.prepend) {
+                                        projectStatus.set(nextProjectPath, {
+                                            type: UpToDateStatusType.OutOfDateWithPrepend,
+                                            outOfDateOutputFileName: status.oldestOutputFileName,
+                                            newerProjectName: project
+                                        });
+                                    }
+                                    else {
+                                        status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
+                                    }
+                                    break;
+                                }
+
+                            // falls through
+                            case UpToDateStatusType.UpToDateWithUpstreamTypes:
+                            case UpToDateStatusType.OutOfDateWithPrepend:
+                                if (declarationOutputChanged) {
+                                    projectStatus.set(nextProjectPath, {
+                                        type: UpToDateStatusType.OutOfDateWithUpstream,
+                                        outOfDateOutputFileName: status.type === UpToDateStatusType.OutOfDateWithPrepend ? status.outOfDateOutputFileName : status.oldestOutputFileName,
+                                        newerProjectName: project
+                                    });
+                                }
+                                break;
+
+                            case UpToDateStatusType.UpstreamBlocked:
+                                if (toResolvedConfigFilePath(resolveProjectName(status.upstreamProjectName)) === projectPath) {
+                                    clearProjectStatus(nextProjectPath);
+                                }
+                                break;
                         }
                     }
-                    else if (status && status.type === UpToDateStatusType.UpToDate) {
-                        if (ref.prepend) {
-                            projectStatus.set(projectPath, {
-                                type: UpToDateStatusType.OutOfDateWithPrepend,
-                                outOfDateOutputFileName: status.oldestOutputFileName,
-                                newerProjectName: resolved
-                            });
-                        }
-                        else {
-                            status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
-                        }
-                    }
-                    addProjToQueue(projectPath, ConfigFileProgramReloadLevel.None);
+                    addProjToQueue(nextProjectPath, ConfigFileProgramReloadLevel.None);
                     break;
                 }
             }
@@ -1354,55 +1389,12 @@ namespace ts {
 
             const buildOrder = getBuildOrder();
             reportBuildQueue(buildOrder);
-            let anyFailed = false;
-            for (const next of buildOrder) {
-                const resolvedPath = toResolvedConfigFilePath(next);
-                const proj = parseConfigFile(next, resolvedPath);
-                if (proj === undefined) {
-                    reportParseConfigFileDiagnostic(resolvedPath);
-                    anyFailed = true;
-                    break;
-                }
+            buildOrder.forEach(configFileName =>
+                projectPendingBuild.set(toResolvedConfigFilePath(configFileName), ConfigFileProgramReloadLevel.None));
 
-                // report errors early when using continue or break statements
-                const errors = proj.errors;
-                const status = getUpToDateStatus(proj, resolvedPath);
-                verboseReportProjectStatus(next, status);
-
-                if (status.type === UpToDateStatusType.UpToDate && !options.force) {
-                    reportAndStoreErrors(resolvedPath, errors);
-                    // Up to date, skip
-                    if (defaultOptions.dry) {
-                        // In a dry build, inform the user of this fact
-                        reportStatus(Diagnostics.Project_0_is_up_to_date, next);
-                    }
-                    continue;
-                }
-
-                if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes && !options.force) {
-                    reportAndStoreErrors(resolvedPath, errors);
-                    // Fake build
-                    updateOutputTimestamps(proj, resolvedPath);
-                    continue;
-                }
-
-                if (status.type === UpToDateStatusType.UpstreamBlocked) {
-                    reportAndStoreErrors(resolvedPath, errors);
-                    if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, next, status.upstreamProjectName);
-                    continue;
-                }
-
-                if (status.type === UpToDateStatusType.ContainerOnly) {
-                    reportAndStoreErrors(resolvedPath, errors);
-                    // Do nothing
-                    continue;
-                }
-
-                const buildResult = needsBuild(status, proj) ?
-                    buildSingleProject(next, resolvedPath) : // Actual build
-                    updateBundle(next, resolvedPath); // Fake that files have been built by manipulating prepend and existing output
-
-                anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
+            while (hasPendingInvalidatedProjects()) {
+                const buildProject = getNextInvalidatedProject()!;
+                buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
             }
             reportErrorSummary();
             host.readFile = originalReadFile;
@@ -1414,7 +1406,7 @@ namespace ts {
             readFileWithCache = savedReadFileWithCache;
             compilerHost.resolveModuleNames = originalResolveModuleNames;
             moduleResolutionCache = undefined;
-            return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
+            return diagnostics.size ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 
         function needsBuild(status: UpToDateStatus, config: ParsedCommandLine) {
@@ -1431,7 +1423,9 @@ namespace ts {
         function reportAndStoreErrors(proj: ResolvedConfigFilePath, errors: ReadonlyArray<Diagnostic>) {
             reportErrors(errors);
             projectErrorsReported.set(proj, true);
-            diagnostics.set(proj, errors);
+            if (errors.length) {
+                diagnostics.set(proj, errors);
+            }
         }
 
         function reportErrors(errors: ReadonlyArray<Diagnostic>) {
