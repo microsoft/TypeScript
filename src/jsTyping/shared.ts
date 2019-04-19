@@ -21,6 +21,11 @@ namespace ts.server {
          * typingsInstaller will run the command with `${npmLocation} install ...`.
          */
         export const NpmLocation = "--npmLocation";
+        /**
+         * Flag indicating that the typings installer should try to validate the default npm location.
+         * If the default npm is not found when this flag is enabled, fallback to `npm install`
+         */
+        export const ValidateDefaultNpmLocation = "--validateDefaultNpmLocation";
     }
 
     export function hasArgument(argumentName: string) {

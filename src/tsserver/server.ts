@@ -242,6 +242,7 @@ namespace ts.server {
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
+            private readonly validateDefaultNpmLocation: boolean,
             private event: Event) {
         }
 
@@ -296,6 +297,9 @@ namespace ts.server {
             }
             if (this.npmLocation) {
                 args.push(Arguments.NpmLocation, this.npmLocation);
+            }
+            if (this.validateDefaultNpmLocation) {
+                args.push(Arguments.ValidateDefaultNpmLocation);
             }
 
             const execArgv: string[] = [];
@@ -497,7 +501,7 @@ namespace ts.server {
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, event);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, validateDefaultNpmLocation, event);
 
             super({
                 host,
@@ -933,6 +937,7 @@ namespace ts.server {
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
     const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
+    const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {
         const arg = findArgument(argName);
