@@ -117,3 +117,18 @@ type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
 type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
 type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
 type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
+
+// Repro from 31006
+
+type Demo<T> = <K extends keyof T>(key: K, val: T[K]) => void;
+
+declare let da: Demo<{ a: number }>;
+declare let db: Demo<{ b: string }>;
+declare let dc: Demo<{ a: number, b: string }>;
+
+da = db;  // Error
+da = dc;
+db = da;  // Error
+db = dc;
+dc = da;  // Error
+dc = db;  // Error
