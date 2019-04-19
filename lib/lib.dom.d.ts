@@ -4897,7 +4897,7 @@ interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode,
      */
     closest<K extends keyof HTMLElementTagNameMap>(selector: K): HTMLElementTagNameMap[K] | null;
     closest<K extends keyof SVGElementTagNameMap>(selector: K): SVGElementTagNameMap[K] | null;
-    closest(selector: string): Element | null;
+    closest<E extends Element = Element>(selector: string): E | null;
     /**
      * Returns element's first attribute whose qualified name is qualifiedName, and null if there is no such attribute otherwise.
      */
