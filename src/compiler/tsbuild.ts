@@ -266,8 +266,6 @@ namespace ts {
         // Testing only
 
         // TODO:: All the below ones should technically only be in watch mode. but thats for later time
-        /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
-
         /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildInvalidatedProject(): void;
 
@@ -377,8 +375,6 @@ namespace ts {
 
             invalidateProject,
             buildInvalidatedProject,
-
-            resolveProjectName,
 
             startWatching
         };
