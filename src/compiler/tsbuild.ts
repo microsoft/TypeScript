@@ -832,14 +832,15 @@ namespace ts {
         }
 
         function getNextInvalidatedProject() {
-            for (const project of getBuildOrder()) {
+            Debug.assert(hasPendingInvalidatedProjects());
+            return forEach(getBuildOrder(), (project, projectIndex) => {
                 const projectPath = toResolvedConfigFilePath(project);
                 const reloadLevel = projectPendingBuild.get(projectPath);
                 if (reloadLevel !== undefined) {
                     projectPendingBuild.delete(projectPath);
-                    return { project, reloadLevel };
+                    return { project, projectPath, reloadLevel, projectIndex };
                 }
-            }
+            });
         }
 
         function hasPendingInvalidatedProjects() {
@@ -863,9 +864,8 @@ namespace ts {
                 projectErrorsReported.clear();
                 reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
             }
-            const buildProject = getNextInvalidatedProject();
-            if (buildProject) {
-                buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
+            if (hasPendingInvalidatedProjects()) {
+                buildNextInvalidatedProject();
                 if (hasPendingInvalidatedProjects()) {
                     if (watch && !timerToBuildInvalidatedProject) {
                         scheduleBuildInvalidatedProject();
@@ -897,8 +897,8 @@ namespace ts {
             }
         }
 
-        function buildSingleInvalidatedProject(project: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
-            const projectPath = toResolvedConfigFilePath(project);
+        function buildNextInvalidatedProject() {
+            const { project, projectPath, reloadLevel, projectIndex } = getNextInvalidatedProject()!;
             const config = parseConfigFile(project, projectPath);
             if (!config) {
                 reportParseConfigFileDiagnostic(projectPath);
@@ -954,14 +954,14 @@ namespace ts {
                 updateBundle(project, projectPath); // Fake that files have been built by manipulating prepend and existing output
             // Only composite projects can be referenced by other projects
             if (!(buildResult & BuildResultFlags.AnyErrors) && config.options.composite) {
-                queueReferencingProjects(project, projectPath, !(buildResult & BuildResultFlags.DeclarationOutputUnchanged));
+                queueReferencingProjects(project, projectPath, projectIndex, !(buildResult & BuildResultFlags.DeclarationOutputUnchanged));
             }
         }
 
-        function queueReferencingProjects(project: ResolvedConfigFileName, projectPath: ResolvedConfigFilePath, declarationOutputChanged: boolean) {
+        function queueReferencingProjects(project: ResolvedConfigFileName, projectPath: ResolvedConfigFilePath, projectIndex: number, declarationOutputChanged: boolean) {
             // Always use build order to queue projects
             const buildOrder = getBuildOrder();
-            for (let index = buildOrder.indexOf(project) + 1; index < buildOrder.length; index++) {
+            for (let index = projectIndex + 1; index < buildOrder.length; index++) {
                 const nextProject = buildOrder[index];
                 const nextProjectPath = toResolvedConfigFilePath(nextProject);
                 if (projectPendingBuild.has(nextProjectPath)) continue;
@@ -1393,8 +1393,7 @@ namespace ts {
                 projectPendingBuild.set(toResolvedConfigFilePath(configFileName), ConfigFileProgramReloadLevel.None));
 
             while (hasPendingInvalidatedProjects()) {
-                const buildProject = getNextInvalidatedProject()!;
-                buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
+                buildNextInvalidatedProject();
             }
             reportErrorSummary();
             host.readFile = originalReadFile;
