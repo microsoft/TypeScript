@@ -8,7 +8,7 @@ namespace ts {
         end: number;
     }
 
-    export type JsDocSyntaxKind =
+    export type JSDocSyntaxKind =
         | SyntaxKind.EndOfFileToken
         | SyntaxKind.WhitespaceTrivia
         | SyntaxKind.AtToken
@@ -23,7 +23,7 @@ namespace ts {
         | SyntaxKind.CommaToken
         | SyntaxKind.DotToken
         | SyntaxKind.Identifier
-        | SyntaxKind.NoSubstitutionTemplateLiteral
+        | SyntaxKind.BacktickToken
         | SyntaxKind.Unknown
         | KeywordSyntaxKind;
 
@@ -181,6 +181,8 @@ namespace ts {
         QuestionToken,
         ColonToken,
         AtToken,
+        /** Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds. */
+        BacktickToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -2961,6 +2963,7 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+        /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective | undefined>;
@@ -3246,6 +3249,7 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+        /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
 
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
@@ -3746,19 +3750,21 @@ namespace ts {
         SyntheticProperty = 1 << 1,         // Property in union or intersection type
         SyntheticMethod   = 1 << 2,         // Method in union or intersection type
         Readonly          = 1 << 3,         // Readonly transient symbol
-        Partial           = 1 << 4,         // Synthetic property present in some but not all constituents
-        HasNonUniformType = 1 << 5,         // Synthetic property with non-uniform type in constituents
-        HasLiteralType    = 1 << 6,         // Synthetic property with at least one literal type in constituents
-        ContainsPublic    = 1 << 7,         // Synthetic property with public constituent(s)
-        ContainsProtected = 1 << 8,         // Synthetic property with protected constituent(s)
-        ContainsPrivate   = 1 << 9,         // Synthetic property with private constituent(s)
-        ContainsStatic    = 1 << 10,        // Synthetic property with static constituent(s)
-        Late              = 1 << 11,        // Late-bound symbol for a computed property with a dynamic name
-        ReverseMapped     = 1 << 12,        // Property of reverse-inferred homomorphic mapped type
-        OptionalParameter = 1 << 13,        // Optional parameter
-        RestParameter     = 1 << 14,        // Rest parameter
+        ReadPartial       = 1 << 4,         // Synthetic property present in some but not all constituents
+        WritePartial      = 1 << 5,         // Synthetic property present in some but only satisfied by an index signature in others
+        HasNonUniformType = 1 << 6,         // Synthetic property with non-uniform type in constituents
+        HasLiteralType    = 1 << 7,         // Synthetic property with at least one literal type in constituents
+        ContainsPublic    = 1 << 8,         // Synthetic property with public constituent(s)
+        ContainsProtected = 1 << 9,         // Synthetic property with protected constituent(s)
+        ContainsPrivate   = 1 << 10,        // Synthetic property with private constituent(s)
+        ContainsStatic    = 1 << 11,        // Synthetic property with static constituent(s)
+        Late              = 1 << 12,        // Late-bound symbol for a computed property with a dynamic name
+        ReverseMapped     = 1 << 13,        // Property of reverse-inferred homomorphic mapped type
+        OptionalParameter = 1 << 14,        // Optional parameter
+        RestParameter     = 1 << 15,        // Rest parameter
         Synthetic = SyntheticProperty | SyntheticMethod,
-        Discriminant = HasNonUniformType | HasLiteralType
+        Discriminant = HasNonUniformType | HasLiteralType,
+        Partial = ReadPartial | WritePartial
     }
 
     /* @internal */
@@ -4171,6 +4177,8 @@ namespace ts {
     }
 
     export interface UnionType extends UnionOrIntersectionType {
+        /* @internal */
+        possiblePropertyCache?: SymbolTable;       // Cache of _all_ resolved properties less any from aparent members
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -4581,6 +4589,7 @@ namespace ts {
         allowJs?: boolean;
         /*@internal*/ allowNonTsExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
+        allowUmdGlobalAccess?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;  // Always combine with strict property
@@ -4823,6 +4832,7 @@ namespace ts {
         affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
         affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
+        affectsEmit?: true;                                     // true if the options affects emit
     }
 
     /* @internal */
