@@ -11958,7 +11958,7 @@ namespace ts {
                 if (targetTypePredicate) {
                     const sourceTypePredicate = getTypePredicateOfSignature(source);
                     if (sourceTypePredicate) {
-                        result &= callbackCheck === CallbackCheck.Bivariant && compareTypePredicateRelatedTo(targetTypePredicate, sourceTypePredicate, /*reportErrors*/ false, undefined, compareTypes) ||
+                        result &= callbackCheck === CallbackCheck.Bivariant && compareTypePredicateRelatedTo(targetTypePredicate, sourceTypePredicate, /*reportErrors*/ false, /*errorReporter*/ undefined, compareTypes) ||
                             compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, reportErrors, errorReporter, compareTypes);
                     }
                     else if (isIdentifierTypePredicate(targetTypePredicate)) {
