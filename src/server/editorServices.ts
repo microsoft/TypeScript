@@ -1607,7 +1607,8 @@ namespace ts.server {
                 this.documentRegistry,
                 compilerOptions,
                 /*lastFileExceededProgramSize*/ this.getFilenameForExceededTotalSizeLimitForNonTsFiles(projectFileName, compilerOptions, files, externalFilePropertyReader),
-                options.compileOnSave === undefined ? true : options.compileOnSave);
+                options.compileOnSave === undefined ? true : options.compileOnSave,
+                /*projectFilePath*/ undefined, this.currentPluginConfigOverrides);
             project.excludedFiles = excludedFiles;
 
             this.addFilesToNonInferredProject(project, files, externalFilePropertyReader, typeAcquisition);

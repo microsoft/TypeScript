@@ -25,8 +25,8 @@ exports.__esModule = true;
 exports.x = Symbol();
 //// [b.js]
 "use strict";
-exports.__esModule = true;
 var _a;
+exports.__esModule = true;
 var a_1 = require("./a");
 var C = /** @class */ (function () {
     function C() {
@@ -51,8 +51,8 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-exports.__esModule = true;
 var _a;
+exports.__esModule = true;
 var a_1 = require("./a");
 var b_1 = require("./b");
 var D = /** @class */ (function (_super) {

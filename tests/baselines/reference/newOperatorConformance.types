@@ -50,12 +50,12 @@ var a: C0;
 
 // Generic construct expression with no parentheses
 var c1 = new T;
->c1 : T<{}>
->new T : T<{}>
+>c1 : T<unknown>
+>new T : T<unknown>
 >T : typeof T
 
 var c1: T<{}>;
->c1 : T<{}>
+>c1 : T<unknown>
 
 // Construct expression where constructor is of type 'any' with no parentheses
 var d = new anyCtor;

@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.4";
+    export const versionMajorMinor = "3.5";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -1613,6 +1613,9 @@ namespace ts {
 
     /** Do nothing and return true */
     export function returnTrue(): true { return true; }
+
+    /** Do nothing and return undefined */
+    export function returnUndefined(): undefined { return undefined; }
 
     /** Returns its argument. */
     export function identity<T>(x: T) { return x; }

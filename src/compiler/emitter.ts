@@ -54,7 +54,7 @@ namespace ts {
     /*@internal*/
     export function getOutputPathForBuildInfo(options: CompilerOptions) {
         const configFile = options.configFilePath;
-        if (!configFile || !isIncrementalCompilation(options)) return undefined;
+        if (!isIncrementalCompilation(options)) return undefined;
         if (options.tsBuildInfoFile) return options.tsBuildInfoFile;
         const outPath = options.outFile || options.out;
         let buildInfoExtensionLess: string;
@@ -62,6 +62,7 @@ namespace ts {
             buildInfoExtensionLess = removeFileExtension(outPath);
         }
         else {
+            if (!configFile) return undefined;
             const configFileExtensionLess = removeFileExtension(configFile);
             buildInfoExtensionLess = options.outDir ?
                 options.rootDir ?
@@ -135,23 +136,34 @@ namespace ts {
         return configFile.options.rootDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath));
     }
 
+    function getOutputPathWithoutChangingExt(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean, outputDir: string | undefined) {
+        return outputDir ?
+            resolvePath(
+                outputDir,
+                getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase)
+            ) :
+            inputFileName;
+    }
+
     /* @internal */
     export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
         Debug.assert(!fileExtensionIs(inputFileName, Extension.Dts) && hasTSFileExtension(inputFileName));
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
-        const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath)), relativePath);
-        return changeExtension(outputPath, Extension.Dts);
+        return changeExtension(
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.declarationDir || configFile.options.outDir),
+            Extension.Dts
+        );
     }
 
     function getOutputJSFileName(inputFileName: string, configFile: ParsedCommandLine, ignoreCase: boolean) {
-        const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile), inputFileName, ignoreCase);
-        const outputPath = resolvePath(configFile.options.outDir || getDirectoryPath(Debug.assertDefined(configFile.options.configFilePath)), relativePath);
         const isJsonFile = fileExtensionIs(inputFileName, Extension.Json);
-        const outputFileName = changeExtension(outputPath, isJsonFile ?
-            Extension.Json :
-            fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ?
-                Extension.Jsx :
-                Extension.Js);
+        const outputFileName = changeExtension(
+            getOutputPathWithoutChangingExt(inputFileName, configFile, ignoreCase, configFile.options.outDir),
+            isJsonFile ?
+                Extension.Json :
+                fileExtensionIs(inputFileName, Extension.Tsx) && configFile.options.jsx === JsxEmit.Preserve ?
+                    Extension.Jsx :
+                    Extension.Js
+        );
         return !isJsonFile || comparePaths(inputFileName, outputFileName, Debug.assertDefined(configFile.options.configFilePath), ignoreCase) !== Comparison.EqualTo ?
             outputFileName :
             undefined;
@@ -203,6 +215,8 @@ namespace ts {
             const jsFilePath = getOutputJSFileName(inputFileName, configFile, ignoreCase);
             if (jsFilePath) return jsFilePath;
         }
+        const buildInfoPath = getOutputPathForBuildInfo(configFile.options);
+        if (buildInfoPath) return buildInfoPath;
         return Debug.fail(`project ${configFile.options.configFilePath} expected to have at least one output`);
     }
 
@@ -665,11 +679,12 @@ namespace ts {
             getCompilerOptions: () => config.options,
             getCurrentDirectory: () => host.getCurrentDirectory(),
             getNewLine: () => host.getNewLine(),
-            getSourceFile: () => undefined,
-            getSourceFileByPath: () => undefined,
+            getSourceFile: returnUndefined,
+            getSourceFileByPath: returnUndefined,
             getSourceFiles: () => sourceFilesForJsEmit,
             getLibFileFromReference: notImplemented,
             isSourceFileFromExternalLibrary: returnFalse,
+            getResolvedProjectReferenceToRedirect: returnUndefined,
             writeFile: (name, text, writeByteOrderMark) => {
                 switch (name) {
                     case jsFilePath:
@@ -706,7 +721,7 @@ namespace ts {
             fileExists: f => host.fileExists(f),
             directoryExists: host.directoryExists && (f => host.directoryExists!(f)),
             useCaseSensitiveFileNames: () => host.useCaseSensitiveFileNames(),
-            getProgramBuildInfo: () => undefined
+            getProgramBuildInfo: returnUndefined
         };
         emitFiles(notImplementedResolver, emitHost, /*targetSourceFile*/ undefined, /*emitOnlyDtsFiles*/ false, getTransformers(config.options));
         return outputFiles;

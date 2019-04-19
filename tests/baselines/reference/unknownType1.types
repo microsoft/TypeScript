@@ -342,7 +342,7 @@ function f23<T extends unknown>(x: T) {
 >x : T
 }
 
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
 >f24 : (x: { [x: string]: unknown; }) => void
@@ -361,7 +361,7 @@ function f24(x: { [x: string]: unknown }) {
 >a : number
 >5 : 5
 
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
 >x = [1, 2, 3] : number[]
 >x : { [x: string]: unknown; }
 >[1, 2, 3] : number[]

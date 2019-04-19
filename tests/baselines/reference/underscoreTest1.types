@@ -521,7 +521,7 @@ _.compact([0, 1, false, 2, '', 3]);
 >3 : 3
 
 _.flatten([1, 2, 3, 4]);
->_.flatten([1, 2, 3, 4]) : {}[]
+>_.flatten([1, 2, 3, 4]) : unknown[]
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
@@ -532,7 +532,7 @@ _.flatten([1, 2, 3, 4]);
 >4 : 4
 
 _.flatten([1, [2]]);
->_.flatten([1, [2]]) : {}[]
+>_.flatten([1, [2]]) : unknown[]
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
@@ -543,7 +543,7 @@ _.flatten([1, [2]]);
 
 // typescript doesn't like the elements being different
 _.flatten([1, [2], [3, [[4]]]]);
->_.flatten([1, [2], [3, [[4]]]]) : {}[]
+>_.flatten([1, [2], [3, [[4]]]]) : unknown[]
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
@@ -558,7 +558,7 @@ _.flatten([1, [2], [3, [[4]]]]);
 >4 : 4
 
 _.flatten([1, [2], [3, [[4]]]], true);
->_.flatten([1, [2], [3, [[4]]]], true) : {}[]
+>_.flatten([1, [2], [3, [[4]]]], true) : unknown[]
 >_.flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }
 >_ : Underscore.Static
 >flatten : { <T>(list: T[][]): T[]; <T>(array: any[], shallow?: boolean): T[]; }

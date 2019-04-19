@@ -26,7 +26,7 @@ module Q {
 >bar : () => void
 
         foo(null);
->foo(null) : (a: Iterator<{}>) => number
+>foo(null) : (a: Iterator<unknown>) => number
 >foo : <T>(x: (a: Iterator<T>) => number) => (a: Iterator<T>) => number
 >null : null
     }

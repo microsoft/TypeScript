@@ -30,6 +30,7 @@ namespace ts {
         listEmittedFiles?: boolean;
         listFiles?: boolean;
         pretty?: boolean;
+        incremental?: boolean;
 
         traceResolution?: boolean;
         /* @internal */ diagnostics?: boolean;
@@ -339,7 +340,7 @@ namespace ts {
 
     function createSolutionBuilderHostBase<T extends BuilderProgram>(system: System, createProgram: CreateProgram<T> | undefined, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
         const host = createProgramHost(system, createProgram) as SolutionBuilderHostBase<T>;
-        host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
+        host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : returnUndefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
         host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
@@ -363,7 +364,7 @@ namespace ts {
     function getCompilerOptionsOfBuildOptions(buildOptions: BuildOptions): CompilerOptions {
         const result = {} as CompilerOptions;
         commonOptionsWithBuild.forEach(option => {
-            result[option.name] = buildOptions[option.name];
+            if (hasProperty(buildOptions, option.name)) result[option.name] = buildOptions[option.name];
         });
         return result;
     }
@@ -393,7 +394,7 @@ namespace ts {
         const projectStatus = createFileMap<UpToDateStatus>(toPath);
         const missingRoots = createMap<true>();
         let globalDependencyGraph: DependencyGraph | undefined;
-        const writeFileName = (s: string) => host.trace && host.trace(s);
+        const writeFileName = host.trace ? (s: string) => host.trace!(s) : undefined;
         let readFileWithCache = (f: string) => host.readFile(f);
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
@@ -660,14 +661,15 @@ namespace ts {
                 }
             }
 
-            // Collect the expected outputs of this project
-            const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
-
-            if (outputs.length === 0) {
+            // Container if no files are specified in the project
+            if (!project.fileNames.length && !canJsonReportNoInutFiles(project.raw)) {
                 return {
                     type: UpToDateStatusType.ContainerOnly
                 };
             }
+
+            // Collect the expected outputs of this project
+            const outputs = getAllProjectOutputs(project, !host.useCaseSensitiveFileNames());
 
             // Now see if all outputs are newer than the newest input
             let oldestOutputFileName = "(none)";
@@ -791,6 +793,15 @@ namespace ts {
                     newerInputFileName: newestInputFileName
                 };
             }
+            else {
+                // Check tsconfig time
+                const configStatus = checkConfigFileUpToDateStatus(project.options.configFilePath!, oldestOutputFileTime, oldestOutputFileName);
+                if (configStatus) return configStatus;
+
+                // Check extended config time
+                const extendedConfigStatus = forEach(project.options.configFile!.extendedSourceFiles || emptyArray, configFile => checkConfigFileUpToDateStatus(configFile, oldestOutputFileTime, oldestOutputFileName));
+                if (extendedConfigStatus) return extendedConfigStatus;
+            }
 
             if (!buildInfoChecked.hasKey(project.options.configFilePath as ResolvedConfigFileName)) {
                 buildInfoChecked.setValue(project.options.configFilePath as ResolvedConfigFileName, true);
@@ -825,6 +836,18 @@ namespace ts {
                 newestOutputFileName,
                 oldestOutputFileName
             };
+        }
+
+        function checkConfigFileUpToDateStatus(configFile: string, oldestOutputFileTime: Date, oldestOutputFileName: string): Status.OutOfDateWithSelf | undefined {
+            // Check tsconfig time
+            const tsconfigTime = host.getModifiedTime(configFile) || missingFileModifiedTime;
+            if (oldestOutputFileTime < tsconfigTime) {
+                return {
+                    type: UpToDateStatusType.OutOfDateWithSelf,
+                    outOfDateOutputFileName: oldestOutputFileName,
+                    newerInputFileName: configFile
+                };
+            }
         }
 
         function invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel) {
@@ -1106,7 +1129,7 @@ namespace ts {
             let declDiagnostics: Diagnostic[] | undefined;
             const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
             const outputFiles: OutputFile[] = [];
-            emitFilesAndReportErrors(program, reportDeclarationDiagnostics, writeFileName, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
+            emitFilesAndReportErrors(program, reportDeclarationDiagnostics, /*writeFileName*/ undefined, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
                 program.restoreState();
@@ -1115,7 +1138,7 @@ namespace ts {
 
             // Actual Emit
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = createFileMap<true>(toPath as ToPath);
+            const emittedOutputs = createFileMap<string>(toPath as ToPath);
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(name)) {
@@ -1129,7 +1152,7 @@ namespace ts {
                     }
                 }
 
-                emittedOutputs.setValue(name, true);
+                emittedOutputs.setValue(name, name);
                 writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
@@ -1140,6 +1163,11 @@ namespace ts {
             const emitDiagnostics = emitterDiagnostics.getDiagnostics();
             if (emitDiagnostics.length) {
                 return buildErrors(emitDiagnostics, BuildResultFlags.EmitErrors, "Emit");
+            }
+
+            if (writeFileName) {
+                emittedOutputs.forEach(name => listEmittedFile(configFile, name));
+                listFiles(program, writeFileName);
             }
 
             // Update time stamps for rest of the outputs
@@ -1159,10 +1187,18 @@ namespace ts {
             function buildErrors(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
                 resultFlags |= errorFlags;
                 reportAndStoreErrors(proj, diagnostics);
+                // List files if any other build error using program (emit errors already report files)
+                if (writeFileName) listFiles(program, writeFileName);
                 projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
                 afterProgramCreate(proj, program);
                 projectCompilerOptions = baseCompilerOptions;
                 return resultFlags;
+            }
+        }
+
+        function listEmittedFile(proj: ParsedCommandLine, file: string) {
+            if (writeFileName && proj.options.listEmittedFiles) {
+                writeFileName(`TSFILE: ${file}`);
             }
         }
 
@@ -1177,6 +1213,7 @@ namespace ts {
         }
 
         function getOldProgram(proj: ResolvedConfigFileName, parsed: ParsedCommandLine) {
+            if (options.force) return undefined;
             const value = builderPrograms.getValue(proj);
             if (value) return value;
             return readBuilderProgram(parsed.options, readFileWithCache) as any as T;
@@ -1205,9 +1242,9 @@ namespace ts {
             // Actual Emit
             Debug.assert(!!outputFiles.length);
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = createFileMap<true>(toPath as ToPath);
+            const emittedOutputs = createFileMap<string>(toPath as ToPath);
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
-                emittedOutputs.setValue(name, true);
+                emittedOutputs.setValue(name, name);
                 writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
             });
             const emitDiagnostics = emitterDiagnostics.getDiagnostics();
@@ -1216,6 +1253,10 @@ namespace ts {
                 projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: "Emit errors" });
                 projectCompilerOptions = baseCompilerOptions;
                 return BuildResultFlags.DeclarationOutputUnchanged | BuildResultFlags.EmitErrors;
+            }
+
+            if (writeFileName) {
+                emittedOutputs.forEach(name => listEmittedFile(config, name));
             }
 
             // Update timestamps for dts
@@ -1246,7 +1287,7 @@ namespace ts {
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, status);
         }
 
-        function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: FileMap<true>) {
+        function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: FileMap<string>) {
             const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
             if (!skipOutputs || outputs.length !== skipOutputs.getSize()) {
                 if (options.verbose) {
@@ -1263,9 +1304,7 @@ namespace ts {
                     }
 
                     host.setModifiedTime(file, now);
-                    if (proj.options.listEmittedFiles) {
-                        writeFileName(`TSFILE: ${file}`);
-                    }
+                    listEmittedFile(proj, file);
                 }
             }
 
