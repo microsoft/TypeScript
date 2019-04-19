@@ -194,20 +194,24 @@ namespace ts {
         }
     }
 
-    interface ConfigFileMap<T> {
-        setValue(fileName: ResolvedConfigFileName, value: T): void;
-        getValue(fileName: ResolvedConfigFileName): T | undefined;
-        hasKey(fileName: ResolvedConfigFileName): boolean;
-        removeKey(fileName: ResolvedConfigFileName): void;
-        forEach(action: (value: T, key: ResolvedConfigFilePath) => void): void;
-        getSize(): number;
+    type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
+
+    interface FileMap<T, U extends Path = Path> extends Map<T> {
+        get(key: U): T | undefined;
+        has(key: U): boolean;
+        forEach(action: (value: T, key: U) => void): void;
+        readonly size: number;
+        keys(): Iterator<U>;
+        values(): Iterator<T>;
+        entries(): Iterator<[U, T]>;
+        set(key: U, value: T): this;
+        delete(key: U): boolean;
         clear(): void;
     }
 
-    type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
+    type ConfigFileMap<T> = FileMap<T, ResolvedConfigFilePath>;
 
-
-    function getOrCreateValueFromConfigFileMap<T>(configFileMap: Map<T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
+    function getOrCreateValueFromConfigFileMap<T>(configFileMap: ConfigFileMap<T>, resolved: ResolvedConfigFilePath, createT: () => T): T {
         const existingValue = configFileMap.get(resolved);
         let newValue: T | undefined;
         if (!existingValue) {
@@ -217,7 +221,7 @@ namespace ts {
         return existingValue || newValue!;
     }
 
-    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: Map<Map<T>>, resolved: ResolvedConfigFilePath): Map<T> {
+    function getOrCreateValueMapFromConfigFileMap<T>(configFileMap: ConfigFileMap<Map<T>>, resolved: ResolvedConfigFilePath): Map<T> {
         return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
     }
 
@@ -354,16 +358,16 @@ namespace ts {
         // Watch state
         const builderPrograms = createFileMap<T>();
         const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>();
-        const projectPendingBuild = createFileMap<ConfigFileProgramReloadLevel>();
+        const projectPendingBuild = createMap() as ConfigFileMap<ConfigFileProgramReloadLevel>;
         const projectErrorsReported = createFileMap<true>();
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
         const { watchFile, watchFilePath, watchDirectory, writeLog } = createWatchFactory<ResolvedConfigFileName>(host, options);
 
         // Watches for the solution
-        const allWatchedWildcardDirectories = createMap<Map<WildcardDirectoryWatcher>>();
-        const allWatchedInputFiles = createMap<Map<FileWatcher>>();
-        const allWatchedConfigFiles = createMap<FileWatcher>();
+        const allWatchedWildcardDirectories = createMap() as ConfigFileMap<Map<WildcardDirectoryWatcher>>;
+        const allWatchedInputFiles = createMap() as ConfigFileMap<Map<FileWatcher>>;
+        const allWatchedConfigFiles = createMap() as ConfigFileMap<FileWatcher>;
 
         return {
             buildAllProjects,
@@ -394,7 +398,15 @@ namespace ts {
 
 
         // TODO remove this and use normal map so we arent transforming paths constantly
-        function createFileMap<T>(): ConfigFileMap<T> {
+        function createFileMap<T>(): {
+            setValue(fileName: ResolvedConfigFileName, value: T): void;
+            getValue(fileName: ResolvedConfigFileName): T | undefined;
+            hasKey(fileName: ResolvedConfigFileName): boolean;
+            removeKey(fileName: ResolvedConfigFileName): void;
+            forEach(action: (value: T, key: ResolvedConfigFilePath) => void): void;
+            getSize(): number;
+            clear(): void;
+        } {
             const lookup = createMap<T>();
             return {
                 setValue,
@@ -434,7 +446,6 @@ namespace ts {
                 lookup.clear();
             }
         }
-
 
         function resetBuildContext(opts = defaultOptions) {
             options = opts;
@@ -848,28 +859,29 @@ namespace ts {
         /**
          * return true if new addition
          */
-        function addProjToQueue(proj: ResolvedConfigFileName, reloadLevel: ConfigFileProgramReloadLevel) {
-            const value = projectPendingBuild.getValue(proj);
+        function addProjToQueue(proj: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
+            const value = projectPendingBuild.get(proj);
             if (value === undefined) {
-                projectPendingBuild.setValue(proj, reloadLevel);
+                projectPendingBuild.set(proj, reloadLevel);
             }
             else if (value < reloadLevel) {
-                projectPendingBuild.setValue(proj, reloadLevel);
+                projectPendingBuild.set(proj, reloadLevel);
             }
         }
 
         function getNextInvalidatedProject() {
             for (const project of getBuildOrder()) {
-                const reloadLevel = projectPendingBuild.getValue(project);
+                const projectPath = toResolvedConfigFilePath(project);
+                const reloadLevel = projectPendingBuild.get(projectPath);
                 if (reloadLevel !== undefined) {
-                    projectPendingBuild.removeKey(project);
+                    projectPendingBuild.delete(projectPath);
                     return { project, reloadLevel };
                 }
             }
         }
 
         function hasPendingInvalidatedProjects() {
-            return !!projectPendingBuild.getSize();
+            return !!projectPendingBuild.size;
         }
 
         function scheduleBuildInvalidatedProject() {
@@ -969,7 +981,8 @@ namespace ts {
             // Always use build order to queue projects
             for (let index = buildOrder.indexOf(resolved) + 1; index < buildOrder.length; index++) {
                 const project = buildOrder[index];
-                if (projectPendingBuild.hasKey(project)) continue;
+                const projectPath = toResolvedConfigFilePath(project);
+                if (projectPendingBuild.has(projectPath)) continue;
 
                 const config = parseConfigFile(project);
                 if (!config || !config.projectReferences) continue;
@@ -1001,15 +1014,15 @@ namespace ts {
                             status.type = UpToDateStatusType.UpToDateWithUpstreamTypes;
                         }
                     }
-                    addProjToQueue(project, ConfigFileProgramReloadLevel.None);
+                    addProjToQueue(projectPath, ConfigFileProgramReloadLevel.None);
                     break;
                 }
             }
         }
 
         function createBuildOrder(roots: readonly ResolvedConfigFileName[]): readonly ResolvedConfigFileName[] {
-            const temporaryMarks = createMap<true>();
-            const permanentMarks = createMap<true>();
+            const temporaryMarks = createMap() as ConfigFileMap<true>;
+            const permanentMarks = createMap() as ConfigFileMap<true>;
             const circularityReportStack: string[] = [];
             let buildOrder: ResolvedConfigFileName[] | undefined;
             for (const root of roots) {
@@ -1138,7 +1151,7 @@ namespace ts {
 
             // Actual Emit
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = createMap<string>();
+            const emittedOutputs = createMap() as FileMap<string>;
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(name)) {
@@ -1241,7 +1254,7 @@ namespace ts {
             // Actual Emit
             Debug.assert(!!outputFiles.length);
             const emitterDiagnostics = createDiagnosticCollection();
-            const emittedOutputs = createMap<string>();
+            const emittedOutputs = createMap() as FileMap<string>;
             outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 emittedOutputs.set(toPath(name), name);
                 writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
@@ -1286,7 +1299,7 @@ namespace ts {
             projectStatus.setValue(proj.options.configFilePath as ResolvedConfigFilePath, status);
         }
 
-        function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: Map<string>) {
+        function updateOutputTimestampsWorker(proj: ParsedCommandLine, priorNewestUpdateTime: Date, verboseMessage: DiagnosticMessage, skipOutputs?: FileMap<string>) {
             const outputs = getAllProjectOutputs(proj, !host.useCaseSensitiveFileNames());
             if (!skipOutputs || outputs.length !== skipOutputs.size) {
                 if (options.verbose) {
