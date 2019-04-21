@@ -11960,8 +11960,8 @@ namespace ts {
 
                 // The following block preserves behavior forbidding boolean returning functions from being assignable to type guard returning functions
                 const targetTypePredicate = getTypePredicateOfSignature(target);
-                if (targetTypePredicate) {
-                    const sourceTypePredicate = getTypePredicateOfSignature(source);
+                const sourceTypePredicate = getTypePredicateOfSignature(source);
+                if (targetTypePredicate && (sourceTypePredicate || callbackCheck !== CallbackCheck.Bivariant)) {
                     if (sourceTypePredicate) {
                         result &= callbackCheck === CallbackCheck.Bivariant && compareTypePredicateRelatedTo(targetTypePredicate, sourceTypePredicate, /*reportErrors*/ false, /*errorReporter*/ undefined, compareTypes) ||
                             compareTypePredicateRelatedTo(sourceTypePredicate, targetTypePredicate, reportErrors, errorReporter, compareTypes);
