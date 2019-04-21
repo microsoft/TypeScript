@@ -63,7 +63,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeReferences: Map<true> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
+        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -701,12 +701,12 @@ namespace ts {
             }
         }
 
-        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement) {
+        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement | ExportAssignment) {
             // Exported top-level member indicates moduleness
             return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
         }
 
-        function needsScopeMarker(result: LateVisibilityPaintedStatement) {
+        function needsScopeMarker(result: LateVisibilityPaintedStatement | ExportAssignment) {
             return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
         }
 
@@ -1047,7 +1047,43 @@ namespace ts {
                             return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
                         });
                         const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input, isPrivate), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
-                        return [clean, namespaceDecl];
+
+                        if (!hasModifier(clean, ModifierFlags.ExportDefault)) {
+                            return [clean, namespaceDecl];
+                        }
+
+                        const modifiers = createModifiersFromModifierFlags((getModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient);
+                        const cleanDeclaration = updateFunctionDeclaration(
+                            clean,
+                            /*decorators*/ undefined,
+                            modifiers,
+                            /*asteriskToken*/ undefined,
+                            clean.name,
+                            clean.typeParameters,
+                            clean.parameters,
+                            clean.type,
+                            /*body*/ undefined
+                        );
+
+                        const namespaceDeclaration = updateModuleDeclaration(
+                            namespaceDecl,
+                            /*decorators*/ undefined,
+                            modifiers,
+                            namespaceDecl.name,
+                            namespaceDecl.body
+                        );
+
+                        const exportDefaultDeclaration = createExportAssignment(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            /*isExportEquals*/ false,
+                            namespaceDecl.name
+                        );
+
+                        resultHasExternalModuleIndicator = true;
+                        resultHasScopeMarker = true;
+
+                        return [cleanDeclaration, namespaceDeclaration, exportDefaultDeclaration];
                     }
                     else {
                         return clean;
