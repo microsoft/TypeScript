@@ -8550,11 +8550,16 @@ namespace ts {
                 isInJSFile(signature.declaration));
         }
 
+        function getErasedConstraint(type: Type, typeParameters: readonly TypeParameter[]): Type | undefined {
+            const constraint = getConstraintOfType(type);
+            return constraint && contains(typeParameters, constraint) ? getErasedConstraint(constraint, typeParameters) : constraint;
+        }
+
         function getBaseSignature(signature: Signature) {
             const typeParameters = signature.typeParameters;
             if (typeParameters) {
                 const typeEraser = createTypeEraser(typeParameters);
-                const baseConstraints = map(typeParameters, tp => instantiateType(getBaseConstraintOfType(tp), typeEraser) || unknownType);
+                const baseConstraints = map(typeParameters, tp => instantiateType(getErasedConstraint(tp, typeParameters), typeEraser) || unknownType);
                 return instantiateSignature(signature, createTypeMapper(typeParameters, baseConstraints), /*eraseTypeParameters*/ true);
             }
             return signature;
@@ -13392,35 +13397,33 @@ namespace ts {
                 let result = Ternary.True;
                 const saveErrorInfo = errorInfo;
 
-                if (getObjectFlags(source) & ObjectFlags.Instantiated && getObjectFlags(target) & ObjectFlags.Instantiated && source.symbol === target.symbol) {
-                    // We have instantiations of the same anonymous type (which typically will be the type of a
-                    // method). Simply do a pairwise comparison of the signatures in the two signature lists instead
-                    // of the much more expensive N * M comparison matrix we explore below. We instantiate type
-                    // parameters to their constraints because, whereas the type parameters are known to be the same,
-                    // the constraints might differ if they reference outer type parameters.
+                const sameSignatureInstantiations = getObjectFlags(source) & ObjectFlags.Instantiated && getObjectFlags(target) & ObjectFlags.Instantiated && source.symbol === target.symbol;
+                if (sameSignatureInstantiations || sourceSignatures.length === 1 && targetSignatures.length === 1) {
+                    // We have instantiations of the same anonymous type (which typically will be the type of a method)
+                    // or we have non-overloaded signatures. Simply do a pairwise comparison of the signatures in the
+                    // two signature lists instead of the much more expensive N * M comparison matrix we explore below.
+                    const eraseGenerics = relation === comparableRelation || !!compilerOptions.noStrictGenericChecks;
                     for (let i = 0; i < targetSignatures.length; i++) {
-                        const related = signatureRelatedTo(getBaseSignature(sourceSignatures[i]), getBaseSignature(targetSignatures[i]), /*erase*/ false, reportErrors);
+                        const s = sourceSignatures[i];
+                        const t = targetSignatures[i];
+                        // We erase type parameters for the comparable relation or when strict checks are disabled.
+                        // Otherwise, when we have instantiations of the same anonymous type, we instantiate target
+                        // type parameters to their constraints because the type parameters are known to be the same.
+                        const effectiveSource = eraseGenerics ? getErasedSignature(s) : s;
+                        const effectiveTarget = eraseGenerics ? getErasedSignature(t) : sameSignatureInstantiations ? getBaseSignature(t) : t;
+                        const related = signatureRelatedTo(effectiveSource, effectiveTarget, reportErrors);
                         if (!related) {
                             return Ternary.False;
                         }
                         result &= related;
                     }
                 }
-                else if (sourceSignatures.length === 1 && targetSignatures.length === 1) {
-                    // For simple functions (functions with a single signature) we only erase type parameters for
-                    // the comparable relation. Otherwise, if the source signature is generic, we instantiate it
-                    // in the context of the target signature before checking the relationship. Ideally we'd do
-                    // this regardless of the number of signatures, but the potential costs are prohibitive due
-                    // to the quadratic nature of the logic below.
-                    const eraseGenerics = relation === comparableRelation || !!compilerOptions.noStrictGenericChecks;
-                    result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors);
-                }
                 else {
                     outer: for (const t of targetSignatures) {
                         // Only elaborate errors from the first failure
                         let shouldElaborateErrors = reportErrors;
                         for (const s of sourceSignatures) {
-                            const related = signatureRelatedTo(s, t, /*erase*/ true, shouldElaborateErrors);
+                            const related = signatureRelatedTo(getErasedSignature(s), getErasedSignature(t), shouldElaborateErrors);
                             if (related) {
                                 result &= related;
                                 errorInfo = saveErrorInfo;
@@ -13443,9 +13446,8 @@ namespace ts {
             /**
              * See signatureAssignableTo, compareSignaturesIdentical
              */
-            function signatureRelatedTo(source: Signature, target: Signature, erase: boolean, reportErrors: boolean): Ternary {
-                return compareSignaturesRelated(erase ? getErasedSignature(source) : source, erase ? getErasedSignature(target) : target,
-                    CallbackCheck.None, /*ignoreReturnTypes*/ false, reportErrors, reportError, isRelatedTo);
+            function signatureRelatedTo(source: Signature, target: Signature, reportErrors: boolean): Ternary {
+                return compareSignaturesRelated(source, target, CallbackCheck.None, /*ignoreReturnTypes*/ false, reportErrors, reportError, isRelatedTo);
             }
 
             function signaturesIdenticalTo(source: Type, target: Type, kind: SignatureKind): Ternary {
