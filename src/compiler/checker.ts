@@ -11787,6 +11787,7 @@ namespace ts {
         }
 
         function elaborateArrayLiteral(node: ArrayLiteralExpression, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            if (target.flags & TypeFlags.Primitive) return false;
             if (isTupleLikeType(source)) {
                 return elaborateElementwise(generateLimitedTupleElements(node, target), source, target, relation);
             }
@@ -11823,6 +11824,7 @@ namespace ts {
         }
 
         function elaborateObjectLiteral(node: ObjectLiteralExpression, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
+            if (target.flags & TypeFlags.Primitive) return false;
             return elaborateElementwise(generateObjectLiteralElements(node), source, target, relation);
         }
 
