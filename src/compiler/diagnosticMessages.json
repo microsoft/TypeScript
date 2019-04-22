@@ -4950,5 +4950,9 @@
     "Allow accessing UMD globals from modules.": {
         "category": "Message",
         "code": 95076
+    },
+    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
+        "category": "Error",
+        "code": 18004
     }
 }
