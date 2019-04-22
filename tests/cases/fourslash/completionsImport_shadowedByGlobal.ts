@@ -8,6 +8,7 @@
 
 verify.completions({
   marker: "",
-  includes: [{ name: "parseInt", kind: "function", kindModifiers: "declare" }],
+  // The real parseInt is in 'globalVars', the fake one exported from a.ts is missing
+  exact: ["globalThis", ...completion.globalsVars, "undefined", ...completion.statementKeywordsWithTypes],
   preferences: { includeCompletionsForModuleExports: true },
 });

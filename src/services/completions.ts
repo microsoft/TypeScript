@@ -273,6 +273,7 @@ namespace ts.Completions {
         // Based on the order we add things we will always see locals first, then globals, then module exports.
         // So adding a completion for a local will prevent us from adding completions for external module exports sharing the same name.
         const uniques = createMap<true>();
+        const uniqueGlobals = createMap<true>();
         for (const symbol of symbols) {
             const origin = symbolToOriginInfoMap ? symbolToOriginInfoMap[getSymbolId(symbol)] : undefined;
             const entry = createCompletionEntry(symbol, location, sourceFile, typeChecker, target, kind, origin, recommendedCompletion, propertyAccessToConvert, isJsxInitializer, preferences);
@@ -285,12 +286,20 @@ namespace ts.Completions {
                 continue;
             }
 
-            // Latter case tests whether this is a global variable.
-            if (!origin && !(symbol.parent === undefined && !some(symbol.declarations, d => d.getSourceFile() === location!.getSourceFile()))) { // TODO: GH#18217
+            const isExternalModule = !!origin;
+            const isTopLevel = symbol.parent === undefined;
+            const hasDeclarationInFile = some(symbol.declarations, d => d.getSourceFile() === location!.getSourceFile());
+            if (!isExternalModule && !(isTopLevel && !hasDeclarationInFile)) {
                 uniques.set(name, true);
             }
+            else if (isTopLevel && !isExternalModule && !hasDeclarationInFile) {
+                uniqueGlobals.set(name, true);
+            }
 
-            entries.push(entry);
+            const shouldBeShadowedByGlobal = isExternalModule && uniqueGlobals.has(name);
+            if (!shouldBeShadowedByGlobal) {
+                entries.push(entry);
+            }
         }
 
         log("getCompletionsAtPosition: getCompletionEntriesFromSymbols: " + (timestamp() - start));

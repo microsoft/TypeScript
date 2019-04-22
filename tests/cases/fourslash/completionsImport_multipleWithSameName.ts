@@ -3,10 +3,6 @@
 // @module: esnext
 // @noLib: true
 
-// @Filename: /global.d.ts
-// A local variable would prevent import completions (see `completionsImport_shadowedByLocal.ts`), but a global doesn't.
-////declare var foo: number;
-
 // @Filename: /a.ts
 ////export const foo = 0;
 
@@ -21,7 +17,6 @@ verify.completions({
     marker: "",
     exact: [
         "globalThis",
-        { name: "foo", text: "var foo: number", kind: "var", kindModifiers: "declare" },
         "undefined",
         {
             name: "foo",
