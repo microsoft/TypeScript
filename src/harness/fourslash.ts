@@ -1529,7 +1529,7 @@ Actual: ${stringify(fullActual)}`);
                     baselineContent.push(masked);
                     selectionRange = selectionRange.parent;
                 }
-                return baselineContent.join(n);
+                return baselineContent.join(fileContent.includes("\n") ? n + n : n);
             }).join(n.repeat(2) + "=".repeat(80) + n.repeat(2));
 
             Harness.Baseline.runBaseline(baselineFile, text);
