@@ -1,16 +1,16 @@
 tests/cases/compiler/main.ts(15,1): error TS2693: 'z1' only refers to a type, but is being used as a value here.
 tests/cases/compiler/main.ts(21,4): error TS2339: Property 'a' does not exist on type '() => any'.
 tests/cases/compiler/main.ts(23,4): error TS2339: Property 'a' does not exist on type 'typeof Foo'.
-tests/cases/compiler/main.ts(27,8): error TS1192: Module '"interface"' has no default export.
-tests/cases/compiler/main.ts(28,8): error TS1192: Module '"variable"' has no default export.
-tests/cases/compiler/main.ts(29,8): error TS1192: Module '"interface-variable"' has no default export.
-tests/cases/compiler/main.ts(30,8): error TS1192: Module '"module"' has no default export.
-tests/cases/compiler/main.ts(31,8): error TS1192: Module '"interface-module"' has no default export.
-tests/cases/compiler/main.ts(32,8): error TS1192: Module '"variable-module"' has no default export.
-tests/cases/compiler/main.ts(33,8): error TS1192: Module '"function"' has no default export.
-tests/cases/compiler/main.ts(34,8): error TS1192: Module '"function-module"' has no default export.
-tests/cases/compiler/main.ts(35,8): error TS1192: Module '"class"' has no default export.
-tests/cases/compiler/main.ts(36,8): error TS1192: Module '"class-module"' has no default export.
+tests/cases/compiler/main.ts(27,8): error TS1259: Module '"interface"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(28,8): error TS1259: Module '"variable"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(29,8): error TS1259: Module '"interface-variable"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(30,8): error TS1259: Module '"module"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(31,8): error TS1259: Module '"interface-module"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(32,8): error TS1259: Module '"variable-module"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(33,8): error TS1259: Module '"function"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(34,8): error TS1259: Module '"function-module"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(35,8): error TS1259: Module '"class"' can only be default-imported using the 'esModuleInterop' flag
+tests/cases/compiler/main.ts(36,8): error TS1259: Module '"class-module"' can only be default-imported using the 'esModuleInterop' flag
 tests/cases/compiler/main.ts(39,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 tests/cases/compiler/main.ts(45,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
 tests/cases/compiler/main.ts(47,21): error TS2497: This module can only be referenced with ECMAScript imports/exports by turning on the 'esModuleInterop' flag and referencing its default export.
@@ -76,34 +76,44 @@ tests/cases/compiler/main.ts(106,15): error TS2498: Module '"class-module"' uses
     // default import
     import x1 from "interface";
            ~~
-!!! error TS1192: Module '"interface"' has no default export.
+!!! error TS1259: Module '"interface"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:6:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x2 from "variable";
            ~~
-!!! error TS1192: Module '"variable"' has no default export.
+!!! error TS1259: Module '"variable"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:14:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x3 from "interface-variable";
            ~~
-!!! error TS1192: Module '"interface-variable"' has no default export.
+!!! error TS1259: Module '"interface-variable"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:26:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x4 from "module";
            ~~
-!!! error TS1192: Module '"module"' has no default export.
+!!! error TS1259: Module '"module"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:34:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x5 from "interface-module";
            ~~
-!!! error TS1192: Module '"interface-module"' has no default export.
+!!! error TS1259: Module '"interface-module"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:46:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x6 from "variable-module";
            ~~
-!!! error TS1192: Module '"variable-module"' has no default export.
+!!! error TS1259: Module '"variable-module"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:60:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x7 from "function";
            ~~
-!!! error TS1192: Module '"function"' has no default export.
+!!! error TS1259: Module '"function"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:65:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x8 from "function-module";
            ~~
-!!! error TS1192: Module '"function-module"' has no default export.
+!!! error TS1259: Module '"function-module"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:74:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x9 from "class";
            ~~
-!!! error TS1192: Module '"class"' has no default export.
+!!! error TS1259: Module '"class"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:82:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     import x0 from "class-module";
            ~~
-!!! error TS1192: Module '"class-module"' has no default export.
+!!! error TS1259: Module '"class-module"' can only be default-imported using the 'esModuleInterop' flag
+!!! related TS2594 tests/cases/compiler/modules.d.ts:94:5: This module is declared with using 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
     
     // namespace import
     import * as y1 from "interface";
