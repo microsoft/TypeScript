@@ -11773,6 +11773,10 @@ namespace ts {
             }
         }
 
+        function getSemanticJsxChildren(children: NodeArray<JsxChild>) {
+            return filter(children, i => !isJsxText(i) || !i.containsOnlyTriviaWhiteSpaces);
+        }
+
         function elaborateJsxComponents(node: JsxAttributes, source: Type, target: Type, relation: Map<RelationComparisonResult>) {
             let result = elaborateElementwise(generateJsxAttributes(node), source, target, relation);
             let invalidTextDiagnostic: DiagnosticMessage | undefined;
@@ -11782,7 +11786,7 @@ namespace ts {
                 const childrenPropName = childPropName === undefined ? "children" : unescapeLeadingUnderscores(childPropName);
                 const childrenNameType = getLiteralType(childrenPropName);
                 const childrenTargetType = getIndexedAccessType(target, childrenNameType);
-                const validChildren = filter(containingElement.children, i => !isJsxText(i) || !i.containsOnlyTriviaWhiteSpaces);
+                const validChildren = getSemanticJsxChildren(containingElement.children);
                 if (!length(validChildren)) {
                     return result;
                 }
@@ -18193,16 +18197,17 @@ namespace ts {
             if (!(attributesType && !isTypeAny(attributesType) && jsxChildrenPropertyName && jsxChildrenPropertyName !== "")) {
                 return undefined;
             }
-            const childIndex = node.children.indexOf(child);
+            const realChildren = getSemanticJsxChildren(node.children);
+            const childIndex = realChildren.indexOf(child);
             const childFieldType = getTypeOfPropertyOfContextualType(attributesType, jsxChildrenPropertyName);
-            return childFieldType && mapType(childFieldType, t => {
+            return childFieldType && (realChildren.length === 1 ? childFieldType : mapType(childFieldType, t => {
                 if (isArrayLikeType(t)) {
                     return getIndexedAccessType(t, getLiteralType(childIndex));
                 }
                 else {
                     return t;
                 }
-            }, /*noReductions*/ true);
+            }, /*noReductions*/ true));
         }
 
         function getContextualTypeForJsxExpression(node: JsxExpression): Type | undefined {
