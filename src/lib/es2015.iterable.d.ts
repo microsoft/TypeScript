@@ -177,7 +177,7 @@ interface ReadonlySet<T> {
 }
 
 interface SetConstructor {
-    new <T>(iterable: Iterable<T>): Set<T>;
+    new <T>(iterable?: Iterable<T> | null): Set<T>;
 }
 
 interface WeakSet<T extends object> { }
