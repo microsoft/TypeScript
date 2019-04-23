@@ -244,6 +244,7 @@ declare namespace FourSlashInterface {
         baselineGetEmitOutput(insertResultsIntoVfs?: boolean): void;
         getEmitOutput(expectedOutputFiles: ReadonlyArray<string>): void;
         baselineQuickInfo(): void;
+        baselineSmartSelection(): void;
         nameOrDottedNameSpanTextIs(text: string): void;
         outliningSpansInCurrentFile(spans: Range[]): void;
         todoCommentsInCurrentFile(descriptors: string[]): void;
@@ -508,7 +509,7 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
     interface CompletionsOptions {
-        readonly marker?: ArrayOrSingle<string | Marker>,
+        readonly marker?: ArrayOrSingle<string | Marker>;
         readonly isNewIdentifierLocation?: boolean;
         readonly isGlobalCompletion?: boolean;
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
