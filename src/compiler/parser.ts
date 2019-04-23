@@ -2922,7 +2922,9 @@ namespace ts {
             if (parseOptional(SyntaxKind.DotToken)) {
                 node.qualifier = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
             }
-            node.typeArguments = tryParseTypeArguments();
+            if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
+                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            }
             return finishNode(node);
         }
 
