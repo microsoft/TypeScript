@@ -946,7 +946,7 @@ namespace ts {
     }
 
     export interface ObjectLiteralElement extends NamedDeclaration {
-        _objectLiteralBrandBrand: any;
+        _objectLiteralBrand: any;
         name?: PropertyName;
     }
 
