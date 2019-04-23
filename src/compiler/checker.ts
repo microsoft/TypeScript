@@ -500,6 +500,7 @@ namespace ts {
          * This is only used if there is no exact match.
          */
         let patternAmbientModules: PatternAmbientModule[];
+        let patternAmbientModuleAugmentations: Map<Symbol> | undefined;
 
         let globalObjectType: ObjectType;
         let globalFunctionType: ObjectType;
@@ -890,7 +891,7 @@ namespace ts {
          * Note: if target is transient, then it is mutable, and mergeSymbol with both mutate and return it.
          * If target is not transient, mergeSymbol will produce a transient clone, mutate that and return it.
          */
-        function mergeSymbol(target: Symbol, source: Symbol): Symbol {
+        function mergeSymbol(target: Symbol, source: Symbol, unidirectional = false): Symbol {
             if (!(target.flags & getExcludedSymbolFlags(source.flags)) ||
                 (source.flags | target.flags) & SymbolFlags.Assignment) {
                 Debug.assert(source !== target);
@@ -923,7 +924,9 @@ namespace ts {
                     if (!target.exports) target.exports = createSymbolTable();
                     mergeSymbolTable(target.exports, source.exports);
                 }
-                recordMergedSymbol(target, source);
+                if (!unidirectional) {
+                    recordMergedSymbol(target, source);
+                }
             }
             else if (target.flags & SymbolFlags.NamespaceModule) {
                 error(getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
@@ -1023,7 +1026,22 @@ namespace ts {
                 // obtain item referenced by 'export='
                 mainModule = resolveExternalModuleSymbol(mainModule);
                 if (mainModule.flags & SymbolFlags.Namespace) {
-                    mainModule = mergeSymbol(mainModule, moduleAugmentation.symbol);
+                    // If we’re merging an augmentation to a pattern ambient module, we want to
+                    // perform the merge unidirectionally from the augmentation ('a.foo') to
+                    // the pattern ('*.foo'), so that 'getMergedSymbol()' on a.foo gives you
+                    // all the exports both from the pattern and from the augmentation, but
+                    // 'getMergedSymbol()' on *.foo only gives you exports from *.foo.
+                    if (some(patternAmbientModules, module => mainModule === module.symbol)) {
+                        const merged = mergeSymbol(moduleAugmentation.symbol, mainModule, /*unidirectional*/ true);
+                        if (!patternAmbientModuleAugmentations) {
+                            patternAmbientModuleAugmentations = createMap();
+                        }
+                        // moduleName will be a StringLiteral since this is not `declare global`.
+                        patternAmbientModuleAugmentations.set((moduleName as StringLiteral).text, merged);
+                    }
+                    else {
+                        mergeSymbol(mainModule, moduleAugmentation.symbol);
+                    }
                 }
                 else {
                     // moduleName will be a StringLiteral since this is not `declare global`.
@@ -2391,6 +2409,14 @@ namespace ts {
             if (patternAmbientModules) {
                 const pattern = findBestPatternMatch(patternAmbientModules, _ => _.pattern, moduleReference);
                 if (pattern) {
+                    // If the module reference matched a pattern ambient module ('*.foo') but there’s also a
+                    // module augmentation by the specific name requested ('a.foo'), we store the merged symbol
+                    // by the augmentation name ('a.foo'), because asking for *.foo should not give you exports
+                    // from a.foo.
+                    const augmentation = patternAmbientModuleAugmentations && patternAmbientModuleAugmentations.get(moduleReference);
+                    if (augmentation) {
+                        return getMergedSymbol(augmentation);
+                    }
                     return getMergedSymbol(pattern.symbol);
                 }
             }
