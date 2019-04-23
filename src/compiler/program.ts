@@ -2677,18 +2677,30 @@ namespace ts {
                 return fromCache || undefined;
             }
 
-            // An absolute path pointing to the containing directory of the config file
-            const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
-            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
-            addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
-            if (sourceFile === undefined) {
-                projectReferenceRedirects.set(sourceFilePath, false);
-                return undefined;
+            let commandLine: ParsedCommandLine | undefined;
+            let sourceFile: JsonSourceFile | undefined;
+            if (host.getParsedCommandLine) {
+                commandLine = host.getParsedCommandLine(refPath);
+                if (!commandLine) {
+                    projectReferenceRedirects.set(sourceFilePath, false);
+                    return undefined;
+                }
+                sourceFile = Debug.assertDefined(commandLine.options.configFile);
             }
-            sourceFile.path = sourceFilePath;
-            sourceFile.resolvedPath = sourceFilePath;
-            sourceFile.originalFileName = refPath;
-            const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
+            else {
+                // An absolute path pointing to the containing directory of the config file
+                const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
+                sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
+                addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
+                if (sourceFile === undefined) {
+                    projectReferenceRedirects.set(sourceFilePath, false);
+                    return undefined;
+                }
+                sourceFile.path = sourceFilePath;
+                sourceFile.resolvedPath = sourceFilePath;
+                sourceFile.originalFileName = refPath;
+                commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
+            }
             const resolvedRef: ResolvedProjectReference = { commandLine, sourceFile };
             projectReferenceRedirects.set(sourceFilePath, resolvedRef);
             if (commandLine.projectReferences) {

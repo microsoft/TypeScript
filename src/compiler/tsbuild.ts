@@ -399,6 +399,7 @@ namespace ts {
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
         setGetSourceFileAsHashVersioned(compilerHost, host);
+        compilerHost.getParsedCommandLine = parseConfigFile;
 
         const buildInfoChecked = createFileMap<true>(toPath);
 
