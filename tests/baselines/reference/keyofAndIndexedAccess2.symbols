@@ -1,0 +1,436 @@
+=== tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts ===
+function f1(obj: { a: number, b: 0 | 1, c: string }, k0: 'a', k1: 'a' | 'b', k2: 'a' | 'b' | 'c') {
+>f1 : Symbol(f1, Decl(keyofAndIndexedAccess2.ts, 0, 0))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 0, 18))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 0, 29))
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 0, 39))
+>k0 : Symbol(k0, Decl(keyofAndIndexedAccess2.ts, 0, 52))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 0, 61))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 0, 76))
+
+    obj[k0] = 1;
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k0 : Symbol(k0, Decl(keyofAndIndexedAccess2.ts, 0, 52))
+
+    obj[k0] = 2;
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k0 : Symbol(k0, Decl(keyofAndIndexedAccess2.ts, 0, 52))
+
+    obj[k0] = 'x';  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k0 : Symbol(k0, Decl(keyofAndIndexedAccess2.ts, 0, 52))
+
+    obj[k1] = 1;
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 0, 61))
+
+    obj[k1] = 2;    // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 0, 61))
+
+    obj[k1] = 'x';  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 0, 61))
+
+    obj[k2] = 1;    // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 0, 76))
+
+    obj[k2] = 2;    // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 0, 76))
+
+    obj[k2] = 'x';  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 0, 12))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 0, 76))
+}
+
+function f2<T extends { [key: string]: number }>(a: { x: number, y: number }, b: { [key: string]: number }, c: T, k: keyof T) {
+>f2 : Symbol(f2, Decl(keyofAndIndexedAccess2.ts, 10, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 12, 12))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 12, 25))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 12, 49))
+>x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
+>y : Symbol(y, Decl(keyofAndIndexedAccess2.ts, 12, 64))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 12, 84))
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 12, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccess2.ts, 12, 113))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 12, 12))
+
+    a = b;  // Error, index signature in source doesn't imply properties are present
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 12, 49))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+
+    a = c;  // Error, index signature in source doesn't imply properties are present
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 12, 49))
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+
+    b = a;
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 12, 49))
+
+    b = c;
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+
+    c = a;  // Error, constraint on target doesn't imply any properties or signatures
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 12, 49))
+
+    c = b;  // Error, constraint on target doesn't imply any properties or signatures
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+
+    a.x;
+>a.x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 12, 49))
+>x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
+
+    b.x;
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+
+    c.x;
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+
+    c[k];
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+>k : Symbol(k, Decl(keyofAndIndexedAccess2.ts, 12, 113))
+
+    a.x = 1;
+>a.x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 12, 49))
+>x : Symbol(x, Decl(keyofAndIndexedAccess2.ts, 12, 53))
+
+    b.x = 1;
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 12, 77))
+
+    c.x = 1;  // Error, cannot write to index signature through constraint
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+
+    c[k] = 1; // Error, cannot write to index signature through constraint
+>c : Symbol(c, Decl(keyofAndIndexedAccess2.ts, 12, 107))
+>k : Symbol(k, Decl(keyofAndIndexedAccess2.ts, 12, 113))
+}
+
+function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
+>f3 : Symbol(f3, Decl(keyofAndIndexedAccess2.ts, 27, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 29, 12))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 29, 30))
+>P : Symbol(P, Decl(keyofAndIndexedAccess2.ts, 29, 36))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 29, 12))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 29, 54))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 29, 61))
+>k : Symbol(k, Decl(keyofAndIndexedAccess2.ts, 29, 84))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 29, 12))
+
+    a = b;  // Error, index signature doesn't imply properties are present
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 29, 30))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 29, 54))
+
+    b = a;
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 29, 54))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 29, 30))
+
+    a[k];
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 29, 30))
+>k : Symbol(k, Decl(keyofAndIndexedAccess2.ts, 29, 84))
+
+    a[k] = 1;
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 29, 30))
+>k : Symbol(k, Decl(keyofAndIndexedAccess2.ts, 29, 84))
+}
+
+function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
+>f3b : Symbol(f3b, Decl(keyofAndIndexedAccess2.ts, 34, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 36, 13))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 36, 31))
+>P : Symbol(P, Decl(keyofAndIndexedAccess2.ts, 36, 37))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 36, 13))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 36, 55))
+>P : Symbol(P, Decl(keyofAndIndexedAccess2.ts, 36, 62))
+>k : Symbol(k, Decl(keyofAndIndexedAccess2.ts, 36, 85))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 36, 13))
+
+    a = b;  // Error, index signature doesn't imply properties are present
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 36, 31))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 36, 55))
+
+    b = a;
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 36, 55))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 36, 31))
+}
+
+function f4<K extends string>(a: { [key: string]: number }[K], b: number) {
+>f4 : Symbol(f4, Decl(keyofAndIndexedAccess2.ts, 39, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 41, 12))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 41, 30))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 41, 36))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 41, 12))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 41, 62))
+
+  a = b;
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 41, 30))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 41, 62))
+
+  b = a;
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 41, 62))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 41, 30))
+}
+
+type Item = { a: string, b: number };
+>Item : Symbol(Item, Decl(keyofAndIndexedAccess2.ts, 44, 1))
+>a : Symbol(a, Decl(keyofAndIndexedAccess2.ts, 46, 13))
+>b : Symbol(b, Decl(keyofAndIndexedAccess2.ts, 46, 24))
+
+function f10<T extends Item, K extends keyof T>(obj: T, k1: string, k2: keyof Item, k3: keyof T, k4: K) {
+>f10 : Symbol(f10, Decl(keyofAndIndexedAccess2.ts, 46, 37))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 48, 13))
+>Item : Symbol(Item, Decl(keyofAndIndexedAccess2.ts, 44, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 48, 28))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 48, 13))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 48, 48))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 48, 13))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 48, 55))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 48, 67))
+>Item : Symbol(Item, Decl(keyofAndIndexedAccess2.ts, 44, 1))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccess2.ts, 48, 83))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 48, 13))
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccess2.ts, 48, 96))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 48, 28))
+
+  obj[k1] = 123;  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 48, 48))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 48, 55))
+
+  obj[k2] = 123;  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 48, 48))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 48, 67))
+
+  obj[k3] = 123;  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 48, 48))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccess2.ts, 48, 83))
+
+  obj[k4] = 123;  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 48, 48))
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccess2.ts, 48, 96))
+}
+
+type Dict = Record<string, number>;
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess2.ts, 53, 1))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+function f11<K extends keyof Dict>(obj: Dict, k1: keyof Dict, k2: K) {
+>f11 : Symbol(f11, Decl(keyofAndIndexedAccess2.ts, 55, 35))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 57, 13))
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess2.ts, 53, 1))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 57, 35))
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess2.ts, 53, 1))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 57, 45))
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess2.ts, 53, 1))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 57, 61))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 57, 13))
+
+  obj.foo = 123;
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 57, 35))
+
+  obj[k1] = 123;
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 57, 35))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 57, 45))
+
+  obj[k2] = 123;
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 57, 35))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 57, 61))
+}
+
+function f12<T extends Readonly<Dict>, K extends keyof T>(obj: T, k1: keyof Dict, k2: keyof T, k3: K) {
+>f12 : Symbol(f12, Decl(keyofAndIndexedAccess2.ts, 61, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 63, 13))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess2.ts, 53, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 63, 38))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 63, 13))
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 63, 58))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 63, 13))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 63, 65))
+>Dict : Symbol(Dict, Decl(keyofAndIndexedAccess2.ts, 53, 1))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 63, 81))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 63, 13))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccess2.ts, 63, 94))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 63, 38))
+
+  obj.foo = 123;  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 63, 58))
+
+  obj[k1] = 123;  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 63, 58))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccess2.ts, 63, 65))
+
+  obj[k2] = 123;  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 63, 58))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccess2.ts, 63, 81))
+
+  obj[k3] = 123;  // Error
+>obj : Symbol(obj, Decl(keyofAndIndexedAccess2.ts, 63, 58))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccess2.ts, 63, 94))
+}
+
+// Repro from #27895
+
+export interface Entity {
+>Entity : Symbol(Entity, Decl(keyofAndIndexedAccess2.ts, 68, 1))
+
+    id: number | string;
+>id : Symbol(Entity.id, Decl(keyofAndIndexedAccess2.ts, 72, 25))
+}
+
+export type IdOf<E extends Entity> = E['id'];
+>IdOf : Symbol(IdOf, Decl(keyofAndIndexedAccess2.ts, 74, 1))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 76, 17))
+>Entity : Symbol(Entity, Decl(keyofAndIndexedAccess2.ts, 68, 1))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 76, 17))
+
+export interface EntityState<E extends Entity> {
+>EntityState : Symbol(EntityState, Decl(keyofAndIndexedAccess2.ts, 76, 45))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 78, 29))
+>Entity : Symbol(Entity, Decl(keyofAndIndexedAccess2.ts, 68, 1))
+
+    ids: IdOf<E>[];
+>ids : Symbol(EntityState.ids, Decl(keyofAndIndexedAccess2.ts, 78, 48))
+>IdOf : Symbol(IdOf, Decl(keyofAndIndexedAccess2.ts, 74, 1))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 78, 29))
+
+    entities: { [key: string]: E, [key: number]: E };
+>entities : Symbol(EntityState.entities, Decl(keyofAndIndexedAccess2.ts, 79, 19))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 80, 17))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 78, 29))
+>key : Symbol(key, Decl(keyofAndIndexedAccess2.ts, 80, 35))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 78, 29))
+}
+
+
+export function getAllEntities<E extends Entity>(state: EntityState<E>): E[] {
+>getAllEntities : Symbol(getAllEntities, Decl(keyofAndIndexedAccess2.ts, 81, 1))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 84, 31))
+>Entity : Symbol(Entity, Decl(keyofAndIndexedAccess2.ts, 68, 1))
+>state : Symbol(state, Decl(keyofAndIndexedAccess2.ts, 84, 49))
+>EntityState : Symbol(EntityState, Decl(keyofAndIndexedAccess2.ts, 76, 45))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 84, 31))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 84, 31))
+
+    const { ids, entities } = state;
+>ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 85, 11))
+>entities : Symbol(entities, Decl(keyofAndIndexedAccess2.ts, 85, 16))
+>state : Symbol(state, Decl(keyofAndIndexedAccess2.ts, 84, 49))
+
+    return ids.map(id => entities[id]);
+>ids.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 85, 11))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 86, 19))
+>entities : Symbol(entities, Decl(keyofAndIndexedAccess2.ts, 85, 16))
+>id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 86, 19))
+}
+
+export function getEntity<E extends Entity>(id: IdOf<E>, state: EntityState<E>): E | undefined {
+>getEntity : Symbol(getEntity, Decl(keyofAndIndexedAccess2.ts, 87, 1))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 89, 26))
+>Entity : Symbol(Entity, Decl(keyofAndIndexedAccess2.ts, 68, 1))
+>id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 89, 44))
+>IdOf : Symbol(IdOf, Decl(keyofAndIndexedAccess2.ts, 74, 1))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 89, 26))
+>state : Symbol(state, Decl(keyofAndIndexedAccess2.ts, 89, 56))
+>EntityState : Symbol(EntityState, Decl(keyofAndIndexedAccess2.ts, 76, 45))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 89, 26))
+>E : Symbol(E, Decl(keyofAndIndexedAccess2.ts, 89, 26))
+
+    const { ids, entities } = state;
+>ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 90, 11))
+>entities : Symbol(entities, Decl(keyofAndIndexedAccess2.ts, 90, 16))
+>state : Symbol(state, Decl(keyofAndIndexedAccess2.ts, 89, 56))
+
+    if (!ids.includes(id)) {
+>ids.includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>ids : Symbol(ids, Decl(keyofAndIndexedAccess2.ts, 90, 11))
+>includes : Symbol(Array.includes, Decl(lib.es2016.array.include.d.ts, --, --))
+>id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 89, 44))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+
+    return entities[id];
+>entities : Symbol(entities, Decl(keyofAndIndexedAccess2.ts, 90, 16))
+>id : Symbol(id, Decl(keyofAndIndexedAccess2.ts, 89, 44))
+}
+
+// Repro from #30603
+
+interface Type {
+>Type : Symbol(Type, Decl(keyofAndIndexedAccess2.ts, 97, 1))
+
+    a: 123;
+>a : Symbol(Type.a, Decl(keyofAndIndexedAccess2.ts, 101, 16))
+
+    b: "some string";
+>b : Symbol(Type.b, Decl(keyofAndIndexedAccess2.ts, 102, 11))
+}
+
+function get123<K extends keyof Type>(): Type[K] {
+>get123 : Symbol(get123, Decl(keyofAndIndexedAccess2.ts, 104, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 106, 16))
+>Type : Symbol(Type, Decl(keyofAndIndexedAccess2.ts, 97, 1))
+>Type : Symbol(Type, Decl(keyofAndIndexedAccess2.ts, 97, 1))
+>K : Symbol(K, Decl(keyofAndIndexedAccess2.ts, 106, 16))
+
+    return 123;  // Error
+}
+
+// Repro from #30920
+
+type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
+>StrictExtract : Symbol(StrictExtract, Decl(keyofAndIndexedAccess2.ts, 108, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 19))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 112, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 19))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 112, 21))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 112, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 19))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 19))
+
+type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
+>StrictExclude : Symbol(StrictExclude, Decl(keyofAndIndexedAccess2.ts, 112, 73))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 113, 19))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 113, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 113, 19))
+>StrictExtract : Symbol(StrictExtract, Decl(keyofAndIndexedAccess2.ts, 108, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 113, 19))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 113, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 113, 19))
+
+type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
+>A : Symbol(A, Decl(keyofAndIndexedAccess2.ts, 113, 69))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 114, 7))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 114, 15))
+>P : Symbol(P, Decl(keyofAndIndexedAccess2.ts, 114, 23))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 114, 7))
+>P : Symbol(P, Decl(keyofAndIndexedAccess2.ts, 114, 23))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 114, 7))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 114, 7))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 114, 15))
+
+type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
+>B : Symbol(B, Decl(keyofAndIndexedAccess2.ts, 114, 62))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 115, 7))
+>V : Symbol(V, Decl(keyofAndIndexedAccess2.ts, 115, 9))
+>A : Symbol(A, Decl(keyofAndIndexedAccess2.ts, 113, 69))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 115, 20))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 115, 7))
+>StrictExclude : Symbol(StrictExclude, Decl(keyofAndIndexedAccess2.ts, 112, 73))
+>B : Symbol(B, Decl(keyofAndIndexedAccess2.ts, 114, 62))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 115, 7))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 115, 20))
+>V : Symbol(V, Decl(keyofAndIndexedAccess2.ts, 115, 9))
+

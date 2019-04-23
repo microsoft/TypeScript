@@ -2605,6 +2605,10 @@
         "category": "Error",
         "code": 2753
     },
+    "'super' may not use type arguments.": {
+        "category": "Error",
+        "code": 2754
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2943,7 +2947,11 @@
         "category": "Error",
         "code": 4103
     },
-
+    "The type '{0}' is 'readonly' and cannot be assigned to the mutable type '{1}'.": {
+        "category": "Error",
+        "code": 4104
+    },
+    
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -4939,16 +4947,25 @@
         "category": "Message",
         "code": 95075
     },
-    "Extract type": {
+    "Allow accessing UMD globals from modules.": {
         "category": "Message",
         "code": 95076
     },
-    "Extract to type alias": {
+    "Extract type": {
         "category": "Message",
         "code": 95077
     },
-    "Extract to typedef": {
+    "Extract to type alias": {
         "category": "Message",
         "code": 95078
+    },
+    "Extract to typedef": {
+        "category": "Message",
+        "code": 95079
+    },
+
+    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
+        "category": "Error",
+        "code": 18004
     }
 }

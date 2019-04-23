@@ -86,7 +86,13 @@ const createTest = (): ITest => {
 }
 
 declare function f1<T, U>(x: T | U): T | U;
-declare function f2<T, U>(x: T & U): T & U;
+declare function f2<T, U>(x: T, y: U): T | U;
 
 let x1: string = f1('a');
-let x2: string = f2('a');
+let x2: string = f2('a', 'b');
+
+// Repro from #30442
+
+const func = <T>() => {};
+const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
+const res: (() => void) & { func: any } = assign(() => {}, { func });
