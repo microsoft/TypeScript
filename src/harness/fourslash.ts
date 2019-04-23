@@ -3068,19 +3068,6 @@ Actual: ${stringify(fullActual)}`);
             return this.languageService.getApplicableRefactors(fileName, positionOrRange, preferences) || ts.emptyArray;
         }
 
-        public generateTypes(examples: ReadonlyArray<FourSlashInterface.GenerateTypesOptions>): void {
-            for (const { name = "example", value, global, output, outputBaseline } of examples) {
-                const actual = (global ? ts.generateTypesForGlobal : ts.generateTypesForModule)(name, value, this.formatCodeSettings);
-                if (outputBaseline) {
-                    if (actual === undefined) throw ts.Debug.fail();
-                    Harness.Baseline.runBaseline(ts.combinePaths("generateTypes", outputBaseline + ts.Extension.Dts), actual);
-                }
-                else {
-                    assert.equal(actual, output, `generateTypes output for ${name} does not match`);
-                }
-            }
-        }
-
         public configurePlugin(pluginName: string, configuration: any): void {
             (<ts.server.SessionClient>this.languageService).configurePlugin(pluginName, configuration);
         }
@@ -4140,19 +4127,6 @@ namespace FourSlashInterface {
         public noMoveToNewFile(): void {
             this.state.noMoveToNewFile();
         }
-
-        public generateTypes(...options: GenerateTypesOptions[]): void {
-            this.state.generateTypes(options);
-        }
-    }
-
-    export interface GenerateTypesOptions {
-        readonly name?: string;
-        readonly value: unknown;
-        readonly global?: boolean;
-        // Exactly one of these should be set:
-        readonly output?: string;
-        readonly outputBaseline?: string;
     }
 
     export class Edit {
