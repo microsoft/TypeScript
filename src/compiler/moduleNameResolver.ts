@@ -436,10 +436,10 @@ namespace ts {
         set(directory: string, result: ResolvedModuleWithFailedLookupLocations): void;
     }
 
-    export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string): ModuleResolutionCache {
+    export function createModuleResolutionCache(currentDirectory: string, getCanonicalFileName: (s: string) => string, options?: CompilerOptions): ModuleResolutionCache {
         return createModuleResolutionCacheWithMaps(
-            createCacheWithRedirects(),
-            createCacheWithRedirects(),
+            createCacheWithRedirects(options),
+            createCacheWithRedirects(options),
             currentDirectory,
             getCanonicalFileName
         );
@@ -454,7 +454,7 @@ namespace ts {
     }
 
     /*@internal*/
-    export function createCacheWithRedirects<T>(): CacheWithRedirects<T> {
+    export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
         const ownMap: Map<T> = createMap();
         const redirectsMap: Map<Map<T>> = createMap();
         return {
@@ -471,7 +471,8 @@ namespace ts {
             const path = redirectedReference.sourceFile.path;
             let redirects = redirectsMap.get(path);
             if (!redirects) {
-                redirects = createMap();
+                // Reuse map if redirected reference map uses same resolution
+                redirects = !options || optionsHaveModuleResolutionChanges(options, redirectedReference.commandLine.options) ? createMap() : ownMap;
                 redirectsMap.set(path, redirects);
             }
             return redirects;
