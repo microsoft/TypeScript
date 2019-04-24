@@ -946,7 +946,7 @@ namespace ts {
     }
 
     export interface ObjectLiteralElement extends NamedDeclaration {
-        _objectLiteralBrandBrand: any;
+        _objectLiteralBrand: any;
         name?: PropertyName;
     }
 
@@ -4590,6 +4590,7 @@ namespace ts {
         allowJs?: boolean;
         /*@internal*/ allowNonTsExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
+        allowUmdGlobalAccess?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;  // Always combine with strict property
