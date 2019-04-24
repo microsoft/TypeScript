@@ -36,6 +36,8 @@ tests/cases/compiler/intTypeCheck.ts(134,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(134,22): error TS2693: 'i3' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(135,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(142,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(145,5): error TS2322: Type '() => void' is not assignable to type 'i4'.
+  Index signature is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(148,5): error TS2322: Type 'boolean' is not assignable to type 'i4'.
 tests/cases/compiler/intTypeCheck.ts(148,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(148,22): error TS2693: 'i4' only refers to a type, but is being used as a value here.
@@ -78,13 +80,15 @@ tests/cases/compiler/intTypeCheck.ts(190,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(190,22): error TS2693: 'i7' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(191,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/intTypeCheck.ts(198,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+tests/cases/compiler/intTypeCheck.ts(201,5): error TS2322: Type '() => void' is not assignable to type 'i8'.
+  Index signature is missing in type '() => void'.
 tests/cases/compiler/intTypeCheck.ts(204,5): error TS2322: Type 'boolean' is not assignable to type 'i8'.
 tests/cases/compiler/intTypeCheck.ts(204,21): error TS1109: Expression expected.
 tests/cases/compiler/intTypeCheck.ts(204,22): error TS2693: 'i8' only refers to a type, but is being used as a value here.
 tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 
 
-==== tests/cases/compiler/intTypeCheck.ts (63 errors) ====
+==== tests/cases/compiler/intTypeCheck.ts (65 errors) ====
     interface i1 {
         //Property Signatures
         p;
@@ -296,6 +300,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj37: i4 = new Base;
     var obj38: i4 = null;
     var obj39: i4 = function () { };
+        ~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'i4'.
+!!! error TS2322:   Index signature is missing in type '() => void'.
     //var obj40: i4 = function foo() { };
     var obj41: i4 = <i4> anyVar;
     var obj42: i4 = new <i4> anyVar;
@@ -425,6 +432,9 @@ tests/cases/compiler/intTypeCheck.ts(205,17): error TS2351: Cannot use 'new' wit
     var obj81: i8 = new Base;
     var obj82: i8 = null;
     var obj83: i8 = function () { };
+        ~~~~~
+!!! error TS2322: Type '() => void' is not assignable to type 'i8'.
+!!! error TS2322:   Index signature is missing in type '() => void'.
     //var obj84: i8 = function foo() { };
     var obj85: i8 = <i8> anyVar;
     var obj86: i8 = new <i8> anyVar;
