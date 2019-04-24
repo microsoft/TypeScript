@@ -1,0 +1,19 @@
+=== tests/cases/compiler/functionAssignableToArrayLike.ts ===
+var bad1: ArrayLike<any> = (x, y) => x + y
+>bad1 : ArrayLike<any>
+>(x, y) => x + y : (x: any, y: any) => any
+>x : any
+>y : any
+>x + y : any
+>x : any
+>y : any
+
+var bad2: ArrayLike<string> = (x, y) => x + y
+>bad2 : ArrayLike<string>
+>(x, y) => x + y : (x: any, y: any) => any
+>x : any
+>y : any
+>x + y : any
+>x : any
+>y : any
+

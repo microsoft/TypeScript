@@ -13574,7 +13574,10 @@ namespace ts {
                     return indexTypesIdenticalTo(source, target, kind);
                 }
                 const targetInfo = getIndexInfoOfType(target, kind);
-                if (!targetInfo || targetInfo.type.flags & TypeFlags.Any && !sourceIsPrimitive) {
+                if (!targetInfo ||
+                    targetInfo.type.flags & TypeFlags.Any && !sourceIsPrimitive &&
+                    getSignaturesOfStructuredType(source, SignatureKind.Call).length === 0 &&
+                    getSignaturesOfStructuredType(source, SignatureKind.Construct).length === 0) {
                     // Index signature of type any permits assignment from everything but primitives
                     return Ternary.True;
                 }
