@@ -31841,7 +31841,7 @@ namespace ts {
                     return false;
             }
 
-            return grammarErrorOnFirstToken(node, Diagnostics.A_declare_modifier_is_required_for_a_top_level_declaration_in_a_d_ts_file);
+            return grammarErrorOnFirstToken(node, Diagnostics.Top_level_declarations_in_d_ts_files_must_start_with_either_a_declare_or_export_modifier);
         }
 
         function checkGrammarTopLevelElementsForRequiredDeclareModifier(file: SourceFile): boolean {
