@@ -3,7 +3,7 @@
     "rulesDirectory": "built/local/tslint/rules",
     "linterOptions": {
         "exclude": [
-            "tests/cases/**/*"
+            "tests/**/*"
         ]
     },
     "rules": {
