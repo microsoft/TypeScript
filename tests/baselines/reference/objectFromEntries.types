@@ -1,10 +1,10 @@
 === tests/cases/compiler/objectFromEntries.ts ===
 const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
->o : any
->Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]) : any
->Object.fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>o : { [x: string]: number; [x: number]: number; }
+>Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]) : { [x: string]: number; [x: number]: number; }
+>Object.fromEntries : <T = any>(entries: Iterable<[string | number | symbol, T]>) => { [x: string]: T; [x: number]: T; }
 >Object : ObjectConstructor
->fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>fromEntries : <T = any>(entries: Iterable<[string | number | symbol, T]>) => { [x: string]: T; [x: number]: T; }
 >[['a', 1], ['b', 2], ['c', 3]] : [string, number][]
 >['a', 1] : [string, number]
 >'a' : "a"
@@ -17,20 +17,20 @@ const o = Object.fromEntries([['a', 1], ['b', 2], ['c', 3]]);
 >3 : 3
 
 const o2 = Object.fromEntries(new URLSearchParams());
->o2 : any
->Object.fromEntries(new URLSearchParams()) : any
->Object.fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>o2 : { [x: string]: string; [x: number]: string; }
+>Object.fromEntries(new URLSearchParams()) : { [x: string]: string; [x: number]: string; }
+>Object.fromEntries : <T = any>(entries: Iterable<[string | number | symbol, T]>) => { [x: string]: T; [x: number]: T; }
 >Object : ObjectConstructor
->fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>fromEntries : <T = any>(entries: Iterable<[string | number | symbol, T]>) => { [x: string]: T; [x: number]: T; }
 >new URLSearchParams() : URLSearchParams
 >URLSearchParams : { new (init?: string | URLSearchParams | string[][] | Record<string, string>): URLSearchParams; prototype: URLSearchParams; }
 
 const o3 = Object.fromEntries(new Map([[Symbol("key"), "value"]]));
->o3 : any
->Object.fromEntries(new Map([[Symbol("key"), "value"]])) : any
->Object.fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>o3 : { [x: string]: string; [x: number]: string; }
+>Object.fromEntries(new Map([[Symbol("key"), "value"]])) : { [x: string]: string; [x: number]: string; }
+>Object.fromEntries : <T = any>(entries: Iterable<[string | number | symbol, T]>) => { [x: string]: T; [x: number]: T; }
 >Object : ObjectConstructor
->fromEntries : (entries: Iterable<[string | symbol, any]>) => any
+>fromEntries : <T = any>(entries: Iterable<[string | number | symbol, T]>) => { [x: string]: T; [x: number]: T; }
 >new Map([[Symbol("key"), "value"]]) : Map<symbol, string>
 >Map : MapConstructor
 >[[Symbol("key"), "value"]] : [symbol, string][]
