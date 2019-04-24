@@ -402,6 +402,7 @@ namespace ts {
         compilerHost.getParsedCommandLine = parseConfigFile;
 
         const buildInfoChecked = createFileMap<true>(toPath);
+        let extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined;
 
         // Watch state
         const builderPrograms = createFileMap<T>(toPath);
@@ -478,7 +479,7 @@ namespace ts {
 
             let diagnostic: Diagnostic | undefined;
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-            const parsed = getParsedCommandLineOfConfigFile(configFilePath, baseCompilerOptions, parseConfigFileHost);
+            const parsed = getParsedCommandLineOfConfigFile(configFilePath, baseCompilerOptions, parseConfigFileHost, extendedConfigCache);
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
             configFileCache.setValue(configFilePath, parsed || diagnostic!);
             return parsed;
@@ -1368,6 +1369,7 @@ namespace ts {
             } = changeCompilerHostLikeToUseCache(host, toPath, (...args) => savedGetSourceFile.call(compilerHost, ...args));
             readFileWithCache = newReadFileWithCache;
             compilerHost.getSourceFile = getSourceFileWithCache!;
+            extendedConfigCache = createMap();
 
             const graph = getGlobalDependencyGraph();
             reportBuildQueue(graph);
@@ -1429,6 +1431,7 @@ namespace ts {
             host.writeFile = originalWriteFile;
             compilerHost.getSourceFile = savedGetSourceFile;
             readFileWithCache = savedReadFileWithCache;
+            extendedConfigCache = undefined;
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 
