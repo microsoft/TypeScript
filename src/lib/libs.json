@@ -39,6 +39,7 @@
         "es2019.symbol",
         "esnext.bigint",
         "esnext.intl",
+        "esnext.promise",
         // Default libraries
         "es5.full",
         "es2015.full",
