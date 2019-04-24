@@ -9,7 +9,7 @@ node_modules/assert/assert.js(130,10): error TS2339: Property 'generatedMessage'
 node_modules/assert/assert.js(132,10): error TS2339: Property 'message' does not exist on type 'typeof ok'.
 node_modules/assert/assert.js(133,10): error TS2339: Property 'generatedMessage' does not exist on type 'typeof ok'.
 node_modules/assert/assert.js(154,12): error TS2339: Property 'stack' does not exist on type 'typeof ok'.
-node_modules/assert/test.js(25,5): error TS2367: This condition will always return 'false' since the types 'string | undefined' and 'boolean' have no overlap.
+node_modules/assert/test.js(25,5): error TS2367: This condition will always return 'false' since the types 'string | undefined' and 'true' have no overlap.
 node_modules/assert/test.js(39,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
 node_modules/assert/test.js(55,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
 node_modules/assert/test.js(74,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
