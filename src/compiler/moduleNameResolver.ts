@@ -421,6 +421,7 @@ namespace ts {
      */
     export interface ModuleResolutionCache extends NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference): Map<ResolvedModuleWithFailedLookupLocations>;
+        /*@internal*/ directoryToModuleNameMap: CacheWithRedirects<Map<ResolvedModuleWithFailedLookupLocations>>;
     }
 
     /**
@@ -429,6 +430,7 @@ namespace ts {
      */
     export interface NonRelativeModuleNameResolutionCache {
         getOrCreateCacheForModuleName(nonRelativeModuleName: string, redirectedReference?: ResolvedProjectReference): PerModuleNameCache;
+        /*@internal*/ moduleNameToDirectoryMap: CacheWithRedirects<PerModuleNameCache>;
     }
 
     export interface PerModuleNameCache {
@@ -445,24 +447,37 @@ namespace ts {
         );
     }
 
+
     /*@internal*/
     export interface CacheWithRedirects<T> {
         ownMap: Map<T>;
         redirectsMap: Map<Map<T>>;
         getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined): Map<T>;
         clear(): void;
+        setOwnOptions(newOptions: CompilerOptions): void;
+        setOwnMap(newOwnMap: Map<T>): void;
     }
 
     /*@internal*/
     export function createCacheWithRedirects<T>(options?: CompilerOptions): CacheWithRedirects<T> {
-        const ownMap: Map<T> = createMap();
+        let ownMap: Map<T> = createMap();
         const redirectsMap: Map<Map<T>> = createMap();
         return {
             ownMap,
             redirectsMap,
             getOrCreateMapOfCacheRedirects,
-            clear
+            clear,
+            setOwnOptions,
+            setOwnMap
         };
+
+        function setOwnOptions(newOptions: CompilerOptions) {
+            options = newOptions;
+        }
+
+        function setOwnMap(newOwnMap: Map<T>) {
+            ownMap = newOwnMap;
+        }
 
         function getOrCreateMapOfCacheRedirects(redirectedReference: ResolvedProjectReference | undefined) {
             if (!redirectedReference) {
@@ -491,7 +506,7 @@ namespace ts {
         currentDirectory: string,
         getCanonicalFileName: GetCanonicalFileName): ModuleResolutionCache {
 
-        return { getOrCreateCacheForDirectory, getOrCreateCacheForModuleName };
+        return { getOrCreateCacheForDirectory, getOrCreateCacheForModuleName, directoryToModuleNameMap, moduleNameToDirectoryMap };
 
         function getOrCreateCacheForDirectory(directoryName: string, redirectedReference?: ResolvedProjectReference) {
             const path = toPath(directoryName, currentDirectory, getCanonicalFileName);
