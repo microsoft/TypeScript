@@ -1417,7 +1417,7 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public baselineCurrentFileBreakpointLocations() {
-            const baselineFile = this.getBaselineFileName().replace(this.basePath + "/breakpointValidation", "bpSpan");
+            const baselineFile = this.getBaselineFileName().replace("breakpointValidation", "bpSpan");
             Harness.Baseline.runBaseline(baselineFile, this.baselineCurrentFileLocations(pos => this.getBreakpointStatementLocation(pos)!));
         }
 
