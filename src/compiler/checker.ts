@@ -918,11 +918,12 @@ namespace ts {
                 addRange(target.declarations, source.declarations);
                 if (source.members) {
                     if (!target.members) target.members = createSymbolTable();
-                    mergeSymbolTable(target.members, source.members);
+                    mergeSymbolTable(target.members, source.members, unidirectional);
                 }
                 if (source.exports) {
                     if (!target.exports) target.exports = createSymbolTable();
-                    mergeSymbolTable(target.exports, source.exports);
+                    mergeSymbolTable(target.exports, source.exports, unidirectional
+                        );
                 }
                 if (!unidirectional) {
                     recordMergedSymbol(target, source);
@@ -993,10 +994,10 @@ namespace ts {
             return combined;
         }
 
-        function mergeSymbolTable(target: SymbolTable, source: SymbolTable) {
+        function mergeSymbolTable(target: SymbolTable, source: SymbolTable, unidirectional = false) {
             source.forEach((sourceSymbol, id) => {
                 const targetSymbol = target.get(id);
-                target.set(id, targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol) : sourceSymbol);
+                target.set(id, targetSymbol ? mergeSymbol(targetSymbol, sourceSymbol, unidirectional) : sourceSymbol);
             });
         }
 
