@@ -1640,39 +1640,6 @@ namespace ts {
     }
 
     /**
-     * High-order function, creates a function that executes a function composition.
-     * For example, `chain(a, b)` is the equivalent of `x => ((a', b') => y => b'(a'(y)))(a(x), b(x))`
-     *
-     * @param args The functions to chain.
-     */
-    export function chain<T, U>(...args: ((t: T) => (u: U) => U)[]): (t: T) => (u: U) => U;
-    export function chain<T, U>(a: (t: T) => (u: U) => U, b: (t: T) => (u: U) => U, c: (t: T) => (u: U) => U, d: (t: T) => (u: U) => U, e: (t: T) => (u: U) => U): (t: T) => (u: U) => U {
-        if (e) {
-            const args: ((t: T) => (u: U) => U)[] = [];
-            for (let i = 0; i < arguments.length; i++) {
-                args[i] = arguments[i];
-            }
-
-            return t => compose(...map(args, f => f(t)));
-        }
-        else if (d) {
-            return t => compose(a(t), b(t), c(t), d(t));
-        }
-        else if (c) {
-            return t => compose(a(t), b(t), c(t));
-        }
-        else if (b) {
-            return t => compose(a(t), b(t));
-        }
-        else if (a) {
-            return t => compose(a(t));
-        }
-        else {
-            return _ => u => u;
-        }
-    }
-
-    /**
      * High-order function, composes functions. Note that functions are composed inside-out;
      * for example, `compose(a, b)` is the equivalent of `x => b(a(x))`.
      *
