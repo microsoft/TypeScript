@@ -1,23 +1,17 @@
 class C {
-    x: number;
-    "constructor"() {
-        this.x = 0;
-    }
+    "constructor"() {} // Error in 3.5
 }
-(new C).constructor(); // Error
 
 class D {
-    x: number;
-    'constructor'() {
-        this.x = 0;
-    }
+    'constructor'() {} // Error in 3.5
 }
-(new C).constructor(); // Error
 
 class E {
-    x: number;
-    ['constructor']() {
-        this.x = 0;
-    }
+    ['constructor']() {}
 }
-(new E).constructor();
+
+new class {
+    "constructor"() {} // Error in 3.5
+};
+
+var o = { "constructor"() {} };
