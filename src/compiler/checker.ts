@@ -21988,7 +21988,7 @@ namespace ts {
             let exprType = checkExpression(expression, checkMode);
             if (isConstTypeReference(type)) {
                 if (!isValidConstAssertionArgument(expression)) {
-                    error(expression, Diagnostics.A_const_assertion_can_only_be_applied_to_a_string_number_boolean_array_literal_enum_or_object_literal);
+                    error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
                 }
                 return getRegularTypeOfLiteralType(exprType);
             }

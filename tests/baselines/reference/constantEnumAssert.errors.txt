@@ -1,5 +1,5 @@
-tests/cases/compiler/constantEnumAssert.ts(45,20): error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, literal enum, or object literal.
-tests/cases/compiler/constantEnumAssert.ts(49,20): error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, literal enum, or object literal.
+tests/cases/compiler/constantEnumAssert.ts(45,20): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
+tests/cases/compiler/constantEnumAssert.ts(49,20): error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
 
 
 ==== tests/cases/compiler/constantEnumAssert.ts (2 errors) ====
@@ -49,11 +49,11 @@ tests/cases/compiler/constantEnumAssert.ts(49,20): error TS1355: A 'const' asser
     
     const foo10 = { a: E3.a as const }
                        ~~~~
-!!! error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, literal enum, or object literal.
+!!! error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
     
     const foo11 = { a: E4.a as const }
     
     const foo12 = { a: E5.a as const }
                        ~~~~
-!!! error TS1355: A 'const' assertion can only be applied to a string, number, boolean, array, literal enum, or object literal.
+!!! error TS1355: A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.
     
