@@ -111,8 +111,8 @@ declare module TypeScript {
 >remove : (key: string) => void
 >key : string
     }
-    class IdentiferNameHashTable<T> extends StringHashTable<T> {
->IdentiferNameHashTable : IdentiferNameHashTable<T>
+    class IdentifierNameHashTable<T> extends StringHashTable<T> {
+>IdentifierNameHashTable : IdentifierNameHashTable<T>
 >StringHashTable : StringHashTable<T>
 
         public getAllKeys(): string[];
@@ -270,8 +270,8 @@ declare module TypeScript {
 >remove : (key: string) => void
 >key : string
     }
-    class IdentiferNameHashTable<T> extends StringHashTable<T> {
->IdentiferNameHashTable : TypeScript.IdentiferNameHashTable<T>
+    class IdentifierNameHashTable<T> extends StringHashTable<T> {
+>IdentifierNameHashTable : TypeScript.IdentifierNameHashTable<T>
 >StringHashTable : TypeScript.StringHashTable<T>
 
         public getAllKeys(): string[];

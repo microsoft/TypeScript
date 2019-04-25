@@ -416,8 +416,8 @@ declare function pipe5<A, B>(f: (a: A) => B): { f: (a: A) => B };
 >a : A
 
 const f50 = pipe5(list);  // No higher order inference
->f50 : { f: (a: {}) => {}[]; }
->pipe5(list) : { f: (a: {}) => {}[]; }
+>f50 : { f: (a: unknown) => unknown[]; }
+>pipe5(list) : { f: (a: unknown) => unknown[]; }
 >pipe5 : <A, B>(f: (a: A) => B) => { f: (a: A) => B; }
 >list : <T>(a: T) => T[]
 
@@ -835,7 +835,7 @@ foo2(() => {});
 >() => {} : () => void
 
 foo2(identity);
->foo2(identity) : [<T>(value: T) => T, {}]
+>foo2(identity) : [<T>(value: T) => T, unknown]
 >foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
 >identity : <T>(value: T) => T
 

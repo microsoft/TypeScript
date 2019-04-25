@@ -31,7 +31,7 @@ class A {
 >z : A[]
 
   whereRelated< // Works // Type is same as A1, but is not assignable to type A
->whereRelated : <RF extends RelationFields = RelationFields, N extends "x" | "y" | "z" = "x" | "y" | "z", A1 extends A = RF[N] extends A[] ? RF[N][0] : never, A2 extends A = ShouldA<RF, N>>() => number
+>whereRelated : <RF extends RelationFields = RelationFields, N extends "x" | "y" | "z" = "x" | "y" | "z", A1 extends A = RF[N] extends A[] ? RF[N][0] : never, A2 extends A = RF[N] extends A[] ? RF[N][0] : never>() => number
 
     RF extends RelationFields = RelationFields,
     N extends Name = Name,

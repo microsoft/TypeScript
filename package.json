@@ -2,7 +2,7 @@
     "name": "typescript",
     "author": "Microsoft Corp.",
     "homepage": "https://www.typescriptlang.org/",
-    "version": "3.4.0",
+    "version": "3.5.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [
@@ -68,7 +68,6 @@
         "gulp-rename": "latest",
         "gulp-sourcemaps": "latest",
         "istanbul": "latest",
-        "lodash": "^4.17.11",
         "merge2": "latest",
         "minimist": "latest",
         "mkdirp": "latest",

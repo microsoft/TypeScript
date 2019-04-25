@@ -7320,6 +7320,11 @@ namespace ts {
             semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
     }
 
+    export function compilerOptionsAffectEmit(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
+        return oldOptions !== newOptions &&
+            affectsEmitOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+    }
+
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {
         return option.strictFlag ? getStrictOptionValue(options, option.name as StrictOptionName) : options[option.name];
     }
