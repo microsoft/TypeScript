@@ -35,14 +35,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(77,1): error TS2322: Type 'new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type 'new <T extends Base>(x: T, y: T) => T'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
-      Type 'Base' is not assignable to type '{ foo: string; bar: string; }'.
-        Property 'bar' is missing in type 'Base'.
+      Property 'bar' is missing in type 'Base' but required in type '{ foo: string; bar: string; }'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(80,1): error TS2322: Type 'new (x: Base[], y: Derived2[]) => Derived[]' is not assignable to type 'new <T extends Base[]>(x: Base[], y: T) => Derived[]'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'T' is not assignable to type 'Derived2[]'.
       Type 'Base[]' is not assignable to type 'Derived2[]'.
-        Type 'Base' is not assignable to type 'Derived2'.
-          Property 'baz' is missing in type 'Base'.
+        Type 'Base' is missing the following properties from type 'Derived2': baz, bar
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(83,1): error TS2322: Type 'new (x: Base[], y: Derived[]) => Derived[]' is not assignable to type 'new <T extends Derived[]>(x: Base[], y: T) => T'.
   Type 'Derived[]' is not assignable to type 'T'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts(85,1): error TS2322: Type 'new <T>(x: { a: T; b: T; }) => T' is not assignable to type 'new (x: { a: string; b: number; }) => Object'.
@@ -183,8 +181,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'new (x: { foo: string; }, y: { foo: string; bar: string; }) => Base' is not assignable to type 'new <T extends Base>(x: T, y: T) => T'.
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
-!!! error TS2322:       Type 'Base' is not assignable to type '{ foo: string; bar: string; }'.
-!!! error TS2322:         Property 'bar' is missing in type 'Base'.
+!!! error TS2322:       Property 'bar' is missing in type 'Base' but required in type '{ foo: string; bar: string; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:53: 'bar' is declared here.
     var b12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
     a12 = b12; // ok
     b12 = a12; // ok
@@ -193,8 +191,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type 'Derived2[]'.
 !!! error TS2322:       Type 'Base[]' is not assignable to type 'Derived2[]'.
-!!! error TS2322:         Type 'Base' is not assignable to type 'Derived2'.
-!!! error TS2322:           Property 'baz' is missing in type 'Base'.
+!!! error TS2322:         Type 'Base' is missing the following properties from type 'Derived2': baz, bar
     var b13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; 
     a13 = b13; // ok
     b13 = a13; // ok

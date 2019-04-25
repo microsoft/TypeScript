@@ -1,4 +1,3 @@
-// @experimentalBigInt: true
 // @target: esnext
 
 // All bases should allow "n" suffix

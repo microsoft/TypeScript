@@ -2,9 +2,9 @@ tests/cases/compiler/interfaceDeclaration4.ts(18,11): error TS2430: Interface 'I
   Types of property 'item' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/interfaceDeclaration4.ts(27,7): error TS2420: Class 'C2' incorrectly implements interface 'I4'.
-  Property 'item' is missing in type 'C2'.
+  Property 'item' is missing in type 'C2' but required in type 'I4'.
 tests/cases/compiler/interfaceDeclaration4.ts(36,7): error TS2420: Class 'C3' incorrectly implements interface 'I1'.
-  Property 'item' is missing in type 'C3'.
+  Property 'item' is missing in type 'C3' but required in type 'I1'.
 tests/cases/compiler/interfaceDeclaration4.ts(39,14): error TS1005: '{' expected.
 tests/cases/compiler/interfaceDeclaration4.ts(39,15): error TS2304: Cannot find name 'I1'.
 tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected.
@@ -44,7 +44,8 @@ tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected
     class C2 implements I4 {
           ~~
 !!! error TS2420: Class 'C2' incorrectly implements interface 'I4'.
-!!! error TS2420:   Property 'item' is missing in type 'C2'.
+!!! error TS2420:   Property 'item' is missing in type 'C2' but required in type 'I4'.
+!!! related TS2728 tests/cases/compiler/interfaceDeclaration4.ts:4:27: 'item' is declared here.
         public token: string;
     }
     
@@ -56,7 +57,8 @@ tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected
     class C3 implements Foo.I1 { }
           ~~
 !!! error TS2420: Class 'C3' incorrectly implements interface 'I1'.
-!!! error TS2420:   Property 'item' is missing in type 'C3'.
+!!! error TS2420:   Property 'item' is missing in type 'C3' but required in type 'I1'.
+!!! related TS2728 tests/cases/compiler/interfaceDeclaration4.ts:4:27: 'item' is declared here.
     
     // Negative case 
     interface Foo.I1 { }

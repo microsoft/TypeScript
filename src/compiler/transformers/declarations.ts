@@ -9,6 +9,34 @@ namespace ts {
         return result.diagnostics;
     }
 
+    function hasInternalAnnotation(range: CommentRange, currentSourceFile: SourceFile) {
+        const comment = currentSourceFile.text.substring(range.pos, range.end);
+        return stringContains(comment, "@internal");
+    }
+
+    export function isInternalDeclaration(node: Node, currentSourceFile: SourceFile) {
+        const parseTreeNode = getParseTreeNode(node);
+        if (parseTreeNode && parseTreeNode.kind === SyntaxKind.Parameter) {
+            const paramIdx = (parseTreeNode.parent as FunctionLike).parameters.indexOf(parseTreeNode as ParameterDeclaration);
+            const previousSibling = paramIdx > 0 ? (parseTreeNode.parent as FunctionLike).parameters[paramIdx - 1] : undefined;
+            const text = currentSourceFile.text;
+            const commentRanges = previousSibling
+                ? concatenate(
+                    // to handle
+                    // ... parameters, /* @internal */
+                    // public param: string
+                    getTrailingCommentRanges(text, skipTrivia(text, previousSibling.end + 1, /* stopAfterLineBreak */ false, /* stopAtComments */ true)),
+                    getLeadingCommentRanges(text, node.pos)
+                )
+                : getTrailingCommentRanges(text, skipTrivia(text, node.pos, /* stopAfterLineBreak */ false, /* stopAtComments */ true));
+            return commentRanges && commentRanges.length && hasInternalAnnotation(last(commentRanges), currentSourceFile);
+        }
+        const leadingCommentRanges = parseTreeNode && getLeadingCommentRangesOfNode(parseTreeNode, currentSourceFile);
+        return !!forEach(leadingCommentRanges, range => {
+            return hasInternalAnnotation(range, currentSourceFile);
+        });
+    }
+
     const declarationEmitNodeBuilderFlags =
         NodeBuilderFlags.MultilineObjectLiterals |
         NodeBuilderFlags.WriteClassExpressionAsTypeLiteral |
@@ -35,7 +63,7 @@ namespace ts {
         let enclosingDeclaration: Node;
         let necessaryTypeReferences: Map<true> | undefined;
         let lateMarkedStatements: LateVisibilityPaintedStatement[] | undefined;
-        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement>>;
+        let lateStatementReplacementMap: Map<VisitResult<LateVisibilityPaintedStatement | ExportAssignment>>;
         let suppressNewDiagnosticContexts: boolean;
         let exportedModulesFromDeclarationEmit: Symbol[] | undefined;
 
@@ -45,6 +73,7 @@ namespace ts {
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
             reportPrivateInBaseOfClassExpression,
+            reportLikelyUnsafeImportRequiredError,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode
@@ -60,7 +89,7 @@ namespace ts {
         const { noResolve, stripInternal } = options;
         return transformRoot;
 
-        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: string[] | undefined): void {
+        function recordTypeReferenceDirectivesIfNecessary(typeReferenceDirectives: ReadonlyArray<string> | undefined): void {
             if (!typeReferenceDirectives) {
                 return;
             }
@@ -153,6 +182,14 @@ namespace ts {
             }
         }
 
+        function reportLikelyUnsafeImportRequiredError(specifier: string) {
+            if (errorNameNode) {
+                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                    declarationNameToString(errorNameNode),
+                    specifier));
+            }
+        }
+
         function transformRoot(node: Bundle): Bundle;
         function transformRoot(node: SourceFile): SourceFile;
         function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle;
@@ -198,8 +235,14 @@ namespace ts {
                     }
                 ), mapDefined(node.prepends, prepend => {
                     if (prepend.kind === SyntaxKind.InputFiles) {
-                        return createUnparsedSourceFile(prepend.declarationText, prepend.declarationMapPath, prepend.declarationMapText);
+                        const sourceFile = createUnparsedSourceFile(prepend, "dts", stripInternal);
+                        hasNoDefaultLib = hasNoDefaultLib || !!sourceFile.hasNoDefaultLib;
+                        collectReferences(sourceFile, refs);
+                        recordTypeReferenceDirectivesIfNecessary(sourceFile.typeReferenceDirectives);
+                        collectLibs(sourceFile, libs);
+                        return sourceFile;
                     }
+                    return prepend;
                 }));
                 bundle.syntheticFileReferences = [];
                 bundle.syntheticTypeReferences = getFileReferencesForUsedTypeReferences();
@@ -302,8 +345,8 @@ namespace ts {
             }
         }
 
-        function collectReferences(sourceFile: SourceFile, ret: Map<SourceFile>) {
-            if (noResolve || isSourceFileJS(sourceFile)) return ret;
+        function collectReferences(sourceFile: SourceFile | UnparsedSource, ret: Map<SourceFile>) {
+            if (noResolve || (!isUnparsedSource(sourceFile) && isSourceFileJS(sourceFile))) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = tryResolveScriptReference(host, sourceFile, f);
                 if (elem) {
@@ -313,7 +356,7 @@ namespace ts {
             return ret;
         }
 
-        function collectLibs(sourceFile: SourceFile, ret: Map<boolean>) {
+        function collectLibs(sourceFile: SourceFile | UnparsedSource, ret: Map<boolean>) {
             forEach(sourceFile.libReferenceDirectives, ref => {
                 const lib = host.getLibFileFromReference(ref);
                 if (lib) {
@@ -625,7 +668,10 @@ namespace ts {
                 if (!isLateVisibilityPaintedStatement(i)) {
                     return Debug.fail(`Late replaced statement was found which is not handled by the declaration transformer!: ${(ts as any).SyntaxKind ? (ts as any).SyntaxKind[(i as any).kind] : (i as any).kind}`);
                 }
+                const priorNeedsDeclare = needsDeclare;
+                needsDeclare = i.parent && isSourceFile(i.parent) && !(isExternalModule(i.parent) && isBundledEmit);
                 const result = transformTopLevelDeclaration(i, /*privateDeclaration*/ true);
+                needsDeclare = priorNeedsDeclare;
                 lateStatementReplacementMap.set("" + getOriginalNodeId(i), result);
             }
 
@@ -655,12 +701,12 @@ namespace ts {
             }
         }
 
-        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement) {
+        function isExternalModuleIndicator(result: LateVisibilityPaintedStatement | ExportAssignment) {
             // Exported top-level member indicates moduleness
             return isAnyImportOrReExport(result) || isExportAssignment(result) || hasModifier(result, ModifierFlags.Export);
         }
 
-        function needsScopeMarker(result: LateVisibilityPaintedStatement) {
+        function needsScopeMarker(result: LateVisibilityPaintedStatement | ExportAssignment) {
             return !isAnyImportOrReExport(result) && !isExportAssignment(result) && !hasModifier(result, ModifierFlags.Export) && !isAmbientModule(result);
         }
 
@@ -994,12 +1040,50 @@ namespace ts {
                             if (!isPropertyAccessExpression(p.valueDeclaration)) {
                                 return undefined;
                             }
+                            getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(p.valueDeclaration);
                             const type = resolver.createTypeOfDeclaration(p.valueDeclaration, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
+                            getSymbolAccessibilityDiagnostic = oldDiag;
                             const varDecl = createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), type, /*initializer*/ undefined);
                             return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
                         });
                         const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input, isPrivate), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
-                        return [clean, namespaceDecl];
+
+                        if (!hasModifier(clean, ModifierFlags.ExportDefault)) {
+                            return [clean, namespaceDecl];
+                        }
+
+                        const modifiers = createModifiersFromModifierFlags((getModifierFlags(clean) & ~ModifierFlags.ExportDefault) | ModifierFlags.Ambient);
+                        const cleanDeclaration = updateFunctionDeclaration(
+                            clean,
+                            /*decorators*/ undefined,
+                            modifiers,
+                            /*asteriskToken*/ undefined,
+                            clean.name,
+                            clean.typeParameters,
+                            clean.parameters,
+                            clean.type,
+                            /*body*/ undefined
+                        );
+
+                        const namespaceDeclaration = updateModuleDeclaration(
+                            namespaceDecl,
+                            /*decorators*/ undefined,
+                            modifiers,
+                            namespaceDecl.name,
+                            namespaceDecl.body
+                        );
+
+                        const exportDefaultDeclaration = createExportAssignment(
+                            /*decorators*/ undefined,
+                            /*modifiers*/ undefined,
+                            /*isExportEquals*/ false,
+                            namespaceDecl.name
+                        );
+
+                        resultHasExternalModuleIndicator = true;
+                        resultHasScopeMarker = true;
+
+                        return [cleanDeclaration, namespaceDeclaration, exportDefaultDeclaration];
                     }
                     else {
                         return clean;
@@ -1046,8 +1130,8 @@ namespace ts {
                     let parameterProperties: ReadonlyArray<PropertyDeclaration> | undefined;
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
-                        parameterProperties = compact(flatMap(ctor.parameters, param => {
-                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier)) return;
+                        parameterProperties = compact(flatMap(ctor.parameters, (param) => {
+                            if (!hasModifier(param, ModifierFlags.ParameterPropertyModifier) || shouldStripInternal(param)) return;
                             getSymbolAccessibilityDiagnostic = createGetSymbolAccessibilityDiagnosticForNode(param);
                             if (param.name.kind === SyntaxKind.Identifier) {
                                 return preserveJsDoc(createProperty(
@@ -1091,7 +1175,8 @@ namespace ts {
                     if (extendsClause && !isEntityNameExpression(extendsClause.expression) && extendsClause.expression.kind !== SyntaxKind.NullKeyword) {
                         // We must add a temporary declaration for the extends clause expression
 
-                        const newId = createOptimisticUniqueName(`${unescapeLeadingUnderscores(input.name!.escapedText)}_base`); // TODO: GH#18217
+                        const oldId = input.name ? unescapeLeadingUnderscores(input.name.escapedText) : "default";
+                        const newId = createOptimisticUniqueName(`${oldId}_base`);
                         getSymbolAccessibilityDiagnostic = () => ({
                             diagnosticMessage: Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1,
                             errorNode: extendsClause,
@@ -1207,19 +1292,8 @@ namespace ts {
             errorNameNode = undefined;
         }
 
-        function hasInternalAnnotation(range: CommentRange) {
-            const comment = currentSourceFile.text.substring(range.pos, range.end);
-            return stringContains(comment, "@internal");
-        }
-
         function shouldStripInternal(node: Node) {
-            if (stripInternal && node) {
-                const leadingCommentRanges = getLeadingCommentRangesOfNode(getParseTreeNode(node), currentSourceFile);
-                if (forEach(leadingCommentRanges, hasInternalAnnotation)) {
-                    return true;
-                }
-            }
-            return false;
+            return !!stripInternal && !!node && isInternalDeclaration(node, currentSourceFile);
         }
 
         function isScopeMarker(node: Node) {

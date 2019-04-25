@@ -268,7 +268,8 @@ namespace ts {
                     nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<PropertyDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName),
-                    visitNode((<PropertyDeclaration>node).questionToken, tokenVisitor, isToken),
+                    // QuestionToken and ExclamationToken is uniqued in Property Declaration and the signature of 'updateProperty' is that too
+                    visitNode((<PropertyDeclaration>node).questionToken || (<PropertyDeclaration>node).exclamationToken, tokenVisitor, isToken),
                     visitNode((<PropertyDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<PropertyDeclaration>node).initializer, visitor, isExpression));
 
@@ -1478,8 +1479,8 @@ namespace ts {
         }
 
         return isNodeArray(statements)
-            ? setTextRange(createNodeArray(addStatementsAfterPrologue(statements.slice(), declarations)), statements)
-            : addStatementsAfterPrologue(statements, declarations);
+            ? setTextRange(createNodeArray(insertStatementsAfterStandardPrologue(statements.slice(), declarations)), statements)
+            : insertStatementsAfterStandardPrologue(statements, declarations);
     }
 
     /**

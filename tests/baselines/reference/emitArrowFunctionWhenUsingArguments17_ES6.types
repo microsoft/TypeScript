@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments17_ES6.ts ===
 function f() {
->f : () => () => any
+>f : () => () => string
 
     var { arguments } = { arguments: "hello" };
 >arguments : string
@@ -15,9 +15,9 @@ function f() {
 >random : () => number
 
         return () => arguments[0];
->() => arguments[0] : () => any
->arguments[0] : any
->arguments : IArguments
+>() => arguments[0] : () => string
+>arguments[0] : string
+>arguments : string
 >0 : 0
     }
     var arguments = "world";

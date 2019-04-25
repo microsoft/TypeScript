@@ -15,6 +15,7 @@
 verify.completions({
     marker: "",
     exact: [
+        "globalThis",
         ...completion.globalsVars,
         "undefined",
         {

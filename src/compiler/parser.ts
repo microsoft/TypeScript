@@ -462,52 +462,46 @@ namespace ts {
                 return visitNodes(cbNode, cbNodes, (<JSDoc>node).tags);
             case SyntaxKind.JSDocParameterTag:
             case SyntaxKind.JSDocPropertyTag:
-                if ((node as JSDocPropertyLikeTag).isNameFirst) {
-                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression);
-                }
-                else {
-                    return visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocPropertyLikeTag>node).name);
-                }
-            case SyntaxKind.JSDocReturnTag:
-                return visitNode(cbNode, (<JSDocReturnTag>node).typeExpression);
-            case SyntaxKind.JSDocTypeTag:
-                return visitNode(cbNode, (<JSDocTypeTag>node).typeExpression);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    ((node as JSDocPropertyLikeTag).isNameFirst
+                        ? visitNode(cbNode, (<JSDocPropertyLikeTag>node).name) ||
+                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression)
+                        : visitNode(cbNode, (<JSDocPropertyLikeTag>node).typeExpression) ||
+                            visitNode(cbNode, (<JSDocPropertyLikeTag>node).name));
             case SyntaxKind.JSDocAugmentsTag:
-                return visitNode(cbNode, (<JSDocAugmentsTag>node).class);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (<JSDocAugmentsTag>node).class);
             case SyntaxKind.JSDocTemplateTag:
-                return visitNode(cbNode, (<JSDocTemplateTag>node).constraint) || visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (<JSDocTemplateTag>node).constraint) ||
+                    visitNodes(cbNode, cbNodes, (<JSDocTemplateTag>node).typeParameters);
             case SyntaxKind.JSDocTypedefTag:
-                if ((node as JSDocTypedefTag).typeExpression &&
-                    (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression) {
-                    return visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).fullName);
-                }
-                else {
-                    return visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
-                        visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression);
-                }
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    ((node as JSDocTypedefTag).typeExpression &&
+                        (node as JSDocTypedefTag).typeExpression!.kind === SyntaxKind.JSDocTypeExpression
+                        ? visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression) ||
+                            visitNode(cbNode, (<JSDocTypedefTag>node).fullName)
+                        : visitNode(cbNode, (<JSDocTypedefTag>node).fullName) ||
+                            visitNode(cbNode, (<JSDocTypedefTag>node).typeExpression));
             case SyntaxKind.JSDocCallbackTag:
-                return visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (node as JSDocCallbackTag).fullName) ||
                     visitNode(cbNode, (node as JSDocCallbackTag).typeExpression);
+            case SyntaxKind.JSDocReturnTag:
+            case SyntaxKind.JSDocTypeTag:
             case SyntaxKind.JSDocThisTag:
-                return visitNode(cbNode, (node as JSDocThisTag).typeExpression);
             case SyntaxKind.JSDocEnumTag:
-                return visitNode(cbNode, (node as JSDocEnumTag).typeExpression);
+                return visitNode(cbNode, (node as JSDocTag).tagName) ||
+                    visitNode(cbNode, (node as JSDocReturnTag | JSDocTypeTag | JSDocThisTag | JSDocEnumTag).typeExpression);
             case SyntaxKind.JSDocSignature:
-                return visitNodes(cbNode, cbNodes, node.decorators) ||
-                    visitNodes(cbNode, cbNodes, node.modifiers) ||
-                    forEach((<JSDocSignature>node).typeParameters, cbNode) ||
+                return forEach((<JSDocSignature>node).typeParameters, cbNode) ||
                     forEach((<JSDocSignature>node).parameters, cbNode) ||
                     visitNode(cbNode, (<JSDocSignature>node).type);
             case SyntaxKind.JSDocTypeLiteral:
-                if ((node as JSDocTypeLiteral).jsDocPropertyTags) {
-                    for (const tag of (node as JSDocTypeLiteral).jsDocPropertyTags!) {
-                        visitNode(cbNode, tag);
-                    }
-                }
-                return;
+                return forEach((node as JSDocTypeLiteral).jsDocPropertyTags, cbNode);
+            case SyntaxKind.JSDocTag:
+            case SyntaxKind.JSDocClassTag:
+                return visitNode(cbNode, (node as JSDocTag).tagName);
             case SyntaxKind.PartiallyEmittedExpression:
                 return visitNode(cbNode, (<PartiallyEmittedExpression>node).expression);
         }
@@ -1087,6 +1081,10 @@ namespace ts {
             return currentToken = scanner.scan();
         }
 
+        function nextTokenJSDoc(): JSDocSyntaxKind {
+            return currentToken = scanner.scanJsDocToken();
+        }
+
         function reScanGreaterToken(): SyntaxKind {
             return currentToken = scanner.reScanGreaterToken();
         }
@@ -1097,6 +1095,10 @@ namespace ts {
 
         function reScanTemplateToken(): SyntaxKind {
             return currentToken = scanner.reScanTemplateToken();
+        }
+
+        function reScanLessThanToken(): SyntaxKind {
+            return currentToken = scanner.reScanLessThanToken();
         }
 
         function scanJsxIdentifier(): SyntaxKind {
@@ -1200,6 +1202,15 @@ namespace ts {
             return false;
         }
 
+        function parseExpectedJSDoc(kind: JSDocSyntaxKind) {
+            if (token() === kind) {
+                nextTokenJSDoc();
+                return true;
+            }
+            parseErrorAtCurrentToken(Diagnostics._0_expected, tokenToString(kind));
+            return false;
+        }
+
         function parseOptional(t: SyntaxKind): boolean {
             if (token() === t) {
                 nextToken();
@@ -1216,15 +1227,35 @@ namespace ts {
             return undefined;
         }
 
+        function parseOptionalTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): Token<TKind>;
+        function parseOptionalTokenJSDoc(t: JSDocSyntaxKind): Node | undefined {
+            if (token() === t) {
+                return parseTokenNodeJSDoc();
+            }
+            return undefined;
+        }
+
         function parseExpectedToken<TKind extends SyntaxKind>(t: TKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Token<TKind>;
         function parseExpectedToken(t: SyntaxKind, diagnosticMessage?: DiagnosticMessage, arg0?: any): Node {
             return parseOptionalToken(t) ||
                 createMissingNode(t, /*reportAtCurrentPosition*/ false, diagnosticMessage || Diagnostics._0_expected, arg0 || tokenToString(t));
         }
 
+        function parseExpectedTokenJSDoc<TKind extends JSDocSyntaxKind>(t: TKind): Token<TKind>;
+        function parseExpectedTokenJSDoc(t: JSDocSyntaxKind): Node {
+            return parseOptionalTokenJSDoc(t) ||
+                createMissingNode(t, /*reportAtCurrentPosition*/ false, Diagnostics._0_expected, tokenToString(t));
+        }
+
         function parseTokenNode<T extends Node>(): T {
             const node = <T>createNode(token());
             nextToken();
+            return finishNode(node);
+        }
+
+        function parseTokenNodeJSDoc<T extends Node>(): T {
+            const node = <T>createNode(token());
+            nextTokenJSDoc();
             return finishNode(node);
         }
 
@@ -1723,6 +1754,8 @@ namespace ts {
         }
 
         function currentNode(parsingContext: ParsingContext): Node | undefined {
+            // If we don't have a cursor or the parsing context isn't reusable, there's nothing to reuse.
+            //
             // If there is an outstanding parse error that we've encountered, but not attached to
             // some node, then we cannot get a node from the old source tree.  This is because we
             // want to mark the next node we encounter as being unusable.
@@ -1730,30 +1763,17 @@ namespace ts {
             // Note: This may be too conservative.  Perhaps we could reuse the node and set the bit
             // on it (or its leftmost child) as having the error.  For now though, being conservative
             // is nice and likely won't ever affect perf.
-            if (parseErrorBeforeNextFinishedNode) {
-                return undefined;
-            }
-
-            if (!syntaxCursor) {
-                // if we don't have a cursor, we could never return a node from the old tree.
+            if (!syntaxCursor || !isReusableParsingContext(parsingContext) || parseErrorBeforeNextFinishedNode) {
                 return undefined;
             }
 
             const node = syntaxCursor.currentNode(scanner.getStartPos());
 
             // Can't reuse a missing node.
-            if (nodeIsMissing(node)) {
-                return undefined;
-            }
-
             // Can't reuse a node that intersected the change range.
-            if (node.intersectsChange) {
-                return undefined;
-            }
-
             // Can't reuse a node that contains a parse error.  This is necessary so that we
             // produce the same set of errors again.
-            if (containsParseError(node)) {
+            if (nodeIsMissing(node) || node.intersectsChange || containsParseError(node)) {
                 return undefined;
             }
 
@@ -1794,6 +1814,23 @@ namespace ts {
             return node;
         }
 
+        function isReusableParsingContext(parsingContext: ParsingContext): boolean {
+            switch (parsingContext) {
+                case ParsingContext.ClassMembers:
+                case ParsingContext.SwitchClauses:
+                case ParsingContext.SourceElements:
+                case ParsingContext.BlockStatements:
+                case ParsingContext.SwitchClauseStatements:
+                case ParsingContext.EnumMembers:
+                case ParsingContext.TypeMembers:
+                case ParsingContext.VariableDeclarations:
+                case ParsingContext.JSDocParameters:
+                case ParsingContext.Parameters:
+                    return true;
+            }
+            return false;
+        }
+
         function canReuseNode(node: Node, parsingContext: ParsingContext): boolean {
             switch (parsingContext) {
                 case ParsingContext.ClassMembers:
@@ -1820,25 +1857,23 @@ namespace ts {
                 case ParsingContext.Parameters:
                     return isReusableParameter(node);
 
-                case ParsingContext.RestProperties:
-                    return false;
-
                 // Any other lists we do not care about reusing nodes in.  But feel free to add if
                 // you can do so safely.  Danger areas involve nodes that may involve speculative
                 // parsing.  If speculative parsing is involved with the node, then the range the
                 // parser reached while looking ahead might be in the edited range (see the example
                 // in canReuseVariableDeclaratorNode for a good case of this).
-                case ParsingContext.HeritageClauses:
+
+                // case ParsingContext.HeritageClauses:
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // heritage clauses.
 
-                case ParsingContext.TypeParameters:
+                // case ParsingContext.TypeParameters:
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // type parameters.  Note that that's because type *parameters* only occur in
                 // unambiguous *type* contexts.  While type *arguments* occur in very ambiguous
                 // *expression* contexts.
 
-                case ParsingContext.TupleElementTypes:
+                // case ParsingContext.TupleElementTypes:
                 // This would probably be safe to reuse.  There is no speculative parsing with
                 // tuple types.
 
@@ -1847,28 +1882,28 @@ namespace ts {
                 // produced from speculative parsing a < as a type argument list), we only have
                 // the types because speculative parsing succeeded.  Thus, the lookahead never
                 // went past the end of the list and rewound.
-                case ParsingContext.TypeArguments:
+                // case ParsingContext.TypeArguments:
 
                 // Note: these are almost certainly not safe to ever reuse.  Expressions commonly
                 // need a large amount of lookahead, and we should not reuse them as they may
                 // have actually intersected the edit.
-                case ParsingContext.ArgumentExpressions:
+                // case ParsingContext.ArgumentExpressions:
 
                 // This is not safe to reuse for the same reason as the 'AssignmentExpression'
                 // cases.  i.e. a property assignment may end with an expression, and thus might
                 // have lookahead far beyond it's old node.
-                case ParsingContext.ObjectLiteralMembers:
+                // case ParsingContext.ObjectLiteralMembers:
 
                 // This is probably not safe to reuse.  There can be speculative parsing with
                 // type names in a heritage clause.  There can be generic names in the type
                 // name list, and there can be left hand side expressions (which can have type
                 // arguments.)
-                case ParsingContext.HeritageClauseElement:
+                // case ParsingContext.HeritageClauseElement:
 
                 // Perhaps safe to reuse, but it's unlikely we'd see more than a dozen attributes
                 // on any given element. Same for children.
-                case ParsingContext.JsxAttributes:
-                case ParsingContext.JsxChildren:
+                // case ParsingContext.JsxAttributes:
+                // case ParsingContext.JsxChildren:
 
             }
 
@@ -2278,7 +2313,7 @@ namespace ts {
         function parseTypeReference(): TypeReferenceNode {
             const node = <TypeReferenceNode>createNode(SyntaxKind.TypeReference);
             node.typeName = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
-            if (!scanner.hasPrecedingLineBreak() && token() === SyntaxKind.LessThanToken) {
+            if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
                 node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
             }
             return finishNode(node);
@@ -2887,7 +2922,9 @@ namespace ts {
             if (parseOptional(SyntaxKind.DotToken)) {
                 node.qualifier = parseEntityName(/*allowReservedWords*/ true, Diagnostics.Type_expected);
             }
-            node.typeArguments = tryParseTypeArguments();
+            if (!scanner.hasPrecedingLineBreak() && reScanLessThanToken() === SyntaxKind.LessThanToken) {
+                node.typeArguments = parseBracketedList(ParsingContext.TypeArguments, parseType, SyntaxKind.LessThanToken, SyntaxKind.GreaterThanToken);
+            }
             return finishNode(node);
         }
 
@@ -2964,6 +3001,7 @@ namespace ts {
                 case SyntaxKind.NumberKeyword:
                 case SyntaxKind.BigIntKeyword:
                 case SyntaxKind.BooleanKeyword:
+                case SyntaxKind.ReadonlyKeyword:
                 case SyntaxKind.SymbolKeyword:
                 case SyntaxKind.UniqueKeyword:
                 case SyntaxKind.VoidKeyword:
@@ -3053,7 +3091,7 @@ namespace ts {
             return finishNode(postfix);
         }
 
-        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword) {
+        function parseTypeOperator(operator: SyntaxKind.KeyOfKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.ReadonlyKeyword) {
             const node = <TypeOperatorNode>createNode(SyntaxKind.TypeOperator);
             parseExpected(operator);
             node.operator = operator;
@@ -3075,6 +3113,7 @@ namespace ts {
             switch (operator) {
                 case SyntaxKind.KeyOfKeyword:
                 case SyntaxKind.UniqueKeyword:
+                case SyntaxKind.ReadonlyKeyword:
                     return parseTypeOperator(operator);
                 case SyntaxKind.InferKeyword:
                     return parseInferType();
@@ -3689,9 +3728,11 @@ namespace ts {
             //  - "(x = 10)" is an assignment expression parsed as a signature with a default parameter value.
             //  - "(x,y)" is a comma expression parsed as a signature with two parameters.
             //  - "a ? (b): c" will have "(b):" parsed as a signature with a return type annotation.
+            //  - "a ? (b): function() {}" will too, since function() is a valid JSDoc function type.
             //
             // So we need just a bit of lookahead to ensure that it can only be a signature.
-            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && token() !== SyntaxKind.OpenBraceToken) {
+            const hasJSDocFunctionType = node.type && isJSDocFunctionType(node.type);
+            if (!allowAmbiguity && token() !== SyntaxKind.EqualsGreaterThanToken && (hasJSDocFunctionType || token() !== SyntaxKind.OpenBraceToken)) {
                 // Returning undefined here will cause our caller to rewind to where we started from.
                 return undefined;
             }
@@ -4183,6 +4224,14 @@ namespace ts {
 
         function parseSuperExpression(): MemberExpression {
             const expression = parseTokenNode<PrimaryExpression>();
+            if (token() === SyntaxKind.LessThanToken) {
+                const startPos = getNodePos();
+                const typeArguments = tryParse(parseTypeArgumentsInExpression);
+                if (typeArguments !== undefined) {
+                    parseErrorAt(startPos, getNodePos(), Diagnostics.super_may_not_use_type_arguments);
+                }
+            }
+
             if (token() === SyntaxKind.OpenParenToken || token() === SyntaxKind.DotToken || token() === SyntaxKind.OpenBracketToken) {
                 return expression;
             }
@@ -4252,7 +4301,8 @@ namespace ts {
 
         function parseJsxText(): JsxText {
             const node = <JsxText>createNode(SyntaxKind.JsxText);
-            node.containsOnlyWhiteSpaces = currentToken === SyntaxKind.JsxTextAllWhiteSpaces;
+            node.text = scanner.getTokenValue();
+            node.containsOnlyTriviaWhiteSpaces = currentToken === SyntaxKind.JsxTextAllWhiteSpaces;
             currentToken = scanner.scanJsxToken();
             return finishNode(node);
         }
@@ -4525,7 +4575,8 @@ namespace ts {
         function parseCallExpressionRest(expression: LeftHandSideExpression): LeftHandSideExpression {
             while (true) {
                 expression = parseMemberExpressionRest(expression);
-                if (token() === SyntaxKind.LessThanToken) {
+                // handle 'foo<<T>()'
+                if (token() === SyntaxKind.LessThanToken || token() === SyntaxKind.LessThanLessThanToken) {
                     // See if this is the start of a generic invocation.  If so, consume it and
                     // keep checking for postfix expressions.  Otherwise, it's just a '<' that's
                     // part of an arithmetic expression.  Break out so we consume it higher in the
@@ -4567,9 +4618,10 @@ namespace ts {
         }
 
         function parseTypeArgumentsInExpression() {
-            if (!parseOptional(SyntaxKind.LessThanToken)) {
+            if (reScanLessThanToken() !== SyntaxKind.LessThanToken) {
                 return undefined;
             }
+            nextToken();
 
             const typeArguments = parseDelimitedList(ParsingContext.TypeArguments, parseType);
             if (!parseExpected(SyntaxKind.GreaterThanToken)) {
@@ -6328,7 +6380,7 @@ namespace ts {
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
                 if (!mayOmitBraces || hasBrace) {
-                    parseExpected(SyntaxKind.CloseBraceToken);
+                    parseExpectedJSDoc(SyntaxKind.CloseBraceToken);
                 }
 
                 fixupParentReferences(result);
@@ -6415,7 +6467,7 @@ namespace ts {
                         indent += text.length;
                     }
 
-                    nextJSDocToken();
+                    nextTokenJSDoc();
                     while (parseOptionalJsdoc(SyntaxKind.WhitespaceTrivia));
                     if (parseOptionalJsdoc(SyntaxKind.NewLineTrivia)) {
                         state = JSDocState.BeginningOfLine;
@@ -6432,7 +6484,6 @@ namespace ts {
                                     // for malformed examples like `/** @param {string} x @returns {number} the length */`
                                     state = JSDocState.BeginningOfLine;
                                     margin = undefined;
-                                    indent++;
                                 }
                                 else {
                                     pushComment(scanner.getTokenText());
@@ -6477,7 +6528,7 @@ namespace ts {
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
-                        nextJSDocToken();
+                        nextTokenJSDoc();
                     }
                     removeLeadingNewlines(comments);
                     removeTrailingWhitespace(comments);
@@ -6506,7 +6557,7 @@ namespace ts {
                 function isNextNonwhitespaceTokenEndOfFile(): boolean {
                     // We must use infinite lookahead, as there could be any number of newlines :(
                     while (true) {
-                        nextJSDocToken();
+                        nextTokenJSDoc();
                         if (token() === SyntaxKind.EndOfFileToken) {
                             return true;
                         }
@@ -6523,36 +6574,42 @@ namespace ts {
                         }
                     }
                     while (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
-                        nextJSDocToken();
+                        nextTokenJSDoc();
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(): void {
+                function skipWhitespaceOrAsterisk(): string {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
-                            return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
+                            return ""; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
                         }
                     }
 
                     let precedingLineBreak = scanner.hasPrecedingLineBreak();
+                    let seenLineBreak = false;
+                    let indentText = "";
                     while ((precedingLineBreak && token() === SyntaxKind.AsteriskToken) || token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
+                        indentText += scanner.getTokenText();
                         if (token() === SyntaxKind.NewLineTrivia) {
                             precedingLineBreak = true;
+                            seenLineBreak = true;
+                            indentText = "";
                         }
                         else if (token() === SyntaxKind.AsteriskToken) {
                             precedingLineBreak = false;
                         }
-                        nextJSDocToken();
+                        nextTokenJSDoc();
                     }
+                    return seenLineBreak ? indentText : "";
                 }
 
-                function parseTag(indent: number) {
+                function parseTag(margin: number) {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const start = scanner.getTokenPos();
-                    nextJSDocToken();
+                    nextTokenJSDoc();
 
                     const tagName = parseJSDocIdentifierName(/*message*/ undefined);
-                    skipWhitespaceOrAsterisk();
+                    const indentText = skipWhitespaceOrAsterisk();
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
@@ -6573,7 +6630,7 @@ namespace ts {
                         case "arg":
                         case "argument":
                         case "param":
-                            return parseParameterOrPropertyTag(start, tagName, PropertyLikeParse.Parameter, indent);
+                            return parseParameterOrPropertyTag(start, tagName, PropertyLikeParse.Parameter, margin);
                         case "return":
                         case "returns":
                             tag = parseReturnTag(start, tagName);
@@ -6585,10 +6642,10 @@ namespace ts {
                             tag = parseTypeTag(start, tagName);
                             break;
                         case "typedef":
-                            tag = parseTypedefTag(start, tagName, indent);
+                            tag = parseTypedefTag(start, tagName, margin);
                             break;
                         case "callback":
-                            tag = parseCallbackTag(start, tagName, indent);
+                            tag = parseCallbackTag(start, tagName, margin);
                             break;
                         default:
                             tag = parseUnknownTag(start, tagName);
@@ -6597,12 +6654,15 @@ namespace ts {
 
                     if (!tag.comment) {
                         // some tags, like typedef and callback, have already parsed their comments earlier
-                        tag.comment = parseTagComments(indent + tag.end - tag.pos);
+                        if (!indentText) {
+                            margin += tag.end - tag.pos;
+                        }
+                        tag.comment = parseTagComments(margin, indentText.slice(margin));
                     }
                     return tag;
                 }
 
-                function parseTagComments(indent: number): string | undefined {
+                function parseTagComments(indent: number, initialMargin?: string): string | undefined {
                     const comments: string[] = [];
                     let state = JSDocState.BeginningOfLine;
                     let margin: number | undefined;
@@ -6613,7 +6673,12 @@ namespace ts {
                         comments.push(text);
                         indent += text.length;
                     }
-                    let tok = token() as JsDocSyntaxKind;
+                    if (initialMargin) {
+                        // jump straight to saving comments if there is some initial indentation
+                        pushComment(initialMargin);
+                        state = JSDocState.SavingComments;
+                    }
+                    let tok = token() as JSDocSyntaxKind;
                     loop: while (true) {
                         switch (tok) {
                             case SyntaxKind.NewLineTrivia:
@@ -6637,18 +6702,18 @@ namespace ts {
                                     const whitespace = scanner.getTokenText();
                                     // if the whitespace crosses the margin, take only the whitespace that passes the margin
                                     if (margin !== undefined && indent + whitespace.length > margin) {
-                                        comments.push(whitespace.slice(margin - indent - 1));
+                                        comments.push(whitespace.slice(margin - indent));
                                     }
                                     indent += whitespace.length;
                                 }
                                 break;
                             case SyntaxKind.OpenBraceToken:
                                 state = JSDocState.SavingComments;
-                                if (lookAhead(() => nextJSDocToken() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextJSDocToken()) && scanner.getTokenText() === "link")) {
+                                if (lookAhead(() => nextTokenJSDoc() === SyntaxKind.AtToken && tokenIsIdentifierOrKeyword(nextTokenJSDoc()) && scanner.getTokenText() === "link")) {
                                     pushComment(scanner.getTokenText());
-                                    nextJSDocToken();
+                                    nextTokenJSDoc();
                                     pushComment(scanner.getTokenText());
-                                    nextJSDocToken();
+                                    nextTokenJSDoc();
                                 }
                                 pushComment(scanner.getTokenText());
                                 break;
@@ -6666,7 +6731,7 @@ namespace ts {
                                 pushComment(scanner.getTokenText());
                                 break;
                         }
-                        tok = nextJSDocToken();
+                        tok = nextTokenJSDoc();
                     }
 
                     removeLeadingNewlines(comments);
@@ -6700,16 +6765,19 @@ namespace ts {
                 }
 
                 function parseBracketNameInPropertyAndParamTag(): { name: EntityName, isBracketed: boolean } {
-                    if (token() === SyntaxKind.NoSubstitutionTemplateLiteral) {
-                        // a markdown-quoted name: `arg` is not legal jsdoc, but occurs in the wild
-                        return { name: createIdentifier(/*isIdentifier*/ true), isBracketed: false };
-                    }
                     // Looking for something like '[foo]', 'foo', '[foo.bar]' or 'foo.bar'
-                    const isBracketed = parseOptional(SyntaxKind.OpenBracketToken);
-                    const name = parseJSDocEntityName();
+                    const isBracketed = parseOptionalJsdoc(SyntaxKind.OpenBracketToken);
                     if (isBracketed) {
                         skipWhitespace();
-
+                    }
+                    // a markdown-quoted name: `arg` is not legal jsdoc, but occurs in the wild
+                    const isBackquoted = parseOptionalJsdoc(SyntaxKind.BacktickToken);
+                    const name = parseJSDocEntityName();
+                    if (isBackquoted) {
+                        parseExpectedTokenJSDoc(SyntaxKind.BacktickToken);
+                    }
+                    if (isBracketed) {
+                        skipWhitespace();
                         // May have an optional default, e.g. '[foo = 42]'
                         if (parseOptionalToken(SyntaxKind.EqualsToken)) {
                             parseExpression();
@@ -6992,7 +7060,7 @@ namespace ts {
                     let canParseTag = true;
                     let seenAsterisk = false;
                     while (true) {
-                        switch (nextJSDocToken()) {
+                        switch (nextTokenJSDoc()) {
                             case SyntaxKind.AtToken:
                                 if (canParseTag) {
                                     const child = tryParseChildTag(target, indent);
@@ -7027,7 +7095,7 @@ namespace ts {
                 function tryParseChildTag(target: PropertyLikeParse, indent: number): JSDocTypeTag | JSDocPropertyTag | JSDocParameterTag | false {
                     Debug.assert(token() === SyntaxKind.AtToken);
                     const start = scanner.getStartPos();
-                    nextJSDocToken();
+                    nextTokenJSDoc();
 
                     const tagName = parseJSDocIdentifierName();
                     skipWhitespace();
@@ -7079,13 +7147,9 @@ namespace ts {
                     return result;
                 }
 
-                function nextJSDocToken(): JsDocSyntaxKind {
-                    return currentToken = scanner.scanJSDocToken();
-                }
-
-                function parseOptionalJsdoc(t: JsDocSyntaxKind): boolean {
+                function parseOptionalJsdoc(t: JSDocSyntaxKind): boolean {
                     if (token() === t) {
-                        nextJSDocToken();
+                        nextTokenJSDoc();
                         return true;
                     }
                     return false;
@@ -7120,7 +7184,7 @@ namespace ts {
                     result.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
                     finishNode(result, end);
 
-                    nextJSDocToken();
+                    nextTokenJSDoc();
                     return result;
                 }
             }
@@ -7742,20 +7806,21 @@ namespace ts {
 
         context.pragmas = createMap() as PragmaMap;
         for (const pragma of pragmas) {
-            if (context.pragmas.has(pragma!.name)) { // TODO: GH#18217
-                const currentValue = context.pragmas.get(pragma!.name);
+            if (context.pragmas.has(pragma.name)) {
+                const currentValue = context.pragmas.get(pragma.name);
                 if (currentValue instanceof Array) {
-                    currentValue.push(pragma!.args);
+                    currentValue.push(pragma.args);
                 }
                 else {
-                    context.pragmas.set(pragma!.name, [currentValue, pragma!.args]);
+                    context.pragmas.set(pragma.name, [currentValue, pragma.args]);
                 }
                 continue;
             }
-            context.pragmas.set(pragma!.name, pragma!.args);
+            context.pragmas.set(pragma.name, pragma.args);
         }
     }
 
+    /*@internal*/
     type PragmaDiagnosticReporter = (pos: number, length: number, message: DiagnosticMessage) => void;
 
     /*@internal*/
@@ -7774,30 +7839,30 @@ namespace ts {
                     const referencedFiles = context.referencedFiles;
                     const typeReferenceDirectives = context.typeReferenceDirectives;
                     const libReferenceDirectives = context.libReferenceDirectives;
-                    forEach(toArray(entryOrList), (arg: PragmaPseudoMap["reference"]) => {
-                        // TODO: GH#18217
-                        if (arg!.arguments["no-default-lib"]) {
+                    forEach(toArray(entryOrList) as PragmaPseudoMap["reference"][], arg => {
+                        const { types, lib, path } = arg.arguments;
+                        if (arg.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
                         }
-                        else if (arg!.arguments.types) {
-                            typeReferenceDirectives.push({ pos: arg!.arguments.types!.pos, end: arg!.arguments.types!.end, fileName: arg!.arguments.types!.value });
+                        else if (types) {
+                            typeReferenceDirectives.push({ pos: types.pos, end: types.end, fileName: types.value });
                         }
-                        else if (arg!.arguments.lib) {
-                            libReferenceDirectives.push({ pos: arg!.arguments.lib!.pos, end: arg!.arguments.lib!.end, fileName: arg!.arguments.lib!.value });
+                        else if (lib) {
+                            libReferenceDirectives.push({ pos: lib.pos, end: lib.end, fileName: lib.value });
                         }
-                        else if (arg!.arguments.path) {
-                            referencedFiles.push({ pos: arg!.arguments.path!.pos, end: arg!.arguments.path!.end, fileName: arg!.arguments.path!.value });
+                        else if (path) {
+                            referencedFiles.push({ pos: path.pos, end: path.end, fileName: path.value });
                         }
                         else {
-                            reportDiagnostic(arg!.range.pos, arg!.range.end - arg!.range.pos, Diagnostics.Invalid_reference_directive_syntax);
+                            reportDiagnostic(arg.range.pos, arg.range.end - arg.range.pos, Diagnostics.Invalid_reference_directive_syntax);
                         }
                     });
                     break;
                 }
                 case "amd-dependency": {
                     context.amdDependencies = map(
-                        toArray(entryOrList),
-                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path })); // TODO: GH#18217
+                        toArray(entryOrList) as PragmaPseudoMap["amd-dependency"][],
+                        x => ({ name: x.arguments.name, path: x.arguments.path }));
                     break;
                 }
                 case "amd-module": {
@@ -7805,13 +7870,13 @@ namespace ts {
                         for (const entry of entryOrList) {
                             if (context.moduleName) {
                                 // TODO: It's probably fine to issue this diagnostic on all instances of the pragma
-                                reportDiagnostic(entry!.range.pos, entry!.range.end - entry!.range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
+                                reportDiagnostic(entry.range.pos, entry.range.end - entry.range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
                             }
-                            context.moduleName = (entry as PragmaPseudoMap["amd-module"])!.arguments.name;
+                            context.moduleName = (entry as PragmaPseudoMap["amd-module"]).arguments.name;
                         }
                     }
                     else {
-                        context.moduleName = (entryOrList as PragmaPseudoMap["amd-module"])!.arguments.name;
+                        context.moduleName = (entryOrList as PragmaPseudoMap["amd-module"]).arguments.name;
                     }
                     break;
                 }
@@ -7819,11 +7884,11 @@ namespace ts {
                 case "ts-check": {
                     // _last_ of either nocheck or check in a file is the "winner"
                     forEach(toArray(entryOrList), entry => {
-                        if (!context.checkJsDirective || entry!.range.pos > context.checkJsDirective.pos) { // TODO: GH#18217
+                        if (!context.checkJsDirective || entry.range.pos > context.checkJsDirective.pos) {
                             context.checkJsDirective = {
                                 enabled: key === "ts-check",
-                                end: entry!.range.end,
-                                pos: entry!.range.pos
+                                end: entry.range.end,
+                                pos: entry.range.pos
                             };
                         }
                     });

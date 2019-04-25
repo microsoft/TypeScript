@@ -86,12 +86,11 @@ namespace ts {
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 
-        /* @internal */ sourceMapper?: sourcemaps.SourceMapper;
+        /* @internal */ sourceMapper?: DocumentPositionMapper;
     }
 
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-        /*@internal*/ sourceMapper?: sourcemaps.SourceMapper;
     }
 
     export interface SourceMapSource {
@@ -231,8 +230,12 @@ namespace ts {
 
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-        /* @internal */ inspectValue?(options: InspectValueOptions): Promise<ValueInfo>;
         writeFile?(fileName: string, content: string): void;
+
+        /* @internal */
+        getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
+        /* @internal */
+        getSourceFileLike?(fileName: string): SourceFileLike | undefined;
     }
 
     /* @internal */
@@ -290,8 +293,8 @@ namespace ts {
 
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
 
-        getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> | undefined;
+        getRenameInfo(fileName: string, position: number, options?: RenameInfoOptions): RenameInfo;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean, providePrefixAndSuffixTextForRename?: boolean): ReadonlyArray<RenameLocation> | undefined;
 
         getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
@@ -489,7 +492,7 @@ namespace ts {
         position: number;
     }
 
-    export class TextChange {
+    export interface TextChange {
         span: TextSpan;
         newText: string;
     }
@@ -530,22 +533,12 @@ namespace ts {
 
     // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
     // See `commands?: {}[]` in protocol.ts
-    export type CodeActionCommand = InstallPackageAction | GenerateTypesAction;
+    export type CodeActionCommand = InstallPackageAction;
 
     export interface InstallPackageAction {
         /* @internal */ readonly type: "install package";
         /* @internal */ readonly file: string;
         /* @internal */ readonly packageName: string;
-    }
-
-    export interface GenerateTypesAction extends GenerateTypesOptions {
-        /* @internal */ readonly type: "generate types";
-    }
-
-    export interface GenerateTypesOptions {
-        readonly file: string; // File that was importing fileToGenerateTypesFor; used for formatting options.
-        readonly fileToGenerateTypesFor: string;
-        readonly outputFileName: string;
     }
 
     /**
@@ -842,6 +835,10 @@ namespace ts {
     export interface RenameInfoFailure {
         canRename: false;
         localizedErrorMessage: string;
+    }
+
+    export interface RenameInfoOptions {
+        readonly allowRenameOfImportPath?: boolean;
     }
 
     export interface SignatureHelpParameter {

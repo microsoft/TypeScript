@@ -1371,3 +1371,30 @@ assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
 >a : Symbol(a, Decl(conditionalTypes1.ts, 351, 25))
 >c : Symbol(c, Decl(conditionalTypes1.ts, 351, 30))
 
+// Repros from #23843
+
+type Weird1 = (<U extends boolean>(a: U) => never) extends 
+>Weird1 : Symbol(Weird1, Decl(conditionalTypes1.ts, 351, 46))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 355, 16))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 355, 35))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 355, 16))
+
+    (<U extends true>(a: U) => never) ? never : never;
+>U : Symbol(U, Decl(conditionalTypes1.ts, 356, 6))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 356, 22))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 356, 6))
+
+type Weird2 = (<U extends boolean>(a: U) => U) extends 
+>Weird2 : Symbol(Weird2, Decl(conditionalTypes1.ts, 356, 54))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 358, 16))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 358, 35))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 358, 16))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 358, 16))
+
+    (<U extends true>(a: U) => infer T) ? T : never;
+>U : Symbol(U, Decl(conditionalTypes1.ts, 359, 6))
+>a : Symbol(a, Decl(conditionalTypes1.ts, 359, 22))
+>U : Symbol(U, Decl(conditionalTypes1.ts, 359, 6))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 359, 36))
+>T : Symbol(T, Decl(conditionalTypes1.ts, 359, 36))
+

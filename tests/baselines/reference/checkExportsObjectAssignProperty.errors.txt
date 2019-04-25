@@ -1,10 +1,10 @@
-tests/cases/conformance/jsdoc/validator.ts(17,4): error TS2540: Cannot assign to 'readonlyProp' because it is a constant or a read-only property.
-tests/cases/conformance/jsdoc/validator.ts(18,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a constant or a read-only property.
+tests/cases/conformance/jsdoc/validator.ts(17,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
+tests/cases/conformance/jsdoc/validator.ts(18,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
 tests/cases/conformance/jsdoc/validator.ts(19,1): error TS2322: Type '"no"' is not assignable to type 'number'.
 tests/cases/conformance/jsdoc/validator.ts(20,1): error TS2322: Type '"no"' is not assignable to type 'number'.
 tests/cases/conformance/jsdoc/validator.ts(21,1): error TS2322: Type '0' is not assignable to type 'string'.
-tests/cases/conformance/jsdoc/validator.ts(37,4): error TS2540: Cannot assign to 'readonlyProp' because it is a constant or a read-only property.
-tests/cases/conformance/jsdoc/validator.ts(38,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a constant or a read-only property.
+tests/cases/conformance/jsdoc/validator.ts(37,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
+tests/cases/conformance/jsdoc/validator.ts(38,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
 tests/cases/conformance/jsdoc/validator.ts(39,1): error TS2322: Type '0' is not assignable to type 'string'.
 tests/cases/conformance/jsdoc/validator.ts(40,1): error TS2322: Type '"no"' is not assignable to type 'number'.
 tests/cases/conformance/jsdoc/validator.ts(41,1): error TS2322: Type '0' is not assignable to type 'string'.
@@ -29,10 +29,10 @@ tests/cases/conformance/jsdoc/validator.ts(41,1): error TS2322: Type '0' is not 
     // disallowed assignments
     m1.readonlyProp = "name";
        ~~~~~~~~~~~~
-!!! error TS2540: Cannot assign to 'readonlyProp' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
     m1.readonlyAccessor = 12;
        ~~~~~~~~~~~~~~~~
-!!! error TS2540: Cannot assign to 'readonlyAccessor' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
     m1.thing = "no";
     ~~~~~~~~
 !!! error TS2322: Type '"no"' is not assignable to type 'number'.
@@ -59,10 +59,10 @@ tests/cases/conformance/jsdoc/validator.ts(41,1): error TS2322: Type '0' is not 
     // disallowed assignments
     m2.readonlyProp = "name";
        ~~~~~~~~~~~~
-!!! error TS2540: Cannot assign to 'readonlyProp' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
     m2.readonlyAccessor = 12;
        ~~~~~~~~~~~~~~~~
-!!! error TS2540: Cannot assign to 'readonlyAccessor' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
     m2.thing = 0;
     ~~~~~~~~
 !!! error TS2322: Type '0' is not assignable to type 'string'.

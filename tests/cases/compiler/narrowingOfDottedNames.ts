@@ -57,3 +57,36 @@ class Foo2
     constructor() {
     }
 }
+
+// Repro from  #29513
+
+class AInfo {
+    a_count: number = 1;
+}
+
+class BInfo {
+    b_count: number = 1;
+}
+
+class Base {
+    id: number = 0;
+}
+
+class A2 extends Base {
+    info!: AInfo;
+}
+
+class B2 extends Base {
+    info!: BInfo;
+}
+
+let target: Base = null as any;
+
+while (target) {
+    if (target instanceof A2) {
+        target.info.a_count = 3;
+    }
+    else if (target instanceof B2) {
+        const j: BInfo = target.info;
+    }
+}

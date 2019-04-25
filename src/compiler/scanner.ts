@@ -31,8 +31,9 @@ namespace ts {
         scanJsxIdentifier(): SyntaxKind;
         scanJsxAttributeValue(): SyntaxKind;
         reScanJsxToken(): JsxTokenSyntaxKind;
+        reScanLessThanToken(): SyntaxKind;
         scanJsxToken(): JsxTokenSyntaxKind;
-        scanJSDocToken(): JsDocSyntaxKind;
+        scanJsDocToken(): JSDocSyntaxKind;
         scan(): SyntaxKind;
         getText(): string;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
@@ -337,17 +338,35 @@ namespace ts {
         return result;
     }
 
-    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number {
-        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
+    /* @internal */
+    // tslint:disable-next-line:unified-signatures
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number;
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
+        return sourceFile.getPositionOfLineAndCharacter ?
+            sourceFile.getPositionOfLineAndCharacter(line, character, allowEdits) :
+            computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, allowEdits);
     }
 
     /* @internal */
-    export function computePositionOfLineAndCharacter(lineStarts: ReadonlyArray<number>, line: number, character: number, debugText?: string): number {
+    export function computePositionOfLineAndCharacter(lineStarts: ReadonlyArray<number>, line: number, character: number, debugText?: string, allowEdits?: true): number {
         if (line < 0 || line >= lineStarts.length) {
-            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            if (allowEdits) {
+                // Clamp line to nearest allowable value
+                line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
+            }
+            else {
+                Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            }
         }
 
         const res = lineStarts[line] + character;
+        if (allowEdits) {
+            // Clamp to nearest allowable values to allow the underlying to be edited without crashing (accuracy is lost, instead)
+            // TODO: Somehow track edits between file as it was during the creation of sourcemap we have and the current file and
+            // apply them to the computed position to improve accuracy
+            return res > lineStarts[line + 1] ? lineStarts[line + 1] : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
+        }
         if (line < lineStarts.length - 1) {
             Debug.assert(res < lineStarts[line + 1]);
         }
@@ -604,13 +623,15 @@ namespace ts {
 
     const shebangTriviaRegex = /^#!.*/;
 
-    function isShebangTrivia(text: string, pos: number) {
+    /*@internal*/
+    export function isShebangTrivia(text: string, pos: number) {
         // Shebangs check must only be done at the start of the file
         Debug.assert(pos === 0);
         return shebangTriviaRegex.test(text);
     }
 
-    function scanShebangTrivia(text: string, pos: number) {
+    /*@internal*/
+    export function scanShebangTrivia(text: string, pos: number) {
         const shebang = shebangTriviaRegex.exec(text)![0];
         pos = pos + shebang.length;
         return pos;
@@ -642,8 +663,15 @@ namespace ts {
         let pendingKind!: CommentKind;
         let pendingHasTrailingNewLine!: boolean;
         let hasPendingCommentRange = false;
-        let collecting = trailing || pos === 0;
+        let collecting = trailing;
         let accumulator = initial;
+        if (pos === 0) {
+            collecting = true;
+            const shebang = getShebang(text);
+            if (shebang) {
+                pos = shebang.length;
+            }
+        }
         scan: while (pos >= 0 && pos < text.length) {
             const ch = text.charCodeAt(pos);
             switch (ch) {
@@ -856,8 +884,9 @@ namespace ts {
             scanJsxIdentifier,
             scanJsxAttributeValue,
             reScanJsxToken,
+            reScanLessThanToken,
             scanJsxToken,
-            scanJSDocToken,
+            scanJsDocToken,
             scan,
             getText,
             setText,
@@ -957,7 +986,9 @@ namespace ts {
             else {
                 result = text.substring(start, end); // No need to use all the fragments; no _ removal needed
             }
+
             if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
+                checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
                 return {
                     type: SyntaxKind.NumericLiteral,
                     value: "" + +result // if value is not an integer, it can be safely coerced to a number
@@ -966,7 +997,30 @@ namespace ts {
             else {
                 tokenValue = result;
                 const type = checkBigIntSuffix(); // if value is an integer, check whether it is a bigint
+                checkForIdentifierStartAfterNumericLiteral(start);
                 return { type, value: tokenValue };
+            }
+        }
+
+        function checkForIdentifierStartAfterNumericLiteral(numericStart: number, isScientific?: boolean) {
+            if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
+                return;
+            }
+
+            const identifierStart = pos;
+            const { length } = scanIdentifierParts();
+
+            if (length === 1 && text[identifierStart] === "n") {
+                if (isScientific) {
+                    error(Diagnostics.A_bigint_literal_cannot_use_exponential_notation, numericStart, identifierStart - numericStart + 1);
+                }
+                else {
+                    error(Diagnostics.A_bigint_literal_must_be_an_integer, numericStart, identifierStart - numericStart + 1);
+                }
+            }
+            else {
+                error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
+                pos = identifierStart;
             }
         }
 
@@ -1896,6 +1950,14 @@ namespace ts {
             return token = scanJsxToken();
         }
 
+        function reScanLessThanToken(): SyntaxKind {
+            if (token === SyntaxKind.LessThanLessThanToken) {
+                pos = tokenPos + 1;
+                return token = SyntaxKind.LessThanToken;
+            }
+            return token;
+        }
+
         function scanJsxToken(): JsxTokenSyntaxKind {
             startPos = tokenPos = pos;
 
@@ -1951,6 +2013,7 @@ namespace ts {
                 pos++;
             }
 
+            tokenValue = text.substring(startPos, pos);
             return firstNonWhitespace === -1 ? SyntaxKind.JsxTextAllWhiteSpaces : SyntaxKind.JsxText;
         }
 
@@ -1987,7 +2050,7 @@ namespace ts {
             }
         }
 
-        function scanJSDocToken(): JsDocSyntaxKind {
+        function scanJsDocToken(): JSDocSyntaxKind {
             startPos = tokenPos = pos;
             tokenFlags = 0;
             if (pos >= end) {
@@ -2030,12 +2093,7 @@ namespace ts {
                 case CharacterCodes.dot:
                     return token = SyntaxKind.DotToken;
                 case CharacterCodes.backtick:
-                    while (pos < end && text.charCodeAt(pos) !== CharacterCodes.backtick) {
-                        pos++;
-                    }
-                    tokenValue = text.substring(tokenPos + 1, pos);
-                    pos++;
-                    return token = SyntaxKind.NoSubstitutionTemplateLiteral;
+                    return token = SyntaxKind.BacktickToken;
             }
 
             if (isIdentifierStart(ch, ScriptTarget.Latest)) {

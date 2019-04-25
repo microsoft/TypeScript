@@ -136,24 +136,24 @@ class C2<T, U> {
     }
 }
 var r6 = (new C2()).f<number>(1, '');
->r6 : {}
->(new C2()).f<number>(1, '') : {}
->(new C2()).f : (x: {}, y: {}) => {}
->(new C2()) : C2<{}, {}>
->new C2() : C2<{}, {}>
+>r6 : unknown
+>(new C2()).f<number>(1, '') : unknown
+>(new C2()).f : (x: unknown, y: unknown) => unknown
+>(new C2()) : C2<unknown, unknown>
+>new C2() : C2<unknown, unknown>
 >C2 : typeof C2
->f : (x: {}, y: {}) => {}
+>f : (x: unknown, y: unknown) => unknown
 >1 : 1
 >'' : ""
 
 var r6b = (new C2()).f<number, string, number>(1, '');
->r6b : {}
->(new C2()).f<number, string, number>(1, '') : {}
->(new C2()).f : (x: {}, y: {}) => {}
->(new C2()) : C2<{}, {}>
->new C2() : C2<{}, {}>
+>r6b : unknown
+>(new C2()).f<number, string, number>(1, '') : unknown
+>(new C2()).f : (x: unknown, y: unknown) => unknown
+>(new C2()) : C2<unknown, unknown>
+>new C2() : C2<unknown, unknown>
 >C2 : typeof C2
->f : (x: {}, y: {}) => {}
+>f : (x: unknown, y: unknown) => unknown
 >1 : 1
 >'' : ""
 

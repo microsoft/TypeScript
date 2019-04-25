@@ -246,6 +246,10 @@ namespace ts {
         return isLabelOfLabeledStatement(node) || isJumpStatementTarget(node);
     }
 
+    export function isTagName(node: Node): boolean {
+        return isJSDocTag(node.parent) && node.parent.tagName === node;
+    }
+
     export function isRightSideOfQualifiedName(node: Node) {
         return node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node;
     }
@@ -901,7 +905,7 @@ namespace ts {
     }
 
     function isWhiteSpaceOnlyJsxText(node: Node): boolean {
-        return isJsxText(node) && node.containsOnlyWhiteSpaces;
+        return isJsxText(node) && node.containsOnlyTriviaWhiteSpaces;
     }
 
     export function isInTemplateString(sourceFile: SourceFile, position: number) {
@@ -1212,6 +1216,7 @@ namespace ts {
 
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
+        SyntaxKind.BigIntKeyword,
         SyntaxKind.BooleanKeyword,
         SyntaxKind.FalseKeyword,
         SyntaxKind.KeyOfKeyword,
@@ -1277,11 +1282,11 @@ namespace ts {
         return !!compilerOptions.module || compilerOptions.target! >= ScriptTarget.ES2015 || !!compilerOptions.noEmit;
     }
 
-    export function hostUsesCaseSensitiveFileNames(host: LanguageServiceHost): boolean {
+    export function hostUsesCaseSensitiveFileNames(host: { useCaseSensitiveFileNames?(): boolean; }): boolean {
         return host.useCaseSensitiveFileNames ? host.useCaseSensitiveFileNames() : false;
     }
 
-    export function hostGetCanonicalFileName(host: LanguageServiceHost): GetCanonicalFileName {
+    export function hostGetCanonicalFileName(host: { useCaseSensitiveFileNames?(): boolean; }): GetCanonicalFileName {
         return createGetCanonicalFileName(hostUsesCaseSensitiveFileNames(host));
     }
 
@@ -1310,7 +1315,7 @@ namespace ts {
     }
 
     export function getQuotePreference(sourceFile: SourceFile, preferences: UserPreferences): QuotePreference {
-        if (preferences.quotePreference) {
+        if (preferences.quotePreference && preferences.quotePreference !== "auto") {
             return preferences.quotePreference === "single" ? QuotePreference.Single : QuotePreference.Double;
         }
         else {
@@ -1459,6 +1464,7 @@ namespace ts {
             writeKeyword: text => writeKind(text, SymbolDisplayPartKind.keyword),
             writeOperator: text => writeKind(text, SymbolDisplayPartKind.operator),
             writePunctuation: text => writeKind(text, SymbolDisplayPartKind.punctuation),
+            writeTrailingSemicolon: text => writeKind(text, SymbolDisplayPartKind.punctuation),
             writeSpace: text => writeKind(text, SymbolDisplayPartKind.space),
             writeStringLiteral: text => writeKind(text, SymbolDisplayPartKind.stringLiteral),
             writeParameter: text => writeKind(text, SymbolDisplayPartKind.parameterName),
@@ -1467,7 +1473,7 @@ namespace ts {
             writeSymbol,
             writeLine,
             write: unknownWrite,
-            writeTextOfNode: unknownWrite,
+            writeComment: unknownWrite,
             getText: () => "",
             getTextPos: () => 0,
             getColumn: () => 0,
@@ -1627,9 +1633,7 @@ namespace ts {
     }
 
     export function isImportOrExportSpecifierName(location: Node): location is Identifier {
-        return !!location.parent &&
-            (location.parent.kind === SyntaxKind.ImportSpecifier || location.parent.kind === SyntaxKind.ExportSpecifier) &&
-            (<ImportOrExportSpecifier>location.parent).propertyName === location;
+        return !!location.parent && isImportOrExportSpecifier(location.parent) && location.parent.propertyName === location;
     }
 
     /**
@@ -1658,6 +1662,27 @@ namespace ts {
         // First check to see if the script kind was specified by the host. Chances are the host
         // may override the default script kind for the file extension.
         return ensureScriptKind(fileName, host && host.getScriptKind && host.getScriptKind(fileName));
+    }
+
+    export function getSymbolTarget(symbol: Symbol, checker: TypeChecker): Symbol {
+        let next: Symbol = symbol;
+        while (isAliasSymbol(next) || (isTransientSymbol(next) && next.target)) {
+            if (isTransientSymbol(next) && next.target) {
+                next = next.target;
+            }
+            else {
+                next = skipAlias(next, checker);
+            }
+        }
+        return next;
+    }
+
+    function isTransientSymbol(symbol: Symbol): symbol is TransientSymbol {
+        return (symbol.flags & SymbolFlags.Transient) !== 0;
+    }
+
+    function isAliasSymbol(symbol: Symbol): boolean {
+        return (symbol.flags & SymbolFlags.Alias) !== 0;
     }
 
     export function getUniqueSymbolId(symbol: Symbol, checker: TypeChecker) {
@@ -1692,7 +1717,19 @@ namespace ts {
 
     export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         let clone;
-        if (isIdentifier(node) && renameMap && checker) {
+        if (renameMap && checker && isBindingElement(node) && isIdentifier(node.name) && isObjectBindingPattern(node.parent)) {
+            const symbol = checker.getSymbolAtLocation(node.name);
+            const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
+
+            if (renameInfo && renameInfo.text !== (node.name || node.propertyName).getText()) {
+                clone = createBindingElement(
+                    node.dotDotDotToken,
+                    node.propertyName || node.name,
+                    renameInfo,
+                    node.initializer);
+            }
+        }
+        else if (renameMap && checker && isIdentifier(node)) {
             const symbol = checker.getSymbolAtLocation(node);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
@@ -1817,8 +1854,28 @@ namespace ts {
         return lastPos;
     }
 
-    export function copyComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
-        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, (pos, end, kind, htnl) => {
+    export function copyLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+        forEachLeadingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
+    }
+
+
+    export function copyTrailingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+        forEachTrailingCommentRange(sourceFile.text, sourceNode.end, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticTrailingComment));
+    }
+
+    /**
+     * This function copies the trailing comments for the token that comes before `sourceNode`, as leading comments of `targetNode`.
+     * This is useful because sometimes a comment that refers to `sourceNode` will be a leading comment for `sourceNode`, according to the
+     * notion of trivia ownership, and instead will be a trailing comment for the token before `sourceNode`, e.g.:
+     * `function foo(\* not leading comment for a *\ a: string) {}`
+     * The comment refers to `a` but belongs to the `(` token, but we might want to copy it.
+     */
+    export function copyTrailingAsLeadingComments(sourceNode: Node, targetNode: Node, sourceFile: SourceFile, commentKind?: CommentKind, hasTrailingNewLine?: boolean) {
+        forEachTrailingCommentRange(sourceFile.text, sourceNode.pos, getAddCommentsFunction(targetNode, sourceFile, commentKind, hasTrailingNewLine, addSyntheticLeadingComment));
+    }
+
+    function getAddCommentsFunction(targetNode: Node, sourceFile: SourceFile, commentKind: CommentKind | undefined, hasTrailingNewLine: boolean | undefined, cb: (node: Node, kind: CommentKind, text: string, hasTrailingNewLine?: boolean) => void) {
+        return (pos: number, end: number, kind: CommentKind, htnl: boolean) => {
             if (kind === SyntaxKind.MultiLineCommentTrivia) {
                 // Remove leading /*
                 pos += 2;
@@ -1829,8 +1886,8 @@ namespace ts {
                 // Remove leading //
                 pos += 2;
             }
-            addSyntheticLeadingComment(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
-        });
+            cb(targetNode, commentKind || kind, sourceFile.text.slice(pos, end), hasTrailingNewLine !== undefined ? hasTrailingNewLine : htnl);
+        };
     }
 
     function indexInTextChange(change: string, name: string): number {
@@ -1864,15 +1921,18 @@ namespace ts {
         if (/^\d+$/.test(text)) {
             return text;
         }
+        // Editors can pass in undefined or empty string - we want to infer the preference in those cases.
+        const quotePreference = preferences.quotePreference || "auto";
         const quoted = JSON.stringify(text);
-        switch (preferences.quotePreference) {
-            case undefined:
+        switch (quotePreference) {
+            // TODO use getQuotePreference to infer the actual quote style.
+            case "auto":
             case "double":
                 return quoted;
             case "single":
                 return `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'`;
             default:
-                return Debug.assertNever(preferences.quotePreference);
+                return Debug.assertNever(quotePreference);
         }
     }
 
@@ -1906,5 +1966,29 @@ namespace ts {
 
     export function getSwitchedType(caseClause: CaseClause, checker: TypeChecker): Type | undefined {
         return checker.getTypeAtLocation(caseClause.parent.parent.expression);
+    }
+
+    export function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
+        const checker = program.getTypeChecker();
+        let typeIsAccessible = true;
+        const notAccessible = () => { typeIsAccessible = false; };
+        const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
+            trackSymbol: (symbol, declaration, meaning) => {
+                // TODO: GH#18217
+                typeIsAccessible = typeIsAccessible && checker.isSymbolAccessible(symbol, declaration, meaning!, /*shouldComputeAliasToMarkVisible*/ false).accessibility === SymbolAccessibility.Accessible;
+            },
+            reportInaccessibleThisError: notAccessible,
+            reportPrivateInBaseOfClassExpression: notAccessible,
+            reportInaccessibleUniqueSymbolError: notAccessible,
+            moduleResolverHost: {
+                readFile: host.readFile,
+                fileExists: host.fileExists,
+                directoryExists: host.directoryExists,
+                getSourceFiles: program.getSourceFiles,
+                getCurrentDirectory: program.getCurrentDirectory,
+                getCommonSourceDirectory: program.getCommonSourceDirectory,
+            }
+        });
+        return typeIsAccessible ? res : undefined;
     }
 }

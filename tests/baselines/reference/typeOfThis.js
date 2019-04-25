@@ -159,32 +159,30 @@ var q1 = function (s = this) {
     this.spaaaaace = 4;
 }
 
-//type of 'this' in a fat arrow expression param list is Any
+//type of 'this' in a fat arrow expression param list is typeof globalThis
 var q2 = (s = this) => {
-    var s: any;
+    var s: typeof globalThis;
     s.spaaaaaaace = 4;
 
-    //type of 'this' in a fat arrow expression body is Any
-    var t: any;
+    //type of 'this' in a fat arrow expression body is typeof globalThis
+    var t: typeof globalThis;
     var t = this;
     this.spaaaaace = 4;
 }
 
-//type of 'this' in global module is Any
-var t: any;
+//type of 'this' in global module is GlobalThis
+var t: typeof globalThis;
 var t = this;
 this.spaaaaace = 4;
 
 
 
 //// [typeOfThis.js]
-var _this = this;
-var MyTestClass = /** @class */ (function () {
-    function MyTestClass() {
-        var _this = this;
-        this.someFunc = function () {
+class MyTestClass {
+    constructor() {
+        this.someFunc = () => {
             //type of 'this' in member variable initializer is the class instance type
-            var t = _this;
+            var t = this;
             var t;
         };
         //type of 'this' in constructor body is the class instance type
@@ -193,32 +191,26 @@ var MyTestClass = /** @class */ (function () {
         this.canary = 3;
     }
     //type of 'this' in member function param list is the class instance type
-    MyTestClass.prototype.memberFunc = function (t) {
-        if (t === void 0) { t = this; }
+    memberFunc(t = this) {
         var t;
         //type of 'this' in member function body is the class instance type
         var p = this;
         var p;
-    };
-    Object.defineProperty(MyTestClass.prototype, "prop", {
-        //type of 'this' in member accessor(get and set) body is the class instance type
-        get: function () {
-            var p = this;
-            var p;
-            return this;
-        },
-        set: function (v) {
-            var p = this;
-            var p;
-            p = v;
-            v = p;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    }
+    //type of 'this' in member accessor(get and set) body is the class instance type
+    get prop() {
+        var p = this;
+        var p;
+        return this;
+    }
+    set prop(v) {
+        var p = this;
+        var p;
+        p = v;
+        v = p;
+    }
     //type of 'this' in static function param list is constructor function type
-    MyTestClass.staticFn = function (t) {
-        if (t === void 0) { t = this; }
+    static staticFn(t = this) {
         var t;
         var t = MyTestClass;
         t.staticCanary;
@@ -227,34 +219,28 @@ var MyTestClass = /** @class */ (function () {
         var p;
         var p = MyTestClass;
         p.staticCanary;
-    };
-    Object.defineProperty(MyTestClass, "staticProp", {
-        get: function () {
-            //type of 'this' in static accessor body is constructor function type
-            var p = this;
-            var p;
-            var p = MyTestClass;
-            p.staticCanary;
-            return this;
-        },
-        set: function (v) {
-            //type of 'this' in static accessor body is constructor function type
-            var p = this;
-            var p;
-            var p = MyTestClass;
-            p.staticCanary;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return MyTestClass;
-}());
-var MyGenericTestClass = /** @class */ (function () {
-    function MyGenericTestClass() {
-        var _this = this;
-        this.someFunc = function () {
+    }
+    static get staticProp() {
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+        var p;
+        var p = MyTestClass;
+        p.staticCanary;
+        return this;
+    }
+    static set staticProp(v) {
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+        var p;
+        var p = MyTestClass;
+        p.staticCanary;
+    }
+}
+class MyGenericTestClass {
+    constructor() {
+        this.someFunc = () => {
             //type of 'this' in member variable initializer is the class instance type
-            var t = _this;
+            var t = this;
             var t;
         };
         //type of 'this' in constructor body is the class instance type
@@ -263,32 +249,26 @@ var MyGenericTestClass = /** @class */ (function () {
         this.canary = 3;
     }
     //type of 'this' in member function param list is the class instance type
-    MyGenericTestClass.prototype.memberFunc = function (t) {
-        if (t === void 0) { t = this; }
+    memberFunc(t = this) {
         var t;
         //type of 'this' in member function body is the class instance type
         var p = this;
         var p;
-    };
-    Object.defineProperty(MyGenericTestClass.prototype, "prop", {
-        //type of 'this' in member accessor(get and set) body is the class instance type
-        get: function () {
-            var p = this;
-            var p;
-            return this;
-        },
-        set: function (v) {
-            var p = this;
-            var p;
-            p = v;
-            v = p;
-        },
-        enumerable: true,
-        configurable: true
-    });
+    }
+    //type of 'this' in member accessor(get and set) body is the class instance type
+    get prop() {
+        var p = this;
+        var p;
+        return this;
+    }
+    set prop(v) {
+        var p = this;
+        var p;
+        p = v;
+        v = p;
+    }
     //type of 'this' in static function param list is constructor function type
-    MyGenericTestClass.staticFn = function (t) {
-        if (t === void 0) { t = this; }
+    static staticFn(t = this) {
         var t;
         var t = MyGenericTestClass;
         t.staticCanary;
@@ -297,31 +277,25 @@ var MyGenericTestClass = /** @class */ (function () {
         var p;
         var p = MyGenericTestClass;
         p.staticCanary;
-    };
-    Object.defineProperty(MyGenericTestClass, "staticProp", {
-        get: function () {
-            //type of 'this' in static accessor body is constructor function type
-            var p = this;
-            var p;
-            var p = MyGenericTestClass;
-            p.staticCanary;
-            return this;
-        },
-        set: function (v) {
-            //type of 'this' in static accessor body is constructor function type
-            var p = this;
-            var p;
-            var p = MyGenericTestClass;
-            p.staticCanary;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return MyGenericTestClass;
-}());
+    }
+    static get staticProp() {
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+        var p;
+        var p = MyGenericTestClass;
+        p.staticCanary;
+        return this;
+    }
+    static set staticProp(v) {
+        //type of 'this' in static accessor body is constructor function type
+        var p = this;
+        var p;
+        var p = MyGenericTestClass;
+        p.staticCanary;
+    }
+}
 //type of 'this' in a function declaration param list is Any
-function fn(s) {
-    if (s === void 0) { s = this; }
+function fn(s = this) {
     var s;
     s.spaaaaaaace = 4;
     //type of 'this' in a function declaration body is Any
@@ -330,8 +304,7 @@ function fn(s) {
     this.spaaaaace = 4;
 }
 //type of 'this' in a function expression param list list is Any
-var q1 = function (s) {
-    if (s === void 0) { s = this; }
+var q1 = function (s = this) {
     var s;
     s.spaaaaaaace = 4;
     //type of 'this' in a function expression body is Any
@@ -339,17 +312,16 @@ var q1 = function (s) {
     var t = this;
     this.spaaaaace = 4;
 };
-//type of 'this' in a fat arrow expression param list is Any
-var q2 = function (s) {
-    if (s === void 0) { s = _this; }
+//type of 'this' in a fat arrow expression param list is typeof globalThis
+var q2 = (s = this) => {
     var s;
     s.spaaaaaaace = 4;
-    //type of 'this' in a fat arrow expression body is Any
+    //type of 'this' in a fat arrow expression body is typeof globalThis
     var t;
-    var t = _this;
-    _this.spaaaaace = 4;
+    var t = this;
+    this.spaaaaace = 4;
 };
-//type of 'this' in global module is Any
+//type of 'this' in global module is GlobalThis
 var t;
 var t = this;
 this.spaaaaace = 4;

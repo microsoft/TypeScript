@@ -76,7 +76,7 @@ type T31<T> = T extends unknown ? true : false;  // Deferred (so it distributes)
 >false : false
 
 type T32<T> = never extends T ? true : false;  // true
->T32 : true
+>T32 : T32<T>
 >true : true
 >false : false
 
@@ -342,7 +342,7 @@ function f23<T extends unknown>(x: T) {
 >x : T
 }
 
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
 >f24 : (x: { [x: string]: unknown; }) => void
@@ -361,7 +361,7 @@ function f24(x: { [x: string]: unknown }) {
 >a : number
 >5 : 5
 
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
 >x = [1, 2, 3] : number[]
 >x : { [x: string]: unknown; }
 >[1, 2, 3] : number[]
@@ -451,5 +451,44 @@ class C1 {
 
     c: any;
 >c : any
+}
+
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+
+function f30<T, U extends unknown>(t: T, u: U) {
+>f30 : <T, U extends unknown>(t: T, u: U) => void
+>t : T
+>u : U
+
+    let x: {} = t;
+>x : {}
+>t : T
+
+    let y: {} = u;
+>y : {}
+>u : U
+}
+
+// Repro from #26796
+
+type Test1 = [unknown] extends [{}] ? true : false;  // false
+>Test1 : false
+>true : true
+>false : false
+
+type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
+>IsDefinitelyDefined : IsDefinitelyDefined<T>
+>true : true
+>false : false
+
+type Test2 = IsDefinitelyDefined<unknown>;  // false
+>Test2 : false
+
+function oops<T extends unknown>(arg: T): {} {
+>oops : <T extends unknown>(arg: T) => {}
+>arg : T
+
+    return arg;  // Error
+>arg : T
 }
 

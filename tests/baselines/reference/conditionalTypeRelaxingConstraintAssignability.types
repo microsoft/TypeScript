@@ -1,0 +1,64 @@
+=== tests/cases/compiler/conditionalTypeRelaxingConstraintAssignability.ts ===
+export type ElChildren =
+>ElChildren : ElChildren
+
+  | ElChildren.Void
+>ElChildren : any
+
+  | ElChildren.Text;
+>ElChildren : any
+
+export namespace ElChildren {
+  export type Void = undefined;
+>Void : undefined
+
+  export type Text = string;
+>Text : string
+}
+
+type Relax<C extends ElChildren> = C extends ElChildren.Text ? ElChildren.Text : C;
+>Relax : Relax<C>
+>ElChildren : any
+>ElChildren : any
+
+export class Elem<
+>Elem : Elem<C>
+
+  C extends ElChildren,
+  > {
+  constructor(
+    private children_: Relax<C>,
+>children_ : Relax<C>
+
+  ) {
+  }
+}
+
+new Elem(undefined as ElChildren.Void);
+>new Elem(undefined as ElChildren.Void) : Elem<undefined>
+>Elem : typeof Elem
+>undefined as ElChildren.Void : undefined
+>undefined : undefined
+>ElChildren : any
+
+new Elem('' as ElChildren.Text);
+>new Elem('' as ElChildren.Text) : Elem<string>
+>Elem : typeof Elem
+>'' as ElChildren.Text : string
+>'' : ""
+>ElChildren : any
+
+new Elem('' as ElChildren.Void | ElChildren.Text); // error
+>new Elem('' as ElChildren.Void | ElChildren.Text) : Elem<ElChildren>
+>Elem : typeof Elem
+>'' as ElChildren.Void | ElChildren.Text : ElChildren
+>'' : ""
+>ElChildren : any
+>ElChildren : any
+
+new Elem('' as ElChildren); // error
+>new Elem('' as ElChildren) : Elem<ElChildren>
+>Elem : typeof Elem
+>'' as ElChildren : ElChildren
+>'' : ""
+

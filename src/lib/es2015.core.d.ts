@@ -299,6 +299,12 @@ interface ObjectConstructor {
     getOwnPropertySymbols(o: any): symbol[];
 
     /**
+      * Returns the names of the enumerable string properties and methods of an object.
+      * @param o Object that contains the properties and methods. This can be an object that you created or an existing Document Object Model (DOM) object.
+      */
+    keys(o: {}): string[];
+
+    /**
      * Returns true if the values are the same value, false otherwise.
      * @param value1 The first value.
      * @param value2 The second value.

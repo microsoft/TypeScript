@@ -62,7 +62,7 @@ type T11 = ReturnType<(s: string) => void>;  // void
 >s : string
 
 type T12 = ReturnType<(<T>() => T)>;  // {}
->T12 : {}
+>T12 : unknown
 
 type T13 = ReturnType<(<T extends U, U extends number[]>() => T)>;  // number[]
 >T13 : number[]
@@ -82,6 +82,11 @@ type T17 = ReturnType<string>;  // Error
 
 type T18 = ReturnType<Function>;  // Error
 >T18 : any
+
+type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;  // T[]
+>T19 : T[]
+>x : string
+>args : T
 
 type U10 = InstanceType<typeof C>;  // C
 >U10 : C
@@ -105,7 +110,7 @@ type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A
 >a : A
 
 type T20 = ArgumentType<() => void>;  // {}
->T20 : {}
+>T20 : unknown
 
 type T21 = ArgumentType<(x: string) => number>;  // string
 >T21 : string
@@ -425,4 +430,40 @@ type Test1 = EnsureIsString<"hello">;  // "hello"
 
 type Test2 = EnsureIsString<42>;  // never
 >Test2 : never
+
+// Repros from #26856
+
+function invoker <K extends string | number | symbol, A extends any[]> (key: K, ...args: A) {
+>invoker : <K extends string | number | symbol, A extends any[]>(key: K, ...args: A) => <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
+>key : K
+>args : A
+
+    return <T extends Record<K, (...args: A) => any>> (obj: T): ReturnType<T[K]> => obj[key](...args)
+><T extends Record<K, (...args: A) => any>> (obj: T): ReturnType<T[K]> => obj[key](...args) : <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
+>args : A
+>obj : T
+>obj[key](...args) : any
+>obj[key] : T[K]
+>obj : T
+>key : K
+>...args : any
+>args : A
+}
+
+const result = invoker('test', true)({ test: (a: boolean) => 123 })
+>result : number
+>invoker('test', true)({ test: (a: boolean) => 123 }) : number
+>invoker('test', true) : <T extends Record<"test", (args_0: boolean) => any>>(obj: T) => ReturnType<T["test"]>
+>invoker : <K extends string | number | symbol, A extends any[]>(key: K, ...args: A) => <T extends Record<K, (...args: A) => any>>(obj: T) => ReturnType<T[K]>
+>'test' : "test"
+>true : true
+>{ test: (a: boolean) => 123 } : { test: (a: boolean) => number; }
+>test : (a: boolean) => number
+>(a: boolean) => 123 : (a: boolean) => number
+>a : boolean
+>123 : 123
+
+type Foo2<A extends any[]> = ReturnType<(...args: A) => string>;
+>Foo2 : string
+>args : A
 

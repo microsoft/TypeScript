@@ -847,7 +847,7 @@
   "The_arguments_object_cannot_be_referenced_in_an_arrow_function_in_ES3_and_ES5_Consider_using_a_stand_2496": "ES3 ve ES5'te bulunan bir ok işlevinde 'arguments' nesnesine başvuru yapılamaz. Standart bir işlev ifadesi kullanmayı göz önünde bulundurun.",
   "The_arguments_object_cannot_be_referenced_in_an_async_function_or_method_in_ES3_and_ES5_Consider_usi_2522": "ES3 ve ES5'te 'arguments' nesnesine zaman uyumsuz bir işlev veya metot içinde başvurulamaz. Standart bir işlev veya metot kullanmayı düşünün.",
   "The_body_of_an_if_statement_cannot_be_the_empty_statement_1313": "'if' deyiminin gövdesi boş deyim olamaz.",
-  "The_character_set_of_the_input_files_6163": "Girdi dosyalarının karakter kümesi.",
+  "The_character_set_of_the_input_files_6163": "Giriş dosyalarının karakter kümesi.",
   "The_containing_function_or_module_body_is_too_large_for_control_flow_analysis_2563": "İçeren işlev veya modül gövdesi, denetim akışı analizi için çok büyük.",
   "The_current_host_does_not_support_the_0_option_5001": "Mevcut ana bilgisayar '{0}' seçeneğini desteklemiyor.",
   "The_expression_of_an_export_assignment_must_be_an_identifier_or_qualified_name_in_an_ambient_context_2714": "Bir dışarı aktarma ataması ifadesi, çevresel bağlamda bir tanımlayıcı veya tam ad olmalıdır.",
