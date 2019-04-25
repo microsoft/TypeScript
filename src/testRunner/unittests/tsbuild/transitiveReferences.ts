@@ -7,12 +7,12 @@ namespace ts {
             "/src/c.js"
         ];
         const expectedFileTraces = [
-            ...getLibs(),
+            "/lib/lib.d.ts",
             "/src/a.ts",
-            ...getLibs(),
+            "/lib/lib.d.ts",
             "/src/a.d.ts",
             "/src/b.ts",
-            ...getLibs(),
+            "/lib/lib.d.ts",
             "/src/a.d.ts",
             "/src/b.d.ts",
             "/src/refs/a.d.ts",
@@ -63,8 +63,10 @@ export const b = new A();`);
             // Error in b build only a
             const allExpectedOutputs = ["/src/a.js", "/src/a.d.ts"];
             const expectedFileTraces = [
-                ...getLibs(),
+                "/lib/lib.d.ts",
                 "/src/a.ts",
+                "/lib/lib.d.ts",
+                "/src/b.ts"
             ];
             verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
                 allExpectedOutputs,

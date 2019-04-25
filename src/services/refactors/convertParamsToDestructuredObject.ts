@@ -81,7 +81,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         const references = flatMap(names, /*mapfn*/ name => FindAllReferences.getReferenceEntriesForNode(-1, name, program, program.getSourceFiles(), cancellationToken));
         const groupedReferences = groupReferences(references);
 
-        if (!every(groupedReferences.declarations, decl => contains(names, decl))) {
+        if (!every(groupedReferences.declarations, /*callback*/ decl => contains(names, decl))) {
             groupedReferences.valid = false;
         }
 
@@ -90,8 +90,8 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         function groupReferences(referenceEntries: ReadonlyArray<FindAllReferences.Entry>): GroupedReferences {
             const classReferences: ClassReferences = { accessExpressions: [], typeUsages: [] };
             const groupedReferences: GroupedReferences = { functionCalls: [], declarations: [], classReferences, valid: true };
-            const functionSymbols = map(functionNames, checker.getSymbolAtLocation);
-            const classSymbols = map(classNames, checker.getSymbolAtLocation);
+            const functionSymbols = map(functionNames, getSymbolTargetAtLocation);
+            const classSymbols = map(classNames, getSymbolTargetAtLocation);
             const isConstructor = isConstructorDeclaration(functionDeclaration);
 
             for (const entry of referenceEntries) {
@@ -99,7 +99,23 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     groupedReferences.valid = false;
                     continue;
                 }
-                if (contains(functionSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
+
+                /* We compare symbols because in some cases find all references wil return a reference that may or may not be to the refactored function.
+                Example from the refactorConvertParamsToDestructuredObject_methodCallUnion.ts test:
+                    class A { foo(a: number, b: number) { return a + b; } }
+                    class B { foo(c: number, d: number) { return c + d; } }
+                    declare const ab: A | B;
+                    ab.foo(1, 2);
+                Find all references will return `ab.foo(1, 2)` as a reference to A's `foo` but we could be calling B's `foo`.
+                When looking for constructor calls, however, the symbol on the constructor call reference is going to be the corresponding class symbol.
+                So we need to add a special case for this because when calling a constructor of a class through one of its subclasses,
+                the symbols are going to be different.
+                */
+                if (contains(functionSymbols, getSymbolTargetAtLocation(entry.node)) || isNewExpressionTarget(entry.node)) {
+                    const importOrExportReference = entryToImportOrExport(entry);
+                    if (importOrExportReference) {
+                        continue;
+                    }
                     const decl = entryToDeclaration(entry);
                     if (decl) {
                         groupedReferences.declarations.push(decl);
@@ -113,7 +129,12 @@ namespace ts.refactor.convertParamsToDestructuredObject {
                     }
                 }
                 // if the refactored function is a constructor, we must also check if the references to its class are valid
-                if (isConstructor && contains(classSymbols, checker.getSymbolAtLocation(entry.node), symbolComparer)) {
+                if (isConstructor && contains(classSymbols, getSymbolTargetAtLocation(entry.node))) {
+                    const importOrExportReference = entryToImportOrExport(entry);
+                    if (importOrExportReference) {
+                        continue;
+                    }
+
                     const decl = entryToDeclaration(entry);
                     if (decl) {
                         groupedReferences.declarations.push(decl);
@@ -141,10 +162,27 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
             return groupedReferences;
         }
+
+        function getSymbolTargetAtLocation(node: Node) {
+            const symbol = checker.getSymbolAtLocation(node);
+            return symbol && getSymbolTarget(symbol, checker);
+        }
     }
 
-    function symbolComparer(a: Symbol, b: Symbol): boolean {
-        return getSymbolTarget(a) === getSymbolTarget(b);
+    function entryToImportOrExport(entry: FindAllReferences.NodeEntry): Node | undefined {
+        const node = entry.node;
+
+        if (isImportSpecifier(node.parent)
+            || isImportClause(node.parent)
+            || isImportEqualsDeclaration(node.parent)
+            || isNamespaceImport(node.parent)) {
+            return node;
+        }
+
+        if (isExportSpecifier(node.parent) || isExportAssignment(node.parent)) {
+            return node;
+        }
+        return undefined;
     }
 
     function entryToDeclaration(entry: FindAllReferences.NodeEntry): Node | undefined {
@@ -159,37 +197,31 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const functionReference = entry.node;
             const parent = functionReference.parent;
             switch (parent.kind) {
-                // Function call (foo(...) or super(...))
+                // foo(...) or super(...) or new Foo(...)
                 case SyntaxKind.CallExpression:
-                    const callExpression = tryCast(parent, isCallExpression);
-                    if (callExpression && callExpression.expression === functionReference) {
-                        return callExpression;
-                    }
-                    break;
-                // Constructor call (new Foo(...))
                 case SyntaxKind.NewExpression:
-                    const newExpression = tryCast(parent, isNewExpression);
-                    if (newExpression && newExpression.expression === functionReference) {
-                        return newExpression;
+                    const callOrNewExpression = tryCast(parent, isCallOrNewExpression);
+                    if (callOrNewExpression && callOrNewExpression.expression === functionReference) {
+                        return callOrNewExpression;
                     }
                     break;
-                // Method call (x.foo(...))
+                // x.foo(...)
                 case SyntaxKind.PropertyAccessExpression:
                     const propertyAccessExpression = tryCast(parent, isPropertyAccessExpression);
                     if (propertyAccessExpression && propertyAccessExpression.parent && propertyAccessExpression.name === functionReference) {
-                        const callExpression = tryCast(propertyAccessExpression.parent, isCallExpression);
-                        if (callExpression && callExpression.expression === propertyAccessExpression) {
-                            return callExpression;
+                        const callOrNewExpression = tryCast(propertyAccessExpression.parent, isCallOrNewExpression);
+                        if (callOrNewExpression && callOrNewExpression.expression === propertyAccessExpression) {
+                            return callOrNewExpression;
                         }
                     }
                     break;
-                // Method call (x["foo"](...))
+                // x["foo"](...)
                 case SyntaxKind.ElementAccessExpression:
                     const elementAccessExpression = tryCast(parent, isElementAccessExpression);
                     if (elementAccessExpression && elementAccessExpression.parent && elementAccessExpression.argumentExpression === functionReference) {
-                        const callExpression = tryCast(elementAccessExpression.parent, isCallExpression);
-                        if (callExpression && callExpression.expression === elementAccessExpression) {
-                            return callExpression;
+                        const callOrNewExpression = tryCast(elementAccessExpression.parent, isCallOrNewExpression);
+                        if (callOrNewExpression && callOrNewExpression.expression === elementAccessExpression) {
+                            return callOrNewExpression;
                         }
                     }
                     break;
@@ -232,7 +264,11 @@ namespace ts.refactor.convertParamsToDestructuredObject {
 
     function getFunctionDeclarationAtPosition(file: SourceFile, startPosition: number, checker: TypeChecker): ValidFunctionDeclaration | undefined {
         const node = getTouchingToken(file, startPosition);
-        const functionDeclaration = getContainingFunction(node);
+        const functionDeclaration = getContainingFunctionDeclaration(node);
+
+         // don't offer refactor on top-level JSDoc
+        if (isTopLevelJSDoc(node)) return undefined;
+
         if (functionDeclaration
             && isValidFunctionDeclaration(functionDeclaration, checker)
             && rangeContainsRange(functionDeclaration, node)
@@ -241,18 +277,31 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return undefined;
     }
 
-    function isValidFunctionDeclaration(functionDeclaration: SignatureDeclaration, checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
-        if (!isValidParameterNodeArray(functionDeclaration.parameters)) return false;
+    function isTopLevelJSDoc(node: Node): boolean {
+        const containingJSDoc = findAncestor(node, isJSDocNode);
+        if (containingJSDoc) {
+            const containingNonJSDoc = findAncestor(containingJSDoc, n => !isJSDocNode(n));
+            return !!containingNonJSDoc && isFunctionLikeDeclaration(containingNonJSDoc);
+        }
+        return false;
+    }
+
+    function isValidFunctionDeclaration(
+        functionDeclaration: FunctionLikeDeclaration,
+        checker: TypeChecker): functionDeclaration is ValidFunctionDeclaration {
+        if (!isValidParameterNodeArray(functionDeclaration.parameters, checker)) return false;
         switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
+                return hasNameOrDefault(functionDeclaration) && isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.MethodDeclaration:
-                return !!functionDeclaration.name && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
+                return isSingleImplementation(functionDeclaration, checker);
             case SyntaxKind.Constructor:
                 if (isClassDeclaration(functionDeclaration.parent)) {
-                    return !!functionDeclaration.body && !!functionDeclaration.parent.name && !checker.isImplementationOfOverload(functionDeclaration);
+                    return hasNameOrDefault(functionDeclaration.parent) && isSingleImplementation(functionDeclaration, checker);
                 }
                 else {
-                    return isValidVariableDeclaration(functionDeclaration.parent.parent) && !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
+                    return isValidVariableDeclaration(functionDeclaration.parent.parent)
+                        && isSingleImplementation(functionDeclaration, checker);
                 }
             case SyntaxKind.FunctionExpression:
             case SyntaxKind.ArrowFunction:
@@ -261,12 +310,33 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return false;
     }
 
-    function isValidParameterNodeArray(parameters: NodeArray<ParameterDeclaration>): parameters is ValidParameterNodeArray {
-        return getRefactorableParametersLength(parameters) >= minimumParameterLength && every(parameters, isValidParameterDeclaration);
+    function isSingleImplementation(functionDeclaration: FunctionLikeDeclaration, checker: TypeChecker): boolean {
+        return !!functionDeclaration.body && !checker.isImplementationOfOverload(functionDeclaration);
     }
 
-    function isValidParameterDeclaration(paramDeclaration: ParameterDeclaration): paramDeclaration is ValidParameterDeclaration {
-        return !paramDeclaration.modifiers && !paramDeclaration.decorators && isIdentifier(paramDeclaration.name);
+    function hasNameOrDefault(functionOrClassDeclaration: FunctionDeclaration | ClassDeclaration): boolean {
+        if (!functionOrClassDeclaration.name) {
+            const defaultKeyword = findModifier(functionOrClassDeclaration, SyntaxKind.DefaultKeyword);
+            return !!defaultKeyword;
+        }
+        return true;
+    }
+
+    function isValidParameterNodeArray(
+        parameters: NodeArray<ParameterDeclaration>,
+        checker: TypeChecker): parameters is ValidParameterNodeArray {
+        return getRefactorableParametersLength(parameters) >= minimumParameterLength
+            && every(parameters, /*callback*/ paramDecl => isValidParameterDeclaration(paramDecl, checker));
+    }
+
+    function isValidParameterDeclaration(
+        parameterDeclaration: ParameterDeclaration,
+        checker: TypeChecker): parameterDeclaration is ValidParameterDeclaration {
+        if (isRestParameter(parameterDeclaration)) {
+            const type = checker.getTypeAtLocation(parameterDeclaration);
+            if (!checker.isArrayType(type) && !checker.isTupleType(type)) return false;
+        }
+        return !parameterDeclaration.modifiers && !parameterDeclaration.decorators && isIdentifier(parameterDeclaration.name);
     }
 
     function isValidVariableDeclaration(node: Node): node is ValidVariableDeclaration {
@@ -291,13 +361,23 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return parameters;
     }
 
+    function createPropertyOrShorthandAssignment(name: string, initializer: Expression): PropertyAssignment | ShorthandPropertyAssignment {
+        if (isIdentifier(initializer) && getTextOfIdentifierOrLiteral(initializer) === name) {
+            return createShorthandPropertyAssignment(name);
+        }
+        return createPropertyAssignment(name, initializer);
+    }
+
     function createNewArgument(functionDeclaration: ValidFunctionDeclaration, functionArguments: NodeArray<Expression>): ObjectLiteralExpression {
         const parameters = getRefactorableParameters(functionDeclaration.parameters);
         const hasRestParameter = isRestParameter(last(parameters));
         const nonRestArguments = hasRestParameter ? functionArguments.slice(0, parameters.length - 1) : functionArguments;
         const properties = map(nonRestArguments, (arg, i) => {
-            const property = createPropertyAssignment(getParameterName(parameters[i]), arg);
-            suppressLeadingAndTrailingTrivia(property.initializer);
+            const parameterName = getParameterName(parameters[i]);
+            const property = createPropertyOrShorthandAssignment(parameterName, arg);
+
+            suppressLeadingAndTrailingTrivia(property.name);
+            if (isPropertyAssignment(property)) suppressLeadingAndTrailingTrivia(property.initializer);
             copyComments(arg, property);
             return property;
         });
@@ -313,15 +393,15 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     }
 
     function createNewParameters(functionDeclaration: ValidFunctionDeclaration, program: Program, host: LanguageServiceHost): NodeArray<ParameterDeclaration> {
+        const checker = program.getTypeChecker();
         const refactorableParameters = getRefactorableParameters(functionDeclaration.parameters);
         const bindingElements = map(refactorableParameters, createBindingElementFromParameterDeclaration);
         const objectParameterName = createObjectBindingPattern(bindingElements);
         const objectParameterType = createParameterTypeNode(refactorableParameters);
-        const checker = program.getTypeChecker();
 
         let objectInitializer: Expression | undefined;
         // If every parameter in the original function was optional, add an empty object initializer to the new object parameter
-        if (every(refactorableParameters, checker.isOptionalParameter)) {
+        if (every(refactorableParameters, isOptionalParameter)) {
             objectInitializer = createObjectLiteral();
         }
 
@@ -355,6 +435,20 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }
         return createNodeArray([objectParameter]);
 
+        function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
+            const element = createBindingElement(
+                /*dotDotDotToken*/ undefined,
+                /*propertyName*/ undefined,
+                getParameterName(parameterDeclaration),
+                isRestParameter(parameterDeclaration) && isOptionalParameter(parameterDeclaration) ? createArrayLiteral() : parameterDeclaration.initializer);
+
+            suppressLeadingAndTrailingTrivia(element);
+            if (parameterDeclaration.initializer && element.initializer) {
+                copyComments(parameterDeclaration.initializer, element.initializer);
+            }
+            return element;
+        }
+
         function createParameterTypeNode(parameters: NodeArray<ValidParameterDeclaration>): TypeLiteralNode {
             const members = map(parameters, createPropertySignatureFromParameterDeclaration);
             const typeNode = addEmitFlags(createTypeLiteralNode(members), EmitFlags.SingleLine);
@@ -370,7 +464,7 @@ namespace ts.refactor.convertParamsToDestructuredObject {
             const propertySignature = createPropertySignature(
                 /*modifiers*/ undefined,
                 getParameterName(parameterDeclaration),
-                parameterDeclaration.initializer || isRestParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
+                isOptionalParameter(parameterDeclaration) ? createToken(SyntaxKind.QuestionToken) : parameterDeclaration.questionToken,
                 parameterType,
                 /*initializer*/ undefined);
 
@@ -384,24 +478,17 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         }
 
         function getTypeNode(node: Node): TypeNode | undefined {
-            const checker = program.getTypeChecker();
             const type = checker.getTypeAtLocation(node);
             return getTypeNodeIfAccessible(type, node, program, host);
         }
-    }
 
-    function createBindingElementFromParameterDeclaration(parameterDeclaration: ValidParameterDeclaration): BindingElement {
-        const element = createBindingElement(
-            /*dotDotDotToken*/ undefined,
-            /*propertyName*/ undefined,
-            getParameterName(parameterDeclaration),
-            isRestParameter(parameterDeclaration) ? createArrayLiteral() : parameterDeclaration.initializer);
-
-        suppressLeadingAndTrailingTrivia(element);
-        if (parameterDeclaration.initializer && element.initializer) {
-            copyComments(parameterDeclaration.initializer, element.initializer);
+        function isOptionalParameter(parameterDeclaration: ValidParameterDeclaration): boolean {
+            if (isRestParameter(parameterDeclaration)) {
+                const type = checker.getTypeAtLocation(parameterDeclaration);
+                return !checker.isTupleType(type);
+            }
+            return checker.isOptionalParameter(parameterDeclaration);
         }
-        return element;
     }
 
     function copyComments(sourceNode: Node, targetNode: Node) {
@@ -429,11 +516,17 @@ namespace ts.refactor.convertParamsToDestructuredObject {
         return getTextOfIdentifierOrLiteral(paramDeclaration.name);
     }
 
-    function getClassNames(constructorDeclaration: ValidConstructor): Identifier[] {
+    function getClassNames(constructorDeclaration: ValidConstructor): (Identifier | Modifier)[] {
         switch (constructorDeclaration.parent.kind) {
             case SyntaxKind.ClassDeclaration:
                 const classDeclaration = constructorDeclaration.parent;
-                return [classDeclaration.name];
+                if (classDeclaration.name) return [classDeclaration.name];
+                // If the class declaration doesn't have a name, it should have a default modifier.
+                // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
+                const defaultModifier = Debug.assertDefined(
+                    findModifier(classDeclaration, SyntaxKind.DefaultKeyword),
+                    "Nameless class declaration should be a default export");
+                return [defaultModifier];
             case SyntaxKind.ClassExpression:
                 const classExpression = constructorDeclaration.parent;
                 const variableDeclaration = constructorDeclaration.parent.parent;
@@ -446,10 +539,19 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     function getFunctionNames(functionDeclaration: ValidFunctionDeclaration): Node[] {
         switch (functionDeclaration.kind) {
             case SyntaxKind.FunctionDeclaration:
+                if (functionDeclaration.name) return [functionDeclaration.name];
+                // If the function declaration doesn't have a name, it should have a default modifier.
+                // We validated this in `isValidFunctionDeclaration` through `hasNameOrDefault`
+                const defaultModifier = Debug.assertDefined(
+                    findModifier(functionDeclaration, SyntaxKind.DefaultKeyword),
+                    "Nameless function declaration should be a default export");
+                return [defaultModifier];
             case SyntaxKind.MethodDeclaration:
                 return [functionDeclaration.name];
             case SyntaxKind.Constructor:
-                const ctrKeyword = findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile())!;
+                const ctrKeyword = Debug.assertDefined(
+                    findChildOfKind(functionDeclaration, SyntaxKind.ConstructorKeyword, functionDeclaration.getSourceFile()),
+                    "Constructor declaration should have constructor keyword");
                 if (functionDeclaration.parent.kind === SyntaxKind.ClassExpression) {
                     const variableDeclaration = functionDeclaration.parent.parent;
                     return [variableDeclaration.name, ctrKeyword];
@@ -473,13 +575,12 @@ namespace ts.refactor.convertParamsToDestructuredObject {
     }
 
     interface ValidConstructor extends ConstructorDeclaration {
-        parent: (ClassDeclaration & { name: Identifier }) | (ClassExpression & { parent: ValidVariableDeclaration });
+        parent: ClassDeclaration | (ClassExpression & { parent: ValidVariableDeclaration });
         parameters: NodeArray<ValidParameterDeclaration>;
         body: FunctionBody;
     }
 
     interface ValidFunction extends FunctionDeclaration {
-        name: Identifier;
         parameters: NodeArray<ValidParameterDeclaration>;
         body: FunctionBody;
     }

@@ -55,8 +55,8 @@ type O = Omit<{ a: number, b: string }, 'a'>
 >a : Symbol(a, Decl(indexedAccessRetainsIndexSignature.ts, 8, 15))
 >b : Symbol(b, Decl(indexedAccessRetainsIndexSignature.ts, 8, 26))
 
-const o: O = { b: '' }
->o : Symbol(o, Decl(indexedAccessRetainsIndexSignature.ts, 9, 5))
+export const o: O = { b: '' }
+>o : Symbol(o, Decl(indexedAccessRetainsIndexSignature.ts, 9, 12))
 >O : Symbol(O, Decl(indexedAccessRetainsIndexSignature.ts, 6, 67))
->b : Symbol(b, Decl(indexedAccessRetainsIndexSignature.ts, 9, 14))
+>b : Symbol(b, Decl(indexedAccessRetainsIndexSignature.ts, 9, 21))
 

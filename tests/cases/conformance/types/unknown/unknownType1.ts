@@ -122,12 +122,12 @@ function f23<T extends unknown>(x: T) {
     let y: object = x;  // Error
 }
 
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
     x = {};
     x = { a: 5 };
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
     x = 123;  // Error
 }
 

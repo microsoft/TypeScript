@@ -545,6 +545,10 @@ const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerel
 task("configure-insiders", series(buildScripts, configureInsiders));
 task("configure-insiders").description = "Runs scripts/configurePrerelease.ts to prepare a build for insiders publishing";
 
+const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/core.ts"])
+task("configure-experimental", series(buildScripts, configureExperimental));
+task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
+
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));
 task("publish-nightly").description = "Runs `npm publish --tag next` to create a new nightly build on npm";
