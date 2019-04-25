@@ -22,9 +22,10 @@ gh.issues.createComment({
     owner: "Microsoft",
     repo: "TypeScript",
     body: `@${requester}
-The results of the perf run you requested are in! Here they are:
-
-${outputTableText}`
+The results of the perf run you requested are in!
+<details><summary> Here they are:</summary><p>
+${outputTableText}
+</p></details>`
 }).then(async data => {
     console.log(`Results posted!`);
     const newCommentUrl = data.data.html_url;

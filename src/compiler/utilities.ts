@@ -2221,6 +2221,7 @@ namespace ts {
     function getNextJSDocCommentLocation(node: Node) {
         const parent = node.parent;
         if (parent.kind === SyntaxKind.PropertyAssignment ||
+            parent.kind === SyntaxKind.ExportAssignment ||
             parent.kind === SyntaxKind.PropertyDeclaration ||
             parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
             getNestedModuleDeclaration(parent) ||
@@ -4330,6 +4331,10 @@ namespace ts {
         return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
     }
 
+    export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
+        return !positionsAreOnSameLine(list.pos, list.end, sourceFile);
+    }
+
     export function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile) {
         return pos1 === pos2 ||
             getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
@@ -4673,6 +4678,8 @@ namespace ts {
         switch (options.target) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2020:
+                return "lib.es2020.full.d.ts";
             case ScriptTarget.ES2019:
                 return "lib.es2019.full.d.ts";
             case ScriptTarget.ES2018:
@@ -7318,6 +7325,11 @@ namespace ts {
     export function compilerOptionsAffectSemanticDiagnostics(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
         return oldOptions !== newOptions &&
             semanticDiagnosticsOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
+    }
+
+    export function compilerOptionsAffectEmit(newOptions: CompilerOptions, oldOptions: CompilerOptions): boolean {
+        return oldOptions !== newOptions &&
+            affectsEmitOptionDeclarations.some(option => !isJsonEqual(getCompilerOptionValue(oldOptions, option), getCompilerOptionValue(newOptions, option)));
     }
 
     export function getCompilerOptionValue(options: CompilerOptions, option: CommandLineOption): unknown {

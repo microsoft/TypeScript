@@ -391,9 +391,9 @@ export function keys<K extends string, V>(obj: Record<K, V>): K[] {
   return Object.keys(obj) as K[]
 >Object.keys(obj) as K[] : K[]
 >Object.keys(obj) : string[]
->Object.keys : (o: {}) => string[]
+>Object.keys : (o: object) => string[]
 >Object : ObjectConstructor
->keys : (o: {}) => string[]
+>keys : (o: object) => string[]
 >obj : Record<K, V>
 }
 

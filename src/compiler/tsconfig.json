@@ -53,6 +53,5 @@
         "moduleSpecifiers.ts",
         "watch.ts",
         "tsbuild.ts",
-        "inspectValue.ts",
     ]
 }

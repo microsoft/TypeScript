@@ -1,0 +1,102 @@
+=== tests/cases/compiler/nearbyIdenticalGenericLambdasAssignable.ts ===
+declare const fA: <T>() => { v: T };
+>fA : Symbol(fA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 13))
+>T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 19))
+>v : Symbol(v, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 28))
+>T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 19))
+
+const fB = <T>() => {
+>fB : Symbol(fB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 1, 5))
+>T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 1, 12))
+
+    return { v: '' as any as T };
+>v : Symbol(v, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 2, 12))
+>T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 1, 12))
+
+};
+const fC = <T>() => {
+>fC : Symbol(fC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 4, 5))
+>T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 4, 12))
+
+    return {} as any as { v: T };
+>v : Symbol(v, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 5, 25))
+>T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 4, 12))
+
+};
+
+// Hover display is identical on all of these
+type TA = typeof fA;
+>TA : Symbol(TA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 6, 2))
+>fA : Symbol(fA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 13))
+
+type TB = typeof fB;
+>TB : Symbol(TB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 9, 20))
+>fB : Symbol(fB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 1, 5))
+
+type TC = typeof fC;
+>TC : Symbol(TC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 10, 20))
+>fC : Symbol(fC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 4, 5))
+
+type TL = <T>() => { v: T }; 
+>TL : Symbol(TL, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 11, 20))
+>T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 12, 11))
+>v : Symbol(v, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 12, 20))
+>T : Symbol(T, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 12, 11))
+
+declare function accA(x: TA): void;
+>accA : Symbol(accA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 12, 28))
+>x : Symbol(x, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 14, 22))
+>TA : Symbol(TA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 6, 2))
+
+declare function accB(x: TB): void;
+>accB : Symbol(accB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 14, 35))
+>x : Symbol(x, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 15, 22))
+>TB : Symbol(TB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 9, 20))
+
+declare function accC(x: TC): void;
+>accC : Symbol(accC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 15, 35))
+>x : Symbol(x, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 16, 22))
+>TC : Symbol(TC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 10, 20))
+
+declare function accL(x: TL): void;
+>accL : Symbol(accL, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 16, 35))
+>x : Symbol(x, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 17, 22))
+>TL : Symbol(TL, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 11, 20))
+
+// These should all be OK, every type is identical
+accA(fA); accA(fB); accA(fC);
+>accA : Symbol(accA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 12, 28))
+>fA : Symbol(fA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 13))
+>accA : Symbol(accA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 12, 28))
+>fB : Symbol(fB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 1, 5))
+>accA : Symbol(accA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 12, 28))
+>fC : Symbol(fC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 4, 5))
+
+//             ~~ previously an error
+accB(fA); accB(fB); accB(fC);
+>accB : Symbol(accB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 14, 35))
+>fA : Symbol(fA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 13))
+>accB : Symbol(accB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 14, 35))
+>fB : Symbol(fB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 1, 5))
+>accB : Symbol(accB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 14, 35))
+>fC : Symbol(fC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 4, 5))
+
+//             OK
+accC(fA); accC(fB); accC(fC);
+>accC : Symbol(accC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 15, 35))
+>fA : Symbol(fA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 13))
+>accC : Symbol(accC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 15, 35))
+>fB : Symbol(fB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 1, 5))
+>accC : Symbol(accC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 15, 35))
+>fC : Symbol(fC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 4, 5))
+
+//             ~~ previously an error
+accL(fA); accL(fB); accL(fC);
+>accL : Symbol(accL, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 16, 35))
+>fA : Symbol(fA, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 0, 13))
+>accL : Symbol(accL, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 16, 35))
+>fB : Symbol(fB, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 1, 5))
+>accL : Symbol(accL, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 16, 35))
+>fC : Symbol(fC, Decl(nearbyIdenticalGenericLambdasAssignable.ts, 4, 5))
+
+//             ~~ previously an error

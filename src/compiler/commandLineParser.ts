@@ -16,6 +16,7 @@ namespace ts {
         ["es2017", "lib.es2017.d.ts"],
         ["es2018", "lib.es2018.d.ts"],
         ["es2019", "lib.es2019.d.ts"],
+        ["es2020", "lib.es2020.d.ts"],
         ["esnext", "lib.esnext.d.ts"],
         // Host only
         ["dom", "lib.dom.d.ts"],
@@ -47,6 +48,8 @@ namespace ts {
         ["es2019.object", "lib.es2019.object.d.ts"],
         ["es2019.string", "lib.es2019.string.d.ts"],
         ["es2019.symbol", "lib.es2019.symbol.d.ts"],
+        ["es2020.string", "lib.es2020.string.d.ts"],
+        ["es2020.symbol.wellknown", "lib.es2020.symbol.wellknown.d.ts"],
         ["esnext.array", "lib.es2019.array.d.ts"],
         ["esnext.symbol", "lib.es2019.symbol.d.ts"],
         ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
@@ -211,6 +214,7 @@ namespace ts {
                 es2017: ScriptTarget.ES2017,
                 es2018: ScriptTarget.ES2018,
                 es2019: ScriptTarget.ES2019,
+                es2020: ScriptTarget.ES2020,
                 esnext: ScriptTarget.ESNext,
             }),
             affectsSourceFile: true,
@@ -282,6 +286,7 @@ namespace ts {
             name: "declaration",
             shortName: "d",
             type: "boolean",
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Generates_corresponding_d_ts_file,
@@ -289,6 +294,7 @@ namespace ts {
         {
             name: "declarationMap",
             type: "boolean",
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Generates_a_sourcemap_for_each_corresponding_d_ts_file,
@@ -296,12 +302,14 @@ namespace ts {
         {
             name: "emitDeclarationOnly",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Only_emit_d_ts_declaration_files,
         },
         {
             name: "sourceMap",
             type: "boolean",
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Generates_corresponding_map_file,
@@ -309,6 +317,7 @@ namespace ts {
         {
             name: "outFile",
             type: "string",
+            affectsEmit: true,
             isFilePath: true,
             paramType: Diagnostics.FILE,
             showInSimplifiedHelpView: true,
@@ -318,6 +327,7 @@ namespace ts {
         {
             name: "outDir",
             type: "string",
+            affectsEmit: true,
             isFilePath: true,
             paramType: Diagnostics.DIRECTORY,
             showInSimplifiedHelpView: true,
@@ -327,6 +337,7 @@ namespace ts {
         {
             name: "rootDir",
             type: "string",
+            affectsEmit: true,
             isFilePath: true,
             paramType: Diagnostics.LOCATION,
             category: Diagnostics.Basic_Options,
@@ -335,6 +346,7 @@ namespace ts {
         {
             name: "composite",
             type: "boolean",
+            affectsEmit: true,
             isTSConfigOnly: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Enable_project_compilation,
@@ -342,6 +354,7 @@ namespace ts {
         {
             name: "tsBuildInfoFile",
             type: "string",
+            affectsEmit: true,
             isFilePath: true,
             paramType: Diagnostics.FILE,
             category: Diagnostics.Basic_Options,
@@ -350,6 +363,7 @@ namespace ts {
         {
             name: "removeComments",
             type: "boolean",
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Do_not_emit_comments_to_output,
@@ -357,6 +371,7 @@ namespace ts {
         {
             name: "noEmit",
             type: "boolean",
+            affectsEmit: true,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Do_not_emit_outputs,
@@ -364,12 +379,14 @@ namespace ts {
         {
             name: "importHelpers",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Import_emit_helpers_from_tslib
         },
         {
             name: "downlevelIteration",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Basic_Options,
             description: Diagnostics.Provide_full_support_for_iterables_in_for_of_spread_and_destructuring_when_targeting_ES5_or_ES3
         },
@@ -576,11 +593,19 @@ namespace ts {
             category: Diagnostics.Module_Resolution_Options,
             description: Diagnostics.Do_not_resolve_the_real_path_of_symlinks,
         },
+        {
+            name: "allowUmdGlobalAccess",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Module_Resolution_Options,
+            description: Diagnostics.Allow_accessing_UMD_globals_from_modules,
+        },
 
         // Source Maps
         {
             name: "sourceRoot",
             type: "string",
+            affectsEmit: true,
             paramType: Diagnostics.LOCATION,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_TypeScript_files_instead_of_source_locations,
@@ -588,6 +613,7 @@ namespace ts {
         {
             name: "mapRoot",
             type: "string",
+            affectsEmit: true,
             paramType: Diagnostics.LOCATION,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Specify_the_location_where_debugger_should_locate_map_files_instead_of_generated_locations,
@@ -595,12 +621,14 @@ namespace ts {
         {
             name: "inlineSourceMap",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Emit_a_single_file_with_source_maps_instead_of_having_a_separate_file
         },
         {
             name: "inlineSources",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Source_Map_Options,
             description: Diagnostics.Emit_the_source_alongside_the_sourcemaps_within_a_single_file_requires_inlineSourceMap_or_sourceMap_to_be_set
         },
@@ -636,6 +664,7 @@ namespace ts {
         {
             name: "out",
             type: "string",
+            affectsEmit: true,
             isFilePath: false, // This is intentionally broken to support compatability with existing tsconfig files
             // for correct behaviour, please use outFile
             category: Diagnostics.Advanced_Options,
@@ -645,6 +674,7 @@ namespace ts {
         {
             name: "reactNamespace",
             type: "string",
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Deprecated_Use_jsxFactory_instead_Specify_the_object_invoked_for_createElement_when_targeting_react_JSX_emit
         },
@@ -663,6 +693,7 @@ namespace ts {
         {
             name: "emitBOM",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Emit_a_UTF_8_Byte_Order_Mark_BOM_in_the_beginning_of_output_files
         },
@@ -678,6 +709,7 @@ namespace ts {
                 crlf: NewLineKind.CarriageReturnLineFeed,
                 lf: NewLineKind.LineFeed
             }),
+            affectsEmit: true,
             paramType: Diagnostics.NEWLINE,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Specify_the_end_of_line_sequence_to_be_used_when_emitting_files_Colon_CRLF_dos_or_LF_unix,
@@ -705,6 +737,7 @@ namespace ts {
         {
             name: "stripInternal",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_emit_declarations_for_code_that_has_an_internal_annotation,
         },
@@ -725,24 +758,28 @@ namespace ts {
         {
             name: "noEmitHelpers",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_generate_custom_helper_functions_like_extends_in_compiled_output
         },
         {
             name: "noEmitOnError",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_emit_outputs_if_any_errors_were_reported,
         },
         {
             name: "preserveConstEnums",
             type: "boolean",
+            affectsEmit: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Do_not_erase_const_enum_declarations_in_generated_code
         },
         {
             name: "declarationDir",
             type: "string",
+            affectsEmit: true,
             isFilePath: true,
             paramType: Diagnostics.DIRECTORY,
             category: Diagnostics.Advanced_Options,
@@ -826,6 +863,10 @@ namespace ts {
     /* @internal */
     export const semanticDiagnosticsOptionDeclarations: ReadonlyArray<CommandLineOption> =
         optionDeclarations.filter(option => !!option.affectsSemanticDiagnostics);
+
+    /* @internal */
+    export const affectsEmitOptionDeclarations: ReadonlyArray<CommandLineOption> =
+        optionDeclarations.filter(option => !!option.affectsEmit);
 
     /* @internal */
     export const moduleResolutionOptionDeclarations: ReadonlyArray<CommandLineOption> =

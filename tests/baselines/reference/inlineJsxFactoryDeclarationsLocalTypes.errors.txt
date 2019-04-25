@@ -1,10 +1,10 @@
-tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'Element' but required in type 'Element'.
+tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,40): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
   Property '__domBrand' is missing in type 'MyClass' but required in type 'ElementClass'.
 tests/cases/conformance/jsx/inline/index.tsx(21,63): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(21,63): error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
-tests/cases/conformance/jsx/inline/index.tsx(24,42): error TS2741: Property '__domBrand' is missing in type 'Element' but required in type 'Element'.
+tests/cases/conformance/jsx/inline/index.tsx(24,42): error TS2741: Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
 tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
 
 
@@ -75,7 +75,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
     let elem = prerendered;
     elem = <h></h>; // Expect assignability error here
     ~~~~
-!!! error TS2741: Property '__predomBrand' is missing in type 'Element' but required in type 'Element'.
+!!! error TS2741: Property '__predomBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
     
     const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
@@ -107,7 +107,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,48): error TS2322: Type 'import(
     // Should fail, nondom isn't allowed as children of dom
     const _brokenTree2 = <DOMSFC x={1} y={2}>{tree}{tree}</DOMSFC>
                                              ~~~~~~
-!!! error TS2741: Property '__domBrand' is missing in type 'Element' but required in type 'Element'.
+!!! error TS2741: Property '__domBrand' is missing in type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' but required in type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
                                                    ~~~~~~
 !!! error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element'.

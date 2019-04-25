@@ -15,26 +15,70 @@ function foo3(y = { x: <typeof z>a }, z = 1) {
     
 }
 
+// error - used before declaration
+function foo4(y = {z}, z = 1) {
+}
+
+// error - used before declaration, IIFEs are inlined
+function foo5(y = (() => z)(), z = 1) {
+}
+
+// ok - IIFE inside another function
+function foo6(y = () => (() => z)(), z = 1) {
+}
+
+// ok - used inside immediately invoked generator function
+function foo7(y = (function*() {yield z})(), z = 1) {
+}
+
+// ok - used inside immediately invoked async function
+function foo8(y = (async () => z)(), z = 1) {
+}
+
+// error - used as computed name of method
+function foo9(y = {[z]() { return z; }}, z = 1) {
+}
+
+
 //// [capturedParametersInInitializers1.js]
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 // ok - usage is deferred
-function foo1(y, x) {
-    if (y === void 0) { y = /** @class */ (function () {
-        function class_1() {
-            this.c = x;
-        }
-        return class_1;
-    }()); }
-    if (x === void 0) { x = 1; }
+function foo1(y = class {
+    constructor() {
+        this.c = x;
+    }
+}, x = 1) {
     new y().c;
 }
 // ok - used in file
-function foo2(y, z) {
-    if (y === void 0) { y = function (x) { }; }
-    if (z === void 0) { z = 1; }
+function foo2(y = function (x) { }, z = 1) {
 }
 // ok -used in type
-var a;
-function foo3(y, z) {
-    if (y === void 0) { y = { x: a }; }
-    if (z === void 0) { z = 1; }
+let a;
+function foo3(y = { x: a }, z = 1) {
+}
+// error - used before declaration
+function foo4(y = { z }, z = 1) {
+}
+// error - used before declaration, IIFEs are inlined
+function foo5(y = (() => z)(), z = 1) {
+}
+// ok - IIFE inside another function
+function foo6(y = () => (() => z)(), z = 1) {
+}
+// ok - used inside immediately invoked generator function
+function foo7(y = (function* () { yield z; })(), z = 1) {
+}
+// ok - used inside immediately invoked async function
+function foo8(y = (() => __awaiter(this, void 0, void 0, function* () { return z; }))(), z = 1) {
+}
+// error - used as computed name of method
+function foo9(y = { [z]() { return z; } }, z = 1) {
 }

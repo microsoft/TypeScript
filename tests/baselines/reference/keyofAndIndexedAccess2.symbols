@@ -388,3 +388,49 @@ function get123<K extends keyof Type>(): Type[K] {
     return 123;  // Error
 }
 
+// Repro from #30920
+
+type StrictExtract<T, U> = T extends U ? U extends T ? T : never : never;
+>StrictExtract : Symbol(StrictExtract, Decl(keyofAndIndexedAccess2.ts, 108, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 19))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 112, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 19))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 112, 21))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 112, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 19))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 112, 19))
+
+type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
+>StrictExclude : Symbol(StrictExclude, Decl(keyofAndIndexedAccess2.ts, 112, 73))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 113, 19))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 113, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 113, 19))
+>StrictExtract : Symbol(StrictExtract, Decl(keyofAndIndexedAccess2.ts, 108, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 113, 19))
+>U : Symbol(U, Decl(keyofAndIndexedAccess2.ts, 113, 21))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 113, 19))
+
+type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
+>A : Symbol(A, Decl(keyofAndIndexedAccess2.ts, 113, 69))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 114, 7))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 114, 15))
+>P : Symbol(P, Decl(keyofAndIndexedAccess2.ts, 114, 23))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 114, 7))
+>P : Symbol(P, Decl(keyofAndIndexedAccess2.ts, 114, 23))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 114, 7))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 114, 7))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 114, 15))
+
+type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
+>B : Symbol(B, Decl(keyofAndIndexedAccess2.ts, 114, 62))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 115, 7))
+>V : Symbol(V, Decl(keyofAndIndexedAccess2.ts, 115, 9))
+>A : Symbol(A, Decl(keyofAndIndexedAccess2.ts, 113, 69))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 115, 20))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 115, 7))
+>StrictExclude : Symbol(StrictExclude, Decl(keyofAndIndexedAccess2.ts, 112, 73))
+>B : Symbol(B, Decl(keyofAndIndexedAccess2.ts, 114, 62))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 115, 7))
+>Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 115, 20))
+>V : Symbol(V, Decl(keyofAndIndexedAccess2.ts, 115, 9))
+

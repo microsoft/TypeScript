@@ -1,6 +1,16 @@
 Exit Code: 1
 Standard output:
 lib/Accessibility.js(118,15): error TS2503: Cannot find namespace 'Protocol'.
+lib/Accessibility.js(310,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
+  Type 'string' is not assignable to type 'never'.
+lib/Accessibility.js(333,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
+  Type 'string' is not assignable to type 'never'.
+lib/Accessibility.js(345,7): error TS2322: Type 'boolean | "mixed"' is not assignable to type 'never'.
+  Type 'false' is not assignable to type 'never'.
+lib/Accessibility.js(356,7): error TS2322: Type 'string | number | boolean' is not assignable to type 'never'.
+  Type 'string' is not assignable to type 'never'.
+lib/Accessibility.js(369,7): error TS2322: Type 'string | number | true' is not assignable to type 'never'.
+  Type 'string' is not assignable to type 'never'.
 lib/Accessibility.js(375,22): error TS2503: Cannot find namespace 'Protocol'.
 lib/Browser.js(109,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Browser.js(116,58): error TS2322: Type 'Promise<CDPSession>' is not assignable to type 'Promise<Puppeteer.CDPSession>'.
