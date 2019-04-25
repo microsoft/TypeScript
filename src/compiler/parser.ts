@@ -2985,6 +2985,9 @@ namespace ts {
                 case SyntaxKind.OpenBracketToken:
                     return parseTupleType();
                 case SyntaxKind.OpenParenToken:
+                    if (isStartOfFunctionType()) {
+                        return parseFunctionOrConstructorType();
+                    }
                     return parseParenthesizedType();
                 case SyntaxKind.ImportKeyword:
                     return parseImportType();

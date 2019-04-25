@@ -1,0 +1,12 @@
+=== tests/cases/compiler/arrowFunctionTypeWithUnion.ts ===
+declare const a: string | (a: string, b: boolean) => string
+>a : Symbol(a, Decl(arrowFunctionTypeWithUnion.ts, 0, 13))
+>a : Symbol(a, Decl(arrowFunctionTypeWithUnion.ts, 0, 27))
+>b : Symbol(b, Decl(arrowFunctionTypeWithUnion.ts, 0, 37))
+
+declare const b: string | () => string
+>b : Symbol(b, Decl(arrowFunctionTypeWithUnion.ts, 1, 13))
+
+declare const c: string | () => string | number | () => boolean
+>c : Symbol(c, Decl(arrowFunctionTypeWithUnion.ts, 2, 13))
+
