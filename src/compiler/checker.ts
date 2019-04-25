@@ -21973,6 +21973,13 @@ namespace ts {
                     const arg = (<PrefixUnaryExpression>node).operand;
                     return op === SyntaxKind.MinusToken && (arg.kind === SyntaxKind.NumericLiteral || arg.kind === SyntaxKind.BigIntLiteral) ||
                         op === SyntaxKind.PlusToken && arg.kind === SyntaxKind.NumericLiteral;
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    const expr = (<PropertyAccessExpression | ElementAccessExpression>node).expression;
+                    if (isIdentifier(expr)) {
+                        const symbol = getSymbolAtLocation(expr);
+                        return !!(symbol && (symbol.flags & SymbolFlags.Enum) && getEnumKind(symbol) === EnumKind.Literal);
+                    }
             }
             return false;
         }
@@ -21981,7 +21988,7 @@ namespace ts {
             let exprType = checkExpression(expression, checkMode);
             if (isConstTypeReference(type)) {
                 if (!isValidConstAssertionArgument(expression)) {
-                    error(expression, Diagnostics.A_const_assertion_can_only_be_applied_to_a_string_number_boolean_array_or_object_literal);
+                    error(expression, Diagnostics.A_const_assertions_can_only_be_applied_to_references_to_enum_members_or_string_number_boolean_array_or_object_literals);
                 }
                 return getRegularTypeOfLiteralType(exprType);
             }
