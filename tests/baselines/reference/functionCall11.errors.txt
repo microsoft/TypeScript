@@ -1,6 +1,6 @@
 tests/cases/compiler/functionCall11.ts(4,1): error TS2554: Expected 1-2 arguments, but got 0.
 tests/cases/compiler/functionCall11.ts(5,5): error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
-tests/cases/compiler/functionCall11.ts(6,1): error TS2554: Expected 1-2 arguments, but got 3.
+tests/cases/compiler/functionCall11.ts(6,15): error TS2554: Expected 1-2 arguments, but got 3.
 
 
 ==== tests/cases/compiler/functionCall11.ts (3 errors) ====
@@ -15,6 +15,6 @@ tests/cases/compiler/functionCall11.ts(6,1): error TS2554: Expected 1-2 argument
         ~
 !!! error TS2345: Argument of type '1' is not assignable to parameter of type 'string'.
     foo('foo', 1, 'bar');
-    ~~~~~~~~~~~~~~~~~~~~
+                  ~~~~~
 !!! error TS2554: Expected 1-2 arguments, but got 3.
     

@@ -121,12 +121,12 @@ function f23<T extends unknown>(x: T) {
     let y: object = x;  // Error
 }
 
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
     x = {};
     x = { a: 5 };
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
     x = 123;  // Error
 }
 
@@ -162,6 +162,23 @@ class C1 {
     a: string;  // Error
     b: unknown;
     c: any;
+}
+
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+
+function f30<T, U extends unknown>(t: T, u: U) {
+    let x: {} = t;
+    let y: {} = u;
+}
+
+// Repro from #26796
+
+type Test1 = [unknown] extends [{}] ? true : false;  // false
+type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
+type Test2 = IsDefinitelyDefined<unknown>;  // false
+
+function oops<T extends unknown>(arg: T): {} {
+    return arg;  // Error
 }
 
 
@@ -245,11 +262,11 @@ function f22(x) {
 function f23(x) {
     var y = x; // Error
 }
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 function f24(x) {
     x = {};
     x = { a: 5 };
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
     x = 123; // Error
 }
 // Locals of type unknown always considered initialized
@@ -276,3 +293,11 @@ var C1 = /** @class */ (function () {
     }
     return C1;
 }());
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+function f30(t, u) {
+    var x = t;
+    var y = u;
+}
+function oops(arg) {
+    return arg; // Error
+}

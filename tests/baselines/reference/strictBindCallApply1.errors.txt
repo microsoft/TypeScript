@@ -1,34 +1,39 @@
-tests/cases/conformance/functions/strictBindCallApply1.ts(6,35): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(9,11): error TS2554: Expected 3 arguments, but got 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(10,35): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(11,11): error TS2554: Expected 3 arguments, but got 4.
-tests/cases/conformance/functions/strictBindCallApply1.ts(14,32): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[number, string]'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(11,35): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(17,11): error TS2554: Expected 3 arguments, but got 2.
+tests/cases/conformance/functions/strictBindCallApply1.ts(18,35): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(19,44): error TS2554: Expected 3 arguments, but got 4.
+tests/cases/conformance/functions/strictBindCallApply1.ts(22,32): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[number, string]'.
   Property '1' is missing in type '[number]' but required in type '[number, string]'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(15,37): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(16,32): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(23,37): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(24,32): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'.
   Types of property 'length' are incompatible.
     Type '3' is not assignable to type '2'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(29,29): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(30,22): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(33,11): error TS2554: Expected 3 arguments, but got 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(34,29): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(35,11): error TS2554: Expected 3 arguments, but got 4.
-tests/cases/conformance/functions/strictBindCallApply1.ts(36,22): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(39,26): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[number, string]'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(40,31): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(41,26): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(42,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(47,33): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(50,1): error TS2554: Expected 3 arguments, but got 2.
-tests/cases/conformance/functions/strictBindCallApply1.ts(51,15): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(52,1): error TS2554: Expected 3 arguments, but got 4.
-tests/cases/conformance/functions/strictBindCallApply1.ts(55,12): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[number, string]'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(56,17): error TS2322: Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/functions/strictBindCallApply1.ts(57,12): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(41,29): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(42,22): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(48,11): error TS2554: Expected 3 arguments, but got 2.
+tests/cases/conformance/functions/strictBindCallApply1.ts(49,29): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(50,38): error TS2554: Expected 3 arguments, but got 4.
+tests/cases/conformance/functions/strictBindCallApply1.ts(51,22): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(54,26): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[number, string]'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(55,31): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(56,26): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(57,23): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(62,33): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(65,1): error TS2554: Expected 3 arguments, but got 2.
+tests/cases/conformance/functions/strictBindCallApply1.ts(66,15): error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(67,24): error TS2554: Expected 3 arguments, but got 4.
+tests/cases/conformance/functions/strictBindCallApply1.ts(70,12): error TS2345: Argument of type '[number]' is not assignable to parameter of type '[number, string]'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(71,17): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'.
 
 
 ==== tests/cases/conformance/functions/strictBindCallApply1.ts (24 errors) ====
     declare function foo(a: number, b: string): string;
+    
+    declare function overloaded(s: string): number;
+    declare function overloaded(n: number): string;
+    
+    declare function generic<T>(x: T): T;
     
     let f00 = foo.bind(undefined);
     let f01 = foo.bind(undefined, 10);
@@ -36,6 +41,9 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(57,12): error TS2345: 
     let f03 = foo.bind(undefined, 10, 20);  // Error
                                       ~~
 !!! error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
+    
+    let f04 = overloaded.bind(undefined);  // typeof overloaded
+    let f05 = generic.bind(undefined);  // typeof generic
     
     let c00 = foo.call(undefined, 10, "hello");
     let c01 = foo.call(undefined, 10);  // Error
@@ -45,7 +53,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(57,12): error TS2345: 
                                       ~~
 !!! error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
     let c03 = foo.call(undefined, 10, "hello", 30);  // Error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                               ~~
 !!! error TS2554: Expected 3 arguments, but got 4.
     
     let a00 = foo.apply(undefined, [10, "hello"]);
@@ -65,6 +73,10 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(57,12): error TS2345: 
     class C {
         constructor(a: number, b: string) {}
         foo(this: this, a: number, b: string): string { return "" }
+        overloaded(s: string): number;
+        overloaded(n: number): string;
+        overloaded(x: any): any { return <any>undefined }
+        generic<T>(x: T): T { return x }
     }
     
     declare let c: C;
@@ -80,6 +92,9 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(57,12): error TS2345: 
                          ~~~~~~~~~
 !!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
     
+    let f15 = c.overloaded.bind(c);  // typeof C.prototype.overloaded
+    let f16 = c.generic.bind(c);  // typeof C.prototype.generic
+    
     let c10 = c.foo.call(c, 10, "hello");
     let c11 = c.foo.call(c, 10);  // Error
               ~~~~~~~~~~~~~~~~~
@@ -88,7 +103,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(57,12): error TS2345: 
                                 ~~
 !!! error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
     let c13 = c.foo.call(c, 10, "hello", 30);  // Error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                         ~~
 !!! error TS2554: Expected 3 arguments, but got 4.
     let c14 = c.foo.call(undefined, 10, "hello");  // Error
                          ~~~~~~~~~
@@ -123,7 +138,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(57,12): error TS2345: 
                   ~~
 !!! error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
     C.call(c, 10, "hello", 30);  // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~
 !!! error TS2554: Expected 3 arguments, but got 4.
     
     C.apply(c, [10, "hello"]);

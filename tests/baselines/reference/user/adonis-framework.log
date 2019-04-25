@@ -19,6 +19,7 @@ node_modules/adonis-framework/src/Config/index.js(37,15): error TS2304: Cannot f
 node_modules/adonis-framework/src/Config/index.js(39,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Config/index.js(58,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Encryption/index.js(53,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Encryption/index.js(71,34): error TS2345: Argument of type 'string' is not assignable to parameter of type '"utf8" | "ascii" | "binary" | undefined'.
 node_modules/adonis-framework/src/Encryption/index.js(77,50): error TS2345: Argument of type 'Buffer' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Encryption/index.js(85,23): error TS8024: JSDoc '@param' tag has name 'value', but there is no parameter with that name.
 node_modules/adonis-framework/src/Encryption/index.js(87,15): error TS2304: Cannot find name 'Mixed'.
@@ -45,25 +46,24 @@ node_modules/adonis-framework/src/Event/index.js(256,52): error TS2345: Argument
   Type 'Function' provides no match for the signature '(...values: any[]): void'.
 node_modules/adonis-framework/src/Event/index.js(264,28): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
 node_modules/adonis-framework/src/Event/index.js(271,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[string, any, TimerHandler]'.
-  Type 'IArguments' is missing the following properties from type '[string, any, TimerHandler]': 0, 1, 2, pop, and 29 more.
 node_modules/adonis-framework/src/Event/index.js(278,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[string, any, TimerHandler]'.
 node_modules/adonis-framework/src/Event/index.js(294,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
 node_modules/adonis-framework/src/Exceptions/index.js(13,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-node_modules/adonis-framework/src/Exceptions/index.js(27,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(40,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(52,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(63,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(75,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(87,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(99,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(112,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(125,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(138,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(151,12): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(27,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(40,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(52,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(63,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(75,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(87,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(99,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(112,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(125,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(138,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(151,21): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/Exceptions/index.js(164,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-node_modules/adonis-framework/src/Exceptions/index.js(178,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(191,12): error TS2554: Expected 0 arguments, but got 3.
-node_modules/adonis-framework/src/Exceptions/index.js(205,12): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(178,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(191,21): error TS2554: Expected 0 arguments, but got 3.
+node_modules/adonis-framework/src/Exceptions/index.js(205,21): error TS2554: Expected 0 arguments, but got 3.
 node_modules/adonis-framework/src/File/index.js(175,5): error TS2322: Type 'Promise<any>' is not assignable to type 'boolean'.
 node_modules/adonis-framework/src/File/index.js(273,5): error TS2322: Type 'boolean | ""' is not assignable to type 'boolean'.
   Type '""' is not assignable to type 'boolean'.
@@ -135,7 +135,7 @@ node_modules/adonis-framework/src/Route/index.js(333,29): error TS2345: Argument
 node_modules/adonis-framework/src/Route/index.js(343,33): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/index.js(354,20): error TS2694: Namespace 'Route' has no exported member 'Group'.
 node_modules/adonis-framework/src/Route/index.js(368,3): error TS2322: Type 'null' is not assignable to type 'string'.
-node_modules/adonis-framework/src/Route/index.js(396,10): error TS2554: Expected 2 arguments, but got 3.
+node_modules/adonis-framework/src/Route/index.js(396,63): error TS2554: Expected 2 arguments, but got 3.
 node_modules/adonis-framework/src/Route/index.js(407,20): error TS2694: Namespace 'Route' has no exported member 'resources'.
 node_modules/adonis-framework/src/Route/index.js(501,42): error TS2345: Argument of type 'boolean | undefined' is not assignable to parameter of type 'boolean'.
   Type 'undefined' is not assignable to type 'boolean'.
@@ -153,7 +153,6 @@ node_modules/adonis-framework/src/Route/resource.js(209,45): error TS2345: Argum
 node_modules/adonis-framework/src/Route/resource.js(233,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(261,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(290,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any, ...any[]]'.
-  Type 'IArguments' is missing the following properties from type '[any, ...any[]]': 0, pop, push, concat, and 27 more.
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(314,62): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Server/helpers.js(17,29): error TS8024: JSDoc '@param' tag has name 'appNamespace', but there is no parameter with that name.

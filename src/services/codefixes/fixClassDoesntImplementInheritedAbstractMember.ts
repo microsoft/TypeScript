@@ -8,9 +8,9 @@ namespace ts.codefix {
     registerCodeFix({
         errorCodes,
         getCodeActions(context) {
-            const { program, sourceFile, span } = context;
+            const { sourceFile, span } = context;
             const changes = textChanges.ChangeTracker.with(context, t =>
-                addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), t, context.preferences));
+                addMissingMembers(getClass(sourceFile, span.start), sourceFile, context, t, context.preferences));
             return changes.length === 0 ? undefined : [createCodeFixAction(fixId, changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
         },
         fixIds: [fixId],
@@ -19,7 +19,7 @@ namespace ts.codefix {
             return codeFixAll(context, errorCodes, (changes, diag) => {
                 const classDeclaration = getClass(diag.file, diag.start);
                 if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
-                    addMissingMembers(classDeclaration, context.sourceFile, context.program.getTypeChecker(), changes, context.preferences);
+                    addMissingMembers(classDeclaration, context.sourceFile, context, changes, context.preferences);
                 }
             });
         },
@@ -32,15 +32,16 @@ namespace ts.codefix {
         return cast(token.parent, isClassLike);
     }
 
-    function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
+    function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, context: TypeConstructionContext, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
         const extendsNode = getEffectiveBaseTypeNode(classDeclaration)!;
+        const checker = context.program.getTypeChecker();
         const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
 
         // Note that this is ultimately derived from a map indexed by symbol names,
         // so duplicates cannot occur.
         const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
-        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, context, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
     }
 
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {

@@ -1,0 +1,64 @@
+=== tests/cases/conformance/declarationEmit/declarationEmitWorkWithInlineComments.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(declarationEmitWorkWithInlineComments.ts, 0, 0))
+
+  constructor(
+    /** @internal */
+    public isInternal1: string,
+>isInternal1 : Symbol(Foo.isInternal1, Decl(declarationEmitWorkWithInlineComments.ts, 1, 14))
+
+    /** @internal */ public isInternal2: string, /** @internal */
+>isInternal2 : Symbol(Foo.isInternal2, Decl(declarationEmitWorkWithInlineComments.ts, 3, 31))
+
+    public isInternal3: string,
+>isInternal3 : Symbol(Foo.isInternal3, Decl(declarationEmitWorkWithInlineComments.ts, 4, 48))
+
+    // @internal
+    public isInternal4: string,
+>isInternal4 : Symbol(Foo.isInternal4, Decl(declarationEmitWorkWithInlineComments.ts, 5, 31))
+
+    // nothing
+    /** @internal */
+    public isInternal5: string,
+>isInternal5 : Symbol(Foo.isInternal5, Decl(declarationEmitWorkWithInlineComments.ts, 7, 31))
+
+    /* @internal */ public isInternal6: string /* trailing */,
+>isInternal6 : Symbol(Foo.isInternal6, Decl(declarationEmitWorkWithInlineComments.ts, 10, 31))
+
+    /* @internal */ public isInternal7: string, /** @internal */
+>isInternal7 : Symbol(Foo.isInternal7, Decl(declarationEmitWorkWithInlineComments.ts, 11, 62))
+
+    // not work
+    public notInternal1: string,
+>notInternal1 : Symbol(Foo.notInternal1, Decl(declarationEmitWorkWithInlineComments.ts, 12, 47))
+
+    // @internal
+    /* not work */
+    public notInternal2: string,
+>notInternal2 : Symbol(Foo.notInternal2, Decl(declarationEmitWorkWithInlineComments.ts, 14, 32))
+
+    /* not work */
+    // @internal
+    /* not work */
+    public notInternal3: string,
+>notInternal3 : Symbol(Foo.notInternal3, Decl(declarationEmitWorkWithInlineComments.ts, 17, 32))
+
+  ) { }
+}
+
+export class Bar {
+>Bar : Symbol(Bar, Decl(declarationEmitWorkWithInlineComments.ts, 23, 1))
+
+  constructor(/* @internal */ public isInternal1: string) {}
+>isInternal1 : Symbol(Bar.isInternal1, Decl(declarationEmitWorkWithInlineComments.ts, 26, 14))
+}
+
+export class Baz {
+>Baz : Symbol(Baz, Decl(declarationEmitWorkWithInlineComments.ts, 27, 1))
+
+  constructor(/* @internal */
+    public isInternal: string
+>isInternal : Symbol(Baz.isInternal, Decl(declarationEmitWorkWithInlineComments.ts, 30, 14))
+
+  ) {}
+}

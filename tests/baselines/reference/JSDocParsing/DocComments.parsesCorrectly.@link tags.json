@@ -2,15 +2,21 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 127,
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTag",
             "pos": 63,
             "end": 68,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 64,
                 "end": 67,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "see"
             },
             "comment": "{@link second link text} and {@link Foo|a foo} as well."

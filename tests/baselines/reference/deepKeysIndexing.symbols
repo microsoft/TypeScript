@@ -1,0 +1,193 @@
+=== tests/cases/compiler/deepKeysIndexing.ts ===
+// regression test from https://github.com/Microsoft/TypeScript/issues/29692
+interface DeepObject {
+>DeepObject : Symbol(DeepObject, Decl(deepKeysIndexing.ts, 0, 0))
+
+  [k1: string]: {
+>k1 : Symbol(k1, Decl(deepKeysIndexing.ts, 2, 3))
+
+    [k2: string]: any;
+>k2 : Symbol(k2, Decl(deepKeysIndexing.ts, 3, 5))
+
+  };
+}
+
+type keys2broken<
+>keys2broken : Symbol(keys2broken, Decl(deepKeysIndexing.ts, 5, 1))
+
+  O extends DeepObject,
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 7, 17))
+>DeepObject : Symbol(DeepObject, Decl(deepKeysIndexing.ts, 0, 0))
+
+  K1 extends keyof O
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 8, 23))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 7, 17))
+
+> = O[K1] extends object ? Extract<keyof O[K1], string> : never;
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 7, 17))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 8, 23))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 7, 17))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 8, 23))
+
+type keys2working<
+>keys2working : Symbol(keys2working, Decl(deepKeysIndexing.ts, 10, 64))
+
+  O extends DeepObject,
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 12, 18))
+>DeepObject : Symbol(DeepObject, Decl(deepKeysIndexing.ts, 0, 0))
+
+  K1 extends keyof O
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 13, 23))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 12, 18))
+
+> = O[K1] extends object ? keyof O[K1] : never;
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 12, 18))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 13, 23))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 12, 18))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 13, 23))
+
+type keys2workaround<O extends DeepObject, K1 extends keyof O> = Extract<
+>keys2workaround : Symbol(keys2workaround, Decl(deepKeysIndexing.ts, 15, 47))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 17, 21))
+>DeepObject : Symbol(DeepObject, Decl(deepKeysIndexing.ts, 0, 0))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 17, 42))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 17, 21))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+
+  O[K1] extends object ? keyof O[K1] : never,
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 17, 21))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 17, 42))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 17, 21))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 17, 42))
+
+  string
+>;
+
+interface Foo extends DeepObject {
+>Foo : Symbol(Foo, Decl(deepKeysIndexing.ts, 20, 2))
+>DeepObject : Symbol(DeepObject, Decl(deepKeysIndexing.ts, 0, 0))
+
+  a: {
+>a : Symbol(Foo.a, Decl(deepKeysIndexing.ts, 22, 34))
+
+    "1": 123;
+>"1" : Symbol("1", Decl(deepKeysIndexing.ts, 23, 6))
+
+    "2": string;
+>"2" : Symbol("2", Decl(deepKeysIndexing.ts, 24, 13))
+
+    "3": boolean;
+>"3" : Symbol("3", Decl(deepKeysIndexing.ts, 25, 16))
+
+  };
+}
+
+class Bar<O extends DeepObject> {
+>Bar : Symbol(Bar, Decl(deepKeysIndexing.ts, 28, 1))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+>DeepObject : Symbol(DeepObject, Decl(deepKeysIndexing.ts, 0, 0))
+
+  broken<
+>broken : Symbol(Bar.broken, Decl(deepKeysIndexing.ts, 30, 33))
+
+    K1 extends keyof O,
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 31, 9))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+
+    K2 extends keys2broken<O, K1>,
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 32, 23))
+>keys2broken : Symbol(keys2broken, Decl(deepKeysIndexing.ts, 5, 1))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 31, 9))
+
+    V extends O[K1][K2]
+>V : Symbol(V, Decl(deepKeysIndexing.ts, 33, 34))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 31, 9))
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 32, 23))
+
+  >(k1: K1, k2: K2, value: V) {}
+>k1 : Symbol(k1, Decl(deepKeysIndexing.ts, 35, 4))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 31, 9))
+>k2 : Symbol(k2, Decl(deepKeysIndexing.ts, 35, 11))
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 32, 23))
+>value : Symbol(value, Decl(deepKeysIndexing.ts, 35, 19))
+>V : Symbol(V, Decl(deepKeysIndexing.ts, 33, 34))
+
+  working<
+>working : Symbol(Bar.working, Decl(deepKeysIndexing.ts, 35, 32))
+
+    K1 extends keyof O,
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 37, 10))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+
+    K2 extends keys2working<O, K1>,
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 38, 23))
+>keys2working : Symbol(keys2working, Decl(deepKeysIndexing.ts, 10, 64))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 37, 10))
+
+    V extends O[K1][K2]
+>V : Symbol(V, Decl(deepKeysIndexing.ts, 39, 35))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 37, 10))
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 38, 23))
+
+  >(k1: K1, k2: K2, value: V) {}
+>k1 : Symbol(k1, Decl(deepKeysIndexing.ts, 41, 4))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 37, 10))
+>k2 : Symbol(k2, Decl(deepKeysIndexing.ts, 41, 11))
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 38, 23))
+>value : Symbol(value, Decl(deepKeysIndexing.ts, 41, 19))
+>V : Symbol(V, Decl(deepKeysIndexing.ts, 39, 35))
+
+  workaround<
+>workaround : Symbol(Bar.workaround, Decl(deepKeysIndexing.ts, 41, 32))
+
+    K1 extends keyof O,
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 43, 13))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+
+    K2 extends keys2workaround<O, K1>,
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 44, 23))
+>keys2workaround : Symbol(keys2workaround, Decl(deepKeysIndexing.ts, 15, 47))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 43, 13))
+
+    V extends O[K1][K2]
+>V : Symbol(V, Decl(deepKeysIndexing.ts, 45, 38))
+>O : Symbol(O, Decl(deepKeysIndexing.ts, 30, 10))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 43, 13))
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 44, 23))
+
+  >(k1: K1, k2: K2, value: V) {}
+>k1 : Symbol(k1, Decl(deepKeysIndexing.ts, 47, 4))
+>K1 : Symbol(K1, Decl(deepKeysIndexing.ts, 43, 13))
+>k2 : Symbol(k2, Decl(deepKeysIndexing.ts, 47, 11))
+>K2 : Symbol(K2, Decl(deepKeysIndexing.ts, 44, 23))
+>value : Symbol(value, Decl(deepKeysIndexing.ts, 47, 19))
+>V : Symbol(V, Decl(deepKeysIndexing.ts, 45, 38))
+}
+
+const bar = new Bar<Foo>();
+>bar : Symbol(bar, Decl(deepKeysIndexing.ts, 50, 5))
+>Bar : Symbol(Bar, Decl(deepKeysIndexing.ts, 28, 1))
+>Foo : Symbol(Foo, Decl(deepKeysIndexing.ts, 20, 2))
+
+// all 3 of the below should error on passing `true` for `"1"`
+bar.broken("a", "1", true); // was broken in the past - with 2nd argument incorrectly of type "1" | "2" | "3".
+>bar.broken : Symbol(Bar.broken, Decl(deepKeysIndexing.ts, 30, 33))
+>bar : Symbol(bar, Decl(deepKeysIndexing.ts, 50, 5))
+>broken : Symbol(Bar.broken, Decl(deepKeysIndexing.ts, 30, 33))
+
+bar.working("a", "1", true); // ok - true is not allowed
+>bar.working : Symbol(Bar.working, Decl(deepKeysIndexing.ts, 35, 32))
+>bar : Symbol(bar, Decl(deepKeysIndexing.ts, 50, 5))
+>working : Symbol(Bar.working, Decl(deepKeysIndexing.ts, 35, 32))
+
+bar.workaround("a", "1", true); // ok - true is not allowed
+>bar.workaround : Symbol(Bar.workaround, Decl(deepKeysIndexing.ts, 41, 32))
+>bar : Symbol(bar, Decl(deepKeysIndexing.ts, 50, 5))
+>workaround : Symbol(Bar.workaround, Decl(deepKeysIndexing.ts, 41, 32))
+

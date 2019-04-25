@@ -221,7 +221,7 @@ namespace ts.server {
 
         /*@internal*/
         constructor(
-            readonly projectName: string,
+            /*@internal*/ readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: DocumentRegistry,
@@ -428,7 +428,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
-                WatchType.FailedLookupLocation,
+                WatchType.FailedLookupLocations,
                 this
             );
         }
@@ -501,6 +501,16 @@ namespace ts.server {
         /** @internal */
         getSourceMapper(): SourceMapper {
             return this.getLanguageService().getSourceMapper();
+        }
+
+        /*@internal*/
+        getDocumentPositionMapper(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
+            return this.projectService.getDocumentPositionMapper(this, generatedFileName, sourceFileName);
+        }
+
+        /*@internal*/
+        getSourceFileLike(fileName: string) {
+            return this.projectService.getSourceFileLike(fileName, this);
         }
 
         private shouldEmitFile(scriptInfo: ScriptInfo) {
@@ -749,7 +759,10 @@ namespace ts.server {
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
-            return this.isRoot(info) || (!!this.program && this.program.getSourceFileByPath(info.path) !== undefined);
+            if (this.isRoot(info)) return true;
+            if (!this.program) return false;
+            const file = this.program.getSourceFileByPath(info.path);
+            return !!file && file.resolvedPath === info.path;
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean {
@@ -945,6 +958,9 @@ namespace ts.server {
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
+            if (this.program !== oldProgram) {
+                this.print();
+            }
             return hasNewProgram;
         }
 
@@ -976,7 +992,7 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.Medium,
-                WatchType.MissingFilePath,
+                WatchType.MissingFile,
                 this
             );
             return fileWatcher;
@@ -1418,7 +1434,6 @@ namespace ts.server {
             }
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
-            this.projectService.sendSurveyReady(this);
             return result;
         }
 
@@ -1598,7 +1613,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
-            projectFilePath?: string) {
+            projectFilePath?: string,
+            pluginConfigOverrides?: Map<any>) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -1609,12 +1625,12 @@ namespace ts.server {
                 compileOnSaveEnabled,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
+            this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }
 
         updateGraph() {
             const result = super.updateGraph();
             this.projectService.sendProjectTelemetry(this);
-            this.projectService.sendSurveyReady(this);
             return result;
         }
 

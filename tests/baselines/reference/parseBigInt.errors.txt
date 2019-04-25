@@ -1,9 +1,9 @@
 tests/cases/compiler/parseBigInt.ts(51,20): error TS2736: Operator '+' cannot be applied to type '123n'.
 tests/cases/compiler/parseBigInt.ts(52,23): error TS2736: Operator '+' cannot be applied to type '291n'.
 tests/cases/compiler/parseBigInt.ts(56,25): error TS1005: ',' expected.
-tests/cases/compiler/parseBigInt.ts(57,25): error TS1005: ',' expected.
-tests/cases/compiler/parseBigInt.ts(58,22): error TS1005: ',' expected.
-tests/cases/compiler/parseBigInt.ts(59,28): error TS1005: ',' expected.
+tests/cases/compiler/parseBigInt.ts(57,22): error TS1352: A bigint literal cannot use exponential notation.
+tests/cases/compiler/parseBigInt.ts(58,19): error TS1353: A bigint literal must be an integer.
+tests/cases/compiler/parseBigInt.ts(59,26): error TS1353: A bigint literal must be an integer.
 tests/cases/compiler/parseBigInt.ts(60,23): error TS1177: Binary digit expected.
 tests/cases/compiler/parseBigInt.ts(61,20): error TS1178: Octal digit expected.
 tests/cases/compiler/parseBigInt.ts(62,20): error TS1125: Hexadecimal digit expected.
@@ -81,14 +81,14 @@ tests/cases/compiler/parseBigInt.ts(70,72): error TS2345: Argument of type '3' i
                             ~
 !!! error TS1005: ',' expected.
     { const scientific = 1e2n; }
-                            ~
-!!! error TS1005: ',' expected.
+                         ~~~~
+!!! error TS1352: A bigint literal cannot use exponential notation.
     { const decimal = 4.1n; }
-                         ~
-!!! error TS1005: ',' expected.
+                      ~~~~
+!!! error TS1353: A bigint literal must be an integer.
     { const leadingDecimal = .1n; }
-                               ~
-!!! error TS1005: ',' expected.
+                             ~~~
+!!! error TS1353: A bigint literal must be an integer.
     const emptyBinary = 0bn; // should error but infer 0n
                           
 !!! error TS1177: Binary digit expected.

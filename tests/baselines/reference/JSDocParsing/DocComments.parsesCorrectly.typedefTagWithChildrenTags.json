@@ -2,58 +2,80 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 102,
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocTypedefTag",
             "pos": 8,
             "end": 100,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 16,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "typedef"
             },
             "fullName": {
                 "kind": "Identifier",
                 "pos": 17,
                 "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "People"
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 17,
                 "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "People"
             },
             "typeExpression": {
                 "kind": "JSDocTypeLiteral",
                 "pos": 8,
                 "end": 100,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "jsDocPropertyTags": [
                     {
                         "kind": "JSDocPropertyTag",
                         "pos": 47,
                         "end": 74,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "tagName": {
                             "kind": "Identifier",
                             "pos": 48,
                             "end": 56,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "escapedText": "property"
                         },
                         "typeExpression": {
                             "kind": "JSDocTypeExpression",
                             "pos": 57,
                             "end": 65,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "type": {
                                 "kind": "NumberKeyword",
                                 "pos": 58,
-                                "end": 64
+                                "end": 64,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0
                             }
                         },
                         "name": {
                             "kind": "Identifier",
                             "pos": 66,
                             "end": 69,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "escapedText": "age"
                         },
                         "isNameFirst": false,
@@ -63,26 +85,36 @@
                         "kind": "JSDocPropertyTag",
                         "pos": 74,
                         "end": 100,
+                        "modifierFlagsCache": 0,
+                        "transformFlags": 0,
                         "tagName": {
                             "kind": "Identifier",
                             "pos": 75,
                             "end": 83,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "escapedText": "property"
                         },
                         "typeExpression": {
                             "kind": "JSDocTypeExpression",
                             "pos": 84,
                             "end": 92,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "type": {
                                 "kind": "StringKeyword",
                                 "pos": 85,
-                                "end": 91
+                                "end": 91,
+                                "modifierFlagsCache": 0,
+                                "transformFlags": 0
                             }
                         },
                         "name": {
                             "kind": "Identifier",
                             "pos": 93,
                             "end": 97,
+                            "modifierFlagsCache": 0,
+                            "transformFlags": 0,
                             "escapedText": "name"
                         },
                         "isNameFirst": false,

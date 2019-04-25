@@ -10,6 +10,7 @@ interface ExecResult {
 
 interface UserConfig {
     types: string[];
+    path?: string;
 }
 
 abstract class ExternalCompileRunnerBase extends RunnerBase {
@@ -57,7 +58,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
                     types = config.types;
 
-                    cwd = submoduleDir;
+                    cwd = config.path ? path.join(cwd, config.path) : submoduleDir;
                 }
                 if (fs.existsSync(path.join(cwd, "package.json"))) {
                     if (fs.existsSync(path.join(cwd, "package-lock.json"))) {

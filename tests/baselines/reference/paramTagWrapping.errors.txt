@@ -2,8 +2,8 @@ tests/cases/conformance/jsdoc/bad.js(2,11): error TS1003: Identifier expected.
 tests/cases/conformance/jsdoc/bad.js(2,11): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 tests/cases/conformance/jsdoc/bad.js(5,4): error TS1003: Identifier expected.
 tests/cases/conformance/jsdoc/bad.js(5,4): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
-tests/cases/conformance/jsdoc/bad.js(6,19): error TS1003: Identifier expected.
-tests/cases/conformance/jsdoc/bad.js(6,19): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+tests/cases/conformance/jsdoc/bad.js(6,20): error TS1003: Identifier expected.
+tests/cases/conformance/jsdoc/bad.js(6,20): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 tests/cases/conformance/jsdoc/bad.js(9,14): error TS7006: Parameter 'x' implicitly has an 'any' type.
 tests/cases/conformance/jsdoc/bad.js(9,17): error TS7006: Parameter 'y' implicitly has an 'any' type.
 tests/cases/conformance/jsdoc/bad.js(9,20): error TS7006: Parameter 'z' implicitly has an 'any' type.
@@ -39,9 +39,9 @@ tests/cases/conformance/jsdoc/bad.js(9,20): error TS7006: Parameter 'z' implicit
        
 !!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
      * @param {number} * z
-                      
+                       
 !!! error TS1003: Identifier expected.
-                      
+                       
 !!! error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
      * Arg z.
      */

@@ -120,7 +120,7 @@ namespace ts {
         }
     }
 
-    describe("Incremental", () => {
+    describe("unittests:: Incremental Parser", () => {
         it("Inserting into method", () => {
             const source = "class C {\r\n" +
                 "    public foo1() { }\r\n" +

@@ -47,6 +47,16 @@ In general, things we find useful when reviewing suggestions are:
 
 # Instructions for Contributing Code
 
+## Tips
+
+### Faster clones
+
+The TypeScript repository is relatively large. To save some time, you might want to clone it without the repo's full history using `git clone --depth=1`.
+
+### Using local builds
+
+Run `gulp` to build a version of the compiler/language service that reflects changes you've made. You can then run `node <repo-root>/built/local/tsc.js` in place of `tsc` in your project. For example, to run `tsc --watch` from within the root of the repository on a file called `test.ts`, you can run `node ./built/local/tsc.js --watch test.ts`.
+
 ## Contributing bug fixes
 
 TypeScript is currently accepting contributions in the form of bug fixes. A bug must have an issue tracking it in the issue tracker that has been approved ("Milestone == Community") by the TypeScript team. Your pull request should include a link to the bug that you are fixing. If you've submitted a PR for a bug, please post a comment in the bug to avoid duplication of effort.
@@ -82,65 +92,72 @@ Your pull request should:
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Contributing `lib.d.ts` fixes
- 
-The library sources are in: [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib)
 
-Library files in `built/local/` are updated by running
-```Shell
-jake
+There are three relevant locations to be aware of when it comes to TypeScript's library declaration files:
+
+* `src/lib`: the location of the sources themselves.
+* `lib`: the location of the last-known-good (LKG) versions of the files which are updated periodically.
+* `built/local`: the build output location, including where `src/lib` files will be copied to.
+
+Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib). **Most** of these files can be updated by hand, with the exception of any generated files (see below).
+
+Library files in `built/local/` are updated automatically by running the standard build task:
+
+```sh
+gulp
 ```
 
-The files in `lib/` are used to bootstrap compilation and usually do not need to be updated.
+The files in `lib/` are used to bootstrap compilation and usually **should not** be updated unless publishing a new version or updating the LKG.
 
-#### `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts`
+### Modifying generated library files
 
-These two files represent the DOM typings and are auto-generated. To make any modifications to them, please submit a PR to  https://github.com/Microsoft/TSJS-lib-generator
+The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
 
 ## Running the Tests
 
-To run all tests, invoke the `runtests-parallel` target using jake:
+To run all tests, invoke the `runtests-parallel` target using gulp:
 
 ```Shell
-jake runtests-parallel
+gulp runtests-parallel
 ```
 
 This will run all tests; to run only a specific subset of tests, use:
 
 ```Shell
-jake runtests tests=<regex>
+gulp runtests --tests=<regex>
 ```
 
 e.g. to run all compiler baseline tests:
 
 ```Shell
-jake runtests tests=compiler
+gulp runtests --tests=compiler
 ```
 
 or to run a specific test: `tests\cases\compiler\2dArrays.ts` 
 
 ```Shell
-jake runtests tests=2dArrays
+gulp runtests --tests=2dArrays
 ```
 
 ## Debugging the tests
 
-To debug the tests, invoke the `runtests-browser` task from jake.
+To debug the tests, invoke the `runtests-browser` task from gulp.
 You will probably only want to debug one test at a time:
 
 ```Shell
-jake runtests-browser tests=2dArrays
+gulp runtests-browser --tests=2dArrays
 ```
 
 You can specify which browser to use for debugging. Currently Chrome and IE are supported:
 
 ```Shell
-jake runtests-browser tests=2dArrays browser=chrome
+gulp runtests-browser --tests=2dArrays --browser=chrome
 ```
 
-You can debug with VS Code or Node instead with `jake runtests inspect=true`:
+You can debug with VS Code or Node instead with `gulp runtests --inspect=true`:
 
 ```Shell
-jake runtests tests=2dArrays inspect=true
+gulp runtests --tests=2dArrays --inspect=true
 ```
 
 ## Adding a Test
@@ -180,13 +197,13 @@ Compiler testcases generate baselines that track the emitted `.js`, the errors p
 When a change in the baselines is detected, the test will fail. To inspect changes vs the expected baselines, use
 
 ```Shell
-jake diff
+gulp diff
 ```
 
 After verifying that the changes in the baselines are correct, run
 
 ```Shell
-jake baseline-accept
+gulp baseline-accept
 ```
 
 to establish the new baselines as the desired behavior. This will change the files in `tests\baselines\reference`, which should be included as part of your commit. It's important to carefully validate changes in the baselines.
@@ -194,6 +211,6 @@ to establish the new baselines as the desired behavior. This will change the fil
 ## Localization
 
 All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
-If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
+If you make changes to it, run `gulp generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
 
 See [coding guidelines on diagnostic messages](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#diagnostic-messages).

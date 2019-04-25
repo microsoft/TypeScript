@@ -47,8 +47,12 @@ const myStoreConnect: Connect = function(
     );
 };
 
+export {};
+
+
 //// [circularlySimplifyingConditionalTypesNoCrash.js]
 "use strict";
+exports.__esModule = true;
 var myStoreConnect = function (mapStateToProps, mapDispatchToProps, mergeProps, options) {
     if (options === void 0) { options = {}; }
     return connect(mapStateToProps, mapDispatchToProps, mergeProps, options);

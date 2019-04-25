@@ -322,3 +322,13 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
 !!! error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
     }
     
+    // Repro from #28839
+    
+    function f30<T, K extends keyof T>() {
+        let x: Partial<Record<keyof T, string>>[K] = "hello";
+    }
+    
+    function f31<T, K extends keyof T>() {
+        let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
+    }
+    

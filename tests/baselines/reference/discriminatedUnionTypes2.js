@@ -72,6 +72,28 @@ function f20<Data>(carrier: DataCarrier<Data>) {
     }
 }
 
+// Repro from #28935
+
+type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]: string };
+
+function f30(foo: Foo) {
+    if (foo.tag) {
+        foo;
+    }
+    else {
+        foo;
+    }
+}
+
+function f31(foo: Foo) {
+    if (foo.tag === true) {
+        foo;
+    }
+    else {
+        foo;
+    }
+}
+
 
 //// [discriminatedUnionTypes2.js]
 "use strict";
@@ -124,5 +146,21 @@ function f20(carrier) {
     else {
         var error = carrier.error;
         var data = carrier.data;
+    }
+}
+function f30(foo) {
+    if (foo.tag) {
+        foo;
+    }
+    else {
+        foo;
+    }
+}
+function f31(foo) {
+    if (foo.tag === true) {
+        foo;
+    }
+    else {
+        foo;
     }
 }

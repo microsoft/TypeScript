@@ -64,12 +64,22 @@ namespace ts.server {
             this.switchToScriptVersionCache();
         }
 
+        private resetSourceMapInfo() {
+            this.info.sourceFileLike = undefined;
+            this.info.closeSourceMapFileWatcher();
+            this.info.sourceMapFilePath = undefined;
+            this.info.declarationInfoPath = undefined;
+            this.info.sourceInfos = undefined;
+            this.info.documentPositionMapper = undefined;
+        }
+
         /** Public for testing */
         public useText(newText?: string) {
             this.svc = undefined;
             this.text = newText;
             this.lineMap = undefined;
             this.fileSize = undefined;
+            this.resetSourceMapInfo();
             this.version.text++;
         }
 
@@ -79,6 +89,7 @@ namespace ts.server {
             this.text = undefined;
             this.lineMap = undefined;
             this.fileSize = undefined;
+            this.resetSourceMapInfo();
         }
 
         /**
@@ -156,8 +167,8 @@ namespace ts.server {
                 : ScriptSnapshot.fromString(this.getOrLoadText());
         }
 
-        public getLineInfo(line: number): AbsolutePositionAndLineText {
-            return this.switchToScriptVersionCache().getLineInfo(line);
+        public getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
+            return this.switchToScriptVersionCache().getAbsolutePositionAndLineText(line);
         }
         /**
          *  @param line 0 based index
@@ -176,9 +187,9 @@ namespace ts.server {
          * @param line 1 based index
          * @param offset 1 based index
          */
-        lineOffsetToPosition(line: number, offset: number): number {
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
             if (!this.useScriptVersionCacheIfValidOrOpen()) {
-                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text);
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
             }
 
             // TODO: assert this offset is actually on the line
@@ -246,6 +257,17 @@ namespace ts.server {
             Debug.assert(!this.svc, "ScriptVersionCache should not be set");
             return this.lineMap || (this.lineMap = computeLineStarts(this.getOrLoadText()));
         }
+
+        getLineInfo(): LineInfo {
+            if (this.svc) {
+                return {
+                    getLineCount: () => this.svc!.getLineCount(),
+                    getLineText: line => this.svc!.getAbsolutePositionAndLineText(line + 1).lineText!
+                };
+            }
+            const lineMap = this.getLineMap();
+            return getLineInfo(this.text!, lineMap);
+        }
     }
 
     /*@internal*/
@@ -257,6 +279,12 @@ namespace ts.server {
     export interface DocumentRegistrySourceFileCache {
         key: DocumentRegistryBucketKey;
         sourceFile: SourceFile;
+    }
+
+    /*@internal*/
+    export interface SourceMapFileWatcher {
+        watcher: FileWatcher;
+        sourceInfos?: Map<true>;
     }
 
     export class ScriptInfo {
@@ -283,6 +311,20 @@ namespace ts.server {
 
         /*@internal*/
         mTime?: number;
+
+        /*@internal*/
+        sourceFileLike?: SourceFileLike;
+
+        /*@internal*/
+        sourceMapFilePath?: Path | SourceMapFileWatcher | false;
+
+        // Present on sourceMapFile info
+        /*@internal*/
+        declarationInfoPath?: Path;
+        /*@internal*/
+        sourceInfos?: Map<true>;
+        /*@internal*/
+        documentPositionMapper?: DocumentPositionMapper | false;
 
         constructor(
             private readonly host: ServerHost,
@@ -521,8 +563,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getLineInfo(line: number): AbsolutePositionAndLineText {
-            return this.textStorage.getLineInfo(line);
+        getAbsolutePositionAndLineText(line: number): AbsolutePositionAndLineText {
+            return this.textStorage.getAbsolutePositionAndLineText(line);
         }
 
         editContent(start: number, end: number, newText: string): void {
@@ -551,8 +593,12 @@ namespace ts.server {
          * @param line 1 based index
          * @param offset 1 based index
          */
-        lineOffsetToPosition(line: number, offset: number): number {
-            return this.textStorage.lineOffsetToPosition(line, offset);
+        lineOffsetToPosition(line: number, offset: number): number;
+        /*@internal*/
+        // tslint:disable-next-line:unified-signatures
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number;
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
+            return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
         }
 
         positionToLineOffset(position: number): protocol.Location {
@@ -561,6 +607,19 @@ namespace ts.server {
 
         public isJavaScript() {
             return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
+        }
+
+        /*@internal*/
+        getLineInfo(): LineInfo {
+            return this.textStorage.getLineInfo();
+        }
+
+        /*@internal*/
+        closeSourceMapFileWatcher() {
+            if (this.sourceMapFilePath && !isString(this.sourceMapFilePath)) {
+                closeFileWatcherOf(this.sourceMapFilePath);
+                this.sourceMapFilePath = undefined;
+            }
         }
     }
 }

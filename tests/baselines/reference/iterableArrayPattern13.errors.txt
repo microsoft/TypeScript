@@ -1,5 +1,4 @@
 tests/cases/conformance/es6/destructuring/iterableArrayPattern13.ts(17,5): error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type '[any, ...any[]]'.
-  Type 'FooIterator' is missing the following properties from type '[any, ...any[]]': 0, length, pop, push, and 25 more.
 
 
 ==== tests/cases/conformance/es6/destructuring/iterableArrayPattern13.ts (1 errors) ====
@@ -22,4 +21,3 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern13.ts(17,5): error
     fun(new FooIterator);
         ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type '[any, ...any[]]'.
-!!! error TS2345:   Type 'FooIterator' is missing the following properties from type '[any, ...any[]]': 0, length, pop, push, and 25 more.
