@@ -4485,6 +4485,10 @@
         "category": "Error",
         "code": 17017
     },
+    "Arrow functions are not syntactically valid here. Consider wrapping the function in parentheses.": {
+        "category": "Error",
+        "code": 17018
+    },
 
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",

@@ -1,0 +1,201 @@
+=== tests/cases/compiler/incorrectArrowFunction.ts ===
+declare const foo;
+>foo : any
+
+interface Foo {
+    a: number
+>a : number
+}
+
+true || () => 1;
+>true || : true | (() => number)
+>true : true
+>() => 1 : () => number
+>1 : 1
+>() => 1 : () => number
+>1 : 1
+
+true || a => 1;
+>true || : true | ((a: any) => number)
+>true : true
+>a => 1 : (a: any) => number
+>a : any
+>1 : 1
+>a => 1 : (a: any) => number
+>a : any
+>1 : 1
+
+true || a => b => 1;
+>true || : true | ((a: any) => (b: any) => number)
+>true : true
+>a => b => 1 : (a: any) => (b: any) => number
+>a : any
+>b => 1 : (b: any) => number
+>b : any
+>1 : 1
+>a => b => 1 : (a: any) => (b: any) => number
+>a : any
+>b => 1 : (b: any) => number
+>b : any
+>1 : 1
+
+true || (a) => 2;
+>true || : true | ((a: any) => number)
+>true : true
+>(a) => 2 : (a: any) => number
+>a : any
+>2 : 2
+>(a) => 2 : (a: any) => number
+>a : any
+>2 : 2
+
+true || foo => 1;
+>true || : true | ((foo: any) => number)
+>true : true
+>foo => 1 : (foo: any) => number
+>foo : any
+>1 : 1
+>foo => 1 : (foo: any) => number
+>foo : any
+>1 : 1
+
+true || (a: number) => 1;
+>true || : true | ((a: number) => number)
+>true : true
+>(a: number) => 1 : (a: number) => number
+>a : number
+>1 : 1
+>(a: number) => 1 : (a: number) => number
+>a : number
+>1 : 1
+
+true || ({ a }: Foo) => 1;
+>true || : true | (({ a }: Foo) => number)
+>true : true
+>({ a }: Foo) => 1 : ({ a }: Foo) => number
+>a : number
+>1 : 1
+>({ a }: Foo) => 1 : ({ a }: Foo) => number
+>a : number
+>1 : 1
+
+true || async() => 1;
+>true || : true | (() => Promise<number>)
+>true : true
+>async() => 1 : () => Promise<number>
+>1 : 1
+>async() => 1 : () => Promise<number>
+>1 : 1
+
+true || async a => 1;
+>true || async a => 1 : true | ((a: any) => Promise<number>)
+>true : true
+>async a => 1 : (a: any) => Promise<number>
+>a : any
+>1 : 1
+
+true || async => 1;
+>true || : true | ((async: any) => number)
+>true : true
+>async => 1 : (async: any) => number
+>async : any
+>1 : 1
+>async => 1 : (async: any) => number
+>async : any
+>1 : 1
+
+true || (() => 1);
+>true || (() => 1) : true | (() => number)
+>true : true
+>(() => 1) : () => number
+>() => 1 : () => number
+>1 : 1
+
+true || (a => 1);
+>true || (a => 1) : true | ((a: any) => number)
+>true : true
+>(a => 1) : (a: any) => number
+>a => 1 : (a: any) => number
+>a : any
+>1 : 1
+
+true || ((a) => 2);
+>true || ((a) => 2) : true | ((a: any) => number)
+>true : true
+>((a) => 2) : (a: any) => number
+>(a) => 2 : (a: any) => number
+>a : any
+>2 : 2
+
+true || (foo => 1);
+>true || (foo => 1) : true | ((foo: any) => number)
+>true : true
+>(foo => 1) : (foo: any) => number
+>foo => 1 : (foo: any) => number
+>foo : any
+>1 : 1
+
+true || ((a: number) => 1);
+>true || ((a: number) => 1) : true | ((a: number) => number)
+>true : true
+>((a: number) => 1) : (a: number) => number
+>(a: number) => 1 : (a: number) => number
+>a : number
+>1 : 1
+
+true || (({ a }: Foo) => 1);
+>true || (({ a }: Foo) => 1) : true | (({ a }: Foo) => number)
+>true : true
+>(({ a }: Foo) => 1) : ({ a }: Foo) => number
+>({ a }: Foo) => 1 : ({ a }: Foo) => number
+>a : number
+>1 : 1
+
+true || (async () => 1);
+>true || (async () => 1) : true | (() => Promise<number>)
+>true : true
+>(async () => 1) : () => Promise<number>
+>async () => 1 : () => Promise<number>
+>1 : 1
+
+true || (async a => 1);
+>true || (async a => 1) : true | ((a: any) => Promise<number>)
+>true : true
+>(async a => 1) : (a: any) => Promise<number>
+>async a => 1 : (a: any) => Promise<number>
+>a : any
+>1 : 1
+
+true || (async => 1);
+>true || (async => 1) : true | ((async: any) => number)
+>true : true
+>(async => 1) : (async: any) => number
+>async => 1 : (async: any) => number
+>async : any
+>1 : 1
+
+(() => 1) || (() => 2);
+>(() => 1) || (() => 2) : () => number
+>(() => 1) : () => number
+>() => 1 : () => number
+>1 : 1
+>(() => 2) : () => number
+>() => 2 : () => number
+>2 : 2
+
+true || (false);
+>true || (false) : boolean
+>true : true
+>(false) : false
+>false : false
+
+true || false;
+>true || false : boolean
+>true : true
+>false : false
+
+true || foo;
+>true || foo : any
+>true : true
+>foo : any
+

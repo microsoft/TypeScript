@@ -1,23 +1,26 @@
 tests/cases/compiler/ambiguousGenericAssertion1.ts(4,10): error TS1109: Expression expected.
-tests/cases/compiler/ambiguousGenericAssertion1.ts(4,15): error TS2304: Cannot find name 'x'.
-tests/cases/compiler/ambiguousGenericAssertion1.ts(4,16): error TS1005: ')' expected.
-tests/cases/compiler/ambiguousGenericAssertion1.ts(4,19): error TS1005: ',' expected.
-tests/cases/compiler/ambiguousGenericAssertion1.ts(4,21): error TS1005: ';' expected.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,10): error TS2365: Operator '>' cannot be applied to types 'number' and '(x: any) => boolean'.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,12): error TS2304: Cannot find name 'T'.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,14): error TS17018: Arrow functions are not syntactically valid here. Consider wrapping the function in parentheses.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,18): error TS2304: Cannot find name 'T'.
+tests/cases/compiler/ambiguousGenericAssertion1.ts(4,24): error TS2304: Cannot find name 'T'.
 
 
-==== tests/cases/compiler/ambiguousGenericAssertion1.ts (5 errors) ====
+==== tests/cases/compiler/ambiguousGenericAssertion1.ts (6 errors) ====
     function f<T>(x: T): T { return null; }
     var r = <T>(x: T) => x;
     var r2 = < <T>(x: T) => T>f; // valid
     var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operation
              ~~
 !!! error TS1109: Expression expected.
-                  ~
-!!! error TS2304: Cannot find name 'x'.
-                   ~
-!!! error TS1005: ')' expected.
-                      ~
-!!! error TS1005: ',' expected.
-                        ~~
-!!! error TS1005: ';' expected.
+             ~~~~
+!!! error TS2365: Operator '>' cannot be applied to types 'number' and '(x: any) => boolean'.
+               ~
+!!! error TS2304: Cannot find name 'T'.
+                 ~~~~~~~~~~~~~
+!!! error TS17018: Arrow functions are not syntactically valid here. Consider wrapping the function in parentheses.
+                     ~
+!!! error TS2304: Cannot find name 'T'.
+                           ~
+!!! error TS2304: Cannot find name 'T'.
     

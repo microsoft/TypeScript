@@ -18,13 +18,17 @@ var r2 = < <T>(x: T) => T>f; // valid
 
 var r3 = <<T>(x: T) => T>f; // ambiguous, appears to the parser as a << operation
 >r3 : boolean
-><<T>(x : boolean
+><<T> : boolean
 ><<T : number
 > : any
 >T : any
->(x : any
+>(x: T) => T>f : (x: any) => boolean
 >x : any
+>T>f : boolean
 >T : any
+>f : <T>(x: T) => T
+>(x: T) => T>f : (x: any) => boolean
+>x : any
 >T>f : boolean
 >T : any
 >f : <T>(x: T) => T

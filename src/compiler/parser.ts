@@ -3857,11 +3857,45 @@ namespace ts {
                     }
                 }
                 else {
-                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode<Token<BinaryOperator>>(), tryParseArrowFunctionExpressionOrExpression() || parseBinaryExpressionOrHigher(newPrecedence));
                 }
             }
-
             return leftOperand;
+        }
+
+        function tryParseArrowFunctionExpressionOrExpression() {
+            // Much of the time, users will write code along the lines of
+            //
+            //   let x = foo || () => { /*...*/ }
+            //
+            // However, arrow functions aren't valid in those positions in the ECMAScript grammar.
+            // Despite that, we'll try to parse it out anyway and give a decent error message.
+            if (isParenthesizedArrowFunctionExpression() !== Tristate.False) {
+                const maybeArrowFunction = lookAhead(tryParseParenthesizedArrowFunctionExpression);
+                if (maybeArrowFunction) {
+                    parseErrorAtNode(maybeArrowFunction, Diagnostics.Arrow_functions_are_not_syntactically_valid_here_Consider_wrapping_the_function_in_parentheses);
+                    return maybeArrowFunction;
+                }
+            }
+            if (lookAhead(isStartOfSimpleArrowFunction)) {
+                const arrowFunction = tryParseAsyncSimpleArrowFunctionExpression() || lookAhead(() => parseSimpleArrowFunctionExpression(<Identifier>parseBinaryExpressionOrHigher(/*precedence*/ 0)));
+                parseErrorAtNode(arrowFunction, Diagnostics.Arrow_functions_are_not_syntactically_valid_here_Consider_wrapping_the_function_in_parentheses);
+                return arrowFunction;
+            }
+            return undefined;
+        }
+
+        function parseErrorAtNode(node: Node, message: DiagnosticMessage, arg0?: any): void {
+            const start = skipTrivia(sourceFile.text, node.pos)
+            parseErrorAtPosition(start, node.end - start, message, arg0)
+        }
+
+        function isStartOfSimpleArrowFunction () {
+            if (token() === SyntaxKind.AsyncKeyword) {
+                nextToken();
+                return isIdentifier() && nextToken() === SyntaxKind.EqualsGreaterThanToken || token() === SyntaxKind.EqualsGreaterThanToken;
+            }
+            return isIdentifier() && nextToken() === SyntaxKind.EqualsGreaterThanToken;
         }
 
         function isBinaryOperator() {
