@@ -958,6 +958,9 @@ namespace ts.server {
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
+            if (this.program !== oldProgram) {
+                this.print();
+            }
             return hasNewProgram;
         }
 
@@ -1610,7 +1613,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
-            projectFilePath?: string) {
+            projectFilePath?: string,
+            pluginConfigOverrides?: Map<any>) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -1621,6 +1625,7 @@ namespace ts.server {
                 compileOnSaveEnabled,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
+            this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }
 
         updateGraph() {

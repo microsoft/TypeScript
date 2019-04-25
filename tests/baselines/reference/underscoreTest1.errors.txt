@@ -1,4 +1,4 @@
-tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,7): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<{}>'.
+tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,7): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
   Index signature is missing in type '(string | number | boolean)[]'.
 
 
@@ -30,7 +30,7 @@ tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,7): error TS2345: Arg
     
     _.all([true, 1, null, 'yes'], _.identity);
           ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<{}>'.
+!!! error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
 !!! error TS2345:   Index signature is missing in type '(string | number | boolean)[]'.
     
     _.any([null, 0, 'yes', false]);

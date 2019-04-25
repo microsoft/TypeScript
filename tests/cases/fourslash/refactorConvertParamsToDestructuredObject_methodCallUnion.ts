@@ -6,9 +6,8 @@
 ////class B {
 ////    foo(c: number, d: number) { return c + d; }
 ////}
-////function foo(ab: A | B) {
-////    return ab.foo(1, 2);
-////}
+////declare var ab: A | B;
+////ab.foo(1, 2);
 
 
 goTo.select("a", "b");
@@ -23,7 +22,6 @@ edit.applyRefactor({
 class B {
     foo(c: number, d: number) { return c + d; }
 }
-function foo(ab: A | B) {
-    return ab.foo(1, 2);
-}`
+declare var ab: A | B;
+ab.foo(1, 2);`
 });

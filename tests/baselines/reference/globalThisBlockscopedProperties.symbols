@@ -1,0 +1,57 @@
+=== tests/cases/conformance/es2019/globalThisBlockscopedProperties.ts ===
+var x = 1
+>x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
+
+const y = 2
+>y : Symbol(y, Decl(globalThisBlockscopedProperties.ts, 1, 5))
+
+let z = 3
+>z : Symbol(z, Decl(globalThisBlockscopedProperties.ts, 2, 3))
+
+globalThis.x // ok
+>globalThis.x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
+>globalThis : Symbol(globalThis)
+>x : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
+
+globalThis.y // should error, no property 'y'
+>globalThis : Symbol(globalThis)
+
+globalThis.z // should error, no property 'z'
+>globalThis : Symbol(globalThis)
+
+globalThis['x'] // ok
+>globalThis : Symbol(globalThis)
+>'x' : Symbol(x, Decl(globalThisBlockscopedProperties.ts, 0, 3))
+
+globalThis['y'] // should error, no property 'y'
+>globalThis : Symbol(globalThis)
+
+globalThis['z'] // should error, no property 'z'
+>globalThis : Symbol(globalThis)
+
+globalThis.Float64Array // ok
+>globalThis.Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>Float64Array : Symbol(Float64Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+globalThis.Infinity // ok
+>globalThis.Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+>globalThis : Symbol(globalThis)
+>Infinity : Symbol(Infinity, Decl(lib.es5.d.ts, --, --))
+
+declare let test1: (typeof globalThis)['x'] // ok
+>test1 : Symbol(test1, Decl(globalThisBlockscopedProperties.ts, 12, 11))
+>globalThis : Symbol(globalThis)
+
+declare let test2: (typeof globalThis)['y'] // error
+>test2 : Symbol(test2, Decl(globalThisBlockscopedProperties.ts, 13, 11))
+>globalThis : Symbol(globalThis)
+
+declare let test3: (typeof globalThis)['z'] // error
+>test3 : Symbol(test3, Decl(globalThisBlockscopedProperties.ts, 14, 11))
+>globalThis : Symbol(globalThis)
+
+declare let themAll: keyof typeof globalThis
+>themAll : Symbol(themAll, Decl(globalThisBlockscopedProperties.ts, 15, 11))
+>globalThis : Symbol(globalThis)
+
