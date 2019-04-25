@@ -4756,7 +4756,8 @@ namespace ts {
         ES2017 = 4,
         ES2018 = 5,
         ES2019 = 6,
-        ESNext = 7,
+        ES2020 = 7,
+        ESNext = 8,
         JSON = 100,
         Latest = ESNext,
     }
