@@ -699,9 +699,9 @@ var fooProm: Promise<Foo>;
 >fooProm : Promise<Foo>
 
 fooProm = Promise.try(Promise, () => {
->fooProm = Promise.try(Promise, () => {	return foo;}) : any
+>fooProm = Promise.try(Promise, () => {	return foo;}) : Promise<Foo>
 >fooProm : Promise<Foo>
->Promise.try(Promise, () => {	return foo;}) : any
+>Promise.try(Promise, () => {	return foo;}) : Promise<Foo>
 >Promise.try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
 >Promise : typeof Promise
 >try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
@@ -713,9 +713,9 @@ fooProm = Promise.try(Promise, () => {
 
 });
 fooProm = Promise.try(Promise, () => {
->fooProm = Promise.try(Promise, () => {	return foo;}, arr) : any
+>fooProm = Promise.try(Promise, () => {	return foo;}, arr) : Promise<Foo>
 >fooProm : Promise<Foo>
->Promise.try(Promise, () => {	return foo;}, arr) : any
+>Promise.try(Promise, () => {	return foo;}, arr) : Promise<Foo>
 >Promise.try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
 >Promise : typeof Promise
 >try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
@@ -729,9 +729,9 @@ fooProm = Promise.try(Promise, () => {
 >arr : any[]
 
 fooProm = Promise.try(Promise, () => {
->fooProm = Promise.try(Promise, () => {	return foo;}, arr, x) : any
+>fooProm = Promise.try(Promise, () => {	return foo;}, arr, x) : Promise<Foo>
 >fooProm : Promise<Foo>
->Promise.try(Promise, () => {	return foo;}, arr, x) : any
+>Promise.try(Promise, () => {	return foo;}, arr, x) : Promise<Foo>
 >Promise.try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
 >Promise : typeof Promise
 >try : { <R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>; <R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>; }
