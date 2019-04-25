@@ -8563,9 +8563,7 @@ namespace ts {
         function getSignatureInstantiation(signature: Signature, typeArguments: Type[] | undefined, isJavascript: boolean, inferredTypeParameters?: ReadonlyArray<TypeParameter>): Signature {
             const instantiatedSignature = getSignatureInstantiationWithoutFillingInTypeArguments(signature, fillMissingTypeArguments(typeArguments, signature.typeParameters, getMinTypeArgumentCount(signature.typeParameters), isJavascript));
             if (inferredTypeParameters) {
-                const returnType = getReturnTypeOfSignature(instantiatedSignature);
-                const returnSignature = getSingleSignature(returnType, SignatureKind.Call, /*allowMembers*/ false) ||
-                    getSingleSignature(returnType, SignatureKind.Construct, /*allowMembers*/ false);
+                const returnSignature = getSingleCallOrConstructSignature(getReturnTypeOfSignature(instantiatedSignature));
                 if (returnSignature) {
                     const newReturnSignature = cloneSignature(returnSignature);
                     newReturnSignature.typeParameters = inferredTypeParameters;
@@ -20427,6 +20425,11 @@ namespace ts {
             return getSingleSignature(type, SignatureKind.Call, /*allowMembers*/ false);
         }
 
+        function getSingleCallOrConstructSignature(type: Type): Signature | undefined {
+            return getSingleSignature(type, SignatureKind.Call, /*allowMembers*/ false) ||
+                getSingleSignature(type, SignatureKind.Construct, /*allowMembers*/ false);
+        }
+
         function getSingleSignature(type: Type, kind: SignatureKind, allowMembers: boolean): Signature | undefined {
             if (type.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(<ObjectType>type);
@@ -23775,7 +23778,7 @@ namespace ts {
                 const constructSignature = getSingleSignature(type, SignatureKind.Construct, /*allowMembers*/ true);
                 const signature = callSignature || constructSignature;
                 if (signature && signature.typeParameters) {
-                    if (checkMode & CheckMode.SkipGenericFunctions) {
+                    if (checkMode & CheckMode.SkipGenericFunctions && getSingleCallOrConstructSignature(type)) {
                         skippedGenericFunction(node, checkMode);
                         return anyFunctionType;
                     }
@@ -23791,9 +23794,7 @@ namespace ts {
                             // if some of the outer function type parameters have no inferences so far. If so, we can
                             // potentially add inferred type parameters to the outer function return type.
                             const returnType = context.signature && getReturnTypeOfSignature(context.signature);
-                            const returnSignature = returnType && (
-                                getSingleSignature(returnType, SignatureKind.Call, /*allowMembers*/ false) ||
-                                getSingleSignature(returnType, SignatureKind.Construct, /*allowMembers*/ false));
+                            const returnSignature = returnType && getSingleCallOrConstructSignature(returnType);
                             if (returnSignature && !returnSignature.typeParameters && !every(context.inferences, hasInferenceCandidates)) {
                                 // Instantiate the signature with its own type parameters as type arguments, possibly
                                 // renaming the type parameters to ensure they have unique names.
