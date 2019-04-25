@@ -1833,30 +1833,15 @@ namespace ts {
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrFormatSettingsOrUndefined?: CodeActionCommand | CodeActionCommand[] | FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
             const action = typeof fileName === "string" ? actionOrFormatSettingsOrUndefined as CodeActionCommand | CodeActionCommand[] : fileName as CodeActionCommand[];
-            const formatSettings = typeof fileName !== "string" ? actionOrFormatSettingsOrUndefined as FormatCodeSettings : undefined;
-            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(a, formatSettings))) : applySingleCodeActionCommand(action, formatSettings);
+            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(a))) : applySingleCodeActionCommand(action);
         }
 
-        function applySingleCodeActionCommand(action: CodeActionCommand, formatSettings: FormatCodeSettings | undefined): Promise<ApplyCodeActionCommandResult> {
+        function applySingleCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
             const getPath = (path: string): Path => toPath(path, currentDirectory, getCanonicalFileName);
-            switch (action.type) {
-                case "install package":
-                    return host.installPackage
-                        ? host.installPackage({ fileName: getPath(action.file), packageName: action.packageName })
-                        : Promise.reject("Host does not implement `installPackage`");
-                case "generate types": {
-                    const { fileToGenerateTypesFor, outputFileName } = action;
-                    if (!host.inspectValue) return Promise.reject("Host does not implement `installPackage`");
-                    const valueInfoPromise = host.inspectValue({ fileNameToRequire: fileToGenerateTypesFor });
-                    return valueInfoPromise.then(valueInfo => {
-                        const fullOut = getPath(outputFileName);
-                        host.writeFile!(fullOut, valueInfoToDeclarationFileText(valueInfo, formatSettings || testFormatSettings)); // TODO: GH#18217
-                        return { successMessage: `Wrote types to '${fullOut}'` };
-                    });
-                }
-                default:
-                    return Debug.assertNever(action);
-            }
+            Debug.assertEqual(action.type, "install package");
+            return host.installPackage
+                ? host.installPackage({ fileName: getPath(action.file), packageName: action.packageName })
+                : Promise.reject("Host does not implement `installPackage`");
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {

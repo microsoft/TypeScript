@@ -1,7 +1,7 @@
 tests/cases/compiler/expr.ts(87,5): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
-tests/cases/compiler/expr.ts(88,5): error TS2367: This condition will always return 'false' since the types 'number' and 'boolean' have no overlap.
+tests/cases/compiler/expr.ts(88,5): error TS2367: This condition will always return 'false' since the types 'number' and 'false' have no overlap.
 tests/cases/compiler/expr.ts(94,5): error TS2367: This condition will always return 'false' since the types 'string' and 'number' have no overlap.
-tests/cases/compiler/expr.ts(95,5): error TS2367: This condition will always return 'false' since the types 'string' and 'boolean' have no overlap.
+tests/cases/compiler/expr.ts(95,5): error TS2367: This condition will always return 'false' since the types 'string' and 'false' have no overlap.
 tests/cases/compiler/expr.ts(98,5): error TS2367: This condition will always return 'false' since the types 'string' and 'E' have no overlap.
 tests/cases/compiler/expr.ts(115,5): error TS2367: This condition will always return 'false' since the types 'E' and 'string' have no overlap.
 tests/cases/compiler/expr.ts(116,5): error TS2367: This condition will always return 'false' since the types 'E' and 'false' have no overlap.
@@ -161,7 +161,7 @@ tests/cases/compiler/expr.ts(242,7): error TS2363: The right-hand side of an ari
 !!! error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
         n==b;
         ~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'number' and 'boolean' have no overlap.
+!!! error TS2367: This condition will always return 'false' since the types 'number' and 'false' have no overlap.
         n==i;
         n==n;
         n==e;
@@ -172,7 +172,7 @@ tests/cases/compiler/expr.ts(242,7): error TS2363: The right-hand side of an ari
 !!! error TS2367: This condition will always return 'false' since the types 'string' and 'number' have no overlap.
         s==b;
         ~~~~
-!!! error TS2367: This condition will always return 'false' since the types 'string' and 'boolean' have no overlap.
+!!! error TS2367: This condition will always return 'false' since the types 'string' and 'false' have no overlap.
         s==i;
         s==s;
         s==e;
