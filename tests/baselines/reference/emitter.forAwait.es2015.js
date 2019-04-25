@@ -58,8 +58,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function f1() {
+    var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        var e_1, _a;
         let y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
@@ -92,8 +92,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
     function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 function f2() {
+    var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        var e_1, _a;
         let x, y;
         try {
             for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {
@@ -203,8 +203,8 @@ var __asyncValues = (this && this.__asyncValues) || function (o) {
 };
 // https://github.com/Microsoft/TypeScript/issues/21363
 function f5() {
+    var e_1, _a;
     return __awaiter(this, void 0, void 0, function* () {
-        var e_1, _a;
         let y;
         try {
             outer: for (var y_1 = __asyncValues(y), y_1_1; y_1_1 = yield y_1.next(), !y_1_1.done;) {

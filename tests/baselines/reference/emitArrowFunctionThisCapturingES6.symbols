@@ -12,9 +12,7 @@ var f2 = (x: string) => {
 >x : Symbol(x, Decl(emitArrowFunctionThisCapturingES6.ts, 4, 10))
 
     this.name = x
->this.name : Symbol(name, Decl(lib.dom.d.ts, --, --))
 >this : Symbol(globalThis)
->name : Symbol(name, Decl(lib.dom.d.ts, --, --))
 >x : Symbol(x, Decl(emitArrowFunctionThisCapturingES6.ts, 4, 10))
 }
 

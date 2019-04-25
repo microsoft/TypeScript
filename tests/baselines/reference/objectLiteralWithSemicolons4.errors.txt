@@ -1,4 +1,4 @@
-tests/cases/compiler/objectLiteralWithSemicolons4.ts(2,3): error TS2304: Cannot find name 'a'.
+tests/cases/compiler/objectLiteralWithSemicolons4.ts(2,3): error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
 tests/cases/compiler/objectLiteralWithSemicolons4.ts(3,1): error TS1005: ',' expected.
 
 
@@ -6,7 +6,7 @@ tests/cases/compiler/objectLiteralWithSemicolons4.ts(3,1): error TS1005: ',' exp
     var v = {
       a
       ~
-!!! error TS2304: Cannot find name 'a'.
+!!! error TS18004: No value exists in scope for the shorthand property 'a'. Either declare one or provide an initializer.
     ;
     ~
 !!! error TS1005: ',' expected.

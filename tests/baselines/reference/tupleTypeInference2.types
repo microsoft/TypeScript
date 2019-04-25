@@ -34,7 +34,7 @@ declare function g<T, U>(f: B<T, U>): U;
 >f : B<T, U>
 
 g([[]] as [void[]]); // U: {}
->g([[]] as [void[]]) : {}
+>g([[]] as [void[]]) : unknown
 >g : <T, U>(f: B<T, U>) => U
 >[[]] as [void[]] : [void[]]
 >[[]] : [never[]]
@@ -48,7 +48,7 @@ declare function h<T, U>(f: C<T, U>): U;
 >f : C<T, U>
 
 h([[]] as [void[]]); // U: {}
->h([[]] as [void[]]) : {}
+>h([[]] as [void[]]) : unknown
 >h : <T, U>(f: C<T, U>) => U
 >[[]] as [void[]] : [void[]]
 >[[]] : [never[]]

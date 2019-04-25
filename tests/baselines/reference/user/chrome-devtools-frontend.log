@@ -1,16 +1,16 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.dom.d.ts(2439,11): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(2458,13): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(3339,11): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(3342,13): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(5032,11): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(5092,13): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(11453,11): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(12214,11): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(12294,13): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(16941,11): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.dom.d.ts(17073,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(2495,11): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2514,13): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(3399,11): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(3402,13): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(5093,11): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(5153,13): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(11609,11): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(12365,11): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(12445,13): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(17123,11): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(17259,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1416,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1452,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
@@ -34,6 +34,8 @@ node_modules/chrome-devtools-frontend/front_end/Runtime.js(693,7): error TS2322:
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(705,5): error TS2322: Type 'Promise<boolean>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(715,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(729,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
+node_modules/chrome-devtools-frontend/front_end/Runtime.js(746,5): error TS2322: Type 'Window | {}' is not assignable to type 'Window'.
+  Type '{}' is missing the following properties from type 'Window': Blob, TextDecoder, TextEncoder, URL, and 234 more.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(854,36): error TS2339: Property 'eval' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1083,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(1088,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -4468,7 +4470,9 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(175,64
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(190,48): error TS2694: Namespace 'Coverage' has no exported member 'RangeUseCount'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(191,11): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '[CSSStyleSheetHeader, any[]]', but here has type 'CoverageInfo'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(197,5): error TS2322: Type '[CSSStyleSheetHeader, any[]][]' is not assignable to type 'CoverageInfo[]'.
-  Type '[CSSStyleSheetHeader, any[]]' is missing the following properties from type 'CoverageInfo': _contentProvider, _size, _usedSize, _coverageType, and 7 more.
+  Types of property 'pop' are incompatible.
+    Type '() => [CSSStyleSheetHeader, any[]]' is not assignable to type '() => CoverageInfo'.
+      Type '[CSSStyleSheetHeader, any[]]' is not assignable to type 'CoverageInfo'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(201,31): error TS2694: Namespace 'Coverage' has no exported member 'RangeUseCount'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(202,32): error TS2694: Namespace 'Coverage' has no exported member 'CoverageSegment'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageModel.js(210,23): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
@@ -5144,7 +5148,7 @@ node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(74
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,48): error TS2339: Property 'pageX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(745,60): error TS2339: Property 'pageY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(753,20): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Document'.
-node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2740: Type 'ShadowRoot' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 174 more.
+node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(761,5): error TS2740: Type 'ShadowRoot' is missing the following properties from type 'Document': URL, alinkColor, all, anchors, and 176 more.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,28): error TS2339: Property 'deepElementFromPoint' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(766,70): error TS2339: Property 'deepElementFromPoint' does not exist on type 'Document'.
 node_modules/chrome-devtools-frontend/front_end/dom_extension/DOMExtension.js(771,20): error TS2339: Property 'deepActiveElement' does not exist on type 'Document'.
@@ -11985,7 +11989,7 @@ node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataP
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(654,37): error TS2339: Property 'naturalHeight' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(655,39): error TS2339: Property 'naturalWidth' does not exist on type 'new (width?: number, height?: number) => HTMLImageElement'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(660,23): error TS2345: Argument of type 'new (width?: number, height?: number) => HTMLImageElement' is not assignable to parameter of type 'CanvasImageSource'.
-  Type 'new (width?: number, height?: number) => HTMLImageElement' is missing the following properties from type 'ImageBitmap': height, width, close
+  Type 'new (width?: number, height?: number) => HTMLImageElement' is missing the following properties from type 'OffscreenCanvas': height, width, convertToBlob, getContext, and 4 more.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(788,33): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'GroupStyle'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(862,44): error TS2339: Property 'id' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/timeline/TimelineFlameChartDataProvider.js(865,63): error TS2339: Property 'id' does not exist on type 'Event'.

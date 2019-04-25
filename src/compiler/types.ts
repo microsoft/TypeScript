@@ -8,7 +8,7 @@ namespace ts {
         end: number;
     }
 
-    export type JsDocSyntaxKind =
+    export type JSDocSyntaxKind =
         | SyntaxKind.EndOfFileToken
         | SyntaxKind.WhitespaceTrivia
         | SyntaxKind.AtToken
@@ -23,7 +23,7 @@ namespace ts {
         | SyntaxKind.CommaToken
         | SyntaxKind.DotToken
         | SyntaxKind.Identifier
-        | SyntaxKind.NoSubstitutionTemplateLiteral
+        | SyntaxKind.BacktickToken
         | SyntaxKind.Unknown
         | KeywordSyntaxKind;
 
@@ -181,6 +181,8 @@ namespace ts {
         QuestionToken,
         ColonToken,
         AtToken,
+        /** Only the JSDoc scanner produces BacktickToken. The normal scanner produces NoSubstitutionTemplateLiteral and related kinds. */
+        BacktickToken,
         // Assignments
         EqualsToken,
         PlusEqualsToken,
@@ -2961,6 +2963,7 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+        /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
         /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective | undefined>;
@@ -3246,6 +3249,7 @@ namespace ts {
         /* @internal */ getIdentifierCount(): number;
         /* @internal */ getSymbolCount(): number;
         /* @internal */ getTypeCount(): number;
+        /* @internal */ getRelationCacheSizes(): { assignable: number, identity: number, subtype: number };
 
         /* @internal */ isArrayType(type: Type): boolean;
         /* @internal */ isTupleType(type: Type): boolean;
@@ -3746,19 +3750,21 @@ namespace ts {
         SyntheticProperty = 1 << 1,         // Property in union or intersection type
         SyntheticMethod   = 1 << 2,         // Method in union or intersection type
         Readonly          = 1 << 3,         // Readonly transient symbol
-        Partial           = 1 << 4,         // Synthetic property present in some but not all constituents
-        HasNonUniformType = 1 << 5,         // Synthetic property with non-uniform type in constituents
-        HasLiteralType    = 1 << 6,         // Synthetic property with at least one literal type in constituents
-        ContainsPublic    = 1 << 7,         // Synthetic property with public constituent(s)
-        ContainsProtected = 1 << 8,         // Synthetic property with protected constituent(s)
-        ContainsPrivate   = 1 << 9,         // Synthetic property with private constituent(s)
-        ContainsStatic    = 1 << 10,        // Synthetic property with static constituent(s)
-        Late              = 1 << 11,        // Late-bound symbol for a computed property with a dynamic name
-        ReverseMapped     = 1 << 12,        // Property of reverse-inferred homomorphic mapped type
-        OptionalParameter = 1 << 13,        // Optional parameter
-        RestParameter     = 1 << 14,        // Rest parameter
+        ReadPartial       = 1 << 4,         // Synthetic property present in some but not all constituents
+        WritePartial      = 1 << 5,         // Synthetic property present in some but only satisfied by an index signature in others
+        HasNonUniformType = 1 << 6,         // Synthetic property with non-uniform type in constituents
+        HasLiteralType    = 1 << 7,         // Synthetic property with at least one literal type in constituents
+        ContainsPublic    = 1 << 8,         // Synthetic property with public constituent(s)
+        ContainsProtected = 1 << 9,         // Synthetic property with protected constituent(s)
+        ContainsPrivate   = 1 << 10,        // Synthetic property with private constituent(s)
+        ContainsStatic    = 1 << 11,        // Synthetic property with static constituent(s)
+        Late              = 1 << 12,        // Late-bound symbol for a computed property with a dynamic name
+        ReverseMapped     = 1 << 13,        // Property of reverse-inferred homomorphic mapped type
+        OptionalParameter = 1 << 14,        // Optional parameter
+        RestParameter     = 1 << 15,        // Rest parameter
         Synthetic = SyntheticProperty | SyntheticMethod,
-        Discriminant = HasNonUniformType | HasLiteralType
+        Discriminant = HasNonUniformType | HasLiteralType,
+        Partial = ReadPartial | WritePartial
     }
 
     /* @internal */
@@ -3944,7 +3950,7 @@ namespace ts {
         Instantiable = InstantiableNonPrimitive | InstantiablePrimitive,
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
-        ObjectFlagsType = Nullable | Object | Union | Intersection,
+        ObjectFlagsType = Nullable | Never | Object | Union | Intersection,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -4064,12 +4070,12 @@ namespace ts {
         /* @internal */
         ContainsObjectLiteral = 1 << 18, // Type is or contains object literal type
         /* @internal */
-        ContainsAnyFunctionType = 1 << 19, // Type is or contains the anyFunctionType
+        NonInferrableType = 1 << 19, // Type is or contains anyFunctionType or silentNeverType
         ClassOrInterface = Class | Interface,
         /* @internal */
         RequiresWidening = ContainsWideningType | ContainsObjectLiteral,
         /* @internal */
-        PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | ContainsAnyFunctionType
+        PropagatingFlags = ContainsWideningType | ContainsObjectLiteral | NonInferrableType
     }
 
     /* @internal */
@@ -4171,6 +4177,8 @@ namespace ts {
     }
 
     export interface UnionType extends UnionOrIntersectionType {
+        /* @internal */
+        possiblePropertyCache?: SymbolTable;       // Cache of _all_ resolved properties less any from aparent members
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -4279,7 +4287,8 @@ namespace ts {
         objectType: Type;
         indexType: Type;
         constraint?: Type;
-        simplified?: Type;
+        simplifiedForReading?: Type;
+        simplifiedForWriting?: Type;
     }
 
     export type TypeVariable = TypeParameter | IndexedAccessType;
@@ -4310,8 +4319,10 @@ namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        resolvedTrueType?: Type;
-        resolvedFalseType?: Type;
+        trueType: Type;
+        falseType: Type;
+        /* @internal */
+        resolvedInferredTrueType?: Type; // The `trueType` instantiated with the `combinedMapper`, if present
         /* @internal */
         resolvedDefaultConstraint?: Type;
         /* @internal */
@@ -4578,6 +4589,7 @@ namespace ts {
         allowJs?: boolean;
         /*@internal*/ allowNonTsExtensions?: boolean;
         allowSyntheticDefaultImports?: boolean;
+        allowUmdGlobalAccess?: boolean;
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;  // Always combine with strict property
@@ -4820,6 +4832,7 @@ namespace ts {
         affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
         affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
+        affectsEmit?: true;                                     // true if the options affects emit
     }
 
     /* @internal */
@@ -5948,26 +5961,18 @@ namespace ts {
     /* @internal */
     export interface PragmaDefinition<T1 extends string = string, T2 extends string = string, T3 extends string = string, T4 extends string = string> {
         args?:
-            | [PragmaArgumentSpecification<T1>]
-            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>]
-            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>]
-            | [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>, PragmaArgumentSpecification<T4>];
+            | readonly [PragmaArgumentSpecification<T1>]
+            | readonly [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>]
+            | readonly [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>]
+            | readonly [PragmaArgumentSpecification<T1>, PragmaArgumentSpecification<T2>, PragmaArgumentSpecification<T3>, PragmaArgumentSpecification<T4>];
         // If not present, defaults to PragmaKindFlags.Default
         kind?: PragmaKindFlags;
-    }
-
-    /**
-     * This function only exists to cause exact types to be inferred for all the literals within `commentPragmas`
-     */
-    /* @internal */
-    function _contextuallyTypePragmas<T extends {[name: string]: PragmaDefinition<K1, K2, K3, K4>}, K1 extends string, K2 extends string, K3 extends string, K4 extends string>(args: T): T {
-        return args;
     }
 
     // While not strictly a type, this is here because `PragmaMap` needs to be here to be used with `SourceFile`, and we don't
     //  fancy effectively defining it twice, once in value-space and once in type-space
     /* @internal */
-    export const commentPragmas = _contextuallyTypePragmas({
+    export const commentPragmas = {
         "reference": {
             args: [
                 { name: "types", optional: true, captureSpan: true },
@@ -5995,7 +6000,7 @@ namespace ts {
             args: [{ name: "factory" }],
             kind: PragmaKindFlags.MultiLine
         },
-    });
+    } as const;
 
     /* @internal */
     type PragmaArgTypeMaybeCapture<TDesc> = TDesc extends {captureSpan: true} ? {value: string, pos: number, end: number} : string;
@@ -6006,29 +6011,29 @@ namespace ts {
             ? {[K in TName]?: PragmaArgTypeMaybeCapture<TDesc>}
             : {[K in TName]: PragmaArgTypeMaybeCapture<TDesc>};
 
+    /* @internal */
+    type UnionToIntersection<U> =
+            (U extends any ? (k: U) => void : never) extends ((k: infer I) => void) ? I : never;
+
+    /* @internal */
+    type ArgumentDefinitionToFieldUnion<T extends readonly PragmaArgumentSpecification<any>[]> = {
+        [K in keyof T]: PragmaArgTypeOptional<T[K], T[K] extends {name: infer TName} ? TName extends string ? TName : never : never>
+    }[Extract<keyof T, number>]; // The mapped type maps over only the tuple members, but this reindex gets _all_ members - by extracting only `number` keys, we get only the tuple members
+
     /**
      * Maps a pragma definition into the desired shape for its arguments object
-     * Maybe the below is a good argument for types being iterable on struture in some way.
      */
     /* @internal */
-    type PragmaArgumentType<T extends PragmaDefinition> =
-        T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>, PragmaArgumentSpecification<infer TName3>, PragmaArgumentSpecification<infer TName4>] }
-            ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2> & PragmaArgTypeOptional<T["args"][2], TName3> & PragmaArgTypeOptional<T["args"][2], TName4>
-            : T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>, PragmaArgumentSpecification<infer TName3>] }
-                ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2> & PragmaArgTypeOptional<T["args"][2], TName3>
-                : T extends { args: [PragmaArgumentSpecification<infer TName1>, PragmaArgumentSpecification<infer TName2>] }
-                    ? PragmaArgTypeOptional<T["args"][0], TName1> & PragmaArgTypeOptional<T["args"][1], TName2>
-                    : T extends { args: [PragmaArgumentSpecification<infer TName>] }
-                        ? PragmaArgTypeOptional<T["args"][0], TName>
-                        : object;
-    // The above fallback to `object` when there's no args to allow `{}` (as intended), but not the number 2, for example
-    // TODO: Swap to `undefined` for a cleaner API once strictNullChecks is enabled
+    type PragmaArgumentType<KPrag extends keyof ConcretePragmaSpecs> =
+        ConcretePragmaSpecs[KPrag] extends { args: readonly PragmaArgumentSpecification<any>[] }
+            ? UnionToIntersection<ArgumentDefinitionToFieldUnion<ConcretePragmaSpecs[KPrag]["args"]>>
+            : never;
 
     /* @internal */
     type ConcretePragmaSpecs = typeof commentPragmas;
 
     /* @internal */
-    export type PragmaPseudoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
+    export type PragmaPseudoMap = {[K in keyof ConcretePragmaSpecs]: {arguments: PragmaArgumentType<K>, range: CommentRange}};
 
     /* @internal */
     export type PragmaPseudoMapEntry = {[K in keyof PragmaPseudoMap]: {name: K, args: PragmaPseudoMap[K]}}[keyof PragmaPseudoMap];
