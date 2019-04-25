@@ -1,4 +1,3 @@
-/** @internal */
 type PromiseSettledResult<T> = { status: 'fulfilled', value: T } | { status: 'rejected', reason: any }
 
 /**
