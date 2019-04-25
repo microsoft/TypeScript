@@ -4957,6 +4957,6 @@
     },
     "Quoted constructors have previously been interpreted as methods, which is incorrect. In TypeScript 3.6, they will be correctly parsed as constructors. In the meantime, consider using 'constructor()' to write a constructor, or '[\"constructor\"]()' to write a method.": {
         "category": "Error",
-        "code": 96000
+        "code": 18005
     }
 }
