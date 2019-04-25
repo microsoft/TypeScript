@@ -847,6 +847,14 @@
         "category": "Error",
         "code": 1257
     },
+    "Definite assignment assertions can only be used along with a type annotation.": {
+        "category": "Error",
+        "code": 1258
+    },
+    "Module '{0}' can only be default-imported using the '{1}' flag": {
+        "category": "Error",
+        "code": 1259
+    },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
         "code": 1300
@@ -2152,6 +2160,10 @@
         "category": "Error",
         "code": 2593
     },
+    "This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.": {
+        "category": "Error",
+        "code": 2594
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2601,6 +2613,10 @@
         "category": "Error",
         "code": 2753
     },
+    "'super' may not use type arguments.": {
+        "category": "Error",
+        "code": 2754
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -2939,7 +2955,11 @@
         "category": "Error",
         "code": 4103
     },
-
+    "The type '{0}' is 'readonly' and cannot be assigned to the mutable type '{1}'.": {
+        "category": "Error",
+        "code": 4104
+    },
+    
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -3072,9 +3092,13 @@
         "category": "Error",
         "code": 5073
     },
-    "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
+    "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option `--tsBuildInfoFile` is specified.": {
         "category": "Error",
         "code": 5074
+    },
+    "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
+        "category": "Error",
+        "code": 5075
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4934,5 +4958,13 @@
     "Convert parameters to destructured object": {
         "category": "Message",
         "code": 95075
+    },
+    "Allow accessing UMD globals from modules.": {
+        "category": "Message",
+        "code": 95076
+    },
+    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
+        "category": "Error",
+        "code": 18004
     }
 }

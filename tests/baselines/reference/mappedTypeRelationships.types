@@ -79,7 +79,7 @@ function f5<T, U extends T>(x: T, y: U, k: keyof U) {
 
     x[k] = y[k];  // Error
 >x[k] = y[k] : U[keyof U]
->x[k] : T[keyof U]
+>x[k] : any
 >x : T
 >k : keyof U
 >y[k] : U[keyof U]
@@ -87,11 +87,11 @@ function f5<T, U extends T>(x: T, y: U, k: keyof U) {
 >k : keyof U
 
     y[k] = x[k];  // Error
->y[k] = x[k] : T[keyof U]
+>y[k] = x[k] : any
 >y[k] : U[keyof U]
 >y : U
 >k : keyof U
->x[k] : T[keyof U]
+>x[k] : any
 >x : T
 >k : keyof U
 }
@@ -104,7 +104,7 @@ function f6<T, U extends T, K extends keyof U>(x: T, y: U, k: K) {
 
     x[k] = y[k];  // Error
 >x[k] = y[k] : U[K]
->x[k] : T[K]
+>x[k] : any
 >x : T
 >k : K
 >y[k] : U[K]
@@ -112,11 +112,11 @@ function f6<T, U extends T, K extends keyof U>(x: T, y: U, k: K) {
 >k : K
 
     y[k] = x[k];  // Error
->y[k] = x[k] : T[K]
+>y[k] = x[k] : any
 >y[k] : U[K]
 >y : U
 >k : K
->x[k] : T[K]
+>x[k] : any
 >x : T
 >k : K
 }

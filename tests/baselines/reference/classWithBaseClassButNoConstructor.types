@@ -54,8 +54,8 @@ var d = new D(); // error
 >D : typeof D
 
 var d2 = new D(1); // ok
->d2 : D<number, {}>
->new D(1) : D<number, {}>
+>d2 : D<number, unknown>
+>new D(1) : D<number, unknown>
 >D : typeof D
 >1 : 1
 
@@ -78,8 +78,8 @@ var d3 = new D(); // error
 >D : typeof D
 
 var d4 = new D(1); // ok
->d4 : D<number, {}>
->new D(1) : D<number, {}>
+>d4 : D<number, unknown>
+>new D(1) : D<number, unknown>
 >D : typeof D
 >1 : 1
 
@@ -101,8 +101,8 @@ var d5 = new D(); // error
 >D : typeof D
 
 var d6 = new D(1); // ok
->d6 : D<number, {}>
->new D(1) : D<number, {}>
+>d6 : D<number, unknown>
+>new D(1) : D<number, unknown>
 >D : typeof D
 >1 : 1
 

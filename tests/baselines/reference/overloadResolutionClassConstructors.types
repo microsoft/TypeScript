@@ -94,7 +94,7 @@ new fn2<Date>('', 0); // OK
 
 // Generic and non - generic overload where non - generic overload is the only candidate when called without type arguments
 new fn2('', 0); // OK
->new fn2('', 0) : fn2<{}>
+>new fn2('', 0) : fn2<unknown>
 >fn2 : typeof fn2
 >'' : ""
 >0 : 0
@@ -120,12 +120,12 @@ class fn3<T, U, V> {
 }
 
 new fn3(3);
->new fn3(3) : fn3<number, {}, {}>
+>new fn3(3) : fn3<number, unknown, unknown>
 >fn3 : typeof fn3
 >3 : 3
 
 new fn3('', 3, '');
->new fn3('', 3, '') : fn3<number, string, {}>
+>new fn3('', 3, '') : fn3<number, string, unknown>
 >fn3 : typeof fn3
 >'' : ""
 >3 : 3

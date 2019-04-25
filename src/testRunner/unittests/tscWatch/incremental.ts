@@ -15,9 +15,51 @@ namespace ts.tscWatch {
             expectedIncrementalEmit?: ReadonlyArray<File>;
             expectedIncrementalErrors?: ReadonlyArray<string>;
         }
-        function verifyIncrementalWatchEmit({
-            files, expectedInitialEmit, expectedInitialErrors, modifyFs, expectedIncrementalEmit, expectedIncrementalErrors
-        }: VerifyIncrementalWatchEmitInput) {
+        function verifyIncrementalWatchEmit(input: VerifyIncrementalWatchEmitInput) {
+            it("with tsc --w", () => {
+                verifyIncrementalWatchEmitWorker({
+                    input,
+                    emitAndReportErrors: createWatchOfConfigFile,
+                    verifyErrors: checkOutputErrorsInitial
+                });
+            });
+            it("with tsc", () => {
+                verifyIncrementalWatchEmitWorker({
+                    input,
+                    emitAndReportErrors: incrementalBuild,
+                    verifyErrors: checkNormalBuildErrors
+                });
+            });
+        }
+
+        function incrementalBuild(configFile: string, host: WatchedSystem) {
+            const reportDiagnostic = createDiagnosticReporter(host);
+            const config = parseConfigFileWithSystem(configFile, {}, host, reportDiagnostic);
+            if (config) {
+                performIncrementalCompilation({
+                    rootNames: config.fileNames,
+                    options: config.options,
+                    projectReferences: config.projectReferences,
+                    configFileParsingDiagnostics: getConfigFileParsingDiagnostics(config),
+                    reportDiagnostic,
+                    system: host
+                });
+            }
+            return { close: noop };
+        }
+
+        interface VerifyIncrementalWatchEmitWorkerInput {
+            input: VerifyIncrementalWatchEmitInput;
+            emitAndReportErrors: (configFile: string, host: WatchedSystem) => { close(): void; };
+            verifyErrors: (host: WatchedSystem, errors: ReadonlyArray<string>) => void;
+        }
+        function verifyIncrementalWatchEmitWorker({
+            input: {
+                files, expectedInitialEmit, expectedInitialErrors, modifyFs, expectedIncrementalEmit, expectedIncrementalErrors
+            },
+            emitAndReportErrors,
+            verifyErrors
+        }: VerifyIncrementalWatchEmitWorkerInput) {
             const host = createWatchedSystem(files, { currentDirectory: project });
             const originalWriteFile = host.writeFile;
             const writtenFiles = createMap<string>();
@@ -26,19 +68,41 @@ namespace ts.tscWatch {
                 writtenFiles.set(path, content);
                 originalWriteFile.call(host, path, content);
             };
-            verifyWatch(host, writtenFiles, expectedInitialEmit, expectedInitialErrors);
+            verifyBuild({
+                host,
+                writtenFiles,
+                emitAndReportErrors,
+                verifyErrors,
+                expectedEmit: expectedInitialEmit,
+                expectedErrors: expectedInitialErrors
+            });
             if (modifyFs) {
                 modifyFs(host);
-                verifyWatch(host, writtenFiles, Debug.assertDefined(expectedIncrementalEmit), Debug.assertDefined(expectedIncrementalErrors));
+                verifyBuild({
+                    host,
+                    writtenFiles,
+                    emitAndReportErrors,
+                    verifyErrors,
+                    expectedEmit: Debug.assertDefined(expectedIncrementalEmit),
+                    expectedErrors: Debug.assertDefined(expectedIncrementalErrors)
+                });
             }
         }
 
-        function verifyWatch(host: WatchedSystem, writtenFiles: Map<string>, expectedEmit: ReadonlyArray<File>, expectedErrors: ReadonlyArray<string>) {
+        interface VerifyBuildWorker {
+            host: WatchedSystem;
+            writtenFiles: Map<string>;
+            emitAndReportErrors: VerifyIncrementalWatchEmitWorkerInput["emitAndReportErrors"];
+            verifyErrors: VerifyIncrementalWatchEmitWorkerInput["verifyErrors"];
+            expectedEmit: ReadonlyArray<File>;
+            expectedErrors: ReadonlyArray<string>;
+        }
+        function verifyBuild({ host, writtenFiles, emitAndReportErrors, verifyErrors, expectedEmit, expectedErrors }: VerifyBuildWorker) {
             writtenFiles.clear();
-            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            const result = emitAndReportErrors("tsconfig.json", host);
             checkFileEmit(writtenFiles, expectedEmit);
-            checkOutputErrorsInitial(host, expectedErrors);
-            watch.close();
+            verifyErrors(host, expectedErrors);
+            result.close();
         }
 
         function checkFileEmit(actual: Map<string>, expected: ReadonlyArray<File>) {
@@ -73,7 +137,7 @@ namespace ts.tscWatch {
                 content: "var y = 20;\n"
             };
 
-            it("own file emit without errors", () => {
+            describe("own file emit without errors", () => {
                 const modifiedFile2Content = file2.content.replace("y", "z").replace("20", "10");
                 verifyIncrementalWatchEmit({
                     files: [libFile, file1, file2, configFile],
@@ -125,7 +189,7 @@ namespace ts.tscWatch {
                 });
             });
 
-            it("own file emit with errors", () => {
+            describe("own file emit with errors", () => {
                 const fileModified: File = {
                     path: file2.path,
                     content: `const y: string = 20;`
@@ -208,7 +272,7 @@ namespace ts.tscWatch {
                 });
             });
 
-            it("with --out", () => {
+            describe("with --out", () => {
                 const config: File = {
                     path: configFile.path,
                     content: JSON.stringify({ compilerOptions: { incremental: true, outFile: "out.js" } })
@@ -279,7 +343,7 @@ namespace ts.tscWatch {
                 content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd" } })
             };
 
-            it("own file emit without errors", () => {
+            describe("own file emit without errors", () => {
                 const modifiedFile2Content = file2.content.replace("y", "z").replace("20", "10");
                 verifyIncrementalWatchEmit({
                     files: [libFile, file1, file2, config],
@@ -330,7 +394,7 @@ namespace ts.tscWatch {
                 });
             });
 
-            it("own file emit with errors", () => {
+            describe("own file emit with errors", () => {
                 const fileModified: File = {
                     path: file2.path,
                     content: `export const y: string = 20;`
@@ -412,7 +476,7 @@ namespace ts.tscWatch {
                 });
             });
 
-            it("with --out", () => {
+            describe("with --out", () => {
                 const config: File = {
                     path: configFile.path,
                     content: JSON.stringify({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } })
