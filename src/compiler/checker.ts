@@ -31186,6 +31186,13 @@ namespace ts {
 
             for (const prop of node.properties) {
                 if (prop.kind === SyntaxKind.SpreadAssignment) {
+                    if (inDestructuring) {
+                        // a rest property cannot be destructured any further
+                        const expression = skipParentheses(prop.expression);
+                        if (isArrayLiteralExpression(expression) || isObjectLiteralExpression(expression)) {
+                            return grammarErrorOnNode(prop.expression, Diagnostics.A_rest_element_cannot_contain_a_binding_pattern);
+                        }
+                    }
                     continue;
                 }
                 const name = prop.name;
