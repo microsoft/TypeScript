@@ -12260,11 +12260,7 @@ namespace ts {
                     targetType = typeToString(target, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType);
                 }
 
-                if (
-                    target.flags & TypeFlags.TypeParameter
-                    && target.immediateBaseConstraint !== undefined
-                    && isTypeAssignableTo(source, target.immediateBaseConstraint)
-                ) {
+                if (target.flags & TypeFlags.TypeParameter && target.immediateBaseConstraint !== undefined && isTypeAssignableTo(source, target.immediateBaseConstraint)) {
                     reportError(
                         Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
                         sourceType,
