@@ -12842,6 +12842,22 @@ namespace ts {
                                 related = isRelatedTo(s, t, reportErrors);
                             }
                         }
+                        else if (variance === Variance.Unmeasurable) {
+                            if (isTypeAny(s) || isTypeAny(t)) {
+                                // If the `s` or `t` type is `any`, even if the structural desugaring says that the types _shouldn't_
+                                // be relatable, it's very surprising if they're not - take `Component<Foo, any>` to `Component<Foo, Foo>` - even
+                                // if the `any` position is unmeasurable, it's incredibly surprising that such a reference wouldn't check out.
+                                // (In fact, any nonlinear relation involving `any` is usually surprising) Even if it's potentially not correct
+                                // according to our underlying structural rules, we persist that assumption here.
+                                related = Ternary.True;
+                            }
+                            else {
+                                // Even an `Unmeasurable` variance works out without a structural check if the source and target are _identical_.
+                                // We can't simply assume invariance, because `Unmeasurable` marks nonlinear relations, for example, a relation tained by
+                                // the `-?` modifier in a mapped type (where, no matter how the inputs are related, the outputs still might not be)
+                                related = relation === identityRelation ? isRelatedTo(s, t, /*reportErrors*/ false) : compareTypesIdentical(s, t);
+                            }
+                        }
                         else {
                             // In the invariant case we first compare covariantly, and only when that
                             // succeeds do we proceed to compare contravariantly. Thus, error elaboration
@@ -13200,11 +13216,17 @@ namespace ts {
                 return Ternary.False;
 
                 function relateVariances(sourceTypeArguments: ReadonlyArray<Type> | undefined, targetTypeArguments: ReadonlyArray<Type> | undefined, variances: Variance[]) {
-                    if (some(variances, v => v === Variance.Unmeasurable)) {
-                        return undefined;
-                    }
                     if (result = typeArgumentsRelatedTo(sourceTypeArguments, targetTypeArguments, variances, reportErrors)) {
                         return result;
+                    }
+                    if (some(variances, v => v === Variance.Unmeasurable)) {
+                        // If some type parameter was `Unmeasurable`, and we couldn't pass by assuming it was invariant, then we
+                        // have to allow a structural fallback check
+                        // We elide the variance-based error elaborations, since those might not be too helpful, since we'll potentially
+                        // be assuming identity of the type parameter.
+                        originalErrorInfo = undefined;
+                        errorInfo = saveErrorInfo;
+                        return undefined;
                     }
                     const allowStructuralFallback = targetTypeArguments && hasCovariantVoidArgument(targetTypeArguments, variances);
                     varianceCheckFailed = !allowStructuralFallback;
