@@ -30,7 +30,6 @@ node_modules/npm/bin/npm-cli.js(132,17): error TS2339: Property 'config' does no
 node_modules/npm/bin/npm-cli.js(134,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(136,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(140,32): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?]'.
-  Type 'IArguments' is missing the following properties from type '[any?]': pop, push, concat, join, and 26 more.
 node_modules/npm/html/static/toc.js(3,40): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/access.js(58,46): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/access.js(65,18): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
@@ -61,7 +60,6 @@ node_modules/npm/lib/auth/legacy.js(35,16): error TS2339: Property 'config' does
 node_modules/npm/lib/auth/legacy.js(69,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/oauth.js(5,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/oauth.js(6,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, any?, any?]'.
-  Type 'IArguments' is missing the following properties from type '[any?, any?, any?, any?]': pop, push, concat, join, and 26 more.
 node_modules/npm/lib/auth/saml.js(5,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/saml.js(6,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, any?, any?]'.
 node_modules/npm/lib/auth/sso.js(7,21): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -368,7 +366,7 @@ node_modules/npm/lib/install.js(745,32): error TS2339: Property 'config' does no
 node_modules/npm/lib/install.js(751,12): error TS2339: Property 'failing' does not exist on type 'Installer'.
 node_modules/npm/lib/install.js(768,13): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(770,20): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install.js(771,14): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/npm/lib/install.js(771,53): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/npm/lib/install.js(890,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(897,26): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/install.js(899,25): error TS2345: Argument of type '{ action: any; name: any; version: any; path: any; }' is not assignable to parameter of type 'never'.
@@ -378,7 +376,7 @@ node_modules/npm/lib/install.js(905,27): error TS2345: Argument of type '{ actio
 node_modules/npm/lib/install.js(948,8): error TS2454: Variable 'previousPath' is used before being assigned.
 node_modules/npm/lib/install.js(985,53): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install.js(1007,53): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/install/access-error.js(4,18): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/npm/lib/install/access-error.js(4,60): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/npm/lib/install/action/build.js(10,50): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(39,40): error TS2339: Property 'limit' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/install/action/extract.js(81,9): error TS2322: Type 'string' is not assignable to type 'any[]'.
@@ -483,7 +481,7 @@ node_modules/npm/lib/logout.js(16,7): error TS2339: Property 'config' does not e
 node_modules/npm/lib/logout.js(17,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/logout.js(23,26): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/logout.js(28,11): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/logout.js(38,10): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/npm/lib/logout.js(39,29): error TS2554: Expected 0-1 arguments, but got 3.
 node_modules/npm/lib/ls.js(37,30): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(88,18): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/ls.js(89,18): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -802,9 +800,9 @@ node_modules/npm/lib/utils/error-handler.js(146,27): error TS2339: Property 'con
 node_modules/npm/lib/utils/error-handler.js(166,14): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/error-handler.js(167,16): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/error-handler.js(168,8): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/npm/lib/utils/error-handler.js(186,40): error TS2345: Argument of type '{ (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | ... 1 more ... | undefined): string; }' is not assignable to parameter of type '(value: string, index: number, array: string[]) => string'.
+node_modules/npm/lib/utils/error-handler.js(186,40): error TS2345: Argument of type '{ (value: any, replacer?: ((this: any, key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | ... 1 more ... | undefined): string; }' is not assignable to parameter of type '(value: string, index: number, array: string[]) => string'.
   Types of parameters 'replacer' and 'index' are incompatible.
-    Type 'number' is not assignable to type '((key: string, value: any) => any) | undefined'.
+    Type 'number' is not assignable to type '((this: any, key: string, value: any) => any) | undefined'.
 node_modules/npm/lib/utils/error-handler.js(188,33): error TS2339: Property 'version' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(205,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/error-handler.js(208,18): error TS2339: Property 'code' does not exist on type 'Error'.
@@ -826,7 +824,7 @@ node_modules/npm/lib/utils/locker.js(28,20): error TS2339: Property 'config' doe
 node_modules/npm/lib/utils/locker.js(29,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/locker.js(65,15): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/utils/map-to-registry.js(98,45): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch": () => ChildProcess | undefined; }' have no overlap.
+node_modules/npm/lib/utils/metrics-launch.js(6,5): error TS2367: This condition will always return 'false' since the types 'NodeModule | undefined' and '{ "../../../tests/cases/user/npm/node_modules/npm/lib/utils/metrics-launch": () => ChildProcessWithoutNullStreams | undefined; }' have no overlap.
 node_modules/npm/lib/utils/metrics-launch.js(12,14): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(13,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics-launch.js(14,30): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -840,7 +838,6 @@ node_modules/npm/lib/utils/metrics.js(62,7): error TS2339: Property 'load' does 
 node_modules/npm/lib/utils/metrics.js(64,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics.js(65,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/output.js(6,30): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, ...any[]]'.
-  Type 'IArguments' is missing the following properties from type '[any?, ...any[]]': pop, push, concat, join, and 26 more.
 node_modules/npm/lib/utils/perf.js(9,12): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/perf.js(10,12): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/read-local-package.js(7,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1485,7 +1482,7 @@ node_modules/npm/test/tap/prepublish-only.js(5,20): error TS2307: Cannot find mo
 node_modules/npm/test/tap/prepublish-only.js(6,21): error TS2307: Cannot find module 'tacks'.
 node_modules/npm/test/tap/prepublish.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/process-logger.js(2,22): error TS2307: Cannot find module 'tap'.
-node_modules/npm/test/tap/process-logger.js(7,24): error TS2554: Expected 1-3 arguments, but got 4.
+node_modules/npm/test/tap/process-logger.js(7,61): error TS2554: Expected 1-3 arguments, but got 4.
 node_modules/npm/test/tap/process-logger.js(8,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/test/tap/process-logger.js(9,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/test/tap/process-logger.js(10,37): error TS2345: Argument of type '"log"' is not assignable to parameter of type 'Signals'.

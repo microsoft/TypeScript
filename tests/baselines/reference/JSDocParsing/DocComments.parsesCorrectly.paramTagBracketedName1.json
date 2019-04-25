@@ -2,31 +2,43 @@
     "kind": "JSDocComment",
     "pos": 0,
     "end": 61,
+    "modifierFlagsCache": 0,
+    "transformFlags": 0,
     "tags": {
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
             "end": 59,
+            "modifierFlagsCache": 0,
+            "transformFlags": 0,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
                 "end": 14,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "param"
             },
             "typeExpression": {
                 "kind": "JSDocTypeExpression",
                 "pos": 15,
                 "end": 23,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "type": {
                     "kind": "NumberKeyword",
                     "pos": 16,
-                    "end": 22
+                    "end": 22,
+                    "modifierFlagsCache": 0,
+                    "transformFlags": 0
                 }
             },
             "name": {
                 "kind": "Identifier",
                 "pos": 25,
                 "end": 30,
+                "modifierFlagsCache": 0,
+                "transformFlags": 0,
                 "escapedText": "name1"
             },
             "isNameFirst": false,

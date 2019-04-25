@@ -1,9 +1,9 @@
 tests/cases/compiler/mutuallyRecursiveCallbacks.ts(7,1): error TS2322: Type '<T>(bar: Bar<T>) => void' is not assignable to type 'Bar<{}>'.
   Types of parameters 'bar' and 'foo' are incompatible.
     Types of parameters 'bar' and 'foo' are incompatible.
-      Type 'Foo<{}>' is not assignable to type 'Bar<{}>'.
+      Type 'Foo<unknown>' is not assignable to type 'Bar<{}>'.
         Types of parameters 'bar' and 'foo' are incompatible.
-          Type 'void' is not assignable to type 'Foo<{}>'.
+          Type 'void' is not assignable to type 'Foo<unknown>'.
 
 
 ==== tests/cases/compiler/mutuallyRecursiveCallbacks.ts (1 errors) ====
@@ -18,7 +18,7 @@ tests/cases/compiler/mutuallyRecursiveCallbacks.ts(7,1): error TS2322: Type '<T>
 !!! error TS2322: Type '<T>(bar: Bar<T>) => void' is not assignable to type 'Bar<{}>'.
 !!! error TS2322:   Types of parameters 'bar' and 'foo' are incompatible.
 !!! error TS2322:     Types of parameters 'bar' and 'foo' are incompatible.
-!!! error TS2322:       Type 'Foo<{}>' is not assignable to type 'Bar<{}>'.
+!!! error TS2322:       Type 'Foo<unknown>' is not assignable to type 'Bar<{}>'.
 !!! error TS2322:         Types of parameters 'bar' and 'foo' are incompatible.
-!!! error TS2322:           Type 'void' is not assignable to type 'Foo<{}>'.
+!!! error TS2322:           Type 'void' is not assignable to type 'Foo<unknown>'.
     

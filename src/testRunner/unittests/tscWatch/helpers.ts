@@ -32,6 +32,7 @@ namespace ts.tscWatch {
     export interface Watch {
         (): Program;
         getBuilderProgram(): EmitAndSemanticDiagnosticsBuilderProgram;
+        close(): void;
     }
 
     export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
@@ -40,6 +41,7 @@ namespace ts.tscWatch {
         const watch = createWatchProgram(compilerHost);
         const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
         result.getBuilderProgram = () => watch.getCurrentProgram();
+        result.close = () => watch.close();
         return result;
     }
 
@@ -51,23 +53,27 @@ namespace ts.tscWatch {
     }
 
     const elapsedRegex = /^Elapsed:: [0-9]+ms/;
+    const buildVerboseLogRegEx = /^.+ \- /;
     function checkOutputErrors(
         host: WatchedSystem,
         logsBeforeWatchDiagnostic: string[] | undefined,
-        preErrorsWatchDiagnostic: Diagnostic,
+        preErrorsWatchDiagnostic: Diagnostic | undefined,
         logsBeforeErrors: string[] | undefined,
         errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>,
         disableConsoleClears?: boolean | undefined,
-        ...postErrorsWatchDiagnostics: Diagnostic[]
+        ...postErrorsWatchDiagnostics: Diagnostic[] | string[]
     ) {
         let screenClears = 0;
         const outputs = host.getOutput();
-        const expectedOutputCount = 1 + errors.length + postErrorsWatchDiagnostics.length +
-            (logsBeforeWatchDiagnostic ? logsBeforeWatchDiagnostic.length : 0) + (logsBeforeErrors ? logsBeforeErrors.length : 0);
+        const expectedOutputCount = (preErrorsWatchDiagnostic ? 1 : 0) +
+            errors.length +
+            postErrorsWatchDiagnostics.length +
+            (logsBeforeWatchDiagnostic ? logsBeforeWatchDiagnostic.length : 0) +
+            (logsBeforeErrors ? logsBeforeErrors.length : 0);
         assert.equal(outputs.length, expectedOutputCount, JSON.stringify(outputs));
         let index = 0;
         forEach(logsBeforeWatchDiagnostic, log => assertLog("logsBeforeWatchDiagnostic", log));
-        assertWatchDiagnostic(preErrorsWatchDiagnostic);
+        if (preErrorsWatchDiagnostic) assertWatchDiagnostic(preErrorsWatchDiagnostic);
         forEach(logsBeforeErrors, log => assertLog("logBeforeError", log));
         // Verify errors
         forEach(errors, assertDiagnostic);
@@ -85,19 +91,28 @@ namespace ts.tscWatch {
             index++;
         }
 
+        function getCleanLogString(log: string) {
+            return log.replace(elapsedRegex, "").replace(buildVerboseLogRegEx, "");
+        }
+
         function assertLog(caption: string, expected: string) {
             const actual = outputs[index];
-            assert.equal(actual.replace(elapsedRegex, ""), expected.replace(elapsedRegex, ""), getOutputAtFailedMessage(caption, expected));
+            assert.equal(getCleanLogString(actual), getCleanLogString(expected), getOutputAtFailedMessage(caption, expected));
             index++;
         }
 
-        function assertWatchDiagnostic(diagnostic: Diagnostic) {
-            const expected = getWatchDiagnosticWithoutDate(diagnostic);
-            if (!disableConsoleClears && contains(screenStartingMessageCodes, diagnostic.code)) {
-                assert.equal(host.screenClears[screenClears], index, `Expected screen clear at this diagnostic: ${expected}`);
-                screenClears++;
+        function assertWatchDiagnostic(diagnostic: Diagnostic | string) {
+            if (isString(diagnostic)) {
+                assert.equal(outputs[index], diagnostic, getOutputAtFailedMessage("Diagnostic", diagnostic));
             }
-            assert.isTrue(endsWith(outputs[index], expected), getOutputAtFailedMessage("Watch diagnostic", expected));
+            else {
+                const expected = getWatchDiagnosticWithoutDate(diagnostic);
+                if (!disableConsoleClears && contains(screenStartingMessageCodes, diagnostic.code)) {
+                    assert.equal(host.screenClears[screenClears], index, `Expected screen clear at this diagnostic: ${expected}`);
+                    screenClears++;
+                }
+                assert.isTrue(endsWith(outputs[index], expected), getOutputAtFailedMessage("Watch diagnostic", expected));
+            }
             index++;
         }
 
@@ -150,6 +165,18 @@ namespace ts.tscWatch {
             errors,
             disableConsoleClears);
         assert.equal(host.exitCode, expectedExitCode);
+    }
+
+    export function checkNormalBuildErrors(host: WatchedSystem, errors: ReadonlyArray<Diagnostic> | ReadonlyArray<string>, reportErrorSummary?: boolean) {
+        checkOutputErrors(
+            host,
+            /*logsBeforeWatchDiagnostic*/ undefined,
+            /*preErrorsWatchDiagnostic*/ undefined,
+            /*logsBeforeErrors*/ undefined,
+            errors,
+            /*disableConsoleClears*/ undefined,
+            ...(reportErrorSummary ? [getErrorSummaryText(errors.length, host.newLine)] : emptyArray)
+        );
     }
 
     function isDiagnosticMessageChain(message: DiagnosticMessage | DiagnosticMessageChain): message is DiagnosticMessageChain {

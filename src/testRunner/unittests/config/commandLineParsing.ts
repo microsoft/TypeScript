@@ -57,7 +57,7 @@ namespace ts {
             assertParseResult(["--lib", "es5,invalidOption", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 'es2019.string', 'es2019.symbol', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
@@ -161,7 +161,7 @@ namespace ts {
                         start: undefined,
                         length: undefined,
                     }, {
-                            messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'esnext'.",
+                            messageText: "Argument for '--target' option must be: 'es3', 'es5', 'es6', 'es2015', 'es2016', 'es2017', 'es2018', 'es2019', 'esnext'.",
                             category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                             code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
 
@@ -259,7 +259,7 @@ namespace ts {
             assertParseResult(["--lib", "es5,", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 'es2019.string', 'es2019.symbol', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
@@ -278,7 +278,7 @@ namespace ts {
             assertParseResult(["--lib", "es5, ", "es7", "0.ts"],
                 {
                     errors: [{
-                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
+                        messageText: "Argument for '--lib' option must be: 'es5', 'es6', 'es2015', 'es7', 'es2016', 'es2017', 'es2018', 'es2019', 'esnext', 'dom', 'dom.iterable', 'webworker', 'webworker.importscripts', 'scripthost', 'es2015.core', 'es2015.collection', 'es2015.generator', 'es2015.iterable', 'es2015.promise', 'es2015.proxy', 'es2015.reflect', 'es2015.symbol', 'es2015.symbol.wellknown', 'es2016.array.include', 'es2017.object', 'es2017.sharedmemory', 'es2017.string', 'es2017.intl', 'es2017.typedarrays', 'es2018.asynciterable', 'es2018.intl', 'es2018.promise', 'es2018.regexp', 'es2019.array', 'es2019.string', 'es2019.symbol', 'esnext.array', 'esnext.symbol', 'esnext.asynciterable', 'esnext.intl', 'esnext.bigint'.",
                         category: Diagnostics.Argument_for_0_option_must_be_Colon_1.category,
                         code: Diagnostics.Argument_for_0_option_must_be_Colon_1.code,
                         file: undefined,
@@ -363,6 +363,26 @@ namespace ts {
                     options: {
                         strictNullChecks: true,
                     }
+                });
+        });
+
+        it("parse --incremental", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--incremental", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: { incremental: true }
+                });
+        });
+
+        it("parse --tsBuildInfoFile", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "0.ts"],
+                {
+                    errors: [],
+                    fileNames: ["0.ts"],
+                    options: { tsBuildInfoFile: "build.tsbuildinfo" }
                 });
         });
     });
@@ -453,6 +473,33 @@ namespace ts {
                     errors: [],
                     projects: ["src", "tests"],
                     buildOptions: { force: true, verbose: true }
+                });
+        });
+
+        it("parse build with --incremental", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--incremental", "tests"],
+                {
+                    errors: [],
+                    projects: ["tests"],
+                    buildOptions: { incremental: true }
+                });
+        });
+
+        it("parse build with --tsBuildInfoFile", () => {
+            // --lib es6 0.ts
+            assertParseResult(["--tsBuildInfoFile", "build.tsbuildinfo", "tests"],
+                {
+                    errors: [{
+                        messageText: "Unknown build option '--tsBuildInfoFile'.",
+                        category: Diagnostics.Unknown_build_option_0.category,
+                        code: Diagnostics.Unknown_build_option_0.code,
+                        file: undefined,
+                        start: undefined,
+                        length: undefined
+                    }],
+                    projects: ["build.tsbuildinfo", "tests"],
+                    buildOptions: { }
                 });
         });
 

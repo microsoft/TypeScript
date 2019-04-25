@@ -5,6 +5,11 @@
         "no-unnecessary-type-assertion": true,
 
         "array-type": [true, "array"],
+        "ban": [
+            true,
+            "setInterval",
+            "setTimeout"
+        ],
         "ban-types": {
             "options": [
                 ["Object", "Avoid using the `Object` type. Did you mean `object`?"],
@@ -34,6 +39,7 @@
         ],
         "no-bom": true,
         "no-double-space": true,
+        "no-eval": true,
         "no-in-operator": true,
         "no-increment-decrement": true,
         "no-inferrable-types": true,
@@ -100,7 +106,6 @@
         "no-console": false,
         "no-debugger": false,
         "no-empty-interface": false,
-        "no-eval": false,
         "no-object-literal-type-assertion": false,
         "no-shadowed-variable": false,
         "no-submodule-imports": false,
