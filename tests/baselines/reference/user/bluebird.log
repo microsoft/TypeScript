@@ -1,6 +1,8 @@
 Exit Code: 1
 Standard output:
 node_modules/bluebird/js/release/assert.js(11,30): error TS2339: Property 'constructor$' does not exist on type 'Error'.
+node_modules/bluebird/js/release/async.js(38,14): error TS2339: Property 'hasDevTools' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/async.js(91,11): error TS2339: Property 'hasDevTools' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/async.js(92,21): error TS2300: Duplicate identifier 'invokeLater'.
 node_modules/bluebird/js/release/async.js(93,21): error TS2300: Duplicate identifier 'invoke'.
 node_modules/bluebird/js/release/async.js(94,21): error TS2300: Duplicate identifier 'settlePromises'.
@@ -9,28 +11,84 @@ node_modules/bluebird/js/release/async.js(108,21): error TS2300: Duplicate ident
 node_modules/bluebird/js/release/async.js(118,21): error TS2300: Duplicate identifier 'settlePromises'.
 node_modules/bluebird/js/release/bluebird.js(5,15): error TS2367: This condition will always return 'false' since the types 'PromiseConstructor' and 'typeof Promise' have no overlap.
 node_modules/bluebird/js/release/bluebird.js(10,10): error TS2339: Property 'noConflict' does not exist on type 'typeof Promise'.
-node_modules/bluebird/js/release/debuggability.js(19,20): error TS2367: This condition will always return 'true' since the types 'string | undefined' and 'number' have no overlap.
-node_modules/bluebird/js/release/debuggability.js(24,19): error TS2367: This condition will always return 'true' since the types 'string | undefined' and 'number' have no overlap.
-node_modules/bluebird/js/release/debuggability.js(27,26): error TS2367: This condition will always return 'true' since the types 'string | undefined' and 'number' have no overlap.
-node_modules/bluebird/js/release/debuggability.js(30,24): error TS2367: This condition will always return 'true' since the types 'string | undefined' and 'number' have no overlap.
+node_modules/bluebird/js/release/call_get.js(11,24): error TS2339: Property 'canEvaluate' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/call_get.js(12,25): error TS2339: Property 'isIdentifier' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/call_get.js(73,40): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/call_get.js(74,27): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/cancel.js(4,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/cancel.js(5,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/cancel.js(93,14): error TS2339: Property 'isArray' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/catch_filter.js(5,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/catch_filter.js(6,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/catch_filter.js(26,29): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(8,27): error TS2339: Property 'canAttachTrace' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(19,25): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(21,31): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(22,31): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(24,24): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(25,24): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(27,31): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(28,24): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(30,29): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(31,25): error TS2339: Property 'env' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(106,55): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(114,55): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(155,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(165,30): error TS2339: Property 'global' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(168,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
+node_modules/bluebird/js/release/debuggability.js(169,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(174,26): error TS2339: Property 'detail' does not exist on type 'Event'.
+node_modules/bluebird/js/release/debuggability.js(177,30): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(182,18): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(187,30): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(197,14): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(199,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
-  Type 'IArguments' is missing the following properties from type '["multipleResolves", MultipleResolveListener]': 0, 1, pop, push, and 28 more.
+node_modules/bluebird/js/release/debuggability.js(202,19): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(209,31): error TS2339: Property 'global' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(211,31): error TS2339: Property 'global' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(242,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
+node_modules/bluebird/js/release/debuggability.js(274,18): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(338,51): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(352,18): error TS2339: Property 'isArray' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(424,18): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(426,18): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(491,19): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/debuggability.js(562,46): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(562,59): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(601,18): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(648,46): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/debuggability.js(736,5): error TS2721: Cannot invoke an object which is possibly 'null'.
+node_modules/bluebird/js/release/debuggability.js(739,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/debuggability.js(754,30): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
 node_modules/bluebird/js/release/debuggability.js(760,37): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
 node_modules/bluebird/js/release/debuggability.js(799,38): error TS2339: Property 'stack' does not exist on type 'CapturedTrace'.
-node_modules/bluebird/js/release/debuggability.js(808,25): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(804,10): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(805,10): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(879,4): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/debuggability.js(885,14): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/debuggability.js(890,22): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/errors.js(5,21): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/errors.js(6,30): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/errors.js(10,49): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/finally.js(5,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/finally.js(126,22): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/finally.js(131,61): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/generators.js(11,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/generators.js(12,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/generators.js(55,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/generators.js(159,21): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(190,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/generators.js(208,15): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/generators.js(220,5): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/generators.js(208,68): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/generators.js(220,16): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/join.js(6,24): error TS2339: Property 'canEvaluate' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/join.js(7,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/join.js(8,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/join.js(152,46): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/map.js(10,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/map.js(11,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/map.js(18,50): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/map.js(27,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/map.js(30,10): error TS2551: Property '_init$' does not exist on type 'MappingPromiseArray'. Did you mean '_init'?
 node_modules/bluebird/js/release/map.js(36,23): error TS2339: Property '_values' does not exist on type 'MappingPromiseArray'.
 node_modules/bluebird/js/release/map.js(37,23): error TS2339: Property 'length' does not exist on type 'MappingPromiseArray'.
@@ -45,37 +103,68 @@ node_modules/bluebird/js/release/map.js(101,18): error TS2339: Property '_resolv
 node_modules/bluebird/js/release/map.js(111,23): error TS2339: Property '_values' does not exist on type 'MappingPromiseArray'.
 node_modules/bluebird/js/release/map.js(113,18): error TS2339: Property '_isResolved' does not exist on type 'MappingPromiseArray'.
 node_modules/bluebird/js/release/map.js(127,10): error TS2339: Property '_resolve' does not exist on type 'MappingPromiseArray'.
+node_modules/bluebird/js/release/map.js(136,68): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/map.js(145,42): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/map.js(151,35): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/map.js(156,66): error TS2339: Property 'promise' does not exist on type 'MappingPromiseArray'.
-node_modules/bluebird/js/release/method.js(15,46): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/bluebird/js/release/method.js(5,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/method.js(9,76): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/method.js(26,68): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/method.js(36,22): error TS2339: Property 'isArray' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/method.js(49,24): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/nodeback.js(3,29): error TS2339: Property 'maybeWrapAsError' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/nodeback.js(30,10): error TS2339: Property 'markAsOriginatingFromRejection' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/nodeify.js(5,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/nodeify.js(6,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/nodeify.js(10,15): error TS2339: Property 'isArray' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/nodeify.js(32,19): error TS2339: Property 'cause' does not exist on type 'Error'.
 node_modules/bluebird/js/release/promise.js(4,12): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promise.js(7,24): error TS2339: Property 'PromiseInspection' does not exist on type 'typeof Promise'.
 node_modules/bluebird/js/release/promise.js(10,27): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/promise.js(17,10): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(20,32): error TS2322: Type 'null' is not assignable to type 'Domain'.
+node_modules/bluebird/js/release/promise.js(28,6): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(58,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(59,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(62,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/promise.js(65,15): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/promise.js(65,68): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(95,22): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(99,59): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(119,22): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(121,32): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(123,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(136,68): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(148,14): error TS2551: Property 'isFulfilled' does not exist on type 'Promise'. Did you mean '_setFulfilled'?
 node_modules/bluebird/js/release/promise.js(149,37): error TS2339: Property 'value' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(151,21): error TS2551: Property 'isRejected' does not exist on type 'Promise'. Did you mean '_setRejected'?
 node_modules/bluebird/js/release/promise.js(152,36): error TS2339: Property 'reason' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(160,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(166,29): error TS2339: Property 'originatesFromRejection' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(177,9): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(207,9): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(214,15): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/promise.js(214,68): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(238,63): error TS2339: Property '_boundTo' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(241,14): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(253,20): error TS2339: Property '_unsetRejectionIsUnhandled' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(257,20): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(264,26): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(295,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(300,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(305,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(322,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(339,42): error TS2339: Property '_isBound' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(400,50): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(404,49): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(412,50): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(416,49): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(434,26): error TS2339: Property '_propagateFrom' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(454,31): error TS2339: Property '_value' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(456,30): error TS2339: Property '_reason' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(459,17): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(466,22): error TS2339: Property 'ensureErrorObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(470,18): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(471,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(473,10): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(480,10): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
@@ -83,27 +172,55 @@ node_modules/bluebird/js/release/promise.js(481,10): error TS2339: Property '_pu
 node_modules/bluebird/js/release/promise.js(483,18): error TS2339: Property '_execute' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(489,10): error TS2339: Property '_popContext' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(506,19): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/promise.js(507,42): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(558,22): error TS2339: Property '_promiseCancelled' does not exist on type '{}'.
 node_modules/bluebird/js/release/promise.js(572,23): error TS2339: Property '_isResolved' does not exist on type '{}'.
 node_modules/bluebird/js/release/promise.js(574,26): error TS2339: Property '_promiseFulfilled' does not exist on type '{}'.
 node_modules/bluebird/js/release/promise.js(576,26): error TS2339: Property '_promiseRejected' does not exist on type '{}'.
 node_modules/bluebird/js/release/promise.js(630,14): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(642,14): error TS2339: Property '_dereferenceTrace' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(653,46): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise.js(659,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(699,10): error TS2339: Property '_clearCancellationData' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(724,6): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(754,10): error TS2339: Property 'toFastProperties' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise.js(755,10): error TS2339: Property 'toFastProperties' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise_array.js(5,20): error TS2339: Property 'isArray' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise_array.js(26,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise_array.js(61,19): error TS2339: Property 'asArray' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promise_array.js(64,72): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promise_array.js(71,18): error TS2339: Property '_resolveEmptyArray' does not exist on type 'PromiseArray'.
-node_modules/bluebird/js/release/promise_array.js(109,30): error TS2554: Expected 0-1 arguments, but got 2.
-node_modules/bluebird/js/release/promise_array.js(111,30): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/promise_array.js(109,76): error TS2554: Expected 0-1 arguments, but got 2.
+node_modules/bluebird/js/release/promise_array.js(111,53): error TS2554: Expected 0 arguments, but got 1.
+node_modules/bluebird/js/release/promisify.js(6,25): error TS2339: Property 'withAppended' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(7,29): error TS2339: Property 'maybeWrapAsError' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(8,24): error TS2339: Property 'canEvaluate' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(24,17): error TS2339: Property 'isIdentifier' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(43,20): error TS2339: Property 'getDataPropertyOrDefault' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promisify.js(54,27): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/bluebird/js/release/promisify.js(69,22): error TS2554: Expected 0-1 arguments, but got 3.
+node_modules/bluebird/js/release/promisify.js(63,21): error TS2339: Property 'inheritedDataKeys' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(69,41): error TS2554: Expected 0-1 arguments, but got 3.
 node_modules/bluebird/js/release/promisify.js(93,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'number', but here has type 'any'.
-node_modules/bluebird/js/release/promisify.js(183,39): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
-  Type 'any[]' provides no match for the signature '(substring: string, ...args: any[]): string'.
+node_modules/bluebird/js/release/promisify.js(100,17): error TS2339: Property 'filledRange' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(104,17): error TS2339: Property 'filledRange' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(201,26): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(202,26): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(203,26): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(230,10): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promisify.js(249,17): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/bluebird/js/release/promisify.js(252,24): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/bluebird/js/release/promisify.js(255,18): error TS2339: Property 'notEnumerableProp' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(259,10): error TS2339: Property 'toFastProperties' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promisify.js(264,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
 node_modules/bluebird/js/release/promisify.js(270,15): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/promisify.js(270,68): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(279,10): error TS2339: Property 'copyDescriptors' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/promisify.js(285,15): error TS2350: Only a void function can be called with the 'new' keyword.
+node_modules/bluebird/js/release/promisify.js(296,15): error TS2339: Property 'isIdentifier' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(300,21): error TS2339: Property 'inheritedDataKeys' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/promisify.js(304,18): error TS2339: Property 'isClass' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/props.js(5,21): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/props.js(60,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/props.js(65,10): error TS2339: Property '_values' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(66,32): error TS2339: Property '_totalResolved' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(67,31): error TS2339: Property '_length' does not exist on type 'PropertiesPromiseArray'.
@@ -114,20 +231,31 @@ node_modules/bluebird/js/release/props.js(75,26): error TS2339: Property '_value
 node_modules/bluebird/js/release/props.js(75,57): error TS2339: Property '_values' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(78,14): error TS2339: Property '_resolve' does not exist on type 'PropertiesPromiseArray'.
 node_modules/bluebird/js/release/props.js(102,53): error TS2339: Property 'promise' does not exist on type 'PropertiesPromiseArray'.
+node_modules/bluebird/js/release/race.js(18,25): error TS2339: Property 'asArray' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/race.js(20,92): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/reduce.js(10,21): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/reduce.js(15,44): error TS2339: Property 'domainBind' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/reduce.js(32,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/reduce.js(44,9): error TS2532: Object is possibly 'undefined'.
 node_modules/bluebird/js/release/reduce.js(61,10): error TS2339: Property '_promise' does not exist on type 'ReductionPromiseArray'.
 node_modules/bluebird/js/release/reduce.js(66,52): error TS2339: Property '_cancel' does not exist on type 'ReductionPromiseArray'.
 node_modules/bluebird/js/release/reduce.js(67,14): error TS2339: Property '_isResolved' does not exist on type 'ReductionPromiseArray'.
 node_modules/bluebird/js/release/reduce.js(68,10): error TS2551: Property '_resultCancelled$' does not exist on type 'ReductionPromiseArray'. Did you mean '_resultCancelled'?
+node_modules/bluebird/js/release/reduce.js(130,68): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/reduce.js(133,18): error TS2339: Property 'promise' does not exist on type 'ReductionPromiseArray'.
+node_modules/bluebird/js/release/schedule.js(7,26): error TS2339: Property 'getNativePromise' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/schedule.js(8,10): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/schedule.js(23,31): error TS2339: Property 'standalone' does not exist on type 'Navigator'.
 node_modules/bluebird/js/release/schedule.js(23,52): error TS2339: Property 'cordova' does not exist on type 'Window'.
+node_modules/bluebird/js/release/settle.js(10,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/settle.js(13,10): error TS2339: Property '_values' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(14,32): error TS2339: Property '_totalResolved' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(15,31): error TS2339: Property '_length' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(16,14): error TS2339: Property '_resolve' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(16,28): error TS2339: Property '_values' does not exist on type 'SettledPromiseArray'.
 node_modules/bluebird/js/release/settle.js(37,46): error TS2339: Property 'promise' does not exist on type 'SettledPromiseArray'.
+node_modules/bluebird/js/release/some.js(7,20): error TS2339: Property 'isArray' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/some.js(17,6): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/some.js(24,14): error TS2339: Property '_resolve' does not exist on type 'SomePromiseArray'.
 node_modules/bluebird/js/release/some.js(27,10): error TS2551: Property '_init$' does not exist on type 'SomePromiseArray'. Did you mean '_init'?
 node_modules/bluebird/js/release/some.js(28,40): error TS2339: Property '_values' does not exist on type 'SomePromiseArray'.
@@ -158,16 +286,32 @@ node_modules/bluebird/js/release/some.js(115,17): error TS2339: Property 'length
 node_modules/bluebird/js/release/some.js(121,12): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/some.js(125,10): error TS2551: Property '_reject' does not exist on type 'SomePromiseArray'. Did you mean '_rejected'?
 node_modules/bluebird/js/release/some.js(133,23): error TS2339: Property 'promise' does not exist on type 'SomePromiseArray'.
+node_modules/bluebird/js/release/thenables.js(4,21): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/thenables.js(5,21): error TS2339: Property 'isObject' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/thenables.js(63,23): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/timers.js(51,10): error TS2339: Property 'markAsOriginatingFromRejection' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/using.js(6,38): error TS2339: Property 'inherits' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/using.js(7,25): error TS2339: Property 'errorObj' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/using.js(8,25): error TS2339: Property 'tryCatch' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/using.js(78,20): error TS2339: Property 'doDispose' does not exist on type 'Disposer'.
 node_modules/bluebird/js/release/using.js(97,23): error TS2339: Property 'data' does not exist on type 'FunctionDisposer'.
+node_modules/bluebird/js/release/using.js(131,72): error TS2339: Property 'classString' does not exist on type 'typeof ret'.
 node_modules/bluebird/js/release/using.js(223,15): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/util.js(200,32): error TS2339: Property 'foo' does not exist on type 'FakeConstructor'.
 node_modules/bluebird/js/release/util.js(279,45): error TS2345: Argument of type 'PropertyDescriptor | { value: any; } | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
   Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
     Type 'undefined' is not assignable to type 'PropertyDescriptor'.
+node_modules/bluebird/js/release/util.js(341,5): error TS2322: Type '{ isClass: (fn: any) => boolean; isIdentifier: (str: any) => boolean; inheritedDataKeys: (obj: any) => string[]; getDataPropertyOrDefault: (obj: any, key: any, defaultValue: any) => any; ... 28 more ...; domainBind: (self: any, cb: any) => any; }' is not assignable to type 'typeof ret'.
+  Object literal may only specify known properties, and 'isClass' does not exist in type 'typeof ret'.
 node_modules/bluebird/js/release/util.js(367,25): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/release/util.js(367,51): error TS2304: Cannot find name 'chrome'.
 node_modules/bluebird/js/release/util.js(368,25): error TS2304: Cannot find name 'chrome'.
+node_modules/bluebird/js/release/util.js(376,24): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/util.js(383,13): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/util.js(383,33): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/util.js(383,54): error TS2532: Object is possibly 'undefined'.
+node_modules/bluebird/js/release/util.js(386,9): error TS2339: Property 'isNode' does not exist on type 'typeof ret'.
+node_modules/bluebird/js/release/util.js(386,21): error TS2339: Property 'toFastProperties' does not exist on type 'typeof ret'.
 
 
 

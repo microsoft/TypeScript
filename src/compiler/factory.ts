@@ -89,10 +89,10 @@ namespace ts {
         return createLiteralFromNode(value);
     }
 
-    export function createNumericLiteral(value: string): NumericLiteral {
+    export function createNumericLiteral(value: string, numericLiteralFlags: TokenFlags = TokenFlags.None): NumericLiteral {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
-        node.numericLiteralFlags = 0;
+        node.numericLiteralFlags = numericLiteralFlags;
         return node;
     }
 
@@ -143,8 +143,8 @@ namespace ts {
     export function updateIdentifier(node: Identifier, typeArguments: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier; // tslint:disable-line unified-signatures
     export function updateIdentifier(node: Identifier, typeArguments?: NodeArray<TypeNode | TypeParameterDeclaration> | undefined): Identifier {
         return node.typeArguments !== typeArguments
-        ? updateNode(createIdentifier(idText(node), typeArguments), node)
-        : node;
+            ? updateNode(createIdentifier(idText(node), typeArguments), node)
+            : node;
     }
 
     let nextAutoGenerateId = 0;
@@ -2299,6 +2299,28 @@ namespace ts {
         return node;
     }
 
+    export function createJsxText(text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
+        const node = <JsxText>createSynthesizedNode(SyntaxKind.JsxText);
+        node.text = text;
+        node.containsOnlyTriviaWhiteSpaces = !!containsOnlyTriviaWhiteSpaces;
+        return node;
+    }
+
+    export function updateJsxText(node: JsxText, text: string, containsOnlyTriviaWhiteSpaces?: boolean) {
+        return node.text !== text
+            || node.containsOnlyTriviaWhiteSpaces !== containsOnlyTriviaWhiteSpaces
+            ? updateNode(createJsxText(text, containsOnlyTriviaWhiteSpaces), node)
+            : node;
+    }
+
+    export function createJsxOpeningFragment() {
+        return <JsxOpeningFragment>createSynthesizedNode(SyntaxKind.JsxOpeningFragment);
+    }
+
+    export function createJsxJsxClosingFragment() {
+        return <JsxClosingFragment>createSynthesizedNode(SyntaxKind.JsxClosingFragment);
+    }
+
     export function updateJsxFragment(node: JsxFragment, openingFragment: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, closingFragment: JsxClosingFragment) {
         return node.openingFragment !== openingFragment
             || node.children !== children
@@ -2629,27 +2651,204 @@ namespace ts {
         return node;
     }
 
-    export function createUnparsedSourceFile(text: string): UnparsedSource;
-    export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts"): UnparsedSource;
-    export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
-    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, map?: string): UnparsedSource {
+    let allUnscopedEmitHelpers: ReadonlyMap<UnscopedEmitHelper> | undefined;
+    function getAllUnscopedEmitHelpers() {
+        return allUnscopedEmitHelpers || (allUnscopedEmitHelpers = arrayToMap([
+            valuesHelper,
+            readHelper,
+            spreadHelper,
+            restHelper,
+            decorateHelper,
+            metadataHelper,
+            paramHelper,
+            awaiterHelper,
+            assignHelper,
+            awaitHelper,
+            asyncGeneratorHelper,
+            asyncDelegator,
+            asyncValues,
+            extendsHelper,
+            templateObjectHelper,
+            generatorHelper,
+            importStarHelper,
+            importDefaultHelper
+        ], helper => helper.name));
+    }
+
+    function createUnparsedSource() {
         const node = <UnparsedSource>createNode(SyntaxKind.UnparsedSource);
+        node.prologues = emptyArray;
+        node.referencedFiles = emptyArray;
+        node.libReferenceDirectives = emptyArray;
+        node.getLineAndCharacterOfPosition = pos => getLineAndCharacterOfPosition(node, pos);
+        return node;
+    }
+
+    export function createUnparsedSourceFile(text: string): UnparsedSource;
+    export function createUnparsedSourceFile(inputFile: InputFiles, type: "js" | "dts", stripInternal?: boolean): UnparsedSource;
+    export function createUnparsedSourceFile(text: string, mapPath: string | undefined, map: string | undefined): UnparsedSource;
+    export function createUnparsedSourceFile(textOrInputFiles: string | InputFiles, mapPathOrType?: string, mapTextOrStripInternal?: string | boolean): UnparsedSource {
+        const node = createUnparsedSource();
+        let stripInternal: boolean | undefined;
+        let bundleFileInfo: BundleFileInfo | undefined;
         if (!isString(textOrInputFiles)) {
             Debug.assert(mapPathOrType === "js" || mapPathOrType === "dts");
-            node.fileName = mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath;
+            node.fileName = (mapPathOrType === "js" ? textOrInputFiles.javascriptPath : textOrInputFiles.declarationPath) || "";
             node.sourceMapPath = mapPathOrType === "js" ? textOrInputFiles.javascriptMapPath : textOrInputFiles.declarationMapPath;
             Object.defineProperties(node, {
                 text: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptText : textOrInputFiles.declarationText; } },
                 sourceMapText: { get() { return mapPathOrType === "js" ? textOrInputFiles.javascriptMapText : textOrInputFiles.declarationMapText; } },
             });
+
+
+            if (textOrInputFiles.buildInfo && textOrInputFiles.buildInfo.bundle) {
+                node.oldFileOfCurrentEmit = textOrInputFiles.oldFileOfCurrentEmit;
+                Debug.assert(mapTextOrStripInternal === undefined || typeof mapTextOrStripInternal === "boolean");
+                stripInternal = mapTextOrStripInternal as boolean | undefined;
+                bundleFileInfo = mapPathOrType === "js" ? textOrInputFiles.buildInfo.bundle.js : textOrInputFiles.buildInfo.bundle.dts;
+                if (node.oldFileOfCurrentEmit) {
+                    parseOldFileOfCurrentEmit(node, Debug.assertDefined(bundleFileInfo));
+                    return node;
+                }
+            }
         }
         else {
+            node.fileName = "";
             node.text = textOrInputFiles;
             node.sourceMapPath = mapPathOrType;
-            node.sourceMapText = map;
+            node.sourceMapText = mapTextOrStripInternal as string;
         }
+        Debug.assert(!node.oldFileOfCurrentEmit);
+        parseUnparsedSourceFile(node, bundleFileInfo, stripInternal);
         return node;
     }
+
+    function parseUnparsedSourceFile(node: UnparsedSource, bundleFileInfo: BundleFileInfo | undefined, stripInternal: boolean | undefined) {
+        let prologues: UnparsedPrologue[] | undefined;
+        let helpers: UnscopedEmitHelper[] | undefined;
+        let referencedFiles: FileReference[] | undefined;
+        let typeReferenceDirectives: string[] | undefined;
+        let libReferenceDirectives: FileReference[] | undefined;
+        let texts: UnparsedSourceText[] | undefined;
+
+        for (const section of bundleFileInfo ? bundleFileInfo.sections : emptyArray) {
+            switch (section.kind) {
+                case BundleFileSectionKind.Prologue:
+                    (prologues || (prologues = [])).push(createUnparsedNode(section, node) as UnparsedPrologue);
+                    break;
+                case BundleFileSectionKind.EmitHelpers:
+                    (helpers || (helpers = [])).push(getAllUnscopedEmitHelpers().get(section.data)!);
+                    break;
+                case BundleFileSectionKind.NoDefaultLib:
+                    node.hasNoDefaultLib = true;
+                    break;
+                case BundleFileSectionKind.Reference:
+                    (referencedFiles || (referencedFiles = [])).push({ pos: -1, end: -1, fileName: section.data });
+                    break;
+                case BundleFileSectionKind.Type:
+                    (typeReferenceDirectives || (typeReferenceDirectives = [])).push(section.data);
+                    break;
+                case BundleFileSectionKind.Lib:
+                    (libReferenceDirectives || (libReferenceDirectives = [])).push({ pos: -1, end: -1, fileName: section.data });
+                    break;
+                case BundleFileSectionKind.Prepend:
+                    const prependNode = createUnparsedNode(section, node) as UnparsedPrepend;
+                    let prependTexts: UnparsedTextLike[] | undefined;
+                    for (const text of section.texts) {
+                        if (!stripInternal || text.kind !== BundleFileSectionKind.Internal) {
+                            (prependTexts || (prependTexts = [])).push(createUnparsedNode(text, node) as UnparsedTextLike);
+                        }
+                    }
+                    prependNode.texts = prependTexts || emptyArray;
+                    (texts || (texts = [])).push(prependNode);
+                    break;
+                case BundleFileSectionKind.Internal:
+                    if (stripInternal) break;
+                // falls through
+                case BundleFileSectionKind.Text:
+                    (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
+                    break;
+                default:
+                    Debug.assertNever(section);
+            }
+        }
+
+        node.prologues = prologues || emptyArray;
+        node.helpers = helpers;
+        node.referencedFiles = referencedFiles || emptyArray;
+        node.typeReferenceDirectives = typeReferenceDirectives;
+        node.libReferenceDirectives = libReferenceDirectives || emptyArray;
+        node.texts = texts || [<UnparsedTextLike>createUnparsedNode({ kind: BundleFileSectionKind.Text, pos: 0, end: node.text.length }, node)];
+    }
+
+    function parseOldFileOfCurrentEmit(node: UnparsedSource, bundleFileInfo: BundleFileInfo) {
+        Debug.assert(!!node.oldFileOfCurrentEmit);
+        let texts: UnparsedTextLike[] | undefined;
+        let syntheticReferences: UnparsedSyntheticReference[] | undefined;
+        for (const section of bundleFileInfo.sections) {
+            switch (section.kind) {
+                case BundleFileSectionKind.Internal:
+                case BundleFileSectionKind.Text:
+                    (texts || (texts = [])).push(createUnparsedNode(section, node) as UnparsedTextLike);
+                    break;
+
+                case BundleFileSectionKind.NoDefaultLib:
+                case BundleFileSectionKind.Reference:
+                case BundleFileSectionKind.Type:
+                case BundleFileSectionKind.Lib:
+                    (syntheticReferences || (syntheticReferences = [])).push(createUnparsedSyntheticReference(section, node));
+                    break;
+
+                // Ignore
+                case BundleFileSectionKind.Prologue:
+                case BundleFileSectionKind.EmitHelpers:
+                case BundleFileSectionKind.Prepend:
+                    break;
+
+                default:
+                    Debug.assertNever(section);
+            }
+        }
+        node.texts = texts || emptyArray;
+        node.helpers = map(bundleFileInfo.sources && bundleFileInfo.sources.helpers, name => getAllUnscopedEmitHelpers().get(name)!);
+        node.syntheticReferences = syntheticReferences;
+        return node;
+    }
+
+    function mapBundleFileSectionKindToSyntaxKind(kind: BundleFileSectionKind): SyntaxKind {
+        switch (kind) {
+            case BundleFileSectionKind.Prologue: return SyntaxKind.UnparsedPrologue;
+            case BundleFileSectionKind.Prepend: return SyntaxKind.UnparsedPrepend;
+            case BundleFileSectionKind.Internal: return SyntaxKind.UnparsedInternalText;
+            case BundleFileSectionKind.Text: return SyntaxKind.UnparsedText;
+
+            case BundleFileSectionKind.EmitHelpers:
+            case BundleFileSectionKind.NoDefaultLib:
+            case BundleFileSectionKind.Reference:
+            case BundleFileSectionKind.Type:
+            case BundleFileSectionKind.Lib:
+                return Debug.fail(`BundleFileSectionKind: ${kind} not yet mapped to SyntaxKind`);
+
+            default:
+                return Debug.assertNever(kind);
+        }
+    }
+
+    function createUnparsedNode(section: BundleFileSection, parent: UnparsedSource): UnparsedNode {
+        const node = createNode(mapBundleFileSectionKindToSyntaxKind(section.kind), section.pos, section.end) as UnparsedNode;
+        node.parent = parent;
+        node.data = section.data;
+        return node;
+    }
+
+    function createUnparsedSyntheticReference(section: BundleFileHasNoDefaultLib | BundleFileReference, parent: UnparsedSource) {
+        const node = createNode(SyntaxKind.UnparsedSyntheticReference, section.pos, section.end) as UnparsedSyntheticReference;
+        node.parent = parent;
+        node.data = section.data;
+        node.section = section;
+        return node;
+    }
+
     export function createInputFiles(
         javascriptText: string,
         declarationText: string
@@ -2660,6 +2859,7 @@ namespace ts {
         javascriptMapPath: string | undefined,
         declarationPath: string,
         declarationMapPath: string | undefined,
+        buildInfoPath: string | undefined
     ): InputFiles;
     export function createInputFiles(
         javascriptText: string,
@@ -2669,13 +2869,32 @@ namespace ts {
         declarationMapPath: string | undefined,
         declarationMapText: string | undefined
     ): InputFiles;
+    /*@internal*/
+    export function createInputFiles(
+        javascriptText: string,
+        declarationText: string,
+        javascriptMapPath: string | undefined,
+        javascriptMapText: string | undefined,
+        declarationMapPath: string | undefined,
+        declarationMapText: string | undefined,
+        javascriptPath: string | undefined,
+        declarationPath: string | undefined,
+        buildInfoPath?: string | undefined,
+        buildInfo?: BuildInfo,
+        oldFileOfCurrentEmit?: boolean
+    ): InputFiles;
     export function createInputFiles(
         javascriptTextOrReadFileText: string | ((path: string) => string | undefined),
         declarationTextOrJavascriptPath: string,
         javascriptMapPath?: string,
         javascriptMapTextOrDeclarationPath?: string,
         declarationMapPath?: string,
-        declarationMapText?: string
+        declarationMapTextOrBuildInfoPath?: string,
+        javascriptPath?: string | undefined,
+        declarationPath?: string | undefined,
+        buildInfoPath?: string | undefined,
+        buildInfo?: BuildInfo,
+        oldFileOfCurrentEmit?: boolean
     ): InputFiles {
         const node = <InputFiles>createNode(SyntaxKind.InputFiles);
         if (!isString(javascriptTextOrReadFileText)) {
@@ -2693,15 +2912,25 @@ namespace ts {
                 const result = textGetter(path);
                 return result !== undefined ? result : `/* Input file ${path} was missing */\r\n`;
             };
+            let buildInfo: BuildInfo | false;
+            const getAndCacheBuildInfo = (getText: () => string | undefined) => {
+                if (buildInfo === undefined) {
+                    const result = getText();
+                    buildInfo = result !== undefined ? getBuildInfo(result) : false;
+                }
+                return buildInfo || undefined;
+            };
             node.javascriptPath = declarationTextOrJavascriptPath;
             node.javascriptMapPath = javascriptMapPath;
             node.declarationPath = Debug.assertDefined(javascriptMapTextOrDeclarationPath);
             node.declarationMapPath = declarationMapPath;
+            node.buildInfoPath = declarationMapTextOrBuildInfoPath;
             Object.defineProperties(node, {
                 javascriptText: { get() { return definedTextGetter(declarationTextOrJavascriptPath); } },
                 javascriptMapText: { get() { return textGetter(javascriptMapPath); } }, // TODO:: if there is inline sourceMap in jsFile, use that
                 declarationText: { get() { return definedTextGetter(Debug.assertDefined(javascriptMapTextOrDeclarationPath)); } },
-                declarationMapText: { get() { return textGetter(declarationMapPath); } } // TODO:: if there is inline sourceMap in dtsFile, use that
+                declarationMapText: { get() { return textGetter(declarationMapPath); } }, // TODO:: if there is inline sourceMap in dtsFile, use that
+                buildInfo: { get() { return getAndCacheBuildInfo(() => textGetter(declarationMapTextOrBuildInfoPath)); } }
             });
         }
         else {
@@ -2710,7 +2939,12 @@ namespace ts {
             node.javascriptMapText = javascriptMapTextOrDeclarationPath;
             node.declarationText = declarationTextOrJavascriptPath;
             node.declarationMapPath = declarationMapPath;
-            node.declarationMapText = declarationMapText;
+            node.declarationMapText = declarationMapTextOrBuildInfoPath;
+            node.javascriptPath = javascriptPath;
+            node.declarationPath = declarationPath,
+            node.buildInfoPath = buildInfoPath;
+            node.buildInfo = buildInfo;
+            node.oldFileOfCurrentEmit = oldFileOfCurrentEmit;
         }
         return node;
     }
@@ -3171,7 +3405,7 @@ namespace ts {
     export const nullTransformationContext: TransformationContext = {
         enableEmitNotification: noop,
         enableSubstitution: noop,
-        endLexicalEnvironment: () => undefined,
+        endLexicalEnvironment: returnUndefined,
         getCompilerOptions: notImplemented,
         getEmitHost: notImplemented,
         getEmitResolver: notImplemented,
@@ -3372,7 +3606,7 @@ namespace ts {
         return setEmitFlags(createIdentifier(name), EmitFlags.HelperName | EmitFlags.AdviseOnEmitNode);
     }
 
-    const valuesHelper: EmitHelper = {
+    export const valuesHelper: UnscopedEmitHelper = {
         name: "typescript:values",
         scoped: false,
         text: `
@@ -3400,7 +3634,7 @@ namespace ts {
         );
     }
 
-    const readHelper: EmitHelper = {
+    export const readHelper: UnscopedEmitHelper = {
         name: "typescript:read",
         scoped: false,
         text: `
@@ -3436,7 +3670,7 @@ namespace ts {
         );
     }
 
-    const spreadHelper: EmitHelper = {
+    export const spreadHelper: UnscopedEmitHelper = {
         name: "typescript:spread",
         scoped: false,
         text: `

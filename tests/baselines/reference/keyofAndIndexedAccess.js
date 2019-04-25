@@ -31,7 +31,8 @@ type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
 type K05 = keyof undefined;  // never
 type K06 = keyof null;  // never
-type K07 = keyof never;  // never
+type K07 = keyof never;  // string | number | symbol
+type K08 = keyof unknown; // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 type K11 = keyof Shape[];  // "length" | "toString" | ...
@@ -1124,6 +1125,7 @@ declare type K04 = keyof void;
 declare type K05 = keyof undefined;
 declare type K06 = keyof null;
 declare type K07 = keyof never;
+declare type K08 = keyof unknown;
 declare type K10 = keyof Shape;
 declare type K11 = keyof Shape[];
 declare type K12 = keyof Dictionary<Shape>;
@@ -1255,13 +1257,13 @@ declare type Thing = {
 declare function f1(thing: Thing): void;
 declare const assignTo2: <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2];
 declare function one<T>(handler: (t: T) => void): T;
-declare var empty: {};
+declare var empty: unknown;
 declare type Handlers<T> = {
     [K in keyof T]: (t: T[K]) => void;
 };
 declare function on<T>(handlerHash: Handlers<T>): T;
 declare var hashOfEmpty1: {
-    test: {};
+    test: unknown;
 };
 declare var hashOfEmpty2: {
     test: boolean;
@@ -1276,7 +1278,7 @@ declare class Component1<Data, Computed> {
 }
 declare let c1: Component1<{
     hello: string;
-}, {}>;
+}, unknown>;
 interface Options2<Data, Computed> {
     data?: Data;
     computed?: Computed;

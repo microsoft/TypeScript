@@ -1,0 +1,127 @@
+=== tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts ===
+// This should behave the same as emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts
+// Begin types from Lodash.
+interface Dictionary<T> {
+>Dictionary : Symbol(Dictionary, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 0, 0))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 2, 21))
+
+  [index: string]: T;
+>index : Symbol(index, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 3, 3))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 2, 21))
+}
+
+interface NumericDictionary<T> {
+>NumericDictionary : Symbol(NumericDictionary, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 4, 1))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 6, 28))
+
+  [index: number]: T;
+>index : Symbol(index, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 7, 3))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 6, 28))
+}
+
+type ObjectIterator<TObject, TResult> = (
+>ObjectIterator : Symbol(ObjectIterator, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 8, 1))
+>TObject : Symbol(TObject, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 10, 20))
+>TResult : Symbol(TResult, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 10, 28))
+
+  value: TObject[keyof TObject],
+>value : Symbol(value, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 10, 41))
+>TObject : Symbol(TObject, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 10, 20))
+>TObject : Symbol(TObject, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 10, 20))
+
+  key: string,
+>key : Symbol(key, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 11, 32))
+
+  collection: TObject
+>collection : Symbol(collection, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 12, 14))
+>TObject : Symbol(TObject, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 10, 20))
+
+) => TResult;
+>TResult : Symbol(TResult, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 10, 28))
+
+type DictionaryIterator<T, TResult> = ObjectIterator<Dictionary<T>, TResult>;
+>DictionaryIterator : Symbol(DictionaryIterator, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 14, 13))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 24))
+>TResult : Symbol(TResult, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 26))
+>ObjectIterator : Symbol(ObjectIterator, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 8, 1))
+>Dictionary : Symbol(Dictionary, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 0, 0))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 24))
+>TResult : Symbol(TResult, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 26))
+
+// In lodash.d.ts this function has many overloads, but this seems to be the problematic one.
+function mapValues<T, TResult>(
+>mapValues : Symbol(mapValues, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 77))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 19, 19))
+>TResult : Symbol(TResult, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 19, 21))
+
+  obj: Dictionary<T> | NumericDictionary<T> | null | undefined,
+>obj : Symbol(obj, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 19, 31))
+>Dictionary : Symbol(Dictionary, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 0, 0))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 19, 19))
+>NumericDictionary : Symbol(NumericDictionary, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 4, 1))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 19, 19))
+
+  callback: DictionaryIterator<T, TResult>
+>callback : Symbol(callback, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 20, 63))
+>DictionaryIterator : Symbol(DictionaryIterator, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 14, 13))
+>T : Symbol(T, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 19, 19))
+>TResult : Symbol(TResult, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 19, 21))
+
+): Dictionary<TResult> {
+>Dictionary : Symbol(Dictionary, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 0, 0))
+>TResult : Symbol(TResult, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 19, 21))
+
+  return null as any;
+}
+// End types from Lodash.
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 24, 1))
+
+  foo: string;
+>foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+}
+
+interface Bar {
+>Bar : Symbol(Bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 29, 1))
+
+  bar: string;
+>bar : Symbol(Bar.bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 31, 15))
+}
+
+export function fooToBar(
+>fooToBar : Symbol(fooToBar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 33, 1))
+
+  foos: Record<string, Foo>
+>foos : Symbol(foos, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 35, 25))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Foo : Symbol(Foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 24, 1))
+
+): Record<string, Bar | null> {
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Bar : Symbol(Bar, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 29, 1))
+
+  const wat = mapValues(foos, f => f.foo);
+>wat : Symbol(wat, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 38, 7))
+>mapValues : Symbol(mapValues, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 77))
+>foos : Symbol(foos, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 35, 25))
+>f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 38, 29))
+>f.foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+>f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 38, 29))
+>foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+
+  const result = foos == null ? {} : mapValues(foos, f => f.foo);
+>result : Symbol(result, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 39, 7))
+>foos : Symbol(foos, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 35, 25))
+>mapValues : Symbol(mapValues, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 16, 77))
+>foos : Symbol(foos, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 35, 25))
+>f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 39, 52))
+>f.foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+>f : Symbol(f, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 39, 52))
+>foo : Symbol(Foo.foo, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 27, 15))
+
+  // This line _should_ fail, because `result` is not the right type.
+  return result;
+>result : Symbol(result, Decl(emptyObjectNotSubtypeOfIndexSignatureContainingObject2.ts, 39, 7))
+}
+

@@ -92,12 +92,12 @@ var aVoid: void = 9.9;
 
 var anInterface: I = new D();
 >anInterface : I
->new D() : D<{}>
+>new D() : D<unknown>
 >D : typeof D
 
 var aClass: C = new D();
 >aClass : C
->new D() : D<{}>
+>new D() : D<unknown>
 >D : typeof D
 
 var aGenericClass: D<string> = new C();

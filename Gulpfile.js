@@ -12,10 +12,9 @@ const merge2 = require("merge2");
 const mkdirp = require("mkdirp");
 const { src, dest, task, parallel, series, watch } = require("gulp");
 const { append, transform } = require("gulp-insert");
-const { browserify } = require("./scripts/build/browserify");
 const { prependFile } = require("./scripts/build/prepend");
-const { exec, readJson, needsUpdate, getDiffTool, getDirSize, flatten, rm } = require("./scripts/build/utils");
-const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
+const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
+const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 const { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
 const cmdLineOptions = require("./scripts/build/options");
 
@@ -114,18 +113,8 @@ const localPreBuild = parallel(generateLibs, series(buildScripts, generateDiagno
 const preBuild = cmdLineOptions.lkg ? lkgPreBuild : localPreBuild;
 
 const buildServices = (() => {
-    // flatten the services project
-    const flattenServicesConfig = async () => flatten("src/services/tsconfig.json", "built/local/typescriptServices.tsconfig.json", {
-        compilerOptions: {
-            "removeComments": false,
-            "stripInternal": true,
-            "declarationMap": false,
-            "outFile": "typescriptServices.out.js"
-        }
-    });
-
     // build typescriptServices.out.js
-    const buildTypescriptServicesOut = () => buildProject("built/local/typescriptServices.tsconfig.json", cmdLineOptions);
+    const buildTypescriptServicesOut = () => buildProject("src/typescriptServices/tsconfig.json", cmdLineOptions);
 
     // create typescriptServices.js
     const createTypescriptServicesJs = () => src("built/local/typescriptServices.out.js")
@@ -167,13 +156,13 @@ const buildServices = (() => {
         .pipe(dest("built/local"));
 
     return series(
-        flattenServicesConfig,
         buildTypescriptServicesOut,
         createTypescriptServicesJs,
         createTypescriptServicesDts,
         createTypescriptJs,
         createTypescriptDts,
-        createTypescriptStandaloneDts);
+        createTypescriptStandaloneDts,
+    );
 })();
 task("services", series(preBuild, buildServices));
 task("services").description = "Builds the language service";
@@ -186,13 +175,13 @@ const cleanServices = async () => {
         await cleanProject("built/local/typescriptServices.tsconfig.json");
     }
     await del([
-        "built/local/typescriptServices.tsconfig.json",
         "built/local/typescriptServices.out.js",
         "built/local/typescriptServices.out.d.ts",
+        "built/local/typescriptServices.out.tsbuildinfo",
         "built/local/typescriptServices.js",
         "built/local/typescript.js",
         "built/local/typescript.d.ts",
-        "built/local/typescript_standalone.d.ts",
+        "built/local/typescript_standalone.d.ts"
     ]);
 };
 cleanTasks.push(cleanServices);
@@ -232,7 +221,7 @@ task("watch-tsserver").flags = {
     "   --built": "Compile using the built version of the compiler."
 }
 
-task("min", series(lkgPreBuild, parallel(buildTsc, buildServer)));
+task("min", series(preBuild, parallel(buildTsc, buildServer)));
 task("min").description = "Builds only tsc and tsserver";
 task("min").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -248,20 +237,8 @@ task("watch-min").flags = {
 }
 
 const buildLssl = (() => {
-    // flatten the server project
-    const flattenTsServerProject = async () => flatten("src/tsserver/tsconfig.json", "built/local/tsserverlibrary.tsconfig.json", {
-        exclude: ["src/tsserver/server.ts"],
-        compilerOptions: {
-            "removeComments": false,
-            "stripInternal": true,
-            "declaration": true,
-            "declarationMap": false,
-            "outFile": "tsserverlibrary.out.js"
-        }
-    });
-
     // build tsserverlibrary.out.js
-    const buildServerLibraryOut = () => buildProject("built/local/tsserverlibrary.tsconfig.json", cmdLineOptions);
+    const buildServerLibraryOut = () => buildProject("src/tsserverlibrary/tsconfig.json", cmdLineOptions);
 
     // create tsserverlibrary.js
     const createServerLibraryJs = () => src("built/local/tsserverlibrary.out.js")
@@ -282,10 +259,10 @@ const buildLssl = (() => {
         .pipe(dest("built/local"));
 
     return series(
-        flattenTsServerProject,
         buildServerLibraryOut,
         createServerLibraryJs,
-        createServerLibraryDts);
+        createServerLibraryDts,
+    );
 })();
 task("lssl", series(preBuild, buildLssl));
 task("lssl").description = "Builds language service server library";
@@ -298,9 +275,9 @@ const cleanLssl = async () => {
         await cleanProject("built/local/tsserverlibrary.tsconfig.json");
     }
     await del([
-        "built/local/tsserverlibrary.tsconfig.json",
         "built/local/tsserverlibrary.out.js",
         "built/local/tsserverlibrary.out.d.ts",
+        "built/local/tsserverlibrary.out.tsbuildinfo",
         "built/local/tsserverlibrary.js",
         "built/local/tsserverlibrary.d.ts",
     ]);
@@ -373,9 +350,34 @@ task("lint").flags = {
     "   --f[iles]=<regex>": "pattern to match files to lint",
 };
 
+const buildCancellationToken = () => buildProject("src/cancellationToken");
+const cleanCancellationToken = () => cleanProject("src/cancellationToken");
+cleanTasks.push(cleanCancellationToken);
+
+const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
+const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
+cleanTasks.push(cleanTypingsInstaller);
+
+const buildWatchGuard = () => buildProject("src/watchGuard");
+const cleanWatchGuard = () => cleanProject("src/watchGuard");
+cleanTasks.push(cleanWatchGuard);
+
+const generateTypesMap = () => src("src/server/typesMap.json")
+    .pipe(newer("built/local/typesMap.json"))
+    .pipe(transform(contents => (JSON.parse(contents), contents))) // validates typesMap.json is valid JSON
+    .pipe(dest("built/local"));
+task("generate-types-map", generateTypesMap);
+
+const cleanTypesMap = () => del("built/local/typesMap.json");
+cleanTasks.push(cleanTypesMap);
+
+const buildOtherOutputs = parallel(buildCancellationToken, buildTypingsInstaller, buildWatchGuard, generateTypesMap);
+task("other-outputs", series(preBuild, buildOtherOutputs));
+task("other-outputs").description = "Builds miscelaneous scripts and documents distributed with the LKG";
+
 const buildFoldStart = async () => { if (fold.isTravis()) console.log(fold.start("build")); };
 const buildFoldEnd = async () => { if (fold.isTravis()) console.log(fold.end("build")); };
-task("local", series(buildFoldStart, lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl), buildFoldEnd));
+task("local", series(buildFoldStart, preBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs), buildFoldEnd));
 task("local").description = "Builds the full compiler and services";
 task("local").flags = {
     "   --built": "Compile using the built version of the compiler."
@@ -429,85 +431,28 @@ task("runtests-parallel").flags = {
     "   --built": "Compile using the built version of the compiler.",
 };
 
-const buildWebTestServer = () => buildProject("tests/webTestServer.tsconfig.json");
-const cleanWebTestServer = () => cleanProject("tests/webTestServer.tsconfig.json");
-cleanTasks.push(cleanWebTestServer);
-
-const browserifyTests = () => src(["built/local/run.js"], { base: "built/local" })
-    .pipe(newer("built/local/bundle.js"))
-    .pipe(sourcemaps.init({ loadMaps: true }))
-    .pipe(browserify())
-    .pipe(rename("bundle.js"))
-    .pipe(sourcemaps.write(".", /**@type {*}*/({ includeContent: false, destPath: "built/local" })))
-    .pipe(dest("built/local"));
-
-const runtestsBrowser = async () => {
-    await cleanTestDirs();
-    const { tests, runners, light } = cmdLineOptions;
-    const testConfigFile = "test.config";
-    await del([testConfigFile]);
-    if (tests || runners || light) {
-        writeTestConfigFile(tests, runners, light);
-    }
-    const args = ["tests/webTestServer.js"];
-    if (cmdLineOptions.browser) {
-        args.push(cmdLineOptions.browser);
-    }
-    if (tests) {
-        args.push(JSON.stringify(tests));
-    }
-    await exec(process.execPath, args);
-};
-
-task("runtests-browser", series(preBuild, parallel(buildTests, buildServices, buildLssl, buildWebTestServer), browserifyTests, runtestsBrowser));
-task("runtests-browser").description = "Runs the tests using the built run.js file like 'gulp runtests'.";
-task("runtests-browser").flags = {
-    "-t --tests=<regex>": "pattern for tests to run",
-    "-b --browser=<browser>": "Either 'IE' or 'chrome'",
-    "   --built": "Compile using the built version of the compiler.",
-};
-
 task("diff", () => exec(getDiffTool(), [refBaseline, localBaseline], { ignoreExitCode: true }));
 task("diff").description = "Diffs the compiler baselines using the diff tool specified by the 'DIFF' environment variable";
 
 task("diff-rwc", () => exec(getDiffTool(), [refRwcBaseline, localRwcBaseline], { ignoreExitCode: true }));
 task("diff-rwc").description = "Diffs the RWC baselines using the diff tool specified by the 'DIFF' environment variable";
 
-const baselineAccept = subfolder => merge2(
-    src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**`, `!${localBaseline}${subfolder}/**/*.delete`], { base: localBaseline })
+/**
+ * @param {string} localBaseline Path to the local copy of the baselines
+ * @param {string} refBaseline Path to the reference copy of the baselines
+ */
+const baselineAccept = (localBaseline, refBaseline) => merge2(
+    src([`${localBaseline}/**`, `!${localBaseline}/**/*.delete`], { base: localBaseline })
         .pipe(dest(refBaseline)),
-    src([`${localBaseline}${subfolder ? `${subfolder}/` : ``}**/*.delete`], { base: localBaseline, read: false })
+    src([`${localBaseline}/**/*.delete`], { base: localBaseline, read: false })
         .pipe(rm())
         .pipe(rename({ extname: "" }))
         .pipe(rm(refBaseline)));
-task("baseline-accept", () => baselineAccept(""));
+task("baseline-accept", () => baselineAccept(localBaseline, refBaseline));
 task("baseline-accept").description = "Makes the most recent test results the new baseline, overwriting the old baseline";
 
-task("baseline-accept-rwc", () => baselineAccept("rwc"));
+task("baseline-accept-rwc", () => baselineAccept(localRwcBaseline, refRwcBaseline));
 task("baseline-accept-rwc").description = "Makes the most recent rwc test results the new baseline, overwriting the old baseline";
-
-task("baseline-accept-test262", () => baselineAccept("test262"));
-task("baseline-accept-test262").description = "Makes the most recent test262 test results the new baseline, overwriting the old baseline";
-
-// TODO(rbuckton): Determine if 'webhost' is still in use.
-const buildWebHost = () => buildProject("tests/webhost/webtsc.tsconfig.json");
-task("webhost", series(lkgPreBuild, buildWebHost));
-task("webhost").description = "Builds the tsc web host";
-
-const cleanWebHost = () => cleanProject("tests/webhost/webtsc.tsconfig.json");
-cleanTasks.push(cleanWebHost);
-task("clean-webhost", cleanWebHost);
-task("clean-webhost").description = "Cleans the outputs of the tsc web host";
-
-// TODO(rbuckton): Determine if 'perftsc' is still in use.
-const buildPerfTsc = () => buildProject("tests/perftsc.tsconfig.json");
-task("perftsc", series(lkgPreBuild, buildPerfTsc));
-task("perftsc").description = "Builds augmented version of the compiler for perf tests";
-
-const cleanPerfTsc = () => cleanProject("tests/perftsc.tsconfig.json");
-cleanTasks.push(cleanPerfTsc);
-task("clean-perftsc", cleanPerfTsc);
-task("clean-perftsc").description = "Cleans the outputs of the perftsc project";
 
 const buildLoggedIO = async () => {
     mkdirp.sync("built/local/temp");
@@ -550,28 +495,6 @@ const buildReleaseTsc = () => buildProject("src/tsc/tsconfig.release.json");
 const cleanReleaseTsc = () => cleanProject("src/tsc/tsconfig.release.json");
 cleanTasks.push(cleanReleaseTsc);
 
-const buildCancellationToken = () => buildProject("src/cancellationToken");
-const cleanCancellationToken = () => cleanProject("src/cancellationToken");
-cleanTasks.push(cleanCancellationToken);
-
-const buildTypingsInstaller = () => buildProject("src/typingsInstaller");
-const cleanTypingsInstaller = () => cleanProject("src/typingsInstaller");
-cleanTasks.push(cleanTypingsInstaller);
-
-const buildWatchGuard = () => buildProject("src/watchGuard");
-const cleanWatchGuard = () => cleanProject("src/watchGuard");
-cleanTasks.push(cleanWatchGuard);
-
-// TODO(rbuckton): This task isn't triggered by any other task. Is it still needed?
-const generateTypesMap = () => src("src/server/typesMap.json")
-    .pipe(newer("built/local/typesMap.json"))
-    .pipe(transform(contents => (JSON.parse(contents), contents))) // validates typesMap.json is valid JSON
-    .pipe(dest("built/local"));
-task("generate-types-map", generateTypesMap);
-
-const cleanTypesMap = () => del("built/local/typesMap.json");
-cleanTasks.push(cleanTypesMap);
-
 const cleanBuilt = () => del("built");
 
 const produceLKG = async () => {
@@ -601,7 +524,7 @@ const produceLKG = async () => {
     }
 };
 
-task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildCancellationToken, buildTypingsInstaller, buildWatchGuard, buildReleaseTsc), produceLKG));
+task("LKG", series(lkgPreBuild, parallel(localize, buildTsc, buildServer, buildServices, buildLssl, buildOtherOutputs, buildReleaseTsc), produceLKG));
 task("LKG").description = "Makes a new LKG out of the built js files";
 task("LKG").flags = {
     "   --built": "Compile using the built version of the compiler.",
@@ -617,6 +540,14 @@ task("clean").description = "Cleans build outputs";
 const configureNightly = () => exec(process.execPath, ["scripts/configurePrerelease.js", "dev", "package.json", "src/compiler/core.ts"])
 task("configure-nightly", series(buildScripts, configureNightly));
 task("configure-nightly").description = "Runs scripts/configurePrerelease.ts to prepare a build for nightly publishing";
+
+const configureInsiders = () => exec(process.execPath, ["scripts/configurePrerelease.js", "insiders", "package.json", "src/compiler/core.ts"])
+task("configure-insiders", series(buildScripts, configureInsiders));
+task("configure-insiders").description = "Runs scripts/configurePrerelease.ts to prepare a build for insiders publishing";
+
+const configureExperimental = () => exec(process.execPath, ["scripts/configurePrerelease.js", "experimental", "package.json", "src/compiler/core.ts"])
+task("configure-experimental", series(buildScripts, configureExperimental));
+task("configure-experimental").description = "Runs scripts/configurePrerelease.ts to prepare a build for experimental publishing";
 
 const publishNightly = () => exec("npm", ["publish", "--tag", "next"]);
 task("publish-nightly", series(task("clean"), task("LKG"), task("clean"), task("runtests-parallel"), publishNightly));

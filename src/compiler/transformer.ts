@@ -327,6 +327,8 @@ namespace ts {
                         createVariableDeclarationList(lexicalEnvironmentVariableDeclarations)
                     );
 
+                    setEmitFlags(statement, EmitFlags.CustomPrologue);
+
                     if (!statements) {
                         statements = [statement];
                     }

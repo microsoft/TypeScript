@@ -90,7 +90,7 @@ namespace ts.server {
             return <T>request;
         }
 
-        private processResponse<T extends protocol.Response>(request: protocol.Request): T {
+        private processResponse<T extends protocol.Response>(request: protocol.Request, expectEmptyBody = false): T {
             let foundResponseMessage = false;
             let response!: T;
             while (!foundResponseMessage) {
@@ -118,7 +118,8 @@ namespace ts.server {
                 throw new Error("Error " + response.message);
             }
 
-            Debug.assert(!!response.body, "Malformed response: Unexpected empty response body.");
+            Debug.assert(expectEmptyBody || !!response.body, "Malformed response: Unexpected empty response body.");
+            Debug.assert(!expectEmptyBody || !response.body, "Malformed response: Unexpected non-empty response body.");
 
             return response;
         }
@@ -696,7 +697,8 @@ namespace ts.server {
         }
 
         configurePlugin(pluginName: string, configuration: any): void {
-            this.processRequest<protocol.ConfigurePluginRequest>("configurePlugin", { pluginName, configuration });
+            const request = this.processRequest<protocol.ConfigurePluginRequest>("configurePlugin", { pluginName, configuration });
+            this.processResponse<protocol.ConfigurePluginResponse>(request, /*expectEmptyBody*/ true);
         }
 
         getIndentationAtPosition(_fileName: string, _position: number, _options: EditorOptions): number {
