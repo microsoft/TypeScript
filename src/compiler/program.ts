@@ -1816,7 +1816,7 @@ namespace ts {
 
                 function walkArray(nodes: NodeArray<Node>) {
                     if (parent.decorators === nodes && !options.experimentalDecorators) {
-                        diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_to_remove_this_warning));
+                        diagnostics.push(createDiagnosticForNode(parent, Diagnostics.Experimental_support_for_decorators_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalDecorators_option_in_your_tsconfig_or_jsconfig_to_remove_this_warning));
                     }
 
                     switch (parent.kind) {
