@@ -434,3 +434,40 @@ type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 >Q : Symbol(Q, Decl(keyofAndIndexedAccess2.ts, 115, 20))
 >V : Symbol(V, Decl(keyofAndIndexedAccess2.ts, 115, 9))
 
+// Repros from #30938
+
+function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
+>fn : Symbol(fn, Decl(keyofAndIndexedAccess2.ts, 115, 69))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 12))
+>elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 119, 23))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 119, 51))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 119, 77))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 12))
+>cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 119, 86))
+>element : Symbol(element, Decl(keyofAndIndexedAccess2.ts, 119, 92))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 119, 12))
+
+    cb(param.elements[0]);
+>cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 119, 86))
+>param.elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 119, 23), Decl(keyofAndIndexedAccess2.ts, 119, 51))
+>param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 119, 77))
+>elements : Symbol(elements, Decl(keyofAndIndexedAccess2.ts, 119, 23), Decl(keyofAndIndexedAccess2.ts, 119, 51))
+}
+
+function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
+>fn2 : Symbol(fn2, Decl(keyofAndIndexedAccess2.ts, 121, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 123, 13))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 123, 38))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 123, 13))
+>cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 123, 47))
+>element : Symbol(element, Decl(keyofAndIndexedAccess2.ts, 123, 53))
+>T : Symbol(T, Decl(keyofAndIndexedAccess2.ts, 123, 13))
+
+    cb(param[0]);
+>cb : Symbol(cb, Decl(keyofAndIndexedAccess2.ts, 123, 47))
+>param : Symbol(param, Decl(keyofAndIndexedAccess2.ts, 123, 38))
+}
+
