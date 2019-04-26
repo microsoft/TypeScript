@@ -92,6 +92,7 @@ namespace ts.server.protocol {
         SynchronizeProjectList = "synchronizeProjectList",
         /* @internal */
         ApplyChangedToOpenFiles = "applyChangedToOpenFiles",
+        UpdateOpen = "updateOpen",
         /* @internal */
         EncodedSemanticClassificationsFull = "encodedSemanticClassifications-full",
         /* @internal */
@@ -1391,6 +1392,9 @@ namespace ts.server.protocol {
         arguments: ConfigurePluginRequestArguments;
     }
 
+    export interface ConfigurePluginResponse extends Response {
+    }
+
     /**
      *  Information found in an "open" request.
      */
@@ -1537,6 +1541,32 @@ namespace ts.server.protocol {
          * List of open files files that were changes
          */
         changedFiles?: ChangedOpenFile[];
+        /**
+         * List of files that were closed
+         */
+        closedFiles?: string[];
+    }
+
+    /**
+     * Request to synchronize list of open files with the client
+     */
+    export interface UpdateOpenRequest extends Request {
+        command: CommandTypes.UpdateOpen;
+        arguments: UpdateOpenRequestArgs;
+    }
+
+    /**
+     * Arguments to UpdateOpenRequest
+     */
+    export interface UpdateOpenRequestArgs {
+        /**
+         * List of newly open files
+         */
+        openFiles?: OpenRequestArgs[];
+        /**
+         * List of open files files that were changes
+         */
+        changedFiles?: FileCodeEdits[];
         /**
          * List of files that were closed
          */
@@ -2891,7 +2921,7 @@ namespace ts.server.protocol {
 
     export interface UserPreferences {
         readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
+        readonly quotePreference?: "auto" | "double" | "single";
         /**
          * If enabled, TypeScript will search through all external modules' exports and add them to the completions list.
          * This affects lone identifier completions but not completions on the right hand side of `obj.`.

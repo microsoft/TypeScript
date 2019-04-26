@@ -24,8 +24,8 @@ var EnumExample;
 exports["default"] = EnumExample;
 //// [index.js]
 "use strict";
-exports.__esModule = true;
 var _a;
+exports.__esModule = true;
 var EnumExample_1 = require("./EnumExample");
 exports["default"] = (_a = {},
     _a[EnumExample_1["default"].TEST] = {},

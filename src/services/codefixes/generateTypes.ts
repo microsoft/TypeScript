@@ -16,6 +16,7 @@ namespace ts {
         return textChanges.getNewFileText(toStatements(valueInfo, outputKind), ScriptKind.TS, formatSettings.newLineCharacter || "\n", formatting.getFormatContext(formatSettings));
     }
 
+    /* @internal */
     const enum OutputKind { ExportEquals, NamedExport, NamespaceMember, Global }
     function toNamespaceMemberStatements(info: ValueInfo): ReadonlyArray<Statement> {
         return toStatements(info, OutputKind.NamespaceMember);

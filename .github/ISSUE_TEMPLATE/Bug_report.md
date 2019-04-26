@@ -16,7 +16,7 @@ Please fill in the *entire* template below.
 -->
 
 <!-- Please try to reproduce the issue with `typescript@next`. It may have already been fixed. -->
-**TypeScript Version:**  3.3.0-dev.201xxxxx
+**TypeScript Version:**  3.4.0-dev.201xxxxx
 
 <!-- Search terms you tried before logging this (so others can find this issue more easily) -->
 **Search Terms:**

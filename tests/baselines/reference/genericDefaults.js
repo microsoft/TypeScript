@@ -980,7 +980,7 @@ declare const Base01c02: Base01<number>;
 declare const Base01c03: Base01<number>;
 declare class Derived01<T> extends Base01<T> {
 }
-declare const Derived01c00: Derived01<{}>;
+declare const Derived01c00: Derived01<unknown>;
 declare const Derived01c01: Derived01<number>;
 declare const Derived01c02: Derived01<number>;
 declare const Derived01c03: Derived01<number>;

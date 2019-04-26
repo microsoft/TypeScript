@@ -133,13 +133,13 @@ o.hasOwnProperty(Symbol.hasInstance);
 
 // Using ES6 promise
 async function out() {
->out : () => Promise<{}>
+>out : () => Promise<unknown>
 
     return new Promise(function (resolve, reject) {});
->new Promise(function (resolve, reject) {}) : Promise<{}>
+>new Promise(function (resolve, reject) {}) : Promise<unknown>
 >Promise : PromiseConstructor
->function (resolve, reject) {} : (resolve: (value?: {} | PromiseLike<{}>) => void, reject: (reason?: any) => void) => void
->resolve : (value?: {} | PromiseLike<{}>) => void
+>function (resolve, reject) {} : (resolve: (value?: unknown) => void, reject: (reason?: any) => void) => void
+>resolve : (value?: unknown) => void
 >reject : (reason?: any) => void
 }
 
@@ -148,10 +148,10 @@ declare var console: any;
 
 out().then(() => {
 >out().then(() => {    console.log("Yea!");}) : Promise<void>
->out().then : <TResult1 = {}, TResult2 = never>(onfulfilled?: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->out() : Promise<{}>
->out : () => Promise<{}>
->then : <TResult1 = {}, TResult2 = never>(onfulfilled?: (value: {}) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>out().then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>out() : Promise<unknown>
+>out : () => Promise<unknown>
+>then : <TResult1 = unknown, TResult2 = never>(onfulfilled?: (value: unknown) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >() => {    console.log("Yea!");} : () => void
 
     console.log("Yea!");

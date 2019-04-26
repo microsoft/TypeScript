@@ -1,0 +1,14 @@
+=== tests/cases/compiler/mappedToToIndexSignatureInference.ts ===
+declare const fn: <K extends string, V>(object: { [Key in K]: V }) => object;
+>fn : <K extends string, V>(object: { [Key in K]: V; }) => object
+>object : { [Key in K]: V; }
+
+declare const a: { [index: string]: number };
+>a : { [index: string]: number; }
+>index : string
+
+fn(a);
+>fn(a) : object
+>fn : <K extends string, V>(object: { [Key in K]: V; }) => object
+>a : { [index: string]: number; }
+
