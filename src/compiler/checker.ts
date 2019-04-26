@@ -26323,7 +26323,7 @@ namespace ts {
                     const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
                     if (needCheckInitializer) {
                         const initializerType = checkExpressionCached(node.initializer!);
-                        if (strictNullChecks && needCheckWinendType) {
+                        if (strictNullChecks && needCheckWidenedType) {
                             checkNonNullNonVoidType(initializerType, node);
                         }
                         else {
