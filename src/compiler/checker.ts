@@ -26462,14 +26462,28 @@ namespace ts {
             }
             // For a binding pattern, validate the initializer and exit
             if (isBindingPattern(node.name)) {
-                // Don't validate for-in initializer as it is already an error
-                if (node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement) {
-                    const initializerType = checkExpressionCached(node.initializer);
-                    if (strictNullChecks && node.name.elements.length === 0) {
-                        checkNonNullNonVoidType(initializerType, node);
+                const needCheckInitializer = node.initializer && node.parent.parent.kind !== SyntaxKind.ForInStatement;
+                const needCheckWidenedType = node.name.elements.length === 0;
+                if (needCheckInitializer || needCheckWidenedType) {
+                    // Don't validate for-in initializer as it is already an error
+                    const widenedType = getWidenedTypeForVariableLikeDeclaration(node);
+                    if (needCheckInitializer) {
+                        const initializerType = checkExpressionCached(node.initializer!);
+                        if (strictNullChecks && needCheckWidenedType) {
+                            checkNonNullNonVoidType(initializerType, node);
+                        }
+                        else {
+                            checkTypeAssignableToAndOptionallyElaborate(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
+                        }
                     }
-                    else {
-                        checkTypeAssignableToAndOptionallyElaborate(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
+                    // check the binding pattern with empty elements
+                    if (needCheckWidenedType) {
+                        if (isArrayBindingPattern(node.name)) {
+                            checkIteratedTypeOrElementType(widenedType, node, /* allowStringInput */ false, /* allowAsyncIterables */ false);
+                        }
+                        else if (strictNullChecks) {
+                            checkNonNullNonVoidType(widenedType, node);
+                        }
                     }
                 }
                 return;
