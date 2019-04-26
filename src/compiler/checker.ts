@@ -14227,6 +14227,32 @@ namespace ts {
             return strictNullChecks ? getGlobalNonNullableTypeInstantiation(type) : type;
         }
 
+
+        /**
+         * Is source potentially coercible to target type under `==`.
+         * Assumes that `source` is a constituent of a union, hence
+         * the boolean literal flag on the LHS, but not on the RHS.
+         *
+         * This does not fully replicate the semantics of `==`. The
+         * intention is to catch cases that are clearly not right.
+         *
+         * Comparing (string | number) to number should not remove the
+         * string element.
+         *
+         * Comparing (string | number) to 1 will remove the string
+         * element, though this is not sound. This is a pragmatic
+         * choice.
+         *
+         * @see narrowTypeByEquality
+         *
+         * @param source
+         * @param target
+         */
+        function isCoercibleUnderDoubleEquals(source: Type, target: Type): boolean {
+            return ((source.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.BooleanLiteral)) !== 0)
+                && ((target.flags & (TypeFlags.Number | TypeFlags.String | TypeFlags.Boolean)) !== 0);
+        }
+
         /**
          * Return true if type was inferred from an object literal, written as an object type literal, or is the shape of a module
          * with no call or construct signatures.
@@ -16570,7 +16596,10 @@ namespace ts {
                     return type;
                 }
                 if (assumeTrue) {
-                    const narrowedType = filterType(type, t => areTypesComparable(t, valueType));
+                    const filterFn: (t: Type) => boolean = operator === SyntaxKind.EqualsEqualsToken ?
+                        (t => areTypesComparable(t, valueType) || isCoercibleUnderDoubleEquals(t, valueType)) :
+                        t => areTypesComparable(t, valueType);
+                    const narrowedType = filterType(type, filterFn);
                     return narrowedType.flags & TypeFlags.Never ? type : replacePrimitivesWithLiterals(narrowedType, valueType);
                 }
                 if (isUnitType(valueType)) {
