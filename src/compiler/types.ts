@@ -2546,6 +2546,8 @@ namespace ts {
         Shared         = 1 << 10, // Referenced as antecedent more than once
         PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
+        /** @internal */
+        Cached         = 1 << 13, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
