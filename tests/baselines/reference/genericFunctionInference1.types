@@ -835,7 +835,7 @@ foo2(() => {});
 >() => {} : () => void
 
 foo2(identity);
->foo2(identity) : [<T>(value: T) => T, unknown]
+>foo2(identity) : [<T>(value: T) => T, <T>(value: T) => T]
 >foo2 : <T, U = T>(fn: T, a?: U | undefined, b?: U | undefined) => [T, U]
 >identity : <T>(value: T) => T
 
