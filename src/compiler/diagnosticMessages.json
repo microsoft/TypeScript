@@ -139,7 +139,7 @@
         "category": "Error",
         "code": 1045
     },
-    "A 'declare' modifier is required for a top level declaration in a .d.ts file.": {
+    "Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.": {
         "category": "Error",
         "code": 1046
     },
@@ -691,7 +691,7 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.": {
+    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.": {
         "category": "Error",
         "code": 1219
     },
@@ -1031,7 +1031,7 @@
         "category": "Error",
         "code": 1354
     },
-    "A 'const' assertion can only be applied to a string, number, boolean, array, or object literal.": {
+    "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
         "category": "Error",
         "code": 1355
     },
