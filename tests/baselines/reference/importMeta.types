@@ -72,9 +72,9 @@
   document.body.appendChild(image);
 >document.body.appendChild(image) : HTMLImageElement
 >document.body.appendChild : <T extends Node>(newChild: T) => T
->document.body : HTMLBodyElement | HTMLFrameSetElement
+>document.body : HTMLElement
 >document : Document
->body : HTMLBodyElement | HTMLFrameSetElement
+>body : HTMLElement
 >appendChild : <T extends Node>(newChild: T) => T
 >image : HTMLImageElement
 

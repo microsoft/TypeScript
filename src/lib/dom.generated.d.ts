@@ -151,7 +151,6 @@ interface ByteLengthChunk {
 }
 
 interface CacheQueryOptions {
-    cacheName?: string;
     ignoreMethod?: boolean;
     ignoreSearch?: boolean;
     ignoreVary?: boolean;
@@ -236,7 +235,7 @@ interface ConstrainDoubleRange extends DoubleRange {
     ideal?: number;
 }
 
-interface ConstrainLongRange extends LongRange {
+interface ConstrainULongRange extends ULongRange {
     exact?: number;
     ideal?: number;
 }
@@ -310,21 +309,27 @@ interface DelayOptions extends AudioNodeOptions {
     maxDelayTime?: number;
 }
 
-interface DeviceAccelerationDict {
+interface DeviceLightEventInit extends EventInit {
+    value?: number;
+}
+
+interface DeviceMotionEventAccelerationInit {
     x?: number | null;
     y?: number | null;
     z?: number | null;
 }
 
-interface DeviceLightEventInit extends EventInit {
-    value?: number;
+interface DeviceMotionEventInit extends EventInit {
+    acceleration?: DeviceMotionEventAccelerationInit;
+    accelerationIncludingGravity?: DeviceMotionEventAccelerationInit;
+    interval?: number;
+    rotationRate?: DeviceMotionEventRotationRateInit;
 }
 
-interface DeviceMotionEventInit extends EventInit {
-    acceleration?: DeviceAccelerationDict | null;
-    accelerationIncludingGravity?: DeviceAccelerationDict | null;
-    interval?: number | null;
-    rotationRate?: DeviceRotationRateDict | null;
+interface DeviceMotionEventRotationRateInit {
+    alpha?: number | null;
+    beta?: number | null;
+    gamma?: number | null;
 }
 
 interface DeviceOrientationEventInit extends EventInit {
@@ -337,12 +342,6 @@ interface DeviceOrientationEventInit extends EventInit {
 interface DevicePermissionDescriptor extends PermissionDescriptor {
     deviceId?: string;
     name: "camera" | "microphone" | "speaker";
-}
-
-interface DeviceRotationRateDict {
-    alpha?: number | null;
-    beta?: number | null;
-    gamma?: number | null;
 }
 
 interface DocumentTimelineOptions {
@@ -542,6 +541,11 @@ interface IIRFilterOptions extends AudioNodeOptions {
     feedforward: number[];
 }
 
+interface ImageEncodeOptions {
+    quality?: number;
+    type?: string;
+}
+
 interface IntersectionObserverEntryInit {
     boundingClientRect: DOMRectInit;
     intersectionRatio: number;
@@ -606,11 +610,6 @@ interface KeyframeEffectOptions extends EffectTiming {
     iterationComposite?: IterationCompositeOperation;
 }
 
-interface LongRange {
-    max?: number;
-    min?: number;
-}
-
 interface MediaElementAudioSourceOptions {
     mediaElement: HTMLMediaElement;
 }
@@ -668,39 +667,45 @@ interface MediaStreamTrackAudioSourceOptions {
 }
 
 interface MediaStreamTrackEventInit extends EventInit {
-    track?: MediaStreamTrack | null;
+    track: MediaStreamTrack;
 }
 
 interface MediaTrackCapabilities {
-    aspectRatio?: number | DoubleRange;
+    aspectRatio?: DoubleRange;
+    autoGainControl?: boolean[];
+    channelCount?: ULongRange;
     deviceId?: string;
     echoCancellation?: boolean[];
-    facingMode?: string;
-    frameRate?: number | DoubleRange;
+    facingMode?: string[];
+    frameRate?: DoubleRange;
     groupId?: string;
-    height?: number | LongRange;
-    sampleRate?: number | LongRange;
-    sampleSize?: number | LongRange;
-    volume?: number | DoubleRange;
-    width?: number | LongRange;
+    height?: ULongRange;
+    latency?: DoubleRange;
+    noiseSuppression?: boolean[];
+    resizeMode?: string[];
+    sampleRate?: ULongRange;
+    sampleSize?: ULongRange;
+    volume?: DoubleRange;
+    width?: ULongRange;
 }
 
 interface MediaTrackConstraintSet {
-    aspectRatio?: number | ConstrainDoubleRange;
-    channelCount?: number | ConstrainLongRange;
-    deviceId?: string | string[] | ConstrainDOMStringParameters;
-    displaySurface?: string | string[] | ConstrainDOMStringParameters;
-    echoCancellation?: boolean | ConstrainBooleanParameters;
-    facingMode?: string | string[] | ConstrainDOMStringParameters;
-    frameRate?: number | ConstrainDoubleRange;
-    groupId?: string | string[] | ConstrainDOMStringParameters;
-    height?: number | ConstrainLongRange;
-    latency?: number | ConstrainDoubleRange;
-    logicalSurface?: boolean | ConstrainBooleanParameters;
-    sampleRate?: number | ConstrainLongRange;
-    sampleSize?: number | ConstrainLongRange;
-    volume?: number | ConstrainDoubleRange;
-    width?: number | ConstrainLongRange;
+    aspectRatio?: ConstrainDouble;
+    autoGainControl?: ConstrainBoolean;
+    channelCount?: ConstrainULong;
+    deviceId?: ConstrainDOMString;
+    echoCancellation?: ConstrainBoolean;
+    facingMode?: ConstrainDOMString;
+    frameRate?: ConstrainDouble;
+    groupId?: ConstrainDOMString;
+    height?: ConstrainULong;
+    latency?: ConstrainDouble;
+    noiseSuppression?: ConstrainBoolean;
+    resizeMode?: ConstrainDOMString;
+    sampleRate?: ConstrainULong;
+    sampleSize?: ConstrainULong;
+    volume?: ConstrainDouble;
+    width?: ConstrainULong;
 }
 
 interface MediaTrackConstraints extends MediaTrackConstraintSet {
@@ -709,12 +714,17 @@ interface MediaTrackConstraints extends MediaTrackConstraintSet {
 
 interface MediaTrackSettings {
     aspectRatio?: number;
+    autoGainControl?: boolean;
+    channelCount?: number;
     deviceId?: string;
     echoCancellation?: boolean;
     facingMode?: string;
     frameRate?: number;
     groupId?: string;
     height?: number;
+    latency?: number;
+    noiseSuppression?: boolean;
+    resizeMode?: string;
     sampleRate?: number;
     sampleSize?: number;
     volume?: number;
@@ -723,12 +733,17 @@ interface MediaTrackSettings {
 
 interface MediaTrackSupportedConstraints {
     aspectRatio?: boolean;
+    autoGainControl?: boolean;
+    channelCount?: boolean;
     deviceId?: boolean;
     echoCancellation?: boolean;
     facingMode?: boolean;
     frameRate?: boolean;
     groupId?: boolean;
     height?: boolean;
+    latency?: boolean;
+    noiseSuppression?: boolean;
+    resizeMode?: boolean;
     sampleRate?: boolean;
     sampleSize?: boolean;
     volume?: boolean;
@@ -758,6 +773,10 @@ interface MouseEventInit extends EventModifierInit {
     relatedTarget?: EventTarget | null;
     screenX?: number;
     screenY?: number;
+}
+
+interface MultiCacheQueryOptions extends CacheQueryOptions {
+    cacheName?: string;
 }
 
 interface MutationObserverInit {
@@ -909,7 +928,8 @@ interface Pbkdf2Params extends Algorithm {
 
 interface PerformanceObserverInit {
     buffered?: boolean;
-    entryTypes: string[];
+    entryTypes?: string[];
+    type?: string;
 }
 
 interface PeriodicWaveConstraints {
@@ -953,6 +973,10 @@ interface PositionOptions {
     enableHighAccuracy?: boolean;
     maximumAge?: number;
     timeout?: number;
+}
+
+interface PostMessageOptions {
+    transfer?: any[];
 }
 
 interface ProgressEventInit extends EventInit {
@@ -1576,6 +1600,11 @@ interface UIEventInit extends EventInit {
     view?: Window | null;
 }
 
+interface ULongRange {
+    max?: number;
+    min?: number;
+}
+
 interface UnderlyingByteSource {
     autoAllocateChunkSize?: number;
     cancel?: ReadableStreamErrorCallback;
@@ -1965,6 +1994,7 @@ interface AudioContext extends BaseAudioContext {
     createMediaStreamSource(mediaStream: MediaStream): MediaStreamAudioSourceNode;
     createMediaStreamTrackSource(mediaStreamTrack: MediaStreamTrack): MediaStreamTrackAudioSourceNode;
     getOutputTimestamp(): AudioTimestamp;
+    resume(): Promise<void>;
     suspend(): Promise<void>;
     addEventListener<K extends keyof BaseAudioContextEventMap>(type: K, listener: (this: AudioContext, ev: BaseAudioContextEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
@@ -2202,7 +2232,6 @@ interface BaseAudioContext extends EventTarget {
     createStereoPanner(): StereoPannerNode;
     createWaveShaper(): WaveShaperNode;
     decodeAudioData(audioData: ArrayBuffer, successCallback?: DecodeSuccessCallback | null, errorCallback?: DecodeErrorCallback | null): Promise<AudioBuffer>;
-    resume(): Promise<void>;
     addEventListener<K extends keyof BaseAudioContextEventMap>(type: K, listener: (this: BaseAudioContext, ev: BaseAudioContextEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof BaseAudioContextEventMap>(type: K, listener: (this: BaseAudioContext, ev: BaseAudioContextEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -4075,17 +4104,28 @@ declare var DeviceLightEvent: {
 
 /** The DeviceMotionEvent provides web developers with information about the speed of changes for the device's position and orientation. */
 interface DeviceMotionEvent extends Event {
-    readonly acceleration: DeviceAcceleration | null;
-    readonly accelerationIncludingGravity: DeviceAcceleration | null;
-    readonly interval: number | null;
-    readonly rotationRate: DeviceRotationRate | null;
-    initDeviceMotionEvent(type: string, bubbles: boolean, cancelable: boolean, acceleration: DeviceAccelerationDict | null, accelerationIncludingGravity: DeviceAccelerationDict | null, rotationRate: DeviceRotationRateDict | null, interval: number | null): void;
+    readonly acceleration: DeviceMotionEventAcceleration | null;
+    readonly accelerationIncludingGravity: DeviceMotionEventAcceleration | null;
+    readonly interval: number;
+    readonly rotationRate: DeviceMotionEventRotationRate | null;
 }
 
 declare var DeviceMotionEvent: {
     prototype: DeviceMotionEvent;
-    new(typeArg: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
+    new(type: string, eventInitDict?: DeviceMotionEventInit): DeviceMotionEvent;
 };
+
+interface DeviceMotionEventAcceleration {
+    readonly x: number | null;
+    readonly y: number | null;
+    readonly z: number | null;
+}
+
+interface DeviceMotionEventRotationRate {
+    readonly alpha: number | null;
+    readonly beta: number | null;
+    readonly gamma: number | null;
+}
 
 /** The DeviceOrientationEvent provides web developers with information from the physical orientation of the device running the web page. */
 interface DeviceOrientationEvent extends Event {
@@ -4093,12 +4133,11 @@ interface DeviceOrientationEvent extends Event {
     readonly alpha: number | null;
     readonly beta: number | null;
     readonly gamma: number | null;
-    initDeviceOrientationEvent(type: string, bubbles: boolean, cancelable: boolean, alpha: number | null, beta: number | null, gamma: number | null, absolute: boolean): void;
 }
 
 declare var DeviceOrientationEvent: {
     prototype: DeviceOrientationEvent;
-    new(typeArg: string, eventInitDict?: DeviceOrientationEventInit): DeviceOrientationEvent;
+    new(type: string, eventInitDict?: DeviceOrientationEventInit): DeviceOrientationEvent;
 };
 
 /** Provides information about the rate at which the device is rotating around all three axes. */
@@ -4179,7 +4218,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     /**
      * Specifies the beginning and end of the document body.
      */
-    body: HTMLBodyElement | HTMLFrameSetElement;
+    body: HTMLElement;
     /**
      * Returns document's encoding.
      */
@@ -5410,7 +5449,7 @@ interface GlobalEventHandlersEventMap {
     "animationend": AnimationEvent;
     "animationiteration": AnimationEvent;
     "animationstart": AnimationEvent;
-    "auxclick": Event;
+    "auxclick": MouseEvent;
     "blur": FocusEvent;
     "cancel": Event;
     "canplay": Event;
@@ -5503,7 +5542,7 @@ interface GlobalEventHandlers {
     onanimationend: ((this: GlobalEventHandlers, ev: AnimationEvent) => any) | null;
     onanimationiteration: ((this: GlobalEventHandlers, ev: AnimationEvent) => any) | null;
     onanimationstart: ((this: GlobalEventHandlers, ev: AnimationEvent) => any) | null;
-    onauxclick: ((this: GlobalEventHandlers, ev: Event) => any) | null;
+    onauxclick: ((this: GlobalEventHandlers, ev: MouseEvent) => any) | null;
     /**
      * Fires when the object loses the input focus.
      * @param ev The focus event.
@@ -6148,6 +6187,7 @@ interface HTMLCanvasElement extends HTMLElement {
      * @param type The standard MIME type for the image format to return. If you do not specify this parameter, the default value is a PNG format image.
      */
     toDataURL(type?: string, quality?: any): string;
+    transferControlToOffscreen(): OffscreenCanvas;
     addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLCanvasElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLCanvasElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -7161,6 +7201,8 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
      * Sets or retrieves the language code of the object.
      */
     hreflang: string;
+    imageSizes: string;
+    imageSrcset: string;
     integrity: string;
     /**
      * Sets or retrieves the media type.
@@ -9421,6 +9463,15 @@ interface InnerHTML {
     innerHTML: string;
 }
 
+interface InputDeviceInfo extends MediaDeviceInfo {
+    getCapabilities(): MediaTrackCapabilities;
+}
+
+declare var InputDeviceInfo: {
+    prototype: InputDeviceInfo;
+    new(): InputDeviceInfo;
+};
+
 /** provides a way to asynchronously observe changes in the intersection of a target element with an ancestor element or with a top-level document's viewport. */
 interface IntersectionObserver {
     readonly root: Element | null;
@@ -9853,6 +9904,7 @@ interface MediaDeviceInfo {
     readonly groupId: string;
     readonly kind: MediaDeviceKind;
     readonly label: string;
+    toJSON(): any;
 }
 
 declare var MediaDeviceInfo: {
@@ -9869,7 +9921,7 @@ interface MediaDevices extends EventTarget {
     ondevicechange: ((this: MediaDevices, ev: Event) => any) | null;
     enumerateDevices(): Promise<MediaDeviceInfo[]>;
     getSupportedConstraints(): MediaTrackSupportedConstraints;
-    getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream>;
+    getUserMedia(constraints?: MediaStreamConstraints): Promise<MediaStream>;
     addEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof MediaDevicesEventMap>(type: K, listener: (this: MediaDevices, ev: MediaDevicesEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -10081,9 +10133,7 @@ declare var MediaSource: {
 };
 
 interface MediaStreamEventMap {
-    "active": Event;
     "addtrack": MediaStreamTrackEvent;
-    "inactive": Event;
     "removetrack": MediaStreamTrackEvent;
 }
 
@@ -10091,9 +10141,7 @@ interface MediaStreamEventMap {
 interface MediaStream extends EventTarget {
     readonly active: boolean;
     readonly id: string;
-    onactive: ((this: MediaStream, ev: Event) => any) | null;
     onaddtrack: ((this: MediaStream, ev: MediaStreamTrackEvent) => any) | null;
-    oninactive: ((this: MediaStream, ev: Event) => any) | null;
     onremovetrack: ((this: MediaStream, ev: MediaStreamTrackEvent) => any) | null;
     addTrack(track: MediaStreamTrack): void;
     clone(): MediaStream;
@@ -10102,7 +10150,6 @@ interface MediaStream extends EventTarget {
     getTracks(): MediaStreamTrack[];
     getVideoTracks(): MediaStreamTrack[];
     removeTrack(track: MediaStreamTrack): void;
-    stop(): void;
     addEventListener<K extends keyof MediaStreamEventMap>(type: K, listener: (this: MediaStream, ev: MediaStreamEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof MediaStreamEventMap>(type: K, listener: (this: MediaStream, ev: MediaStreamEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -10166,7 +10213,7 @@ declare var MediaStreamEvent: {
 };
 
 interface MediaStreamTrackEventMap {
-    "ended": MediaStreamErrorEvent;
+    "ended": Event;
     "isolationchange": Event;
     "mute": Event;
     "overconstrained": MediaStreamErrorEvent;
@@ -10181,15 +10228,13 @@ interface MediaStreamTrack extends EventTarget {
     readonly kind: string;
     readonly label: string;
     readonly muted: boolean;
-    onended: ((this: MediaStreamTrack, ev: MediaStreamErrorEvent) => any) | null;
+    onended: ((this: MediaStreamTrack, ev: Event) => any) | null;
     onisolationchange: ((this: MediaStreamTrack, ev: Event) => any) | null;
     onmute: ((this: MediaStreamTrack, ev: Event) => any) | null;
     onoverconstrained: ((this: MediaStreamTrack, ev: MediaStreamErrorEvent) => any) | null;
     onunmute: ((this: MediaStreamTrack, ev: Event) => any) | null;
-    readonly readonly: boolean;
     readonly readyState: MediaStreamTrackState;
-    readonly remote: boolean;
-    applyConstraints(constraints: MediaTrackConstraints): Promise<void>;
+    applyConstraints(constraints?: MediaTrackConstraints): Promise<void>;
     clone(): MediaStreamTrack;
     getCapabilities(): MediaTrackCapabilities;
     getConstraints(): MediaTrackConstraints;
@@ -10221,7 +10266,7 @@ interface MediaStreamTrackEvent extends Event {
 
 declare var MediaStreamTrackEvent: {
     prototype: MediaStreamTrackEvent;
-    new(typeArg: string, eventInitDict?: MediaStreamTrackEventInit): MediaStreamTrackEvent;
+    new(type: string, eventInitDict: MediaStreamTrackEventInit): MediaStreamTrackEvent;
 };
 
 /** An interface of the Channel Messaging API allows us to create a new message channel and send data through it via its two MessagePort properties. */
@@ -10282,14 +10327,8 @@ interface MessagePort extends EventTarget {
      * Disconnects the port, so that it is no longer active.
      */
     close(): void;
-    /**
-     * Posts a message through the channel. Objects listed in transfer are
-     * transferred, not just cloned, meaning that they are no longer usable on the sending side.
-     * Throws a "DataCloneError" DOMException if
-     * transfer contains duplicate objects or port, or if message
-     * could not be cloned.
-     */
-    postMessage(message: any, transfer?: Transferable[]): void;
+    postMessage(message: any, transfer: Transferable[]): void;
+    postMessage(message: any, options?: PostMessageOptions): void;
     /**
      * Begins dispatching messages received on the port.
      */
@@ -10521,6 +10560,7 @@ interface Navigator extends NavigatorID, NavigatorOnLine, NavigatorContentUtils,
     gamepadInputEmulation: GamepadInputEmulationType;
     readonly geolocation: Geolocation;
     readonly maxTouchPoints: number;
+    readonly mediaDevices: MediaDevices;
     readonly mimeTypes: MimeTypeArray;
     readonly msManipulationViewsEnabled: boolean;
     readonly msMaxTouchPoints: number;
@@ -10531,6 +10571,7 @@ interface Navigator extends NavigatorID, NavigatorOnLine, NavigatorContentUtils,
     readonly serviceWorker: ServiceWorkerContainer;
     readonly webdriver: boolean;
     getGamepads(): (Gamepad | null)[];
+    getUserMedia(constraints: MediaStreamConstraints, successCallback: NavigatorUserMediaSuccessCallback, errorCallback: NavigatorUserMediaErrorCallback): void;
     getVRDisplays(): Promise<VRDisplay[]>;
     javaEnabled(): boolean;
     msLaunchUri(uri: string, successCallback?: MSLaunchUriCallback, noHandlerCallback?: MSLaunchUriCallback): void;
@@ -10931,6 +10972,7 @@ interface OfflineAudioContextEventMap extends BaseAudioContextEventMap {
 interface OfflineAudioContext extends BaseAudioContext {
     readonly length: number;
     oncomplete: ((this: OfflineAudioContext, ev: OfflineAudioCompletionEvent) => any) | null;
+    resume(): Promise<void>;
     startRendering(): Promise<AudioBuffer>;
     suspend(suspendTime: number): Promise<void>;
     addEventListener<K extends keyof OfflineAudioContextEventMap>(type: K, listener: (this: OfflineAudioContext, ev: OfflineAudioContextEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
@@ -10943,6 +10985,62 @@ declare var OfflineAudioContext: {
     prototype: OfflineAudioContext;
     new(contextOptions: OfflineAudioContextOptions): OfflineAudioContext;
     new(numberOfChannels: number, length: number, sampleRate: number): OfflineAudioContext;
+};
+
+interface OffscreenCanvas extends EventTarget {
+    /**
+     * These attributes return the dimensions of the OffscreenCanvas object's bitmap.
+     * They can be set, to replace the bitmap with a
+     * new, transparent black bitmap of the specified dimensions (effectively resizing
+     * it).
+     */
+    height: number;
+    width: number;
+    /**
+     * Returns a promise that will fulfill with a new Blob object representing a file
+     * containing the image in the OffscreenCanvas object.
+     * The argument, if provided, is a dictionary that controls the encoding options of the image
+     * file to be created. The type
+     * field specifies the file format and has a default value of "image/png"; that type
+     * is also used if the requested type isn't supported. If the image format supports variable
+     * quality (such as "image/jpeg"), then the quality field is a number in the range 0.0
+     * to 1.0 inclusive indicating the desired quality level for the resulting image.
+     */
+    convertToBlob(options?: ImageEncodeOptions): Promise<Blob>;
+    /**
+     * Returns an object that exposes an API for drawing on the OffscreenCanvas
+     * object. contextId specifies the desired API: "2d" or "webgl". options is handled by that
+     * API.
+     * This specification defines the "2d" context below,
+     * which is similar but distinct from the "2d"
+     * context that is created from a canvas element. There is also a specification that
+     * defines a "webgl" context. [WEBGL]
+     * Returns null if the canvas has already been initialized with another context type (e.g.,
+     * trying to get a "2d" context after getting a
+     * "webgl" context).
+     */
+    getContext(contextId: OffscreenRenderingContextId, options?: any): OffscreenRenderingContext | null;
+    /**
+     * Returns a newly created ImageBitmap object with the image in the
+     * OffscreenCanvas object. The image in the OffscreenCanvas object is
+     * replaced with a new blank image.
+     */
+    transferToImageBitmap(): ImageBitmap;
+}
+
+declare var OffscreenCanvas: {
+    prototype: OffscreenCanvas;
+    new(width: number, height: number): OffscreenCanvas;
+};
+
+interface OffscreenCanvasRenderingContext2D extends CanvasState, CanvasTransform, CanvasCompositing, CanvasImageSmoothing, CanvasFillStrokeStyles, CanvasShadowStyles, CanvasFilters, CanvasRect, CanvasDrawPath, CanvasText, CanvasDrawImage, CanvasImageData, CanvasPathDrawingStyles, CanvasTextDrawingStyles, CanvasPath {
+    readonly canvas: OffscreenCanvas;
+    commit(): void;
+}
+
+declare var OffscreenCanvasRenderingContext2D: {
+    prototype: OffscreenCanvasRenderingContext2D;
+    new(): OffscreenCanvasRenderingContext2D;
 };
 
 /** The OscillatorNode interface represents a periodic waveform, such as a sine wave. It is an AudioScheduledSourceNode audio-processing module that causes a specified frequency of a given wave to be created—in effect, a constant tone. */
@@ -10960,6 +11058,15 @@ interface OscillatorNode extends AudioScheduledSourceNode {
 declare var OscillatorNode: {
     prototype: OscillatorNode;
     new(context: BaseAudioContext, options?: OscillatorOptions): OscillatorNode;
+};
+
+interface OverconstrainedError extends Error {
+    constraint: string;
+}
+
+declare var OverconstrainedError: {
+    prototype: OverconstrainedError;
+    new(): OverconstrainedError;
 };
 
 interface OverflowEvent extends UIEvent {
@@ -11284,13 +11391,14 @@ declare var PerformanceNavigationTiming: {
 
 interface PerformanceObserver {
     disconnect(): void;
-    observe(options: PerformanceObserverInit): void;
+    observe(options?: PerformanceObserverInit): void;
     takeRecords(): PerformanceEntryList;
 }
 
 declare var PerformanceObserver: {
     prototype: PerformanceObserver;
     new(callback: PerformanceObserverCallback): PerformanceObserver;
+    readonly supportedEntryTypes: ReadonlyArray<string>;
 };
 
 interface PerformanceObserverEntryList {
@@ -12568,7 +12676,7 @@ declare var SVGAnimationElement: {
 };
 
 /** An interface for the <circle> element. The circle element is defined by the cx and cy attributes that denote the coordinates of the centre of the circle. */
-interface SVGCircleElement extends SVGGraphicsElement {
+interface SVGCircleElement extends SVGGeometryElement {
     readonly cx: SVGAnimatedLength;
     readonly cy: SVGAnimatedLength;
     readonly r: SVGAnimatedLength;
@@ -12712,7 +12820,7 @@ declare var SVGElementInstanceList: {
 };
 
 /** Provides access to the properties of <ellipse> elements. */
-interface SVGEllipseElement extends SVGGraphicsElement {
+interface SVGEllipseElement extends SVGGeometryElement {
     readonly cx: SVGAnimatedLength;
     readonly cy: SVGAnimatedLength;
     readonly rx: SVGAnimatedLength;
@@ -13428,7 +13536,7 @@ declare var SVGLengthList: {
 };
 
 /** Provides access to the properties of <line> elements, as well as methods to manipulate them. */
-interface SVGLineElement extends SVGGraphicsElement {
+interface SVGLineElement extends SVGGeometryElement {
     readonly x1: SVGAnimatedLength;
     readonly x2: SVGAnimatedLength;
     readonly y1: SVGAnimatedLength;
@@ -13909,14 +14017,16 @@ declare var SVGPatternElement: {
 };
 
 interface SVGPointList {
+    readonly length: number;
     readonly numberOfItems: number;
-    appendItem(newItem: SVGPoint): SVGPoint;
+    appendItem(newItem: DOMPoint): DOMPoint;
     clear(): void;
-    getItem(index: number): SVGPoint;
-    initialize(newItem: SVGPoint): SVGPoint;
-    insertItemBefore(newItem: SVGPoint, index: number): SVGPoint;
-    removeItem(index: number): SVGPoint;
-    replaceItem(newItem: SVGPoint, index: number): SVGPoint;
+    getItem(index: number): DOMPoint;
+    initialize(newItem: DOMPoint): DOMPoint;
+    insertItemBefore(newItem: DOMPoint, index: number): DOMPoint;
+    removeItem(index: number): DOMPoint;
+    replaceItem(newItem: DOMPoint, index: number): DOMPoint;
+    [index: number]: DOMPoint;
 }
 
 declare var SVGPointList: {
@@ -13925,7 +14035,7 @@ declare var SVGPointList: {
 };
 
 /** Provides access to the properties of <polygon> elements, as well as methods to manipulate them. */
-interface SVGPolygonElement extends SVGGraphicsElement, SVGAnimatedPoints {
+interface SVGPolygonElement extends SVGGeometryElement, SVGAnimatedPoints {
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPolygonElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPolygonElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -13938,7 +14048,7 @@ declare var SVGPolygonElement: {
 };
 
 /** Provides access to the properties of <polyline> elements, as well as methods to manipulate them. */
-interface SVGPolylineElement extends SVGGraphicsElement, SVGAnimatedPoints {
+interface SVGPolylineElement extends SVGGeometryElement, SVGAnimatedPoints {
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPolylineElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGPolylineElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -14008,7 +14118,7 @@ declare var SVGRadialGradientElement: {
 };
 
 /** Provides access to the properties of <rect> elements, as well as methods to manipulate them. */
-interface SVGRectElement extends SVGGraphicsElement {
+interface SVGRectElement extends SVGGeometryElement {
     readonly height: SVGAnimatedLength;
     readonly rx: SVGAnimatedLength;
     readonly ry: SVGAnimatedLength;
@@ -14055,6 +14165,7 @@ interface SVGSVGElement extends SVGGraphicsElement, DocumentEvent, SVGFitToViewB
     readonly width: SVGAnimatedLength;
     readonly x: SVGAnimatedLength;
     readonly y: SVGAnimatedLength;
+    animationsPaused(): boolean;
     checkEnclosure(element: SVGElement, rect: SVGRect): boolean;
     checkIntersection(element: SVGElement, rect: SVGRect): boolean;
     createSVGAngle(): SVGAngle;
@@ -14069,18 +14180,14 @@ interface SVGSVGElement extends SVGGraphicsElement, DocumentEvent, SVGFitToViewB
     /** @deprecated */
     forceRedraw(): void;
     getComputedStyle(elt: Element, pseudoElt?: string | null): CSSStyleDeclaration;
-    /** @deprecated */
     getCurrentTime(): number;
     getElementById(elementId: string): Element;
     getEnclosureList(rect: SVGRect, referenceElement: SVGElement): NodeListOf<SVGCircleElement | SVGEllipseElement | SVGImageElement | SVGLineElement | SVGPathElement | SVGPolygonElement | SVGPolylineElement | SVGRectElement | SVGTextElement | SVGUseElement>;
     getIntersectionList(rect: SVGRect, referenceElement: SVGElement): NodeListOf<SVGCircleElement | SVGEllipseElement | SVGImageElement | SVGLineElement | SVGPathElement | SVGPolygonElement | SVGPolylineElement | SVGRectElement | SVGTextElement | SVGUseElement>;
-    /** @deprecated */
     pauseAnimations(): void;
-    /** @deprecated */
     setCurrentTime(seconds: number): void;
     /** @deprecated */
     suspendRedraw(maxWaitMilliseconds: number): number;
-    /** @deprecated */
     unpauseAnimations(): void;
     /** @deprecated */
     unsuspendRedraw(suspendHandleID: number): void;
@@ -14583,7 +14690,8 @@ interface ServiceWorker extends EventTarget, AbstractWorker {
     onstatechange: ((this: ServiceWorker, ev: Event) => any) | null;
     readonly scriptURL: string;
     readonly state: ServiceWorkerState;
-    postMessage(message: any, transfer?: Transferable[]): void;
+    postMessage(message: any, transfer: Transferable[]): void;
+    postMessage(message: any, options?: PostMessageOptions): void;
     addEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof ServiceWorkerEventMap>(type: K, listener: (this: ServiceWorker, ev: ServiceWorkerEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -16907,6 +17015,7 @@ interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandler
     "devicelight": DeviceLightEvent;
     "devicemotion": DeviceMotionEvent;
     "deviceorientation": DeviceOrientationEvent;
+    "deviceorientationabsolute": DeviceOrientationEvent;
     "drag": DragEvent;
     "dragend": DragEvent;
     "dragenter": DragEvent;
@@ -17029,6 +17138,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
     ondevicelight: ((this: Window, ev: DeviceLightEvent) => any) | null;
     ondevicemotion: ((this: Window, ev: DeviceMotionEvent) => any) | null;
     ondeviceorientation: ((this: Window, ev: DeviceOrientationEvent) => any) | null;
+    ondeviceorientationabsolute: ((this: Window, ev: DeviceOrientationEvent) => any) | null;
     onmousewheel: ((this: Window, ev: Event) => any) | null;
     onmsgesturechange: ((this: Window, ev: Event) => any) | null;
     onmsgesturedoubletap: ((this: Window, ev: Event) => any) | null;
@@ -18024,6 +18134,7 @@ declare var oncompassneedscalibration: ((this: Window, ev: Event) => any) | null
 declare var ondevicelight: ((this: Window, ev: DeviceLightEvent) => any) | null;
 declare var ondevicemotion: ((this: Window, ev: DeviceMotionEvent) => any) | null;
 declare var ondeviceorientation: ((this: Window, ev: DeviceOrientationEvent) => any) | null;
+declare var ondeviceorientationabsolute: ((this: Window, ev: DeviceOrientationEvent) => any) | null;
 declare var onmousewheel: ((this: Window, ev: Event) => any) | null;
 declare var onmsgesturechange: ((this: Window, ev: Event) => any) | null;
 declare var onmsgesturedoubletap: ((this: Window, ev: Event) => any) | null;
@@ -18132,7 +18243,7 @@ declare var onanimationcancel: ((this: Window, ev: AnimationEvent) => any) | nul
 declare var onanimationend: ((this: Window, ev: AnimationEvent) => any) | null;
 declare var onanimationiteration: ((this: Window, ev: AnimationEvent) => any) | null;
 declare var onanimationstart: ((this: Window, ev: AnimationEvent) => any) | null;
-declare var onauxclick: ((this: Window, ev: Event) => any) | null;
+declare var onauxclick: ((this: Window, ev: MouseEvent) => any) | null;
 /**
  * Fires when the object loses the input focus.
  * @param ev The focus event.
@@ -18437,13 +18548,18 @@ type RequestInfo = Request | string;
 type DOMHighResTimeStamp = number;
 type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext;
 type HTMLOrSVGImageElement = HTMLImageElement | SVGImageElement;
-type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap;
+type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap | OffscreenCanvas;
+type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | WebGLRenderingContext;
 type MessageEventSource = WindowProxy | MessagePort | ServiceWorker;
 type HTMLOrSVGScriptElement = HTMLScriptElement | SVGScriptElement;
 type ImageBitmapSource = CanvasImageSource | Blob | ImageData;
 type OnErrorEventHandler = OnErrorEventHandlerNonNull | null;
 type OnBeforeUnloadEventHandler = OnBeforeUnloadEventHandlerNonNull | null;
 type TimerHandler = string | Function;
+type ConstrainULong = number | ConstrainULongRange;
+type ConstrainDouble = number | ConstrainDoubleRange;
+type ConstrainBoolean = boolean | ConstrainBooleanParameters;
+type ConstrainDOMString = string | string[] | ConstrainDOMStringParameters;
 type PerformanceEntryList = PerformanceEntry[];
 type VibratePattern = number | number[];
 type AlgorithmIdentifier = string | Algorithm;
@@ -18470,10 +18586,6 @@ type FormDataEntryValue = File | string;
 type InsertPosition = "beforebegin" | "afterbegin" | "beforeend" | "afterend";
 type IDBValidKey = number | string | Date | BufferSource | IDBArrayKey;
 type MutationRecordType = "attributes" | "characterData" | "childList";
-type ConstrainBoolean = boolean | ConstrainBooleanParameters;
-type ConstrainDOMString = string | string[] | ConstrainDOMStringParameters;
-type ConstrainDouble = number | ConstrainDoubleRange;
-type ConstrainLong = number | ConstrainLongRange;
 type IDBKeyPath = string;
 type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
 type RTCIceGatherCandidate = RTCIceCandidateDictionary | RTCIceCandidateComplete;
@@ -18538,6 +18650,7 @@ type NavigationReason = "up" | "down" | "left" | "right";
 type NavigationType = "navigate" | "reload" | "back_forward" | "prerender";
 type NotificationDirection = "auto" | "ltr" | "rtl";
 type NotificationPermission = "default" | "denied" | "granted";
+type OffscreenRenderingContextId = "2d" | "webgl";
 type OrientationLockType = "any" | "natural" | "landscape" | "portrait" | "portrait-primary" | "portrait-secondary" | "landscape-primary" | "landscape-secondary";
 type OrientationType = "portrait-primary" | "portrait-secondary" | "landscape-primary" | "landscape-secondary";
 type OscillatorType = "sine" | "square" | "sawtooth" | "triangle" | "custom";

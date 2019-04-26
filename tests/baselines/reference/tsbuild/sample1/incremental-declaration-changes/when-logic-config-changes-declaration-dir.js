@@ -25,28 +25,8 @@ export declare const m: typeof mod;
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "/lib/lib.d.ts",
-        "signature": "/lib/lib.d.ts"
-      },
-      "/lib/lib.es3.d.ts": {
-        "version": "/lib/lib.es3.d.ts",
-        "signature": "/lib/lib.es3.d.ts"
-      },
-      "/lib/lib.es5.d.ts": {
-        "version": "/lib/lib.es5.d.ts",
-        "signature": "/lib/lib.es5.d.ts"
-      },
-      "/lib/lib.dom.d.ts": {
-        "version": "/lib/lib.dom.d.ts",
-        "signature": "/lib/lib.dom.d.ts"
-      },
-      "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "/lib/lib.webworker.importscripts.d.ts",
-        "signature": "/lib/lib.webworker.importscripts.d.ts"
-      },
-      "/lib/lib.scripthost.d.ts": {
-        "version": "/lib/lib.scripthost.d.ts",
-        "signature": "/lib/lib.scripthost.d.ts"
+        "version": "-15964756381",
+        "signature": "-15964756381"
       },
       "/src/core/index.ts": {
         "version": "-13851440507",
@@ -83,11 +63,6 @@ export declare const m: typeof mod;
     },
     "semanticDiagnosticsPerFile": [
       "/lib/lib.d.ts",
-      "/lib/lib.dom.d.ts",
-      "/lib/lib.es3.d.ts",
-      "/lib/lib.es5.d.ts",
-      "/lib/lib.scripthost.d.ts",
-      "/lib/lib.webworker.importscripts.d.ts",
       "/src/core/anothermodule.ts",
       "/src/core/index.ts",
       "/src/logic/index.ts"
@@ -101,28 +76,8 @@ export declare const m: typeof mod;
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "/lib/lib.d.ts",
-        "signature": "/lib/lib.d.ts"
-      },
-      "/lib/lib.es3.d.ts": {
-        "version": "/lib/lib.es3.d.ts",
-        "signature": "/lib/lib.es3.d.ts"
-      },
-      "/lib/lib.es5.d.ts": {
-        "version": "/lib/lib.es5.d.ts",
-        "signature": "/lib/lib.es5.d.ts"
-      },
-      "/lib/lib.dom.d.ts": {
-        "version": "/lib/lib.dom.d.ts",
-        "signature": "/lib/lib.dom.d.ts"
-      },
-      "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "/lib/lib.webworker.importscripts.d.ts",
-        "signature": "/lib/lib.webworker.importscripts.d.ts"
-      },
-      "/lib/lib.scripthost.d.ts": {
-        "version": "/lib/lib.scripthost.d.ts",
-        "signature": "/lib/lib.scripthost.d.ts"
+        "version": "-15964756381",
+        "signature": "-15964756381"
       },
       "/src/core/index.ts": {
         "version": "-13851440507",
@@ -168,11 +123,6 @@ export declare const m: typeof mod;
     },
     "semanticDiagnosticsPerFile": [
       "/lib/lib.d.ts",
-      "/lib/lib.dom.d.ts",
-      "/lib/lib.es3.d.ts",
-      "/lib/lib.es5.d.ts",
-      "/lib/lib.scripthost.d.ts",
-      "/lib/lib.webworker.importscripts.d.ts",
       "/src/core/anothermodule.ts",
       "/src/core/index.ts",
       "/src/logic/index.ts",

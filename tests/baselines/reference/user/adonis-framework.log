@@ -46,7 +46,6 @@ node_modules/adonis-framework/src/Event/index.js(256,52): error TS2345: Argument
   Type 'Function' provides no match for the signature '(...values: any[]): void'.
 node_modules/adonis-framework/src/Event/index.js(264,28): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
 node_modules/adonis-framework/src/Event/index.js(271,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[string, any, TimerHandler]'.
-  Type 'IArguments' is missing the following properties from type '[string, any, TimerHandler]': 0, 1, 2, pop, and 29 more.
 node_modules/adonis-framework/src/Event/index.js(278,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[string, any, TimerHandler]'.
 node_modules/adonis-framework/src/Event/index.js(294,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
 node_modules/adonis-framework/src/Exceptions/index.js(13,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
@@ -154,7 +153,6 @@ node_modules/adonis-framework/src/Route/resource.js(209,45): error TS2345: Argum
 node_modules/adonis-framework/src/Route/resource.js(233,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(261,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(290,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any, ...any[]]'.
-  Type 'IArguments' is missing the following properties from type '[any, ...any[]]': 0, pop, push, concat, and 27 more.
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(314,62): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Server/helpers.js(17,29): error TS8024: JSDoc '@param' tag has name 'appNamespace', but there is no parameter with that name.

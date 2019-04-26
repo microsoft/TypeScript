@@ -185,28 +185,8 @@ exports.multiply = multiply;
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "/lib/lib.d.ts",
-        "signature": "/lib/lib.d.ts"
-      },
-      "/lib/lib.es3.d.ts": {
-        "version": "/lib/lib.es3.d.ts",
-        "signature": "/lib/lib.es3.d.ts"
-      },
-      "/lib/lib.es5.d.ts": {
-        "version": "/lib/lib.es5.d.ts",
-        "signature": "/lib/lib.es5.d.ts"
-      },
-      "/lib/lib.dom.d.ts": {
-        "version": "/lib/lib.dom.d.ts",
-        "signature": "/lib/lib.dom.d.ts"
-      },
-      "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "/lib/lib.webworker.importscripts.d.ts",
-        "signature": "/lib/lib.webworker.importscripts.d.ts"
-      },
-      "/lib/lib.scripthost.d.ts": {
-        "version": "/lib/lib.scripthost.d.ts",
-        "signature": "/lib/lib.scripthost.d.ts"
+        "version": "-15964756381",
+        "signature": "-15964756381"
       },
       "/src/core/anothermodule.ts": {
         "version": "-2676574883",
@@ -232,11 +212,6 @@ exports.multiply = multiply;
     "exportedModulesMap": {},
     "semanticDiagnosticsPerFile": [
       "/lib/lib.d.ts",
-      "/lib/lib.dom.d.ts",
-      "/lib/lib.es3.d.ts",
-      "/lib/lib.es5.d.ts",
-      "/lib/lib.scripthost.d.ts",
-      "/lib/lib.webworker.importscripts.d.ts",
       "/src/core/anothermodule.ts",
       "/src/core/index.ts",
       "/src/core/some_decl.d.ts"
@@ -395,28 +370,8 @@ sourceFile:index.ts
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "/lib/lib.d.ts",
-        "signature": "/lib/lib.d.ts"
-      },
-      "/lib/lib.es3.d.ts": {
-        "version": "/lib/lib.es3.d.ts",
-        "signature": "/lib/lib.es3.d.ts"
-      },
-      "/lib/lib.es5.d.ts": {
-        "version": "/lib/lib.es5.d.ts",
-        "signature": "/lib/lib.es5.d.ts"
-      },
-      "/lib/lib.dom.d.ts": {
-        "version": "/lib/lib.dom.d.ts",
-        "signature": "/lib/lib.dom.d.ts"
-      },
-      "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "/lib/lib.webworker.importscripts.d.ts",
-        "signature": "/lib/lib.webworker.importscripts.d.ts"
-      },
-      "/lib/lib.scripthost.d.ts": {
-        "version": "/lib/lib.scripthost.d.ts",
-        "signature": "/lib/lib.scripthost.d.ts"
+        "version": "-15964756381",
+        "signature": "-15964756381"
       },
       "/src/core/index.ts": {
         "version": "-13851440507",
@@ -453,11 +408,6 @@ sourceFile:index.ts
     },
     "semanticDiagnosticsPerFile": [
       "/lib/lib.d.ts",
-      "/lib/lib.dom.d.ts",
-      "/lib/lib.es3.d.ts",
-      "/lib/lib.es5.d.ts",
-      "/lib/lib.scripthost.d.ts",
-      "/lib/lib.webworker.importscripts.d.ts",
       "/src/core/anothermodule.ts",
       "/src/core/index.ts",
       "/src/logic/index.ts"
@@ -503,28 +453,8 @@ exports.m = mod;
   "program": {
     "fileInfos": {
       "/lib/lib.d.ts": {
-        "version": "/lib/lib.d.ts",
-        "signature": "/lib/lib.d.ts"
-      },
-      "/lib/lib.es3.d.ts": {
-        "version": "/lib/lib.es3.d.ts",
-        "signature": "/lib/lib.es3.d.ts"
-      },
-      "/lib/lib.es5.d.ts": {
-        "version": "/lib/lib.es5.d.ts",
-        "signature": "/lib/lib.es5.d.ts"
-      },
-      "/lib/lib.dom.d.ts": {
-        "version": "/lib/lib.dom.d.ts",
-        "signature": "/lib/lib.dom.d.ts"
-      },
-      "/lib/lib.webworker.importscripts.d.ts": {
-        "version": "/lib/lib.webworker.importscripts.d.ts",
-        "signature": "/lib/lib.webworker.importscripts.d.ts"
-      },
-      "/lib/lib.scripthost.d.ts": {
-        "version": "/lib/lib.scripthost.d.ts",
-        "signature": "/lib/lib.scripthost.d.ts"
+        "version": "-15964756381",
+        "signature": "-15964756381"
       },
       "/src/core/index.ts": {
         "version": "-13851440507",
@@ -570,11 +500,6 @@ exports.m = mod;
     },
     "semanticDiagnosticsPerFile": [
       "/lib/lib.d.ts",
-      "/lib/lib.dom.d.ts",
-      "/lib/lib.es3.d.ts",
-      "/lib/lib.es5.d.ts",
-      "/lib/lib.scripthost.d.ts",
-      "/lib/lib.webworker.importscripts.d.ts",
       "/src/core/anothermodule.ts",
       "/src/core/index.ts",
       "/src/logic/index.ts",
