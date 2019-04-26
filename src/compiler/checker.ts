@@ -26475,7 +26475,6 @@ namespace ts {
                         else {
                             checkTypeAssignableToAndOptionallyElaborate(initializerType, getWidenedTypeForVariableLikeDeclaration(node), node, node.initializer);
                         }
-                        checkParameterInitializer(node);
                     }
                     // check the binding pattern with empty elements
                     if (needCheckWidenedType) {
@@ -26483,7 +26482,7 @@ namespace ts {
                             checkIteratedTypeOrElementType(widenedType, node, /* allowStringInput */ false, /* allowAsyncIterables */ false);
                         }
                         else if (strictNullChecks) {
-                            checkNonNullType(widenedType, node);
+                            checkNonNullNonVoidType(widenedType, node);
                         }
                     }
                 }
