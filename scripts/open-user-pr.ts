@@ -1,16 +1,7 @@
 /// <reference lib="esnext.asynciterable" />
 // Must reference esnext.asynciterable lib, since octokit uses AsyncIterable internally
-import cp = require("child_process");
 import Octokit = require("@octokit/rest");
-
-const opts = { timeout: 100_000, shell: true, stdio: "inherit" }
-function runSequence(tasks: [string, string[]][]) {
-    for (const task of tasks) {
-        console.log(`${task[0]} ${task[1].join(" ")}`);
-        const result = cp.spawnSync(task[0], task[1], opts);
-        if (result.status !== 0) throw new Error(`${task[0]} ${task[1].join(" ")} failed: ${result.stderr && result.stderr.toString()}`);
-    }
-}
+import {runSequence} from "./run-sequence";
 
 function padNum(number: number) {
     const str = "" + number;

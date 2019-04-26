@@ -68,7 +68,6 @@
         "gulp-rename": "latest",
         "gulp-sourcemaps": "latest",
         "istanbul": "latest",
-        "lodash": "^4.17.11",
         "merge2": "latest",
         "minimist": "latest",
         "mkdirp": "latest",

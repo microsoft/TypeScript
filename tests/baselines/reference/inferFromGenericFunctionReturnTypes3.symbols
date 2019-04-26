@@ -204,9 +204,9 @@ function objectToMap(obj: any) {
 	return new Map(Object.keys(obj).map(key => [key, obj[key]]));
 >Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Object.keys(obj).map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >obj : Symbol(obj, Decl(inferFromGenericFunctionReturnTypes3.ts, 83, 21))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(inferFromGenericFunctionReturnTypes3.ts, 84, 37))

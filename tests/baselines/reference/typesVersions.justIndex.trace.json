@@ -12,7 +12,6 @@
     "'package.json' does not have a 'main' field.",
     "'package.json' has a 'typesVersions' field with version-specific path mappings.",
     "Found 'package.json' at '/a/package.json'.",
-    "'package.json' has a 'typesVersions' field with version-specific path mappings.",
     "'package.json' does not have a 'typings' field.",
     "'package.json' does not have a 'types' field.",
     "'package.json' does not have a 'main' field.",

@@ -230,7 +230,6 @@ namespace ts {
 
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-        /* @internal */ inspectValue?(options: InspectValueOptions): Promise<ValueInfo>;
         writeFile?(fileName: string, content: string): void;
 
         /* @internal */
@@ -534,22 +533,12 @@ namespace ts {
 
     // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
     // See `commands?: {}[]` in protocol.ts
-    export type CodeActionCommand = InstallPackageAction | GenerateTypesAction;
+    export type CodeActionCommand = InstallPackageAction;
 
     export interface InstallPackageAction {
         /* @internal */ readonly type: "install package";
         /* @internal */ readonly file: string;
         /* @internal */ readonly packageName: string;
-    }
-
-    export interface GenerateTypesAction extends GenerateTypesOptions {
-        /* @internal */ readonly type: "generate types";
-    }
-
-    export interface GenerateTypesOptions {
-        readonly file: string; // File that was importing fileToGenerateTypesFor; used for formatting options.
-        readonly fileToGenerateTypesFor: string;
-        readonly outputFileName: string;
     }
 
     /**
