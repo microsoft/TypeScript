@@ -12,11 +12,8 @@ interface Foo {
 true || () => 1;
 true || a => 1;
 >a : Symbol(a, Decl(incorrectArrowFunction.ts, 7, 7))
->a : Symbol(a, Decl(incorrectArrowFunction.ts, 7, 7))
 
 true || a => b => 1;
->a : Symbol(a, Decl(incorrectArrowFunction.ts, 8, 7))
->b : Symbol(b, Decl(incorrectArrowFunction.ts, 8, 12))
 >a : Symbol(a, Decl(incorrectArrowFunction.ts, 8, 7))
 >b : Symbol(b, Decl(incorrectArrowFunction.ts, 8, 12))
 
@@ -25,7 +22,6 @@ true || (a) => 2;
 >a : Symbol(a, Decl(incorrectArrowFunction.ts, 9, 9))
 
 true || foo => 1;
->foo : Symbol(foo, Decl(incorrectArrowFunction.ts, 10, 7))
 >foo : Symbol(foo, Decl(incorrectArrowFunction.ts, 10, 7))
 
 true || (a: number) => 1;
@@ -43,7 +39,6 @@ true || async a => 1;
 >a : Symbol(a, Decl(incorrectArrowFunction.ts, 14, 13))
 
 true || async => 1;
->async : Symbol(async, Decl(incorrectArrowFunction.ts, 15, 7))
 >async : Symbol(async, Decl(incorrectArrowFunction.ts, 15, 7))
 
 true || (() => 1);

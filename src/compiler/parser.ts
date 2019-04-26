@@ -3878,7 +3878,7 @@ namespace ts {
                 }
             }
             if (lookAhead(isStartOfSimpleArrowFunction)) {
-                const arrowFunction = tryParseAsyncSimpleArrowFunctionExpression() || lookAhead(() => parseSimpleArrowFunctionExpression(<Identifier>parseBinaryExpressionOrHigher(/*precedence*/ 0)));
+                const arrowFunction = tryParseAsyncSimpleArrowFunctionExpression() || parseSimpleArrowFunctionExpression(<Identifier>parseBinaryExpressionOrHigher(/*precedence*/ 0));
                 parseErrorAtNode(arrowFunction, Diagnostics.Arrow_functions_are_not_syntactically_valid_here_Consider_wrapping_the_function_in_parentheses);
                 return arrowFunction;
             }
@@ -3890,7 +3890,7 @@ namespace ts {
             parseErrorAtPosition(start, node.end - start, message, arg0)
         }
 
-        function isStartOfSimpleArrowFunction () {
+        function isStartOfSimpleArrowFunction() {
             if (token() === SyntaxKind.AsyncKeyword) {
                 nextToken();
                 return isIdentifier() && nextToken() === SyntaxKind.EqualsGreaterThanToken || token() === SyntaxKind.EqualsGreaterThanToken;

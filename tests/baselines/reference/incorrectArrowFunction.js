@@ -72,13 +72,10 @@ var _this = this;
 true || function () { return 1; };
 (function () { return 1; });
 true || function (a) { return 1; };
-(function (a) { return 1; });
 true || function (a) { return function (b) { return 1; }; };
-(function (a) { return function (b) { return 1; }; });
 true || function (a) { return 2; };
 (function (a) { return 2; });
 true || function (foo) { return 1; };
-(function (foo) { return 1; });
 true || (function (a) { return 1; });
 (function (a) { return 1; });
 true || (function (_a) {
@@ -99,7 +96,6 @@ true || (function (a) { return __awaiter(_this, void 0, void 0, function () { re
     return [2 /*return*/, 1];
 }); }); });
 true || function (async) { return 1; };
-(function (async) { return 1; });
 true || (function () { return 1; });
 true || (function (a) { return 1; });
 true || (function (a) { return 2; });

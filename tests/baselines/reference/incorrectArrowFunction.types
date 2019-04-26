@@ -16,23 +16,15 @@ true || () => 1;
 >1 : 1
 
 true || a => 1;
->true || : true | ((a: any) => number)
+>true || a => 1 : true | ((a: any) => number)
 >true : true
->a => 1 : (a: any) => number
->a : any
->1 : 1
 >a => 1 : (a: any) => number
 >a : any
 >1 : 1
 
 true || a => b => 1;
->true || : true | ((a: any) => (b: any) => number)
+>true || a => b => 1 : true | ((a: any) => (b: any) => number)
 >true : true
->a => b => 1 : (a: any) => (b: any) => number
->a : any
->b => 1 : (b: any) => number
->b : any
->1 : 1
 >a => b => 1 : (a: any) => (b: any) => number
 >a : any
 >b => 1 : (b: any) => number
@@ -50,11 +42,8 @@ true || (a) => 2;
 >2 : 2
 
 true || foo => 1;
->true || : true | ((foo: any) => number)
+>true || foo => 1 : true | ((foo: any) => number)
 >true : true
->foo => 1 : (foo: any) => number
->foo : any
->1 : 1
 >foo => 1 : (foo: any) => number
 >foo : any
 >1 : 1
@@ -95,11 +84,8 @@ true || async a => 1;
 >1 : 1
 
 true || async => 1;
->true || : true | ((async: any) => number)
+>true || async => 1 : true | ((async: any) => number)
 >true : true
->async => 1 : (async: any) => number
->async : any
->1 : 1
 >async => 1 : (async: any) => number
 >async : any
 >1 : 1
