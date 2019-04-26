@@ -1345,7 +1345,7 @@ namespace ts {
         configFileName: string,
         optionsToExtend: CompilerOptions,
         host: ParseConfigFileHost,
-        /*@internal*/ extendedConfigCache?: Map<ExtendedConfigCacheEntry>
+        extendedConfigCache?: Map<ExtendedConfigCacheEntry>
     ): ParsedCommandLine | undefined {
         let configFileText: string | undefined;
         try {
@@ -2183,7 +2183,7 @@ namespace ts {
         return existingErrors !== configParseDiagnostics.length;
     }
 
-    interface ParsedTsconfig {
+    export interface ParsedTsconfig {
         raw: any;
         options?: CompilerOptions;
         typeAcquisition?: TypeAcquisition;
@@ -2370,7 +2370,6 @@ namespace ts {
         return undefined;
     }
 
-    /*@internal*/
     export interface ExtendedConfigCacheEntry {
         extendedResult: TsConfigSourceFile;
         extendedConfig: ParsedTsconfig | undefined;
@@ -2398,7 +2397,6 @@ namespace ts {
                 const extendedDirname = getDirectoryPath(extendedConfigPath);
                 extendedConfig = parseConfig(/*json*/ undefined, extendedResult, host, extendedDirname,
                     getBaseFileName(extendedConfigPath), resolutionStack, errors, extendedConfigCache);
-                
 
                 if (isSuccessfulParsedTsconfig(extendedConfig)) {
                     // Update the paths to reflect base path
@@ -2423,7 +2421,7 @@ namespace ts {
         if (sourceFile) {
             sourceFile.extendedSourceFiles = [extendedResult.fileName];
             if (extendedResult.extendedSourceFiles) {
-                sourceFile.extendedSourceFiles!.push(...extendedResult.extendedSourceFiles);
+                sourceFile.extendedSourceFiles.push(...extendedResult.extendedSourceFiles);
             }
         }
         if (extendedResult.parseDiagnostics.length) {

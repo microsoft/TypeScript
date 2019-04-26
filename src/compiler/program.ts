@@ -2682,10 +2682,12 @@ namespace ts {
             if (host.getParsedCommandLine) {
                 commandLine = host.getParsedCommandLine(refPath);
                 if (!commandLine) {
+                    addFileToFilesByName(/*sourceFile*/ undefined, sourceFilePath, /*redirectedPath*/ undefined);
                     projectReferenceRedirects.set(sourceFilePath, false);
                     return undefined;
                 }
                 sourceFile = Debug.assertDefined(commandLine.options.configFile);
+                addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             }
             else {
                 // An absolute path pointing to the containing directory of the config file
