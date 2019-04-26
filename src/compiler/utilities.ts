@@ -101,7 +101,12 @@ namespace ts {
     }
 
     export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
-        return oldOptions.configFilePath !== newOptions.configFilePath || moduleResolutionOptionDeclarations.some(o =>
+        return oldOptions.configFilePath !== newOptions.configFilePath ||
+            optionsHaveModuleResolutionChanges(oldOptions, newOptions);
+    }
+
+    export function optionsHaveModuleResolutionChanges(oldOptions: CompilerOptions, newOptions: CompilerOptions) {
+        return moduleResolutionOptionDeclarations.some(o =>
             !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
