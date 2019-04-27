@@ -14860,6 +14860,14 @@ namespace ts {
                         target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
                     }
                 }
+                else if (target.flags & TypeFlags.Substitution) {
+                    target = (target as SubstitutionType).typeVariable;
+                }
+                else if (target.flags & TypeFlags.IndexedAccess && (
+                    (<IndexedAccessType>target).objectType.flags & TypeFlags.Substitution ||
+                    (<IndexedAccessType>target).indexType.flags & TypeFlags.Substitution)) {
+                    target = getIndexedAccessType(getActualTypeVariable((<IndexedAccessType>target).objectType), getActualTypeVariable((<IndexedAccessType>target).indexType));
+                }
                 if (target.flags & TypeFlags.TypeVariable) {
                     // If target is a type parameter, make an inference, unless the source type contains
                     // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
@@ -14920,9 +14928,6 @@ namespace ts {
                             }
                         }
                     }
-                }
-                else if (target.flags & TypeFlags.Substitution) {
-                    inferFromTypes(source, (target as SubstitutionType).typeVariable);
                 }
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // If source and target are references to the same generic type, infer from type arguments
