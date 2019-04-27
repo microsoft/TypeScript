@@ -42,6 +42,9 @@ namespace ts.codefix {
 
         // Property declarations
         Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code,
+
+        // Function expressions and declarations
+        Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code,
     ];
     registerCodeFix({
         errorCodes,
@@ -176,6 +179,14 @@ namespace ts.codefix {
                 }
                 return undefined;
 
+            // Function 'this'
+            case Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation.code:
+                if (textChanges.isThisTypeAnnotatable(containingFunction) && markSeen(containingFunction)) {
+                    annotateThis(changes, sourceFile, containingFunction, program, host, cancellationToken);
+                    return containingFunction;
+                }
+                return undefined;
+
             default:
                 return Debug.fail(String(errorCode));
         }
@@ -210,6 +221,25 @@ namespace ts.codefix {
                 }
             }
             if (needParens) changes.insertNodeAfter(sourceFile, last(containingFunction.parameters), createToken(SyntaxKind.CloseParenToken));
+        }
+    }
+
+    function annotateThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: textChanges.ThisTypeAnnotatable, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken) {
+        const thisInference = inferTypeForThisFromUsage(containingFunction, program, cancellationToken);
+        if (!thisInference) {
+            return;
+        }
+
+        const typeNode = getTypeNodeIfAccessible(thisInference, containingFunction, program, host);
+        if (!typeNode) {
+            return;
+        }
+
+        if (isInJSFile(containingFunction)) {
+            annotateJSDocThis(changes, sourceFile, containingFunction, typeNode, program, host);
+        }
+        else {
+            changes.tryInsertThisTypeAnnotation(sourceFile, containingFunction, typeNode);
         }
     }
 
@@ -263,6 +293,12 @@ namespace ts.codefix {
             return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
+    }
+
+    function annotateJSDocThis(changes: textChanges.ChangeTracker, sourceFile: SourceFile, containingFunction: FunctionLike, typeNode: TypeNode, _program: Program, _host: LanguageServiceHost) {
+        addJSDocTags(changes, sourceFile, containingFunction, [
+            createJSDocParamTag(createIdentifier("this"), /* isBracketed */ false, createJSDocTypeExpression(typeNode)),
+        ]);
     }
 
     function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: ReadonlyArray<JSDocTag>): void {
@@ -340,6 +376,27 @@ namespace ts.codefix {
         }
     }
 
+    function inferTypeForThisFromUsage(containingFunction: SignatureDeclaration, program: Program, cancellationToken: CancellationToken) {
+        let searchToken;
+
+        switch (containingFunction.kind) {
+            case SyntaxKind.FunctionExpression:
+                const parent = containingFunction.parent;
+                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
+                    parent.name :
+                    containingFunction.name;
+                break;
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.MethodDeclaration:
+                searchToken = containingFunction.name;
+                break;
+        }
+
+        if (searchToken) {
+            return InferFromReference.inferTypeForThisFromReferences(getReferences(searchToken, program, cancellationToken), program, cancellationToken);
+        }
+    }
+
     interface ParameterInference {
         readonly declaration: ParameterDeclaration;
         readonly type: Type;
@@ -364,6 +421,7 @@ namespace ts.codefix {
             constructContexts?: CallContext[];
             numberIndexContext?: UsageContext;
             stringIndexContext?: UsageContext;
+            thisType?: Type;
         }
 
         export function inferTypesFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type[] {
@@ -421,6 +479,27 @@ namespace ts.codefix {
             });
         }
 
+        export function inferTypeForThisFromReferences(references: ReadonlyArray<Identifier>, program: Program, cancellationToken: CancellationToken) {
+            if (references.length === 0) {
+                return undefined;
+            }
+
+            const checker = program.getTypeChecker();
+            const candidateTypes: Type[] = [];
+            const usageContext: UsageContext = {};
+
+            for (const reference of references) {
+                cancellationToken.throwIfCancellationRequested();
+                inferTypeFromContext(reference, checker, usageContext);
+            }
+
+            if (usageContext.thisType) {
+                candidateTypes.push(usageContext.thisType);
+            }
+
+            return unifyFromContext(candidateTypes, checker);
+        }
+
         function inferTypeFromContext(node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
             while (isRightSideOfQualifiedNameOrPropertyAccess(node)) {
                 node = <Expression>node.parent;
@@ -454,6 +533,10 @@ namespace ts.codefix {
                     break;
                 case SyntaxKind.ElementAccessExpression:
                     inferTypeFromPropertyElementExpressionContext(<ElementAccessExpression>node.parent, node, checker, usageContext);
+                    break;
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                    inferTypeFromPropertyAssignment(<PropertyAssignment | ShorthandPropertyAssignment>node.parent, checker, usageContext);
                     break;
                 case SyntaxKind.VariableDeclaration: {
                     const { name, initializer } = node.parent as VariableDeclaration;
@@ -645,6 +728,17 @@ namespace ts.codefix {
                     usageContext.stringIndexContext = indexUsageContext;
                 }
             }
+        }
+
+        function inferTypeFromPropertyAssignment(assignment: PropertyAssignment | ShorthandPropertyAssignment, checker: TypeChecker, usageContext: UsageContext) {
+            const objectLiteral = isShorthandPropertyAssignment(assignment) ?
+                assignment.parent :
+                assignment.parent.parent;
+            const nodeWithRealType = isVariableDeclaration(objectLiteral.parent) ?
+                objectLiteral.parent :
+                objectLiteral;
+
+            usageContext.thisType = checker.getTypeAtLocation(nodeWithRealType);
         }
 
         interface Priority {
