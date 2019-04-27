@@ -538,6 +538,7 @@ namespace ts {
         let deferredGlobalExtractSymbol: Symbol;
         let deferredGlobalExcludeSymbol: Symbol;
         let deferredGlobalPickSymbol: Symbol;
+        let deferredGlobalOmitSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
@@ -4939,6 +4940,12 @@ namespace ts {
                 if (omitKeyType.flags & TypeFlags.Never) {
                     return source;
                 }
+
+                const omitTypeAlias = getGlobalOmitSymbol();
+                if (omitTypeAlias) {
+                    return getTypeAliasInstantiation(omitTypeAlias, [source, omitKeyType]);
+                }
+
                 const pickTypeAlias = getGlobalPickSymbol();
                 const excludeTypeAlias = getGlobalExcludeSymbol();
                 if (!pickTypeAlias || !excludeTypeAlias) {
@@ -9280,6 +9287,10 @@ namespace ts {
 
         function getGlobalPickSymbol(): Symbol {
             return deferredGlobalPickSymbol || (deferredGlobalPickSymbol = getGlobalSymbol("Pick" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        }
+
+        function getGlobalOmitSymbol(): Symbol {
+            return deferredGlobalOmitSymbol || (deferredGlobalOmitSymbol = getGlobalSymbol("Omit" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
         function getGlobalBigIntType(reportErrors: boolean) {
