@@ -10080,7 +10080,7 @@ namespace ts {
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                         return indexInfo.type;
                     }
-                    if (indexInfo.isReadonly && (accessFlags & AccessFlags.Writing || accessExpression && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression)))) {
+                    if (indexInfo.isReadonly && accessExpression && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression))) {
                         if (accessExpression) {
                             error(accessExpression, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
                             return indexInfo.type;
