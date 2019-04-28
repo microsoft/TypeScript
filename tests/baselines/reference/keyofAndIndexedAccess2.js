@@ -129,7 +129,12 @@ function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void
 // Repro from #31149
 
 function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
-    cb(param[0]); // Argument of type 'string' is not assignable to parameter of type 'T[number]'.
+    cb(param[0]);
+}
+
+function fn4<K extends number>() {
+    let x: Array<string>[K] = 'abc';
+    let y: ReadonlyArray<string>[K] = 'abc';
 }
 
 
@@ -215,5 +220,9 @@ function fn2(param, cb) {
 }
 // Repro from #31149
 function fn3(param, cb) {
-    cb(param[0]); // Argument of type 'string' is not assignable to parameter of type 'T[number]'.
+    cb(param[0]);
+}
+function fn4() {
+    let x = 'abc';
+    let y = 'abc';
 }
