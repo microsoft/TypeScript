@@ -85,6 +85,69 @@ function narrowToNeverUnknown(data: unknown): "Cool stuff!" | 0 {
     }
 }
 
+type Foo = { kind: "a", a: number } | { kind: "b", b: number };
+type Bar = { kind: "c", c: number } | { kind: "d", d: number };
+
+declare function isFoo(x: unknown): x is Foo;
+declare function isBar(x: unknown): x is Bar;
+
+function blah(x: unknown) {
+    if (isFoo(x)) {
+        if (x.kind === "a") {
+            let a = x.a;
+        }
+        else if (x.kind === "b") {
+            let b = x.b;
+        }
+    }
+    else if (isBar(x)) {
+        if (x.kind === "c") {
+            let c = x.c;
+        }
+        else if (x.kind === "d") {
+            let d = x.d;
+        }
+    }
+    x  // unknown
+}
+
+type PrimitiveUnion = number | string
+type FooComplex = { kind: "a", a: number } | { kind: "b", b: number } | number;
+type BarComplex = { kind: "c", c: number } | { kind: "d", d: number } | string;
+
+declare function isPrimitiveUnion(x: unknown): x is PrimitiveUnion;
+declare function isFooComplex(x: unknown): x is FooComplex;
+declare function isBarComplex(x: unknown): x is BarComplex;
+
+function bluergh(x: unknown) {
+    if (isPrimitiveUnion(x)) {
+        let a: number | string = x;
+    }
+    if (isFooComplex(x) && typeof x === "object") {
+        if (x.kind === "a") {
+            let a = x.a;
+        }
+        else if (x.kind === "b") {
+            let b = x.b;
+        }
+    }
+    if (isPrimitiveUnion(x)) {
+        let a: number | string = x;
+    }
+    if (isBarComplex(x) && typeof x === "object") {
+        if (x.kind === "c") {
+            let c = x.c;
+        }
+        else if (x.kind === "d") {
+            let d = x.d;
+        }
+    }
+    if (isPrimitiveUnion(x)) {
+        let a: number | string = x;
+    }
+    x  // unknown
+}
+
 
 //// [discriminantsAndTypePredicates.js]
 // Repro from #10145
@@ -145,4 +208,51 @@ function narrowToNeverUnknown(data) {
         }
         return data;
     }
+}
+function blah(x) {
+    if (isFoo(x)) {
+        if (x.kind === "a") {
+            var a = x.a;
+        }
+        else if (x.kind === "b") {
+            var b = x.b;
+        }
+    }
+    else if (isBar(x)) {
+        if (x.kind === "c") {
+            var c = x.c;
+        }
+        else if (x.kind === "d") {
+            var d = x.d;
+        }
+    }
+    x; // unknown
+}
+function bluergh(x) {
+    if (isPrimitiveUnion(x)) {
+        var a = x;
+    }
+    if (isFooComplex(x) && typeof x === "object") {
+        if (x.kind === "a") {
+            var a = x.a;
+        }
+        else if (x.kind === "b") {
+            var b = x.b;
+        }
+    }
+    if (isPrimitiveUnion(x)) {
+        var a = x;
+    }
+    if (isBarComplex(x) && typeof x === "object") {
+        if (x.kind === "c") {
+            var c = x.c;
+        }
+        else if (x.kind === "d") {
+            var d = x.d;
+        }
+    }
+    if (isPrimitiveUnion(x)) {
+        var a = x;
+    }
+    x; // unknown
 }

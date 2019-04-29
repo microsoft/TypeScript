@@ -16035,7 +16035,7 @@ namespace ts {
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string | undefined;
             let flowDepth = 0;
-            let firstDiscriminable: UnionType | undefined;
+            let rootDiscriminable: UnionType | undefined;
             if (flowAnalysisDisabled) {
                 return errorType;
             }
@@ -16379,14 +16379,9 @@ namespace ts {
                 return result;
             }
 
-            function getTypeToDiscriminate(computedType: Type): Type {
-                if (firstDiscriminable) {
-                    return firstDiscriminable;
-                }
-                if (declaredType.flags & TypeFlags.Union) {
-                    return firstDiscriminable = <UnionType>declaredType;
-                }
-                return (computedType.flags & TypeFlags.Union) ? (firstDiscriminable = <UnionType>computedType) : declaredType;
+            function isFlowToRootDiscriminant(type: Type, candidate: Type, isRelated: (t1: Type, t2: Type) => boolean) {
+                return !(declaredType.flags & TypeFlags.Union) && !(type.flags & TypeFlags.Union) && (candidate.flags & TypeFlags.Union) !== 0
+                    && isRelated(candidate, type);
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
@@ -16465,10 +16460,10 @@ namespace ts {
                         if (isMatchingReference(reference, right)) {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
-                        if (isMatchingReferenceDiscriminant(left, getTypeToDiscriminate(type))) {
+                        if (isMatchingReferenceDiscriminant(left, rootDiscriminable || declaredType)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
-                        if (isMatchingReferenceDiscriminant(right, getTypeToDiscriminate(type))) {
+                        if (isMatchingReferenceDiscriminant(right, rootDiscriminable || declaredType)) {
                             return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
@@ -16762,6 +16757,14 @@ namespace ts {
             }
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
+                if (isFlowToRootDiscriminant(type, candidate, isRelated)) {
+                    if (assumeTrue) {
+                        rootDiscriminable = candidate as UnionType;
+                    }
+                    else {
+                        rootDiscriminable = undefined;
+                    }
+                }
                 if (!assumeTrue) {
                     return filterType(type, t => !isRelated(t, candidate));
                 }
