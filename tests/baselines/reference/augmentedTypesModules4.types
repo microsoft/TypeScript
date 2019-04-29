@@ -12,7 +12,7 @@ module m4a { var y = 2; }
 
 enum m4a { One }
 >m4a : m4a
->One : m4a
+>One : m4a.One
 
 module m4b { export var y = 2; }
 >m4b : typeof m4b
@@ -21,14 +21,14 @@ module m4b { export var y = 2; }
 
 enum m4b { One }
 >m4b : m4b
->One : m4b
+>One : m4b.One
 
 module m4c { interface I { foo(): void } }
 >foo : () => void
 
 enum m4c { One }
 >m4c : m4c
->One : m4c
+>One : m4c.One
 
 module m4d { class C { foo() { } } }
 >m4d : typeof m4d
@@ -37,7 +37,7 @@ module m4d { class C { foo() { } } }
 
 enum m4d { One }
 >m4d : m4d
->One : m4d
+>One : m4d.One
 
 //// module then module
 

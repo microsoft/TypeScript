@@ -189,9 +189,9 @@ var k = fun((Math.random() < 0.5 ? (x => x) : (x => undefined)), x => x, 10);
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->x => x : (x: any) => any
->x : any
->x : any
+>x => x : (x: number) => number
+>x : number
+>x : number
 >10 : 10
 
 var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)), 10);
@@ -217,11 +217,11 @@ var l = fun(((Math.random() < 0.5 ? ((x => x)) : ((x => undefined)))), ((x => x)
 >x => undefined : (x: number) => any
 >x : number
 >undefined : undefined
->((x => x)) : (x: any) => any
->(x => x) : (x: any) => any
->x => x : (x: any) => any
->x : any
->x : any
+>((x => x)) : (x: number) => number
+>(x => x) : (x: number) => number
+>x => x : (x: number) => number
+>x : number
+>x : number
 >10 : 10
 
 var lambda1: (x: number) => number = x => x;

@@ -17,11 +17,7 @@
 ////var p2 = point./*2*/origin;
 ////var b = point./*3*/equals(p1, p2);
 
-goTo.marker('1');
-verify.completionListContains('point');
-
-goTo.marker('2');
-verify.completionListContains('origin');
-
-goTo.marker('3');
-verify.completionListContains('equals');
+verify.completions(
+    { marker: "1", includes: "point", isNewIdentifierLocation: true },
+    { marker: ["2", "3"], exact: ["equals", "origin", ...completion.functionMembersWithPrototype] },
+);

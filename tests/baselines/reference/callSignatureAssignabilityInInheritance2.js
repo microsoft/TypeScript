@@ -62,7 +62,7 @@ interface I extends A {
     a11: <T extends Base>(x: T, y: T) => T; // ok
     a12: <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
     a13: <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
-    a14: <T>(x: { a: T; b: T }) => T; // ok, best common type yields T = {} but that's satisfactory for this signature
+    a14: <T, U>(x: { a: T; b: U }) => T; // ok
     a15: <T>(x: T) => T[]; // ok
     a16: <T extends Base>(x: T) => number[]; // ok
     a17: <T>(x: (a: T) => T) => T[]; // ok
@@ -77,7 +77,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }

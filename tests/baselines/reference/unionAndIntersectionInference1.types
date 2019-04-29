@@ -179,3 +179,85 @@ pigify(mbp).walks; // Ok, mbp is treated as Man
 >mbp : Man & Bear
 >walks : boolean
 
+// Repros from #29815
+
+interface ITest {
+  name: 'test'
+>name : "test"
+}
+
+const createTestAsync = (): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' }))
+>createTestAsync : () => Promise<ITest>
+>(): Promise<ITest> => Promise.resolve().then(() => ({ name: 'test' })) : () => Promise<ITest>
+>Promise.resolve().then(() => ({ name: 'test' })) : Promise<ITest | { name: "test"; }>
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>Promise.resolve() : Promise<void>
+>Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>Promise : PromiseConstructor
+>resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
+>() => ({ name: 'test' }) : () => { name: "test"; }
+>({ name: 'test' }) : { name: "test"; }
+>{ name: 'test' } : { name: "test"; }
+>name : "test"
+>'test' : "test"
+
+const createTest = (): ITest => {
+>createTest : () => ITest
+>(): ITest => {  return { name: 'test' }} : () => ITest
+
+  return { name: 'test' }
+>{ name: 'test' } : { name: "test"; }
+>name : "test"
+>'test' : "test"
+}
+
+declare function f1<T, U>(x: T | U): T | U;
+>f1 : <T, U>(x: T | U) => T | U
+>x : T | U
+
+declare function f2<T, U>(x: T, y: U): T | U;
+>f2 : <T, U>(x: T, y: U) => T | U
+>x : T
+>y : U
+
+let x1: string = f1('a');
+>x1 : string
+>f1('a') : "a"
+>f1 : <T, U>(x: T | U) => T | U
+>'a' : "a"
+
+let x2: string = f2('a', 'b');
+>x2 : string
+>f2('a', 'b') : "a" | "b"
+>f2 : <T, U>(x: T, y: U) => T | U
+>'a' : "a"
+>'b' : "b"
+
+// Repro from #30442
+
+const func = <T>() => {};
+>func : <T>() => void
+><T>() => {} : <T>() => void
+
+const assign = <T, U>(a: T, b: U) => Object.assign(a, b);
+>assign : <T, U>(a: T, b: U) => T & U
+><T, U>(a: T, b: U) => Object.assign(a, b) : <T, U>(a: T, b: U) => T & U
+>a : T
+>b : U
+>Object.assign(a, b) : T & U
+>Object.assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object : ObjectConstructor
+>assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>a : T
+>b : U
+
+const res: (() => void) & { func: any } = assign(() => {}, { func });
+>res : (() => void) & { func: any; }
+>func : any
+>assign(() => {}, { func }) : (() => void) & { func: <T>() => void; }
+>assign : <T, U>(a: T, b: U) => T & U
+>() => {} : () => void
+>{ func } : { func: <T>() => void; }
+>func : <T>() => void
+

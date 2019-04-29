@@ -143,7 +143,7 @@ class D10 extends Base {
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 class D11 extends Base {
 >D11 : D11

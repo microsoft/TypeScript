@@ -19,9 +19,6 @@ verify.importFixAtPosition([
 `import { f1 } from "b/x";
 
 f1();`,
-`import { f1 } from "../b/x";
-
-f1();`
 ]);
 
 verify.importFixAtPosition([

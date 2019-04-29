@@ -16,25 +16,25 @@ i;
 >i : Symbol(i, Decl(a.js, 3, 3))
 
 function StaticToo() {
->StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2))
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
 
     this.i = 'more complex'
 >i : Symbol(StaticToo.i, Decl(a.js, 7, 22))
 }
 StaticToo.property = 'yep'
 >StaticToo.property : Symbol(StaticToo.property, Decl(a.js, 9, 1))
->StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2))
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
 >property : Symbol(StaticToo.property, Decl(a.js, 9, 1))
 
 var s = new StaticToo();
 >s : Symbol(s, Decl(a.js, 11, 3))
->StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2))
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
 
 s;
 >s : Symbol(s, Decl(a.js, 11, 3))
 
 StaticToo;
->StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2))
+>StaticToo : Symbol(StaticToo, Decl(a.js, 5, 2), Decl(a.js, 9, 1))
 
 // Both!
 function A () {
@@ -74,12 +74,12 @@ A.t = function g(m) {
 >m : Symbol(m, Decl(a.js, 26, 17))
 }
 var a = new A()
->a : Symbol(a, Decl(a.js, 29, 3))
+>a : Symbol(a, Decl(a.js, 29, 3), Decl(a.js, 31, 6))
 >A : Symbol(A, Decl(a.js, 13, 10), Decl(a.js, 24, 1))
 
 a.z(3)
 >a.z : Symbol(A.z, Decl(a.js, 20, 1))
->a : Symbol(a, Decl(a.js, 29, 3))
+>a : Symbol(a, Decl(a.js, 29, 3), Decl(a.js, 31, 6))
 >z : Symbol(A.z, Decl(a.js, 20, 1))
 
 A.t(2)
@@ -89,6 +89,6 @@ A.t(2)
 
 a.second = 1
 >a.second : Symbol(A.second, Decl(a.js, 17, 14))
->a : Symbol(a, Decl(a.js, 29, 3))
+>a : Symbol(a, Decl(a.js, 29, 3), Decl(a.js, 31, 6))
 >second : Symbol(A.second, Decl(a.js, 17, 14))
 

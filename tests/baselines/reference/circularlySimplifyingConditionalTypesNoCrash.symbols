@@ -1,0 +1,157 @@
+=== tests/cases/compiler/circularlySimplifyingConditionalTypesNoCrash.ts ===
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+>Omit : Symbol(Omit, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 0))
+>T : Symbol(T, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 10))
+>K : Symbol(K, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 12))
+>T : Symbol(T, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 10))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 10))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 10))
+>K : Symbol(K, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 12))
+
+type Shared< // Circularly self constraining type, defered thanks to mapping
+>Shared : Symbol(Shared, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 63))
+
+    InjectedProps,
+>InjectedProps : Symbol(InjectedProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 2, 12))
+
+    DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>
+>DecorationTargetProps : Symbol(DecorationTargetProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 3, 18))
+>Shared : Symbol(Shared, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 63))
+>InjectedProps : Symbol(InjectedProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 2, 12))
+>DecorationTargetProps : Symbol(DecorationTargetProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 3, 18))
+
+    > = {
+        [P in Extract<keyof InjectedProps, keyof DecorationTargetProps>]: InjectedProps[P] extends DecorationTargetProps[P] ? DecorationTargetProps[P] : never;
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 6, 9))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>InjectedProps : Symbol(InjectedProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 2, 12))
+>DecorationTargetProps : Symbol(DecorationTargetProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 3, 18))
+>InjectedProps : Symbol(InjectedProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 2, 12))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 6, 9))
+>DecorationTargetProps : Symbol(DecorationTargetProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 3, 18))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 6, 9))
+>DecorationTargetProps : Symbol(DecorationTargetProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 3, 18))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 6, 9))
+
+    };
+
+interface ComponentClass<P> {
+>ComponentClass : Symbol(ComponentClass, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 7, 6))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 9, 25))
+
+    defaultProps?: Partial<P>; // Inference target is also mapped _and_ optional
+>defaultProps : Symbol(ComponentClass.defaultProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 9, 29))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 9, 25))
+}
+
+interface InferableComponentEnhancerWithProps<TInjectedProps, TNeedsProps> {
+>InferableComponentEnhancerWithProps : Symbol(InferableComponentEnhancerWithProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 11, 1))
+>TInjectedProps : Symbol(TInjectedProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 13, 46))
+>TNeedsProps : Symbol(TNeedsProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 13, 61))
+
+    <P extends Shared<TInjectedProps, P>>(
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 14, 5))
+>Shared : Symbol(Shared, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 63))
+>TInjectedProps : Symbol(TInjectedProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 13, 46))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 14, 5))
+
+        component: ComponentClass<P>
+>component : Symbol(component, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 14, 42))
+>ComponentClass : Symbol(ComponentClass, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 7, 6))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 14, 5))
+
+    ): ComponentClass<Omit<P, keyof Shared<TInjectedProps, P>> & TNeedsProps> & { WrappedComponent: ComponentClass<P> }
+>ComponentClass : Symbol(ComponentClass, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 7, 6))
+>Omit : Symbol(Omit, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 0))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 14, 5))
+>Shared : Symbol(Shared, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 0, 63))
+>TInjectedProps : Symbol(TInjectedProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 13, 46))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 14, 5))
+>TNeedsProps : Symbol(TNeedsProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 13, 61))
+>WrappedComponent : Symbol(WrappedComponent, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 16, 81))
+>ComponentClass : Symbol(ComponentClass, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 7, 6))
+>P : Symbol(P, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 14, 5))
+
+} // Then intersected with and indexed via Omit and &
+
+interface Connect { // Then strictly compared with another signature in its context
+>Connect : Symbol(Connect, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 17, 1))
+
+    <TStateProps, TOwnProps>(
+>TStateProps : Symbol(TStateProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 20, 5))
+>TOwnProps : Symbol(TOwnProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 20, 17))
+
+        mapStateToProps: unknown,
+>mapStateToProps : Symbol(mapStateToProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 20, 29))
+
+    ): InferableComponentEnhancerWithProps<TStateProps, TOwnProps>;
+>InferableComponentEnhancerWithProps : Symbol(InferableComponentEnhancerWithProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 11, 1))
+>TStateProps : Symbol(TStateProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 20, 5))
+>TOwnProps : Symbol(TOwnProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 20, 17))
+
+    <TDispatchProps, TOwnProps>(
+>TDispatchProps : Symbol(TDispatchProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 24, 5))
+>TOwnProps : Symbol(TOwnProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 24, 20))
+
+        mapStateToProps: null | undefined,
+>mapStateToProps : Symbol(mapStateToProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 24, 32))
+
+        mapDispatchToProps: unknown,
+>mapDispatchToProps : Symbol(mapDispatchToProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 25, 42))
+
+        mergeProps: null | undefined,
+>mergeProps : Symbol(mergeProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 26, 36))
+
+        options: unknown
+>options : Symbol(options, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 27, 37))
+
+    ): InferableComponentEnhancerWithProps<TDispatchProps, TOwnProps>;
+>InferableComponentEnhancerWithProps : Symbol(InferableComponentEnhancerWithProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 11, 1))
+>TDispatchProps : Symbol(TDispatchProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 24, 5))
+>TOwnProps : Symbol(TOwnProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 24, 20))
+}
+
+declare var connect: Connect;
+>connect : Symbol(connect, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 32, 11))
+>Connect : Symbol(Connect, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 17, 1))
+
+const myStoreConnect: Connect = function(
+>myStoreConnect : Symbol(myStoreConnect, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 34, 5))
+>Connect : Symbol(Connect, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 17, 1))
+
+    mapStateToProps?: any,
+>mapStateToProps : Symbol(mapStateToProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 34, 41))
+
+    mapDispatchToProps?: any,
+>mapDispatchToProps : Symbol(mapDispatchToProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 35, 26))
+
+    mergeProps?: any,
+>mergeProps : Symbol(mergeProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 36, 29))
+
+    options: unknown = {},
+>options : Symbol(options, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 37, 21))
+
+) {
+    return connect(
+>connect : Symbol(connect, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 32, 11))
+
+        mapStateToProps,
+>mapStateToProps : Symbol(mapStateToProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 34, 41))
+
+        mapDispatchToProps,
+>mapDispatchToProps : Symbol(mapDispatchToProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 35, 26))
+
+        mergeProps,
+>mergeProps : Symbol(mergeProps, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 36, 29))
+
+        options,
+>options : Symbol(options, Decl(circularlySimplifyingConditionalTypesNoCrash.ts, 37, 21))
+
+    );
+};
+
+export {};
+

@@ -6,17 +6,17 @@ var x = 0;
 
 /// @ts-ignore
 x();
->x() : any
+>x() : error
 >x : number
 
 /// @ts-ignore
 x();
->x() : any
+>x() : error
 >x : number
 
 /// @ts-ignore
 x(
->x(    2,    3) : any
+>x(    2,    3) : error
 >x : number
 
     2,
@@ -34,13 +34,13 @@ x(
 // @another
 
 x();
->x() : any
+>x() : error
 >x : number
 
 
 
 // @ts-ignore: no call signature
 x();
->x() : any
+>x() : error
 >x : number
 

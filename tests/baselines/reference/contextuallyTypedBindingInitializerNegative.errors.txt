@@ -1,13 +1,8 @@
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(4,20): error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(5,23): error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(6,25): error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(11,40): error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(16,23): error TS2322: Type '(arg: string) => number' is not assignable to type '(s: string) => string'.
-  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(4,38): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(5,41): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(6,43): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(11,51): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(16,35): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(21,22): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts(26,14): error TS2322: Type '"baz"' is not assignable to type '"foo" | "bar"'.
 
@@ -17,34 +12,33 @@ tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTyp
         show: (x: number) => string;
     }
     function f({ show: showRename = v => v }: Show) {}
-                       ~~~~~~~~~~
-!!! error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                                         ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:2:11: The expected type comes from the return type of this signature.
     function f2({ "show": showRename = v => v }: Show) {}
-                          ~~~~~~~~~~
-!!! error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                                            ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:2:11: The expected type comes from the return type of this signature.
     function f3({ ["show"]: showRename = v => v }: Show) {}
-                            ~~~~~~~~~~
-!!! error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                                              ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:2:11: The expected type comes from the return type of this signature.
     
     interface Nested {
         nested: Show
     }
     function ff({ nested: nestedRename = { show: v => v } }: Nested) {}
-                                           ~~~~
-!!! error TS2322: Type '(v: number) => number' is not assignable to type '(x: number) => string'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
-!!! related TS6500 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:2:5: The expected type comes from property 'show' which is declared here on type 'Show'
+                                                      ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:2:11: The expected type comes from the return type of this signature.
     
     interface StringIdentity {
         stringIdentity(s: string): string;
     }
     let { stringIdentity: id = arg => arg.length }: StringIdentity = { stringIdentity: x => x};
-                          ~~
-!!! error TS2322: Type '(arg: string) => number' is not assignable to type '(s: string) => string'.
-!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+                                      ~~~~~~~~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+!!! related TS6502 tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedBindingInitializerNegative.ts:14:5: The expected type comes from the return type of this signature.
     
     interface Tuples {
         prop: [string, number];

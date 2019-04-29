@@ -28,8 +28,8 @@ class Bar extends Foo {
 >symbol : symbol
 
         return super[symbol]();
->super[symbol]() : any
->super[symbol] : any
+>super[symbol]() : error
+>super[symbol] : error
 >super : Foo
 >symbol : symbol
     }

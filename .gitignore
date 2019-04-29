@@ -76,3 +76,4 @@ tests/cases/user/*/**/*.d.ts
 tests/baselines/reference/dt
 .failed-tests
 TEST-results.xml
+package-lock.json

@@ -1,0 +1,15 @@
+=== tests/cases/compiler/a.js ===
+/**
+No type information for this code. * A number, or a string containing a number.
+No type information for this code. * @typedef {(number|string)} NumberLike
+No type information for this code. */
+No type information for this code.
+No type information for this code.export default /** @type {NumberLike[]} */([ ]);
+No type information for this code.
+No type information for this code.=== tests/cases/compiler/b.ts ===
+import A from './a'
+>A : Symbol(A, Decl(b.ts, 0, 6))
+
+A[0]
+>A : Symbol(A, Decl(b.ts, 0, 6))
+

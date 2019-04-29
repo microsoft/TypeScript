@@ -1,0 +1,28 @@
+=== /a.ts ===
+interface I {}
+export default I;
+>I : I
+
+=== /b.ts ===
+export {};
+declare module './a' {
+>'./a' : typeof import("/a")
+
+    export default interface I { x: number; }
+>x : number
+}
+
+=== /c.ts ===
+import I from "./a";
+>I : any
+
+function f(i: I) {
+>f : (i: I) => void
+>i : I
+
+    i.x;
+>i.x : number
+>i : I
+>x : number
+}
+

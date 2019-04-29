@@ -5,4 +5,7 @@ function foo(x:any) {}
 
 foo(()=>this.window);
 >foo : Symbol(foo, Decl(topLevelLambda2.ts, 0, 0))
+>this.window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>this : Symbol(globalThis)
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 

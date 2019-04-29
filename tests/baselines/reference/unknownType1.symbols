@@ -314,7 +314,7 @@ function f23<T extends unknown>(x: T) {
 >x : Symbol(x, Decl(unknownType1.ts, 118, 32))
 }
 
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
 >f24 : Symbol(f24, Decl(unknownType1.ts, 120, 1))
@@ -328,7 +328,7 @@ function f24(x: { [x: string]: unknown }) {
 >x : Symbol(x, Decl(unknownType1.ts, 124, 13))
 >a : Symbol(a, Decl(unknownType1.ts, 126, 9))
 
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
 >x : Symbol(x, Decl(unknownType1.ts, 124, 13))
 
     x = 123;  // Error
@@ -405,5 +405,49 @@ class C1 {
 
     c: any;
 >c : Symbol(C1.c, Decl(unknownType1.ts, 161, 15))
+}
+
+// Type parameter with explicit 'unknown' constraint not assignable to '{}'
+
+function f30<T, U extends unknown>(t: T, u: U) {
+>f30 : Symbol(f30, Decl(unknownType1.ts, 163, 1))
+>T : Symbol(T, Decl(unknownType1.ts, 167, 13))
+>U : Symbol(U, Decl(unknownType1.ts, 167, 15))
+>t : Symbol(t, Decl(unknownType1.ts, 167, 35))
+>T : Symbol(T, Decl(unknownType1.ts, 167, 13))
+>u : Symbol(u, Decl(unknownType1.ts, 167, 40))
+>U : Symbol(U, Decl(unknownType1.ts, 167, 15))
+
+    let x: {} = t;
+>x : Symbol(x, Decl(unknownType1.ts, 168, 7))
+>t : Symbol(t, Decl(unknownType1.ts, 167, 35))
+
+    let y: {} = u;
+>y : Symbol(y, Decl(unknownType1.ts, 169, 7))
+>u : Symbol(u, Decl(unknownType1.ts, 167, 40))
+}
+
+// Repro from #26796
+
+type Test1 = [unknown] extends [{}] ? true : false;  // false
+>Test1 : Symbol(Test1, Decl(unknownType1.ts, 170, 1))
+
+type IsDefinitelyDefined<T extends unknown> = [T] extends [{}] ? true : false;
+>IsDefinitelyDefined : Symbol(IsDefinitelyDefined, Decl(unknownType1.ts, 174, 51))
+>T : Symbol(T, Decl(unknownType1.ts, 175, 25))
+>T : Symbol(T, Decl(unknownType1.ts, 175, 25))
+
+type Test2 = IsDefinitelyDefined<unknown>;  // false
+>Test2 : Symbol(Test2, Decl(unknownType1.ts, 175, 78))
+>IsDefinitelyDefined : Symbol(IsDefinitelyDefined, Decl(unknownType1.ts, 174, 51))
+
+function oops<T extends unknown>(arg: T): {} {
+>oops : Symbol(oops, Decl(unknownType1.ts, 176, 42))
+>T : Symbol(T, Decl(unknownType1.ts, 178, 14))
+>arg : Symbol(arg, Decl(unknownType1.ts, 178, 33))
+>T : Symbol(T, Decl(unknownType1.ts, 178, 14))
+
+    return arg;  // Error
+>arg : Symbol(arg, Decl(unknownType1.ts, 178, 33))
 }
 

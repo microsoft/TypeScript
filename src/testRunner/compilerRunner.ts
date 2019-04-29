@@ -5,7 +5,7 @@ const enum CompilerTestType {
 }
 
 interface CompilerFileBasedTest extends Harness.FileBasedTest {
-    payload?: Harness.TestCaseParser.TestCaseContent;
+    readonly content?: string;
 }
 
 class CompilerBaselineRunner extends RunnerBase {
@@ -13,7 +13,7 @@ class CompilerBaselineRunner extends RunnerBase {
     private testSuiteName: TestRunnerKind;
     private emit: boolean;
 
-    public options: string;
+    public options: string | undefined;
 
     constructor(public testType: CompilerTestType) {
         super();
@@ -74,7 +74,14 @@ class CompilerBaselineRunner extends RunnerBase {
         // Mocha holds onto the closure environment of the describe callback even after the test is done.
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
-        before(() => { compilerTest = new CompilerTest(fileName, test && test.payload, configuration); });
+        before(() => {
+            let payload;
+            if (test && test.content) {
+                const rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/";
+                payload = Harness.TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
+            }
+            compilerTest = new CompilerTest(fileName, payload, configuration);
+        });
         it(`Correct errors for ${fileName}`, () => { compilerTest.verifyDiagnostics(); });
         it(`Correct module resolution tracing for ${fileName}`, () => { compilerTest.verifyModuleResolution(); });
         it(`Correct sourcemap content for ${fileName}`, () => { compilerTest.verifySourceMapRecord(); });
@@ -189,11 +196,9 @@ class CompilerTest {
     public static getConfigurations(file: string): CompilerFileBasedTest {
         // also see `parseCompilerTestConfigurations` in tests/webTestServer.ts
         const content = Harness.IO.readFile(file)!;
-        const rootDir = file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(file) + "/";
-        const payload = Harness.TestCaseParser.makeUnitsFromTest(content, file, rootDir);
         const settings = Harness.TestCaseParser.extractCompilerSettings(content);
         const configurations = Harness.getFileBasedTestConfigurations(settings, /*varyBy*/ ["module", "target"]);
-        return { file, payload, configurations };
+        return { file, configurations, content };
     }
 
     public verifyDiagnostics() {
@@ -207,24 +212,19 @@ class CompilerTest {
 
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
-            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".trace.json"), () => {
-                return utils.removeTestPathPrefixes(JSON.stringify(this.result.traces, undefined, 4));
-            });
+            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".trace.json"),
+                JSON.stringify(this.result.traces.map(utils.sanitizeTraceResolutionLogEntry), undefined, 4));
         }
     }
 
     public verifySourceMapRecord() {
         if (this.options.sourceMap || this.options.inlineSourceMap || this.options.declarationMap) {
-            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".sourcemap.txt"), () => {
-                const record = utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
-                if ((this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined) {
-                    // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
-                    /* tslint:disable:no-null-keyword */
-                    return null;
-                    /* tslint:enable:no-null-keyword */
-                }
-                return record;
-            });
+            const record = utils.removeTestPathPrefixes(this.result.getSourceMapRecord()!);
+            const baseline = (this.options.noEmitOnError && this.result.diagnostics.length !== 0) || record === undefined
+                // Because of the noEmitOnError option no files are created. We need to return null because baselining isn't required.
+                ? null // tslint:disable-line no-null-keyword
+                : record;
+            Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".sourcemap.txt"), baseline);
         }
     }
 
@@ -258,7 +258,13 @@ class CompilerTest {
         Harness.Compiler.doTypeAndSymbolBaseline(
             this.justName,
             this.result.program!,
-            this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)));
+            this.toBeCompiled.concat(this.otherFiles).filter(file => !!this.result.program!.getSourceFile(file.unitName)),
+            /*opts*/ undefined,
+            /*multifile*/ undefined,
+            /*skipTypeBaselines*/ undefined,
+            /*skipSymbolBaselines*/ undefined,
+            !!ts.length(this.result.diagnostics)
+        );
     }
 
     private makeUnitName(name: string, root: string) {

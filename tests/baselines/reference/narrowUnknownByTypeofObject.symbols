@@ -1,0 +1,13 @@
+=== tests/cases/compiler/narrowUnknownByTypeofObject.ts ===
+function foo(x: unknown) {
+>foo : Symbol(foo, Decl(narrowUnknownByTypeofObject.ts, 0, 0))
+>x : Symbol(x, Decl(narrowUnknownByTypeofObject.ts, 0, 13))
+
+    if (typeof x === "object") {
+>x : Symbol(x, Decl(narrowUnknownByTypeofObject.ts, 0, 13))
+
+        x
+>x : Symbol(x, Decl(narrowUnknownByTypeofObject.ts, 0, 13))
+    }
+}
+

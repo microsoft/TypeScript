@@ -14,7 +14,7 @@ var array = [{ x: "", y: true }]
 
 enum E { x }
 >E : E
->x : E
+>x : E.x
 
 for ({x, y = E.x} of array) {
 >{x, y = E.x} : { x: string; y?: number; }

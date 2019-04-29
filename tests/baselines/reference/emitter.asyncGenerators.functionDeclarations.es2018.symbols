@@ -1,0 +1,46 @@
+=== tests/cases/conformance/emitter/es2018/asyncGenerators/F1.ts ===
+async function * f1() {
+>f1 : Symbol(f1, Decl(F1.ts, 0, 0))
+}
+=== tests/cases/conformance/emitter/es2018/asyncGenerators/F2.ts ===
+async function * f2() {
+>f2 : Symbol(f2, Decl(F2.ts, 0, 0))
+
+    const x = yield;
+>x : Symbol(x, Decl(F2.ts, 1, 9))
+}
+=== tests/cases/conformance/emitter/es2018/asyncGenerators/F3.ts ===
+async function * f3() {
+>f3 : Symbol(f3, Decl(F3.ts, 0, 0))
+
+    const x = yield 1;
+>x : Symbol(x, Decl(F3.ts, 1, 9))
+}
+=== tests/cases/conformance/emitter/es2018/asyncGenerators/F4.ts ===
+async function * f4() {
+>f4 : Symbol(f4, Decl(F4.ts, 0, 0))
+
+    const x = yield* [1];
+>x : Symbol(x, Decl(F4.ts, 1, 9))
+}
+=== tests/cases/conformance/emitter/es2018/asyncGenerators/F5.ts ===
+async function * f5() {
+>f5 : Symbol(f5, Decl(F5.ts, 0, 0))
+
+    const x = yield* (async function*() { yield 1; })();
+>x : Symbol(x, Decl(F5.ts, 1, 9))
+}
+=== tests/cases/conformance/emitter/es2018/asyncGenerators/F6.ts ===
+async function * f6() {
+>f6 : Symbol(f6, Decl(F6.ts, 0, 0))
+
+    const x = await 1;
+>x : Symbol(x, Decl(F6.ts, 1, 9))
+}
+=== tests/cases/conformance/emitter/es2018/asyncGenerators/F7.ts ===
+async function * f7() {
+>f7 : Symbol(f7, Decl(F7.ts, 0, 0))
+
+    return 1;
+}
+

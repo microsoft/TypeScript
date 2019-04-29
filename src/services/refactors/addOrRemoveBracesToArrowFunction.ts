@@ -15,10 +15,10 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         addBraces: boolean;
     }
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
-        if (!info) return undefined;
+        if (!info) return emptyArray;
 
         return [{
             name: refactorName,
@@ -48,13 +48,13 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
             const returnStatement = createReturn(expression);
             body = createBlock([returnStatement], /* multiLine */ true);
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
+            copyLeadingComments(expression!, returnStatement, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ true);
         }
         else if (actionName === removeBracesActionName && returnStatement) {
             const actualExpression = expression || createVoidZero();
             body = needsParentheses(actualExpression) ? createParen(actualExpression) : actualExpression;
             suppressLeadingAndTrailingTrivia(body);
-            copyComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+            copyLeadingComments(returnStatement, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
         }
         else {
             Debug.fail("invalid action");

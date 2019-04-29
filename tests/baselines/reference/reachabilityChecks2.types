@@ -4,7 +4,7 @@ while (true) { }
 
 const enum E { X }
 >E : E
->X : E
+>X : E.X
 
 module A4 {
 >A4 : typeof A4
@@ -15,7 +15,7 @@ module A4 {
     module A {
         const enum E { X }
 >E : E
->X : E
+>X : E.X
     }
 }
 

@@ -23,7 +23,7 @@ namespace project {
         program?: ts.Program;
         compilerOptions?: ts.CompilerOptions;
         errors: ReadonlyArray<ts.Diagnostic>;
-        sourceMapData?: ReadonlyArray<ts.SourceMapData>;
+        sourceMapData?: ReadonlyArray<ts.SourceMapEmitResult>;
     }
 
     interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
@@ -67,7 +67,7 @@ namespace project {
 
     class ProjectCompilerHost extends fakes.CompilerHost {
         private _testCase: ProjectRunnerTestCase & ts.CompilerOptions;
-        private _projectParseConfigHost: ProjectParseConfigHost;
+        private _projectParseConfigHost: ProjectParseConfigHost | undefined;
 
         constructor(sys: fakes.System | vfs.FileSystem, compilerOptions: ts.CompilerOptions, _testCaseJustName: string, testCase: ProjectRunnerTestCase & ts.CompilerOptions, _moduleKind: ts.ModuleKind) {
             super(sys, compilerOptions);
@@ -211,14 +211,12 @@ namespace project {
                 .map(output => utils.removeTestPathPrefixes(vpath.isAbsolute(output) ? vpath.relative(cwd, output, ignoreCase) : output));
 
             const content = JSON.stringify(resolutionInfo, undefined, "    ");
-            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", () => content);
+            Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".json", content);
         }
 
         public verifyDiagnostics() {
             if (this.compilerResult.errors.length) {
-                Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".errors.txt", () => {
-                    return getErrorsBaseline(this.compilerResult);
-                });
+                Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".errors.txt", getErrorsBaseline(this.compilerResult));
             }
         }
 
@@ -244,7 +242,7 @@ namespace project {
                         }
 
                         const content = utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                        Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, () => content as string | null); // TODO: GH#18217
+                        Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
                     }
                     catch (e) {
                         errs.push(e);
@@ -271,9 +269,7 @@ namespace project {
             if (!this.compilerResult.errors.length && this.testCase.declaration) {
                 const dTsCompileResult = this.compileDeclarations(this.compilerResult);
                 if (dTsCompileResult && dTsCompileResult.errors.length) {
-                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".dts.errors.txt", () => {
-                        return getErrorsBaseline(dTsCompileResult);
-                    });
+                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + this.testCaseJustName + ".dts.errors.txt", getErrorsBaseline(dTsCompileResult));
                 }
             }
         }
@@ -314,18 +310,16 @@ namespace project {
             const program = ts.createProgram(getInputFiles(), compilerOptions, compilerHost);
             const errors = ts.getPreEmitDiagnostics(program);
 
-            const emitResult = program.emit();
-            ts.addRange(errors, emitResult.diagnostics);
-            const sourceMapData = emitResult.sourceMaps;
+            const { sourceMaps: sourceMapData, diagnostics: emitDiagnostics } = program.emit();
 
             // Clean up source map data that will be used in baselining
             if (sourceMapData) {
                 for (const data of sourceMapData) {
-                    for (let j = 0; j < data.sourceMapSources.length; j++) {
-                        data.sourceMapSources[j] = this.cleanProjectUrl(data.sourceMapSources[j]);
-                    }
-                    data.jsSourceMappingURL = this.cleanProjectUrl(data.jsSourceMappingURL);
-                    data.sourceMapSourceRoot = this.cleanProjectUrl(data.sourceMapSourceRoot);
+                    data.sourceMap = {
+                        ...data.sourceMap,
+                        sources: data.sourceMap.sources.map(source => this.cleanProjectUrl(source)),
+                        sourceRoot: data.sourceMap.sourceRoot && this.cleanProjectUrl(data.sourceMap.sourceRoot)
+                    };
                 }
             }
 
@@ -333,7 +327,7 @@ namespace project {
                 configFileSourceFiles,
                 moduleKind,
                 program,
-                errors,
+                errors: ts.concatenate(errors, emitDiagnostics),
                 sourceMapData
             };
         }
@@ -431,6 +425,7 @@ namespace project {
             skipDefaultLibCheck: false,
             moduleResolution: ts.ModuleResolutionKind.Classic,
             module: moduleKind,
+            newLine: ts.NewLineKind.CarriageReturnLineFeed,
             mapRoot: testCase.resolveMapRoot && testCase.mapRoot
                 ? vpath.resolve(vfs.srcFolder, testCase.mapRoot)
                 : testCase.mapRoot,

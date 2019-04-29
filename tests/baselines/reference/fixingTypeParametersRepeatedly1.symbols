@@ -45,5 +45,7 @@ g("", x => null, x => x.toLowerCase());
 >g : Symbol(g, Decl(fixingTypeParametersRepeatedly1.ts, 1, 39), Decl(fixingTypeParametersRepeatedly1.ts, 4, 63))
 >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 5))
 >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 16))
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(fixingTypeParametersRepeatedly1.ts, 6, 16))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 

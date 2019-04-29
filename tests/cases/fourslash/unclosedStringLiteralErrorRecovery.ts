@@ -6,6 +6,5 @@
 ////var f = new foo();
 ////f./**/
 
-goTo.marker();
 // Error recovery for unclosed string literals
-verify.completionListContains('x');
+verify.completions({ marker: "", exact: "x" });

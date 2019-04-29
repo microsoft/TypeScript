@@ -35,7 +35,7 @@ interface i3 { // error
 }
 enum i3 { One }; // error
 >i3 : i3
->One : i3
+>One : i3.One
 
 // interface then import
 interface i4 {

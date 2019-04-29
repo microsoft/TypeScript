@@ -118,9 +118,9 @@ function f4(a: A, b: B, c: C, d: D) {
 >c : C
 
     d = d;
->d = d : 1 | 2
+>d = d : D
 >d : D
->d : 1 | 2
+>d : D
 }
 
 function f5(a: A, b: B, c: C, d: D) {

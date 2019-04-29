@@ -36,7 +36,7 @@ verify.codeFixAll({
         this.y();
         this.x = "";
     }
-    y(): any {
+    y() {
         throw new Error("Method not implemented.");
     }
 }

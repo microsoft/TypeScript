@@ -3,10 +3,8 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type 'T' is not assig
     Types of property 'x' are incompatible.
       Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(25,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
-  Type '{ y: string; }' is not assignable to type 'Attribs1'.
-    Property 'x' is missing in type '{ y: string; }'.
-tests/cases/conformance/jsx/file.tsx(29,2): error TS2322: Type '{}' is not assignable to type 'Attribs1'.
-  Property 'x' is missing in type '{}'.
+  Property 'x' is missing in type '{ y: string; }' but required in type 'Attribs1'.
+tests/cases/conformance/jsx/file.tsx(29,2): error TS2741: Property 'x' is missing in type '{}' but required in type 'Attribs1'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -42,14 +40,14 @@ tests/cases/conformance/jsx/file.tsx(29,2): error TS2322: Type '{}' is not assig
     	return <test1 {...obj} />; // Error, missing x
     	        ~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'Attribs1'.
-!!! error TS2322:   Type '{ y: string; }' is not assignable to type 'Attribs1'.
-!!! error TS2322:     Property 'x' is missing in type '{ y: string; }'.
+!!! error TS2322:   Property 'x' is missing in type '{ y: string; }' but required in type 'Attribs1'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:2: 'x' is declared here.
     }
     
     
     <test1 {...{}} />; // Error, missing x
      ~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'Attribs1'.
-!!! error TS2322:   Property 'x' is missing in type '{}'.
+!!! error TS2741: Property 'x' is missing in type '{}' but required in type 'Attribs1'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:2: 'x' is declared here.
     <test2 {...{}} />; // Error, missing toString
     

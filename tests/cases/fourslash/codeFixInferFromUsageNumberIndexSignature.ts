@@ -5,4 +5,4 @@
 ////    return a[0] + 1;
 ////}
 
-verify.rangeAfterCodeFix("a: { [x: number]: number; }",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
+verify.rangeAfterCodeFix("a: number[]",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

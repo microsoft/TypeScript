@@ -2,18 +2,15 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(3,5): error TS232
   Types of property 'length' are incompatible.
     Type '3' is not assignable to type '2'.
 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(15,1): error TS2322: Type '[number, string, boolean]' is not assignable to type '[number, string]'.
-tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(18,17): error TS2322: Type '{}' is not assignable to type '{ a: string; }'.
-  Property 'a' is missing in type '{}'.
-tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(19,1): error TS2322: Type '[number, string]' is not assignable to type '[number, string, boolean]'.
-  Property '2' is missing in type '[number, string]'.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(18,17): error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: string; }'.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(19,1): error TS2741: Property '2' is missing in type '[number, string]' but required in type '[number, string, boolean]'.
 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(20,5): error TS2322: Type '[string, string, number]' is not assignable to type '[string, string]'.
   Types of property 'length' are incompatible.
     Type '3' is not assignable to type '2'.
 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(23,1): error TS2322: Type '[C, string | number, D]' is not assignable to type '[C, string | number]'.
   Types of property 'length' are incompatible.
     Type '3' is not assignable to type '2'.
-tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(24,1): error TS2322: Type '[C, string | number]' is not assignable to type '[C, string | number, D]'.
-  Property '2' is missing in type '[C, string | number]'.
+tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(24,1): error TS2741: Property '2' is missing in type '[C, string | number]' but required in type '[C, string | number, D]'.
 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS2322: Type '[number, string | number]' is not assignable to type '[number, string]'.
   Type 'string | number' is not assignable to type 'string'.
     Type 'number' is not assignable to type 'string'.
@@ -45,12 +42,11 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS23
     // error
     objNumTuple = [ {}, 5];
                     ~~
-!!! error TS2322: Type '{}' is not assignable to type '{ a: string; }'.
-!!! error TS2322:   Property 'a' is missing in type '{}'.
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: string; }'.
+!!! related TS2728 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:5:21: 'a' is declared here.
     numStrBoolTuple = numStrTuple;
     ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '[number, string]' is not assignable to type '[number, string, boolean]'.
-!!! error TS2322:   Property '2' is missing in type '[number, string]'.
+!!! error TS2741: Property '2' is missing in type '[number, string]' but required in type '[number, string, boolean]'.
     var strStrTuple: [string, string] = ["foo", "bar", 5];
         ~~~~~~~~~~~
 !!! error TS2322: Type '[string, string, number]' is not assignable to type '[string, string]'.
@@ -65,8 +61,7 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS23
 !!! error TS2322:     Type '3' is not assignable to type '2'.
     unionTuple2 = unionTuple;
     ~~~~~~~~~~~
-!!! error TS2322: Type '[C, string | number]' is not assignable to type '[C, string | number, D]'.
-!!! error TS2322:   Property '2' is missing in type '[C, string | number]'.
+!!! error TS2741: Property '2' is missing in type '[C, string | number]' but required in type '[C, string | number, D]'.
     numStrTuple = unionTuple3;
     ~~~~~~~~~~~
 !!! error TS2322: Type '[number, string | number]' is not assignable to type '[number, string]'.

@@ -3,6 +3,4 @@
 ////// should NOT see a and b
 ////foo((a, b) => a,/*1*/
 
-goTo.marker("1");
-verify.not.completionListContains("a");
-verify.not.completionListContains("b");
+verify.completions({ marker: "1", excludes: ["a", "b"], isNewIdentifierLocation: true });

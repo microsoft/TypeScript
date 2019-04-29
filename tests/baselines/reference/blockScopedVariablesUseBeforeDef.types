@@ -224,3 +224,4 @@ function foo14() {
     let x
 >x : any
 }
+

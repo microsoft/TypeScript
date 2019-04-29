@@ -63,21 +63,14 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             it("has the expected emitted code", () => {
-                Harness.Baseline.runBaseline(testState.filename + ".output.js", () => {
-                    const files = Array.from(testState.compilerResult.js.values()).filter(f => f.file !== Test262BaselineRunner.helpersFilePath);
-                    return Harness.Compiler.collateOutputs(files);
-                }, Test262BaselineRunner.baselineOptions);
+                const files = Array.from(testState.compilerResult.js.values()).filter(f => f.file !== Test262BaselineRunner.helpersFilePath);
+                Harness.Baseline.runBaseline(testState.filename + ".output.js", Harness.Compiler.collateOutputs(files), Test262BaselineRunner.baselineOptions);
             });
 
             it("has the expected errors", () => {
-                Harness.Baseline.runBaseline(testState.filename + ".errors.txt", () => {
-                    const errors = testState.compilerResult.diagnostics;
-                    if (errors.length === 0) {
-                        return null;
-                    }
-
-                    return Harness.Compiler.getErrorBaseline(testState.inputFiles, errors);
-                }, Test262BaselineRunner.baselineOptions);
+                const errors = testState.compilerResult.diagnostics;
+                const baseline = errors.length === 0 ? null : Harness.Compiler.getErrorBaseline(testState.inputFiles, errors);
+                Harness.Baseline.runBaseline(testState.filename + ".errors.txt", baseline, Test262BaselineRunner.baselineOptions);
             });
 
             it("satisfies invariants", () => {
@@ -86,10 +79,8 @@ class Test262BaselineRunner extends RunnerBase {
             });
 
             it("has the expected AST", () => {
-                Harness.Baseline.runBaseline(testState.filename + ".AST.txt", () => {
-                    const sourceFile = testState.compilerResult.program!.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename))!;
-                    return Utils.sourceFileToJSON(sourceFile);
-                }, Test262BaselineRunner.baselineOptions);
+                const sourceFile = testState.compilerResult.program!.getSourceFile(Test262BaselineRunner.getTestFilePath(testState.filename))!;
+                Harness.Baseline.runBaseline(testState.filename + ".AST.txt", Utils.sourceFileToJSON(sourceFile), Test262BaselineRunner.baselineOptions);
             });
         });
     }

@@ -1,0 +1,21 @@
+=== tests/cases/compiler/spreadOfParamsFromGeneratorMakesRequiredParams.ts ===
+declare function call<Fn extends (...args: any[]) => any>(
+>call : Symbol(call, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 0, 0))
+>Fn : Symbol(Fn, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 0, 22))
+>args : Symbol(args, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 0, 34))
+
+    fn: Fn,
+>fn : Symbol(fn, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 0, 58))
+>Fn : Symbol(Fn, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 0, 22))
+
+    ...args: Parameters<Fn>
+>args : Symbol(args, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 1, 11))
+>Parameters : Symbol(Parameters, Decl(lib.es5.d.ts, --, --))
+>Fn : Symbol(Fn, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 0, 22))
+
+): any;
+
+call(function* (a: 'a') { }); // error, 2nd argument required
+>call : Symbol(call, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 0, 0))
+>a : Symbol(a, Decl(spreadOfParamsFromGeneratorMakesRequiredParams.ts, 5, 16))
+

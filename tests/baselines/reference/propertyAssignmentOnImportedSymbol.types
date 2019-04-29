@@ -5,12 +5,12 @@ export var hurk = {}
 
 === tests/cases/conformance/salsa/bug24658.js ===
 import { hurk } from './mod1'
->hurk : {}
+>hurk : typeof hurk
 
 hurk.expando = 4
 >hurk.expando = 4 : 4
->hurk.expando : any
->hurk : {}
->expando : any
+>hurk.expando : number
+>hurk : typeof hurk
+>expando : number
 >4 : 4
 

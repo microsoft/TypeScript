@@ -105,13 +105,13 @@ class A {
 >[			<meta content="helloworld"></meta>,			<meta content={c.a!.b}></meta>		] : any[]
 
 			<meta content="helloworld"></meta>,
-><meta content="helloworld"></meta> : any
+><meta content="helloworld"></meta> : error
 >meta : any
 >content : string
 >meta : any
 
 			<meta content={c.a!.b}></meta>
-><meta content={c.a!.b}></meta> : any
+><meta content={c.a!.b}></meta> : error
 >meta : any
 >content : string
 >c.a!.b : string

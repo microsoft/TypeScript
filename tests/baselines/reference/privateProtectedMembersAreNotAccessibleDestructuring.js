@@ -15,10 +15,13 @@ class C extends K {
     }
 }
 let k = new K();
-let { priv } = k; // error 
+let { priv } = k; // error
 let { prot } = k; // error
 let { privateMethod } = k; // error
-let { priv: a, prot: b, privateMethod: f } = k; // error
+let { priv: a, prot: b, privateMethod: pm } = k; // error
+function f({ priv, prot, privateMethod }: K) {
+
+}
 
 
 //// [privateProtectedMembersAreNotAccessibleDestructuring.js]
@@ -28,7 +31,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -57,7 +60,10 @@ var C = /** @class */ (function (_super) {
     return C;
 }(K));
 var k = new K();
-var priv = k.priv; // error 
+var priv = k.priv; // error
 var prot = k.prot; // error
 var privateMethod = k.privateMethod; // error
-var a = k.priv, b = k.prot, f = k.privateMethod; // error
+var a = k.priv, b = k.prot, pm = k.privateMethod; // error
+function f(_a) {
+    var priv = _a.priv, prot = _a.prot, privateMethod = _a.privateMethod;
+}

@@ -30,8 +30,8 @@ var r2 = c['2'];
 >'2' : "2"
 
 var r3 = c['3'];
->r3 : any
->c['3'] : any
+>r3 : error
+>c['3'] : error
 >c : C
 >'3' : "3"
 
@@ -80,8 +80,8 @@ var r2 = i['2'];
 >'2' : "2"
 
 var r3 = i['3'];
->r3 : any
->i['3'] : any
+>r3 : error
+>i['3'] : error
 >i : I
 >'3' : "3"
 
@@ -129,8 +129,8 @@ var r2 = a['2'];
 >'2' : "2"
 
 var r3 = a['3'];
->r3 : any
->a['3'] : any
+>r3 : error
+>a['3'] : error
 >a : { [x: number]: string; 1: string; "2": string; }
 >'3' : "3"
 
@@ -162,20 +162,20 @@ var b: { [x: number]: string } = { 1: '', "2": '' }
 >'' : ""
 
 var r1a = b['1'];
->r1a : any
->b['1'] : any
+>r1a : error
+>b['1'] : error
 >b : { [x: number]: string; }
 >'1' : "1"
 
 var r2a = b['2'];
->r2a : any
->b['2'] : any
+>r2a : error
+>b['2'] : error
 >b : { [x: number]: string; }
 >'2' : "2"
 
 var r3 = b['3'];
->r3 : any
->b['3'] : any
+>r3 : error
+>b['3'] : error
 >b : { [x: number]: string; }
 >'3' : "3"
 
@@ -221,8 +221,8 @@ var r2b = b2['2'];
 >'2' : "2"
 
 var r3 = b2['3'];
->r3 : any
->b2['3'] : any
+>r3 : error
+>b2['3'] : error
 >b2 : { [x: number]: string; 1: string; "2": string; }
 >'3' : "3"
 

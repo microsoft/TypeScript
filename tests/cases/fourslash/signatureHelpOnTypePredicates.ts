@@ -9,6 +9,6 @@
 
 verify.signatureHelp(
     { marker: "1", text: "f1(a: any): a is number" },
-    { marker: "2", text: "f2(a: any): a is {}" },
+    { marker: "2", text: "f2(a: any): a is unknown" },
     { marker: "3", text: "f3(a: any, ...b: any[]): a is number", isVariadic: true },
 )

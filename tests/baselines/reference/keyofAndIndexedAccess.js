@@ -31,7 +31,8 @@ type K03 = keyof boolean;  // "valueOf"
 type K04 = keyof void;  // never
 type K05 = keyof undefined;  // never
 type K06 = keyof null;  // never
-type K07 = keyof never;  // never
+type K07 = keyof never;  // string | number | symbol
+type K08 = keyof unknown; // never
 
 type K10 = keyof Shape;  // "name" | "width" | "height" | "visible"
 type K11 = keyof Shape[];  // "length" | "toString" | ...
@@ -61,12 +62,11 @@ type Q21 = Shape[WIDTH_OR_HEIGHT];  // number
 
 type Q30 = [string, number][0];  // string
 type Q31 = [string, number][1];  // number
-type Q32 = [string, number][2];  // string | number
+type Q32 = [string, number][number];  // string | number
 type Q33 = [string, number][E.A];  // string
 type Q34 = [string, number][E.B];  // number
-type Q35 = [string, number][E.C];  // string | number
-type Q36 = [string, number]["0"];  // string
-type Q37 = [string, number]["1"];  // string
+type Q35 = [string, number]["0"];  // string
+type Q36 = [string, number]["1"];  // string
 
 type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
@@ -300,23 +300,16 @@ type S2 = {
     b: string;
 };
 
-function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 
 function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
@@ -492,10 +485,10 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 function updateIds<T extends Record<K, string>, K extends string>(
     obj: T,
     idFields: K[],
-    idMapping: { [oldId: string]: string }
+    idMapping: Partial<Record<T[K], T[K]>>
 ): Record<K, string> {
     for (const idField of idFields) {
-        const newId = idMapping[obj[idField]];
+        const newId: T[K] | undefined = idMapping[obj[idField]];
         if (newId) {
             obj[idField] = newId;
         }
@@ -650,6 +643,20 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
     return d[k2];
 }
 
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
 
 //// [keyofAndIndexedAccess.js]
 var __extends = (this && this.__extends) || (function () {
@@ -658,7 +665,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -872,23 +879,16 @@ var C1 = /** @class */ (function () {
     };
     return C1;
 }());
-function f90(x1, x2, x3, x4) {
+function f90(x1, x2, x3) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 function f91(x, y, z) {
     var a;
@@ -1078,6 +1078,15 @@ function ff2(dd, k1, k2) {
     var d = dd[k1];
     return d[k2];
 }
+// Repro from #26409
+var cf1 = function (t, k) {
+    var s = t[k];
+    t.cool;
+};
+var cf2 = function (t, k) {
+    var s = t[k];
+    t.cool;
+};
 
 
 //// [keyofAndIndexedAccess.d.ts]
@@ -1116,6 +1125,7 @@ declare type K04 = keyof void;
 declare type K05 = keyof undefined;
 declare type K06 = keyof null;
 declare type K07 = keyof never;
+declare type K08 = keyof unknown;
 declare type K10 = keyof Shape;
 declare type K11 = keyof Shape[];
 declare type K12 = keyof Dictionary<Shape>;
@@ -1138,12 +1148,11 @@ declare type Q20 = Shape[NAME];
 declare type Q21 = Shape[WIDTH_OR_HEIGHT];
 declare type Q30 = [string, number][0];
 declare type Q31 = [string, number][1];
-declare type Q32 = [string, number][2];
+declare type Q32 = [string, number][number];
 declare type Q33 = [string, number][E.A];
 declare type Q34 = [string, number][E.B];
-declare type Q35 = [string, number][E.C];
-declare type Q36 = [string, number]["0"];
-declare type Q37 = [string, number]["1"];
+declare type Q35 = [string, number]["0"];
+declare type Q36 = [string, number]["1"];
 declare type Q40 = (Shape | Options)["visible"];
 declare type Q41 = (Shape & Options)["visible"];
 declare type Q50 = Dictionary<Shape>["howdy"];
@@ -1217,7 +1226,7 @@ declare type S2 = {
     a: string;
     b: string;
 };
-declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]): void;
+declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]): void;
 declare function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare class Base {
@@ -1248,13 +1257,13 @@ declare type Thing = {
 declare function f1(thing: Thing): void;
 declare const assignTo2: <T, K1 extends keyof T, K2 extends keyof T[K1]>(object: T, key1: K1, key2: K2) => (value: T[K1][K2]) => T[K1][K2];
 declare function one<T>(handler: (t: T) => void): T;
-declare var empty: {};
+declare var empty: unknown;
 declare type Handlers<T> = {
     [K in keyof T]: (t: T[K]) => void;
 };
 declare function on<T>(handlerHash: Handlers<T>): T;
 declare var hashOfEmpty1: {
-    test: {};
+    test: unknown;
 };
 declare var hashOfEmpty2: {
     test: boolean;
@@ -1269,7 +1278,7 @@ declare class Component1<Data, Computed> {
 }
 declare let c1: Component1<{
     hello: string;
-}, {}>;
+}, unknown>;
 interface Options2<Data, Computed> {
     data?: Data;
     computed?: Computed;
@@ -1305,9 +1314,7 @@ declare type Handler<T> = {
 declare function onChangeGenericFunction<T>(handler: Handler<T & {
     preset: number;
 }>): void;
-declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: {
-    [oldId: string]: string;
-}): Record<K, string>;
+declare function updateIds<T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: Partial<Record<T[K], T[K]>>): Record<K, string>;
 declare function updateIds2<T extends {
     [x: string]: string;
 }, K extends keyof T>(obj: T, key: K, stringMap: {
@@ -1413,3 +1420,7 @@ declare type DictDict<V extends string, T extends string> = {
 };
 declare function ff1<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
 declare function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: T): number;
+declare const cf1: <T extends { [P in K]: string; } & {
+    cool: string;
+}, K extends keyof T>(t: T, k: K) => void;
+declare const cf2: <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) => void;

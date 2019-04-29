@@ -36,8 +36,8 @@ var { 'b': renamed, ...justA } = o;
 
 var { b: { '0': n, '1': oooo }, ...justA } = o;
 >b : any
->n : string
->oooo : string
+>n : any
+>oooo : any
 >justA : { a: number; }
 >o : { a: number; b: string; }
 
@@ -175,7 +175,7 @@ var removable = new Removable();
 
 var { removed, ...removableRest } = removable;
 >removed : string
->removableRest : { both: number; remainder: string; }
+>removableRest : { remainder: string; }
 >removable : Removable
 
 var i: I = removable;

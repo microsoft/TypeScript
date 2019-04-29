@@ -7,4 +7,4 @@
 
 // We specifically filter out any array-like types.
 // Private members will be excluded by `createUnionOrIntersectionProperty`.
-verify.completionsAt("", ["x"]);
+verify.completions({ marker: "", exact: "x" });

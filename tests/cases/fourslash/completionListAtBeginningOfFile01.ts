@@ -6,8 +6,4 @@
 ////    A, B, C
 ////}
 
-goTo.marker("1");
-verify.completionListContains("x");
-verify.completionListContains("y");
-verify.completionListContains("z");
-verify.completionListContains("E");
+verify.completions({ marker: "1", includes: ["x", "y", "z", "E"] });

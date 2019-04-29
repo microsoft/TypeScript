@@ -5,7 +5,7 @@
 // @Filename: /a.js
 /////**
 //// * @typedef I {Object}
-//// * @prop [|{| "isWriteAccess": true, "isDefinition": true |}p|] {number}
+//// * @prop [|{| "isDefinition": true |}p|] {number}
 //// */
 ////
 /////** @type {I} */

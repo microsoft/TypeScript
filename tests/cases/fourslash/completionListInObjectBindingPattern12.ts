@@ -8,7 +8,4 @@
 ////function f({ property1, /**/ }: I): void {
 ////}
 
-goTo.marker("");
-verify.completionListContains("property2");
-verify.not.completionListContains("property1");
-verify.not.completionListAllowsNewIdentifier();
+verify.completions({ marker: "", includes: "property2", excludes: "property1" });

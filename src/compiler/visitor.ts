@@ -268,7 +268,8 @@ namespace ts {
                     nodesVisitor((<PropertyDeclaration>node).decorators, visitor, isDecorator),
                     nodesVisitor((<PropertyDeclaration>node).modifiers, visitor, isModifier),
                     visitNode((<PropertyDeclaration>node).name, visitor, isPropertyName),
-                    visitNode((<PropertyDeclaration>node).questionToken, tokenVisitor, isToken),
+                    // QuestionToken and ExclamationToken is uniqued in Property Declaration and the signature of 'updateProperty' is that too
+                    visitNode((<PropertyDeclaration>node).questionToken || (<PropertyDeclaration>node).exclamationToken, tokenVisitor, isToken),
                     visitNode((<PropertyDeclaration>node).type, visitor, isTypeNode),
                     visitNode((<PropertyDeclaration>node).initializer, visitor, isExpression));
 
@@ -1111,6 +1112,7 @@ namespace ts {
 
             case SyntaxKind.TaggedTemplateExpression:
                 result = reduceNode((<TaggedTemplateExpression>node).tag, cbNode, result);
+                result = reduceNodes((<TaggedTemplateExpression>node).typeArguments, cbNodes, result);
                 result = reduceNode((<TaggedTemplateExpression>node).template, cbNode, result);
                 break;
 
@@ -1377,6 +1379,7 @@ namespace ts {
             case SyntaxKind.JsxSelfClosingElement:
             case SyntaxKind.JsxOpeningElement:
                 result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).tagName, cbNode, result);
+                result = reduceNodes((<JsxSelfClosingElement | JsxOpeningElement>node).typeArguments, cbNode, result);
                 result = reduceNode((<JsxSelfClosingElement | JsxOpeningElement>node).attributes, cbNode, result);
                 break;
 
@@ -1476,8 +1479,8 @@ namespace ts {
         }
 
         return isNodeArray(statements)
-            ? setTextRange(createNodeArray(addStatementsAfterPrologue(statements.slice(), declarations)), statements)
-            : addStatementsAfterPrologue(statements, declarations);
+            ? setTextRange(createNodeArray(insertStatementsAfterStandardPrologue(statements.slice(), declarations)), statements)
+            : insertStatementsAfterStandardPrologue(statements, declarations);
     }
 
     /**
