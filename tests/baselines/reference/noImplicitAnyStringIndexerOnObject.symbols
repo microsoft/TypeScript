@@ -1,9 +1,49 @@
 === tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
-var x = {}["hello"];
->x : Symbol(x, Decl(noImplicitAnyStringIndexerOnObject.ts, 0, 3))
+var a = {}["hello"];
+>a : Symbol(a, Decl(noImplicitAnyStringIndexerOnObject.ts, 0, 3))
 
-var y: string = { '': 'foo' }[''];
->y : Symbol(y, Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 3))
+var b: string = { '': 'foo' }[''];
+>b : Symbol(b, Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 3))
 >'' : Symbol('', Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 17))
 >'' : Symbol('', Decl(noImplicitAnyStringIndexerOnObject.ts, 1, 17))
+
+// Should give suggestion 'c.get'
+var c = {
+>c : Symbol(c, Decl(noImplicitAnyStringIndexerOnObject.ts, 4, 3))
+
+  get: (key: string) => 'foobar'
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 4, 9))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 5, 8))
+
+};
+c['hello'];
+>c : Symbol(c, Decl(noImplicitAnyStringIndexerOnObject.ts, 4, 3))
+
+// Should give suggestion 'd.set'
+var d = {
+>d : Symbol(d, Decl(noImplicitAnyStringIndexerOnObject.ts, 10, 3))
+
+  set: (key: string) => 'foobar'
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 10, 9))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 11, 8))
+
+};
+d['hello'];
+>d : Symbol(d, Decl(noImplicitAnyStringIndexerOnObject.ts, 10, 3))
+
+// Should give suggestion 'e.get or e.set'
+var e = {
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 16, 3))
+
+  set: (key: string) => 'foobar',
+>set : Symbol(set, Decl(noImplicitAnyStringIndexerOnObject.ts, 16, 9))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 17, 8))
+
+  get: (key: string) => 'foobar'
+>get : Symbol(get, Decl(noImplicitAnyStringIndexerOnObject.ts, 17, 33))
+>key : Symbol(key, Decl(noImplicitAnyStringIndexerOnObject.ts, 18, 8))
+
+};
+e['hello'];
+>e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 16, 3))
 

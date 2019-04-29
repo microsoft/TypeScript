@@ -1,15 +1,72 @@
 === tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
-var x = {}["hello"];
->x : any
+var a = {}["hello"];
+>a : any
 >{}["hello"] : any
 >{} : {}
 >"hello" : "hello"
 
-var y: string = { '': 'foo' }[''];
->y : string
+var b: string = { '': 'foo' }[''];
+>b : string
 >{ '': 'foo' }[''] : string
 >{ '': 'foo' } : { '': string; }
 >'' : string
 >'foo' : "foo"
 >'' : ""
+
+// Should give suggestion 'c.get'
+var c = {
+>c : { get: (key: string) => string; }
+>{  get: (key: string) => 'foobar'} : { get: (key: string) => string; }
+
+  get: (key: string) => 'foobar'
+>get : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+};
+c['hello'];
+>c['hello'] : any
+>c : { get: (key: string) => string; }
+>'hello' : "hello"
+
+// Should give suggestion 'd.set'
+var d = {
+>d : { set: (key: string) => string; }
+>{  set: (key: string) => 'foobar'} : { set: (key: string) => string; }
+
+  set: (key: string) => 'foobar'
+>set : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+};
+d['hello'];
+>d['hello'] : any
+>d : { set: (key: string) => string; }
+>'hello' : "hello"
+
+// Should give suggestion 'e.get or e.set'
+var e = {
+>e : { set: (key: string) => string; get: (key: string) => string; }
+>{  set: (key: string) => 'foobar',  get: (key: string) => 'foobar'} : { set: (key: string) => string; get: (key: string) => string; }
+
+  set: (key: string) => 'foobar',
+>set : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+  get: (key: string) => 'foobar'
+>get : (key: string) => string
+>(key: string) => 'foobar' : (key: string) => string
+>key : string
+>'foobar' : "foobar"
+
+};
+e['hello'];
+>e['hello'] : any
+>e : { set: (key: string) => string; get: (key: string) => string; }
+>'hello' : "hello"
 
