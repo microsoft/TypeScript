@@ -10117,7 +10117,13 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectType));
+                                const suggestions = getSuggestionsForNonexistentIndexSignature(objectType);
+                                if (suggestions) {
+                                    error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature_Did_you_mean_to_call_1, typeToString(objectType), suggestions);
+                                }
+                                else {
+                                    error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectType));
+                                }
                             }
                         }
                     }
@@ -20184,6 +20190,25 @@ namespace ts {
         function getSuggestionForNonexistentExport(name: Identifier, targetModule: Symbol): string | undefined {
             const suggestion = getSuggestedSymbolForNonexistentModule(name, targetModule);
             return suggestion && symbolName(suggestion);
+        }
+
+        function getSuggestionsForNonexistentIndexSignature(objectType: Type): string | undefined {
+            let suggestions: string | undefined;
+            const props = [
+                getPropertyOfObjectType(objectType, <__String>"get"),
+                getPropertyOfObjectType(objectType, <__String>"set")
+            ];
+
+            for (const prop of props) {
+                if (prop) {
+                    const s = getSingleCallSignature(getTypeOfSymbol(prop));
+                    if (s && getMinArgumentCount(s) === 1 && typeToString(getTypeAtPosition(s, 0)) === "string") {
+                        const suggestion = symbolToString(objectType.symbol) + "." + symbolToString(prop);
+                        suggestions = (!suggestions) ? suggestion : suggestions.concat(" or " + suggestion);
+                    }
+                }
+            }
+            return suggestions;
         }
 
         /**
