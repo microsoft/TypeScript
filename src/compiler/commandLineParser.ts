@@ -218,6 +218,7 @@ namespace ts {
             }),
             affectsSourceFile: true,
             affectsModuleResolution: true,
+            affectsEmit: true,
             paramType: Diagnostics.VERSION,
             showInSimplifiedHelpView: true,
             category: Diagnostics.Basic_Options,
