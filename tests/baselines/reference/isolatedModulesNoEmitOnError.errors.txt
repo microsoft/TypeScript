@@ -1,6 +1,7 @@
-error TS5053: Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.
+tests/cases/compiler/file1.ts(1,14): error TS2322: Type '3' is not assignable to type 'string'.
 
 
-!!! error TS5053: Option 'noEmitOnError' cannot be specified with option 'isolatedModules'.
-==== tests/cases/compiler/file1.ts (0 errors) ====
-    export var x;
+==== tests/cases/compiler/file1.ts (1 errors) ====
+    export const x: string = 3;
+                 ~
+!!! error TS2322: Type '3' is not assignable to type 'string'.

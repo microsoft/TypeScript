@@ -1,6 +1,6 @@
 Exit Code: 1
 Standard output:
-node_modules/@typescript-eslint/typescript-estree/dist/parser.d.ts(1,8): error TS1192: Module '"/prettier/prettier/node_modules/typescript/lib/typescript"' has no default export.
+node_modules/@typescript-eslint/typescript-estree/dist/parser.d.ts(1,8): error TS1259: Module '"/prettier/prettier/node_modules/typescript/lib/typescript"' can only be default-imported using the 'esModuleInterop' flag
 src/cli/util.js(60,44): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
 src/cli/util.js(119,38): error TS2339: Property 'sync' does not exist on type '(...args: any[]) => any'.
 src/cli/util.js(372,29): error TS2532: Object is possibly 'undefined'.
