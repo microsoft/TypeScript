@@ -7782,24 +7782,9 @@ namespace ts {
 
     /*@internal*/
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
-        const triviaScanner = createScanner(context.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
         const pragmas: PragmaPseudoMapEntry[] = [];
 
-        // Keep scanning all the leading trivia in the file until we get to something that
-        // isn't trivia.  Any single line comment will be analyzed to see if it is a
-        // reference comment.
-        while (true) {
-            const kind = triviaScanner.scan();
-            if (!isTrivia(kind)) {
-                break;
-            }
-
-            const range = {
-                kind: <SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia>triviaScanner.getToken(),
-                pos: triviaScanner.getTokenPos(),
-                end: triviaScanner.getTextPos(),
-            };
-
+        for (const range of getLeadingCommentRanges(sourceText, 0) || emptyArray) {
             const comment = sourceText.substring(range.pos, range.end);
             extractPragmas(pragmas, range, comment);
         }
