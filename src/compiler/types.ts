@@ -5307,12 +5307,13 @@ namespace ts {
         Values = 1 << 8,                // __values (used by ES2015 for..of and yield* transformations)
         Read = 1 << 9,                  // __read (used by ES2015 iterator destructuring transformation)
         Spread = 1 << 10,               // __spread (used by ES2015 array spread and argument list spread transformations)
-        Await = 1 << 11,                // __await (used by ES2017 async generator transformation)
-        AsyncGenerator = 1 << 12,       // __asyncGenerator (used by ES2017 async generator transformation)
-        AsyncDelegator = 1 << 13,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
-        AsyncValues = 1 << 14,          // __asyncValues (used by ES2017 for..await..of transformation)
-        ExportStar = 1 << 15,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
-        MakeTemplateObject = 1 << 16,   // __makeTemplateObject (used for constructing template string array objects)
+        SpreadArrays = 1 << 11,         // __spreadArrays (used by ES2015 array spread and argument list spread transformations)
+        Await = 1 << 12,                // __await (used by ES2017 async generator transformation)
+        AsyncGenerator = 1 << 13,       // __asyncGenerator (used by ES2017 async generator transformation)
+        AsyncDelegator = 1 << 14,       // __asyncDelegator (used by ES2017 async generator yield* transformation)
+        AsyncValues = 1 << 15,          // __asyncValues (used by ES2017 for..await..of transformation)
+        ExportStar = 1 << 16,           // __exportStar (used by CommonJS/AMD/UMD module transformation)
+        MakeTemplateObject = 1 << 17,   // __makeTemplateObject (used for constructing template string array objects)
         FirstEmitHelper = Extends,
         LastEmitHelper = MakeTemplateObject,
 
