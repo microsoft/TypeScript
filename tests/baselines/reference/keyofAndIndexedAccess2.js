@@ -116,6 +116,16 @@ type StrictExclude<T, U> = T extends StrictExtract<T, U> ? never : T;
 type A<T> = { [Q in { [P in keyof T]: P; }[keyof T]]: T[Q]; };
 type B<T, V> = A<{ [Q in keyof T]: StrictExclude<B<T[Q], V>, {}>; }>;
 
+// Repros from #30938
+
+function fn<T extends {elements: Array<string>} | {elements: Array<number>}>(param: T, cb: (element: T['elements'][number]) => void) {
+    cb(param.elements[0]);
+}
+
+function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void) {
+    cb(param[0]);
+}
+
 
 //// [keyofAndIndexedAccess2.js]
 function f1(obj, k0, k1, k2) {
@@ -189,4 +199,11 @@ export function getEntity(id, state) {
 }
 function get123() {
     return 123; // Error
+}
+// Repros from #30938
+function fn(param, cb) {
+    cb(param.elements[0]);
+}
+function fn2(param, cb) {
+    cb(param[0]);
 }
