@@ -10117,9 +10117,9 @@ namespace ts {
                                 }
                             }
                             else {
-                                const suggestions = getSuggestionsForNonexistentIndexSignature(objectType);
-                                if (suggestions) {
-                                    error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature_Did_you_mean_to_call_1, typeToString(objectType), suggestions);
+                                const suggestion = getSuggestionForNonexistentIndexSignature(objectType, accessExpression);
+                                if (suggestion !== undefined) {
+                                    error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature_Did_you_mean_to_call_1, typeToString(objectType), suggestion);
                                 }
                                 else {
                                     error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectType));
@@ -20192,23 +20192,33 @@ namespace ts {
             return suggestion && symbolName(suggestion);
         }
 
-        function getSuggestionsForNonexistentIndexSignature(objectType: Type): string | undefined {
-            let suggestions: string | undefined;
-            const props = [
-                getPropertyOfObjectType(objectType, <__String>"get"),
-                getPropertyOfObjectType(objectType, <__String>"set")
-            ];
-
-            for (const prop of props) {
+        function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression): string | undefined {
+            // check if object type has setter or getter
+            const hasProp = (name: "set" | "get", argCount = 1) => {
+                const prop = getPropertyOfObjectType(objectType, <__String>name);
                 if (prop) {
                     const s = getSingleCallSignature(getTypeOfSymbol(prop));
-                    if (s && getMinArgumentCount(s) === 1 && typeToString(getTypeAtPosition(s, 0)) === "string") {
-                        const suggestion = symbolToString(objectType.symbol) + "." + symbolToString(prop);
-                        suggestions = (!suggestions) ? suggestion : suggestions.concat(" or " + suggestion);
+                    if (s && getMinArgumentCount(s) === argCount && typeToString(getTypeAtPosition(s, 0)) === "string") {
+                        return true;
                     }
                 }
+                return false;
+            };
+
+            const suggestedMethod = isAssignmentTarget(expr) ? "set" : "get";
+            if (!hasProp(suggestedMethod)) {
+                return undefined;
             }
-            return suggestions;
+
+            let suggestion = tryGetPropertyAccessOrIdentifierToString(expr);
+            if (suggestion === undefined) {
+                suggestion = suggestedMethod;
+            }
+            else {
+                suggestion += "." + suggestedMethod;
+            }
+
+            return suggestion;
         }
 
         /**
