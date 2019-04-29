@@ -7784,7 +7784,7 @@ namespace ts {
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
         const pragmas: PragmaPseudoMapEntry[] = [];
 
-        for (const range of getLeadingCommentRanges(sourceText, 0) || []) {
+        for (const range of getLeadingCommentRanges(sourceText, 0) || emptyArray) {
             const comment = sourceText.substring(range.pos, range.end);
             extractPragmas(pragmas, range, comment);
         }
