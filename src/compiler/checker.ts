@@ -94,8 +94,6 @@ namespace ts {
 
         const globalThisSymbol = createSymbol(SymbolFlags.Module, "globalThis" as __String, CheckFlags.Readonly);
         globalThisSymbol.exports = globals;
-        globalThisSymbol.valueDeclaration = createNode(SyntaxKind.Identifier) as Identifier;
-        (globalThisSymbol.valueDeclaration as Identifier).escapedText = "globalThis" as __String;
         globals.set(globalThisSymbol.escapedName, globalThisSymbol);
 
         const argumentsSymbol = createSymbol(SymbolFlags.Property, "arguments" as __String);
@@ -926,7 +924,12 @@ namespace ts {
                 recordMergedSymbol(target, source);
             }
             else if (target.flags & SymbolFlags.NamespaceModule) {
-                error(getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
+                // Do not report an error when merging `var globalThis` with the built-in `globalThis`,
+                // as we will already report a "Declaration name conflicts..." error, and this error
+                // won't make much sense.
+                if (target !== globalThisSymbol) {
+                    error(getNameOfDeclaration(source.declarations[0]), Diagnostics.Cannot_augment_module_0_with_value_exports_because_it_resolves_to_a_non_module_entity, symbolToString(target));
+                }
             }
             else { // error
                 const isEitherEnum = !!(target.flags & SymbolFlags.Enum || source.flags & SymbolFlags.Enum);
@@ -30456,6 +30459,14 @@ namespace ts {
                     continue;
                 }
                 if (!isExternalOrCommonJsModule(file)) {
+                    // It is an error for a non-external-module (i.e. script) to declare its own `globalThis`.
+                    // We can't use `builtinGlobals` for this due to synthetic expando-namespace generation in JS files.
+                    const fileGlobalThisSymbol = file.locals!.get("globalThis" as __String);
+                    if (fileGlobalThisSymbol) {
+                        for (const declaration of fileGlobalThisSymbol.declarations) {
+                            diagnostics.add(createDiagnosticForNode(declaration, Diagnostics.Declaration_name_conflicts_with_built_in_global_identifier_0, "globalThis"));
+                        }
+                    }
                     mergeSymbolTable(globals, file.locals!);
                 }
                 if (file.jsGlobalAugmentations) {
@@ -30501,6 +30512,7 @@ namespace ts {
             getSymbolLinks(undefinedSymbol).type = undefinedWideningType;
             getSymbolLinks(argumentsSymbol).type = getGlobalType("IArguments" as __String, /*arity*/ 0, /*reportErrors*/ true);
             getSymbolLinks(unknownSymbol).type = errorType;
+            getSymbolLinks(globalThisSymbol).type = createObjectType(ObjectFlags.Anonymous, globalThisSymbol);
 
             // Initialize special types
             globalArrayType = getGlobalType("Array" as __String, /*arity*/ 1, /*reportErrors*/ true);
