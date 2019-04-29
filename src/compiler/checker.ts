@@ -11205,11 +11205,7 @@ namespace ts {
                     return mapType(mappedTypeVariable, t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType && t !== errorType) {
                             const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
-                            // The first rule exists such that `Readonly<any>` is simply `any`, which is what most people think it will resolve to.
-                            // Without the extra special callout, it actually instantiates to `{readonly [index: string]: any}` which has a bunch of
-                            // assignability quirks to do with index signatures - most notably it no longer provides _every possible explicit property_.
-                            return isTypeAny(t) && getTemplateTypeFromMappedType(type) === getIndexedAccessType(typeVariable, getTypeParameterFromMappedType(type)) ? t :
-                                isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
+                            return isArrayType(t) ? instantiateMappedArrayType(t, type, replacementMapper) :
                                 isTupleType(t) ? instantiateMappedTupleType(t, type, replacementMapper) :
                                 instantiateAnonymousType(type, replacementMapper);
                         }
