@@ -4942,17 +4942,10 @@ namespace ts {
                 }
 
                 const omitTypeAlias = getGlobalOmitSymbol();
-                if (omitTypeAlias) {
-                    return getTypeAliasInstantiation(omitTypeAlias, [source, omitKeyType]);
-                }
-
-                const pickTypeAlias = getGlobalPickSymbol();
-                const excludeTypeAlias = getGlobalExcludeSymbol();
-                if (!pickTypeAlias || !excludeTypeAlias) {
+                if (!omitTypeAlias) {
                     return errorType;
                 }
-                const pickKeys = getTypeAliasInstantiation(excludeTypeAlias, [getIndexType(source), omitKeyType]);
-                return getTypeAliasInstantiation(pickTypeAlias, [source, pickKeys]);
+                return getTypeAliasInstantiation(omitTypeAlias, [source, omitKeyType]);
             }
             const members = createSymbolTable();
             for (const prop of getPropertiesOfType(source)) {
