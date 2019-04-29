@@ -401,6 +401,10 @@ namespace ts {
         setGetSourceFileAsHashVersioned(compilerHost, host);
         compilerHost.getParsedCommandLine = parseConfigFile;
 
+        compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
+        compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
+        let moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
+
         const buildInfoChecked = createFileMap<true>(toPath);
         let extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined;
 
@@ -1099,6 +1103,30 @@ namespace ts {
 
             // TODO: handle resolve module name to cache result in project reference redirect
             projectCompilerOptions = configFile.options;
+            // Update module resolution cache if needed
+            if (moduleResolutionCache) {
+                const projPath = toPath(proj);
+                if (moduleResolutionCache.directoryToModuleNameMap.redirectsMap.size === 0) {
+                    // The own map will be for projectCompilerOptions
+                    Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size === 0);
+                    moduleResolutionCache.directoryToModuleNameMap.redirectsMap.set(projPath, moduleResolutionCache.directoryToModuleNameMap.ownMap);
+                    moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.set(projPath, moduleResolutionCache.moduleNameToDirectoryMap.ownMap);
+                }
+                else {
+                    // Set correct own map
+                    Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size > 0);
+
+                    const ref: ResolvedProjectReference = {
+                        sourceFile: projectCompilerOptions.configFile!,
+                        commandLine: configFile
+                    };
+                    moduleResolutionCache.directoryToModuleNameMap.setOwnMap(moduleResolutionCache.directoryToModuleNameMap.getOrCreateMapOfCacheRedirects(ref));
+                    moduleResolutionCache.moduleNameToDirectoryMap.setOwnMap(moduleResolutionCache.moduleNameToDirectoryMap.getOrCreateMapOfCacheRedirects(ref));
+                }
+                moduleResolutionCache.directoryToModuleNameMap.setOwnOptions(projectCompilerOptions);
+                moduleResolutionCache.moduleNameToDirectoryMap.setOwnOptions(projectCompilerOptions);
+            }
+
             const program = host.createProgram(
                 configFile.fileNames,
                 configFile.options,
@@ -1371,6 +1399,13 @@ namespace ts {
             compilerHost.getSourceFile = getSourceFileWithCache!;
             extendedConfigCache = createMap();
 
+            const originalResolveModuleNames = compilerHost.resolveModuleNames;
+            if (!compilerHost.resolveModuleNames) {
+                const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference).resolvedModule!;
+                compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference) =>
+                    loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
+            }
+
             const graph = getGlobalDependencyGraph();
             reportBuildQueue(graph);
             let anyFailed = false;
@@ -1432,6 +1467,8 @@ namespace ts {
             compilerHost.getSourceFile = savedGetSourceFile;
             readFileWithCache = savedReadFileWithCache;
             extendedConfigCache = undefined;
+            compilerHost.resolveModuleNames = originalResolveModuleNames;
+            moduleResolutionCache = undefined;
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 

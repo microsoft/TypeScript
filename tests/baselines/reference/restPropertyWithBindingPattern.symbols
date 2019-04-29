@@ -1,0 +1,6 @@
+=== tests/cases/conformance/es6/destructuring/restPropertyWithBindingPattern.ts ===
+({...{}} = {});
+No type information for this code.({...({})} = {});
+No type information for this code.({...[]} = {});
+No type information for this code.({...([])} = {});
+No type information for this code.

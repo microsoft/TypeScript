@@ -60,7 +60,7 @@ declare function encodeURI(uri: string): string;
   * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
   * @param uriComponent A value representing an encoded URI component.
   */
-declare function encodeURIComponent(uriComponent: string): string;
+declare function encodeURIComponent(uriComponent: string | number | boolean): string;
 
 /**
   * Computes a new string in which certain characters have been replaced by a hexadecimal escape sequence.
@@ -1446,7 +1446,9 @@ type Extract<T, U> = T extends U ? T : never;
 /**
  * Construct a type with the properties of T except for those in type K.
  */
-type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+type Omit<T, K extends keyof any> = {
+    [P in Exclude<keyof T, K>]: T[P]
+};
 
 /**
  * Exclude null and undefined from T

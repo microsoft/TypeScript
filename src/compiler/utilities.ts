@@ -101,7 +101,12 @@ namespace ts {
     }
 
     export function changesAffectModuleResolution(oldOptions: CompilerOptions, newOptions: CompilerOptions): boolean {
-        return oldOptions.configFilePath !== newOptions.configFilePath || moduleResolutionOptionDeclarations.some(o =>
+        return oldOptions.configFilePath !== newOptions.configFilePath ||
+            optionsHaveModuleResolutionChanges(oldOptions, newOptions);
+    }
+
+    export function optionsHaveModuleResolutionChanges(oldOptions: CompilerOptions, newOptions: CompilerOptions) {
+        return moduleResolutionOptionDeclarations.some(o =>
             !isJsonEqual(getCompilerOptionValue(oldOptions, o), getCompilerOptionValue(newOptions, o)));
     }
 
@@ -2221,6 +2226,7 @@ namespace ts {
     function getNextJSDocCommentLocation(node: Node) {
         const parent = node.parent;
         if (parent.kind === SyntaxKind.PropertyAssignment ||
+            parent.kind === SyntaxKind.ExportAssignment ||
             parent.kind === SyntaxKind.PropertyDeclaration ||
             parent.kind === SyntaxKind.ExpressionStatement && node.kind === SyntaxKind.PropertyAccessExpression ||
             getNestedModuleDeclaration(parent) ||
@@ -4330,6 +4336,10 @@ namespace ts {
         return positionsAreOnSameLine(range1.end, getStartPositionOfRange(range2, sourceFile), sourceFile);
     }
 
+    export function isNodeArrayMultiLine(list: NodeArray<Node>, sourceFile: SourceFile): boolean {
+        return !positionsAreOnSameLine(list.pos, list.end, sourceFile);
+    }
+
     export function positionsAreOnSameLine(pos1: number, pos2: number, sourceFile: SourceFile) {
         return pos1 === pos2 ||
             getLineOfLocalPosition(sourceFile, pos1) === getLineOfLocalPosition(sourceFile, pos2);
@@ -4673,6 +4683,8 @@ namespace ts {
         switch (options.target) {
             case ScriptTarget.ESNext:
                 return "lib.esnext.full.d.ts";
+            case ScriptTarget.ES2020:
+                return "lib.es2020.full.d.ts";
             case ScriptTarget.ES2019:
                 return "lib.es2019.full.d.ts";
             case ScriptTarget.ES2018:
