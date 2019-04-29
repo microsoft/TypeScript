@@ -7,14 +7,18 @@ var c = {
   get: (key: string) => 'foobar'
 };
 c['hello'];
+const foo = c['hello'];
 
 var d = {
   set: (key: string) => 'foobar'
 };
-d['hello'];
+const bar = d['hello'];
 
 var e = {
   set: (key: string) => 'foobar',
   get: (key: string) => 'foobar'
 };
-e['hello'];
+e['hello'] = 'modified';
+e['hello'] += 1;
+e['hello'] ++;
+
