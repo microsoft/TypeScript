@@ -13250,14 +13250,14 @@ namespace ts {
 
             function reportUnmeasurableMarkers(p: TypeParameter) {
                 if (outofbandVarianceMarkerHandler && (p === markerSuperType || p === markerSubType || p === markerOtherType)) {
-                    outofbandVarianceMarkerHandler(/*onlyUnreliable*/false);
+                    outofbandVarianceMarkerHandler(/*onlyUnreliable*/ false);
                 }
                 return p;
             }
 
             function reportUnreliableMarkers(p: TypeParameter) {
                 if (outofbandVarianceMarkerHandler && (p === markerSuperType || p === markerSubType || p === markerOtherType)) {
-                    outofbandVarianceMarkerHandler(/*onlyUnreliable*/true);
+                    outofbandVarianceMarkerHandler(/*onlyUnreliable*/ true);
                 }
                 return p;
             }
