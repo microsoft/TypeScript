@@ -349,12 +349,28 @@ namespace ts {
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
         setGetSourceFileAsHashVersioned(compilerHost, host);
+        compilerHost.getParsedCommandLine = fileName => parseConfigFile(fileName as ResolvedConfigFileName, toResolvedConfigFilePath(fileName as ResolvedConfigFileName));
 
         compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
         compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
-        let moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
+        const moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
+        if (!compilerHost.resolveModuleNames) {
+            const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference).resolvedModule!;
+            compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference) =>
+                loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
+        }
+        let cacheState: {
+            originalReadFile: CompilerHost["readFile"];
+            originalFileExists: CompilerHost["fileExists"];
+            originalDirectoryExists: CompilerHost["directoryExists"];
+            originalCreateDirectory: CompilerHost["createDirectory"];
+            originalWriteFile: CompilerHost["writeFile"] | undefined;
+            originalReadFileWithCache: CompilerHost["readFile"];
+            originalGetSourceFile: CompilerHost["getSourceFile"];
+        } | undefined;
 
         const buildInfoChecked = createMap() as ConfigFileMap<true>;
+        const extendedConfigCache = createMap<ExtendedConfigCacheEntry>();
 
         // Watch state
         const builderPrograms = createMap() as ConfigFileMap<T>;
@@ -409,7 +425,7 @@ namespace ts {
 
             let diagnostic: Diagnostic | undefined;
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-            const parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost);
+            const parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache);
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
             configFileCache.set(configFilePath, parsed || diagnostic!);
             return parsed;
@@ -786,6 +802,7 @@ namespace ts {
             }
             clearProjectStatus(resolved);
             addProjToQueue(resolved, reloadLevel);
+            enableCache();
         }
 
         function clearProjectStatus(resolved: ResolvedConfigFilePath) {
@@ -847,6 +864,7 @@ namespace ts {
                     }
                 }
                 else {
+                    disableCache();
                     reportErrorSummary();
                 }
             }
@@ -1341,26 +1359,53 @@ namespace ts {
             return configFileNames.map(resolveProjectName);
         }
 
-        function buildAllProjects(): ExitStatus {
-            if (watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
-            // TODO:: In watch mode as well to use caches for incremental build once we can invalidate caches correctly and have right api
-            // Override readFile for json files and output .d.ts to cache the text
-            const savedReadFileWithCache = readFileWithCache;
-            const savedGetSourceFile = compilerHost.getSourceFile;
+        function enableCache() {
+            if (cacheState) {
+                disableCache();
+            }
+
+            const originalReadFileWithCache = readFileWithCache;
+            const originalGetSourceFile = compilerHost.getSourceFile;
 
             const { originalReadFile, originalFileExists, originalDirectoryExists,
                 originalCreateDirectory, originalWriteFile, getSourceFileWithCache,
                 readFileWithCache: newReadFileWithCache
-            } = changeCompilerHostLikeToUseCache(host, toPath, (...args) => savedGetSourceFile.call(compilerHost, ...args));
+            } = changeCompilerHostLikeToUseCache(host, toPath, (...args) => originalGetSourceFile.call(compilerHost, ...args));
             readFileWithCache = newReadFileWithCache;
             compilerHost.getSourceFile = getSourceFileWithCache!;
 
-            const originalResolveModuleNames = compilerHost.resolveModuleNames;
-            if (!compilerHost.resolveModuleNames) {
-                const loader = (moduleName: string, containingFile: string, redirectedReference: ResolvedProjectReference | undefined) => resolveModuleName(moduleName, containingFile, projectCompilerOptions, compilerHost, moduleResolutionCache, redirectedReference).resolvedModule!;
-                compilerHost.resolveModuleNames = (moduleNames, containingFile, _reusedNames, redirectedReference) =>
-                    loadWithLocalCache<ResolvedModuleFull>(Debug.assertEachDefined(moduleNames), containingFile, redirectedReference, loader);
+            cacheState = {
+                originalReadFile,
+                originalFileExists,
+                originalDirectoryExists,
+                originalCreateDirectory,
+                originalWriteFile,
+                originalReadFileWithCache,
+                originalGetSourceFile,
+            };
+        }
+
+        function disableCache() {
+            if (!cacheState) return;
+
+            host.readFile = cacheState.originalReadFile;
+            host.fileExists = cacheState.originalFileExists;
+            host.directoryExists = cacheState.originalDirectoryExists;
+            host.createDirectory = cacheState.originalCreateDirectory;
+            host.writeFile = cacheState.originalWriteFile;
+            compilerHost.getSourceFile = cacheState.originalGetSourceFile;
+            readFileWithCache = cacheState.originalReadFileWithCache;
+            extendedConfigCache.clear();
+            if (moduleResolutionCache) {
+                moduleResolutionCache.directoryToModuleNameMap.clear();
+                moduleResolutionCache.moduleNameToDirectoryMap.clear();
             }
+            cacheState = undefined;
+        }
+
+        function buildAllProjects(): ExitStatus {
+            if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
+            enableCache();
 
             const buildOrder = getBuildOrder();
             reportBuildQueue(buildOrder);
@@ -1371,15 +1416,7 @@ namespace ts {
                 buildNextInvalidatedProject();
             }
             reportErrorSummary();
-            host.readFile = originalReadFile;
-            host.fileExists = originalFileExists;
-            host.directoryExists = originalDirectoryExists;
-            host.createDirectory = originalCreateDirectory;
-            host.writeFile = originalWriteFile;
-            compilerHost.getSourceFile = savedGetSourceFile;
-            readFileWithCache = savedReadFileWithCache;
-            compilerHost.resolveModuleNames = originalResolveModuleNames;
-            moduleResolutionCache = undefined;
+            disableCache();
             return diagnostics.size ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 
