@@ -19,5 +19,6 @@ verify.codeFixAvailable([
     { description: 'Add a return statement' },
     { description: 'Remove block body braces' },
     { description: 'Replace braces with parentheses' },
+    { description: `Infer type of 'props' from usage` },
     { description: 'Remove unused label' },
 ]);

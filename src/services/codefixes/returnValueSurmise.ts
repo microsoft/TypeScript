@@ -162,12 +162,6 @@ namespace ts.codefix {
                 if (!initializer || !isFunctionLikeDeclaration(initializer) || !initializer.body) return undefined;
                 return getFixInfo(checker, initializer, checker.getTypeAtLocation(node.parent), /* isFunctionType */ true);
         }
-
-        if (isDeclarationName(node) && (isVariableLike(node.parent) || isJsxAttribute(node.parent))) {
-            const initializer = getVariableLikeInitializer(node.parent);
-            if (!initializer || !isFunctionLikeDeclaration(initializer) || !initializer.body) return undefined;
-            return getFixInfo(checker, initializer, checker.getTypeAtLocation(node.parent), /* isFunctionType */ true);
-        }
         return undefined;
     }
 
@@ -187,8 +181,6 @@ namespace ts.codefix {
             case SyntaxKind.JSDocPropertyTag:
             case SyntaxKind.JSDocParameterTag:
                 return undefined;
-            default:
-                Debug.fail("unexpected token");
         }
     }
 

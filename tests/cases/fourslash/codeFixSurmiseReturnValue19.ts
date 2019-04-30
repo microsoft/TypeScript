@@ -15,5 +15,6 @@
 
 verify.codeFixAvailable([
     { description: 'Wrap this block with parentheses' },
+    { description: `Infer type of 'props' from usage` },
     { description: 'Remove unused label' },
 ]);
