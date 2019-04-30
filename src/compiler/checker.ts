@@ -10117,7 +10117,13 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectType));
+                                const suggestion = getSuggestionForNonexistentIndexSignature(objectType, accessExpression);
+                                if (suggestion !== undefined) {
+                                    error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature_Did_you_mean_to_call_1, typeToString(objectType), suggestion);
+                                }
+                                else {
+                                    error(accessExpression, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(objectType));
+                                }
                             }
                         }
                     }
@@ -20184,6 +20190,35 @@ namespace ts {
         function getSuggestionForNonexistentExport(name: Identifier, targetModule: Symbol): string | undefined {
             const suggestion = getSuggestedSymbolForNonexistentModule(name, targetModule);
             return suggestion && symbolName(suggestion);
+        }
+
+        function getSuggestionForNonexistentIndexSignature(objectType: Type, expr: ElementAccessExpression): string | undefined {
+            // check if object type has setter or getter
+            const hasProp = (name: "set" | "get", argCount = 1) => {
+                const prop = getPropertyOfObjectType(objectType, <__String>name);
+                if (prop) {
+                    const s = getSingleCallSignature(getTypeOfSymbol(prop));
+                    if (s && getMinArgumentCount(s) === argCount && typeToString(getTypeAtPosition(s, 0)) === "string") {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            const suggestedMethod = isAssignmentTarget(expr) ? "set" : "get";
+            if (!hasProp(suggestedMethod)) {
+                return undefined;
+            }
+
+            let suggestion = tryGetPropertyAccessOrIdentifierToString(expr);
+            if (suggestion === undefined) {
+                suggestion = suggestedMethod;
+            }
+            else {
+                suggestion += "." + suggestedMethod;
+            }
+
+            return suggestion;
         }
 
         /**
