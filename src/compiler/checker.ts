@@ -10383,11 +10383,11 @@ namespace ts {
             // We attempt to resolve the conditional type only when the check and extends types are non-generic
             if (!checkTypeInstantiable && !maybeTypeOfKind(inferredExtendsType, TypeFlags.Instantiable | TypeFlags.GenericMappedType)) {
                 if (inferredExtendsType.flags & TypeFlags.AnyOrUnknown) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
+                    return combinedMapper ? instantiateType(root.trueType, combinedMapper) : trueType;
                 }
                 // Return union of trueType and falseType for 'any' since it matches anything
                 if (checkType.flags & TypeFlags.Any) {
-                    return getUnionType([instantiateType(root.trueType, combinedMapper || mapper), falseType]);
+                    return getUnionType([combinedMapper ? instantiateType(root.trueType, combinedMapper) : trueType, falseType]);
                 }
                 // Return falseType for a definitely false extends check. We check an instantiations of the two
                 // types with type parameters mapped to the wildcard type, the most permissive instantiations
@@ -10402,7 +10402,7 @@ namespace ts {
                 //   type Foo<T extends { x: any }> = T extends { x: string } ? string : number
                 // doesn't immediately resolve to 'string' instead of being deferred.
                 if (isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(inferredExtendsType))) {
-                    return instantiateType(root.trueType, combinedMapper || mapper);
+                    return combinedMapper ? instantiateType(root.trueType, combinedMapper) : trueType;
                 }
             }
             // Return a deferred type for a check that is neither definitely true nor definitely false
