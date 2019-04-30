@@ -25,6 +25,27 @@ x(
     3);
 >3 : 3
 
+{/* @ts-ignore */}
+x();
+>x() : error
+>x : number
+
+{/* @ts-ignore */}
+x();
+>x() : error
+>x : number
+
+{/* @ts-ignore */}
+x(
+>x(    2,    3) : error
+>x : number
+
+    2,
+>2 : 2
+
+    3);
+>3 : 3
+
 
 
 // @ts-ignore

@@ -18,6 +18,21 @@ x(
     2,
     3);
 
+{/* @ts-ignore */}
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+{/* @ts-ignore */}
+x();
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+{/* @ts-ignore */}
+x(
+>x : Symbol(x, Decl(a.js, 0, 3))
+
+    2,
+    3);
+
 
 
 // @ts-ignore
