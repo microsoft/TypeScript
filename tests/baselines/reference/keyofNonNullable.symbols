@@ -1,0 +1,35 @@
+=== tests/cases/compiler/keyofNonNullable.ts ===
+function f<X, Y extends X>(keyofX: keyof X, keyofY: keyof Y) {
+>f : Symbol(f, Decl(keyofNonNullable.ts, 0, 0))
+>X : Symbol(X, Decl(keyofNonNullable.ts, 0, 11))
+>Y : Symbol(Y, Decl(keyofNonNullable.ts, 0, 13))
+>X : Symbol(X, Decl(keyofNonNullable.ts, 0, 11))
+>keyofX : Symbol(keyofX, Decl(keyofNonNullable.ts, 0, 27))
+>X : Symbol(X, Decl(keyofNonNullable.ts, 0, 11))
+>keyofY : Symbol(keyofY, Decl(keyofNonNullable.ts, 0, 43))
+>Y : Symbol(Y, Decl(keyofNonNullable.ts, 0, 13))
+
+    keyofY = keyofX;
+>keyofY : Symbol(keyofY, Decl(keyofNonNullable.ts, 0, 43))
+>keyofX : Symbol(keyofX, Decl(keyofNonNullable.ts, 0, 27))
+
+    keyofX = keyofY;
+>keyofX : Symbol(keyofX, Decl(keyofNonNullable.ts, 0, 27))
+>keyofY : Symbol(keyofY, Decl(keyofNonNullable.ts, 0, 43))
+}
+
+
+function f1<T>(keyofT: keyof T, keyofNonNullT: keyof NonNullable<T>) {
+>f1 : Symbol(f1, Decl(keyofNonNullable.ts, 3, 1))
+>T : Symbol(T, Decl(keyofNonNullable.ts, 6, 12))
+>keyofT : Symbol(keyofT, Decl(keyofNonNullable.ts, 6, 15))
+>T : Symbol(T, Decl(keyofNonNullable.ts, 6, 12))
+>keyofNonNullT : Symbol(keyofNonNullT, Decl(keyofNonNullable.ts, 6, 31))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofNonNullable.ts, 6, 12))
+
+    keyofT = keyofNonNullT
+>keyofT : Symbol(keyofT, Decl(keyofNonNullable.ts, 6, 15))
+>keyofNonNullT : Symbol(keyofNonNullT, Decl(keyofNonNullable.ts, 6, 31))
+}
+

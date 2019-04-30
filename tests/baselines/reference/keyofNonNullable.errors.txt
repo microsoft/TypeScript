@@ -1,0 +1,20 @@
+tests/cases/compiler/keyofNonNullable.ts(3,5): error TS2322: Type 'keyof Y' is not assignable to type 'keyof X'.
+  Type 'string | number | symbol' is not assignable to type 'keyof X'.
+    Type 'string' is not assignable to type 'keyof X'.
+
+
+==== tests/cases/compiler/keyofNonNullable.ts (1 errors) ====
+    function f<X, Y extends X>(keyofX: keyof X, keyofY: keyof Y) {
+        keyofY = keyofX;
+        keyofX = keyofY;
+        ~~~~~~
+!!! error TS2322: Type 'keyof Y' is not assignable to type 'keyof X'.
+!!! error TS2322:   Type 'string | number | symbol' is not assignable to type 'keyof X'.
+!!! error TS2322:     Type 'string' is not assignable to type 'keyof X'.
+    }
+    
+    
+    function f1<T>(keyofT: keyof T, keyofNonNullT: keyof NonNullable<T>) {
+        keyofT = keyofNonNullT
+    }
+    

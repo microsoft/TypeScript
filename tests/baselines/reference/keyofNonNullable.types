@@ -1,0 +1,29 @@
+=== tests/cases/compiler/keyofNonNullable.ts ===
+function f<X, Y extends X>(keyofX: keyof X, keyofY: keyof Y) {
+>f : <X, Y extends X>(keyofX: keyof X, keyofY: keyof Y) => void
+>keyofX : keyof X
+>keyofY : keyof Y
+
+    keyofY = keyofX;
+>keyofY = keyofX : keyof X
+>keyofY : keyof Y
+>keyofX : keyof X
+
+    keyofX = keyofY;
+>keyofX = keyofY : keyof Y
+>keyofX : keyof X
+>keyofY : keyof Y
+}
+
+
+function f1<T>(keyofT: keyof T, keyofNonNullT: keyof NonNullable<T>) {
+>f1 : <T>(keyofT: keyof T, keyofNonNullT: keyof NonNullable<T>) => void
+>keyofT : keyof T
+>keyofNonNullT : keyof NonNullable<T>
+
+    keyofT = keyofNonNullT
+>keyofT = keyofNonNullT : keyof NonNullable<T>
+>keyofT : keyof T
+>keyofNonNullT : keyof NonNullable<T>
+}
+
