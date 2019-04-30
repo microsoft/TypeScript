@@ -12426,6 +12426,14 @@ namespace ts {
                 return true;
             }
 
+            function isIndexType(t: Type): t is IndexType {
+                return (t.flags & TypeFlags.Index) > 0;
+            }
+
+            function isConditionalType(t: Type): t is ConditionalType {
+                return (t.flags & TypeFlags.Conditional) > 0
+            }
+
             /**
              * Compare two types and return
              * * Ternary.True if they are related with no assumptions,
@@ -13132,7 +13140,22 @@ namespace ts {
                         }
                     }
                 }
-                else if (source.flags & TypeFlags.Index) {
+                else if (isIndexType(source)) {
+                    // keyof target = keyof (T extends x ? A : B)
+                    // when keyof target = keyof (A | B)
+                    if (isIndexType(target)
+                        && isConditionalType(source.type)
+                        && isUnconstrainedTypeParameter(source.type.checkType)
+                    ) {
+                        const branchUnion = getUnionType([ source.type.trueType, source.type.falseType ]);
+                        const newSource = getIndexType(branchUnion);
+                        const newTarget = target;
+                        if (result = isRelatedTo(newSource, newTarget)) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
+                    }
+
                     if (result = isRelatedTo(keyofConstraintType, target, reportErrors)) {
                         errorInfo = saveErrorInfo;
                         return result;
