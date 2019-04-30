@@ -399,12 +399,14 @@ namespace ts {
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
         setGetSourceFileAsHashVersioned(compilerHost, host);
+        compilerHost.getParsedCommandLine = parseConfigFile;
 
         compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
         compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
         let moduleResolutionCache = !compilerHost.resolveModuleNames ? createModuleResolutionCache(currentDirectory, getCanonicalFileName) : undefined;
 
         const buildInfoChecked = createFileMap<true>(toPath);
+        let extendedConfigCache: Map<ExtendedConfigCacheEntry> | undefined;
 
         // Watch state
         const builderPrograms = createFileMap<T>(toPath);
@@ -481,7 +483,7 @@ namespace ts {
 
             let diagnostic: Diagnostic | undefined;
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-            const parsed = getParsedCommandLineOfConfigFile(configFilePath, baseCompilerOptions, parseConfigFileHost);
+            const parsed = getParsedCommandLineOfConfigFile(configFilePath, baseCompilerOptions, parseConfigFileHost, extendedConfigCache);
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
             configFileCache.setValue(configFilePath, parsed || diagnostic!);
             return parsed;
@@ -1395,6 +1397,7 @@ namespace ts {
             } = changeCompilerHostLikeToUseCache(host, toPath, (...args) => savedGetSourceFile.call(compilerHost, ...args));
             readFileWithCache = newReadFileWithCache;
             compilerHost.getSourceFile = getSourceFileWithCache!;
+            extendedConfigCache = createMap();
 
             const originalResolveModuleNames = compilerHost.resolveModuleNames;
             if (!compilerHost.resolveModuleNames) {
@@ -1463,6 +1466,7 @@ namespace ts {
             host.writeFile = originalWriteFile;
             compilerHost.getSourceFile = savedGetSourceFile;
             readFileWithCache = savedReadFileWithCache;
+            extendedConfigCache = undefined;
             compilerHost.resolveModuleNames = originalResolveModuleNames;
             moduleResolutionCache = undefined;
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
