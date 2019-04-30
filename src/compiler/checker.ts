@@ -12328,6 +12328,15 @@ namespace ts {
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
                 const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
 
+                if (target.flags & TypeFlags.TypeParameter && target.immediateBaseConstraint !== undefined && isTypeAssignableTo(source, target.immediateBaseConstraint)) {
+                    reportError(
+                        Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
+                        sourceType,
+                        targetType,
+                        typeToString(target.immediateBaseConstraint),
+                    );
+                }
+
                 if (!message) {
                     if (relation === comparableRelation) {
                         message = Diagnostics.Type_0_is_not_comparable_to_type_1;

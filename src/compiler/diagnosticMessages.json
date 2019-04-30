@@ -3096,6 +3096,10 @@
         "category": "Error",
         "code": 5074
     },
+    "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
+        "category": "Error",
+        "code": 5075
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
