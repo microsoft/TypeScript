@@ -869,16 +869,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24079,1): error TS2323: Cannot redeclare exported variable 'Buf16'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24080,1): error TS2323: Cannot redeclare exported variable 'Buf32'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26059,1): error TS2323: Cannot redeclare exported variable 'deflate'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27915,27): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27918,30): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27921,30): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27928,27): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27929,20): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
-  Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27956,16): error TS2323: Cannot redeclare exported variable 'parse'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28222,51): error TS2300: Duplicate identifier '_read'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28457,20): error TS2339: Property 'emit' does not exist on type 'Readable'.
@@ -5027,9 +5017,9 @@ node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,20):
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,125): error TS2339: Property 'length1' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(42,138): error TS2339: Property 'length2' does not exist on type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,411): error TS2403: Subsequent variable declarations must have the same type.  Variable 'g' must be of type 'string', but here has type 'any'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,443): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,7): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,220): error TS2367: This condition will always return 'false' since the types 'number' and 'string' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(43,443): error TS2367: This condition will always return 'false' since the types '1' and 'string' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,7): error TS2367: This condition will always return 'false' since the types '-1' and 'string' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(44,220): error TS2367: This condition will always return 'false' since the types '0' and 'string' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,403): error TS2339: Property 'diffs' does not exist on type 'typeof diff_match_patch'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,417): error TS2339: Property 'start2' does not exist on type 'typeof diff_match_patch'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(47,429): error TS2339: Property 'start1' does not exist on type 'typeof diff_match_patch'.
@@ -10912,7 +10902,7 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.j
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(822,79): error TS2339: Property 'charAt' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(823,41): error TS2339: Property 'length' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(823,88): error TS2339: Property 'charAt' does not exist on type 'void'.
-node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(839,9): error TS2367: This condition will always return 'false' since the types 'void' and 'number' have no overlap.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(839,9): error TS2367: This condition will always return 'false' since the types 'void' and '0' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(854,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(862,12): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourcesTextEditor.js(862,13): error TS1345: An expression of type 'void' cannot be tested for truthiness

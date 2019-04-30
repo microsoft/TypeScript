@@ -399,6 +399,7 @@ namespace ts {
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
         setGetSourceFileAsHashVersioned(compilerHost, host);
+        compilerHost.getParsedCommandLine = parseConfigFile;
 
         compilerHost.resolveModuleNames = maybeBind(host, host.resolveModuleNames);
         compilerHost.resolveTypeReferenceDirectives = maybeBind(host, host.resolveTypeReferenceDirectives);
@@ -415,6 +416,7 @@ namespace ts {
         } | undefined;
 
         const buildInfoChecked = createFileMap<true>(toPath);
+        const extendedConfigCache = createMap<ExtendedConfigCacheEntry>();
 
         // Watch state
         const builderPrograms = createFileMap<T>(toPath);
@@ -491,7 +493,7 @@ namespace ts {
 
             let diagnostic: Diagnostic | undefined;
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-            const parsed = getParsedCommandLineOfConfigFile(configFilePath, baseCompilerOptions, parseConfigFileHost);
+            const parsed = getParsedCommandLineOfConfigFile(configFilePath, baseCompilerOptions, parseConfigFileHost, extendedConfigCache);
             parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
             configFileCache.setValue(configFilePath, parsed || diagnostic!);
             return parsed;
@@ -1439,6 +1441,7 @@ namespace ts {
             compilerHost.getSourceFile = cacheState.originalGetSourceFile;
             readFileWithCache = cacheState.originalReadFileWithCache;
             compilerHost.resolveModuleNames = cacheState.originalResolveModuleNames;
+            extendedConfigCache.clear();
             if (moduleResolutionCache) {
                 moduleResolutionCache.directoryToModuleNameMap.clear();
                 moduleResolutionCache.moduleNameToDirectoryMap.clear();

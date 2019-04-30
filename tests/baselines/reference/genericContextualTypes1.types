@@ -155,9 +155,9 @@ const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);
 >(a: T[]) => a.filter(f) : (a: T[]) => T[]
 >a : T[]
 >a.filter(f) : T[]
->a.filter : { <S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[]; }
+>a.filter : { <S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; }
 >a : T[]
->filter : { <S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: T, index: number, array: T[]) => any, thisArg?: any): T[]; }
+>filter : { <S extends T>(callbackfn: (value: T, index: number, array: T[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: T, index: number, array: T[]) => unknown, thisArg?: any): T[]; }
 >f : (x: T) => boolean
 
 const f20: (a: string[]) => number[] = arrayMap(x => x.length);
