@@ -535,8 +535,7 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
-        let deferredGlobalExcludeSymbol: Symbol;
-        let deferredGlobalPickSymbol: Symbol;
+        let deferredGlobalOmitSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
@@ -4969,13 +4968,12 @@ namespace ts {
                 if (omitKeyType.flags & TypeFlags.Never) {
                     return source;
                 }
-                const pickTypeAlias = getGlobalPickSymbol();
-                const excludeTypeAlias = getGlobalExcludeSymbol();
-                if (!pickTypeAlias || !excludeTypeAlias) {
+
+                const omitTypeAlias = getGlobalOmitSymbol();
+                if (!omitTypeAlias) {
                     return errorType;
                 }
-                const pickKeys = getTypeAliasInstantiation(excludeTypeAlias, [getIndexType(source), omitKeyType]);
-                return getTypeAliasInstantiation(pickTypeAlias, [source, pickKeys]);
+                return getTypeAliasInstantiation(omitTypeAlias, [source, omitKeyType]);
             }
             const members = createSymbolTable();
             for (const prop of getPropertiesOfType(source)) {
@@ -9305,12 +9303,8 @@ namespace ts {
             return deferredGlobalExtractSymbol || (deferredGlobalExtractSymbol = getGlobalSymbol("Extract" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
-        function getGlobalExcludeSymbol(): Symbol {
-            return deferredGlobalExcludeSymbol || (deferredGlobalExcludeSymbol = getGlobalSymbol("Exclude" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
-        }
-
-        function getGlobalPickSymbol(): Symbol {
-            return deferredGlobalPickSymbol || (deferredGlobalPickSymbol = getGlobalSymbol("Pick" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        function getGlobalOmitSymbol(): Symbol {
+            return deferredGlobalOmitSymbol || (deferredGlobalOmitSymbol = getGlobalSymbol("Omit" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
         function getGlobalBigIntType(reportErrors: boolean) {
