@@ -6855,7 +6855,7 @@ namespace ts {
                 }
 
                 function parseReturnTag(start: number, tagName: Identifier): JSDocReturnTag {
-                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
+                    if (some(tags, isJSDocReturnTag)) {
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
@@ -6866,7 +6866,7 @@ namespace ts {
                 }
 
                 function parseTypeTag(start: number, tagName: Identifier): JSDocTypeTag {
-                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
+                    if (some(tags, isJSDocTypeTag)) {
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
