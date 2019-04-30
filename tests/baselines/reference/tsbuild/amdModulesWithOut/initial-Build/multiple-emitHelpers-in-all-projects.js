@@ -286,7 +286,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
@@ -371,7 +371,7 @@ sourceFile:../lib/file0.ts
 >>>        t[p] = s[p];
 >>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
 >>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
->>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+>>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
 >>>                t[p[i]] = s[p[i]];
 >>>        }
 >>>    return t;
@@ -847,26 +847,26 @@ sourceFile:file4.ts
         },
         {
           "pos": 678,
-          "end": 1170,
+          "end": 1178,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1172,
-          "end": 1898,
+          "pos": 1180,
+          "end": 1906,
           "kind": "prepend",
           "data": "/src/lib/module.js",
           "texts": [
             {
-              "pos": 1172,
-              "end": 1898,
+              "pos": 1180,
+              "end": 1906,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1898,
-          "end": 2416,
+          "pos": 1906,
+          "end": 2424,
           "kind": "text"
         }
       ],
@@ -932,22 +932,22 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (678-1170):: typescript:rest
+emitHelpers: (678-1178):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1172-1898):: /src/lib/module.js texts:: 1
+prepend: (1180-1906):: /src/lib/module.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1172-1898)
+text: (1180-1906)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];
@@ -972,7 +972,7 @@ define("file2", ["require", "exports"], function (require, exports) {
 var globalConst = 10;
 
 ----------------------------------------------------------------------
-text: (1898-2416)
+text: (1906-2424)
 define("file3", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1234,7 +1234,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
@@ -1303,7 +1303,7 @@ sourceFile:file0.ts
 >>>        t[p] = s[p];
 >>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
 >>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
->>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+>>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
 >>>                t[p[i]] = s[p[i]];
 >>>        }
 >>>    return t;
@@ -1583,13 +1583,13 @@ sourceFile:global.ts
         },
         {
           "pos": 678,
-          "end": 1170,
+          "end": 1178,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1172,
-          "end": 1898,
+          "pos": 1180,
+          "end": 1906,
           "kind": "text"
         }
       ],
@@ -1642,20 +1642,20 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (678-1170):: typescript:rest
+emitHelpers: (678-1178):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
 };
 ----------------------------------------------------------------------
-text: (1172-1898)
+text: (1180-1906)
 var myGlob = 20;
 function libfile0Spread() {
     var b = [];

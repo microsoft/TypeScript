@@ -702,7 +702,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
@@ -759,7 +759,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>        t[p] = s[p];
 >>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
 >>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
->>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+>>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
 >>>                t[p[i]] = s[p[i]];
 >>>        }
 >>>    return t;
@@ -1324,39 +1324,39 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 492,
+          "end": 500,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 494,
-          "end": 644,
+          "pos": 502,
+          "end": 652,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.js",
           "texts": [
             {
-              "pos": 494,
-              "end": 644,
+              "pos": 502,
+              "end": 652,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 644,
-          "end": 1048,
+          "pos": 652,
+          "end": 1056,
           "kind": "prepend",
           "data": "/src/2/second-output.js",
           "texts": [
             {
-              "pos": 644,
-              "end": 1048,
+              "pos": 652,
+              "end": 1056,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1048,
-          "end": 1201,
+          "pos": 1056,
+          "end": 1209,
           "kind": "text"
         }
       ],
@@ -1409,22 +1409,22 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-492):: typescript:rest
+emitHelpers: (0-500):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (494-644):: /src/first/bin/first-output.js texts:: 1
+prepend: (502-652):: /src/first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (494-644)
+text: (502-652)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -1434,9 +1434,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (644-1048):: /src/2/second-output.js texts:: 1
+prepend: (652-1056):: /src/2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (644-1048)
+text: (652-1056)
 var N;
 (function (N) {
     function f() {
@@ -1457,7 +1457,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (1048-1201)
+text: (1056-1209)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {

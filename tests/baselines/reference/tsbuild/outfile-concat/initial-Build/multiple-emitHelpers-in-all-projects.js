@@ -165,7 +165,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
@@ -237,7 +237,7 @@ sourceFile:../second/second_part1.ts
 >>>        t[p] = s[p];
 >>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
 >>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
->>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+>>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
 >>>                t[p[i]] = s[p[i]];
 >>>        }
 >>>    return t;
@@ -663,25 +663,25 @@ sourceFile:../second/second_part2.ts
       "sections": [
         {
           "pos": 0,
-          "end": 492,
+          "end": 500,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 494,
-          "end": 998,
+          "pos": 502,
+          "end": 1006,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 1000,
-          "end": 1170,
+          "pos": 1008,
+          "end": 1178,
           "kind": "emitHelpers",
           "data": "typescript:spread"
         },
         {
-          "pos": 1172,
-          "end": 1792,
+          "pos": 1180,
+          "end": 1800,
           "kind": "text"
         }
       ],
@@ -710,20 +710,20 @@ sourceFile:../second/second_part2.ts
 ======================================================================
 File:: /src/2/second-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-492):: typescript:rest
+emitHelpers: (0-500):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
 };
 ----------------------------------------------------------------------
-emitHelpers: (494-998):: typescript:read
+emitHelpers: (502-1006):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -741,13 +741,13 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1000-1170):: typescript:spread
+emitHelpers: (1008-1178):: typescript:spread
 var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
 };
 ----------------------------------------------------------------------
-text: (1172-1792)
+text: (1180-1800)
 var N;
 (function (N) {
     function f() {
@@ -993,7 +993,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
@@ -1056,7 +1056,7 @@ sourceFile:../first_PART1.ts
 >>>        t[p] = s[p];
 >>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
 >>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
->>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+>>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
 >>>                t[p[i]] = s[p[i]];
 >>>        }
 >>>    return t;
@@ -1372,25 +1372,25 @@ sourceFile:../first_part3.ts
       "sections": [
         {
           "pos": 0,
-          "end": 492,
+          "end": 500,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 494,
-          "end": 998,
+          "pos": 502,
+          "end": 1006,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 1000,
-          "end": 1170,
+          "pos": 1008,
+          "end": 1178,
           "kind": "emitHelpers",
           "data": "typescript:spread"
         },
         {
-          "pos": 1172,
-          "end": 1611,
+          "pos": 1180,
+          "end": 1619,
           "kind": "text"
         }
       ],
@@ -1419,20 +1419,20 @@ sourceFile:../first_part3.ts
 ======================================================================
 File:: /src/first/bin/first-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-492):: typescript:rest
+emitHelpers: (0-500):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
 };
 ----------------------------------------------------------------------
-emitHelpers: (494-998):: typescript:read
+emitHelpers: (502-1006):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -1450,13 +1450,13 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1000-1170):: typescript:spread
+emitHelpers: (1008-1178):: typescript:spread
 var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
 };
 ----------------------------------------------------------------------
-text: (1172-1611)
+text: (1180-1619)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -2007,7 +2007,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
@@ -2107,7 +2107,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>        t[p] = s[p];
 >>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
 >>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
->>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+>>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
 >>>                t[p[i]] = s[p[i]];
 >>>        }
 >>>    return t;
@@ -3010,51 +3010,51 @@ sourceFile:../../third_part1.ts
       "sections": [
         {
           "pos": 0,
-          "end": 492,
+          "end": 500,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 494,
-          "end": 998,
+          "pos": 502,
+          "end": 1006,
           "kind": "emitHelpers",
           "data": "typescript:read"
         },
         {
-          "pos": 1000,
-          "end": 1170,
+          "pos": 1008,
+          "end": 1178,
           "kind": "emitHelpers",
           "data": "typescript:spread"
         },
         {
-          "pos": 1172,
-          "end": 1611,
+          "pos": 1180,
+          "end": 1619,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1172,
-              "end": 1611,
+              "pos": 1180,
+              "end": 1619,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1611,
-          "end": 2231,
+          "pos": 1619,
+          "end": 2239,
           "kind": "prepend",
           "data": "/src/2/second-output.js",
           "texts": [
             {
-              "pos": 1611,
-              "end": 2231,
+              "pos": 1619,
+              "end": 2239,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2231,
-          "end": 2596,
+          "pos": 2239,
+          "end": 2604,
           "kind": "text"
         }
       ],
@@ -3109,20 +3109,20 @@ sourceFile:../../third_part1.ts
 ======================================================================
 File:: /src/third/thirdjs/output/third-output.js
 ----------------------------------------------------------------------
-emitHelpers: (0-492):: typescript:rest
+emitHelpers: (0-500):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
 };
 ----------------------------------------------------------------------
-emitHelpers: (494-998):: typescript:read
+emitHelpers: (502-1006):: typescript:read
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -3140,15 +3140,15 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (1000-1170):: typescript:spread
+emitHelpers: (1008-1178):: typescript:spread
 var __spread = (this && this.__spread) || function () {
     for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
     return ar;
 };
 ----------------------------------------------------------------------
-prepend: (1172-1611):: /src/first/bin/first-output.js texts:: 1
+prepend: (1180-1619):: /src/first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1172-1611)
+text: (1180-1619)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() {
@@ -3167,9 +3167,9 @@ function firstfirst_part3Spread() {
 firstfirst_part3Spread.apply(void 0, __spread([10, 20, 30]));
 
 ----------------------------------------------------------------------
-prepend: (1611-2231):: /src/2/second-output.js texts:: 1
+prepend: (1619-2239):: /src/2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1611-2231)
+text: (1619-2239)
 var N;
 (function (N) {
     function f() {
@@ -3197,7 +3197,7 @@ function secondsecond_part2Spread() {
 secondsecond_part2Spread.apply(void 0, __spread([10, 20, 30]));
 
 ----------------------------------------------------------------------
-text: (2231-2596)
+text: (2239-2604)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {

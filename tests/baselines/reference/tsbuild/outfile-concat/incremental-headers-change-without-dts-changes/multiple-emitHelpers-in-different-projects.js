@@ -736,7 +736,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
@@ -817,7 +817,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>        t[p] = s[p];
 >>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
 >>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
->>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+>>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
 >>>                t[p[i]] = s[p[i]];
 >>>        }
 >>>    return t;
@@ -1440,39 +1440,39 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 678,
-          "end": 1170,
+          "end": 1178,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1172,
-          "end": 1322,
+          "pos": 1180,
+          "end": 1330,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1172,
-              "end": 1322,
+              "pos": 1180,
+              "end": 1330,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1322,
-          "end": 1823,
+          "pos": 1330,
+          "end": 1831,
           "kind": "prepend",
           "data": "/src/2/second-output.js",
           "texts": [
             {
-              "pos": 1322,
-              "end": 1823,
+              "pos": 1330,
+              "end": 1831,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1823,
-          "end": 1976,
+          "pos": 1831,
+          "end": 1984,
           "kind": "text"
         }
       ],
@@ -1549,22 +1549,22 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (678-1170):: typescript:rest
+emitHelpers: (678-1178):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1172-1322):: /src/first/bin/first-output.js texts:: 1
+prepend: (1180-1330):: /src/first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1172-1322)
+text: (1180-1330)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -1574,9 +1574,9 @@ function f() {
 }
 
 ----------------------------------------------------------------------
-prepend: (1322-1823):: /src/2/second-output.js texts:: 1
+prepend: (1330-1831):: /src/2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1322-1823)
+text: (1330-1831)
 var N;
 (function (N) {
     function f() {
@@ -1601,7 +1601,7 @@ var C = (function () {
 }());
 
 ----------------------------------------------------------------------
-text: (1823-1976)
+text: (1831-1984)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {

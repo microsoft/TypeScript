@@ -1037,7 +1037,7 @@ var __rest = (this && this.__rest) || function (s, e) {
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
@@ -1135,7 +1135,7 @@ sourceFile:../../../first/first_PART1.ts
 >>>        t[p] = s[p];
 >>>    if (s != null && typeof Object.getOwnPropertySymbols === "function")
 >>>        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
->>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+>>>            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
 >>>                t[p[i]] = s[p[i]];
 >>>        }
 >>>    return t;
@@ -1998,39 +1998,39 @@ sourceFile:../../third_part1.ts
         },
         {
           "pos": 678,
-          "end": 1170,
+          "end": 1178,
           "kind": "emitHelpers",
           "data": "typescript:rest"
         },
         {
-          "pos": 1172,
-          "end": 1534,
+          "pos": 1180,
+          "end": 1542,
           "kind": "prepend",
           "data": "/src/first/bin/first-output.js",
           "texts": [
             {
-              "pos": 1172,
-              "end": 1534,
+              "pos": 1180,
+              "end": 1542,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 1534,
-          "end": 2154,
+          "pos": 1542,
+          "end": 2162,
           "kind": "prepend",
           "data": "/src/2/second-output.js",
           "texts": [
             {
-              "pos": 1534,
-              "end": 2154,
+              "pos": 1542,
+              "end": 2162,
               "kind": "text"
             }
           ]
         },
         {
-          "pos": 2154,
-          "end": 2519,
+          "pos": 2162,
+          "end": 2527,
           "kind": "text"
         }
       ],
@@ -2109,22 +2109,22 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 ----------------------------------------------------------------------
-emitHelpers: (678-1170):: typescript:rest
+emitHelpers: (678-1178):: typescript:rest
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
         for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable(p[i]))
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
                 t[p[i]] = s[p[i]];
         }
     return t;
 };
 ----------------------------------------------------------------------
-prepend: (1172-1534):: /src/first/bin/first-output.js texts:: 1
+prepend: (1180-1542):: /src/first/bin/first-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1172-1534)
+text: (1180-1542)
 var s = "Hello, world";
 console.log(s);
 function forfirstfirst_PART1Rest() { }
@@ -2141,9 +2141,9 @@ function firstfirst_part3Spread() {
 firstfirst_part3Spread.apply(void 0, __spread([10, 20, 30]));
 
 ----------------------------------------------------------------------
-prepend: (1534-2154):: /src/2/second-output.js texts:: 1
+prepend: (1542-2162):: /src/2/second-output.js texts:: 1
 >>--------------------------------------------------------------------
-text: (1534-2154)
+text: (1542-2162)
 var N;
 (function (N) {
     function f() {
@@ -2171,7 +2171,7 @@ function secondsecond_part2Spread() {
 secondsecond_part2Spread.apply(void 0, __spread([10, 20, 30]));
 
 ----------------------------------------------------------------------
-text: (2154-2519)
+text: (2162-2527)
 var c = new C();
 c.doSomething();
 function forthirdthird_part1Rest() {
