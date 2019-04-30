@@ -10318,8 +10318,16 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getActualTypeVariable(type: Type) {
-            return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeVariable : type;
+        function getActualTypeVariable(type: Type): Type {
+            if (type.flags & TypeFlags.Substitution) {
+                return (<SubstitutionType>type).typeVariable;
+            }
+            if (type.flags & TypeFlags.IndexedAccess && (
+                (<IndexedAccessType>type).objectType.flags & TypeFlags.Substitution ||
+                (<IndexedAccessType>type).indexType.flags & TypeFlags.Substitution)) {
+                return getIndexedAccessType(getActualTypeVariable((<IndexedAccessType>type).objectType), getActualTypeVariable((<IndexedAccessType>type).indexType));
+            }
+            return type;
         }
 
         /**
@@ -14860,13 +14868,8 @@ namespace ts {
                         target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
                     }
                 }
-                else if (target.flags & TypeFlags.Substitution) {
-                    target = (target as SubstitutionType).typeVariable;
-                }
-                else if (target.flags & TypeFlags.IndexedAccess && (
-                    (<IndexedAccessType>target).objectType.flags & TypeFlags.Substitution ||
-                    (<IndexedAccessType>target).indexType.flags & TypeFlags.Substitution)) {
-                    target = getIndexedAccessType(getActualTypeVariable((<IndexedAccessType>target).objectType), getActualTypeVariable((<IndexedAccessType>target).indexType));
+                else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
+                    target = getActualTypeVariable(target);
                 }
                 if (target.flags & TypeFlags.TypeVariable) {
                     // If target is a type parameter, make an inference, unless the source type contains
