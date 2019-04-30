@@ -17,6 +17,17 @@ x(
     2,
     3);
 
+{/* @ts-ignore */}
+x();
+
+{/* @ts-ignore */}
+x();
+
+{/* @ts-ignore */}
+x(
+    2,
+    3);
+
 
 
 // @ts-ignore

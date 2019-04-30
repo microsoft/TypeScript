@@ -1,5 +1,5 @@
 namespace ts {
-    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*\/\/\/?\s*(@ts-ignore)?)/;
+    const ignoreDiagnosticCommentRegEx = /(^\s*$)|(^\s*(\/\/\/?|{\s*\/\*)\s*(@ts-ignore)?(\s*\*\/\s*})?)/;
 
     export function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName = "tsconfig.json"): string | undefined {
         return forEachAncestorDirectory(searchPath, ancestor => {
@@ -1724,7 +1724,7 @@ namespace ts {
                         // non-empty line
                         return true;
                     }
-                    if (result[3]) {
+                    if (result[4]) {
                         // @ts-ignore
                         return false;
                     }
