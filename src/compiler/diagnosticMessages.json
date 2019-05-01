@@ -1035,6 +1035,10 @@
         "category": "Error",
         "code": 1355
     },
+    "Did you mean to mark this function as 'async'?": {
+        "category": "Error",
+        "code": 1356
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2959,7 +2963,7 @@
         "category": "Error",
         "code": 4104
     },
-    
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
