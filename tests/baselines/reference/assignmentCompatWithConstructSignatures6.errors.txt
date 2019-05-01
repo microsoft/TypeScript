@@ -5,6 +5,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
       Types of property 'foo' are incompatible.
         Type 'U' is not assignable to type 'T'.
+          'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures6.ts(42,1): error TS2322: Type 'new <T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type 'new <T>(x: { a: T; b: T; }) => T[]'.
   Types of parameters 'x' and 'x' are incompatible.
     Type '{ a: T; b: T; }' is not assignable to type '{ a: Base; b: Base; }'.
@@ -61,6 +62,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:     Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
 !!! error TS2322:       Types of property 'foo' are incompatible.
 !!! error TS2322:         Type 'U' is not assignable to type 'T'.
+!!! error TS2322:           'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
     var b16: new <T>(x: { a: T; b: T }) => T[]; 
     x.a16 = b16;
     b16 = x.a16;

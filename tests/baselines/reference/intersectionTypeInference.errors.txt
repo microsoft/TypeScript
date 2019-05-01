@@ -1,7 +1,9 @@
 tests/cases/conformance/types/intersection/intersectionTypeInference.ts(5,5): error TS2322: Type 'T' is not assignable to type 'T & U'.
   Type 'T' is not assignable to type 'U'.
+    'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/intersection/intersectionTypeInference.ts(6,5): error TS2322: Type 'U' is not assignable to type 'T & U'.
   Type 'U' is not assignable to type 'T'.
+    'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 
 
 ==== tests/cases/conformance/types/intersection/intersectionTypeInference.ts (2 errors) ====
@@ -13,10 +15,12 @@ tests/cases/conformance/types/intersection/intersectionTypeInference.ts(6,5): er
         ~~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'T & U'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
+!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
         result = obj2;  // Error
         ~~~~~~
 !!! error TS2322: Type 'U' is not assignable to type 'T & U'.
 !!! error TS2322:   Type 'U' is not assignable to type 'T'.
+!!! error TS2322:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         return result;
     }
     

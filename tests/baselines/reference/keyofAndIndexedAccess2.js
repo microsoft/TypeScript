@@ -126,6 +126,17 @@ function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void
     cb(param[0]);
 }
 
+// Repro from #31149
+
+function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
+    cb(param[0]);
+}
+
+function fn4<K extends number>() {
+    let x: Array<string>[K] = 'abc';
+    let y: ReadonlyArray<string>[K] = 'abc';
+}
+
 
 //// [keyofAndIndexedAccess2.js]
 function f1(obj, k0, k1, k2) {
@@ -206,4 +217,12 @@ function fn(param, cb) {
 }
 function fn2(param, cb) {
     cb(param[0]);
+}
+// Repro from #31149
+function fn3(param, cb) {
+    cb(param[0]);
+}
+function fn4() {
+    let x = 'abc';
+    let y = 'abc';
 }

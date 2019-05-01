@@ -6855,7 +6855,7 @@ namespace ts {
                 }
 
                 function parseReturnTag(start: number, tagName: Identifier): JSDocReturnTag {
-                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocReturnTag)) {
+                    if (some(tags, isJSDocReturnTag)) {
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
@@ -6866,7 +6866,7 @@ namespace ts {
                 }
 
                 function parseTypeTag(start: number, tagName: Identifier): JSDocTypeTag {
-                    if (forEach(tags, t => t.kind === SyntaxKind.JSDocTypeTag)) {
+                    if (some(tags, isJSDocTypeTag)) {
                         parseErrorAt(tagName.pos, scanner.getTokenPos(), Diagnostics._0_tag_already_specified, tagName.escapedText);
                     }
 
@@ -7782,24 +7782,9 @@ namespace ts {
 
     /*@internal*/
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
-        const triviaScanner = createScanner(context.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
         const pragmas: PragmaPseudoMapEntry[] = [];
 
-        // Keep scanning all the leading trivia in the file until we get to something that
-        // isn't trivia.  Any single line comment will be analyzed to see if it is a
-        // reference comment.
-        while (true) {
-            const kind = triviaScanner.scan();
-            if (!isTrivia(kind)) {
-                break;
-            }
-
-            const range = {
-                kind: <SyntaxKind.SingleLineCommentTrivia | SyntaxKind.MultiLineCommentTrivia>triviaScanner.getToken(),
-                pos: triviaScanner.getTokenPos(),
-                end: triviaScanner.getTextPos(),
-            };
-
+        for (const range of getLeadingCommentRanges(sourceText, 0) || emptyArray) {
             const comment = sourceText.substring(range.pos, range.end);
             extractPragmas(pragmas, range, comment);
         }
