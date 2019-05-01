@@ -12325,10 +12325,7 @@ interface ReadableStreamDefaultReader<R = any> {
     releaseLock(): void;
 }
 
-interface ReadableStreamReadResult<T> {
-    done: boolean;
-    value: T;
-}
+type ReadableStreamReadResult<T> = { done: false, value: T } | { done: true, value?: undefined }
 
 interface ReadableStreamReader<R = any> {
     cancel(): Promise<void>;
