@@ -23097,7 +23097,6 @@ namespace ts {
                             Debug.assert((getFunctionFlags(func) & FunctionFlags.Async) === 0, "Enclosing function should never be an async function.");
                             const relatedInfo = createDiagnosticForNode(func, Diagnostics.Did_you_mean_to_mark_this_function_as_async);
                             addRelatedInfo(diagnostic, relatedInfo);
-
                         }
                         diagnostics.add(diagnostic);
                     }
