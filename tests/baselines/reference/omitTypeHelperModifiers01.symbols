@@ -28,42 +28,42 @@ function f(x: B) {
 
     const b = x.b;
 >b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 10, 9))
->x.b : Symbol(b)
+>x.b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
 >x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
->b : Symbol(b)
+>b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
 
     x.b = "hello";
->x.b : Symbol(b)
+>x.b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
 >x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
->b : Symbol(b)
+>b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
 
     x.b = undefined;
->x.b : Symbol(b)
+>x.b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
 >x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
->b : Symbol(b)
+>b : Symbol(b, Decl(omitTypeHelperModifiers01.ts, 1, 14))
 >undefined : Symbol(undefined)
 
     const c = x.c;
 >c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 14, 9))
->x.c : Symbol(c)
+>x.c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
 >x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
->c : Symbol(c)
+>c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
 
     x.c = true;
->x.c : Symbol(c)
+>x.c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
 >x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
->c : Symbol(c)
+>c : Symbol(c, Decl(omitTypeHelperModifiers01.ts, 2, 15))
 
     const d = x.d;
 >d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 17, 9))
->x.d : Symbol(d)
+>x.d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
 >x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
->d : Symbol(d)
+>d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
 
     x.d = d;
->x.d : Symbol(d)
+>x.d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
 >x : Symbol(x, Decl(omitTypeHelperModifiers01.ts, 9, 11))
->d : Symbol(d)
+>d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 3, 24))
 >d : Symbol(d, Decl(omitTypeHelperModifiers01.ts, 17, 9))
 }
 
