@@ -10349,8 +10349,16 @@ namespace ts {
             return links.resolvedType;
         }
 
-        function getActualTypeVariable(type: Type) {
-            return type.flags & TypeFlags.Substitution ? (<SubstitutionType>type).typeVariable : type;
+        function getActualTypeVariable(type: Type): Type {
+            if (type.flags & TypeFlags.Substitution) {
+                return (<SubstitutionType>type).typeVariable;
+            }
+            if (type.flags & TypeFlags.IndexedAccess && (
+                (<IndexedAccessType>type).objectType.flags & TypeFlags.Substitution ||
+                (<IndexedAccessType>type).indexType.flags & TypeFlags.Substitution)) {
+                return getIndexedAccessType(getActualTypeVariable((<IndexedAccessType>type).objectType), getActualTypeVariable((<IndexedAccessType>type).indexType));
+            }
+            return type;
         }
 
         /**
@@ -15030,6 +15038,9 @@ namespace ts {
                         target = removeTypesFromUnionOrIntersection(<UnionOrIntersectionType>target, matchingTypes);
                     }
                 }
+                else if (target.flags & (TypeFlags.IndexedAccess | TypeFlags.Substitution)) {
+                    target = getActualTypeVariable(target);
+                }
                 if (target.flags & TypeFlags.TypeVariable) {
                     // If target is a type parameter, make an inference, unless the source type contains
                     // the anyFunctionType (the wildcard type that's used to avoid contextually typing functions).
@@ -15090,9 +15101,6 @@ namespace ts {
                             }
                         }
                     }
-                }
-                else if (target.flags & TypeFlags.Substitution) {
-                    inferFromTypes(source, (target as SubstitutionType).typeVariable);
                 }
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // If source and target are references to the same generic type, infer from type arguments
