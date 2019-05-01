@@ -12431,7 +12431,7 @@ namespace ts {
             }
 
             function isConditionalType(t: Type): t is ConditionalType {
-                return (t.flags & TypeFlags.Conditional) > 0
+                return (t.flags & TypeFlags.Conditional) > 0;
             }
 
             /**
