@@ -82,9 +82,9 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >{ ...t } : T
 >t : T
 
-    var o4 = { ...i };   // OK, index access
->o4 : T["b"]
->{ ...i } : T["b"]
+    var o4 = { ...i };   // Error, index access
+>o4 : any
+>{ ...i } : any
 >i : T["b"]
 
     var o5 = { ...k };   // Error, index

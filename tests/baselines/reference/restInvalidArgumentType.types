@@ -79,7 +79,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >t : T
 
     var {...r4} = i;   // Error, index access
->r4 : T["b"]
+>r4 : any
 >i : T["b"]
 
     var {...r5} = k;   // Error, index
