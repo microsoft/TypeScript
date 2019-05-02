@@ -19,7 +19,7 @@ namespace ts {
         function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: ReadonlyArray<string>, ...expectedDiagnosticMessages: fakes.ExpectedDiagnostic[]) {
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(...expectedDiagnosticMessages);
             if (!expectedDiagnosticMessages.length) {
                 // Check for outputs. Not an exhaustive list
@@ -65,7 +65,7 @@ export default hello.hello`);
             replaceText(fs, configFile, `"composite": true,`, `"composite": true, "sourceMap": true,`);
             const host = new fakes.SolutionBuilderHost(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFile, "src/dist/src/index.js"],
@@ -77,7 +77,7 @@ export default hello.hello`);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFile, "src/src/index.ts", "src/dist/src/index.js"]
@@ -90,7 +90,7 @@ export default hello.hello`);
             replaceText(fs, configFile, `"outDir": "dist",`, "");
             const host = new fakes.SolutionBuilderHost(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFile, "src/src/index.js"],
@@ -102,7 +102,7 @@ export default hello.hello`);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, configFile, "src/src/index.ts", "src/src/index.js"]
@@ -129,7 +129,7 @@ export default hello.hello`);
             const mainConfigFile = "src/main/tsconfig.json";
             const host = new fakes.SolutionBuilderHost(fs);
             let builder = createSolutionBuilder(host, [configFile], { verbose: true });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, stringsConfigFile, "src/strings/tsconfig.tsbuildinfo"],
@@ -141,7 +141,7 @@ export default hello.hello`);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild(stringsConfigFile, mainConfigFile, configFile),
                 [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, stringsConfigFile, "src/strings/foo.json", "src/strings/tsconfig.tsbuildinfo"],

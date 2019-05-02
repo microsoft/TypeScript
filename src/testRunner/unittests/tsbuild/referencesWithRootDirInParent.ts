@@ -19,7 +19,7 @@ namespace ts {
             const fs = projFs.shadow();
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main", "/src/src/other"], {});
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(/*empty*/);
             for (const output of allExpectedOutputs) {
                 assert(fs.existsSync(output), `Expect file ${output} to exist`);
@@ -39,7 +39,7 @@ namespace ts {
             replaceText(fs, "/src/tsconfig.base.json", `"rootDir": "./src/",`, "");
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main"], { verbose: true });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/other/tsconfig.json", "src/src/main/tsconfig.json"),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/other/tsconfig.json", "src/dist/other.js"],
@@ -75,7 +75,7 @@ namespace ts {
             }));
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main"], { verbose: true });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/other/tsconfig.json", "src/src/main/tsconfig.json"),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/other/tsconfig.json", "src/dist/other.js"],
@@ -112,7 +112,7 @@ namespace ts {
             }));
             const host = new fakes.SolutionBuilderHost(fs);
             const builder = createSolutionBuilder(host, ["/src/src/main/tsconfig.main.json"], { verbose: true });
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(
                 getExpectedDiagnosticForProjectsInBuild("src/src/other/tsconfig.other.json", "src/src/main/tsconfig.main.json"),
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/other/tsconfig.other.json", "src/dist/other.js"],

@@ -14,7 +14,7 @@ namespace ts {
             const builder = createSolutionBuilder(host, ["/src/no-references"], { dry: false, force: false, verbose: false });
 
             host.clearDiagnostics();
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages([Diagnostics.The_files_list_in_config_file_0_is_empty, "/src/no-references/tsconfig.json"]);
 
             // Check for outputs to not be written.
@@ -29,7 +29,7 @@ namespace ts {
             const builder = createSolutionBuilder(host, ["/src/with-references"], { dry: false, force: false, verbose: false });
 
             host.clearDiagnostics();
-            builder.buildAllProjects();
+            builder.build();
             host.assertDiagnosticMessages(/*empty*/);
 
             // Check for outputs to be written.

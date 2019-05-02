@@ -255,7 +255,7 @@ namespace ts {
     }
 
     export interface SolutionBuilder {
-        buildAllProjects(): ExitStatus;
+        build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
         cleanAllProjects(): ExitStatus;
 
         // Currently used for testing but can be made public if needed:
@@ -264,12 +264,19 @@ namespace ts {
         // Testing only
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
         /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
-        /*@internal*/ buildInvalidatedProject(): void;
+        /*@internal*/ buildNextInvalidatedProject(): void;
     }
 
     export interface SolutionBuilderWithWatch {
-        buildAllProjects(): ExitStatus;
+        build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
         /*@internal*/ startWatching(): void;
+    }
+
+    interface InvalidatedProject {
+        project: ResolvedConfigFileName;
+        projectPath: ResolvedConfigFilePath;
+        reloadLevel: ConfigFileProgramReloadLevel;
+        projectIndex: number;
     }
 
     /**
@@ -386,18 +393,22 @@ namespace ts {
         const allWatchedInputFiles = createMap() as ConfigFileMap<Map<FileWatcher>>;
         const allWatchedConfigFiles = createMap() as ConfigFileMap<FileWatcher>;
 
+        let allProjectBuildPending = true;
+        let needsSummary = true;
+    //    let watchAllProjectsPending = watch;
+
         return watch ?
             {
-                buildAllProjects,
+                build,
                 startWatching
             } :
             {
-                buildAllProjects,
+                build,
                 cleanAllProjects,
                 getBuildOrder,
                 getUpToDateStatusOfProject,
                 invalidateProject,
-                buildInvalidatedProject,
+                buildNextInvalidatedProject,
             };
 
         function toPath(fileName: string) {
@@ -800,6 +811,7 @@ namespace ts {
                 configFileCache.delete(resolved);
                 buildOrder = undefined;
             }
+            needsSummary = true;
             clearProjectStatus(resolved);
             addProjToQueue(resolved, reloadLevel);
             enableCache();
@@ -823,16 +835,16 @@ namespace ts {
             }
         }
 
-        function getNextInvalidatedProject() {
-            Debug.assert(hasPendingInvalidatedProjects());
-            return forEach(getBuildOrder(), (project, projectIndex) => {
-                const projectPath = toResolvedConfigFilePath(project);
-                const reloadLevel = projectPendingBuild.get(projectPath);
-                if (reloadLevel !== undefined) {
-                    projectPendingBuild.delete(projectPath);
-                    return { project, projectPath, reloadLevel, projectIndex };
-                }
-            });
+        function getNextInvalidatedProject(buildOrder: readonly ResolvedConfigFileName[]): InvalidatedProject | undefined {
+            return hasPendingInvalidatedProjects() ?
+                forEach(buildOrder, (project, projectIndex) => {
+                    const projectPath = toResolvedConfigFilePath(project);
+                    const reloadLevel = projectPendingBuild.get(projectPath);
+                    if (reloadLevel !== undefined) {
+                        return { project, projectPath, reloadLevel, projectIndex };
+                    }
+                }) :
+                undefined;
         }
 
         function hasPendingInvalidatedProjects() {
@@ -846,18 +858,19 @@ namespace ts {
             if (timerToBuildInvalidatedProject) {
                 hostWithWatch.clearTimeout(timerToBuildInvalidatedProject);
             }
-            timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildInvalidatedProject, 250);
+            timerToBuildInvalidatedProject = hostWithWatch.setTimeout(buildNextInvalidatedProject, 250);
         }
 
-        function buildInvalidatedProject() {
+        function buildNextInvalidatedProject() {
             timerToBuildInvalidatedProject = undefined;
             if (reportFileChangeDetected) {
                 reportFileChangeDetected = false;
                 projectErrorsReported.clear();
                 reportWatchStatus(Diagnostics.File_change_detected_Starting_incremental_compilation);
             }
-            if (hasPendingInvalidatedProjects()) {
-                buildNextInvalidatedProject();
+            const invalidatedProject = getNextInvalidatedProject(getBuildOrder());
+            if (invalidatedProject) {
+                buildInvalidatedProject(invalidatedProject);
                 if (hasPendingInvalidatedProjects()) {
                     if (watch && !timerToBuildInvalidatedProject) {
                         scheduleBuildInvalidatedProject();
@@ -872,6 +885,7 @@ namespace ts {
 
         function reportErrorSummary() {
             if (watch || host.reportErrorSummary) {
+                needsSummary = false;
                 // Report errors from the other projects
                 getBuildOrder().forEach(project => {
                     const projectPath = toResolvedConfigFilePath(project);
@@ -890,11 +904,11 @@ namespace ts {
             }
         }
 
-        function buildNextInvalidatedProject() {
-            const { project, projectPath, reloadLevel, projectIndex } = getNextInvalidatedProject()!;
+        function buildInvalidatedProject({ project, projectPath, reloadLevel, projectIndex }: InvalidatedProject, cancellationToken?: CancellationToken) {
             const config = parseConfigFile(project, projectPath);
             if (!config) {
                 reportParseConfigFileDiagnostic(projectPath);
+                projectPendingBuild.delete(projectPath);
                 return;
             }
 
@@ -920,6 +934,7 @@ namespace ts {
                     // In a dry build, inform the user of this fact
                     reportStatus(Diagnostics.Project_0_is_up_to_date, project);
                 }
+                projectPendingBuild.delete(projectPath);
                 return;
             }
 
@@ -927,24 +942,28 @@ namespace ts {
                 reportAndStoreErrors(projectPath, config.errors);
                 // Fake that files have been built by updating output file stamps
                 updateOutputTimestamps(config, projectPath);
+                projectPendingBuild.delete(projectPath);
                 return;
             }
 
             if (status.type === UpToDateStatusType.UpstreamBlocked) {
                 reportAndStoreErrors(projectPath, config.errors);
                 if (options.verbose) reportStatus(Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, project, status.upstreamProjectName);
+                projectPendingBuild.delete(projectPath);
                 return;
             }
 
             if (status.type === UpToDateStatusType.ContainerOnly) {
                 reportAndStoreErrors(projectPath, config.errors);
                 // Do nothing
+                projectPendingBuild.delete(projectPath);
                 return;
             }
 
             const buildResult = needsBuild(status, config) ?
-                buildSingleProject(project, projectPath) : // Actual build
-                updateBundle(project, projectPath); // Fake that files have been built by manipulating prepend and existing output
+                buildSingleProject(project, projectPath, cancellationToken) : // Actual build
+                updateBundle(project, projectPath, cancellationToken); // Fake that files have been built by manipulating prepend and existing output
+            projectPendingBuild.delete(projectPath);
             // Only composite projects can be referenced by other projects
             if (!(buildResult & BuildResultFlags.AnyErrors) && config.options.composite) {
                 queueReferencingProjects(project, projectPath, projectIndex, !(buildResult & BuildResultFlags.DeclarationOutputUnchanged));
@@ -1050,7 +1069,7 @@ namespace ts {
             }
         }
 
-        function buildSingleProject(proj: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath): BuildResultFlags {
+        function buildSingleProject(proj: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, cancellationToken: CancellationToken | undefined): BuildResultFlags {
             if (options.dry) {
                 reportStatus(Diagnostics.A_non_dry_build_would_build_project_0, proj);
                 return BuildResultFlags.Success;
@@ -1112,15 +1131,15 @@ namespace ts {
             // Don't emit anything in the presence of syntactic errors or options diagnostics
             const syntaxDiagnostics = [
                 ...program.getConfigFileParsingDiagnostics(),
-                ...program.getOptionsDiagnostics(),
-                ...program.getGlobalDiagnostics(),
-                ...program.getSyntacticDiagnostics()];
+                ...program.getOptionsDiagnostics(cancellationToken),
+                ...program.getGlobalDiagnostics(cancellationToken),
+                ...program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken)];
             if (syntaxDiagnostics.length) {
                 return buildErrors(syntaxDiagnostics, BuildResultFlags.SyntaxErrors, "Syntactic");
             }
 
             // Same as above but now for semantic diagnostics
-            const semanticDiagnostics = program.getSemanticDiagnostics();
+            const semanticDiagnostics = program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken);
             if (semanticDiagnostics.length) {
                 return buildErrors(semanticDiagnostics, BuildResultFlags.TypeErrors, "Semantic");
             }
@@ -1132,7 +1151,14 @@ namespace ts {
             let declDiagnostics: Diagnostic[] | undefined;
             const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
             const outputFiles: OutputFile[] = [];
-            emitFilesAndReportErrors(program, reportDeclarationDiagnostics, /*writeFileName*/ undefined, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
+            emitFilesAndReportErrors(
+                program,
+                reportDeclarationDiagnostics,
+                /*writeFileName*/ undefined,
+                /*reportSummary*/ undefined,
+                (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }),
+                cancellationToken
+            );
             // Don't emit .d.ts if there are decl file errors
             if (declDiagnostics) {
                 program.restoreState();
@@ -1221,7 +1247,7 @@ namespace ts {
             return readBuilderProgram(parsed.options, readFileWithCache) as any as T;
         }
 
-        function updateBundle(proj: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath): BuildResultFlags {
+        function updateBundle(proj: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, cancellationToken: CancellationToken | undefined): BuildResultFlags {
             if (options.dry) {
                 reportStatus(Diagnostics.A_non_dry_build_would_update_output_of_project_0, proj);
                 return BuildResultFlags.Success;
@@ -1241,7 +1267,7 @@ namespace ts {
                 });
             if (isString(outputFiles)) {
                 reportStatus(Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, proj, relName(outputFiles));
-                return buildSingleProject(proj, resolvedPath);
+                return buildSingleProject(proj, resolvedPath, cancellationToken);
             }
 
             // Actual Emit
@@ -1403,21 +1429,58 @@ namespace ts {
             cacheState = undefined;
         }
 
-        function buildAllProjects(): ExitStatus {
-            if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
-            enableCache();
+        function build(project?: string, cancellationToken?: CancellationToken): ExitStatus {
+            // Set initial build if not already built
+            if (allProjectBuildPending) {
+                allProjectBuildPending = false;
+                if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
+                enableCache();
+                const buildOrder = getBuildOrder();
+                reportBuildQueue(buildOrder);
+                buildOrder.forEach(configFileName =>
+                    projectPendingBuild.set(toResolvedConfigFilePath(configFileName), ConfigFileProgramReloadLevel.None));
 
-            const buildOrder = getBuildOrder();
-            reportBuildQueue(buildOrder);
-            buildOrder.forEach(configFileName =>
-                projectPendingBuild.set(toResolvedConfigFilePath(configFileName), ConfigFileProgramReloadLevel.None));
-
-            while (hasPendingInvalidatedProjects()) {
-                buildNextInvalidatedProject();
+                if (cancellationToken) {
+                    cancellationToken.throwIfCancellationRequested();
+                }
             }
-            reportErrorSummary();
-            disableCache();
-            return diagnostics.size ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
+
+            let successfulProjects = 0;
+            let errorProjects = 0;
+            const resolvedProject = project && resolveProjectName(project);
+            if (resolvedProject) {
+                const projectPath = toResolvedConfigFilePath(resolvedProject);
+                const projectIndex = findIndex(
+                    getBuildOrder(),
+                    configFileName => toResolvedConfigFilePath(configFileName) === projectPath
+                );
+                if (projectIndex === -1) return ExitStatus.InvalidProject_OutputsSkipped;
+            }
+            const buildOrder = resolvedProject ? createBuildOrder([resolvedProject]) : getBuildOrder();
+            while (true) {
+                const invalidatedProject = getNextInvalidatedProject(buildOrder);
+                if (!invalidatedProject) {
+                    if (needsSummary) {
+                        disableCache();
+                        reportErrorSummary();
+                    }
+                    break;
+                }
+
+                buildInvalidatedProject(invalidatedProject, cancellationToken);
+                if (diagnostics.has(invalidatedProject.projectPath)) {
+                    errorProjects++;
+                }
+                else {
+                    successfulProjects++;
+                }
+            }
+
+            return errorProjects ?
+                successfulProjects ?
+                    ExitStatus.DiagnosticsPresent_OutputsGenerated :
+                    ExitStatus.DiagnosticsPresent_OutputsSkipped :
+                ExitStatus.Success;
         }
 
         function needsBuild(status: UpToDateStatus, config: ParsedCommandLine) {

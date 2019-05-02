@@ -24,7 +24,7 @@ namespace ts.tscWatch {
     function createSolutionBuilderWithWatch(system: TsBuildWatchSystem, rootNames: ReadonlyArray<string>, defaultOptions?: BuildOptions) {
         const host = createSolutionBuilderWithWatchHost(system);
         const solutionBuilder = ts.createSolutionBuilderWithWatch(host, rootNames, defaultOptions || { watch: true });
-        solutionBuilder.buildAllProjects();
+        solutionBuilder.build();
         solutionBuilder.startWatching();
         return solutionBuilder;
     }
@@ -608,7 +608,7 @@ let x: string = 10;`);
                     // Build the composite project
                     const host = createTsBuildWatchSystem(allFiles, { currentDirectory });
                     const solutionBuilder = createSolutionBuilder(host, [solutionBuilderconfig], {});
-                    solutionBuilder.buildAllProjects();
+                    solutionBuilder.build();
                     const outputFileStamps = getOutputFileStamps(host);
                     for (const stamp of outputFileStamps) {
                         assert.isDefined(stamp[1], `${stamp[0]} expected to be present`);
@@ -723,7 +723,7 @@ let x: string = 10;`);
 function foo() {
 }`);
                             solutionBuilder.invalidateProject(`${project}/${SubProject.logic}`);
-                            solutionBuilder.buildInvalidatedProject();
+                            solutionBuilder.buildNextInvalidatedProject();
 
                             // not ideal, but currently because of d.ts but no new file is written
                             // There will be timeout queued even though file contents are same
@@ -736,7 +736,7 @@ function foo() {
 export function gfoo() {
 }`);
                             solutionBuilder.invalidateProject(logic[0].path);
-                            solutionBuilder.buildInvalidatedProject();
+                            solutionBuilder.buildNextInvalidatedProject();
                         }, expectedProgramFiles);
                     });
 
@@ -747,7 +747,7 @@ export function gfoo() {
                                 references: [{ path: "../core" }]
                             }));
                             solutionBuilder.invalidateProject(logic[0].path, ConfigFileProgramReloadLevel.Full);
-                            solutionBuilder.buildInvalidatedProject();
+                            solutionBuilder.buildNextInvalidatedProject();
                         }, [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")]);
                     });
                 });
@@ -967,7 +967,7 @@ export function gfoo() {
 export function gfoo() {
 }`);
                                     solutionBuilder.invalidateProject(bTsconfig.path);
-                                    solutionBuilder.buildInvalidatedProject();
+                                    solutionBuilder.buildNextInvalidatedProject();
                                 },
                                 emptyArray,
                                 expectedProgramFiles,

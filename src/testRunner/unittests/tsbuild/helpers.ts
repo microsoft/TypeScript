@@ -172,7 +172,7 @@ declare const console: { log(msg: any): void; };`;
             }
             return originalReadFile.call(host, path);
         };
-        builder.buildAllProjects();
+        builder.build();
         generateSourceMapBaselineFiles(fs, expectedMapFileNames);
         generateBuildInfoSectionBaselineFiles(fs, expectedBuildInfoFilesForSectionBaselines || emptyArray);
         fs.makeReadonly();

@@ -216,7 +216,7 @@ namespace ts {
             updateCreateProgram(buildHost);
             buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions);
-            builder.buildAllProjects();
+            builder.build();
             return builder.startWatching();
         }
         else {
@@ -224,7 +224,7 @@ namespace ts {
             updateCreateProgram(buildHost);
             buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
             const builder = createSolutionBuilder(buildHost, projects, buildOptions);
-            return sys.exit(buildOptions.clean ? builder.cleanAllProjects() : builder.buildAllProjects());
+            return sys.exit(buildOptions.clean ? builder.cleanAllProjects() : builder.build());
         }
     }
 

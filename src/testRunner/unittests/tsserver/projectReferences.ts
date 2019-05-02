@@ -5,7 +5,7 @@ namespace ts.projectSystem {
 
             // ts build should succeed
             const solutionBuilder = tscWatch.createSolutionBuilder(host, rootNames, {});
-            solutionBuilder.buildAllProjects();
+            solutionBuilder.build();
             assert.equal(host.getOutput().length, 0);
 
             return host;
