@@ -260,9 +260,15 @@ namespace ts {
     export interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
     }
 
+    export interface SolutionBuilderResult<T> {
+        project: ResolvedConfigFileName;
+        result: T;
+    }
+
     export interface SolutionBuilder {
         build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
         clean(project?: string): ExitStatus;
+        buildNextProject(cancellationToken?: CancellationToken): SolutionBuilderResult<ExitStatus> | undefined;
 
         // Currently used for testing but can be made public if needed:
         /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
@@ -401,6 +407,7 @@ namespace ts {
         return {
             build,
             clean,
+            buildNextProject,
             getBuildOrder,
             getUpToDateStatusOfProject,
             invalidateProject,
@@ -1437,10 +1444,7 @@ namespace ts {
             return resolvedProject ? createBuildOrder([resolvedProject]) : getBuildOrder();
         }
 
-        function build(project?: string, cancellationToken?: CancellationToken): ExitStatus {
-            const buildOrder = getBuildOrderFor(project);
-            if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
-
+        function setupInitialBuild(cancellationToken: CancellationToken | undefined) {
             // Set initial build if not already built
             if (allProjectBuildPending) {
                 allProjectBuildPending = false;
@@ -1455,6 +1459,27 @@ namespace ts {
                     cancellationToken.throwIfCancellationRequested();
                 }
             }
+        }
+
+        function buildNextProject(cancellationToken?: CancellationToken): SolutionBuilderResult<ExitStatus> | undefined {
+            setupInitialBuild(cancellationToken);
+            const invalidatedProject = getNextInvalidatedProject(getBuildOrder());
+            if (!invalidatedProject) return undefined;
+
+            buildInvalidatedProject(invalidatedProject, cancellationToken);
+            return {
+                project: invalidatedProject.project,
+                result: diagnostics.has(invalidatedProject.projectPath) ?
+                    ExitStatus.DiagnosticsPresent_OutputsSkipped :
+                    ExitStatus.Success
+            };
+        }
+
+        function build(project?: string, cancellationToken?: CancellationToken): ExitStatus {
+            const buildOrder = getBuildOrderFor(project);
+            if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
+
+            setupInitialBuild(cancellationToken);
 
             let successfulProjects = 0;
             let errorProjects = 0;

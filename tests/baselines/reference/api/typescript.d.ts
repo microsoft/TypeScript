@@ -4594,9 +4594,14 @@ declare namespace ts {
     }
     interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
     }
+    interface SolutionBuilderResult<T> {
+        project: ResolvedConfigFileName;
+        result: T;
+    }
     interface SolutionBuilder {
         build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
         clean(project?: string): ExitStatus;
+        buildNextProject(cancellationToken?: CancellationToken): SolutionBuilderResult<ExitStatus> | undefined;
     }
     /**
      * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic

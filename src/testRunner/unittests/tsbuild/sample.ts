@@ -2,9 +2,10 @@ namespace ts {
     describe("unittests:: tsbuild:: on 'sample1' project", () => {
         let projFs: vfs.FileSystem;
         const { time, tick } = getTime();
-        const allExpectedOutputs = ["/src/tests/index.js",
-            "/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map",
-            "/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts"];
+        const testsOutputs = ["/src/tests/index.js"];
+        const logicOutputs = ["/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts"];
+        const coreOutputs = ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map"];
+        const allExpectedOutputs = [...testsOutputs, ...logicOutputs, ...coreOutputs];
 
         before(() => {
             projFs = loadProjectFromDisk("tests/projects/sample1", time);
@@ -140,8 +141,8 @@ namespace ts {
                 builder.build();
                 const result = builder.clean("/src/logic");
                 host.assertDiagnosticMessages(/*empty*/);
-                verifyOutputsPresent(fs, [allExpectedOutputs[0]]);
-                verifyOutputsAbsent(fs, allExpectedOutputs.slice(1));
+                verifyOutputsPresent(fs, testsOutputs);
+                verifyOutputsAbsent(fs, [...logicOutputs, ...coreOutputs]);
                 assert.equal(result, ExitStatus.Success);
             });
 
@@ -334,8 +335,8 @@ namespace ts {
                 const builder = createSolutionBuilder(host, ["/src/tests"], {});
                 const result = builder.build("/src/logic");
                 host.assertDiagnosticMessages(/*empty*/);
-                verifyOutputsAbsent(fs, [allExpectedOutputs[0]]);
-                verifyOutputsPresent(fs, allExpectedOutputs.slice(1));
+                verifyOutputsAbsent(fs, testsOutputs);
+                verifyOutputsPresent(fs, [...logicOutputs, ...coreOutputs]);
                 assert.equal(result, ExitStatus.Success);
             });
 
@@ -347,6 +348,39 @@ namespace ts {
                 host.assertDiagnosticMessages(/*empty*/);
                 verifyOutputsAbsent(fs, allExpectedOutputs);
                 assert.equal(result, ExitStatus.InvalidProject_OutputsSkipped);
+            });
+
+            it("building using buildNextProject", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                verifyBuildNextResult({
+                    project: "/src/core/tsconfig.json" as ResolvedConfigFileName,
+                    result: ExitStatus.Success
+                }, coreOutputs, [...logicOutputs, ...testsOutputs]);
+
+                verifyBuildNextResult({
+                    project: "/src/logic/tsconfig.json" as ResolvedConfigFileName,
+                    result: ExitStatus.Success
+                }, [...coreOutputs, ...logicOutputs], testsOutputs);
+
+                verifyBuildNextResult({
+                    project: "/src/tests/tsconfig.json" as ResolvedConfigFileName,
+                    result: ExitStatus.Success
+                }, allExpectedOutputs, emptyArray);
+
+                verifyBuildNextResult(/*expected*/ undefined, allExpectedOutputs, emptyArray);
+
+                function verifyBuildNextResult(
+                    expected: SolutionBuilderResult<ExitStatus> | undefined,
+                    presentOutputs: readonly string[],
+                    absentOutputs: readonly string[]
+                ) {
+                    const result = builder.buildNextProject();
+                    assert.deepEqual(result, expected);
+                    verifyOutputsPresent(fs, presentOutputs);
+                    verifyOutputsAbsent(fs, absentOutputs);
+                }
             });
         });
 
