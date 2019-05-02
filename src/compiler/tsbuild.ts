@@ -1,58 +1,5 @@
-// Currently we do not want to expose API for build, we should work out the API, and then expose it just like we did for builder/watch
 /*@internal*/
 namespace ts {
-    const minimumDate = new Date(-8640000000000000);
-    const maximumDate = new Date(8640000000000000);
-
-    export interface BuildHost {
-        verbose(diag: DiagnosticMessage, ...args: string[]): void;
-        error(diag: DiagnosticMessage, ...args: string[]): void;
-        errorDiagnostic(diag: Diagnostic): void;
-        message(diag: DiagnosticMessage, ...args: string[]): void;
-    }
-
-    export interface BuildOptions extends OptionsBase {
-        dry?: boolean;
-        force?: boolean;
-        verbose?: boolean;
-
-        /*@internal*/ clean?: boolean;
-        /*@internal*/ watch?: boolean;
-        /*@internal*/ help?: boolean;
-
-        preserveWatchOutput?: boolean;
-        listEmittedFiles?: boolean;
-        listFiles?: boolean;
-        pretty?: boolean;
-        incremental?: boolean;
-
-        traceResolution?: boolean;
-        /* @internal */ diagnostics?: boolean;
-        /* @internal */ extendedDiagnostics?: boolean;
-    }
-
-    enum BuildResultFlags {
-        None = 0,
-
-        /**
-         * No errors of any kind occurred during build
-         */
-        Success = 1 << 0,
-        /**
-         * None of the .d.ts files emitted by this build were
-         * different from the existing files on disk
-         */
-        DeclarationOutputUnchanged = 1 << 1,
-
-        ConfigFileErrors = 1 << 2,
-        SyntaxErrors = 1 << 3,
-        TypeErrors = 1 << 4,
-        DeclarationEmitErrors = 1 << 5,
-        EmitErrors = 1 << 6,
-
-        AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors | EmitErrors
-    }
-
     export enum UpToDateStatusType {
         Unbuildable,
         UpToDate,
@@ -194,6 +141,63 @@ namespace ts {
         }
     }
 
+    export function resolveConfigFileProjectName(project: string): ResolvedConfigFileName {
+        if (fileExtensionIs(project, Extension.Json)) {
+            return project as ResolvedConfigFileName;
+        }
+
+        return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
+    }
+}
+
+namespace ts {
+    const minimumDate = new Date(-8640000000000000);
+    const maximumDate = new Date(8640000000000000);
+
+    export interface BuildOptions {
+        dry?: boolean;
+        force?: boolean;
+        verbose?: boolean;
+
+        /*@internal*/ clean?: boolean;
+        /*@internal*/ watch?: boolean;
+        /*@internal*/ help?: boolean;
+
+        preserveWatchOutput?: boolean;
+        listEmittedFiles?: boolean;
+        listFiles?: boolean;
+        pretty?: boolean;
+        incremental?: boolean;
+
+        traceResolution?: boolean;
+        /* @internal */ diagnostics?: boolean;
+        /* @internal */ extendedDiagnostics?: boolean;
+
+        [option: string]: CompilerOptionsValue | undefined;
+    }
+
+    enum BuildResultFlags {
+        None = 0,
+
+        /**
+         * No errors of any kind occurred during build
+         */
+        Success = 1 << 0,
+        /**
+         * None of the .d.ts files emitted by this build were
+         * different from the existing files on disk
+         */
+        DeclarationOutputUnchanged = 1 << 1,
+
+        ConfigFileErrors = 1 << 2,
+        SyntaxErrors = 1 << 3,
+        TypeErrors = 1 << 4,
+        DeclarationEmitErrors = 1 << 5,
+        EmitErrors = 1 << 6,
+
+        AnyErrors = ConfigFileErrors | SyntaxErrors | TypeErrors | DeclarationEmitErrors | EmitErrors
+    }
+
     type ResolvedConfigFilePath = ResolvedConfigFileName & Path;
     interface FileMap<T, U extends Path = Path> extends Map<T> {
         get(key: U): T | undefined;
@@ -230,6 +234,8 @@ namespace ts {
     function isDeclarationFile(fileName: string) {
         return fileExtensionIs(fileName, Extension.Dts);
     }
+
+    export type ReportEmitErrorSummary = (errorCount: number) => void;
 
     export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
         getModifiedTime(fileName: string): Date | undefined;
@@ -1527,15 +1533,7 @@ namespace ts {
         }
     }
 
-    export function resolveConfigFileProjectName(project: string): ResolvedConfigFileName {
-        if (fileExtensionIs(project, Extension.Json)) {
-            return project as ResolvedConfigFileName;
-        }
-
-        return combinePaths(project, "tsconfig.json") as ResolvedConfigFileName;
-    }
-
-    export function formatUpToDateStatus<T>(configFileName: string, status: UpToDateStatus, relName: (fileName: string) => string, formatMessage: (message: DiagnosticMessage, ...args: string[]) => T) {
+    function formatUpToDateStatus<T>(configFileName: string, status: UpToDateStatus, relName: (fileName: string) => string, formatMessage: (message: DiagnosticMessage, ...args: string[]) => T) {
         switch (status.type) {
             case UpToDateStatusType.OutOfDateWithSelf:
                 return formatMessage(Diagnostics.Project_0_is_out_of_date_because_oldest_output_1_is_older_than_newest_input_2,

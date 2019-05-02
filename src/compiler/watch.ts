@@ -88,8 +88,6 @@ namespace ts {
         return result;
     }
 
-    export type ReportEmitErrorSummary = (errorCount: number) => void;
-
     export function getErrorCountForSummary(diagnostics: ReadonlyArray<Diagnostic>) {
         return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
     }
