@@ -1,0 +1,115 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsUnionWithUnion.ts ===
+declare let a: string | undefined;
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 11))
+
+declare function isEmptyStringOrUndefined(a: string | undefined): a is "" | undefined;
+>isEmptyStringOrUndefined : Symbol(isEmptyStringOrUndefined, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 34))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 2, 42))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 2, 42))
+
+if (isEmptyStringOrUndefined(a)) {
+>isEmptyStringOrUndefined : Symbol(isEmptyStringOrUndefined, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 34))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 11))
+
+  a; // "" | undefined
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 11))
+}
+
+declare function isEmptyStringOrFoo(a: any): a is "" | "foo";
+>isEmptyStringOrFoo : Symbol(isEmptyStringOrFoo, Decl(typeGuardNarrowsUnionWithUnion.ts, 5, 1))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 7, 36))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 7, 36))
+
+if (isEmptyStringOrFoo(a)) {
+>isEmptyStringOrFoo : Symbol(isEmptyStringOrFoo, Decl(typeGuardNarrowsUnionWithUnion.ts, 5, 1))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 11))
+
+  a; // "" | "foo"
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 11))
+}
+
+declare function isNumberOrBoolean(a: any): a is number | boolean;
+>isNumberOrBoolean : Symbol(isNumberOrBoolean, Decl(typeGuardNarrowsUnionWithUnion.ts, 10, 1))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 12, 35))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 12, 35))
+
+if (isNumberOrBoolean(a)) {
+>isNumberOrBoolean : Symbol(isNumberOrBoolean, Decl(typeGuardNarrowsUnionWithUnion.ts, 10, 1))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 11))
+
+  a; // never
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 0, 11))
+}
+
+declare let b: "" | undefined;
+>b : Symbol(b, Decl(typeGuardNarrowsUnionWithUnion.ts, 17, 11))
+
+declare function isStringOrUndefined(b: any): b is string | undefined;
+>isStringOrUndefined : Symbol(isStringOrUndefined, Decl(typeGuardNarrowsUnionWithUnion.ts, 17, 30))
+>b : Symbol(b, Decl(typeGuardNarrowsUnionWithUnion.ts, 19, 37))
+>b : Symbol(b, Decl(typeGuardNarrowsUnionWithUnion.ts, 19, 37))
+
+if (isStringOrUndefined(b)) {
+>isStringOrUndefined : Symbol(isStringOrUndefined, Decl(typeGuardNarrowsUnionWithUnion.ts, 17, 30))
+>b : Symbol(b, Decl(typeGuardNarrowsUnionWithUnion.ts, 17, 11))
+
+  b; // "" | undefined
+>b : Symbol(b, Decl(typeGuardNarrowsUnionWithUnion.ts, 17, 11))
+}
+
+if (isNumberOrBoolean(b)) {
+>isNumberOrBoolean : Symbol(isNumberOrBoolean, Decl(typeGuardNarrowsUnionWithUnion.ts, 10, 1))
+>b : Symbol(b, Decl(typeGuardNarrowsUnionWithUnion.ts, 17, 11))
+
+  b; // never
+>b : Symbol(b, Decl(typeGuardNarrowsUnionWithUnion.ts, 17, 11))
+}
+
+type A = { a: unknown };
+>A : Symbol(A, Decl(typeGuardNarrowsUnionWithUnion.ts, 26, 1))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 28, 10))
+
+type B = { b: unknown };
+>B : Symbol(B, Decl(typeGuardNarrowsUnionWithUnion.ts, 28, 24))
+>b : Symbol(b, Decl(typeGuardNarrowsUnionWithUnion.ts, 29, 10))
+
+declare let c: { a: string } | { z: number };
+>c : Symbol(c, Decl(typeGuardNarrowsUnionWithUnion.ts, 30, 11))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 30, 16))
+>z : Symbol(z, Decl(typeGuardNarrowsUnionWithUnion.ts, 30, 32))
+
+declare function isAorB(c: any): c is A | B;
+>isAorB : Symbol(isAorB, Decl(typeGuardNarrowsUnionWithUnion.ts, 30, 45))
+>c : Symbol(c, Decl(typeGuardNarrowsUnionWithUnion.ts, 32, 24))
+>c : Symbol(c, Decl(typeGuardNarrowsUnionWithUnion.ts, 32, 24))
+>A : Symbol(A, Decl(typeGuardNarrowsUnionWithUnion.ts, 26, 1))
+>B : Symbol(B, Decl(typeGuardNarrowsUnionWithUnion.ts, 28, 24))
+
+if (isAorB(c)) {
+>isAorB : Symbol(isAorB, Decl(typeGuardNarrowsUnionWithUnion.ts, 30, 45))
+>c : Symbol(c, Decl(typeGuardNarrowsUnionWithUnion.ts, 30, 11))
+
+  c; // { a: string }
+>c : Symbol(c, Decl(typeGuardNarrowsUnionWithUnion.ts, 30, 11))
+}
+
+declare let d: A | B;
+>d : Symbol(d, Decl(typeGuardNarrowsUnionWithUnion.ts, 37, 11))
+>A : Symbol(A, Decl(typeGuardNarrowsUnionWithUnion.ts, 26, 1))
+>B : Symbol(B, Decl(typeGuardNarrowsUnionWithUnion.ts, 28, 24))
+
+declare function hasStringPropertyAOrIsBOrUndefined(d: any): d is { a: string } | B | undefined;
+>hasStringPropertyAOrIsBOrUndefined : Symbol(hasStringPropertyAOrIsBOrUndefined, Decl(typeGuardNarrowsUnionWithUnion.ts, 37, 21))
+>d : Symbol(d, Decl(typeGuardNarrowsUnionWithUnion.ts, 39, 52))
+>d : Symbol(d, Decl(typeGuardNarrowsUnionWithUnion.ts, 39, 52))
+>a : Symbol(a, Decl(typeGuardNarrowsUnionWithUnion.ts, 39, 67))
+>B : Symbol(B, Decl(typeGuardNarrowsUnionWithUnion.ts, 28, 24))
+
+if (hasStringPropertyAOrIsBOrUndefined(d)) {
+>hasStringPropertyAOrIsBOrUndefined : Symbol(hasStringPropertyAOrIsBOrUndefined, Decl(typeGuardNarrowsUnionWithUnion.ts, 37, 21))
+>d : Symbol(d, Decl(typeGuardNarrowsUnionWithUnion.ts, 37, 11))
+
+  d; // { a: string } | B
+>d : Symbol(d, Decl(typeGuardNarrowsUnionWithUnion.ts, 37, 11))
+}
+

@@ -1,0 +1,111 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardNarrowsEmptyStringOrUndefinedUnion.ts ===
+declare let a: string | undefined;
+>a : string | undefined
+
+declare function isEmptyStringOrUndefined(a: string | undefined): a is "" | undefined;
+>isEmptyStringOrUndefined : (a: string | undefined) => a is "" | undefined
+>a : string | undefined
+
+if (isEmptyStringOrUndefined(a)) {
+>isEmptyStringOrUndefined(a) : boolean
+>isEmptyStringOrUndefined : (a: string | undefined) => a is "" | undefined
+>a : string | undefined
+
+  a; // "" | undefined
+>a : "" | undefined
+}
+
+declare function isEmptyStringOrFoo(a: any): a is "" | "foo";
+>isEmptyStringOrFoo : (a: any) => a is "" | "foo"
+>a : any
+
+if (isEmptyStringOrFoo(a)) {
+>isEmptyStringOrFoo(a) : boolean
+>isEmptyStringOrFoo : (a: any) => a is "" | "foo"
+>a : string | undefined
+
+  a; // "" | "foo"
+>a : "" | "foo"
+}
+
+declare function isNumberOrBoolean(a: any): a is number | boolean;
+>isNumberOrBoolean : (a: any) => a is number | boolean
+>a : any
+
+if (isNumberOrBoolean(a)) {
+>isNumberOrBoolean(a) : boolean
+>isNumberOrBoolean : (a: any) => a is number | boolean
+>a : string | undefined
+
+  a; // never
+>a : never
+}
+
+declare let b: "" | undefined;
+>b : "" | undefined
+
+declare function isStringOrUndefined(b: any): b is string | undefined;
+>isStringOrUndefined : (b: any) => b is string | undefined
+>b : any
+
+if (isStringOrUndefined(b)) {
+>isStringOrUndefined(b) : boolean
+>isStringOrUndefined : (b: any) => b is string | undefined
+>b : "" | undefined
+
+  b; // "" | undefined
+>b : "" | undefined
+}
+
+if (isNumberOrBoolean(b)) {
+>isNumberOrBoolean(b) : boolean
+>isNumberOrBoolean : (a: any) => a is number | boolean
+>b : "" | undefined
+
+  b; // never
+>b : never
+}
+
+type A = { a: unknown };
+>A : A
+>a : unknown
+
+type B = { b: unknown };
+>B : B
+>b : unknown
+
+declare let c: { a: string } | { z: number };
+>c : { a: string; } | { z: number; }
+>a : string
+>z : number
+
+declare function isAorB(c: any): c is A | B;
+>isAorB : (c: any) => c is A | B
+>c : any
+
+if (isAorB(c)) {
+>isAorB(c) : boolean
+>isAorB : (c: any) => c is A | B
+>c : { a: string; } | { z: number; }
+
+  c; // { a: string }
+>c : { a: string; }
+}
+
+declare let d: A | B;
+>d : A | B
+
+declare function hasStringPropertyAOrIsBOrUndefined(d: any): d is { a: string } | B | undefined;
+>hasStringPropertyAOrIsBOrUndefined : (d: any) => d is B | { a: string; } | undefined
+>d : any
+>a : string
+
+if (hasStringPropertyAOrIsBOrUndefined(d)) {
+>hasStringPropertyAOrIsBOrUndefined(d) : boolean
+>hasStringPropertyAOrIsBOrUndefined : (d: any) => d is B | { a: string; } | undefined
+>d : A | B
+
+  d; // { a: string } | B
+>d : B | { a: string; }
+}
+
