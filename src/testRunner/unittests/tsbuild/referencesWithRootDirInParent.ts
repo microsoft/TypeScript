@@ -21,9 +21,7 @@ namespace ts {
             const builder = createSolutionBuilder(host, ["/src/src/main", "/src/src/other"], {});
             builder.build();
             host.assertDiagnosticMessages(/*empty*/);
-            for (const output of allExpectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, allExpectedOutputs);
         });
 
         it("verify that it reports error for same .tsbuildinfo file because no rootDir in the base", () => {
@@ -48,12 +46,8 @@ namespace ts {
                 [Diagnostics.Building_project_0, "/src/src/main/tsconfig.json"],
                 [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, "/src/dist/tsconfig.tsbuildinfo", "/src/src/other"]
             );
-            for (const output of allExpectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
-            for (const output of missingOutputs) {
-                assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
-            }
+            verifyOutputsPresent(fs, allExpectedOutputs);
+            verifyOutputsAbsent(fs, missingOutputs);
         });
 
         it("verify that it reports error for same .tsbuildinfo file", () => {
@@ -84,12 +78,8 @@ namespace ts {
                 [Diagnostics.Building_project_0, "/src/src/main/tsconfig.json"],
                 [Diagnostics.Cannot_write_file_0_because_it_will_overwrite_tsbuildinfo_file_generated_by_referenced_project_1, "/src/dist/tsconfig.tsbuildinfo", "/src/src/other"]
             );
-            for (const output of allExpectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
-            for (const output of missingOutputs) {
-                assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
-            }
+            verifyOutputsPresent(fs, allExpectedOutputs);
+            verifyOutputsAbsent(fs, missingOutputs);
         });
 
         it("verify that it reports no error when .tsbuildinfo differ", () => {
@@ -120,9 +110,7 @@ namespace ts {
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/src/main/tsconfig.main.json", "src/dist/a.js"],
                 [Diagnostics.Building_project_0, "/src/src/main/tsconfig.main.json"]
             );
-            for (const output of allExpectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, allExpectedOutputs);
         });
     });
 }

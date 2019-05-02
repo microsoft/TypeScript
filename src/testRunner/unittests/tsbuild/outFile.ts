@@ -366,18 +366,14 @@ namespace ts {
             builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             // Verify they exist
-            for (const output of expectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, expectedOutputs);
             host.clearDiagnostics();
-            builder.cleanAllProjects();
+            builder.clean();
             host.assertDiagnosticMessages(/*none*/);
             // Verify they are gone
-            for (const output of expectedOutputs) {
-                assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
-            }
+            verifyOutputsAbsent(fs, expectedOutputs);
             // Subsequent clean shouldn't throw / etc
-            builder.cleanAllProjects();
+            builder.clean();
         });
 
         it("verify buildInfo absence results in new build", () => {
@@ -392,9 +388,7 @@ namespace ts {
             builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             // Verify they exist
-            for (const output of expectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, expectedOutputs);
             // Delete bundle info
             host.clearDiagnostics();
             host.deleteFile(outputFiles[project.first][ext.buildinfo]);
@@ -419,10 +413,8 @@ namespace ts {
             builder.build();
             host.assertDiagnosticMessages(...initialExpectedDiagnostics);
             // Verify they exist - without tsbuildinfo for third project
-            for (const output of expectedOutputFiles.slice(0, expectedOutputFiles.length - 2)) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
-            assert.isFalse(fs.existsSync(outputFiles[project.third][ext.buildinfo]), `Expect file ${outputFiles[project.third][ext.buildinfo]} to not exist`);
+            verifyOutputsPresent(fs, expectedOutputFiles.slice(0, expectedOutputFiles.length - 2));
+            verifyOutputsAbsent(fs, [outputFiles[project.third][ext.buildinfo]]);
         });
 
         it("rebuilds completely when version in tsbuildinfo doesnt match ts version", () => {
@@ -496,13 +488,23 @@ namespace ts {
             const result = builder.build(sources[project.second][source.config]);
             host.assertDiagnosticMessages(/*empty*/);
             // First and Third is not built
-            for (const output of [...outputFiles[project.first], ...outputFiles[project.third]]) {
-                assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
-            }
+            verifyOutputsAbsent(fs, [...outputFiles[project.first], ...outputFiles[project.third]]);
             // second is built
-            for (const output of outputFiles[project.second]) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, outputFiles[project.second]);
+            assert.equal(result, ExitStatus.Success);
+        });
+
+        it("cleans till project specified", () => {
+            const fs = outFileFs.shadow();
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host, { verbose: false });
+            builder.build();
+            const result = builder.clean(sources[project.second][source.config]);
+            host.assertDiagnosticMessages(/*empty*/);
+            // First and Third output for present
+            verifyOutputsPresent(fs, [...outputFiles[project.first], ...outputFiles[project.third]]);
+            // second is cleaned
+            verifyOutputsAbsent(fs, outputFiles[project.second]);
             assert.equal(result, ExitStatus.Success);
         });
 
@@ -940,9 +942,7 @@ ${internal} enum internalEnum { a, b, c }`);
                     removeFileExtension(f) + Extension.Dts + ".map",
                 ])
             ]);
-            for (const output of expectedOutputFiles) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, expectedOutputFiles);
         });
     });
 }

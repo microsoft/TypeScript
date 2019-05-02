@@ -23,9 +23,7 @@ namespace ts {
             host.assertDiagnosticMessages(...expectedDiagnosticMessages);
             if (!expectedDiagnosticMessages.length) {
                 // Check for outputs. Not an exhaustive list
-                for (const output of allExpectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+                verifyOutputsPresent(fs, allExpectedOutputs);
             }
         }
 
@@ -71,9 +69,7 @@ export default hello.hello`);
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFile, "src/dist/src/index.js"],
                 [Diagnostics.Building_project_0, `/${configFile}`]
             );
-            for (const output of [...allExpectedOutputs, "/src/dist/src/index.js.map"]) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, [...allExpectedOutputs, "/src/dist/src/index.js.map"]);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
@@ -96,9 +92,7 @@ export default hello.hello`);
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, configFile, "src/src/index.js"],
                 [Diagnostics.Building_project_0, `/${configFile}`]
             );
-            for (const output of ["/src/src/index.js", "/src/src/index.d.ts"]) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, ["/src/src/index.js", "/src/src/index.d.ts"]);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();
@@ -137,7 +131,7 @@ export default hello.hello`);
                 [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, mainConfigFile, "src/main/index.js"],
                 [Diagnostics.Building_project_0, `/${mainConfigFile}`],
             );
-            assert(fs.existsSync(expectedOutput), `Expect file ${expectedOutput} to exist`);
+            verifyOutputsPresent(fs, [expectedOutput]);
             host.clearDiagnostics();
             builder = createSolutionBuilder(host, [configFile], { verbose: true });
             tick();

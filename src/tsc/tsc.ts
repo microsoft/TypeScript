@@ -224,7 +224,7 @@ namespace ts {
             updateCreateProgram(buildHost);
             buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
             const builder = createSolutionBuilder(buildHost, projects, buildOptions);
-            return sys.exit(buildOptions.clean ? builder.cleanAllProjects() : builder.build());
+            return sys.exit(buildOptions.clean ? builder.clean() : builder.build());
         }
     }
 

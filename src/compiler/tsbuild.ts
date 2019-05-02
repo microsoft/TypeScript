@@ -256,7 +256,7 @@ namespace ts {
 
     export interface SolutionBuilder {
         build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
-        cleanAllProjects(): ExitStatus;
+        clean(project?: string): ExitStatus;
 
         // Currently used for testing but can be made public if needed:
         /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
@@ -404,7 +404,7 @@ namespace ts {
             } :
             {
                 build,
-                cleanAllProjects,
+                clean,
                 getBuildOrder,
                 getUpToDateStatusOfProject,
                 invalidateProject,
@@ -1342,10 +1342,12 @@ namespace ts {
             return priorNewestUpdateTime;
         }
 
-        function getFilesToClean(): string[] {
-            // Get the same graph for cleaning we'd use for building
-            const filesToDelete: string[] = [];
-            for (const proj of getBuildOrder()) {
+        function clean(project?: string) {
+            const buildOrder = getBuildOrderFor(project);
+            if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
+
+            const filesToDelete = options.dry ? [] as string[] : undefined;
+            for (const proj of buildOrder) {
                 const resolvedPath = toResolvedConfigFilePath(proj);
                 const parsed = parseConfigFile(proj, resolvedPath);
                 if (parsed === undefined) {
@@ -1356,22 +1358,19 @@ namespace ts {
                 const outputs = getAllProjectOutputs(parsed, !host.useCaseSensitiveFileNames());
                 for (const output of outputs) {
                     if (host.fileExists(output)) {
-                        filesToDelete.push(output);
+                        if (filesToDelete) {
+                            filesToDelete.push(output);
+                        }
+                        else {
+                            host.deleteFile(output);
+                            invalidateResolvedProject(resolvedPath, ConfigFileProgramReloadLevel.None);
+                        }
                     }
                 }
             }
-            return filesToDelete;
-        }
 
-        function cleanAllProjects() {
-            const filesToDelete = getFilesToClean();
-            if (options.dry) {
+            if (filesToDelete) {
                 reportStatus(Diagnostics.A_non_dry_build_would_delete_the_following_files_Colon_0, filesToDelete.map(f => `\r\n * ${f}`).join(""));
-                return ExitStatus.Success;
-            }
-
-            for (const output of filesToDelete) {
-                host.deleteFile(output);
             }
 
             return ExitStatus.Success;
@@ -1429,7 +1428,23 @@ namespace ts {
             cacheState = undefined;
         }
 
+        function getBuildOrderFor(project: string | undefined) {
+            const resolvedProject = project && resolveProjectName(project);
+            if (resolvedProject) {
+                const projectPath = toResolvedConfigFilePath(resolvedProject);
+                const projectIndex = findIndex(
+                    getBuildOrder(),
+                    configFileName => toResolvedConfigFilePath(configFileName) === projectPath
+                );
+                if (projectIndex === -1) return undefined;
+            }
+            return resolvedProject ? createBuildOrder([resolvedProject]) : getBuildOrder();
+        }
+
         function build(project?: string, cancellationToken?: CancellationToken): ExitStatus {
+            const buildOrder = getBuildOrderFor(project);
+            if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
+
             // Set initial build if not already built
             if (allProjectBuildPending) {
                 allProjectBuildPending = false;
@@ -1447,16 +1462,6 @@ namespace ts {
 
             let successfulProjects = 0;
             let errorProjects = 0;
-            const resolvedProject = project && resolveProjectName(project);
-            if (resolvedProject) {
-                const projectPath = toResolvedConfigFilePath(resolvedProject);
-                const projectIndex = findIndex(
-                    getBuildOrder(),
-                    configFileName => toResolvedConfigFilePath(configFileName) === projectPath
-                );
-                if (projectIndex === -1) return ExitStatus.InvalidProject_OutputsSkipped;
-            }
-            const buildOrder = resolvedProject ? createBuildOrder([resolvedProject]) : getBuildOrder();
             while (true) {
                 const invalidatedProject = getNextInvalidatedProject(buildOrder);
                 if (!invalidatedProject) {

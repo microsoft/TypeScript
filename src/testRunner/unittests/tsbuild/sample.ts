@@ -25,9 +25,7 @@ namespace ts {
                 host.assertDiagnosticMessages(/*empty*/);
 
                 // Check for outputs. Not an exhaustive list
-                for (const output of allExpectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+                verifyOutputsPresent(fs, allExpectedOutputs);
             });
 
             it("builds correctly when outDir is specified", () => {
@@ -43,9 +41,7 @@ namespace ts {
                 host.assertDiagnosticMessages(/*empty*/);
                 const expectedOutputs = allExpectedOutputs.map(f => f.replace("/logic/", "/logic/outDir/"));
                 // Check for outputs. Not an exhaustive list
-                for (const output of expectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+                verifyOutputsPresent(fs, expectedOutputs);
             });
 
             it("builds correctly when declarationDir is specified", () => {
@@ -61,9 +57,7 @@ namespace ts {
                 host.assertDiagnosticMessages(/*empty*/);
                 const expectedOutputs = allExpectedOutputs.map(f => f.replace("/logic/index.d.ts", "/logic/out/decls/index.d.ts"));
                 // Check for outputs. Not an exhaustive list
-                for (const output of expectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+                verifyOutputsPresent(fs, expectedOutputs);
             });
 
             it("builds correctly when project is not composite or doesnt have any references", () => {
@@ -77,9 +71,7 @@ namespace ts {
                     [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
                     [Diagnostics.Building_project_0, "/src/core/tsconfig.json"]
                 );
-                for (const output of ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map"]) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+                verifyOutputsPresent(fs, ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map"]);
             });
         });
 
@@ -96,9 +88,7 @@ namespace ts {
                 );
 
                 // Check for outputs to not be written. Not an exhaustive list
-                for (const output of allExpectedOutputs) {
-                    assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
-                }
+                verifyOutputsAbsent(fs, allExpectedOutputs);
             });
 
             it("indicates that it would skip builds during a dry build", () => {
@@ -128,16 +118,42 @@ namespace ts {
                 const builder = createSolutionBuilder(host, ["/src/tests"], { dry: false, force: false, verbose: false });
                 builder.build();
                 // Verify they exist
-                for (const output of allExpectedOutputs) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
-                builder.cleanAllProjects();
+                verifyOutputsPresent(fs, allExpectedOutputs);
+
+                builder.clean();
                 // Verify they are gone
-                for (const output of allExpectedOutputs) {
-                    assert(!fs.existsSync(output), `Expect file ${output} to not exist`);
-                }
+                verifyOutputsAbsent(fs, allExpectedOutputs);
+
                 // Subsequent clean shouldn't throw / etc
-                builder.cleanAllProjects();
+                builder.clean();
+                verifyOutputsAbsent(fs, allExpectedOutputs);
+
+                builder.build();
+                // Verify they exist
+                verifyOutputsPresent(fs, allExpectedOutputs);
+            });
+
+            it("cleans till project specified", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.build();
+                const result = builder.clean("/src/logic");
+                host.assertDiagnosticMessages(/*empty*/);
+                verifyOutputsPresent(fs, [allExpectedOutputs[0]]);
+                verifyOutputsAbsent(fs, allExpectedOutputs.slice(1));
+                assert.equal(result, ExitStatus.Success);
+            });
+
+            it("cleaning project in not build order doesnt throw error", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], {});
+                builder.build();
+                const result = builder.clean("/src/logic2");
+                host.assertDiagnosticMessages(/*empty*/);
+                verifyOutputsPresent(fs, allExpectedOutputs);
+                assert.equal(result, ExitStatus.InvalidProject_OutputsSkipped);
             });
         });
 
@@ -318,10 +334,8 @@ namespace ts {
                 const builder = createSolutionBuilder(host, ["/src/tests"], {});
                 const result = builder.build("/src/logic");
                 host.assertDiagnosticMessages(/*empty*/);
-                assert.isFalse(fs.existsSync(allExpectedOutputs[0]), `Expect file ${allExpectedOutputs[0]} to not exist`);
-                for (const output of allExpectedOutputs.slice(1)) {
-                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
-                }
+                verifyOutputsAbsent(fs, [allExpectedOutputs[0]]);
+                verifyOutputsPresent(fs, allExpectedOutputs.slice(1));
                 assert.equal(result, ExitStatus.Success);
             });
 
@@ -331,9 +345,7 @@ namespace ts {
                 const builder = createSolutionBuilder(host, ["/src/tests"], {});
                 const result = builder.build("/src/logic2");
                 host.assertDiagnosticMessages(/*empty*/);
-                for (const output of allExpectedOutputs) {
-                    assert.isFalse(fs.existsSync(output), `Expect file ${output} to not exist`);
-                }
+                verifyOutputsAbsent(fs, allExpectedOutputs);
                 assert.equal(result, ExitStatus.InvalidProject_OutputsSkipped);
             });
         });

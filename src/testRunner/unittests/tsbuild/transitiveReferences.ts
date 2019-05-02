@@ -32,9 +32,7 @@ namespace ts {
             const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
             builder.build();
             host.assertDiagnosticMessages(...expectedDiagnostics);
-            for (const output of allExpectedOutputs) {
-                assert(fs.existsSync(output), `Expect file ${output} to exist`);
-            }
+            verifyOutputsPresent(fs, allExpectedOutputs);
             assert.deepEqual(host.traces, expectedFileTraces);
         }
 
