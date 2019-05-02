@@ -81,21 +81,22 @@ namespace ts.OutliningElementsCollector {
             }
 
             if (!result[1]) {
-                const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
+                const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), result[3] ? lineEnd - 1 : lineEnd);
                 regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"));
             }
             else {
                 const region = regions.pop();
                 if (region) {
-                    region.textSpan.length = lineEnd - region.textSpan.start;
-                    region.hintSpan.length = lineEnd - region.textSpan.start;
+                    region.textSpan.length = result[3] ? (lineEnd - 1) - region.textSpan.start : lineEnd - region.textSpan.start;
+                    region.hintSpan.length = result[3] ? (lineEnd - 1) - region.textSpan.start : lineEnd - region.textSpan.start;
                     out.push(region);
                 }
             }
         }
     }
 
-    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+    // [^\S\r\n]+ match any whitespace that is not \r \n. Note that we probably should not see \n here.
+    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:[^\S\r\n]+(.*))?(\r)?$/;
     function isRegionDelimiter(lineText: string) {
         return regionDelimiterRegExp.exec(lineText);
     }
