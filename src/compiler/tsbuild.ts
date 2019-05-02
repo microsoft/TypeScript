@@ -234,6 +234,7 @@ namespace ts {
     export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
+        deleteFile(fileName: string): void;
 
         reportDiagnostic: DiagnosticReporter; // Technically we want to move it out and allow steps of actions on Solution, but for now just merge stuff in build host here
         reportSolutionBuilderStatus: DiagnosticReporter;
@@ -247,7 +248,6 @@ namespace ts {
     }
 
     export interface SolutionBuilderHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T> {
-        deleteFile(fileName: string): void;
         reportErrorSummary?: ReportEmitErrorSummary;
     }
 
@@ -265,11 +265,6 @@ namespace ts {
         /*@internal*/ getUpToDateStatusOfProject(project: string): UpToDateStatus;
         /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
         /*@internal*/ buildNextInvalidatedProject(): void;
-    }
-
-    export interface SolutionBuilderWithWatch {
-        build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
-        /*@internal*/ startWatching(): void;
     }
 
     interface InvalidatedProject {
@@ -294,6 +289,7 @@ namespace ts {
         const host = createProgramHost(system, createProgram) as SolutionBuilderHostBase<T>;
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : returnUndefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
+        host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
         host.reportDiagnostic = reportDiagnostic || createDiagnosticReporter(system);
         host.reportSolutionBuilderStatus = reportSolutionBuilderStatus || createBuilderStatusReporter(system);
         return host;
@@ -301,7 +297,6 @@ namespace ts {
 
     export function createSolutionBuilderHost<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>(system = sys, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
         const host = createSolutionBuilderHostBase(system, createProgram, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost<T>;
-        host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
         host.reportErrorSummary = reportErrorSummary;
         return host;
     }
@@ -325,7 +320,7 @@ namespace ts {
         return createSolutionBuilderWorker(/*watch*/ false, host, rootNames, defaultOptions);
     }
 
-    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch {
+    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
         return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions);
     }
 
@@ -334,8 +329,8 @@ namespace ts {
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
     function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder | SolutionBuilderWithWatch {
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
         const host = hostOrHostWithWatch as SolutionBuilderHost<T>;
         const hostWithWatch = hostOrHostWithWatch as SolutionBuilderWithWatchHost<T>;
         const currentDirectory = host.getCurrentDirectory();
@@ -395,21 +390,16 @@ namespace ts {
 
         let allProjectBuildPending = true;
         let needsSummary = true;
-    //    let watchAllProjectsPending = watch;
+        let watchAllProjectsPending = watch;
 
-        return watch ?
-            {
-                build,
-                startWatching
-            } :
-            {
-                build,
-                clean,
-                getBuildOrder,
-                getUpToDateStatusOfProject,
-                invalidateProject,
-                buildNextInvalidatedProject,
-            };
+        return {
+            build,
+            clean,
+            getBuildOrder,
+            getUpToDateStatusOfProject,
+            invalidateProject,
+            buildNextInvalidatedProject,
+        };
 
         function toPath(fileName: string) {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -1468,6 +1458,10 @@ namespace ts {
                     if (needsSummary) {
                         disableCache();
                         reportErrorSummary();
+                    }
+                    if (watchAllProjectsPending) {
+                        watchAllProjectsPending = false;
+                        startWatching();
                     }
                     break;
                 }

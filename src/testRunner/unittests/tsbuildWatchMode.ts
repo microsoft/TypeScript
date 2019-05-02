@@ -25,7 +25,6 @@ namespace ts.tscWatch {
         const host = createSolutionBuilderWithWatchHost(system);
         const solutionBuilder = ts.createSolutionBuilderWithWatch(host, rootNames, defaultOptions || { watch: true });
         solutionBuilder.build();
-        solutionBuilder.startWatching();
         return solutionBuilder;
     }
 

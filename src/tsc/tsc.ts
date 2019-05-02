@@ -207,25 +207,22 @@ namespace ts {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
             return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
-        if (buildOptions.watch) {
-            reportWatchModeWithoutSysSupport();
-        }
 
         if (buildOptions.watch) {
+            reportWatchModeWithoutSysSupport();
             const buildHost = createSolutionBuilderWithWatchHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createWatchStatusReporter(buildOptions));
             updateCreateProgram(buildHost);
             buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
             const builder = createSolutionBuilderWithWatch(buildHost, projects, buildOptions);
             builder.build();
-            return builder.startWatching();
+            return;
         }
-        else {
-            const buildHost = createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createReportErrorSummary(buildOptions));
-            updateCreateProgram(buildHost);
-            buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
-            const builder = createSolutionBuilder(buildHost, projects, buildOptions);
-            return sys.exit(buildOptions.clean ? builder.clean() : builder.build());
-        }
+
+        const buildHost = createSolutionBuilderHost(sys, /*createProgram*/ undefined, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty(buildOptions)), createReportErrorSummary(buildOptions));
+        updateCreateProgram(buildHost);
+        buildHost.afterProgramEmitAndDiagnostics = program => reportStatistics(program.getProgram());
+        const builder = createSolutionBuilder(buildHost, projects, buildOptions);
+        return sys.exit(buildOptions.clean ? builder.clean() : builder.build());
     }
 
     function createReportErrorSummary(options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
