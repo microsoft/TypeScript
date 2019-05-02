@@ -380,43 +380,6 @@ namespace ts {
         return host;
     }
 
-    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
-        if (compilerOptions.out || compilerOptions.outFile) return undefined;
-        const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
-        if (!buildInfoPath) return undefined;
-        const content = readFile(buildInfoPath);
-        if (!content) return undefined;
-        const buildInfo = getBuildInfo(content);
-        if (buildInfo.version !== version) return undefined;
-        if (!buildInfo.program) return undefined;
-        return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
-    }
-
-    export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
-        const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
-        host.createHash = maybeBind(system, system.createHash);
-        setGetSourceFileAsHashVersioned(host, system);
-        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
-        return host;
-    }
-
-    interface IncrementalProgramOptions<T extends BuilderProgram> {
-        rootNames: ReadonlyArray<string>;
-        options: CompilerOptions;
-        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
-        projectReferences?: ReadonlyArray<ProjectReference>;
-        host?: CompilerHost;
-        createProgram?: CreateProgram<T>;
-    }
-    function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
-        rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
-    }: IncrementalProgramOptions<T>): T {
-        host = host || createIncrementalCompilerHost(options);
-        createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
-        const oldProgram = readBuilderProgram(options, path => host!.readFile(path)) as any as T;
-        return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
-    }
-
     export interface IncrementalCompilationOptions {
         rootNames: ReadonlyArray<string>;
         options: CompilerOptions;
@@ -444,6 +407,44 @@ namespace ts {
 }
 
 namespace ts {
+    export function readBuilderProgram(compilerOptions: CompilerOptions, readFile: (path: string) => string | undefined) {
+        if (compilerOptions.out || compilerOptions.outFile) return undefined;
+        const buildInfoPath = getOutputPathForBuildInfo(compilerOptions);
+        if (!buildInfoPath) return undefined;
+        const content = readFile(buildInfoPath);
+        if (!content) return undefined;
+        const buildInfo = getBuildInfo(content);
+        if (buildInfo.version !== version) return undefined;
+        if (!buildInfo.program) return undefined;
+        return createBuildProgramUsingProgramBuildInfo(buildInfo.program);
+    }
+
+    export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+        const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
+        host.createHash = maybeBind(system, system.createHash);
+        setGetSourceFileAsHashVersioned(host, system);
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, host.getCurrentDirectory(), host.getCanonicalFileName));
+        return host;
+    }
+
+    export interface IncrementalProgramOptions<T extends BuilderProgram> {
+        rootNames: ReadonlyArray<string>;
+        options: CompilerOptions;
+        configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
+        projectReferences?: ReadonlyArray<ProjectReference>;
+        host?: CompilerHost;
+        createProgram?: CreateProgram<T>;
+    }
+
+    export function createIncrementalProgram<T extends BuilderProgram = EmitAndSemanticDiagnosticsBuilderProgram>({
+        rootNames, options, configFileParsingDiagnostics, projectReferences, host, createProgram
+    }: IncrementalProgramOptions<T>): T {
+        host = host || createIncrementalCompilerHost(options);
+        createProgram = createProgram || createEmitAndSemanticDiagnosticsBuilderProgram as any as CreateProgram<T>;
+        const oldProgram = readBuilderProgram(options, path => host!.readFile(path)) as any as T;
+        return createProgram(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
+    }
+
     export type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
     export type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference> | undefined) => T;
