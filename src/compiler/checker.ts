@@ -30078,7 +30078,7 @@ namespace ts {
         }
 
         function checkAliasSymbol(node: ImportEqualsDeclaration | ImportClause | NamespaceImport | ImportSpecifier | ExportSpecifier) {
-            const symbol = getSymbolOfNode(node);
+            let symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
 
             const shouldSkipWithJSExpandoTargets = symbol.flags & SymbolFlags.Assignment;
@@ -30089,6 +30089,7 @@ namespace ts {
                 // Based on symbol.flags we can compute a set of excluded meanings (meaning that resolved alias should not have,
                 // otherwise it will conflict with some local declaration). Note that in addition to normal flags we include matching SymbolFlags.Export*
                 // in order to prevent collisions with declarations that were exported from the current module (they still contribute to local names).
+                symbol = getMergedSymbol(symbol.exportSymbol || symbol);
                 const excludedMeanings =
                     (symbol.flags & (SymbolFlags.Value | SymbolFlags.ExportValue) ? SymbolFlags.Value : 0) |
                     (symbol.flags & SymbolFlags.Type ? SymbolFlags.Type : 0) |
