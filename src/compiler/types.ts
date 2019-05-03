@@ -2482,7 +2482,7 @@ namespace ts {
 
     export interface JSDocTypeTag extends JSDocTag {
         kind: SyntaxKind.JSDocTypeTag;
-        typeExpression?: JSDocTypeExpression;
+        typeExpression: JSDocTypeExpression;
     }
 
     export interface JSDocTypedefTag extends JSDocTag, NamedDeclaration {
@@ -3737,7 +3737,7 @@ namespace ts {
         specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
         extendedContainers?: Symbol[];      // Containers (other than the parent) which this symbol is aliased in
         extendedContainersByFile?: Map<Symbol[]>;      // Containers (other than the parent) which this symbol is aliased in
-        variances?: Variance[];             // Alias symbol type argument variance cache
+        variances?: VarianceFlags[];             // Alias symbol type argument variance cache
     }
 
     /* @internal */
@@ -4133,12 +4133,16 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum Variance {
-        Invariant     = 0,  // Neither covariant nor contravariant
-        Covariant     = 1,  // Covariant
-        Contravariant = 2,  // Contravariant
-        Bivariant     = 3,  // Both covariant and contravariant
-        Independent   = 4,  // Unwitnessed type parameter
+    export const enum VarianceFlags {
+        Invariant     =      0,  // Neither covariant nor contravariant
+        Covariant     = 1 << 0,  // Covariant
+        Contravariant = 1 << 1,  // Contravariant
+        Bivariant     = Covariant | Contravariant,  // Both covariant and contravariant
+        Independent   = 1 << 2,  // Unwitnessed type parameter
+        VarianceMask  = Invariant | Covariant | Contravariant | Independent, // Mask containing all measured variances without the unmeasurable flag
+        Unmeasurable  = 1 << 3,  // Variance result is unusable - relationship relies on structural comparisons which are not reflected in generic relationships
+        Unreliable    = 1 << 4,  // Variance result is unreliable - relationship relies on structural comparisons which are not reflected in generic relationships
+        AllowsStructuralFallback = Unmeasurable | Unreliable,
     }
 
     // Generic class and interface types
@@ -4146,7 +4150,7 @@ namespace ts {
         /* @internal */
         instantiations: Map<TypeReference>;  // Generic instantiation cache
         /* @internal */
-        variances?: Variance[];  // Variance of each type parameter
+        variances?: VarianceFlags[];  // Variance of each type parameter
     }
 
     export interface TupleType extends GenericType {
@@ -5133,6 +5137,7 @@ namespace ts {
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
 
         // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesnt use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;

@@ -1,0 +1,33 @@
+=== tests/cases/conformance/classes/constructorDeclarations/quotedConstructors.ts ===
+class C {
+>C : Symbol(C, Decl(quotedConstructors.ts, 0, 0))
+
+    "constructor"() {} // Error in 3.5
+>"constructor" : Symbol(C["constructor"], Decl(quotedConstructors.ts, 0, 9))
+}
+
+class D {
+>D : Symbol(D, Decl(quotedConstructors.ts, 2, 1))
+
+    'constructor'() {} // Error in 3.5
+>'constructor' : Symbol(D['constructor'], Decl(quotedConstructors.ts, 4, 9))
+}
+
+class E {
+>E : Symbol(E, Decl(quotedConstructors.ts, 6, 1))
+
+    ['constructor']() {}
+>['constructor'] : Symbol(E['constructor'], Decl(quotedConstructors.ts, 8, 9))
+>'constructor' : Symbol(E['constructor'], Decl(quotedConstructors.ts, 8, 9))
+}
+
+new class {
+    "constructor"() {} // Error in 3.5
+>"constructor" : Symbol((Anonymous class)["constructor"], Decl(quotedConstructors.ts, 12, 11))
+
+};
+
+var o = { "constructor"() {} };
+>o : Symbol(o, Decl(quotedConstructors.ts, 16, 3))
+>"constructor" : Symbol("constructor", Decl(quotedConstructors.ts, 16, 9))
+
