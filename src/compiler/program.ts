@@ -2678,18 +2678,32 @@ namespace ts {
                 return fromCache || undefined;
             }
 
-            // An absolute path pointing to the containing directory of the config file
-            const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
-            const sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
-            addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
-            if (sourceFile === undefined) {
-                projectReferenceRedirects.set(sourceFilePath, false);
-                return undefined;
+            let commandLine: ParsedCommandLine | undefined;
+            let sourceFile: JsonSourceFile | undefined;
+            if (host.getParsedCommandLine) {
+                commandLine = host.getParsedCommandLine(refPath);
+                if (!commandLine) {
+                    addFileToFilesByName(/*sourceFile*/ undefined, sourceFilePath, /*redirectedPath*/ undefined);
+                    projectReferenceRedirects.set(sourceFilePath, false);
+                    return undefined;
+                }
+                sourceFile = Debug.assertDefined(commandLine.options.configFile);
+                addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             }
-            sourceFile.path = sourceFilePath;
-            sourceFile.resolvedPath = sourceFilePath;
-            sourceFile.originalFileName = refPath;
-            const commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
+            else {
+                // An absolute path pointing to the containing directory of the config file
+                const basePath = getNormalizedAbsolutePath(getDirectoryPath(refPath), host.getCurrentDirectory());
+                sourceFile = host.getSourceFile(refPath, ScriptTarget.JSON) as JsonSourceFile | undefined;
+                addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
+                if (sourceFile === undefined) {
+                    projectReferenceRedirects.set(sourceFilePath, false);
+                    return undefined;
+                }
+                sourceFile.path = sourceFilePath;
+                sourceFile.resolvedPath = sourceFilePath;
+                sourceFile.originalFileName = refPath;
+                commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
+            }
             const resolvedRef: ResolvedProjectReference = { commandLine, sourceFile };
             projectReferenceRedirects.set(sourceFilePath, resolvedRef);
             if (commandLine.projectReferences) {
@@ -2754,10 +2768,8 @@ namespace ts {
             if (options.composite) {
                 const rootPaths = rootNames.map(toPath);
                 for (const file of files) {
-                    // Ignore declaration files
-                    if (file.isDeclarationFile) continue;
-                    // Ignore json file thats from project reference
-                    if (isJsonSourceFile(file) && getResolvedProjectReferenceToRedirect(file.fileName)) continue;
+                    // Ignore file that is not emitted
+                    if (!sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary, getResolvedProjectReferenceToRedirect)) continue;
                     if (rootPaths.indexOf(file.path) === -1) {
                         programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file.fileName));
                     }

@@ -1400,8 +1400,8 @@ namespace ts {
     /** Shims `Array.from`. */
     export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
     export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
-    export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
-        const result: any[] = [];
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
+        const result: (T | U)[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(map ? map(value) : value);
         }
@@ -2283,5 +2283,30 @@ namespace ts {
             result[i] = cb(i);
         }
         return result;
+    }
+
+    export function cartesianProduct<T>(arrays: readonly T[][]) {
+        const result: T[][] = [];
+        cartesianProductWorker(arrays, result, /*outer*/ undefined, 0);
+        return result;
+    }
+
+    function cartesianProductWorker<T>(arrays: readonly (readonly T[])[], result: (readonly T[])[], outer: readonly T[] | undefined, index: number) {
+        for (const element of arrays[index]) {
+            let inner: T[];
+            if (outer) {
+                inner = outer.slice();
+                inner.push(element);
+            }
+            else {
+                inner = [element];
+            }
+            if (index === arrays.length - 1) {
+                result.push(inner);
+            }
+            else {
+                cartesianProductWorker(arrays, result, inner, index + 1);
+            }
+        }
     }
 }

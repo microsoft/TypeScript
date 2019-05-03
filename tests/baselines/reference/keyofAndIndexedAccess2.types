@@ -471,3 +471,31 @@ function fn2<T extends Array<string>>(param: T, cb: (element: T[number]) => void
 >0 : 0
 }
 
+// Repro from #31149
+
+function fn3<T extends ReadonlyArray<string>>(param: T, cb: (element: T[number]) => void) {
+>fn3 : <T extends readonly string[]>(param: T, cb: (element: T[number]) => void) => void
+>param : T
+>cb : (element: T[number]) => void
+>element : T[number]
+
+    cb(param[0]);
+>cb(param[0]) : void
+>cb : (element: T[number]) => void
+>param[0] : string
+>param : T
+>0 : 0
+}
+
+function fn4<K extends number>() {
+>fn4 : <K extends number>() => void
+
+    let x: Array<string>[K] = 'abc';
+>x : string[][K]
+>'abc' : "abc"
+
+    let y: ReadonlyArray<string>[K] = 'abc';
+>y : readonly string[][K]
+>'abc' : "abc"
+}
+

@@ -1035,6 +1035,10 @@
         "category": "Error",
         "code": 1355
     },
+    "Did you mean to mark this function as 'async'?": {
+        "category": "Error",
+        "code": 1356
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2959,7 +2963,7 @@
         "category": "Error",
         "code": 4104
     },
-    
+
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -3095,6 +3099,10 @@
     "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option `--tsBuildInfoFile` is specified.": {
         "category": "Error",
         "code": 5074
+    },
+    "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
+        "category": "Error",
+        "code": 5075
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -4272,7 +4280,10 @@
         "category": "Error",
         "code": 7051
     },
-
+    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}' ?": {
+        "category": "Error",
+        "code": 7052
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4954,5 +4965,13 @@
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
         "category": "Error",
         "code": 18004
+    },
+    "Quoted constructors have previously been interpreted as methods, which is incorrect. In TypeScript 3.6, they will be correctly parsed as constructors. In the meantime, consider using 'constructor()' to write a constructor, or '[\"constructor\"]()' to write a method.": {
+        "category": "Error",
+        "code": 18005
+    },
+    "Classes may not have a field named 'constructor'.": {
+        "category": "Error",
+        "code": 18006
     }
 }
