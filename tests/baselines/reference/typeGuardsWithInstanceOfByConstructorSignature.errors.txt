@@ -3,14 +3,20 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(33,5): error TS2322: Type '"str"' is not assignable to type 'number'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(34,10): error TS2339: Property 'bar' does not exist on type 'B<number>'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(41,10): error TS2339: Property 'bar' does not exist on type 'B<any>'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(66,10): error TS2339: Property 'bar2' does not exist on type 'C1'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(65,10): error TS2339: Property 'bar1' does not exist on type 'C1 | C2'.
+  Property 'bar1' does not exist on type 'C2'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(66,10): error TS2339: Property 'bar2' does not exist on type 'C1 | C2'.
+  Property 'bar2' does not exist on type 'C1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(72,10): error TS2339: Property 'bar1' does not exist on type 'C1 | C2'.
   Property 'bar1' does not exist on type 'C2'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(73,10): error TS2339: Property 'bar2' does not exist on type 'C1 | C2'.
   Property 'bar2' does not exist on type 'C1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(85,10): error TS2339: Property 'bar' does not exist on type 'D'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(91,10): error TS2339: Property 'bar' does not exist on type 'D'.
-tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(112,10): error TS2339: Property 'bar2' does not exist on type 'E1'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(111,10): error TS2339: Property 'bar1' does not exist on type 'E1 | E2'.
+  Property 'bar1' does not exist on type 'E2'.
+tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(112,10): error TS2339: Property 'bar2' does not exist on type 'E1 | E2'.
+  Property 'bar2' does not exist on type 'E1'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(118,11): error TS2339: Property 'bar1' does not exist on type 'E1 | E2'.
   Property 'bar1' does not exist on type 'E2'.
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(119,11): error TS2339: Property 'bar2' does not exist on type 'E1 | E2'.
@@ -26,7 +32,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts(188,11): error TS2551: Property 'foo2' does not exist on type 'H'. Did you mean 'foo'?
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts (20 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts (22 errors) ====
     interface AConstructor {
         new (): A;
     }
@@ -102,9 +108,13 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
         obj5.foo;
         obj5.c;
         obj5.bar1;
+             ~~~~
+!!! error TS2339: Property 'bar1' does not exist on type 'C1 | C2'.
+!!! error TS2339:   Property 'bar1' does not exist on type 'C2'.
         obj5.bar2;
              ~~~~
-!!! error TS2339: Property 'bar2' does not exist on type 'C1'.
+!!! error TS2339: Property 'bar2' does not exist on type 'C1 | C2'.
+!!! error TS2339:   Property 'bar2' does not exist on type 'C1'.
     }
     
     var obj6: any;
@@ -160,9 +170,13 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
     if (obj9 instanceof E) { // narrowed to E1 | E2
         obj9.foo;
         obj9.bar1;
+             ~~~~
+!!! error TS2339: Property 'bar1' does not exist on type 'E1 | E2'.
+!!! error TS2339:   Property 'bar1' does not exist on type 'E2'.
         obj9.bar2;
              ~~~~
-!!! error TS2339: Property 'bar2' does not exist on type 'E1'.
+!!! error TS2339: Property 'bar2' does not exist on type 'E1 | E2'.
+!!! error TS2339:   Property 'bar2' does not exist on type 'E1'.
     }
     
     var obj10: any;

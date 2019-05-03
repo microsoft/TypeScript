@@ -43,6 +43,12 @@ if (hasStringPropertyAOrIsBOrUndefined(d)) {
   d; // { a: string } | B
 }
 
+declare let e: { x: number } | { y: string };
+declare function isEightOrString(n: any): n is { x: 8 } | { x: string }
+if (isEightOrString(e)) {
+  e;
+}
+
 
 //// [typeGuardNarrowsUnionWithUnion.js]
 if (isEmptyStringOrUndefined(a)) {
@@ -65,4 +71,7 @@ if (isAorB(c)) {
 }
 if (hasStringPropertyAOrIsBOrUndefined(d)) {
     d; // { a: string } | B
+}
+if (isEightOrString(e)) {
+    e;
 }

@@ -159,22 +159,22 @@ if (obj5 instanceof C) { // narrowed to C1|C2.
 
     obj5.foo;
 >obj5.foo : string
->obj5 : C1
+>obj5 : C1 | C2
 >foo : string
 
     obj5.c;
 >obj5.c : string
->obj5 : C1
+>obj5 : C1 | C2
 >c : string
 
     obj5.bar1;
->obj5.bar1 : number
->obj5 : C1
->bar1 : number
+>obj5.bar1 : any
+>obj5 : C1 | C2
+>bar1 : any
 
     obj5.bar2;
 >obj5.bar2 : any
->obj5 : C1
+>obj5 : C1 | C2
 >bar2 : any
 }
 
@@ -279,17 +279,17 @@ if (obj9 instanceof E) { // narrowed to E1 | E2
 
     obj9.foo;
 >obj9.foo : string
->obj9 : E1
+>obj9 : E1 | E2
 >foo : string
 
     obj9.bar1;
->obj9.bar1 : number
->obj9 : E1
->bar1 : number
+>obj9.bar1 : any
+>obj9 : E1 | E2
+>bar1 : any
 
     obj9.bar2;
 >obj9.bar2 : any
->obj9 : E1
+>obj9 : E1 | E2
 >bar2 : any
 }
 

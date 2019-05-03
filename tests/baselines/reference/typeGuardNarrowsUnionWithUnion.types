@@ -89,7 +89,7 @@ if (isAorB(c)) {
 >c : { a: string; } | { z: number; }
 
   c; // { a: string }
->c : { a: string; }
+>c : { a: string; } | (A & { z: number; }) | (B & { z: number; })
 }
 
 declare let d: A | B;
@@ -107,5 +107,25 @@ if (hasStringPropertyAOrIsBOrUndefined(d)) {
 
   d; // { a: string } | B
 >d : B | { a: string; }
+}
+
+declare let e: { x: number } | { y: string };
+>e : { x: number; } | { y: string; }
+>x : number
+>y : string
+
+declare function isEightOrString(n: any): n is { x: 8 } | { x: string }
+>isEightOrString : (n: any) => n is { x: 8; } | { x: string; }
+>n : any
+>x : 8
+>x : string
+
+if (isEightOrString(e)) {
+>isEightOrString(e) : boolean
+>isEightOrString : (n: any) => n is { x: 8; } | { x: string; }
+>e : { x: number; } | { y: string; }
+
+  e;
+>e : { x: 8; } | ({ x: 8; } & { y: string; }) | ({ x: string; } & { y: string; })
 }
 

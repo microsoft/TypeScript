@@ -95,13 +95,13 @@ function fail(s: Shapes) {
         if (s.kind === "circle") {
 >s.kind === "circle" : boolean
 >s.kind : "square" | "circle"
->s : Shape
+>s : Square | Circle | (Square & Shape[]) | (Circle & Shape[])
 >kind : "square" | "circle"
 >"circle" : "circle"
 
             let c: Circle = s;
 >c : Circle
->s : Circle
+>s : Circle | (Circle & Shape[])
         }
     }
 }

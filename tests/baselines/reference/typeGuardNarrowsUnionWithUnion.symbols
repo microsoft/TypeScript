@@ -113,3 +113,23 @@ if (hasStringPropertyAOrIsBOrUndefined(d)) {
 >d : Symbol(d, Decl(typeGuardNarrowsUnionWithUnion.ts, 37, 11))
 }
 
+declare let e: { x: number } | { y: string };
+>e : Symbol(e, Decl(typeGuardNarrowsUnionWithUnion.ts, 44, 11))
+>x : Symbol(x, Decl(typeGuardNarrowsUnionWithUnion.ts, 44, 16))
+>y : Symbol(y, Decl(typeGuardNarrowsUnionWithUnion.ts, 44, 32))
+
+declare function isEightOrString(n: any): n is { x: 8 } | { x: string }
+>isEightOrString : Symbol(isEightOrString, Decl(typeGuardNarrowsUnionWithUnion.ts, 44, 45))
+>n : Symbol(n, Decl(typeGuardNarrowsUnionWithUnion.ts, 45, 33))
+>n : Symbol(n, Decl(typeGuardNarrowsUnionWithUnion.ts, 45, 33))
+>x : Symbol(x, Decl(typeGuardNarrowsUnionWithUnion.ts, 45, 48))
+>x : Symbol(x, Decl(typeGuardNarrowsUnionWithUnion.ts, 45, 59))
+
+if (isEightOrString(e)) {
+>isEightOrString : Symbol(isEightOrString, Decl(typeGuardNarrowsUnionWithUnion.ts, 44, 45))
+>e : Symbol(e, Decl(typeGuardNarrowsUnionWithUnion.ts, 44, 11))
+
+  e;
+>e : Symbol(e, Decl(typeGuardNarrowsUnionWithUnion.ts, 44, 11))
+}
+

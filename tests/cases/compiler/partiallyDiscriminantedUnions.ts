@@ -38,9 +38,9 @@ function isShape(s : Shapes): s is Shape {
 }
 
 function fail(s: Shapes) {
-    if (isShape(s)) {
-        if (s.kind === "circle") {
-            let c: Circle = s;
-        }
+if (isShape(s)) {
+    if (s.kind === "circle") {
+        let c: Circle = s;
     }
+}
 }

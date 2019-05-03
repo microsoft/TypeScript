@@ -42,3 +42,9 @@ declare function hasStringPropertyAOrIsBOrUndefined(d: any): d is { a: string } 
 if (hasStringPropertyAOrIsBOrUndefined(d)) {
   d; // { a: string } | B
 }
+
+declare let e: { x: number } | { y: string };
+declare function isEightOrString(n: any): n is { x: 8 } | { x: string }
+if (isEightOrString(e)) {
+  e;
+}

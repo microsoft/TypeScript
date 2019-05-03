@@ -162,19 +162,17 @@ if (obj5 instanceof C) { // narrowed to C1|C2.
 >C : Symbol(C, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 58, 11))
 
     obj5.foo;
->obj5.foo : Symbol(C1.foo, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 48, 14))
+>obj5.foo : Symbol(foo, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 48, 14), Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 53, 14))
 >obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 60, 3))
->foo : Symbol(C1.foo, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 48, 14))
+>foo : Symbol(foo, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 48, 14), Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 53, 14))
 
     obj5.c;
->obj5.c : Symbol(C1.c, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 49, 16))
+>obj5.c : Symbol(c, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 49, 16), Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 54, 16))
 >obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 60, 3))
->c : Symbol(C1.c, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 49, 16))
+>c : Symbol(c, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 49, 16), Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 54, 16))
 
     obj5.bar1;
->obj5.bar1 : Symbol(C1.bar1, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 50, 14))
 >obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 60, 3))
->bar1 : Symbol(C1.bar1, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 50, 14))
 
     obj5.bar2;
 >obj5 : Symbol(obj5, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 60, 3))
@@ -283,14 +281,12 @@ if (obj9 instanceof E) { // narrowed to E1 | E2
 >E : Symbol(E, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 105, 11))
 
     obj9.foo;
->obj9.foo : Symbol(E1.foo, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 97, 14))
+>obj9.foo : Symbol(foo, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 97, 14), Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 101, 14))
 >obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 107, 3))
->foo : Symbol(E1.foo, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 97, 14))
+>foo : Symbol(foo, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 97, 14), Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 101, 14))
 
     obj9.bar1;
->obj9.bar1 : Symbol(E1.bar1, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 98, 16))
 >obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 107, 3))
->bar1 : Symbol(E1.bar1, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 98, 16))
 
     obj9.bar2;
 >obj9 : Symbol(obj9, Decl(typeGuardsWithInstanceOfByConstructorSignature.ts, 107, 3))

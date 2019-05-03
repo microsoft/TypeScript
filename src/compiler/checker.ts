@@ -16851,7 +16851,7 @@ namespace ts {
                         // - if the constituent is a subtype of the candidate, toss it in
                         // - if any candidate constituents are a subtype of the target constituent, toss ’em in
                         // - return a union of everything we tossed in.
-                        ? mapType(type, t => isRelated(t, candidate) ? t : filterType(candidate, c => isRelated(c, t)))
+                        ? mapType(type, t => getNarrowedType(candidate, t, assumeTrue, isRelated))
                         // If the target type is a union type and the candidate is not, remove all
                         // constituents that couldn't be instances of the candidate type. If one or
                         // more constituents remain, return a union of those.
