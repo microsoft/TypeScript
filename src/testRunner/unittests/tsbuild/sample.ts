@@ -437,7 +437,7 @@ export class cNew {}`);
                 function verifyInvalidation(expectedToWriteTests: boolean) {
                     // Rebuild this project
                     tick();
-                    builder.invalidateProject("/src/logic");
+                    builder.invalidateProject("/src/logic/tsconfig.json" as ResolvedConfigFilePath);
                     builder.buildNextInvalidatedProject();
                     // The file should be updated
                     assert.isTrue(writtenFiles.has("/src/logic/index.js"), "JS file should have been rebuilt");

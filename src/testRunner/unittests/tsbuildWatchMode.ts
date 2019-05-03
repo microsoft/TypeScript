@@ -721,7 +721,7 @@ let x: string = 10;`);
                             host.writeFile(logic[1].path, `${logic[1].content}
 function foo() {
 }`);
-                            solutionBuilder.invalidateProject(`${project}/${SubProject.logic}`);
+                            solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath);
                             solutionBuilder.buildNextInvalidatedProject();
 
                             // not ideal, but currently because of d.ts but no new file is written
@@ -734,7 +734,7 @@ function foo() {
                             host.writeFile(logic[1].path, `${logic[1].content}
 export function gfoo() {
 }`);
-                            solutionBuilder.invalidateProject(logic[0].path);
+                            solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath);
                             solutionBuilder.buildNextInvalidatedProject();
                         }, expectedProgramFiles);
                     });
@@ -745,7 +745,7 @@ export function gfoo() {
                                 compilerOptions: { composite: true, declaration: true, declarationDir: "decls" },
                                 references: [{ path: "../core" }]
                             }));
-                            solutionBuilder.invalidateProject(logic[0].path, ConfigFileProgramReloadLevel.Full);
+                            solutionBuilder.invalidateProject(logic[0].path.toLowerCase() as ResolvedConfigFilePath, ConfigFileProgramReloadLevel.Full);
                             solutionBuilder.buildNextInvalidatedProject();
                         }, [tests[1].path, libFile.path, coreIndexDts, coreAnotherModuleDts, projectFilePath(SubProject.logic, "decls/index.d.ts")]);
                     });
@@ -965,7 +965,7 @@ export function gfoo() {
                                     host.writeFile(bTs.path, `${bTs.content}
 export function gfoo() {
 }`);
-                                    solutionBuilder.invalidateProject(bTsconfig.path);
+                                    solutionBuilder.invalidateProject(bTsconfig.path.toLowerCase() as ResolvedConfigFilePath);
                                     solutionBuilder.buildNextInvalidatedProject();
                                 },
                                 emptyArray,
