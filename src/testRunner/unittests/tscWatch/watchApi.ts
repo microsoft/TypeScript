@@ -30,7 +30,7 @@ namespace ts.tscWatch {
                     resolvedFileName: resolvedModule.resolvedFileName,
                     isExternalLibraryImport: resolvedModule.isExternalLibraryImport,
                     originalFileName: resolvedModule.originalPath,
-                };
+                } as ResolvedModule as ResolvedModuleFull;
             });
             const watch = createWatchProgram(compilerHost);
             const program = watch.getCurrentProgram().getProgram();

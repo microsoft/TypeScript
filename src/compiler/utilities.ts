@@ -224,9 +224,9 @@ namespace ts {
         return sourceFile && sourceFile.resolvedModules && sourceFile.resolvedModules.get(moduleNameText);
     }
 
-    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull): void {
+    export function setResolvedModule(sourceFile: SourceFile, moduleNameText: string, resolvedModule: ResolvedModuleFull | undefined): void {
         if (!sourceFile.resolvedModules) {
-            sourceFile.resolvedModules = createMap<ResolvedModuleFull>();
+            sourceFile.resolvedModules = createMap<ResolvedModuleFull | undefined>();
         }
 
         sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
