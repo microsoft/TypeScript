@@ -2577,7 +2577,7 @@ namespace ts {
          */
         function visitEnumDeclaration(node: EnumDeclaration): VisitResult<Statement> {
             if (!shouldEmitEnumDeclaration(node)) {
-                return undefined;
+                return createNotEmittedStatement(node);
             }
 
             const statements: Statement[] = [];

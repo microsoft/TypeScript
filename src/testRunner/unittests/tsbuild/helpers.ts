@@ -62,7 +62,7 @@ namespace ts {
         }
     }
 
-    const libContent = `${TestFSWithWatch.libFile.content}
+    export const libContent = `${TestFSWithWatch.libFile.content}
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };`;
 

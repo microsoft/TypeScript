@@ -1639,7 +1639,7 @@ namespace ts {
             // arguments are both mapped contiguously to the accessor name.
             const target = getMutableClone(receiver);
             setEmitFlags(target, EmitFlags.NoComments | EmitFlags.NoTrailingSourceMap);
-            setSourceMapRange(target, firstAccessor.name); // TODO: GH#18217
+            setSourceMapRange(target, firstAccessor.name);
 
             const propertyName = createExpressionForPropertyName(visitNode(firstAccessor.name, visitor, isPropertyName));
             setEmitFlags(propertyName, EmitFlags.NoComments | EmitFlags.NoLeadingSourceMap);

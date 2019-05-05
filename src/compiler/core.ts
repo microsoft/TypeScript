@@ -1400,8 +1400,8 @@ namespace ts {
     /** Shims `Array.from`. */
     export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
     export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
-    export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
-        const result: any[] = [];
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
+        const result: (T | U)[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(map ? map(value) : value);
         }
@@ -1637,39 +1637,6 @@ namespace ts {
             }
             return value;
         };
-    }
-
-    /**
-     * High-order function, creates a function that executes a function composition.
-     * For example, `chain(a, b)` is the equivalent of `x => ((a', b') => y => b'(a'(y)))(a(x), b(x))`
-     *
-     * @param args The functions to chain.
-     */
-    export function chain<T, U>(...args: ((t: T) => (u: U) => U)[]): (t: T) => (u: U) => U;
-    export function chain<T, U>(a: (t: T) => (u: U) => U, b: (t: T) => (u: U) => U, c: (t: T) => (u: U) => U, d: (t: T) => (u: U) => U, e: (t: T) => (u: U) => U): (t: T) => (u: U) => U {
-        if (e) {
-            const args: ((t: T) => (u: U) => U)[] = [];
-            for (let i = 0; i < arguments.length; i++) {
-                args[i] = arguments[i];
-            }
-
-            return t => compose(...map(args, f => f(t)));
-        }
-        else if (d) {
-            return t => compose(a(t), b(t), c(t), d(t));
-        }
-        else if (c) {
-            return t => compose(a(t), b(t), c(t));
-        }
-        else if (b) {
-            return t => compose(a(t), b(t));
-        }
-        else if (a) {
-            return t => compose(a(t));
-        }
-        else {
-            return _ => u => u;
-        }
     }
 
     /**
@@ -2316,5 +2283,30 @@ namespace ts {
             result[i] = cb(i);
         }
         return result;
+    }
+
+    export function cartesianProduct<T>(arrays: readonly T[][]) {
+        const result: T[][] = [];
+        cartesianProductWorker(arrays, result, /*outer*/ undefined, 0);
+        return result;
+    }
+
+    function cartesianProductWorker<T>(arrays: readonly (readonly T[])[], result: (readonly T[])[], outer: readonly T[] | undefined, index: number) {
+        for (const element of arrays[index]) {
+            let inner: T[];
+            if (outer) {
+                inner = outer.slice();
+                inner.push(element);
+            }
+            else {
+                inner = [element];
+            }
+            if (index === arrays.length - 1) {
+                result.push(inner);
+            }
+            else {
+                cartesianProductWorker(arrays, result, inner, index + 1);
+            }
+        }
     }
 }

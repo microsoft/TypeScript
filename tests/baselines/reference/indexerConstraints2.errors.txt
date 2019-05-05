@@ -9,9 +9,10 @@ tests/cases/compiler/indexerConstraints2.ts(58,6): error TS1023: An index signat
 tests/cases/compiler/indexerConstraints2.ts(64,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 tests/cases/compiler/indexerConstraints2.ts(70,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
+tests/cases/compiler/indexerConstraints2.ts(79,6): error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[key: string]: any' instead.
 
 
-==== tests/cases/compiler/indexerConstraints2.ts (11 errors) ====
+==== tests/cases/compiler/indexerConstraints2.ts (12 errors) ====
     class A { a: number; }
     class B extends A { b: number; }
     
@@ -109,3 +110,11 @@ tests/cases/compiler/indexerConstraints2.ts(74,6): error TS1337: An index signat
          ~
 !!! error TS1337: An index signature parameter type cannot be a union type. Consider using a mapped object type instead.
     }
+    
+    type Key = string;
+    interface T {
+        [key: Key]
+         ~~~
+!!! error TS1336: An index signature parameter type cannot be a type alias. Consider writing '[key: string]: any' instead.
+    }
+    
