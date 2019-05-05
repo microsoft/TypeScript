@@ -559,7 +559,8 @@ namespace ts {
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
         const flowLoopCaches: Map<Type>[] = [];
-        const flowAssignmentCaches: Map<Type>[] = [];
+        const flowAssignmentKeys: string[] = [];
+        const flowAssignmentTypes: FlowType[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
@@ -16390,10 +16391,8 @@ namespace ts {
                         const key = getOrSetCacheKey();
                         if (key) {
                             const id = getFlowNodeId(flow);
-                            const cache = flowAssignmentCaches[id] || (flowAssignmentCaches[id] = createMap<Type>());
-                            const cached = cache.get(key);
-                            if (cached) {
-                                return cached;
+                            if (flowAssignmentKeys[id] === key) {
+                                return flowAssignmentTypes[id];
                             }
                         }
                     }
@@ -16432,8 +16431,8 @@ namespace ts {
                             if (key && !isIncomplete(type)) {
                                 flow.flags |= FlowFlags.Cached;
                                 const id = getFlowNodeId(flow);
-                                const cache = flowAssignmentCaches[id] || (flowAssignmentCaches[id] = createMap<Type>());
-                                cache.set(key, type as Type);
+                                flowAssignmentKeys[id] = key;
+                                flowAssignmentTypes[id] = type;
                             }
                         }
                     }
