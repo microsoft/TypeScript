@@ -2688,6 +2688,7 @@ namespace ts {
                     return undefined;
                 }
                 sourceFile = Debug.assertDefined(commandLine.options.configFile);
+                Debug.assert(!sourceFile.path || sourceFile.path === sourceFilePath);
                 addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             }
             else {
