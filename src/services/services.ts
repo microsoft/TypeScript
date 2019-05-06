@@ -1467,7 +1467,7 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
-            const nodeForQuickInfo = getNodeForQuickInfo(node, typeChecker);
+            const nodeForQuickInfo = getNodeForQuickInfo(node);
             const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
@@ -1495,17 +1495,9 @@ namespace ts {
             };
         }
 
-        function getNodeForQuickInfo(node: Node, typeChecker: TypeChecker): Node {
-            const firstParentNode = node.parent.getFirstToken();
-            const firstNodeSyntaxKind = firstParentNode ? firstParentNode.kind : undefined;
-
-            if (node.kind === SyntaxKind.NewKeyword || firstNodeSyntaxKind === SyntaxKind.NewKeyword) {
-                for (const singleNode of node.parent.getChildren()) {
-                    const symbol = getSymbolAtLocationForQuickInfo(singleNode, typeChecker);
-                    if (symbol) {
-                        return singleNode;
-                    }
-                }
+        function getNodeForQuickInfo(node: Node): Node {
+            if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
+                return node.parent.expression;
             }
             return node;
         }

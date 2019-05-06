@@ -9,13 +9,10 @@
 ////  static makeCat() { new Cat(); }
 ////}
 ////
-////ne/*1*/w Ca/*2*/t(/*3*/);
+////ne/*1*/w Ca/*2*/t();
 
 verify.quickInfoAt('1', 'constructor Cat(): Cat',
 'NOTE: this constructor is private! Please use the factory function');
 
 verify.quickInfoAt('2', 'constructor Cat(): Cat',
-'NOTE: this constructor is private! Please use the factory function');
-
-verify.quickInfoAt('3', 'constructor Cat(): Cat',
 'NOTE: this constructor is private! Please use the factory function');

@@ -2991,15 +2991,15 @@
       "position": 337
     },
     "quickInfo": {
-      "kind": "constructor",
+      "kind": "var",
       "kindModifiers": "",
       "textSpan": {
-        "start": 334,
-        "length": 2
+        "start": 337,
+        "length": 9
       },
       "displayParts": [
         {
-          "text": "constructor",
+          "text": "var",
           "kind": "keyword"
         },
         {
@@ -3007,40 +3007,8 @@
           "kind": "space"
         },
         {
-          "text": "c2",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "c",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": "a",
-          "kind": "parameterName"
+          "text": "cInstance",
+          "kind": "localName"
         },
         {
           "text": ":",
@@ -3061,46 +3029,6 @@
         {
           "text": "string",
           "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "c2",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "c",
-          "kind": "className"
-        },
-        {
-          "text": "<",
-          "kind": "punctuation"
-        },
-        {
-          "text": "string",
-          "kind": "keyword"
-        },
-        {
-          "text": ">",
-          "kind": "punctuation"
         },
         {
           "text": ">",
