@@ -283,30 +283,6 @@ namespace ts {
         /*@internal*/ buildNextInvalidatedProject(): void;
     }
 
-    const enum InvalidatedProjectKind {
-        BuildProject,
-        UpdateBundle,
-        UpdateOutputFileStamps
-    }
-
-    interface UpdateOutputFileStampsProject {
-        readonly kind: InvalidatedProjectKind.UpdateOutputFileStamps;
-        readonly project: ResolvedConfigFileName;
-        readonly projectPath: ResolvedConfigFilePath;
-        readonly config: ParsedCommandLine;
-    }
-
-    interface BuildOrUpdateBundleProject {
-        readonly kind: InvalidatedProjectKind.BuildProject | InvalidatedProjectKind.UpdateBundle;
-        readonly project: ResolvedConfigFileName;
-        readonly projectPath: ResolvedConfigFilePath;
-        readonly projectIndex: number;
-        readonly config: ParsedCommandLine;
-        readonly buildOrder: readonly ResolvedConfigFileName[];
-    }
-
-    type InvalidatedProject = UpdateOutputFileStampsProject | BuildOrUpdateBundleProject;
-
     /**
      * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
      */
@@ -678,6 +654,121 @@ namespace ts {
         }
     }
 
+    const enum InvalidatedProjectKind {
+        Build,
+        UpdateBundle,
+        UpdateOutputFileStamps
+    }
+
+    interface InvalidatedProjectBase {
+        readonly kind: InvalidatedProjectKind;
+        readonly project: ResolvedConfigFileName;
+        readonly projectPath: ResolvedConfigFilePath;
+        /**
+         *  To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
+         */
+        done(cancellationToken?: CancellationToken): void;
+    }
+
+    interface UpdateOutputFileStampsProject extends InvalidatedProjectBase {
+        readonly kind: InvalidatedProjectKind.UpdateOutputFileStamps;
+        updateOutputFileStatmps(): void;
+    }
+
+    interface BuildInvalidedProject extends InvalidatedProjectBase {
+        readonly kind: InvalidatedProjectKind.Build;
+        build(cancellationToken?: CancellationToken): BuildResultFlags;
+    }
+
+    interface UpdateBundleProject extends InvalidatedProjectBase {
+        readonly kind: InvalidatedProjectKind.UpdateBundle;
+        updateBundle(cancellationToken?: CancellationToken): BuildResultFlags;
+    }
+
+    type InvalidatedProject = UpdateOutputFileStampsProject | BuildInvalidedProject | UpdateBundleProject;
+
+    function createUpdateOutputFileStampsProject(state: SolutionBuilderState, project: ResolvedConfigFileName, projectPath: ResolvedConfigFilePath, config: ParsedCommandLine): UpdateOutputFileStampsProject {
+        let updateOutputFileStampsPending = true;
+        return {
+            kind: InvalidatedProjectKind.UpdateOutputFileStamps,
+            project,
+            projectPath,
+            updateOutputFileStatmps: () => {
+                updateOutputTimestamps(state, config, projectPath);
+                updateOutputFileStampsPending = false;
+            },
+            done: () => {
+                if (updateOutputFileStampsPending) {
+                    updateOutputTimestamps(state, config, projectPath);
+                }
+                state.projectPendingBuild.delete(projectPath);
+            }
+        };
+    }
+
+    function createBuildInvalidedProject(
+        state: SolutionBuilderState,
+        project: ResolvedConfigFileName,
+        projectPath: ResolvedConfigFilePath,
+        projectIndex: number,
+        config: ParsedCommandLine,
+        buildOrder: readonly ResolvedConfigFileName[]
+    ): BuildInvalidedProject {
+        let buildPending = true;
+        return {
+            kind: InvalidatedProjectKind.Build,
+            project,
+            projectPath,
+            build,
+            done: cancellationToken => {
+                if (buildPending) build(cancellationToken);
+                state.projectPendingBuild.delete(projectPath);
+            }
+        };
+
+        function build(cancellationToken?: CancellationToken) {
+            const buildResult = buildSingleProject(state, project, projectPath, config, cancellationToken);
+            queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, buildResult);
+            buildPending = false;
+            return buildResult;
+        }
+    }
+
+    function createUpdateBundleProject(
+        state: SolutionBuilderState,
+        project: ResolvedConfigFileName,
+        projectPath: ResolvedConfigFilePath,
+        projectIndex: number,
+        config: ParsedCommandLine,
+        buildOrder: readonly ResolvedConfigFileName[]
+    ): UpdateBundleProject {
+        let updatePending = true;
+        return {
+            kind: InvalidatedProjectKind.UpdateBundle,
+            project,
+            projectPath,
+            updateBundle: update,
+            done: cancellationToken => {
+                if (updatePending) update(cancellationToken);
+                state.projectPendingBuild.delete(projectPath);
+            }
+        };
+
+        function update(cancellationToken?: CancellationToken) {
+            const buildResult = updateBundle(state, project, projectPath, config, cancellationToken);
+            queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, buildResult);
+            updatePending = false;
+            return buildResult;
+        }
+    }
+
+    function needsBuild({ options }: SolutionBuilderState, status: UpToDateStatus, config: ParsedCommandLine) {
+        if (status.type !== UpToDateStatusType.OutOfDateWithPrepend || options.force) return true;
+        return config.fileNames.length === 0 ||
+            !!config.errors.length ||
+            !isIncrementalCompilation(config.options);
+    }
+
     function getNextInvalidatedProject(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]): InvalidatedProject | undefined {
         if (!state.projectPendingBuild.size) return undefined;
 
@@ -724,14 +815,12 @@ namespace ts {
 
                 if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
                     reportAndStoreErrors(state, projectPath, config.errors);
-                    return {
-                        kind: InvalidatedProjectKind.UpdateOutputFileStamps,
+                    return createUpdateOutputFileStampsProject(
+                        state,
                         project,
                         projectPath,
                         config
-                    };
-
-                    continue;
+                    );
                 }
             }
 
@@ -749,17 +838,9 @@ namespace ts {
                 continue;
             }
 
-
-            return {
-                kind: needsBuild(state, status, config) ?
-                    InvalidatedProjectKind.BuildProject :
-                    InvalidatedProjectKind.UpdateBundle,
-                project,
-                projectPath,
-                projectIndex,
-                config,
-                buildOrder
-            };
+            return needsBuild(state, status, config) ?
+                createBuildInvalidedProject(state, project, projectPath, projectIndex, config, buildOrder) :
+                createUpdateBundleProject(state, project, projectPath, projectIndex, config, buildOrder);
         }
 
         return undefined;
@@ -1307,46 +1388,19 @@ namespace ts {
         });
     }
 
-    function needsBuild({ options }: SolutionBuilderState, status: UpToDateStatus, config: ParsedCommandLine) {
-        if (status.type !== UpToDateStatusType.OutOfDateWithPrepend || options.force) return true;
-        return config.fileNames.length === 0 ||
-            !!config.errors.length ||
-            !isIncrementalCompilation(config.options);
-    }
-
-    function buildInvalidatedProject(
-        state: SolutionBuilderState,
-        invalidatedProject: InvalidatedProject,
-        cancellationToken?: CancellationToken
-    ) {
-        const { projectPendingBuild } = state;
-        if (invalidatedProject.kind === InvalidatedProjectKind.UpdateOutputFileStamps) {
-            // Fake that files have been built by updating output file stamps
-            const { projectPath, config } = invalidatedProject;
-            updateOutputTimestamps(state, config, projectPath);
-            projectPendingBuild.delete(projectPath);
-            return;
-        }
-
-        const { kind, project, projectPath, projectIndex, config, buildOrder } = invalidatedProject;
-        const buildResult = kind === InvalidatedProjectKind.BuildProject ?
-            buildSingleProject(state, project, projectPath, config, cancellationToken) : // Actual build
-            updateBundle(state, project, projectPath, config, cancellationToken); // Fake that files have been built by manipulating prepend and existing output
-        projectPendingBuild.delete(projectPath);
-        // Only composite projects can be referenced by other projects
-        if (!(buildResult & BuildResultFlags.AnyErrors) && config.options.composite) {
-            queueReferencingProjects(state, project, projectPath, projectIndex, buildOrder, !(buildResult & BuildResultFlags.DeclarationOutputUnchanged));
-        }
-    }
-
     function queueReferencingProjects(
         state: SolutionBuilderState,
         project: ResolvedConfigFileName,
         projectPath: ResolvedConfigFilePath,
         projectIndex: number,
+        config: ParsedCommandLine,
         buildOrder: readonly ResolvedConfigFileName[],
-        declarationOutputChanged: boolean
+        buildResult: BuildResultFlags
     ) {
+        // Queue only if there are no errors
+        if (buildResult & BuildResultFlags.AnyErrors) return;
+        // Only composite projects can be referenced by other projects
+        if (!config.options.composite) return;
         // Always use build order to queue projects
         for (let index = projectIndex + 1; index < buildOrder.length; index++) {
             const nextProject = buildOrder[index];
@@ -1365,7 +1419,7 @@ namespace ts {
                 if (status) {
                     switch (status.type) {
                         case UpToDateStatusType.UpToDate:
-                            if (!declarationOutputChanged) {
+                            if (buildResult & BuildResultFlags.DeclarationOutputUnchanged) {
                                 if (ref.prepend) {
                                     state.projectStatus.set(nextProjectPath, {
                                         type: UpToDateStatusType.OutOfDateWithPrepend,
@@ -1382,7 +1436,7 @@ namespace ts {
                         // falls through
                         case UpToDateStatusType.UpToDateWithUpstreamTypes:
                         case UpToDateStatusType.OutOfDateWithPrepend:
-                            if (declarationOutputChanged) {
+                            if (!(buildResult & BuildResultFlags.DeclarationOutputUnchanged)) {
                                 state.projectStatus.set(nextProjectPath, {
                                     type: UpToDateStatusType.OutOfDateWithUpstream,
                                     outOfDateOutputFileName: status.type === UpToDateStatusType.OutOfDateWithPrepend ? status.outOfDateOutputFileName : status.oldestOutputFileName,
@@ -1409,7 +1463,7 @@ namespace ts {
         const invalidatedProject = getNextInvalidatedProject(state, getBuildOrder(state));
         if (!invalidatedProject) return undefined;
 
-        buildInvalidatedProject(state, invalidatedProject, cancellationToken);
+        invalidatedProject.done(cancellationToken);
         return {
             project: invalidatedProject.project,
             result: state.diagnostics.has(invalidatedProject.projectPath) ?
@@ -1429,7 +1483,7 @@ namespace ts {
         while (true) {
             const invalidatedProject = getNextInvalidatedProject(state, buildOrder);
             if (!invalidatedProject) break;
-            buildInvalidatedProject(state, invalidatedProject, cancellationToken);
+            invalidatedProject.done(cancellationToken);
             if (state.diagnostics.has(invalidatedProject.projectPath)) {
                 errorProjects++;
             }
@@ -1521,7 +1575,7 @@ namespace ts {
         }
         const invalidatedProject = getNextInvalidatedProject(state, getBuildOrder(state));
         if (invalidatedProject) {
-            buildInvalidatedProject(state, invalidatedProject);
+            invalidatedProject.done();
             if (state.projectPendingBuild.size) {
                 // Schedule next project for build
                 if (state.watch && !state.timerToBuildInvalidatedProject) {
