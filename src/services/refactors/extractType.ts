@@ -47,32 +47,26 @@ namespace ts.refactor {
         if (!selection || !isTypeNode(selection)) return undefined;
 
         const checker = context.program.getTypeChecker();
-        const firstStatement = Debug.assertDefined(isJS ? findAncestor(selection, isStatementButNotBlockAndHasJSDoc) : findAncestor(selection, isStatementButNotBlock));
-        const typeParameters = checkAndCollectionTypeArguments(checker, selection, firstStatement, file);
+        const firstStatement = Debug.assertDefined(isJS ? findAncestor(selection, isStatementAndHasJSDoc) : findAncestor(selection, isStatement));
+        const typeParameters = collectTypeParameters(checker, selection, firstStatement, file);
         if (!typeParameters) return undefined;
 
         return { isJS, selection, firstStatement, typeParameters };
     }
 
-    function isStatementButNotBlock(n: Node): n is Statement {
-        return n && isStatement(n) && !isBlock(n);
-    }
-
-    function isStatementButNotBlockAndHasJSDoc(n: Node): n is (Statement & HasJSDoc) {
-        return isStatementButNotBlock(n) && hasJSDocNodes(n);
+    function isStatementAndHasJSDoc(n: Node): n is (Statement & HasJSDoc) {
+        return isStatement(n) && hasJSDocNodes(n);
     }
 
     function rangeContainsSkipTrivia(r1: TextRange, node: Node, file: SourceFile): boolean {
         return rangeContainsStartEnd(r1, skipTrivia(file.text, node.pos), node.end);
     }
 
-    function checkAndCollectionTypeArguments(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): TypeParameterDeclaration[] | undefined {
-        let hasError = false;
+    function collectTypeParameters(checker: TypeChecker, selection: TypeNode, statement: Statement, file: SourceFile): TypeParameterDeclaration[] | undefined {
         const result: TypeParameterDeclaration[] = [];
-        visitor(selection);
-        return hasError ? undefined : result;
+        return visitor(selection) ? undefined : result;
 
-        function visitor(node: Node) {
+        function visitor(node: Node): true | undefined {
             if (isTypeReferenceNode(node)) {
                 if (isIdentifier(node.typeName)) {
                     const symbol = checker.resolveName(node.typeName.text, node.typeName, SymbolFlags.TypeParameter, /* excludeGlobals */ true);
@@ -87,30 +81,29 @@ namespace ts.refactor {
             else if (isInferTypeNode(node)) {
                 const conditionalTypeNode = findAncestor(node, n => isConditionalTypeNode(n) && rangeContainsSkipTrivia(n.extendsType, node, file));
                 if (!conditionalTypeNode || !rangeContainsSkipTrivia(selection, conditionalTypeNode, file)) {
-                    hasError = true;
-                    return;
+                    return true;
                 }
             }
-            else if ((isTypePredicateNode(node) || isThisTypeNode(node)) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
-                hasError = true;
-                return;
+            else if ((isTypePredicateNode(node) || isThisTypeNode(node))) {
+                const functionLikeNode = findAncestor(node.parent, isFunctionLike);
+                if (functionLikeNode && functionLikeNode.type && rangeContainsSkipTrivia(functionLikeNode.type, node, file) && !rangeContainsSkipTrivia(selection, functionLikeNode, file)) {
+                    return true;
+                }
             }
             else if (isTypeQueryNode(node)) {
                 if (isIdentifier(node.exprName)) {
                     const symbol = checker.resolveName(node.exprName.text, node.exprName, SymbolFlags.Value, /* excludeGlobals */ false);
                     if (symbol && rangeContainsSkipTrivia(statement, symbol.valueDeclaration, file) && !rangeContainsSkipTrivia(selection, symbol.valueDeclaration, file)) {
-                        hasError = true;
-                        return;
+                        return true;
                     }
                 }
                 else {
                     if (isThisIdentifier(node.exprName.left) && !rangeContainsSkipTrivia(selection, node.parent, file)) {
-                        hasError = true;
-                        return;
+                        return true;
                     }
                 }
             }
-            forEachChild(node, visitor);
+            return forEachChild(node, visitor);
         }
     }
 
