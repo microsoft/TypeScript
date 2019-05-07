@@ -1,0 +1,109 @@
+=== tests/cases/compiler/requiredMappedTypeModifierTrumpsVariance.ts ===
+const a: Required<{ a?: 1; x: 1 }> = { a: 1, x: 1 };
+>a : Required<{ a?: 1; x: 1; }>
+>a : 1
+>x : 1
+>{ a: 1, x: 1 } : { a: 1; x: 1; }
+>a : 1
+>1 : 1
+>x : 1
+>1 : 1
+
+const b: Required<{ b?: 1; x: 1 }> = { b: 1, x: 1 };
+>b : Required<{ b?: 1; x: 1; }>
+>b : 1
+>x : 1
+>{ b: 1, x: 1 } : { b: 1; x: 1; }
+>b : 1
+>1 : 1
+>x : 1
+>1 : 1
+
+export let A = a;
+>A : Required<{ a?: 1; x: 1; }>
+>a : Required<{ a?: 1; x: 1; }>
+
+export let B = b;
+>B : Required<{ b?: 1; x: 1; }>
+>b : Required<{ b?: 1; x: 1; }>
+
+A = b; // Should Error
+>A = b : Required<{ b?: 1; x: 1; }>
+>A : Required<{ a?: 1; x: 1; }>
+>b : Required<{ b?: 1; x: 1; }>
+
+B = a; // Should Error
+>B = a : Required<{ a?: 1; x: 1; }>
+>B : Required<{ b?: 1; x: 1; }>
+>a : Required<{ a?: 1; x: 1; }>
+
+a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
+>a.b : any
+>a : Required<{ a?: 1; x: 1; }>
+>b : any
+
+b.a; // Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
+>b.a : any
+>b : Required<{ b?: 1; x: 1; }>
+>a : any
+
+interface Foo<T> {
+    a: Required<T>;
+>a : Required<T>
+}
+const aa: Foo<{ a?: 1; x: 1 }> = { a: { a: 1, x: 1 } };
+>aa : Foo<{ a?: 1; x: 1; }>
+>a : 1
+>x : 1
+>{ a: { a: 1, x: 1 } } : { a: { a: 1; x: 1; }; }
+>a : { a: 1; x: 1; }
+>{ a: 1, x: 1 } : { a: 1; x: 1; }
+>a : 1
+>1 : 1
+>x : 1
+>1 : 1
+
+const bb: Foo<{ b?: 1; x: 1 }> = { a: { b: 1, x: 1 } };
+>bb : Foo<{ b?: 1; x: 1; }>
+>b : 1
+>x : 1
+>{ a: { b: 1, x: 1 } } : { a: { b: 1; x: 1; }; }
+>a : { b: 1; x: 1; }
+>{ b: 1, x: 1 } : { b: 1; x: 1; }
+>b : 1
+>1 : 1
+>x : 1
+>1 : 1
+
+export let AA = aa;
+>AA : Foo<{ a?: 1; x: 1; }>
+>aa : Foo<{ a?: 1; x: 1; }>
+
+export let BB = bb;
+>BB : Foo<{ b?: 1; x: 1; }>
+>bb : Foo<{ b?: 1; x: 1; }>
+
+AA = bb; // Should Error
+>AA = bb : Foo<{ b?: 1; x: 1; }>
+>AA : Foo<{ a?: 1; x: 1; }>
+>bb : Foo<{ b?: 1; x: 1; }>
+
+BB = aa; // Should Error
+>BB = aa : Foo<{ a?: 1; x: 1; }>
+>BB : Foo<{ b?: 1; x: 1; }>
+>aa : Foo<{ a?: 1; x: 1; }>
+
+aa.a.b; // Property 'b' does not exist on type 'Required<{ a?: 1; x: 1; }>'.
+>aa.a.b : any
+>aa.a : Required<{ a?: 1; x: 1; }>
+>aa : Foo<{ a?: 1; x: 1; }>
+>a : Required<{ a?: 1; x: 1; }>
+>b : any
+
+bb.a.a; // Property 'a' does not exist on type 'Required<{ b?: 1; x: 1; }>'.
+>bb.a.a : any
+>bb.a : Required<{ b?: 1; x: 1; }>
+>bb : Foo<{ b?: 1; x: 1; }>
+>a : Required<{ b?: 1; x: 1; }>
+>a : any
+

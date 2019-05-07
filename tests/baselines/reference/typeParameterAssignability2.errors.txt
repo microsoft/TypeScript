@@ -1,33 +1,63 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(5,5): error TS2322: Type 'T' is not assignable to type 'U'.
+  'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(9,5): error TS2322: Type 'U' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(14,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type 'V' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+    Type 'V' is not assignable to type 'T'.
+      'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(17,5): error TS2322: Type 'V' is not assignable to type 'T'.
+  'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(20,5): error TS2322: Type 'V' is not assignable to type 'U'.
+  'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(25,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type 'V' is not assignable to type 'T'.
-    Type 'Date' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+    Type 'V' is not assignable to type 'T'.
+      'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+        Type 'Date' is not assignable to type 'T'.
+          'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(26,5): error TS2322: Type 'V' is not assignable to type 'T'.
+  'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(27,5): error TS2322: Type 'Date' is not assignable to type 'T'.
+  'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(30,5): error TS2322: Type 'V' is not assignable to type 'U'.
-  Type 'Date' is not assignable to type 'U'.
+  'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+    Type 'Date' is not assignable to type 'U'.
+      'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(31,5): error TS2322: Type 'Date' is not assignable to type 'U'.
+  'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(35,5): error TS2322: Type 'Date' is not assignable to type 'V'.
+  'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(45,5): error TS2322: Type 'U' is not assignable to type 'T'.
-  Type 'V' is not assignable to type 'T'.
-    Type 'Date' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+    Type 'V' is not assignable to type 'T'.
+      'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+        Type 'Date' is not assignable to type 'T'.
+          'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(46,5): error TS2322: Type 'V' is not assignable to type 'T'.
+  'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(47,5): error TS2322: Type 'Date' is not assignable to type 'T'.
+  'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(50,5): error TS2322: Type 'V' is not assignable to type 'U'.
-  Type 'Date' is not assignable to type 'U'.
+  'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+    Type 'Date' is not assignable to type 'U'.
+      'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(51,5): error TS2322: Type 'Date' is not assignable to type 'U'.
+  'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(55,5): error TS2322: Type 'Date' is not assignable to type 'V'.
+  'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
+  'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(65,5): error TS2322: Type 'V' is not assignable to type 'T'.
+  'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(68,5): error TS2322: Type 'V' is not assignable to type 'U'.
+  'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(70,5): error TS2322: Type 'T' is not assignable to type 'V'.
-  Type 'U' is not assignable to type 'V'.
+  'T' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
+    Type 'U' is not assignable to type 'V'.
+      'U' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts(71,5): error TS2322: Type 'U' is not assignable to type 'V'.
+  'U' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts (22 errors) ====
@@ -38,12 +68,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         u = t; // ok
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'U'.
+!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     }
     
     function foo2<T extends U, U>(t: T, u: U) {
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         u = t; // ok
     }
     
@@ -51,17 +83,21 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type 'V' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type 'V' is not assignable to type 'T'.
+!!! error TS2322:       'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         u = t;
     
         t = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
+!!! error TS2322:   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         v = t; // ok
     
         u = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
+!!! error TS2322:   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
         v = u; // ok
     }
     
@@ -69,29 +105,38 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type 'V' is not assignable to type 'T'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322:     Type 'V' is not assignable to type 'T'.
+!!! error TS2322:       'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322:         Type 'Date' is not assignable to type 'T'.
+!!! error TS2322:           'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
         t = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
+!!! error TS2322:   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
         t = new Date(); // error
         ~
 !!! error TS2322: Type 'Date' is not assignable to type 'T'.
+!!! error TS2322:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
     
         u = t;
         u = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
-!!! error TS2322:   Type 'Date' is not assignable to type 'U'.
+!!! error TS2322:   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322:     Type 'Date' is not assignable to type 'U'.
+!!! error TS2322:       'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
         u = new Date(); // error
         ~
 !!! error TS2322: Type 'Date' is not assignable to type 'U'.
+!!! error TS2322:   'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
     
         v = t;
         v = u;
         v = new Date(); // ok
         ~
 !!! error TS2322: Type 'Date' is not assignable to type 'V'.
+!!! error TS2322:   'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
     
         var d: Date;
         d = t; // ok
@@ -104,29 +149,38 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   Type 'V' is not assignable to type 'T'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322:     Type 'V' is not assignable to type 'T'.
+!!! error TS2322:       'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322:         Type 'Date' is not assignable to type 'T'.
+!!! error TS2322:           'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
         t = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
+!!! error TS2322:   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
         t = new Date(); // error
         ~
 !!! error TS2322: Type 'Date' is not assignable to type 'T'.
+!!! error TS2322:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
     
         u = t;
         u = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
-!!! error TS2322:   Type 'Date' is not assignable to type 'U'.
+!!! error TS2322:   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322:     Type 'Date' is not assignable to type 'U'.
+!!! error TS2322:       'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
         u = new Date(); // error
         ~
 !!! error TS2322: Type 'Date' is not assignable to type 'U'.
+!!! error TS2322:   'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
     
         v = t;
         v = u;
         v = new Date(); // ok
         ~
 !!! error TS2322: Type 'Date' is not assignable to type 'V'.
+!!! error TS2322:   'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
     
         var d: Date;
         d = t; // ok
@@ -138,20 +192,26 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         t = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'T'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
         t = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'T'.
+!!! error TS2322:   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
     
         u = t; // ok
         u = v; // error
         ~
 !!! error TS2322: Type 'V' is not assignable to type 'U'.
+!!! error TS2322:   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
     
         v = t; // error
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'V'.
-!!! error TS2322:   Type 'U' is not assignable to type 'V'.
+!!! error TS2322:   'T' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type 'U' is not assignable to type 'V'.
+!!! error TS2322:       'U' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
         v = u; // error
         ~
 !!! error TS2322: Type 'U' is not assignable to type 'V'.
+!!! error TS2322:   'U' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
     }
