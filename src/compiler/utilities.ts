@@ -865,6 +865,7 @@ namespace ts {
             code: messageChain.code,
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText,
+            markdownText: messageChain.next ? messageChain : messageChain.markdownText,
             relatedInformation
         };
     }
@@ -3194,7 +3195,7 @@ namespace ts {
         return indentStrings[1].length;
     }
 
-    export function createTextWriter(newLine: string): EmitTextWriter {
+    export function createTextWriter(newLine: string, writeSymbol?: ((t: string, s: Symbol) => string)): EmitTextWriter {
         let output: string;
         let indent: number;
         let lineStart: boolean;
@@ -3285,7 +3286,7 @@ namespace ts {
             writePunctuation: write,
             writeSpace: write,
             writeStringLiteral: write,
-            writeSymbol: (s, _) => write(s),
+            writeSymbol: (s, _) => write(writeSymbol ? writeSymbol(s, _) : s),
             writeTrailingSemicolon: write,
             writeComment: write,
             getTextPosWithWriteLine
@@ -7107,8 +7108,21 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
-    export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
-        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(args[+index + baseIndex]));
+    function renderForOutput(arg: string | number | Type | Symbol, renderContext: DiagnosticRenderContext | undefined) {
+        if (typeof arg === "string" || typeof arg === "number") {
+            return arg;
+        }
+        if (!renderContext) {
+            return Debug.fail("Type or symbol passed into diagnostic rendering pipeline with no renderer provided.");
+        }
+        if (arg.checker) {
+            return renderContext.typeToString(arg);
+        }
+        return renderContext.symbolToString(arg);
+    }
+
+    export function formatStringFromArgs(text: string, args: ArrayLike<string | number | Type | Symbol>, baseIndex = 0, renderContext?: DiagnosticRenderContext): string {
+        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(renderForOutput(args[+index + baseIndex], renderContext)));
     }
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -7176,6 +7190,33 @@ namespace ts {
         };
     }
 
+    export function createRenderedCompilerDiagnostic(checker: TypeChecker, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): Diagnostic;
+    export function createRenderedCompilerDiagnostic(checker: TypeChecker, message: DiagnosticMessage): Diagnostic {
+        let text = getLocaleSpecificMessage(message);
+        let markdown: string | undefined;
+
+        if (arguments.length > 2) {
+            let unformatted = text;
+            text = formatStringFromArgs(unformatted, arguments, 2, checker.getPlainDiagnosticRenderingContext());
+            const candidateMarkdown = formatStringFromArgs(unformatted, arguments, 2, checker.getMarkdownDiagnosticRenderingContext());
+            if (candidateMarkdown !== text) {
+                markdown = candidateMarkdown;
+            }
+        }
+
+        return {
+            file: undefined,
+            start: undefined,
+            length: undefined,
+
+            messageText: text,
+            markdownText: markdown,
+            category: message.category,
+            code: message.code,
+            reportsUnnecessary: message.reportsUnnecessary,
+        };
+    }
+
     export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
         return {
             file: undefined,
@@ -7198,6 +7239,30 @@ namespace ts {
 
         return {
             messageText: text,
+            category: message.category,
+            code: message.code,
+
+            next: details
+        };
+    }
+
+    export function chainRenderedDiagnosticMessages(checker: TypeChecker, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): DiagnosticMessageChain;
+    export function chainRenderedDiagnosticMessages(checker: TypeChecker, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
+        let text = getLocaleSpecificMessage(message);
+        let markdown: string | undefined;
+
+        if (arguments.length > 3) {
+            let unformatted = text;
+            text = formatStringFromArgs(unformatted, arguments, 3, checker.getPlainDiagnosticRenderingContext());
+            const candidateMarkdown = formatStringFromArgs(unformatted, arguments, 3, checker.getMarkdownDiagnosticRenderingContext());
+            if (candidateMarkdown !== text) {
+                markdown = candidateMarkdown;
+            }
+        }
+
+        return {
+            messageText: text,
+            markdownText: markdown,
             category: message.category,
             code: message.code,
 

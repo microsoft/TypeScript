@@ -478,6 +478,10 @@ namespace ts.server.protocol {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
+        /**
+         * Markdown containing variation of the message
+         */
+        markdown?: string;
     }
 
     /**
@@ -2385,6 +2389,10 @@ namespace ts.server.protocol {
          * The name of the plugin reporting the message.
          */
         source?: string;
+        /**
+         * Markdown containing variation of the message
+         */
+        markdown?: string;
     }
 
     export interface DiagnosticWithFileName extends Diagnostic {

@@ -502,7 +502,7 @@ namespace ts {
         return output;
     }
 
-    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string {
+    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string, flattenMarkdown?: boolean): string {
         if (isString(messageText)) {
             return messageText;
         }
@@ -519,7 +519,7 @@ namespace ts {
                         result += "  ";
                     }
                 }
-                result += diagnosticChain.messageText;
+                result += flattenMarkdown && diagnosticChain.markdownText ? diagnosticChain.markdownText : diagnosticChain.messageText;
                 indent++;
                 diagnosticChain = diagnosticChain.next;
             }

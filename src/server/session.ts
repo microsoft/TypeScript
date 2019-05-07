@@ -48,6 +48,7 @@ namespace ts.server {
             start: scriptInfo.positionToLineOffset(diag.start!),
             end: scriptInfo.positionToLineOffset(diag.start! + diag.length!), // TODO: GH#18217
             text: flattenDiagnosticMessageText(diag.messageText, "\n"),
+            markdown: diag.markdownText ? flattenDiagnosticMessageText(diag.markdownText, "\n", /*flattenMarkdown*/ true) : undefined,
             code: diag.code,
             category: diagnosticCategoryName(diag),
             reportsUnnecessary: diag.reportsUnnecessary,
@@ -884,6 +885,7 @@ namespace ts.server {
         private convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics: ReadonlyArray<Diagnostic>): protocol.DiagnosticWithLinePosition[] {
             return diagnostics.map<protocol.DiagnosticWithLinePosition>(d => ({
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                markdown: d.markdownText ? flattenDiagnosticMessageText(d.markdownText, this.host.newLine, /*flattenMarkdown*/ true) : undefined,
                 start: d.start!, // TODO: GH#18217
                 length: d.length!, // TODO: GH#18217
                 category: diagnosticCategoryName(d),
@@ -911,6 +913,7 @@ namespace ts.server {
         private convertToDiagnosticsWithLinePosition(diagnostics: ReadonlyArray<Diagnostic>, scriptInfo: ScriptInfo | undefined): protocol.DiagnosticWithLinePosition[] {
             return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                markdown: d.markdownText ? flattenDiagnosticMessageText(d.markdownText, this.host.newLine, /*flattenMarkdown*/ true): undefined,
                 start: d.start,
                 length: d.length,
                 category: diagnosticCategoryName(d),

@@ -379,7 +379,56 @@ namespace ts {
             },
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
+            getPlainDiagnosticRenderingContext: () => checker,
+            getMarkdownDiagnosticRenderingContext: () => markdownRenderContext,
         };
+        const renderSymbolIntoMarkdown = (original: string, s: Symbol): string => {
+            const def = s.valueDeclaration || s.declarations && s.declarations[0];
+            if (!def) {
+                return original;
+            }
+
+            const file = getSourceFileOfNode(def);
+            if (!file) {
+                return original;
+            }
+            return `[${original}](file:///${file.path}#L${getLineAndCharacterOfPosition(file, def.pos).line + 1})`;
+        }
+        const renderTypeSymbolIntoMarkdown = (original: string, s: Symbol): string => {
+            const def = forEach(s.declarations, d => d.flags & SymbolFlags.Type ? d : undefined);
+            if (!def) {
+                return original;
+            }
+
+            const file = getSourceFileOfNode(def);
+            if (!file) {
+                return original;
+            }
+            return `[${original}](file:///${file.path}#L${getLineAndCharacterOfPosition(file, def.pos).line + 1})`;
+        }
+        const markdownRenderContext: DiagnosticRenderContext = {
+            typeToString: type => {
+                const mdWriter = createTextWriter("", renderTypeSymbolIntoMarkdown);
+                typeToString(type, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, mdWriter);
+                return mdWriter.getText();
+            },
+            symbolToString: symbol => {
+                const mdWriter = createTextWriter("", renderSymbolIntoMarkdown);
+                symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, mdWriter);
+                return mdWriter.getText();
+            }
+        }
+        const fullyQualifiedRenderer: DiagnosticRenderContext = {
+            typeToString: t => typeToString(t, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType),
+            symbolToString: s => symbolToString(s)
+        };
+        function withFullyQualifiedPlainRenderer(action: () => void) {
+            const oldGetter = checker.getPlainDiagnosticRenderingContext;
+            checker.getPlainDiagnosticRenderingContext = () => fullyQualifiedRenderer;
+            action();
+            checker.getPlainDiagnosticRenderingContext = oldGetter;
+        }
+        const chainDiagnosticMessages: (details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]) => DiagnosticMessageChain = (message, ...args) => chainRenderedDiagnosticMessages(checker, message, ...args);
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
             const node = getParseTreeNode(nodeIn, isCallLikeExpression);
@@ -12331,7 +12380,7 @@ namespace ts {
             }
             return result !== Ternary.False;
 
-            function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
+            function reportError(message: DiagnosticMessage, arg0?: string | number | Type | Symbol, arg1?: string | number | Type | Symbol, arg2?: string | number | Type | Symbol, arg3?: string | number | Type | Symbol): void {
                 Debug.assert(!!errorNode);
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
             }
@@ -12347,41 +12396,39 @@ namespace ts {
             }
 
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
-                const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
-
                 if (target.flags & TypeFlags.TypeParameter && target.immediateBaseConstraint !== undefined && isTypeAssignableTo(source, target.immediateBaseConstraint)) {
                     reportError(
                         Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
-                        sourceType,
-                        targetType,
-                        typeToString(target.immediateBaseConstraint),
+                        source,
+                        target,
+                        target.immediateBaseConstraint,
                     );
                 }
 
                 if (!message) {
+                    const [sourceType, targetType] = getTypeNamesForErrorDisplay(source, target);
                     if (relation === comparableRelation) {
                         message = Diagnostics.Type_0_is_not_comparable_to_type_1;
                     }
                     else if (sourceType === targetType) {
-                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
+                        return withFullyQualifiedPlainRenderer(() => {
+                            reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated, source, target);
+                        });
                     }
                     else {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                     }
                 }
 
-                reportError(message, sourceType, targetType);
+                reportError(message, source, target);
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
-                const sourceType = typeToString(source);
-                const targetType = typeToString(target);
-
                 if ((globalStringType === source && stringType === target) ||
                     (globalNumberType === source && numberType === target) ||
                     (globalBooleanType === source && booleanType === target) ||
                     (getGlobalESSymbolType(/*reportErrors*/ false) === source && esSymbolType === target)) {
-                    reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, targetType, sourceType);
+                    reportError(Diagnostics._0_is_a_primitive_but_1_is_a_wrapper_object_Prefer_using_0_when_possible, target, source);
                 }
             }
 

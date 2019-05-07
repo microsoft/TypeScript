@@ -3319,6 +3319,15 @@ namespace ts {
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
+
+        /* @internal */ getPlainDiagnosticRenderingContext(): DiagnosticRenderContext;
+        /* @internal */ getMarkdownDiagnosticRenderingContext(): DiagnosticRenderContext;
+    }
+
+    /** @internal */
+    export interface DiagnosticRenderContext {
+        typeToString(type: Type): string;
+        symbolToString(symbol: Symbol): string;
     }
 
     /* @internal */
@@ -3716,6 +3725,7 @@ namespace ts {
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
+        /* @internal */ checker?: undefined;    // A symbol cannot be associated with a checker since they may outlive checker lifetimes
     }
 
     /* @internal */
@@ -4547,6 +4557,7 @@ namespace ts {
      */
     export interface DiagnosticMessageChain {
         messageText: string;
+        markdownText?: string;
         category: DiagnosticCategory;
         code: number;
         next?: DiagnosticMessageChain;
@@ -4565,6 +4576,7 @@ namespace ts {
         start: number | undefined;
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
+        markdownText?: string | DiagnosticMessageChain;
     }
     export interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
