@@ -4962,6 +4962,19 @@
         "category": "Message",
         "code": 95076
     },
+    "Extract type": {
+        "category": "Message",
+        "code": 95077
+    },
+    "Extract to type alias": {
+        "category": "Message",
+        "code": 95078
+    },
+    "Extract to typedef": {
+        "category": "Message",
+        "code": 95079
+    },
+
     "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
         "category": "Error",
         "code": 18004
