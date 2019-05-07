@@ -239,7 +239,7 @@ namespace ts {
                     }
 
                     // When the deleted entry was the last one, we need to
-                    // adust the lastEntry reference.
+                    // adjust the lastEntry reference.
                     if (this.lastEntry === entry) {
                         this.lastEntry = previousEntry;
                     }
@@ -1255,7 +1255,7 @@ namespace ts {
     }
 
     /**
-     * Returns the only element of an array if it contains only one element; otheriwse, returns the
+     * Returns the only element of an array if it contains only one element; otherwise, returns the
      * array.
      */
     export function singleOrMany<T>(array: T[]): T | T[];
