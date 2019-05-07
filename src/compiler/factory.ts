@@ -2949,7 +2949,7 @@ namespace ts {
         return node;
     }
 
-    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource> = emptyArray) {
+    export function updateBundle(node: Bundle, sourceFiles: ReadonlyArray<SourceFile>, prepends: ReadonlyArray<UnparsedSource | InputFiles> = emptyArray) {
         if (node.sourceFiles !== sourceFiles || node.prepends !== prepends) {
             return createBundle(sourceFiles, prepends);
         }

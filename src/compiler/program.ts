@@ -1453,9 +1453,8 @@ namespace ts {
                 notImplementedResolver,
                 getEmitHost(writeFileCallback),
                 /*targetSourceFile*/ undefined,
+                /*transformers*/ noTransformers,
                 /*emitOnlyDtsFiles*/ false,
-                /*transformers*/ undefined,
-                /*declaraitonTransformers*/ undefined,
                 /*onlyBuildInfo*/ true
             );
 
@@ -1574,14 +1573,12 @@ namespace ts {
 
             performance.mark("beforeEmit");
 
-            const transformers = emitOnlyDtsFiles ? [] : getTransformers(options, customTransformers);
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile,
+                getTransformers(options, customTransformers, emitOnlyDtsFiles),
                 emitOnlyDtsFiles,
-                transformers,
-                customTransformers && customTransformers.afterDeclarations
             );
 
             performance.mark("afterEmit");
