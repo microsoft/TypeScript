@@ -283,13 +283,29 @@ namespace ts {
         /*@internal*/ buildNextInvalidatedProject(): void;
     }
 
-    interface InvalidatedProject {
+    const enum InvalidatedProjectKind {
+        BuildProject,
+        UpdateBundle,
+        UpdateOutputFileStamps
+    }
+
+    interface UpdateOutputFileStampsProject {
+        readonly kind: InvalidatedProjectKind.UpdateOutputFileStamps;
         readonly project: ResolvedConfigFileName;
         readonly projectPath: ResolvedConfigFilePath;
-        readonly reloadLevel: ConfigFileProgramReloadLevel;
+        readonly config: ParsedCommandLine;
+    }
+
+    interface BuildOrUpdateBundleProject {
+        readonly kind: InvalidatedProjectKind.BuildProject | InvalidatedProjectKind.UpdateBundle;
+        readonly project: ResolvedConfigFileName;
+        readonly projectPath: ResolvedConfigFilePath;
         readonly projectIndex: number;
+        readonly config: ParsedCommandLine;
         readonly buildOrder: readonly ResolvedConfigFileName[];
     }
+
+    type InvalidatedProject = UpdateOutputFileStampsProject | BuildOrUpdateBundleProject;
 
     /**
      * Create a function that reports watch status by writing to the system and handles the formating of the diagnostic
@@ -663,15 +679,90 @@ namespace ts {
     }
 
     function getNextInvalidatedProject(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]): InvalidatedProject | undefined {
-        return state.projectPendingBuild.size ?
-            forEach(buildOrder, (project, projectIndex) => {
-                const projectPath = toResolvedConfigFilePath(state, project);
-                const reloadLevel = state.projectPendingBuild.get(projectPath);
-                if (reloadLevel !== undefined) {
-                    return { project, projectPath, reloadLevel, projectIndex, buildOrder };
+        if (!state.projectPendingBuild.size) return undefined;
+
+        const { options, projectPendingBuild } = state;
+        for (let projectIndex = 0; projectIndex < buildOrder.length; projectIndex++) {
+            const project = buildOrder[projectIndex];
+            const projectPath = toResolvedConfigFilePath(state, project);
+            const reloadLevel = state.projectPendingBuild.get(projectPath);
+            if (reloadLevel === undefined) continue;
+
+            const config = parseConfigFile(state, project, projectPath);
+            if (!config) {
+                reportParseConfigFileDiagnostic(state, projectPath);
+                projectPendingBuild.delete(projectPath);
+                continue;
+            }
+
+            if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
+                watchConfigFile(state, project, projectPath);
+                watchWildCardDirectories(state, project, projectPath, config);
+                watchInputFiles(state, project, projectPath, config);
+            }
+            else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+                // Update file names
+                const result = getFileNamesFromConfigSpecs(config.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
+                updateErrorForNoInputFiles(result, project, config.configFileSpecs!, config.errors, canJsonReportNoInutFiles(config.raw));
+                config.fileNames = result.fileNames;
+                watchInputFiles(state, project, projectPath, config);
+            }
+
+            const status = getUpToDateStatus(state, config, projectPath);
+            verboseReportProjectStatus(state, project, status);
+            if (!options.force) {
+                if (status.type === UpToDateStatusType.UpToDate) {
+                    reportAndStoreErrors(state, projectPath, config.errors);
+                    projectPendingBuild.delete(projectPath);
+                    // Up to date, skip
+                    if (options.dry) {
+                        // In a dry build, inform the user of this fact
+                        reportStatus(state, Diagnostics.Project_0_is_up_to_date, project);
+                    }
+                    continue;
                 }
-            }) :
-            undefined;
+
+                if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
+                    reportAndStoreErrors(state, projectPath, config.errors);
+                    return {
+                        kind: InvalidatedProjectKind.UpdateOutputFileStamps,
+                        project,
+                        projectPath,
+                        config
+                    };
+
+                    continue;
+                }
+            }
+
+            if (status.type === UpToDateStatusType.UpstreamBlocked) {
+                reportAndStoreErrors(state, projectPath, config.errors);
+                projectPendingBuild.delete(projectPath);
+                if (options.verbose) reportStatus(state, Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, project, status.upstreamProjectName);
+                continue;
+            }
+
+            if (status.type === UpToDateStatusType.ContainerOnly) {
+                reportAndStoreErrors(state, projectPath, config.errors);
+                projectPendingBuild.delete(projectPath);
+                // Do nothing
+                continue;
+            }
+
+
+            return {
+                kind: needsBuild(state, status, config) ?
+                    InvalidatedProjectKind.BuildProject :
+                    InvalidatedProjectKind.UpdateBundle,
+                project,
+                projectPath,
+                projectIndex,
+                config,
+                buildOrder
+            };
+        }
+
+        return undefined;
     }
 
     function listEmittedFile({ writeFileName }: SolutionBuilderState, proj: ParsedCommandLine, file: string) {
@@ -714,7 +805,44 @@ namespace ts {
         return errorFlags;
     }
 
-    function buildSingleProject(state: SolutionBuilderState, proj: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, cancellationToken: CancellationToken | undefined): BuildResultFlags {
+    function updateModuleResolutionCache(
+        state: SolutionBuilderState,
+        proj: ResolvedConfigFileName,
+        config: ParsedCommandLine
+    ) {
+        if (!state.moduleResolutionCache) return;
+
+        // Update module resolution cache if needed
+        const { moduleResolutionCache } = state;
+        const projPath = toPath(state, proj);
+        if (moduleResolutionCache.directoryToModuleNameMap.redirectsMap.size === 0) {
+            // The own map will be for projectCompilerOptions
+            Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size === 0);
+            moduleResolutionCache.directoryToModuleNameMap.redirectsMap.set(projPath, moduleResolutionCache.directoryToModuleNameMap.ownMap);
+            moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.set(projPath, moduleResolutionCache.moduleNameToDirectoryMap.ownMap);
+        }
+        else {
+            // Set correct own map
+            Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size > 0);
+
+            const ref: ResolvedProjectReference = {
+                sourceFile: config.options.configFile!,
+                commandLine: config
+            };
+            moduleResolutionCache.directoryToModuleNameMap.setOwnMap(moduleResolutionCache.directoryToModuleNameMap.getOrCreateMapOfCacheRedirects(ref));
+            moduleResolutionCache.moduleNameToDirectoryMap.setOwnMap(moduleResolutionCache.moduleNameToDirectoryMap.getOrCreateMapOfCacheRedirects(ref));
+        }
+        moduleResolutionCache.directoryToModuleNameMap.setOwnOptions(config.options);
+        moduleResolutionCache.moduleNameToDirectoryMap.setOwnOptions(config.options);
+    }
+
+    function buildSingleProject(
+        state: SolutionBuilderState,
+        proj: ResolvedConfigFileName,
+        resolvedPath: ResolvedConfigFilePath,
+        config: ParsedCommandLine,
+        cancellationToken: CancellationToken | undefined
+    ): BuildResultFlags {
         if (state.options.dry) {
             reportStatus(state, Diagnostics.A_non_dry_build_would_build_project_0, proj);
             return BuildResultFlags.Success;
@@ -722,54 +850,25 @@ namespace ts {
 
         if (state.options.verbose) reportStatus(state, Diagnostics.Building_project_0, proj);
 
-        const { host, projectStatus, diagnostics, compilerHost, moduleResolutionCache, } = state;
-        const configFile = parseConfigFile(state, proj, resolvedPath);
-        if (!configFile) {
-            // Failed to read the config file
-            reportParseConfigFileDiagnostic(state, resolvedPath);
-            projectStatus.set(resolvedPath, { type: UpToDateStatusType.Unbuildable, reason: "Config file errors" });
-            return BuildResultFlags.ConfigFileErrors;
-        }
-
-        if (configFile.fileNames.length === 0) {
-            reportAndStoreErrors(state, resolvedPath, configFile.errors);
+        if (config.fileNames.length === 0) {
+            reportAndStoreErrors(state, resolvedPath, config.errors);
             // Nothing to build - must be a solution file, basically
             return BuildResultFlags.None;
         }
 
-        state.projectCompilerOptions = configFile.options;
+        const { host, projectStatus, diagnostics, compilerHost } = state;
+        state.projectCompilerOptions = config.options;
         // Update module resolution cache if needed
-        if (moduleResolutionCache) {
-            const projPath = toPath(state, proj);
-            if (moduleResolutionCache.directoryToModuleNameMap.redirectsMap.size === 0) {
-                // The own map will be for projectCompilerOptions
-                Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size === 0);
-                moduleResolutionCache.directoryToModuleNameMap.redirectsMap.set(projPath, moduleResolutionCache.directoryToModuleNameMap.ownMap);
-                moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.set(projPath, moduleResolutionCache.moduleNameToDirectoryMap.ownMap);
-            }
-            else {
-                // Set correct own map
-                Debug.assert(moduleResolutionCache.moduleNameToDirectoryMap.redirectsMap.size > 0);
-
-                const ref: ResolvedProjectReference = {
-                    sourceFile: configFile.options.configFile!,
-                    commandLine: configFile
-                };
-                moduleResolutionCache.directoryToModuleNameMap.setOwnMap(moduleResolutionCache.directoryToModuleNameMap.getOrCreateMapOfCacheRedirects(ref));
-                moduleResolutionCache.moduleNameToDirectoryMap.setOwnMap(moduleResolutionCache.moduleNameToDirectoryMap.getOrCreateMapOfCacheRedirects(ref));
-            }
-            moduleResolutionCache.directoryToModuleNameMap.setOwnOptions(configFile.options);
-            moduleResolutionCache.moduleNameToDirectoryMap.setOwnOptions(configFile.options);
-        }
+        updateModuleResolutionCache(state, proj, config);
 
         // Create program
         const program = host.createProgram(
-            configFile.fileNames,
-            configFile.options,
+            config.fileNames,
+            config.options,
             compilerHost,
-            getOldProgram(state, resolvedPath, configFile),
-            configFile.errors,
-            configFile.projectReferences
+            getOldProgram(state, resolvedPath, config),
+            config.errors,
+            config.projectReferences
         );
 
         // Don't emit anything in the presence of syntactic errors or options diagnostics
@@ -867,24 +966,30 @@ namespace ts {
         }
 
         if (state.writeFileName) {
-            emittedOutputs.forEach(name => listEmittedFile(state, configFile, name));
+            emittedOutputs.forEach(name => listEmittedFile(state, config, name));
             listFiles(program, state.writeFileName);
         }
 
         // Update time stamps for rest of the outputs
-        newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(state, configFile, newestDeclarationFileContentChangedTime, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
+        newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(state, config, newestDeclarationFileContentChangedTime, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
         diagnostics.delete(resolvedPath);
         projectStatus.set(resolvedPath, {
             type: UpToDateStatusType.UpToDate,
             newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime,
-            oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(configFile, !host.useCaseSensitiveFileNames())
+            oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(config, !host.useCaseSensitiveFileNames())
         });
         afterProgramCreate(state, resolvedPath, program);
         state.projectCompilerOptions = state.baseCompilerOptions;
         return resultFlags;
     }
 
-    function updateBundle(state: SolutionBuilderState, proj: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath, cancellationToken: CancellationToken | undefined): BuildResultFlags {
+    function updateBundle(
+        state: SolutionBuilderState,
+        proj: ResolvedConfigFileName,
+        resolvedPath: ResolvedConfigFilePath,
+        config: ParsedCommandLine,
+        cancellationToken: CancellationToken | undefined
+    ): BuildResultFlags {
         if (state.options.dry) {
             reportStatus(state, Diagnostics.A_non_dry_build_would_update_output_of_project_0, proj);
             return BuildResultFlags.Success;
@@ -894,7 +999,6 @@ namespace ts {
 
         // Update js, and source map
         const { projectStatus, diagnostics, compilerHost } = state;
-        const config = Debug.assertDefined(parseConfigFile(state, proj, resolvedPath));
         state.projectCompilerOptions = config.options;
         const outputFiles = emitUsingBuildInfo(
             config,
@@ -905,7 +1009,7 @@ namespace ts {
             });
         if (isString(outputFiles)) {
             reportStatus(state, Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, proj, relName(state, outputFiles));
-            return buildSingleProject(state, proj, resolvedPath, cancellationToken);
+            return buildSingleProject(state, proj, resolvedPath, config, cancellationToken);
         }
 
         // Actual Emit
@@ -1210,68 +1314,24 @@ namespace ts {
             !isIncrementalCompilation(config.options);
     }
 
-    function buildInvalidatedProject(state: SolutionBuilderState, { project, projectPath, reloadLevel, projectIndex, buildOrder }: InvalidatedProject, cancellationToken?: CancellationToken) {
-        const { options, projectPendingBuild } = state;
-        const config = parseConfigFile(state, project, projectPath);
-        if (!config) {
-            reportParseConfigFileDiagnostic(state, projectPath);
+    function buildInvalidatedProject(
+        state: SolutionBuilderState,
+        invalidatedProject: InvalidatedProject,
+        cancellationToken?: CancellationToken
+    ) {
+        const { projectPendingBuild } = state;
+        if (invalidatedProject.kind === InvalidatedProjectKind.UpdateOutputFileStamps) {
+            // Fake that files have been built by updating output file stamps
+            const { projectPath, config } = invalidatedProject;
+            updateOutputTimestamps(state, config, projectPath);
             projectPendingBuild.delete(projectPath);
             return;
         }
 
-        if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
-            watchConfigFile(state, project, projectPath);
-            watchWildCardDirectories(state, project, projectPath, config);
-            watchInputFiles(state, project, projectPath, config);
-        }
-        else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
-            // Update file names
-            const result = getFileNamesFromConfigSpecs(config.configFileSpecs!, getDirectoryPath(project), config.options, state.parseConfigFileHost);
-            updateErrorForNoInputFiles(result, project, config.configFileSpecs!, config.errors, canJsonReportNoInutFiles(config.raw));
-            config.fileNames = result.fileNames;
-            watchInputFiles(state, project, projectPath, config);
-        }
-
-        const status = getUpToDateStatus(state, config, projectPath);
-        verboseReportProjectStatus(state, project, status);
-        if (!options.force) {
-            if (status.type === UpToDateStatusType.UpToDate) {
-                reportAndStoreErrors(state, projectPath, config.errors);
-                projectPendingBuild.delete(projectPath);
-                // Up to date, skip
-                if (options.dry) {
-                    // In a dry build, inform the user of this fact
-                    reportStatus(state, Diagnostics.Project_0_is_up_to_date, project);
-                }
-                return;
-            }
-
-            if (status.type === UpToDateStatusType.UpToDateWithUpstreamTypes) {
-                reportAndStoreErrors(state, projectPath, config.errors);
-                projectPendingBuild.delete(projectPath);
-                // Fake that files have been built by updating output file stamps
-                updateOutputTimestamps(state, config, projectPath);
-                return;
-            }
-        }
-
-        if (status.type === UpToDateStatusType.UpstreamBlocked) {
-            reportAndStoreErrors(state, projectPath, config.errors);
-            projectPendingBuild.delete(projectPath);
-            if (options.verbose) reportStatus(state, Diagnostics.Skipping_build_of_project_0_because_its_dependency_1_has_errors, project, status.upstreamProjectName);
-            return;
-        }
-
-        if (status.type === UpToDateStatusType.ContainerOnly) {
-            reportAndStoreErrors(state, projectPath, config.errors);
-            projectPendingBuild.delete(projectPath);
-            // Do nothing
-            return;
-        }
-
-        const buildResult = needsBuild(state, status, config) ?
-            buildSingleProject(state, project, projectPath, cancellationToken) : // Actual build
-            updateBundle(state, project, projectPath, cancellationToken); // Fake that files have been built by manipulating prepend and existing output
+        const { kind, project, projectPath, projectIndex, config, buildOrder } = invalidatedProject;
+        const buildResult = kind === InvalidatedProjectKind.BuildProject ?
+            buildSingleProject(state, project, projectPath, config, cancellationToken) : // Actual build
+            updateBundle(state, project, projectPath, config, cancellationToken); // Fake that files have been built by manipulating prepend and existing output
         projectPendingBuild.delete(projectPath);
         // Only composite projects can be referenced by other projects
         if (!(buildResult & BuildResultFlags.AnyErrors) && config.options.composite) {
@@ -1467,12 +1527,11 @@ namespace ts {
                 if (state.watch && !state.timerToBuildInvalidatedProject) {
                     scheduleBuildInvalidatedProject(state);
                 }
-            }
-            else {
-                disableCache(state);
-                reportErrorSummary(state);
+                return;
             }
         }
+        disableCache(state);
+        reportErrorSummary(state);
     }
 
     function watchConfigFile(state: SolutionBuilderState, resolved: ResolvedConfigFileName, resolvedPath: ResolvedConfigFilePath) {
