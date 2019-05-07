@@ -2614,7 +2614,7 @@ namespace ts {
 
     // Incomplete types occur during control flow analysis of loops. An IncompleteType
     // is distinguished from a regular type by a flags value of zero. Incomplete type
-    // objects are internal to the getFlowTypeOfRefecence function and never escape it.
+    // objects are internal to the getFlowTypeOfReference function and never escape it.
     export interface IncompleteType {
         flags: TypeFlags;  // No flags set
         type: Type;        // The type marked incomplete
@@ -5137,7 +5137,7 @@ namespace ts {
         createHash?(data: string): string;
         getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
 
-        // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesnt use compilerHost as base
+        // TODO: later handle this in better way in builder host instead once the api for tsbuild finalizes and doesn't use compilerHost as base
         /*@internal*/createDirectory?(directory: string): void;
     }
 
