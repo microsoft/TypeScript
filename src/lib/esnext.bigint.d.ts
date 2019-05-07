@@ -260,7 +260,7 @@ interface BigInt64Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): BigInt64Array;
+    subarray(begin?: number, end?: number): BigInt64Array;
 
     /** Converts the array to a string by using the current locale. */
     toLocaleString(): string;
@@ -529,7 +529,7 @@ interface BigUint64Array {
       * @param begin The index of the beginning of the array.
       * @param end The index of the end of the array.
       */
-    subarray(begin: number, end?: number): BigUint64Array;
+    subarray(begin?: number, end?: number): BigUint64Array;
 
     /** Converts the array to a string by using the current locale. */
     toLocaleString(): string;
