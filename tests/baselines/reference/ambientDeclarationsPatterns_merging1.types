@@ -1,0 +1,26 @@
+=== tests/cases/conformance/ambient/types.ts ===
+declare module "*.foo" {
+>"*.foo" : typeof import("*.foo")
+
+  let everywhere: string;
+>everywhere : string
+}
+
+
+=== tests/cases/conformance/ambient/testA.ts ===
+import { everywhere, onlyInA } from "a.foo";
+>everywhere : string
+>onlyInA : number
+
+declare module "a.foo" {
+>"a.foo" : typeof import("a.foo")
+
+  let onlyInA: number;
+>onlyInA : number
+}
+
+=== tests/cases/conformance/ambient/testB.ts ===
+import { everywhere, onlyInA } from "b.foo"; // Error
+>everywhere : string
+>onlyInA : any
+

@@ -78,7 +78,7 @@ declare function encodeURI(uri: string): string;
   * Encodes a text string as a valid component of a Uniform Resource Identifier (URI).
   * @param uriComponent A value representing an encoded URI component.
   */
-declare function encodeURIComponent(uriComponent: string): string;
+declare function encodeURIComponent(uriComponent: string | number | boolean): string;
 
 interface PropertyDescriptor {
     configurable?: boolean;
@@ -1141,4 +1141,4 @@ declare var Array: {
     <T>(...items: T[]): T[];
     isArray(arg: any): boolean;
     prototype: Array<any>;
-}
+}

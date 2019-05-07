@@ -53,3 +53,23 @@ export function bar2<T>(obj: T) {
 >obj : Symbol(obj, Decl(inferTypes2.ts, 10, 24))
 }
 
+// Repros from #31099
+
+type Weird = any extends infer U ? U : never;
+>Weird : Symbol(Weird, Decl(inferTypes2.ts, 12, 1))
+>U : Symbol(U, Decl(inferTypes2.ts, 16, 30))
+>U : Symbol(U, Decl(inferTypes2.ts, 16, 30))
+
+type AlsoWeird = unknown extends infer U ? U : never;
+>AlsoWeird : Symbol(AlsoWeird, Decl(inferTypes2.ts, 16, 45))
+>U : Symbol(U, Decl(inferTypes2.ts, 17, 38))
+>U : Symbol(U, Decl(inferTypes2.ts, 17, 38))
+
+const a: Weird = null;
+>a : Symbol(a, Decl(inferTypes2.ts, 19, 5))
+>Weird : Symbol(Weird, Decl(inferTypes2.ts, 12, 1))
+
+const b: string = a;
+>b : Symbol(b, Decl(inferTypes2.ts, 20, 5))
+>a : Symbol(a, Decl(inferTypes2.ts, 19, 5))
+

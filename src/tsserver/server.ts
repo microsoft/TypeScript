@@ -232,7 +232,6 @@ namespace ts.server {
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
         private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
-        private inspectValuePromise: { resolve(value: ValueInfo): void } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -268,12 +267,6 @@ namespace ts.server {
             return new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
                 this.packageInstalledPromise = { resolve, reject };
             });
-        }
-
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
-            this.send<InspectValueRequest>({ kind: "inspectValue", options });
-            Debug.assert(this.inspectValuePromise === undefined);
-            return new Promise<ValueInfo>(resolve => { this.inspectValuePromise = { resolve }; });
         }
 
         attach(projectService: ProjectService) {
@@ -363,7 +356,7 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | InspectValueResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
@@ -388,10 +381,6 @@ namespace ts.server {
                     this.event(response, "setTypings");
                     break;
                 }
-                case ActionValueInspected:
-                    this.inspectValuePromise!.resolve(response.result);
-                    this.inspectValuePromise = undefined;
-                    break;
                 case EventInitializationFailed: {
                         const body: protocol.TypesInstallerInitializationFailedEventBody = {
                             message: response.message

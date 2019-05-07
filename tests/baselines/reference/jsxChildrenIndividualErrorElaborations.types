@@ -85,9 +85,9 @@ var a = <Blah2>
 >Blah2 : (props: PropsArr) => JSX.Element
 
   {x => x}
->x => x : (x: number) => number
->x : number
->x : number
+>x => x : (x: any) => any
+>x : any
+>x : any
 
 </Blah2>
 >Blah2 : (props: PropsArr) => JSX.Element

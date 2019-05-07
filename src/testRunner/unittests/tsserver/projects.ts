@@ -390,7 +390,6 @@ namespace ts.projectSystem {
             const typingsInstaller: server.ITypingsInstaller = {
                 isKnownTypesPackageName: returnFalse,
                 installPackage: notImplemented,
-                inspectValue: notImplemented,
                 enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
                     assert.isUndefined(request);
                     request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray, cachePath));

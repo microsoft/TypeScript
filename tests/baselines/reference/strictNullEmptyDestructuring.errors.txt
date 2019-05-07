@@ -1,3 +1,4 @@
+tests/cases/compiler/strictNullEmptyDestructuring.ts(3,5): error TS2461: Type 'null' is not an array type.
 tests/cases/compiler/strictNullEmptyDestructuring.ts(3,5): error TS2531: Object is possibly 'null'.
 tests/cases/compiler/strictNullEmptyDestructuring.ts(5,5): error TS2531: Object is possibly 'null'.
 tests/cases/compiler/strictNullEmptyDestructuring.ts(7,2): error TS2531: Object is possibly 'null'.
@@ -11,10 +12,12 @@ tests/cases/compiler/strictNullEmptyDestructuring.ts(21,5): error TS2533: Object
 tests/cases/compiler/strictNullEmptyDestructuring.ts(23,2): error TS2533: Object is possibly 'null' or 'undefined'.
 
 
-==== tests/cases/compiler/strictNullEmptyDestructuring.ts (11 errors) ====
+==== tests/cases/compiler/strictNullEmptyDestructuring.ts (12 errors) ====
     // Repro from #20873
     
     let [] = null;
+        ~~
+!!! error TS2461: Type 'null' is not an array type.
         ~~
 !!! error TS2531: Object is possibly 'null'.
     

@@ -13,6 +13,14 @@ export function bar2<T>(obj: T) {
     return foo2(obj);
 }
 
+// Repros from #31099
+
+type Weird = any extends infer U ? U : never;
+type AlsoWeird = unknown extends infer U ? U : never;
+
+const a: Weird = null;
+const b: string = a;
+
 
 //// [inferTypes2.js]
 "use strict";
@@ -26,6 +34,8 @@ function bar2(obj) {
     return foo2(obj);
 }
 exports.bar2 = bar2;
+var a = null;
+var b = a;
 
 
 //// [inferTypes2.d.ts]
