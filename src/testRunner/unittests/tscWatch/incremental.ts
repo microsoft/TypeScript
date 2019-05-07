@@ -105,9 +105,23 @@ namespace ts.tscWatch {
             result.close();
         }
 
+        function sanitizeBuildInfo(content: string) {
+            const buildInfo = getBuildInfo(content);
+            fakes.sanitizeBuildInfoProgram(buildInfo);
+            return getBuildInfoText(buildInfo);
+        }
+
         function checkFileEmit(actual: Map<string>, expected: ReadonlyArray<File>) {
             assert.equal(actual.size, expected.length, `Actual: ${JSON.stringify(arrayFrom(actual.entries()), /*replacer*/ undefined, " ")}\nExpected: ${JSON.stringify(expected, /*replacer*/ undefined, " ")}`);
-            expected.forEach(file => assert.equal(actual.get(file.path), file.content, `Emit for ${file.path}`));
+            expected.forEach(file => {
+                let expectedContent = file.content;
+                let actualContent = actual.get(file.path);
+                if (isBuildInfoFile(file.path)) {
+                    actualContent = actualContent && sanitizeBuildInfo(actualContent);
+                    expectedContent = sanitizeBuildInfo(expectedContent);
+                }
+                assert.equal(actualContent, expectedContent, `Emit for ${file.path}`);
+            });
         }
 
         const libFileInfo: BuilderState.FileInfo = {
