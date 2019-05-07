@@ -682,7 +682,7 @@ namespace ts {
 
     interface UpdateBundleProject extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.UpdateBundle;
-        updateBundle(cancellationToken?: CancellationToken): BuildResultFlags;
+        updateBundle(): BuildResultFlags | BuildInvalidedProject;
     }
 
     type InvalidatedProject = UpdateOutputFileStampsProject | BuildInvalidedProject | UpdateBundleProject;
@@ -749,13 +749,21 @@ namespace ts {
             projectPath,
             updateBundle: update,
             done: cancellationToken => {
-                if (updatePending) update(cancellationToken);
+                if (updatePending) {
+                    const result = update();
+                    if ((result as BuildInvalidedProject).project) {
+                        return (result as BuildInvalidedProject).done(cancellationToken);
+                    }
+                }
                 state.projectPendingBuild.delete(projectPath);
             }
         };
 
-        function update(cancellationToken?: CancellationToken) {
-            const buildResult = updateBundle(state, project, projectPath, config, cancellationToken);
+        function update() {
+            const buildResult = updateBundle(state, project, projectPath, config);
+            if (isString(buildResult)) {
+                return createBuildInvalidedProject(state, project, projectPath, projectIndex, config, buildOrder);
+            }
             queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, buildResult);
             updatePending = false;
             return buildResult;
@@ -1068,9 +1076,8 @@ namespace ts {
         state: SolutionBuilderState,
         proj: ResolvedConfigFileName,
         resolvedPath: ResolvedConfigFilePath,
-        config: ParsedCommandLine,
-        cancellationToken: CancellationToken | undefined
-    ): BuildResultFlags {
+        config: ParsedCommandLine
+    ): BuildResultFlags | string {
         if (state.options.dry) {
             reportStatus(state, Diagnostics.A_non_dry_build_would_update_output_of_project_0, proj);
             return BuildResultFlags.Success;
@@ -1090,7 +1097,7 @@ namespace ts {
             });
         if (isString(outputFiles)) {
             reportStatus(state, Diagnostics.Cannot_update_output_of_project_0_because_there_was_error_reading_file_1, proj, relName(state, outputFiles));
-            return buildSingleProject(state, proj, resolvedPath, config, cancellationToken);
+            return outputFiles;
         }
 
         // Actual Emit
