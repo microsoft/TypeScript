@@ -386,8 +386,7 @@ namespace ts {
                 };
             },
             getMarkdownDiagnosticRenderingContext: flags => {
-                const typeWriter = createTextWriter("", renderTypeSymbolIntoMarkdown);
-                const symbolWriter = createTextWriter("", renderSymbolIntoMarkdown);
+                const typeWriter = createTextWriter("", renderIntoMarkdown);
                 const typeFormatFlags = getTypeFormatFlagsFromRenderFlags(flags);
                 return {
                     typeToString: type => {
@@ -396,36 +395,28 @@ namespace ts {
                         return typeWriter.getText();
                     },
                     symbolToString: symbol => {
-                        symbolWriter.clear();
-                        symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, symbolWriter);
-                        return symbolWriter.getText();
+                        typeWriter.clear();
+                        symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, typeWriter);
+                        return typeWriter.getText();
                     }
                 };
             },
         };
-        const renderSymbolIntoMarkdown = (original: string, s: Symbol): string => {
-            const def = s.valueDeclaration || s.declarations && s.declarations[0];
-            if (!def) {
+        const renderIntoMarkdown = (original: string, s: Symbol): string => {
+            const d = firstOrUndefined(s.declarations);
+            if (!d) {
                 return original;
             }
-
-            const file = getSourceFileOfNode(def);
-            if (!file) {
+            const f = getSourceFileOfNode(d);
+            if (!f) {
                 return original;
             }
-            return `[${original}](file:///${file.path}#L${getLineAndCharacterOfPosition(file, skipTrivia(file.text, def.pos)).line + 1})`;
-        };
-        const renderTypeSymbolIntoMarkdown = (original: string, s: Symbol): string => {
-            const def = forEach(s.declarations, d => isTypeDeclaration(d) ? d : undefined);
-            if (!def) {
-                return original;
-            }
-
-            const file = getSourceFileOfNode(def);
-            if (!file) {
-                return original;
-            }
-            return `[${original}](file:///${file.path}#L${getLineAndCharacterOfPosition(file, skipTrivia(file.text, def.pos)).line + 1})`;
+            const pos = getNameOfDeclaration(d) || d;
+            const p = getLineAndCharacterOfPosition(f, skipTrivia(f.text, pos.pos));
+            return `[${original}](command:editor.action.peekDefinition?${encodeURIComponent(JSON.stringify({
+                resource: { $mid: 1, scheme: "file", authority: "", path: startsWith(f.path, "/") ? f.path : `/${f.path}`},
+                position: { lineNumber: p.line + 1, column: p.character + 1 }
+            }))})`;
         };
 
         function getTypeFormatFlagsFromRenderFlags(flags: DiagnosticRendererFlags) {
