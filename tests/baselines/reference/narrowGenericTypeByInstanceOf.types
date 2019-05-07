@@ -1,6 +1,8 @@
 === tests/cases/compiler/narrowGenericTypeByInstanceOf.ts ===
-function exampleSingleArgument() {
->exampleSingleArgument : () => void
+// From #28560
+
+function preserveParentParameters() {
+>preserveParentParameters : () => void
 
   class Parent<T> {
 >Parent : Parent<T>
@@ -8,8 +10,180 @@ function exampleSingleArgument() {
     value: T;
 >value : T
   }
+  class Child<S> extends Parent<S> {
+>Child : Child<S>
+>Parent : Parent<S>
 
-  class Child<T> extends Parent<T> {
+    other: S;
+>other : S
+  }
+
+  function withNumber(p: Parent<number>) {
+>withNumber : (p: Parent<number>) => void
+>p : Parent<number>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<number>
+>Child : typeof Child
+
+      p;
+>p : Child<number>
+
+    } else {
+      p;
+>p : Parent<number>
+    }
+  }
+  function withString(p: Parent<string>) {
+>withString : (p: Parent<string>) => void
+>p : Parent<string>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<string>
+>Child : typeof Child
+
+      p;
+>p : Child<string>
+
+    } else {
+      p;
+>p : Parent<string>
+    }
+  }
+  function withGeneric<A>(p: Parent<A>) {
+>withGeneric : <A>(p: Parent<A>) => void
+>p : Parent<A>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<A>
+>Child : typeof Child
+
+      p;
+>p : Child<A>
+
+    } else {
+      p;
+>p : Parent<A>
+    }
+  }
+}
+
+function copyParameterStructurally() {
+>copyParameterStructurally : () => void
+
+  class Parent<T> {
+>Parent : Parent<T>
+
+    value: T;
+>value : T
+  }
+  class Child<S> {
+>Child : Child<S>
+
+    value: S;
+>value : S
+
+    other: S;
+>other : S
+  }
+
+  function withNumber(p: Parent<number>) {
+>withNumber : (p: Parent<number>) => void
+>p : Parent<number>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<number>
+>Child : typeof Child
+
+      p;
+>p : Child<number>
+
+    } else {
+      p;
+>p : Parent<number>
+    }
+  }
+  function withString(p: Parent<string>) {
+>withString : (p: Parent<string>) => void
+>p : Parent<string>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<string>
+>Child : typeof Child
+
+      p;
+>p : Child<string>
+
+    } else {
+      p;
+>p : Parent<string>
+    }
+  }
+  function withGeneric<A>(p: Parent<A>) {
+>withGeneric : <A>(p: Parent<A>) => void
+>p : Parent<A>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<A>
+>Child : typeof Child
+
+      p;
+>p : Child<A>
+
+    } else {
+      p;
+>p : Parent<A>
+    }
+  }
+}
+
+function useConstraint() {
+>useConstraint : () => void
+
+  // #17473
+  interface Foo {
+    foo: string;
+>foo : string
+  }
+
+  class Bar<T extends Foo> {
+>Bar : Bar<T>
+
+    constructor(readonly bar: T) {}
+>bar : T
+  }
+
+  let a: any;
+>a : any
+
+  if (a instanceof Bar) {
+>a instanceof Bar : boolean
+>a : any
+>Bar : typeof Bar
+
+    a.bar; // <-- a.bar should be 'Foo' instead of 'any'
+>a.bar : any
+>a : Bar<any>
+>bar : any
+  }
+}
+
+function enhanceConstraint() {
+>enhanceConstraint : () => void
+
+  class Parent<T extends 1 | 2 | 3 | 4> {
+>Parent : Parent<T>
+
+    value: T;
+>value : T
+  }
+  class Child<T extends 1 | 2> extends Parent<T> {
 >Child : Child<T>
 >Parent : Parent<T>
 
@@ -17,335 +191,191 @@ function exampleSingleArgument() {
 >other : T
   }
 
-  const obj: Parent<number> = undefined as any;
->obj : Parent<number>
->undefined as any : any
->undefined : undefined
+  function simpleExtends(p: Parent<1 | 2 | 3 | 4>) {
+>simpleExtends : (p: Parent<1 | 2 | 3 | 4>) => void
+>p : Parent<1 | 2 | 3 | 4>
 
-  if (obj instanceof Child) {
->obj instanceof Child : boolean
->obj : Parent<number>
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<1 | 2 | 3 | 4>
 >Child : typeof Child
 
-    obj;
->obj : Child<number>
+      p;
+>p : Child<1 | 2>
+
+    } else {
+      p;
+>p : Parent<1 | 2 | 3 | 4>
+    }
+  }
+  function complexExtends(p: Parent<2 | 3>) {
+>complexExtends : (p: Parent<2 | 3>) => void
+>p : Parent<2 | 3>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<2 | 3>
+>Child : typeof Child
+
+      p;
+>p : Child<any>
+
+    } else {
+      p;
+>p : Parent<2 | 3>
+    }
+  }
+  function impossibleExtends(p: Parent<3 | 4>) {
+>impossibleExtends : (p: Parent<3 | 4>) => void
+>p : Parent<3 | 4>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<3 | 4>
+>Child : typeof Child
+
+      p;
+>p : Child<any>
+
+    } else {
+      p;
+>p : Parent<3 | 4>
+    }
   }
 }
-function exampleSingleExtendsMultiple() {
->exampleSingleExtendsMultiple : () => void
+
+function dontWidenPointlessly() {
+>dontWidenPointlessly : () => void
+
+  class Query<T> {
+>Query : Query<T>
+
+    uses: T;
+>uses : T
+  }
+  function f<T>(p: T[] | Query<T>) {
+>f : <T>(p: Query<T> | T[]) => void
+>p : Query<T> | T[]
+
+    if (Array.isArray(p)) {
+>Array.isArray(p) : boolean
+>Array.isArray : (arg: any) => arg is any[]
+>Array : ArrayConstructor
+>isArray : (arg: any) => arg is any[]
+>p : Query<T> | T[]
+
+      p; // T[], so far so good
+>p : T[]
+
+    } else if (p instanceof Query) {
+>p instanceof Query : boolean
+>p : Query<T>
+>Query : typeof Query
+
+      p; // should be Query<T>, not Query<any>
+>p : Query<T>
+    }
+  }
+}
+
+function multipleParameters() {
+>multipleParameters : () => void
 
   class Parent<A, B> {
 >Parent : Parent<A, B>
-
-    value1: A;
->value1 : A
-
-    value2: B;
->value2 : B
-  }
-
-  class Child<T> extends Parent<T, T> {
->Child : Child<T>
->Parent : Parent<T, T>
-
-    other: T;
->other : T
-  }
-
-  const obj: Parent<number, number> = undefined as any;
->obj : Parent<number, number>
->undefined as any : any
->undefined : undefined
-
-  if (obj instanceof Child) {
->obj instanceof Child : boolean
->obj : Parent<number, number>
->Child : typeof Child
-
-    obj;
->obj : Child<number>
-  }
-}
-
-function exampleSwapParameterOrder() {
->exampleSwapParameterOrder : () => void
-
-  class Parent<A, B> {
->Parent : Parent<A, B>
-
-    value1: A;
->value1 : A
-
-    value2: B;
->value2 : B
-  }
-
-  class Child<C, D> extends Parent<D, C> {
->Child : Child<C, D>
->Parent : Parent<D, C>
-
-    value3: C;
->value3 : C
-
-    value4: D;
->value4 : D
-  }
-
-  const obj: Parent<number, string> = undefined as any;
->obj : Parent<number, string>
->undefined as any : any
->undefined : undefined
-
-  if (obj instanceof Child) {
->obj instanceof Child : boolean
->obj : Parent<number, string>
->Child : typeof Child
-
-    obj;
->obj : Child<string, number>
-  }
-}
-
-function exampleSingleExtendsMultipleReject() {
->exampleSingleExtendsMultipleReject : () => void
-
-  class Parent<A, B> {
->Parent : Parent<A, B>
-
-    value1: A;
->value1 : A
-
-    value2: B;
->value2 : B
-  }
-
-  class Child<C> extends Parent<C, C> {
->Child : Child<C>
->Parent : Parent<C, C>
-
-    value3: C;
->value3 : C
-  }
-
-  const obj: Parent<number, string> = undefined as any;
->obj : Parent<number, string>
->undefined as any : any
->undefined : undefined
-
-  if (obj instanceof Child) {
->obj instanceof Child : boolean
->obj : Parent<number, string>
->Child : typeof Child
-
-    obj;
->obj : Child<any>
-  }
-}
-
-function exampleUnion() {
->exampleUnion : () => void
-
-  class Parent<A, B> {
->Parent : Parent<A, B>
-
-    value1: A;
->value1 : A
-
-    value2: B;
->value2 : B
-  }
-
-  class Child<C> extends Parent<C, C> {
->Child : Child<C>
->Parent : Parent<C, C>
-
-    value3: C;
->value3 : C
-  }
-
-  const obj0:
->obj0 : Parent<{ foo: string; }, { foo: string; }> | Parent<string, string> | Parent<number, number>
-
-    | Parent<{ foo: string }, { foo: string }>
->foo : string
->foo : string
-
-    | Parent<string, string>
-    | Parent<number, number> = undefined as any;
->undefined as any : any
->undefined : undefined
-
-  if (obj0 instanceof Child) {
->obj0 instanceof Child : boolean
->obj0 : Parent<{ foo: string; }, { foo: string; }> | Parent<string, string> | Parent<number, number>
->Child : typeof Child
-
-    obj0;
->obj0 : Child<{ foo: string; }> | Child<string> | Child<number>
-  }
-
-  const obj1 = undefined as Parent<{ foo: string }, { foo: string }>;
->obj1 : Parent<{ foo: string; }, { foo: string; }>
->undefined as Parent<{ foo: string }, { foo: string }> : Parent<{ foo: string; }, { foo: string; }>
->undefined : undefined
->foo : string
->foo : string
-
-  if (obj1 instanceof Child) {
->obj1 instanceof Child : boolean
->obj1 : Parent<{ foo: string; }, { foo: string; }>
->Child : typeof Child
-
-    obj1;
->obj1 : Child<{ foo: string; }>
-  }
-
-  const obj2 = undefined as Parent<string, string>;
->obj2 : Parent<string, string>
->undefined as Parent<string, string> : Parent<string, string>
->undefined : undefined
-
-  if (obj2 instanceof Child) {
->obj2 instanceof Child : boolean
->obj2 : Parent<string, string>
->Child : typeof Child
-
-    obj2;
->obj2 : Child<string>
-  }
-
-  const obj3 = undefined as Parent<number, number>;
->obj3 : Parent<number, number>
->undefined as Parent<number, number> : Parent<number, number>
->undefined : undefined
-
-  if (obj3 instanceof Child) {
->obj3 instanceof Child : boolean
->obj3 : Parent<number, number>
->Child : typeof Child
-
-    obj3;
->obj3 : Child<number>
-  }
-
-  const obj4 = undefined as string | { foo: string };
->obj4 : string | { foo: string; }
->undefined as string | { foo: string } : string | { foo: string; }
->undefined : undefined
->foo : string
-
-  if (obj4 instanceof Child) {
->obj4 instanceof Child : boolean
->obj4 : string | { foo: string; }
->Child : typeof Child
-
-    obj4;
->obj4 : (string & Child<any>) | ({ foo: string; } & Child<any>)
-  }
-  const obj5 = undefined as { foo: string };
->obj5 : { foo: string; }
->undefined as { foo: string } : { foo: string; }
->undefined : undefined
->foo : string
-
-  if (obj5 instanceof Child) {
->obj5 instanceof Child : boolean
->obj5 : { foo: string; }
->Child : typeof Child
-
-    obj5;
->obj5 : { foo: string; } & Child<any>
-  }
-}
-
-function exampleNegative() {
->exampleNegative : () => void
-
-  class Parent<A, B> {
->Parent : Parent<A, B>
-
-    value1: A;
->value1 : A
-
-    value2: B;
->value2 : B
-  }
-
-  class Child<C> extends Parent<C, C> {
->Child : Child<C>
->Parent : Parent<C, C>
-
-    value3: C;
->value3 : C
-  }
-
-  const obj:
->obj : Parent<string, string> | Parent<string, number> | Child<string>
-
-    | Parent<string, string>
-    | Parent<string, number>
-    | Child<string> = undefined as any;
->undefined as any : any
->undefined : undefined
-
-  if (obj instanceof Child) {
->obj instanceof Child : boolean
->obj : Parent<string, string> | Parent<string, number> | Child<string>
->Child : typeof Child
-
-    // Here we filter out matching ones, instead of just narrowing to them.
-    obj;
->obj : Child<string>
-
-    return;
-  }
-
-  console.log(obj);
->console.log(obj) : void
->console.log : (message?: any, ...optionalParams: any[]) => void
->console : Console
->log : (message?: any, ...optionalParams: any[]) => void
->obj : Parent<string, string> | Parent<string, number>
-}
-
-function exampleIgnoreDefaults() {
->exampleIgnoreDefaults : () => void
-
-  // default parameters shouldn't have any impact on this narrowing.
-  class Parent<A> {
->Parent : Parent<A>
 
     a: A;
 >a : A
-  }
-  class Child<A2, C = number> extends Parent<A2> {
->Child : Child<A2, C>
->Parent : Parent<A2>
 
-    a2: A2;
->a2 : A2
+    b: B;
+>b : B
+  }
+  class Swapped<X, Y> extends Parent<Y, X> {
+>Swapped : Swapped<X, Y>
+>Parent : Parent<Y, X>
+
+    x: X;
+>x : X
+
+    y: Y;
+>y : Y
+  }
+  function checkSwapped(p: Parent<number, string>) {
+>checkSwapped : (p: Parent<number, string>) => void
+>p : Parent<number, string>
+
+    if (p instanceof Swapped) {
+>p instanceof Swapped : boolean
+>p : Parent<number, string>
+>Swapped : typeof Swapped
+
+      p;
+>p : Swapped<string, number>
+
+    } else {
+      p;
+>p : Parent<number, string>
+    }
+  }
+}
+
+function inconsistentParameters() {
+>inconsistentParameters : () => void
+
+  class Parent<A, B> {
+>Parent : Parent<A, B>
+
+    a: A;
+>a : A
+
+    b: B;
+>b : B
+  }
+  class Child<C> extends Parent<C, C> {
+>Child : Child<C>
+>Parent : Parent<C, C>
 
     c: C;
 >c : C
   }
+  function possible(p: Parent<number, number>) {
+>possible : (p: Parent<number, number>) => void
+>p : Parent<number, number>
 
-  const obj: Parent<number> = undefined as any;
->obj : Parent<number>
->undefined as any : any
->undefined : undefined
-
-  if (obj instanceof Child) {
->obj instanceof Child : boolean
->obj : Parent<number>
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<number, number>
 >Child : typeof Child
 
-    obj;
->obj : Child<number, any>
+      p;
+>p : Child<number>
+
+    } else {
+      p;
+>p : Parent<number, number>
+    }
+  }
+  function impossible(p: Parent<number, string>) {
+>impossible : (p: Parent<number, string>) => void
+>p : Parent<number, string>
+
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<number, string>
+>Child : typeof Child
+
+      p;
+>p : Child<any>
+
+    } else {
+      p;
+>p : Parent<number, string>
+    }
   }
 }
 
-function exampleConstraints() {
->exampleConstraints : () => void
+function union() {
+>union : () => void
 
   class Parent<A> {
 >Parent : Parent<A>
@@ -353,213 +383,70 @@ function exampleConstraints() {
     a: A;
 >a : A
   }
-  class Child<B extends 1 | 2 | 3> extends Parent<B> {
+  class Child<B> extends Parent<B> {
 >Child : Child<B>
 >Parent : Parent<B>
 
     b: B;
 >b : B
   }
+  function multipleParents(
+>multipleParents : (p: Parent<number> | Parent<string> | Parent<boolean>) => void
 
-  const objPass: Parent<1 | 2 | 3> = undefined as any;
->objPass : Parent<1 | 2 | 3>
->undefined as any : any
->undefined : undefined
+    p: Parent<number> | Parent<string> | Parent<boolean>
+>p : Parent<number> | Parent<string> | Parent<boolean>
 
-  if (objPass instanceof Child) {
->objPass instanceof Child : boolean
->objPass : Parent<1 | 2 | 3>
+  ) {
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<number> | Parent<string> | Parent<boolean>
 >Child : typeof Child
 
-    objPass; // expect: Child<1 | 2 | 3>
->objPass : Child<1 | 2 | 3>
+      p;
+>p : Child<number> | Child<string> | Child<boolean>
+
+    } else {
+      p;
+>p : Parent<number> | Parent<string> | Parent<boolean>
+    }
   }
+  function mixedChildren(p: Parent<number> | Child<string>) {
+>mixedChildren : (p: Parent<number> | Child<string>) => void
+>p : Parent<number> | Child<string>
 
-  const obj12: Parent<1 | 2> = undefined as any;
->obj12 : Parent<1 | 2>
->undefined as any : any
->undefined : undefined
-
-  if (obj12 instanceof Child) {
->obj12 instanceof Child : boolean
->obj12 : Parent<1 | 2>
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<number> | Child<string>
 >Child : typeof Child
 
-    obj12; // expect: Child<1 | 2>
->obj12 : Child<1 | 2>
+      p;
+>p : Child<string>
+
+    } else {
+      p;
+>p : Parent<number>
+    }
   }
+  function imcompatibleOptions(
+>imcompatibleOptions : (p: Parent<number> | Parent<string> | { foo: boolean; }) => void
 
-  const objFail: Parent<string> = undefined as any;
->objFail : Parent<string>
->undefined as any : any
->undefined : undefined
+    p: Parent<number> | Parent<string> | { foo: boolean }
+>p : Parent<number> | Parent<string> | { foo: boolean; }
+>foo : boolean
 
-  if (objFail instanceof Child) {
->objFail instanceof Child : boolean
->objFail : Parent<string>
+  ) {
+    if (p instanceof Child) {
+>p instanceof Child : boolean
+>p : Parent<number> | Parent<string> | { foo: boolean; }
 >Child : typeof Child
 
-    objFail; // Child<any>, since string and 1|2|3 have no overlap.
->objFail : Child<any>
-  }
+      p;
+>p : Child<any>
 
-  const objRefine: Parent<number> = undefined as any;
->objRefine : Parent<number>
->undefined as any : any
->undefined : undefined
-
-  if (objRefine instanceof Child) {
->objRefine instanceof Child : boolean
->objRefine : Parent<number>
->Child : typeof Child
-
-    objRefine; // expect: Child<1 | 2 | 3>
->objRefine : Child<1 | 2 | 3>
-  }
-
-  const objRefine1234: Parent<1 | 2 | 3 | 4> = undefined as any;
->objRefine1234 : Parent<1 | 2 | 3 | 4>
->undefined as any : any
->undefined : undefined
-
-  if (objRefine1234 instanceof Child) {
->objRefine1234 instanceof Child : boolean
->objRefine1234 : Parent<1 | 2 | 3 | 4>
->Child : typeof Child
-
-    objRefine1234; // expect: Child<1 | 2 | 3>
->objRefine1234 : Child<1 | 2 | 3>
-  }
-
-  const objOverlap: Parent<2 | 3 | 4 | 5> = undefined as any;
->objOverlap : Parent<2 | 3 | 4 | 5>
->undefined as any : any
->undefined : undefined
-
-  if (objOverlap instanceof Child) {
->objOverlap instanceof Child : boolean
->objOverlap : Parent<2 | 3 | 4 | 5>
->Child : typeof Child
-
-    objOverlap; // ideally, Child<2 | 3>, but actually Child<any> since 2|3|4|5 is not a supertype of 1|2|3.
->objOverlap : Child<any>
-  }
-}
-
-function exampleUnrelated() {
->exampleUnrelated : () => void
-
-  class Child<A, B> {
->Child : Child<A, B>
-
-    a: A;
->a : A
-
-    b: B;
->b : B
-
-    foo: number;
->foo : number
-  }
-
-  const objA = { a: 5 };
->objA : { a: number; }
->{ a: 5 } : { a: number; }
->a : number
->5 : 5
-
-  if (objA instanceof Child) {
->objA instanceof Child : boolean
->objA : { a: number; }
->Child : typeof Child
-
-    objA; // Child<number, any>
->objA : Child<number, any>
-  }
-
-  const objB = { b: "hello" };
->objB : { b: string; }
->{ b: "hello" } : { b: string; }
->b : string
->"hello" : "hello"
-
-  if (objB instanceof Child) {
->objB instanceof Child : boolean
->objB : { b: string; }
->Child : typeof Child
-
-    objB; // Child<any, string>
->objB : Child<any, string>
-  }
-
-  const objAB = { a: 5, b: "hello" };
->objAB : { a: number; b: string; }
->{ a: 5, b: "hello" } : { a: number; b: string; }
->a : number
->5 : 5
->b : string
->"hello" : "hello"
-
-  if (objAB instanceof Child) {
->objAB instanceof Child : boolean
->objAB : { a: number; b: string; }
->Child : typeof Child
-
-    objAB; // Child<number, string>
->objAB : Child<number, string>
-  }
-
-  const objAX = { a: 5, x: 7 };
->objAX : { a: number; x: number; }
->{ a: 5, x: 7 } : { a: number; x: number; }
->a : number
->5 : 5
->x : number
->7 : 7
-
-  if (objAX instanceof Child) {
->objAX instanceof Child : boolean
->objAX : { a: number; x: number; }
->Child : typeof Child
-
-    objAX; // Child<number, any>
->objAX : { a: number; x: number; } & Child<any, any>
-  }
-
-  const objBX = { b: "hello", x: 7 };
->objBX : { b: string; x: number; }
->{ b: "hello", x: 7 } : { b: string; x: number; }
->b : string
->"hello" : "hello"
->x : number
->7 : 7
-
-  if (objBX instanceof Child) {
->objBX instanceof Child : boolean
->objBX : { b: string; x: number; }
->Child : typeof Child
-
-    objBX; // Child<any, string>
->objBX : { b: string; x: number; } & Child<any, any>
-  }
-
-  const objABX = { a: 5, b: "hello", x: 7 };
->objABX : { a: number; b: string; x: number; }
->{ a: 5, b: "hello", x: 7 } : { a: number; b: string; x: number; }
->a : number
->5 : 5
->b : string
->"hello" : "hello"
->x : number
->7 : 7
-
-  if (objABX instanceof Child) {
->objABX instanceof Child : boolean
->objABX : { a: number; b: string; x: number; }
->Child : typeof Child
-
-    objABX; // Child<number, string>
->objABX : { a: number; b: string; x: number; } & Child<any, any>
+    } else {
+      p;
+>p : Parent<number> | Parent<string> | { foo: boolean; }
+    }
   }
 }
 
