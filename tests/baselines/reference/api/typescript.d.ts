@@ -2448,6 +2448,7 @@ declare namespace ts {
      */
     interface DiagnosticMessageChain {
         messageText: string;
+        markdownText?: string;
         category: DiagnosticCategory;
         code: number;
         next?: DiagnosticMessageChain;
@@ -2465,6 +2466,7 @@ declare namespace ts {
         start: number | undefined;
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
+        markdownText?: string | DiagnosticMessageChain;
     }
     interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
@@ -4269,7 +4271,7 @@ declare namespace ts {
     function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
     function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
     function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
-    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string;
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string, flattenMarkdown?: boolean): string;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic>;
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'

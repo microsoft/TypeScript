@@ -379,8 +379,29 @@ namespace ts {
             },
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
-            getPlainDiagnosticRenderingContext: () => checker,
-            getMarkdownDiagnosticRenderingContext: () => markdownRenderContext,
+            getPlainDiagnosticRenderingContext: flags => {
+                return {
+                    typeToString: t => typeToString(t, /*enclosingDeclaration*/ undefined, getTypeFormatFlagsFromRenderFlags(flags)),
+                    symbolToString: s => symbolToString(s),
+                };
+            },
+            getMarkdownDiagnosticRenderingContext: flags => {
+                const typeWriter = createTextWriter("", renderTypeSymbolIntoMarkdown);
+                const symbolWriter = createTextWriter("", renderSymbolIntoMarkdown);
+                const typeFormatFlags = getTypeFormatFlagsFromRenderFlags(flags);
+                return {
+                    typeToString: type => {
+                        typeWriter.clear();
+                        typeToString(type, /*enclosingDeclaration*/ undefined, typeFormatFlags, typeWriter);
+                        return typeWriter.getText();
+                    },
+                    symbolToString: symbol => {
+                        symbolWriter.clear();
+                        symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, symbolWriter);
+                        return symbolWriter.getText();
+                    }
+                };
+            },
         };
         const renderSymbolIntoMarkdown = (original: string, s: Symbol): string => {
             const def = s.valueDeclaration || s.declarations && s.declarations[0];
@@ -392,10 +413,10 @@ namespace ts {
             if (!file) {
                 return original;
             }
-            return `[${original}](file:///${file.path}#L${getLineAndCharacterOfPosition(file, def.pos).line + 1})`;
-        }
+            return `[${original}](file:///${file.path}#L${getLineAndCharacterOfPosition(file, skipTrivia(file.text, def.pos)).line + 1})`;
+        };
         const renderTypeSymbolIntoMarkdown = (original: string, s: Symbol): string => {
-            const def = forEach(s.declarations, d => d.flags & SymbolFlags.Type ? d : undefined);
+            const def = forEach(s.declarations, d => isTypeDeclaration(d) ? d : undefined);
             if (!def) {
                 return original;
             }
@@ -404,31 +425,15 @@ namespace ts {
             if (!file) {
                 return original;
             }
-            return `[${original}](file:///${file.path}#L${getLineAndCharacterOfPosition(file, def.pos).line + 1})`;
-        }
-        const markdownRenderContext: DiagnosticRenderContext = {
-            typeToString: type => {
-                const mdWriter = createTextWriter("", renderTypeSymbolIntoMarkdown);
-                typeToString(type, /*enclosingDeclaration*/ undefined, /*flags*/ undefined, mdWriter);
-                return mdWriter.getText();
-            },
-            symbolToString: symbol => {
-                const mdWriter = createTextWriter("", renderSymbolIntoMarkdown);
-                symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, mdWriter);
-                return mdWriter.getText();
-            }
-        }
-        const fullyQualifiedRenderer: DiagnosticRenderContext = {
-            typeToString: t => typeToString(t, /*enclosingDeclaration*/ undefined, TypeFormatFlags.UseFullyQualifiedType),
-            symbolToString: s => symbolToString(s)
+            return `[${original}](file:///${file.path}#L${getLineAndCharacterOfPosition(file, skipTrivia(file.text, def.pos)).line + 1})`;
         };
-        function withFullyQualifiedPlainRenderer(action: () => void) {
-            const oldGetter = checker.getPlainDiagnosticRenderingContext;
-            checker.getPlainDiagnosticRenderingContext = () => fullyQualifiedRenderer;
-            action();
-            checker.getPlainDiagnosticRenderingContext = oldGetter;
+
+        function getTypeFormatFlagsFromRenderFlags(flags: DiagnosticRendererFlags) {
+            // Setting a flag disables the default `TypeFormatFlags.AllowUniqueESSymbolType | TypeFormatFlags.UseAliasDefinedOutsideCurrentScope` flags
+            // This is _usually_ an oversight, but the current output is captured in our baselines.
+            return flags & DiagnosticRendererFlags.UseFullyQualifiedTypes ? TypeFormatFlags.UseFullyQualifiedType : undefined;
         }
-        const chainDiagnosticMessages: (details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]) => DiagnosticMessageChain = (message, ...args) => chainRenderedDiagnosticMessages(checker, message, ...args);
+        const chainDiagnosticMessages: (flags: DiagnosticRendererFlags, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]) => DiagnosticMessageChain = (flags, message, ...args) => chainRenderedDiagnosticMessages(checker, flags, message, ...args);
 
         function getResolvedSignatureWorker(nodeIn: CallLikeExpression, candidatesOutArray: Signature[] | undefined, argumentCount: number | undefined, checkMode: CheckMode): Signature | undefined {
             const node = getParseTreeNode(nodeIn, isCallLikeExpression);
@@ -2586,16 +2591,19 @@ namespace ts {
             const errorInfo = !isExternalModuleNameRelative(moduleReference) && packageId
                 ? typesPackageExists(packageId.name)
                     ? chainDiagnosticMessages(
+                        DiagnosticRendererFlags.None,
                         /*details*/ undefined,
                         Diagnostics.If_the_0_package_actually_exposes_this_module_consider_sending_a_pull_request_to_amend_https_Colon_Slash_Slashgithub_com_SlashDefinitelyTyped_SlashDefinitelyTyped_Slashtree_Slashmaster_Slashtypes_Slash_1,
                         packageId.name, mangleScopedPackageName(packageId.name))
                     : chainDiagnosticMessages(
+                        DiagnosticRendererFlags.None,
                         /*details*/ undefined,
                         Diagnostics.Try_npm_install_types_Slash_1_if_it_exists_or_add_a_new_declaration_d_ts_file_containing_declare_module_0,
                         moduleReference,
                         mangleScopedPackageName(packageId.name))
                 : undefined;
             errorOrSuggestion(isError, errorNode, chainDiagnosticMessages(
+                DiagnosticRendererFlags.None,
                 errorInfo,
                 Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type,
                 moduleReference,
@@ -12381,8 +12389,12 @@ namespace ts {
             return result !== Ternary.False;
 
             function reportError(message: DiagnosticMessage, arg0?: string | number | Type | Symbol, arg1?: string | number | Type | Symbol, arg2?: string | number | Type | Symbol, arg3?: string | number | Type | Symbol): void {
+                return reportErrorWithFlags(DiagnosticRendererFlags.None, message, arg0, arg1, arg2, arg3);
+            }
+
+            function reportErrorWithFlags(flags: DiagnosticRendererFlags, message: DiagnosticMessage, arg0?: string | number | Type | Symbol, arg1?: string | number | Type | Symbol, arg2?: string | number | Type | Symbol, arg3?: string | number | Type | Symbol): void {
                 Debug.assert(!!errorNode);
-                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
+                errorInfo = chainDiagnosticMessages(flags, errorInfo, message, arg0, arg1, arg2, arg3);
             }
 
             function associateRelatedInfo(info: DiagnosticRelatedInformation) {
@@ -12396,8 +12408,10 @@ namespace ts {
             }
 
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
+                const flags = typeToString(source) === typeToString(target) ? DiagnosticRendererFlags.UseFullyQualifiedTypes : DiagnosticRendererFlags.None;
                 if (target.flags & TypeFlags.TypeParameter && target.immediateBaseConstraint !== undefined && isTypeAssignableTo(source, target.immediateBaseConstraint)) {
-                    reportError(
+                    reportErrorWithFlags(
+                        flags,
                         Diagnostics._0_is_assignable_to_the_constraint_of_type_1_but_1_could_be_instantiated_with_a_different_subtype_of_constraint_2,
                         source,
                         target,
@@ -12411,16 +12425,14 @@ namespace ts {
                         message = Diagnostics.Type_0_is_not_comparable_to_type_1;
                     }
                     else if (sourceType === targetType) {
-                        return withFullyQualifiedPlainRenderer(() => {
-                            reportError(Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated, source, target);
-                        });
+                        message = Diagnostics.Type_0_is_not_assignable_to_type_1_Two_different_types_with_this_name_exist_but_they_are_unrelated;
                     }
                     else {
                         message = Diagnostics.Type_0_is_not_assignable_to_type_1;
                     }
                 }
 
-                reportError(message, source, target);
+                reportErrorWithFlags(flags, message, source, target);
             }
 
             function tryElaborateErrorsForPrimitivesAndObjects(source: Type, target: Type) {
@@ -20269,28 +20281,28 @@ namespace ts {
             if (containingType.flags & TypeFlags.Union && !(containingType.flags & TypeFlags.Primitive)) {
                 for (const subtype of (containingType as UnionType).types) {
                     if (!getPropertyOfType(subtype, propNode.escapedText)) {
-                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
+                        errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(subtype));
                         break;
                     }
                 }
             }
             if (typeHasStaticProperty(propNode.escapedText, containingType)) {
-                errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_is_a_static_member_of_type_1, declarationNameToString(propNode), typeToString(containingType));
+                errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, errorInfo, Diagnostics.Property_0_is_a_static_member_of_type_1, declarationNameToString(propNode), typeToString(containingType));
             }
             else {
                 const promisedType = getPromisedTypeOfPromise(containingType);
                 if (promisedType && getPropertyOfType(promisedType, propNode.escapedText)) {
-                    errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await, declarationNameToString(propNode), typeToString(containingType));
+                    errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_forget_to_use_await, declarationNameToString(propNode), typeToString(containingType));
                 }
                 else {
                     const suggestion = getSuggestedSymbolForNonexistentProperty(propNode, containingType);
                     if (suggestion !== undefined) {
                         const suggestedName = symbolName(suggestion);
-                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestedName);
+                        errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1_Did_you_mean_2, declarationNameToString(propNode), typeToString(containingType), suggestedName);
                         relatedInfo = suggestion.valueDeclaration && createDiagnosticForNode(suggestion.valueDeclaration, Diagnostics._0_is_declared_here, suggestedName);
                     }
                     else {
-                        errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
+                        errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, errorInfo, Diagnostics.Property_0_does_not_exist_on_type_1, declarationNameToString(propNode), typeToString(containingType));
                     }
                 }
             }
@@ -20911,7 +20923,7 @@ namespace ts {
                 Debug.assert(typeParameters[i] !== undefined, "Should not call checkTypeArguments with too many type arguments");
                 const constraint = getConstraintOfTypeParameter(typeParameters[i]);
                 if (constraint) {
-                    const errorInfo = reportErrors && headMessage ? (() => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1)) : undefined;
+                    const errorInfo = reportErrors && headMessage ? (() => chainDiagnosticMessages(DiagnosticRendererFlags.None, /*details*/ undefined, Diagnostics.Type_0_does_not_satisfy_the_constraint_1)) : undefined;
                     const typeArgumentHeadMessage = headMessage || Diagnostics.Type_0_does_not_satisfy_the_constraint_1;
                     if (!mapper) {
                         mapper = createTypeMapper(typeParameters, typeArgumentTypes);
@@ -21926,8 +21938,8 @@ namespace ts {
 
             const headMessage = getDiagnosticHeadMessageForDecoratorResolution(node);
             if (!callSignatures.length) {
-                let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
-                errorInfo = chainDiagnosticMessages(errorInfo, headMessage);
+                let errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, /*details*/ undefined, Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures, typeToString(apparentType));
+                errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, errorInfo, headMessage);
                 const diag = createDiagnosticForNodeFromMessageChain(node, errorInfo);
                 diagnostics.add(diag);
                 invocationErrorRecovery(apparentType, SignatureKind.Call, diag);
@@ -24532,7 +24544,7 @@ namespace ts {
                         error(parameterName, Diagnostics.A_type_predicate_cannot_reference_a_rest_parameter);
                     }
                     else {
-                        const leadingError = () => chainDiagnosticMessages(/*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
+                        const leadingError = () => chainDiagnosticMessages(DiagnosticRendererFlags.None, /*details*/ undefined, Diagnostics.A_type_predicate_s_type_must_be_assignable_to_its_parameter_s_type);
                         checkTypeAssignableTo(typePredicate.type,
                             getTypeOfSymbol(signature.parameters[typePredicate.parameterIndex]),
                             node.type,
@@ -25854,6 +25866,7 @@ namespace ts {
                 case SyntaxKind.Parameter:
                     expectedReturnType = voidType;
                     errorInfo = chainDiagnosticMessages(
+                        DiagnosticRendererFlags.None,
                         /*details*/ undefined,
                         Diagnostics.The_return_type_of_a_parameter_decorator_function_must_be_either_void_or_any);
 
@@ -25862,6 +25875,7 @@ namespace ts {
                 case SyntaxKind.PropertyDeclaration:
                     expectedReturnType = voidType;
                     errorInfo = chainDiagnosticMessages(
+                        DiagnosticRendererFlags.None,
                         /*details*/ undefined,
                         Diagnostics.The_return_type_of_a_property_decorator_function_must_be_either_void_or_any);
                     break;
@@ -28026,6 +28040,7 @@ namespace ts {
                     const baseProp = getPropertyOfType(baseWithThis, declaredProp.escapedName);
                     if (prop && baseProp) {
                         const rootChain = () => chainDiagnosticMessages(
+                            DiagnosticRendererFlags.None,
                             /*details*/ undefined,
                             Diagnostics.Property_0_in_type_1_is_not_assignable_to_the_same_property_in_base_type_2,
                             symbolToString(declaredProp),
@@ -28182,8 +28197,8 @@ namespace ts {
                             const typeName1 = typeToString(existing.containingType);
                             const typeName2 = typeToString(base);
 
-                            let errorInfo = chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, symbolToString(prop), typeName1, typeName2);
-                            errorInfo = chainDiagnosticMessages(errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
+                            let errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, /*details*/ undefined, Diagnostics.Named_property_0_of_types_1_and_2_are_not_identical, symbolToString(prop), typeName1, typeName2);
+                            errorInfo = chainDiagnosticMessages(DiagnosticRendererFlags.None, errorInfo, Diagnostics.Interface_0_cannot_simultaneously_extend_types_1_and_2, typeToString(type), typeName1, typeName2);
                             diagnostics.add(createDiagnosticForNodeFromMessageChain(typeNode, errorInfo));
                         }
                     }

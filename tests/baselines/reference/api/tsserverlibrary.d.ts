@@ -2448,6 +2448,7 @@ declare namespace ts {
      */
     interface DiagnosticMessageChain {
         messageText: string;
+        markdownText?: string;
         category: DiagnosticCategory;
         code: number;
         next?: DiagnosticMessageChain;
@@ -2465,6 +2466,7 @@ declare namespace ts {
         start: number | undefined;
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
+        markdownText?: string | DiagnosticMessageChain;
     }
     interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
@@ -4269,7 +4271,7 @@ declare namespace ts {
     function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
     function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
     function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
-    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string;
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string, flattenMarkdown?: boolean): string;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic>;
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'
@@ -6082,6 +6084,10 @@ declare namespace ts.server.protocol {
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
+        /**
+         * Markdown containing variation of the message
+         */
+        markdown?: string;
     }
     /**
      * Response message for "projectInfo" request
@@ -7579,6 +7585,10 @@ declare namespace ts.server.protocol {
          * The name of the plugin reporting the message.
          */
         source?: string;
+        /**
+         * Markdown containing variation of the message
+         */
+        markdown?: string;
     }
     interface DiagnosticWithFileName extends Diagnostic {
         /**

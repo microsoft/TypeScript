@@ -1,6 +1,6 @@
 namespace ts {
     /* @internal */
-    export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: any[]): void;
+    export function trace(host: ModuleResolutionHost, message: DiagnosticMessage, ...args: (string | number)[]): void;
     export function trace(host: ModuleResolutionHost): void {
         host.trace!(formatMessage.apply(undefined, arguments));
     }
@@ -133,7 +133,7 @@ namespace ts {
         if (fileName === undefined) return;
         const path = normalizePath(combinePaths(baseDirectory, fileName));
         if (state.traceEnabled) {
-            trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, fileName, path);
+            trace(state.host, Diagnostics.package_json_has_0_field_1_that_references_2, fieldName, fileName!, path);
         }
         return path;
     }
@@ -279,7 +279,7 @@ namespace ts {
                     trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_not_set, typeReferenceDirectiveName);
                 }
                 else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, typeRoots);
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_not_set_root_directory_1, typeReferenceDirectiveName, String(typeRoots));
                 }
             }
             else {
@@ -287,7 +287,7 @@ namespace ts {
                     trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_not_set, typeReferenceDirectiveName, containingFile);
                 }
                 else {
-                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, typeRoots);
+                    trace(host, Diagnostics.Resolving_type_reference_directive_0_containing_file_1_root_directory_2, typeReferenceDirectiveName, containingFile, String(typeRoots));
                 }
             }
             if (redirectedReference) {
@@ -307,7 +307,7 @@ namespace ts {
             const { fileName, packageId } = resolved;
             const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
             if (traceEnabled) {
-                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, primary);
+                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, String(primary));
             }
             resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(fileName) };
         }
@@ -796,7 +796,7 @@ namespace ts {
                 (matchedNormalizedPrefix === undefined || matchedNormalizedPrefix.length < normalizedRoot.length);
 
             if (state.traceEnabled) {
-                trace(state.host, Diagnostics.Checking_if_0_is_the_longest_matching_prefix_for_1_2, normalizedRoot, candidate, isLongestMatchingPrefix);
+                trace(state.host, Diagnostics.Checking_if_0_is_the_longest_matching_prefix_for_1_2, normalizedRoot, candidate, String(isLongestMatchingPrefix));
             }
 
             if (isLongestMatchingPrefix) {
@@ -1506,7 +1506,7 @@ namespace ts {
     export function loadModuleFromGlobalCache(moduleName: string, projectName: string | undefined, compilerOptions: CompilerOptions, host: ModuleResolutionHost, globalCache: string): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
         if (traceEnabled) {
-            trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName, moduleName, globalCache);
+            trace(host, Diagnostics.Auto_discovery_for_typings_is_enabled_in_project_0_Running_extra_resolution_pass_for_module_1_using_cache_location_2, projectName === undefined ? "unnamed project" : projectName, moduleName, globalCache);
         }
         const failedLookupLocations: string[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };

@@ -48,12 +48,12 @@ namespace ts.server {
             start: scriptInfo.positionToLineOffset(diag.start!),
             end: scriptInfo.positionToLineOffset(diag.start! + diag.length!), // TODO: GH#18217
             text: flattenDiagnosticMessageText(diag.messageText, "\n"),
-            markdown: diag.markdownText ? flattenDiagnosticMessageText(diag.markdownText, "\n", /*flattenMarkdown*/ true) : undefined,
             code: diag.code,
             category: diagnosticCategoryName(diag),
             reportsUnnecessary: diag.reportsUnnecessary,
             source: diag.source,
             relatedInformation: map(diag.relatedInformation, formatRelatedInformation),
+            ...(diag.markdownText ? { markdown: flattenDiagnosticMessageText(diag.markdownText, "\n", /*flattenMarkdown*/ true) } : {})
         };
     }
 
@@ -885,14 +885,14 @@ namespace ts.server {
         private convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics: ReadonlyArray<Diagnostic>): protocol.DiagnosticWithLinePosition[] {
             return diagnostics.map<protocol.DiagnosticWithLinePosition>(d => ({
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
-                markdown: d.markdownText ? flattenDiagnosticMessageText(d.markdownText, this.host.newLine, /*flattenMarkdown*/ true) : undefined,
                 start: d.start!, // TODO: GH#18217
                 length: d.length!, // TODO: GH#18217
                 category: diagnosticCategoryName(d),
                 code: d.code,
                 startLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start!)))!, // TODO: GH#18217
                 endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
-                relatedInformation: map(d.relatedInformation, formatRelatedInformation)
+                relatedInformation: map(d.relatedInformation, formatRelatedInformation),
+                ...(d.markdownText ? { markdown: flattenDiagnosticMessageText(d.markdownText, this.host.newLine, /*flattenMarkdown*/ true) } : {})
             }));
         }
 
@@ -911,19 +911,19 @@ namespace ts.server {
         }
 
         private convertToDiagnosticsWithLinePosition(diagnostics: ReadonlyArray<Diagnostic>, scriptInfo: ScriptInfo | undefined): protocol.DiagnosticWithLinePosition[] {
-            return diagnostics.map(d => <protocol.DiagnosticWithLinePosition>{
+            return diagnostics.map(d => ({
                 message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
-                markdown: d.markdownText ? flattenDiagnosticMessageText(d.markdownText, this.host.newLine, /*flattenMarkdown*/ true): undefined,
-                start: d.start,
-                length: d.length,
+                start: d.start!,
+                length: d.length!,
                 category: diagnosticCategoryName(d),
                 code: d.code,
                 source: d.source,
-                startLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start!), // TODO: GH#18217
-                endLocation: scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!),
+                startLocation: (scriptInfo && scriptInfo.positionToLineOffset(d.start!))!, // TODO: GH#18217
+                endLocation: (scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!))!,
                 reportsUnnecessary: d.reportsUnnecessary,
                 relatedInformation: map(d.relatedInformation, formatRelatedInformation),
-            });
+                ...(d.markdownText ? { markdown: flattenDiagnosticMessageText(d.markdownText, this.host.newLine, /*flattenMarkdown*/ true) } : {})
+            }));
         }
 
         private getDiagnosticsWorker(

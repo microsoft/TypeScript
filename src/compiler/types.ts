@@ -3320,8 +3320,15 @@ namespace ts {
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
 
-        /* @internal */ getPlainDiagnosticRenderingContext(): DiagnosticRenderContext;
-        /* @internal */ getMarkdownDiagnosticRenderingContext(): DiagnosticRenderContext;
+        /* @internal */ getPlainDiagnosticRenderingContext(flags: DiagnosticRendererFlags): DiagnosticRenderContext;
+        /* @internal */ getMarkdownDiagnosticRenderingContext(flags: DiagnosticRendererFlags): DiagnosticRenderContext;
+    }
+
+
+    /** @internal */
+    export enum DiagnosticRendererFlags {
+        None                    =      0,
+        UseFullyQualifiedTypes  = 1 << 0,
     }
 
     /** @internal */

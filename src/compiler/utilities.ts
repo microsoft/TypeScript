@@ -7190,15 +7190,15 @@ namespace ts {
         };
     }
 
-    export function createRenderedCompilerDiagnostic(checker: TypeChecker, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): Diagnostic;
-    export function createRenderedCompilerDiagnostic(checker: TypeChecker, message: DiagnosticMessage): Diagnostic {
+    export function createRenderedCompilerDiagnostic(checker: TypeChecker, flags: DiagnosticRendererFlags, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): Diagnostic;
+    export function createRenderedCompilerDiagnostic(checker: TypeChecker, flags: DiagnosticRendererFlags, message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
         let markdown: string | undefined;
 
-        if (arguments.length > 2) {
-            let unformatted = text;
-            text = formatStringFromArgs(unformatted, arguments, 2, checker.getPlainDiagnosticRenderingContext());
-            const candidateMarkdown = formatStringFromArgs(unformatted, arguments, 2, checker.getMarkdownDiagnosticRenderingContext());
+        if (arguments.length > 3) {
+            const unformatted = text;
+            text = formatStringFromArgs(unformatted, arguments, 3, checker.getPlainDiagnosticRenderingContext(flags));
+            const candidateMarkdown = formatStringFromArgs(unformatted, arguments, 3, checker.getMarkdownDiagnosticRenderingContext(flags));
             if (candidateMarkdown !== text) {
                 markdown = candidateMarkdown;
             }
@@ -7210,10 +7210,10 @@ namespace ts {
             length: undefined,
 
             messageText: text,
-            markdownText: markdown,
             category: message.category,
             code: message.code,
             reportsUnnecessary: message.reportsUnnecessary,
+            ...(typeof markdown === "string" ? { markdownText: markdown } : {})
         };
     }
 
@@ -7246,15 +7246,15 @@ namespace ts {
         };
     }
 
-    export function chainRenderedDiagnosticMessages(checker: TypeChecker, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): DiagnosticMessageChain;
-    export function chainRenderedDiagnosticMessages(checker: TypeChecker, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
+    export function chainRenderedDiagnosticMessages(checker: TypeChecker, flags: DiagnosticRendererFlags, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): DiagnosticMessageChain;
+    export function chainRenderedDiagnosticMessages(checker: TypeChecker, flags: DiagnosticRendererFlags, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
         let markdown: string | undefined;
 
-        if (arguments.length > 3) {
-            let unformatted = text;
-            text = formatStringFromArgs(unformatted, arguments, 3, checker.getPlainDiagnosticRenderingContext());
-            const candidateMarkdown = formatStringFromArgs(unformatted, arguments, 3, checker.getMarkdownDiagnosticRenderingContext());
+        if (arguments.length > 4) {
+            const unformatted = text;
+            text = formatStringFromArgs(unformatted, arguments, 4, checker.getPlainDiagnosticRenderingContext(flags));
+            const candidateMarkdown = formatStringFromArgs(unformatted, arguments, 4, checker.getMarkdownDiagnosticRenderingContext(flags));
             if (candidateMarkdown !== text) {
                 markdown = candidateMarkdown;
             }
@@ -7262,11 +7262,11 @@ namespace ts {
 
         return {
             messageText: text,
-            markdownText: markdown,
             category: message.category,
             code: message.code,
 
-            next: details
+            next: details,
+            ...(typeof markdown === "string" ? { markdownText: markdown } : {})
         };
     }
 
