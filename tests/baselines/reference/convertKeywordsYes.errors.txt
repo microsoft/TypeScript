@@ -1,3 +1,4 @@
+tests/cases/compiler/convertKeywordsYes.ts(175,12): error TS18006: Classes may not have a field named 'constructor'.
 tests/cases/compiler/convertKeywordsYes.ts(292,11): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/convertKeywordsYes.ts(293,11): error TS1213: Identifier expected. 'interface' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/convertKeywordsYes.ts(294,11): error TS1213: Identifier expected. 'let' is a reserved word in strict mode. Class definitions are automatically in strict mode.
@@ -9,7 +10,7 @@ tests/cases/compiler/convertKeywordsYes.ts(301,11): error TS1213: Identifier exp
 tests/cases/compiler/convertKeywordsYes.ts(303,11): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 
 
-==== tests/cases/compiler/convertKeywordsYes.ts (9 errors) ====
+==== tests/cases/compiler/convertKeywordsYes.ts (10 errors) ====
     // reserved ES5 future in strict mode
     
     var constructor = 0;
@@ -185,6 +186,8 @@ tests/cases/compiler/convertKeywordsYes.ts(303,11): error TS1213: Identifier exp
     
     class bigClass {
         public "constructor" = 0;
+               ~~~~~~~~~~~~~
+!!! error TS18006: Classes may not have a field named 'constructor'.
         public any = 0;
         public boolean = 0;
         public implements = 0;
