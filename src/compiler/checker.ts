@@ -230,10 +230,10 @@ namespace ts {
             },
             isContextSensitive,
             getFullyQualifiedName,
-            getResolvedSignature: (node, candidatesOutArray, agumentCount) =>
-                getResolvedSignatureWorker(node, candidatesOutArray, agumentCount, CheckMode.Normal),
-            getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, agumentCount) =>
-                getResolvedSignatureWorker(node, candidatesOutArray, agumentCount, CheckMode.IsForSignatureHelp),
+            getResolvedSignature: (node, candidatesOutArray, argumentCount) =>
+                getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.Normal),
+            getResolvedSignatureForSignatureHelp: (node, candidatesOutArray, argumentCount) =>
+                getResolvedSignatureWorker(node, candidatesOutArray, argumentCount, CheckMode.IsForSignatureHelp),
             getExpandedParameters,
             hasEffectiveRestParameter,
             getConstantValue: nodeIn => {
@@ -3184,7 +3184,7 @@ namespace ts {
                 let containers = getContainersOfSymbol(symbol, enclosingDeclaration);
                 // If we're trying to reference some object literal in, eg `var a = { x: 1 }`, the symbol for the literal, `__object`, is distinct
                 // from the symbol of the declaration it is being assigned to. Since we can use the declaration to refer to the literal, however,
-                // we'd like to make that connection here - potentially causing us to paint the declararation's visibiility, and therefore the literal.
+                // we'd like to make that connection here - potentially causing us to paint the declaration's visibility, and therefore the literal.
                 const firstDecl: Node = first(symbol.declarations);
                 if (!length(containers) && meaning & SymbolFlags.Value && firstDecl && isObjectLiteralExpression(firstDecl)) {
                     if (firstDecl.parent && isVariableDeclaration(firstDecl.parent) && firstDecl === firstDecl.parent.initializer) {
@@ -7733,10 +7733,10 @@ namespace ts {
                 }
             }
             // If the target is a union type or if we are intersecting with types belonging to one of the
-            // disjoint domans, we may end up producing a constraint that hasn't been examined before.
+            // disjoint domains, we may end up producing a constraint that hasn't been examined before.
             if (constraints && (targetIsUnion || hasDisjointDomainType)) {
                 if (hasDisjointDomainType) {
-                    // We add any types belong to one of the disjoint domans because they might cause the final
+                    // We add any types belong to one of the disjoint domains because they might cause the final
                     // intersection operation to reduce the union constraints.
                     for (const t of type.types) {
                         if (t.flags & TypeFlags.DisjointDomains) {
@@ -7786,7 +7786,7 @@ namespace ts {
                     }
                     if (constraintDepth >= 50) {
                         // We have reached 50 recursive invocations of getImmediateBaseConstraint and there is a
-                        // very high likelyhood we're dealing with an infinite generic type that perpetually generates
+                        // very high likelihood we're dealing with an infinite generic type that perpetually generates
                         // new type identities as we descend into it. We stop the recursion here and mark this type
                         // and the outer types as having circular constraints.
                         error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
@@ -21032,7 +21032,7 @@ namespace ts {
                 // of the argument is a tuple type, spread the tuple elements into the argument list. We can
                 // call checkExpressionCached because spread expressions never have a contextual type.
                 const spreadArgument = <SpreadElement>args[length - 1];
-                const type = checkExpressionCached(spreadArgument.expression);
+                const type = flowLoopCount ? checkExpression(spreadArgument.expression) : checkExpressionCached(spreadArgument.expression);
                 if (isTupleType(type)) {
                     const typeArguments = (<TypeReference>type).typeArguments || emptyArray;
                     const restIndex = type.target.hasRestElement ? typeArguments.length - 1 : -1;
