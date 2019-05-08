@@ -5,6 +5,7 @@
 ////}
 
 verify.codeFix({
+    index: 3,
     description: "Add async modifier to containing function",
     newFileContent:
 `const f: () => Promise<number | string> = async () => {
