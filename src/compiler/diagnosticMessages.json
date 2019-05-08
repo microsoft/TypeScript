@@ -4974,7 +4974,6 @@
         "category": "Message",
         "code": 95079
     },
-
     "Add 'const' to unresolved variable": {
         "category": "Message",
         "code": 95080
@@ -4982,8 +4981,8 @@
     "Add 'const' to all unresolved variables": {
         "category": "Message",
         "code": 95081
-
-    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
+    },
+    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer.": {
         "category": "Error",
         "code": 18004
     },
