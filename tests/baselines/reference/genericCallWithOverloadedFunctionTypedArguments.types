@@ -74,8 +74,8 @@ module GenericParameter {
 >x : number
 
     var r7 = foo5(a); // any => string (+1 overload)
->r7 : { (x: {}): string; (x: number): {}; }
->foo5(a) : { (x: {}): string; (x: number): {}; }
+>r7 : { (x: unknown): string; (x: number): unknown; }
+>foo5(a) : { (x: unknown): string; (x: number): unknown; }
 >foo5 : <T>(cb: { (x: T): string; (x: number): T; }) => { (x: T): string; (x: number): T; }
 >a : { <T>(x: T): string; <T>(x: number): T; }
 
@@ -99,16 +99,16 @@ module GenericParameter {
 >x : any
 
     var r9 = foo6(<T>(x: T) => ''); // any => string (+1 overload)
->r9 : { (x: {}): string; (x: {}, y?: {}): string; }
->foo6(<T>(x: T) => '') : { (x: {}): string; (x: {}, y?: {}): string; }
+>r9 : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo6(<T>(x: T) => '') : { (x: unknown): string; (x: unknown, y?: unknown): string; }
 >foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
 ><T>(x: T) => '' : <T>(x: T) => string
 >x : T
 >'' : ""
 
     var r11 = foo6(<T>(x: T, y?: T) => ''); // any => string (+1 overload)
->r11 : { (x: {}): string; (x: {}, y?: {}): string; }
->foo6(<T>(x: T, y?: T) => '') : { (x: {}): string; (x: {}, y?: {}): string; }
+>r11 : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo6(<T>(x: T, y?: T) => '') : { (x: unknown): string; (x: unknown, y?: unknown): string; }
 >foo6 : <T>(cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
 ><T>(x: T, y?: T) => '' : <T>(x: T, y?: T) => string
 >x : T
@@ -137,8 +137,8 @@ module GenericParameter {
 >x : any
 
     var r13 = foo7(1, <T>(x: T) => ''); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
->r13 : { (x: {}): string; (x: {}, y?: {}): string; }
->foo7(1, <T>(x: T) => '') : { (x: {}): string; (x: {}, y?: {}): string; }
+>r13 : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo7(1, <T>(x: T) => '') : { (x: unknown): string; (x: unknown, y?: unknown): string; }
 >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
 >1 : 1
 ><T>(x: T) => '' : <T>(x: T) => string
@@ -151,8 +151,8 @@ module GenericParameter {
 >x : number
 
     var r14 = foo7(1, a); // any => string (+1 overload) [inferences are made for T, but lambda not contextually typed]
->r14 : { (x: {}): string; (x: {}, y?: {}): string; }
->foo7(1, a) : { (x: {}): string; (x: {}, y?: {}): string; }
+>r14 : { (x: unknown): string; (x: unknown, y?: unknown): string; }
+>foo7(1, a) : { (x: unknown): string; (x: unknown, y?: unknown): string; }
 >foo7 : <T>(x: T, cb: { (x: T): string; (x: T, y?: T): string; }) => { (x: T): string; (x: T, y?: T): string; }
 >1 : 1
 >a : { <T>(x: T): string; <T>(x: number): T; }

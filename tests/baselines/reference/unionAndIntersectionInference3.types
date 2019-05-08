@@ -1,0 +1,19 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts ===
+// Repro from #30720
+
+type Maybe<T> = T | undefined;
+>Maybe : Maybe<T>
+
+declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];
+>concatMaybe : <T>(...args: (T | Maybe<T>[] | undefined)[]) => T[]
+>args : (T | Maybe<T>[] | undefined)[]
+
+concatMaybe([1, 2, 3], 4);
+>concatMaybe([1, 2, 3], 4) : number[]
+>concatMaybe : <T>(...args: (T | Maybe<T>[] | undefined)[]) => T[]
+>[1, 2, 3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
+

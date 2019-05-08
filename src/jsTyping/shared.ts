@@ -4,7 +4,6 @@ namespace ts.server {
     export const ActionSet: ActionSet = "action::set";
     export const ActionInvalidate: ActionInvalidate = "action::invalidate";
     export const ActionPackageInstalled: ActionPackageInstalled = "action::packageInstalled";
-    export const ActionValueInspected: ActionValueInspected = "action::valueInspected";
     export const EventTypesRegistry: EventTypesRegistry = "event::typesRegistry";
     export const EventBeginInstallTypes: EventBeginInstallTypes = "event::beginInstallTypes";
     export const EventEndInstallTypes: EventEndInstallTypes = "event::endInstallTypes";
@@ -21,6 +20,11 @@ namespace ts.server {
          * typingsInstaller will run the command with `${npmLocation} install ...`.
          */
         export const NpmLocation = "--npmLocation";
+        /**
+         * Flag indicating that the typings installer should try to validate the default npm location.
+         * If the default npm is not found when this flag is enabled, fallback to `npm install`
+         */
+        export const ValidateDefaultNpmLocation = "--validateDefaultNpmLocation";
     }
 
     export function hasArgument(argumentName: string) {

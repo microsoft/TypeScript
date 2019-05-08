@@ -232,7 +232,6 @@ namespace ts.server {
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
         private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
-        private inspectValuePromise: { resolve(value: ValueInfo): void } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -242,6 +241,7 @@ namespace ts.server {
             readonly typingSafeListLocation: string,
             readonly typesMapLocation: string,
             private readonly npmLocation: string | undefined,
+            private readonly validateDefaultNpmLocation: boolean,
             private event: Event) {
         }
 
@@ -269,12 +269,6 @@ namespace ts.server {
             });
         }
 
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
-            this.send<InspectValueRequest>({ kind: "inspectValue", options });
-            Debug.assert(this.inspectValuePromise === undefined);
-            return new Promise<ValueInfo>(resolve => { this.inspectValuePromise = { resolve }; });
-        }
-
         attach(projectService: ProjectService) {
             this.projectService = projectService;
             if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -296,6 +290,9 @@ namespace ts.server {
             }
             if (this.npmLocation) {
                 args.push(Arguments.NpmLocation, this.npmLocation);
+            }
+            if (this.validateDefaultNpmLocation) {
+                args.push(Arguments.ValidateDefaultNpmLocation);
             }
 
             const execArgv: string[] = [];
@@ -359,7 +356,7 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | InspectValueResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
@@ -384,10 +381,6 @@ namespace ts.server {
                     this.event(response, "setTypings");
                     break;
                 }
-                case ActionValueInspected:
-                    this.inspectValuePromise!.resolve(response.result);
-                    this.inspectValuePromise = undefined;
-                    break;
                 case EventInitializationFailed: {
                         const body: protocol.TypesInstallerInitializationFailedEventBody = {
                             message: response.message
@@ -497,7 +490,7 @@ namespace ts.server {
 
             const typingsInstaller = disableAutomaticTypingAcquisition
                 ? undefined
-                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, event);
+                : new NodeTypingsInstaller(telemetryEnabled, logger, host, getGlobalTypingsCacheLocation(), typingSafeListLocation, typesMapLocation, npmLocation, validateDefaultNpmLocation, event);
 
             super({
                 host,
@@ -705,6 +698,7 @@ namespace ts.server {
         // stat due to inconsistencies of fs.watch
         // and efficiency of stat on modern filesystems
         function startWatchTimer() {
+            // tslint:disable-next-line:ban
             setInterval(() => {
                 let count = 0;
                 let nextToCheck = nextFileToCheck;
@@ -932,6 +926,7 @@ namespace ts.server {
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
     const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
+    const validateDefaultNpmLocation = hasArgument(Arguments.ValidateDefaultNpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {
         const arg = findArgument(argName);
@@ -967,4 +962,12 @@ namespace ts.server {
     (process as any).noAsar = true;
     // Start listening
     ioSession.listen();
+
+    if (Debug.isDebugging) {
+        Debug.enableDebugInfo();
+    }
+
+    if (ts.sys.tryEnableSourceMapsForHost && /^development$/i.test(ts.sys.getEnvironmentVariable("NODE_ENV"))) {
+        ts.sys.tryEnableSourceMapsForHost();
+    }
 }

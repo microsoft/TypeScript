@@ -44,3 +44,76 @@ function foo3(y = { x: <typeof z>a }, z = 1) {
 >1 : 1
     
 }
+
+// error - used before declaration
+function foo4(y = {z}, z = 1) {
+>foo4 : (y?: { z: number; }, z?: number) => void
+>y : { z: number; }
+>{z} : { z: number; }
+>z : number
+>z : number
+>1 : 1
+}
+
+// error - used before declaration, IIFEs are inlined
+function foo5(y = (() => z)(), z = 1) {
+>foo5 : (y?: number, z?: number) => void
+>y : number
+>(() => z)() : number
+>(() => z) : () => number
+>() => z : () => number
+>z : number
+>z : number
+>1 : 1
+}
+
+// ok - IIFE inside another function
+function foo6(y = () => (() => z)(), z = 1) {
+>foo6 : (y?: () => number, z?: number) => void
+>y : () => number
+>() => (() => z)() : () => number
+>(() => z)() : number
+>(() => z) : () => number
+>() => z : () => number
+>z : number
+>z : number
+>1 : 1
+}
+
+// ok - used inside immediately invoked generator function
+function foo7(y = (function*() {yield z})(), z = 1) {
+>foo7 : (y?: IterableIterator<number>, z?: number) => void
+>y : IterableIterator<number>
+>(function*() {yield z})() : IterableIterator<number>
+>(function*() {yield z}) : () => IterableIterator<number>
+>function*() {yield z} : () => IterableIterator<number>
+>yield z : any
+>z : number
+>z : number
+>1 : 1
+}
+
+// ok - used inside immediately invoked async function
+function foo8(y = (async () => z)(), z = 1) {
+>foo8 : (y?: Promise<number>, z?: number) => void
+>y : Promise<number>
+>(async () => z)() : Promise<number>
+>(async () => z) : () => Promise<number>
+>async () => z : () => Promise<number>
+>z : number
+>z : number
+>1 : 1
+}
+
+// error - used as computed name of method
+function foo9(y = {[z]() { return z; }}, z = 1) {
+>foo9 : (y?: { [x: number]: () => number; }, z?: number) => void
+>y : { [x: number]: () => number; }
+>{[z]() { return z; }} : { [x: number]: () => number; }
+>[z] : () => number
+>z : number
+>z : number
+>z : number
+>1 : 1
+}
+

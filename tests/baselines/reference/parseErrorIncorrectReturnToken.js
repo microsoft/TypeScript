@@ -17,9 +17,7 @@ let o = {
 string; // should be => not :
 // doesn't work in non-type contexts, where the return type is optional
 var f = function (n) { return function (string) { return n.toString(); }; };
-var o = {
-    m: function (n) { }
-};
+var o = {};
 string;
 {
     return n.toString();

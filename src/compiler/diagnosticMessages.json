@@ -139,7 +139,7 @@
         "category": "Error",
         "code": 1045
     },
-    "A 'declare' modifier is required for a top level declaration in a .d.ts file.": {
+    "Top-level declarations in .d.ts files must start with either a 'declare' or 'export' modifier.": {
         "category": "Error",
         "code": 1046
     },
@@ -659,10 +659,6 @@
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
-        "category": "Error",
-        "code": 1209
-    },
     "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1210
@@ -695,7 +691,7 @@
         "category": "Error",
         "code": 1218
     },
-    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option to remove this warning.": {
+    "Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.": {
         "category": "Error",
         "code": 1219
     },
@@ -850,6 +846,14 @@
     "A required element cannot follow an optional element.": {
         "category": "Error",
         "code": 1257
+    },
+    "Definite assignment assertions can only be used along with a type annotation.": {
+        "category": "Error",
+        "code": 1258
+    },
+    "Module '{0}' can only be default-imported using the '{1}' flag": {
+        "category": "Error",
+        "code": 1259
     },
     "'with' statements are not allowed in an async function block.": {
         "category": "Error",
@@ -1022,6 +1026,18 @@
     "A bigint literal must be an integer.": {
         "category": "Error",
         "code": 1353
+    },
+    "'readonly' type modifier is only permitted on array and tuple literal types.": {
+        "category": "Error",
+        "code": 1354
+    },
+    "A 'const' assertions can only be applied to references to enum members, or string, number, boolean, array, or object literals.": {
+        "category": "Error",
+        "code": 1355
+    },
+    "Did you mean to mark this function as 'async'?": {
+        "category": "Error",
+        "code": 1356
     },
 
     "Duplicate identifier '{0}'.": {
@@ -1400,7 +1416,7 @@
         "category": "Error",
         "code": 2393
     },
-    "Overload signature is not compatible with function implementation.": {
+    "This overload signature is not compatible with its implementation signature.": {
         "category": "Error",
         "code": 2394
     },
@@ -2092,15 +2108,15 @@
         "category": "Error",
         "code": 2577
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
         "category": "Error",
         "code": 2580
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
         "category": "Error",
         "code": 2581
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
         "category": "Error",
         "code": 2582
     },
@@ -2127,6 +2143,30 @@
     "Cannot assign to '{0}' because it is a constant.": {
         "category": "Error",
         "code": 2588
+    },
+    "Type instantiation is excessively deep and possibly infinite.": {
+        "category": "Error",
+        "code": 2589
+    },
+    "Expression produces a union type that is too complex to represent.": {
+        "category": "Error",
+        "code": 2590
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2591
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2592
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha` and then add `jest` or `mocha` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2593
+    },
+    "This module is declared with using 'export =', and can only be used with a default import when using the '{0}' flag.": {
+        "category": "Error",
+        "code": 2594
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2433,7 +2473,7 @@
         "category": "Error",
         "code": 2717
     },
-    "Duplicate declaration '{0}'.": {
+    "Duplicate property '{0}'.": {
         "category": "Error",
         "code": 2718
     },
@@ -2493,6 +2533,10 @@
         "category": "Error",
         "code": 2732
     },
+    "Property '{0}' was also declared here.": {
+        "category": "Error",
+        "code": 2733
+    },
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
         "code": 2734
@@ -2548,6 +2592,34 @@
     "'{0}' components don't accept text as child elements. Text in JSX has the type 'string', but the expected type of '{1}' is '{2}'.": {
         "category": "Error",
         "code": 2747
+    },
+    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 2748
+    },
+    "'{0}' refers to a value, but is being used as a type here.": {
+        "category": "Error",
+        "code": 2749
+    },
+    "The implementation signature is declared here.": {
+        "category": "Error",
+        "code": 2750
+    },
+    "Circularity originates in type at this location.": {
+        "category": "Error",
+        "code": 2751
+    },
+    "The first export default is here.": {
+        "category": "Error",
+        "code": 2752
+    },
+    "Another export default is here.": {
+        "category": "Error",
+        "code": 2753
+    },
+    "'super' may not use type arguments.": {
+        "category": "Error",
+        "code": 2754
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2883,6 +2955,14 @@
         "category": "Error",
         "code": 4102
     },
+    "Type parameter '{0}' of exported mapped object type is using private name '{1}'.": {
+        "category": "Error",
+        "code": 4103
+    },
+    "The type '{0}' is 'readonly' and cannot be assigned to the mutable type '{1}'.": {
+        "category": "Error",
+        "code": 4104
+    },
 
     "The current host does not support the '{0}' option.": {
         "category": "Error",
@@ -3016,6 +3096,14 @@
         "category": "Error",
         "code": 5073
     },
+    "Option '--incremental' can only be specified using tsconfig, emitting to single file or when option `--tsBuildInfoFile` is specified.": {
+        "category": "Error",
+        "code": 5074
+    },
+    "'{0}' is assignable to the constraint of type '{1}', but '{1}' could be instantiated with a different subtype of constraint '{2}'.": {
+        "category": "Error",
+        "code": 5075
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3077,7 +3165,7 @@
         "category": "Message",
         "code": 6014
     },
-    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'.": {
+    "Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'.": {
         "category": "Message",
         "code": 6015
     },
@@ -3888,7 +3976,6 @@
         "category": "Message",
         "code": 6353
     },
-
     "Project '{0}' is up to date with .d.ts files from its dependencies": {
         "category": "Message",
         "code": 6354
@@ -3956,6 +4043,50 @@
     "Options '{0}' and '{1}' cannot be combined.": {
         "category": "Error",
         "code": 6370
+    },
+    "Updating unchanged output timestamps of project '{0}'...": {
+        "category": "Message",
+        "code": 6371
+    },
+    "Project '{0}' is out of date because output of its dependency '{1}' has changed": {
+        "category": "Message",
+        "code": 6372
+    },
+    "Updating output of project '{0}'...": {
+        "category": "Message",
+        "code": 6373
+    },
+    "A non-dry build would update timestamps for output of project '{0}'": {
+        "category": "Message",
+        "code": 6374
+    },
+    "A non-dry build would update output of project '{0}'": {
+        "category": "Message",
+        "code": 6375
+    },
+    "Cannot update output of project '{0}' because there was error reading file '{1}'": {
+        "category": "Message",
+        "code": 6376
+    },
+    "Cannot write file '{0}' because it will overwrite '.tsbuildinfo' file generated by referenced project '{1}'": {
+        "category": "Error",
+        "code": 6377
+    },
+    "Enable incremental compilation": {
+        "category": "Message",
+        "code": 6378
+    },
+    "Composite projects may not disable incremental compilation.": {
+        "category": "Error",
+        "code": 6379
+    },
+    "Specify file to store incremental compilation information": {
+        "category": "Message",
+        "code": 6380
+    },
+    "Project '{0}' is out of date because output for it was generated with version '{1}' that differs with current version '{2}'": {
+        "category": "Message",
+        "code": 6381
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -4105,7 +4236,7 @@
         "category": "Error",
         "code": 7040
     },
-    "The containing arrow function captures the global value of 'this' which implicitly has type 'any'.": {
+    "The containing arrow function captures the global value of 'this'.": {
         "category": "Error",
         "code": 7041
     },
@@ -4149,7 +4280,10 @@
         "category": "Error",
         "code": 7051
     },
-
+    "Element implicitly has an 'any' type because type '{0}' has no index signature. Did you mean to call '{1}' ?": {
+        "category": "Error",
+        "code": 7052
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4796,14 +4930,6 @@
         "category": "Message",
         "code": 95066
     },
-    "Generate types for '{0}'": {
-        "category": "Message",
-        "code": 95067
-    },
-    "Generate types for all packages without types": {
-        "category": "Message",
-        "code": 95068
-    },
     "Add 'unknown' conversion for non-overlapping types": {
         "category": "Message",
         "code": 95069
@@ -4828,12 +4954,45 @@
         "category": "Message",
         "code": 95074
     },
-    "Add 'const' to unresolved variable": {
+    "Convert parameters to destructured object": {
         "category": "Message",
         "code": 95075
     },
-    "Add 'const' to all unresolved variables": {
+    "Allow accessing UMD globals from modules.": {
         "category": "Message",
         "code": 95076
+    },
+    "Extract type": {
+        "category": "Message",
+        "code": 95077
+    },
+    "Extract to type alias": {
+        "category": "Message",
+        "code": 95078
+    },
+    "Extract to typedef": {
+        "category": "Message",
+        "code": 95079
+    },
+
+    "Add 'const' to unresolved variable": {
+        "category": "Message",
+        "code": 95080
+    },
+    "Add 'const' to all unresolved variables": {
+        "category": "Message",
+        "code": 95081
+
+    "No value exists in scope for the shorthand property '{0}'. Either declare one or provide an initializer." :{
+        "category": "Error",
+        "code": 18004
+    },
+    "Quoted constructors have previously been interpreted as methods, which is incorrect. In TypeScript 3.6, they will be correctly parsed as constructors. In the meantime, consider using 'constructor()' to write a constructor, or '[\"constructor\"]()' to write a method.": {
+        "category": "Error",
+        "code": 18005
+    },
+    "Classes may not have a field named 'constructor'.": {
+        "category": "Error",
+        "code": 18006
     }
 }

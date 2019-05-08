@@ -1,6 +1,8 @@
 Exit Code: 1
 Standard output:
-node_modules/@types/passport-facebook/index.d.ts(50,31): error TS2689: Cannot extend an interface 'passport.Strategy'. Did you mean 'implements'?
+src/controllers/user.ts(95,5): error TS2345: Argument of type '{ email: any; password: any; }' is not assignable to parameter of type 'Partial<Document>'.
+  Object literal may only specify known properties, and 'email' does not exist in type 'Partial<Document>'.
+src/controllers/user.ts(105,16): error TS7006: Parameter 'err' implicitly has an 'any' type.
 
 
 

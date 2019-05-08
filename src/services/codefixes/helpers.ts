@@ -156,7 +156,7 @@ namespace ts.codefix {
             isIdentifier(arg) ? arg.text :
                 isPropertyAccessExpression(arg) ? arg.name.text : undefined);
         const contextualType = checker.getContextualType(call);
-        const returnType = inJs ? undefined : contextualType && checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker) || createKeywordTypeNode(SyntaxKind.AnyKeyword);
+        const returnType = (inJs || !contextualType) ? undefined : checker.typeToTypeNode(contextualType, contextNode, /*flags*/ undefined, tracker);
         return createMethod(
             /*decorators*/ undefined,
             /*modifiers*/ makeStatic ? [createToken(SyntaxKind.StaticKeyword)] : undefined,
@@ -264,6 +264,7 @@ namespace ts.codefix {
                 createNew(
                     createIdentifier("Error"),
                     /*typeArguments*/ undefined,
+                    // TODO Handle auto quote preference.
                     [createLiteral("Method not implemented.", /*isSingleQuote*/ preferences.quotePreference === "single")]))],
             /*multiline*/ true);
     }

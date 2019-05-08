@@ -1,0 +1,21 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/unionAndIntersectionInference3.ts ===
+// Repro from #30720
+
+type Maybe<T> = T | undefined;
+>Maybe : Symbol(Maybe, Decl(unionAndIntersectionInference3.ts, 0, 0))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 2, 11))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 2, 11))
+
+declare function concatMaybe<T>(...args: (Maybe<T> | Maybe<T>[])[]): T[];
+>concatMaybe : Symbol(concatMaybe, Decl(unionAndIntersectionInference3.ts, 2, 30))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 3, 29))
+>args : Symbol(args, Decl(unionAndIntersectionInference3.ts, 3, 32))
+>Maybe : Symbol(Maybe, Decl(unionAndIntersectionInference3.ts, 0, 0))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 3, 29))
+>Maybe : Symbol(Maybe, Decl(unionAndIntersectionInference3.ts, 0, 0))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 3, 29))
+>T : Symbol(T, Decl(unionAndIntersectionInference3.ts, 3, 29))
+
+concatMaybe([1, 2, 3], 4);
+>concatMaybe : Symbol(concatMaybe, Decl(unionAndIntersectionInference3.ts, 2, 30))
+

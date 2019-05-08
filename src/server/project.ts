@@ -221,7 +221,7 @@ namespace ts.server {
 
         /*@internal*/
         constructor(
-            readonly projectName: string,
+            /*@internal*/ readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: DocumentRegistry,
@@ -276,10 +276,6 @@ namespace ts.server {
         }
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
             return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
-        }
-        /* @internal */
-        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
-            return this.typingsCache.inspectValue(options);
         }
 
         private get typingsCache(): TypingsCache {
@@ -428,7 +424,7 @@ namespace ts.server {
                 directory,
                 cb,
                 flags,
-                WatchType.FailedLookupLocation,
+                WatchType.FailedLookupLocations,
                 this
             );
         }
@@ -958,6 +954,9 @@ namespace ts.server {
             );
             const elapsed = timestamp() - start;
             this.writeLog(`Finishing updateGraphWorker: Project: ${this.getProjectName()} Version: ${this.getProjectVersion()} structureChanged: ${hasNewProgram} Elapsed: ${elapsed}ms`);
+            if (this.program !== oldProgram) {
+                this.print();
+            }
             return hasNewProgram;
         }
 
@@ -989,7 +988,7 @@ namespace ts.server {
                     }
                 },
                 PollingInterval.Medium,
-                WatchType.MissingFilePath,
+                WatchType.MissingFile,
                 this
             );
             return fileWatcher;
@@ -1431,7 +1430,6 @@ namespace ts.server {
             }
             this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
-            this.projectService.sendSurveyReady(this);
             return result;
         }
 
@@ -1611,7 +1609,8 @@ namespace ts.server {
             compilerOptions: CompilerOptions,
             lastFileExceededProgramSize: string | undefined,
             public compileOnSaveEnabled: boolean,
-            projectFilePath?: string) {
+            projectFilePath?: string,
+            pluginConfigOverrides?: Map<any>) {
             super(externalProjectName,
                 ProjectKind.External,
                 projectService,
@@ -1622,12 +1621,12 @@ namespace ts.server {
                 compileOnSaveEnabled,
                 projectService.host,
                 getDirectoryPath(projectFilePath || normalizeSlashes(externalProjectName)));
+            this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }
 
         updateGraph() {
             const result = super.updateGraph();
             this.projectService.sendProjectTelemetry(this);
-            this.projectService.sendSurveyReady(this);
             return result;
         }
 

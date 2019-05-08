@@ -37,6 +37,8 @@ namespace ts {
                 parsesCorrectly("callSignatureInRecordType", "{{(): number}}");
                 parsesCorrectly("methodInRecordType", "{{foo(): number}}");
                 parsesCorrectly("unionType", "{(number|string)}");
+                parsesCorrectly("unionTypeWithLeadingOperator", "{( | number | string )}");
+                parsesCorrectly("unionTypeWithOneElementAndLeadingOperator", "{( | number )}");
                 parsesCorrectly("topLevelNoParenUnionType", "{number|string}");
                 parsesCorrectly("functionType1", "{function()}");
                 parsesCorrectly("functionType2", "{function(string, boolean)}");

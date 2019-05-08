@@ -77,16 +77,16 @@ var values2 = Object.values({ a: true, b: 2 });     // (number|boolean)[]
 >2 : 2
 
 var entries3 = Object.entries({});                  // [string, {}][]
->entries3 : [string, {}][]
->Object.entries({}) : [string, {}][]
+>entries3 : [string, unknown][]
+>Object.entries({}) : [string, unknown][]
 >Object.entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >Object : ObjectConstructor
 >entries : { <T>(o: { [s: string]: T; } | ArrayLike<T>): [string, T][]; (o: {}): [string, any][]; }
 >{} : {}
 
 var values3 = Object.values({});                    // {}[]
->values3 : {}[]
->Object.values({}) : {}[]
+>values3 : unknown[]
+>Object.values({}) : unknown[]
 >Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 >Object : ObjectConstructor
 >values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }

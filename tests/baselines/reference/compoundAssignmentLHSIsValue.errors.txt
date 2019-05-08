@@ -6,7 +6,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(16,9): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(21,5): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(22,5): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(25,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(25,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(26,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(30,1): error TS2539: Cannot assign to 'M' because it is not a variable.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(31,1): error TS2539: Cannot assign to 'M' because it is not a variable.
@@ -45,7 +45,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(88,11): error TS1005: ';' expected.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(91,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(92,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
-tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(95,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(95,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(96,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(97,2): error TS2539: Cannot assign to 'M' because it is not a variable.
 tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsValue.ts(98,2): error TS2539: Cannot assign to 'M' because it is not a variable.
@@ -119,7 +119,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     
     this *= value;
     ~~~~
-!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     this += value;
     ~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
@@ -267,7 +267,7 @@ tests/cases/conformance/expressions/assignmentOperator/compoundAssignmentLHSIsVa
     // parentheses, the containted expression is value
     (this) *= value;
     ~~~~~~
-!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     (this) += value;
     ~~~~~~
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.

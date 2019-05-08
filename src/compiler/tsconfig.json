@@ -30,6 +30,8 @@
         "transformers/destructuring.ts",
         "transformers/ts.ts",
         "transformers/es2017.ts",
+        "transformers/es2018.ts",
+        "transformers/es2019.ts",
         "transformers/esnext.ts",
         "transformers/jsx.ts",
         "transformers/es2016.ts",
@@ -51,6 +53,5 @@
         "moduleSpecifiers.ts",
         "watch.ts",
         "tsbuild.ts",
-        "inspectValue.ts",
     ]
 }

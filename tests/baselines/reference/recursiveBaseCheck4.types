@@ -5,8 +5,8 @@ class M<T> extends M<string> { }
 
 (new M).blah;
 >(new M).blah : any
->(new M) : M<{}>
->new M : M<{}>
+>(new M) : M<unknown>
+>new M : M<unknown>
 >M : typeof M
 >blah : any
 

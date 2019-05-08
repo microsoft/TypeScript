@@ -202,7 +202,7 @@ namespace ts.projectSystem {
 
                 const host = createServerHost([file1, config1]);
                 const projectService = createProjectService(host, { useSingleInferredProject: true }, { syntaxOnly: true });
-                projectService.applyChangesInOpenFiles([{ fileName: file1.path, content: file1.content }], [], []);
+                projectService.applyChangesInOpenFiles(singleIterator({ fileName: file1.path, content: file1.content }));
 
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
                 const proj = projectService.inferredProjects[0];
@@ -390,7 +390,6 @@ namespace ts.projectSystem {
             const typingsInstaller: server.ITypingsInstaller = {
                 isKnownTypesPackageName: returnFalse,
                 installPackage: notImplemented,
-                inspectValue: notImplemented,
                 enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
                     assert.isUndefined(request);
                     request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray, cachePath));
@@ -588,11 +587,11 @@ namespace ts.projectSystem {
 
             const host = createServerHost([]);
             const projectService = createProjectService(host);
-            projectService.applyChangesInOpenFiles([tsFile], [], []);
+            projectService.applyChangesInOpenFiles(singleIterator(tsFile));
             const projs = projectService.synchronizeProjectList([]);
             projectService.findProject(projs[0].info!.projectName)!.getLanguageService().getNavigationBarItems(tsFile.fileName);
             projectService.synchronizeProjectList([projs[0].info!]);
-            projectService.applyChangesInOpenFiles([jsFile], [], []);
+            projectService.applyChangesInOpenFiles(singleIterator(jsFile));
         });
 
         it("config file is deleted", () => {
@@ -696,11 +695,12 @@ namespace ts.projectSystem {
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
 
             // Open HTML file
-            projectService.applyChangesInOpenFiles(
-                /*openFiles*/[{ fileName: file2.path, hasMixedContent: true, scriptKind: ScriptKind.JS, content: `var hello = "hello";` }],
-                /*changedFiles*/ undefined,
-                /*closedFiles*/ undefined);
-
+            projectService.applyChangesInOpenFiles(singleIterator({
+                fileName: file2.path,
+                hasMixedContent: true,
+                scriptKind: ScriptKind.JS,
+                content: `var hello = "hello";`
+            }));
             // Now HTML file is included in the project
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             checkProjectActualFiles(configuredProjectAt(projectService, 0), [file1.path, file2.path, config.path]);
@@ -708,7 +708,8 @@ namespace ts.projectSystem {
             // Check identifiers defined in HTML content are available in .ts file
             const project = configuredProjectAt(projectService, 0);
             let completions = project.getLanguageService().getCompletionsAtPosition(file1.path, 1, emptyOptions);
-            assert(completions && completions.entries[0].name === "hello", `expected entry hello to be in completion list`);
+            assert(completions && completions.entries[1].name === "hello", `expected entry hello to be in completion list`);
+            assert(completions && completions.entries[0].name === "globalThis", `first entry should be globalThis (not strictly relevant for this test).`);
 
             // Close HTML file
             projectService.applyChangesInOpenFiles(
@@ -852,7 +853,7 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { inferredProjects: 1 });
             projectService.applyChangesInOpenFiles(
                 /*openFiles*/ undefined,
-                /*changedFiles*/[{ fileName: file1.path, changes: [{ span: createTextSpan(0, file1.path.length), newText: "let y = 1" }] }],
+                /*changedFiles*/singleIterator({ fileName: file1.path, changes: singleIterator({ span: createTextSpan(0, file1.path.length), newText: "let y = 1" }) }),
                 /*closedFiles*/ undefined);
 
             checkNumberOfProjects(projectService, { inferredProjects: 1 });

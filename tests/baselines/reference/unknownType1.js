@@ -121,12 +121,12 @@ function f23<T extends unknown>(x: T) {
     let y: object = x;  // Error
 }
 
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 
 function f24(x: { [x: string]: unknown }) {
     x = {};
     x = { a: 5 };
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
     x = 123;  // Error
 }
 
@@ -201,8 +201,10 @@ var __rest = (this && this.__rest) || function (s, e) {
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
         t[p] = s[p];
     if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) if (e.indexOf(p[i]) < 0)
-            t[p[i]] = s[p[i]];
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
     return t;
 };
 // Only equality operators are allowed with unknown
@@ -262,11 +264,11 @@ function f22(x) {
 function f23(x) {
     var y = x; // Error
 }
-// Anything but primitive assignable to { [x: string]: unknown }
+// Anything fresh but primitive assignable to { [x: string]: unknown }
 function f24(x) {
     x = {};
     x = { a: 5 };
-    x = [1, 2, 3];
+    x = [1, 2, 3]; // Error
     x = 123; // Error
 }
 // Locals of type unknown always considered initialized

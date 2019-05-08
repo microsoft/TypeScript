@@ -139,7 +139,7 @@ namespace ts.projectSystem {
                 assert.isTrue(false, `should not find file '${imported.path}'`);
             }
             catch (e) {
-                assert.isTrue(e.message.indexOf(`Could not find file: '${imported.path}'.`) === 0);
+                assert.isTrue(e.message.indexOf(`Could not find sourceFile: '${imported.path}' in ["${root.path}"].`) === 0, `Actual: ${e.message}`);
             }
             const f2Lookups = getLocationsForModuleLookup("f2");
             callsTrackingHost.verifyCalledOnEachEntryNTimes(CalledMapsWithSingleArg.fileExists, f2Lookups, 1);

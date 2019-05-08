@@ -16,18 +16,20 @@ namespace ts {
         public pos: number;
         public end: number;
         public flags: NodeFlags;
+        public modifierFlagsCache: ModifierFlags;
+        public transformFlags: TransformFlags;
         public parent: Node;
         public symbol!: Symbol; // Actually optional, but it was too annoying to access `node.symbol!` everywhere since in many cases we know it must be defined
         public jsDoc?: JSDoc[];
         public original?: Node;
-        public transformFlags: TransformFlags;
         private _children: Node[] | undefined;
 
         constructor(kind: SyntaxKind, pos: number, end: number) {
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
-            this.transformFlags = undefined!; // TODO: GH#18217
+            this.modifierFlagsCache = ModifierFlags.None;
+            this.transformFlags = TransformFlags.None;
             this.parent = undefined!;
             this.kind = kind;
         }
@@ -200,16 +202,19 @@ namespace ts {
         public pos: number;
         public end: number;
         public flags: NodeFlags;
+        public modifierFlagsCache: ModifierFlags;
+        public transformFlags: TransformFlags;
         public parent: Node;
         public symbol!: Symbol;
         public jsDocComments?: JSDoc[];
-        public transformFlags!: TransformFlags;
 
         constructor(pos: number, end: number) {
             // Set properties in same order as NodeObject
             this.pos = pos;
             this.end = end;
             this.flags = NodeFlags.None;
+            this.modifierFlagsCache = ModifierFlags.None;
+            this.transformFlags = TransformFlags.None;
             this.parent = undefined!;
         }
 
@@ -1153,7 +1158,7 @@ namespace ts {
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
             if (!sourceFile) {
-                throw new Error("Could not find file: '" + fileName + "'.");
+                throw new Error(`Could not find sourceFile: '${fileName}' in ${program && JSON.stringify(program.getSourceFiles().map(f => f.fileName))}.`);
             }
             return sourceFile;
         }
@@ -1793,7 +1798,7 @@ namespace ts {
             const span = createTextSpanFromBounds(start, end);
             const formatContext = formatting.getFormatContext(formatOptions);
 
-            return flatMap(deduplicate(errorCodes, equateValues, compareValues), errorCode => {
+            return flatMap(deduplicate<number>(errorCodes, equateValues, compareValues), errorCode => {
                 cancellationToken.throwIfCancellationRequested();
                 return codefix.getFixes({ errorCode, sourceFile, span, program, host, cancellationToken, formatContext, preferences });
             });
@@ -1828,30 +1833,15 @@ namespace ts {
         function applyCodeActionCommand(fileName: Path, action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
         function applyCodeActionCommand(fileName: Path | CodeActionCommand | CodeActionCommand[], actionOrFormatSettingsOrUndefined?: CodeActionCommand | CodeActionCommand[] | FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]> {
             const action = typeof fileName === "string" ? actionOrFormatSettingsOrUndefined as CodeActionCommand | CodeActionCommand[] : fileName as CodeActionCommand[];
-            const formatSettings = typeof fileName !== "string" ? actionOrFormatSettingsOrUndefined as FormatCodeSettings : undefined;
-            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(a, formatSettings))) : applySingleCodeActionCommand(action, formatSettings);
+            return isArray(action) ? Promise.all(action.map(a => applySingleCodeActionCommand(a))) : applySingleCodeActionCommand(action);
         }
 
-        function applySingleCodeActionCommand(action: CodeActionCommand, formatSettings: FormatCodeSettings | undefined): Promise<ApplyCodeActionCommandResult> {
+        function applySingleCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult> {
             const getPath = (path: string): Path => toPath(path, currentDirectory, getCanonicalFileName);
-            switch (action.type) {
-                case "install package":
-                    return host.installPackage
-                        ? host.installPackage({ fileName: getPath(action.file), packageName: action.packageName })
-                        : Promise.reject("Host does not implement `installPackage`");
-                case "generate types": {
-                    const { fileToGenerateTypesFor, outputFileName } = action;
-                    if (!host.inspectValue) return Promise.reject("Host does not implement `installPackage`");
-                    const valueInfoPromise = host.inspectValue({ fileNameToRequire: fileToGenerateTypesFor });
-                    return valueInfoPromise.then(valueInfo => {
-                        const fullOut = getPath(outputFileName);
-                        host.writeFile!(fullOut, valueInfoToDeclarationFileText(valueInfo, formatSettings || testFormatSettings)); // TODO: GH#18217
-                        return { successMessage: `Wrote types to '${fullOut}'` };
-                    });
-                }
-                default:
-                    return Debug.assertNever(action);
-            }
+            Debug.assertEqual(action.type, "install package");
+            return host.installPackage
+                ? host.installPackage({ fileName: getPath(action.file), packageName: action.packageName })
+                : Promise.reject("Host does not implement `installPackage`");
         }
 
         function getDocCommentTemplateAtPosition(fileName: string, position: number): TextInsertion | undefined {
