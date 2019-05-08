@@ -3124,15 +3124,16 @@ namespace ts {
         }
 
         function parseUnionOrIntersectionType(kind: SyntaxKind.UnionType | SyntaxKind.IntersectionType, parseConstituentType: () => TypeNode, operator: SyntaxKind.BarToken | SyntaxKind.AmpersandToken): TypeNode {
-            parseOptional(operator);
+            const start = scanner.getStartPos();
+            const hasLeadingOperator = parseOptional(operator);
             let type = parseConstituentType();
-            if (token() === operator) {
+            if (token() === operator || hasLeadingOperator) {
                 const types = [type];
                 while (parseOptional(operator)) {
                     types.push(parseConstituentType());
                 }
-                const node = <UnionOrIntersectionTypeNode>createNode(kind, type.pos);
-                node.types = createNodeArray(types, type.pos);
+                const node = <UnionOrIntersectionTypeNode>createNode(kind, start);
+                node.types = createNodeArray(types, start);
                 type = finishNode(node);
             }
             return type;
