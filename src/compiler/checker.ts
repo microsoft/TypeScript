@@ -14898,11 +14898,8 @@ namespace ts {
 
         function createReverseMappedType(source: Type, target: MappedType, constraint: IndexType) {
             // We consider a source type reverse mappable if it has a string index signature or if
-            // it has one or more properties and all properties have inferable types.
-            const properties = getPropertiesOfType(source);
-            const isReverseMappable = getIndexInfoOfType(source, IndexKind.String) ||
-                properties.length !== 0 && every(properties, prop => isPartiallyInferableType(getTypeOfSymbol(prop)));
-            if (!isReverseMappable) {
+            // it has one or more properties and is of a partially inferable type.
+            if (!(getIndexInfoOfType(source, IndexKind.String) || getPropertiesOfType(source).length !== 0 && isPartiallyInferableType(source))) {
                 return undefined;
             }
             // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
@@ -15287,7 +15284,11 @@ namespace ts {
                         const inferredType = inferTypeForHomomorphicMappedType(source, target, <IndexType>constraintType);
                         if (inferredType) {
                             const savePriority = priority;
-                            priority |= InferencePriority.HomomorphicMappedType;
+                            // We assign a lower priority to inferences made from types containing non-inferrable
+                            // types because we may only have a partial result (i.e. we may have failed to make
+                            // reverse inferences for some properties).
+                            priority |= getObjectFlags(source) & ObjectFlags.NonInferrableType ?
+                                InferencePriority.PartialHomomorphicMappedType : InferencePriority.HomomorphicMappedType;
                             inferFromTypes(inferredType, inference.typeParameter);
                             priority = savePriority;
                         }
