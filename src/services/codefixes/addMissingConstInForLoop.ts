@@ -1,7 +1,10 @@
 /* @internal */
 namespace ts.codefix {
     const fixId = "addMissingConstInForLoop";
-    const errorCodes = [Diagnostics.Cannot_find_name_0.code];
+    const errorCodes = [
+        Diagnostics.Cannot_find_name_0.code, 
+        Diagnostics.No_value_exists_in_scope_for_the_shorthand_property_0_Either_declare_one_or_provide_an_initializer.code
+    ];
 
     registerCodeFix({
         errorCodes,
