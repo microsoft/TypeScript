@@ -239,7 +239,7 @@ namespace ts {
                     }
 
                     // When the deleted entry was the last one, we need to
-                    // adust the lastEntry reference.
+                    // adjust the lastEntry reference.
                     if (this.lastEntry === entry) {
                         this.lastEntry = previousEntry;
                     }
@@ -1255,7 +1255,7 @@ namespace ts {
     }
 
     /**
-     * Returns the only element of an array if it contains only one element; otheriwse, returns the
+     * Returns the only element of an array if it contains only one element; otherwise, returns the
      * array.
      */
     export function singleOrMany<T>(array: T[]): T | T[];
@@ -1400,8 +1400,8 @@ namespace ts {
     /** Shims `Array.from`. */
     export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
     export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
-    export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
-        const result: any[] = [];
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map?: (t: T) => U): (T | U)[] {
+        const result: (T | U)[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(map ? map(value) : value);
         }

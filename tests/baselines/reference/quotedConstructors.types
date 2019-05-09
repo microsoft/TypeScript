@@ -1,0 +1,37 @@
+=== tests/cases/conformance/classes/constructorDeclarations/quotedConstructors.ts ===
+class C {
+>C : C
+
+    "constructor"() {} // Error in 3.5
+>"constructor" : () => void
+}
+
+class D {
+>D : D
+
+    'constructor'() {} // Error in 3.5
+>'constructor' : () => void
+}
+
+class E {
+>E : E
+
+    ['constructor']() {}
+>['constructor'] : () => void
+>'constructor' : "constructor"
+}
+
+new class {
+>new class {    "constructor"() {} // Error in 3.5} : (Anonymous class)
+>class {    "constructor"() {} // Error in 3.5} : typeof (Anonymous class)
+
+    "constructor"() {} // Error in 3.5
+>"constructor" : () => void
+
+};
+
+var o = { "constructor"() {} };
+>o : { "constructor"(): void; }
+>{ "constructor"() {} } : { "constructor"(): void; }
+>"constructor" : () => void
+

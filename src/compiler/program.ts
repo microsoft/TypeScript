@@ -1453,9 +1453,8 @@ namespace ts {
                 notImplementedResolver,
                 getEmitHost(writeFileCallback),
                 /*targetSourceFile*/ undefined,
+                /*transformers*/ noTransformers,
                 /*emitOnlyDtsFiles*/ false,
-                /*transformers*/ undefined,
-                /*declaraitonTransformers*/ undefined,
                 /*onlyBuildInfo*/ true
             );
 
@@ -1574,14 +1573,12 @@ namespace ts {
 
             performance.mark("beforeEmit");
 
-            const transformers = emitOnlyDtsFiles ? [] : getTransformers(options, customTransformers);
             const emitResult = emitFiles(
                 emitResolver,
                 getEmitHost(writeFileCallback),
                 sourceFile,
+                getTransformers(options, customTransformers, emitOnlyDtsFiles),
                 emitOnlyDtsFiles,
-                transformers,
-                customTransformers && customTransformers.afterDeclarations
             );
 
             performance.mark("afterEmit");
@@ -2688,6 +2685,7 @@ namespace ts {
                     return undefined;
                 }
                 sourceFile = Debug.assertDefined(commandLine.options.configFile);
+                Debug.assert(!sourceFile.path || sourceFile.path === sourceFilePath);
                 addFileToFilesByName(sourceFile, sourceFilePath, /*redirectedPath*/ undefined);
             }
             else {
@@ -2699,11 +2697,12 @@ namespace ts {
                     projectReferenceRedirects.set(sourceFilePath, false);
                     return undefined;
                 }
-                sourceFile.path = sourceFilePath;
-                sourceFile.resolvedPath = sourceFilePath;
-                sourceFile.originalFileName = refPath;
                 commandLine = parseJsonSourceFileConfigFileContent(sourceFile, configParsingHost, basePath, /*existingOptions*/ undefined, refPath);
             }
+            sourceFile.path = sourceFilePath;
+            sourceFile.resolvedPath = sourceFilePath;
+            sourceFile.originalFileName = refPath;
+
             const resolvedRef: ResolvedProjectReference = { commandLine, sourceFile };
             projectReferenceRedirects.set(sourceFilePath, resolvedRef);
             if (commandLine.projectReferences) {
@@ -2768,10 +2767,8 @@ namespace ts {
             if (options.composite) {
                 const rootPaths = rootNames.map(toPath);
                 for (const file of files) {
-                    // Ignore declaration files
-                    if (file.isDeclarationFile) continue;
-                    // Ignore json file thats from project reference
-                    if (isJsonSourceFile(file) && getResolvedProjectReferenceToRedirect(file.fileName)) continue;
+                    // Ignore file that is not emitted
+                    if (!sourceFileMayBeEmitted(file, options, isSourceFileFromExternalLibrary, getResolvedProjectReferenceToRedirect)) continue;
                     if (rootPaths.indexOf(file.path) === -1) {
                         programDiagnostics.add(createCompilerDiagnostic(Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern, file.fileName));
                     }
