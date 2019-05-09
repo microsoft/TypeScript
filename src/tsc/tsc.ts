@@ -246,7 +246,7 @@ namespace ts {
             configFileParsingDiagnostics
         };
         const program = createProgram(programOptions);
-        const exitStatus = emitFilesAndReportErrors(
+        const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
             program,
             reportDiagnostic,
             s => sys.write(s + sys.newLine),

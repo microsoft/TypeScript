@@ -675,17 +675,44 @@ namespace ts {
         updateOutputFileStatmps(): void;
     }
 
-    interface BuildInvalidedProject extends InvalidatedProjectBase {
+    interface BuildInvalidedProject<T extends BuilderProgram = BuilderProgram> extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.Build;
-        build(cancellationToken?: CancellationToken): BuildResultFlags;
+        /*
+         * Emitting with this builder program without the api provided for this project
+         * can result in build system going into invalid state as files written reflect the state of the project
+         */
+        getBuilderProgram(): T | undefined;
+        getProgram(): Program | undefined;
+        getCompilerOptions(): CompilerOptions;
+        getSourceFile(fileName: string): SourceFile | undefined;
+        getSourceFiles(): ReadonlyArray<SourceFile>;
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
+        getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnosticsOfNextAffectedFile(cancellationToken?: CancellationToken, ignoreSourceFile?: (sourceFile: SourceFile) => boolean): AffectedFileResult<ReadonlyArray<Diagnostic>>;
+        /*
+         * Calling emit directly with targetSourceFile and emitOnlyDtsFiles set to true is not advised since
+         * emit in build system is responsible in updating status of the project
+         * If called with targetSourceFile and emitOnlyDtsFiles set to true, the emit just passes to underlying builder and
+         * wont reflect the status of file as being emitted in the builder
+         * (if that emit of that source file is required it would be emitted again when making sure invalidated project is completed)
+         * This emit is not considered actual emit (and hence uptodate status is not reflected if
+         */
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
+        // TODO(shkamat):: investigate later if we can emit even when there are declaration diagnostics
+        // emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
+        getCurrentDirectory(): string;
     }
 
-    interface UpdateBundleProject extends InvalidatedProjectBase {
+    interface UpdateBundleProject<T extends BuilderProgram = BuilderProgram> extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.UpdateBundle;
-        updateBundle(): BuildResultFlags | BuildInvalidedProject;
+        updateBundle(): BuildResultFlags | BuildInvalidedProject<T>;
     }
 
-    type InvalidatedProject = UpdateOutputFileStampsProject | BuildInvalidedProject | UpdateBundleProject;
+    type InvalidatedProject<T extends BuilderProgram = BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
 
     function createUpdateOutputFileStampsProject(state: SolutionBuilderState, project: ResolvedConfigFileName, projectPath: ResolvedConfigFilePath, config: ParsedCommandLine): UpdateOutputFileStampsProject {
         let updateOutputFileStampsPending = true;
@@ -706,42 +733,318 @@ namespace ts {
         };
     }
 
-    function createBuildInvalidedProject(
-        state: SolutionBuilderState,
+    function createBuildInvalidedProject<T extends BuilderProgram>(
+        state: SolutionBuilderState<T>,
         project: ResolvedConfigFileName,
         projectPath: ResolvedConfigFilePath,
         projectIndex: number,
         config: ParsedCommandLine,
         buildOrder: readonly ResolvedConfigFileName[]
-    ): BuildInvalidedProject {
-        let buildPending = true;
+    ): BuildInvalidedProject<T> {
+        enum Step {
+            CreateProgram,
+            SyntaxDiagnostics,
+            SemanticDiagnostics,
+            Emit,
+            QueueReferencingProjects,
+            Done
+        }
+
+        let step = Step.CreateProgram;
+        let program: T | undefined;
+        let buildResult: BuildResultFlags | undefined;
+
         return {
             kind: InvalidatedProjectKind.Build,
             project,
             projectPath,
-            build,
+            getBuilderProgram: () => withProgramOrUndefined(identity),
+            getProgram: () =>
+                withProgramOrUndefined(
+                    program => program.getProgramOrUndefined()
+                ),
+            getCompilerOptions: () => config.options,
+            getSourceFile: fileName =>
+                withProgramOrUndefined(
+                    program => program.getSourceFile(fileName)
+                ),
+            getSourceFiles: () =>
+                withProgramOrEmptyArray(
+                    program => program.getSourceFiles()
+                ),
+            getOptionsDiagnostics: cancellationToken =>
+                withProgramOrEmptyArray(
+                    program => program.getOptionsDiagnostics(cancellationToken)
+                ),
+            getGlobalDiagnostics: cancellationToken =>
+                withProgramOrEmptyArray(
+                    program => program.getGlobalDiagnostics(cancellationToken)
+                ),
+            getConfigFileParsingDiagnostics: () =>
+                withProgramOrEmptyArray(
+                    program => program.getConfigFileParsingDiagnostics()
+                ),
+            getSyntacticDiagnostics: (sourceFile, cancellationToken) =>
+                withProgramOrEmptyArray(
+                    program => program.getSyntacticDiagnostics(sourceFile, cancellationToken)
+                ),
+            getAllDependencies: sourceFile =>
+                withProgramOrEmptyArray(
+                    program => program.getAllDependencies(sourceFile)
+                ),
+            getSemanticDiagnostics: (sourceFile, cancellationToken) =>
+                withProgramOrEmptyArray(
+                    program => program.getSemanticDiagnostics(sourceFile, cancellationToken)
+                ),
+            getSemanticDiagnosticsOfNextAffectedFile: (cancellationToken, ignoreSourceFile) =>
+                withProgramOrUndefined(
+                    program =>
+                        ((program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile) &&
+                        (program as any as SemanticDiagnosticsBuilderProgram).getSemanticDiagnosticsOfNextAffectedFile(cancellationToken, ignoreSourceFile)
+                ),
+            emit: (targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers) => {
+                if (targetSourceFile || emitOnlyDtsFiles) {
+                    return withProgramOrUndefined(
+                        program => program.emit(targetSourceFile, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers)
+                    );
+                }
+                executeSteps(Step.SemanticDiagnostics, cancellationToken);
+                if (step !== Step.Emit) return undefined;
+                return emit(writeFile, cancellationToken, customTransformers);
+            },
+            getCurrentDirectory: () => state.currentDirectory,
             done: cancellationToken => {
-                if (buildPending) build(cancellationToken);
+                executeSteps(Step.Done, cancellationToken);
                 state.projectPendingBuild.delete(projectPath);
             }
         };
 
-        function build(cancellationToken?: CancellationToken) {
-            const buildResult = buildSingleProject(state, project, projectPath, config, cancellationToken);
-            queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, buildResult);
-            buildPending = false;
-            return buildResult;
+        function withProgramOrUndefined<U>(action: (program: T) => U | undefined): U | undefined {
+            executeSteps(Step.CreateProgram);
+            return program && action(program);
+        }
+
+        function withProgramOrEmptyArray<U>(action: (program: T) => ReadonlyArray<U>): ReadonlyArray<U> {
+            return withProgramOrUndefined(action) || emptyArray;
+        }
+
+        function createProgram() {
+            Debug.assert(program === undefined);
+
+            if (state.options.dry) {
+                reportStatus(state, Diagnostics.A_non_dry_build_would_build_project_0, project);
+                buildResult = BuildResultFlags.Success;
+                step = Step.QueueReferencingProjects;
+                return;
+            }
+
+            if (state.options.verbose) reportStatus(state, Diagnostics.Building_project_0, project);
+
+            if (config.fileNames.length === 0) {
+                reportAndStoreErrors(state, projectPath, config.errors);
+                // Nothing to build - must be a solution file, basically
+                buildResult = BuildResultFlags.None;
+                step = Step.QueueReferencingProjects;
+                return;
+            }
+
+            const { host, compilerHost } = state;
+            state.projectCompilerOptions = config.options;
+            // Update module resolution cache if needed
+            updateModuleResolutionCache(state, project, config);
+
+            // Create program
+            program = host.createProgram(
+                config.fileNames,
+                config.options,
+                compilerHost,
+                getOldProgram(state, projectPath, config),
+                config.errors,
+                config.projectReferences
+            );
+            step++;
+        }
+
+        function handleDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
+            if (diagnostics.length) {
+                buildResult = buildErrors(
+                    state,
+                    projectPath,
+                    program,
+                    diagnostics,
+                    errorFlags,
+                    errorType
+                );
+                step = Step.QueueReferencingProjects;
+            }
+            else {
+                step++;
+            }
+        }
+
+        function getSyntaxDiagnostics(cancellationToken?: CancellationToken) {
+            Debug.assertDefined(program);
+            handleDiagnostics(
+                [
+                    ...program!.getConfigFileParsingDiagnostics(),
+                    ...program!.getOptionsDiagnostics(cancellationToken),
+                    ...program!.getGlobalDiagnostics(cancellationToken),
+                    ...program!.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken)
+                ],
+                BuildResultFlags.SyntaxErrors,
+                "Syntactic"
+            );
+        }
+
+        function getSemanticDiagnostics(cancellationToken?: CancellationToken) {
+            handleDiagnostics(
+                Debug.assertDefined(program).getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken),
+                BuildResultFlags.TypeErrors,
+                "Semantic"
+            );
+        }
+
+        function emit(writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): EmitResult {
+            Debug.assertDefined(program);
+            Debug.assert(step === Step.Emit);
+            // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
+            program!.backupState();
+            let declDiagnostics: Diagnostic[] | undefined;
+            const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
+            const outputFiles: OutputFile[] = [];
+            const { emitResult } = emitFilesAndReportErrors(
+                program!,
+                reportDeclarationDiagnostics,
+                /*writeFileName*/ undefined,
+                /*reportSummary*/ undefined,
+                (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }),
+                cancellationToken,
+                /*emitOnlyDts*/ false,
+                customTransformers
+            );
+            // Don't emit .d.ts if there are decl file errors
+            if (declDiagnostics) {
+                program!.restoreState();
+                buildResult = buildErrors(
+                    state,
+                    projectPath,
+                    program,
+                    declDiagnostics,
+                    BuildResultFlags.DeclarationEmitErrors,
+                    "Declaration file"
+                );
+                step = Step.QueueReferencingProjects;
+                return {
+                    emitSkipped: true,
+                    diagnostics: emitResult.diagnostics
+                };
+            }
+
+            // Actual Emit
+            const { host, compilerHost, diagnostics, projectStatus } = state;
+            let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
+            let newestDeclarationFileContentChangedTime = minimumDate;
+            let anyDtsChanged = false;
+            const emitterDiagnostics = createDiagnosticCollection();
+            const emittedOutputs = createMap() as FileMap<string>;
+            outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
+                let priorChangeTime: Date | undefined;
+                if (!anyDtsChanged && isDeclarationFile(name)) {
+                    // Check for unchanged .d.ts files
+                    if (host.fileExists(name) && state.readFileWithCache(name) === text) {
+                        priorChangeTime = host.getModifiedTime(name);
+                    }
+                    else {
+                        resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
+                        anyDtsChanged = true;
+                    }
+                }
+
+                emittedOutputs.set(toPath(state, name), name);
+                writeFile(writeFileCallback ? { writeFile: writeFileCallback } : compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
+                if (priorChangeTime !== undefined) {
+                    newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
+                }
+            });
+
+            const emitDiagnostics = emitterDiagnostics.getDiagnostics();
+            if (emitDiagnostics.length) {
+                buildResult = buildErrors(
+                    state,
+                    projectPath,
+                    program,
+                    emitDiagnostics,
+                    BuildResultFlags.EmitErrors,
+                    "Emit"
+                );
+                step = Step.QueueReferencingProjects;
+                return emitResult;
+            }
+
+            if (state.writeFileName) {
+                emittedOutputs.forEach(name => listEmittedFile(state, config, name));
+                listFiles(program!, state.writeFileName);
+            }
+
+            // Update time stamps for rest of the outputs
+            newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(state, config, newestDeclarationFileContentChangedTime, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
+            diagnostics.delete(projectPath);
+            projectStatus.set(projectPath, {
+                type: UpToDateStatusType.UpToDate,
+                newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime,
+                oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(config, !host.useCaseSensitiveFileNames())
+            });
+            afterProgramCreate(state, projectPath, program!);
+            state.projectCompilerOptions = state.baseCompilerOptions;
+            step++;
+            buildResult = resultFlags;
+            return emitResult;
+        }
+
+        function executeSteps(till: Step, cancellationToken?: CancellationToken) {
+            while (step <= till && step < Step.Done) {
+                const currentStep = step;
+                switch (step) {
+                    case Step.CreateProgram:
+                        createProgram();
+                        break;
+
+                    case Step.SyntaxDiagnostics:
+                        getSyntaxDiagnostics(cancellationToken);
+                        break;
+
+                    case Step.SemanticDiagnostics:
+                        getSemanticDiagnostics(cancellationToken);
+                        break;
+
+                    case Step.Emit:
+                        emit(/*writeFileCallback*/ undefined, cancellationToken);
+                        break;
+
+                    case Step.QueueReferencingProjects:
+                        queueReferencingProjects(state, project, projectPath, projectIndex, config, buildOrder, Debug.assertDefined(buildResult));
+                        step++;
+                        break;
+
+                    // Should never be done
+                    case Step.Done:
+                    default:
+                        assertType<Step.Done>(step);
+
+                }
+                Debug.assert(step > currentStep);
+            }
         }
     }
 
-    function createUpdateBundleProject(
-        state: SolutionBuilderState,
+    function createUpdateBundleProject<T extends BuilderProgram>(
+        state: SolutionBuilderState<T>,
         project: ResolvedConfigFileName,
         projectPath: ResolvedConfigFilePath,
         projectIndex: number,
         config: ParsedCommandLine,
         buildOrder: readonly ResolvedConfigFileName[]
-    ): UpdateBundleProject {
+    ): UpdateBundleProject<T> {
         let updatePending = true;
         return {
             kind: InvalidatedProjectKind.UpdateBundle,
@@ -777,7 +1080,7 @@ namespace ts {
             !isIncrementalCompilation(config.options);
     }
 
-    function getNextInvalidatedProject(state: SolutionBuilderState, buildOrder: readonly ResolvedConfigFileName[]): InvalidatedProject | undefined {
+    function getNextInvalidatedProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, buildOrder: readonly ResolvedConfigFileName[]): InvalidatedProject<T> | undefined {
         if (!state.projectPendingBuild.size) return undefined;
 
         const { options, projectPendingBuild } = state;
@@ -923,153 +1226,6 @@ namespace ts {
         }
         moduleResolutionCache.directoryToModuleNameMap.setOwnOptions(config.options);
         moduleResolutionCache.moduleNameToDirectoryMap.setOwnOptions(config.options);
-    }
-
-    function buildSingleProject(
-        state: SolutionBuilderState,
-        proj: ResolvedConfigFileName,
-        resolvedPath: ResolvedConfigFilePath,
-        config: ParsedCommandLine,
-        cancellationToken: CancellationToken | undefined
-    ): BuildResultFlags {
-        if (state.options.dry) {
-            reportStatus(state, Diagnostics.A_non_dry_build_would_build_project_0, proj);
-            return BuildResultFlags.Success;
-        }
-
-        if (state.options.verbose) reportStatus(state, Diagnostics.Building_project_0, proj);
-
-        if (config.fileNames.length === 0) {
-            reportAndStoreErrors(state, resolvedPath, config.errors);
-            // Nothing to build - must be a solution file, basically
-            return BuildResultFlags.None;
-        }
-
-        const { host, projectStatus, diagnostics, compilerHost } = state;
-        state.projectCompilerOptions = config.options;
-        // Update module resolution cache if needed
-        updateModuleResolutionCache(state, proj, config);
-
-        // Create program
-        const program = host.createProgram(
-            config.fileNames,
-            config.options,
-            compilerHost,
-            getOldProgram(state, resolvedPath, config),
-            config.errors,
-            config.projectReferences
-        );
-
-        // Don't emit anything in the presence of syntactic errors or options diagnostics
-        const syntaxDiagnostics = [
-            ...program.getConfigFileParsingDiagnostics(),
-            ...program.getOptionsDiagnostics(cancellationToken),
-            ...program.getGlobalDiagnostics(cancellationToken),
-            ...program.getSyntacticDiagnostics(/*sourceFile*/ undefined, cancellationToken)];
-        if (syntaxDiagnostics.length) {
-            return buildErrors(
-                state,
-                resolvedPath,
-                program,
-                syntaxDiagnostics,
-                BuildResultFlags.SyntaxErrors,
-                "Syntactic"
-            );
-        }
-
-        // Same as above but now for semantic diagnostics
-        const semanticDiagnostics = program.getSemanticDiagnostics(/*sourceFile*/ undefined, cancellationToken);
-        if (semanticDiagnostics.length) {
-            return buildErrors(
-                state,
-                resolvedPath,
-                program,
-                semanticDiagnostics,
-                BuildResultFlags.TypeErrors,
-                "Semantic"
-            );
-        }
-
-        // Before emitting lets backup state, so we can revert it back if there are declaration errors to handle emit and declaration errors correctly
-        program.backupState();
-        let declDiagnostics: Diagnostic[] | undefined;
-        const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
-        const outputFiles: OutputFile[] = [];
-        emitFilesAndReportErrors(
-            program,
-            reportDeclarationDiagnostics,
-                /*writeFileName*/ undefined,
-                /*reportSummary*/ undefined,
-            (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }),
-            cancellationToken
-        );
-        // Don't emit .d.ts if there are decl file errors
-        if (declDiagnostics) {
-            program.restoreState();
-            return buildErrors(
-                state,
-                resolvedPath,
-                program,
-                declDiagnostics,
-                BuildResultFlags.DeclarationEmitErrors,
-                "Declaration file"
-            );
-        }
-
-        // Actual Emit
-        let resultFlags = BuildResultFlags.DeclarationOutputUnchanged;
-        let newestDeclarationFileContentChangedTime = minimumDate;
-        let anyDtsChanged = false;
-        const emitterDiagnostics = createDiagnosticCollection();
-        const emittedOutputs = createMap() as FileMap<string>;
-        outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
-            let priorChangeTime: Date | undefined;
-            if (!anyDtsChanged && isDeclarationFile(name)) {
-                // Check for unchanged .d.ts files
-                if (host.fileExists(name) && state.readFileWithCache(name) === text) {
-                    priorChangeTime = host.getModifiedTime(name);
-                }
-                else {
-                    resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
-                    anyDtsChanged = true;
-                }
-            }
-
-            emittedOutputs.set(toPath(state, name), name);
-            writeFile(compilerHost, emitterDiagnostics, name, text, writeByteOrderMark);
-            if (priorChangeTime !== undefined) {
-                newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
-            }
-        });
-
-        const emitDiagnostics = emitterDiagnostics.getDiagnostics();
-        if (emitDiagnostics.length) {
-            return buildErrors(
-                state,
-                resolvedPath,
-                program,
-                emitDiagnostics,
-                BuildResultFlags.EmitErrors,
-                "Emit"
-            );
-        }
-
-        if (state.writeFileName) {
-            emittedOutputs.forEach(name => listEmittedFile(state, config, name));
-            listFiles(program, state.writeFileName);
-        }
-
-        // Update time stamps for rest of the outputs
-        newestDeclarationFileContentChangedTime = updateOutputTimestampsWorker(state, config, newestDeclarationFileContentChangedTime, Diagnostics.Updating_unchanged_output_timestamps_of_project_0, emittedOutputs);
-        diagnostics.delete(resolvedPath);
-        projectStatus.set(resolvedPath, {
-            type: UpToDateStatusType.UpToDate,
-            newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime,
-            oldestOutputFileName: outputFiles.length ? outputFiles[0].name : getFirstProjectOutput(config, !host.useCaseSensitiveFileNames())
-        });
-        afterProgramCreate(state, resolvedPath, program);
-        state.projectCompilerOptions = state.baseCompilerOptions;
-        return resultFlags;
     }
 
     function updateBundle(

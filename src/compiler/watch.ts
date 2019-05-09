@@ -116,7 +116,7 @@ namespace ts {
         getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
-        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken): EmitResult;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
     }
 
     export function listFiles(program: ProgramToEmitFilesAndReportErrors, writeFileName: (s: string) => void) {
@@ -136,7 +136,9 @@ namespace ts {
         writeFileName?: (s: string) => void,
         reportSummary?: ReportEmitErrorSummary,
         writeFile?: WriteFileCallback,
-        cancellationToken?: CancellationToken
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
     ) {
         // First get and report any syntactic errors.
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
@@ -155,7 +157,8 @@ namespace ts {
         }
 
         // Emit and report any errors we ran into.
-        const { emittedFiles, emitSkipped, diagnostics: emitDiagnostics } = program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken);
+        const emitResult = program.emit(/*targetSourceFile*/ undefined, writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+        const { emittedFiles, diagnostics: emitDiagnostics } = emitResult;
         addRange(diagnostics, emitDiagnostics);
 
         sortAndDeduplicateDiagnostics(diagnostics).forEach(reportDiagnostic);
@@ -172,7 +175,34 @@ namespace ts {
             reportSummary(getErrorCountForSummary(diagnostics));
         }
 
-        if (emitSkipped && diagnostics.length > 0) {
+        return {
+            emitResult,
+            diagnostics,
+        };
+    }
+
+    export function emitFilesAndReportErrorsAndGetExitStatus(
+        program: ProgramToEmitFilesAndReportErrors,
+        reportDiagnostic: DiagnosticReporter,
+        writeFileName?: (s: string) => void,
+        reportSummary?: ReportEmitErrorSummary,
+        writeFile?: WriteFileCallback,
+        cancellationToken?: CancellationToken,
+        emitOnlyDtsFiles?: boolean,
+        customTransformers?: CustomTransformers
+    ) {
+        const { emitResult, diagnostics } = emitFilesAndReportErrors(
+            program,
+            reportDiagnostic,
+            writeFileName,
+            reportSummary,
+            writeFile,
+            cancellationToken,
+            emitOnlyDtsFiles,
+            customTransformers
+        );
+
+        if (emitResult.emitSkipped && diagnostics.length > 0) {
             // If the emitter didn't emit anything, then pass that value along.
             return ExitStatus.DiagnosticsPresent_OutputsSkipped;
         }
@@ -395,7 +425,7 @@ namespace ts {
         const system = input.system || sys;
         const host = input.host || (input.host = createIncrementalCompilerHost(input.options, system));
         const builderProgram = createIncrementalProgram(input);
-        const exitStatus = emitFilesAndReportErrors(
+        const exitStatus = emitFilesAndReportErrorsAndGetExitStatus(
             builderProgram,
             input.reportDiagnostic || createDiagnosticReporter(system),
             s => host.trace && host.trace(s),
