@@ -1417,8 +1417,8 @@ namespace ts.FindAllReferences.Core {
         const typeNode = findAncestor(refNode, a => !isQualifiedName(a.parent) && !isTypeNode(a.parent) && !isTypeElement(a.parent))!;
         const typeHavingNode = typeNode.parent;
         if (hasType(typeHavingNode) && typeHavingNode.type === typeNode && state.markSeenContainingTypeReference(typeHavingNode)) {
-            if (hasInitializer(typeHavingNode)) {
-                addIfImplementation(typeHavingNode.initializer!);
+            if (hasInitializer(typeHavingNode) && isExpression(typeHavingNode.initializer!)) {
+                addIfImplementation(typeHavingNode.initializer);
             }
             else if (isFunctionLike(typeHavingNode) && (typeHavingNode as FunctionLikeDeclaration).body) {
                 const body = (typeHavingNode as FunctionLikeDeclaration).body!;
