@@ -1883,7 +1883,9 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return option.type.keys().next().value;
+                    const iterResult = option.type.keys().next();
+                    if (!iterResult.done) return iterResult.value;
+                    return Debug.fail("Expected 'option.type' to have entries.");
             }
         }
 

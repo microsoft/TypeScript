@@ -24,7 +24,6 @@ namespace ts {
         " __sortedArrayBrand": any;
     }
 
-
     /** ES6 Map interface, only read methods included. */
     export interface ReadonlyMap<T> {
         get(key: string): T | undefined;
@@ -45,7 +44,7 @@ namespace ts {
 
     /** ES6 Iterator type. */
     export interface Iterator<T> {
-        next(): { value: T, done: false } | { value: never, done: true };
+        next(): { value: T, done: false } | { done: true };
     }
 
     /** Array that is only intended to be pushed to, never read. */
@@ -297,12 +296,13 @@ namespace ts {
             forEach(action: (value: T, key: string) => void): void {
                 const iterator = this.entries();
                 while (true) {
-                    const { value: entry, done } = iterator.next();
-                    if (done) {
+                    const iterResult = iterator.next();
+                    if (iterResult.done) {
                         break;
                     }
 
-                    action(entry[1], entry[0]);
+                    const [key, value] = iterResult.value;
+                    action(value, key);
                 }
             }
         };
@@ -346,11 +346,11 @@ namespace ts {
 
     export function firstDefinedIterator<T, U>(iter: Iterator<T>, callback: (element: T) => U | undefined): U | undefined {
         while (true) {
-            const { value, done } = iter.next();
-            if (done) {
+            const iterResult = iter.next();
+            if (iterResult.done) {
                 return undefined;
             }
-            const result = callback(value);
+            const result = callback(iterResult.value);
             if (result !== undefined) {
                 return result;
             }
@@ -1402,8 +1402,8 @@ namespace ts {
     export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
     export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
         const result: any[] = [];
-        for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
-            result.push(map ? map(value) : value);
+        for (let iterResult = iterator.next(); !iterResult.done; iterResult = iterator.next()) {
+            result.push(map ? map(iterResult.value) : iterResult.value);
         }
         return result;
     }
