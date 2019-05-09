@@ -9,7 +9,7 @@ interface SymbolConstructor {
 }
 
 interface IteratorYieldResult<TYield> {
-    done: false;
+    done?: false;
     value: TYield;
 }
 

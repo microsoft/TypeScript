@@ -53,9 +53,8 @@ declare namespace ts {
     interface Iterator<T> {
         next(): {
             value: T;
-            done: false;
+            done?: false;
         } | {
-            value: never;
             done: true;
         };
     }
