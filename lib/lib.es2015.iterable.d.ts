@@ -28,10 +28,16 @@ interface SymbolConstructor {
     readonly iterator: symbol;
 }
 
-interface IteratorResult<T> {
-    done: boolean;
-    value: T;
+interface IterableResultValue<T> {
+    done?: false
+    value: T
 }
+
+interface IterableResultDone {
+    done: true
+}
+
+type IteratorResult<T> = IterableResultValue<T> | IterableResultDone
 
 interface Iterator<T> {
     next(value?: any): IteratorResult<T>;
