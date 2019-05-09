@@ -11,13 +11,13 @@ function* a() {
 }
 
 function* b(): IterableIterator<number> {
->b : () => IterableIterator<number>
+>b : () => IterableIterator<number, number | void, unknown>
 
     yield;
->yield : any
+>yield : unknown
 
     yield 0;
->yield 0 : any
+>yield 0 : unknown
 >0 : 0
 }
 

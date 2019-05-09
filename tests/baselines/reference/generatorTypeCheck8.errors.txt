@@ -1,6 +1,6 @@
 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts(2,17): error TS2322: Type 'Generator<string, string | void, unknown>' is not assignable to type 'BadGenerator'.
   Types of property 'next' are incompatible.
-    Type '(value?: unknown) => IteratorResult<string, string | void>' is not assignable to type '(value?: any) => IteratorResult<number, number | void>'.
+    Type '(value?: unknown) => IteratorResult<string, string | void>' is not assignable to type '(value?: unknown) => IteratorResult<number, number | void>'.
       Type 'IteratorResult<string, string | void>' is not assignable to type 'IteratorResult<number, number | void>'.
         Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, number | void>'.
           Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.
@@ -13,7 +13,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts(2,17): error
                     ~~~~~~~~~~~~
 !!! error TS2322: Type 'Generator<string, string | void, unknown>' is not assignable to type 'BadGenerator'.
 !!! error TS2322:   Types of property 'next' are incompatible.
-!!! error TS2322:     Type '(value?: unknown) => IteratorResult<string, string | void>' is not assignable to type '(value?: any) => IteratorResult<number, number | void>'.
+!!! error TS2322:     Type '(value?: unknown) => IteratorResult<string, string | void>' is not assignable to type '(value?: unknown) => IteratorResult<number, number | void>'.
 !!! error TS2322:       Type 'IteratorResult<string, string | void>' is not assignable to type 'IteratorResult<number, number | void>'.
 !!! error TS2322:         Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorResult<number, number | void>'.
 !!! error TS2322:           Type 'IteratorYieldResult<string>' is not assignable to type 'IteratorYieldResult<number>'.

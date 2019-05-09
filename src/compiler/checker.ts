@@ -9267,11 +9267,11 @@ namespace ts {
         }
 
         function getGlobalAsyncIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIteratorType || (deferredGlobalAsyncIteratorType = getGlobalType("AsyncIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalAsyncIterableIteratorType || (deferredGlobalAsyncIterableIteratorType = getGlobalType("AsyncIterableIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalAsyncGeneratorType(reportErrors: boolean) {
@@ -9283,11 +9283,11 @@ namespace ts {
         }
 
         function getGlobalIteratorType(reportErrors: boolean) {
-            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIteratorType || (deferredGlobalIteratorType = getGlobalType("Iterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalIterableIteratorType(reportErrors: boolean) {
-            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as __String, /*arity*/ 1, reportErrors)) || emptyGenericType;
+            return deferredGlobalIterableIteratorType || (deferredGlobalIterableIteratorType = getGlobalType("IterableIterator" as __String, /*arity*/ 3, reportErrors)) || emptyGenericType;
         }
 
         function getGlobalGeneratorType(reportErrors: boolean) {
@@ -27093,22 +27093,31 @@ namespace ts {
             return arrayElementType;
         }
 
+        function getIterationTypeOfReference(typeKind: IterationTypeKind, type: Type, getTarget: (reportErrors?: boolean) => GenericType) {
+            const target = getTarget(/*reportErrors*/ false);
+            const index = getTypeArgumentIndexFromIterationTypeKind(typeKind);
+            if (index < length(target.typeParameters) && isReferenceToType(type, target)) {
+                return (<GenericType>type).typeArguments![index];
+            }
+            return undefined;
+        }
+
         /**
          * Gets the requested "iteration type" from an `Iterable`-like or `AsyncIterable`-like type.
          *
-         * We pick either `TYield`, `TReturn`, or `TNext` (as specified by `kind`) per the following rules:
-         *
-         * - If `allowSyncIterables` is `true` and `type` matches:
-         *   - `{[Symbol.iterator]():{next(value?: TNext)}`
-         *   - `{[Symbol.iterator]():{return(value?: TReturn)}`
-         *   - `{[Symbol.iterator]():{next(): {done: false, value: TYield}}`
-         *   - `{[Symbol.iterator]():{next(): {done: true, value: TReturn}}`
+         * We pick either `T`, `TReturn`, or `TNext` (as specified by `kind`) per the following rules:
          *
          * - If `allowAsyncIterables` is `true` and `type` matches:
          *   - `{[Symbol.asyncIterator](): {next(value?: TNext | PromiseLike<TNext>)}}`
          *   - `{[Symbol.asyncIterator](): {return(value?: TReturn | PromiseLike<TReturn>)}}`
-         *   - `{[Symbol.asyncIterator](): {next(): PromiseLike<{done: false, value: TYield}>}}`
+         *   - `{[Symbol.asyncIterator](): {next(): PromiseLike<{done: false, value: T}>}}`
          *   - `{[Symbol.asyncIterator](): {next(): PromiseLike<{done: true, value: TReturn}>}}`
+         *
+         * - If `allowSyncIterables` is `true` and `type` matches:
+         *   - `{[Symbol.iterator]():{next(value?: TNext)}`
+         *   - `{[Symbol.iterator]():{return(value?: TReturn)}`
+         *   - `{[Symbol.iterator]():{next(): {done: false, value: T}}`
+         *   - `{[Symbol.iterator]():{next(): {done: true, value: TReturn}}`
          *
          * At every level that involves analyzing return types of signatures, we union the return types of all the signatures.
          *
@@ -27118,7 +27127,7 @@ namespace ts {
          * is missing, and the previous step did not result in `any`, then we also give an error if the
          * caller requested it. Then the caller can decide what to do in the case where there is no iterated
          * type. This is different from returning `anyType`, because that would signify that we have matched the
-         * whole pattern and that the type we picked (`TYield`, `TReturn`, or `TNext`) is `any`.
+         * whole pattern and that the type we picked (`T`, `TReturn`, or `TNext`) is `any`.
          *
          * For a **for-of** statement, `yield*` (in a normal generator), spread, array
          * destructuring, or normal generator we will only ever look for a `[Symbol.iterator]()`
@@ -27147,18 +27156,15 @@ namespace ts {
                         return cachedType;
                     }
 
-                    // As an optimization, if the type is an instantiation of one of the global `AsyncIterable<T>`,
-                    // `AsyncIterableIterator<T>`, or `AsyncGenerator<TYield, TReturn, TNext>` types, then just grab its type argument.
-                    let typeArgument: Type | undefined;
-                    if (isReferenceToType(type, getGlobalAsyncGeneratorType(/*reportErrors*/ false))) {
-                        typeArgument = (<GenericType>type).typeArguments![getTypeArgumentIndexFromIterationTypeKind(kind)];
-                    }
-                    else if (kind === IterationTypeKind.Yield) {
-                        if (isReferenceToType(type, getGlobalAsyncIterableType(/*reportErrors*/ false)) ||
-                            isReferenceToType(type, getGlobalAsyncIterableIteratorType(/*reportErrors*/ false))) {
-                            typeArgument = (<GenericType>type).typeArguments![0];
-                        }
-                    }
+                    // As an optimization, if the type is an instantiation of one of the following global types, then
+                    // just grab its related type argument:
+                    // - `AsyncIterable<T>`
+                    // - `AsyncIterableIterator<T, TReturn, TNext>`
+                    // - `AsyncGenerator<T, TReturn, TNext>`
+                    const typeArgument =
+                        getIterationTypeOfReference(kind, type, getGlobalAsyncGeneratorType) ||
+                        getIterationTypeOfReference(kind, type, getGlobalAsyncIterableIteratorType) ||
+                        getIterationTypeOfReference(kind, type, getGlobalAsyncIterableType);
                     if (typeArgument) {
                         return setCachedIterationType(typeAsIterable, IterationTypesCacheKind.AsyncIterable, kind, typeArgument);
                     }
@@ -27171,18 +27177,15 @@ namespace ts {
                             : cachedType;
                     }
 
-                    // As an optimization, if the type is an instantiation of one of the global `Iterable<T>`,
-                    // `IterableIterator<T>`, or `Generator<TYield, TReturn, TNext>` types, then just grab its type argument.
-                    let typeArgument: Type | undefined;
-                    if (isReferenceToType(type, getGlobalGeneratorType(/*reportErrors*/ false))) {
-                        typeArgument = (<GenericType>type).typeArguments![getTypeArgumentIndexFromIterationTypeKind(kind)];
-                    }
-                    else if (kind === IterationTypeKind.Yield) {
-                        if (isReferenceToType(type, getGlobalIterableType(/*reportErrors*/ false)) ||
-                            isReferenceToType(type, getGlobalIterableIteratorType(/*reportErrors*/ false))) {
-                            typeArgument = (<GenericType>type).typeArguments![0];
-                        }
-                    }
+                    // As an optimization, if the type is an instantiation of one of the following global types,
+                    // then just grab its related type argument:
+                    // - `Iterable<T>`
+                    // - `IterableIterator<T, TReturn, TNext>`
+                    // - `Generator<T, TReturn, TNext>`
+                    const typeArgument =
+                        getIterationTypeOfReference(kind, type, getGlobalGeneratorType) ||
+                        getIterationTypeOfReference(kind, type, getGlobalIterableIteratorType) ||
+                        getIterationTypeOfReference(kind, type, getGlobalIterableType);
                     if (typeArgument) {
                         return allowAsyncIterables
                             ? setCachedIterationType(typeAsIterable, IterationTypesCacheKind.AsyncIterable, kind, getAwaitedType(typeArgument))
@@ -27257,8 +27260,8 @@ namespace ts {
         /**
          * Gets the iteration type of an `IteratorResult`-like type.
          *
-         * We pick either `TYield` or `TReturn` (as specified by `kind`) if `type` matches:
-         * - `{done: false, value: TYield}`
+         * We pick either `T` or `TReturn` (as specified by `kind`) if `type` matches:
+         * - `{done: false, value: T}`
          * - `{done: true, value: TReturn}`
          */
         function getIterationTypeOfIteratorResult(kind: IterationTypeKind.Yield | IterationTypeKind.Return, type: Type, errorNode: Node | undefined, isAsyncIterator: boolean) {
@@ -27269,7 +27272,7 @@ namespace ts {
                 return cachedType;
             }
 
-            // As an optimization, if the type is an instantiation of one of the global `IteratorYieldResult<TYield>`
+            // As an optimization, if the type is an instantiation of one of the global `IteratorYieldResult<T>`
             // or `IteratorReturnResult<TReturn>` types, then just grab its type argument.
             const getGeneratorResultType = kind === IterationTypeKind.Yield ? getGlobalIteratorYieldResultType : getGlobalIteratorReturnResultType;
             if (isReferenceToType(type, getGeneratorResultType(/*reportErrors*/ false))) {
@@ -27474,18 +27477,18 @@ namespace ts {
         /**
          * Gets the specified "iteration type" from an `Iterator`-like or `AsyncIterator`-like type.
          *
-         * We pick either pick either `TYield`, `TReturn`, or `TNext` (as specified by `kind`) per the following rules:
+         * We pick either pick either `T`, `TReturn`, or `TNext` (as specified by `kind`) per the following rules:
          *
          * - If `isAsyncIterator` is `false` and `type` matches:
          *   - `{next(value?: TNext)}`
          *   - `{return(value?: TReturn)}`
-         *   - `{next(): {done: false, value: TYield}}`
+         *   - `{next(): {done: false, value: T}}`
          *   - `{next(): {done: true, value: TReturn}}`
          *
          * - If `isAsyncIterator` is `true` and `type` matches:
          *   - `{next(value?: TNext | PromiseLike<TNext>)}`
          *   - `{return(value?: TReturn | PromiseLike<TReturn>)}`
-         *   - `{next(): PromiseLike<{done: false, value: TYield}>}`
+         *   - `{next(): PromiseLike<{done: false, value: T}>}`
          *   - `{next(): PromiseLike<{done: true, value: TReturn}>}`
          */
         function getIterationTypeOfIterator(kind: IterationTypeKind, type: Type, errorNode: Node | undefined, isAsyncIterator: boolean): Type | undefined {
@@ -27494,31 +27497,40 @@ namespace ts {
             }
 
             const typeAsIterator = <IterableOrIteratorType>type;
-            const cacheKind = isAsyncFunction ? IterationTypesCacheKind.AsyncIterator : IterationTypesCacheKind.Iterator;
+            const cacheKind = isAsyncIterator ? IterationTypesCacheKind.AsyncIterator : IterationTypesCacheKind.Iterator;
             let cacheType: Type | undefined;
             if (cacheType = getCachedIterationType(typeAsIterator, cacheKind, kind)) {
                 return cacheType;
             }
 
-            // As an optimization, if the type is an instantiation of the global `Iterator<T>` (for
-            // a non-async iterator) or the global `AsyncIterator<T>` (for an async-iterator) then
-            // just grab its type argument.
-            const getIteratorType = kind === IterationTypeKind.Yield ? (isAsyncIterator ? getGlobalAsyncIteratorType : getGlobalIteratorType) : undefined;
-            const getIterableIteratorType = kind === IterationTypeKind.Yield ? (isAsyncIterator ? getGlobalAsyncIterableIteratorType : getGlobalIterableIteratorType) : undefined;
-            const getGeneratorType = isAsyncIterator ? getGlobalAsyncGeneratorType : getGlobalGeneratorType;
-            if (getIteratorType && isReferenceToType(type, getIteratorType(/*reportErrors*/ false)) ||
-                getIterableIteratorType && isReferenceToType(type, getIterableIteratorType(/*reportErrors*/ false)) ||
-                isReferenceToType(type, getGeneratorType(/*reportErrors*/ false))) {
-                const typeArgument = (<GenericType>type).typeArguments![getTypeArgumentIndexFromIterationTypeKind(kind)];
-                return setCachedIterationType(typeAsIterator, cacheKind, kind, typeArgument);
-            }
-
+            // As an optimization, if the type is an instantiation of one of the following global types,
+            // then just grab its related type argument:
+            // - For a non-async iterator:
+            //     - `Iterator<T, TReturn, TNext>`
+            //     - `IterableIterator<T, TReturn, TNext>`
+            //     - `Generator<T, TReturn, TNext>`
+            // - For an async-iterator:
+            //     - `AsyncIterator<T, TReturn, TNext>`
+            //     - `AsyncIterableIterator<T, TReturn, TNext>`
+            //     - `AsyncGenerator<T, TReturn, TNext>`
             const iterationType =
-                kind === IterationTypeKind.Yield ? getYieldIterationTypeOfIterator(type, errorNode, isAsyncIterator) :
+                getIterationTypeOfReference(kind, type, isAsyncIterator ? getGlobalAsyncIteratorType : getGlobalIteratorType) ||
+                getIterationTypeOfReference(kind, type, isAsyncIterator ? getGlobalAsyncIterableIteratorType : getGlobalIterableIteratorType) ||
+                getIterationTypeOfReference(kind, type, isAsyncIterator ? getGlobalAsyncGeneratorType : getGlobalGeneratorType) ||
+                getIterationTypeOfIteratorWorker(kind, type, errorNode, isAsyncIterator);
+            return setCachedIterationType(typeAsIterator, cacheKind, kind, iterationType);
+        }
+
+        /**
+         * Gets the specified "iteration type" directly from an `Iterator`-like or `AsyncIterator`-like type
+         * without using the cache or using any optimizations.
+         *
+         * NOTE: You probably don't want to call this directly and should be calling `getIterationTypeOfIterator` instead.
+         */
+        function getIterationTypeOfIteratorWorker(kind: IterationTypeKind, type: Type, errorNode: Node | undefined, isAsyncIterator: boolean) {
+            return kind === IterationTypeKind.Yield ? getYieldIterationTypeOfIterator(type, errorNode, isAsyncIterator) :
                 kind === IterationTypeKind.Return ? getReturnIterationTypeOfIterator(type, errorNode, isAsyncIterator) :
                 getNextIterationTypeOfIterator(type, errorNode, isAsyncIterator);
-
-            return setCachedIterationType(typeAsIterator, cacheKind, kind, iterationType);
         }
 
         /**

@@ -8,13 +8,13 @@ class Baz { z: number }
 >z : number
 
 function* g(): IterableIterator<Foo> {
->g : () => IterableIterator<Foo>
+>g : () => IterableIterator<Foo, void | Foo, unknown>
 
     yield;
->yield : any
+>yield : unknown
 
     yield new Baz;
->yield new Baz : any
+>yield new Baz : unknown
 >new Baz : Baz
 >Baz : typeof Baz
 }

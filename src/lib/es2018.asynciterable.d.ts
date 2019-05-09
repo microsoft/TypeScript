@@ -9,16 +9,16 @@ interface SymbolConstructor {
     readonly asyncIterator: symbol;
 }
 
-interface AsyncIterator<T> {
-    next(value?: any): Promise<IteratorResult<T>>;
-    return?(value?: any): Promise<IteratorResult<T>>;
-    throw?(e?: any): Promise<IteratorResult<T>>;
+interface AsyncIterator<T, TReturn = T | void, TNext = unknown> {
+    next(value?: TNext): Promise<IteratorResult<T, TReturn>>;
+    return?(value?: TReturn): Promise<IteratorResult<T, TReturn>>;
+    throw?(e?: unknown): Promise<IteratorResult<T, TReturn>>;
 }
 
 interface AsyncIterable<T> {
     [Symbol.asyncIterator](): AsyncIterator<T>;
 }
 
-interface AsyncIterableIterator<T> extends AsyncIterator<T> {
-    [Symbol.asyncIterator](): AsyncIterableIterator<T>;
+interface AsyncIterableIterator<T, TReturn = T | void, TNext = unknown> extends AsyncIterator<T, TReturn, TNext> {
+    [Symbol.asyncIterator](): AsyncIterableIterator<T, TReturn, TNext>;
 }

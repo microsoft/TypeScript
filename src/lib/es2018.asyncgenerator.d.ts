@@ -1,10 +1,10 @@
 /// <reference lib="es2018.asynciterable" />
 
-interface AsyncGenerator<TYield = unknown, TReturn = void, TNext = unknown> {
-    next(value?: TNext): Promise<IteratorResult<TYield, TReturn>>;
-    return(value: TReturn): Promise<IteratorResult<TYield, TReturn>>;
-    throw(e: unknown): Promise<IteratorResult<TYield, TReturn>>;
-    [Symbol.asyncIterator](): AsyncGenerator<TYield, TReturn, TNext>;
+interface AsyncGenerator<T = unknown, TReturn = T | void, TNext = unknown> extends AsyncIterableIterator<T, TReturn, TNext> {
+    next(value?: TNext): Promise<IteratorResult<T, TReturn>>;
+    return(value: TReturn): Promise<IteratorResult<T, TReturn>>;
+    throw(e: unknown): Promise<IteratorResult<T, TReturn>>;
+    [Symbol.asyncIterator](): AsyncGenerator<T, TReturn, TNext>;
 }
 
 interface AsyncGeneratorFunction {

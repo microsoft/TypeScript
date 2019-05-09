@@ -1,23 +1,23 @@
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Generator<number, State, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
-  Type 'Generator<number, State, unknown>' is not assignable to type 'IterableIterator<State>'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(24,61): error TS2345: Argument of type '(state: State) => Generator<number, State, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void | State, unknown>'.
+  Type 'Generator<number, State, unknown>' is not assignable to type 'IterableIterator<State, void | State, unknown>'.
     Types of property 'next' are incompatible.
-      Type '(value?: unknown) => IteratorResult<number, State>' is not assignable to type '(value?: any) => IteratorResult<State, void | State>'.
+      Type '(value?: unknown) => IteratorResult<number, State>' is not assignable to type '(value?: unknown) => IteratorResult<State, void | State>'.
         Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, void | State>'.
           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, void | State>'.
             Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
               Type 'number' is not assignable to type 'State'.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(32,62): error TS2345: Argument of type '(state: State) => Generator<never, number, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
-  Type 'Generator<never, number, unknown>' is not assignable to type 'IterableIterator<State>'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(32,62): error TS2345: Argument of type '(state: State) => Generator<never, number, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void | State, unknown>'.
+  Type 'Generator<never, number, unknown>' is not assignable to type 'IterableIterator<State, void | State, unknown>'.
     Types of property 'next' are incompatible.
-      Type '(value?: unknown) => IteratorResult<never, number>' is not assignable to type '(value?: any) => IteratorResult<State, void | State>'.
+      Type '(value?: unknown) => IteratorResult<never, number>' is not assignable to type '(value?: unknown) => IteratorResult<State, void | State>'.
         Type 'IteratorResult<never, number>' is not assignable to type 'IteratorResult<State, void | State>'.
           Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void | State>'.
             Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void | State>'.
               Type 'number' is not assignable to type 'void | State'.
-tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): error TS2345: Argument of type '(state: State) => Generator<State, number, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
-  Type 'Generator<State, number, unknown>' is not assignable to type 'IterableIterator<State>'.
+tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): error TS2345: Argument of type '(state: State) => Generator<State, number, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void | State, unknown>'.
+  Type 'Generator<State, number, unknown>' is not assignable to type 'IterableIterator<State, void | State, unknown>'.
     Types of property 'next' are incompatible.
-      Type '(value?: unknown) => IteratorResult<State, number>' is not assignable to type '(value?: any) => IteratorResult<State, void | State>'.
+      Type '(value?: unknown) => IteratorResult<State, number>' is not assignable to type '(value?: unknown) => IteratorResult<State, void | State>'.
         Type 'IteratorResult<State, number>' is not assignable to type 'IteratorResult<State, void | State>'.
           Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void | State>'.
             Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void | State>'.
@@ -49,10 +49,10 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
     
     export const Nothing: Strategy<State> = strategy("Nothing", function* (state: State) {
                                                                 ~~~~~~~~
-!!! error TS2345: Argument of type '(state: State) => Generator<number, State, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
-!!! error TS2345:   Type 'Generator<number, State, unknown>' is not assignable to type 'IterableIterator<State>'.
+!!! error TS2345: Argument of type '(state: State) => Generator<number, State, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void | State, unknown>'.
+!!! error TS2345:   Type 'Generator<number, State, unknown>' is not assignable to type 'IterableIterator<State, void | State, unknown>'.
 !!! error TS2345:     Types of property 'next' are incompatible.
-!!! error TS2345:       Type '(value?: unknown) => IteratorResult<number, State>' is not assignable to type '(value?: any) => IteratorResult<State, void | State>'.
+!!! error TS2345:       Type '(value?: unknown) => IteratorResult<number, State>' is not assignable to type '(value?: unknown) => IteratorResult<State, void | State>'.
 !!! error TS2345:         Type 'IteratorResult<number, State>' is not assignable to type 'IteratorResult<State, void | State>'.
 !!! error TS2345:           Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorResult<State, void | State>'.
 !!! error TS2345:             Type 'IteratorYieldResult<number>' is not assignable to type 'IteratorYieldResult<State>'.
@@ -66,10 +66,10 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
     
     export const Nothing2: Strategy<State> = strategy("Nothing", function* (state: State) {
                                                                  ~~~~~~~~
-!!! error TS2345: Argument of type '(state: State) => Generator<never, number, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
-!!! error TS2345:   Type 'Generator<never, number, unknown>' is not assignable to type 'IterableIterator<State>'.
+!!! error TS2345: Argument of type '(state: State) => Generator<never, number, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void | State, unknown>'.
+!!! error TS2345:   Type 'Generator<never, number, unknown>' is not assignable to type 'IterableIterator<State, void | State, unknown>'.
 !!! error TS2345:     Types of property 'next' are incompatible.
-!!! error TS2345:       Type '(value?: unknown) => IteratorResult<never, number>' is not assignable to type '(value?: any) => IteratorResult<State, void | State>'.
+!!! error TS2345:       Type '(value?: unknown) => IteratorResult<never, number>' is not assignable to type '(value?: unknown) => IteratorResult<State, void | State>'.
 !!! error TS2345:         Type 'IteratorResult<never, number>' is not assignable to type 'IteratorResult<State, void | State>'.
 !!! error TS2345:           Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void | State>'.
 !!! error TS2345:             Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void | State>'.
@@ -79,10 +79,10 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck63.ts(36,62): err
     
     export const Nothing3: Strategy<State> = strategy("Nothing", function* (state: State) {
                                                                  ~~~~~~~~
-!!! error TS2345: Argument of type '(state: State) => Generator<State, number, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State>'.
-!!! error TS2345:   Type 'Generator<State, number, unknown>' is not assignable to type 'IterableIterator<State>'.
+!!! error TS2345: Argument of type '(state: State) => Generator<State, number, unknown>' is not assignable to parameter of type '(a: State) => IterableIterator<State, void | State, unknown>'.
+!!! error TS2345:   Type 'Generator<State, number, unknown>' is not assignable to type 'IterableIterator<State, void | State, unknown>'.
 !!! error TS2345:     Types of property 'next' are incompatible.
-!!! error TS2345:       Type '(value?: unknown) => IteratorResult<State, number>' is not assignable to type '(value?: any) => IteratorResult<State, void | State>'.
+!!! error TS2345:       Type '(value?: unknown) => IteratorResult<State, number>' is not assignable to type '(value?: unknown) => IteratorResult<State, void | State>'.
 !!! error TS2345:         Type 'IteratorResult<State, number>' is not assignable to type 'IteratorResult<State, void | State>'.
 !!! error TS2345:           Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorResult<State, void | State>'.
 !!! error TS2345:             Type 'IteratorReturnResult<number>' is not assignable to type 'IteratorReturnResult<void | State>'.

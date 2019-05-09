@@ -4,9 +4,9 @@ var v: string;
 
 for (v of [""].values()) { }
 >v : string
->[""].values() : IterableIterator<string>
->[""].values : () => IterableIterator<string>
+>[""].values() : IterableIterator<string, string | void, unknown>
+>[""].values : () => IterableIterator<string, string | void, unknown>
 >[""] : string[]
 >"" : ""
->values : () => IterableIterator<string>
+>values : () => IterableIterator<string, string | void, unknown>
 
