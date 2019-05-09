@@ -676,7 +676,7 @@ let x: string = 10;`);
                     }
 
                     function verifyScenario(
-                        edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder) => void,
+                        edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
                         expectedFilesAfterEdit: ReadonlyArray<string>
                     ) {
                         it("with tsc-watch", () => {
@@ -899,7 +899,7 @@ export function gfoo() {
                         }
 
                         function verifyScenario(
-                            edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder) => void,
+                            edit: (host: TsBuildWatchSystem, solutionBuilder: SolutionBuilder<EmitAndSemanticDiagnosticsBuilderProgram>) => void,
                             expectedEditErrors: ReadonlyArray<string>,
                             expectedProgramFiles: ReadonlyArray<string>,
                             expectedWatchedFiles: ReadonlyArray<string>,

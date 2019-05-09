@@ -350,7 +350,12 @@ namespace ts {
                 assert.equal(result, ExitStatus.InvalidProject_OutputsSkipped);
             });
 
-            it("building using buildNextProject", () => {
+            it("building using getNextInvalidatedProject", () => {
+                interface SolutionBuilderResult<T> {
+                    project: ResolvedConfigFileName;
+                    result: T;
+                }
+
                 const fs = projFs.shadow();
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, ["/src/tests"], {});
@@ -376,8 +381,9 @@ namespace ts {
                     presentOutputs: readonly string[],
                     absentOutputs: readonly string[]
                 ) {
-                    const result = builder.buildNextProject();
-                    assert.deepEqual(result, expected);
+                    const project = builder.getNextInvalidatedProject();
+                    const result = project && project.done();
+                    assert.deepEqual(project && { project: project.project, result }, expected);
                     verifyOutputsPresent(fs, presentOutputs);
                     verifyOutputsAbsent(fs, absentOutputs);
                 }

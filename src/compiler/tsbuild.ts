@@ -264,15 +264,10 @@ namespace ts {
     export interface SolutionBuilderWithWatchHost<T extends BuilderProgram> extends SolutionBuilderHostBase<T>, WatchHost {
     }
 
-    export interface SolutionBuilderResult<T> {
-        project: ResolvedConfigFileName;
-        result: T;
-    }
-
-    export interface SolutionBuilder {
+    export interface SolutionBuilder<T extends BuilderProgram> {
         build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
         clean(project?: string): ExitStatus;
-        buildNextProject(cancellationToken?: CancellationToken): SolutionBuilderResult<ExitStatus> | undefined;
+        getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
         // Currently used for testing but can be made public if needed:
         /*@internal*/ getBuildOrder(): ReadonlyArray<ResolvedConfigFileName>;
@@ -325,11 +320,11 @@ namespace ts {
         return result;
     }
 
-    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
+    export function createSolutionBuilder<T extends BuilderProgram>(host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T> {
         return createSolutionBuilderWorker(/*watch*/ false, host, rootNames, defaultOptions);
     }
 
-    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
+    export function createSolutionBuilderWithWatch<T extends BuilderProgram>(host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T> {
         return createSolutionBuilderWorker(/*watch*/ true, host, rootNames, defaultOptions);
     }
 
@@ -380,6 +375,7 @@ namespace ts {
         allProjectBuildPending: boolean;
         needsSummary: boolean;
         watchAllProjectsPending: boolean;
+        currentInvalidatedProject: InvalidatedProject<T> | undefined;
 
         // Watch state
         readonly watch: boolean;
@@ -452,6 +448,7 @@ namespace ts {
             allProjectBuildPending: true,
             needsSummary: true,
             watchAllProjectsPending: watch,
+            currentInvalidatedProject: undefined,
 
             // Watch state
             watch,
@@ -654,28 +651,31 @@ namespace ts {
         }
     }
 
-    const enum InvalidatedProjectKind {
+    export enum InvalidatedProjectKind {
         Build,
         UpdateBundle,
         UpdateOutputFileStamps
     }
 
-    interface InvalidatedProjectBase {
+    export interface InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind;
         readonly project: ResolvedConfigFileName;
-        readonly projectPath: ResolvedConfigFilePath;
+        /*@internal*/ readonly projectPath: ResolvedConfigFilePath;
+        /*@internal*/ readonly buildOrder: readonly ResolvedConfigFileName[];
         /**
          *  To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
          */
-        done(cancellationToken?: CancellationToken): void;
+        done(cancellationToken?: CancellationToken): ExitStatus;
+        getCompilerOptions(): CompilerOptions;
+        getCurrentDirectory(): string;
     }
 
-    interface UpdateOutputFileStampsProject extends InvalidatedProjectBase {
+    export interface UpdateOutputFileStampsProject extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.UpdateOutputFileStamps;
         updateOutputFileStatmps(): void;
     }
 
-    interface BuildInvalidedProject<T extends BuilderProgram = BuilderProgram> extends InvalidatedProjectBase {
+    export interface BuildInvalidedProject<T extends BuilderProgram> extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.Build;
         /*
          * Emitting with this builder program without the api provided for this project
@@ -683,7 +683,6 @@ namespace ts {
          */
         getBuilderProgram(): T | undefined;
         getProgram(): Program | undefined;
-        getCompilerOptions(): CompilerOptions;
         getSourceFile(fileName: string): SourceFile | undefined;
         getSourceFiles(): ReadonlyArray<SourceFile>;
         getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
@@ -704,22 +703,41 @@ namespace ts {
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult | undefined;
         // TODO(shkamat):: investigate later if we can emit even when there are declaration diagnostics
         // emitNextAffectedFile(writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, customTransformers?: CustomTransformers): AffectedFileResult<EmitResult>;
-        getCurrentDirectory(): string;
     }
 
-    interface UpdateBundleProject<T extends BuilderProgram = BuilderProgram> extends InvalidatedProjectBase {
+    export interface UpdateBundleProject<T extends BuilderProgram> extends InvalidatedProjectBase {
         readonly kind: InvalidatedProjectKind.UpdateBundle;
         emit(writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): EmitResult | BuildInvalidedProject<T> | undefined;
     }
 
-    type InvalidatedProject<T extends BuilderProgram = BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
+    export type InvalidatedProject<T extends BuilderProgram> = UpdateOutputFileStampsProject | BuildInvalidedProject<T> | UpdateBundleProject<T>;
 
-    function createUpdateOutputFileStampsProject(state: SolutionBuilderState, project: ResolvedConfigFileName, projectPath: ResolvedConfigFilePath, config: ParsedCommandLine): UpdateOutputFileStampsProject {
+    function doneInvalidatedProject(
+        state: SolutionBuilderState,
+        projectPath: ResolvedConfigFilePath
+    ) {
+        state.projectPendingBuild.delete(projectPath);
+        state.currentInvalidatedProject = undefined;
+        return state.diagnostics.has(projectPath) ?
+            ExitStatus.DiagnosticsPresent_OutputsSkipped :
+            ExitStatus.Success;
+    }
+
+    function createUpdateOutputFileStampsProject(
+        state: SolutionBuilderState,
+        project: ResolvedConfigFileName,
+        projectPath: ResolvedConfigFilePath,
+        config: ParsedCommandLine,
+        buildOrder: readonly ResolvedConfigFileName[]
+    ): UpdateOutputFileStampsProject {
         let updateOutputFileStampsPending = true;
         return {
             kind: InvalidatedProjectKind.UpdateOutputFileStamps,
             project,
             projectPath,
+            buildOrder,
+            getCompilerOptions: () => config.options,
+            getCurrentDirectory: () => state.currentDirectory,
             updateOutputFileStatmps: () => {
                 updateOutputTimestamps(state, config, projectPath);
                 updateOutputFileStampsPending = false;
@@ -728,7 +746,7 @@ namespace ts {
                 if (updateOutputFileStampsPending) {
                     updateOutputTimestamps(state, config, projectPath);
                 }
-                state.projectPendingBuild.delete(projectPath);
+                return doneInvalidatedProject(state, projectPath);
             }
         };
     }
@@ -763,12 +781,14 @@ namespace ts {
                 kind,
                 project,
                 projectPath,
+                buildOrder,
+                getCompilerOptions: () => config.options,
+                getCurrentDirectory: () => state.currentDirectory,
                 getBuilderProgram: () => withProgramOrUndefined(identity),
                 getProgram: () =>
                     withProgramOrUndefined(
                         program => program.getProgramOrUndefined()
                     ),
-                getCompilerOptions: () => config.options,
                 getSourceFile: fileName =>
                     withProgramOrUndefined(
                         program => program.getSourceFile(fileName)
@@ -817,25 +837,26 @@ namespace ts {
                     if (step !== Step.Emit) return undefined;
                     return emit(writeFile, cancellationToken, customTransformers);
                 },
-                getCurrentDirectory: () => state.currentDirectory,
-                done: cancellationToken => {
-                    executeSteps(Step.Done, cancellationToken);
-                    state.projectPendingBuild.delete(projectPath);
-                }
+                done
             } :
             {
                 kind,
                 project,
                 projectPath,
+                buildOrder,
+                getCompilerOptions: () => config.options,
+                getCurrentDirectory: () => state.currentDirectory,
                 emit: (writeFile: WriteFileCallback | undefined, customTransformers: CustomTransformers | undefined) => {
                     if (step !== Step.EmitBundle) return invalidatedProjectOfBundle;
                     return emitBundle(writeFile, customTransformers);
                 },
-                done: cancellationToken => {
-                    executeSteps(Step.Done, cancellationToken);
-                    state.projectPendingBuild.delete(projectPath);
-                }
+                done,
             };
+
+        function done(cancellationToken?: CancellationToken) {
+            executeSteps(Step.Done, cancellationToken);
+            return doneInvalidatedProject(state, projectPath);
+        }
 
         function withProgramOrUndefined<U>(action: (program: T) => U | undefined): U | undefined {
             executeSteps(Step.CreateProgram);
@@ -1152,6 +1173,12 @@ namespace ts {
 
     function getNextInvalidatedProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, buildOrder: readonly ResolvedConfigFileName[]): InvalidatedProject<T> | undefined {
         if (!state.projectPendingBuild.size) return undefined;
+        if (state.currentInvalidatedProject) {
+            // Only if same buildOrder the currentInvalidated project can be sent again
+            return arrayIsEqualTo(state.currentInvalidatedProject.buildOrder, buildOrder) ?
+                state.currentInvalidatedProject :
+                undefined;
+        }
 
         const { options, projectPendingBuild } = state;
         for (let projectIndex = 0; projectIndex < buildOrder.length; projectIndex++) {
@@ -1200,7 +1227,8 @@ namespace ts {
                         state,
                         project,
                         projectPath,
-                        config
+                        config,
+                        buildOrder
                     );
                 }
             }
@@ -1635,20 +1663,6 @@ namespace ts {
         }
     }
 
-    function buildNextProject(state: SolutionBuilderState, cancellationToken?: CancellationToken): SolutionBuilderResult<ExitStatus> | undefined {
-        setupInitialBuild(state, cancellationToken);
-        const invalidatedProject = getNextInvalidatedProject(state, getBuildOrder(state));
-        if (!invalidatedProject) return undefined;
-
-        invalidatedProject.done(cancellationToken);
-        return {
-            project: invalidatedProject.project,
-            result: state.diagnostics.has(invalidatedProject.projectPath) ?
-                ExitStatus.DiagnosticsPresent_OutputsSkipped :
-                ExitStatus.Success
-        };
-    }
-
     function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken): ExitStatus {
         const buildOrder = getBuildOrderFor(state, project);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
@@ -1883,14 +1897,17 @@ namespace ts {
      * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
      * can dynamically add/remove other projects based on changes on the rootNames' references
      */
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder;
-    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, options: BuildOptions): SolutionBuilder {
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: false, host: SolutionBuilderHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T>;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: true, host: SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder<T>;
+    function createSolutionBuilderWorker<T extends BuilderProgram>(watch: boolean, hostOrHostWithWatch: SolutionBuilderHost<T> | SolutionBuilderWithWatchHost<T>, rootNames: ReadonlyArray<string>, options: BuildOptions): SolutionBuilder<T> {
         const state = createSolutionBuilderState(watch, hostOrHostWithWatch, rootNames, options);
         return {
             build: (project, cancellationToken) => build(state, project, cancellationToken),
             clean: project => clean(state, project),
-            buildNextProject: cancellationToken => buildNextProject(state, cancellationToken),
+            getNextInvalidatedProject: cancellationToken => {
+                setupInitialBuild(state, cancellationToken);
+                return getNextInvalidatedProject(state, getBuildOrder(state));
+            },
             getBuildOrder: () => getBuildOrder(state),
             getUpToDateStatusOfProject: project => {
                 const configFileName = resolveProjectName(state, project);
