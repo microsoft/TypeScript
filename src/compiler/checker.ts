@@ -10480,21 +10480,6 @@ namespace ts {
             return result;
         }
 
-        function isPossiblyReferencedInConditionalType(tp: TypeParameter, node: Node) {
-            if (isTypeParameterPossiblyReferenced(tp, node)) {
-                return true;
-            }
-            while (node) {
-                if (node.kind === SyntaxKind.ConditionalType) {
-                    if (isTypeParameterPossiblyReferenced(tp, (<ConditionalTypeNode>node).extendsType)) {
-                        return true;
-                    }
-                }
-                node = node.parent;
-            }
-            return false;
-        }
-
         function getTypeFromConditionalTypeNode(node: ConditionalTypeNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
@@ -10502,7 +10487,7 @@ namespace ts {
                 const aliasSymbol = getAliasSymbolForTypeNode(node);
                 const aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                 const allOuterTypeParameters = getOuterTypeParameters(node, /*includeThisTypes*/ true);
-                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isPossiblyReferencedInConditionalType(tp, node));
+                const outerTypeParameters = aliasTypeArguments ? allOuterTypeParameters : filter(allOuterTypeParameters, tp => isTypeParameterPossiblyReferenced(tp, node));
                 const root: ConditionalRoot = {
                     node,
                     checkType,
@@ -11196,9 +11181,12 @@ namespace ts {
             // type parameter, or if the node contains type queries, we consider the type parameter possibly referenced.
             if (tp.symbol && tp.symbol.declarations && tp.symbol.declarations.length === 1) {
                 const container = tp.symbol.declarations[0].parent;
-                if (findAncestor(node, n => n.kind === SyntaxKind.Block ? "quit" : n === container)) {
-                    return !!forEachChild(node, containsReference);
+                for (let n = node; n !== container; n = n.parent) {
+                    if (!n || n.kind === SyntaxKind.Block || n.kind === SyntaxKind.ConditionalType && forEachChild((<ConditionalTypeNode>n).extendsType, containsReference)) {
+                        return true;
+                    }
                 }
+                return !!forEachChild(node, containsReference);
             }
             return true;
             function containsReference(node: Node): boolean {
