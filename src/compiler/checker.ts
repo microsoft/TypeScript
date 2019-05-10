@@ -16379,9 +16379,8 @@ namespace ts {
                 return result;
             }
 
-            function isFlowToRootDiscriminant(type: Type, candidate: Type, isRelated: (t1: Type, t2: Type) => boolean) {
-                return !(declaredType.flags & TypeFlags.Union) && !(type.flags & TypeFlags.Union) && (candidate.flags & TypeFlags.Union) !== 0
-                    && isRelated(candidate, type);
+            function isFlowToRootDiscriminant(type: Type, candidate: Type) {
+                return (type.flags & TypeFlags.Unknown | TypeFlags.Any) && (candidate.flags & TypeFlags.Union) !== 0;
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
@@ -16757,7 +16756,7 @@ namespace ts {
             }
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
-                if (isFlowToRootDiscriminant(type, candidate, isRelated)) {
+                if (isFlowToRootDiscriminant(type, candidate)) {
                     if (assumeTrue) {
                         rootDiscriminable = candidate as UnionType;
                     }
