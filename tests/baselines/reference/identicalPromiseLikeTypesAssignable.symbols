@@ -1,0 +1,51 @@
+=== tests/cases/compiler/identicalPromiseLikeTypesAssignable.ts ===
+interface P1<T> {
+>P1 : Symbol(P1, Decl(identicalPromiseLikeTypesAssignable.ts, 0, 0))
+>T : Symbol(T, Decl(identicalPromiseLikeTypesAssignable.ts, 0, 13))
+
+    then<T1>(onfulfilled: (value: T) => T1 | P1<T1>): P1<T1>;
+>then : Symbol(P1.then, Decl(identicalPromiseLikeTypesAssignable.ts, 0, 17))
+>T1 : Symbol(T1, Decl(identicalPromiseLikeTypesAssignable.ts, 1, 9))
+>onfulfilled : Symbol(onfulfilled, Decl(identicalPromiseLikeTypesAssignable.ts, 1, 13))
+>value : Symbol(value, Decl(identicalPromiseLikeTypesAssignable.ts, 1, 27))
+>T : Symbol(T, Decl(identicalPromiseLikeTypesAssignable.ts, 0, 13))
+>T1 : Symbol(T1, Decl(identicalPromiseLikeTypesAssignable.ts, 1, 9))
+>P1 : Symbol(P1, Decl(identicalPromiseLikeTypesAssignable.ts, 0, 0))
+>T1 : Symbol(T1, Decl(identicalPromiseLikeTypesAssignable.ts, 1, 9))
+>P1 : Symbol(P1, Decl(identicalPromiseLikeTypesAssignable.ts, 0, 0))
+>T1 : Symbol(T1, Decl(identicalPromiseLikeTypesAssignable.ts, 1, 9))
+}
+
+interface P2<U> {
+>P2 : Symbol(P2, Decl(identicalPromiseLikeTypesAssignable.ts, 2, 1))
+>U : Symbol(U, Decl(identicalPromiseLikeTypesAssignable.ts, 4, 13))
+
+    then<T2>(onfulfilled: (value: U) => T2 | P2<T2>): P2<T2>;
+>then : Symbol(P2.then, Decl(identicalPromiseLikeTypesAssignable.ts, 4, 17))
+>T2 : Symbol(T2, Decl(identicalPromiseLikeTypesAssignable.ts, 5, 9))
+>onfulfilled : Symbol(onfulfilled, Decl(identicalPromiseLikeTypesAssignable.ts, 5, 13))
+>value : Symbol(value, Decl(identicalPromiseLikeTypesAssignable.ts, 5, 27))
+>U : Symbol(U, Decl(identicalPromiseLikeTypesAssignable.ts, 4, 13))
+>T2 : Symbol(T2, Decl(identicalPromiseLikeTypesAssignable.ts, 5, 9))
+>P2 : Symbol(P2, Decl(identicalPromiseLikeTypesAssignable.ts, 2, 1))
+>T2 : Symbol(T2, Decl(identicalPromiseLikeTypesAssignable.ts, 5, 9))
+>P2 : Symbol(P2, Decl(identicalPromiseLikeTypesAssignable.ts, 2, 1))
+>T2 : Symbol(T2, Decl(identicalPromiseLikeTypesAssignable.ts, 5, 9))
+}
+
+declare var x: P1<number>;
+>x : Symbol(x, Decl(identicalPromiseLikeTypesAssignable.ts, 8, 11))
+>P1 : Symbol(P1, Decl(identicalPromiseLikeTypesAssignable.ts, 0, 0))
+
+declare var y: P2<number>;
+>y : Symbol(y, Decl(identicalPromiseLikeTypesAssignable.ts, 9, 11))
+>P2 : Symbol(P2, Decl(identicalPromiseLikeTypesAssignable.ts, 2, 1))
+
+x = y;
+>x : Symbol(x, Decl(identicalPromiseLikeTypesAssignable.ts, 8, 11))
+>y : Symbol(y, Decl(identicalPromiseLikeTypesAssignable.ts, 9, 11))
+
+y = x;
+>y : Symbol(y, Decl(identicalPromiseLikeTypesAssignable.ts, 9, 11))
+>x : Symbol(x, Decl(identicalPromiseLikeTypesAssignable.ts, 8, 11))
+

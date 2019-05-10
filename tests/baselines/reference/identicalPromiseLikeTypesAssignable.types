@@ -1,0 +1,31 @@
+=== tests/cases/compiler/identicalPromiseLikeTypesAssignable.ts ===
+interface P1<T> {
+    then<T1>(onfulfilled: (value: T) => T1 | P1<T1>): P1<T1>;
+>then : <T1>(onfulfilled: (value: T) => T1 | P1<T1>) => P1<T1>
+>onfulfilled : (value: T) => T1 | P1<T1>
+>value : T
+}
+
+interface P2<U> {
+    then<T2>(onfulfilled: (value: U) => T2 | P2<T2>): P2<T2>;
+>then : <T2>(onfulfilled: (value: U) => T2 | P2<T2>) => P2<T2>
+>onfulfilled : (value: U) => T2 | P2<T2>
+>value : U
+}
+
+declare var x: P1<number>;
+>x : P1<number>
+
+declare var y: P2<number>;
+>y : P2<number>
+
+x = y;
+>x = y : P2<number>
+>x : P1<number>
+>y : P2<number>
+
+y = x;
+>y = x : P1<number>
+>y : P2<number>
+>x : P1<number>
+

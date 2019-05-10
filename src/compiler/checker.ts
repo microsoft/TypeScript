@@ -15189,6 +15189,13 @@ namespace ts {
                     inferFromTypes(source, (<ConditionalType>target).trueType);
                     inferFromTypes(source, (<ConditionalType>target).falseType);
                 }
+                else if (source.flags & TypeFlags.Union) {
+                    // Source is a union or intersection type, infer from each constituent type
+                    const sourceTypes = (<UnionOrIntersectionType>source).types;
+                    for (const sourceType of sourceTypes) {
+                        inferFromTypes(sourceType, target);
+                    }
+                }
                 else if (target.flags & TypeFlags.UnionOrIntersection) {
                     // We infer from types that are not naked type variables first so that inferences we
                     // make from nested naked type variables and given slightly higher priority by virtue
@@ -15215,13 +15222,6 @@ namespace ts {
                             }
                         }
                         priority = savePriority;
-                    }
-                }
-                else if (source.flags & TypeFlags.Union) {
-                    // Source is a union or intersection type, infer from each constituent type
-                    const sourceTypes = (<UnionOrIntersectionType>source).types;
-                    for (const sourceType of sourceTypes) {
-                        inferFromTypes(sourceType, target);
                     }
                 }
                 else {
