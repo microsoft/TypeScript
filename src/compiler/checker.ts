@@ -559,6 +559,8 @@ namespace ts {
         const symbolLinks: SymbolLinks[] = [];
         const nodeLinks: NodeLinks[] = [];
         const flowLoopCaches: Map<Type>[] = [];
+        const flowAssignmentKeys: string[] = [];
+        const flowAssignmentTypes: FlowType[] = [];
         const flowLoopNodes: FlowNode[] = [];
         const flowLoopKeys: string[] = [];
         const flowLoopTypes: Type[][] = [];
@@ -15666,21 +15668,21 @@ namespace ts {
         // The result is undefined if the reference isn't a dotted name. We prefix nodes
         // occurring in an apparent type position with '@' because the control flow type
         // of such nodes may be based on the apparent type instead of the declared type.
-        function getFlowCacheKey(node: Node): string | undefined {
+        function getFlowCacheKey(node: Node, declaredType: Type, initialType: Type, flowContainer: Node | undefined): string | undefined {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
                     const symbol = getResolvedSymbol(<Identifier>node);
-                    return symbol !== unknownSymbol ? (isConstraintPosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
+                    return symbol !== unknownSymbol ? `${flowContainer ? getNodeId(flowContainer) : "-1"}|${getTypeId(declaredType)}|${getTypeId(initialType)}|${isConstraintPosition(node) ? "@" : ""}${getSymbolId(symbol)}` : undefined;
                 case SyntaxKind.ThisKeyword:
                     return "0";
                 case SyntaxKind.NonNullExpression:
                 case SyntaxKind.ParenthesizedExpression:
-                    return getFlowCacheKey((<NonNullExpression | ParenthesizedExpression>node).expression);
+                    return getFlowCacheKey((<NonNullExpression | ParenthesizedExpression>node).expression, declaredType, initialType, flowContainer);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const propName = getAccessedPropertyName(<AccessExpression>node);
                     if (propName !== undefined) {
-                        const key = getFlowCacheKey((<AccessExpression>node).expression);
+                        const key = getFlowCacheKey((<AccessExpression>node).expression, declaredType, initialType, flowContainer);
                         return key && key + "." + propName;
                     }
             }
@@ -16345,6 +16347,7 @@ namespace ts {
 
         function getFlowTypeOfReference(reference: Node, declaredType: Type, initialType = declaredType, flowContainer?: Node, couldBeUninitialized?: boolean) {
             let key: string | undefined;
+            let keySet = false;
             let flowDepth = 0;
             if (flowAnalysisDisabled) {
                 return errorType;
@@ -16365,6 +16368,14 @@ namespace ts {
             }
             return resultType;
 
+            function getOrSetCacheKey() {
+                if (keySet) {
+                    return key;
+                }
+                keySet = true;
+                return key = getFlowCacheKey(reference, declaredType, initialType, flowContainer);
+            }
+
             function getTypeAtFlowNode(flow: FlowNode): FlowType {
                 if (flowDepth === 2000) {
                     // We have made 2000 recursive invocations. To avoid overflowing the call stack we report an error
@@ -16376,6 +16387,15 @@ namespace ts {
                 flowDepth++;
                 while (true) {
                     const flags = flow.flags;
+                    if (flags & FlowFlags.Cached) {
+                        const key = getOrSetCacheKey();
+                        if (key) {
+                            const id = getFlowNodeId(flow);
+                            if (flowAssignmentKeys[id] === key) {
+                                return flowAssignmentTypes[id];
+                            }
+                        }
+                    }
                     if (flags & FlowFlags.Shared) {
                         // We cache results of flow type resolution for shared nodes that were previously visited in
                         // the same getFlowTypeOfReference invocation. A node is considered shared when it is the
@@ -16405,6 +16425,15 @@ namespace ts {
                         if (!type) {
                             flow = (<FlowAssignment>flow).antecedent;
                             continue;
+                        }
+                        else if (flowLoopCount === flowLoopStart) { // Only cache assignments when not within loop analysis
+                            const key = getOrSetCacheKey();
+                            if (key && !isIncomplete(type)) {
+                                flow.flags |= FlowFlags.Cached;
+                                const id = getFlowNodeId(flow);
+                                flowAssignmentKeys[id] = key;
+                                flowAssignmentTypes[id] = type;
+                            }
                         }
                     }
                     else if (flags & FlowFlags.Condition) {
@@ -16618,12 +16647,10 @@ namespace ts {
                 // this flow loop junction, return the cached type.
                 const id = getFlowNodeId(flow);
                 const cache = flowLoopCaches[id] || (flowLoopCaches[id] = createMap<Type>());
+                const key = getOrSetCacheKey();
                 if (!key) {
-                    key = getFlowCacheKey(reference);
                     // No cache key is generated when binding patterns are in unnarrowable situations
-                    if (!key) {
-                        return declaredType;
-                    }
+                    return declaredType;
                 }
                 const cached = cache.get(key);
                 if (cached) {
