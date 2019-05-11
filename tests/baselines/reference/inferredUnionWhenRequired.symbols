@@ -1,0 +1,20 @@
+=== tests/cases/compiler/inferredUnionWhenRequired.ts ===
+declare function assertDefined<T>(x: T | null | undefined): T;
+>assertDefined : Symbol(assertDefined, Decl(inferredUnionWhenRequired.ts, 0, 0))
+>T : Symbol(T, Decl(inferredUnionWhenRequired.ts, 0, 31))
+>x : Symbol(x, Decl(inferredUnionWhenRequired.ts, 0, 34))
+>T : Symbol(T, Decl(inferredUnionWhenRequired.ts, 0, 31))
+>T : Symbol(T, Decl(inferredUnionWhenRequired.ts, 0, 31))
+
+declare function doThing(x: string | number) : void;
+>doThing : Symbol(doThing, Decl(inferredUnionWhenRequired.ts, 0, 62))
+>x : Symbol(x, Decl(inferredUnionWhenRequired.ts, 2, 25))
+
+declare function getThing(): string | number | undefined;
+>getThing : Symbol(getThing, Decl(inferredUnionWhenRequired.ts, 2, 52))
+
+doThing(assertDefined(getThing()));
+>doThing : Symbol(doThing, Decl(inferredUnionWhenRequired.ts, 0, 62))
+>assertDefined : Symbol(assertDefined, Decl(inferredUnionWhenRequired.ts, 0, 0))
+>getThing : Symbol(getThing, Decl(inferredUnionWhenRequired.ts, 2, 52))
+

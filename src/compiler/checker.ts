@@ -15189,7 +15189,7 @@ namespace ts {
                     inferFromTypes(source, (<ConditionalType>target).trueType);
                     inferFromTypes(source, (<ConditionalType>target).falseType);
                 }
-                else if (source.flags & TypeFlags.Union) {
+                else if (source.flags & TypeFlags.Union && some((source as UnionType).types, t => !!(t.flags & TypeFlags.TypeVariable))) {
                     // Source is a union or intersection type, infer from each constituent type
                     const sourceTypes = (<UnionOrIntersectionType>source).types;
                     for (const sourceType of sourceTypes) {
@@ -15222,6 +15222,13 @@ namespace ts {
                             }
                         }
                         priority = savePriority;
+                    }
+                }
+                else if (source.flags & TypeFlags.Union && !some((source as UnionType).types, t => !!(t.flags & TypeFlags.TypeVariable))) {
+                    // Source is a union or intersection type, infer from each constituent type
+                    const sourceTypes = (<UnionOrIntersectionType>source).types;
+                    for (const sourceType of sourceTypes) {
+                        inferFromTypes(sourceType, target);
                     }
                 }
                 else {

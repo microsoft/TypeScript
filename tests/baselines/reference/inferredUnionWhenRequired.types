@@ -1,0 +1,21 @@
+=== tests/cases/compiler/inferredUnionWhenRequired.ts ===
+declare function assertDefined<T>(x: T | null | undefined): T;
+>assertDefined : <T>(x: T | null | undefined) => T
+>x : T | null | undefined
+>null : null
+
+declare function doThing(x: string | number) : void;
+>doThing : (x: string | number) => void
+>x : string | number
+
+declare function getThing(): string | number | undefined;
+>getThing : () => string | number | undefined
+
+doThing(assertDefined(getThing()));
+>doThing(assertDefined(getThing())) : void
+>doThing : (x: string | number) => void
+>assertDefined(getThing()) : string | number
+>assertDefined : <T>(x: T | null | undefined) => T
+>getThing() : string | number | undefined
+>getThing : () => string | number | undefined
+
