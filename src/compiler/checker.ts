@@ -10379,7 +10379,7 @@ namespace ts {
             // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
             if (root.falseType.flags & TypeFlags.Never && getActualTypeVariable(root.trueType) === getActualTypeVariable(root.checkType)) {
                 if (checkType.flags & TypeFlags.Any || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
-                    return instantiateType(root.trueType, mapper);
+                    return checkType;
                 }
                 else if (isIntersectionEmpty(checkType, extendsType)) { // Always false
                     return neverType;
@@ -10390,7 +10390,7 @@ namespace ts {
                     return neverType;
                 }
                 else if (checkType.flags & TypeFlags.Any || isIntersectionEmpty(checkType, extendsType)) { // Always false
-                    return instantiateType(root.falseType, mapper);
+                    return checkType;
                 }
             }
             const checkTypeInstantiable = maybeTypeOfKind(checkType, TypeFlags.Instantiable | TypeFlags.GenericMappedType);
