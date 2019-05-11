@@ -186,6 +186,10 @@ interface SVGNumberList {
     [Symbol.iterator](): IterableIterator<SVGNumber>;
 }
 
+interface SVGPointList {
+    [Symbol.iterator](): IterableIterator<DOMPoint>;
+}
+
 interface SVGStringList {
     [Symbol.iterator](): IterableIterator<string>;
 }
