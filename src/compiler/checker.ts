@@ -9044,7 +9044,7 @@ namespace ts {
         }
 
         function getSubstitutionType(typeVariable: TypeVariable, substitute: Type) {
-            if (substitute.flags & TypeFlags.AnyOrUnknown) {
+            if (substitute.flags & TypeFlags.AnyOrUnknown || substitute === typeVariable) {
                 return typeVariable;
             }
             const id = `${getTypeId(typeVariable)}>${getTypeId(substitute)}`;
@@ -10194,7 +10194,9 @@ namespace ts {
         }
 
         function getSimplifiedType(type: Type, writing: boolean): Type {
-            return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type, writing) : type;
+            return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type, writing) :
+                type.flags & TypeFlags.Conditional ? getSimplifiedConditionalType(<ConditionalType>type, writing) :
+                type;
         }
 
         function distributeIndexOverObjectType(objectType: Type, indexType: Type, writing: boolean) {
@@ -10255,6 +10257,32 @@ namespace ts {
                 return type[cache] = mapType(substituteIndexedMappedType(objectType, type.indexType), t => getSimplifiedType(t, writing));
             }
             return type[cache] = type;
+        }
+
+        function getSimplifiedConditionalType(type: ConditionalType, writing: boolean) {
+            const falseType = getFalseTypeFromConditionalType(type);
+            const trueType = getTrueTypeFromConditionalType(type);
+            const checkType = type.checkType;
+            const extendsType = type.extendsType;
+            // Simplifications for types of the form `T extends U ? T : never` and `T extends U ? never : T`.
+            if (falseType.flags & TypeFlags.Never && getActualTypeVariable(trueType) === getActualTypeVariable(checkType)) {
+                if (checkType.flags & TypeFlags.Any || isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+                    return getSimplifiedType(trueType, writing);
+                }
+                else if (isIntersectionEmpty(checkType, extendsType)) { // Always false
+                    return neverType;
+                }
+            }
+            else if (trueType.flags & TypeFlags.Never && getActualTypeVariable(falseType) === getActualTypeVariable(checkType)) {
+                if (!(checkType.flags & TypeFlags.Any) && isTypeAssignableTo(getRestrictiveInstantiation(checkType), getRestrictiveInstantiation(extendsType))) { // Always true
+                    return neverType;
+                }
+                else if (checkType.flags & TypeFlags.Any || isIntersectionEmpty(checkType, extendsType)) { // Always false
+                    return getSimplifiedType(falseType, writing);
+                }
+            }
+
+            return type;
         }
 
         function substituteIndexedMappedType(objectType: MappedType, index: Type) {
@@ -12431,10 +12459,10 @@ namespace ts {
                 if (target.flags & TypeFlags.Substitution) {
                     target = (<SubstitutionType>target).typeVariable;
                 }
-                if (source.flags & TypeFlags.IndexedAccess) {
+                if (source.flags & TypeFlags.Simplifiable) {
                     source = getSimplifiedType(source, /*writing*/ false);
                 }
-                if (target.flags & TypeFlags.IndexedAccess) {
+                if (target.flags & TypeFlags.Simplifiable) {
                     target = getSimplifiedType(target, /*writing*/ true);
                 }
 
