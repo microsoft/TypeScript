@@ -20387,6 +20387,7 @@ namespace ts {
 
         function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode | QualifiedName, type: Type, property: Symbol): boolean {
             return isValidPropertyAccessWithType(node, node.kind === SyntaxKind.PropertyAccessExpression && node.expression.kind === SyntaxKind.SuperKeyword, property.escapedName, type);
+            // Previously we validated the 'this' type of methods but this adversely affected performance. See #31377 for more context.
         }
 
         function isValidPropertyAccessWithType(
