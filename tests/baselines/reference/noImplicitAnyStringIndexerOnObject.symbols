@@ -55,4 +55,56 @@ e['hello'] += 1;
 e['hello'] ++;
 >e : Symbol(e, Decl(noImplicitAnyStringIndexerOnObject.ts, 14, 3))
 
+const o = { a: 0 };
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 22, 5))
+>a : Symbol(a, Decl(noImplicitAnyStringIndexerOnObject.ts, 22, 11))
+
+declare const k: "a" | "b" | "c";
+>k : Symbol(k, Decl(noImplicitAnyStringIndexerOnObject.ts, 24, 13))
+
+o[k];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 22, 5))
+>k : Symbol(k, Decl(noImplicitAnyStringIndexerOnObject.ts, 24, 13))
+
+
+declare const k2: "c";
+>k2 : Symbol(k2, Decl(noImplicitAnyStringIndexerOnObject.ts, 28, 13))
+
+o[k2];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 22, 5))
+>k2 : Symbol(k2, Decl(noImplicitAnyStringIndexerOnObject.ts, 28, 13))
+
+declare const sym : unique symbol;
+>sym : Symbol(sym, Decl(noImplicitAnyStringIndexerOnObject.ts, 31, 13))
+
+o[sym];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 22, 5))
+>sym : Symbol(sym, Decl(noImplicitAnyStringIndexerOnObject.ts, 31, 13))
+
+enum NumEnum { a, b }
+>NumEnum : Symbol(NumEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 32, 7))
+>a : Symbol(NumEnum.a, Decl(noImplicitAnyStringIndexerOnObject.ts, 34, 14))
+>b : Symbol(NumEnum.b, Decl(noImplicitAnyStringIndexerOnObject.ts, 34, 17))
+
+let numEnumKey: NumEnum;
+>numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 35, 3))
+>NumEnum : Symbol(NumEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 32, 7))
+
+o[numEnumKey];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 22, 5))
+>numEnumKey : Symbol(numEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 35, 3))
+
+
+enum StrEnum { a = "a", b = "b" }
+>StrEnum : Symbol(StrEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 36, 14))
+>a : Symbol(StrEnum.a, Decl(noImplicitAnyStringIndexerOnObject.ts, 39, 14))
+>b : Symbol(StrEnum.b, Decl(noImplicitAnyStringIndexerOnObject.ts, 39, 23))
+
+let strEnumKey: StrEnum;
+>strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 40, 3))
+>StrEnum : Symbol(StrEnum, Decl(noImplicitAnyStringIndexerOnObject.ts, 36, 14))
+
+o[strEnumKey];
+>o : Symbol(o, Decl(noImplicitAnyStringIndexerOnObject.ts, 22, 5))
+>strEnumKey : Symbol(strEnumKey, Decl(noImplicitAnyStringIndexerOnObject.ts, 40, 3))
 
