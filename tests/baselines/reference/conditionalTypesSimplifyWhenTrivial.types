@@ -1,49 +1,49 @@
 === tests/cases/compiler/conditionalTypesSimplifyWhenTrivial.ts ===
 const fn1 = <Params>(
->fn1 : <Params>(params: Pick<Params, keyof Params>) => Params
-><Params>(    params: Pick<Params, Exclude<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, keyof Params>) => Params
+>fn1 : <Params>(params: Pick<Params, Exclude<keyof Params, never>>) => Params
+><Params>(    params: Pick<Params, Exclude<keyof Params, never>>,): Params => params : <Params>(params: Pick<Params, Exclude<keyof Params, never>>) => Params
 
     params: Pick<Params, Exclude<keyof Params, never>>,
->params : Pick<Params, keyof Params>
+>params : Pick<Params, Exclude<keyof Params, never>>
 
 ): Params => params;
->params : Pick<Params, keyof Params>
+>params : Pick<Params, Exclude<keyof Params, never>>
 
 function fn2<T>(x: Exclude<T, never>) {
->fn2 : <T>(x: T) => void
->x : T
+>fn2 : <T>(x: Exclude<T, never>) => void
+>x : Exclude<T, never>
 
     var y: T = x;
 >y : T
->x : T
+>x : Exclude<T, never>
 
     x = y;
 >x = y : T
->x : T
+>x : Exclude<T, never>
 >y : T
 }
 
 const fn3 = <Params>(
->fn3 : <Params>(params: Pick<Params, keyof Params>) => Params
-><Params>(    params: Pick<Params, Extract<keyof Params, keyof Params>>,): Params => params : <Params>(params: Pick<Params, keyof Params>) => Params
+>fn3 : <Params>(params: Pick<Params, Extract<keyof Params, keyof Params>>) => Params
+><Params>(    params: Pick<Params, Extract<keyof Params, keyof Params>>,): Params => params : <Params>(params: Pick<Params, Extract<keyof Params, keyof Params>>) => Params
 
     params: Pick<Params, Extract<keyof Params, keyof Params>>,
->params : Pick<Params, keyof Params>
+>params : Pick<Params, Extract<keyof Params, keyof Params>>
 
 ): Params => params;
->params : Pick<Params, keyof Params>
+>params : Pick<Params, Extract<keyof Params, keyof Params>>
 
 function fn4<T>(x: Extract<T, T>) {
->fn4 : <T>(x: T) => void
->x : T
+>fn4 : <T>(x: Extract<T, T>) => void
+>x : Extract<T, T>
 
     var y: T = x;
 >y : T
->x : T
+>x : Extract<T, T>
 
     x = y;
 >x = y : T
->x : T
+>x : Extract<T, T>
 >y : T
 }
 
