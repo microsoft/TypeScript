@@ -2546,6 +2546,8 @@ namespace ts {
         Shared         = 1 << 10, // Referenced as antecedent more than once
         PreFinally     = 1 << 11, // Injected edge that links pre-finally label and pre-try flow
         AfterFinally   = 1 << 12, // Injected edge that links post-finally flow with the rest of the graph
+        /** @internal */
+        Cached         = 1 << 13, // Indicates that at least one cross-call cache entry exists for this node, even if not a loop participant
         Label = BranchLabel | LoopLabel,
         Condition = TrueCondition | FalseCondition
     }
@@ -3967,6 +3969,8 @@ namespace ts {
         StructuredOrInstantiable = StructuredType | Instantiable,
         /* @internal */
         ObjectFlagsType = Nullable | Never | Object | Union | Intersection,
+        /* @internal */
+        Simplifiable = IndexedAccess | Conditional | Substitution,
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
         Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
@@ -4339,8 +4343,8 @@ namespace ts {
         root: ConditionalRoot;
         checkType: Type;
         extendsType: Type;
-        trueType: Type;
-        falseType: Type;
+        resolvedTrueType: Type;
+        resolvedFalseType: Type;
         /* @internal */
         resolvedInferredTrueType?: Type; // The `trueType` instantiated with the `combinedMapper`, if present
         /* @internal */
@@ -4425,15 +4429,16 @@ namespace ts {
     export type TypeMapper = (t: TypeParameter) => Type;
 
     export const enum InferencePriority {
-        NakedTypeVariable           = 1 << 0,  // Naked type variable in union or intersection type
-        HomomorphicMappedType       = 1 << 1,  // Reverse inference for homomorphic mapped type
-        MappedTypeConstraint        = 1 << 2,  // Reverse inference for mapped type
-        ReturnType                  = 1 << 3,  // Inference made from return type of generic function
-        LiteralKeyof                = 1 << 4,  // Inference made from a string literal to a keyof T
-        NoConstraints               = 1 << 5,  // Don't infer from constraints of instantiable types
-        AlwaysStrict                = 1 << 6,  // Always use strict rules for contravariant inferences
+        NakedTypeVariable            = 1 << 0,  // Naked type variable in union or intersection type
+        HomomorphicMappedType        = 1 << 1,  // Reverse inference for homomorphic mapped type
+        PartialHomomorphicMappedType = 1 << 2,  // Partial reverse inference for homomorphic mapped type
+        MappedTypeConstraint         = 1 << 3,  // Reverse inference for mapped type
+        ReturnType                   = 1 << 4,  // Inference made from return type of generic function
+        LiteralKeyof                 = 1 << 5,  // Inference made from a string literal to a keyof T
+        NoConstraints                = 1 << 6,  // Don't infer from constraints of instantiable types
+        AlwaysStrict                 = 1 << 7,  // Always use strict rules for contravariant inferences
 
-        PriorityImpliesCombination  = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
+        PriorityImpliesCombination = ReturnType | MappedTypeConstraint | LiteralKeyof,  // These priorities imply that the resulting type should be a combination of all candidates
     }
 
     /* @internal */

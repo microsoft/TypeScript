@@ -1,0 +1,67 @@
+=== tests/cases/compiler/controlFlowForCompoundAssignmentToThisMember.ts ===
+class DatasourceCommandWidgetElement {
+>DatasourceCommandWidgetElement : DatasourceCommandWidgetElement
+
+    _commandBased: boolean;
+>_commandBased : boolean
+
+    _commandElement: unknown;
+>_commandElement : unknown
+
+    commandElement: unknown;
+>commandElement : unknown
+
+    constructor(target: unknown) {
+>target : unknown
+
+        if (target instanceof DatasourceCommandWidgetElement) {
+>target instanceof DatasourceCommandWidgetElement : boolean
+>target : unknown
+>DatasourceCommandWidgetElement : typeof DatasourceCommandWidgetElement
+
+            this._commandBased = true;
+>this._commandBased = true : true
+>this._commandBased : boolean
+>this : this
+>_commandBased : boolean
+>true : true
+
+            this._commandElement = target.commandElement;
+>this._commandElement = target.commandElement : unknown
+>this._commandElement : unknown
+>this : this
+>_commandElement : unknown
+>target.commandElement : unknown
+>target : DatasourceCommandWidgetElement
+>commandElement : unknown
+
+        } else {
+            this._commandBased = false;
+>this._commandBased = false : false
+>this._commandBased : boolean
+>this : this
+>_commandBased : boolean
+>false : false
+        }
+
+        if (this._commandBased = (target instanceof DatasourceCommandWidgetElement)) {
+>this._commandBased = (target instanceof DatasourceCommandWidgetElement) : boolean
+>this._commandBased : boolean
+>this : this
+>_commandBased : boolean
+>(target instanceof DatasourceCommandWidgetElement) : boolean
+>target instanceof DatasourceCommandWidgetElement : boolean
+>target : unknown
+>DatasourceCommandWidgetElement : typeof DatasourceCommandWidgetElement
+
+            this._commandElement = target.commandElement;
+>this._commandElement = target.commandElement : unknown
+>this._commandElement : unknown
+>this : this
+>_commandElement : unknown
+>target.commandElement : unknown
+>target : DatasourceCommandWidgetElement
+>commandElement : unknown
+        }
+    }
+}
