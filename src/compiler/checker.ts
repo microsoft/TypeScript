@@ -10196,7 +10196,6 @@ namespace ts {
         function getSimplifiedType(type: Type, writing: boolean): Type {
             return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type, writing) :
                 type.flags & TypeFlags.Conditional ? getSimplifiedConditionalType(<ConditionalType>type, writing) :
-                type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
                 type;
         }
 
@@ -12431,6 +12430,12 @@ namespace ts {
                 }
                 if (isFreshLiteralType(target)) {
                     target = (<FreshableType>target).regularType;
+                }
+                if (source.flags & TypeFlags.Substitution) {
+                    source = (<SubstitutionType>source).substitute;
+                }
+                if (target.flags & TypeFlags.Substitution) {
+                    target = (<SubstitutionType>target).typeVariable;
                 }
                 if (source.flags & TypeFlags.Simplifiable) {
                     source = getSimplifiedType(source, /*writing*/ false);
