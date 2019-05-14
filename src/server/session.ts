@@ -44,6 +44,10 @@ namespace ts.server {
 
     function formatDiag(fileName: NormalizedPath, project: Project, diag: Diagnostic): protocol.Diagnostic {
         const scriptInfo = project.getScriptInfoForNormalizedPath(fileName)!; // TODO: GH#18217
+        const annotations = mapDefined(
+            flattenDiagnosticAnnotationSpans(typeof diag.messageText !== "string" ? diag.messageText : diag.annotations, "\n"),
+            convertAnnotationSpanToDiagnosticAnnotationSpan
+        );
         return {
             start: scriptInfo.positionToLineOffset(diag.start!),
             end: scriptInfo.positionToLineOffset(diag.start! + diag.length!), // TODO: GH#18217
@@ -53,7 +57,7 @@ namespace ts.server {
             reportsUnnecessary: diag.reportsUnnecessary,
             source: diag.source,
             relatedInformation: map(diag.relatedInformation, formatRelatedInformation),
-            ...(diag.markdownText ? { markdown: flattenDiagnosticMessageText(diag.markdownText, "\n", /*flattenMarkdown*/ true) } : {})
+            ...(length(annotations) ? { annotations } : {})
         };
     }
 
@@ -883,17 +887,20 @@ namespace ts.server {
         }
 
         private convertToDiagnosticsWithLinePositionFromDiagnosticFile(diagnostics: ReadonlyArray<Diagnostic>): protocol.DiagnosticWithLinePosition[] {
-            return diagnostics.map<protocol.DiagnosticWithLinePosition>(d => ({
-                message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
-                start: d.start!, // TODO: GH#18217
-                length: d.length!, // TODO: GH#18217
-                category: diagnosticCategoryName(d),
-                code: d.code,
-                startLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start!)))!, // TODO: GH#18217
-                endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
-                relatedInformation: map(d.relatedInformation, formatRelatedInformation),
-                ...(d.markdownText ? { markdown: flattenDiagnosticMessageText(d.markdownText, this.host.newLine, /*flattenMarkdown*/ true) } : {})
-            }));
+            return diagnostics.map<protocol.DiagnosticWithLinePosition>(d => {
+                const annotations = mapDefined(flattenDiagnosticAnnotationSpans(typeof d.messageText !== "string" ? d.messageText : d.annotations, this.host.newLine), convertAnnotationSpanToDiagnosticAnnotationSpan);
+                return {
+                    message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                    start: d.start!, // TODO: GH#18217
+                    length: d.length!, // TODO: GH#18217
+                    category: diagnosticCategoryName(d),
+                    code: d.code,
+                    startLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start!)))!, // TODO: GH#18217
+                    endLocation: (d.file && convertToLocation(getLineAndCharacterOfPosition(d.file, d.start! + d.length!)))!, // TODO: GH#18217
+                    relatedInformation: map(d.relatedInformation, formatRelatedInformation),
+                    ...(length(annotations) ? { annotations } : {})
+                };
+            });
         }
 
         private getCompilerOptionsDiagnostics(args: protocol.CompilerOptionsDiagnosticsRequestArgs) {
@@ -911,19 +918,22 @@ namespace ts.server {
         }
 
         private convertToDiagnosticsWithLinePosition(diagnostics: ReadonlyArray<Diagnostic>, scriptInfo: ScriptInfo | undefined): protocol.DiagnosticWithLinePosition[] {
-            return diagnostics.map(d => ({
-                message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
-                start: d.start!,
-                length: d.length!,
-                category: diagnosticCategoryName(d),
-                code: d.code,
-                source: d.source,
-                startLocation: (scriptInfo && scriptInfo.positionToLineOffset(d.start!))!, // TODO: GH#18217
-                endLocation: (scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!))!,
-                reportsUnnecessary: d.reportsUnnecessary,
-                relatedInformation: map(d.relatedInformation, formatRelatedInformation),
-                ...(d.markdownText ? { markdown: flattenDiagnosticMessageText(d.markdownText, this.host.newLine, /*flattenMarkdown*/ true) } : {})
-            }));
+            return diagnostics.map(d => {
+                const annotations = mapDefined(flattenDiagnosticAnnotationSpans(typeof d.messageText !== "string" ? d.messageText : d.annotations, this.host.newLine), convertAnnotationSpanToDiagnosticAnnotationSpan);
+                return {
+                    message: flattenDiagnosticMessageText(d.messageText, this.host.newLine),
+                    start: d.start!,
+                    length: d.length!,
+                    category: diagnosticCategoryName(d),
+                    code: d.code,
+                    source: d.source,
+                    startLocation: (scriptInfo && scriptInfo.positionToLineOffset(d.start!))!, // TODO: GH#18217
+                    endLocation: (scriptInfo && scriptInfo.positionToLineOffset(d.start! + d.length!))!,
+                    reportsUnnecessary: d.reportsUnnecessary,
+                    relatedInformation: map(d.relatedInformation, formatRelatedInformation),
+                    ...(length(annotations) ? { annotations } : {})
+                };
+            });
         }
 
         private getDiagnosticsWorker(
@@ -2547,6 +2557,36 @@ namespace ts.server {
 
     function locationFromLineAndCharacter(lc: LineAndCharacter): protocol.Location {
         return { line: lc.line + 1, offset: lc.character + 1 };
+    }
+
+    function convertAnnotationSpanToDiagnosticAnnotationSpan(span: AnnotationSpan): protocol.DiagnosticAnnotationSpan | undefined {
+        switch (span.kind) {
+            case "symbol":
+                return convertSymbolSpanIntoDiagnosticSymbolSpan(span);
+            default:
+                // TODO: Convert to `Debug.assertNever` once `span` is actually a union
+                return Debug.fail("Unconverted annotation kind");
+        }
+    }
+
+    function convertSymbolSpanIntoDiagnosticSymbolSpan(span: SymbolSpan): protocol.DiagnosticSymbolSpan | undefined {
+        if (!span.symbol.declarations || !span.symbol.declarations[0]) {
+            return undefined;
+        }
+        const d = span.symbol.declarations[0];
+        const f = getSourceFileOfNode(d);
+        if (!f) {
+            return undefined;
+        }
+        const pos = getNameOfDeclaration(d) || d;
+        const p = getLineAndCharacterOfPosition(f, skipTrivia(f.text, pos.pos));
+        return {
+            kind: "symbol",
+            start: span.start,
+            length: span.length,
+            file: f.path,
+            location: locationFromLineAndCharacter(p)
+        };
     }
 
     function convertNewFileTextChangeToCodeEdit(textChanges: FileTextChanges): protocol.FileCodeEdits {

@@ -2009,6 +2009,13 @@ declare namespace ts {
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
     }
+    type AnnotationSpan = SymbolSpan;
+    interface SymbolSpan {
+        kind: "symbol";
+        symbol: Symbol;
+        start: number;
+        length: number;
+    }
     enum NodeBuilderFlags {
         None = 0,
         NoTruncation = 1,
@@ -2448,7 +2455,7 @@ declare namespace ts {
      */
     interface DiagnosticMessageChain {
         messageText: string;
-        markdownText?: string;
+        annotations?: AnnotationSpan[];
         category: DiagnosticCategory;
         code: number;
         next?: DiagnosticMessageChain;
@@ -2466,7 +2473,7 @@ declare namespace ts {
         start: number | undefined;
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
-        markdownText?: string | DiagnosticMessageChain;
+        annotations?: AnnotationSpan[];
     }
     interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;
@@ -4271,7 +4278,7 @@ declare namespace ts {
     function formatDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
     function formatDiagnostic(diagnostic: Diagnostic, host: FormatDiagnosticsHost): string;
     function formatDiagnosticsWithColorAndContext(diagnostics: ReadonlyArray<Diagnostic>, host: FormatDiagnosticsHost): string;
-    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string, flattenMarkdown?: boolean): string;
+    function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string;
     function getConfigFileParsingDiagnostics(configFileParseResult: ParsedCommandLine): ReadonlyArray<Diagnostic>;
     /**
      * Create a new 'Program' instance. A Program is an immutable collection of 'SourceFile's and a 'CompilerOptions'

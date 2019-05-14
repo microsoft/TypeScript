@@ -379,44 +379,33 @@ namespace ts {
             },
 
             getLocalTypeParametersOfClassOrInterfaceOrTypeAlias,
-            getPlainDiagnosticRenderingContext: flags => {
-                return {
-                    typeToString: t => typeToString(t, /*enclosingDeclaration*/ undefined, getTypeFormatFlagsFromRenderFlags(flags)),
-                    symbolToString: s => symbolToString(s),
+            getDiagnosticRenderingContext: flags => {
+                let spans: AnnotationSpan[] | undefined;
+                let offset = 0;
+                const captureSymbolSpan = (original: string, symbol: Symbol): string => {
+                    (spans || (spans = [])).push({ kind: "symbol", symbol, start: offset + typeWriter.getTextPos(), length: original.length });
+                    return original;
                 };
-            },
-            getMarkdownDiagnosticRenderingContext: flags => {
-                const typeWriter = createTextWriter("", renderIntoMarkdown);
+                const typeWriter = createTextWriter("", captureSymbolSpan);
                 const typeFormatFlags = getTypeFormatFlagsFromRenderFlags(flags);
                 return {
-                    typeToString: type => {
+                    typeToString: (type, symbolOffset) => {
+                        offset = symbolOffset;
                         typeWriter.clear();
-                        typeToString(type, /*enclosingDeclaration*/ undefined, typeFormatFlags, typeWriter);
-                        return typeWriter.getText();
+                        return typeToString(type, /*enclosingDeclaration*/ undefined, typeFormatFlags, typeWriter);
                     },
-                    symbolToString: symbol => {
+                    symbolToString: (symbol, symbolOffset) => {
+                        offset = symbolOffset;
                         typeWriter.clear();
-                        symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, typeWriter);
-                        return typeWriter.getText();
+                        return symbolToString(symbol, /*enclosingDeclaration*/ undefined, /*meaning*/ undefined, /*flags*/ undefined, typeWriter);
+                    },
+                    getPendingAnnotationSpans: () => {
+                        const result = spans;
+                        spans = undefined;
+                        return result;
                     }
                 };
             },
-        };
-        const renderIntoMarkdown = (original: string, s: Symbol): string => {
-            const d = firstOrUndefined(s.declarations);
-            if (!d) {
-                return original;
-            }
-            const f = getSourceFileOfNode(d);
-            if (!f) {
-                return original;
-            }
-            const pos = getNameOfDeclaration(d) || d;
-            const p = getLineAndCharacterOfPosition(f, skipTrivia(f.text, pos.pos));
-            return `[${original}](command:editor.action.peekDefinition?${encodeURIComponent(JSON.stringify({
-                resource: { $mid: 1, scheme: "file", authority: "", path: startsWith(f.path, "/") ? f.path : `/${f.path}`},
-                position: { lineNumber: p.line + 1, column: p.character + 1 }
-            }))})`;
         };
 
         function getTypeFormatFlagsFromRenderFlags(flags: DiagnosticRendererFlags) {

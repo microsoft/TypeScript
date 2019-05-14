@@ -865,8 +865,8 @@ namespace ts {
             code: messageChain.code,
             category: messageChain.category,
             messageText: messageChain.next ? messageChain : messageChain.messageText,
-            markdownText: messageChain.next ? messageChain : messageChain.markdownText,
-            relatedInformation
+            relatedInformation,
+            ...(!messageChain.next && messageChain.annotations ? { annotations: messageChain.annotations } : {})
         };
     }
 
@@ -7108,7 +7108,8 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
-    function renderForOutput(arg: string | number | Type | Symbol, renderContext: DiagnosticRenderContext | undefined) {
+    function renderForOutput(arg: string | number | Type | Symbol, renderContext: DiagnosticRenderContext | undefined, offset: number) {
+        Debug.assertDefined(arg);
         if (typeof arg === "string" || typeof arg === "number") {
             return arg;
         }
@@ -7116,13 +7117,18 @@ namespace ts {
             return Debug.fail("Type or symbol passed into diagnostic rendering pipeline with no renderer provided.");
         }
         if (arg.checker) {
-            return renderContext.typeToString(arg);
+            return renderContext.typeToString(arg, offset);
         }
-        return renderContext.symbolToString(arg);
+        return renderContext.symbolToString(arg, offset);
     }
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number | Type | Symbol>, baseIndex = 0, renderContext?: DiagnosticRenderContext): string {
-        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(renderForOutput(args[+index + baseIndex], renderContext)));
+        let offsetAdjustmentFromReplacement = 0;
+        return text.replace(/{(\d+)}/g, (match: string, index: string, offset: number) => {
+            const text = "" + renderForOutput(args[+index + baseIndex], renderContext, offset + offsetAdjustmentFromReplacement);
+            offsetAdjustmentFromReplacement += text.length - match.length;
+            return text;
+        });
     }
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -7193,15 +7199,12 @@ namespace ts {
     export function createRenderedCompilerDiagnostic(checker: TypeChecker, flags: DiagnosticRendererFlags, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): Diagnostic;
     export function createRenderedCompilerDiagnostic(checker: TypeChecker, flags: DiagnosticRendererFlags, message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
-        let markdown: string | undefined;
+        let spans: SymbolSpan[] | undefined;
 
         if (arguments.length > 3) {
-            const unformatted = text;
-            text = formatStringFromArgs(unformatted, arguments, 3, checker.getPlainDiagnosticRenderingContext(flags));
-            const candidateMarkdown = formatStringFromArgs(unformatted, arguments, 3, checker.getMarkdownDiagnosticRenderingContext(flags));
-            if (candidateMarkdown !== text) {
-                markdown = candidateMarkdown;
-            }
+            const ctx = checker.getDiagnosticRenderingContext(flags);
+            text = formatStringFromArgs(text, arguments, 3, ctx);
+            spans = ctx.getPendingAnnotationSpans();
         }
 
         return {
@@ -7213,7 +7216,7 @@ namespace ts {
             category: message.category,
             code: message.code,
             reportsUnnecessary: message.reportsUnnecessary,
-            ...(typeof markdown === "string" ? { markdownText: markdown } : {})
+            ...(typeof spans === "undefined" ? {} : { annotations: spans })
         };
     }
 
@@ -7249,15 +7252,12 @@ namespace ts {
     export function chainRenderedDiagnosticMessages(checker: TypeChecker, flags: DiagnosticRendererFlags, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | Type | Symbol | undefined)[]): DiagnosticMessageChain;
     export function chainRenderedDiagnosticMessages(checker: TypeChecker, flags: DiagnosticRendererFlags, details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
-        let markdown: string | undefined;
+        let spans: SymbolSpan[] | undefined;
 
         if (arguments.length > 4) {
-            const unformatted = text;
-            text = formatStringFromArgs(unformatted, arguments, 4, checker.getPlainDiagnosticRenderingContext(flags));
-            const candidateMarkdown = formatStringFromArgs(unformatted, arguments, 4, checker.getMarkdownDiagnosticRenderingContext(flags));
-            if (candidateMarkdown !== text) {
-                markdown = candidateMarkdown;
-            }
+            const ctx = checker.getDiagnosticRenderingContext(flags);
+            text = formatStringFromArgs(text, arguments, 4, ctx);
+            spans = ctx.getPendingAnnotationSpans();
         }
 
         return {
@@ -7266,7 +7266,7 @@ namespace ts {
             code: message.code,
 
             next: details,
-            ...(typeof markdown === "string" ? { markdownText: markdown } : {})
+            ...(typeof spans === "undefined" ? {} : { annotations: spans })
         };
     }
 

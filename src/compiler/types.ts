@@ -3320,8 +3320,7 @@ namespace ts {
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
 
-        /* @internal */ getPlainDiagnosticRenderingContext(flags: DiagnosticRendererFlags): DiagnosticRenderContext;
-        /* @internal */ getMarkdownDiagnosticRenderingContext(flags: DiagnosticRendererFlags): DiagnosticRenderContext;
+        /* @internal */ getDiagnosticRenderingContext(flags: DiagnosticRendererFlags): DiagnosticRenderContext;
     }
 
 
@@ -3331,10 +3330,20 @@ namespace ts {
         UseFullyQualifiedTypes  = 1 << 0,
     }
 
+    export type AnnotationSpan = SymbolSpan;
+
+    export interface SymbolSpan {
+        kind: "symbol";
+        symbol: Symbol;
+        start: number;
+        length: number;
+    }
+
     /** @internal */
     export interface DiagnosticRenderContext {
-        typeToString(type: Type): string;
-        symbolToString(symbol: Symbol): string;
+        typeToString(type: Type, symbolOffset: number): string;
+        symbolToString(symbol: Symbol, symbolOffset: number): string;
+        getPendingAnnotationSpans(): AnnotationSpan[] | undefined;
     }
 
     /* @internal */
@@ -4564,7 +4573,7 @@ namespace ts {
      */
     export interface DiagnosticMessageChain {
         messageText: string;
-        markdownText?: string;
+        annotations?: AnnotationSpan[];
         category: DiagnosticCategory;
         code: number;
         next?: DiagnosticMessageChain;
@@ -4583,7 +4592,7 @@ namespace ts {
         start: number | undefined;
         length: number | undefined;
         messageText: string | DiagnosticMessageChain;
-        markdownText?: string | DiagnosticMessageChain;
+        annotations?: AnnotationSpan[];
     }
     export interface DiagnosticWithLocation extends Diagnostic {
         file: SourceFile;

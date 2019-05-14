@@ -502,7 +502,35 @@ namespace ts {
         return output;
     }
 
-    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string, flattenMarkdown?: boolean): string {
+    /* @internal */
+    export function flattenDiagnosticAnnotationSpans(spans: AnnotationSpan[] | DiagnosticMessageChain | undefined, newLine: string): AnnotationSpan[] | undefined {
+        if (!spans || isArray(spans)) {
+            return spans;
+        }
+        let results: SymbolSpan[] | undefined;
+        let diagnosticChain: DiagnosticMessageChain | undefined = spans;
+        let offset = 0;
+
+        let indent = 0;
+        while (diagnosticChain) {
+            if (indent) {
+                offset += newLine.length;
+
+                for (let i = 0; i < indent; i++) {
+                    offset += "  ".length;
+                }
+            }
+            if (diagnosticChain.annotations) {
+                results = concatenate(results, map(diagnosticChain.annotations, d => ({ ...d, start: d.start + offset })));
+            }
+            offset += diagnosticChain.messageText.length;
+            indent++;
+            diagnosticChain = diagnosticChain.next;
+        }
+        return results;
+    }
+
+    export function flattenDiagnosticMessageText(messageText: string | DiagnosticMessageChain | undefined, newLine: string): string {
         if (isString(messageText)) {
             return messageText;
         }
@@ -519,7 +547,7 @@ namespace ts {
                         result += "  ";
                     }
                 }
-                result += flattenMarkdown && diagnosticChain.markdownText ? diagnosticChain.markdownText : diagnosticChain.messageText;
+                result += diagnosticChain.messageText;
                 indent++;
                 diagnosticChain = diagnosticChain.next;
             }

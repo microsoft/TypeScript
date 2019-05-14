@@ -479,9 +479,19 @@ namespace ts.server.protocol {
         reportsUnnecessary?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
         /**
-         * Markdown containing variation of the message
+         * List of spans of the message that have associated information
          */
-        markdown?: string;
+        annotations?: DiagnosticAnnotationSpan[];
+    }
+
+    export type DiagnosticAnnotationSpan = DiagnosticSymbolSpan;
+
+    export interface DiagnosticSymbolSpan {
+        kind: "symbol";
+        start: number;
+        length: number;
+        file: string;
+        location: Location;
     }
 
     /**
@@ -2390,9 +2400,9 @@ namespace ts.server.protocol {
          */
         source?: string;
         /**
-         * Markdown containing variation of the message
+         * List of spans of the message that have associated information
          */
-        markdown?: string;
+        annotations?: DiagnosticAnnotationSpan[];
     }
 
     export interface DiagnosticWithFileName extends Diagnostic {
