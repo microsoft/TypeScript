@@ -245,6 +245,7 @@ namespace ts {
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
         deleteFile(fileName: string): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
 
         reportDiagnostic: DiagnosticReporter; // Technically we want to move it out and allow steps of actions on Solution, but for now just merge stuff in build host here
         reportSolutionBuilderStatus: DiagnosticReporter;
@@ -493,10 +494,17 @@ namespace ts {
         }
 
         let diagnostic: Diagnostic | undefined;
-        const { parseConfigFileHost, baseCompilerOptions, extendedConfigCache } = state;
-        parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
-        const parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache);
-        parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
+        const { parseConfigFileHost, baseCompilerOptions, extendedConfigCache, host } = state;
+        let parsed: ParsedCommandLine | undefined;
+        if (host.getParsedCommandLine) {
+            parsed = host.getParsedCommandLine(configFileName);
+            if (!parsed) diagnostic = createCompilerDiagnostic(Diagnostics.File_0_not_found, configFileName);
+        }
+        else {
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = d => diagnostic = d;
+            parsed = getParsedCommandLineOfConfigFile(configFileName, baseCompilerOptions, parseConfigFileHost, extendedConfigCache);
+            parseConfigFileHost.onUnRecoverableConfigFileDiagnostic = noop;
+        }
         configFileCache.set(configFilePath, parsed || diagnostic!);
         return parsed;
     }
@@ -1730,6 +1738,10 @@ namespace ts {
     }
 
     function invalidateProject(state: SolutionBuilderState, resolved: ResolvedConfigFilePath, reloadLevel: ConfigFileProgramReloadLevel) {
+        // If host implements getParsedCommandLine, we cant get list of files from parseConfigFileHost
+        if (state.host.getParsedCommandLine && reloadLevel === ConfigFileProgramReloadLevel.Partial) {
+            reloadLevel = ConfigFileProgramReloadLevel.Full;
+        }
         if (reloadLevel === ConfigFileProgramReloadLevel.Full) {
             state.configFileCache.delete(resolved);
             state.buildOrder = undefined;

@@ -4591,6 +4591,7 @@ declare namespace ts {
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
         deleteFile(fileName: string): void;
+        getParsedCommandLine?(fileName: string): ParsedCommandLine | undefined;
         reportDiagnostic: DiagnosticReporter;
         reportSolutionBuilderStatus: DiagnosticReporter;
         afterProgramEmitAndDiagnostics?(program: T): void;
