@@ -4288,7 +4288,7 @@
         "category": "Error",
         "code": 7053
     },    
-    "No index with a parameter of type '{0}' was found on type '{1}'.": {
+    "No index signature with a parameter of type '{0}' was found on type '{1}'.": {
         "category": "Error",
         "code": 7054
     },
