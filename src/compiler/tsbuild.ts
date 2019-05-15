@@ -242,6 +242,13 @@ namespace ts {
     export type ReportEmitErrorSummary = (errorCount: number) => void;
 
     export interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
+        createDirectory?(path: string): void;
+        /**
+         * Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
+         * writeFileCallback
+         */
+        writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
+
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
         deleteFile(fileName: string): void;
@@ -673,7 +680,7 @@ namespace ts {
         /**
          *  To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
          */
-        done(cancellationToken?: CancellationToken): ExitStatus;
+        done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): ExitStatus;
         getCompilerOptions(): CompilerOptions;
         getCurrentDirectory(): string;
     }
@@ -861,8 +868,8 @@ namespace ts {
                 done,
             };
 
-        function done(cancellationToken?: CancellationToken) {
-            executeSteps(Step.Done, cancellationToken);
+        function done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
+            executeSteps(Step.Done, cancellationToken, writeFile, customTransformers);
             return doneInvalidatedProject(state, projectPath);
         }
 
@@ -1127,7 +1134,7 @@ namespace ts {
             return { emitSkipped: false, diagnostics: emitDiagnostics };
         }
 
-        function executeSteps(till: Step, cancellationToken?: CancellationToken) {
+        function executeSteps(till: Step, cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers) {
             while (step <= till && step < Step.Done) {
                 const currentStep = step;
                 switch (step) {
@@ -1144,11 +1151,11 @@ namespace ts {
                         break;
 
                     case Step.Emit:
-                        emit(/*writeFileCallback*/ undefined, cancellationToken);
+                        emit(writeFile, cancellationToken, customTransformers);
                         break;
 
                     case Step.EmitBundle:
-                        emitBundle();
+                        emitBundle(writeFile, customTransformers);
                         break;
 
                     case Step.BuildInvalidatedProjectOfBundle:

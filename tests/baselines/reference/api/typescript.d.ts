@@ -4588,6 +4588,12 @@ declare namespace ts {
     }
     type ReportEmitErrorSummary = (errorCount: number) => void;
     interface SolutionBuilderHostBase<T extends BuilderProgram> extends ProgramHost<T> {
+        createDirectory?(path: string): void;
+        /**
+         * Should provide create directory and writeFile if done of invalidatedProjects is not invoked with
+         * writeFileCallback
+         */
+        writeFile?(path: string, data: string, writeByteOrderMark?: boolean): void;
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
         deleteFile(fileName: string): void;
@@ -4625,7 +4631,7 @@ declare namespace ts {
         /**
          *  To dispose this project and ensure that all the necessary actions are taken and state is updated accordingly
          */
-        done(cancellationToken?: CancellationToken): ExitStatus;
+        done(cancellationToken?: CancellationToken, writeFile?: WriteFileCallback, customTransformers?: CustomTransformers): ExitStatus;
         getCompilerOptions(): CompilerOptions;
         getCurrentDirectory(): string;
     }
