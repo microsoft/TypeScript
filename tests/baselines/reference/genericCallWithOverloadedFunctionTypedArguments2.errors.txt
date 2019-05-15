@@ -31,7 +31,10 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOve
     
         var r10 = foo6(<T>(x: T, y: T) => ''); // error
                        ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, y: T) => string' is not assignable to parameter of type '{ (x: unknown): string; (x: unknown, y?: unknown): string; }'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, y: {|T|2|}) => string' is not assignable to parameter of type '{ (x: unknown): string; (x: unknown, y?: unknown): string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts:28:21
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts:28:21
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithOverloadedFunctionTypedArguments2.ts:28:21
     
         function foo7<T>(x:T, cb: { (x: T): string; (x: T, y?: T): string }) {
             return cb;

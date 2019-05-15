@@ -21,5 +21,7 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern6.ts(17,8): error 
     var a: Bar, b: string[];
     [a, ...b] = new FooIterator;
            ~
-!!! error TS2322: Type 'Foo[]' is not assignable to type 'string[]'.
-!!! error TS2322:   Type 'Foo' is not assignable to type 'string'.
+!!! error TS2322: Type '{|Foo|0|}[]' is not assignable to type 'string[]'.
+!!! error TS2322:   Type '{|Foo|1|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/es6/destructuring/iterableArrayPattern6.ts:2:7
+!!! annotated symbol 1 tests/cases/conformance/es6/destructuring/iterableArrayPattern6.ts:2:7

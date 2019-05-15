@@ -65,91 +65,273 @@ tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(37,1): e
     b = anb;  // Ok
     anb = a;
     ~~~
-!!! error TS2322: Type 'A' is not assignable to type 'A & B'.
+!!! error TS2322: Type '{|A|0|}' is not assignable to type '{|A|1|} & {|B|2|}'.
 !!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:15: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
     anb = b;
     ~~~
-!!! error TS2322: Type 'B' is not assignable to type 'A & B'.
+!!! error TS2322: Type '{|B|0|}' is not assignable to type '{|A|1|} & {|B|2|}'.
 !!! error TS2322:   Property 'a' is missing in type 'B' but required in type 'A'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:15: 'a' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
     
     x = anb;  // Ok
     x = aob;
     ~
-!!! error TS2322: Type 'A | B' is not assignable to type '(A & B) | (C & D)'.
-!!! error TS2322:   Type 'A' is not assignable to type '(A & B) | (C & D)'.
-!!! error TS2322:     Type 'A' is not assignable to type 'A & B'.
-!!! error TS2322:       Type 'A' is not assignable to type 'B'.
+!!! error TS2322: Type '{|A|0|} | {|B|1|}' is not assignable to type '({|A|2|} & {|B|3|}) | ({|C|4|} & {|D|5|})'.
+!!! error TS2322:   Type '{|A|6|}' is not assignable to type '({|A|7|} & {|B|8|}) | ({|C|9|} & {|D|10|})'.
+!!! error TS2322:     Type '{|A|11|}' is not assignable to type '{|A|12|} & {|B|13|}'.
+!!! error TS2322:       Type '{|A|14|}' is not assignable to type '{|B|15|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 10 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 11 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 12 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 13 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 14 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 15 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
     x = cnd;  // Ok
     x = cod;
     ~
-!!! error TS2322: Type 'C | D' is not assignable to type '(A & B) | (C & D)'.
-!!! error TS2322:   Type 'C' is not assignable to type '(A & B) | (C & D)'.
-!!! error TS2322:     Type 'C' is not assignable to type 'C & D'.
+!!! error TS2322: Type '{|C|0|} | {|D|1|}' is not assignable to type '({|A|2|} & {|B|3|}) | ({|C|4|} & {|D|5|})'.
+!!! error TS2322:   Type '{|C|6|}' is not assignable to type '({|A|7|} & {|B|8|}) | ({|C|9|} & {|D|10|})'.
+!!! error TS2322:     Type '{|C|11|}' is not assignable to type '{|C|12|} & {|D|13|}'.
 !!! error TS2322:       Property 'd' is missing in type 'C' but required in type 'D'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:15: 'd' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 10 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 11 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 12 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 13 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
     anb = x;
     ~~~
-!!! error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'A & B'.
-!!! error TS2322:   Type 'C & D' is not assignable to type 'A & B'.
+!!! error TS2322: Type '({|A|0|} & {|B|1|}) | ({|C|2|} & {|D|3|})' is not assignable to type '{|A|4|} & {|B|5|}'.
+!!! error TS2322:   Type '{|C|6|} & {|D|7|}' is not assignable to type '{|A|8|} & {|B|9|}'.
 !!! error TS2322:     Property 'a' is missing in type 'C & D' but required in type 'A'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:15: 'a' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
     aob = x;
     ~~~
-!!! error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'A | B'.
-!!! error TS2322:   Type 'C & D' is not assignable to type 'A | B'.
+!!! error TS2322: Type '({|A|0|} & {|B|1|}) | ({|C|2|} & {|D|3|})' is not assignable to type '{|A|4|} | {|B|5|}'.
+!!! error TS2322:   Type '{|C|6|} & {|D|7|}' is not assignable to type '{|A|8|} | {|B|9|}'.
 !!! error TS2322:     Property 'b' is missing in type 'C & D' but required in type 'B'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:15: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
     cnd = x;
     ~~~
-!!! error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'C & D'.
-!!! error TS2322:   Type 'A & B' is not assignable to type 'C & D'.
+!!! error TS2322: Type '({|A|0|} & {|B|1|}) | ({|C|2|} & {|D|3|})' is not assignable to type '{|C|4|} & {|D|5|}'.
+!!! error TS2322:   Type '{|A|6|} & {|B|7|}' is not assignable to type '{|C|8|} & {|D|9|}'.
 !!! error TS2322:     Property 'c' is missing in type 'A & B' but required in type 'C'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:15: 'c' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
     cod = x;
     ~~~
-!!! error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'C | D'.
-!!! error TS2322:   Type 'A & B' is not assignable to type 'C | D'.
+!!! error TS2322: Type '({|A|0|} & {|B|1|}) | ({|C|2|} & {|D|3|})' is not assignable to type '{|C|4|} | {|D|5|}'.
+!!! error TS2322:   Type '{|A|6|} & {|B|7|}' is not assignable to type '{|C|8|} | {|D|9|}'.
 !!! error TS2322:     Property 'd' is missing in type 'A & B' but required in type 'D'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:15: 'd' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
     
     y = anb;
     ~
-!!! error TS2322: Type 'A & B' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
-!!! error TS2322:   Type 'A & B' is not assignable to type 'B & D'.
-!!! error TS2322:     Type 'A & B' is not assignable to type 'D'.
+!!! error TS2322: Type '{|A|0|} & {|B|1|}' is not assignable to type '({|A|2|} & {|C|3|}) | ({|A|4|} & {|D|5|}) | ({|B|6|} & {|C|7|}) | ({|B|8|} & {|D|9|})'.
+!!! error TS2322:   Type '{|A|10|} & {|B|11|}' is not assignable to type '{|B|12|} & {|D|13|}'.
+!!! error TS2322:     Type '{|A|14|} & {|B|15|}' is not assignable to type '{|D|16|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 10 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 11 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 12 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 13 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 14 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 15 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 16 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
     y = aob;
     ~
-!!! error TS2322: Type 'A | B' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
-!!! error TS2322:   Type 'A' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
-!!! error TS2322:     Type 'A' is not assignable to type 'A & D'.
+!!! error TS2322: Type '{|A|0|} | {|B|1|}' is not assignable to type '({|A|2|} & {|C|3|}) | ({|A|4|} & {|D|5|}) | ({|B|6|} & {|C|7|}) | ({|B|8|} & {|D|9|})'.
+!!! error TS2322:   Type '{|A|10|}' is not assignable to type '({|A|11|} & {|C|12|}) | ({|A|13|} & {|D|14|}) | ({|B|15|} & {|C|16|}) | ({|B|17|} & {|D|18|})'.
+!!! error TS2322:     Type '{|A|19|}' is not assignable to type '{|A|20|} & {|D|21|}'.
 !!! error TS2322:       Property 'd' is missing in type 'A' but required in type 'D'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:15: 'd' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 10 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 11 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 12 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 13 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 14 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 15 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 16 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 17 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 18 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 19 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 20 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 21 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
     y = cnd;
     ~
-!!! error TS2322: Type 'C & D' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
-!!! error TS2322:   Type 'C & D' is not assignable to type 'B & D'.
-!!! error TS2322:     Type 'C & D' is not assignable to type 'B'.
+!!! error TS2322: Type '{|C|0|} & {|D|1|}' is not assignable to type '({|A|2|} & {|C|3|}) | ({|A|4|} & {|D|5|}) | ({|B|6|} & {|C|7|}) | ({|B|8|} & {|D|9|})'.
+!!! error TS2322:   Type '{|C|10|} & {|D|11|}' is not assignable to type '{|B|12|} & {|D|13|}'.
+!!! error TS2322:     Type '{|C|14|} & {|D|15|}' is not assignable to type '{|B|16|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 10 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 11 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 12 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 13 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 14 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 15 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 16 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
     y = cod;
     ~
-!!! error TS2322: Type 'C | D' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
-!!! error TS2322:   Type 'C' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
-!!! error TS2322:     Type 'C' is not assignable to type 'B & C'.
+!!! error TS2322: Type '{|C|0|} | {|D|1|}' is not assignable to type '({|A|2|} & {|C|3|}) | ({|A|4|} & {|D|5|}) | ({|B|6|} & {|C|7|}) | ({|B|8|} & {|D|9|})'.
+!!! error TS2322:   Type '{|C|10|}' is not assignable to type '({|A|11|} & {|C|12|}) | ({|A|13|} & {|D|14|}) | ({|B|15|} & {|C|16|}) | ({|B|17|} & {|D|18|})'.
+!!! error TS2322:     Type '{|C|19|}' is not assignable to type '{|B|20|} & {|C|21|}'.
 !!! error TS2322:       Property 'b' is missing in type 'C' but required in type 'B'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:15: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 10 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 11 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 12 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 13 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 14 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 15 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 16 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 17 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 18 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 19 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 20 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 21 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
     anb = y;
     ~~~
-!!! error TS2322: Type '(A & C) | (A & D) | (B & C) | (B & D)' is not assignable to type 'A & B'.
-!!! error TS2322:   Type 'A & C' is not assignable to type 'A & B'.
+!!! error TS2322: Type '({|A|0|} & {|C|1|}) | ({|A|2|} & {|D|3|}) | ({|B|4|} & {|C|5|}) | ({|B|6|} & {|D|7|})' is not assignable to type '{|A|8|} & {|B|9|}'.
+!!! error TS2322:   Type '{|A|10|} & {|C|11|}' is not assignable to type '{|A|12|} & {|B|13|}'.
 !!! error TS2322:     Property 'b' is missing in type 'A & C' but required in type 'B'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:15: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 10 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 11 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 12 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 13 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
     aob = y;  // Ok
     cnd = y;
     ~~~
-!!! error TS2322: Type '(A & C) | (A & D) | (B & C) | (B & D)' is not assignable to type 'C & D'.
-!!! error TS2322:   Type 'A & C' is not assignable to type 'C & D'.
+!!! error TS2322: Type '({|A|0|} & {|C|1|}) | ({|A|2|} & {|D|3|}) | ({|B|4|} & {|C|5|}) | ({|B|6|} & {|D|7|})' is not assignable to type '{|C|8|} & {|D|9|}'.
+!!! error TS2322:   Type '{|A|10|} & {|C|11|}' is not assignable to type '{|C|12|} & {|D|13|}'.
 !!! error TS2322:     Property 'd' is missing in type 'A & C' but required in type 'D'.
 !!! related TS2728 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:15: 'd' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:2:11
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 8 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 9 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
+!!! annotated symbol 10 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:1:11
+!!! annotated symbol 11 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 12 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:3:11
+!!! annotated symbol 13 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts:4:11
     cod = y;  // Ok
     

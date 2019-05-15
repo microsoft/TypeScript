@@ -41,15 +41,19 @@ tests/cases/compiler/assignmentIndexedToPrimitives.ts(15,7): error TS2322: Type 
     
     const no1: number = { 0: 1 };
           ~~~
-!!! error TS2322: Type '{ 0: number; }' is not assignable to type 'number'.
+!!! error TS2322: Type '{ {|0|0|}: number; }' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentIndexedToPrimitives.ts:11:23
     
     const so1: string = { 0: 1 };
           ~~~
-!!! error TS2322: Type '{ 0: number; }' is not assignable to type 'string'.
+!!! error TS2322: Type '{ {|0|0|}: number; }' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentIndexedToPrimitives.ts:13:23
     const so2: string = { "0": 1 };
           ~~~
-!!! error TS2322: Type '{ "0": number; }' is not assignable to type 'string'.
+!!! error TS2322: Type '{ {|"0"|0|}: number; }' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentIndexedToPrimitives.ts:14:23
     const so3: string = { 0: "1" };
           ~~~
-!!! error TS2322: Type '{ 0: string; }' is not assignable to type 'string'.
+!!! error TS2322: Type '{ {|0|0|}: string; }' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentIndexedToPrimitives.ts:15:23
     

@@ -26,8 +26,11 @@ tests/cases/conformance/jsx/file.tsx(35,26): error TS2339: Property 'propertyNot
     // Error - not allowed to specify 'ref' on SFCs
     let c = <Greet ref="myRef" />;
              ~~~~~
-!!! error TS2322: Type '{ ref: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+!!! error TS2322: Type '{ {|ref|0|}: string; }' is not assignable to type '{|IntrinsicAttributes|1|} & { {|name|2|}?: string; }'.
 !!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:19:16
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:3:20
     
     
     // OK - ref is valid for classes

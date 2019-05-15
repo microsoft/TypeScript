@@ -25,8 +25,10 @@ tests/cases/compiler/getAndSetNotIdenticalType3.ts(9,9): error TS2322: Type 'A<s
 !!! error TS2380: 'get' and 'set' accessor must have the same type.
             this.data = v;
             ~~~~~~~~~
-!!! error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
+!!! error TS2322: Type '{|A|0|}<string>' is not assignable to type '{|A|1|}<number>'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/getAndSetNotIdenticalType3.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/getAndSetNotIdenticalType3.ts:1:7
         }
     }
     

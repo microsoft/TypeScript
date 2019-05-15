@@ -60,14 +60,19 @@ tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts(75,
     if (typeof strOrC === "Object" as string) { // comparison is OK with cast
         c = strOrC; // error: but no narrowing to C
         ~
-!!! error TS2322: Type 'string | C' is not assignable to type 'C'.
-!!! error TS2322:   Type 'string' is not assignable to type 'C'.
+!!! error TS2322: Type 'string | {|C|0|}' is not assignable to type '{|C|1|}'.
+!!! error TS2322:   Type 'string' is not assignable to type '{|C|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts:1:7
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts:1:7
+!!! annotated symbol 2 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts:1:7
     }
     else {
         var r5: string = strOrC; // error: no narrowing to string
             ~~
-!!! error TS2322: Type 'string | C' is not assignable to type 'string'.
-!!! error TS2322:   Type 'C' is not assignable to type 'string'.
+!!! error TS2322: Type 'string | {|C|0|}' is not assignable to type 'string'.
+!!! error TS2322:   Type '{|C|1|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts:1:7
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfOther.ts:1:7
     }
     
     if (typeof strOrNumOrBool === "Object") {

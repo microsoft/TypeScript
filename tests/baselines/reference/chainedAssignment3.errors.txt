@@ -26,7 +26,9 @@ tests/cases/compiler/chainedAssignment3.ts(19,5): error TS2322: Type 'A' is not 
 !!! related TS2728 tests/cases/compiler/chainedAssignment3.ts:6:5: 'value' is declared here.
     a = b = new A();
         ~
-!!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! error TS2322: Type '{|A|0|}' is not assignable to type '{|B|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/chainedAssignment3.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/chainedAssignment3.ts:5:7
     
     
     

@@ -135,12 +135,16 @@ tests/cases/compiler/protectedMembers.ts(111,7): error TS2415: Class 'B3' incorr
     var b1: B1;
     a1 = b1;  // Error, B1 doesn't derive from A1
     ~~
-!!! error TS2322: Type 'B1' is not assignable to type 'A1'.
+!!! error TS2322: Type '{|B1|0|}' is not assignable to type '{|A1|1|}'.
 !!! error TS2322:   Property 'x' is protected but type 'B1' is not a class derived from 'A1'.
+!!! annotated symbol 0 tests/cases/compiler/protectedMembers.ts:92:7
+!!! annotated symbol 1 tests/cases/compiler/protectedMembers.ts:89:7
     b1 = a1;  // Error, x is protected in A1 but public in B1
     ~~
-!!! error TS2322: Type 'A1' is not assignable to type 'B1'.
+!!! error TS2322: Type '{|A1|0|}' is not assignable to type '{|B1|1|}'.
 !!! error TS2322:   Property 'x' is protected in type 'A1' but public in type 'B1'.
+!!! annotated symbol 0 tests/cases/compiler/protectedMembers.ts:89:7
+!!! annotated symbol 1 tests/cases/compiler/protectedMembers.ts:92:7
     
     class A2 {
         protected x;
@@ -155,8 +159,10 @@ tests/cases/compiler/protectedMembers.ts(111,7): error TS2415: Class 'B3' incorr
     // Error x is protected in B3 but public in A3
     class B3 extends A3 {
           ~~
-!!! error TS2415: Class 'B3' incorrectly extends base class 'A3'.
+!!! error TS2415: Class '{|B3|0|}' incorrectly extends base class '{|A3|1|}'.
 !!! error TS2415:   Property 'x' is protected in type 'B3' but public in type 'A3'.
+!!! annotated symbol 0 tests/cases/compiler/protectedMembers.ts:111:7
+!!! annotated symbol 1 tests/cases/compiler/protectedMembers.ts:107:7
         protected x;
     }
     

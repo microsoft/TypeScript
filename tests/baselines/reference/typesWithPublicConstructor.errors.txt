@@ -13,8 +13,9 @@ tests/cases/conformance/types/members/typesWithPublicConstructor.ts(15,10): erro
     var c = new C();
     var r: () => void = c.constructor;
         ~
-!!! error TS2322: Type 'Function' is not assignable to type '() => void'.
+!!! error TS2322: Type '{|Function|0|}' is not assignable to type '() => void'.
 !!! error TS2322:   Type 'Function' provides no match for the signature '(): void'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:272:11
     
     class C2 {
         public constructor(x: number);

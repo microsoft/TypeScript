@@ -45,10 +45,22 @@ tests/cases/conformance/jsx/file.tsx(34,10): error TS2322: Type '{ prop: true; }
 !!! related TS6500 tests/cases/conformance/jsx/file.tsx:3:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1 | RC2> & { x: number; } & { children?: ReactNode; } & { x: string; } & { children?: ReactNode; }'
     let b = <PartRCComp x={10} />
              ~~~~~~~~~~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
+!!! error TS2322: Type '{ {|x|0|}: number; }' is not assignable to type '{|IntrinsicAttributes|1|} & {|IntrinsicClassAttributes|2|}<{|RC4|3|}> & { {|children|4|}?: {|ReactNode|5|}; }'.
 !!! error TS2322:   Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:33:21
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
+!!! annotated symbol 2 /.lib/react.d.ts:2369:15
+!!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:22:7
+!!! annotated symbol 4 /.lib/react.d.ts:175:22
+!!! annotated symbol 5 /.lib/react.d.ts:93:10
     let c = <EmptyRCComp prop />;
              ~~~~~~~~~~~
-!!! error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+!!! error TS2322: Type '{ {|prop|0|}: true; }' is not assignable to type '{|IntrinsicAttributes|1|} & {|IntrinsicClassAttributes|2|}<{|RC3|3|}> & { {|children|4|}?: {|ReactNode|5|}; }'.
 !!! error TS2322:   Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:34:22
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
+!!! annotated symbol 2 /.lib/react.d.ts:2369:15
+!!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:16:7
+!!! annotated symbol 4 /.lib/react.d.ts:175:22
+!!! annotated symbol 5 /.lib/react.d.ts:93:10
     

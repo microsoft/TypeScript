@@ -17,5 +17,7 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
     list1 = list2; // ok
     list1 = list3; // error
     ~~~~~
-!!! error TS2322: Type 'List<string>' is not assignable to type 'List<number>'.
+!!! error TS2322: Type '{|List|0|}<string>' is not assignable to type '{|List|1|}<number>'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedProperty2.ts:3:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedProperty2.ts:3:7

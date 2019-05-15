@@ -30,13 +30,23 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts(24,101): erro
     // Contextual type C with numeric index signature makes array literal of EveryType E of type BCT(E,C)[]
     var context1: { [n: number]: { a: string; b: number; }; } = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
                                                                                 ~~~~~
-!!! error TS2322: Type '{ a: string; b: number; c: string; }' is not assignable to type '{ a: string; b: number; }'.
+!!! error TS2322: Type '{ {|a|0|}: string; {|b|1|}: number; {|c|2|}: string; }' is not assignable to type '{ {|a|3|}: string; {|b|4|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
 !!! related TS6501 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:17: The expected type comes from this index signature.
+!!! annotated symbol 0 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:64
+!!! annotated symbol 1 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:71
+!!! annotated symbol 2 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:77
+!!! annotated symbol 3 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:32
+!!! annotated symbol 4 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:43
                                                                                                         ~~~~
-!!! error TS2322: Type '{ a: string; b: number; c: number; }' is not assignable to type '{ a: string; b: number; }'.
+!!! error TS2322: Type '{ {|a|0|}: string; {|b|1|}: number; {|c|2|}: number; }' is not assignable to type '{ {|a|3|}: string; {|b|4|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: string; b: number; }'.
 !!! related TS6501 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:17: The expected type comes from this index signature.
+!!! annotated symbol 0 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:88
+!!! annotated symbol 1 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:95
+!!! annotated symbol 2 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:101
+!!! annotated symbol 3 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:32
+!!! annotated symbol 4 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals.ts:24:43
     var context2 = [{ a: '', b: 0, c: '' }, { a: "", b: 3, c: 0 }];
     
     // Contextual type C with numeric index signature of type Base makes array literal of Derived have type Base[]

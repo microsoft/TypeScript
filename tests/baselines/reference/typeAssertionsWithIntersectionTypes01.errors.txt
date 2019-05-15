@@ -22,12 +22,17 @@ tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithInt
     
     var a = <I1 & I3>z;
             ~~~~~~~~~~
-!!! error TS2352: Conversion of type 'I2' to type 'I1 & I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352: Conversion of type '{|I2|0|}' to type '{|I1|1|} & {|I3|2|}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'p3' is missing in type 'I2' but required in type 'I3'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts:10:5: 'p3' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts:5:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts:1:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts:9:11
     var b = <I3>z;
             ~~~~~
-!!! error TS2352: Conversion of type 'I2' to type 'I3' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352: Conversion of type '{|I2|0|}' to type '{|I3|1|}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts:5:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithIntersectionTypes01.ts:9:11
     var c = <I2>z;
     var d = <I1>y;
     

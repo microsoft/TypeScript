@@ -5,5 +5,8 @@ tests/cases/compiler/contextualTyping12.ts(1,57): error TS2322: Type '{ id: numb
 ==== tests/cases/compiler/contextualTyping12.ts (1 errors) ====
     class foo { public bar:{id:number;}[] = [{id:1}, {id:2, name:"foo"}]; }
                                                             ~~~~~~~~~~
-!!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
+!!! error TS2322: Type '{ {|id|0|}: number; {|name|1|}: string; }' is not assignable to type '{ {|id|2|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/contextualTyping12.ts:1:51
+!!! annotated symbol 1 tests/cases/compiler/contextualTyping12.ts:1:57
+!!! annotated symbol 2 tests/cases/compiler/contextualTyping12.ts:1:25

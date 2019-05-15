@@ -19,5 +19,7 @@ tests/cases/compiler/genericCloneReturnTypes2.ts(15,5): error TS2322: Type 'MyLi
     var c: MyList<string> = a.clone(); // bug was there was an error on this line
     var d: MyList<number> = a.clone(); // error
         ~
-!!! error TS2322: Type 'MyList<string>' is not assignable to type 'MyList<number>'.
+!!! error TS2322: Type '{|MyList|0|}<string>' is not assignable to type '{|MyList|1|}<number>'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/genericCloneReturnTypes2.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/genericCloneReturnTypes2.ts:1:7

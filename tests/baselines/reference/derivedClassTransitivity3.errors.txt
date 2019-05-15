@@ -25,10 +25,12 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTra
     var e: E<string>;
     c = e;
     ~
-!!! error TS2322: Type 'E<string>' is not assignable to type 'C<string>'.
+!!! error TS2322: Type '{|E|0|}<string>' is not assignable to type '{|C|1|}<string>'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
 !!! error TS2322:     Type '(x: string, y?: number) => void' is not assignable to type '(x: string, y: string) => void'.
 !!! error TS2322:       Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts:11:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassTransitivity3.ts:3:7
     var r = c.foo('', '');
     var r2 = e.foo('', 1);

@@ -57,8 +57,9 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
 !!! error TS2344: Type 'string' does not satisfy the constraint '(...args: any) => any'.
     type T18 = ReturnType<Function>;  // Error
                           ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344: Type '{|Function|0|}' does not satisfy the constraint '(...args: any) => any'.
 !!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any): any'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:272:11
     type T19<T extends any[]> = ReturnType<(x: string, ...args: T) => T[]>;  // T[]
     
     type U10 = InstanceType<typeof C>;  // C
@@ -69,8 +70,9 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
 !!! error TS2344: Type 'string' does not satisfy the constraint 'new (...args: any) => any'.
     type U14 = InstanceType<Function>;  // Error
                             ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint 'new (...args: any) => any'.
+!!! error TS2344: Type '{|Function|0|}' does not satisfy the constraint 'new (...args: any) => any'.
 !!! error TS2344:   Type 'Function' provides no match for the signature 'new (...args: any): any'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:272:11
     
     type ArgumentType<T extends (x: any) => any> = T extends (a: infer A) => any ? A : any;
     
@@ -83,8 +85,9 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
 !!! error TS2344: Type '(x: string, y: string) => number' does not satisfy the constraint '(x: any) => any'.
     type T25 = ArgumentType<Function>;  // Error
                             ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint '(x: any) => any'.
+!!! error TS2344: Type '{|Function|0|}' does not satisfy the constraint '(x: any) => any'.
 !!! error TS2344:   Type 'Function' provides no match for the signature '(x: any): any'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:272:11
     type T26 = ArgumentType<any>;  // any
     type T27 = ArgumentType<never>;  // never
     
@@ -137,8 +140,9 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
     type T72<T extends number> = { y: T };
     type T73<T> = T extends T72<infer U> ? T70<U> : never;  // Error
                                                ~
-!!! error TS2344: Type 'U' does not satisfy the constraint 'string'.
+!!! error TS2344: Type '{|U|0|}' does not satisfy the constraint 'string'.
 !!! error TS2344:   Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/inferTypes1.ts:83:35
     
     type T74<T extends number, U extends string> = { x: T, y: U };
     type T75<T> = T extends T74<infer U, infer U> ? T70<U> | T72<U> | T74<U, U> : never;
@@ -202,8 +206,10 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(145,40): error TS2322: 
     type A<T> = T extends string ? { [P in T]: void; } : T;
     type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
                                            ~
-!!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
-!!! error TS2322:   Type 'T' is not assignable to type 'symbol'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type '{|T|1|}' is not assignable to type 'symbol'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/inferTypes1.ts:145:8
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/inferTypes1.ts:145:8
     
     // Repro from #22302
     

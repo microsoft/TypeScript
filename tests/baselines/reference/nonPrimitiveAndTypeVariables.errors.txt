@@ -16,11 +16,19 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts(11,9)
     function foo<T, U>(x: T) {
         let a: object = x;  // Error
             ~
-!!! error TS2322: Type 'T' is not assignable to type 'object'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type 'object'.
+!!! annotated symbol 0 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:14
         let b: U | object = x;  // Error
             ~
-!!! error TS2322: Type 'T' is not assignable to type 'object | U'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type 'object | {|U|1|}'.
+!!! error TS2322:   Type '{|T|2|}' is not assignable to type '{|U|3|}'.
+!!! error TS2322:     '{|T|4|}' is assignable to the constraint of type '{|U|5|}', but '{|U|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:14
+!!! annotated symbol 1 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:17
+!!! annotated symbol 2 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:14
+!!! annotated symbol 3 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:17
+!!! annotated symbol 4 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:14
+!!! annotated symbol 5 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:17
+!!! annotated symbol 6 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAndTypeVariables.ts:9:17
     }
     

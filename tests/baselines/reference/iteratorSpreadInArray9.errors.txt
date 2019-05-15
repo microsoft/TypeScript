@@ -22,11 +22,19 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts(13,17): error TS232
     
     var array = [...new SymbolIterator];
                     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'SymbolIterator' is not assignable to type 'Iterable<symbol>'.
+!!! error TS2322: Type '{|SymbolIterator|0|}' is not assignable to type '{|Iterable|1|}<symbol>'.
 !!! error TS2322:   Types of property '[Symbol.iterator]' are incompatible.
-!!! error TS2322:     Type '() => SymbolIterator' is not assignable to type '() => Iterator<symbol>'.
-!!! error TS2322:       Type 'SymbolIterator' is not assignable to type 'Iterator<symbol>'.
+!!! error TS2322:     Type '() => {|SymbolIterator|2|}' is not assignable to type '() => {|Iterator|3|}<symbol>'.
+!!! error TS2322:       Type '{|SymbolIterator|4|}' is not assignable to type '{|Iterator|5|}<symbol>'.
 !!! error TS2322:         Types of property 'next' are incompatible.
-!!! error TS2322:           Type '() => { value: symbol; }' is not assignable to type '(value?: any) => IteratorResult<symbol>'.
+!!! error TS2322:           Type '() => { {|value|6|}: symbol; }' is not assignable to type '(value?: any) => {|IteratorResult|7|}<symbol>'.
 !!! error TS2322:             Property 'done' is missing in type '{ value: symbol; }' but required in type 'IteratorResult<symbol>'.
 !!! related TS2728 /.ts/lib.es2015.iterable.d.ts:32:5: 'done' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts:1:7
+!!! annotated symbol 1 /.ts/lib.es2015.iterable.d.ts:42:11
+!!! annotated symbol 2 tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts:1:7
+!!! annotated symbol 3 /.ts/lib.es2015.iterable.d.ts:36:11
+!!! annotated symbol 4 tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts:1:7
+!!! annotated symbol 5 /.ts/lib.es2015.iterable.d.ts:36:11
+!!! annotated symbol 6 tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts:4:13
+!!! annotated symbol 7 /.ts/lib.es2015.iterable.d.ts:31:11

@@ -45,22 +45,58 @@ tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(50,1): error TS2322: Typ
     
     thingOfInterfaces = a;
     ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'A<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
-!!! error TS2322:   Type 'A<Foo>' is not assignable to type 'A<Bar>'.
+!!! error TS2322: Type '{|A|0|}<{|Foo|1|}>' is not assignable to type '{|A|2|}<{|Bar|3|}> | {|B|4|}<{|Baz|5|}> | {|C|6|}<{|Kwah|7|}>'.
+!!! error TS2322:   Type '{|A|8|}<{|Foo|9|}>' is not assignable to type '{|A|10|}<{|Bar|11|}>'.
 !!! error TS2322:     Property 'bar' is missing in type 'Foo' but required in type 'Bar'.
 !!! related TS2728 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:17: 'bar' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:8:11
+!!! annotated symbol 1 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:8:11
+!!! annotated symbol 3 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
+!!! annotated symbol 4 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:12:11
+!!! annotated symbol 5 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
+!!! annotated symbol 6 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:16:11
+!!! annotated symbol 7 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11
+!!! annotated symbol 8 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:8:11
+!!! annotated symbol 9 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 10 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:8:11
+!!! annotated symbol 11 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
     thingOfInterfaces = b;
     ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'B<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
-!!! error TS2322:   Type 'B<Foo>' is not assignable to type 'B<Baz>'.
+!!! error TS2322: Type '{|B|0|}<{|Foo|1|}>' is not assignable to type '{|A|2|}<{|Bar|3|}> | {|B|4|}<{|Baz|5|}> | {|C|6|}<{|Kwah|7|}>'.
+!!! error TS2322:   Type '{|B|8|}<{|Foo|9|}>' is not assignable to type '{|B|10|}<{|Baz|11|}>'.
 !!! error TS2322:     Property 'baz' is missing in type 'Foo' but required in type 'Baz'.
 !!! related TS2728 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:17: 'baz' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:12:11
+!!! annotated symbol 1 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:8:11
+!!! annotated symbol 3 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
+!!! annotated symbol 4 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:12:11
+!!! annotated symbol 5 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
+!!! annotated symbol 6 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:16:11
+!!! annotated symbol 7 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11
+!!! annotated symbol 8 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:12:11
+!!! annotated symbol 9 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 10 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:12:11
+!!! annotated symbol 11 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
     thingOfInterfaces = c;
     ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'C<Foo>' is not assignable to type 'A<Bar> | B<Baz> | C<Kwah>'.
-!!! error TS2322:   Type 'C<Foo>' is not assignable to type 'C<Kwah>'.
+!!! error TS2322: Type '{|C|0|}<{|Foo|1|}>' is not assignable to type '{|A|2|}<{|Bar|3|}> | {|B|4|}<{|Baz|5|}> | {|C|6|}<{|Kwah|7|}>'.
+!!! error TS2322:   Type '{|C|8|}<{|Foo|9|}>' is not assignable to type '{|C|10|}<{|Kwah|11|}>'.
 !!! error TS2322:     Property 'kwah' is missing in type 'Foo' but required in type 'Kwah'.
 !!! related TS2728 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:18: 'kwah' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:16:11
+!!! annotated symbol 1 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:8:11
+!!! annotated symbol 3 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
+!!! annotated symbol 4 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:12:11
+!!! annotated symbol 5 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
+!!! annotated symbol 6 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:16:11
+!!! annotated symbol 7 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11
+!!! annotated symbol 8 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:16:11
+!!! annotated symbol 9 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 10 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:16:11
+!!! annotated symbol 11 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11
     
     ////////
     
@@ -83,16 +119,58 @@ tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts(50,1): error TS2322: Typ
     
     thingOfTypeAliases = x;
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'X<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
-!!! error TS2322:   Type 'X<Foo>' is not assignable to type 'X<Bar>'.
-!!! error TS2322:     Type 'Foo' is not assignable to type 'Bar'.
+!!! error TS2322: Type '{|X|0|}<{|Foo|1|}>' is not assignable to type '{|X|2|}<{|Bar|3|}> | {|Y|4|}<{|Baz|5|}> | {|Z|6|}<{|Kwah|7|}>'.
+!!! error TS2322:   Type '{|X|8|}<{|Foo|9|}>' is not assignable to type '{|X|10|}<{|Bar|11|}>'.
+!!! error TS2322:     Type '{|Foo|12|}' is not assignable to type '{|Bar|13|}'.
+!!! annotated symbol 0 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:31:6
+!!! annotated symbol 1 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:31:6
+!!! annotated symbol 3 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
+!!! annotated symbol 4 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:35:6
+!!! annotated symbol 5 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
+!!! annotated symbol 6 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:39:6
+!!! annotated symbol 7 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11
+!!! annotated symbol 8 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:31:6
+!!! annotated symbol 9 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 10 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:31:6
+!!! annotated symbol 11 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
+!!! annotated symbol 12 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 13 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
     thingOfTypeAliases = y;
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Y<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
-!!! error TS2322:   Type 'Y<Foo>' is not assignable to type 'Y<Baz>'.
-!!! error TS2322:     Type 'Foo' is not assignable to type 'Baz'.
+!!! error TS2322: Type '{|Y|0|}<{|Foo|1|}>' is not assignable to type '{|X|2|}<{|Bar|3|}> | {|Y|4|}<{|Baz|5|}> | {|Z|6|}<{|Kwah|7|}>'.
+!!! error TS2322:   Type '{|Y|8|}<{|Foo|9|}>' is not assignable to type '{|Y|10|}<{|Baz|11|}>'.
+!!! error TS2322:     Type '{|Foo|12|}' is not assignable to type '{|Baz|13|}'.
+!!! annotated symbol 0 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:35:6
+!!! annotated symbol 1 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:31:6
+!!! annotated symbol 3 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
+!!! annotated symbol 4 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:35:6
+!!! annotated symbol 5 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
+!!! annotated symbol 6 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:39:6
+!!! annotated symbol 7 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11
+!!! annotated symbol 8 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:35:6
+!!! annotated symbol 9 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 10 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:35:6
+!!! annotated symbol 11 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
+!!! annotated symbol 12 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 13 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
     thingOfTypeAliases = z;
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Z<Foo>' is not assignable to type 'X<Bar> | Y<Baz> | Z<Kwah>'.
-!!! error TS2322:   Type 'Z<Foo>' is not assignable to type 'Z<Kwah>'.
-!!! error TS2322:     Type 'Foo' is not assignable to type 'Kwah'.
+!!! error TS2322: Type '{|Z|0|}<{|Foo|1|}>' is not assignable to type '{|X|2|}<{|Bar|3|}> | {|Y|4|}<{|Baz|5|}> | {|Z|6|}<{|Kwah|7|}>'.
+!!! error TS2322:   Type '{|Z|8|}<{|Foo|9|}>' is not assignable to type '{|Z|10|}<{|Kwah|11|}>'.
+!!! error TS2322:     Type '{|Foo|12|}' is not assignable to type '{|Kwah|13|}'.
+!!! annotated symbol 0 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:39:6
+!!! annotated symbol 1 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:31:6
+!!! annotated symbol 3 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:2:11
+!!! annotated symbol 4 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:35:6
+!!! annotated symbol 5 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:3:11
+!!! annotated symbol 6 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:39:6
+!!! annotated symbol 7 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11
+!!! annotated symbol 8 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:39:6
+!!! annotated symbol 9 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 10 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:39:6
+!!! annotated symbol 11 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11
+!!! annotated symbol 12 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:1:11
+!!! annotated symbol 13 tests/cases/compiler/unionTypeErrorMessageTypeRefs01.ts:4:11

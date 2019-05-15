@@ -23,7 +23,8 @@ tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignatur
     
     var v2: {
         ~~
-!!! error TS2322: Type '() => void' is not assignable to type '{ [n: number]: Bar; }'.
+!!! error TS2322: Type '() => void' is not assignable to type '{ [n: number]: {|Bar|0|}; }'.
 !!! error TS2322:   Index signature is missing in type '() => void'.
+!!! annotated symbol 0 tests/cases/conformance/types/members/augmentedTypeAssignmentCompatIndexSignature.ts:2:11
         [n: number]: Bar
     } = f; // Should be allowed

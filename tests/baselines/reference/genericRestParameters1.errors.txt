@@ -149,8 +149,9 @@ tests/cases/conformance/types/rest/genericRestParameters1.ts(164,1): error TS232
     type T08<T extends any[]> = ConstructorParameters<new (...args: T) => void>;
     type T09 = Parameters<Function>;
                           ~~~~~~~~
-!!! error TS2344: Type 'Function' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344: Type '{|Function|0|}' does not satisfy the constraint '(...args: any) => any'.
 !!! error TS2344:   Type 'Function' provides no match for the signature '(...args: any): any'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:272:11
     
     type Record1 = {
       move: [number, 'left' | 'right'];

@@ -12,8 +12,11 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     // AA = A; // okay
     AAA = A; // error. 
     ~~~
-!!! error TS2322: Type 'typeof A' is not assignable to type 'new () => A'.
+!!! error TS2322: Type 'typeof {|A|0|}' is not assignable to type 'new () => {|A|1|}'.
 !!! error TS2322:   Cannot assign an abstract constructor type to a non-abstract constructor type.
+!!! annotated symbol 0 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts:1:16
+!!! annotated symbol 1 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts:1:16
     AAA = "asdf";
     ~~~
-!!! error TS2322: Type '"asdf"' is not assignable to type 'new () => A'.
+!!! error TS2322: Type '"asdf"' is not assignable to type 'new () => {|A|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractAssignabilityConstructorFunction.ts:1:16

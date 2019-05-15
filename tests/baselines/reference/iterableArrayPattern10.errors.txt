@@ -20,4 +20,5 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern10.ts(17,5): error
     function fun([a, b]) { }
     fun(new FooIterator);
         ~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'FooIterator' is not assignable to parameter of type '[any, any]'.
+!!! error TS2345: Argument of type '{|FooIterator|0|}' is not assignable to parameter of type '[any, any]'.
+!!! annotated symbol 0 tests/cases/conformance/es6/destructuring/iterableArrayPattern10.ts:3:7

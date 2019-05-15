@@ -24,10 +24,12 @@ tests/cases/compiler/propertyAssignment.ts(14,1): error TS2322: Type '{ x: numbe
     
     foo1 = bar1; // should be an error
     ~~~~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type 'new () => any'.
+!!! error TS2322: Type '{ {|x|0|}: number; }' is not assignable to type 'new () => any'.
 !!! error TS2322:   Type '{ x: number; }' provides no match for the signature 'new (): any'.
+!!! annotated symbol 0 tests/cases/compiler/propertyAssignment.ts:2:13
     foo2 = bar2; 
     foo3 = bar3; // should be an error
     ~~~~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type '() => void'.
+!!! error TS2322: Type '{ {|x|0|}: number; }' is not assignable to type '() => void'.
 !!! error TS2322:   Type '{ x: number; }' provides no match for the signature '(): void'.
+!!! annotated symbol 0 tests/cases/compiler/propertyAssignment.ts:8:13

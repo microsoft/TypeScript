@@ -51,16 +51,30 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
         x = x;
         x = y;  // Error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'Required<T>'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|Required|1|}<{|T|2|}>'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1431:6
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
         x = z;  // Error
         ~
-!!! error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
+!!! error TS2322: Type '{|Partial|0|}<{|T|1|}>' is not assignable to type '{|Required|2|}<{|T|3|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1431:6
+!!! annotated symbol 3 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
         y = x;
         y = y;
         y = z;  // Error
         ~
-!!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-!!! error TS2322:   'Partial<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Partial|0|}<{|T|1|}>' is not assignable to type '{|T|2|}'.
+!!! error TS2322:   '{|Partial|3|}<{|T|4|}>' is assignable to the constraint of type '{|T|5|}', but '{|T|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
+!!! annotated symbol 5 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
+!!! annotated symbol 6 tests/cases/conformance/types/mapped/mappedTypes6.ts:21:13
         z = x;
         z = y;
         z = z;
@@ -72,32 +86,77 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
         w = w;
         w = x;  // Error
         ~
-!!! error TS2322: Type 'Required<T>' is not assignable to type 'Denullified<T>'.
-!!! error TS2322:   Type 'T[P]' is not assignable to type 'NonNullable<T[P]>'.
-!!! error TS2322:     Type 'T[keyof T]' is not assignable to type 'NonNullable<T[P]>'.
-!!! error TS2322:       Type 'T[string] | T[number] | T[symbol]' is not assignable to type 'NonNullable<T[P]>'.
-!!! error TS2322:         Type 'T[string]' is not assignable to type 'NonNullable<T[P]>'.
+!!! error TS2322: Type '{|Required|0|}<{|T|1|}>' is not assignable to type '{|Denullified|2|}<{|T|3|}>'.
+!!! error TS2322:   Type '{|T|4|}[{|P|5|}]' is not assignable to type '{|NonNullable|6|}<{|T|7|}[{|P|8|}]>'.
+!!! error TS2322:     Type '{|T|9|}[keyof {|T|10|}]' is not assignable to type '{|NonNullable|11|}<{|T|12|}[{|P|13|}]>'.
+!!! error TS2322:       Type '{|T|14|}[string] | {|T|15|}[number] | {|T|16|}[symbol]' is not assignable to type '{|NonNullable|17|}<{|T|18|}[{|P|19|}]>'.
+!!! error TS2322:         Type '{|T|20|}[string]' is not assignable to type '{|NonNullable|21|}<{|T|22|}[{|P|23|}]>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1431:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:6
+!!! annotated symbol 3 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 5 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:26
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 7 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 8 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:26
+!!! annotated symbol 9 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 10 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 12 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 13 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:26
+!!! annotated symbol 14 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 15 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 16 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 17 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 18 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 19 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:26
+!!! annotated symbol 20 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 21 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 22 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 23 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:26
         w = y;  // Error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'Denullified<T>'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|Denullified|1|}<{|T|2|}>'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:6
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
         w = z;  // Error
         ~
-!!! error TS2322: Type 'Partial<T>' is not assignable to type 'Denullified<T>'.
+!!! error TS2322: Type '{|Partial|0|}<{|T|1|}>' is not assignable to type '{|Denullified|2|}<{|T|3|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:6
+!!! annotated symbol 3 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
         x = w;
         x = x;
         x = y;  // Error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'Required<T>'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|Required|1|}<{|T|2|}>'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1431:6
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
         x = z;  // Error
         ~
-!!! error TS2322: Type 'Partial<T>' is not assignable to type 'Required<T>'.
+!!! error TS2322: Type '{|Partial|0|}<{|T|1|}>' is not assignable to type '{|Required|2|}<{|T|3|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1431:6
+!!! annotated symbol 3 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
         y = w;
         y = x;
         y = y;
         y = z;  // Error
         ~
-!!! error TS2322: Type 'Partial<T>' is not assignable to type 'T'.
-!!! error TS2322:   'Partial<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Partial|0|}<{|T|1|}>' is not assignable to type '{|T|2|}'.
+!!! error TS2322:   '{|Partial|3|}<{|T|4|}>' is assignable to the constraint of type '{|T|5|}', but '{|T|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 5 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
+!!! annotated symbol 6 tests/cases/conformance/types/mapped/mappedTypes6.ts:35:13
         z = w;
         z = x;
         z = y;
@@ -108,14 +167,21 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
         w = {};  // Error
         ~
-!!! error TS2322: Type '{}' is not assignable to type 'Denullified<T>'.
+!!! error TS2322: Type '{}' is not assignable to type '{|Denullified|0|}<{|T|1|}>'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypes6.ts:33:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:55:13
         x = {};  // Error
         ~
-!!! error TS2322: Type '{}' is not assignable to type 'Required<T>'.
+!!! error TS2322: Type '{}' is not assignable to type '{|Required|0|}<{|T|1|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1431:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:55:13
         y = {};  // Error
         ~
-!!! error TS2322: Type '{}' is not assignable to type 'T'.
-!!! error TS2322:   '{}' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{}' is not assignable to type '{|T|0|}'.
+!!! error TS2322:   '{}' is assignable to the constraint of type '{|T|1|}', but '{|T|2|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypes6.ts:55:13
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes6.ts:55:13
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes6.ts:55:13
         z = {};
     }
     

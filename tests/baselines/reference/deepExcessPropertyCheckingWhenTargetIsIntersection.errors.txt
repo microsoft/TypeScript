@@ -30,9 +30,12 @@ tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34
      
     TestComponent({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
+!!! error TS2322: Type '{ {|INVALID_PROP_NAME|0|}: string; {|ariaLabel|1|}: string; }' is not assignable to type '{|ITestProps|2|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
 !!! related TS6500 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:14:3: The expected type comes from property 'props' which is declared here on type 'NestedProp<ITestProps>'
+!!! annotated symbol 0 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:21:33
+!!! annotated symbol 1 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:21:61
+!!! annotated symbol 2 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:9:11
     
     const TestComponent2: StatelessComponent<TestProps | {props2: {x: number}}> = (props) => {
       return null;
@@ -41,8 +44,16 @@ tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts(27,34
     TestComponent2({icon: { props: { INVALID_PROP_NAME: 'share', ariaLabel: 'test label' } }});
                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2326: Types of property 'icon' are incompatible.
-!!! error TS2326:   Type '{ props: { INVALID_PROP_NAME: string; ariaLabel: string; }; }' is not assignable to type 'NestedProp<ITestProps>'.
+!!! error TS2326:   Type '{ {|props|0|}: { {|INVALID_PROP_NAME|1|}: string; {|ariaLabel|2|}: string; }; }' is not assignable to type '{|NestedProp|3|}<{|ITestProps|4|}>'.
 !!! error TS2326:     Types of property 'props' are incompatible.
-!!! error TS2326:       Type '{ INVALID_PROP_NAME: string; ariaLabel: string; }' is not assignable to type 'ITestProps'.
+!!! error TS2326:       Type '{ {|INVALID_PROP_NAME|5|}: string; {|ariaLabel|6|}: string; }' is not assignable to type '{|ITestProps|7|}'.
 !!! error TS2326:         Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'ITestProps'.
+!!! annotated symbol 0 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:27:25
+!!! annotated symbol 1 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:27:34
+!!! annotated symbol 2 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:27:62
+!!! annotated symbol 3 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:13:11
+!!! annotated symbol 4 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:9:11
+!!! annotated symbol 5 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:27:34
+!!! annotated symbol 6 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:27:62
+!!! annotated symbol 7 tests/cases/compiler/deepExcessPropertyCheckingWhenTargetIsIntersection.ts:9:11
     

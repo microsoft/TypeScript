@@ -8,19 +8,31 @@ tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(10,5
     function foo<T extends { a: string }>(x: T) {
         x = { a: "abc", b: 20, c: 30 };
         ~
-!!! error TS2322: Type '{ a: string; b: number; c: number; }' is not assignable to type 'T'.
+!!! error TS2322: Type '{ {|a|0|}: string; {|b|1|}: number; {|c|2|}: number; }' is not assignable to type '{|T|3|}'.
+!!! annotated symbol 0 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:2:11
+!!! annotated symbol 1 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:2:21
+!!! annotated symbol 2 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:2:28
+!!! annotated symbol 3 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:1:14
     }
     
     function bar<T extends { a: string }>(x: T) {
         x = { a: 20 };
         ~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type 'T'.
+!!! error TS2322: Type '{ {|a|0|}: number; }' is not assignable to type '{|T|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:6:11
+!!! annotated symbol 1 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:5:14
     }
     
     function baz<T extends { a: string }>(x: T) {
         x = { a: "not ok" };
         ~
-!!! error TS2322: Type '{ a: string; }' is not assignable to type 'T'.
-!!! error TS2322:   '{ a: string; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ a: string; }'.
+!!! error TS2322: Type '{ {|a|0|}: string; }' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{ {|a|2|}: string; }' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{ {|a|5|}: string; }'.
+!!! annotated symbol 0 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:10:11
+!!! annotated symbol 1 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:9:14
+!!! annotated symbol 2 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:10:11
+!!! annotated symbol 3 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:9:14
+!!! annotated symbol 4 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:9:14
+!!! annotated symbol 5 tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts:9:26
     }
     

@@ -9,8 +9,10 @@ tests/cases/compiler/invalidConstraint1.ts(4,11): error TS2344: Type '{ a: numbe
     }
     f<string, { a: number }>(); // should error
               ~~~~~~~~~~~~~
-!!! error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
+!!! error TS2344: Type '{ {|a|0|}: number; }' does not satisfy the constraint '{ {|a|1|}: string; }'.
 !!! error TS2344:   Types of property 'a' are incompatible.
 !!! error TS2344:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/invalidConstraint1.ts:4:13
+!!! annotated symbol 1 tests/cases/compiler/invalidConstraint1.ts:1:27
     
     

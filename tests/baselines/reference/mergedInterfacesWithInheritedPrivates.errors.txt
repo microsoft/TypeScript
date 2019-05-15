@@ -20,8 +20,10 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
     
     class D implements A { // error
           ~
-!!! error TS2420: Class 'D' incorrectly implements interface 'A'.
+!!! error TS2420: Class '{|D|0|}' incorrectly implements interface '{|A|1|}'.
 !!! error TS2420:   Types have separate declarations of a private property 'x'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts:13:7
+!!! annotated symbol 1 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts:5:11
         private x: number;
         y: string;
         z: string;
@@ -29,8 +31,10 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
     
     class E implements A { // error
           ~
-!!! error TS2420: Class 'E' incorrectly implements interface 'A'.
+!!! error TS2420: Class '{|E|0|}' incorrectly implements interface '{|A|1|}'.
 !!! error TS2420:   Property 'x' is private in type 'A' but not in type 'E'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates.ts:5:11
         x: number;
         y: string;
         z: string;

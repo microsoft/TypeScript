@@ -75,84 +75,213 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
     // S's
     interface I<T> extends A {
               ~
-!!! error TS2430: Interface 'I<T>' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|I|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => T[]' is not assignable to type 'new <T>(x: T) => T[]'.
+!!! error TS2430:     Type 'new (x: {|T|3|}) => {|T|4|}[]' is not assignable to type 'new <{|T|5|}>(x: {|T|6|}) => {|T|7|}[]'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|8|}' is not assignable to type '{|T|9|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|10|}' is assignable to the constraint of type '{|T|11|}', but '{|T|12|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:24:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:24:13
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:10:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:24:13
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:24:13
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:12:13
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:12:13
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:12:13
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:12:13
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:24:13
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:12:13
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:24:13
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:24:13
         a: new (x: T) => T[]; 
     }
     
     interface I2<T> extends A {
               ~~
-!!! error TS2430: Interface 'I2<T>' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|I2|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}'.
 !!! error TS2430:   Types of property 'a2' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => string[]' is not assignable to type 'new <T>(x: T) => string[]'.
+!!! error TS2430:     Type 'new (x: {|T|3|}) => string[]' is not assignable to type 'new <{|T|4|}>(x: {|T|5|}) => string[]'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:28:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:28:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:10:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:28:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:13:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:13:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:13:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:28:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:13:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:28:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:28:14
         a2: new (x: T) => string[]; 
     }
     
     interface I3<T> extends A {
               ~~
-!!! error TS2430: Interface 'I3<T>' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|I3|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => void'.
+!!! error TS2430:     Type 'new (x: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>(x: {|T|6|}) => void'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|7|}' is not assignable to type '{|T|8|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:32:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:32:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:10:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:32:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:32:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:14:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:14:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:14:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:32:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:14:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:32:14
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:32:14
         a3: new (x: T) => T;
     }
     
     interface I4<T> extends A {
               ~~
-!!! error TS2430: Interface 'I4<T>' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|I4|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}'.
 !!! error TS2430:   Types of property 'a4' are incompatible.
-!!! error TS2430:     Type 'new <U>(x: T, y: U) => string' is not assignable to type 'new <T, U>(x: T, y: U) => string'.
+!!! error TS2430:     Type 'new <{|U|3|}>(x: {|T|4|}, y: {|U|5|}) => string' is not assignable to type 'new <{|T|6|}, {|U|7|}>(x: {|T|8|}, y: {|U|9|}) => string'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|10|}' is not assignable to type '{|T|11|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|12|}' is assignable to the constraint of type '{|T|13|}', but '{|T|14|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:36:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:36:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:10:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:37:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:36:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:37:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:15:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:15:17
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:15:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:15:17
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:15:14
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:36:14
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:15:14
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:36:14
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:36:14
         a4: new <U>(x: T, y: U) => string; 
     }
     
     interface I5<T> extends A {
               ~~
-!!! error TS2430: Interface 'I5<T>' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|I5|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}'.
 !!! error TS2430:   Types of property 'a5' are incompatible.
-!!! error TS2430:     Type 'new <U>(x: (arg: T) => U) => T' is not assignable to type 'new <T, U>(x: (arg: T) => U) => T'.
+!!! error TS2430:     Type 'new <{|U|3|}>(x: (arg: {|T|4|}) => {|U|5|}) => {|T|6|}' is not assignable to type 'new <{|T|7|}, {|U|8|}>(x: (arg: {|T|9|}) => {|U|10|}) => {|T|11|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2430:         Types of parameters 'arg' and 'arg' are incompatible.
-!!! error TS2430:           Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:             'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:           Type '{|T|12|}' is not assignable to type '{|T|13|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:             '{|T|14|}' is assignable to the constraint of type '{|T|15|}', but '{|T|16|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:40:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:40:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:10:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:41:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:40:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:41:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:40:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:16:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:16:17
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:16:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:16:17
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:16:14
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:40:14
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:16:14
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:40:14
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:16:14
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:16:14
         a5: new <U>(x: (arg: T) => U) => T; 
     }
     
     interface I7<T> extends A {
               ~~
-!!! error TS2430: Interface 'I7<T>' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|I7|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}'.
 !!! error TS2430:   Types of property 'a11' are incompatible.
-!!! error TS2430:     Type 'new <U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base' is not assignable to type 'new <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base'.
+!!! error TS2430:     Type 'new <{|U|3|}>(x: { {|foo|4|}: {|T|5|}; }, y: { {|foo|6|}: {|U|7|}; {|bar|8|}: {|U|9|}; }) => {|Base|10|}' is not assignable to type 'new <{|T|11|}>(x: { {|foo|12|}: {|T|13|}; }, y: { {|foo|14|}: {|T|15|}; {|bar|16|}: {|T|17|}; }) => {|Base|18|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type '{ foo: T; }' is not assignable to type '{ foo: T; }'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:         Type '{ {|foo|19|}: {|T|20|}; }' is not assignable to type '{ {|foo|21|}: {|T|22|}; }'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           Types of property 'foo' are incompatible.
-!!! error TS2430:             Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:               'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:             Type '{|T|23|}' is not assignable to type '{|T|24|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:               '{|T|25|}' is assignable to the constraint of type '{|T|26|}', but '{|T|27|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:44:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:44:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:10:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:45:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:45:23
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:44:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:45:38
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:45:15
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:45:46
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:45:15
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:5:7
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:15
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:23
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:15
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:38
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:15
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:46
+!!! annotated symbol 17 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:15
+!!! annotated symbol 18 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:5:7
+!!! annotated symbol 19 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:23
+!!! annotated symbol 20 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:15
+!!! annotated symbol 21 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:45:23
+!!! annotated symbol 22 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:44:14
+!!! annotated symbol 23 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:15
+!!! annotated symbol 24 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:44:14
+!!! annotated symbol 25 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:18:15
+!!! annotated symbol 26 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:44:14
+!!! annotated symbol 27 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:44:14
         a11: new <U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
     }
     
     interface I9<T> extends A {
               ~~
-!!! error TS2430: Interface 'I9<T>' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|I9|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}'.
 !!! error TS2430:   Types of property 'a16' are incompatible.
-!!! error TS2430:     Type 'new (x: { a: T; b: T; }) => T[]' is not assignable to type 'new <T extends Base>(x: { a: T; b: T; }) => T[]'.
+!!! error TS2430:     Type 'new (x: { {|a|3|}: {|T|4|}; {|b|5|}: {|T|6|}; }) => {|T|7|}[]' is not assignable to type 'new <{|T|8|} extends {|Base|9|}>(x: { {|a|10|}: {|T|11|}; {|b|12|}: {|T|13|}; }) => {|T|14|}[]'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type '{ a: T; b: T; }' is not assignable to type '{ a: T; b: T; }'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:         Type '{ {|a|15|}: {|T|16|}; {|b|17|}: {|T|18|}; }' is not assignable to type '{ {|a|19|}: {|T|20|}; {|b|21|}: {|T|22|}; }'. Two different types with this name exist, but they are unrelated.
 !!! error TS2430:           Types of property 'a' are incompatible.
-!!! error TS2430:             Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:               'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2430:                 Type 'Base' is not assignable to type 'T'.
-!!! error TS2430:                   'Base' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:             Type '{|T|23|}' is not assignable to type '{|T|24|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:               '{|T|25|}' is assignable to the constraint of type '{|T|26|}', but '{|T|27|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:                 Type '{|Base|28|}' is not assignable to type '{|T|29|}'.
+!!! error TS2430:                   '{|Base|30|}' is assignable to the constraint of type '{|T|31|}', but '{|T|32|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:10:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:49:20
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:49:26
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:15
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:5:7
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:36
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:15
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:42
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:15
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:15
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:36
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:15
+!!! annotated symbol 17 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:42
+!!! annotated symbol 18 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:15
+!!! annotated symbol 19 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:49:20
+!!! annotated symbol 20 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 21 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:49:26
+!!! annotated symbol 22 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 23 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:15
+!!! annotated symbol 24 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 25 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:20:15
+!!! annotated symbol 26 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 27 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 28 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:5:7
+!!! annotated symbol 29 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 30 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:5:7
+!!! annotated symbol 31 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
+!!! annotated symbol 32 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance6.ts:48:14
         a16: new (x: { a: T; b: T }) => T[]; 
     }

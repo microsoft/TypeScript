@@ -81,49 +81,65 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         a = d;
         a = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type '{ foo: string; }'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{ {|foo|1|}: string; }'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type '{ foo: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:22:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:13:14
     
         b = a;
         b = i;
         b = d;
         b = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type 'Base'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|Base|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'Base'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:22:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:5:11
     
         i = a;
         i = b;
         i = d;
         i = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type 'I'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|I|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'I'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:22:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:9:15
     
         d = a;
         d = b;
         d = i;
         d = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type 'D'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|D|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'D'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:22:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:18:11
     
         e = a; // errror
         ~
-!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'E'.
+!!! error TS2322: Type '{ {|foo|0|}: string; }' is not assignable to type '{|E|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type '{ foo: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:13:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:22:11
         e = b; // errror
         ~
-!!! error TS2322: Type 'Base' is not assignable to type 'E'.
+!!! error TS2322: Type '{|Base|0|}' is not assignable to type '{|E|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'Base'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:5:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:22:11
         e = i; // errror
         ~
-!!! error TS2322: Type 'I' is not assignable to type 'E'.
+!!! error TS2322: Type '{|I|0|}' is not assignable to type '{|E|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'I'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:9:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:22:11
         e = d; // errror
         ~
-!!! error TS2322: Type 'D' is not assignable to type 'E'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|E|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'D'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:18:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:22:11
         e = e; 
     
     }
@@ -155,78 +171,110 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
         a = b; // error
         ~
-!!! error TS2322: Type 'Base' is not assignable to type '{ foo: string; }'.
+!!! error TS2322: Type '{|Base|0|}' is not assignable to type '{ {|foo|1|}: string; }'.
 !!! error TS2322:   Property 'foo' is private in type 'Base' but not in type '{ foo: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:58:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:65:14
         a = i; // error
         ~
-!!! error TS2322: Type 'I' is not assignable to type '{ foo: string; }'.
+!!! error TS2322: Type '{|I|0|}' is not assignable to type '{ {|foo|1|}: string; }'.
 !!! error TS2322:   Property 'foo' is private in type 'I' but not in type '{ foo: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:62:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:65:14
         a = d;
         a = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type '{ foo: string; }'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{ {|foo|1|}: string; }'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type '{ foo: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:74:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:65:14
     
         b = a; // error
         ~
-!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'Base'.
+!!! error TS2322: Type '{ {|foo|0|}: string; }' is not assignable to type '{|Base|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'Base' but not in type '{ foo: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:65:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:58:11
         b = i;
         b = d; // error
         ~
-!!! error TS2322: Type 'D' is not assignable to type 'Base'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|Base|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'Base' but not in type 'D'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:70:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:58:11
         b = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type 'Base'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|Base|1|}'.
 !!! error TS2322:   Types have separate declarations of a private property 'foo'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:74:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:58:11
         b = b;
         
         i = a; // error
         ~
-!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'I'.
+!!! error TS2322: Type '{ {|foo|0|}: string; }' is not assignable to type '{|I|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'I' but not in type '{ foo: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:65:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:62:15
         i = b;
         i = d; // error
         ~
-!!! error TS2322: Type 'D' is not assignable to type 'I'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|I|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'I' but not in type 'D'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:70:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:62:15
         i = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type 'I'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|I|1|}'.
 !!! error TS2322:   Types have separate declarations of a private property 'foo'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:74:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:62:15
         i = i;
     
         d = a;
         d = b; // error
         ~
-!!! error TS2322: Type 'Base' is not assignable to type 'D'.
+!!! error TS2322: Type '{|Base|0|}' is not assignable to type '{|D|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'Base' but not in type 'D'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:58:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:70:11
         d = i; // error
         ~
-!!! error TS2322: Type 'I' is not assignable to type 'D'.
+!!! error TS2322: Type '{|I|0|}' is not assignable to type '{|D|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'I' but not in type 'D'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:62:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:70:11
         d = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type 'D'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|D|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'D'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:74:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:70:11
     
         e = a; // errror
         ~
-!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'E'.
+!!! error TS2322: Type '{ {|foo|0|}: string; }' is not assignable to type '{|E|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type '{ foo: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:65:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:74:11
         e = b; // errror
         ~
-!!! error TS2322: Type 'Base' is not assignable to type 'E'.
+!!! error TS2322: Type '{|Base|0|}' is not assignable to type '{|E|1|}'.
 !!! error TS2322:   Types have separate declarations of a private property 'foo'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:58:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:74:11
         e = i; // errror
         ~
-!!! error TS2322: Type 'I' is not assignable to type 'E'.
+!!! error TS2322: Type '{|I|0|}' is not assignable to type '{|E|1|}'.
 !!! error TS2322:   Types have separate declarations of a private property 'foo'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:62:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:74:11
         e = d; // errror
         ~
-!!! error TS2322: Type 'D' is not assignable to type 'E'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|E|1|}'.
 !!! error TS2322:   Property 'foo' is private in type 'E' but not in type 'D'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:70:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersAccessibility.ts:74:11
         e = e;
     
     }

@@ -19,7 +19,11 @@ tests/cases/compiler/interfaceImplementation7.ts(8,12): error TS2416: Property '
         public name(): string { return ""; }
                ~~~~
 !!! error TS2416: Property 'name' in type 'C1' is not assignable to the same property in base type 'i4'.
-!!! error TS2416:   Type '() => string' is not assignable to type '() => { s: string; n: number; }'.
-!!! error TS2416:     Type 'string' is not assignable to type '{ s: string; n: number; }'.
+!!! error TS2416:   Type '() => string' is not assignable to type '() => { {|s|0|}: string; {|n|1|}: number; }'.
+!!! error TS2416:     Type 'string' is not assignable to type '{ {|s|2|}: string; {|n|3|}: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceImplementation7.ts:5:41
+!!! annotated symbol 1 tests/cases/compiler/interfaceImplementation7.ts:5:52
+!!! annotated symbol 2 tests/cases/compiler/interfaceImplementation7.ts:5:41
+!!! annotated symbol 3 tests/cases/compiler/interfaceImplementation7.ts:5:52
     }
     

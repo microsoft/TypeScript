@@ -46,7 +46,8 @@ tests/cases/compiler/vararg.ts(33,17): error TS2345: Argument of type 'C' is not
     var result="";
     result+=x.f(x,3,3); // bad first param
                 ~
-!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '{|C|0|}' is not assignable to parameter of type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/vararg.ts:2:18
     result+=x.f(3,"hello",3); // bad second param
                 ~
 !!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
@@ -57,7 +58,8 @@ tests/cases/compiler/vararg.ts(33,17): error TS2345: Argument of type 'C' is not
 !!! error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
     result+=x.fonly(x); // bad param
                     ~
-!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '{|C|0|}' is not assignable to parameter of type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/vararg.ts:2:18
     result+=x.fonly("a"); // ok 
     result+=x.fonly("a","b","c","d"); //ok 
     

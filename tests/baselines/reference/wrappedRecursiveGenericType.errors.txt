@@ -17,7 +17,9 @@ tests/cases/compiler/wrappedRecursiveGenericType.ts(14,1): error TS2322: Type '5
     x.a.val = 5;       // val -> number
     x.a.b.val = 5;     // val -> X<number> (This should be an error)
     ~~~~~~~~~
-!!! error TS2322: Type '5' is not assignable to type 'X<number>'.
+!!! error TS2322: Type '5' is not assignable to type '{|X|0|}<number>'.
+!!! annotated symbol 0 tests/cases/compiler/wrappedRecursiveGenericType.ts:1:11
     x.a.b.a.val = 5;   // val -> X<number> (This should be an error)
     ~~~~~~~~~~~
-!!! error TS2322: Type '5' is not assignable to type 'X<number>'.
+!!! error TS2322: Type '5' is not assignable to type '{|X|0|}<number>'.
+!!! annotated symbol 0 tests/cases/compiler/wrappedRecursiveGenericType.ts:1:11

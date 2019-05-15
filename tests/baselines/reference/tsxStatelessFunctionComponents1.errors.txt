@@ -33,8 +33,11 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
     // Error
     let b = <Greet naaame='world' />;
              ~~~~~
-!!! error TS2322: Type '{ naaame: string; }' is not assignable to type 'IntrinsicAttributes & { name: string; }'.
+!!! error TS2322: Type '{ {|naaame|0|}: string; }' is not assignable to type '{|IntrinsicAttributes|1|} & { {|name|2|}: string; }'.
 !!! error TS2322:   Property 'naaame' does not exist on type 'IntrinsicAttributes & { name: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:19:16
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:5:20
     
     // OK
     let c = <Meet />;
@@ -48,8 +51,11 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
     // Error
     let f = <Meet naaaaaaame='no' />;
              ~~~~
-!!! error TS2322: Type '{ naaaaaaame: string; }' is not assignable to type 'IntrinsicAttributes & { name?: string; }'.
+!!! error TS2322: Type '{ {|naaaaaaame|0|}: string; }' is not assignable to type '{|IntrinsicAttributes|1|} & { {|name|2|}?: string; }'.
 !!! error TS2322:   Property 'naaaaaaame' does not exist on type 'IntrinsicAttributes & { name?: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:29:15
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
+!!! annotated dropped!: 2
     
     // OK
     let g = <MeetAndGreet prop-name="Bob" />;
@@ -62,12 +68,16 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
     // Error
     let i = <EmptyPropSFC prop1 />
              ~~~~~~~~~~~~
-!!! error TS2322: Type '{ prop1: true; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2322: Type '{ {|prop1|0|}: true; }' is not assignable to type '{|IntrinsicAttributes|1|}'.
 !!! error TS2322:   Property 'prop1' does not exist on type 'IntrinsicAttributes'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:37:23
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
     let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
               ~~~~~~~~~~~~
-!!! error TS2322: Type '{ ref: (x: any) => any; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2322: Type '{ {|ref|0|}: (x: any) => any; }' is not assignable to type '{|IntrinsicAttributes|1|}'.
 !!! error TS2322:   Property 'ref' does not exist on type 'IntrinsicAttributes'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:38:24
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
     
     let o = {
         prop1: true;

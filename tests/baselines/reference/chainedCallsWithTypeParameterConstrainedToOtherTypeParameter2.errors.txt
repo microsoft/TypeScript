@@ -16,16 +16,26 @@ tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParamete
             // Ok to go down the chain, but error to climb up the chain
             (new Chain(t)).then(tt => s).then(ss => t);
                                                     ~
-!!! error TS2322: Type 'T' is not assignable to type 'S'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|S|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|S|3|}', but '{|S|4|}' could be instantiated with a different subtype of constraint '{}'.
 !!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:1:13
+!!! annotated symbol 1 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:10
+!!! annotated symbol 2 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:1:13
+!!! annotated symbol 3 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:10
+!!! annotated symbol 4 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:10
     
             // But error to try to climb up the chain
             (new Chain(s)).then(ss => t);
                                       ~
-!!! error TS2322: Type 'T' is not assignable to type 'S'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'S', but 'S' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|S|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|S|3|}', but '{|S|4|}' could be instantiated with a different subtype of constraint '{}'.
 !!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:1:13
+!!! annotated symbol 1 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:10
+!!! annotated symbol 2 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:1:13
+!!! annotated symbol 3 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:10
+!!! annotated symbol 4 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:10
     
             // Staying at T or S should be fine
             (new Chain(t)).then(tt => t).then(tt => t).then(tt => t);

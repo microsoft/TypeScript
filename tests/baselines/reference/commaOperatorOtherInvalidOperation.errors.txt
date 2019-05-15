@@ -19,6 +19,11 @@ tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOpera
         var y: T2;
         var result: T1 = (x, y); //error here
             ~~~~~~
-!!! error TS2322: Type 'T2' is not assignable to type 'T1'.
-!!! error TS2322:   'T2' is assignable to the constraint of type 'T1', but 'T1' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T2|0|}' is not assignable to type '{|T1|1|}'.
+!!! error TS2322:   '{|T2|2|}' is assignable to the constraint of type '{|T1|3|}', but '{|T1|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts:9:19
+!!! annotated symbol 1 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts:9:15
+!!! annotated symbol 2 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts:9:19
+!!! annotated symbol 3 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts:9:15
+!!! annotated symbol 4 tests/cases/conformance/expressions/commaOperator/commaOperatorOtherInvalidOperation.ts:9:15
     }

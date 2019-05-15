@@ -28,11 +28,15 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B implements A {
           ~
-!!! error TS2420: Class 'B' incorrectly implements interface 'A'.
+!!! error TS2420: Class '{|B|0|}' incorrectly implements interface '{|A|1|}'.
 !!! error TS2420:   Index signatures are incompatible.
-!!! error TS2420:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2420:     Type '{|Base|2|}' is not assignable to type '{|Derived|3|}'.
 !!! error TS2420:       Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:4:34: 'bar' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:11:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:7:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:4:11
         [x: string]: Base; // error
     }
     
@@ -55,27 +59,53 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B3<T extends Derived> implements A<T> {
               ~~
-!!! error TS2420: Class 'B3<T>' incorrectly implements interface 'A<T>'.
+!!! error TS2420: Class '{|B3|0|}<{|T|1|}>' incorrectly implements interface '{|A|2|}<{|T|3|}>'.
 !!! error TS2420:   Index signatures are incompatible.
-!!! error TS2420:     Type 'Base' is not assignable to type 'T'.
+!!! error TS2420:     Type '{|Base|4|}' is not assignable to type '{|T|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:32:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:32:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:20:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:32:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:3:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:32:14
             [x: string]: Base; // error
         }
     
         class B4<T extends Derived> implements A<T> {
               ~~
-!!! error TS2420: Class 'B4<T>' incorrectly implements interface 'A<T>'.
+!!! error TS2420: Class '{|B4|0|}<{|T|1|}>' incorrectly implements interface '{|A|2|}<{|T|3|}>'.
 !!! error TS2420:   Index signatures are incompatible.
-!!! error TS2420:     Type 'Derived' is not assignable to type 'T'.
-!!! error TS2420:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+!!! error TS2420:     Type '{|Derived|4|}' is not assignable to type '{|T|5|}'.
+!!! error TS2420:       '{|Derived|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{|Derived|9|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:36:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:36:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:20:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:36:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:4:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:36:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:4:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:36:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:36:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:4:11
             [x: string]: Derived; // error
         }
     
         class B5<T extends Derived2> implements A<T> {
               ~~
-!!! error TS2420: Class 'B5<T>' incorrectly implements interface 'A<T>'.
+!!! error TS2420: Class '{|B5|0|}<{|T|1|}>' incorrectly implements interface '{|A|2|}<{|T|3|}>'.
 !!! error TS2420:   Index signatures are incompatible.
-!!! error TS2420:     Type 'Derived2' is not assignable to type 'T'.
-!!! error TS2420:       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
+!!! error TS2420:     Type '{|Derived2|4|}' is not assignable to type '{|T|5|}'.
+!!! error TS2420:       '{|Derived2|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{|Derived2|9|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:40:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:40:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:20:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:40:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:5:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:40:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:5:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:40:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:40:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:5:11
             [x: string]: Derived2; // error
         }
     }

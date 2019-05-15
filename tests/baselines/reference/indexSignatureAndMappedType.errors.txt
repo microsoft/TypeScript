@@ -13,7 +13,11 @@ tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, T>'.
+!!! error TS2322: Type '{ [key: string]: {|T|0|}; }' is not assignable to type '{|Record|1|}<{|K|2|}, {|T|3|}>'.
+!!! annotated symbol 0 tests/cases/compiler/indexSignatureAndMappedType.ts:4:13
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1452:6
+!!! annotated symbol 2 tests/cases/compiler/indexSignatureAndMappedType.ts:4:16
+!!! annotated symbol 3 tests/cases/compiler/indexSignatureAndMappedType.ts:4:13
     }
     
     function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
@@ -24,12 +28,25 @@ tests/cases/compiler/indexSignatureAndMappedType.ts(16,5): error TS2322: Type '{
     function f3<T, U, K extends string>(x: { [key: string]: T }, y: Record<K, U>) {
         x = y;  // Error
         ~
-!!! error TS2322: Type 'Record<K, U>' is not assignable to type '{ [key: string]: T; }'.
-!!! error TS2322:   Type 'U' is not assignable to type 'T'.
-!!! error TS2322:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Record|0|}<{|K|1|}, {|U|2|}>' is not assignable to type '{ [key: string]: {|T|3|}; }'.
+!!! error TS2322:   Type '{|U|4|}' is not assignable to type '{|T|5|}'.
+!!! error TS2322:     '{|U|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1452:6
+!!! annotated symbol 1 tests/cases/compiler/indexSignatureAndMappedType.ts:14:19
+!!! annotated symbol 2 tests/cases/compiler/indexSignatureAndMappedType.ts:14:16
+!!! annotated symbol 3 tests/cases/compiler/indexSignatureAndMappedType.ts:14:13
+!!! annotated symbol 4 tests/cases/compiler/indexSignatureAndMappedType.ts:14:16
+!!! annotated symbol 5 tests/cases/compiler/indexSignatureAndMappedType.ts:14:13
+!!! annotated symbol 6 tests/cases/compiler/indexSignatureAndMappedType.ts:14:16
+!!! annotated symbol 7 tests/cases/compiler/indexSignatureAndMappedType.ts:14:13
+!!! annotated symbol 8 tests/cases/compiler/indexSignatureAndMappedType.ts:14:13
         y = x;  // Error
         ~
-!!! error TS2322: Type '{ [key: string]: T; }' is not assignable to type 'Record<K, U>'.
+!!! error TS2322: Type '{ [key: string]: {|T|0|}; }' is not assignable to type '{|Record|1|}<{|K|2|}, {|U|3|}>'.
+!!! annotated symbol 0 tests/cases/compiler/indexSignatureAndMappedType.ts:14:13
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1452:6
+!!! annotated symbol 2 tests/cases/compiler/indexSignatureAndMappedType.ts:14:19
+!!! annotated symbol 3 tests/cases/compiler/indexSignatureAndMappedType.ts:14:16
     }
     
     // Repro from #14548

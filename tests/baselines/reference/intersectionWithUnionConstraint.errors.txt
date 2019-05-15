@@ -29,35 +29,55 @@ tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts(12
     function f2<T extends string | number | undefined, U extends string | null | undefined>(x: T & U) {
         let y1: string | number = x;     // Error
             ~~
-!!! error TS2322: Type 'T & U' is not assignable to type 'string | number'.
+!!! error TS2322: Type '{|T|0|} & {|U|1|}' is not assignable to type 'string | number'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'string | number'.
-!!! error TS2322:       Type 'T & U' is not assignable to type 'number'.
+!!! error TS2322:       Type '{|T|2|} & {|U|3|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
         let y2: string | null = x;       // Error
             ~~
-!!! error TS2322: Type 'T & U' is not assignable to type 'string | null'.
+!!! error TS2322: Type '{|T|0|} & {|U|1|}' is not assignable to type 'string | null'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'string | null'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'string | null'.
-!!! error TS2322:       Type 'T & U' is not assignable to type 'string'.
+!!! error TS2322:       Type '{|T|2|} & {|U|3|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
         let y3: string | undefined = x;
         let y4: number | null = x;       // Error
             ~~
-!!! error TS2322: Type 'T & U' is not assignable to type 'number | null'.
+!!! error TS2322: Type '{|T|0|} & {|U|1|}' is not assignable to type 'number | null'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'number | null'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'number | null'.
-!!! error TS2322:       Type 'T & U' is not assignable to type 'number'.
+!!! error TS2322:       Type '{|T|2|} & {|U|3|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
         let y5: number | undefined = x;  // Error
             ~~
-!!! error TS2322: Type 'T & U' is not assignable to type 'number | undefined'.
+!!! error TS2322: Type '{|T|0|} & {|U|1|}' is not assignable to type 'number | undefined'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'number | undefined'.
 !!! error TS2322:     Type 'string' is not assignable to type 'number | undefined'.
-!!! error TS2322:       Type 'T & U' is not assignable to type 'number'.
+!!! error TS2322:       Type '{|T|2|} & {|U|3|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
         let y6: null | undefined = x;    // Error
             ~~
-!!! error TS2322: Type 'T & U' is not assignable to type 'null | undefined'.
+!!! error TS2322: Type '{|T|0|} & {|U|1|}' is not assignable to type 'null | undefined'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'null | undefined'.
 !!! error TS2322:     Type 'string' is not assignable to type 'null | undefined'.
-!!! error TS2322:       Type 'T & U' is not assignable to type 'null'.
+!!! error TS2322:       Type '{|T|2|} & {|U|3|}' is not assignable to type 'null'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:13
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionWithUnionConstraint.ts:6:52
     }
     
     type T1 = (string | number | undefined) & (string | null | undefined);  // string | undefined

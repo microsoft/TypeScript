@@ -10,8 +10,10 @@ tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts(3,18)
     
     let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
                      ~~~~~~~~~~
-!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'Test<any>'.
+!!! error TS2322: Type '{ {|foo|0|}: string; }' is not assignable to type '{|Test|1|}<any>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'foo' does not exist in type 'Test<any>'.
+!!! annotated symbol 0 tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts:3:18
+!!! annotated symbol 1 tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts:1:6
     
     let zzy: Test = { value: {} };
     

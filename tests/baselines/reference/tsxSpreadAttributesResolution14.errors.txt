@@ -15,8 +15,13 @@ tests/cases/conformance/jsx/file.tsx(11,10): error TS2322: Type '{ Property1: tr
             // Error extra property
             <AnotherComponent {...props} Property1/>
              ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ Property1: true; property1: string; property2: number; }' is not assignable to type 'IntrinsicAttributes & AnotherComponentProps'.
+!!! error TS2322: Type '{ {|Property1|0|}: true; {|property1|1|}: string; {|property2|2|}: number; }' is not assignable to type '{|IntrinsicAttributes|3|} & {|AnotherComponentProps|4|}'.
 !!! error TS2322:   Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:11:38
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:4:5
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:5:5
+!!! annotated symbol 3 /.lib/react.d.ts:2367:15
+!!! annotated symbol 4 tests/cases/conformance/jsx/file.tsx:15:11
         );
     }
     

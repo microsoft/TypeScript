@@ -10,8 +10,9 @@ tests/cases/compiler/promiseChaining2.ts(7,50): error TS2322: Type 'string' is n
             // should get a fresh type parameter which each then call
             var z = this.then(x => result).then(x => "abc").then(x => x.length);
                                                      ~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'Function'.
+!!! error TS2322: Type 'string' is not assignable to type '{|Function|0|}'.
 !!! related TS6502 tests/cases/compiler/promiseChaining2.ts:4:34: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:272:11
             return new Chain2(result);
         }
     }

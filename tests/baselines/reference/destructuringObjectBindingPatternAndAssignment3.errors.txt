@@ -17,8 +17,10 @@ tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAs
 !!! error TS1005: ',' expected.
     var {i}: string | number = { i: 2 };
         ~~~
-!!! error TS2322: Type '{ i: number; }' is not assignable to type 'string | number'.
-!!! error TS2322:   Type '{ i: number; }' is not assignable to type 'number'.
+!!! error TS2322: Type '{ {|i|0|}: number; }' is not assignable to type 'string | number'.
+!!! error TS2322:   Type '{ {|i|1|}: number; }' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts:3:30
+!!! annotated symbol 1 tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment3.ts:3:30
          ~
 !!! error TS2339: Property 'i' does not exist on type 'string | number'.
     var {i1}: string | number| {} = { i1: 2 };

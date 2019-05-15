@@ -25,19 +25,33 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansion
     var ownerList: OwnerList<string>;
     list = ownerList; 
     ~~~~
-!!! error TS2322: Type 'OwnerList<string>' is not assignable to type 'List<string>'.
+!!! error TS2322: Type '{|OwnerList|0|}<string>' is not assignable to type '{|List|1|}<string>'.
 !!! error TS2322:   Types of property 'data' are incompatible.
-!!! error TS2322:     Type 'List<string>' is not assignable to type 'string'.
+!!! error TS2322:     Type '{|List|2|}<string>' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:10:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:3:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:3:11
     
     function other<T>(x: T) {
         var list: List<T>;
         var ownerList: OwnerList<T>;
         list = ownerList; 
         ~~~~
-!!! error TS2322: Type 'OwnerList<T>' is not assignable to type 'List<T>'.
+!!! error TS2322: Type '{|OwnerList|0|}<{|T|1|}>' is not assignable to type '{|List|2|}<{|T|3|}>'.
 !!! error TS2322:   Types of property 'data' are incompatible.
-!!! error TS2322:     Type 'List<T>' is not assignable to type 'T'.
-!!! error TS2322:       'List<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|List|4|}<{|T|5|}>' is not assignable to type '{|T|6|}'.
+!!! error TS2322:       '{|List|7|}<{|T|8|}>' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:10:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:18:16
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:18:16
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:3:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:18:16
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:18:16
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:3:11
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:18:16
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:18:16
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/recursiveTypes/infiniteExpansionThroughInstantiation.ts:18:16
     
     }
     

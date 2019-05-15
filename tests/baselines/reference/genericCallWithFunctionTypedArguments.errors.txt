@@ -51,24 +51,36 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
     function other<T, U>(t: T, u: U) {
         var r10 = foo2(1, (x: T) => ''); // error
                           ~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+!!! error TS2345: Argument of type '(x: {|T|0|}) => string' is not assignable to parameter of type '(a: 1) => string'.
 !!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
-!!! error TS2345:     Type '1' is not assignable to type 'T'.
-!!! error TS2345:       '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2345:     Type '1' is not assignable to type '{|T|1|}'.
+!!! error TS2345:       '1' is assignable to the constraint of type '{|T|2|}', but '{|T|3|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
         var r10 = foo2(1, (x) => ''); // string
     
         var r11 = foo3(1, (x: T) => '', ''); // error
                           ~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+!!! error TS2345: Argument of type '(x: {|T|0|}) => string' is not assignable to parameter of type '(a: 1) => string'.
 !!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
-!!! error TS2345:     Type '1' is not assignable to type 'T'.
-!!! error TS2345:       '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2345:     Type '1' is not assignable to type '{|T|1|}'.
+!!! error TS2345:       '1' is assignable to the constraint of type '{|T|2|}', but '{|T|3|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
         var r11b = foo3(1, (x: T) => '', 1); // error
                            ~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: T) => string' is not assignable to parameter of type '(a: 1) => string'.
+!!! error TS2345: Argument of type '(x: {|T|0|}) => string' is not assignable to parameter of type '(a: 1) => string'.
 !!! error TS2345:   Types of parameters 'x' and 'a' are incompatible.
-!!! error TS2345:     Type '1' is not assignable to type 'T'.
-!!! error TS2345:       '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2345:     Type '1' is not assignable to type '{|T|1|}'.
+!!! error TS2345:       '1' is assignable to the constraint of type '{|T|2|}', but '{|T|3|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments.ts:29:16
         var r12 = foo3(1, function (a) { return '' }, 1); // error
                           ~~~~~~~~
 !!! error TS2345: Argument of type '(a: number) => string' is not assignable to parameter of type '(a: number) => 1'.

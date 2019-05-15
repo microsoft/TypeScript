@@ -7,6 +7,7 @@ tests/cases/compiler/switchAssignmentCompat.ts(4,10): error TS2678: Type 'typeof
     switch (0) {
         case Foo: break; // Error expected
              ~~~
-!!! error TS2678: Type 'typeof Foo' is not comparable to type 'number'.
+!!! error TS2678: Type 'typeof {|Foo|0|}' is not comparable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/switchAssignmentCompat.ts:1:7
     }
     

@@ -27,22 +27,51 @@ tests/cases/compiler/errorMessagesIntersectionTypes03.ts(23,5): error TS2322: Ty
     
         t = a_and_b;
         ~
-!!! error TS2322: Type 'A & B' is not assignable to type 'T'.
-!!! error TS2322:   'A & B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|A|0|} & {|B|1|}' is not assignable to type '{|T|2|}'.
+!!! error TS2322:   '{|A|3|} & {|B|4|}' is assignable to the constraint of type '{|T|5|}', but '{|T|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:5:11
+!!! annotated symbol 2 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:12
+!!! annotated symbol 3 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:1:11
+!!! annotated symbol 4 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:5:11
+!!! annotated symbol 5 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:12
+!!! annotated symbol 6 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:12
         u = a_and_b;
         ~
-!!! error TS2322: Type 'A & B' is not assignable to type 'U'.
-!!! error TS2322:   'A & B' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'A'.
+!!! error TS2322: Type '{|A|0|} & {|B|1|}' is not assignable to type '{|U|2|}'.
+!!! error TS2322:   '{|A|3|} & {|B|4|}' is assignable to the constraint of type '{|U|5|}', but '{|U|6|}' could be instantiated with a different subtype of constraint '{|A|7|}'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:5:11
+!!! annotated symbol 2 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:15
+!!! annotated symbol 3 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:1:11
+!!! annotated symbol 4 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:5:11
+!!! annotated symbol 5 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:15
+!!! annotated symbol 6 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:15
+!!! annotated symbol 7 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:1:11
         v = a_and_b;
         ~
-!!! error TS2322: Type 'A & B' is not assignable to type 'V'.
-!!! error TS2322:   'A & B' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'A'.
+!!! error TS2322: Type '{|A|0|} & {|B|1|}' is not assignable to type '{|V|2|}'.
+!!! error TS2322:   '{|A|3|} & {|B|4|}' is assignable to the constraint of type '{|V|5|}', but '{|V|6|}' could be instantiated with a different subtype of constraint '{|A|7|}'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:5:11
+!!! annotated symbol 2 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:28
+!!! annotated symbol 3 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:1:11
+!!! annotated symbol 4 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:5:11
+!!! annotated symbol 5 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:28
+!!! annotated symbol 6 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:28
+!!! annotated symbol 7 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:1:11
     
         t = t_and_b;
         u = t_and_b;
         ~
-!!! error TS2322: Type 'T & B' is not assignable to type 'U'.
+!!! error TS2322: Type '{|T|0|} & {|B|1|}' is not assignable to type '{|U|2|}'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:12
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:5:11
+!!! annotated symbol 2 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:15
         v = t_and_b;
         ~
-!!! error TS2322: Type 'T & B' is not assignable to type 'V'.
+!!! error TS2322: Type '{|T|0|} & {|B|1|}' is not assignable to type '{|V|2|}'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:12
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:5:11
+!!! annotated symbol 2 tests/cases/compiler/errorMessagesIntersectionTypes03.ts:9:28
     }

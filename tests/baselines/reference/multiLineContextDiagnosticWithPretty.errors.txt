@@ -17,8 +17,11 @@
     ~~~~~~~~~~~~~~
         }
     ~~~~~
-!!! error TS2322: Type '{ a: { b: string; }; }' is not assignable to type '{ c: string; }'.
+!!! error TS2322: Type '{ {|a|0|}: { {|b|1|}: string; }; }' is not assignable to type '{ {|c|2|}: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type '{ c: string; }'.
+!!! annotated symbol 0 tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts:2:5
+!!! annotated symbol 1 tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts:3:9
+!!! annotated symbol 2 tests/cases/compiler/multiLineContextDiagnosticWithPretty.ts:1:11
     };
     
 Found 1 error.

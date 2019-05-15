@@ -75,9 +75,10 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     var l2: [number] = y;
         ~~
-!!! error TS2322: Type 'StrNum' is not assignable to type '[number]'.
+!!! error TS2322: Type '{|StrNum|0|}' is not assignable to type '[number]'.
 !!! error TS2322:   Types of property '0' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts:1:11
     var l3: [number] = z;
         ~~
 !!! error TS2740: Type '{ 0: string; 1: number; length: 2; }' is missing the following properties from type '[number]': pop, push, concat, join, and 15 more.
@@ -88,9 +89,10 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
 !!! error TS2322:     Type '2' is not assignable to type '1'.
     var m2: [string] = y;
         ~~
-!!! error TS2322: Type 'StrNum' is not assignable to type '[string]'.
+!!! error TS2322: Type '{|StrNum|0|}' is not assignable to type '[string]'.
 !!! error TS2322:   Types of property 'length' are incompatible.
 !!! error TS2322:     Type '2' is not assignable to type '1'.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts:1:11
     var m3: [string] = z;
         ~~
 !!! error TS2740: Type '{ 0: string; 1: number; length: 2; }' is missing the following properties from type '[string]': pop, push, concat, join, and 15 more.
@@ -100,9 +102,10 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
     var n2: [number, string] = y;
         ~~
-!!! error TS2322: Type 'StrNum' is not assignable to type '[number, string]'.
+!!! error TS2322: Type '{|StrNum|0|}' is not assignable to type '[number, string]'.
 !!! error TS2322:   Types of property '0' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts:1:11
     var n3: [number, string] = z;
         ~~
 !!! error TS2740: Type '{ 0: string; 1: number; length: 2; }' is missing the following properties from type '[number, string]': pop, push, concat, join, and 15 more.

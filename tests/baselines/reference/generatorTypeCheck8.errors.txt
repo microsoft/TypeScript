@@ -9,8 +9,14 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts(2,17): error
     interface BadGenerator extends Iterator<number>, Iterable<string> { }
     function* g3(): BadGenerator { }
                     ~~~~~~~~~~~~
-!!! error TS2322: Type 'IterableIterator<string>' is not assignable to type 'BadGenerator'.
+!!! error TS2322: Type '{|IterableIterator|0|}<string>' is not assignable to type '{|BadGenerator|1|}'.
 !!! error TS2322:   Types of property 'next' are incompatible.
-!!! error TS2322:     Type '(value?: any) => IteratorResult<string>' is not assignable to type '(value?: any) => IteratorResult<number>'.
-!!! error TS2322:       Type 'IteratorResult<string>' is not assignable to type 'IteratorResult<number>'.
+!!! error TS2322:     Type '(value?: any) => {|IteratorResult|2|}<string>' is not assignable to type '(value?: any) => {|IteratorResult|3|}<number>'.
+!!! error TS2322:       Type '{|IteratorResult|4|}<string>' is not assignable to type '{|IteratorResult|5|}<number>'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es2015.iterable.d.ts:46:11
+!!! annotated symbol 1 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck8.ts:1:11
+!!! annotated symbol 2 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 3 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 4 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 5 /.ts/lib.es2015.iterable.d.ts:31:11

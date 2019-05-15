@@ -140,92 +140,161 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
     var s3c = s3.then(testFunction3P, testFunction3, testFunction3);
     var s3d = s3.then(testFunction3P, testFunction3, testFunction3).then(testFunction3, testFunction3, testFunction3); // error
                                                                          ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number) => IPromise<number>' is not assignable to parameter of type '(value: IPromise<number>) => IPromise<number>'.
+!!! error TS2345: Argument of type '(x: number) => {|IPromise|0|}<number>' is not assignable to parameter of type '(value: {|IPromise|1|}<number>) => {|IPromise|2|}<number>'.
 !!! error TS2345:   Types of parameters 'x' and 'value' are incompatible.
-!!! error TS2345:     Type 'IPromise<number>' is not assignable to type 'number'.
+!!! error TS2345:     Type '{|IPromise|3|}<number>' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
     
     var r4: IPromise<string>;
     var sIPromise: (x: any) => IPromise<string>;
     var sPromise: (x: any) => Promise<string>;
     var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, y?: string) => {|IPromise|0|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|1|}<string>'.
 !!! error TS2345:   Types of parameters 'x' and 'value' are incompatible.
 !!! error TS2345:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
     var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testFunction4, testFunction4); // ok
     var s4: Promise<string>;
     var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, y?: string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, y?: string) => {|IPromise|0|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|1|}<string>'.
 !!! error TS2345:   Types of parameters 'x' and 'value' are incompatible.
 !!! error TS2345:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
     var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error 
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, y?: string) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
+!!! error TS2345: Argument of type '(x: number, y?: string) => {|Promise|0|}<string>' is not assignable to parameter of type '(value: string) => {|Promise|1|}<string>'.
 !!! error TS2345:   Types of parameters 'x' and 'value' are incompatible.
 !!! error TS2345:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1399:11
     var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, y?: string) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, y?: string) => {|Promise|0|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|1|}<string>'.
 !!! error TS2345:   Types of parameters 'x' and 'value' are incompatible.
 !!! error TS2345:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
     var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4);
     
     var r5: IPromise<string>;
     var r5a = r5.then(testFunction5, testFunction5, testFunction5); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, cb: (a: string) => string) => {|IPromise|0|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|1|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
     var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s5: Promise<string>;
     var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, cb: (a: string) => string) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, cb: (a: string) => string) => {|IPromise|0|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|1|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
     var s5b = s5.then(testFunction5P, testFunction5P, testFunction5P); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, cb: (a: string) => string) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
+!!! error TS2345: Argument of type '(x: number, cb: (a: string) => string) => {|Promise|0|}<string>' is not assignable to parameter of type '(value: string) => {|Promise|1|}<string>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1399:11
     var s5c = s5.then(testFunction5P, testFunction5, testFunction5); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, cb: (a: string) => string) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, cb: (a: string) => string) => {|Promise|0|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|1|}<string>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
     var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
     var r6: IPromise<string>;
     var r6a = r6.then(testFunction6, testFunction6, testFunction6); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, cb: <{|T|0|}>(a: {|T|1|}) => {|T|2|}) => {|IPromise|3|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|4|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:27:48
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:27:48
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:27:48
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
     var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s6: Promise<string>;
     var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, cb: <{|T|0|}>(a: {|T|1|}) => {|T|2|}) => {|IPromise|3|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|4|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:27:48
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:27:48
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:27:48
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
     var s6b = s6.then(testFunction6P, testFunction6P, testFunction6P); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
+!!! error TS2345: Argument of type '(x: number, cb: <{|T|0|}>(a: {|T|1|}) => {|T|2|}) => {|Promise|3|}<string>' is not assignable to parameter of type '(value: string) => {|Promise|4|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:28:49
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:28:49
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:28:49
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:1399:11
     var s6c = s6.then(testFunction6P, testFunction6, testFunction6); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: number, cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(x: number, cb: <{|T|0|}>(a: {|T|1|}) => {|T|2|}) => {|Promise|3|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|4|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:28:49
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:28:49
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:28:49
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
     var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
     var r7: IPromise<string>;
     var r7a = r7.then(testFunction7, testFunction7, testFunction7); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(cb: <{|T|0|}>(a: {|T|1|}) => {|T|2|}) => {|IPromise|3|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|4|}<string>'.
 !!! error TS2345:   Types of parameters 'cb' and 'value' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type '<T>(a: T) => T'.
+!!! error TS2345:     Type 'string' is not assignable to type '<{|T|5|}>(a: {|T|6|}) => {|T|7|}'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:29:37
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:29:37
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:29:37
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:29:37
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:29:37
+!!! annotated symbol 7 tests/cases/compiler/promisePermutations.ts:29:37
     var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s7: Promise<string>;
     var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(cb: <T>(a: T) => T) => IPromise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(cb: <{|T|0|}>(a: {|T|1|}) => {|T|2|}) => {|IPromise|3|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|4|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:29:37
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:29:37
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:29:37
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
     var s7b = r7.then(testFunction7P, testFunction7P, testFunction7P); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => Promise<string>'.
+!!! error TS2345: Argument of type '(cb: <{|T|0|}>(a: {|T|1|}) => {|T|2|}) => {|Promise|3|}<string>' is not assignable to parameter of type '(value: string) => {|Promise|4|}<string>'.
 !!! error TS2345:   Types of parameters 'cb' and 'value' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type '<T>(a: T) => T'.
+!!! error TS2345:     Type 'string' is not assignable to type '<{|T|5|}>(a: {|T|6|}) => {|T|7|}'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 7 tests/cases/compiler/promisePermutations.ts:30:38
     var s7c = r7.then(testFunction7P, testFunction7, testFunction7); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(cb: <T>(a: T) => T) => Promise<string>' is not assignable to parameter of type '(value: string) => IPromise<string>'.
+!!! error TS2345: Argument of type '(cb: <{|T|0|}>(a: {|T|1|}) => {|T|2|}) => {|Promise|3|}<string>' is not assignable to parameter of type '(value: string) => {|IPromise|4|}<string>'.
 !!! error TS2345:   Types of parameters 'cb' and 'value' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type '<T>(a: T) => T'.
+!!! error TS2345:     Type 'string' is not assignable to type '<{|T|5|}>(a: {|T|6|}) => {|T|7|}'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:30:38
+!!! annotated symbol 7 tests/cases/compiler/promisePermutations.ts:30:38
     var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromise); // ok?
     
     var r8: IPromise<number>;
@@ -233,48 +302,116 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
     var nPromise: (x: any) => Promise<number>;
     var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, cb: (a: {|T|2|}) => {|T|3|}) => {|IPromise|4|}<{|T|5|}>' is not assignable to parameter of type '(value: number) => {|IPromise|6|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:9:11
     var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
     var s8: Promise<number>;
     var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, cb: (a: {|T|2|}) => {|T|3|}) => {|IPromise|4|}<{|T|5|}>' is not assignable to parameter of type '(value: number) => {|IPromise|6|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:31:32
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:9:11
     var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<any>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, cb: (a: {|T|2|}) => {|T|3|}) => {|Promise|4|}<{|T|5|}>' is not assignable to parameter of type '(value: number) => {|Promise|6|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:1399:11
     var s8c = s8.then(testFunction8P, testFunction8, testFunction8); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, cb: (a: T) => T) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, cb: (a: {|T|2|}) => {|T|3|}) => {|Promise|4|}<{|T|5|}>' is not assignable to parameter of type '(value: number) => {|IPromise|6|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:32:33
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:9:11
     var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
     
     var r9: IPromise<number>;
     var r9a = r9.then(testFunction9, testFunction9, testFunction9); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, cb: <{|U|2|}>(a: {|U|3|}) => {|U|4|}) => {|IPromise|5|}<{|T|6|}>' is not assignable to parameter of type '(value: number) => {|IPromise|7|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:33:32
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:33:32
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:33:46
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:33:46
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:33:46
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:33:32
+!!! annotated symbol 7 tests/cases/compiler/promisePermutations.ts:9:11
     var r9b = r9.then(sIPromise, sIPromise, sIPromise); // ok
     var r9c = r9.then(nIPromise, nIPromise, nIPromise); // ok
     var r9d = r9.then(testFunction, sIPromise, nIPromise); // ok
                                     ~~~~~~~~~
-!!! error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
-!!! error TS2345:   Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+!!! error TS2345: Argument of type '(x: any) => {|IPromise|0|}<string>' is not assignable to parameter of type '(error: any) => {|IPromise|1|}<number>'.
+!!! error TS2345:   Type '{|IPromise|2|}<string>' is not assignable to type '{|IPromise|3|}<number>'.
 !!! error TS2345:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
     var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s9: Promise<number>;
     var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
                       ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => IPromise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, cb: <{|U|2|}>(a: {|U|3|}) => {|U|4|}) => {|IPromise|5|}<{|T|6|}>' is not assignable to parameter of type '(value: number) => {|IPromise|7|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:33:32
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:33:32
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:33:46
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:33:46
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:33:46
+!!! annotated symbol 5 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:33:32
+!!! annotated symbol 7 tests/cases/compiler/promisePermutations.ts:9:11
     var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => Promise<any>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, cb: <{|U|2|}>(a: {|U|3|}) => {|U|4|}) => {|Promise|5|}<{|T|6|}>' is not assignable to parameter of type '(value: number) => {|Promise|7|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:34:33
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:34:33
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:34:47
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:34:47
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:34:47
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:34:33
+!!! annotated symbol 7 /.ts/lib.es5.d.ts:1399:11
     var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error
                       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(x: T, cb: <U>(a: U) => U) => Promise<T>' is not assignable to parameter of type '(value: number) => IPromise<any>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(x: {|T|1|}, cb: <{|U|2|}>(a: {|U|3|}) => {|U|4|}) => {|Promise|5|}<{|T|6|}>' is not assignable to parameter of type '(value: number) => {|IPromise|7|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:34:33
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:34:33
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:34:47
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:34:47
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:34:47
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 6 tests/cases/compiler/promisePermutations.ts:34:33
+!!! annotated symbol 7 tests/cases/compiler/promisePermutations.ts:9:11
     var s9d = s9.then(sPromise, sPromise, sPromise); // ok
     var s9e = s9.then(nPromise, nPromise, nPromise); // ok
     var s9f = s9.then(testFunction, sIPromise, nIPromise); // error
                                     ~~~~~~~~~
-!!! error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
-!!! error TS2345:   Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
+!!! error TS2345: Argument of type '(x: any) => {|IPromise|0|}<string>' is not assignable to parameter of type '(error: any) => {|IPromise|1|}<number>'.
+!!! error TS2345:   Type '{|IPromise|2|}<string>' is not assignable to type '{|IPromise|3|}<number>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
     var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     
     var r10 = testFunction10(x => x);
@@ -283,7 +420,9 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
     var r10c = r10.then(nIPromise, nIPromise, nIPromise); // ok
     var r10d = r10.then(testFunction, sIPromise, nIPromise); // ok
                                       ~~~~~~~~~
-!!! error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
+!!! error TS2345: Argument of type '(x: any) => {|IPromise|0|}<string>' is not assignable to parameter of type '(error: any) => {|IPromise|1|}<number>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
     var r10e = r10.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
     var s10 = testFunction10P(x => x);
     var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
@@ -293,36 +432,117 @@ tests/cases/compiler/promisePermutations.ts(160,21): error TS2345: Argument of t
     var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok
     var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // error
                                        ~~~~~~~~~
-!!! error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
+!!! error TS2345: Argument of type '(x: any) => {|IPromise|0|}<string>' is not assignable to parameter of type '(error: any) => {|Promise|1|}<number>'.
 !!! error TS2345:   Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
 !!! related TS2728 /.ts/lib.es5.d.ts:1413:5: 'catch' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1399:11
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
     var r11: IPromise<number>;
     var r11a = r11.then(testFunction11, testFunction11, testFunction11); // error
                         ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
-!!! error TS2345:   Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
+!!! error TS2345: Argument of type '{ (x: number): {|IPromise|0|}<number>; (x: string): {|IPromise|1|}<string>; }' is not assignable to parameter of type '(value: number) => {|IPromise|2|}<string>'.
+!!! error TS2345:   Type '{|IPromise|3|}<number>' is not assignable to type '{|IPromise|4|}<string>'.
 !!! error TS2345:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
     var s11: Promise<number>;
     var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
                         ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
-!!! error TS2345:   Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
+!!! error TS2345: Argument of type '{ (x: number): {|IPromise|0|}<number>; (x: string): {|IPromise|1|}<string>; }' is not assignable to parameter of type '(value: number) => {|IPromise|2|}<string>'.
+!!! error TS2345:   Type '{|IPromise|3|}<number>' is not assignable to type '{|IPromise|4|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 3 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
     var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
                         ~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => Promise<string>'.
-!!! error TS2345:   Type 'Promise<number>' is not assignable to type 'Promise<string>'.
+!!! error TS2345: Argument of type '{ (x: number): {|Promise|0|}<number>; (x: string): {|Promise|1|}<string>; }' is not assignable to parameter of type '(value: number) => {|Promise|2|}<string>'.
+!!! error TS2345:   Type '{|Promise|3|}<number>' is not assignable to type '{|Promise|4|}<string>'.
 !!! error TS2345:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:1399:11
     var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // error
                         ~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ (x: number): Promise<number>; (x: string): Promise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
-!!! error TS2345:   Type 'Promise<number>' is not assignable to type 'IPromise<string>'.
+!!! error TS2345: Argument of type '{ (x: number): {|Promise|0|}<number>; (x: string): {|Promise|1|}<string>; }' is not assignable to parameter of type '(value: number) => {|IPromise|2|}<string>'.
+!!! error TS2345:   Type '{|Promise|3|}<number>' is not assignable to type '{|IPromise|4|}<string>'.
 !!! error TS2345:     Types of property 'then' are incompatible.
-!!! error TS2345:       Type '{ <TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>; <U>(success?: (value: number) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>; }' is not assignable to type '{ <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): IPromise<U>; }'.
+!!! error TS2345:       Type '{ <{|TResult1|5|} = number, {|TResult2|6|} = never>(onfulfilled?: (value: number) => {|TResult1|7|} | {|PromiseLike|8|}<{|TResult1|9|}>, onrejected?: (reason: any) => {|TResult2|10|} | {|PromiseLike|11|}<{|TResult2|12|}>): {|Promise|13|}<{|TResult1|14|} | {|TResult2|15|}>; <{|U|16|}>(success?: (value: number) => {|Promise|17|}<{|U|18|}>, error?: (error: any) => {|Promise|19|}<{|U|20|}>, progress?: (progress: any) => void): {|Promise|21|}<{|U|22|}>; <{|U|23|}>(success?: (value: number) => {|Promise|24|}<{|U|25|}>, error?: (error: any) => {|U|26|}, progress?: (progress: any) => void): {|Promise|27|}<{|U|28|}>; <{|U|29|}>(success?: (value: number) => {|U|30|}, error?: (error: any) => {|Promise|31|}<{|U|32|}>, progress?: (progress: any) => void): {|Promise|33|}<{|U|34|}>; <{|U|35|}>(success?: (value: number) => {|U|36|}, error?: (error: any) => {|U|37|}, progress?: (progress: any) => void): {|Promise|38|}<{|U|39|}>; }' is not assignable to type '{ <{|U|40|}>(success?: (value: string) => {|IPromise|41|}<{|U|42|}>, error?: (error: any) => {|IPromise|43|}<{|U|44|}>, progress?: (progress: any) => void): {|IPromise|45|}<{|U|46|}>; <{|U|47|}>(success?: (value: string) => {|IPromise|48|}<{|U|49|}>, error?: (error: any) => {|U|50|}, progress?: (progress: any) => void): {|IPromise|51|}<{|U|52|}>; <{|U|53|}>(success?: (value: string) => {|U|54|}, error?: (error: any) => {|IPromise|55|}<{|U|56|}>, progress?: (progress: any) => void): {|IPromise|57|}<{|U|58|}>; <{|U|59|}>(success?: (value: string) => {|U|60|}, error?: (error: any) => {|U|61|}, progress?: (progress: any) => void): {|IPromise|62|}<{|U|63|}>; }'.
 !!! error TS2345:         Types of parameters 'onfulfilled' and 'success' are incompatible.
 !!! error TS2345:           Types of parameters 'value' and 'value' are incompatible.
 !!! error TS2345:             Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 2 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 4 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:1406:10
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:1406:24
+!!! annotated symbol 7 /.ts/lib.es5.d.ts:1406:10
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 9 /.ts/lib.es5.d.ts:1406:10
+!!! annotated symbol 10 /.ts/lib.es5.d.ts:1406:24
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 12 /.ts/lib.es5.d.ts:1406:24
+!!! annotated symbol 13 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 14 /.ts/lib.es5.d.ts:1406:10
+!!! annotated symbol 15 /.ts/lib.es5.d.ts:1406:24
+!!! annotated symbol 16 tests/cases/compiler/promisePermutations.ts:2:10
+!!! annotated symbol 17 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 18 tests/cases/compiler/promisePermutations.ts:2:10
+!!! annotated symbol 19 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 20 tests/cases/compiler/promisePermutations.ts:2:10
+!!! annotated symbol 21 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 22 tests/cases/compiler/promisePermutations.ts:2:10
+!!! annotated symbol 23 tests/cases/compiler/promisePermutations.ts:3:10
+!!! annotated symbol 24 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 25 tests/cases/compiler/promisePermutations.ts:3:10
+!!! annotated symbol 26 tests/cases/compiler/promisePermutations.ts:3:10
+!!! annotated symbol 27 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 28 tests/cases/compiler/promisePermutations.ts:3:10
+!!! annotated symbol 29 tests/cases/compiler/promisePermutations.ts:4:10
+!!! annotated symbol 30 tests/cases/compiler/promisePermutations.ts:4:10
+!!! annotated symbol 31 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 32 tests/cases/compiler/promisePermutations.ts:4:10
+!!! annotated symbol 33 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 34 tests/cases/compiler/promisePermutations.ts:4:10
+!!! annotated symbol 35 tests/cases/compiler/promisePermutations.ts:5:10
+!!! annotated symbol 36 tests/cases/compiler/promisePermutations.ts:5:10
+!!! annotated symbol 37 tests/cases/compiler/promisePermutations.ts:5:10
+!!! annotated symbol 38 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 39 tests/cases/compiler/promisePermutations.ts:5:10
+!!! annotated symbol 40 tests/cases/compiler/promisePermutations.ts:10:10
+!!! annotated symbol 41 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 42 tests/cases/compiler/promisePermutations.ts:10:10
+!!! annotated symbol 43 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 44 tests/cases/compiler/promisePermutations.ts:10:10
+!!! annotated symbol 45 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 46 tests/cases/compiler/promisePermutations.ts:10:10
+!!! annotated symbol 47 tests/cases/compiler/promisePermutations.ts:11:10
+!!! annotated symbol 48 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 49 tests/cases/compiler/promisePermutations.ts:11:10
+!!! annotated symbol 50 tests/cases/compiler/promisePermutations.ts:11:10
+!!! annotated symbol 51 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 52 tests/cases/compiler/promisePermutations.ts:11:10
+!!! annotated symbol 53 tests/cases/compiler/promisePermutations.ts:12:10
+!!! annotated symbol 54 tests/cases/compiler/promisePermutations.ts:12:10
+!!! annotated symbol 55 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 56 tests/cases/compiler/promisePermutations.ts:12:10
+!!! annotated symbol 57 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 58 tests/cases/compiler/promisePermutations.ts:12:10
+!!! annotated symbol 59 tests/cases/compiler/promisePermutations.ts:13:10
+!!! annotated symbol 60 tests/cases/compiler/promisePermutations.ts:13:10
+!!! annotated symbol 61 tests/cases/compiler/promisePermutations.ts:13:10
+!!! annotated symbol 62 tests/cases/compiler/promisePermutations.ts:9:11
+!!! annotated symbol 63 tests/cases/compiler/promisePermutations.ts:13:10
     
     var r12 = testFunction12(x => x);
     var r12a = r12.then(testFunction12, testFunction12, testFunction12); // ok

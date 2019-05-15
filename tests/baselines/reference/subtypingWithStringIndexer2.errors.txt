@@ -28,10 +28,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     interface B extends A {
               ~
-!!! error TS2430: Interface 'B' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|B|0|}' incorrectly extends interface '{|A|1|}'.
 !!! error TS2430:   Index signatures are incompatible.
 !!! error TS2430:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:4:34: 'bar' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:11:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:7:11
         [x: string]: Base; // error
     }
     
@@ -46,7 +48,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface B extends A<Base> {
                               ~~~~
-!!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+!!! error TS2344: Type '{|Base|0|}' does not satisfy the constraint '{|Derived|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:3:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:4:11
             [x: string]: Derived; // error
         }
     
@@ -56,27 +60,53 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface B3<T extends Derived> extends A<T> {
                   ~~
-!!! error TS2430: Interface 'B3<T>' incorrectly extends interface 'A<T>'.
+!!! error TS2430: Interface '{|B3|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}<{|T|3|}>'.
 !!! error TS2430:   Index signatures are incompatible.
-!!! error TS2430:     Type 'Base' is not assignable to type 'T'.
+!!! error TS2430:     Type '{|Base|4|}' is not assignable to type '{|T|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:32:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:32:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:20:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:32:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:3:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:32:18
             [x: string]: Base; // error
         }
     
         interface B4<T extends Derived> extends A<T> {
                   ~~
-!!! error TS2430: Interface 'B4<T>' incorrectly extends interface 'A<T>'.
+!!! error TS2430: Interface '{|B4|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}<{|T|3|}>'.
 !!! error TS2430:   Index signatures are incompatible.
-!!! error TS2430:     Type 'Derived' is not assignable to type 'T'.
-!!! error TS2430:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+!!! error TS2430:     Type '{|Derived|4|}' is not assignable to type '{|T|5|}'.
+!!! error TS2430:       '{|Derived|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{|Derived|9|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:36:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:36:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:20:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:36:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:4:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:36:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:4:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:36:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:36:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:4:11
             [x: string]: Derived; // error
         }
     
         interface B5<T extends Derived2> extends A<T> {
                   ~~
-!!! error TS2430: Interface 'B5<T>' incorrectly extends interface 'A<T>'.
+!!! error TS2430: Interface '{|B5|0|}<{|T|1|}>' incorrectly extends interface '{|A|2|}<{|T|3|}>'.
 !!! error TS2430:   Index signatures are incompatible.
-!!! error TS2430:     Type 'Derived2' is not assignable to type 'T'.
-!!! error TS2430:       'Derived2' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived2'.
+!!! error TS2430:     Type '{|Derived2|4|}' is not assignable to type '{|T|5|}'.
+!!! error TS2430:       '{|Derived2|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{|Derived2|9|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:40:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:40:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:20:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:40:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:5:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:40:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:5:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:40:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:40:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithStringIndexer2.ts:5:11
             [x: string]: Derived2; // error
         }
     }

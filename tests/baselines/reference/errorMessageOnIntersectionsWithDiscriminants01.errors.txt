@@ -14,9 +14,18 @@ tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts(8,1): err
     
     b = a;
     ~
-!!! error TS2322: Type 'A' is not assignable to type 'B'.
-!!! error TS2322:   Type '{ test: true; } & { foo: 1; }' is not assignable to type 'B'.
-!!! error TS2322:     Type '{ test: true; } & { foo: 1; }' is not assignable to type '{ test: true; } & { bar: 1; }'.
+!!! error TS2322: Type '{|A|0|}' is not assignable to type '{|B|1|}'.
+!!! error TS2322:   Type '{ {|test|2|}: true; } & { {|foo|3|}: 1; }' is not assignable to type '{|B|4|}'.
+!!! error TS2322:     Type '{ {|test|5|}: true; } & { {|foo|6|}: 1; }' is not assignable to type '{ {|test|7|}: true; } & { {|bar|8|}: 1; }'.
 !!! error TS2322:       Property 'bar' is missing in type '{ test: true; } & { foo: 1; }' but required in type '{ bar: 1; }'.
 !!! related TS2728 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:3:28: 'bar' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:2:13
+!!! annotated symbol 1 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:3:13
+!!! annotated symbol 2 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:1:24
+!!! annotated symbol 3 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:2:28
+!!! annotated symbol 4 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:3:13
+!!! annotated symbol 5 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:1:24
+!!! annotated symbol 6 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:2:28
+!!! annotated symbol 7 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:1:24
+!!! annotated symbol 8 tests/cases/compiler/errorMessageOnIntersectionsWithDiscriminants01.ts:3:28
     

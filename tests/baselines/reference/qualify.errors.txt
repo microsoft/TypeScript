@@ -33,7 +33,8 @@ tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in 
         export module U {
             var z:I=3;
                 ~
-!!! error TS2322: Type '3' is not assignable to type 'I'.
+!!! error TS2322: Type '3' is not assignable to type '{|I|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/qualify.ts:17:22
             export interface I2 {
                 q;
             }
@@ -44,7 +45,8 @@ tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in 
         export module U2 {
             var z:T.U.I2=3;
                 ~
-!!! error TS2322: Type '3' is not assignable to type 'I2'.
+!!! error TS2322: Type '3' is not assignable to type '{|I2|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/qualify.ts:22:26
         }
     }
     
@@ -68,12 +70,16 @@ tests/cases/compiler/qualify.ts(58,5): error TS2741: Property 'p' is missing in 
 !!! error TS2740: Type 'I4' is missing the following properties from type 'I3[]': length, pop, push, concat, and 16 more.
             var v4:()=>K1.I3=v1;
                 ~~
-!!! error TS2322: Type 'I4' is not assignable to type '() => I3'.
+!!! error TS2322: Type '{|I4|0|}' is not assignable to type '() => {|I3|1|}'.
 !!! error TS2322:   Type 'I4' provides no match for the signature '(): I3'.
+!!! annotated symbol 0 tests/cases/compiler/qualify.ts:41:26
+!!! annotated symbol 1 tests/cases/compiler/qualify.ts:36:26
             var v5:(k:K1.I3)=>void=v1;
                 ~~
-!!! error TS2322: Type 'I4' is not assignable to type '(k: I3) => void'.
+!!! error TS2322: Type '{|I4|0|}' is not assignable to type '(k: {|I3|1|}) => void'.
 !!! error TS2322:   Type 'I4' provides no match for the signature '(k: I3): void'.
+!!! annotated symbol 0 tests/cases/compiler/qualify.ts:41:26
+!!! annotated symbol 1 tests/cases/compiler/qualify.ts:36:26
             var v6:{k:K1.I3;}=v1;
                 ~~
 !!! error TS2741: Property 'k' is missing in type 'I4' but required in type '{ k: I3; }'.

@@ -39,11 +39,18 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
             // BUG 835518
             var r9 = r7(new Date()); // should be ok
                         ~~~~~~~~~~
-!!! error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
-!!! error TS2345:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2345: Argument of type '{|Date|0|}' is not assignable to parameter of type '{|T|1|}'.
+!!! error TS2345:   '{|Date|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:12:21
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:12:21
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:12:21
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
             var r10 = r7(1); // error
                          ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type '{|T|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:12:21
         }
     
         function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
@@ -54,9 +61,15 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
         function other3<T extends RegExp>(x: T) {
             var r7 = foo2((a: T) => a, (b: T) => b); // error
                           ~~~~~~~~~~~
-!!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+!!! error TS2345: Argument of type '(a: {|T|0|}) => {|T|1|}' is not assignable to parameter of type '(x: {|Date|2|}) => {|Date|3|}'.
 !!! error TS2345:   Types of parameters 'a' and 'x' are incompatible.
-!!! error TS2345:     Type 'Date' is not assignable to type 'T'.
+!!! error TS2345:     Type '{|Date|4|}' is not assignable to type '{|T|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:24:21
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:24:21
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:24:21
             var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
         }
     
@@ -70,8 +83,10 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
     
         var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
                                               ~~~
-!!! error TS2322: Type 'F' is not assignable to type 'E'.
+!!! error TS2322: Type '{|F|0|}' is not assignable to type '{|E|1|}'.
 !!! related TS6502 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:32:47: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:30:10
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:29:10
     }
     
     module TU {
@@ -86,11 +101,18 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
             var r7 = foo((a: T) => a, (b: T) => b); 
             var r9 = r7(new Date()); 
                         ~~~~~~~~~~
-!!! error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
-!!! error TS2345:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2345: Argument of type '{|Date|0|}' is not assignable to parameter of type '{|T|1|}'.
+!!! error TS2345:   '{|Date|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:48:21
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:48:21
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:48:21
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
             var r10 = r7(1); 
                          ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type '{|T|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:48:21
         }
     
         function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
@@ -101,9 +123,15 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
         function other3<T extends RegExp>(x: T) {
             var r7 = foo2((a: T) => a, (b: T) => b); 
                           ~~~~~~~~~~~
-!!! error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
+!!! error TS2345: Argument of type '(a: {|T|0|}) => {|T|1|}' is not assignable to parameter of type '(x: {|Date|2|}) => {|Date|3|}'.
 !!! error TS2345:   Types of parameters 'a' and 'x' are incompatible.
-!!! error TS2345:     Type 'Date' is not assignable to type 'T'.
+!!! error TS2345:     Type '{|Date|4|}' is not assignable to type '{|T|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:59:21
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:59:21
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:59:21
             var r7b = foo2((a) => a, (b) => b); 
         }
     

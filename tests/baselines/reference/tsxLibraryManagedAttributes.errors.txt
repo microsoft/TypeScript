@@ -78,13 +78,37 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const a = <Component foo={12} bar="yes" baz="yeah" />;
     const b = <Component foo={12} />; // Error, missing required prop bar
                ~~~~~~~~~
-!!! error TS2322: Type '{ foo: number; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
+!!! error TS2322: Type '{ {|foo|0|}: number; }' is not assignable to type '{|Defaultize|1|}<{|InferredPropTypes|2|}<{ {|foo|3|}: {|PropTypeChecker|4|}<number, false>; {|bar|5|}: {|PropTypeChecker|6|}<{|ReactNode|7|}, false>; {|baz|8|}: {|PropTypeChecker|9|}<string, true>; }>, { {|foo|10|}: number; }>'.
 !!! error TS2322:   Type '{ foo: number; }' is missing the following properties from type '{ bar: string | number | ReactComponent<{}, {}> | null | undefined; baz: string; }': bar, baz
+!!! annotated symbol 0 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:55:22
+!!! annotated symbol 1 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:1:6
+!!! annotated symbol 2 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:6:6
+!!! annotated symbol 3 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:45:9
+!!! annotated symbol 4 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 5 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:46:9
+!!! annotated symbol 6 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 7 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:21:6
+!!! annotated symbol 8 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:47:9
+!!! annotated symbol 9 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 10 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:50:9
     const c = <Component bar="yes" baz="yeah" />;
     const d = <Component bar="yes" baz="yo" bat="ohno" />; // Error, baz not a valid prop
                ~~~~~~~~~
-!!! error TS2322: Type '{ bar: string; baz: string; bat: string; }' is not assignable to type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
+!!! error TS2322: Type '{ {|bar|0|}: string; {|baz|1|}: string; {|bat|2|}: string; }' is not assignable to type '{|Defaultize|3|}<{|InferredPropTypes|4|}<{ {|foo|5|}: {|PropTypeChecker|6|}<number, false>; {|bar|7|}: {|PropTypeChecker|8|}<{|ReactNode|9|}, false>; {|baz|10|}: {|PropTypeChecker|11|}<string, true>; }>, { {|foo|12|}: number; }>'.
 !!! error TS2322:   Property 'bat' does not exist on type 'Defaultize<InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<string, true>; }>, { foo: number; }>'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:57:22
+!!! annotated symbol 1 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:57:32
+!!! annotated symbol 2 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:57:41
+!!! annotated symbol 3 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:1:6
+!!! annotated symbol 4 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:6:6
+!!! annotated symbol 5 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:45:9
+!!! annotated symbol 6 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 7 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:46:9
+!!! annotated symbol 8 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 9 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:21:6
+!!! annotated symbol 10 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:47:9
+!!! annotated symbol 11 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 12 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:50:9
     const e = <Component foo={12} bar={null} baz="cool" />; // bar is nullable/undefinable since it's not marked `isRequired`
     const f = <Component foo={12} bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
                                              ~~~
@@ -105,8 +129,9 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const i = <JustPropTypes foo={null} bar="ok" />;
     const j = <JustPropTypes foo={12} bar={null} />; // error, bar is required
                                       ~~~
-!!! error TS2322: Type 'null' is not assignable to type 'ReactNode'.
+!!! error TS2322: Type 'null' is not assignable to type '{|ReactNode|0|}'.
 !!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:64:9: The expected type comes from property 'bar' which is declared here on type 'InferredPropTypes<{ foo: PropTypeChecker<number, false>; bar: PropTypeChecker<ReactNode, true>; }>'
+!!! annotated symbol 0 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:21:6
     
     class JustDefaultProps extends ReactComponent {
         static defaultProps = {
@@ -117,8 +142,12 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const k = <JustDefaultProps foo={12} />;
     const l = <JustDefaultProps foo={12} bar="ok" />; // error, no prop named bar
                ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ foo: number; bar: string; }' is not assignable to type 'Defaultize<{}, { foo: number; }>'.
+!!! error TS2322: Type '{ {|foo|0|}: number; {|bar|1|}: string; }' is not assignable to type '{|Defaultize|2|}<{}, { {|foo|3|}: number; }>'.
 !!! error TS2322:   Property 'bar' does not exist on type 'Defaultize<{}, { foo: number; }>'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:80:29
+!!! annotated symbol 1 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:80:38
+!!! annotated symbol 2 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:1:6
+!!! annotated symbol 3 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:75:9
     const m = <JustDefaultProps foo="no" />; // error, wrong type
                                 ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number | undefined'.
@@ -141,13 +170,39 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const n = <BothWithSpecifiedGeneric foo="fine" bar="yes" baz={12} />;
     const o = <BothWithSpecifiedGeneric foo="no" />; // Error, missing required prop bar
                ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
+!!! error TS2322: Type '{ {|foo|0|}: string; }' is not assignable to type '{|Defaultize|1|}<{|FooProps|2|} & {|InferredPropTypes|3|}<{ {|foo|4|}: {|PropTypeChecker|5|}<string, false>; {|bar|6|}: {|PropTypeChecker|7|}<{|ReactNode|8|}, false>; {|baz|9|}: {|PropTypeChecker|10|}<number, true>; }>, { {|foo|11|}: string; }>'.
 !!! error TS2322:   Type '{ foo: string; }' is missing the following properties from type '{ bar: string | number | ReactComponent<{}, {}> | null | undefined; baz: number; }': bar, baz
+!!! annotated symbol 0 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:98:37
+!!! annotated symbol 1 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:1:6
+!!! annotated symbol 2 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:83:11
+!!! annotated symbol 3 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:6:6
+!!! annotated symbol 4 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:89:9
+!!! annotated symbol 5 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 6 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:90:9
+!!! annotated symbol 7 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 8 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:21:6
+!!! annotated symbol 9 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:91:9
+!!! annotated symbol 10 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 11 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:94:9
     const p = <BothWithSpecifiedGeneric bar="yes" baz={12} />;
     const q = <BothWithSpecifiedGeneric bar="yes" baz={12} bat="ohno" />; // Error, baz not a valid prop
                ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ bar: string; baz: number; bat: string; }' is not assignable to type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
+!!! error TS2322: Type '{ {|bar|0|}: string; {|baz|1|}: number; {|bat|2|}: string; }' is not assignable to type '{|Defaultize|3|}<{|FooProps|4|} & {|InferredPropTypes|5|}<{ {|foo|6|}: {|PropTypeChecker|7|}<string, false>; {|bar|8|}: {|PropTypeChecker|9|}<{|ReactNode|10|}, false>; {|baz|11|}: {|PropTypeChecker|12|}<number, true>; }>, { {|foo|13|}: string; }>'.
 !!! error TS2322:   Property 'bat' does not exist on type 'Defaultize<FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, false>; baz: PropTypeChecker<number, true>; }>, { foo: string; }>'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:100:37
+!!! annotated symbol 1 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:100:47
+!!! annotated symbol 2 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:100:56
+!!! annotated symbol 3 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:1:6
+!!! annotated symbol 4 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:83:11
+!!! annotated symbol 5 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:6:6
+!!! annotated symbol 6 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:89:9
+!!! annotated symbol 7 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 8 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:90:9
+!!! annotated symbol 9 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 10 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:21:6
+!!! annotated symbol 11 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:91:9
+!!! annotated symbol 12 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:9:11
+!!! annotated symbol 13 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:94:9
     const r = <BothWithSpecifiedGeneric foo="no" bar={null} baz={0} />; // bar is nullable/undefinable since it's not marked `isRequired`
     const s = <BothWithSpecifiedGeneric foo="eh" bar="yeah" baz={null} />; // Error, baz is _not_ nullable/undefinable since it's marked `isRequired`
                                                             ~~~
@@ -170,8 +225,9 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
 !!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:84:5: The expected type comes from property 'foo' which is declared here on type 'FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }>'
     const w = <JustPropTypesWithSpecifiedGeneric foo="cool" bar={null} />; // error, bar is required
                                                             ~~~
-!!! error TS2322: Type 'null' is not assignable to type 'ReactNode'.
+!!! error TS2322: Type 'null' is not assignable to type '{|ReactNode|0|}'.
 !!! related TS6500 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:107:9: The expected type comes from property 'bar' which is declared here on type 'FooProps & InferredPropTypes<{ foo: PropTypeChecker<string, false>; bar: PropTypeChecker<ReactNode, true>; }>'
+!!! annotated symbol 0 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:21:6
     
     class JustDefaultPropsWithSpecifiedGeneric extends ReactComponent<FooProps> {
         static defaultProps = {
@@ -182,8 +238,13 @@ tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx(123,49): error TS232
     const x = <JustDefaultPropsWithSpecifiedGeneric foo="eh" />;
     const y = <JustDefaultPropsWithSpecifiedGeneric foo="no" bar="ok" />; // error, no prop named bar
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ foo: string; bar: string; }' is not assignable to type 'Defaultize<FooProps, { foo: string; }>'.
+!!! error TS2322: Type '{ {|foo|0|}: string; {|bar|1|}: string; }' is not assignable to type '{|Defaultize|2|}<{|FooProps|3|}, { {|foo|4|}: string; }>'.
 !!! error TS2322:   Property 'bar' does not exist on type 'Defaultize<FooProps, { foo: string; }>'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:122:49
+!!! annotated symbol 1 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:122:58
+!!! annotated symbol 2 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:1:6
+!!! annotated symbol 3 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:83:11
+!!! annotated symbol 4 tests/cases/conformance/jsx/tsxLibraryManagedAttributes.tsx:117:9
     const z = <JustDefaultPropsWithSpecifiedGeneric foo={12} />; // error, wrong type
                                                     ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string | undefined'.

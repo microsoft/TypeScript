@@ -39,8 +39,11 @@ tests/cases/conformance/statements/switchStatements/switchStatements.ts(35,20): 
         case new D():
         case { id: 12, name: '' }:
                        ~~~~~~~~
-!!! error TS2678: Type '{ id: number; name: string; }' is not comparable to type 'C'.
+!!! error TS2678: Type '{ {|id|0|}: number; {|name|1|}: string; }' is not comparable to type '{|C|2|}'.
 !!! error TS2678:   Object literal may only specify known properties, and 'name' does not exist in type 'C'.
+!!! annotated symbol 0 tests/cases/conformance/statements/switchStatements/switchStatements.ts:35:12
+!!! annotated symbol 1 tests/cases/conformance/statements/switchStatements/switchStatements.ts:35:20
+!!! annotated symbol 2 tests/cases/conformance/statements/switchStatements/switchStatements.ts:30:7
         case new C():
     }
     

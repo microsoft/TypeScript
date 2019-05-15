@@ -156,8 +156,11 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
     var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                                              ~~~~~
-!!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
+!!! error TS2345: Argument of type '{ {|x|0|}: number; {|y|1|}: string; }' is not assignable to parameter of type '{|A92|2|}'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts:122:68
+!!! annotated symbol 1 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts:122:74
+!!! annotated symbol 2 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts:116:11
     var a9f: A92;
     
     // Generic call with multiple parameters of generic type passed arguments with a single best common type

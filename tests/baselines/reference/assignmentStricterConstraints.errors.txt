@@ -13,9 +13,23 @@ tests/cases/compiler/assignmentStricterConstraints.ts(7,1): error TS2322: Type '
     
     g = f
     ~
-!!! error TS2322: Type '<T, S extends T>(x: T, y: S) => void' is not assignable to type '<T, S>(x: T, y: S) => void'.
+!!! error TS2322: Type '<{|T|0|}, {|S|1|} extends {|T|2|}>(x: {|T|3|}, y: {|S|4|}) => void' is not assignable to type '<{|T|5|}, {|S|6|}>(x: {|T|7|}, y: {|S|8|}) => void'.
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
-!!! error TS2322:     Type 'S' is not assignable to type 'T'.
-!!! error TS2322:       'S' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|S|9|}' is not assignable to type '{|T|10|}'.
+!!! error TS2322:       '{|S|11|}' is assignable to the constraint of type '{|T|12|}', but '{|T|13|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentStricterConstraints.ts:1:19
+!!! annotated symbol 1 tests/cases/compiler/assignmentStricterConstraints.ts:1:22
+!!! annotated symbol 2 tests/cases/compiler/assignmentStricterConstraints.ts:1:19
+!!! annotated symbol 3 tests/cases/compiler/assignmentStricterConstraints.ts:1:19
+!!! annotated symbol 4 tests/cases/compiler/assignmentStricterConstraints.ts:1:22
+!!! annotated symbol 5 tests/cases/compiler/assignmentStricterConstraints.ts:5:19
+!!! annotated symbol 6 tests/cases/compiler/assignmentStricterConstraints.ts:5:22
+!!! annotated symbol 7 tests/cases/compiler/assignmentStricterConstraints.ts:5:19
+!!! annotated symbol 8 tests/cases/compiler/assignmentStricterConstraints.ts:5:22
+!!! annotated symbol 9 tests/cases/compiler/assignmentStricterConstraints.ts:5:22
+!!! annotated symbol 10 tests/cases/compiler/assignmentStricterConstraints.ts:5:19
+!!! annotated symbol 11 tests/cases/compiler/assignmentStricterConstraints.ts:5:22
+!!! annotated symbol 12 tests/cases/compiler/assignmentStricterConstraints.ts:5:19
+!!! annotated symbol 13 tests/cases/compiler/assignmentStricterConstraints.ts:5:19
     g(1, "")
     

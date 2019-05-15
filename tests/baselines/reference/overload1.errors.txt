@@ -35,7 +35,8 @@ tests/cases/compiler/overload1.ts(34,9): error TS2345: Argument of type '2' is n
     
     var e:string=x.g(new O.A()); // matches overload but bad assignment
         ~
-!!! error TS2322: Type 'C' is not assignable to type 'string'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/overload1.ts:9:18
     var y:string=x.f(3); // good
     y=x.f("nope"); // can't assign number to string
     ~
@@ -50,7 +51,8 @@ tests/cases/compiler/overload1.ts(34,9): error TS2345: Argument of type '2' is n
 !!! related TS6210 tests/cases/compiler/overload1.ts:17:11: An argument for 'n' was not provided.
     z=x.g(new O.B()); // ambiguous (up and down conversion)
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'string'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/overload1.ts:9:18
     z=x.h(2,2); // no match
             ~
 !!! error TS2345: Argument of type '2' is not assignable to parameter of type 'string'.

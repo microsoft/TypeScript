@@ -61,12 +61,14 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     function someGenerics3<T extends Window>(producer: () => T) { }
     someGenerics3(() => ''); // Error
                         ~~
-!!! error TS2322: Type 'string' is not assignable to type 'Window'.
+!!! error TS2322: Type 'string' is not assignable to type '{|Window|0|}'.
 !!! related TS6502 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:32:52: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 /.ts/lib.dom.d.ts:17123:11
     someGenerics3<Window>(() => undefined);
     someGenerics3<number>(() => 3); // Error
                   ~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint 'Window'.
+!!! error TS2344: Type 'number' does not satisfy the constraint '{|Window|0|}'.
+!!! annotated symbol 0 /.ts/lib.dom.d.ts:17123:11
     
     // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
     function someGenerics4<T, U extends number>(n: T, f: (x: U) => void) { }
@@ -113,7 +115,16 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
     function someGenerics8<T extends string>(n: T): T { return n; }
     var x = someGenerics8<string>(someGenerics7); // Error
                                   ~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) => void' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '<{|A|0|}, {|B|1|} extends string, {|C|2|}>(a: (a: {|A|3|}) => {|A|4|}, b: (b: {|B|5|}) => {|B|6|}, c: (c: {|C|7|}) => {|C|8|}) => void' is not assignable to parameter of type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:24
+!!! annotated symbol 1 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:27
+!!! annotated symbol 2 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:45
+!!! annotated symbol 3 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:24
+!!! annotated symbol 4 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:24
+!!! annotated symbol 5 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:27
+!!! annotated symbol 6 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:27
+!!! annotated symbol 7 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:45
+!!! annotated symbol 8 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:59:45
     x<string, string, string>(null, null, null); // Error
     
     // Generic call with multiple parameters of generic type passed arguments with no best common type
@@ -142,8 +153,11 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConst
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
     var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
                                                                          ~~~~~
-!!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
+!!! error TS2345: Argument of type '{ {|x|0|}: number; {|y|1|}: string; }' is not assignable to parameter of type '{|A92|2|}'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:89:64
+!!! annotated symbol 1 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:89:70
+!!! annotated symbol 2 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts:83:11
     var a9f: A92;
     
     // Generic call with multiple parameters of generic type passed arguments with a single best common type

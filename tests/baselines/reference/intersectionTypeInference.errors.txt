@@ -13,14 +13,30 @@ tests/cases/conformance/types/intersection/intersectionTypeInference.ts(6,5): er
         obj2 = result;
         result = obj1;  // Error
         ~~~~~~
-!!! error TS2322: Type 'T' is not assignable to type 'T & U'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|T|1|} & {|U|2|}'.
+!!! error TS2322:   Type '{|T|3|}' is not assignable to type '{|U|4|}'.
+!!! error TS2322:     '{|T|5|}' is assignable to the constraint of type '{|U|6|}', but '{|U|7|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20
         result = obj2;  // Error
         ~~~~~~
-!!! error TS2322: Type 'U' is not assignable to type 'T & U'.
-!!! error TS2322:   Type 'U' is not assignable to type 'T'.
-!!! error TS2322:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|} & {|U|2|}'.
+!!! error TS2322:   Type '{|U|3|}' is not assignable to type '{|T|4|}'.
+!!! error TS2322:     '{|U|5|}' is assignable to the constraint of type '{|T|6|}', but '{|T|7|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20
+!!! annotated symbol 1 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17
+!!! annotated symbol 2 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20
+!!! annotated symbol 3 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20
+!!! annotated symbol 4 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17
+!!! annotated symbol 5 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:20
+!!! annotated symbol 6 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17
+!!! annotated symbol 7 tests/cases/conformance/types/intersection/intersectionTypeInference.ts:1:17
         return result;
     }
     

@@ -29,28 +29,35 @@ tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts(22,5):
     var c: C;
     x = C;
     ~
-!!! error TS2322: Type 'typeof C' is not assignable to type 'void'.
+!!! error TS2322: Type 'typeof {|C|0|}' is not assignable to type 'void'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:7:7
     x = c;
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'void'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type 'void'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:7:7
     
     interface I { foo: string; }
     var i: I;
     x = i;
     ~
-!!! error TS2322: Type 'I' is not assignable to type 'void'.
+!!! error TS2322: Type '{|I|0|}' is not assignable to type 'void'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:12:11
     
     module M { export var x = 1; }
     x = M;
     ~
-!!! error TS2322: Type 'typeof M' is not assignable to type 'void'.
+!!! error TS2322: Type 'typeof {|M|0|}' is not assignable to type 'void'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:16:8
     
     function f<T>(a: T) {
         x = a;
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'void'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type 'void'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:19:12
     }
     x = f;
         ~
-!!! error TS2322: Type '<T>(a: T) => void' is not assignable to type 'void'.
+!!! error TS2322: Type '<{|T|0|}>(a: {|T|1|}) => void' is not assignable to type 'void'.
 !!! related TS6212 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:22:5: Did you mean to call this expression?
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:19:12
+!!! annotated symbol 1 tests/cases/conformance/types/primitives/void/invalidAssignmentsToVoid.ts:19:12

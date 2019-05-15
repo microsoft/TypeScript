@@ -19,6 +19,8 @@ tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts(15,5):
     
     Biz(new Foo());
         ~~~~~~~~~
-!!! error TS2345: Argument of type 'Foo' is not assignable to parameter of type 'IHandlerMap'.
+!!! error TS2345: Argument of type '{|Foo|0|}' is not assignable to parameter of type '{|IHandlerMap|1|}'.
 !!! error TS2345:   Index signature is missing in type 'Foo'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts:9:7
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatInterfaceWithStringIndexSignature.ts:5:11
     

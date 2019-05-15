@@ -16,9 +16,11 @@ tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOf
     f = i;
     i = f;
     ~
-!!! error TS2322: Type 'Object' is not assignable to type 'I'.
+!!! error TS2322: Type '{|Object|0|}' is not assignable to type '{|I|1|}'.
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2322:     Type 'Object' provides no match for the signature '(): void'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:120:11
+!!! annotated symbol 1 tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts:1:11
     
     var a: {
         (): void
@@ -26,6 +28,7 @@ tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOf
     f = a;
     a = f;
     ~
-!!! error TS2322: Type 'Object' is not assignable to type '() => void'.
+!!! error TS2322: Type '{|Object|0|}' is not assignable to type '() => void'.
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2322:     Type 'Object' provides no match for the signature '(): void'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:120:11

@@ -24,12 +24,18 @@ tests/cases/compiler/arrayLiteralTypeInference.ts(32,18): error TS2322: Type '{ 
     var x1: Action[] = [
         { id: 2, trueness: false },
                  ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ id: number; trueness: boolean; }' is not assignable to type 'Action'.
+!!! error TS2322: Type '{ {|id|0|}: number; {|trueness|1|}: boolean; }' is not assignable to type '{|Action|2|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'trueness' does not exist in type 'Action'.
+!!! annotated symbol 0 tests/cases/compiler/arrayLiteralTypeInference.ts:14:7
+!!! annotated symbol 1 tests/cases/compiler/arrayLiteralTypeInference.ts:14:14
+!!! annotated symbol 2 tests/cases/compiler/arrayLiteralTypeInference.ts:1:7
         { id: 3, name: "three" }
                  ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type 'Action'.
+!!! error TS2322: Type '{ {|id|0|}: number; {|name|1|}: string; }' is not assignable to type '{|Action|2|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type 'Action'.
+!!! annotated symbol 0 tests/cases/compiler/arrayLiteralTypeInference.ts:15:7
+!!! annotated symbol 1 tests/cases/compiler/arrayLiteralTypeInference.ts:15:14
+!!! annotated symbol 2 tests/cases/compiler/arrayLiteralTypeInference.ts:1:7
     ]
     
     var x2: Action[] = [
@@ -47,12 +53,18 @@ tests/cases/compiler/arrayLiteralTypeInference.ts(32,18): error TS2322: Type '{ 
         [
             { id: 2, trueness: false },
                      ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ id: number; trueness: boolean; }' is not assignable to type '{ id: number; }'.
+!!! error TS2322: Type '{ {|id|0|}: number; {|trueness|1|}: boolean; }' is not assignable to type '{ {|id|2|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'trueness' does not exist in type '{ id: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/arrayLiteralTypeInference.ts:31:11
+!!! annotated symbol 1 tests/cases/compiler/arrayLiteralTypeInference.ts:31:18
+!!! annotated symbol 2 tests/cases/compiler/arrayLiteralTypeInference.ts:29:11
             { id: 3, name: "three" }
                      ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
+!!! error TS2322: Type '{ {|id|0|}: number; {|name|1|}: string; }' is not assignable to type '{ {|id|2|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/arrayLiteralTypeInference.ts:32:11
+!!! annotated symbol 1 tests/cases/compiler/arrayLiteralTypeInference.ts:32:18
+!!! annotated symbol 2 tests/cases/compiler/arrayLiteralTypeInference.ts:29:11
         ]
     
     var z2: { id: number }[] =

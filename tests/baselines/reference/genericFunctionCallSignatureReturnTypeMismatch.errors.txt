@@ -11,9 +11,17 @@ tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts(6,1): err
     var g : { <S>() : S[]; };
     f = g;
     ~
-!!! error TS2322: Type '<S>() => S[]' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2322:   Type 'unknown[]' is not assignable to type 'T'.
-!!! error TS2322:     'unknown[]' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '<{|S|0|}>() => {|S|1|}[]' is not assignable to type '<{|T|2|}>(x: {|T|3|}) => {|T|4|}'.
+!!! error TS2322:   Type 'unknown[]' is not assignable to type '{|T|5|}'.
+!!! error TS2322:     'unknown[]' is assignable to the constraint of type '{|T|6|}', but '{|T|7|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts:5:12
+!!! annotated symbol 1 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts:5:12
+!!! annotated symbol 2 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts:3:12
+!!! annotated symbol 3 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts:3:12
+!!! annotated symbol 4 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts:3:12
+!!! annotated symbol 5 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts:3:12
+!!! annotated symbol 6 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts:3:12
+!!! annotated symbol 7 tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts:3:12
     
     var s = f("str").toUpperCase();
     

@@ -46,8 +46,12 @@ tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts(4
       // This line _should_ fail, because `result` is not the right type.
       return result;
       ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Dictionary<string>' is not assignable to type 'Record<string, Bar>'.
+!!! error TS2322: Type '{|Dictionary|0|}<string>' is not assignable to type '{|Record|1|}<string, {|Bar|2|}>'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'Bar'.
+!!! error TS2322:     Type 'string' is not assignable to type '{|Bar|3|}'.
+!!! annotated symbol 0 tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts:3:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1452:6
+!!! annotated symbol 2 tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts:32:11
+!!! annotated symbol 3 tests/cases/compiler/emptyObjectNotSubtypeOfIndexSignatureContainingObject1.ts:32:11
     }
     

@@ -46,11 +46,16 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
     
     interface Derived2 extends Base1, Base2 { // error
               ~~~~~~~~
-!!! error TS2430: Interface 'Derived2' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|Derived2|0|}' incorrectly extends interface '{|Base2|1|}'.
 !!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type '{ a: string; b: number; }' is not assignable to type '{ b: string; }'.
+!!! error TS2430:     Type '{ {|a|2|}: string; {|b|3|}: number; }' is not assignable to type '{ {|b|4|}: string; }'.
 !!! error TS2430:       Types of property 'b' are incompatible.
 !!! error TS2430:         Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:21:11
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:9:11
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:23:9
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:23:20
+!!! annotated symbol 4 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:11:9
         x: {
             a: string; b: number;
         }
@@ -88,17 +93,35 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
     
         interface Derived4<T> extends Base1<number>, Base2<number> { // error
                   ~~~~~~~~
-!!! error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base1<number>'.
+!!! error TS2430: Interface '{|Derived4|0|}<{|T|1|}>' incorrectly extends interface '{|Base1|2|}<number>'.
 !!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type '{ a: T; b: T; }' is not assignable to type '{ a: number; }'.
+!!! error TS2430:     Type '{ {|a|3|}: {|T|4|}; {|b|5|}: {|T|6|}; }' is not assignable to type '{ {|a|7|}: number; }'.
 !!! error TS2430:       Types of property 'a' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'number'.
+!!! error TS2430:         Type '{|T|8|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:15
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:28:15
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:56:13
+!!! annotated symbol 4 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24
+!!! annotated symbol 5 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:56:19
+!!! annotated symbol 6 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24
+!!! annotated symbol 7 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:30:13
+!!! annotated symbol 8 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24
                   ~~~~~~~~
-!!! error TS2430: Interface 'Derived4<T>' incorrectly extends interface 'Base2<number>'.
+!!! error TS2430: Interface '{|Derived4|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}<number>'.
 !!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type '{ a: T; b: T; }' is not assignable to type '{ b: number; }'.
+!!! error TS2430:     Type '{ {|a|3|}: {|T|4|}; {|b|5|}: {|T|6|}; }' is not assignable to type '{ {|b|7|}: number; }'.
 !!! error TS2430:       Types of property 'b' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'number'.
+!!! error TS2430:         Type '{|T|8|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:15
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:34:15
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:56:13
+!!! annotated symbol 4 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24
+!!! annotated symbol 5 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:56:19
+!!! annotated symbol 6 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24
+!!! annotated symbol 7 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:36:13
+!!! annotated symbol 8 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:54:24
             x: {
                 a: T; b: T;
             }
@@ -106,13 +129,27 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBa
     
         interface Derived5<T> extends Base1<T>, Base2<T> { // error
                   ~~~~~~~~
-!!! error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base1<T>'.
+!!! error TS2430: Interface '{|Derived5|0|}<{|T|1|}>' incorrectly extends interface '{|Base1|2|}<{|T|3|}>'.
 !!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type 'T' is not assignable to type '{ a: T; }'.
+!!! error TS2430:     Type '{|T|4|}' is not assignable to type '{ {|a|5|}: {|T|6|}; }'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:15
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:28:15
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24
+!!! annotated symbol 4 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24
+!!! annotated symbol 5 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:30:13
+!!! annotated symbol 6 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24
                   ~~~~~~~~
-!!! error TS2430: Interface 'Derived5<T>' incorrectly extends interface 'Base2<T>'.
+!!! error TS2430: Interface '{|Derived5|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}<{|T|3|}>'.
 !!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type 'T' is not assignable to type '{ b: T; }'.
+!!! error TS2430:     Type '{|T|4|}' is not assignable to type '{ {|b|5|}: {|T|6|}; }'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:15
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:34:15
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24
+!!! annotated symbol 4 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24
+!!! annotated symbol 5 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:36:13
+!!! annotated symbol 6 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithMultipleBaseTypes.ts:60:24
             x: T;
         }
     }

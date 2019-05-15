@@ -16,7 +16,9 @@ tests/cases/compiler/genericDerivedTypeWithSpecializedBase.ts(11,1): error TS232
     var y: B<number>;
     x = y;  // error
     ~
-!!! error TS2322: Type 'B<number>' is not assignable to type 'A<number>'.
+!!! error TS2322: Type '{|B|0|}<number>' is not assignable to type '{|A|1|}<number>'.
 !!! error TS2322:   Types of property 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/genericDerivedTypeWithSpecializedBase.ts:5:7
+!!! annotated symbol 1 tests/cases/compiler/genericDerivedTypeWithSpecializedBase.ts:1:7
     

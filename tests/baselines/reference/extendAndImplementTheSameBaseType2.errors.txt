@@ -15,10 +15,13 @@ tests/cases/compiler/extendAndImplementTheSameBaseType2.ts(16,5): error TS2322: 
     }
     class D extends C<string> implements C<number> {
           ~
-!!! error TS2720: Class 'D' incorrectly implements class 'C<number>'. Did you mean to extend 'C<number>' and inherit its members as a subclass?
+!!! error TS2720: Class '{|D|0|}' incorrectly implements class '{|C|1|}<number>'. Did you mean to extend '{|C|2|}<number>' and inherit its members as a subclass?
 !!! error TS2720:   Types of property 'bar' are incompatible.
 !!! error TS2720:     Type '() => string' is not assignable to type '() => number'.
 !!! error TS2720:       Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/extendAndImplementTheSameBaseType2.ts:7:7
+!!! annotated symbol 1 tests/cases/compiler/extendAndImplementTheSameBaseType2.ts:1:7
+!!! annotated symbol 2 tests/cases/compiler/extendAndImplementTheSameBaseType2.ts:1:7
         baz() { }
     }
     

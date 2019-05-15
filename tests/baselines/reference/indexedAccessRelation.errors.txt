@@ -25,13 +25,31 @@ tests/cases/compiler/indexedAccessRelation.ts(16,23): error TS2345: Argument of 
         foo(a: T) {
             this.setState({ a: a });
                           ~~~~~~~~
-!!! error TS2345: Argument of type '{ a: T; }' is not assignable to parameter of type 'Pick<S & State<T>, "a">'.
+!!! error TS2345: Argument of type '{ {|a|0|}: {|T|1|}; }' is not assignable to parameter of type '{|Pick|2|}<{|S|3|} & {|State|4|}<{|T|5|}>, "a">'.
 !!! error TS2345:   Types of property 'a' are incompatible.
-!!! error TS2345:     Type 'T' is not assignable to type 'S["a"] & T'.
-!!! error TS2345:       Type 'Foo' is not assignable to type 'S["a"] & T'.
-!!! error TS2345:         Type 'Foo' is not assignable to type 'S["a"]'.
-!!! error TS2345:           Type 'T' is not assignable to type 'S["a"]'.
-!!! error TS2345:             Type 'Foo' is not assignable to type 'S["a"]'.
+!!! error TS2345:     Type '{|T|6|}' is not assignable to type '{|S|7|}["a"] & {|T|8|}'.
+!!! error TS2345:       Type '{|Foo|9|}' is not assignable to type '{|S|10|}["a"] & {|T|11|}'.
+!!! error TS2345:         Type '{|Foo|12|}' is not assignable to type '{|S|13|}["a"]'.
+!!! error TS2345:           Type '{|T|14|}' is not assignable to type '{|S|15|}["a"]'.
+!!! error TS2345:             Type '{|Foo|16|}' is not assignable to type '{|S|17|}["a"]'.
+!!! annotated symbol 0 tests/cases/compiler/indexedAccessRelation.ts:16:25
+!!! annotated symbol 1 tests/cases/compiler/indexedAccessRelation.ts:13:12
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 3 tests/cases/compiler/indexedAccessRelation.ts:13:27
+!!! annotated symbol 4 tests/cases/compiler/indexedAccessRelation.ts:7:18
+!!! annotated symbol 5 tests/cases/compiler/indexedAccessRelation.ts:13:12
+!!! annotated symbol 6 tests/cases/compiler/indexedAccessRelation.ts:13:12
+!!! annotated symbol 7 tests/cases/compiler/indexedAccessRelation.ts:13:27
+!!! annotated symbol 8 tests/cases/compiler/indexedAccessRelation.ts:13:12
+!!! annotated symbol 9 tests/cases/compiler/indexedAccessRelation.ts:11:7
+!!! annotated symbol 10 tests/cases/compiler/indexedAccessRelation.ts:13:27
+!!! annotated symbol 11 tests/cases/compiler/indexedAccessRelation.ts:13:12
+!!! annotated symbol 12 tests/cases/compiler/indexedAccessRelation.ts:11:7
+!!! annotated symbol 13 tests/cases/compiler/indexedAccessRelation.ts:13:27
+!!! annotated symbol 14 tests/cases/compiler/indexedAccessRelation.ts:13:12
+!!! annotated symbol 15 tests/cases/compiler/indexedAccessRelation.ts:13:27
+!!! annotated symbol 16 tests/cases/compiler/indexedAccessRelation.ts:11:7
+!!! annotated symbol 17 tests/cases/compiler/indexedAccessRelation.ts:13:27
         }
     }
     

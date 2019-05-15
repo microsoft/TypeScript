@@ -32,7 +32,9 @@ tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2553: Computed values
     enum E5 {
         C = new Number(30)
             ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Number' is not assignable to type 'E5'.
+!!! error TS2322: Type '{|Number|0|}' is not assignable to type '{|E5|1|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:542:11
+!!! annotated symbol 1 tests/cases/conformance/enums/enumErrors.ts:8:6
     }
     
     enum E9 {
@@ -51,16 +53,22 @@ tests/cases/conformance/enums/enumErrors.ts(38,9): error TS2553: Computed values
     enum E11 {
         A = true,
             ~~~~
-!!! error TS2322: Type 'true' is not assignable to type 'E11'.
+!!! error TS2322: Type 'true' is not assignable to type '{|E11|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/enums/enumErrors.ts:25:6
         B = new Date(),
             ~~~~~~~~~~
-!!! error TS2322: Type 'Date' is not assignable to type 'E11'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type '{|E11|1|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/enums/enumErrors.ts:25:6
         C = window,
             ~~~~~~
-!!! error TS2322: Type 'Window' is not assignable to type 'E11'.
+!!! error TS2322: Type '{|Window|0|}' is not assignable to type '{|E11|1|}'.
+!!! annotated symbol 0 /.ts/lib.dom.d.ts:17123:11
+!!! annotated symbol 1 tests/cases/conformance/enums/enumErrors.ts:25:6
         D = {}
             ~~
-!!! error TS2322: Type '{}' is not assignable to type 'E11'.
+!!! error TS2322: Type '{}' is not assignable to type '{|E11|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/enums/enumErrors.ts:25:6
     }
     
     // Enum with string valued member and computed member initializers

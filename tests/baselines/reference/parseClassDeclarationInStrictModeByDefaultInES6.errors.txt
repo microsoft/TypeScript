@@ -18,6 +18,7 @@ tests/cases/conformance/es6/classDeclaration/parseClassDeclarationInStrictModeBy
             ~~~~~~~~~
 !!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
             ~~~~~~~~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'IArguments'.
+!!! error TS2322: Type '"hello"' is not assignable to type '{|IArguments|0|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:388:11
         }
     }

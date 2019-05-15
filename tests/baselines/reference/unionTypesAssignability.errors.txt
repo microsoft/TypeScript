@@ -56,8 +56,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:21: 'foo1' is declared here.
     d = unionDE; // error e is not assignable to d
     ~
-!!! error TS2322: Type 'D | E' is not assignable to type 'D'.
-!!! error TS2322:   Type 'E' is not assignable to type 'D'.
+!!! error TS2322: Type '{|D|0|} | {|E|1|}' is not assignable to type '{|D|2|}'.
+!!! error TS2322:   Type '{|E|3|}' is not assignable to type '{|D|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:7
     e = d;
     ~
 !!! error TS2741: Property 'foo2' is missing in type 'D' but required in type 'E'.
@@ -65,8 +70,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     e = e;
     e = unionDE; // error d is not assignable to e
     ~
-!!! error TS2322: Type 'D | E' is not assignable to type 'E'.
-!!! error TS2322:   Type 'D' is not assignable to type 'E'.
+!!! error TS2322: Type '{|D|0|} | {|E|1|}' is not assignable to type '{|E|2|}'.
+!!! error TS2322:   Type '{|D|3|}' is not assignable to type '{|E|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
     num = num;
     num = str;
     ~~~
@@ -95,16 +105,25 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:21: 'foo2' is declared here.
     unionDE = c; // error since C is not assinable to either D or E
     ~~~~~~~
-!!! error TS2322: Type 'C' is not assignable to type 'D | E'.
-!!! error TS2322:   Type 'C' is not assignable to type 'E'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type '{|D|1|} | {|E|2|}'.
+!!! error TS2322:   Type '{|C|3|}' is not assignable to type '{|E|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:2:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:2:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
     d = d;
     e = d;
     ~
-!!! error TS2322: Type 'D' is not assignable to type 'E'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|E|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
     unionDE = d; // ok
     d = e;
     ~
-!!! error TS2322: Type 'E' is not assignable to type 'D'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|D|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:7
     e = e;
     unionDE = e; // ok
     num = num;
@@ -137,27 +156,61 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     function foo<T, U>(t: T, u: U) {
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
         u = t; // error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
         var x : T | U;
         x = t; // ok
         x = u; // ok
         x = undefined;
         t = x; // error U not assignable to T
         ~
-!!! error TS2322: Type 'T | U' is not assignable to type 'T'.
-!!! error TS2322:   'T | U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'U' is not assignable to type 'T'.
-!!! error TS2322:       'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|} | {|U|1|}' is not assignable to type '{|T|2|}'.
+!!! error TS2322:   '{|T|3|} | {|U|4|}' is assignable to the constraint of type '{|T|5|}', but '{|T|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|U|7|}' is not assignable to type '{|T|8|}'.
+!!! error TS2322:       '{|U|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
         u = x; // error T not assignable to U
         ~
-!!! error TS2322: Type 'T | U' is not assignable to type 'U'.
-!!! error TS2322:   'T | U' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'T' is not assignable to type 'U'.
-!!! error TS2322:       'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|} | {|U|1|}' is not assignable to type '{|U|2|}'.
+!!! error TS2322:   '{|T|3|} | {|U|4|}' is assignable to the constraint of type '{|U|5|}', but '{|U|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|7|}' is not assignable to type '{|U|8|}'.
+!!! error TS2322:       '{|T|9|}' is assignable to the constraint of type '{|U|10|}', but '{|U|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:63:17
     }
     

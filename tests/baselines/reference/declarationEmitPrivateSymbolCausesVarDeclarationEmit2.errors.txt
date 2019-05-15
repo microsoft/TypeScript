@@ -18,8 +18,10 @@ tests/cases/compiler/c.ts(4,14): error TS2415: Class 'D' incorrectly extends bas
     
     export class D extends C {
                  ~
-!!! error TS2415: Class 'D' incorrectly extends base class 'C'.
+!!! error TS2415: Class '{|D|0|}' incorrectly extends base class '{|C|1|}'.
 !!! error TS2415:   Types have separate declarations of a private property '[x]'.
+!!! annotated symbol 0 tests/cases/compiler/c.ts:4:14
+!!! annotated symbol 1 tests/cases/compiler/b.ts:3:14
       private [x]: 12 = 12;
     }
     

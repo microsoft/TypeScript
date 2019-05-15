@@ -16,7 +16,13 @@ tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts(11,1): error TS23
     var y: B<number>;
     x = y;  // error
     ~
-!!! error TS2322: Type 'B<number>' is not assignable to type 'A<{ length: number; foo: number; }>'.
+!!! error TS2322: Type '{|B|0|}<number>' is not assignable to type '{|A|1|}<{ {|length|2|}: number; {|foo|3|}: number; }>'.
 !!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type '{ length: number; foo: number; }'.
+!!! error TS2322:     Type 'string' is not assignable to type '{ {|length|4|}: number; {|foo|5|}: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts:5:7
+!!! annotated symbol 1 tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts:1:7
+!!! annotated symbol 2 tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts:9:12
+!!! annotated symbol 3 tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts:9:28
+!!! annotated symbol 4 tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts:9:12
+!!! annotated symbol 5 tests/cases/compiler/genericDerivedTypeWithSpecializedBase2.ts:9:28
     

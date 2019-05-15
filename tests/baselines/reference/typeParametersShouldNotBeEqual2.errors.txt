@@ -22,32 +22,70 @@ tests/cases/compiler/typeParametersShouldNotBeEqual2.ts(9,5): error TS2322: Type
         x = x;  // Ok
         x = y;  // Ok
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'T'.
-!!! error TS2322:       'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! error TS2322:     Type '{|Date|6|}' is not assignable to type '{|T|7|}'.
+!!! error TS2322:       '{|Date|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|Date|11|}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:29
+!!! annotated symbol 1 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
+!!! annotated symbol 2 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:29
+!!! annotated symbol 3 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
+!!! annotated symbol 4 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 7 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 9 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
+!!! annotated symbol 10 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:729:11
         x = z;  // Error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'T'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 1 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
         z = x;  // Error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'V'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'V'.
-!!! error TS2322:       'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|V|3|}', but '{|V|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|Date|5|}' is not assignable to type '{|V|6|}'.
+!!! error TS2322:       '{|Date|7|}' is assignable to the constraint of type '{|V|8|}', but '{|V|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
+!!! annotated symbol 1 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 2 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
+!!! annotated symbol 3 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 4 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 7 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 8 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 9 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
         y = z;  // Error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'U'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 1 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:29
         z = y;  // Error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'V'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'V'.
-!!! error TS2322:       'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|V|3|}', but '{|V|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|Date|5|}' is not assignable to type '{|V|6|}'.
+!!! error TS2322:       '{|Date|7|}' is assignable to the constraint of type '{|V|8|}', but '{|V|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:29
+!!! annotated symbol 1 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 2 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:29
+!!! annotated symbol 3 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 4 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 7 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 8 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
+!!! annotated symbol 9 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:45
         x = zz;  // Error
         ~
-!!! error TS2322: Type 'Object' is not assignable to type 'T'.
+!!! error TS2322: Type '{|Object|0|}' is not assignable to type '{|T|1|}'.
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:120:11
+!!! annotated symbol 1 tests/cases/compiler/typeParametersShouldNotBeEqual2.ts:1:13
         zz = x;  // Ok
     }
     

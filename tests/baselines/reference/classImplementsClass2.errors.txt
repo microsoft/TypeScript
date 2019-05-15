@@ -7,9 +7,12 @@ tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2741: Property 'foo
     class A { foo(): number { return 1; } }
     class C implements A {} // error
           ~
-!!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+!!! error TS2720: Class '{|C|0|}' incorrectly implements class '{|A|1|}'. Did you mean to extend '{|A|2|}' and inherit its members as a subclass?
 !!! error TS2720:   Property 'foo' is missing in type 'C' but required in type 'A'.
 !!! related TS2728 tests/cases/compiler/classImplementsClass2.ts:1:11: 'foo' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/classImplementsClass2.ts:2:7
+!!! annotated symbol 1 tests/cases/compiler/classImplementsClass2.ts:1:7
+!!! annotated symbol 2 tests/cases/compiler/classImplementsClass2.ts:1:7
     
     class C2 extends A {
         foo() {

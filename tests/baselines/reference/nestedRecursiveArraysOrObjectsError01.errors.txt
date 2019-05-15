@@ -26,20 +26,50 @@ tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts(10,9): error TS232
             foo: 'asdf',
             jj: 1 // intentional error
             ~~~~~
-!!! error TS2322: Type '{ foo: string; jj: number; }[][][]' is not assignable to type 'Style'.
-!!! error TS2322:   Type '{ foo: string; jj: number; }[][][]' is not assignable to type 'StyleArray'.
+!!! error TS2322: Type '{ {|foo|0|}: string; {|jj|1|}: number; }[][][]' is not assignable to type '{|Style|2|}'.
+!!! error TS2322:   Type '{ {|foo|3|}: string; {|jj|4|}: number; }[][][]' is not assignable to type '{|StyleArray|5|}'.
 !!! error TS2322:     Types of property 'pop' are incompatible.
-!!! error TS2322:       Type '() => { foo: string; jj: number; }[][]' is not assignable to type '() => Style'.
-!!! error TS2322:         Type '{ foo: string; jj: number; }[][]' is not assignable to type 'Style'.
-!!! error TS2322:           Type '{ foo: string; jj: number; }[][]' is not assignable to type 'StyleArray'.
+!!! error TS2322:       Type '() => { {|foo|6|}: string; {|jj|7|}: number; }[][]' is not assignable to type '() => {|Style|8|}'.
+!!! error TS2322:         Type '{ {|foo|9|}: string; {|jj|10|}: number; }[][]' is not assignable to type '{|Style|11|}'.
+!!! error TS2322:           Type '{ {|foo|12|}: string; {|jj|13|}: number; }[][]' is not assignable to type '{|StyleArray|14|}'.
 !!! error TS2322:             Types of property 'pop' are incompatible.
-!!! error TS2322:               Type '() => { foo: string; jj: number; }[]' is not assignable to type '() => Style'.
-!!! error TS2322:                 Type '{ foo: string; jj: number; }[]' is not assignable to type 'Style'.
-!!! error TS2322:                   Type '{ foo: string; jj: number; }[]' is not assignable to type 'StyleArray'.
+!!! error TS2322:               Type '() => { {|foo|15|}: string; {|jj|16|}: number; }[]' is not assignable to type '() => {|Style|17|}'.
+!!! error TS2322:                 Type '{ {|foo|18|}: string; {|jj|19|}: number; }[]' is not assignable to type '{|Style|20|}'.
+!!! error TS2322:                   Type '{ {|foo|21|}: string; {|jj|22|}: number; }[]' is not assignable to type '{|StyleArray|23|}'.
 !!! error TS2322:                     Types of property 'pop' are incompatible.
-!!! error TS2322:                       Type '() => { foo: string; jj: number; }' is not assignable to type '() => Style'.
-!!! error TS2322:                         Type '{ foo: string; jj: number; }' is not assignable to type 'Style'.
+!!! error TS2322:                       Type '() => { {|foo|24|}: string; {|jj|25|}: number; }' is not assignable to type '() => {|Style|26|}'.
+!!! error TS2322:                         Type '{ {|foo|27|}: string; {|jj|28|}: number; }' is not assignable to type '{|Style|29|}'.
 !!! error TS2322:                           Object literal may only specify known properties, and 'jj' does not exist in type 'Style'.
+!!! annotated symbol 0 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 1 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 2 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:1:6
+!!! annotated symbol 3 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 4 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 5 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:2:11
+!!! annotated symbol 6 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 7 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 8 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:1:6
+!!! annotated symbol 9 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 10 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 11 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:1:6
+!!! annotated symbol 12 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 13 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 14 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:2:11
+!!! annotated symbol 15 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 16 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 17 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:1:6
+!!! annotated symbol 18 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 19 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 20 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:1:6
+!!! annotated symbol 21 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 22 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 23 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:2:11
+!!! annotated symbol 24 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 25 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 26 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:1:6
+!!! annotated symbol 27 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:9:9
+!!! annotated symbol 28 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:10:9
+!!! annotated symbol 29 tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts:1:6
         }]]
     ];
     

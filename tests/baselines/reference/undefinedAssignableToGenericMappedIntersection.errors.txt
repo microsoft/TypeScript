@@ -8,6 +8,9 @@ tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts(5,5): err
         let x!: keyof T;
         obj[x] = undefined;
         ~~~~~~
-!!! error TS2322: Type 'undefined' is not assignable to type 'Errors<T>[keyof T]'.
+!!! error TS2322: Type 'undefined' is not assignable to type '{|Errors|0|}<{|T|1|}>[keyof {|T|2|}]'.
+!!! annotated symbol 0 tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts:1:6
+!!! annotated symbol 1 tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts:2:14
+!!! annotated symbol 2 tests/cases/compiler/undefinedAssignableToGenericMappedIntersection.ts:2:14
     }
     

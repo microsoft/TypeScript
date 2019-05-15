@@ -24,12 +24,32 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
 !!! related TS6500 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47: The expected type comes from property 'b' which is declared here on type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'
     a1 = { b: "y" };  // Error
     ~~
-!!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
+!!! error TS2322: Type '{ {|b|0|}: string; }' is not assignable to type '{ {|a|1|}: number; {|b|2|}?: undefined; {|c|3|}?: undefined; } | { {|a|4|}: number; {|b|5|}: string; {|c|6|}?: undefined; } | { {|a|7|}: number; {|b|8|}: string; {|c|9|}: boolean; }'.
 !!! error TS2322:   Type '{ b: string; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, c
+!!! annotated symbol 0 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:8:8
+!!! annotated symbol 1 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:13
+!!! annotated symbol 2 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
+!!! annotated symbol 3 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:55
+!!! annotated symbol 4 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:23
+!!! annotated symbol 5 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:29
+!!! annotated symbol 6 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:55
+!!! annotated symbol 7 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:41
+!!! annotated symbol 8 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
+!!! annotated symbol 9 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:55
     a1 = { c: true };  // Error
     ~~
-!!! error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
+!!! error TS2322: Type '{ {|c|0|}: true; }' is not assignable to type '{ {|a|1|}: number; {|b|2|}?: undefined; {|c|3|}?: undefined; } | { {|a|4|}: number; {|b|5|}: string; {|c|6|}?: undefined; } | { {|a|7|}: number; {|b|8|}: string; {|c|9|}: boolean; }'.
 !!! error TS2322:   Type '{ c: true; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, b
+!!! annotated symbol 0 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:9:8
+!!! annotated symbol 1 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:13
+!!! annotated symbol 2 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
+!!! annotated symbol 3 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:55
+!!! annotated symbol 4 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:23
+!!! annotated symbol 5 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:29
+!!! annotated symbol 6 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:55
+!!! annotated symbol 7 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:41
+!!! annotated symbol 8 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
+!!! annotated symbol 9 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:55
     
     let a2 = [{ a: 1, b: 2 }, { a: "abc" }, {}][0];
     a2.a;  // string | number | undefined
@@ -39,15 +59,34 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     a2 = {};
     a2 = { a: "def", b: 20 };  // Error
     ~~
-!!! error TS2322: Type '{ a: string; b: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
-!!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type '{ a?: undefined; b?: undefined; }'.
+!!! error TS2322: Type '{ {|a|0|}: string; {|b|1|}: number; }' is not assignable to type '{ {|a|2|}: number; {|b|3|}: number; } | { {|a|4|}: string; {|b|5|}?: undefined; } | { {|a|6|}?: undefined; {|b|7|}?: undefined; }'.
+!!! error TS2322:   Type '{ {|a|8|}: string; {|b|9|}: number; }' is not assignable to type '{ {|a|10|}?: undefined; {|b|11|}?: undefined; }'.
 !!! error TS2322:     Types of property 'a' are incompatible.
 !!! error TS2322:       Type 'string' is not assignable to type 'undefined'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:17:8
+!!! annotated symbol 1 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:17:18
+!!! annotated symbol 2 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:13
+!!! annotated symbol 3 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:19
+!!! annotated symbol 4 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:29
+!!! annotated symbol 5 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
+!!! annotated symbol 6 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:29
+!!! annotated symbol 7 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
+!!! annotated symbol 8 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:17:8
+!!! annotated symbol 9 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:17:18
+!!! annotated symbol 10 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:29
+!!! annotated symbol 11 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
     a2 = { a: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
+!!! error TS2322: Type '{ {|a|0|}: number; }' is not assignable to type '{ {|a|1|}: number; {|b|2|}: number; } | { {|a|3|}: string; {|b|4|}?: undefined; } | { {|a|5|}?: undefined; {|b|6|}?: undefined; }'.
 !!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
 !!! related TS2728 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:19: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:18:8
+!!! annotated symbol 1 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:13
+!!! annotated symbol 2 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:19
+!!! annotated symbol 3 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:29
+!!! annotated symbol 4 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
+!!! annotated symbol 5 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:29
+!!! annotated symbol 6 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:2:47
     
     // Object literals containing spreads are not normalized
     declare let b1: { a: string, b: string } | { b: string, c: string };

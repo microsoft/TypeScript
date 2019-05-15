@@ -10,8 +10,9 @@ tests/cases/compiler/keyofIsLiteralContexualType.ts(13,11): error TS2339: Proper
         let a: (keyof T)[] = ["a", "b"];
         let b: (keyof T)[] = ["a", "b", "c"];
                                         ~~~
-!!! error TS2322: Type '"c"' is not assignable to type 'keyof T'.
+!!! error TS2322: Type '"c"' is not assignable to type 'keyof {|T|0|}'.
 !!! error TS2322:   Type '"c"' is not assignable to type '"a" | "b"'.
+!!! annotated symbol 0 tests/cases/compiler/keyofIsLiteralContexualType.ts:3:14
     }
     
     // Repro from #12455

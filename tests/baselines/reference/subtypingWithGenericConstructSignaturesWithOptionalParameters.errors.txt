@@ -130,9 +130,16 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface I3<T> extends Base<T> {
                   ~~
-!!! error TS2430: Interface 'I3<T>' incorrectly extends interface 'Base<T>'.
+!!! error TS2430: Interface '{|I3|0|}<{|T|1|}>' incorrectly extends interface '{|Base|2|}<{|T|3|}>'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new () => T'.
+!!! error TS2430:     Type 'new (x: {|T|4|}) => {|T|5|}' is not assignable to type 'new () => {|T|6|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:20:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:20:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:4:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:20:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:20:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:20:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:20:18
             a: new (x: T) => T; // error, too many required params
         }
     
@@ -164,9 +171,18 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface I10<T> extends Base<T> {
                   ~~~
-!!! error TS2430: Interface 'I10<T>' incorrectly extends interface 'Base<T>'.
+!!! error TS2430: Interface '{|I10|0|}<{|T|1|}>' incorrectly extends interface '{|Base|2|}<{|T|3|}>'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
-!!! error TS2430:     Type 'new (x: T, y: T) => T' is not assignable to type 'new (x: T) => T'.
+!!! error TS2430:     Type 'new (x: {|T|4|}, y: {|T|5|}) => {|T|6|}' is not assignable to type 'new (x: {|T|7|}) => {|T|8|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:50:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:50:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:4:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:50:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:50:19
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:50:19
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:50:19
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:50:19
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:50:19
             a3: new (x: T, y: T) => T;  // error, too many required params
         }
     
@@ -218,191 +234,420 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface I1<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I1<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I1|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'new () => T' is not assignable to type 'new <T>() => T'.
-!!! error TS2430:       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:         'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:     Type 'new () => {|T|3|}' is not assignable to type 'new <{|T|4|}>() => {|T|5|}'.
+!!! error TS2430:       Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:         '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:100:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:100:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:100:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:100:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:100:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
             a: new () => T; 
         }
     
         interface I2<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I2<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I2|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'new (x?: T) => T' is not assignable to type 'new <T>() => T'.
-!!! error TS2430:       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:         'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:     Type 'new (x?: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>() => {|T|6|}'.
+!!! error TS2430:       Type '{|T|7|}' is not assignable to type '{|T|8|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:         '{|T|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:104:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:104:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:104:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:104:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:104:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:104:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
             a: new (x?: T) => T;
         }
     
         interface I3<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I3<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I3|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>() => T'.
+!!! error TS2430:     Type 'new (x: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>() => {|T|6|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:108:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:108:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:108:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:108:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:93:17
             a: new (x: T) => T; 
         }
     
     
         interface I4<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I4<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I4|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a2' are incompatible.
-!!! error TS2430:     Type 'new () => T' is not assignable to type 'new <T>(x?: T) => T'.
-!!! error TS2430:       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:         'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:     Type 'new () => {|T|3|}' is not assignable to type 'new <{|T|4|}>(x?: {|T|5|}) => {|T|6|}'.
+!!! error TS2430:       Type '{|T|7|}' is not assignable to type '{|T|8|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:         '{|T|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:113:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:113:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:113:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:113:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:113:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
             a2: new () => T; 
         }
     
         interface I5<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I5<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I5|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a2' are incompatible.
-!!! error TS2430:     Type 'new (x?: T) => T' is not assignable to type 'new <T>(x?: T) => T'.
+!!! error TS2430:     Type 'new (x?: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>(x?: {|T|6|}) => {|T|7|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|8|}' is not assignable to type '{|T|9|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|10|}' is assignable to the constraint of type '{|T|11|}', but '{|T|12|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:117:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:117:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:117:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:117:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:117:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:117:18
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:117:18
             a2: new (x?: T) => T
         }
     
         interface I6<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I6<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I6|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a2' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x?: T) => T'.
+!!! error TS2430:     Type 'new (x: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>(x?: {|T|6|}) => {|T|7|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|8|}' is not assignable to type '{|T|9|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|10|}' is assignable to the constraint of type '{|T|11|}', but '{|T|12|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:121:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:121:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:121:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:121:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:121:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:94:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:121:18
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:121:18
             a2: new (x: T) => T;
         }
     
     
         interface I7<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I7<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I7|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
-!!! error TS2430:     Type 'new () => T' is not assignable to type 'new <T>(x: T) => T'.
-!!! error TS2430:       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:         'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:     Type 'new () => {|T|3|}' is not assignable to type 'new <{|T|4|}>(x: {|T|5|}) => {|T|6|}'.
+!!! error TS2430:       Type '{|T|7|}' is not assignable to type '{|T|8|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:         '{|T|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:126:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:126:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:126:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:126:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:126:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
             a3: new () => T;
         }
     
         interface I8<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I8<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I8|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
-!!! error TS2430:     Type 'new (x?: T) => T' is not assignable to type 'new <T>(x: T) => T'.
+!!! error TS2430:     Type 'new (x?: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>(x: {|T|6|}) => {|T|7|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|8|}' is not assignable to type '{|T|9|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|10|}' is assignable to the constraint of type '{|T|11|}', but '{|T|12|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:130:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:130:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:130:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:130:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:130:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:130:18
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:130:18
             a3: new (x?: T) => T; 
         }
     
         interface I9<T> extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I9<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I9|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T) => T'.
+!!! error TS2430:     Type 'new (x: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>(x: {|T|6|}) => {|T|7|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|8|}' is not assignable to type '{|T|9|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|10|}' is assignable to the constraint of type '{|T|11|}', but '{|T|12|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:134:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:134:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:134:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:134:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:134:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:134:18
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:134:18
             a3: new (x: T) => T; 
         }
     
         interface I10<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I10<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I10|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
-!!! error TS2430:     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x: T) => T'.
+!!! error TS2430:     Type 'new (x: {|T|3|}, y: {|T|4|}) => {|T|5|}' is not assignable to type 'new <{|T|6|}>(x: {|T|7|}) => {|T|8|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:138:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:138:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:138:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:138:19
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:138:19
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:95:18
             a3: new (x: T, y: T) => T;  
         }
     
     
         interface I11<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I11<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I11|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a4' are incompatible.
-!!! error TS2430:     Type 'new () => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
-!!! error TS2430:       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:         'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:     Type 'new () => {|T|3|}' is not assignable to type 'new <{|T|4|}>(x: {|T|5|}, y?: {|T|6|}) => {|T|7|}'.
+!!! error TS2430:       Type '{|T|8|}' is not assignable to type '{|T|9|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:         '{|T|10|}' is assignable to the constraint of type '{|T|11|}', but '{|T|12|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:143:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:143:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:143:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:143:19
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:143:19
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
             a4: new () => T; 
         }
     
         interface I12<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I12<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I12|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a4' are incompatible.
-!!! error TS2430:     Type 'new (x?: T, y?: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
+!!! error TS2430:     Type 'new (x?: {|T|3|}, y?: {|T|4|}) => {|T|5|}' is not assignable to type 'new <{|T|6|}>(x: {|T|7|}, y?: {|T|8|}) => {|T|9|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|10|}' is not assignable to type '{|T|11|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|12|}' is assignable to the constraint of type '{|T|13|}', but '{|T|14|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:147:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:147:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:147:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:147:19
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:147:19
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:147:19
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:147:19
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:147:19
             a4: new (x?: T, y?: T) => T; 
         }
     
         interface I13<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I13<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I13|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a4' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
+!!! error TS2430:     Type 'new (x: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>(x: {|T|6|}, y?: {|T|7|}) => {|T|8|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|9|}' is not assignable to type '{|T|10|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|11|}' is assignable to the constraint of type '{|T|12|}', but '{|T|13|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:151:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:151:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:151:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:151:19
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:151:19
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:151:19
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:151:19
             a4: new (x: T) => T; 
         }
     
         interface I14<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I14<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I14|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a4' are incompatible.
-!!! error TS2430:     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x: T, y?: T) => T'.
+!!! error TS2430:     Type 'new (x: {|T|3|}, y: {|T|4|}) => {|T|5|}' is not assignable to type 'new <{|T|6|}>(x: {|T|7|}, y?: {|T|8|}) => {|T|9|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|10|}' is not assignable to type '{|T|11|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|12|}' is assignable to the constraint of type '{|T|13|}', but '{|T|14|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:155:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:155:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:155:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:155:19
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:155:19
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:155:19
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:96:18
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:155:19
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:155:19
             a4: new (x: T, y: T) => T; 
         }
     
     
         interface I15<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I15<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I15|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a5' are incompatible.
-!!! error TS2430:     Type 'new () => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
-!!! error TS2430:       Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:         'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:     Type 'new () => {|T|3|}' is not assignable to type 'new <{|T|4|}>(x?: {|T|5|}, y?: {|T|6|}) => {|T|7|}'.
+!!! error TS2430:       Type '{|T|8|}' is not assignable to type '{|T|9|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:         '{|T|10|}' is assignable to the constraint of type '{|T|11|}', but '{|T|12|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:160:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:160:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:160:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:160:19
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:160:19
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
             a5: new () => T; 
         }
     
         interface I16<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I16<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I16|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a5' are incompatible.
-!!! error TS2430:     Type 'new (x?: T, y?: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
+!!! error TS2430:     Type 'new (x?: {|T|3|}, y?: {|T|4|}) => {|T|5|}' is not assignable to type 'new <{|T|6|}>(x?: {|T|7|}, y?: {|T|8|}) => {|T|9|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|10|}' is not assignable to type '{|T|11|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|12|}' is assignable to the constraint of type '{|T|13|}', but '{|T|14|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:164:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:164:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:164:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:164:19
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:164:19
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:164:19
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:164:19
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:164:19
             a5: new (x?: T, y?: T) => T; 
         }
     
         interface I17<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I17<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I17|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a5' are incompatible.
-!!! error TS2430:     Type 'new (x: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
+!!! error TS2430:     Type 'new (x: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>(x?: {|T|6|}, y?: {|T|7|}) => {|T|8|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|9|}' is not assignable to type '{|T|10|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|11|}' is assignable to the constraint of type '{|T|12|}', but '{|T|13|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:168:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:168:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:168:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:168:19
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:168:19
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:168:19
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:168:19
             a5: new (x: T) => T;
         }
     
         interface I18<T> extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I18<T>' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I18|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}'.
 !!! error TS2430:   Types of property 'a5' are incompatible.
-!!! error TS2430:     Type 'new (x: T, y: T) => T' is not assignable to type 'new <T>(x?: T, y?: T) => T'.
+!!! error TS2430:     Type 'new (x: {|T|3|}, y: {|T|4|}) => {|T|5|}' is not assignable to type 'new <{|T|6|}>(x?: {|T|7|}, y?: {|T|8|}) => {|T|9|}'.
 !!! error TS2430:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2430:         Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2430:           'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:         Type '{|T|10|}' is not assignable to type '{|T|11|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2430:           '{|T|12|}' is assignable to the constraint of type '{|T|13|}', but '{|T|14|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:172:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:172:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:92:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:172:19
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:172:19
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:172:19
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:172:19
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:97:18
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:172:19
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:172:19
             a5: new (x: T, y: T) => T; 
         }
     }
@@ -428,9 +673,16 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface I3 extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I3|0|}' incorrectly extends interface '{|Base2|1|}'.
 !!! error TS2430:   Types of property 'a' are incompatible.
-!!! error TS2430:     Type 'new <T>(x: T) => T' is not assignable to type 'new <T>() => T'.
+!!! error TS2430:     Type 'new <{|T|2|}>(x: {|T|3|}) => {|T|4|}' is not assignable to type 'new <{|T|5|}>() => {|T|6|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:196:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:179:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:197:17
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:197:17
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:197:17
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:180:17
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:180:17
             a: new <T>(x: T) => T; // error, not identical and contextual signature instatiation can't make inference from T to T
         }
     
@@ -462,9 +714,18 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface I10 extends Base2 {
                   ~~~
-!!! error TS2430: Interface 'I10' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I10|0|}' incorrectly extends interface '{|Base2|1|}'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
-!!! error TS2430:     Type 'new <T>(x: T, y: T) => T' is not assignable to type 'new <T>(x: T) => T'.
+!!! error TS2430:     Type 'new <{|T|2|}>(x: {|T|3|}, y: {|T|4|}) => {|T|5|}' is not assignable to type 'new <{|T|6|}>(x: {|T|7|}) => {|T|8|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:226:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:179:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:227:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:227:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:227:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:227:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:182:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:182:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericConstructSignaturesWithOptionalParameters.ts:182:18
             a3: new <T>(x: T, y: T) => T;  // error, too many required params
         }
     

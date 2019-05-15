@@ -51,13 +51,19 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
             ~
 !!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
                      ~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'T'.
-!!! error TS2322:   '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322: Type '""' is not assignable to type '{|T|0|}'.
+!!! error TS2322:   '""' is assignable to the constraint of type '{|T|1|}', but '{|T|2|}' could be instantiated with a different subtype of constraint 'string'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts:28:9
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts:28:9
+!!! annotated symbol 2 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts:28:9
         foo(): T {
             return ''; // error
             ~~~~~~~~~~
-!!! error TS2322: Type '""' is not assignable to type 'T'.
-!!! error TS2322:   '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322: Type '""' is not assignable to type '{|T|0|}'.
+!!! error TS2322:   '""' is assignable to the constraint of type '{|T|1|}', but '{|T|2|}' could be instantiated with a different subtype of constraint 'string'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts:28:9
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts:28:9
+!!! annotated symbol 2 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts:28:9
         }
     }
     
@@ -68,7 +74,9 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericC
     c = d;
     c = e;
     ~
-!!! error TS2322: Type 'E<string>' is not assignable to type 'C<number>'.
+!!! error TS2322: Type '{|E|0|}<string>' is not assignable to type '{|C|1|}<number>'.
 !!! error TS2322:   Types of property 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts:28:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedGenericClassWithAny.ts:1:7
     var r = c.foo(); // e.foo would return string

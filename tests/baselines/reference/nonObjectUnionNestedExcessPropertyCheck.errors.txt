@@ -24,21 +24,35 @@ tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts(19,56): error TS
     // These are the types of errors we want:
     const propB1: IProps | number = { INVALID_PROP_NAME: 'share', iconProp: 'test' };
                                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'number | IProps'.
+!!! error TS2322: Type '{ {|INVALID_PROP_NAME|0|}: string; {|iconProp|1|}: string; }' is not assignable to type 'number | {|IProps|2|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
+!!! annotated symbol 0 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:13:35
+!!! annotated symbol 1 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:13:63
+!!! annotated symbol 2 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:1:11
     
     // Nested typing works here and we also get an expected error:
     const propB2: IProps | number = { nestedProp: { asdfasdf: 'test' }, iconProp: 'test' };
           ~~~~~~
-!!! error TS2322: Type '{ nestedProp: { asdfasdf: string; }; iconProp: string; }' is not assignable to type 'number | IProps'.
-!!! error TS2322:   Type '{ nestedProp: { asdfasdf: string; }; iconProp: string; }' is not assignable to type 'IProps'.
+!!! error TS2322: Type '{ {|nestedProp|0|}: { {|asdfasdf|1|}: string; }; {|iconProp|2|}: string; }' is not assignable to type 'number | {|IProps|3|}'.
+!!! error TS2322:   Type '{ {|nestedProp|4|}: { {|asdfasdf|5|}: string; }; {|iconProp|6|}: string; }' is not assignable to type '{|IProps|7|}'.
 !!! error TS2322:     Types of property 'nestedProp' are incompatible.
 !!! error TS2322:       Type '{ asdfasdf: string; }' has no properties in common with type '{ testBool?: boolean; }'.
+!!! annotated symbol 0 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:16:35
+!!! annotated symbol 1 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:16:49
+!!! annotated symbol 2 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:16:69
+!!! annotated symbol 3 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:1:11
+!!! annotated symbol 4 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:16:35
+!!! annotated symbol 5 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:16:49
+!!! annotated symbol 6 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:16:69
+!!! annotated symbol 7 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:1:11
     
     // Want an error generated here but there isn't one.
     const propA1: INestedProps | number = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };
                                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2326: Types of property 'nestedProps' are incompatible.
-!!! error TS2326:   Type '{ INVALID_PROP_NAME: string; iconProp: string; }' is not assignable to type 'IProps'.
+!!! error TS2326:   Type '{ {|INVALID_PROP_NAME|0|}: string; {|iconProp|1|}: string; }' is not assignable to type '{|IProps|2|}'.
 !!! error TS2326:     Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
+!!! annotated symbol 0 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:19:56
+!!! annotated symbol 1 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:19:84
+!!! annotated symbol 2 tests/cases/compiler/nonObjectUnionNestedExcessPropertyCheck.ts:1:11
     

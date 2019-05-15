@@ -68,10 +68,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
         // S's
         interface I2 extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I2' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I2|0|}' incorrectly extends interface '{|Base2|1|}'.
 !!! error TS2430:   Types of property 'a' are incompatible.
 !!! error TS2430:     Type '(x: number) => string' is not assignable to type '(x: number) => number'.
 !!! error TS2430:       Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:57:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:50:15
             // N's
             a: (x: number) => string; // error because base returns non-void;
         }
@@ -79,11 +81,21 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSign
         // S's
         interface I3 extends Base2 {
                   ~~
-!!! error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+!!! error TS2430: Interface '{|I3|0|}' incorrectly extends interface '{|Base2|1|}'.
 !!! error TS2430:   Types of property 'a2' are incompatible.
-!!! error TS2430:     Type '<T>(x: T) => string' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2430:       Type 'string' is not assignable to type 'T'.
-!!! error TS2430:         'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2430:     Type '<{|T|2|}>(x: {|T|3|}) => string' is not assignable to type '<{|T|4|}>(x: {|T|5|}) => {|T|6|}'.
+!!! error TS2430:       Type 'string' is not assignable to type '{|T|7|}'.
+!!! error TS2430:         'string' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:63:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:50:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:65:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:65:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:53:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:53:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:53:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:53:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:53:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/callSignatureAssignabilityInInheritance.ts:53:14
             // N's
             a2: <T>(x: T) => string; // error because base returns non-void;
         }

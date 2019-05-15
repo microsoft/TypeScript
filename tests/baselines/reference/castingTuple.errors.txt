@@ -44,8 +44,13 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
     var interfaceIITuple = <[I, I]>classCDTuple;
     var classCDATuple = <[C, D, A]>classCDTuple;
                         ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Conversion of type '[C, D]' to type '[C, D, A]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352: Conversion of type '[{|C|0|}, {|D|1|}]' to type '[{|C|2|}, {|D|3|}, {|A|4|}]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property '2' is missing in type '[C, D]' but required in type '[C, D, A]'.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
+!!! annotated symbol 1 tests/cases/conformance/types/tuple/castingTuple.ts:4:7
+!!! annotated symbol 2 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/types/tuple/castingTuple.ts:4:7
+!!! annotated symbol 4 tests/cases/conformance/types/tuple/castingTuple.ts:2:7
     var eleFromCDA1 = classCDATuple[2]; // A
     var eleFromCDA2 = classCDATuple[5]; // C | D | A
                                     ~
@@ -65,9 +70,13 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
 !!! error TS2352:   Type 'string' is not comparable to type 'number'.
     var t9 = <[A, I]>classCDTuple;
              ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Conversion of type '[C, D]' to type '[A, I]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352: Conversion of type '[{|C|0|}, {|D|1|}]' to type '[{|A|2|}, {|I|3|}]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'a' is missing in type 'C' but required in type 'A'.
 !!! related TS2728 tests/cases/conformance/types/tuple/castingTuple.ts:2:11: 'a' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/castingTuple.ts:3:7
+!!! annotated symbol 1 tests/cases/conformance/types/tuple/castingTuple.ts:4:7
+!!! annotated symbol 2 tests/cases/conformance/types/tuple/castingTuple.ts:2:7
+!!! annotated symbol 3 tests/cases/conformance/types/tuple/castingTuple.ts:1:11
     var array1 = <number[]>numStrTuple;
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.

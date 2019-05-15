@@ -39,11 +39,13 @@ tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' c
     
     const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
                                               ~~~~
-!!! error TS2322: Type 'Record<"val", "dup">' is not assignable to type 'never'.
+!!! error TS2322: Type '{|Record|0|}<"val", "dup">' is not assignable to type 'never'.
 !!! related TS6500 tests/cases/compiler/infiniteConstraints.ts:31:43: The expected type comes from property 'main' which is declared here on type '{ main: never; alternate: never; }'
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1452:6
                                                                   ~~~~~~~~~
-!!! error TS2322: Type 'Record<"val", "dup">' is not assignable to type 'never'.
+!!! error TS2322: Type '{|Record|0|}<"val", "dup">' is not assignable to type 'never'.
 !!! related TS6500 tests/cases/compiler/infiniteConstraints.ts:31:63: The expected type comes from property 'alternate' which is declared here on type '{ main: never; alternate: never; }'
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1452:6
     
     // Repro from #26448
     

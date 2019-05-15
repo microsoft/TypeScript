@@ -41,30 +41,54 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(36,13): err
     
     const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
                 ~~~~~~~~~~
-!!! error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+!!! error TS2322: Type '{ {|extra|0|}: true; {|onClick|1|}: (k: "left" | "right") => void; }' is not assignable to type '{|IntrinsicAttributes|2|} & {|LinkProps|3|}'.
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
+!!! annotated symbol 0 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:27:64
+!!! annotated symbol 1 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:27:29
+!!! annotated symbol 2 /.lib/react.d.ts:2367:15
+!!! annotated symbol 3 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:12:18
     const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
                 ~~~~~~~~~~
-!!! error TS2322: Type '{ onClick: (k: any) => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+!!! error TS2322: Type '{ {|onClick|0|}: (k: any) => void; {|extra|1|}: true; }' is not assignable to type '{|IntrinsicAttributes|2|} & {|LinkProps|3|}'.
 !!! error TS2322:   Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
+!!! annotated symbol 0 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:28:24
+!!! annotated symbol 1 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:28:56
+!!! annotated symbol 2 /.lib/react.d.ts:2367:15
+!!! annotated symbol 3 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:12:18
     const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
                 ~~~~~~~~~~
-!!! error TS2322: Type '{ extra: true; goTo: "home"; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+!!! error TS2322: Type '{ {|extra|0|}: true; {|goTo|1|}: "home"; }' is not assignable to type '{|IntrinsicAttributes|2|} & {|LinkProps|3|}'.
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
+!!! annotated symbol 0 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:29:43
+!!! annotated symbol 1 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:29:29
+!!! annotated symbol 2 /.lib/react.d.ts:2367:15
+!!! annotated symbol 3 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:12:18
     const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact"
                 ~~~~~~~~~~
-!!! error TS2322: Type '{ goTo: "home"; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+!!! error TS2322: Type '{ {|goTo|0|}: "home"; {|extra|1|}: true; }' is not assignable to type '{|IntrinsicAttributes|2|} & {|LinkProps|3|}'.
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
+!!! annotated symbol 0 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:30:24
+!!! annotated symbol 1 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:30:36
+!!! annotated symbol 2 /.lib/react.d.ts:2367:15
+!!! annotated symbol 3 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:12:18
     
     export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undefined }
     const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
                 ~~~~~~~~~~
-!!! error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
+!!! error TS2322: Type '{ {|extra|0|}: true; {|onClick|1|}: (k: "left" | "right") => void; }' is not assignable to type '{|IntrinsicAttributes|2|} & {|ButtonProps|3|}'.
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
+!!! annotated symbol 0 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:33:65
+!!! annotated symbol 1 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:33:30
+!!! annotated symbol 2 /.lib/react.d.ts:2367:15
+!!! annotated symbol 3 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:8:18
     
     export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
     const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"
                 ~~~~~~~~~~~
-!!! error TS2322: Type '{ extra: true; goTo: "home"; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+!!! error TS2322: Type '{ {|extra|0|}: true; {|goTo|1|}: "home"; }' is not assignable to type '{|IntrinsicAttributes|2|} & {|LinkProps|3|}'.
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
+!!! annotated symbol 0 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:36:44
+!!! annotated symbol 1 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:36:30
+!!! annotated symbol 2 /.lib/react.d.ts:2367:15
+!!! annotated symbol 3 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx:12:18
     

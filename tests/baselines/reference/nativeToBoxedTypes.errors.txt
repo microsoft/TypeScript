@@ -13,26 +13,34 @@ tests/cases/compiler/nativeToBoxedTypes.ts(15,1): error TS2322: Type 'Symbol' is
     var n = 100;
     n = N;
     ~
-!!! error TS2322: Type 'Number' is not assignable to type 'number'.
-!!! error TS2322:   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+!!! error TS2322: Type '{|Number|0|}' is not assignable to type 'number'.
+!!! error TS2322:   'number' is a primitive, but '{|Number|1|}' is a wrapper object. Prefer using 'number' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:542:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:542:11
     
     var S = new String();
     var s = "foge";
     s = S;
     ~
-!!! error TS2322: Type 'String' is not assignable to type 'string'.
-!!! error TS2322:   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+!!! error TS2322: Type '{|String|0|}' is not assignable to type 'string'.
+!!! error TS2322:   'string' is a primitive, but '{|String|1|}' is a wrapper object. Prefer using 'string' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:394:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:394:11
     
     var B = new Boolean();
     var b = true;
     b = B;
     ~
-!!! error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
-!!! error TS2322:   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
+!!! error TS2322: Type '{|Boolean|0|}' is not assignable to type 'boolean'.
+!!! error TS2322:   'boolean' is a primitive, but '{|Boolean|1|}' is a wrapper object. Prefer using 'boolean' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:529:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:529:11
     
     var sym: symbol; 
     var Sym: Symbol;
     sym = Sym;
     ~~~
-!!! error TS2322: Type 'Symbol' is not assignable to type 'symbol'.
-!!! error TS2322:   'symbol' is a primitive, but 'Symbol' is a wrapper object. Prefer using 'symbol' when possible.
+!!! error TS2322: Type '{|Symbol|0|}' is not assignable to type 'symbol'.
+!!! error TS2322:   'symbol' is a primitive, but '{|Symbol|1|}' is a wrapper object. Prefer using 'symbol' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:97:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:97:11

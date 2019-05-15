@@ -11,10 +11,12 @@ tests/cases/compiler/optionalParameterProperty.ts(5,7): error TS2415: Class 'D' 
     
     class D extends C { 
           ~
-!!! error TS2415: Class 'D' incorrectly extends base class 'C'.
+!!! error TS2415: Class '{|D|0|}' incorrectly extends base class '{|C|1|}'.
 !!! error TS2415:   Types of property 'p' are incompatible.
 !!! error TS2415:     Type 'number | undefined' is not assignable to type 'number'.
 !!! error TS2415:       Type 'undefined' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/optionalParameterProperty.ts:5:7
+!!! annotated symbol 1 tests/cases/compiler/optionalParameterProperty.ts:1:7
         constructor(public p?: number) {
             super();
         }

@@ -36,7 +36,8 @@ tests/cases/compiler/constructorOverloads1.ts(17,18): error TS2345: Argument of 
     var f2 = new Foo(0);
     var f3 = new Foo(f1);
                      ~~
-!!! error TS2345: Argument of type 'Foo' is not assignable to parameter of type 'number'.
+!!! error TS2345: Argument of type '{|Foo|0|}' is not assignable to parameter of type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/constructorOverloads1.ts:1:7
     var f4 = new Foo([f1,f2,f3]);
                      ~~~~~~~~~~
 !!! error TS2345: Argument of type 'any[]' is not assignable to parameter of type 'number'.

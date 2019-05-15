@@ -20,8 +20,10 @@ tests/cases/compiler/interfaceImplementation8.ts(22,7): error TS2420: Class 'C6'
     
     class C2 implements i1 {
           ~~
-!!! error TS2420: Class 'C2' incorrectly implements interface 'i1'.
+!!! error TS2420: Class '{|C2|0|}' incorrectly implements interface '{|i1|1|}'.
 !!! error TS2420:   Property 'name' is private in type 'C2' but not in type 'i1'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceImplementation8.ts:12:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceImplementation8.ts:4:11
         private name:string;
     }
     
@@ -32,12 +34,16 @@ tests/cases/compiler/interfaceImplementation8.ts(22,7): error TS2420: Class 'C6'
     class C4 extends C1 implements i1{ }
     class C5 extends C2 implements i1{ }
           ~~
-!!! error TS2420: Class 'C5' incorrectly implements interface 'i1'.
+!!! error TS2420: Class '{|C5|0|}' incorrectly implements interface '{|i1|1|}'.
 !!! error TS2420:   Property 'name' is private in type 'C5' but not in type 'i1'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceImplementation8.ts:21:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceImplementation8.ts:4:11
     class C6 extends C3 implements i1{ }
           ~~
-!!! error TS2420: Class 'C6' incorrectly implements interface 'i1'.
+!!! error TS2420: Class '{|C6|0|}' incorrectly implements interface '{|i1|1|}'.
 !!! error TS2420:   Property 'name' is private in type 'C6' but not in type 'i1'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceImplementation8.ts:22:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceImplementation8.ts:4:11
     
     /*
         2

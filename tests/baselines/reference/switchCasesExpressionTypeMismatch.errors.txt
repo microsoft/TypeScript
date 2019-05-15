@@ -10,7 +10,8 @@ tests/cases/compiler/switchCasesExpressionTypeMismatch.ts(7,10): error TS2678: T
     switch (0) {
         case Foo: break;    // Error
              ~~~
-!!! error TS2678: Type 'typeof Foo' is not comparable to type 'number'.
+!!! error TS2678: Type 'typeof {|Foo|0|}' is not comparable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/switchCasesExpressionTypeMismatch.ts:1:7
         case "sss": break;  // Error
              ~~~~~
 !!! error TS2678: Type '"sss"' is not comparable to type '0'.

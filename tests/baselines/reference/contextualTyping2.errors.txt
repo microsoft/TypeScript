@@ -5,5 +5,8 @@ tests/cases/compiler/contextualTyping2.ts(1,32): error TS2322: Type '{ id: numbe
 ==== tests/cases/compiler/contextualTyping2.ts (1 errors) ====
     var foo: {id:number;} = {id:4, name:"foo"};
                                    ~~~~~~~~~~
-!!! error TS2322: Type '{ id: number; name: string; }' is not assignable to type '{ id: number; }'.
+!!! error TS2322: Type '{ {|id|0|}: number; {|name|1|}: string; }' is not assignable to type '{ {|id|2|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/contextualTyping2.ts:1:26
+!!! annotated symbol 1 tests/cases/compiler/contextualTyping2.ts:1:32
+!!! annotated symbol 2 tests/cases/compiler/contextualTyping2.ts:1:11

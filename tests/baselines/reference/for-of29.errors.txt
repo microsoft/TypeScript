@@ -9,6 +9,9 @@ tests/cases/conformance/es6/for-ofStatements/for-of29.ts(5,15): error TS2322: Ty
     
     for (var v of iterableWithOptionalIterator) { }
                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ [Symbol.iterator]?(): Iterator<string>; }' is not assignable to type 'Iterable<string>'.
+!!! error TS2322: Type '{ {|[Symbol.iterator]|0|}?(): {|Iterator|1|}<string>; }' is not assignable to type '{|Iterable|2|}<string>'.
 !!! error TS2322:   Property '[Symbol.iterator]' is optional in type '{ [Symbol.iterator]?(): Iterator<string>; }' but required in type 'Iterable<string>'.
+!!! annotated symbol 0 tests/cases/conformance/es6/for-ofStatements/for-of29.ts:2:5
+!!! annotated symbol 1 /.ts/lib.es2015.iterable.d.ts:36:11
+!!! annotated symbol 2 /.ts/lib.es2015.iterable.d.ts:42:11
     

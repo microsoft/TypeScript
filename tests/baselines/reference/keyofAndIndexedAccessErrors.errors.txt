@@ -219,31 +219,74 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
         k1 = k2;
         k1 = k3;  // Error
         ~~
-!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:       Type 'string' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:         Type 'string' is not assignable to type 'keyof T'.
-!!! error TS2322:           Type 'keyof T' is not assignable to type 'keyof U'.
-!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'keyof U'.
-!!! error TS2322:               Type 'string' is not assignable to type 'keyof U'.
+!!! error TS2322: Type 'keyof {|T|0|} | keyof {|U|1|}' is not assignable to type 'keyof {|T|2|} & keyof {|U|3|}'.
+!!! error TS2322:   Type 'keyof {|T|4|}' is not assignable to type 'keyof {|T|5|} & keyof {|U|6|}'.
+!!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'keyof {|T|7|} & keyof {|U|8|}'.
+!!! error TS2322:       Type 'string' is not assignable to type 'keyof {|T|9|} & keyof {|U|10|}'.
+!!! error TS2322:         Type 'string' is not assignable to type 'keyof {|T|11|}'.
+!!! error TS2322:           Type 'keyof {|T|12|}' is not assignable to type 'keyof {|U|13|}'.
+!!! error TS2322:             Type 'string | number | symbol' is not assignable to type 'keyof {|U|14|}'.
+!!! error TS2322:               Type 'string' is not assignable to type 'keyof {|U|15|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 9 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 10 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 11 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 12 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 13 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 14 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 15 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
         k1 = k4;  // Error
         ~~
-!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322: Type 'keyof {|T|0|} | keyof {|U|1|}' is not assignable to type 'keyof {|T|2|} & keyof {|U|3|}'.
+!!! error TS2322:   Type 'keyof {|T|4|}' is not assignable to type 'keyof {|T|5|} & keyof {|U|6|}'.
+!!! error TS2322:     Type 'keyof {|T|7|}' is not assignable to type 'keyof {|U|8|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
     
         k2 = k1;
         k2 = k3;  // Error
         ~~
-!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322: Type 'keyof {|T|0|} | keyof {|U|1|}' is not assignable to type 'keyof {|T|2|} & keyof {|U|3|}'.
+!!! error TS2322:   Type 'keyof {|T|4|}' is not assignable to type 'keyof {|T|5|} & keyof {|U|6|}'.
+!!! error TS2322:     Type 'keyof {|T|7|}' is not assignable to type 'keyof {|U|8|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
         k2 = k4;  // Error
         ~~
-!!! error TS2322: Type 'keyof T | keyof U' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'keyof T & keyof U'.
-!!! error TS2322:     Type 'keyof T' is not assignable to type 'keyof U'.
+!!! error TS2322: Type 'keyof {|T|0|} | keyof {|U|1|}' is not assignable to type 'keyof {|T|2|} & keyof {|U|3|}'.
+!!! error TS2322:   Type 'keyof {|T|4|}' is not assignable to type 'keyof {|T|5|} & keyof {|U|6|}'.
+!!! error TS2322:     Type 'keyof {|T|7|}' is not assignable to type 'keyof {|U|8|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:14
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:70:17
     
         k3 = k1;
         k3 = k2;
@@ -261,66 +304,152 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
             key = k // ok, K ==> keyof T
             k = key // error, keyof T =/=> K
             ~
-!!! error TS2322: Type 'Extract<keyof T, string>' is not assignable to type 'K'.
-!!! error TS2322:   'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:     Type 'string & keyof T' is not assignable to type 'K'.
-!!! error TS2322:       'string & keyof T' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:         Type 'string' is not assignable to type 'K'.
-!!! error TS2322:           'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:             Type 'string' is not assignable to type 'K'.
-!!! error TS2322:               'string' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322: Type '{|Extract|0|}<keyof {|T|1|}, string>' is not assignable to type '{|K|2|}'.
+!!! error TS2322:   '{|Extract|3|}<keyof {|T|4|}, string>' is assignable to the constraint of type '{|K|5|}', but '{|K|6|}' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:     Type 'string & keyof {|T|7|}' is not assignable to type '{|K|8|}'.
+!!! error TS2322:       'string & keyof {|T|9|}' is assignable to the constraint of type '{|K|10|}', but '{|K|11|}' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:         Type 'string' is not assignable to type '{|K|12|}'.
+!!! error TS2322:           'string' is assignable to the constraint of type '{|K|13|}', but '{|K|14|}' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:             Type 'string' is not assignable to type '{|K|15|}'.
+!!! error TS2322:               'string' is assignable to the constraint of type '{|K|16|}', but '{|K|17|}' could be instantiated with a different subtype of constraint 'string'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1464:6
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1464:6
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 9 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 10 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 11 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 12 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 13 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 14 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 15 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 16 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 17 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
             t[key] = tk; // ok, T[K] ==> T[keyof T]
             tk = t[key]; // error, T[keyof T] =/=> T[K]
             ~~
-!!! error TS2322: Type 'T[Extract<keyof T, string>]' is not assignable to type 'T[K]'.
-!!! error TS2322:   Type 'Extract<keyof T, string>' is not assignable to type 'K'.
-!!! error TS2322:     'Extract<keyof T, string>' is assignable to the constraint of type 'K', but 'K' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322: Type '{|T|0|}[{|Extract|1|}<keyof {|T|2|}, string>]' is not assignable to type '{|T|3|}[{|K|4|}]'.
+!!! error TS2322:   Type '{|Extract|5|}<keyof {|T|6|}, string>' is not assignable to type '{|K|7|}'.
+!!! error TS2322:     '{|Extract|8|}<keyof {|T|9|}, string>' is assignable to the constraint of type '{|K|10|}', but '{|K|11|}' could be instantiated with a different subtype of constraint 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1464:6
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:1464:6
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:1464:6
+!!! annotated symbol 9 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 10 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 11 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
         }
         tk = uk;
         uk = tk; // error
         ~~
-!!! error TS2322: Type 'T[K]' is not assignable to type 'U[K]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}[{|K|1|}]' is not assignable to type '{|U|2|}[{|K|3|}]'.
+!!! error TS2322:   Type '{|T|4|}' is not assignable to type '{|U|5|}'.
+!!! error TS2322:     '{|T|6|}' is assignable to the constraint of type '{|U|7|}', but '{|U|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
     
         tj = uj;
         uj = tj; // error
         ~~
-!!! error TS2322: Type 'T[J]' is not assignable to type 'U[J]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}[{|J|1|}]' is not assignable to type '{|U|2|}[{|J|3|}]'.
+!!! error TS2322:   Type '{|T|4|}' is not assignable to type '{|U|5|}'.
+!!! error TS2322:     '{|T|6|}' is assignable to the constraint of type '{|U|7|}', but '{|U|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
     
         tk = tj;
         tj = tk; // error
         ~~
-!!! error TS2322: Type 'T[K]' is not assignable to type 'T[J]'.
-!!! error TS2322:   Type 'K' is not assignable to type 'J'.
-!!! error TS2322:     'K' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:       Type 'Extract<keyof T, string>' is not assignable to type 'J'.
-!!! error TS2322:         'Extract<keyof T, string>' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:           Type 'string & keyof T' is not assignable to type 'J'.
-!!! error TS2322:             'string & keyof T' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:               Type 'string' is not assignable to type 'J'.
-!!! error TS2322:                 'string' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
-!!! error TS2322:                   Type 'string' is not assignable to type 'J'.
-!!! error TS2322:                     'string' is assignable to the constraint of type 'J', but 'J' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322: Type '{|T|0|}[{|K|1|}]' is not assignable to type '{|T|2|}[{|J|3|}]'.
+!!! error TS2322:   Type '{|K|4|}' is not assignable to type '{|J|5|}'.
+!!! error TS2322:     '{|K|6|}' is assignable to the constraint of type '{|J|7|}', but '{|J|8|}' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:       Type '{|Extract|9|}<keyof {|T|10|}, string>' is not assignable to type '{|J|11|}'.
+!!! error TS2322:         '{|Extract|12|}<keyof {|T|13|}, string>' is assignable to the constraint of type '{|J|14|}', but '{|J|15|}' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:           Type 'string & keyof {|T|16|}' is not assignable to type '{|J|17|}'.
+!!! error TS2322:             'string & keyof {|T|18|}' is assignable to the constraint of type '{|J|19|}', but '{|J|20|}' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:               Type 'string' is not assignable to type '{|J|21|}'.
+!!! error TS2322:                 'string' is assignable to the constraint of type '{|J|22|}', but '{|J|23|}' could be instantiated with a different subtype of constraint 'string'.
+!!! error TS2322:                   Type 'string' is not assignable to type '{|J|24|}'.
+!!! error TS2322:                     'string' is assignable to the constraint of type '{|J|25|}', but '{|J|26|}' could be instantiated with a different subtype of constraint 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 9 /.ts/lib.es5.d.ts:1464:6
+!!! annotated symbol 10 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 11 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 12 /.ts/lib.es5.d.ts:1464:6
+!!! annotated symbol 13 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 14 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 15 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 16 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 17 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 18 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 19 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 20 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 21 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 22 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 23 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 24 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 25 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 26 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
     
         tk = uj;
         uj = tk; // error
         ~~
-!!! error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}[{|K|1|}]' is not assignable to type '{|U|2|}[{|J|3|}]'.
+!!! error TS2322:   Type '{|T|4|}' is not assignable to type '{|U|5|}'.
+!!! error TS2322:     '{|T|6|}' is assignable to the constraint of type '{|U|7|}', but '{|U|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:16
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:65
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:13
+!!! annotated symbol 7 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
+!!! annotated symbol 8 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:99:52
     }
     
     // The constraint of 'keyof T' is 'keyof T'
     function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
         k = 42; // error
         ~
-!!! error TS2322: Type '42' is not assignable to type 'keyof T'.
+!!! error TS2322: Type '42' is not assignable to type 'keyof {|T|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:121:13
         k = "hello"; // error
         ~
-!!! error TS2322: Type '"hello"' is not assignable to type 'keyof T'.
+!!! error TS2322: Type '"hello"' is not assignable to type 'keyof {|T|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:121:13
     }
     
     // Repro from #27470
@@ -339,13 +468,19 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error
     function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
         t[k] = 42;  // Error
         ~~~~
-!!! error TS2322: Type '42' is not assignable to type 'T[K]'.
+!!! error TS2322: Type '42' is not assignable to type '{|T|0|}[{|K|1|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:139:16
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:139:47
         t[k] = "hello";  // Error
         ~~~~
-!!! error TS2322: Type '"hello"' is not assignable to type 'T[K]'.
+!!! error TS2322: Type '"hello"' is not assignable to type '{|T|0|}[{|K|1|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:139:16
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:139:47
         t[k] = [10, 20];  // Error
         ~~~~
-!!! error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
+!!! error TS2322: Type 'number[]' is not assignable to type '{|T|0|}[{|K|1|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:139:16
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts:139:47
     }
     
     // Repro from #28839

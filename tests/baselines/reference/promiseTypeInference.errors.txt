@@ -19,12 +19,42 @@ tests/cases/compiler/promiseTypeInference.ts(10,39): error TS2322: Type 'IPromis
     
     var $$x = load("something").then(s => convert(s));
                                           ~~~~~~~~~~
-!!! error TS2322: Type 'IPromise<number>' is not assignable to type 'number | PromiseLike<number>'.
-!!! error TS2322:   Type 'IPromise<number>' is not assignable to type 'PromiseLike<number>'.
+!!! error TS2322: Type '{|IPromise|0|}<number>' is not assignable to type 'number | {|PromiseLike|1|}<number>'.
+!!! error TS2322:   Type '{|IPromise|2|}<number>' is not assignable to type '{|PromiseLike|3|}<number>'.
 !!! error TS2322:     Types of property 'then' are incompatible.
-!!! error TS2322:       Type '<U>(success?: (value: number) => IPromise<U>) => IPromise<U>' is not assignable to type '<TResult1 = number, TResult2 = never>(onfulfilled?: (value: number) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
+!!! error TS2322:       Type '<{|U|4|}>(success?: (value: number) => {|IPromise|5|}<{|U|6|}>) => {|IPromise|7|}<{|U|8|}>' is not assignable to type '<{|TResult1|9|} = number, {|TResult2|10|} = never>(onfulfilled?: (value: number) => {|TResult1|11|} | {|PromiseLike|12|}<{|TResult1|13|}>, onrejected?: (reason: any) => {|TResult2|14|} | {|PromiseLike|15|}<{|TResult2|16|}>) => {|PromiseLike|17|}<{|TResult1|18|} | {|TResult2|19|}>'.
 !!! error TS2322:         Types of parameters 'success' and 'onfulfilled' are incompatible.
-!!! error TS2322:           Type 'TResult1 | PromiseLike<TResult1>' is not assignable to type 'IPromise<TResult1 | TResult2>'.
-!!! error TS2322:             Type 'TResult1' is not assignable to type 'IPromise<TResult1 | TResult2>'.
+!!! error TS2322:           Type '{|TResult1|20|} | {|PromiseLike|21|}<{|TResult1|22|}>' is not assignable to type '{|IPromise|23|}<{|TResult1|24|} | {|TResult2|25|}>'.
+!!! error TS2322:             Type '{|TResult1|26|}' is not assignable to type '{|IPromise|27|}<{|TResult1|28|} | {|TResult2|29|}>'.
 !!! related TS6502 /.ts/lib.es5.d.ts:1406:57: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 tests/cases/compiler/promiseTypeInference.ts:4:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 2 tests/cases/compiler/promiseTypeInference.ts:4:11
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 4 tests/cases/compiler/promiseTypeInference.ts:5:10
+!!! annotated symbol 5 tests/cases/compiler/promiseTypeInference.ts:4:11
+!!! annotated symbol 6 tests/cases/compiler/promiseTypeInference.ts:5:10
+!!! annotated symbol 7 tests/cases/compiler/promiseTypeInference.ts:4:11
+!!! annotated symbol 8 tests/cases/compiler/promiseTypeInference.ts:5:10
+!!! annotated symbol 9 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 10 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 12 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 13 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 14 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 15 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 16 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 17 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 18 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 19 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 20 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 21 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 22 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 23 tests/cases/compiler/promiseTypeInference.ts:4:11
+!!! annotated symbol 24 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 25 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 26 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 27 tests/cases/compiler/promiseTypeInference.ts:4:11
+!!! annotated symbol 28 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 29 /.ts/lib.es5.d.ts:1393:24
     

@@ -17,9 +17,23 @@ tests/cases/conformance/jsx/file.tsx(13,10): error TS2322: Type '{ editable: tru
     // Error
     let x = <TextComponent editable={true} />
              ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ editable: true; }' is not assignable to type '(IntrinsicAttributes & IntrinsicClassAttributes<TextComponent> & { editable: false; } & { children?: ReactNode; }) | (IntrinsicAttributes & IntrinsicClassAttributes<TextComponent> & { editable: true; onEdit: (newText: string) => void; } & { children?: ReactNode; })'.
+!!! error TS2322: Type '{ {|editable|0|}: true; }' is not assignable to type '({|IntrinsicAttributes|1|} & {|IntrinsicClassAttributes|2|}<{|TextComponent|3|}> & { {|editable|4|}: false; } & { {|children|5|}?: {|ReactNode|6|}; }) | ({|IntrinsicAttributes|7|} & {|IntrinsicClassAttributes|8|}<{|TextComponent|9|}> & { {|editable|10|}: true; {|onEdit|11|}: (newText: string) => void; } & { {|children|12|}?: {|ReactNode|13|}; })'.
 !!! error TS2322:   Property 'onEdit' is missing in type '{ editable: true; }' but required in type '{ editable: true; onEdit: (newText: string) => void; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:4:36: 'onEdit' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:13:24
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
+!!! annotated symbol 2 /.lib/react.d.ts:2369:15
+!!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:6:7
+!!! annotated symbol 4 tests/cases/conformance/jsx/file.tsx:3:20
+!!! annotated symbol 5 /.lib/react.d.ts:175:22
+!!! annotated symbol 6 /.lib/react.d.ts:93:10
+!!! annotated symbol 7 /.lib/react.d.ts:2367:15
+!!! annotated symbol 8 /.lib/react.d.ts:2369:15
+!!! annotated symbol 9 tests/cases/conformance/jsx/file.tsx:6:7
+!!! annotated symbol 10 tests/cases/conformance/jsx/file.tsx:4:20
+!!! annotated symbol 11 tests/cases/conformance/jsx/file.tsx:4:36
+!!! annotated symbol 12 /.lib/react.d.ts:175:22
+!!! annotated symbol 13 /.lib/react.d.ts:93:10
     
     const textProps: TextProps = {
         editable: false

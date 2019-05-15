@@ -14,6 +14,8 @@ tests/cases/compiler/assignmentCompatability23.ts(9,1): error TS2322: Type 'inte
     }
     __test2__.__val__obj = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: boolean[]; }'.
+!!! error TS2322: Type '{|interfaceWithPublicAndOptional|0|}<number, string>' is not assignable to type '{ {|two|1|}: boolean[]; }'.
 !!! error TS2322:   Types of property 'two' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'boolean[]'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability23.ts:2:22
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatability23.ts:6:23

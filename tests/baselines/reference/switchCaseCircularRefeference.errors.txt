@@ -9,8 +9,14 @@ tests/cases/compiler/switchCaseCircularRefeference.ts(5,10): error TS2678: Type 
         switch (x.a) {
         case x:
              ~
-!!! error TS2678: Type '{ a: "A"; b: any; } | { a: "C"; e: any; }' is not comparable to type 'string'.
-!!! error TS2678:   Type '{ a: "C"; e: any; }' is not comparable to type 'string'.
+!!! error TS2678: Type '{ {|a|0|}: "A"; {|b|1|}: any; } | { {|a|2|}: "C"; {|e|3|}: any; }' is not comparable to type 'string'.
+!!! error TS2678:   Type '{ {|a|4|}: "C"; {|e|5|}: any; }' is not comparable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/switchCaseCircularRefeference.ts:3:16
+!!! annotated symbol 1 tests/cases/compiler/switchCaseCircularRefeference.ts:3:24
+!!! annotated symbol 2 tests/cases/compiler/switchCaseCircularRefeference.ts:3:30
+!!! annotated symbol 3 tests/cases/compiler/switchCaseCircularRefeference.ts:3:38
+!!! annotated symbol 4 tests/cases/compiler/switchCaseCircularRefeference.ts:3:30
+!!! annotated symbol 5 tests/cases/compiler/switchCaseCircularRefeference.ts:3:38
             break;
         }
     }

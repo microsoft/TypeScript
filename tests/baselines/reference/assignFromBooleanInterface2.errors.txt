@@ -23,20 +23,27 @@ tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts(
     a = x;
     a = b;
     ~
-!!! error TS2322: Type 'NotBoolean' is not assignable to type 'Boolean'.
+!!! error TS2322: Type '{|NotBoolean|0|}' is not assignable to type '{|Boolean|1|}'.
 !!! error TS2322:   Types of property 'valueOf' are incompatible.
-!!! error TS2322:     Type '() => Object' is not assignable to type '() => boolean'.
-!!! error TS2322:       Type 'Object' is not assignable to type 'boolean'.
+!!! error TS2322:     Type '() => {|Object|2|}' is not assignable to type '() => boolean'.
+!!! error TS2322:       Type '{|Object|3|}' is not assignable to type 'boolean'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts:5:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:529:11
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:120:11
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:120:11
     
     b = a;
     b = x;
     
     x = a; // expected error
     ~
-!!! error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
-!!! error TS2322:   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
+!!! error TS2322: Type '{|Boolean|0|}' is not assignable to type 'boolean'.
+!!! error TS2322:   'boolean' is a primitive, but '{|Boolean|1|}' is a wrapper object. Prefer using 'boolean' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:529:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:529:11
     x = b; // expected error
     ~
-!!! error TS2322: Type 'NotBoolean' is not assignable to type 'boolean'.
+!!! error TS2322: Type '{|NotBoolean|0|}' is not assignable to type 'boolean'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts:5:11
     
     

@@ -20,19 +20,52 @@ tests/cases/compiler/typeParameterDiamond4.ts(10,13): error TS2322: Type 'Bottom
     
                 top = middle;
                 ~~~
-!!! error TS2322: Type 'Top | T | U' is not assignable to type 'Top'.
-!!! error TS2322:   'Top | T | U' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'T' is not assignable to type 'Top'.
-!!! error TS2322:       'T' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Top|0|} | {|T|1|} | {|U|2|}' is not assignable to type '{|Top|3|}'.
+!!! error TS2322:   '{|Top|4|} | {|T|5|} | {|U|6|}' is assignable to the constraint of type '{|Top|7|}', but '{|Top|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|9|}' is not assignable to type '{|Top|10|}'.
+!!! error TS2322:       '{|T|11|}' is assignable to the constraint of type '{|Top|12|}', but '{|Top|13|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 1 tests/cases/compiler/typeParameterDiamond4.ts:2:28
+!!! annotated symbol 2 tests/cases/compiler/typeParameterDiamond4.ts:2:31
+!!! annotated symbol 3 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 4 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 5 tests/cases/compiler/typeParameterDiamond4.ts:2:28
+!!! annotated symbol 6 tests/cases/compiler/typeParameterDiamond4.ts:2:31
+!!! annotated symbol 7 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 8 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 9 tests/cases/compiler/typeParameterDiamond4.ts:2:28
+!!! annotated symbol 10 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 11 tests/cases/compiler/typeParameterDiamond4.ts:2:28
+!!! annotated symbol 12 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 13 tests/cases/compiler/typeParameterDiamond4.ts:1:21
                 middle = bottom;
                 top = bottom;
                 ~~~
-!!! error TS2322: Type 'Bottom' is not assignable to type 'Top'.
-!!! error TS2322:   'Bottom' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'Top | T | U' is not assignable to type 'Top'.
-!!! error TS2322:       'Top | T | U' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:         Type 'T' is not assignable to type 'Top'.
-!!! error TS2322:           'T' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Bottom|0|}' is not assignable to type '{|Top|1|}'.
+!!! error TS2322:   '{|Bottom|2|}' is assignable to the constraint of type '{|Top|3|}', but '{|Top|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|Top|5|} | {|T|6|} | {|U|7|}' is not assignable to type '{|Top|8|}'.
+!!! error TS2322:       '{|Top|9|} | {|T|10|} | {|U|11|}' is assignable to the constraint of type '{|Top|12|}', but '{|Top|13|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:         Type '{|T|14|}' is not assignable to type '{|Top|15|}'.
+!!! error TS2322:           '{|T|16|}' is assignable to the constraint of type '{|Top|17|}', but '{|Top|18|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterDiamond4.ts:3:32
+!!! annotated symbol 1 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 2 tests/cases/compiler/typeParameterDiamond4.ts:3:32
+!!! annotated symbol 3 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 4 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 5 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 6 tests/cases/compiler/typeParameterDiamond4.ts:2:28
+!!! annotated symbol 7 tests/cases/compiler/typeParameterDiamond4.ts:2:31
+!!! annotated symbol 8 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 9 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 10 tests/cases/compiler/typeParameterDiamond4.ts:2:28
+!!! annotated symbol 11 tests/cases/compiler/typeParameterDiamond4.ts:2:31
+!!! annotated symbol 12 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 13 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 14 tests/cases/compiler/typeParameterDiamond4.ts:2:28
+!!! annotated symbol 15 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 16 tests/cases/compiler/typeParameterDiamond4.ts:2:28
+!!! annotated symbol 17 tests/cases/compiler/typeParameterDiamond4.ts:1:21
+!!! annotated symbol 18 tests/cases/compiler/typeParameterDiamond4.ts:1:21
             }
         }
     }

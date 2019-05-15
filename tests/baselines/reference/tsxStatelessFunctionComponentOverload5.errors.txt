@@ -55,8 +55,13 @@ tests/cases/conformance/jsx/file.tsx(56,24): error TS2322: Type 'true' is not as
     // Error
     const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // extra property;
                 ~~~~~~~~~~
-!!! error TS2322: Type '{ children: string; to: string; onClick: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & HyphenProps'.
+!!! error TS2322: Type '{ {|children|0|}: string; {|to|1|}: string; {|onClick|2|}: (e: any) => void; }' is not assignable to type '{|IntrinsicAttributes|3|} & {|HyphenProps|4|}'.
 !!! error TS2322:   Property 'to' does not exist on type 'IntrinsicAttributes & HyphenProps'.
+!!! annotated dropped!: 0
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:48:24
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:48:40
+!!! annotated symbol 3 /.lib/react.d.ts:2367:15
+!!! annotated symbol 4 tests/cases/conformance/jsx/file.tsx:16:18
     const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
     const b2 = <MainButton {...{to: "10000"}} {...obj2} />;  // extra property
     const b3 = <MainButton {...{to: "10000"}} {...{onClick: (k) => {}}} />;  // extra property

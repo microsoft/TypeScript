@@ -34,15 +34,20 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type paramet
 !!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
     declare function f04<T extends string, U extends number = T>(): void; // error
                                                               ~
-!!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
+!!! error TS2344: Type '{|T|0|}' does not satisfy the constraint 'number'.
 !!! error TS2344:   Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/genericDefaultsErrors.ts:4:22
     declare function f05<T, U extends number = T>(): void; // error
                                                ~
-!!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
+!!! error TS2344: Type '{|T|0|}' does not satisfy the constraint 'number'.
+!!! annotated symbol 0 tests/cases/compiler/genericDefaultsErrors.ts:5:22
     declare function f06<T, U extends T = number>(): void; // error
                                           ~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint 'T'.
-!!! error TS2344:   'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2344: Type 'number' does not satisfy the constraint '{|T|0|}'.
+!!! error TS2344:   'number' is assignable to the constraint of type '{|T|1|}', but '{|T|2|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/genericDefaultsErrors.ts:6:22
+!!! annotated symbol 1 tests/cases/compiler/genericDefaultsErrors.ts:6:22
+!!! annotated symbol 2 tests/cases/compiler/genericDefaultsErrors.ts:6:22
     
     declare function f11<T, U, V = number>(): void;
     f11(); // ok
@@ -83,15 +88,20 @@ tests/cases/compiler/genericDefaultsErrors.ts(42,29): error TS2716: Type paramet
 !!! error TS2344: Type 'number' does not satisfy the constraint 'string'.
     interface i06<T extends string, U extends number = T> { } // error
                                                        ~
-!!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
+!!! error TS2344: Type '{|T|0|}' does not satisfy the constraint 'number'.
 !!! error TS2344:   Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/genericDefaultsErrors.ts:27:15
     interface i07<T, U extends number = T> { } // error
                                         ~
-!!! error TS2344: Type 'T' does not satisfy the constraint 'number'.
+!!! error TS2344: Type '{|T|0|}' does not satisfy the constraint 'number'.
+!!! annotated symbol 0 tests/cases/compiler/genericDefaultsErrors.ts:28:15
     interface i08<T, U extends T = number> { } // error
                                    ~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint 'T'.
-!!! error TS2344:   'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2344: Type 'number' does not satisfy the constraint '{|T|0|}'.
+!!! error TS2344:   'number' is assignable to the constraint of type '{|T|1|}', but '{|T|2|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/genericDefaultsErrors.ts:29:15
+!!! annotated symbol 1 tests/cases/compiler/genericDefaultsErrors.ts:29:15
+!!! annotated symbol 2 tests/cases/compiler/genericDefaultsErrors.ts:29:15
     
     interface i09<T, U, V = number> { }
     type i09t00 = i09; // error

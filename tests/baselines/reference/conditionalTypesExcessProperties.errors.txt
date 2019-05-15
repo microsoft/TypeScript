@@ -14,11 +14,39 @@ tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts(9,
     function testFunc2<A extends object>(a: A, sa: Something<A>) {
         sa = { test: 'hi', arg: a }; // not excess (but currently still not assignable)
         ~~
-!!! error TS2322: Type '{ test: string; arg: A; }' is not assignable to type 'Something<A>'.
-!!! error TS2322:   Type '{ test: string; arg: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+!!! error TS2322: Type '{ {|test|0|}: string; {|arg|1|}: {|A|2|}; }' is not assignable to type '{|Something|3|}<{|A|4|}>'.
+!!! error TS2322:   Type '{ {|test|5|}: string; {|arg|6|}: {|A|7|}; }' is not assignable to type '{|A|8|} extends object ? { {|arg|9|}: {|A|10|}; } : { {|arg|11|}?: undefined; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:8:12
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:8:24
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:1:6
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:8:12
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:8:24
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:2:5
+!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:4:5
         sa = { test: 'bye', arg: a, arr: a } // excess
         ~~
-!!! error TS2322: Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'Something<A>'.
-!!! error TS2322:   Type '{ test: string; arg: A; arr: A; }' is not assignable to type 'A extends object ? { arg: A; } : { arg?: undefined; }'.
+!!! error TS2322: Type '{ {|test|0|}: string; {|arg|1|}: {|A|2|}; {|arr|3|}: {|A|4|}; }' is not assignable to type '{|Something|5|}<{|A|6|}>'.
+!!! error TS2322:   Type '{ {|test|7|}: string; {|arg|8|}: {|A|9|}; {|arr|10|}: {|A|11|}; }' is not assignable to type '{|A|12|} extends object ? { {|arg|13|}: {|A|14|}; } : { {|arg|15|}?: undefined; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:9:12
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:9:25
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:9:33
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:1:6
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:9:12
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:9:25
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:9:33
+!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 13 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:2:5
+!!! annotated symbol 14 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:7:20
+!!! annotated symbol 15 tests/cases/conformance/types/conditional/conditionalTypesExcessProperties.ts:4:5
     }
     

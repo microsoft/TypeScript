@@ -22,5 +22,7 @@ tests/cases/compiler/objectLiteralIndexerErrors.ts(14,14): error TS2322: Type 'A
 !!! related TS6501 tests/cases/compiler/objectLiteralIndexerErrors.ts:13:26: The expected type comes from this index signature.
     o1 = { x: c, 0: a }; // string indexer is any, number indexer is A
                  ~
-!!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! error TS2322: Type '{|A|0|}' is not assignable to type '{|B|1|}'.
 !!! related TS6501 tests/cases/compiler/objectLiteralIndexerErrors.ts:13:26: The expected type comes from this index signature.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralIndexerErrors.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralIndexerErrors.ts:5:11

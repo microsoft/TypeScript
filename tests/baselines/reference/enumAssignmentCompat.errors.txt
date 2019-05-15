@@ -33,22 +33,29 @@ tests/cases/compiler/enumAssignmentCompat.ts(33,5): error TS2322: Type '5' is no
     var y: typeof W = W;
     var z: number = W; // error
         ~
-!!! error TS2322: Type 'typeof W' is not assignable to type 'number'.
+!!! error TS2322: Type 'typeof {|W|0|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/enumAssignmentCompat.ts:1:8
     var a: number = W.a;
     var b: typeof W = W.a; // error
         ~
-!!! error TS2322: Type 'W.a' is not assignable to type 'typeof W'.
+!!! error TS2322: Type '{|W|0|}.a' is not assignable to type 'typeof {|W|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/enumAssignmentCompat.ts:1:8
+!!! annotated symbol 1 tests/cases/compiler/enumAssignmentCompat.ts:1:8
     var c: typeof W.a = W.a;
     var d: typeof W = 3; // error
         ~
-!!! error TS2322: Type '3' is not assignable to type 'typeof W'.
+!!! error TS2322: Type '3' is not assignable to type 'typeof {|W|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/enumAssignmentCompat.ts:1:8
     var e: typeof W.a = 4;
     var f: WStatic = W.a; // error
         ~
-!!! error TS2322: Type 'W.a' is not assignable to type 'WStatic'.
+!!! error TS2322: Type '{|W|0|}.a' is not assignable to type '{|WStatic|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/enumAssignmentCompat.ts:1:8
+!!! annotated symbol 1 tests/cases/compiler/enumAssignmentCompat.ts:12:11
     var g: WStatic = 5; // error
         ~
-!!! error TS2322: Type '5' is not assignable to type 'WStatic'.
+!!! error TS2322: Type '5' is not assignable to type '{|WStatic|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/enumAssignmentCompat.ts:12:11
     var h: W = 3;
     var i: W = W.a;
     i = W.a;

@@ -15,9 +15,11 @@ tests/cases/compiler/classPropertyErrorOnNameOnly.ts(24,7): error TS2322: Type '
     class Example {
       insideClass: FuncType = function(val) { // error span goes from here
       ~~~~~~~~~~~
-!!! error TS2322: Type '(val: Values) => "1" | "2" | "3" | "4" | "5" | undefined' is not assignable to type 'FuncType'.
+!!! error TS2322: Type '(val: {|Values|0|}) => "1" | "2" | "3" | "4" | "5" | undefined' is not assignable to type '{|FuncType|1|}'.
 !!! error TS2322:   Type '"1" | "2" | "3" | "4" | "5" | undefined' is not assignable to type 'string'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/classPropertyErrorOnNameOnly.ts:1:6
+!!! annotated symbol 1 tests/cases/compiler/classPropertyErrorOnNameOnly.ts:3:6
         switch (val) {
           case 1:
             return "1";
@@ -36,9 +38,11 @@ tests/cases/compiler/classPropertyErrorOnNameOnly.ts(24,7): error TS2322: Type '
     
     const outsideClass: FuncType = function(val) { // compare to errors only on this line in this case 
           ~~~~~~~~~~~~
-!!! error TS2322: Type '(val: Values) => "1" | "2" | "3" | "4" | "5" | undefined' is not assignable to type 'FuncType'.
+!!! error TS2322: Type '(val: {|Values|0|}) => "1" | "2" | "3" | "4" | "5" | undefined' is not assignable to type '{|FuncType|1|}'.
 !!! error TS2322:   Type '"1" | "2" | "3" | "4" | "5" | undefined' is not assignable to type 'string'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/classPropertyErrorOnNameOnly.ts:1:6
+!!! annotated symbol 1 tests/cases/compiler/classPropertyErrorOnNameOnly.ts:3:6
         switch (val) {
           case 1:
             return "1";

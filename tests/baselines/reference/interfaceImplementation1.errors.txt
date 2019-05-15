@@ -20,11 +20,15 @@ tests/cases/compiler/interfaceImplementation1.ts(34,5): error TS2322: Type '() =
     
     class C1 implements I1,I2 {
           ~~
-!!! error TS2420: Class 'C1' incorrectly implements interface 'I1'.
+!!! error TS2420: Class '{|C1|0|}' incorrectly implements interface '{|I1|1|}'.
 !!! error TS2420:   Property 'iObj' is private in type 'C1' but not in type 'I1'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceImplementation1.ts:12:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceImplementation1.ts:1:11
           ~~
-!!! error TS2420: Class 'C1' incorrectly implements interface 'I2'.
+!!! error TS2420: Class '{|C1|0|}' incorrectly implements interface '{|I2|1|}'.
 !!! error TS2420:   Property 'iFn' is private in type 'C1' but not in type 'I2'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceImplementation1.ts:12:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceImplementation1.ts:8:11
         private iFn();
     	private iFn(n?:number, s?:string) { }
         private iAny:any;
@@ -48,8 +52,10 @@ tests/cases/compiler/interfaceImplementation1.ts(34,5): error TS2322: Type '() =
     
     var a:I4 = function(){ 
         ~
-!!! error TS2322: Type '() => C2' is not assignable to type 'I4'.
+!!! error TS2322: Type '() => {|C2|0|}' is not assignable to type '{|I4|1|}'.
 !!! error TS2322:   Type '() => C2' provides no match for the signature 'new (): I3'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceImplementation1.ts:30:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceImplementation1.ts:24:11
         return new C2();
     }
     new a();

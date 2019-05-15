@@ -12,13 +12,27 @@ tests/cases/compiler/typeParameterArgumentEquivalence4.ts(5,5): error TS2322: Ty
         var y: (item) => T;
         x = y;  // Should be an error
         ~
-!!! error TS2322: Type '(item: any) => T' is not assignable to type '(item: any) => U'.
-!!! error TS2322:   Type 'T' is not assignable to type 'U'.
-!!! error TS2322:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '(item: any) => {|T|0|}' is not assignable to type '(item: any) => {|U|1|}'.
+!!! error TS2322:   Type '{|T|2|}' is not assignable to type '{|U|3|}'.
+!!! error TS2322:     '{|T|4|}' is assignable to the constraint of type '{|U|5|}', but '{|U|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:14
+!!! annotated symbol 1 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:16
+!!! annotated symbol 2 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:14
+!!! annotated symbol 3 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:16
+!!! annotated symbol 4 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:14
+!!! annotated symbol 5 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:16
+!!! annotated symbol 6 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:16
         y = x;  // Shound be an error
         ~
-!!! error TS2322: Type '(item: any) => U' is not assignable to type '(item: any) => T'.
-!!! error TS2322:   Type 'U' is not assignable to type 'T'.
-!!! error TS2322:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '(item: any) => {|U|0|}' is not assignable to type '(item: any) => {|T|1|}'.
+!!! error TS2322:   Type '{|U|2|}' is not assignable to type '{|T|3|}'.
+!!! error TS2322:     '{|U|4|}' is assignable to the constraint of type '{|T|5|}', but '{|T|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:16
+!!! annotated symbol 1 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:14
+!!! annotated symbol 2 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:16
+!!! annotated symbol 3 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:14
+!!! annotated symbol 4 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:16
+!!! annotated symbol 5 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:14
+!!! annotated symbol 6 tests/cases/compiler/typeParameterArgumentEquivalence4.ts:1:14
     }
     

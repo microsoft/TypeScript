@@ -17,7 +17,10 @@ tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSuperty
         x: U;
         ~
 !!! error TS2416: Property 'x' in type 'Derived<U>' is not assignable to the same property in base type 'Base'.
-!!! error TS2416:   Type 'U' is not assignable to type 'string'.
-!!! error TS2416:     Type 'String' is not assignable to type 'string'.
-!!! error TS2416:       'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type 'string'.
+!!! error TS2416:     Type '{|String|1|}' is not assignable to type 'string'.
+!!! error TS2416:       'string' is a primitive, but '{|String|2|}' is a wrapper object. Prefer using 'string' when possible.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/apparentType/apparentTypeSupertype.ts:9:15
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:394:11
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:394:11
     }

@@ -379,11 +379,29 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
         export function Keyed<V>(obj: {[key: string]: V}): Collection.Keyed<string, V>;
         export interface Keyed<K, V> extends Collection<K, V> {
                          ~~~~~
-!!! error TS2430: Interface 'Keyed<K, V>' incorrectly extends interface 'Collection<K, V>'.
+!!! error TS2430: Interface '{|Keyed|0|}<{|K|1|}, {|V|2|}>' incorrectly extends interface '{|Collection|3|}<{|K|4|}, {|V|5|}>'.
 !!! error TS2430:   Types of property 'toSeq' are incompatible.
-!!! error TS2430:     Type '() => Keyed<K, V>' is not assignable to type '() => this'.
-!!! error TS2430:       Type 'Keyed<K, V>' is not assignable to type 'this'.
-!!! error TS2430:         'Keyed<K, V>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Keyed<K, V>'.
+!!! error TS2430:     Type '() => {|Keyed|6|}<{|K|7|}, {|V|8|}>' is not assignable to type '() => this'.
+!!! error TS2430:       Type '{|Keyed|9|}<{|K|10|}, {|V|11|}>' is not assignable to type 'this'.
+!!! error TS2430:         '{|Keyed|12|}<{|K|13|}, {|V|14|}>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint '{|Keyed|15|}<{|K|16|}, {|V|17|}>'.
+!!! annotated symbol 0 tests/cases/compiler/immutable.ts:339:21
+!!! annotated symbol 1 tests/cases/compiler/immutable.ts:341:28
+!!! annotated symbol 2 tests/cases/compiler/immutable.ts:341:31
+!!! annotated symbol 3 tests/cases/compiler/immutable.ts:404:19
+!!! annotated symbol 4 tests/cases/compiler/immutable.ts:341:28
+!!! annotated symbol 5 tests/cases/compiler/immutable.ts:341:31
+!!! annotated symbol 6 tests/cases/compiler/immutable.ts:266:21
+!!! annotated symbol 7 tests/cases/compiler/immutable.ts:341:28
+!!! annotated symbol 8 tests/cases/compiler/immutable.ts:341:31
+!!! annotated symbol 9 tests/cases/compiler/immutable.ts:266:21
+!!! annotated symbol 10 tests/cases/compiler/immutable.ts:341:28
+!!! annotated symbol 11 tests/cases/compiler/immutable.ts:341:31
+!!! annotated symbol 12 tests/cases/compiler/immutable.ts:266:21
+!!! annotated symbol 13 tests/cases/compiler/immutable.ts:341:28
+!!! annotated symbol 14 tests/cases/compiler/immutable.ts:341:31
+!!! annotated symbol 15 tests/cases/compiler/immutable.ts:339:21
+!!! annotated symbol 16 tests/cases/compiler/immutable.ts:341:28
+!!! annotated symbol 17 tests/cases/compiler/immutable.ts:341:31
           toJS(): Object;
           toJSON(): { [key: string]: V };
           toSeq(): Seq.Keyed<K, V>;
@@ -403,11 +421,23 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
         export function Indexed<T>(collection: Iterable<T>): Collection.Indexed<T>;
         export interface Indexed<T> extends Collection<number, T> {
                          ~~~~~~~
-!!! error TS2430: Interface 'Indexed<T>' incorrectly extends interface 'Collection<number, T>'.
+!!! error TS2430: Interface '{|Indexed|0|}<{|T|1|}>' incorrectly extends interface '{|Collection|2|}<number, {|T|3|}>'.
 !!! error TS2430:   Types of property 'toSeq' are incompatible.
-!!! error TS2430:     Type '() => Indexed<T>' is not assignable to type '() => this'.
-!!! error TS2430:       Type 'Indexed<T>' is not assignable to type 'this'.
-!!! error TS2430:         'Indexed<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Indexed<T>'.
+!!! error TS2430:     Type '() => {|Indexed|4|}<{|T|5|}>' is not assignable to type '() => this'.
+!!! error TS2430:       Type '{|Indexed|6|}<{|T|7|}>' is not assignable to type 'this'.
+!!! error TS2430:         '{|Indexed|8|}<{|T|9|}>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint '{|Indexed|10|}<{|T|11|}>'.
+!!! annotated symbol 0 tests/cases/compiler/immutable.ts:358:21
+!!! annotated symbol 1 tests/cases/compiler/immutable.ts:359:30
+!!! annotated symbol 2 tests/cases/compiler/immutable.ts:404:19
+!!! annotated symbol 3 tests/cases/compiler/immutable.ts:359:30
+!!! annotated symbol 4 tests/cases/compiler/immutable.ts:286:21
+!!! annotated symbol 5 tests/cases/compiler/immutable.ts:359:30
+!!! annotated symbol 6 tests/cases/compiler/immutable.ts:286:21
+!!! annotated symbol 7 tests/cases/compiler/immutable.ts:359:30
+!!! annotated symbol 8 tests/cases/compiler/immutable.ts:286:21
+!!! annotated symbol 9 tests/cases/compiler/immutable.ts:359:30
+!!! annotated symbol 10 tests/cases/compiler/immutable.ts:358:21
+!!! annotated symbol 11 tests/cases/compiler/immutable.ts:359:30
           toJS(): Array<any>;
           toJSON(): Array<T>;
           // Reading values
@@ -441,11 +471,23 @@ tests/cases/compiler/immutable.ts(391,22): error TS2430: Interface 'Set<T>' inco
         export function Set<T>(collection: Iterable<T>): Collection.Set<T>;
         export interface Set<T> extends Collection<never, T> {
                          ~~~
-!!! error TS2430: Interface 'Set<T>' incorrectly extends interface 'Collection<never, T>'.
+!!! error TS2430: Interface '{|Set|0|}<{|T|1|}>' incorrectly extends interface '{|Collection|2|}<never, {|T|3|}>'.
 !!! error TS2430:   Types of property 'toSeq' are incompatible.
-!!! error TS2430:     Type '() => Set<T>' is not assignable to type '() => this'.
-!!! error TS2430:       Type 'Set<T>' is not assignable to type 'this'.
-!!! error TS2430:         'Set<T>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'Set<T>'.
+!!! error TS2430:     Type '() => {|Set|4|}<{|T|5|}>' is not assignable to type '() => this'.
+!!! error TS2430:       Type '{|Set|6|}<{|T|7|}>' is not assignable to type 'this'.
+!!! error TS2430:         '{|Set|8|}<{|T|9|}>' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint '{|Set|10|}<{|T|11|}>'.
+!!! annotated symbol 0 tests/cases/compiler/immutable.ts:390:21
+!!! annotated symbol 1 tests/cases/compiler/immutable.ts:391:26
+!!! annotated symbol 2 tests/cases/compiler/immutable.ts:404:19
+!!! annotated symbol 3 tests/cases/compiler/immutable.ts:391:26
+!!! annotated symbol 4 tests/cases/compiler/immutable.ts:302:21
+!!! annotated symbol 5 tests/cases/compiler/immutable.ts:391:26
+!!! annotated symbol 6 tests/cases/compiler/immutable.ts:302:21
+!!! annotated symbol 7 tests/cases/compiler/immutable.ts:391:26
+!!! annotated symbol 8 tests/cases/compiler/immutable.ts:302:21
+!!! annotated symbol 9 tests/cases/compiler/immutable.ts:391:26
+!!! annotated symbol 10 tests/cases/compiler/immutable.ts:390:21
+!!! annotated symbol 11 tests/cases/compiler/immutable.ts:391:26
           toJS(): Array<any>;
           toJSON(): Array<T>;
           toSeq(): Seq.Set<T>;

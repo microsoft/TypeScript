@@ -16,9 +16,13 @@ tests/cases/compiler/mismatchedGenericArguments1.ts(11,4): error TS2416: Propert
        foo(x: string): number {
        ~~~
 !!! error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
-!!! error TS2416:   Type '(x: string) => number' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2416:   Type '(x: string) => number' is not assignable to type '<{|T|0|}>(x: {|T|1|}) => {|T|2|}'.
 !!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2416:       Type 'T' is not assignable to type 'string'.
+!!! error TS2416:       Type '{|T|3|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/mismatchedGenericArguments1.ts:2:8
+!!! annotated symbol 1 tests/cases/compiler/mismatchedGenericArguments1.ts:2:8
+!!! annotated symbol 2 tests/cases/compiler/mismatchedGenericArguments1.ts:2:8
+!!! annotated symbol 3 tests/cases/compiler/mismatchedGenericArguments1.ts:2:8
          return null;
        }
     }
@@ -27,9 +31,14 @@ tests/cases/compiler/mismatchedGenericArguments1.ts(11,4): error TS2416: Propert
        foo<U>(x: string): number {
        ~~~
 !!! error TS2416: Property 'foo' in type 'C2<T>' is not assignable to the same property in base type 'IFoo<T>'.
-!!! error TS2416:   Type '<U>(x: string) => number' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2416:   Type '<{|U|0|}>(x: string) => number' is not assignable to type '<{|T|1|}>(x: {|T|2|}) => {|T|3|}'.
 !!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2416:       Type 'T' is not assignable to type 'string'.
+!!! error TS2416:       Type '{|T|4|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/mismatchedGenericArguments1.ts:11:8
+!!! annotated symbol 1 tests/cases/compiler/mismatchedGenericArguments1.ts:2:8
+!!! annotated symbol 2 tests/cases/compiler/mismatchedGenericArguments1.ts:2:8
+!!! annotated symbol 3 tests/cases/compiler/mismatchedGenericArguments1.ts:2:8
+!!! annotated symbol 4 tests/cases/compiler/mismatchedGenericArguments1.ts:2:8
          return null;
        }
     }

@@ -37,11 +37,31 @@ tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration1
 !!! error TS1055: Type 'PromiseLike' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
     async function fn6(): Thenable { } // error
                           ~~~~~~~~
-!!! error TS1055: Type 'typeof Thenable' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
-!!! error TS1055:   Type 'Thenable' is not assignable to type 'PromiseLike<T>'.
+!!! error TS1055: Type 'typeof {|Thenable|0|}' is not a valid async function return type in ES5/ES3 because it does not refer to a Promise-compatible constructor value.
+!!! error TS1055:   Type '{|Thenable|1|}' is not assignable to type '{|PromiseLike|2|}<{|T|3|}>'.
 !!! error TS1055:     Types of property 'then' are incompatible.
-!!! error TS1055:       Type '() => void' is not assignable to type '<TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => PromiseLike<TResult1 | TResult2>'.
-!!! error TS1055:         Type 'void' is not assignable to type 'PromiseLike<TResult1 | TResult2>'.
+!!! error TS1055:       Type '() => void' is not assignable to type '<{|TResult1|4|} = {|T|5|}, {|TResult2|6|} = never>(onfulfilled?: (value: {|T|7|}) => {|TResult1|8|} | {|PromiseLike|9|}<{|TResult1|10|}>, onrejected?: (reason: any) => {|TResult2|11|} | {|PromiseLike|12|}<{|TResult2|13|}>) => {|PromiseLike|14|}<{|TResult1|15|} | {|TResult2|16|}>'.
+!!! error TS1055:         Type 'void' is not assignable to type '{|PromiseLike|17|}<{|TResult1|18|} | {|TResult2|19|}>'.
+!!! annotated symbol 0 tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts:1:15
+!!! annotated symbol 1 tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration15_es5.ts:1:15
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1384:44
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:1384:44
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 7 /.ts/lib.es5.d.ts:1384:44
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 9 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 10 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 12 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 13 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 14 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 15 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 16 /.ts/lib.es5.d.ts:1393:24
+!!! annotated symbol 17 /.ts/lib.es5.d.ts:1386:11
+!!! annotated symbol 18 /.ts/lib.es5.d.ts:1393:10
+!!! annotated symbol 19 /.ts/lib.es5.d.ts:1393:24
     async function fn7() { return; } // valid: Promise<void>
     async function fn8() { return 1; } // valid: Promise<number>
     async function fn9() { return null; } // valid: Promise<any>

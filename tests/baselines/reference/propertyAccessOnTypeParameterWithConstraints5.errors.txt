@@ -51,7 +51,8 @@ tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOn
             var a = x['foo'](); // should be string
             return a + x.notHere();
             ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'U'.
+!!! error TS2322: Type 'string' is not assignable to type '{|U|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeParameterLists/propertyAccessOnTypeParameterWithConstraints5.ts:36:11
                          ~~~~~~~
 !!! error TS2339: Property 'notHere' does not exist on type 'U'.
         },

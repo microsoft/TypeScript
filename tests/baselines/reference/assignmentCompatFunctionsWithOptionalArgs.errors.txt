@@ -16,6 +16,9 @@ tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts(5,5): error TS
 !!! related TS6500 tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts:1:31: The expected type comes from property 'name' which is declared here on type '{ id: number; name?: string; }'
     foo({ name: "hello" });            // Error, id required but missing
         ~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ name: string; }' is not assignable to parameter of type '{ id: number; name?: string; }'.
+!!! error TS2345: Argument of type '{ {|name|0|}: string; }' is not assignable to parameter of type '{ {|id|1|}: number; {|name|2|}?: string; }'.
 !!! error TS2345:   Property 'id' is missing in type '{ name: string; }' but required in type '{ id: number; name?: string; }'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts:1:19: 'id' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts:5:7
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts:1:19
+!!! annotated symbol 2 tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts:1:31

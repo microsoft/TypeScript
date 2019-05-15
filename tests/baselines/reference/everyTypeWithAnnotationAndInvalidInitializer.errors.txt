@@ -67,7 +67,8 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! error TS2322: Type '9.9' is not assignable to type 'string'.
     var aDate: Date = 9.9;
         ~~~~~
-!!! error TS2322: Type '9.9' is not assignable to type 'Date'.
+!!! error TS2322: Type '9.9' is not assignable to type '{|Date|0|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
     
     var aVoid: void = 9.9;
         ~~~~~
@@ -90,9 +91,11 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! related TS6500 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:2:5: The expected type comes from property 'id' which is declared here on type 'I'
     var anOtherObjectLiteral: { id: string } = new C();
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'C' is not assignable to type '{ id: string; }'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type '{ {|id|1|}: string; }'.
 !!! error TS2322:   Types of property 'id' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:5:7
+!!! annotated symbol 1 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:44:29
     
     var aFunction: typeof F = F2;
         ~~~~~~~~~
@@ -111,14 +114,24 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     
     var aModule: typeof M = N;
         ~~~~~~~
-!!! error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
+!!! error TS2322: Type 'typeof {|N|0|}' is not assignable to type 'typeof {|M|1|}'.
 !!! error TS2322:   Types of property 'A' are incompatible.
-!!! error TS2322:     Type 'typeof N.A' is not assignable to type 'typeof M.A'.
+!!! error TS2322:     Type 'typeof {|N|2|}.{|A|3|}' is not assignable to type 'typeof {|M|4|}.{|A|5|}'.
 !!! error TS2322:       Property 'name' is missing in type 'N.A' but required in type 'M.A'.
 !!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:20:9: 'name' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:26:8
+!!! annotated symbol 1 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:18:8
+!!! annotated symbol 2 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:26:8
+!!! annotated symbol 3 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:27:18
+!!! annotated symbol 4 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:18:8
+!!! annotated symbol 5 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:19:18
     var aClassInModule: M.A = new N.A();
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'N.A' is not assignable to type 'M.A'.
+!!! error TS2322: Type '{|N|0|}.{|A|1|}' is not assignable to type '{|M|2|}.{|A|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:26:8
+!!! annotated symbol 1 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:27:18
+!!! annotated symbol 2 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:18:8
+!!! annotated symbol 3 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:19:18
     var aFunctionInModule: typeof M.F2 = F2;
         ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: number) => string'.

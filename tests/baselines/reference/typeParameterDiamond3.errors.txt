@@ -31,31 +31,97 @@ tests/cases/compiler/typeParameterDiamond3.ts(10,13): error TS2322: Type 'Bottom
     
                 top = middle;
                 ~~~
-!!! error TS2322: Type 'T | U' is not assignable to type 'Top'.
-!!! error TS2322:   'T | U' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'T' is not assignable to type 'Top'.
-!!! error TS2322:       'T' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|} | {|U|1|}' is not assignable to type '{|Top|2|}'.
+!!! error TS2322:   '{|T|3|} | {|U|4|}' is assignable to the constraint of type '{|Top|5|}', but '{|Top|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|7|}' is not assignable to type '{|Top|8|}'.
+!!! error TS2322:       '{|T|9|}' is assignable to the constraint of type '{|Top|10|}', but '{|Top|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 1 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 2 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 3 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 4 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 5 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 6 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 7 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 8 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 9 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 10 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 11 tests/cases/compiler/typeParameterDiamond3.ts:1:21
                 middle = bottom;
                 ~~~~~~
-!!! error TS2322: Type 'Bottom' is not assignable to type 'T | U'.
-!!! error TS2322:   Type 'Top | T | U' is not assignable to type 'T | U'.
-!!! error TS2322:     Type 'Top' is not assignable to type 'T | U'.
-!!! error TS2322:       Type 'Top' is not assignable to type 'U'.
-!!! error TS2322:         'Top' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:           Type 'Bottom' is not assignable to type 'U'.
-!!! error TS2322:             'Bottom' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:               Type 'Top | T | U' is not assignable to type 'U'.
-!!! error TS2322:                 'Top | T | U' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:                   Type 'Top' is not assignable to type 'U'.
-!!! error TS2322:                     'Top' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Bottom|0|}' is not assignable to type '{|T|1|} | {|U|2|}'.
+!!! error TS2322:   Type '{|Top|3|} | {|T|4|} | {|U|5|}' is not assignable to type '{|T|6|} | {|U|7|}'.
+!!! error TS2322:     Type '{|Top|8|}' is not assignable to type '{|T|9|} | {|U|10|}'.
+!!! error TS2322:       Type '{|Top|11|}' is not assignable to type '{|U|12|}'.
+!!! error TS2322:         '{|Top|13|}' is assignable to the constraint of type '{|U|14|}', but '{|U|15|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:           Type '{|Bottom|16|}' is not assignable to type '{|U|17|}'.
+!!! error TS2322:             '{|Bottom|18|}' is assignable to the constraint of type '{|U|19|}', but '{|U|20|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:               Type '{|Top|21|} | {|T|22|} | {|U|23|}' is not assignable to type '{|U|24|}'.
+!!! error TS2322:                 '{|Top|25|} | {|T|26|} | {|U|27|}' is assignable to the constraint of type '{|U|28|}', but '{|U|29|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:                   Type '{|Top|30|}' is not assignable to type '{|U|31|}'.
+!!! error TS2322:                     '{|Top|32|}' is assignable to the constraint of type '{|U|33|}', but '{|U|34|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterDiamond3.ts:3:32
+!!! annotated symbol 1 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 2 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 3 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 4 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 5 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 6 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 7 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 8 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 9 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 10 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 11 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 12 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 13 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 14 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 15 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 16 tests/cases/compiler/typeParameterDiamond3.ts:3:32
+!!! annotated symbol 17 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 18 tests/cases/compiler/typeParameterDiamond3.ts:3:32
+!!! annotated symbol 19 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 20 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 21 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 22 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 23 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 24 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 25 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 26 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 27 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 28 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 29 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 30 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 31 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 32 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 33 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 34 tests/cases/compiler/typeParameterDiamond3.ts:2:31
                 top = bottom;
                 ~~~
-!!! error TS2322: Type 'Bottom' is not assignable to type 'Top'.
-!!! error TS2322:   'Bottom' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'Top | T | U' is not assignable to type 'Top'.
-!!! error TS2322:       'Top | T | U' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:         Type 'T' is not assignable to type 'Top'.
-!!! error TS2322:           'T' is assignable to the constraint of type 'Top', but 'Top' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Bottom|0|}' is not assignable to type '{|Top|1|}'.
+!!! error TS2322:   '{|Bottom|2|}' is assignable to the constraint of type '{|Top|3|}', but '{|Top|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|Top|5|} | {|T|6|} | {|U|7|}' is not assignable to type '{|Top|8|}'.
+!!! error TS2322:       '{|Top|9|} | {|T|10|} | {|U|11|}' is assignable to the constraint of type '{|Top|12|}', but '{|Top|13|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:         Type '{|T|14|}' is not assignable to type '{|Top|15|}'.
+!!! error TS2322:           '{|T|16|}' is assignable to the constraint of type '{|Top|17|}', but '{|Top|18|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterDiamond3.ts:3:32
+!!! annotated symbol 1 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 2 tests/cases/compiler/typeParameterDiamond3.ts:3:32
+!!! annotated symbol 3 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 4 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 5 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 6 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 7 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 8 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 9 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 10 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 11 tests/cases/compiler/typeParameterDiamond3.ts:2:31
+!!! annotated symbol 12 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 13 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 14 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 15 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 16 tests/cases/compiler/typeParameterDiamond3.ts:2:28
+!!! annotated symbol 17 tests/cases/compiler/typeParameterDiamond3.ts:1:21
+!!! annotated symbol 18 tests/cases/compiler/typeParameterDiamond3.ts:1:21
             }
         }
     }

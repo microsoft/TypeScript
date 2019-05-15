@@ -23,8 +23,9 @@ tests/cases/compiler/parameterListAsTupleType.ts(16,23): error TS2344: Type 'typ
     
     type Cps = Parameters<typeof C>; // should not work
                           ~~~~~~~~
-!!! error TS2344: Type 'typeof C' does not satisfy the constraint '(...args: any) => any'.
+!!! error TS2344: Type 'typeof {|C|0|}' does not satisfy the constraint '(...args: any) => any'.
 !!! error TS2344:   Type 'typeof C' provides no match for the signature '(...args: any): any'.
+!!! annotated symbol 0 tests/cases/compiler/parameterListAsTupleType.ts:11:7
     type Ccps = ConstructorParameters<typeof C>; // should be [number, string]
     
     class D {

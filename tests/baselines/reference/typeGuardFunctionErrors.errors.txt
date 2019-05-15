@@ -147,7 +147,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     function hasNonMathcingGenericType<T>(a: string): a is T[] {
                                                            ~~~
 !!! error TS2677: A type predicate's type must be assignable to its parameter's type.
-!!! error TS2677:   Type 'T[]' is not assignable to type 'string'.
+!!! error TS2677:   Type '{|T|0|}[]' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:45:36
         return true;
     }
     
@@ -187,17 +188,20 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is B);
     acceptingDifferentSignatureTypeGuardFunction(isC);
                                                  ~~~
-!!! error TS2345: Argument of type '(p1: any) => p1 is C' is not assignable to parameter of type '(p1: any) => p1 is B'.
+!!! error TS2345: Argument of type '(p1: any) => p1 is {|C|0|}' is not assignable to parameter of type '(p1: any) => p1 is {|B|1|}'.
 !!! error TS2345:   Type predicate 'p1 is C' is not assignable to 'p1 is B'.
 !!! error TS2345:     Property 'propB' is missing in type 'C' but required in type 'B'.
 !!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:6:5: 'propB' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:9:7
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:5:7
     
     // Boolean not assignable to type guard
     var assign1: (p1, p2) => p1 is A;
     assign1 = function(p1, p2): boolean {
     ~~~~~~~
-!!! error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+!!! error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is {|A|0|}'.
 !!! error TS2322:   Signature '(p1: any, p2: any): boolean' must be a type predicate.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:1:7
         return true;
     };
     
@@ -205,9 +209,11 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     var assign2: (p1, p2) => p1 is A;
     assign2 = function(p1, p2): p2 is A {
     ~~~~~~~
-!!! error TS2322: Type '(p1: any, p2: any) => p2 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+!!! error TS2322: Type '(p1: any, p2: any) => p2 is {|A|0|}' is not assignable to type '(p1: any, p2: any) => p1 is {|A|1|}'.
 !!! error TS2322:   Type predicate 'p2 is A' is not assignable to 'p1 is A'.
 !!! error TS2322:     Parameter 'p2' is not in the same position as parameter 'p1'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:1:7
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:1:7
         return true;
     };
     
@@ -215,7 +221,9 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     var assign3: (p1, p2) => p1 is A;
     assign3 = function(p1, p2, p3): p1 is A {
     ~~~~~~~
-!!! error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
+!!! error TS2322: Type '(p1: any, p2: any, p3: any) => p1 is {|A|0|}' is not assignable to type '(p1: any, p2: any) => p1 is {|A|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:1:7
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:1:7
         return true;
     };
     
@@ -255,7 +263,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
 !!! error TS1228: A type predicate is only allowed in return type position for functions and methods.
             return true;
             ~~~~~~~~~~~~
-!!! error TS2322: Type 'true' is not assignable to type 'D'.
+!!! error TS2322: Type 'true' is not assignable to type '{|D|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:102:7
             ~~~~~~~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }
@@ -331,8 +340,11 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     // expected an error, since Keys doesn't have a 'd'
     declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
                                                                        ~~~~~
-!!! error TS2344: Type 'T | "d"' does not satisfy the constraint 'Keys'.
-!!! error TS2344:   Type '"d"' is not assignable to type 'Keys'.
+!!! error TS2344: Type '{|T|0|} | "d"' does not satisfy the constraint '{|Keys|1|}'.
+!!! error TS2344:   Type '"d"' is not assignable to type '{|Keys|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:152:25
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:148:6
+!!! annotated symbol 2 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:148:6
     
     type Foo = { 'a': string; }
     type Bar = { 'a': number; }
@@ -341,27 +353,37 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         foo: T;
         isFoo(): this is NeedsFoo<Bar>; // should error
                                   ~~~
-!!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+!!! error TS2344: Type '{|Bar|0|}' does not satisfy the constraint '{|Foo|1|}'.
 !!! error TS2344:   Types of property ''a'' are incompatible.
 !!! error TS2344:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:155:6
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:154:6
     };
     
     declare var anError: NeedsFoo<Bar>; // error, as expected
                                   ~~~
-!!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+!!! error TS2344: Type '{|Bar|0|}' does not satisfy the constraint '{|Foo|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:155:6
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:154:6
     declare var alsoAnError: NeedsFoo<number>; // also error, as expected
                                       ~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+!!! error TS2344: Type 'number' does not satisfy the constraint '{|Foo|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:154:6
     declare function newError1(x: any): x is NeedsFoo<Bar>; // should error
                                                       ~~~
-!!! error TS2344: Type 'Bar' does not satisfy the constraint 'Foo'.
+!!! error TS2344: Type '{|Bar|0|}' does not satisfy the constraint '{|Foo|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:155:6
+!!! annotated symbol 1 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:154:6
     declare function newError2(x: any): x is NeedsFoo<number>; // should error
                                                       ~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+!!! error TS2344: Type 'number' does not satisfy the constraint '{|Foo|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:154:6
     declare function newError3(x: number): x is NeedsFoo<number>; // should error
                                                 ~~~~~~~~~~~~~~~~
 !!! error TS2677: A type predicate's type must be assignable to its parameter's type.
-!!! error TS2677:   Type 'NeedsFoo<number>' is not assignable to type 'number'.
+!!! error TS2677:   Type '{|NeedsFoo|0|}<number>' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:157:11
                                                          ~~~~~~
-!!! error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
+!!! error TS2344: Type 'number' does not satisfy the constraint '{|Foo|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:154:6
     

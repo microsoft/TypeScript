@@ -107,7 +107,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
                 this.a = (x?: T) => null; // ok, same T of required params
                 this.a = (x: T) => null; // error, too many required params
                 ~~~~~~
-!!! error TS2322: Type '(x: T) => any' is not assignable to type '() => T'.
+!!! error TS2322: Type '(x: {|T|0|}) => any' is not assignable to type '() => {|T|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:4:16
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:4:16
     
                 this.a2 = () => null; // ok, same T of required params
                 this.a2 = (x?: T) => null; // ok, same T of required params
@@ -118,7 +120,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
                 this.a3 = (x: T) => null; // ok, same T of required params
                 this.a3 = (x: T, y: T) => null;  // error, too many required params
                 ~~~~~~~
-!!! error TS2322: Type '(x: T, y: T) => any' is not assignable to type '(x: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}, y: {|T|1|}) => any' is not assignable to type '(x: {|T|2|}) => {|T|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:4:16
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:4:16
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:4:16
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:4:16
     
                 this.a4 = () => null; // ok, fewer required params
                 this.a4 = (x?: T, y?: T) => null; // ok, fewer required params
@@ -160,145 +166,395 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             // all errors
             b.a = t.a;
             ~~~
-!!! error TS2322: Type '() => T' is not assignable to type '<T>() => T'.
-!!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:     'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '() => {|T|0|}' is not assignable to type '<{|T|1|}>() => {|T|2|}'.
+!!! error TS2322:   Type '{|T|3|}' is not assignable to type '{|T|4|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:     '{|T|5|}' is assignable to the constraint of type '{|T|6|}', but '{|T|7|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
             b.a = t.a2;
             ~~~
-!!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>() => T'.
-!!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:     'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '(x?: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>() => {|T|3|}'.
+!!! error TS2322:   Type '{|T|4|}' is not assignable to type '{|T|5|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:     '{|T|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
             b.a = t.a3;
             ~~~
-!!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>() => T'.
+!!! error TS2322: Type '(x: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>() => {|T|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
             b.a = t.a4;
             ~~~
-!!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>() => T'.
+!!! error TS2322: Type '(x: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>() => {|T|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
             b.a = t.a5;
             ~~~
-!!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>() => T'.
-!!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:     'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '(x?: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>() => {|T|4|}'.
+!!! error TS2322:   Type '{|T|5|}' is not assignable to type '{|T|6|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:     '{|T|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:42:13
     
             b.a2 = t.a;
             ~~~~
-!!! error TS2322: Type '() => T' is not assignable to type '<T>(x?: T) => T'.
-!!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:     'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '() => {|T|0|}' is not assignable to type '<{|T|1|}>(x?: {|T|2|}) => {|T|3|}'.
+!!! error TS2322:   Type '{|T|4|}' is not assignable to type '{|T|5|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:     '{|T|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
             b.a2 = t.a2;
             ~~~~
-!!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>(x?: T) => T'.
+!!! error TS2322: Type '(x?: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>(x?: {|T|3|}) => {|T|4|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|5|}' is not assignable to type '{|T|6|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a2 = t.a3;
             ~~~~
-!!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>(x?: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>(x?: {|T|3|}) => {|T|4|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|5|}' is not assignable to type '{|T|6|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a2 = t.a4;
             ~~~~
-!!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>(x?: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>(x?: {|T|4|}) => {|T|5|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a2 = t.a5;
             ~~~~
-!!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>(x?: T) => T'.
+!!! error TS2322: Type '(x?: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>(x?: {|T|4|}) => {|T|5|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:43:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
     
             b.a3 = t.a;
             ~~~~
-!!! error TS2322: Type '() => T' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:     'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '() => {|T|0|}' is not assignable to type '<{|T|1|}>(x: {|T|2|}) => {|T|3|}'.
+!!! error TS2322:   Type '{|T|4|}' is not assignable to type '{|T|5|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:     '{|T|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
             b.a3 = t.a2;
             ~~~~
-!!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2322: Type '(x?: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>(x: {|T|3|}) => {|T|4|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|5|}' is not assignable to type '{|T|6|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a3 = t.a3;
             ~~~~
-!!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>(x: {|T|3|}) => {|T|4|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|5|}' is not assignable to type '{|T|6|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a3 = t.a4;
             ~~~~
-!!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>(x: {|T|4|}) => {|T|5|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a3 = t.a5;
             ~~~~
-!!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2322: Type '(x?: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>(x: {|T|4|}) => {|T|5|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:44:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
     
             b.a4 = t.a;
             ~~~~
-!!! error TS2322: Type '() => T' is not assignable to type '<T>(x: T, y?: T) => T'.
-!!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:     'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '() => {|T|0|}' is not assignable to type '<{|T|1|}>(x: {|T|2|}, y?: {|T|3|}) => {|T|4|}'.
+!!! error TS2322:   Type '{|T|5|}' is not assignable to type '{|T|6|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:     '{|T|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
             b.a4 = t.a2;
             ~~~~
-!!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>(x: T, y?: T) => T'.
+!!! error TS2322: Type '(x?: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>(x: {|T|3|}, y?: {|T|4|}) => {|T|5|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a4 = t.a3;
             ~~~~
-!!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>(x: T, y?: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>(x: {|T|3|}, y?: {|T|4|}) => {|T|5|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a4 = t.a4;
             ~~~~
-!!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>(x: T, y?: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>(x: {|T|4|}, y?: {|T|5|}) => {|T|6|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|7|}' is not assignable to type '{|T|8|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a4 = t.a5;
             ~~~~
-!!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>(x: T, y?: T) => T'.
+!!! error TS2322: Type '(x?: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>(x: {|T|4|}, y?: {|T|5|}) => {|T|6|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|7|}' is not assignable to type '{|T|8|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:45:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
     
             b.a5 = t.a;
             ~~~~
-!!! error TS2322: Type '() => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
-!!! error TS2322:   Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:     'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '() => {|T|0|}' is not assignable to type '<{|T|1|}>(x?: {|T|2|}, y?: {|T|3|}) => {|T|4|}'.
+!!! error TS2322:   Type '{|T|5|}' is not assignable to type '{|T|6|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:     '{|T|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
             b.a5 = t.a2;
             ~~~~
-!!! error TS2322: Type '(x?: T) => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
+!!! error TS2322: Type '(x?: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>(x?: {|T|3|}, y?: {|T|4|}) => {|T|5|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a5 = t.a3;
             ~~~~
-!!! error TS2322: Type '(x: T) => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}) => {|T|1|}' is not assignable to type '<{|T|2|}>(x?: {|T|3|}, y?: {|T|4|}) => {|T|5|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|6|}' is not assignable to type '{|T|7|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a5 = t.a4;
             ~~~~
-!!! error TS2322: Type '(x: T, y?: T) => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
+!!! error TS2322: Type '(x: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>(x?: {|T|4|}, y?: {|T|5|}) => {|T|6|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|7|}' is not assignable to type '{|T|8|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
             b.a5 = t.a5;
             ~~~~
-!!! error TS2322: Type '(x?: T, y?: T) => T' is not assignable to type '<T>(x?: T, y?: T) => T'.
+!!! error TS2322: Type '(x?: {|T|0|}, y?: {|T|1|}) => {|T|2|}' is not assignable to type '<{|T|3|}>(x?: {|T|4|}, y?: {|T|5|}) => {|T|6|}'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2322:       'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|T|7|}' is not assignable to type '{|T|8|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2322:       '{|T|9|}' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:46:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:58:18
         }
     }
     
@@ -316,7 +572,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
                 this.a = <T>(x?: T) => null; // ok, same T of required params
                 this.a = <T>(x: T) => null; // error, too many required params
                 ~~~~~~
-!!! error TS2322: Type '<T>(x: T) => any' is not assignable to type '<T>() => T'.
+!!! error TS2322: Type '<{|T|0|}>(x: {|T|1|}) => any' is not assignable to type '<{|T|2|}>() => {|T|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:107:23
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:107:23
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:98:13
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:98:13
     
                 this.a2 = <T>() => null; // ok, same T of required params
                 this.a2 = <T>(x?: T) => null; // ok, same T of required params
@@ -327,7 +587,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
                 this.a3 = <T>(x: T) => null; // ok, same T of required params
                 this.a3 = <T>(x: T, y: T) => null;  // error, too many required params
                 ~~~~~~~
-!!! error TS2322: Type '<T>(x: T, y: T) => any' is not assignable to type '<T>(x: T) => T'.
+!!! error TS2322: Type '<{|T|0|}>(x: {|T|1|}, y: {|T|2|}) => any' is not assignable to type '<{|T|3|}>(x: {|T|4|}) => {|T|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:116:24
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:116:24
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:116:24
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:100:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:100:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts:100:14
     
                 this.a4 = <T>() => null; // ok, fewer required params
                 this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params

@@ -92,8 +92,10 @@ tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or st
     
     class L extends G {
           ~
-!!! error TS2415: Class 'L' incorrectly extends base class 'G'.
+!!! error TS2415: Class '{|L|0|}' incorrectly extends base class '{|G|1|}'.
 !!! error TS2415:   Property 'p1' is private in type 'L' but not in type 'G'.
+!!! annotated symbol 0 tests/cases/compiler/classUpdateTests.ts:63:7
+!!! annotated symbol 1 tests/cases/compiler/classUpdateTests.ts:37:7
     	constructor(private p1:number) {
     		super(); // NO ERROR
     	}
@@ -101,8 +103,10 @@ tests/cases/compiler/classUpdateTests.ts(113,1): error TS1128: Declaration or st
     
     class M extends G {
           ~
-!!! error TS2415: Class 'M' incorrectly extends base class 'G'.
+!!! error TS2415: Class '{|M|0|}' incorrectly extends base class '{|G|1|}'.
 !!! error TS2415:   Property 'p1' is private in type 'M' but not in type 'G'.
+!!! annotated symbol 0 tests/cases/compiler/classUpdateTests.ts:69:7
+!!! annotated symbol 1 tests/cases/compiler/classUpdateTests.ts:37:7
     	constructor(private p1:number) { // ERROR
     	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     		var i = 0;

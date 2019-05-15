@@ -35,6 +35,16 @@ tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextua
 !!! error TS2345:     Type 'number' is not assignable to type '3'.
     foo(o);                              // Error because x has an array type namely (string|number)[]
         ~
-!!! error TS2345: Argument of type '{ x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }' is not assignable to parameter of type '{ x: [any, any]; y: { c: any; d: any; e: any; }; }'.
+!!! error TS2345: Argument of type '{ {|x|0|}: (string | number)[]; {|y|1|}: { {|c|2|}: boolean; {|d|3|}: string; {|e|4|}: number; }; }' is not assignable to parameter of type '{ {|x|5|}: [any, any]; {|y|6|}: { {|c|7|}: any; {|d|8|}: any; {|e|9|}: any; }; }'.
 !!! error TS2345:   Types of property 'x' are incompatible.
 !!! error TS2345:     Type '(string | number)[]' is missing the following properties from type '[any, any]': 0, 1
+!!! annotated symbol 0 tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts:6:11
+!!! annotated symbol 1 tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts:6:29
+!!! annotated symbol 2 tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts:6:34
+!!! annotated symbol 3 tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts:6:43
+!!! annotated symbol 4 tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts:6:55
+!!! annotated dropped!: 5
+!!! annotated dropped!: 6
+!!! annotated dropped!: 7
+!!! annotated dropped!: 8
+!!! annotated dropped!: 9

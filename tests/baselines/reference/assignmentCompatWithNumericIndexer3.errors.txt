@@ -26,10 +26,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
     a = b; // error
     ~
-!!! error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
+!!! error TS2322: Type '{ [x: number]: {|Base|0|}; }' is not assignable to type '{|A|1|}'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:4:34: 'bar' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:3:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:7:7
     b = a; // ok
     
     class B2 extends A {
@@ -40,10 +42,12 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     a = b2; // ok
     b2 = a; // error
     ~~
-!!! error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
+!!! error TS2322: Type '{|A|0|}' is not assignable to type '{ [x: number]: {|Derived2|1|}; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:5:38: 'baz' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:7:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:5:11
     
     module Generics {
         class A<T extends Derived> {
@@ -55,10 +59,19 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             var b: { [x: number]: Derived; };
             a = b; // error
             ~
-!!! error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
+!!! error TS2322: Type '{ [x: number]: {|Derived|0|}; }' is not assignable to type '{|A|1|}<{|T|2|}>'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'Derived' is not assignable to type 'T'.
-!!! error TS2322:       'Derived' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Derived'.
+!!! error TS2322:     Type '{|Derived|3|}' is not assignable to type '{|T|4|}'.
+!!! error TS2322:       '{|Derived|5|}' is assignable to the constraint of type '{|T|6|}', but '{|T|7|}' could be instantiated with a different subtype of constraint '{|Derived|8|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:4:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:26:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:30:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:4:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:30:18
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:4:11
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:30:18
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:30:18
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:4:11
             b = a; // ok
     
             var b2: { [x: number]: T; };

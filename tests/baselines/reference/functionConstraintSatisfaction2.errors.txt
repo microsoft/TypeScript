@@ -31,7 +31,8 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
     
     foo(1);
         ~
-!!! error TS2345: Argument of type '1' is not assignable to parameter of type 'Function'.
+!!! error TS2345: Argument of type '1' is not assignable to parameter of type '{|Function|0|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:272:11
     foo(() => { }, 1);
                    ~
 !!! error TS2554: Expected 1 arguments, but got 2.
@@ -55,8 +56,9 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
     
     var r = foo2(new Function());
                  ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'Function' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type '{|Function|0|}' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type 'Function' provides no match for the signature '(x: string): string'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:272:11
     var r2 = foo2((x: string[]) => x);
                   ~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: string[]) => string[]' is not assignable to parameter of type '(x: string) => string'.
@@ -64,8 +66,9 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
 !!! error TS2345:     Type 'string' is not assignable to type 'string[]'.
     var r6 = foo2(C);
                   ~
-!!! error TS2345: Argument of type 'typeof C' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'typeof {|C|0|}' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type 'typeof C' provides no match for the signature '(x: string): string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:11:7
     var r7 = foo2(b);
                   ~
 !!! error TS2345: Argument of type 'new (x: string) => string' is not assignable to parameter of type '(x: string) => string'.
@@ -73,32 +76,45 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstrain
     var r8 = foo2(<U>(x: U) => x); // no error expected
     var r11 = foo2(<U, V>(x: U, y: V) => x);
                    ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '<U, V>(x: U, y: V) => U' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type '<{|U|0|}, {|V|1|}>(x: {|U|2|}, y: {|V|3|}) => {|U|4|}' is not assignable to parameter of type '(x: string) => string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:28:17
+!!! annotated symbol 1 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:28:20
+!!! annotated symbol 2 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:28:17
+!!! annotated symbol 3 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:28:20
+!!! annotated symbol 4 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:28:17
     var r13 = foo2(C2);
                    ~~
-!!! error TS2345: Argument of type 'typeof C2' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'typeof {|C2|0|}' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type 'typeof C2' provides no match for the signature '(x: string): string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:17:7
     var r14 = foo2(b2);
                    ~~
-!!! error TS2345: Argument of type 'new <T>(x: T) => T' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type 'new <{|T|0|}>(x: {|T|1|}) => {|T|2|}' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type 'new <T>(x: T) => T' provides no match for the signature '(x: string): string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:21:16
+!!! annotated symbol 1 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:21:16
+!!! annotated symbol 2 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:21:16
     
     interface F2 extends Function { foo: string; }
     var f2: F2;
     var r16 = foo2(f2);
                    ~~
-!!! error TS2345: Argument of type 'F2' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type '{|F2|0|}' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type 'F2' provides no match for the signature '(x: string): string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:32:11
     
     function fff<T extends { (): void }, U extends T>(x: T, y: U) {
         foo2(x);
              ~
-!!! error TS2345: Argument of type 'T' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345: Argument of type '{|T|0|}' is not assignable to parameter of type '(x: string) => string'.
 !!! error TS2345:   Type '() => void' is not assignable to type '(x: string) => string'.
 !!! error TS2345:     Type 'void' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:36:14
         foo2(y);
              ~
-!!! error TS2345: Argument of type 'U' is not assignable to parameter of type '(x: string) => string'.
-!!! error TS2345:   Type 'T' is not assignable to type '(x: string) => string'.
+!!! error TS2345: Argument of type '{|U|0|}' is not assignable to parameter of type '(x: string) => string'.
+!!! error TS2345:   Type '{|T|1|}' is not assignable to type '(x: string) => string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:36:38
+!!! annotated symbol 1 tests/cases/conformance/types/typeParameters/typeArgumentLists/functionConstraintSatisfaction2.ts:36:14
     }
     

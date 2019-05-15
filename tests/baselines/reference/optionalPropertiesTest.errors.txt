@@ -56,5 +56,7 @@ tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is
     var test10_2: i2;
     test10_1 = test10_2;
     ~~~~~~~~
-!!! error TS2322: Type 'i2' is not assignable to type 'i1'.
+!!! error TS2322: Type '{|i2|0|}' is not assignable to type '{|i1|1|}'.
 !!! error TS2322:   Property 'M' is optional in type 'i2' but required in type 'i1'.
+!!! annotated symbol 0 tests/cases/compiler/optionalPropertiesTest.ts:21:11
+!!! annotated symbol 1 tests/cases/compiler/optionalPropertiesTest.ts:20:11

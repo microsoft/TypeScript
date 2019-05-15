@@ -14,8 +14,14 @@ tests/cases/compiler/generics4.ts(7,1): error TS2322: Type 'C<Y>' is not assigna
     
     a = b; // Not ok - return types of "f" are different
     ~
-!!! error TS2322: Type 'C<Y>' is not assignable to type 'C<X>'.
-!!! error TS2322:   Type 'Y' is not assignable to type 'X'.
+!!! error TS2322: Type '{|C|0|}<{|Y|1|}>' is not assignable to type '{|C|2|}<{|X|3|}>'.
+!!! error TS2322:   Type '{|Y|4|}' is not assignable to type '{|X|5|}'.
 !!! error TS2322:     Types of property 'f' are incompatible.
 !!! error TS2322:       Type '() => boolean' is not assignable to type '() => string'.
 !!! error TS2322:         Type 'boolean' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/generics4.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/generics4.ts:3:11
+!!! annotated symbol 2 tests/cases/compiler/generics4.ts:1:7
+!!! annotated symbol 3 tests/cases/compiler/generics4.ts:2:11
+!!! annotated symbol 4 tests/cases/compiler/generics4.ts:3:11
+!!! annotated symbol 5 tests/cases/compiler/generics4.ts:2:11

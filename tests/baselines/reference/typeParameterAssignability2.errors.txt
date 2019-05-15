@@ -67,76 +67,160 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         t = u; // error
         u = t; // ok
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:3:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:3:17
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:3:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:3:17
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:3:17
     }
     
     function foo2<T extends U, U>(t: T, u: U) {
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:8:28
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:8:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:8:28
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:8:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:8:15
         u = t; // ok
     }
     
     function foo3<T extends U, U extends V, V>(t: T, u: U, v: V) {
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'V' is not assignable to type 'T'.
-!!! error TS2322:       'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|V|5|}' is not assignable to type '{|T|6|}'.
+!!! error TS2322:       '{|V|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:28
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:28
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
         u = t;
     
         t = v; // error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'T'.
-!!! error TS2322:   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|V|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:15
         v = t; // ok
     
         u = v; // error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'U'.
-!!! error TS2322:   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|V|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:28
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:41
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:28
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:13:28
         v = u; // ok
     }
     
     function foo4<T extends U, U extends V, V extends Date>(t: T, u: U, v: V) {
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2322:     Type 'V' is not assignable to type 'T'.
-!!! error TS2322:       'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2322:         Type 'Date' is not assignable to type 'T'.
-!!! error TS2322:           'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! error TS2322:     Type '{|V|6|}' is not assignable to type '{|T|7|}'.
+!!! error TS2322:       '{|V|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|Date|11|}'.
+!!! error TS2322:         Type '{|Date|12|}' is not assignable to type '{|T|13|}'.
+!!! error TS2322:           '{|Date|14|}' is assignable to the constraint of type '{|T|15|}', but '{|T|16|}' could be instantiated with a different subtype of constraint '{|Date|17|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 12 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 14 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 17 /.ts/lib.es5.d.ts:729:11
         t = v; // error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'T'.
-!!! error TS2322:   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|V|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
         t = new Date(); // error
         ~
-!!! error TS2322: Type 'Date' is not assignable to type 'T'.
-!!! error TS2322:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|Date|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:15
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     
         u = t;
         u = v; // error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'U'.
-!!! error TS2322:   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'U'.
-!!! error TS2322:       'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|V|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! error TS2322:     Type '{|Date|6|}' is not assignable to type '{|U|7|}'.
+!!! error TS2322:       '{|Date|8|}' is assignable to the constraint of type '{|U|9|}', but '{|U|10|}' could be instantiated with a different subtype of constraint '{|Date|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:729:11
         u = new Date(); // error
         ~
-!!! error TS2322: Type 'Date' is not assignable to type 'U'.
-!!! error TS2322:   'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|Date|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:28
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     
         v = t;
         v = u;
         v = new Date(); // ok
         ~
-!!! error TS2322: Type 'Date' is not assignable to type 'V'.
-!!! error TS2322:   'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2322:   '{|Date|2|}' is assignable to the constraint of type '{|V|3|}', but '{|V|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:24:41
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     
         var d: Date;
         d = t; // ok
@@ -148,39 +232,93 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
     function foo5<V extends Date, U extends V, T extends U>(t: T, u: U, v: V) {
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2322:     Type 'V' is not assignable to type 'T'.
-!!! error TS2322:       'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2322:         Type 'Date' is not assignable to type 'T'.
-!!! error TS2322:           'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! error TS2322:     Type '{|V|6|}' is not assignable to type '{|T|7|}'.
+!!! error TS2322:       '{|V|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|Date|11|}'.
+!!! error TS2322:         Type '{|Date|12|}' is not assignable to type '{|T|13|}'.
+!!! error TS2322:           '{|Date|14|}' is assignable to the constraint of type '{|T|15|}', but '{|T|16|}' could be instantiated with a different subtype of constraint '{|Date|17|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 12 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 14 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 17 /.ts/lib.es5.d.ts:729:11
         t = v; // error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'T'.
-!!! error TS2322:   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|V|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
         t = new Date(); // error
         ~
-!!! error TS2322: Type 'Date' is not assignable to type 'T'.
-!!! error TS2322:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|Date|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:44
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     
         u = t;
         u = v; // error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'U'.
-!!! error TS2322:   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2322:     Type 'Date' is not assignable to type 'U'.
-!!! error TS2322:       'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|V|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! error TS2322:     Type '{|Date|6|}' is not assignable to type '{|U|7|}'.
+!!! error TS2322:       '{|Date|8|}' is assignable to the constraint of type '{|U|9|}', but '{|U|10|}' could be instantiated with a different subtype of constraint '{|Date|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:729:11
         u = new Date(); // error
         ~
-!!! error TS2322: Type 'Date' is not assignable to type 'U'.
-!!! error TS2322:   'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|Date|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:31
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     
         v = t;
         v = u;
         v = new Date(); // ok
         ~
-!!! error TS2322: Type 'Date' is not assignable to type 'V'.
-!!! error TS2322:   'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2322:   '{|Date|2|}' is assignable to the constraint of type '{|V|3|}', but '{|V|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:44:15
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     
         var d: Date;
         d = t; // ok
@@ -191,27 +329,57 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
     function foo6<T extends U, U, V>(t: T, u: U, v: V) {
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:15
         t = v; // error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'T'.
-!!! error TS2322:   'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|V|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:15
     
         u = t; // ok
         u = v; // error
         ~
-!!! error TS2322: Type 'V' is not assignable to type 'U'.
-!!! error TS2322:   'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|V|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
     
         v = t; // error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'V'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2322:     Type 'U' is not assignable to type 'V'.
-!!! error TS2322:       'U' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|V|3|}', but '{|V|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:     Type '{|U|5|}' is not assignable to type '{|V|6|}'.
+!!! error TS2322:       '{|U|7|}' is assignable to the constraint of type '{|V|8|}', but '{|V|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:15
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
         v = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'V'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|V|3|}', but '{|V|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:28
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability2.ts:63:31
     }

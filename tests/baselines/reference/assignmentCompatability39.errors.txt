@@ -13,5 +13,7 @@ tests/cases/compiler/assignmentCompatability39.ts(9,1): error TS2322: Type 'inte
     }
     __test2__.__val__x2 = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type 'classWithTwoPublic<number, string>'.
+!!! error TS2322: Type '{|interfaceWithPublicAndOptional|0|}<number, string>' is not assignable to type '{|classWithTwoPublic|1|}<number, string>'.
 !!! error TS2322:   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type 'classWithTwoPublic<number, string>'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability39.ts:2:22
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatability39.ts:6:26

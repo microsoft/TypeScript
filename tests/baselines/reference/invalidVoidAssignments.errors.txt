@@ -30,19 +30,23 @@ tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(29,1): e
     class C { foo: string; }
     var e: C = x;
         ~
-!!! error TS2322: Type 'void' is not assignable to type 'C'.
+!!! error TS2322: Type 'void' is not assignable to type '{|C|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts:8:7
     
     interface I { bar: string; }
     var f: I = x;
         ~
-!!! error TS2322: Type 'void' is not assignable to type 'I'.
+!!! error TS2322: Type 'void' is not assignable to type '{|I|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts:11:11
     
     var g: { baz: string } = 1;
         ~
-!!! error TS2322: Type '1' is not assignable to type '{ baz: string; }'.
+!!! error TS2322: Type '1' is not assignable to type '{ {|baz|0|}: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts:14:10
     var g2: { 0: number } = 1;
         ~~
-!!! error TS2322: Type '1' is not assignable to type '{ 0: number; }'.
+!!! error TS2322: Type '1' is not assignable to type '{ {|0|0|}: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts:15:11
     
     module M { export var x = 1; }
     M = x;
@@ -52,7 +56,8 @@ tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(29,1): e
     function i<T>(a: T) {
         a = x;
         ~
-!!! error TS2322: Type 'void' is not assignable to type 'T'.
+!!! error TS2322: Type 'void' is not assignable to type '{|T|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts:20:12
     }
     i = x;
     ~
@@ -61,11 +66,14 @@ tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts(29,1): e
     enum E { A }
     x = E;
     ~
-!!! error TS2322: Type 'typeof E' is not assignable to type 'void'.
+!!! error TS2322: Type 'typeof {|E|0|}' is not assignable to type 'void'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts:25:6
     x = E.A;
     ~
-!!! error TS2322: Type 'E' is not assignable to type 'void'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type 'void'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts:25:6
     
     x = { f() { } }
     ~
-!!! error TS2322: Type '{ f(): void; }' is not assignable to type 'void'.
+!!! error TS2322: Type '{ {|f|0|}(): void; }' is not assignable to type 'void'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/void/invalidVoidAssignments.ts:29:7

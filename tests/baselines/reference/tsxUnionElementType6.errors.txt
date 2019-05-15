@@ -25,8 +25,10 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2741: Property 'x' is missi
     // Error
     let a = <EmptySFCComp x />;
              ~~~~~~~~~~~~
-!!! error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes'.
+!!! error TS2322: Type '{ {|x|0|}: true; }' is not assignable to type '{|IntrinsicAttributes|1|}'.
 !!! error TS2322:   Property 'x' does not exist on type 'IntrinsicAttributes'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:18:23
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
     let b = <SFC2AndEmptyComp x="hi" />;
                               ~
 !!! error TS2322: Type 'string' is not assignable to type 'boolean'.

@@ -30,8 +30,9 @@ tests/cases/compiler/underscoreTest1_underscoreTests.ts(26,7): error TS2345: Arg
     
     _.all([true, 1, null, 'yes'], _.identity);
           ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type 'Dictionary<unknown>'.
+!!! error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '{|Dictionary|0|}<unknown>'.
 !!! error TS2345:   Index signature is missing in type '(string | number | boolean)[]'.
+!!! annotated symbol 0 tests/cases/compiler/underscoreTest1_underscore.ts:1:11
     
     _.any([null, 0, 'yes', false]);
     

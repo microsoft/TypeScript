@@ -30,8 +30,12 @@ tests/cases/conformance/types/mapped/mappedTypeErrors2.ts(17,49): error TS2536: 
                                          ~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2536: Type 'S' cannot be used to index type '{ [key in AB[S]]: true; }'.
                                                   ~~~~~
-!!! error TS2322: Type 'AB[S]' is not assignable to type 'string | number | symbol'.
-!!! error TS2322:   Type 'AB[S]' is not assignable to type 'symbol'.
+!!! error TS2322: Type '{|AB|0|}[{|S|1|}]' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type '{|AB|2|}[{|S|3|}]' is not assignable to type 'symbol'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors2.ts:3:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypeErrors2.ts:15:9
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypeErrors2.ts:3:6
+!!! annotated symbol 3 tests/cases/conformance/types/mapped/mappedTypeErrors2.ts:15:9
                                                   ~~~~~
 !!! error TS2536: Type 'S' cannot be used to index type 'AB'.
     

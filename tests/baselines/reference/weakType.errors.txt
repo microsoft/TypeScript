@@ -92,9 +92,16 @@ tests/cases/compiler/weakType.ts(62,5): error TS2322: Type '{ properties: { wron
     }
     let weak: Weak & Spoiler = unknown
         ~~~~
-!!! error TS2322: Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak & Spoiler'.
-!!! error TS2322:   Type '{ properties: { wrong: string; }; }' is not assignable to type 'Weak'.
+!!! error TS2322: Type '{ {|properties|0|}: { {|wrong|1|}: string; }; }' is not assignable to type '{|Weak|2|} & {|Spoiler|3|}'.
+!!! error TS2322:   Type '{ {|properties|4|}: { {|wrong|5|}: string; }; }' is not assignable to type '{|Weak|6|}'.
 !!! error TS2322:     Types of property 'properties' are incompatible.
 !!! error TS2322:       Type '{ wrong: string; }' has no properties in common with type '{ b?: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/weakType.ts:58:5
+!!! annotated symbol 1 tests/cases/compiler/weakType.ts:59:9
+!!! annotated symbol 2 tests/cases/compiler/weakType.ts:51:6
+!!! annotated symbol 3 tests/cases/compiler/weakType.ts:50:6
+!!! annotated symbol 4 tests/cases/compiler/weakType.ts:58:5
+!!! annotated symbol 5 tests/cases/compiler/weakType.ts:59:9
+!!! annotated symbol 6 tests/cases/compiler/weakType.ts:51:6
     
     

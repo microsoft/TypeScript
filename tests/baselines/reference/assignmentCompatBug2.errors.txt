@@ -12,18 +12,25 @@ tests/cases/compiler/assignmentCompatBug2.ts(33,1): error TS2741: Property 'm' i
 ==== tests/cases/compiler/assignmentCompatBug2.ts (6 errors) ====
     var b2: { b: number;} = { a: 0 }; // error
                               ~~~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type '{ b: number; }'.
+!!! error TS2322: Type '{ {|a|0|}: number; }' is not assignable to type '{ {|b|1|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatBug2.ts:1:27
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatBug2.ts:1:11
     
     b2 = { a: 0 }; // error
            ~~~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type '{ b: number; }'.
+!!! error TS2322: Type '{ {|a|0|}: number; }' is not assignable to type '{ {|b|1|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatBug2.ts:3:8
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatBug2.ts:1:11
     
     b2 = {b: 0, a: 0 };
                 ~~~~
-!!! error TS2322: Type '{ b: number; a: number; }' is not assignable to type '{ b: number; }'.
+!!! error TS2322: Type '{ {|b|0|}: number; {|a|1|}: number; }' is not assignable to type '{ {|b|2|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a' does not exist in type '{ b: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatBug2.ts:5:7
+!!! annotated symbol 1 tests/cases/compiler/assignmentCompatBug2.ts:5:13
+!!! annotated symbol 2 tests/cases/compiler/assignmentCompatBug2.ts:1:11
     
     var b3: { f(n: number): number; g(s: string): number; m: number; n?: number; k?(a: any): any; };
     

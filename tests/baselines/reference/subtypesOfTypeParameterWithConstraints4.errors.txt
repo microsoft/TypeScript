@@ -73,7 +73,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'B1<Foo>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'Foo'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|Foo|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:45:40
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
     }
     
     class D4<T extends Foo, U extends Foo, V> extends B1<T> {
@@ -88,10 +90,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'T'.
-!!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
-!!! error TS2416:       Type 'Foo' is not assignable to type 'T'.
-!!! error TS2416:         'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Foo|5|}'.
+!!! error TS2416:       Type '{|Foo|6|}' is not assignable to type '{|T|7|}'.
+!!! error TS2416:         '{|Foo|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|Foo|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:55:25
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:55:10
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:55:25
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:55:10
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:55:10
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:55:10
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:55:10
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:55:10
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
     }
     
     class D6<T extends Foo, U extends Foo, V> extends B1<T> {
@@ -101,7 +115,9 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'T'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:60:40
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:60:10
     }
     
     class D7<T extends Foo, U extends Foo, V> extends B1<U> {
@@ -111,10 +127,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
-!!! error TS2416:   Type 'T' is not assignable to type 'U'.
-!!! error TS2416:     'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
-!!! error TS2416:       Type 'Foo' is not assignable to type 'U'.
-!!! error TS2416:         'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2416:   Type '{|T|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2416:     '{|T|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Foo|5|}'.
+!!! error TS2416:       Type '{|Foo|6|}' is not assignable to type '{|U|7|}'.
+!!! error TS2416:         '{|Foo|8|}' is assignable to the constraint of type '{|U|9|}', but '{|U|10|}' could be instantiated with a different subtype of constraint '{|Foo|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:65:10
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:65:25
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:65:10
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:65:25
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:65:25
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:65:25
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:65:25
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:65:25
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:3:7
     }
     
     class D8<T extends Foo, U extends Foo, V> extends B1<U> {
@@ -129,5 +157,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D9<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'U'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:75:40
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts:75:25
     }

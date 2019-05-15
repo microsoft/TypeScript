@@ -28,7 +28,10 @@ tests/cases/conformance/jsx/file.tsx(11,10): error TS2322: Type '{ bar: string; 
     // Should be an OK
     var x = <MyComponent bar='world' />;
              ~~~~~~~~~~~
-!!! error TS2322: Type '{ bar: string; }' is not assignable to type 'IntrinsicAttributes & { ref?: string; }'.
+!!! error TS2322: Type '{ {|bar|0|}: string; }' is not assignable to type '{|IntrinsicAttributes|1|} & { {|ref|2|}?: string; }'.
 !!! error TS2322:   Property 'bar' does not exist on type 'IntrinsicAttributes & { ref?: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:11:22
+!!! annotated symbol 1 tests/cases/conformance/jsx/react.d.ts:8:12
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:6:4
     
     

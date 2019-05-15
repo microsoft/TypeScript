@@ -45,11 +45,16 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
     // Since T is union Type we only allow the assignment of either object with property of type string or object with property of type number but do not allow object with property of type string | number
     var objStrOrNum3: { prop: string } | { prop: number } = {
         ~~~~~~~~~~~~
-!!! error TS2322: Type '{ prop: string | number; }' is not assignable to type '{ prop: string; } | { prop: number; }'.
-!!! error TS2322:   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
+!!! error TS2322: Type '{ {|prop|0|}: string | number; }' is not assignable to type '{ {|prop|1|}: string; } | { {|prop|2|}: number; }'.
+!!! error TS2322:   Type '{ {|prop|3|}: string | number; }' is not assignable to type '{ {|prop|4|}: number; }'.
 !!! error TS2322:     Types of property 'prop' are incompatible.
 !!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:15:5
+!!! annotated symbol 1 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:14:21
+!!! annotated symbol 2 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:14:40
+!!! annotated symbol 3 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:15:5
+!!! annotated symbol 4 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:14:40
         prop: strOrNumber
     };
     var objStrOrNum4: { prop: string | number } = {
@@ -57,38 +62,75 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
     };
     var objStrOrNum5: { prop: string; anotherP: string; } | { prop: number } = { prop: strOrNumber };
         ~~~~~~~~~~~~
-!!! error TS2322: Type '{ prop: string | number; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; }'.
-!!! error TS2322:   Type '{ prop: string | number; }' is not assignable to type '{ prop: number; }'.
+!!! error TS2322: Type '{ {|prop|0|}: string | number; }' is not assignable to type '{ {|prop|1|}: string; {|anotherP|2|}: string; } | { {|prop|3|}: number; }'.
+!!! error TS2322:   Type '{ {|prop|4|}: string | number; }' is not assignable to type '{ {|prop|5|}: number; }'.
 !!! error TS2322:     Types of property 'prop' are incompatible.
 !!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:20:78
+!!! annotated symbol 1 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:20:21
+!!! annotated symbol 2 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:20:35
+!!! annotated symbol 3 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:20:59
+!!! annotated symbol 4 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:20:78
+!!! annotated symbol 5 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:20:59
     var objStrOrNum6: { prop: string; anotherP: string; } | { prop: number } = {
         ~~~~~~~~~~~~
-!!! error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; }'.
-!!! error TS2322:   Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; }'.
+!!! error TS2322: Type '{ {|prop|0|}: string | number; {|anotherP|1|}: string; }' is not assignable to type '{ {|prop|2|}: string; {|anotherP|3|}: string; } | { {|prop|4|}: number; }'.
+!!! error TS2322:   Type '{ {|prop|5|}: string | number; {|anotherP|6|}: string; }' is not assignable to type '{ {|prop|7|}: string; {|anotherP|8|}: string; }'.
 !!! error TS2322:     Types of property 'prop' are incompatible.
 !!! error TS2322:       Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:         Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:22:5
+!!! annotated symbol 1 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:23:5
+!!! annotated symbol 2 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:21:21
+!!! annotated symbol 3 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:21:35
+!!! annotated symbol 4 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:21:59
+!!! annotated symbol 5 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:22:5
+!!! annotated symbol 6 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:23:5
+!!! annotated symbol 7 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:21:21
+!!! annotated symbol 8 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:21:35
         prop: strOrNumber,
         anotherP: str
     };
     var objStrOrNum7: { prop: string; anotherP: string; } | { prop: number; anotherP1: number } = {
         ~~~~~~~~~~~~
-!!! error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
-!!! error TS2322:   Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; }'.
+!!! error TS2322: Type '{ {|prop|0|}: string | number; {|anotherP|1|}: string; }' is not assignable to type '{ {|prop|2|}: string; {|anotherP|3|}: string; } | { {|prop|4|}: number; {|anotherP1|5|}: number; }'.
+!!! error TS2322:   Type '{ {|prop|6|}: string | number; {|anotherP|7|}: string; }' is not assignable to type '{ {|prop|8|}: string; {|anotherP|9|}: string; }'.
 !!! error TS2322:     Types of property 'prop' are incompatible.
 !!! error TS2322:       Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:         Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:26:5
+!!! annotated symbol 1 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:27:5
+!!! annotated symbol 2 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:25:21
+!!! annotated symbol 3 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:25:35
+!!! annotated symbol 4 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:25:59
+!!! annotated symbol 5 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:25:73
+!!! annotated symbol 6 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:26:5
+!!! annotated symbol 7 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:27:5
+!!! annotated symbol 8 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:25:21
+!!! annotated symbol 9 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:25:35
         prop: strOrNumber,
         anotherP: str
     };
     var objStrOrNum8: { prop: string; anotherP: string; } | { prop: number; anotherP1: number } = {
         ~~~~~~~~~~~~
-!!! error TS2322: Type '{ prop: string | number; anotherP: string; anotherP1: number; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
-!!! error TS2322:   Type '{ prop: string | number; anotherP: string; anotherP1: number; }' is not assignable to type '{ prop: number; anotherP1: number; }'.
+!!! error TS2322: Type '{ {|prop|0|}: string | number; {|anotherP|1|}: string; {|anotherP1|2|}: number; }' is not assignable to type '{ {|prop|3|}: string; {|anotherP|4|}: string; } | { {|prop|5|}: number; {|anotherP1|6|}: number; }'.
+!!! error TS2322:   Type '{ {|prop|7|}: string | number; {|anotherP|8|}: string; {|anotherP1|9|}: number; }' is not assignable to type '{ {|prop|10|}: number; {|anotherP1|11|}: number; }'.
 !!! error TS2322:     Types of property 'prop' are incompatible.
 !!! error TS2322:       Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:30:5
+!!! annotated symbol 1 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:31:5
+!!! annotated symbol 2 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:32:5
+!!! annotated symbol 3 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:29:21
+!!! annotated symbol 4 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:29:35
+!!! annotated symbol 5 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:29:59
+!!! annotated symbol 6 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:29:73
+!!! annotated symbol 7 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:30:5
+!!! annotated symbol 8 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:31:5
+!!! annotated symbol 9 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:32:5
+!!! annotated symbol 10 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:29:59
+!!! annotated symbol 11 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:29:73
         prop: strOrNumber,
         anotherP: str,
         anotherP1: num

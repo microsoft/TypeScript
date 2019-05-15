@@ -7,6 +7,8 @@ tests/cases/conformance/types/primitives/number/assignFromNumberInterface.ts(3,1
     var a: Number;
     x = a;
     ~
-!!! error TS2322: Type 'Number' is not assignable to type 'number'.
-!!! error TS2322:   'number' is a primitive, but 'Number' is a wrapper object. Prefer using 'number' when possible.
+!!! error TS2322: Type '{|Number|0|}' is not assignable to type 'number'.
+!!! error TS2322:   'number' is a primitive, but '{|Number|1|}' is a wrapper object. Prefer using 'number' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:542:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:542:11
     a = x;

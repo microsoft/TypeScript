@@ -66,9 +66,13 @@ tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts(34,5): error
 !!! error TS2739: Type 'number[]' is missing the following properties from type '[number, number, number]': 0, 1, 2
     var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]
         ~~
-!!! error TS2322: Type '(string | number)[]' is not assignable to type 'myArray'.
+!!! error TS2322: Type '(string | number)[]' is not assignable to type '{|myArray|0|}'.
 !!! error TS2322:   Types of property 'pop' are incompatible.
-!!! error TS2322:     Type '() => string | number' is not assignable to type '() => Number'.
-!!! error TS2322:       Type 'string | number' is not assignable to type 'Number'.
-!!! error TS2322:         Type 'string' is not assignable to type 'Number'.
+!!! error TS2322:     Type '() => string | number' is not assignable to type '() => {|Number|1|}'.
+!!! error TS2322:       Type 'string | number' is not assignable to type '{|Number|2|}'.
+!!! error TS2322:         Type 'string' is not assignable to type '{|Number|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/arrayLiterals/arrayLiterals3.ts:30:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:542:11
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:542:11
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:542:11
     

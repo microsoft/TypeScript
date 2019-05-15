@@ -17,7 +17,8 @@ tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUni
     var a = <number | I2>z;
     var b = <number>z;
             ~~~~~~~~~
-!!! error TS2352: Conversion of type 'I1' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352: Conversion of type '{|I1|0|}' to type 'number' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/comparable/typeAssertionsWithUnionTypes01.ts:1:11
     var c = <I2>z;
     var d = <I1>y;
     

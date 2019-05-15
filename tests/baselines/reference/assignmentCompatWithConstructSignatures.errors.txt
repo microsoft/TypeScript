@@ -46,24 +46,30 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     // these are errors
     t = s2;
     ~
-!!! error TS2322: Type 'S2' is not assignable to type 'T'.
+!!! error TS2322: Type '{|S2|0|}' is not assignable to type '{|T|1|}'.
 !!! error TS2322:   Type 'S2' provides no match for the signature 'new (x: number): void'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts:22:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts:3:11
     t = a3;
     ~
-!!! error TS2322: Type '(x: string) => void' is not assignable to type 'T'.
+!!! error TS2322: Type '(x: string) => void' is not assignable to type '{|T|0|}'.
 !!! error TS2322:   Type '(x: string) => void' provides no match for the signature 'new (x: number): void'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts:3:11
     t = (x: string) => 1;
     ~
-!!! error TS2322: Type '(x: string) => number' is not assignable to type 'T'.
+!!! error TS2322: Type '(x: string) => number' is not assignable to type '{|T|0|}'.
 !!! error TS2322:   Type '(x: string) => number' provides no match for the signature 'new (x: number): void'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts:3:11
     t = function (x: string) { return ''; }
     ~
-!!! error TS2322: Type '(x: string) => string' is not assignable to type 'T'.
+!!! error TS2322: Type '(x: string) => string' is not assignable to type '{|T|0|}'.
 !!! error TS2322:   Type '(x: string) => string' provides no match for the signature 'new (x: number): void'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts:3:11
     a = s2;
     ~
-!!! error TS2322: Type 'S2' is not assignable to type 'new (x: number) => void'.
+!!! error TS2322: Type '{|S2|0|}' is not assignable to type 'new (x: number) => void'.
 !!! error TS2322:   Type 'S2' provides no match for the signature 'new (x: number): void'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures.ts:22:11
     a = a3;
     ~
 !!! error TS2322: Type '(x: string) => void' is not assignable to type 'new (x: number) => void'.

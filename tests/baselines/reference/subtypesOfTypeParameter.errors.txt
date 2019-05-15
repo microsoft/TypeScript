@@ -14,8 +14,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         foo: U; // error
         ~~~
 !!! error TS2416: Property 'foo' in type 'D1<T, U>' is not assignable to the same property in base type 'C3<T>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'T'.
-!!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts:7:13
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts:7:10
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts:7:13
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts:7:10
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameter.ts:7:10
     }
     
     function f1<T, U>(x: T, y: U) {

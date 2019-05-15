@@ -37,10 +37,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface B extends A {
                   ~
-!!! error TS2430: Interface 'B' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|B|0|}' incorrectly extends interface '{|A|1|}'.
 !!! error TS2430:   Types of property 'bar' are incompatible.
 !!! error TS2430:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:6:5: 'bar' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:17:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:12:15
             foo: Derived; // ok
             bar: Base; // error
         }
@@ -52,9 +54,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface B2 extends A2 {
                   ~~
-!!! error TS2430: Interface 'B2' incorrectly extends interface 'A2'.
+!!! error TS2430: Interface '{|B2|0|}' incorrectly extends interface '{|A2|1|}'.
 !!! error TS2430:   Types of property '2.0' are incompatible.
-!!! error TS2430:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2430:     Type '{|Base|2|}' is not assignable to type '{|Derived|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:27:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:22:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:5:11
             1: Derived; // ok
             2: Base; // error
         }
@@ -66,9 +72,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface B3 extends A3 {
                   ~~
-!!! error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
+!!! error TS2430: Interface '{|B3|0|}' incorrectly extends interface '{|A3|1|}'.
 !!! error TS2430:   Types of property ''2.0'' are incompatible.
-!!! error TS2430:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2430:     Type '{|Base|2|}' is not assignable to type '{|Derived|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:37:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:32:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:5:11
             '1': Derived; // ok
             '2.0': Base; // error
         }
@@ -82,9 +92,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface B extends A {
                   ~
-!!! error TS2430: Interface 'B' incorrectly extends interface 'A'.
+!!! error TS2430: Interface '{|B|0|}' incorrectly extends interface '{|A|1|}'.
 !!! error TS2430:   Types of property 'bar' are incompatible.
-!!! error TS2430:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2430:     Type '{|Base|2|}' is not assignable to type '{|Derived|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:49:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:44:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:5:11
             foo?: Derived; // ok
             bar?: Base; // error
         }
@@ -96,9 +110,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface B2 extends A2 {
                   ~~
-!!! error TS2430: Interface 'B2' incorrectly extends interface 'A2'.
+!!! error TS2430: Interface '{|B2|0|}' incorrectly extends interface '{|A2|1|}'.
 !!! error TS2430:   Types of property '2.0' are incompatible.
-!!! error TS2430:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2430:     Type '{|Base|2|}' is not assignable to type '{|Derived|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:59:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:54:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:5:11
             1?: Derived; // ok
             2?: Base; // error
         }
@@ -110,9 +128,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         interface B3 extends A3 {
                   ~~
-!!! error TS2430: Interface 'B3' incorrectly extends interface 'A3'.
+!!! error TS2430: Interface '{|B3|0|}' incorrectly extends interface '{|A3|1|}'.
 !!! error TS2430:   Types of property ''2.0'' are incompatible.
-!!! error TS2430:     Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2430:     Type '{|Base|2|}' is not assignable to type '{|Derived|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:69:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:64:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:1:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts:5:11
             '1'?: Derived; // ok
             '2.0'?: Base; // error
         }

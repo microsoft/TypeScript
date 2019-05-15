@@ -8,7 +8,9 @@ tests/cases/compiler/implementPublicPropertyAsPrivate.ts(4,7): error TS2420: Cla
     }
     class C implements I {
           ~
-!!! error TS2420: Class 'C' incorrectly implements interface 'I'.
+!!! error TS2420: Class '{|C|0|}' incorrectly implements interface '{|I|1|}'.
 !!! error TS2420:   Property 'x' is private in type 'C' but not in type 'I'.
+!!! annotated symbol 0 tests/cases/compiler/implementPublicPropertyAsPrivate.ts:4:7
+!!! annotated symbol 1 tests/cases/compiler/implementPublicPropertyAsPrivate.ts:1:11
         private x = 0; // should raise error at class decl
     }

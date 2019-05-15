@@ -16,7 +16,8 @@ tests/cases/compiler/app.js(6,7): error TS2322: Type '1' is not assignable to ty
         data1(val) {
           this.data2 = 1;
           ~~~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type 'WatchHandler<any>'.
+!!! error TS2322: Type '1' is not assignable to type '{|WatchHandler|0|}<any>'.
+!!! annotated symbol 0 tests/cases/compiler/func.ts:4:6
         },
         data2(val) { },
       }

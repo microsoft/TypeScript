@@ -56,27 +56,91 @@ tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.t
         const localChannelId = `blahblahblah`;
         return { type, localChannelId };
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ type: T; localChannelId: string; }' is not assignable to type 'NewChannel<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>>'.
-!!! error TS2322:   Type '{ type: T; localChannelId: string; }' is not assignable to type 'Pick<ChannelOfType<T, TextChannel> | ChannelOfType<T, EmailChannel>, "type">'.
+!!! error TS2322: Type '{ {|type|0|}: {|T|1|}; {|localChannelId|2|}: string; }' is not assignable to type '{|NewChannel|3|}<{|ChannelOfType|4|}<{|T|5|}, {|TextChannel|6|}> | {|ChannelOfType|7|}<{|T|8|}, {|EmailChannel|9|}>>'.
+!!! error TS2322:   Type '{ {|type|10|}: {|T|11|}; {|localChannelId|12|}: string; }' is not assignable to type '{|Pick|13|}<{|ChannelOfType|14|}<{|T|15|}, {|TextChannel|16|}> | {|ChannelOfType|17|}<{|T|18|}, {|EmailChannel|19|}>, "type">'.
 !!! error TS2322:     Types of property 'type' are incompatible.
-!!! error TS2322:       Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-!!! error TS2322:         Type '"text" | "email"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-!!! error TS2322:           Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"] & ChannelOfType<T, EmailChannel>["type"]'.
-!!! error TS2322:             Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:               Type 'T' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:                 Type '"text" | "email"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:                   Type '"text"' is not assignable to type 'ChannelOfType<T, TextChannel>["type"]'.
-!!! error TS2322:                     Type '"text"' is not assignable to type 'T & "text"'.
-!!! error TS2322:                       Type '"text"' is not assignable to type 'T'.
-!!! error TS2322:                         '"text"' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '"text" | "email"'.
-!!! error TS2322:                           Type 'T' is not assignable to type 'T & "text"'.
-!!! error TS2322:                             Type '"text" | "email"' is not assignable to type 'T & "text"'.
-!!! error TS2322:                               Type '"text"' is not assignable to type 'T & "text"'.
-!!! error TS2322:                                 Type '"text"' is not assignable to type 'T'.
-!!! error TS2322:                                   '"text"' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '"text" | "email"'.
-!!! error TS2322:                                     Type 'T' is not assignable to type '"text"'.
+!!! error TS2322:       Type '{|T|20|}' is not assignable to type '{|ChannelOfType|21|}<{|T|22|}, {|TextChannel|23|}>["type"] & {|ChannelOfType|24|}<{|T|25|}, {|EmailChannel|26|}>["type"]'.
+!!! error TS2322:         Type '"text" | "email"' is not assignable to type '{|ChannelOfType|27|}<{|T|28|}, {|TextChannel|29|}>["type"] & {|ChannelOfType|30|}<{|T|31|}, {|EmailChannel|32|}>["type"]'.
+!!! error TS2322:           Type '"text"' is not assignable to type '{|ChannelOfType|33|}<{|T|34|}, {|TextChannel|35|}>["type"] & {|ChannelOfType|36|}<{|T|37|}, {|EmailChannel|38|}>["type"]'.
+!!! error TS2322:             Type '"text"' is not assignable to type '{|ChannelOfType|39|}<{|T|40|}, {|TextChannel|41|}>["type"]'.
+!!! error TS2322:               Type '{|T|42|}' is not assignable to type '{|ChannelOfType|43|}<{|T|44|}, {|TextChannel|45|}>["type"]'.
+!!! error TS2322:                 Type '"text" | "email"' is not assignable to type '{|ChannelOfType|46|}<{|T|47|}, {|TextChannel|48|}>["type"]'.
+!!! error TS2322:                   Type '"text"' is not assignable to type '{|ChannelOfType|49|}<{|T|50|}, {|TextChannel|51|}>["type"]'.
+!!! error TS2322:                     Type '"text"' is not assignable to type '{|T|52|} & "text"'.
+!!! error TS2322:                       Type '"text"' is not assignable to type '{|T|53|}'.
+!!! error TS2322:                         '"text"' is assignable to the constraint of type '{|T|54|}', but '{|T|55|}' could be instantiated with a different subtype of constraint '"text" | "email"'.
+!!! error TS2322:                           Type '{|T|56|}' is not assignable to type '{|T|57|} & "text"'.
+!!! error TS2322:                             Type '"text" | "email"' is not assignable to type '{|T|58|} & "text"'.
+!!! error TS2322:                               Type '"text"' is not assignable to type '{|T|59|} & "text"'.
+!!! error TS2322:                                 Type '"text"' is not assignable to type '{|T|60|}'.
+!!! error TS2322:                                   '"text"' is assignable to the constraint of type '{|T|61|}', but '{|T|62|}' could be instantiated with a different subtype of constraint '"text" | "email"'.
+!!! error TS2322:                                     Type '{|T|63|}' is not assignable to type '"text"'.
 !!! error TS2322:                                       Type '"text" | "email"' is not assignable to type '"text"'.
 !!! error TS2322:                                         Type '"email"' is not assignable to type '"text"'.
+!!! annotated symbol 0 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:33:14
+!!! annotated symbol 1 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 2 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:33:20
+!!! annotated symbol 3 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:27:13
+!!! annotated symbol 4 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 5 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 6 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 7 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 8 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 9 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:7:11
+!!! annotated symbol 10 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:33:14
+!!! annotated symbol 11 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 12 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:33:20
+!!! annotated symbol 13 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 14 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 15 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 16 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 17 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 18 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 19 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:7:11
+!!! annotated symbol 20 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 21 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 22 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 23 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 24 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 25 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 26 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:7:11
+!!! annotated symbol 27 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 28 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 29 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 30 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 31 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 32 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:7:11
+!!! annotated symbol 33 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 34 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 35 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 36 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 37 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 38 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:7:11
+!!! annotated symbol 39 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 40 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 41 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 42 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 43 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 44 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 45 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 46 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 47 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 48 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 49 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:22:6
+!!! annotated symbol 50 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 51 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:1:11
+!!! annotated symbol 52 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 53 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 54 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 55 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 56 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 57 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 58 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 59 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 60 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 61 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 62 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
+!!! annotated symbol 63 tests/cases/compiler/complicatedIndexedAccessKeyofReliesOnKeyofNeverUpperBound.ts:31:32
     }
     
     const newTextChannel = makeNewChannel('text');

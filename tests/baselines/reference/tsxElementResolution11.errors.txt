@@ -21,8 +21,10 @@ tests/cases/conformance/jsx/file.tsx(17,2): error TS2322: Type '{ x: number; }' 
     var Obj2: Obj2type;
     <Obj2 x={10} />; // Error
      ~~~~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type '{ q?: number; }'.
+!!! error TS2322: Type '{ {|x|0|}: number; }' is not assignable to type '{ {|q|1|}?: number; }'.
 !!! error TS2322:   Property 'x' does not exist on type '{ q?: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:17:7
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:14:20
     
     interface Obj3type {
     	new(n: string): { x: number; };

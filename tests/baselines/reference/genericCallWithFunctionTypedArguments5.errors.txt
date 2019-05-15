@@ -14,8 +14,11 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFun
     // more args not allowed
     var r2 = foo({ cb: <T>(x: T, y: T) => '' }); // error
                    ~~
-!!! error TS2322: Type '<T>(x: T, y: T) => string' is not assignable to type '(t: unknown) => string'.
+!!! error TS2322: Type '<{|T|0|}>(x: {|T|1|}, y: {|T|2|}) => string' is not assignable to type '(t: unknown) => string'.
 !!! related TS6500 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts:3:27: The expected type comes from property 'cb' which is declared here on type '{ cb: (t: unknown) => string; }'
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts:10:21
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts:10:21
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithFunctionTypedArguments5.ts:10:21
     var r3 = foo({ cb: (x: string, y: number) => '' }); // error
                    ~~
 !!! error TS2322: Type '(x: string, y: number) => string' is not assignable to type '(t: string) => string'.

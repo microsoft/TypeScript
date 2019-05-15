@@ -11,12 +11,18 @@ tests/cases/compiler/typeParameterArgumentEquivalence3.ts(5,5): error TS2322: Ty
         var y: (item) => boolean;
         x = y;  // Should be an error
         ~
-!!! error TS2322: Type '(item: any) => boolean' is not assignable to type '(item: any) => T'.
-!!! error TS2322:   Type 'boolean' is not assignable to type 'T'.
-!!! error TS2322:     'boolean' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '(item: any) => boolean' is not assignable to type '(item: any) => {|T|0|}'.
+!!! error TS2322:   Type 'boolean' is not assignable to type '{|T|1|}'.
+!!! error TS2322:     'boolean' is assignable to the constraint of type '{|T|2|}', but '{|T|3|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterArgumentEquivalence3.ts:1:14
+!!! annotated symbol 1 tests/cases/compiler/typeParameterArgumentEquivalence3.ts:1:14
+!!! annotated symbol 2 tests/cases/compiler/typeParameterArgumentEquivalence3.ts:1:14
+!!! annotated symbol 3 tests/cases/compiler/typeParameterArgumentEquivalence3.ts:1:14
         y = x;  // Shound be an error
         ~
-!!! error TS2322: Type '(item: any) => T' is not assignable to type '(item: any) => boolean'.
-!!! error TS2322:   Type 'T' is not assignable to type 'boolean'.
+!!! error TS2322: Type '(item: any) => {|T|0|}' is not assignable to type '(item: any) => boolean'.
+!!! error TS2322:   Type '{|T|1|}' is not assignable to type 'boolean'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterArgumentEquivalence3.ts:1:14
+!!! annotated symbol 1 tests/cases/compiler/typeParameterArgumentEquivalence3.ts:1:14
     }
     

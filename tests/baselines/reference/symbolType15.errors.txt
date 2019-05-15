@@ -9,5 +9,7 @@ tests/cases/conformance/es6/Symbols/symbolType15.ts(5,1): error TS2322: Type 'Sy
     symObj = sym;
     sym = symObj;
     ~~~
-!!! error TS2322: Type 'Symbol' is not assignable to type 'symbol'.
-!!! error TS2322:   'symbol' is a primitive, but 'Symbol' is a wrapper object. Prefer using 'symbol' when possible.
+!!! error TS2322: Type '{|Symbol|0|}' is not assignable to type 'symbol'.
+!!! error TS2322:   'symbol' is a primitive, but '{|Symbol|1|}' is a wrapper object. Prefer using 'symbol' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:97:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:97:11

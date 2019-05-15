@@ -11,8 +11,10 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyTh
     
     interface Foo extends Base { // error
               ~~~
-!!! error TS2430: Interface 'Foo' incorrectly extends interface 'Base'.
+!!! error TS2430: Interface '{|Foo|0|}' incorrectly extends interface '{|Base|1|}'.
 !!! error TS2430:   Property 'x' is private in type 'Base' but not in type 'Foo'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType.ts:5:11
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType.ts:1:7
         x: number;
     }
     
@@ -22,7 +24,11 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyTh
     
     interface Foo2<T> extends Base2<T> { // error
               ~~~~
-!!! error TS2430: Interface 'Foo2<T>' incorrectly extends interface 'Base2<T>'.
+!!! error TS2430: Interface '{|Foo2|0|}<{|T|1|}>' incorrectly extends interface '{|Base2|2|}<{|T|3|}>'.
 !!! error TS2430:   Property 'x' is private in type 'Base2<T>' but not in type 'Foo2<T>'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType.ts:13:11
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType.ts:13:16
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType.ts:9:7
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceWithPropertyThatIsPrivateInBaseType.ts:13:16
         x: number;
     }

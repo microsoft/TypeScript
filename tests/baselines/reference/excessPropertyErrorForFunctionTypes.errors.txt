@@ -8,5 +8,9 @@ tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts(4,44): error TS2322:
     
     let doesntWork: DoesntWork = { a: 1, c: 2, d: 3 }
                                                ~~~~
-!!! error TS2322: Type '{ a: number; c: number; d: number; }' is not assignable to type 'DoesntWork'.
+!!! error TS2322: Type '{ {|a|0|}: number; {|c|1|}: number; {|d|2|}: number; }' is not assignable to type '{|DoesntWork|3|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'd' does not exist in type 'DoesntWork'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts:4:32
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts:4:38
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts:4:44
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyErrorForFunctionTypes.ts:2:6

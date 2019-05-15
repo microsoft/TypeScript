@@ -26,8 +26,11 @@ tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,5): error TS234
     
     v({ s: "", n: 0 }).toLowerCase();
         ~~~~~
-!!! error TS2345: Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
+!!! error TS2345: Argument of type '{ {|s|0|}: string; {|n|1|}: number; }' is not assignable to parameter of type '{ {|n|2|}: number; }'.
 !!! error TS2345:   Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts:19:5
+!!! annotated symbol 1 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts:19:12
+!!! annotated symbol 2 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts:3:11
     
     var w: A;
     var w: C;
@@ -36,5 +39,8 @@ tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts(24,5): error TS234
     
     w({ s: "", n: 0 }).toLowerCase();
         ~~~~~
-!!! error TS2345: Argument of type '{ s: string; n: number; }' is not assignable to parameter of type '{ n: number; }'.
+!!! error TS2345: Argument of type '{ {|s|0|}: string; {|n|1|}: number; }' is not assignable to parameter of type '{ {|n|2|}: number; }'.
 !!! error TS2345:   Object literal may only specify known properties, and 's' does not exist in type '{ n: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts:24:5
+!!! annotated symbol 1 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts:24:12
+!!! annotated symbol 2 tests/cases/compiler/orderMattersForSignatureGroupIdentity.ts:3:11

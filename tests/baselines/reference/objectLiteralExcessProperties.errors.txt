@@ -46,51 +46,91 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(49,44): error TS2322: Type
     
     var b1: Book = { forword: "oops" };
                      ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ forword: string; }' is not assignable to type 'Book'.
+!!! error TS2322: Type '{ {|forword|0|}: string; }' is not assignable to type '{|Book|1|}'.
 !!! error TS2322:   Object literal may only specify known properties, but 'forword' does not exist in type 'Book'. Did you mean to write 'foreword'?
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:9:18
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
     
     var b2: Book | string = { foreward: "nope" };
                               ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ foreward: string; }' is not assignable to type 'string | Book'.
+!!! error TS2322: Type '{ {|foreward|0|}: string; }' is not assignable to type 'string | {|Book|1|}'.
 !!! error TS2322:   Object literal may only specify known properties, but 'foreward' does not exist in type 'Book'. Did you mean to write 'foreword'?
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:11:27
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
     
     var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
                                                         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '({ foreword: string; } | { forwards: string; })[]' is not assignable to type 'Book | Book[]'.
-!!! error TS2322:   Type '({ foreword: string; } | { forwards: string; })[]' is not assignable to type 'Book[]'.
-!!! error TS2322:     Type '{ foreword: string; } | { forwards: string; }' is not assignable to type 'Book'.
-!!! error TS2322:       Type '{ forwards: string; }' is not assignable to type 'Book'.
+!!! error TS2322: Type '({ {|foreword|0|}: string; } | { {|forwards|1|}: string; })[]' is not assignable to type '{|Book|2|} | {|Book|3|}[]'.
+!!! error TS2322:   Type '({ {|foreword|4|}: string; } | { {|forwards|5|}: string; })[]' is not assignable to type '{|Book|6|}[]'.
+!!! error TS2322:     Type '{ {|foreword|7|}: string; } | { {|forwards|8|}: string; }' is not assignable to type '{|Book|9|}'.
+!!! error TS2322:       Type '{ {|forwards|10|}: string; }' is not assignable to type '{|Book|11|}'.
 !!! error TS2322:         Object literal may only specify known properties, and 'forwards' does not exist in type 'Book'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:13:30
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:13:53
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 4 tests/cases/compiler/objectLiteralExcessProperties.ts:13:30
+!!! annotated symbol 5 tests/cases/compiler/objectLiteralExcessProperties.ts:13:53
+!!! annotated symbol 6 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 7 tests/cases/compiler/objectLiteralExcessProperties.ts:13:30
+!!! annotated symbol 8 tests/cases/compiler/objectLiteralExcessProperties.ts:13:53
+!!! annotated symbol 9 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 10 tests/cases/compiler/objectLiteralExcessProperties.ts:13:53
+!!! annotated symbol 11 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
     
     var b4: Book & Cover = { foreword: "hi", colour: "blue" };
                                              ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ foreword: string; colour: string; }' is not assignable to type 'Book & Cover'.
+!!! error TS2322: Type '{ {|foreword|0|}: string; {|colour|1|}: string; }' is not assignable to type '{|Book|2|} & {|Cover|3|}'.
 !!! error TS2322:   Object literal may only specify known properties, but 'colour' does not exist in type 'Book & Cover'. Did you mean to write 'color'?
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:15:26
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:15:42
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:5:11
     
     var b5: Book & Cover = { foreward: "hi", color: "blue" };
                              ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ foreward: string; color: string; }' is not assignable to type 'Book & Cover'.
+!!! error TS2322: Type '{ {|foreward|0|}: string; {|color|1|}: string; }' is not assignable to type '{|Book|2|} & {|Cover|3|}'.
 !!! error TS2322:   Object literal may only specify known properties, but 'foreward' does not exist in type 'Book & Cover'. Did you mean to write 'foreword'?
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:17:26
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:17:42
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:5:11
     
     var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
                                                             ~~~~~~~~~~~~
-!!! error TS2322: Type '{ foreword: string; color: string; price: number; }' is not assignable to type 'Book & Cover'.
+!!! error TS2322: Type '{ {|foreword|0|}: string; {|color|1|}: string; {|price|2|}: number; }' is not assignable to type '{|Book|3|} & {|Cover|4|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'price' does not exist in type 'Book & Cover'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:19:26
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:19:42
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:19:57
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 4 tests/cases/compiler/objectLiteralExcessProperties.ts:5:11
     
     var b7: Book & number = { foreword: "hi", price: 10.99 };
         ~~
-!!! error TS2322: Type '{ foreword: string; price: number; }' is not assignable to type 'Book & number'.
-!!! error TS2322:   Type '{ foreword: string; price: number; }' is not assignable to type 'number'.
+!!! error TS2322: Type '{ {|foreword|0|}: string; {|price|1|}: number; }' is not assignable to type '{|Book|2|} & number'.
+!!! error TS2322:   Type '{ {|foreword|3|}: string; {|price|4|}: number; }' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:21:27
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:21:43
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:21:27
+!!! annotated symbol 4 tests/cases/compiler/objectLiteralExcessProperties.ts:21:43
     
     var b8: Cover | Cover[] = { couleur : "non" };
                                 ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ couleur: string; }' is not assignable to type 'Cover | Cover[]'.
+!!! error TS2322: Type '{ {|couleur|0|}: string; }' is not assignable to type '{|Cover|1|} | {|Cover|2|}[]'.
 !!! error TS2322:   Object literal may only specify known properties, and 'couleur' does not exist in type 'Cover | Cover[]'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:23:29
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:5:11
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:5:11
     
     var b9: Book | Book[] = { forewarned: "still no" };
                               ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ forewarned: string; }' is not assignable to type 'Book | Book[]'.
+!!! error TS2322: Type '{ {|forewarned|0|}: string; }' is not assignable to type '{|Book|1|} | {|Book|2|}[]'.
 !!! error TS2322:   Object literal may only specify known properties, and 'forewarned' does not exist in type 'Book | Book[]'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:25:27
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:1:11
     
     interface Indexed {
         [n: number]: Cover;
@@ -100,9 +140,11 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(49,44): error TS2322: Type
     
     var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
                               ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ colour: string; }' is not assignable to type 'Cover'.
+!!! error TS2322: Type '{ {|colour|0|}: string; }' is not assignable to type '{|Cover|1|}'.
 !!! error TS2322:   Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
 !!! related TS6501 tests/cases/compiler/objectLiteralExcessProperties.ts:28:5: The expected type comes from this index signature.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:33:27
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:5:11
     
     // Repros inspired by #28752
     
@@ -112,30 +154,57 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(49,44): error TS2322: Type
         // No excess property checks on generic types
         const obj1: T = { name: "test" };
               ~~~~
-!!! error TS2322: Type '{ name: string; }' is not assignable to type 'T'.
-!!! error TS2322:   '{ name: string; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'any'.
+!!! error TS2322: Type '{ {|name|0|}: string; }' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{ {|name|2|}: string; }' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint 'any'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:39:23
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:39:23
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
+!!! annotated symbol 4 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
         // No excess property checks on intersections involving generics
         const obj2: T & { prop: boolean } = { name: "test", prop: true };
               ~~~~
-!!! error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type 'T & { prop: boolean; }'.
-!!! error TS2322:   Type '{ name: string; prop: boolean; }' is not assignable to type 'T'.
-!!! error TS2322:     '{ name: string; prop: boolean; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'any'.
+!!! error TS2322: Type '{ {|name|0|}: string; {|prop|1|}: boolean; }' is not assignable to type '{|T|2|} & { {|prop|3|}: boolean; }'.
+!!! error TS2322:   Type '{ {|name|4|}: string; {|prop|5|}: boolean; }' is not assignable to type '{|T|6|}'.
+!!! error TS2322:     '{ {|name|7|}: string; {|prop|8|}: boolean; }' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint 'any'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:41:43
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:41:57
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:41:23
+!!! annotated symbol 4 tests/cases/compiler/objectLiteralExcessProperties.ts:41:43
+!!! annotated symbol 5 tests/cases/compiler/objectLiteralExcessProperties.ts:41:57
+!!! annotated symbol 6 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
+!!! annotated symbol 7 tests/cases/compiler/objectLiteralExcessProperties.ts:41:43
+!!! annotated symbol 8 tests/cases/compiler/objectLiteralExcessProperties.ts:41:57
+!!! annotated symbol 9 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
+!!! annotated symbol 10 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
         // Excess property checks only on non-generic parts of unions
         const obj3: T | { prop: boolean } = { name: "test", prop: true };
                                               ~~~~~~~~~~~~
-!!! error TS2322: Type '{ name: string; prop: true; }' is not assignable to type 'T | { prop: boolean; }'.
+!!! error TS2322: Type '{ {|name|0|}: string; {|prop|1|}: true; }' is not assignable to type '{|T|2|} | { {|prop|3|}: boolean; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ prop: boolean; }'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:43:43
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:43:57
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:43:23
         // Excess property checks only on non-generic parts of unions
         const obj4: T & { prop: boolean } | { name: string } = { name: "test", prop: true };
                                                                                ~~~~~~~~~~
-!!! error TS2322: Type '{ name: string; prop: boolean; }' is not assignable to type '{ name: string; } | (T & { prop: boolean; })'.
+!!! error TS2322: Type '{ {|name|0|}: string; {|prop|1|}: boolean; }' is not assignable to type '{ {|name|2|}: string; } | ({|T|3|} & { {|prop|4|}: boolean; })'.
 !!! error TS2322:   Object literal may only specify known properties, and 'prop' does not exist in type '{ name: string; }'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:45:62
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:45:76
+!!! annotated symbol 2 tests/cases/compiler/objectLiteralExcessProperties.ts:45:43
+!!! annotated symbol 3 tests/cases/compiler/objectLiteralExcessProperties.ts:37:15
+!!! annotated symbol 4 tests/cases/compiler/objectLiteralExcessProperties.ts:45:23
         // No excess property checks when union includes 'object' type
         const obj5: object | { x: string } = { z: 'abc' }
         // The 'object' type has no effect on intersections
         const obj6: object & { x: string } = { z: 'abc' }
                                                ~~~~~~~~
-!!! error TS2322: Type '{ z: string; }' is not assignable to type 'object & { x: string; }'.
+!!! error TS2322: Type '{ {|z|0|}: string; }' is not assignable to type 'object & { {|x|1|}: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'z' does not exist in type 'object & { x: string; }'.
+!!! annotated symbol 0 tests/cases/compiler/objectLiteralExcessProperties.ts:49:44
+!!! annotated symbol 1 tests/cases/compiler/objectLiteralExcessProperties.ts:49:28
     }
     

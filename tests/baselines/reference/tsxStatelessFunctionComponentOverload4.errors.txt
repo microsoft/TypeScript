@@ -29,8 +29,12 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not 
     // Error
     const c0 = <OneThing extraProp />;  // extra property;
                 ~~~~~~~~
-!!! error TS2322: Type '{ extraProp: true; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+!!! error TS2322: Type '{ {|extraProp|0|}: true; }' is not assignable to type '{|IntrinsicAttributes|1|} & { {|yy|2|}: number; {|yy1|3|}: string; }'.
 !!! error TS2322:   Property 'extraProp' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:12:22
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:3:31
+!!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:3:43
     const c1 = <OneThing yy={10}/>;  // missing property;
                 ~~~~~~~~
 !!! error TS2741: Property 'yy1' is missing in type '{ yy: number; }' but required in type '{ yy: number; yy1: string; }'.
@@ -42,13 +46,23 @@ tests/cases/conformance/jsx/file.tsx(36,29): error TS2322: Type 'string' is not 
     const c3 = <OneThing {...obj} {...{extra: "extra attr"}} />;  //  This is OK becuase all attribute are spread
     const c4 = <OneThing {...obj} y1={10000} />;  // extra property;
                 ~~~~~~~~
-!!! error TS2322: Type '{ y1: number; yy: number; yy1: string; }' is not assignable to type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+!!! error TS2322: Type '{ {|y1|0|}: number; {|yy|1|}: number; {|yy1|2|}: string; }' is not assignable to type '{|IntrinsicAttributes|3|} & { {|yy|4|}: number; {|yy1|5|}: string; }'.
 !!! error TS2322:   Property 'y1' does not exist on type 'IntrinsicAttributes & { yy: number; yy1: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:16:31
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:6:5
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:7:5
+!!! annotated symbol 3 /.lib/react.d.ts:2367:15
+!!! annotated symbol 4 tests/cases/conformance/jsx/file.tsx:3:31
+!!! annotated symbol 5 tests/cases/conformance/jsx/file.tsx:3:43
     const c5 = <OneThing {...obj} {...{yy: true}} />;  // type incompatible;
                 ~~~~~~~~
-!!! error TS2322: Type '{ yy: boolean; yy1: string; }' is not assignable to type '{ yy: number; yy1: string; }'.
+!!! error TS2322: Type '{ {|yy|0|}: boolean; {|yy1|1|}: string; }' is not assignable to type '{ {|yy|2|}: number; {|yy1|3|}: string; }'.
 !!! error TS2322:   Types of property 'yy' are incompatible.
 !!! error TS2322:     Type 'boolean' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:17:36
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:7:5
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:3:31
+!!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:3:43
     const c6 = <OneThing {...obj2} {...{extra: "extra attr"}} />;  // Should error as there is extra attribute that doesn't match any. Current it is not
     const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribute that doesn't match any. Current it is not
     

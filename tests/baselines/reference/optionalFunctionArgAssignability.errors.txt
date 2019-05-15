@@ -13,8 +13,18 @@ tests/cases/compiler/optionalFunctionArgAssignability.ts(7,1): error TS2322: Typ
     var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null };
     a = b; // error because number is not assignable to string
     ~
-!!! error TS2322: Type '<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U) => Promise<U>' is not assignable to type '<U>(onFulfill?: (value: string) => U, onReject?: (reason: any) => U) => Promise<U>'.
+!!! error TS2322: Type '<{|U|0|}>(onFulFill?: (value: number) => {|U|1|}, onReject?: (reason: any) => {|U|2|}) => {|Promise|3|}<{|U|4|}>' is not assignable to type '<{|U|5|}>(onFulfill?: (value: string) => {|U|6|}, onReject?: (reason: any) => {|U|7|}) => {|Promise|8|}<{|U|9|}>'.
 !!! error TS2322:   Types of parameters 'onFulFill' and 'onFulfill' are incompatible.
 !!! error TS2322:     Types of parameters 'value' and 'value' are incompatible.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/optionalFunctionArgAssignability.ts:6:23
+!!! annotated symbol 1 tests/cases/compiler/optionalFunctionArgAssignability.ts:6:23
+!!! annotated symbol 2 tests/cases/compiler/optionalFunctionArgAssignability.ts:6:23
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 4 tests/cases/compiler/optionalFunctionArgAssignability.ts:6:23
+!!! annotated symbol 5 tests/cases/compiler/optionalFunctionArgAssignability.ts:5:23
+!!! annotated symbol 6 tests/cases/compiler/optionalFunctionArgAssignability.ts:5:23
+!!! annotated symbol 7 tests/cases/compiler/optionalFunctionArgAssignability.ts:5:23
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 9 tests/cases/compiler/optionalFunctionArgAssignability.ts:5:23
     

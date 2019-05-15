@@ -33,12 +33,22 @@ tests/cases/compiler/baseClassImprovedMismatchErrors.ts(15,5): error TS2416: Pro
         n: Derived | string;
         ~
 !!! error TS2416: Property 'n' in type 'Derived' is not assignable to the same property in base type 'Base'.
-!!! error TS2416:   Type 'string | Derived' is not assignable to type 'string | Base'.
-!!! error TS2416:     Type 'Derived' is not assignable to type 'string | Base'.
-!!! error TS2416:       Type 'Derived' is not assignable to type 'Base'.
+!!! error TS2416:   Type 'string | {|Derived|0|}' is not assignable to type 'string | {|Base|1|}'.
+!!! error TS2416:     Type '{|Derived|2|}' is not assignable to type 'string | {|Base|3|}'.
+!!! error TS2416:       Type '{|Derived|4|}' is not assignable to type '{|Base|5|}'.
 !!! error TS2416:         Types of property 'n' are incompatible.
-!!! error TS2416:           Type 'string | Derived' is not assignable to type 'string | Base'.
-!!! error TS2416:             Type 'Derived' is not assignable to type 'string | Base'.
+!!! error TS2416:           Type 'string | {|Derived|6|}' is not assignable to type 'string | {|Base|7|}'.
+!!! error TS2416:             Type '{|Derived|8|}' is not assignable to type 'string | {|Base|9|}'.
+!!! annotated symbol 0 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:7:7
+!!! annotated symbol 1 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
+!!! annotated symbol 2 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:7:7
+!!! annotated symbol 3 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
+!!! annotated symbol 4 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:7:7
+!!! annotated symbol 5 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
+!!! annotated symbol 6 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:7:7
+!!! annotated symbol 7 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
+!!! annotated symbol 8 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:7:7
+!!! annotated symbol 9 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
         fn() {
         ~~
 !!! error TS2416: Property 'fn' in type 'Derived' is not assignable to the same property in base type 'Base'.
@@ -52,12 +62,22 @@ tests/cases/compiler/baseClassImprovedMismatchErrors.ts(15,5): error TS2416: Pro
         n: DerivedInterface | string;
         ~
 !!! error TS2416: Property 'n' in type 'DerivedInterface' is not assignable to the same property in base type 'Base'.
-!!! error TS2416:   Type 'string | DerivedInterface' is not assignable to type 'string | Base'.
-!!! error TS2416:     Type 'DerivedInterface' is not assignable to type 'string | Base'.
-!!! error TS2416:       Type 'DerivedInterface' is not assignable to type 'Base'.
+!!! error TS2416:   Type 'string | {|DerivedInterface|0|}' is not assignable to type 'string | {|Base|1|}'.
+!!! error TS2416:     Type '{|DerivedInterface|2|}' is not assignable to type 'string | {|Base|3|}'.
+!!! error TS2416:       Type '{|DerivedInterface|4|}' is not assignable to type '{|Base|5|}'.
 !!! error TS2416:         Types of property 'n' are incompatible.
-!!! error TS2416:           Type 'string | DerivedInterface' is not assignable to type 'string | Base'.
-!!! error TS2416:             Type 'DerivedInterface' is not assignable to type 'string | Base'.
+!!! error TS2416:           Type 'string | {|DerivedInterface|6|}' is not assignable to type 'string | {|Base|7|}'.
+!!! error TS2416:             Type '{|DerivedInterface|8|}' is not assignable to type 'string | {|Base|9|}'.
+!!! annotated symbol 0 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:13:7
+!!! annotated symbol 1 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
+!!! annotated symbol 2 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:13:7
+!!! annotated symbol 3 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
+!!! annotated symbol 4 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:13:7
+!!! annotated symbol 5 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
+!!! annotated symbol 6 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:13:7
+!!! annotated symbol 7 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
+!!! annotated symbol 8 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:13:7
+!!! annotated symbol 9 tests/cases/compiler/baseClassImprovedMismatchErrors.ts:1:7
         fn() {
         ~~
 !!! error TS2416: Property 'fn' in type 'DerivedInterface' is not assignable to the same property in base type 'Base'.

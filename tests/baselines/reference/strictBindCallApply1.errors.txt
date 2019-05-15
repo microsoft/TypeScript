@@ -90,7 +90,8 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
 !!! error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
     let f14 = c.foo.bind(undefined);  // Error
                          ~~~~~~~~~
-!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{|C|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/functions/strictBindCallApply1.ts:26:7
     
     let f15 = c.overloaded.bind(c);  // typeof C.prototype.overloaded
     let f16 = c.generic.bind(c);  // typeof C.prototype.generic
@@ -107,7 +108,8 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
 !!! error TS2554: Expected 3 arguments, but got 4.
     let c14 = c.foo.call(undefined, 10, "hello");  // Error
                          ~~~~~~~~~
-!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{|C|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/functions/strictBindCallApply1.ts:26:7
     
     let a10 = c.foo.apply(c, [10, "hello"]);
     let a11 = c.foo.apply(c, [10]);  // Error
@@ -121,7 +123,8 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
 !!! error TS2345: Argument of type '[number, string, number]' is not assignable to parameter of type '[number, string]'.
     let a14 = c.foo.apply(undefined, [10, "hello"]);  // Error
                           ~~~~~~~~~
-!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'C'.
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type '{|C|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/functions/strictBindCallApply1.ts:26:7
     
     let f20 = C.bind(undefined);
     let f21 = C.bind(undefined, 10);

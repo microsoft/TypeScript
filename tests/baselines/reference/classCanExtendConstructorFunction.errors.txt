@@ -91,13 +91,19 @@ tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type '
     // ok
     class Conestoga extends Wagon {
           ~~~~~~~~~
-!!! error TS2417: Class static side 'typeof Conestoga' incorrectly extends base class static side 'typeof Wagon'.
+!!! error TS2417: Class static side 'typeof {|Conestoga|0|}' incorrectly extends base class static side 'typeof {|Wagon|1|}'.
 !!! error TS2417:   Types of property 'circle' are incompatible.
-!!! error TS2417:     Type '(others: (typeof Wagon)[]) => number' is not assignable to type '(wagons?: Wagon[]) => number'.
+!!! error TS2417:     Type '(others: (typeof {|Wagon|2|})[]) => number' is not assignable to type '(wagons?: {|Wagon|3|}[]) => number'.
 !!! error TS2417:       Types of parameters 'others' and 'wagons' are incompatible.
-!!! error TS2417:         Type 'Wagon[]' is not assignable to type '(typeof Wagon)[]'.
+!!! error TS2417:         Type '{|Wagon|4|}[]' is not assignable to type '(typeof {|Wagon|5|})[]'.
 !!! error TS2417:           Property 'circle' is missing in type 'Wagon' but required in type 'typeof Wagon'.
 !!! related TS2728 tests/cases/conformance/salsa/first.js:9:1: 'circle' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/salsa/second.ts:14:7
+!!! annotated symbol 1 tests/cases/conformance/salsa/first.js:5:10
+!!! annotated symbol 2 tests/cases/conformance/salsa/first.js:5:10
+!!! annotated symbol 3 tests/cases/conformance/salsa/first.js:5:10
+!!! annotated symbol 4 tests/cases/conformance/salsa/first.js:5:10
+!!! annotated symbol 5 tests/cases/conformance/salsa/first.js:5:10
         constructor(public drunkOO: true) {
             // error: wrong type
             super('nope');
@@ -138,6 +144,7 @@ tests/cases/conformance/salsa/second.ts(17,15): error TS2345: Argument of type '
 !!! related TS6210 tests/cases/conformance/salsa/generic.js:5:15: An argument for 'flavour' was not provided.
     var errorArgType = new Chowder(0);
                                    ~
-!!! error TS2345: Argument of type '0' is not assignable to parameter of type '{ claim: "ignorant" | "malicious"; }'.
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type '{ {|claim|0|}: "ignorant" | "malicious"; }'.
+!!! annotated symbol 0 tests/cases/conformance/salsa/generic.js:8:22
     
     

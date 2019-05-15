@@ -25,11 +25,15 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtending
     
     interface I4 extends Foo, Bar { // error
               ~~
-!!! error TS2430: Interface 'I4' incorrectly extends interface 'Bar'.
+!!! error TS2430: Interface '{|I4|0|}' incorrectly extends interface '{|Bar|1|}'.
 !!! error TS2430:   Property 'x' is protected but type 'I4' is not a class derived from 'Bar'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds2.ts:12:11
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds2.ts:5:7
               ~~
-!!! error TS2430: Interface 'I4' incorrectly extends interface 'Foo'.
+!!! error TS2430: Interface '{|I4|0|}' incorrectly extends interface '{|Foo|1|}'.
 !!! error TS2430:   Property 'x' is protected but type 'I4' is not a class derived from 'Foo'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds2.ts:12:11
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds2.ts:1:7
         x: string;
     }
     

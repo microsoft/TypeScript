@@ -31,23 +31,53 @@ tests/cases/compiler/genericTypeAssertions5.ts(24,9): error TS2352: Conversion o
         var y = x;
         y = a; // error: cannot convert A to T
         ~
-!!! error TS2322: Type 'A' is not assignable to type 'T'.
-!!! error TS2322:   'A' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+!!! error TS2322: Type '{|A|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|A|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|A|5|}'.
+!!! annotated symbol 0 tests/cases/compiler/genericTypeAssertions5.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 2 tests/cases/compiler/genericTypeAssertions5.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 4 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 5 tests/cases/compiler/genericTypeAssertions5.ts:1:11
         y = b; // error: cannot convert B to T
         ~
-!!! error TS2322: Type 'B' is not assignable to type 'T'.
-!!! error TS2322:   'B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+!!! error TS2322: Type '{|B|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|B|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|A|5|}'.
+!!! annotated symbol 0 tests/cases/compiler/genericTypeAssertions5.ts:5:11
+!!! annotated symbol 1 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 2 tests/cases/compiler/genericTypeAssertions5.ts:5:11
+!!! annotated symbol 3 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 4 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 5 tests/cases/compiler/genericTypeAssertions5.ts:1:11
         y = c; // error: cannot convert C to T
         ~
-!!! error TS2322: Type 'C' is not assignable to type 'T'.
-!!! error TS2322:   'C' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|C|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|A|5|}'.
+!!! annotated symbol 0 tests/cases/compiler/genericTypeAssertions5.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 2 tests/cases/compiler/genericTypeAssertions5.ts:9:11
+!!! annotated symbol 3 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 4 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 5 tests/cases/compiler/genericTypeAssertions5.ts:1:11
         y = <T>a;
         y = <T>b; // error: cannot convert B to T
             ~~~~
-!!! error TS2352: Conversion of type 'B' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   'B' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+!!! error TS2352: Conversion of type '{|B|0|}' to type '{|T|1|}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   '{|B|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|A|5|}'.
+!!! annotated symbol 0 tests/cases/compiler/genericTypeAssertions5.ts:5:11
+!!! annotated symbol 1 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 2 tests/cases/compiler/genericTypeAssertions5.ts:5:11
+!!! annotated symbol 3 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 4 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 5 tests/cases/compiler/genericTypeAssertions5.ts:1:11
         y = <T>c; // error: cannot convert C to T
             ~~~~
-!!! error TS2352: Conversion of type 'C' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   'C' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'A'.
+!!! error TS2352: Conversion of type '{|C|0|}' to type '{|T|1|}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   '{|C|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|A|5|}'.
+!!! annotated symbol 0 tests/cases/compiler/genericTypeAssertions5.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 2 tests/cases/compiler/genericTypeAssertions5.ts:9:11
+!!! annotated symbol 3 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 4 tests/cases/compiler/genericTypeAssertions5.ts:17:15
+!!! annotated symbol 5 tests/cases/compiler/genericTypeAssertions5.ts:1:11
     }

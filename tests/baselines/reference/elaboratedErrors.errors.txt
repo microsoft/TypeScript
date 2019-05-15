@@ -35,7 +35,9 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
 !!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:14:19: 'x' is declared here.
     x = y;
     ~
-!!! error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
+!!! error TS2322: Type '{|Beta|0|}' is not assignable to type '{|Alpha|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/elaboratedErrors.ts:15:11
+!!! annotated symbol 1 tests/cases/compiler/elaboratedErrors.ts:14:11
     
     // Only one of these errors should be large
     y = x;
@@ -44,5 +46,7 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
 !!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:15:18: 'y' is declared here.
     y = x;
     ~
-!!! error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
+!!! error TS2322: Type '{|Alpha|0|}' is not assignable to type '{|Beta|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/elaboratedErrors.ts:14:11
+!!! annotated symbol 1 tests/cases/compiler/elaboratedErrors.ts:15:11
     

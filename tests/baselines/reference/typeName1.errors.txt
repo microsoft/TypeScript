@@ -28,53 +28,97 @@ tests/cases/compiler/typeName1.ts(23,5): error TS2322: Type 'typeof C' is not as
     
     var x1:{ f(s:string):number;f(n:number):string; }=3;
         ~~
-!!! error TS2322: Type '3' is not assignable to type '{ f(s: string): number; f(n: number): string; }'.
+!!! error TS2322: Type '3' is not assignable to type '{ {|f|0|}(s: string): number; {|f|1|}(n: number): string; }'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:9:10
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:9:10
     var x2:{ f(s:string):number; } =3;
         ~~
-!!! error TS2322: Type '3' is not assignable to type '{ f(s: string): number; }'.
+!!! error TS2322: Type '3' is not assignable to type '{ {|f|0|}(s: string): number; }'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:10:10
     var x3:{ (s:string):number;(n:number):string; }=3;
         ~~
 !!! error TS2322: Type '3' is not assignable to type '{ (s: string): number; (n: number): string; }'.
     var x4:{ x;y;z:number;f(n:number):string;f(s:string):number; }=3;
         ~~
-!!! error TS2322: Type '3' is not assignable to type '{ x: any; y: any; z: number; f(n: number): string; f(s: string): number; }'.
+!!! error TS2322: Type '3' is not assignable to type '{ {|x|0|}: any; {|y|1|}: any; {|z|2|}: number; {|f|3|}(n: number): string; {|f|4|}(s: string): number; }'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:12:10
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:12:12
+!!! annotated symbol 2 tests/cases/compiler/typeName1.ts:12:14
+!!! annotated symbol 3 tests/cases/compiler/typeName1.ts:12:23
+!!! annotated symbol 4 tests/cases/compiler/typeName1.ts:12:23
     var x5:{ (s:string):number;(n:number):string;x;y;z:number;f(n:number):string;f(s:string):number; }=3;
         ~~
-!!! error TS2322: Type '3' is not assignable to type '{ (s: string): number; (n: number): string; x: any; y: any; z: number; f(n: number): string; f(s: string): number; }'.
+!!! error TS2322: Type '3' is not assignable to type '{ (s: string): number; (n: number): string; {|x|0|}: any; {|y|1|}: any; {|z|2|}: number; {|f|3|}(n: number): string; {|f|4|}(s: string): number; }'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:13:46
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:13:48
+!!! annotated symbol 2 tests/cases/compiler/typeName1.ts:13:50
+!!! annotated symbol 3 tests/cases/compiler/typeName1.ts:13:59
+!!! annotated symbol 4 tests/cases/compiler/typeName1.ts:13:59
     var x6:{ z:number;f:{(n:number):string;(s:string):number;}; }=3;
         ~~
-!!! error TS2322: Type '3' is not assignable to type '{ z: number; f: { (n: number): string; (s: string): number; }; }'.
+!!! error TS2322: Type '3' is not assignable to type '{ {|z|0|}: number; {|f|1|}: { (n: number): string; (s: string): number; }; }'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:14:10
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:14:19
     var x7:(s:string)=>boolean=3;
         ~~
 !!! error TS2322: Type '3' is not assignable to type '(s: string) => boolean'.
     var x8:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; }=3;
         ~~
-!!! error TS2322: Type '3' is not assignable to type '{ (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }'.
+!!! error TS2322: Type '3' is not assignable to type '{ (): boolean; [s: string]: { {|x|0|}: any; {|y|1|}: any; }; [n: number]: { {|x|2|}: any; {|y|3|}: any; }; {|z|4|}: {|I|5|}; }'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:16:27
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:16:30
+!!! annotated symbol 2 tests/cases/compiler/typeName1.ts:16:47
+!!! annotated symbol 3 tests/cases/compiler/typeName1.ts:16:50
+!!! annotated symbol 4 tests/cases/compiler/typeName1.ts:16:10
+!!! annotated symbol 5 tests/cases/compiler/typeName1.ts:1:11
              ~
 !!! error TS2411: Property 'z' of type 'I' is not assignable to string index type '{ x: any; y: any; }'.
     var x9:I=3;
         ~~
-!!! error TS2322: Type '3' is not assignable to type 'I'.
+!!! error TS2322: Type '3' is not assignable to type '{|I|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:1:11
     var x10:I[][][][]=3;
         ~~~
-!!! error TS2322: Type '3' is not assignable to type 'I[][][][]'.
+!!! error TS2322: Type '3' is not assignable to type '{|I|0|}[][][][]'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:1:11
     var x11:{z:I;x:boolean;}[][]=3;
         ~~~
-!!! error TS2322: Type '3' is not assignable to type '{ z: I; x: boolean; }[][]'.
+!!! error TS2322: Type '3' is not assignable to type '{ {|z|0|}: {|I|1|}; {|x|2|}: boolean; }[][]'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:19:10
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/typeName1.ts:19:14
     var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
         ~~~
-!!! error TS2322: Type '3' is not assignable to type '{ z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }; }[][]'.
+!!! error TS2322: Type '3' is not assignable to type '{ {|z|0|}: {|I|1|}; {|x|2|}: boolean; {|y|3|}: (s: string) => boolean; {|w|4|}: { (): boolean; [s: string]: { {|x|5|}: any; {|y|6|}: any; }; [n: number]: { {|x|7|}: any; {|y|8|}: any; }; {|z|9|}: {|I|10|}; }; }[][]'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:20:10
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/typeName1.ts:20:14
+!!! annotated symbol 3 tests/cases/compiler/typeName1.ts:20:24
+!!! annotated symbol 4 tests/cases/compiler/typeName1.ts:20:46
+!!! annotated symbol 5 tests/cases/compiler/typeName1.ts:20:67
+!!! annotated symbol 6 tests/cases/compiler/typeName1.ts:20:70
+!!! annotated symbol 7 tests/cases/compiler/typeName1.ts:20:87
+!!! annotated symbol 8 tests/cases/compiler/typeName1.ts:20:90
+!!! annotated symbol 9 tests/cases/compiler/typeName1.ts:20:50
+!!! annotated symbol 10 tests/cases/compiler/typeName1.ts:1:11
                                                      ~
 !!! error TS2411: Property 'z' of type 'I' is not assignable to string index type '{ x: any; y: any; }'.
     var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
         ~~~
-!!! error TS2322: Type '3' is not assignable to type '{ (): {}; new (): number; new (n: number): number; x: string; w: { y: number; }; }'.
+!!! error TS2322: Type '3' is not assignable to type '{ (): {}; new (): number; new (n: number): number; {|x|0|}: string; {|w|1|}: { {|y|2|}: number; }; }'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:21:48
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:21:59
+!!! annotated symbol 2 tests/cases/compiler/typeName1.ts:21:63
     var x14:{ f(x:number):boolean; p; q; ():string; }=3;
         ~~~
-!!! error TS2322: Type '3' is not assignable to type '{ (): string; f(x: number): boolean; p: any; q: any; }'.
+!!! error TS2322: Type '3' is not assignable to type '{ (): string; {|f|0|}(x: number): boolean; {|p|1|}: any; {|q|2|}: any; }'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:22:11
+!!! annotated symbol 1 tests/cases/compiler/typeName1.ts:22:32
+!!! annotated symbol 2 tests/cases/compiler/typeName1.ts:22:35
     var x15:number=C;
         ~~~
-!!! error TS2322: Type 'typeof C' is not assignable to type 'number'.
+!!! error TS2322: Type 'typeof {|C|0|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/typeName1.ts:4:7
     
     
     

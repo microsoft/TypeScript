@@ -50,18 +50,24 @@ tests/cases/conformance/jsx/file.tsx(39,15): error TS2322: Type '(user: IUser) =
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ) }
     ~~~~~~~~~~~~~
-!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'string | number | boolean | any[] | ReactElement<any>'.
+!!! error TS2322: Type '(user: {|IUser|0|}) => {|Element|1|}' is not assignable to type 'string | number | boolean | any[] | {|ReactElement|2|}<any>'.
 !!! error TS2322:   Type '(user: IUser) => Element' is missing the following properties from type 'ReactElement<any>': type, props
 !!! related TS6212 tests/cases/conformance/jsx/file.tsx:36:15: Did you mean to call this expression?
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:3:11
+!!! annotated symbol 1 /.lib/react.d.ts:2359:15
+!!! annotated symbol 2 /.lib/react.d.ts:25:15
                 { user => (
                   ~~~~~~~~~
                     <h1>{ user.Name }</h1>
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ) }
     ~~~~~~~~~~~~~
-!!! error TS2322: Type '(user: IUser) => Element' is not assignable to type 'string | number | boolean | any[] | ReactElement<any>'.
+!!! error TS2322: Type '(user: {|IUser|0|}) => {|Element|1|}' is not assignable to type 'string | number | boolean | any[] | {|ReactElement|2|}<any>'.
 !!! error TS2322:   Type '(user: IUser) => Element' is missing the following properties from type 'ReactElement<any>': type, props
 !!! related TS6212 tests/cases/conformance/jsx/file.tsx:39:15: Did you mean to call this expression?
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:3:11
+!!! annotated symbol 1 /.lib/react.d.ts:2359:15
+!!! annotated symbol 2 /.lib/react.d.ts:25:15
             </FetchUser>
         );
     }

@@ -27,8 +27,10 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
     
     class D extends C implements A { // error
           ~
-!!! error TS2420: Class 'D' incorrectly implements interface 'A'.
+!!! error TS2420: Class '{|D|0|}' incorrectly implements interface '{|A|1|}'.
 !!! error TS2420:   Types have separate declarations of a private property 'w'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:17:7
+!!! annotated symbol 1 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:9:11
         private w: number;
         y: string;
         z: string;
@@ -36,12 +38,16 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
     
     class E extends C2 implements A { // error
           ~
-!!! error TS2415: Class 'E' incorrectly extends base class 'C2'.
+!!! error TS2415: Class '{|E|0|}' incorrectly extends base class '{|C2|1|}'.
 !!! error TS2415:   Property 'w' is private in type 'C2' but not in type 'E'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:23:7
+!!! annotated symbol 1 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:5:7
           ~
-!!! error TS2420: Class 'E' incorrectly implements interface 'A'.
+!!! error TS2420: Class '{|E|0|}' incorrectly implements interface '{|A|1|}'.
 !!! error TS2420:   Property 'x' is missing in type 'E' but required in type 'A'.
 !!! related TS2728 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:2:13: 'x' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:23:7
+!!! annotated symbol 1 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:9:11
         w: number;
         y: string;
         z: string;

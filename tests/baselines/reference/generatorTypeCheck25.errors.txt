@@ -16,17 +16,50 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error
     class Baz { z: number }
     var g3: () => Iterable<Foo> = function* () {
         ~~
-!!! error TS2322: Type '() => IterableIterator<Bar | Baz>' is not assignable to type '() => Iterable<Foo>'.
-!!! error TS2322:   Type 'IterableIterator<Bar | Baz>' is not assignable to type 'Iterable<Foo>'.
+!!! error TS2322: Type '() => {|IterableIterator|0|}<{|Bar|1|} | {|Baz|2|}>' is not assignable to type '() => {|Iterable|3|}<{|Foo|4|}>'.
+!!! error TS2322:   Type '{|IterableIterator|5|}<{|Bar|6|} | {|Baz|7|}>' is not assignable to type '{|Iterable|8|}<{|Foo|9|}>'.
 !!! error TS2322:     Types of property '[Symbol.iterator]' are incompatible.
-!!! error TS2322:       Type '() => IterableIterator<Bar | Baz>' is not assignable to type '() => Iterator<Foo>'.
-!!! error TS2322:         Type 'IterableIterator<Bar | Baz>' is not assignable to type 'Iterator<Foo>'.
+!!! error TS2322:       Type '() => {|IterableIterator|10|}<{|Bar|11|} | {|Baz|12|}>' is not assignable to type '() => {|Iterator|13|}<{|Foo|14|}>'.
+!!! error TS2322:         Type '{|IterableIterator|15|}<{|Bar|16|} | {|Baz|17|}>' is not assignable to type '{|Iterator|18|}<{|Foo|19|}>'.
 !!! error TS2322:           Types of property 'next' are incompatible.
-!!! error TS2322:             Type '(value?: any) => IteratorResult<Bar | Baz>' is not assignable to type '(value?: any) => IteratorResult<Foo>'.
-!!! error TS2322:               Type 'IteratorResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo>'.
-!!! error TS2322:                 Type 'Bar | Baz' is not assignable to type 'Foo'.
+!!! error TS2322:             Type '(value?: any) => {|IteratorResult|20|}<{|Bar|21|} | {|Baz|22|}>' is not assignable to type '(value?: any) => {|IteratorResult|23|}<{|Foo|24|}>'.
+!!! error TS2322:               Type '{|IteratorResult|25|}<{|Bar|26|} | {|Baz|27|}>' is not assignable to type '{|IteratorResult|28|}<{|Foo|29|}>'.
+!!! error TS2322:                 Type '{|Bar|30|} | {|Baz|31|}' is not assignable to type '{|Foo|32|}'.
 !!! error TS2322:                   Property 'x' is missing in type 'Baz' but required in type 'Foo'.
 !!! related TS2728 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:13: 'x' is declared here.
+!!! annotated symbol 0 /.ts/lib.es2015.iterable.d.ts:46:11
+!!! annotated symbol 1 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
+!!! annotated symbol 2 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
+!!! annotated symbol 3 /.ts/lib.es2015.iterable.d.ts:42:11
+!!! annotated symbol 4 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
+!!! annotated symbol 5 /.ts/lib.es2015.iterable.d.ts:46:11
+!!! annotated symbol 6 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
+!!! annotated symbol 7 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
+!!! annotated symbol 8 /.ts/lib.es2015.iterable.d.ts:42:11
+!!! annotated symbol 9 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
+!!! annotated symbol 10 /.ts/lib.es2015.iterable.d.ts:46:11
+!!! annotated symbol 11 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
+!!! annotated symbol 12 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
+!!! annotated symbol 13 /.ts/lib.es2015.iterable.d.ts:36:11
+!!! annotated symbol 14 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
+!!! annotated symbol 15 /.ts/lib.es2015.iterable.d.ts:46:11
+!!! annotated symbol 16 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
+!!! annotated symbol 17 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
+!!! annotated symbol 18 /.ts/lib.es2015.iterable.d.ts:36:11
+!!! annotated symbol 19 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
+!!! annotated symbol 20 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 21 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
+!!! annotated symbol 22 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
+!!! annotated symbol 23 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 24 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
+!!! annotated symbol 25 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 26 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
+!!! annotated symbol 27 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
+!!! annotated symbol 28 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 29 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
+!!! annotated symbol 30 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:2:7
+!!! annotated symbol 31 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:3:7
+!!! annotated symbol 32 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts:1:7
         yield;
         yield new Bar;
         yield new Baz;

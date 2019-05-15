@@ -98,19 +98,34 @@ tests/cases/conformance/classes/mixinAccessModifiers.ts(130,4): error TS2445: Pr
     
     class C1 extends Mix(Private, Private2) {}
           ~~
-!!! error TS2415: Class 'C1' incorrectly extends base class 'Private & Private2'.
-!!! error TS2415:   Type 'C1' is not assignable to type 'Private'.
+!!! error TS2415: Class '{|C1|0|}' incorrectly extends base class '{|Private|1|} & {|Private2|2|}'.
+!!! error TS2415:   Type '{|C1|3|}' is not assignable to type '{|Private|4|}'.
 !!! error TS2415:     Property 'p' has conflicting declarations and is inaccessible in type 'C1'.
+!!! annotated symbol 0 tests/cases/conformance/classes/mixinAccessModifiers.ts:65:7
+!!! annotated symbol 1 tests/cases/conformance/classes/mixinAccessModifiers.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/classes/mixinAccessModifiers.ts:8:7
+!!! annotated symbol 3 tests/cases/conformance/classes/mixinAccessModifiers.ts:65:7
+!!! annotated symbol 4 tests/cases/conformance/classes/mixinAccessModifiers.ts:3:7
     class C2 extends Mix(Private, Protected) {}
           ~~
-!!! error TS2415: Class 'C2' incorrectly extends base class 'Private & Protected'.
-!!! error TS2415:   Type 'C2' is not assignable to type 'Private'.
+!!! error TS2415: Class '{|C2|0|}' incorrectly extends base class '{|Private|1|} & {|Protected|2|}'.
+!!! error TS2415:   Type '{|C2|3|}' is not assignable to type '{|Private|4|}'.
 !!! error TS2415:     Property 'p' has conflicting declarations and is inaccessible in type 'C2'.
+!!! annotated symbol 0 tests/cases/conformance/classes/mixinAccessModifiers.ts:66:7
+!!! annotated symbol 1 tests/cases/conformance/classes/mixinAccessModifiers.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/classes/mixinAccessModifiers.ts:13:7
+!!! annotated symbol 3 tests/cases/conformance/classes/mixinAccessModifiers.ts:66:7
+!!! annotated symbol 4 tests/cases/conformance/classes/mixinAccessModifiers.ts:3:7
     class C3 extends Mix(Private, Public) {}
           ~~
-!!! error TS2415: Class 'C3' incorrectly extends base class 'Private & Public'.
-!!! error TS2415:   Type 'C3' is not assignable to type 'Private'.
+!!! error TS2415: Class '{|C3|0|}' incorrectly extends base class '{|Private|1|} & {|Public|2|}'.
+!!! error TS2415:   Type '{|C3|3|}' is not assignable to type '{|Private|4|}'.
 !!! error TS2415:     Property 'p' has conflicting declarations and is inaccessible in type 'C3'.
+!!! annotated symbol 0 tests/cases/conformance/classes/mixinAccessModifiers.ts:67:7
+!!! annotated symbol 1 tests/cases/conformance/classes/mixinAccessModifiers.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/classes/mixinAccessModifiers.ts:25:7
+!!! annotated symbol 3 tests/cases/conformance/classes/mixinAccessModifiers.ts:67:7
+!!! annotated symbol 4 tests/cases/conformance/classes/mixinAccessModifiers.ts:3:7
     
     class C4 extends Mix(Protected, Protected2) {
     	f(c4: C4, c5: C5, c6: C6) {

@@ -10,9 +10,11 @@ tests/cases/compiler/addMoreOverloadsToBaseSignature.ts(5,11): error TS2430: Int
     
     interface Bar extends Foo {
               ~~~
-!!! error TS2430: Interface 'Bar' incorrectly extends interface 'Foo'.
+!!! error TS2430: Interface '{|Bar|0|}' incorrectly extends interface '{|Foo|1|}'.
 !!! error TS2430:   Types of property 'f' are incompatible.
 !!! error TS2430:     Type '(key: string) => string' is not assignable to type '() => string'.
+!!! annotated symbol 0 tests/cases/compiler/addMoreOverloadsToBaseSignature.ts:5:11
+!!! annotated symbol 1 tests/cases/compiler/addMoreOverloadsToBaseSignature.ts:1:11
         f(key: string): string;
     }
     

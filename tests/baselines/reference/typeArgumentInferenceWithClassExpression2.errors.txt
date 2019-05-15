@@ -10,6 +10,8 @@ tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpre
     // Should not infer string because it is a static property
     foo(class { static prop = "hello" }).length;
         ~~~~~
-!!! error TS2345: Argument of type 'typeof (Anonymous class)' is not assignable to parameter of type 'typeof (Anonymous class)'.
+!!! error TS2345: Argument of type 'typeof {|(Anonymous class)|0|}' is not assignable to parameter of type 'typeof {|(Anonymous class)|1|}'.
 !!! error TS2345:   Property 'prop' is missing in type '(Anonymous class)' but required in type 'foo<unknown>.(Anonymous class)'.
 !!! related TS2728 tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts:1:29: 'prop' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts:6:5
+!!! annotated symbol 1 tests/cases/conformance/es6/classExpressions/typeArgumentInferenceWithClassExpression2.ts:1:21

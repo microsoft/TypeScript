@@ -52,10 +52,13 @@ tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts(48
     
     x = a; // expected error
     ~
-!!! error TS2322: Type 'String' is not assignable to type 'string'.
-!!! error TS2322:   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
+!!! error TS2322: Type '{|String|0|}' is not assignable to type 'string'.
+!!! error TS2322:   'string' is a primitive, but '{|String|1|}' is a wrapper object. Prefer using 'string' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:394:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:394:11
     x = b; // expected error
     ~
-!!! error TS2322: Type 'NotString' is not assignable to type 'string'.
+!!! error TS2322: Type '{|NotString|0|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/string/assignFromStringInterface2.ts:5:11
     
     

@@ -10,6 +10,10 @@ tests/cases/compiler/restTypeRetainsMappyness.ts(7,8): error TS2345: Argument of
         const arr: Foo<T> = {} as any
         fn(...arr) // Error: Argument of type 'any[]' is not assignable to parameter of type 'Foo<T>'
            ~~~~~~
-!!! error TS2345: Argument of type 'Foo<T>[number][]' is not assignable to parameter of type 'Foo<T>'.
+!!! error TS2345: Argument of type '{|Foo|0|}<{|T|1|}>[number][]' is not assignable to parameter of type '{|Foo|2|}<{|T|3|}>'.
+!!! annotated symbol 0 tests/cases/compiler/restTypeRetainsMappyness.ts:1:6
+!!! annotated symbol 1 tests/cases/compiler/restTypeRetainsMappyness.ts:5:15
+!!! annotated symbol 2 tests/cases/compiler/restTypeRetainsMappyness.ts:1:6
+!!! annotated symbol 3 tests/cases/compiler/restTypeRetainsMappyness.ts:5:15
     }
     

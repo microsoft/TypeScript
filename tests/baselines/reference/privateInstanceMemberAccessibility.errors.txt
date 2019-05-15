@@ -13,8 +13,10 @@ tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAcces
     
     class Derived extends Base {
           ~~~~~~~
-!!! error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
+!!! error TS2415: Class '{|Derived|0|}' incorrectly extends base class '{|Base|1|}'.
 !!! error TS2415:   Property 'foo' is private in type 'Base' but not in type 'Derived'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts:5:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts:1:7
         x = super.foo; // error
                   ~~~
 !!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.

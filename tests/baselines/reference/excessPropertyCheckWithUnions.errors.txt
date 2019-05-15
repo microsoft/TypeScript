@@ -37,17 +37,25 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2326: Types
     }
     let wrong: ADT = { tag: "T", a1: "extra" }
                                  ~~~~~~~~~~~
-!!! error TS2322: Type '{ tag: "T"; a1: string; }' is not assignable to type 'ADT'.
+!!! error TS2322: Type '{ {|tag|0|}: "T"; {|a1|1|}: string; }' is not assignable to type '{|ADT|2|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'a1' does not exist in type '{ tag: "T"; }'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:10:20
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:10:30
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:1:6
     wrong = { tag: "A", d20: 12 }
                         ~~~~~~~
-!!! error TS2322: Type '{ tag: "A"; d20: number; }' is not assignable to type 'ADT'.
+!!! error TS2322: Type '{ {|tag|0|}: "A"; {|d20|1|}: number; }' is not assignable to type '{|ADT|2|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'd20' does not exist in type '{ tag: "A"; a1: string; }'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:11:11
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:11:21
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:1:6
     wrong = { tag: "D" }
     ~~~~~
-!!! error TS2322: Type '{ tag: "D"; }' is not assignable to type 'ADT'.
+!!! error TS2322: Type '{ {|tag|0|}: "D"; }' is not assignable to type '{|ADT|1|}'.
 !!! error TS2322:   Property 'd20' is missing in type '{ tag: "D"; }' but required in type '{ tag: "D"; d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20; }'.
 !!! related TS2728 tests/cases/compiler/excessPropertyCheckWithUnions.ts:6:5: 'd20' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:12:11
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:1:6
     
     type Ambiguous = {
         tag: "A",
@@ -70,28 +78,47 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2326: Types
     // correctly error on excess property 'extra', even when ambiguous
     amb = { tag: "A", x: "hi", extra: 12 }
                                ~~~~~~~~~
-!!! error TS2322: Type '{ tag: "A"; x: string; extra: number; }' is not assignable to type 'Ambiguous'.
+!!! error TS2322: Type '{ {|tag|0|}: "A"; {|x|1|}: string; {|extra|2|}: number; }' is not assignable to type '{|Ambiguous|3|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:33:9
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:33:19
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:33:28
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyCheckWithUnions.ts:14:6
     amb = { tag: "A", y: 12, extra: 12 }
                              ~~~~~~~~~
-!!! error TS2322: Type '{ tag: "A"; y: number; extra: number; }' is not assignable to type 'Ambiguous'.
+!!! error TS2322: Type '{ {|tag|0|}: "A"; {|y|1|}: number; {|extra|2|}: number; }' is not assignable to type '{|Ambiguous|3|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'extra' does not exist in type 'Ambiguous'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:34:9
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:34:19
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:34:26
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyCheckWithUnions.ts:14:6
     
     // assignability errors still work.
     // But note that the error for `z: true` is the fallback one of reporting on
     // the last constituent since assignability error reporting can't find a single best discriminant either.
     amb = { tag: "A" }
     ~~~
-!!! error TS2322: Type '{ tag: "A"; }' is not assignable to type 'Ambiguous'.
-!!! error TS2322:   Type '{ tag: "A"; }' is not assignable to type '{ tag: "C"; }'.
+!!! error TS2322: Type '{ {|tag|0|}: "A"; }' is not assignable to type '{|Ambiguous|1|}'.
+!!! error TS2322:   Type '{ {|tag|2|}: "A"; }' is not assignable to type '{ {|tag|3|}: "C"; }'.
 !!! error TS2322:     Types of property 'tag' are incompatible.
 !!! error TS2322:       Type '"A"' is not assignable to type '"C"'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:39:9
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:14:6
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:39:9
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyCheckWithUnions.ts:24:5
     amb = { tag: "A", z: true }
     ~~~
-!!! error TS2322: Type '{ tag: "A"; z: true; }' is not assignable to type 'Ambiguous'.
-!!! error TS2322:   Type '{ tag: "A"; z: true; }' is not assignable to type '{ tag: "B"; z: boolean; }'.
+!!! error TS2322: Type '{ {|tag|0|}: "A"; {|z|1|}: true; }' is not assignable to type '{|Ambiguous|2|}'.
+!!! error TS2322:   Type '{ {|tag|3|}: "A"; {|z|4|}: true; }' is not assignable to type '{ {|tag|5|}: "B"; {|z|6|}: boolean; }'.
 !!! error TS2322:     Types of property 'tag' are incompatible.
 !!! error TS2322:       Type '"A"' is not assignable to type '"B"'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:40:9
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:40:19
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:14:6
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyCheckWithUnions.ts:40:9
+!!! annotated symbol 4 tests/cases/compiler/excessPropertyCheckWithUnions.ts:40:19
+!!! annotated symbol 5 tests/cases/compiler/excessPropertyCheckWithUnions.ts:21:5
+!!! annotated symbol 6 tests/cases/compiler/excessPropertyCheckWithUnions.ts:22:5
     
     type Overlapping =
         | { a: 1, b: 1, first: string }
@@ -102,12 +129,22 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2326: Types
     // these two are still errors despite their doubled up discriminants
     over = { a: 1, b: 1, first: "ok", second: "error" }
                                       ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: 1; b: 1; first: string; second: string; }' is not assignable to type 'Overlapping'.
+!!! error TS2322: Type '{ {|a|0|}: 1; {|b|1|}: 1; {|first|2|}: string; {|second|3|}: string; }' is not assignable to type '{|Overlapping|4|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'second' does not exist in type '{ a: 1; b: 1; first: string; }'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:49:10
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:49:16
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:49:22
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyCheckWithUnions.ts:49:35
+!!! annotated symbol 4 tests/cases/compiler/excessPropertyCheckWithUnions.ts:42:6
     over = { a: 1, b: 1, first: "ok", third: "error" }
                                       ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: 1; b: 1; first: string; third: string; }' is not assignable to type 'Overlapping'.
+!!! error TS2322: Type '{ {|a|0|}: 1; {|b|1|}: 1; {|first|2|}: string; {|third|3|}: string; }' is not assignable to type '{|Overlapping|4|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'third' does not exist in type '{ a: 1; b: 1; first: string; }'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:50:10
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:50:16
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:50:22
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyCheckWithUnions.ts:50:35
+!!! annotated symbol 4 tests/cases/compiler/excessPropertyCheckWithUnions.ts:42:6
     
     // Freshness disappears after spreading a union
     declare let t0: { a: any, b: any } | { d: any, e: any }
@@ -126,8 +163,11 @@ tests/cases/compiler/excessPropertyCheckWithUnions.ts(66,9): error TS2326: Types
             b: "b", // excess -- kind: "A"
             ~~~~~~
 !!! error TS2326: Types of property 'n' are incompatible.
-!!! error TS2326:   Type '{ a: string; b: string; }' is not assignable to type 'AN'.
+!!! error TS2326:   Type '{ {|a|0|}: string; {|b|1|}: string; }' is not assignable to type '{|AN|2|}'.
 !!! error TS2326:     Object literal may only specify known properties, and 'b' does not exist in type 'AN'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyCheckWithUnions.ts:65:9
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyCheckWithUnions.ts:66:9
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyCheckWithUnions.ts:59:6
         }
     }
     const abac: AB = {

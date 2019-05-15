@@ -17,15 +17,19 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
 ==== tests/cases/compiler/recursiveFunctionTypes.ts (13 errors) ====
     function fn(): typeof fn { return 1; }
                                ~~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type '() => typeof fn'.
+!!! error TS2322: Type '1' is not assignable to type '() => typeof {|fn|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveFunctionTypes.ts:1:10
     
     var x: number = fn; // error
         ~
-!!! error TS2322: Type '() => typeof fn' is not assignable to type 'number'.
+!!! error TS2322: Type '() => typeof {|fn|0|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveFunctionTypes.ts:1:10
     var y: () => number = fn; // ok
         ~
-!!! error TS2322: Type '() => typeof fn' is not assignable to type '() => number'.
-!!! error TS2322:   Type '() => typeof fn' is not assignable to type 'number'.
+!!! error TS2322: Type '() => typeof {|fn|0|}' is not assignable to type '() => number'.
+!!! error TS2322:   Type '() => typeof {|fn|1|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveFunctionTypes.ts:1:10
+!!! annotated symbol 1 tests/cases/compiler/recursiveFunctionTypes.ts:1:10
     
     var f: () => typeof g;
     var g: () => typeof f;
@@ -44,14 +48,17 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
     
     var a: number = f3; // error
         ~
-!!! error TS2322: Type '() => I<typeof f3>' is not assignable to type 'number'.
+!!! error TS2322: Type '() => {|I|0|}<typeof {|f3|1|}>' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveFunctionTypes.ts:14:11
+!!! annotated symbol 1 tests/cases/compiler/recursiveFunctionTypes.ts:15:10
     
     class C {
          static g(t: typeof C.g){ }
     }
     C.g(3); // error
         ~
-!!! error TS2345: Argument of type '3' is not assignable to parameter of type '(t: typeof g) => void'.
+!!! error TS2345: Argument of type '3' is not assignable to parameter of type '(t: typeof {|g|0|}) => void'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveFunctionTypes.ts:20:13
     
     var f4: () => typeof f4;
     f4 = 3; // error
@@ -72,7 +79,9 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
 !!! error TS2554: Expected 0-1 arguments, but got 2.
     f6(""); // ok (function takes an any param)
        ~~
-!!! error TS2345: Argument of type '""' is not assignable to parameter of type '{ (): typeof f6; (a: typeof f6): () => number; }'.
+!!! error TS2345: Argument of type '""' is not assignable to parameter of type '{ (): typeof {|f6|0|}; (a: typeof {|f6|1|}): () => number; }'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveFunctionTypes.ts:29:10
+!!! annotated symbol 1 tests/cases/compiler/recursiveFunctionTypes.ts:29:10
     f6(); // ok
     
     declare function f7(): typeof f7;
@@ -85,5 +94,9 @@ tests/cases/compiler/recursiveFunctionTypes.ts(43,4): error TS2345: Argument of 
 !!! error TS2554: Expected 0-1 arguments, but got 2.
     f7(""); // ok (function takes an any param)
        ~~
-!!! error TS2345: Argument of type '""' is not assignable to parameter of type '{ (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }'.
+!!! error TS2345: Argument of type '""' is not assignable to parameter of type '{ (): typeof {|f7|0|}; (a: typeof {|f7|1|}): () => number; (a: number): number; (a?: typeof {|f7|2|}): typeof {|f7|3|}; }'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveFunctionTypes.ts:37:18
+!!! annotated symbol 1 tests/cases/compiler/recursiveFunctionTypes.ts:37:18
+!!! annotated symbol 2 tests/cases/compiler/recursiveFunctionTypes.ts:37:18
+!!! annotated symbol 3 tests/cases/compiler/recursiveFunctionTypes.ts:37:18
     f7(); // ok

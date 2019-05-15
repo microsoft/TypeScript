@@ -89,8 +89,10 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1241: Unabl
     @allRest
     ~~~~~~~~
 !!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof B'.
+!!! error TS1238:   Type '{|OmniDecorator|0|}' is not assignable to type 'typeof {|B|1|}'.
 !!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): B'.
+!!! annotated symbol 0 tests/cases/compiler/potentiallyUncalledDecorators.ts:24:11
+!!! annotated symbol 1 tests/cases/compiler/potentiallyUncalledDecorators.ts:42:7
     class B {
         @allRest foo: any;
         ~~~~~~~~
@@ -105,8 +107,10 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1241: Unabl
     @oneOptional
     ~~~~~~~~~~~~
 !!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof C'.
+!!! error TS1238:   Type '{|OmniDecorator|0|}' is not assignable to type 'typeof {|C|1|}'.
 !!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): C'.
+!!! annotated symbol 0 tests/cases/compiler/potentiallyUncalledDecorators.ts:24:11
+!!! annotated symbol 1 tests/cases/compiler/potentiallyUncalledDecorators.ts:48:7
     class C {
         @oneOptional foo: any;
         ~~~~~~~~~~~~
@@ -119,8 +123,10 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1241: Unabl
     @twoOptional
     ~~~~~~~~~~~~
 !!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof D'.
+!!! error TS1238:   Type '{|OmniDecorator|0|}' is not assignable to type 'typeof {|D|1|}'.
 !!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): D'.
+!!! annotated symbol 0 tests/cases/compiler/potentiallyUncalledDecorators.ts:24:11
+!!! annotated symbol 1 tests/cases/compiler/potentiallyUncalledDecorators.ts:54:7
     class D {
         @twoOptional foo: any;
         ~~~~~~~~~~~~
@@ -135,8 +141,10 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1241: Unabl
     @threeOptional
     ~~~~~~~~~~~~~~
 !!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof E'.
+!!! error TS1238:   Type '{|OmniDecorator|0|}' is not assignable to type 'typeof {|E|1|}'.
 !!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): E'.
+!!! annotated symbol 0 tests/cases/compiler/potentiallyUncalledDecorators.ts:24:11
+!!! annotated symbol 1 tests/cases/compiler/potentiallyUncalledDecorators.ts:60:7
     class E {
         @threeOptional foo: any;
         ~~~~~~~~~~~~~~
@@ -151,8 +159,10 @@ tests/cases/compiler/potentiallyUncalledDecorators.ts(68,5): error TS1241: Unabl
     @oneOptionalWithRest
     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS1238: Unable to resolve signature of class decorator when called as an expression.
-!!! error TS1238:   Type 'OmniDecorator' is not assignable to type 'typeof F'.
+!!! error TS1238:   Type '{|OmniDecorator|0|}' is not assignable to type 'typeof {|F|1|}'.
 !!! error TS1238:     Type 'OmniDecorator' provides no match for the signature 'new (): F'.
+!!! annotated symbol 0 tests/cases/compiler/potentiallyUncalledDecorators.ts:24:11
+!!! annotated symbol 1 tests/cases/compiler/potentiallyUncalledDecorators.ts:66:7
     class F {
         @oneOptionalWithRest foo: any;
         ~~~~~~~~~~~~~~~~~~~~

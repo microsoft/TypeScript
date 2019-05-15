@@ -10,16 +10,21 @@ tests/cases/compiler/booleanAssignment.ts(4,1): error TS2322: Type '{}' is not a
     var b = new Boolean();
     b = 1; // Error
     ~
-!!! error TS2322: Type '1' is not assignable to type 'Boolean'.
+!!! error TS2322: Type '1' is not assignable to type '{|Boolean|0|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:529:11
     b = "a"; // Error
     ~
-!!! error TS2322: Type '"a"' is not assignable to type 'Boolean'.
+!!! error TS2322: Type '"a"' is not assignable to type '{|Boolean|0|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:529:11
     b = {}; // Error
     ~
-!!! error TS2322: Type '{}' is not assignable to type 'Boolean'.
+!!! error TS2322: Type '{}' is not assignable to type '{|Boolean|0|}'.
 !!! error TS2322:   Types of property 'valueOf' are incompatible.
-!!! error TS2322:     Type '() => Object' is not assignable to type '() => boolean'.
-!!! error TS2322:       Type 'Object' is not assignable to type 'boolean'.
+!!! error TS2322:     Type '() => {|Object|1|}' is not assignable to type '() => boolean'.
+!!! error TS2322:       Type '{|Object|2|}' is not assignable to type 'boolean'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:529:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:120:11
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:120:11
     
     var o = {};
     o = b; // OK

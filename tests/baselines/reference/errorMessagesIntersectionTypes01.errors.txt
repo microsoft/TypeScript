@@ -19,8 +19,11 @@ tests/cases/compiler/errorMessagesIntersectionTypes01.ts(14,5): error TS2322: Ty
     
     let fooBar: FooBar = mixBar({
         ~~~~~~
-!!! error TS2322: Type '{ fooProp: string; } & Bar' is not assignable to type 'FooBar'.
+!!! error TS2322: Type '{ {|fooProp|0|}: string; } & {|Bar|1|}' is not assignable to type '{|FooBar|2|}'.
 !!! error TS2322:   Types of property 'fooProp' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'boolean'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes01.ts:15:5
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes01.ts:5:11
+!!! annotated symbol 2 tests/cases/compiler/errorMessagesIntersectionTypes01.ts:9:11
         fooProp: "frizzlebizzle"
     });

@@ -24,8 +24,10 @@ tests/cases/compiler/typeMatch1.ts(20,1): error TS2367: This condition will alwa
     
     x6 = x7;
     ~~
-!!! error TS2322: Type 'D' is not assignable to type 'C'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|C|1|}'.
 !!! error TS2322:   Types have separate declarations of a private property 'x'.
+!!! annotated symbol 0 tests/cases/compiler/typeMatch1.ts:13:7
+!!! annotated symbol 1 tests/cases/compiler/typeMatch1.ts:12:7
     x6=C;
        ~
 !!! error TS2741: Property 'x' is missing in type 'typeof C' but required in type 'C'.

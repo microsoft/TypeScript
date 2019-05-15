@@ -14,15 +14,27 @@ tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts(6,1): error TS2322: 
     
     x = y;
     ~
-!!! error TS2322: Type '{ foo: { bar: number | undefined; }; }' is not assignable to type '{ foo: { bar: string | null; } | undefined; }'.
+!!! error TS2322: Type '{ {|foo|0|}: { {|bar|1|}: number | undefined; }; }' is not assignable to type '{ {|foo|2|}: { {|bar|3|}: string | null; } | undefined; }'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Type '{ bar: number | undefined; }' is not assignable to type '{ bar: string | null; }'.
+!!! error TS2322:     Type '{ {|bar|4|}: number | undefined; }' is not assignable to type '{ {|bar|5|}: string | null; }'.
 !!! error TS2322:       Types of property 'bar' are incompatible.
 !!! error TS2322:         Type 'number | undefined' is not assignable to type 'string | null'.
 !!! error TS2322:           Type 'undefined' is not assignable to type 'string | null'.
+!!! annotated symbol 0 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:2:25
+!!! annotated symbol 1 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:2:32
+!!! annotated symbol 2 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:1:32
+!!! annotated symbol 3 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:1:39
+!!! annotated symbol 4 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:2:32
+!!! annotated symbol 5 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:1:39
     
     y = x;
     ~
-!!! error TS2322: Type '{ foo: { bar: string | null; } | undefined; } | null | undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
-!!! error TS2322:   Type 'undefined' is not assignable to type '{ foo: { bar: number | undefined; }; }'.
+!!! error TS2322: Type '{ {|foo|0|}: { {|bar|1|}: string | null; } | undefined; } | null | undefined' is not assignable to type '{ {|foo|2|}: { {|bar|3|}: number | undefined; }; }'.
+!!! error TS2322:   Type 'undefined' is not assignable to type '{ {|foo|4|}: { {|bar|5|}: number | undefined; }; }'.
+!!! annotated symbol 0 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:1:32
+!!! annotated symbol 1 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:1:39
+!!! annotated symbol 2 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:2:25
+!!! annotated symbol 3 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:2:32
+!!! annotated symbol 4 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:2:25
+!!! annotated symbol 5 tests/cases/compiler/elaboratedErrorsOnNullableTargets01.ts:2:32
     

@@ -194,10 +194,26 @@ tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts(180,26): error TS23
     declare function bar<T>(f: () => T[]): T[];
     let x: Foo[] = bar(() => !!true ? [{ state: State.A }] : [{ state: State.B }]);  // Error
                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ state: State.A; }[] | { state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
-!!! error TS2322:   Type '{ state: State.B; }[]' is not assignable to type '{ state: State.A; }[]'.
-!!! error TS2322:     Type '{ state: State.B; }' is not assignable to type '{ state: State.A; }'.
+!!! error TS2322: Type '{ {|state|0|}: {|State|1|}.A; }[] | { {|state|2|}: {|State|3|}.B; }[]' is not assignable to type '{ {|state|4|}: {|State|5|}.A; }[]'.
+!!! error TS2322:   Type '{ {|state|6|}: {|State|7|}.B; }[]' is not assignable to type '{ {|state|8|}: {|State|9|}.A; }[]'.
+!!! error TS2322:     Type '{ {|state|10|}: {|State|11|}.B; }' is not assignable to type '{ {|state|12|}: {|State|13|}.A; }'.
 !!! error TS2322:       Types of property 'state' are incompatible.
-!!! error TS2322:         Type 'State.B' is not assignable to type 'State.A'.
+!!! error TS2322:         Type '{|State|14|}.B' is not assignable to type '{|State|15|}.A'.
 !!! related TS6502 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:179:28: The expected type comes from the return type of this signature.
+!!! annotated symbol 0 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:180:38
+!!! annotated symbol 1 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
+!!! annotated symbol 2 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:180:61
+!!! annotated symbol 3 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
+!!! annotated symbol 4 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:180:38
+!!! annotated symbol 5 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
+!!! annotated symbol 6 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:180:61
+!!! annotated symbol 7 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
+!!! annotated symbol 8 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:180:38
+!!! annotated symbol 9 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
+!!! annotated symbol 10 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:180:61
+!!! annotated symbol 11 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
+!!! annotated symbol 12 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:180:38
+!!! annotated symbol 13 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
+!!! annotated symbol 14 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
+!!! annotated symbol 15 tests/cases/compiler/inferFromGenericFunctionReturnTypes3.ts:177:6
     

@@ -58,11 +58,16 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         // S is *not* assignable to T2 when S["a"] is 2
         t = s;
         ~
-!!! error TS2322: Type 'S' is not assignable to type 'T'.
-!!! error TS2322:   Type 'S' is not assignable to type '{ a: 2; b: 3; }'.
+!!! error TS2322: Type '{|S|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   Type '{|S|2|}' is not assignable to type '{ {|a|3|}: 2; {|b|4|}: 3; }'.
 !!! error TS2322:     Types of property 'a' are incompatible.
 !!! error TS2322:       Type '0 | 2' is not assignable to type '2'.
 !!! error TS2322:         Type '0' is not assignable to type '2'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:34:10
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:35:10
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:34:10
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:37:16
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:37:26
     }
     
     // Unmatched non-discriminants
@@ -78,9 +83,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         // S is *not* assignable to T2 when S["a"] is 2 as S is missing "c"
         t = s;
         ~
-!!! error TS2322: Type 'S' is not assignable to type 'T'.
+!!! error TS2322: Type '{|S|0|}' is not assignable to type '{|T|1|}'.
 !!! error TS2322:   Property 'c' is missing in type 'S' but required in type '{ a: 2; b: 4 | 3; c: string; }'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:52:36: 'c' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:49:10
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:50:10
     }
     
     // Maximum discriminant combinations
@@ -106,11 +113,17 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         // combinations is too complex.
         t = s;
         ~
-!!! error TS2322: Type 'S' is not assignable to type 'T'.
-!!! error TS2322:   Type 'S' is not assignable to type '{ a: 0 | 2 | 1; b: 0 | 2 | 1; c: 2; }'.
+!!! error TS2322: Type '{|S|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   Type '{|S|2|}' is not assignable to type '{ {|a|3|}: 0 | 2 | 1; {|b|4|}: 0 | 2 | 1; {|c|5|}: 2; }'.
 !!! error TS2322:     Types of property 'c' are incompatible.
 !!! error TS2322:       Type '0 | 2 | 1' is not assignable to type '2'.
 !!! error TS2322:         Type '0' is not assignable to type '2'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:67:10
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:68:10
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:67:10
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:76:16
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:76:22
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithDiscriminatedUnion.ts:76:28
     }
     
     // https://github.com/Microsoft/TypeScript/issues/14865

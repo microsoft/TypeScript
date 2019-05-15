@@ -13,5 +13,10 @@ tests/cases/compiler/errorWithTruncatedType.ts(10,5): error TS2322: Type '{ prop
     // String representation of type of 'x' should be truncated in error message
     var s: string = x;
         ~
-!!! error TS2322: Type '{ propertyWithAnExceedinglyLongName1: string; propertyWithAnExceedinglyLongName2: string; propertyWithAnExceedinglyLongName3: string; propertyWithAnExceedinglyLongName4: string; propertyWithAnExceedinglyLongName5: string; }' is not assignable to type 'string'.
+!!! error TS2322: Type '{ {|propertyWithAnExceedinglyLongName1|0|}: string; {|propertyWithAnExceedinglyLongName2|1|}: string; {|propertyWithAnExceedinglyLongName3|2|}: string; {|propertyWithAnExceedinglyLongName4|3|}: string; {|propertyWithAnExceedinglyLongName5|4|}: string; }' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/errorWithTruncatedType.ts:2:5
+!!! annotated symbol 1 tests/cases/compiler/errorWithTruncatedType.ts:3:5
+!!! annotated symbol 2 tests/cases/compiler/errorWithTruncatedType.ts:4:5
+!!! annotated symbol 3 tests/cases/compiler/errorWithTruncatedType.ts:5:5
+!!! annotated symbol 4 tests/cases/compiler/errorWithTruncatedType.ts:6:5
     

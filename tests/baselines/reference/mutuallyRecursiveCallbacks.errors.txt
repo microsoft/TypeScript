@@ -15,10 +15,17 @@ tests/cases/compiler/mutuallyRecursiveCallbacks.ts(7,1): error TS2322: Type '<T>
     declare var bar: Bar<{}>;
     bar = foo;
     ~~~
-!!! error TS2322: Type '<T>(bar: Bar<T>) => void' is not assignable to type 'Bar<{}>'.
+!!! error TS2322: Type '<{|T|0|}>(bar: {|Bar|1|}<{|T|2|}>) => void' is not assignable to type '{|Bar|3|}<{}>'.
 !!! error TS2322:   Types of parameters 'bar' and 'foo' are incompatible.
 !!! error TS2322:     Types of parameters 'bar' and 'foo' are incompatible.
-!!! error TS2322:       Type 'Foo<unknown>' is not assignable to type 'Bar<{}>'.
+!!! error TS2322:       Type '{|Foo|4|}<unknown>' is not assignable to type '{|Bar|5|}<{}>'.
 !!! error TS2322:         Types of parameters 'bar' and 'foo' are incompatible.
-!!! error TS2322:           Type 'void' is not assignable to type 'Foo<unknown>'.
+!!! error TS2322:           Type 'void' is not assignable to type '{|Foo|6|}<unknown>'.
+!!! annotated symbol 0 tests/cases/compiler/mutuallyRecursiveCallbacks.ts:5:22
+!!! annotated symbol 1 tests/cases/compiler/mutuallyRecursiveCallbacks.ts:4:6
+!!! annotated symbol 2 tests/cases/compiler/mutuallyRecursiveCallbacks.ts:5:22
+!!! annotated symbol 3 tests/cases/compiler/mutuallyRecursiveCallbacks.ts:4:6
+!!! annotated symbol 4 tests/cases/compiler/mutuallyRecursiveCallbacks.ts:3:11
+!!! annotated symbol 5 tests/cases/compiler/mutuallyRecursiveCallbacks.ts:4:6
+!!! annotated symbol 6 tests/cases/compiler/mutuallyRecursiveCallbacks.ts:3:11
     

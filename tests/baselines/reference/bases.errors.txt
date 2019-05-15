@@ -31,9 +31,11 @@ tests/cases/compiler/bases.ts(18,9): error TS2339: Property 'y' does not exist o
     
     class C extends B implements I {
           ~
-!!! error TS2420: Class 'C' incorrectly implements interface 'I'.
+!!! error TS2420: Class '{|C|0|}' incorrectly implements interface '{|I|1|}'.
 !!! error TS2420:   Property 'x' is missing in type 'C' but required in type 'I'.
 !!! related TS2728 tests/cases/compiler/bases.ts:2:5: 'x' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/bases.ts:11:7
+!!! annotated symbol 1 tests/cases/compiler/bases.ts:1:11
         constructor() {
         ~~~~~~~~~~~~~~~
             this.x: any;

@@ -31,17 +31,21 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
     var o: Object;
     o = i; // error
     ~
-!!! error TS2322: Type 'I' is not assignable to type 'Object'.
+!!! error TS2322: Type '{|I|0|}' is not assignable to type '{|Object|1|}'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => number' is not assignable to type '() => string'.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts:1:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:120:11
     i = o; // error
     ~
-!!! error TS2322: Type 'Object' is not assignable to type 'I'.
+!!! error TS2322: Type '{|Object|0|}' is not assignable to type '{|I|1|}'.
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2322:     Types of property 'toString' are incompatible.
 !!! error TS2322:       Type '() => string' is not assignable to type '() => number'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:120:11
+!!! annotated symbol 1 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts:1:11
     
     class C {
         toString(): number { return 1; }
@@ -49,25 +53,31 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
     var c: C;
     o = c; // error
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'Object'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type '{|Object|1|}'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => number' is not assignable to type '() => string'.
 !!! error TS2322:       Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts:10:7
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:120:11
     c = o; // error
     ~
-!!! error TS2322: Type 'Object' is not assignable to type 'C'.
+!!! error TS2322: Type '{|Object|0|}' is not assignable to type '{|C|1|}'.
 !!! error TS2322:   The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
 !!! error TS2322:     Types of property 'toString' are incompatible.
 !!! error TS2322:       Type '() => string' is not assignable to type '() => number'.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:120:11
+!!! annotated symbol 1 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts:10:7
     
     var a = {
         toString: () => { }
     }
     o = a; // error
     ~
-!!! error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
+!!! error TS2322: Type '{ {|toString|0|}: () => void; }' is not assignable to type '{|Object|1|}'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => void' is not assignable to type '() => string'.
 !!! error TS2322:       Type 'void' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat2.ts:18:5
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:120:11
     a = o; // ok

@@ -26,7 +26,8 @@ tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(18,3): error TS25
     var g: G;
     g = "string";
     ~
-!!! error TS2322: Type '"string"' is not assignable to type 'G'.
+!!! error TS2322: Type '"string"' is not assignable to type '{|G|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts:5:12
     function foo(x: G) { }
     G.B = 3;
       ~

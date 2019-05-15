@@ -11,8 +11,10 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     
     class Derived extends Base {
           ~~~~~~~
-!!! error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
+!!! error TS2415: Class '{|Derived|0|}' incorrectly extends base class '{|Base|1|}'.
 !!! error TS2415:   Types have separate declarations of a private property 'x'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts:5:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts:1:7
         private x: { foo: string; bar: string; }; // error
     }
     
@@ -22,7 +24,9 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     
     class Derived2 extends Base2 {
           ~~~~~~~~
-!!! error TS2417: Class static side 'typeof Derived2' incorrectly extends base class static side 'typeof Base2'.
+!!! error TS2417: Class static side 'typeof {|Derived2|0|}' incorrectly extends base class static side 'typeof {|Base2|1|}'.
 !!! error TS2417:   Types have separate declarations of a private property 'y'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts:13:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesPrivates.ts:9:7
         private static y: { foo: string; bar: string; }; // error
     }

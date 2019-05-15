@@ -19,9 +19,12 @@ tests/cases/compiler/implementGenericWithMismatchedTypes.ts(17,5): error TS2416:
         foo(x: string): number {
         ~~~
 !!! error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
-!!! error TS2416:   Type '(x: string) => number' is not assignable to type '(x: T) => T'.
+!!! error TS2416:   Type '(x: string) => number' is not assignable to type '(x: {|T|0|}) => {|T|1|}'.
 !!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2416:       Type 'T' is not assignable to type 'string'.
+!!! error TS2416:       Type '{|T|2|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:7:9
+!!! annotated symbol 1 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:7:9
+!!! annotated symbol 2 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:7:9
             return null;
         }
     }
@@ -33,9 +36,16 @@ tests/cases/compiler/implementGenericWithMismatchedTypes.ts(17,5): error TS2416:
         foo<Tstring>(x: Tstring): number {
         ~~~
 !!! error TS2416: Property 'foo' in type 'C2<T>' is not assignable to the same property in base type 'IFoo2<T>'.
-!!! error TS2416:   Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
-!!! error TS2416:     Type 'number' is not assignable to type 'T'.
-!!! error TS2416:       'number' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2416:   Type '<{|Tstring|0|}>(x: {|Tstring|1|}) => number' is not assignable to type '(x: {|T|2|}) => {|T|3|}'.
+!!! error TS2416:     Type 'number' is not assignable to type '{|T|4|}'.
+!!! error TS2416:       'number' is assignable to the constraint of type '{|T|5|}', but '{|T|6|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:17:9
+!!! annotated symbol 1 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:17:9
+!!! annotated symbol 2 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:16:10
+!!! annotated symbol 3 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:16:10
+!!! annotated symbol 4 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:16:10
+!!! annotated symbol 5 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:16:10
+!!! annotated symbol 6 tests/cases/compiler/implementGenericWithMismatchedTypes.ts:16:10
             return null;
         }
     }

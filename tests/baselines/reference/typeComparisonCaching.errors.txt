@@ -34,12 +34,18 @@ tests/cases/compiler/typeComparisonCaching.ts(27,1): error TS2322: Type 'D' is n
     
     a = b;
     ~
-!!! error TS2322: Type 'B' is not assignable to type 'A'.
+!!! error TS2322: Type '{|B|0|}' is not assignable to type '{|A|1|}'.
 !!! error TS2322:   Types of property 's' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/typeComparisonCaching.ts:8:11
+!!! annotated symbol 1 tests/cases/compiler/typeComparisonCaching.ts:3:11
     c = d; // Should not be allowed
     ~
-!!! error TS2322: Type 'D' is not assignable to type 'C'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|C|1|}'.
 !!! error TS2322:   Types of property 'q' are incompatible.
-!!! error TS2322:     Type 'B' is not assignable to type 'A'.
+!!! error TS2322:     Type '{|B|2|}' is not assignable to type '{|A|3|}'.
+!!! annotated symbol 0 tests/cases/compiler/typeComparisonCaching.ts:17:11
+!!! annotated symbol 1 tests/cases/compiler/typeComparisonCaching.ts:13:11
+!!! annotated symbol 2 tests/cases/compiler/typeComparisonCaching.ts:8:11
+!!! annotated symbol 3 tests/cases/compiler/typeComparisonCaching.ts:3:11
     

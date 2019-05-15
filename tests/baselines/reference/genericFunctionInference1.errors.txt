@@ -139,8 +139,13 @@ tests/cases/compiler/genericFunctionInference1.ts(135,14): error TS2345: Argumen
     
     toKeys(data, keyOf);  // Error
                  ~~~~~
-!!! error TS2345: Argument of type '<a>(value: { key: a; }) => a' is not assignable to parameter of type '(value: Data) => string'.
+!!! error TS2345: Argument of type '<{|a|0|}>(value: { {|key|1|}: {|a|2|}; }) => {|a|3|}' is not assignable to parameter of type '(value: {|Data|4|}) => string'.
 !!! error TS2345:   Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/genericFunctionInference1.ts:123:23
+!!! annotated symbol 1 tests/cases/compiler/genericFunctionInference1.ts:123:35
+!!! annotated symbol 2 tests/cases/compiler/genericFunctionInference1.ts:123:23
+!!! annotated symbol 3 tests/cases/compiler/genericFunctionInference1.ts:123:23
+!!! annotated symbol 4 tests/cases/compiler/genericFunctionInference1.ts:126:18
     
     // #9366
     

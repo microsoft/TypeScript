@@ -32,14 +32,21 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
             var b: { [x: string]: string; }
             a = b; // error
             ~
-!!! error TS2322: Type '{ [x: string]: string; }' is not assignable to type 'A<T>'.
+!!! error TS2322: Type '{ [x: string]: string; }' is not assignable to type '{|A|0|}<{|T|1|}>'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'T'.
+!!! error TS2322:     Type 'string' is not assignable to type '{|T|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts:13:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts:17:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts:17:18
             b = a; // error
             ~
-!!! error TS2322: Type 'A<T>' is not assignable to type '{ [x: string]: string; }'.
+!!! error TS2322: Type '{|A|0|}<{|T|1|}>' is not assignable to type '{ [x: string]: string; }'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'string'.
-!!! error TS2322:       Type 'Derived' is not assignable to type 'string'.
+!!! error TS2322:     Type '{|T|2|}' is not assignable to type 'string'.
+!!! error TS2322:       Type '{|Derived|3|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts:13:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts:17:18
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts:17:18
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer3.ts:4:11
         }
     }

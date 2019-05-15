@@ -16,21 +16,53 @@ tests/cases/compiler/invariantGenericErrorElaboration.ts(4,19): error TS2322: Ty
     
     const wat: Runtype<any> = Num;
           ~~~
-!!! error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
+!!! error TS2322: Type '{|Num|0|}' is not assignable to type '{|Runtype|1|}<any>'.
 !!! error TS2322:   Types of property 'constraint' are incompatible.
-!!! error TS2322:     Type 'Constraint<Num>' is not assignable to type 'Constraint<Runtype<any>>'.
+!!! error TS2322:     Type '{|Constraint|2|}<{|Num|3|}>' is not assignable to type '{|Constraint|4|}<{|Runtype|5|}<any>>'.
 !!! error TS2322:       Types of property 'constraint' are incompatible.
-!!! error TS2322:         Type 'Constraint<Constraint<Num>>' is not assignable to type 'Constraint<Constraint<Runtype<any>>>'.
+!!! error TS2322:         Type '{|Constraint|6|}<{|Constraint|7|}<{|Num|8|}>>' is not assignable to type '{|Constraint|9|}<{|Constraint|10|}<{|Runtype|11|}<any>>>'.
 !!! error TS2322:           Types of property 'constraint' are incompatible.
-!!! error TS2322:             Type 'Constraint<Constraint<Constraint<Num>>>' is not assignable to type 'Constraint<Constraint<Constraint<Runtype<any>>>>'.
-!!! error TS2322:               Type 'Constraint<Constraint<Runtype<any>>>' is not assignable to type 'Constraint<Constraint<Num>>'.
+!!! error TS2322:             Type '{|Constraint|12|}<{|Constraint|13|}<{|Constraint|14|}<{|Num|15|}>>>' is not assignable to type '{|Constraint|16|}<{|Constraint|17|}<{|Constraint|18|}<{|Runtype|19|}<any>>>>'.
+!!! error TS2322:               Type '{|Constraint|20|}<{|Constraint|21|}<{|Runtype|22|}<any>>>' is not assignable to type '{|Constraint|23|}<{|Constraint|24|}<{|Num|25|}>>'.
 !!! error TS2322:                 Types of property 'underlying' are incompatible.
-!!! error TS2322:                   Type 'Constraint<Runtype<any>>' is not assignable to type 'Constraint<Num>'.
+!!! error TS2322:                   Type '{|Constraint|26|}<{|Runtype|27|}<any>>' is not assignable to type '{|Constraint|28|}<{|Num|29|}>'.
 !!! related TS2728 tests/cases/compiler/invariantGenericErrorElaboration.ts:12:3: 'tag' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/invariantGenericErrorElaboration.ts:11:11
+!!! annotated symbol 1 tests/cases/compiler/invariantGenericErrorElaboration.ts:6:11
+!!! annotated symbol 2 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 3 tests/cases/compiler/invariantGenericErrorElaboration.ts:11:11
+!!! annotated symbol 4 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 5 tests/cases/compiler/invariantGenericErrorElaboration.ts:6:11
+!!! annotated symbol 6 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 7 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 8 tests/cases/compiler/invariantGenericErrorElaboration.ts:11:11
+!!! annotated symbol 9 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 10 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 11 tests/cases/compiler/invariantGenericErrorElaboration.ts:6:11
+!!! annotated symbol 12 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 13 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 14 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 15 tests/cases/compiler/invariantGenericErrorElaboration.ts:11:11
+!!! annotated symbol 16 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 17 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 18 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 19 tests/cases/compiler/invariantGenericErrorElaboration.ts:6:11
+!!! annotated symbol 20 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 21 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 22 tests/cases/compiler/invariantGenericErrorElaboration.ts:6:11
+!!! annotated symbol 23 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 24 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 25 tests/cases/compiler/invariantGenericErrorElaboration.ts:11:11
+!!! annotated symbol 26 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 27 tests/cases/compiler/invariantGenericErrorElaboration.ts:6:11
+!!! annotated symbol 28 tests/cases/compiler/invariantGenericErrorElaboration.ts:19:11
+!!! annotated symbol 29 tests/cases/compiler/invariantGenericErrorElaboration.ts:11:11
     const Foo = Obj({ foo: Num })
                       ~~~
-!!! error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.
+!!! error TS2322: Type '{|Num|0|}' is not assignable to type '{|Runtype|1|}<any>'.
 !!! related TS6501 tests/cases/compiler/invariantGenericErrorElaboration.ts:17:34: The expected type comes from this index signature.
+!!! annotated symbol 0 tests/cases/compiler/invariantGenericErrorElaboration.ts:11:11
+!!! annotated symbol 1 tests/cases/compiler/invariantGenericErrorElaboration.ts:6:11
     
     interface Runtype<A> {
       constraint: Constraint<this>

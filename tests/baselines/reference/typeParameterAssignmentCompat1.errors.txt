@@ -16,12 +16,25 @@ tests/cases/compiler/typeParameterAssignmentCompat1.ts(17,9): error TS2322: Type
         var y: Foo<U>;
         x = y; // should be an error
         ~
-!!! error TS2322: Type 'Foo<U>' is not assignable to type 'Foo<T>'.
-!!! error TS2322:   Type 'U' is not assignable to type 'T'.
-!!! error TS2322:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Foo|0|}<{|U|1|}>' is not assignable to type '{|Foo|2|}<{|T|3|}>'.
+!!! error TS2322:   Type '{|U|4|}' is not assignable to type '{|T|5|}'.
+!!! error TS2322:     '{|U|6|}' is assignable to the constraint of type '{|T|7|}', but '{|T|8|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterAssignmentCompat1.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:15
+!!! annotated symbol 2 tests/cases/compiler/typeParameterAssignmentCompat1.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:12
+!!! annotated symbol 4 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:15
+!!! annotated symbol 5 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:12
+!!! annotated symbol 6 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:15
+!!! annotated symbol 7 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:12
+!!! annotated symbol 8 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:12
         return x;
         ~~~~~~~~~
-!!! error TS2322: Type 'Foo<T>' is not assignable to type 'Foo<U>'.
+!!! error TS2322: Type '{|Foo|0|}<{|T|1|}>' is not assignable to type '{|Foo|2|}<{|U|3|}>'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterAssignmentCompat1.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:12
+!!! annotated symbol 2 tests/cases/compiler/typeParameterAssignmentCompat1.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/typeParameterAssignmentCompat1.ts:5:15
     }
     
     class C<T> {
@@ -30,9 +43,17 @@ tests/cases/compiler/typeParameterAssignmentCompat1.ts(17,9): error TS2322: Type
             var y: Foo<U>;
             x = y; // should be an error
             ~
-!!! error TS2322: Type 'Foo<U>' is not assignable to type 'Foo<T>'.
+!!! error TS2322: Type '{|Foo|0|}<{|U|1|}>' is not assignable to type '{|Foo|2|}<{|T|3|}>'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterAssignmentCompat1.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/typeParameterAssignmentCompat1.ts:13:7
+!!! annotated symbol 2 tests/cases/compiler/typeParameterAssignmentCompat1.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/typeParameterAssignmentCompat1.ts:12:9
             return x;
             ~~~~~~~~~
-!!! error TS2322: Type 'Foo<T>' is not assignable to type 'Foo<U>'.
+!!! error TS2322: Type '{|Foo|0|}<{|T|1|}>' is not assignable to type '{|Foo|2|}<{|U|3|}>'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterAssignmentCompat1.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/typeParameterAssignmentCompat1.ts:12:9
+!!! annotated symbol 2 tests/cases/compiler/typeParameterAssignmentCompat1.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/typeParameterAssignmentCompat1.ts:13:7
         }
     }

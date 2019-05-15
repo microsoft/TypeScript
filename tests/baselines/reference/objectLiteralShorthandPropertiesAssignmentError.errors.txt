@@ -11,8 +11,12 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
     
     var person: { b: string; id: number } = { name, id };  // error
                                               ~~~~
-!!! error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
+!!! error TS2322: Type '{ {|name|0|}: string; {|id|1|}: number; }' is not assignable to type '{ {|b|2|}: string; {|id|3|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts:4:43
+!!! annotated symbol 1 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts:4:49
+!!! annotated symbol 2 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts:4:15
+!!! annotated symbol 3 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentError.ts:4:26
     var person1: { name, id };  // ok
     function foo(name: string, id: number): { id: string, name: number } { return { name, id }; }  // error
                                                                                     ~~~~

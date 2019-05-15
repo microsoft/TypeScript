@@ -38,9 +38,12 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): erro
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:4:5: The expected type comes from property 'x' which is declared here on type 'A'
     let c: B = { a: { x: 'hello', y: 2 } }; // error - y does not exist in type A
                                   ~~~~
-!!! error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'A'.
+!!! error TS2322: Type '{ {|x|0|}: string; {|y|1|}: number; }' is not assignable to type '{|A|2|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'A'.
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:8:5: The expected type comes from property 'a' which is declared here on type 'B'
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:19:19
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:19:31
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:3:11
     
     let d: D = { a: { x: 'hello' }, c: 5 }; // ok
     let e: D = { a: { x: 2 }, c: 5 }; // error - types of property x are incompatible
@@ -49,9 +52,12 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): erro
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:4:5: The expected type comes from property 'x' which is declared here on type 'A'
     let f: D = { a: { x: 'hello', y: 2 }, c: 5 }; // should be an error
                                   ~~~~
-!!! error TS2322: Type '{ x: string; y: number; }' is not assignable to type 'A'.
+!!! error TS2322: Type '{ {|x|0|}: string; {|y|1|}: number; }' is not assignable to type '{|A|2|}'.
 !!! error TS2322:   Object literal may only specify known properties, and 'y' does not exist in type 'A'.
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:8:5: The expected type comes from property 'a' which is declared here on type 'D'
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:23:19
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:23:31
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:3:11
     
     // https://github.com/Microsoft/TypeScript/issues/18075
     
@@ -64,8 +70,13 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): erro
         url: '',
         xyz: 1 // Great! This causes an error!
         ~~~~~~
-!!! error TS2322: Type '{ id: number; url: string; xyz: number; }' is not assignable to type '{ id: number; } & { url: string; }'.
+!!! error TS2322: Type '{ {|id|0|}: number; {|url|1|}: string; {|xyz|2|}: number; }' is not assignable to type '{ {|id|3|}: number; } & { {|url|4|}: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'xyz' does not exist in type '{ id: number; } & { url: string; }'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:32:5
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:33:5
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:34:5
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:27:71
+!!! annotated symbol 4 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:27:89
     };
     
     export const myInstance: MyType = {
@@ -76,9 +87,14 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): erro
             url: '',
             xyz: 2 // This should also be an error
             ~~~~~~
-!!! error TS2322: Type '{ id: number; url: string; xyz: number; }' is not assignable to type '{ id: number; } & { url: string; }'.
+!!! error TS2322: Type '{ {|id|0|}: number; {|url|1|}: string; {|xyz|2|}: number; }' is not assignable to type '{ {|id|3|}: number; } & { {|url|4|}: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'xyz' does not exist in type '{ id: number; } & { url: string; }'.
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:27:62: The expected type comes from property 'photo' which is declared here on type 'MyType'
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:41:9
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:42:9
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:43:9
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:27:71
+!!! annotated symbol 4 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:27:89
         }
     };
     
@@ -105,12 +121,22 @@ tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts(70,50): erro
     
     test = { foo: true, bar: true, boo: true }
                                    ~~~~~~~~~
-!!! error TS2322: Type '{ foo: true; bar: true; boo: boolean; }' is not assignable to type 'View<TypeA>'.
+!!! error TS2322: Type '{ {|foo|0|}: true; {|bar|1|}: true; {|boo|2|}: boolean; }' is not assignable to type '{|View|3|}<{|TypeA|4|}>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeA>'.
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:68:10
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:68:21
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:68:32
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:49:13
+!!! annotated symbol 4 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:61:11
     
     test = { foo: true, bar: { foo: true, bar: true, boo: true } }
                                                      ~~~~~~~~~
-!!! error TS2322: Type '{ foo: true; bar: true; boo: boolean; }' is not assignable to type 'boolean | View<TypeB>'.
+!!! error TS2322: Type '{ {|foo|0|}: true; {|bar|1|}: true; {|boo|2|}: boolean; }' is not assignable to type 'boolean | {|View|3|}<{|TypeB|4|}>'.
 !!! error TS2322:   Object literal may only specify known properties, and 'boo' does not exist in type 'View<TypeB>'.
 !!! related TS6500 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:63:5: The expected type comes from property 'bar' which is declared here on type 'View<TypeA>'
+!!! annotated symbol 0 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:70:28
+!!! annotated symbol 1 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:70:39
+!!! annotated symbol 2 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:70:50
+!!! annotated symbol 3 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:49:13
+!!! annotated symbol 4 tests/cases/compiler/excessPropertyChecksWithNestedIntersections.ts:56:11
     

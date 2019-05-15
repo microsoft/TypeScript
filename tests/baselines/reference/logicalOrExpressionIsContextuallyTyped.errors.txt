@@ -11,6 +11,14 @@ tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrE
     
     var r: { a: string } = { a: '', b: 123 } || { a: '', b: true };
                                     ~~~~~~
-!!! error TS2322: Type '{ a: string; b: number; } | { a: string; b: boolean; }' is not assignable to type '{ a: string; }'.
-!!! error TS2322:   Type '{ a: string; b: number; }' is not assignable to type '{ a: string; }'.
+!!! error TS2322: Type '{ {|a|0|}: string; {|b|1|}: number; } | { {|a|2|}: string; {|b|3|}: boolean; }' is not assignable to type '{ {|a|4|}: string; }'.
+!!! error TS2322:   Type '{ {|a|5|}: string; {|b|6|}: number; }' is not assignable to type '{ {|a|7|}: string; }'.
 !!! error TS2322:     Object literal may only specify known properties, and 'b' does not exist in type '{ a: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:26
+!!! annotated symbol 1 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:33
+!!! annotated symbol 2 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:47
+!!! annotated symbol 3 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:54
+!!! annotated symbol 4 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:10
+!!! annotated symbol 5 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:26
+!!! annotated symbol 6 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:33
+!!! annotated symbol 7 tests/cases/conformance/expressions/binaryOperators/logicalOrOperator/logicalOrExpressionIsContextuallyTyped.ts:6:10

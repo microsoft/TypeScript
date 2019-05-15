@@ -13,8 +13,12 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
     
     var person: { b: string; id: number } = { name, id };  // error
                                               ~~~~
-!!! error TS2322: Type '{ name: string; id: number; }' is not assignable to type '{ b: string; id: number; }'.
+!!! error TS2322: Type '{ {|name|0|}: string; {|id|1|}: number; }' is not assignable to type '{ {|b|2|}: string; {|id|3|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'name' does not exist in type '{ b: string; id: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:4:43
+!!! annotated symbol 1 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:4:49
+!!! annotated symbol 2 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:4:15
+!!! annotated symbol 3 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:4:26
     function bar(name: string, id: number): { name: number, id: string } { return { name, id }; }  // error
                                                                                     ~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
@@ -26,7 +30,11 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
     var person1: { name, id }; // ok
     var person2: { name: string, id: number } = bar("hello", 5);
         ~~~~~~~
-!!! error TS2322: Type '{ name: number; id: string; }' is not assignable to type '{ name: string; id: number; }'.
+!!! error TS2322: Type '{ {|name|0|}: number; {|id|1|}: string; }' is not assignable to type '{ {|name|2|}: string; {|id|3|}: number; }'.
 !!! error TS2322:   Types of property 'name' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:5:43
+!!! annotated symbol 1 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:5:57
+!!! annotated symbol 2 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:8:16
+!!! annotated symbol 3 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesAssignmentErrorFromMissingIdentifier.ts:8:30
     

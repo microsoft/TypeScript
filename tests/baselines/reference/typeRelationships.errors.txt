@@ -16,8 +16,11 @@ tests/cases/conformance/types/thisType/typeRelationships.ts(36,9): error TS2322:
             this.c = this.self;
             this.self = this.c;  // Error
             ~~~~~~~~~
-!!! error TS2322: Type 'C' is not assignable to type 'this'.
-!!! error TS2322:   'C' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'C'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type 'this'.
+!!! error TS2322:   '{|C|1|}' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint '{|C|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/typeRelationships.ts:1:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/typeRelationships.ts:1:7
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/typeRelationships.ts:1:7
         }
         f2() {
             var a: C[];
@@ -48,8 +51,11 @@ tests/cases/conformance/types/thisType/typeRelationships.ts(36,9): error TS2322:
 !!! error TS2739: Type 'C' is missing the following properties from type 'D': self1, self2, self3, d, bar
             this.self = this.d;  // Error
             ~~~~~~~~~
-!!! error TS2322: Type 'D' is not assignable to type 'this'.
-!!! error TS2322:   'D' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint 'D'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type 'this'.
+!!! error TS2322:   '{|D|1|}' is assignable to the constraint of type 'this', but 'this' could be instantiated with a different subtype of constraint '{|D|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/typeRelationships.ts:22:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/typeRelationships.ts:22:7
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/typeRelationships.ts:22:7
             this.c = this.d;
         }
     }

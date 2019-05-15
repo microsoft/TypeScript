@@ -32,16 +32,40 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
     
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
-!!! error TS2322:     Type 'Foo' is not assignable to type 'T'.
-!!! error TS2322:       'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Foo|5|}'.
+!!! error TS2322:     Type '{|Foo|6|}' is not assignable to type '{|T|7|}'.
+!!! error TS2322:       '{|Foo|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|Foo|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:29
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:29
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:14
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
         u = t; // error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
-!!! error TS2322:     Type 'Foo' is not assignable to type 'U'.
-!!! error TS2322:       'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Foo|5|}'.
+!!! error TS2322:     Type '{|Foo|6|}' is not assignable to type '{|U|7|}'.
+!!! error TS2322:       '{|Foo|8|}' is assignable to the constraint of type '{|U|9|}', but '{|U|10|}' could be instantiated with a different subtype of constraint '{|Foo|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:29
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:29
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:29
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:29
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:29
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:5:29
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
     }
     
     class C<T extends Foo, U extends Foo> {
@@ -50,15 +74,39 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typePara
         r = () => {
             this.t = this.u; // error
             ~~~~~~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
-!!! error TS2322:     Type 'Foo' is not assignable to type 'T'.
-!!! error TS2322:       'Foo' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Foo|5|}'.
+!!! error TS2322:     Type '{|Foo|6|}' is not assignable to type '{|T|7|}'.
+!!! error TS2322:       '{|Foo|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|Foo|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:24
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:9
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:24
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:9
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:9
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:9
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:9
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:9
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
             this.u = this.t; // error
             ~~~~~~
-!!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
-!!! error TS2322:     Type 'Foo' is not assignable to type 'U'.
-!!! error TS2322:       'Foo' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Foo'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Foo|5|}'.
+!!! error TS2322:     Type '{|Foo|6|}' is not assignable to type '{|U|7|}'.
+!!! error TS2322:       '{|Foo|8|}' is assignable to the constraint of type '{|U|9|}', but '{|U|10|}' could be instantiated with a different subtype of constraint '{|Foo|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:9
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:24
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:9
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:24
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:24
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:24
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:24
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:18:24
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/typeParameterAssignability3.ts:3:7
         }
     }

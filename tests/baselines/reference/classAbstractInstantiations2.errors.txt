@@ -27,8 +27,10 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     var BB: typeof B = B;
     var AA: typeof A = BB; // error, AA is not of abstract type.
         ~~
-!!! error TS2322: Type 'typeof B' is not assignable to type 'typeof A'.
+!!! error TS2322: Type 'typeof {|B|0|}' is not assignable to type 'typeof {|A|1|}'.
 !!! error TS2322:   Cannot assign an abstract constructor type to a non-abstract constructor type.
+!!! annotated symbol 0 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts:5:16
+!!! annotated symbol 1 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractInstantiations2.ts:1:7
     new AA;
     
     function constructB(Factory : typeof B) {

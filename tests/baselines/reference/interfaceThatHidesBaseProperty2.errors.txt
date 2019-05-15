@@ -12,11 +12,15 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseP
     
     interface Derived extends Base { // error
               ~~~~~~~
-!!! error TS2430: Interface 'Derived' incorrectly extends interface 'Base'.
+!!! error TS2430: Interface '{|Derived|0|}' incorrectly extends interface '{|Base|1|}'.
 !!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type '{ a: string; }' is not assignable to type '{ a: number; }'.
+!!! error TS2430:     Type '{ {|a|2|}: string; }' is not assignable to type '{ {|a|3|}: number; }'.
 !!! error TS2430:       Types of property 'a' are incompatible.
 !!! error TS2430:         Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty2.ts:5:11
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty2.ts:1:11
+!!! annotated symbol 2 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty2.ts:7:9
+!!! annotated symbol 3 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty2.ts:2:10
         x: {
             a: string;
         };

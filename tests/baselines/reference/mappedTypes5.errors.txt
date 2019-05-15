@@ -11,14 +11,28 @@ tests/cases/conformance/types/mapped/mappedTypes5.ts(9,9): error TS2322: Type 'R
         let a4: Partial<T> = rp;
         let b1: Readonly<T> = p;  // Error
             ~~
-!!! error TS2322: Type 'Partial<T>' is not assignable to type 'Readonly<T>'.
+!!! error TS2322: Type '{|Partial|0|}<{|T|1|}>' is not assignable to type '{|Readonly|2|}<{|T|3|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypes5.ts:1:12
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 3 tests/cases/conformance/types/mapped/mappedTypes5.ts:1:12
         let b2: Readonly<T> = r;
         let b3: Readonly<T> = pr;  // Error
             ~~
-!!! error TS2322: Type 'Partial<Readonly<T>>' is not assignable to type 'Readonly<T>'.
+!!! error TS2322: Type '{|Partial|0|}<{|Readonly|1|}<{|T|2|}>>' is not assignable to type '{|Readonly|3|}<{|T|4|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes5.ts:1:12
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypes5.ts:1:12
         let b4: Readonly<T> = rp;  // Error
             ~~
-!!! error TS2322: Type 'Readonly<Partial<T>>' is not assignable to type 'Readonly<T>'.
+!!! error TS2322: Type '{|Readonly|0|}<{|Partial|1|}<{|T|2|}>>' is not assignable to type '{|Readonly|3|}<{|T|4|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypes5.ts:1:12
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypes5.ts:1:12
         let c1: Partial<Readonly<T>> = p;
         let c2: Partial<Readonly<T>> = r;
         let c3: Partial<Readonly<T>> = pr;

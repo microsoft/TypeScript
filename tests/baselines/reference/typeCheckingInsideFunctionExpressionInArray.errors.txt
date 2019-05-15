@@ -11,7 +11,8 @@ tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts(5,5): error 
 !!! error TS2322: Type '10' is not assignable to type 'string'.
         k = new Object();
         ~
-!!! error TS2322: Type 'Object' is not assignable to type 'string'.
+!!! error TS2322: Type '{|Object|0|}' is not assignable to type 'string'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:120:11
         [1, 2, 3].NonexistantMethod();
                   ~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'NonexistantMethod' does not exist on type 'number[]'.

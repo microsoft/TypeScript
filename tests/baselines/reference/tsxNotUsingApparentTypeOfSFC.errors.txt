@@ -19,11 +19,16 @@ tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx(15,14): error TS2322: Type
         }
         let x = <MySFC />;  // should error
                  ~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'P'.
-!!! error TS2322:   '{}' is assignable to the constraint of type 'P', but 'P' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{}' is not assignable to type '{|P|0|}'.
+!!! error TS2322:   '{}' is assignable to the constraint of type '{|P|1|}', but '{|P|2|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15
+!!! annotated symbol 1 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15
+!!! annotated symbol 2 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15
         let y = <MyComponent />;  // should error
                  ~~~~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'Readonly<P>'.
+!!! error TS2322: Type '{}' is not assignable to type '{|Readonly|0|}<{|P|1|}>'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 1 tests/cases/compiler/tsxNotUsingApparentTypeOfSFC.tsx:5:15
     
         let z = <MySFC {...wrappedProps} /> // should work
         let q = <MyComponent {...wrappedProps} /> // should work

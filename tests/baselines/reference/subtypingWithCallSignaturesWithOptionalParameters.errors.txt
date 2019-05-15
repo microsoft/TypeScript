@@ -27,9 +27,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     interface I3 extends Base {
               ~~
-!!! error TS2430: Interface 'I3' incorrectly extends interface 'Base'.
+!!! error TS2430: Interface '{|I3|0|}' incorrectly extends interface '{|Base|1|}'.
 !!! error TS2430:   Types of property 'a' are incompatible.
 !!! error TS2430:     Type '(x: number) => number' is not assignable to type '() => number'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts:19:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts:3:11
         a: (x: number) => number; // error, too many required params
     }
     
@@ -61,9 +63,11 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     interface I10 extends Base {
               ~~~
-!!! error TS2430: Interface 'I10' incorrectly extends interface 'Base'.
+!!! error TS2430: Interface '{|I10|0|}' incorrectly extends interface '{|Base|1|}'.
 !!! error TS2430:   Types of property 'a3' are incompatible.
 !!! error TS2430:     Type '(x: number, y: number) => number' is not assignable to type '(x: number) => number'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts:49:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignaturesWithOptionalParameters.ts:3:11
         a3: (x: number, y: number) => number;  // error, too many required params
     }
     

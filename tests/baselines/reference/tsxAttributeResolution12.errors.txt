@@ -44,15 +44,19 @@ tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type '{}' is not assi
     const T = TestMod.Test;
     var t1 = <T />;
               ~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
+!!! error TS2322: Type '{}' is not assignable to type '{|IntrinsicAttributes|0|} & { {|reqd|1|}: any; }'.
 !!! error TS2322:   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:18:46: 'reqd' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/react.d.ts:8:12
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:18:46
     
     // Should error
     var t2 = <TestMod.Test />;
               ~~~~~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
+!!! error TS2322: Type '{}' is not assignable to type '{|IntrinsicAttributes|0|} & { {|reqd|1|}: any; }'.
 !!! error TS2322:   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:18:46: 'reqd' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/react.d.ts:8:12
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:18:46
     
     

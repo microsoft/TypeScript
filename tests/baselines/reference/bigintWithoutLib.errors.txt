@@ -70,7 +70,8 @@ tests/cases/compiler/bigintWithoutLib.ts(49,22): error TS2339: Property 'getBigU
 !!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
     bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
     ~~~~~~~~~
-!!! error TS2322: Type 'Object' is not assignable to type 'bigint'.
+!!! error TS2322: Type '{|Object|0|}' is not assignable to type 'bigint'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:120:11
     let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
     stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
                                    ~

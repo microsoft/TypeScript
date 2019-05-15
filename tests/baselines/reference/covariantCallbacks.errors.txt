@@ -39,17 +39,27 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         a = b;
         b = a;  // Error
         ~
-!!! error TS2322: Type 'P<A>' is not assignable to type 'P<B>'.
+!!! error TS2322: Type '{|P|0|}<{|A|1|}>' is not assignable to type '{|P|2|}<{|B|3|}>'.
 !!! error TS2322:   Property 'b' is missing in type 'A' but required in type 'B'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:25: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:3:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
     }
     
     function f2(a: Promise<A>, b: Promise<B>) {
         a = b;
         b = a;  // Error
         ~
-!!! error TS2322: Type 'Promise<A>' is not assignable to type 'Promise<B>'.
-!!! error TS2322:   Type 'A' is not assignable to type 'B'.
+!!! error TS2322: Type '{|Promise|0|}<{|A|1|}>' is not assignable to type '{|Promise|2|}<{|B|3|}>'.
+!!! error TS2322:   Type '{|A|4|}' is not assignable to type '{|B|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
     }
     
     interface AList1 {
@@ -64,12 +74,18 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         a = b;
         b = a;  // Error
         ~
-!!! error TS2322: Type 'AList1' is not assignable to type 'BList1'.
+!!! error TS2322: Type '{|AList1|0|}' is not assignable to type '{|BList1|1|}'.
 !!! error TS2322:   Types of property 'forEach' are incompatible.
-!!! error TS2322:     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: B) => void) => void'.
+!!! error TS2322:     Type '(cb: (item: {|A|2|}) => void) => void' is not assignable to type '(cb: (item: {|B|3|}) => void) => void'.
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
 !!! error TS2322:         Types of parameters 'item' and 'item' are incompatible.
-!!! error TS2322:           Type 'A' is not assignable to type 'B'.
+!!! error TS2322:           Type '{|A|4|}' is not assignable to type '{|B|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:20:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:24:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
     }
     
     interface AList2 {
@@ -84,11 +100,15 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         a = b;
         b = a;  // Error
         ~
-!!! error TS2322: Type 'AList2' is not assignable to type 'BList2'.
+!!! error TS2322: Type '{|AList2|0|}' is not assignable to type '{|BList2|1|}'.
 !!! error TS2322:   Types of property 'forEach' are incompatible.
-!!! error TS2322:     Type '(cb: (item: A) => boolean) => void' is not assignable to type '(cb: (item: A) => void) => void'.
+!!! error TS2322:     Type '(cb: (item: {|A|2|}) => boolean) => void' is not assignable to type '(cb: (item: {|A|3|}) => void) => void'.
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
 !!! error TS2322:         Type 'void' is not assignable to type 'boolean'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:33:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:37:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
     }
     
     interface AList3 {
@@ -103,10 +123,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         a = b;
         b = a;  // Error
         ~
-!!! error TS2322: Type 'AList3' is not assignable to type 'BList3'.
+!!! error TS2322: Type '{|AList3|0|}' is not assignable to type '{|BList3|1|}'.
 !!! error TS2322:   Types of property 'forEach' are incompatible.
-!!! error TS2322:     Type '(cb: (item: A) => void) => void' is not assignable to type '(cb: (item: A, context: any) => void) => void'.
+!!! error TS2322:     Type '(cb: (item: {|A|2|}) => void) => void' is not assignable to type '(cb: (item: {|A|3|}, context: any) => void) => void'.
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:46:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:50:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
     }
     
     interface AList4 {
@@ -121,11 +145,19 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covarian
         a = b;
         b = a;  // Error
         ~
-!!! error TS2322: Type 'AList4' is not assignable to type 'BList4'.
+!!! error TS2322: Type '{|AList4|0|}' is not assignable to type '{|BList4|1|}'.
 !!! error TS2322:   Types of property 'forEach' are incompatible.
-!!! error TS2322:     Type '(cb: (item: A) => A) => void' is not assignable to type '(cb: (item: B) => B) => void'.
+!!! error TS2322:     Type '(cb: (item: {|A|2|}) => {|A|3|}) => void' is not assignable to type '(cb: (item: {|B|4|}) => {|B|5|}) => void'.
 !!! error TS2322:       Types of parameters 'cb' and 'cb' are incompatible.
 !!! error TS2322:         Types of parameters 'item' and 'item' are incompatible.
-!!! error TS2322:           Type 'A' is not assignable to type 'B'.
+!!! error TS2322:           Type '{|A|6|}' is not assignable to type '{|B|7|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:59:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:63:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:7:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/covariantCallbacks.ts:8:11
     }
     

@@ -22,22 +22,31 @@ tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts(21,5): e
     
     e = E2.A;
     ~
-!!! error TS2322: Type 'E2.A' is not assignable to type 'E'.
+!!! error TS2322: Type '{|E2|0|}.A' is not assignable to type '{|E|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:6:6
+!!! annotated symbol 1 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:1:6
     e2 = E.A;
     ~~
-!!! error TS2322: Type 'E.A' is not assignable to type 'E2'.
+!!! error TS2322: Type '{|E|0|}.A' is not assignable to type '{|E2|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:1:6
+!!! annotated symbol 1 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:6:6
     e = <void>null;
     ~
-!!! error TS2322: Type 'void' is not assignable to type 'E'.
+!!! error TS2322: Type 'void' is not assignable to type '{|E|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:1:6
     e = {};
     ~
-!!! error TS2322: Type '{}' is not assignable to type 'E'.
+!!! error TS2322: Type '{}' is not assignable to type '{|E|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:1:6
     e = '';
     ~
-!!! error TS2322: Type '""' is not assignable to type 'E'.
+!!! error TS2322: Type '""' is not assignable to type '{|E|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:1:6
     
     function f<T>(a: T) {
         e = a;
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'E'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|E|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:20:12
+!!! annotated symbol 1 tests/cases/conformance/types/primitives/enum/invalidEnumAssignments.ts:1:6
     }

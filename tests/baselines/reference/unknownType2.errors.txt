@@ -220,8 +220,10 @@ tests/cases/conformance/types/unknown/unknownType2.ts(216,13): error TS2322: Typ
             case 'maybe':
                 return x; // error
                 ~~~~~~~~~
-!!! error TS2322: Type '"yes" | "no" | "maybe"' is not assignable to type 'SomeResponse'.
-!!! error TS2322:   Type '"maybe"' is not assignable to type 'SomeResponse'.
+!!! error TS2322: Type '"yes" | "no" | "maybe"' is not assignable to type '{|SomeResponse|0|}'.
+!!! error TS2322:   Type '"maybe"' is not assignable to type '{|SomeResponse|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/unknown/unknownType2.ts:4:6
+!!! annotated symbol 1 tests/cases/conformance/types/unknown/unknownType2.ts:4:6
             default:
                 throw new Error('Can you repeat the question?');
         }

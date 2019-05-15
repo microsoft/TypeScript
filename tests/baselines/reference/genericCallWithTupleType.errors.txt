@@ -34,7 +34,8 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
 !!! error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
     i1.tuple1[3] = { a: "string" };
     ~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: string; }' is not assignable to type 'undefined'.
+!!! error TS2322: Type '{ {|a|0|}: string; }' is not assignable to type 'undefined'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts:14:18
               ~
 !!! error TS2493: Tuple type '[string, number]' of length '2' has no element at index '3'.
     var e4 = i1.tuple1[3];  // {}

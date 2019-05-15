@@ -28,28 +28,44 @@ tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts(17,5): error TS23
     var z = { x: new A<number>() };
     var a1: I<string> = { x: new A<number>() };
                           ~
-!!! error TS2322: Type 'A<number>' is not assignable to type 'Comparable<string>'.
+!!! error TS2322: Type '{|A|0|}<number>' is not assignable to type '{|Comparable|1|}<string>'.
 !!! error TS2322:   Types of property 'compareTo' are incompatible.
 !!! error TS2322:     Type '(other: number) => number' is not assignable to type '(other: string) => number'.
 !!! error TS2322:       Types of parameters 'other' and 'other' are incompatible.
 !!! error TS2322:         Type 'string' is not assignable to type 'number'.
 !!! related TS6500 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:5:5: The expected type comes from property 'x' which is declared here on type 'I<string>'
+!!! annotated symbol 0 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:10:7
+!!! annotated symbol 1 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:1:11
     var a2: I<string> = function (): { x: A<number> } {
         ~~
-!!! error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>'.
+!!! error TS2322: Type '{ {|x|0|}: {|A|1|}<number>; }' is not assignable to type '{|I|2|}<string>'.
 !!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>'.
+!!! error TS2322:     Type '{|A|3|}<number>' is not assignable to type '{|Comparable|4|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:13:36
+!!! annotated symbol 1 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:10:7
+!!! annotated symbol 2 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:4:11
+!!! annotated symbol 3 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:10:7
+!!! annotated symbol 4 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:1:11
        var z = { x: new A<number>() }; return z;
     } ();
     var a3: I<string> = z;
         ~~
-!!! error TS2322: Type '{ x: A<number>; }' is not assignable to type 'I<string>'.
+!!! error TS2322: Type '{ {|x|0|}: {|A|1|}<number>; }' is not assignable to type '{|I|2|}<string>'.
 !!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>'.
+!!! error TS2322:     Type '{|A|3|}<number>' is not assignable to type '{|Comparable|4|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:11:11
+!!! annotated symbol 1 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:10:7
+!!! annotated symbol 2 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:4:11
+!!! annotated symbol 3 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:10:7
+!!! annotated symbol 4 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:1:11
     var a4: I<string> = <K<number>>z;
         ~~
-!!! error TS2322: Type 'K<number>' is not assignable to type 'I<string>'.
+!!! error TS2322: Type '{|K|0|}<number>' is not assignable to type '{|I|1|}<string>'.
 !!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'A<number>' is not assignable to type 'Comparable<string>'.
+!!! error TS2322:     Type '{|A|2|}<number>' is not assignable to type '{|Comparable|3|}<string>'.
+!!! annotated symbol 0 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:7:11
+!!! annotated symbol 1 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:4:11
+!!! annotated symbol 2 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:10:7
+!!! annotated symbol 3 tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts:1:11
      
     

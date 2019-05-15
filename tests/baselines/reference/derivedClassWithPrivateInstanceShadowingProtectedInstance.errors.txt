@@ -16,8 +16,10 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     // error, not a subtype
     class Derived extends Base {
           ~~~~~~~
-!!! error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
+!!! error TS2415: Class '{|Derived|0|}' incorrectly extends base class '{|Base|1|}'.
 !!! error TS2415:   Property 'x' is private in type 'Derived' but not in type 'Base'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingProtectedInstance.ts:12:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateInstanceShadowingProtectedInstance.ts:1:7
         private x: string; 
         private fn(): string {
             return '';

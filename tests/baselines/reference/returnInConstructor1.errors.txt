@@ -23,7 +23,8 @@ tests/cases/compiler/returnInConstructor1.ts(55,9): error TS2409: Return type of
         constructor() {
             return 1; // error
             ~~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type 'B'.
+!!! error TS2322: Type '1' is not assignable to type '{|B|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/returnInConstructor1.ts:8:7
             ~~~~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }
@@ -41,7 +42,8 @@ tests/cases/compiler/returnInConstructor1.ts(55,9): error TS2409: Return type of
         constructor() {
             return "test"; // error
             ~~~~~~~~~~~~~~
-!!! error TS2322: Type '"test"' is not assignable to type 'D'.
+!!! error TS2322: Type '"test"' is not assignable to type '{|D|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/returnInConstructor1.ts:22:7
             ~~~~~~~~~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }
@@ -80,9 +82,11 @@ tests/cases/compiler/returnInConstructor1.ts(55,9): error TS2409: Return type of
             super();
             return new G(); //error
             ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'G' is not assignable to type 'H'.
+!!! error TS2322: Type '{|G|0|}' is not assignable to type '{|H|1|}'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
 !!! error TS2322:     Type '() => void' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/returnInConstructor1.ts:43:7
+!!! annotated symbol 1 tests/cases/compiler/returnInConstructor1.ts:52:7
             ~~~~~~~~~~~~~~~
 !!! error TS2409: Return type of constructor signature must be assignable to the instance type of the class.
         }

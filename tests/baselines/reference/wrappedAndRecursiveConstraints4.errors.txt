@@ -16,4 +16,6 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursi
     var r = c.foo('');
     var r2 = r({ length: 3, charAt: (x: number) => { '' } }); // error
                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ length: number; charAt: (x: number) => void; }' is not assignable to parameter of type 'string'.
+!!! error TS2345: Argument of type '{ {|length|0|}: number; {|charAt|1|}: (x: number) => void; }' is not assignable to parameter of type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints4.ts:13:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints4.ts:13:25

@@ -25,7 +25,13 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     var d1 = new X<D>();
     var r = foo(c1, d1); // error
                     ~~
-!!! error TS2345: Argument of type 'X<D>' is not assignable to parameter of type 'X<C>'.
-!!! error TS2345:   Type 'D' is not assignable to type 'C'.
+!!! error TS2345: Argument of type '{|X|0|}<{|D|1|}>' is not assignable to parameter of type '{|X|2|}<{|C|3|}>'.
+!!! error TS2345:   Type '{|D|4|}' is not assignable to type '{|C|5|}'.
 !!! error TS2345:     Types have separate declarations of a private property 'x'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts:9:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts:5:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts:9:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts:1:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts:5:7
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgs.ts:1:7
     var r2 = foo(c1, c1); // ok

@@ -30,17 +30,21 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2741: Property 'select' is m
     }
     class ImageBase extends Control implements SelectableControl{
           ~~~~~~~~~
-!!! error TS2420: Class 'ImageBase' incorrectly implements interface 'SelectableControl'.
+!!! error TS2420: Class '{|ImageBase|0|}' incorrectly implements interface '{|SelectableControl|1|}'.
 !!! error TS2420:   Property 'select' is missing in type 'ImageBase' but required in type 'SelectableControl'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:14:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:4:11
     }
     class Image1 extends Control {
     }
     class Locations implements SelectableControl {
           ~~~~~~~~~
-!!! error TS2420: Class 'Locations' incorrectly implements interface 'SelectableControl'.
+!!! error TS2420: Class '{|Locations|0|}' incorrectly implements interface '{|SelectableControl|1|}'.
 !!! error TS2420:   Property 'state' is missing in type 'Locations' but required in type 'SelectableControl'.
 !!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/inheritance1.ts:18:7
+!!! annotated symbol 1 tests/cases/compiler/inheritance1.ts:4:11
         select() { }
     }
     class Locations1 {

@@ -32,4 +32,6 @@ tests/cases/compiler/chainedAssignment1.ts(22,1): error TS2322: Type 'Z' is not 
 !!! error TS2739: Type 'Z' is missing the following properties from type 'Y': a, b
     c2 = c3; // Error TS111: Cannot convert Z to Y
     ~~
-!!! error TS2322: Type 'Z' is not assignable to type 'Y'.
+!!! error TS2322: Type '{|Z|0|}' is not assignable to type '{|Y|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/chainedAssignment1.ts:13:7
+!!! annotated symbol 1 tests/cases/compiler/chainedAssignment1.ts:6:7

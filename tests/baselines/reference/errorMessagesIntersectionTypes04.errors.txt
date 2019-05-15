@@ -22,13 +22,19 @@ tests/cases/compiler/errorMessagesIntersectionTypes04.ts(19,5): error TS2322: Ty
     
         num = a_and_b;
         ~~~
-!!! error TS2322: Type 'A & B' is not assignable to type 'number'.
+!!! error TS2322: Type '{|A|0|} & {|B|1|}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes04.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes04.ts:5:11
         bool = a_and_b;
         ~~~~
-!!! error TS2322: Type 'A & B' is not assignable to type 'boolean'.
+!!! error TS2322: Type '{|A|0|} & {|B|1|}' is not assignable to type 'boolean'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes04.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes04.ts:5:11
         str = a_and_b;
         ~~~
-!!! error TS2322: Type 'A & B' is not assignable to type 'string'.
+!!! error TS2322: Type '{|A|0|} & {|B|1|}' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/errorMessagesIntersectionTypes04.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/errorMessagesIntersectionTypes04.ts:5:11
     
         str = num_and_bool;
     }

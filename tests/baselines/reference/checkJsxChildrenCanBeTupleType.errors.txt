@@ -24,11 +24,22 @@ tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx(17,18): error TS2
     
     const testErr = <ResizablePanel>
                      ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ children: [Element, Element, Element]; }' is not assignable to type 'Readonly<ResizablePanelProps>'.
+!!! error TS2322: Type '{ {|children|0|}: [{|Element|1|}, {|Element|2|}, {|Element|3|}]; }' is not assignable to type '{|Readonly|4|}<{|ResizablePanelProps|5|}>'.
 !!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '[Element, Element, Element]' is not assignable to type '[ReactNode, ReactNode]'.
+!!! error TS2322:     Type '[{|Element|6|}, {|Element|7|}, {|Element|8|}]' is not assignable to type '[{|ReactNode|9|}, {|ReactNode|10|}]'.
 !!! error TS2322:       Types of property 'length' are incompatible.
 !!! error TS2322:         Type '3' is not assignable to type '2'.
+!!! annotated dropped!: 0
+!!! annotated symbol 1 /.lib/react16.d.ts:2371:23
+!!! annotated symbol 2 /.lib/react16.d.ts:2371:23
+!!! annotated symbol 3 /.lib/react16.d.ts:2371:23
+!!! annotated symbol 4 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 5 tests/cases/conformance/jsx/checkJsxChildrenCanBeTupleType.tsx:5:11
+!!! annotated symbol 6 /.lib/react16.d.ts:2371:23
+!!! annotated symbol 7 /.lib/react16.d.ts:2371:23
+!!! annotated symbol 8 /.lib/react16.d.ts:2371:23
+!!! annotated symbol 9 /.lib/react16.d.ts:218:14
+!!! annotated symbol 10 /.lib/react16.d.ts:218:14
       <div />
       <div />
       <div />

@@ -30,8 +30,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B extends A {
               ~
-!!! error TS2415: Class 'B' incorrectly extends base class 'A'.
+!!! error TS2415: Class '{|B|0|}' incorrectly extends base class '{|A|1|}'.
 !!! error TS2415:   Property 'foo' is private in type 'A' but not in type 'B'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:16:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:12:11
             public foo: Derived; // error
         }
     
@@ -41,8 +43,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B2 extends A2 {
               ~~
-!!! error TS2415: Class 'B2' incorrectly extends base class 'A2'.
+!!! error TS2415: Class '{|B2|0|}' incorrectly extends base class '{|A2|1|}'.
 !!! error TS2415:   Property '1' is private in type 'A2' but not in type 'B2'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:24:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:20:11
             public 1: Derived; // error
         }
     
@@ -52,8 +56,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B3 extends A3 {
               ~~
-!!! error TS2415: Class 'B3' incorrectly extends base class 'A3'.
+!!! error TS2415: Class '{|B3|0|}' incorrectly extends base class '{|A3|1|}'.
 !!! error TS2415:   Property ''1'' is private in type 'A3' but not in type 'B3'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:32:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:28:11
             public '1': Derived; // error
         }
     }
@@ -65,8 +71,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B extends A {
               ~
-!!! error TS2415: Class 'B' incorrectly extends base class 'A'.
+!!! error TS2415: Class '{|B|0|}' incorrectly extends base class '{|A|1|}'.
 !!! error TS2415:   Property 'foo' is private in type 'A' but not in type 'B'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:42:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:38:11
             foo: Derived; // error
         }
     
@@ -76,8 +84,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B2 extends A2 {
               ~~
-!!! error TS2415: Class 'B2' incorrectly extends base class 'A2'.
+!!! error TS2415: Class '{|B2|0|}' incorrectly extends base class '{|A2|1|}'.
 !!! error TS2415:   Property '1' is private in type 'A2' but not in type 'B2'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:50:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:46:11
             1: Derived; // error
         }
     
@@ -87,8 +97,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B3 extends A3 {
               ~~
-!!! error TS2415: Class 'B3' incorrectly extends base class 'A3'.
+!!! error TS2415: Class '{|B3|0|}' incorrectly extends base class '{|A3|1|}'.
 !!! error TS2415:   Property ''1'' is private in type 'A3' but not in type 'B3'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:58:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembersAccessibility2.ts:54:11
             '1': Derived; // error
         }
     }

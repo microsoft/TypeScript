@@ -10,8 +10,10 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtending
     
     interface I extends Foo { // error
               ~
-!!! error TS2430: Interface 'I' incorrectly extends interface 'Foo'.
+!!! error TS2430: Interface '{|I|0|}' incorrectly extends interface '{|Foo|1|}'.
 !!! error TS2430:   Property 'x' is protected but type 'I' is not a class derived from 'Foo'.
+!!! annotated symbol 0 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds.ts:5:11
+!!! annotated symbol 1 tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClassWithProtecteds.ts:1:7
         x: string;
     }
     

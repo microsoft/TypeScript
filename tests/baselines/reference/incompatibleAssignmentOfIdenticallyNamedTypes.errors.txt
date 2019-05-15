@@ -10,8 +10,13 @@ tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): erro
         fn() {
             this.x = a;
             ~~~~~~
-!!! error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
-!!! error TS2719:   'T' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2719: Type '{|T|0|}' is not assignable to type '{|T|1|}'. Two different types with this name exist, but they are unrelated.
+!!! error TS2719:   '{|T|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts:3:11
+!!! annotated symbol 2 tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts:1:11
+!!! annotated symbol 3 tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts:3:11
+!!! annotated symbol 4 tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts:3:11
         }
     }
     

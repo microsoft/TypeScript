@@ -8,9 +8,13 @@ tests/cases/compiler/arrayCast.ts(3,23): error TS2352: Conversion of type '{ foo
     // has type { foo: string }[], which is not assignable to { id: number }[].
     <{ id: number; }[]>[{ foo: "s" }];
                           ~~~~~~~~
-!!! error TS2352: Conversion of type '{ foo: string; }[]' to type '{ id: number; }[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Type '{ foo: string; }' is not comparable to type '{ id: number; }'.
+!!! error TS2352: Conversion of type '{ {|foo|0|}: string; }[]' to type '{ {|id|1|}: number; }[]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+!!! error TS2352:   Type '{ {|foo|2|}: string; }' is not comparable to type '{ {|id|3|}: number; }'.
 !!! error TS2352:     Object literal may only specify known properties, and 'foo' does not exist in type '{ id: number; }'.
+!!! annotated symbol 0 tests/cases/compiler/arrayCast.ts:3:23
+!!! annotated symbol 1 tests/cases/compiler/arrayCast.ts:3:4
+!!! annotated symbol 2 tests/cases/compiler/arrayCast.ts:3:23
+!!! annotated symbol 3 tests/cases/compiler/arrayCast.ts:3:4
     
     // Should succeed, as the {} element causes the type of the array to be {}[]
     <{ id: number; }[]>[{ foo: "s" }, {}]; 

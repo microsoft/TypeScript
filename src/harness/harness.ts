@@ -993,7 +993,19 @@ namespace Harness {
             };
 
             function outputErrorText(error: ts.Diagnostic) {
-                const message = ts.flattenDiagnosticMessageText(error.messageText, IO.newLine());
+                let message = ts.flattenDiagnosticMessageText(error.messageText, IO.newLine());
+                const annotations = ts.flattenDiagnosticAnnotationSpans(typeof error.messageText !== "string" ? error.messageText : error.annotations, IO.newLine());
+                if (annotations) {
+                    let totalOffset = 0;
+                    for (let i = 0; i < annotations.length; i++) {
+                        const annotation = annotations[i];
+                        const start = totalOffset + annotation.start;
+                        const original = message.slice(start, start + annotation.length);
+                        const replacement = `{|${original}|${i}|}`;
+                        totalOffset += replacement.length - original.length;
+                        message = message.slice(0, start) + replacement + message.slice(start + annotation.length);
+                    }
+                }
 
                 const errLines = utils.removeTestPathPrefixes(message)
                     .split("\n")
@@ -1003,6 +1015,12 @@ namespace Harness {
                 if (error.relatedInformation) {
                     for (const info of error.relatedInformation) {
                         errLines.push(`!!! related TS${info.code}${info.file ? " " + ts.formatLocation(info.file, info.start!, formatDiagnsoticHost, ts.identity) : ""}: ${ts.flattenDiagnosticMessageText(info.messageText, IO.newLine())}`);
+                    }
+                }
+                if (annotations) {
+                    for (let i = 0; i < annotations.length; i++) {
+                        const annotation = annotations[i];
+                        errLines.push(`!!! annotated ${formatAnnotationForBaseline(annotation, i)}`);
                     }
                 }
                 errLines.forEach(e => outputLines += (newLine() + e));
@@ -1119,6 +1137,21 @@ namespace Harness {
 
             // Verify we didn't miss any errors in total
             assert.equal(totalErrorsReportedInNonLibraryFiles + numLibraryDiagnostics + numTest262HarnessDiagnostics, diagnostics.length, "total number of errors");
+
+            function formatAnnotationForBaseline(annotation: ts.AnnotationSpan, index: number) {
+                const protocolSpan = ts.server.convertAnnotationSpanToDiagnosticAnnotationSpan(annotation);
+                if (!protocolSpan) {
+                    return `dropped!: ${index}`;
+                }
+                switch (annotation.kind) {
+                    case "symbol":
+                        const p = protocolSpan;
+                        const file = ts.getSourceFileOfNode(annotation.symbol.declarations[0]);
+                        return `symbol ${index} ${ts.formatLocation(file, ts.getPositionOfLineAndCharacter(file, p.location.line - 1, p.location.offset - 1), formatDiagnsoticHost, ts.identity)}`;
+                    default:
+                        return ts.Debug.fail("Unhandled annotation kind in harness baseliner"); // TODO: use Debug.assertNever when AnnotationSpan is a union
+                }
+            }
         }
 
         export function doErrorBaseline(baselinePath: string, inputFiles: ReadonlyArray<TestFile>, errors: ReadonlyArray<ts.Diagnostic>, pretty?: boolean) {

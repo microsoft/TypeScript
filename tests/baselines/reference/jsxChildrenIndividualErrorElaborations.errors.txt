@@ -101,10 +101,13 @@ tests/cases/compiler/index.tsx(74,9): error TS2322: Type 'number' is not assigna
     var a = <Blah3>
       {x => x}
       ~~~~~~~~
-!!! error TS2322: Type '(x: number) => number' is not assignable to type 'Cb | Cb[]'.
-!!! error TS2322:   Type '(x: number) => number' is not assignable to type 'Cb'.
+!!! error TS2322: Type '(x: number) => number' is not assignable to type '{|Cb|0|} | {|Cb|1|}[]'.
+!!! error TS2322:   Type '(x: number) => number' is not assignable to type '{|Cb|2|}'.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/compiler/index.tsx:54:3: The expected type comes from property 'children' which is declared here on type 'IntrinsicAttributes & PropsMixed'
+!!! annotated symbol 0 tests/cases/compiler/index.tsx:52:6
+!!! annotated symbol 1 tests/cases/compiler/index.tsx:52:6
+!!! annotated symbol 2 tests/cases/compiler/index.tsx:52:6
     </Blah3>
     
     // Blah3 components don't accept text as child elements

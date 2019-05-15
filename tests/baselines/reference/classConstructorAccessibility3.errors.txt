@@ -28,12 +28,16 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
     a = Bar;
     a = Baz; // error Baz is protected
     ~
-!!! error TS2322: Type 'typeof Baz' is not assignable to type 'typeof Foo'.
+!!! error TS2322: Type 'typeof {|Baz|0|}' is not assignable to type 'typeof {|Foo|1|}'.
 !!! error TS2322:   Cannot assign a 'protected' constructor type to a 'public' constructor type.
+!!! annotated symbol 0 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts:9:7
+!!! annotated symbol 1 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts:1:7
     a = Qux; // error Qux is private
     ~
-!!! error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Foo'.
+!!! error TS2322: Type 'typeof {|Qux|0|}' is not assignable to type 'typeof {|Foo|1|}'.
 !!! error TS2322:   Cannot assign a 'private' constructor type to a 'public' constructor type.
+!!! annotated symbol 0 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts:13:7
+!!! annotated symbol 1 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts:1:7
     
     // b is protected
     let b = Baz;
@@ -41,8 +45,10 @@ tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessib
     b = Bar;
     b = Qux; // error Qux is private
     ~
-!!! error TS2322: Type 'typeof Qux' is not assignable to type 'typeof Baz'.
+!!! error TS2322: Type 'typeof {|Qux|0|}' is not assignable to type 'typeof {|Baz|1|}'.
 !!! error TS2322:   Cannot assign a 'private' constructor type to a 'protected' constructor type.
+!!! annotated symbol 0 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts:13:7
+!!! annotated symbol 1 tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility3.ts:9:7
     
     // c is private
     let c = Qux;

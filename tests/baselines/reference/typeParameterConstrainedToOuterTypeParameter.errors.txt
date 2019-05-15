@@ -16,7 +16,10 @@ tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter.ts(10,5): erro
     var a: A<string>
     var b: B<string> = a; // assignment should be legal (both U's get instantiated to any for comparison)
         ~
-!!! error TS2322: Type 'A<string>' is not assignable to type 'B<string>'.
+!!! error TS2322: Type '{|A|0|}<string>' is not assignable to type '{|B|1|}<string>'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type 'U' is not assignable to type 'string[]'.
+!!! error TS2322:     Type '{|U|2|}' is not assignable to type 'string[]'.
 !!! error TS2322:       Type 'string' is not assignable to type 'string[]'.
+!!! annotated symbol 0 tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter.ts:5:11
+!!! annotated symbol 2 tests/cases/compiler/typeParameterConstrainedToOuterTypeParameter.ts:6:6

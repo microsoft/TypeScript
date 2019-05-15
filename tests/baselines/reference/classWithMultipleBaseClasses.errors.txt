@@ -22,8 +22,10 @@ tests/cases/compiler/classWithMultipleBaseClasses.ts(18,7): error TS2420: Class 
     
     class D implements I, J {
           ~
-!!! error TS2420: Class 'D' incorrectly implements interface 'I'.
+!!! error TS2420: Class '{|D|0|}' incorrectly implements interface '{|I|1|}'.
 !!! error TS2420:   Type 'D' is missing the following properties from type 'I': foo, bar
+!!! annotated symbol 0 tests/cases/compiler/classWithMultipleBaseClasses.ts:18:7
+!!! annotated symbol 1 tests/cases/compiler/classWithMultipleBaseClasses.ts:9:11
         baz() { }
         bat() { }
     }

@@ -20,8 +20,10 @@ tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts(149,5): err
     
     var numIndex: { [n: number]: string } = { 3: 'three', 'three': 'three' };
                                                           ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ 3: string; 'three': string; }' is not assignable to type '{ [n: number]: string; }'.
+!!! error TS2322: Type '{ {|3|0|}: string; {|'three'|1|}: string; }' is not assignable to type '{ [n: number]: string; }'.
 !!! error TS2322:   Object literal may only specify known properties, and ''three'' does not exist in type '{ [n: number]: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts:11:43
+!!! annotated symbol 1 tests/cases/conformance/expressions/propertyAccess/propertyAccess.ts:11:55
     var strIndex: { [n: string]: Compass } = { 'N': Compass.North, 'E': Compass.East };
     var bothIndex:
         {

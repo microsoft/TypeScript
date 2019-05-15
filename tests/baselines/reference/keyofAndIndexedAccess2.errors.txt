@@ -60,18 +60,31 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
 !!! error TS2739: Type '{ [key: string]: number; }' is missing the following properties from type '{ x: number; y: number; }': x, y
         a = c;  // Error, index signature in source doesn't imply properties are present
         ~
-!!! error TS2322: Type 'T' is not assignable to type '{ x: number; y: number; }'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{ {|x|1|}: number; {|y|2|}: number; }'.
 !!! error TS2322:   Type '{ [key: string]: number; }' is missing the following properties from type '{ x: number; y: number; }': x, y
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:55
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:66
         b = a;
         b = c;
         c = a;  // Error, constraint on target doesn't imply any properties or signatures
         ~
-!!! error TS2322: Type '{ x: number; y: number; }' is not assignable to type 'T'.
-!!! error TS2322:   '{ x: number; y: number; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
+!!! error TS2322: Type '{ {|x|0|}: number; {|y|1|}: number; }' is not assignable to type '{|T|2|}'.
+!!! error TS2322:   '{ {|x|3|}: number; {|y|4|}: number; }' is assignable to the constraint of type '{|T|5|}', but '{|T|6|}' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:55
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:66
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
+!!! annotated symbol 3 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:55
+!!! annotated symbol 4 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:66
+!!! annotated symbol 5 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
+!!! annotated symbol 6 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
         c = b;  // Error, constraint on target doesn't imply any properties or signatures
         ~
-!!! error TS2322: Type '{ [key: string]: number; }' is not assignable to type 'T'.
-!!! error TS2322:   '{ [key: string]: number; }' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
+!!! error TS2322: Type '{ [key: string]: number; }' is not assignable to type '{|T|0|}'.
+!!! error TS2322:   '{ [key: string]: number; }' is assignable to the constraint of type '{|T|1|}', but '{|T|2|}' could be instantiated with a different subtype of constraint '{ [key: string]: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
+!!! annotated symbol 2 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
         a.x;
         b.x;
         c.x;
@@ -83,13 +96,17 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
 !!! error TS2339: Property 'x' does not exist on type 'T'.
         c[k] = 1; // Error, cannot write to index signature through constraint
         ~~~~
-!!! error TS2322: Type '1' is not assignable to type 'T[keyof T]'.
+!!! error TS2322: Type '1' is not assignable to type '{|T|0|}[keyof {|T|1|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:13:13
     }
     
     function f3<K extends string>(a: { [P in K]: number }, b: { [key: string]: number }, k: K) {
         a = b;  // Error, index signature doesn't imply properties are present
         ~
-!!! error TS2322: Type '{ [key: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
+!!! error TS2322: Type '{ [key: string]: number; }' is not assignable to type '{ [{|P|0|} in {|K|1|}]: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:30:37
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:30:13
         b = a;
         a[k];
         a[k] = 1;
@@ -98,7 +115,9 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
     function f3b<K extends string>(a: { [P in K]: number }, b: { [P in string]: number }, k: K) {
         a = b;  // Error, index signature doesn't imply properties are present
         ~
-!!! error TS2322: Type '{ [x: string]: number; }' is not assignable to type '{ [P in K]: number; }'.
+!!! error TS2322: Type '{ [x: string]: number; }' is not assignable to type '{ [{|P|0|} in {|K|1|}]: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:37:38
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:37:14
         b = a;
     }
     
@@ -119,10 +138,14 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
 !!! error TS2322:   Type '123' is not assignable to type 'string'.
       obj[k3] = 123;  // Error
       ~~~~~~~
-!!! error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
+!!! error TS2322: Type '123' is not assignable to type '{|T|0|}[keyof {|T|1|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:49:14
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:49:14
       obj[k4] = 123;  // Error
       ~~~~~~~
-!!! error TS2322: Type '123' is not assignable to type 'T[K]'.
+!!! error TS2322: Type '123' is not assignable to type '{|T|0|}[{|K|1|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:49:14
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:49:30
     }
     
     type Dict = Record<string, number>;
@@ -142,10 +165,14 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
 !!! error TS2536: Type 'string' cannot be used to index type 'T'.
       obj[k2] = 123;  // Error
       ~~~~~~~
-!!! error TS2322: Type '123' is not assignable to type 'T[keyof T]'.
+!!! error TS2322: Type '123' is not assignable to type '{|T|0|}[keyof {|T|1|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:64:14
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:64:14
       obj[k3] = 123;  // Error
       ~~~~~~~
-!!! error TS2322: Type '123' is not assignable to type 'T[K]'.
+!!! error TS2322: Type '123' is not assignable to type '{|T|0|}[{|K|1|}]'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:64:14
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:64:40
     }
     
     // Repro from #27895
@@ -187,9 +214,11 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts(108,5): error TS23
     function get123<K extends keyof Type>(): Type[K] {
         return 123;  // Error
         ~~~~~~~~~~~
-!!! error TS2322: Type '123' is not assignable to type 'Type[K]'.
+!!! error TS2322: Type '123' is not assignable to type '{|Type|0|}[{|K|1|}]'.
 !!! error TS2322:   Type '123' is not assignable to type '123 & "some string"'.
 !!! error TS2322:     Type '123' is not assignable to type '"some string"'.
+!!! annotated symbol 0 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:102:11
+!!! annotated symbol 1 tests/cases/conformance/types/keyof/keyofAndIndexedAccess2.ts:107:17
     }
     
     // Repro from #30920

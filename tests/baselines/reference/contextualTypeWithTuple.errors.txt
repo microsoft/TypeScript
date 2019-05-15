@@ -56,9 +56,12 @@ tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts(25,1): error TS23
     unionTuple = unionTuple1;
     unionTuple = unionTuple2;
     ~~~~~~~~~~
-!!! error TS2322: Type '[C, string | number, D]' is not assignable to type '[C, string | number]'.
+!!! error TS2322: Type '[{|C|0|}, string | number, {|D|1|}]' is not assignable to type '[{|C|2|}, string | number]'.
 !!! error TS2322:   Types of property 'length' are incompatible.
 !!! error TS2322:     Type '3' is not assignable to type '2'.
+!!! annotated symbol 0 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:7:7
+!!! annotated symbol 1 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:8:7
+!!! annotated symbol 2 tests/cases/conformance/types/tuple/contextualTypeWithTuple.ts:7:7
     unionTuple2 = unionTuple;
     ~~~~~~~~~~~
 !!! error TS2741: Property '2' is missing in type '[C, string | number]' but required in type '[C, string | number, D]'.

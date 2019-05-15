@@ -33,9 +33,12 @@ tests/cases/conformance/jsdoc/a.js(25,2): error TS1069: Unexpected token. A type
     f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
     f({ a: 12  }, undefined, undefined, 101, 'nope');
       ~~~~~~~~~~
-!!! error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: string; }'.
+!!! error TS2345: Argument of type '{ {|a|0|}: number; }' is not assignable to parameter of type '{ {|a|1|}: number; {|b|2|}: string; }'.
 !!! error TS2345:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
 !!! related TS2728 tests/cases/conformance/jsdoc/a.js:2:28: 'b' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsdoc/a.js:21:5
+!!! annotated symbol 1 tests/cases/conformance/jsdoc/a.js:2:17
+!!! annotated symbol 2 tests/cases/conformance/jsdoc/a.js:2:28
     
     /**
      * @template {NoLongerAllowed}

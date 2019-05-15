@@ -80,8 +80,10 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     c = d;
     c = e;
     ~
-!!! error TS2322: Type 'E' is not assignable to type 'C'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|C|1|}'.
 !!! error TS2322:   Types of property 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts:36:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithAny.ts:1:7
     var r = c.foo(); // e.foo would return string
     

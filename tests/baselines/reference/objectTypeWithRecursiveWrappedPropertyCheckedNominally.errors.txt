@@ -40,15 +40,19 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
     list1 = myList1; // error, not nominally equal
     list1 = myList2; // error, type mismatch
     ~~~~~
-!!! error TS2322: Type 'MyList<string>' is not assignable to type 'List<number>'.
+!!! error TS2322: Type '{|MyList|0|}<string>' is not assignable to type '{|List|1|}<number>'.
 !!! error TS2322:   Types of property 'data' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:3:7
     
     list2 = myList1; // error, not nominally equal
     ~~~~~
-!!! error TS2322: Type 'MyList<number>' is not assignable to type 'List<string>'.
+!!! error TS2322: Type '{|MyList|0|}<number>' is not assignable to type '{|List|1|}<string>'.
 !!! error TS2322:   Types of property 'data' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:3:7
     list2 = myList2; // error, type mismatch
     
     var rList1 = new List<List<number>>();
@@ -58,16 +62,40 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
     function foo<T extends List<number>, U extends MyList<number>>(t: T, u: U) {
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'List<number>'.
-!!! error TS2322:     Type 'MyList<number>' is not assignable to type 'T'.
-!!! error TS2322:       'MyList<number>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'List<number>'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|List|5|}<number>'.
+!!! error TS2322:     Type '{|MyList|6|}<number>' is not assignable to type '{|T|7|}'.
+!!! error TS2322:       '{|MyList|8|}<number>' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|List|11|}<number>'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:38
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:38
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:14
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:3:7
         u = t; // error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'MyList<number>'.
-!!! error TS2322:     Type 'List<number>' is not assignable to type 'U'.
-!!! error TS2322:       'List<number>' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'MyList<number>'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|MyList|5|}<number>'.
+!!! error TS2322:     Type '{|List|6|}<number>' is not assignable to type '{|U|7|}'.
+!!! error TS2322:       '{|List|8|}<number>' is assignable to the constraint of type '{|U|9|}', but '{|U|10|}' could be instantiated with a different subtype of constraint '{|MyList|11|}<number>'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:38
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:38
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:38
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:3:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:38
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:3:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:38
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:29:38
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
     
         var a: List<number>;
         var b: MyList<number>;
@@ -80,10 +108,22 @@ tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRec
     function foo2<T extends U, U extends MyList<number>>(t: T, u: U) {
         t = u; // error
         ~
-!!! error TS2322: Type 'U' is not assignable to type 'T'.
-!!! error TS2322:   'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
-!!! error TS2322:     Type 'MyList<number>' is not assignable to type 'T'.
-!!! error TS2322:       'MyList<number>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'MyList<number>'.
+!!! error TS2322: Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|MyList|5|}<number>'.
+!!! error TS2322:     Type '{|MyList|6|}<number>' is not assignable to type '{|T|7|}'.
+!!! error TS2322:       '{|MyList|8|}<number>' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|MyList|11|}<number>'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:41:28
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:41:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:41:28
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:41:15
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:41:15
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:41:15
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:41:15
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:41:15
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedPropertyCheckedNominally.ts:8:7
         u = t; // was error, ok after constraint made illegal, doesn't matter
     
         var a: List<number>;

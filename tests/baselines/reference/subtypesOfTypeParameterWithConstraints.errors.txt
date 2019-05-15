@@ -74,8 +74,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D3<T, U>' is not assignable to the same property in base type 'C3<T>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'T'.
-!!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:17:23
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:17:10
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:17:23
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:17:10
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:17:10
     }
     
     class D4<T extends U, U> extends C3<U> {
@@ -111,10 +116,20 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'T'.
-!!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
-!!! error TS2416:       Type 'V' is not assignable to type 'T'.
-!!! error TS2416:         'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2416:       Type '{|V|5|}' is not assignable to type '{|T|6|}'.
+!!! error TS2416:         '{|V|7|}' is assignable to the constraint of type '{|T|8|}', but '{|T|9|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:23
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:10
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:23
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:10
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:10
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:36
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:10
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:36
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:10
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:48:10
     }
     
     class D9<T extends U, U extends V, V> extends C3<U> {
@@ -136,8 +151,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D11<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'T'.
-!!! error TS2416:     'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     '{|V|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:65:37
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:65:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:65:37
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:65:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:65:11
     }
     
     class D12<T extends U, U extends V, V> extends C3<U> {
@@ -147,8 +167,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D12<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'U'.
-!!! error TS2416:     'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2416:     '{|V|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:70:37
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:70:24
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:70:37
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:70:24
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:70:24
     }
     
     class D13<T extends U, U extends V, V> extends C3<V> {
@@ -193,12 +218,30 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D19<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'T'.
-!!! error TS2416:     'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2416:       Type 'V' is not assignable to type 'T'.
-!!! error TS2416:         'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2416:           Type 'Date' is not assignable to type 'T'.
-!!! error TS2416:             'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     '{|U|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! error TS2416:       Type '{|V|6|}' is not assignable to type '{|T|7|}'.
+!!! error TS2416:         '{|V|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|Date|11|}'.
+!!! error TS2416:           Type '{|Date|12|}' is not assignable to type '{|T|13|}'.
+!!! error TS2416:             '{|Date|14|}' is assignable to the constraint of type '{|T|15|}', but '{|T|16|}' could be instantiated with a different subtype of constraint '{|Date|17|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:24
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:24
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:37
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:37
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 12 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 14 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:110:11
+!!! annotated symbol 17 /.ts/lib.es5.d.ts:729:11
     }
     
     class D20<T extends U, U extends V, V extends Date> extends C3<U> {
@@ -225,10 +268,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D23<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'T'.
-!!! error TS2416:     'V' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2416:       Type 'Date' is not assignable to type 'T'.
-!!! error TS2416:         'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     '{|V|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! error TS2416:       Type '{|Date|6|}' is not assignable to type '{|T|7|}'.
+!!! error TS2416:         '{|Date|8|}' is assignable to the constraint of type '{|T|9|}', but '{|T|10|}' could be instantiated with a different subtype of constraint '{|Date|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:132:37
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:132:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:132:37
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:132:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:132:11
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:132:11
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:132:11
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:132:11
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:729:11
     }
     
     class D24<T extends U, U extends V, V extends Date> extends C3<U> {
@@ -238,10 +293,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D24<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'U'.
-!!! error TS2416:     'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
-!!! error TS2416:       Type 'Date' is not assignable to type 'U'.
-!!! error TS2416:         'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2416:     '{|V|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! error TS2416:       Type '{|Date|6|}' is not assignable to type '{|U|7|}'.
+!!! error TS2416:         '{|Date|8|}' is assignable to the constraint of type '{|U|9|}', but '{|U|10|}' could be instantiated with a different subtype of constraint '{|Date|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:137:37
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:137:24
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:137:37
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:137:24
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:137:24
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:137:24
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:137:24
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:137:24
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:729:11
     }
     
     class D25<T extends U, U extends V, V extends Date> extends C3<V> {
@@ -263,8 +330,14 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'T'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D27<T, U, V>' is not assignable to the same property in base type 'C3<T>'.
-!!! error TS2416:   Type 'Date' is not assignable to type 'T'.
-!!! error TS2416:     'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2416:   Type '{|Date|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     '{|Date|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:154:11
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:154:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:154:11
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     }
     
     class D28<T extends U, U extends V, V extends Date> extends C3<U> {
@@ -274,8 +347,14 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'U'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D28<T, U, V>' is not assignable to the same property in base type 'C3<U>'.
-!!! error TS2416:   Type 'Date' is not assignable to type 'U'.
-!!! error TS2416:     'Date' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2416:   Type '{|Date|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2416:     '{|Date|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:159:24
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:159:24
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:159:24
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     }
     
     class D29<T extends U, U extends V, V extends Date> extends C3<V> {
@@ -285,6 +364,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'Date' is not assignable to string index type 'V'.
         ~~~
 !!! error TS2416: Property 'foo' in type 'D29<T, U, V>' is not assignable to the same property in base type 'C3<V>'.
-!!! error TS2416:   Type 'Date' is not assignable to type 'V'.
-!!! error TS2416:     'Date' is assignable to the constraint of type 'V', but 'V' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2416:   Type '{|Date|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2416:     '{|Date|2|}' is assignable to the constraint of type '{|V|3|}', but '{|V|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:164:37
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:164:37
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints.ts:164:37
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
     }

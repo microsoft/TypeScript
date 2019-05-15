@@ -7,6 +7,8 @@ tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface.ts(3
     var a: Boolean;
     x = a;
     ~
-!!! error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
-!!! error TS2322:   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
+!!! error TS2322: Type '{|Boolean|0|}' is not assignable to type 'boolean'.
+!!! error TS2322:   'boolean' is a primitive, but '{|Boolean|1|}' is a wrapper object. Prefer using 'boolean' when possible.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:529:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:529:11
     a = x;

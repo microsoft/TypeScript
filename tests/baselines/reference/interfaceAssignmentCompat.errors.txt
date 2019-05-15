@@ -41,10 +41,14 @@ tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEy
     
             x=x.sort(CompareYeux); // parameter mismatch
                      ~~~~~~~~~~~
-!!! error TS2345: Argument of type '(a: IFrenchEye, b: IFrenchEye) => number' is not assignable to parameter of type '(a: IEye, b: IEye) => number'.
+!!! error TS2345: Argument of type '(a: {|IFrenchEye|0|}, b: {|IFrenchEye|1|}) => number' is not assignable to parameter of type '(a: {|IEye|2|}, b: {|IEye|3|}) => number'.
 !!! error TS2345:   Types of parameters 'a' and 'a' are incompatible.
 !!! error TS2345:     Property 'coleur' is missing in type 'IEye' but required in type 'IFrenchEye'.
 !!! related TS2728 tests/cases/compiler/interfaceAssignmentCompat.ts:13:9: 'coleur' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/interfaceAssignmentCompat.ts:12:22
+!!! annotated symbol 1 tests/cases/compiler/interfaceAssignmentCompat.ts:12:22
+!!! annotated symbol 2 tests/cases/compiler/interfaceAssignmentCompat.ts:8:22
+!!! annotated symbol 3 tests/cases/compiler/interfaceAssignmentCompat.ts:8:22
             // type of z inferred from specialized array type
             var z=x.sort(CompareEyes); // ok
     
@@ -58,12 +62,18 @@ tests/cases/compiler/interfaceAssignmentCompat.ts(44,9): error TS2322: Type 'IEy
             for (var j=z.length=1;j>=0;j--) {
                 eeks[j]=z[j];  // nope: element assignment
                 ~~~~~~~
-!!! error TS2322: Type 'IEye' is not assignable to type 'IFrenchEye'.
+!!! error TS2322: Type '{|IEye|0|}' is not assignable to type '{|IFrenchEye|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceAssignmentCompat.ts:8:22
+!!! annotated symbol 1 tests/cases/compiler/interfaceAssignmentCompat.ts:12:22
             }
             eeks=z; // nope: array assignment
             ~~~~
-!!! error TS2322: Type 'IEye[]' is not assignable to type 'IFrenchEye[]'.
-!!! error TS2322:   Type 'IEye' is not assignable to type 'IFrenchEye'.
+!!! error TS2322: Type '{|IEye|0|}[]' is not assignable to type '{|IFrenchEye|1|}[]'.
+!!! error TS2322:   Type '{|IEye|2|}' is not assignable to type '{|IFrenchEye|3|}'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceAssignmentCompat.ts:8:22
+!!! annotated symbol 1 tests/cases/compiler/interfaceAssignmentCompat.ts:12:22
+!!! annotated symbol 2 tests/cases/compiler/interfaceAssignmentCompat.ts:8:22
+!!! annotated symbol 3 tests/cases/compiler/interfaceAssignmentCompat.ts:12:22
             return result;
         }
     }

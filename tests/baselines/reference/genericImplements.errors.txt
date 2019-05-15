@@ -15,8 +15,16 @@ tests/cases/compiler/genericImplements.ts(9,5): error TS2416: Property 'f' in ty
         f<T extends B>(): T { return undefined; }
         ~
 !!! error TS2416: Property 'f' in type 'X' is not assignable to the same property in base type 'I'.
-!!! error TS2416:   Type '<T extends B>() => T' is not assignable to type '<T extends A>() => T'.
-!!! error TS2416:     Type 'B' is not assignable to type 'T'.
+!!! error TS2416:   Type '<{|T|0|} extends {|B|1|}>() => {|T|2|}' is not assignable to type '<{|T|3|} extends {|A|4|}>() => {|T|5|}'.
+!!! error TS2416:     Type '{|B|6|}' is not assignable to type '{|T|7|}'.
+!!! annotated symbol 0 tests/cases/compiler/genericImplements.ts:9:7
+!!! annotated symbol 1 tests/cases/compiler/genericImplements.ts:2:7
+!!! annotated symbol 2 tests/cases/compiler/genericImplements.ts:9:7
+!!! annotated symbol 3 tests/cases/compiler/genericImplements.ts:4:7
+!!! annotated symbol 4 tests/cases/compiler/genericImplements.ts:1:7
+!!! annotated symbol 5 tests/cases/compiler/genericImplements.ts:4:7
+!!! annotated symbol 6 tests/cases/compiler/genericImplements.ts:2:7
+!!! annotated symbol 7 tests/cases/compiler/genericImplements.ts:4:7
     } // { f: () => { b; } }
     
     // OK

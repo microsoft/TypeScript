@@ -150,11 +150,13 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     let implExplicitStructural = impl.explicitStructural;
     implExplicitStructural(); // error, no 'a' in 'void'
     ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{ a: number; }'.
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{ {|a|0|}: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:32:31
     let implExplicitInterface = impl.explicitInterface;
     implExplicitInterface(); // error, no 'a' in 'void' 
     ~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type 'I'.
+!!! error TS2684: The 'this' context of type 'void' is not assignable to method's 'this' of type '{|I|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:28:11
     function explicitStructural(this: { y: number }, x: number): number {
         return x + this.y;
     }
@@ -170,16 +172,34 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     }
     let ok: {y: number, f: (this: { y: number }, x: number) => number} = { y: 12, explicitStructural };
                                                                                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ y: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
+!!! error TS2322: Type '{ {|y|0|}: number; {|explicitStructural|1|}: (this: { {|y|2|}: number; }, x: number) => number; }' is not assignable to type '{ {|y|3|}: number; {|f|4|}: (this: { {|y|5|}: number; }, x: number) => number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: number; f: (this: { y: number; }, x: number) => number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:72
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:79
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:52:37
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:10
+!!! annotated symbol 4 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:21
+!!! annotated symbol 5 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:33
     let wrongPropertyType: {y: string, f: (this: { y: number }, x: number) => number} = { y: 'foo', explicitStructural };
                                                                                                     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ y: string; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
+!!! error TS2322: Type '{ {|y|0|}: string; {|explicitStructural|1|}: (this: { {|y|2|}: number; }, x: number) => number; }' is not assignable to type '{ {|y|3|}: string; {|f|4|}: (this: { {|y|5|}: number; }, x: number) => number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ y: string; f: (this: { y: number; }, x: number) => number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:87
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:97
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:52:37
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:25
+!!! annotated symbol 4 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:36
+!!! annotated symbol 5 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:48
     let wrongPropertyName: {wrongName: number, f: (this: { y: number }, x: number) => number} = { wrongName: 12, explicitStructural };
                                                                                                                  ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ wrongName: number; explicitStructural: (this: { y: number; }, x: number) => number; }' is not assignable to type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
+!!! error TS2322: Type '{ {|wrongName|0|}: number; {|explicitStructural|1|}: (this: { {|y|2|}: number; }, x: number) => number; }' is not assignable to type '{ {|wrongName|3|}: number; {|f|4|}: (this: { {|y|5|}: number; }, x: number) => number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'explicitStructural' does not exist in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:95
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:110
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:52:37
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:25
+!!! annotated symbol 4 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:44
+!!! annotated symbol 5 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56
     
     ok.f(); // not enough arguments
     ~~~~~~
@@ -193,14 +213,22 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
 !!! error TS2554: Expected 1 arguments, but got 2.
     wrongPropertyType.f(13);
     ~~~~~~~~~~~~~~~~~
-!!! error TS2684: The 'this' context of type '{ y: string; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
+!!! error TS2684: The 'this' context of type '{ {|y|0|}: string; {|f|1|}: (this: { {|y|2|}: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ {|y|3|}: number; }'.
 !!! error TS2684:   Types of property 'y' are incompatible.
 !!! error TS2684:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:25
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:36
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:48
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:62:48
     wrongPropertyName.f(13);
     ~~~~~~~~~~~~~~~~~
-!!! error TS2684: The 'this' context of type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ y: number; }'.
+!!! error TS2684: The 'this' context of type '{ {|wrongName|0|}: number; {|f|1|}: (this: { {|y|2|}: number; }, x: number) => number; }' is not assignable to method's 'this' of type '{ {|y|3|}: number; }'.
 !!! error TS2684:   Property 'y' is missing in type '{ wrongName: number; f: (this: { y: number; }, x: number) => number; }' but required in type '{ y: number; }'.
 !!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56: 'y' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:25
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:44
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:63:56
     
     let c = new C();
     c.explicitC(); // not enough arguments
@@ -247,9 +275,11 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     // oops, this triggers contextual typing, which needs to be updated to understand that =>'s `this` is void.
     let specifiedToVoid: (this: void, x: number) => number = explicitStructural;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: { y: number; }, x: number) => number' is not assignable to type '(this: void, x: number) => number'.
+!!! error TS2322: Type '(this: { {|y|0|}: number; }, x: number) => number' is not assignable to type '(this: void, x: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'void' is not assignable to type '{ y: number; }'.
+!!! error TS2322:     Type 'void' is not assignable to type '{ {|y|1|}: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:52:37
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:52:37
     
     let reconstructed: { 
         n: number,
@@ -272,54 +302,82 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     // from differing object types
     c.explicitC = function(this: D, m: number) { return this.x + m };
     ~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: {|C|1|}, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Type 'C' is missing the following properties from type 'D': x, explicitD
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
     c.explicitProperty = explicitXProperty;
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: { x: number; }, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
+!!! error TS2322: Type '(this: { {|x|0|}: number; }, m: number) => number' is not assignable to type '(this: { {|n|1|}: number; }, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Property 'x' is missing in type '{ n: number; }' but required in type '{ x: number; }'.
 !!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:104:33: 'x' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:104:33
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:12:29
     
     c.explicitC = d.explicitD;
     ~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: {|C|1|}, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
+!!! error TS2322:     Type '{|C|2|}' is not assignable to type '{|D|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
     c.explicitC = d.explicitThis;
     ~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: {|C|1|}, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
+!!! error TS2322:     Type '{|C|2|}' is not assignable to type '{|D|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
     c.explicitThis = d.explicitD;
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: {|C|1|}, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
+!!! error TS2322:     Type '{|C|2|}' is not assignable to type '{|D|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
     c.explicitThis = d.explicitThis;
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: {|C|1|}, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'C' is not assignable to type 'D'.
+!!! error TS2322:     Type '{|C|2|}' is not assignable to type '{|D|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
     c.explicitProperty = d.explicitD;
     ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: { n: number; }, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: { {|n|1|}: number; }, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Type '{ n: number; }' is missing the following properties from type 'D': x, explicitThis, explicitD
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:12:29
     c.explicitThis = d.explicitThis;
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: C, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: {|C|1|}, m: number) => number'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:1:7
     c.explicitVoid = d.explicitD;
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'void' is not assignable to type 'D'.
+!!! error TS2322:     Type 'void' is not assignable to type '{|D|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
     c.explicitVoid = d.explicitThis;
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: D, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
+!!! error TS2322: Type '(this: {|D|0|}, m: number) => number' is not assignable to type '(this: void, m: number) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'void' is not assignable to type 'D'.
+!!! error TS2322:     Type 'void' is not assignable to type '{|D|1|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:19:7
     
     /// class-based polymorphic assignability (with inheritance!) ///
     
@@ -351,19 +409,27 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     
     b1.polymorphic = b2.polymorphic // error, 'this.y' not in Base1: { x }
     ~~~~~~~~~~~~~~
-!!! error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
+!!! error TS2322: Type '(this: {|Base2|0|}) => number' is not assignable to type '(this: {|Base1|1|}) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
 !!! error TS2322:     Property 'y' is missing in type 'Base1' but required in type 'Base2'.
 !!! related TS2728 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:131:5: 'y' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:130:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:121:7
     b1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
     ~~~~~~~~~~~
-!!! error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
+!!! error TS2322: Type '(this: {|Base2|0|}) => number' is not assignable to type '(this: {|Base1|1|}) => number'.
 !!! error TS2322:   The 'this' types of each signature are incompatible.
-!!! error TS2322:     Type 'Base1' is not assignable to type 'Base2'.
+!!! error TS2322:     Type '{|Base1|2|}' is not assignable to type '{|Base2|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:130:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:121:7
+!!! annotated symbol 2 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:121:7
+!!! annotated symbol 3 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:130:7
     
     d1.explicit = b2.polymorphic // error, 'y' not in Base1: { x }
     ~~~~~~~~~~~
-!!! error TS2322: Type '(this: Base2) => number' is not assignable to type '(this: Base1) => number'.
+!!! error TS2322: Type '(this: {|Base2|0|}) => number' is not assignable to type '(this: {|Base1|1|}) => number'.
+!!! annotated symbol 0 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:130:7
+!!! annotated symbol 1 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:121:7
     
     ////// use this-type for construction with new ////
     function VoidThis(this: void) {

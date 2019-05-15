@@ -18,9 +18,11 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: Th
     let notAssignable: { a: string };
     ({ b, ...notAssignable } = o);
              ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type '{ a: string; }'.
+!!! error TS2322: Type '{ {|a|0|}: number; }' is not assignable to type '{ {|a|1|}: string; }'.
 !!! error TS2322:   Types of property 'a' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/rest/objectRestNegative.ts:1:11
+!!! annotated symbol 1 tests/cases/conformance/types/rest/objectRestNegative.ts:5:22
     
     
     function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {

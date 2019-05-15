@@ -28,8 +28,10 @@ tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2
     
     class C implements Function {
           ~
-!!! error TS2420: Class 'C' incorrectly implements interface 'Function'.
+!!! error TS2420: Class '{|C|0|}' incorrectly implements interface '{|Function|1|}'.
 !!! error TS2420:   Type 'C' is missing the following properties from type 'Function': apply, call, bind
+!!! annotated symbol 0 tests/cases/compiler/untypedFunctionCallsWithTypeParameters1.ts:10:7
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:272:11
         prototype = null;
         length = 1;
         arguments = null;

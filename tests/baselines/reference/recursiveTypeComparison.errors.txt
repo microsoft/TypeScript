@@ -20,8 +20,12 @@ tests/cases/compiler/recursiveTypeComparison.ts(14,5): error TS2322: Type 'Obser
     var p: Observable<{}>;
     var stuck: Property<number> = p;
         ~~~~~
-!!! error TS2322: Type 'Observable<{}>' is not assignable to type 'Property<number>'.
+!!! error TS2322: Type '{|Observable|0|}<{}>' is not assignable to type '{|Property|1|}<number>'.
 !!! error TS2322:   Types of property 'needThisOne' are incompatible.
-!!! error TS2322:     Type 'Observable<{}>' is not assignable to type 'Observable<number>'.
+!!! error TS2322:     Type '{|Observable|2|}<{}>' is not assignable to type '{|Observable|3|}<number>'.
 !!! error TS2322:       Type '{}' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveTypeComparison.ts:3:11
+!!! annotated symbol 1 tests/cases/compiler/recursiveTypeComparison.ts:11:11
+!!! annotated symbol 2 tests/cases/compiler/recursiveTypeComparison.ts:3:11
+!!! annotated symbol 3 tests/cases/compiler/recursiveTypeComparison.ts:3:11
     

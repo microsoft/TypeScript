@@ -19,9 +19,29 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     x = y 
     y = x 
     ~
-!!! error TS2322: Type '<T extends I2<T>>(z: T) => void' is not assignable to type '<T extends I2<I2<T>>>(z: T) => void'.
+!!! error TS2322: Type '<{|T|0|} extends {|I2|1|}<{|T|2|}>>(z: {|T|3|}) => void' is not assignable to type '<{|T|4|} extends {|I2|5|}<{|I2|6|}<{|T|7|}>>>(z: {|T|8|}) => void'.
 !!! error TS2322:   Types of parameters 'z' and 'z' are incompatible.
-!!! error TS2322:     Type 'T' is not assignable to type 'I2<T>'.
-!!! error TS2322:       Type 'I2<I2<T>>' is not assignable to type 'I2<T>'.
-!!! error TS2322:         Type 'I2<T>' is not assignable to type 'T'.
+!!! error TS2322:     Type '{|T|9|}' is not assignable to type '{|I2|10|}<{|T|11|}>'.
+!!! error TS2322:       Type '{|I2|12|}<{|I2|13|}<{|T|14|}>>' is not assignable to type '{|I2|15|}<{|T|16|}>'.
+!!! error TS2322:         Type '{|I2|17|}<{|T|18|}>' is not assignable to type '{|T|19|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:7:9
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:3:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:7:9
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:7:9
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:3:11
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:3:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:3:11
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:3:11
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:3:11
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:3:11
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
+!!! annotated symbol 17 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:3:11
+!!! annotated symbol 18 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
+!!! annotated symbol 19 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignatures4.ts:8:9
     

@@ -33,8 +33,10 @@ tests/cases/compiler/interfaceInheritance.ts(38,1): error TS2322: Type 'I4' is n
     
     class C1 implements I2 { // should be an error - it doesn't implement the members of I1
           ~~
-!!! error TS2420: Class 'C1' incorrectly implements interface 'I2'.
+!!! error TS2420: Class '{|C1|0|}' incorrectly implements interface '{|I2|1|}'.
 !!! error TS2420:   Type 'C1' is missing the following properties from type 'I2': i1P1, i1P2
+!!! annotated symbol 0 tests/cases/compiler/interfaceInheritance.ts:22:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceInheritance.ts:6:11
         public i2P1: string;
     }
     
@@ -53,13 +55,17 @@ tests/cases/compiler/interfaceInheritance.ts(38,1): error TS2322: Type 'I4' is n
     
     i4 = i5; // should be an error
     ~~
-!!! error TS2322: Type 'I5' is not assignable to type 'I4'.
+!!! error TS2322: Type '{|I5|0|}' is not assignable to type '{|I4|1|}'.
 !!! error TS2322:   Types of property 'one' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceInheritance.ts:18:11
+!!! annotated symbol 1 tests/cases/compiler/interfaceInheritance.ts:14:11
     i5 = i4; // should be an error
     ~~
-!!! error TS2322: Type 'I4' is not assignable to type 'I5'.
+!!! error TS2322: Type '{|I4|0|}' is not assignable to type '{|I5|1|}'.
 !!! error TS2322:   Types of property 'one' are incompatible.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceInheritance.ts:14:11
+!!! annotated symbol 1 tests/cases/compiler/interfaceInheritance.ts:18:11
     
     

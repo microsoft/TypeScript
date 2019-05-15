@@ -26,9 +26,15 @@ tests/cases/compiler/getAndSetNotIdenticalType2.ts(9,9): error TS2322: Type 'A<s
 !!! error TS2380: 'get' and 'set' accessor must have the same type.
             this.data = v;
             ~~~~~~~~~
-!!! error TS2322: Type 'A<string>' is not assignable to type 'A<T>'.
-!!! error TS2322:   Type 'string' is not assignable to type 'T'.
-!!! error TS2322:     'string' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|A|0|}<string>' is not assignable to type '{|A|1|}<{|T|2|}>'.
+!!! error TS2322:   Type 'string' is not assignable to type '{|T|3|}'.
+!!! error TS2322:     'string' is assignable to the constraint of type '{|T|4|}', but '{|T|5|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/compiler/getAndSetNotIdenticalType2.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/getAndSetNotIdenticalType2.ts:1:7
+!!! annotated symbol 2 tests/cases/compiler/getAndSetNotIdenticalType2.ts:3:9
+!!! annotated symbol 3 tests/cases/compiler/getAndSetNotIdenticalType2.ts:3:9
+!!! annotated symbol 4 tests/cases/compiler/getAndSetNotIdenticalType2.ts:3:9
+!!! annotated symbol 5 tests/cases/compiler/getAndSetNotIdenticalType2.ts:3:9
         }
     }
     

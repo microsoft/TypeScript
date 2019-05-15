@@ -13,5 +13,7 @@ tests/cases/compiler/incompatibleGenericTypes.ts(9,5): error TS2322: Type 'I1<bo
      
     var v2: I1<number> = v1;
         ~~
-!!! error TS2322: Type 'I1<boolean>' is not assignable to type 'I1<number>'.
+!!! error TS2322: Type '{|I1|0|}<boolean>' is not assignable to type '{|I1|1|}<number>'.
 !!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/incompatibleGenericTypes.ts:1:11
+!!! annotated symbol 1 tests/cases/compiler/incompatibleGenericTypes.ts:1:11

@@ -21,9 +21,13 @@ tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts(16,31): error TS2
     // Ideally, we would not have a generic signature here, because it should be instantiated with {} during inferential typing
     _.all([true, 1, null, 'yes'], _.identity);
                                   ~~~~~~~~~~
-!!! error TS2345: Argument of type '<T>(value: T) => T' is not assignable to parameter of type 'Iterator<string | number | boolean, boolean>'.
+!!! error TS2345: Argument of type '<{|T|0|}>(value: {|T|1|}) => {|T|2|}' is not assignable to parameter of type '{|Iterator|3|}<string | number | boolean, boolean>'.
 !!! error TS2345:   Type 'string | number | boolean' is not assignable to type 'boolean'.
 !!! error TS2345:     Type 'string' is not assignable to type 'boolean'.
+!!! annotated symbol 0 tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts:8:18
+!!! annotated symbol 1 tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts:8:18
+!!! annotated symbol 2 tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts:8:18
+!!! annotated symbol 3 tests/cases/compiler/genericArgumentCallSigAssignmentCompat.ts:2:22
      
     // Ok, because fixing makes us infer boolean for T
     _.all([true], _.identity);

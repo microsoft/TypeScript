@@ -17,5 +17,6 @@ tests/cases/conformance/jsx/file.tsx(11,2): error TS2322: Type '{ x: number; }' 
     var Obj1: Obj1type;
     <Obj1 x={10} />; // Error
      ~~~~
-!!! error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
+!!! error TS2322: Type '{ {|x|0|}: number; }' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:11:7
     

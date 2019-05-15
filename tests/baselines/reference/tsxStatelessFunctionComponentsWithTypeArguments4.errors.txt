@@ -18,7 +18,12 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2322: Type 'T & { ignore-pr
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:49: 'b' is declared here.
         let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
                   ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: unknown; a: unknown; }'.
+!!! error TS2322: Type '{|T|0|} & { {|ignore-prop|1|}: true; }' is not assignable to type '{|IntrinsicAttributes|2|} & { {|b|3|}: unknown; {|a|4|}: unknown; }'.
 !!! error TS2322:   Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }' but required in type '{ b: unknown; a: unknown; }'.
 !!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:55: 'a' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:8:14
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:10:43
+!!! annotated symbol 2 /.lib/react.d.ts:2367:15
+!!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:5:49
+!!! annotated symbol 4 tests/cases/conformance/jsx/file.tsx:5:55
     }

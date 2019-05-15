@@ -13,7 +13,13 @@ tests/cases/compiler/noErrorTruncation.ts(10,7): error TS2322: Type '42' is not 
     
     const x: SomeLongOptionA
           ~
-!!! error TS2322: Type '42' is not assignable to type 'SomeLongOptionA | SomeLongOptionB | SomeLongOptionC | SomeLongOptionD | SomeLongOptionE | SomeLongOptionF'.
+!!! error TS2322: Type '42' is not assignable to type '{|SomeLongOptionA|0|} | {|SomeLongOptionB|1|} | {|SomeLongOptionC|2|} | {|SomeLongOptionD|3|} | {|SomeLongOptionE|4|} | {|SomeLongOptionF|5|}'.
+!!! annotated symbol 0 tests/cases/compiler/noErrorTruncation.ts:3:6
+!!! annotated symbol 1 tests/cases/compiler/noErrorTruncation.ts:4:6
+!!! annotated symbol 2 tests/cases/compiler/noErrorTruncation.ts:5:6
+!!! annotated symbol 3 tests/cases/compiler/noErrorTruncation.ts:6:6
+!!! annotated symbol 4 tests/cases/compiler/noErrorTruncation.ts:7:6
+!!! annotated symbol 5 tests/cases/compiler/noErrorTruncation.ts:8:6
            | SomeLongOptionB
            | SomeLongOptionC
            | SomeLongOptionD

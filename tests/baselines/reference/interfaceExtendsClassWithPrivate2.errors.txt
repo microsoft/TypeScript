@@ -20,11 +20,15 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts(20,13): error TS2416: 
     
     class D extends C implements I { // error
           ~
-!!! error TS2415: Class 'D' incorrectly extends base class 'C'.
+!!! error TS2415: Class '{|D|0|}' incorrectly extends base class '{|C|1|}'.
 !!! error TS2415:   Types have separate declarations of a private property 'x'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts:10:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts:1:7
           ~
-!!! error TS2420: Class 'D' incorrectly implements interface 'I'.
+!!! error TS2420: Class '{|D|0|}' incorrectly implements interface '{|I|1|}'.
 !!! error TS2420:   Types have separate declarations of a private property 'x'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts:10:7
+!!! annotated symbol 1 tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts:6:11
         public foo(x: any) { return x; }
         private x = 2;
         private y = 3;

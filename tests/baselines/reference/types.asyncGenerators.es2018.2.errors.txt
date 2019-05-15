@@ -61,65 +61,115 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
     }
     const assignability1: () => AsyncIterableIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterableIterator<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterableIterator<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterableIterator|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterableIterator|3|}<number>'.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:42:11
         yield "a";
     };
     const assignability2: () => AsyncIterableIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterableIterator<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterableIterator<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterableIterator|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterableIterator|3|}<number>'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:42:11
         yield* ["a", "b"];
     };
     const assignability3: () => AsyncIterableIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterableIterator<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterableIterator<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterableIterator|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterableIterator|3|}<number>'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:42:11
         yield* (async function * () { yield "a"; })();
     };
     const assignability4: () => AsyncIterable<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterable<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterable<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterable|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterable|3|}<number>'.
 !!! error TS2322:     Types of property '[Symbol.asyncIterator]' are incompatible.
-!!! error TS2322:       Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterator<number>'.
-!!! error TS2322:         Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterator<number>'.
+!!! error TS2322:       Type '() => {|AsyncIterableIterator|4|}<string>' is not assignable to type '() => {|AsyncIterator|5|}<number>'.
+!!! error TS2322:         Type '{|AsyncIterableIterator|6|}<string>' is not assignable to type '{|AsyncIterator|7|}<number>'.
 !!! error TS2322:           Types of property 'next' are incompatible.
-!!! error TS2322:             Type '(value?: any) => Promise<IteratorResult<string>>' is not assignable to type '(value?: any) => Promise<IteratorResult<number>>'.
-!!! error TS2322:               Type 'Promise<IteratorResult<string>>' is not assignable to type 'Promise<IteratorResult<number>>'.
-!!! error TS2322:                 Type 'IteratorResult<string>' is not assignable to type 'IteratorResult<number>'.
+!!! error TS2322:             Type '(value?: any) => {|Promise|8|}<{|IteratorResult|9|}<string>>' is not assignable to type '(value?: any) => {|Promise|10|}<{|IteratorResult|11|}<number>>'.
+!!! error TS2322:               Type '{|Promise|12|}<{|IteratorResult|13|}<string>>' is not assignable to type '{|Promise|14|}<{|IteratorResult|15|}<number>>'.
+!!! error TS2322:                 Type '{|IteratorResult|16|}<string>' is not assignable to type '{|IteratorResult|17|}<number>'.
 !!! error TS2322:                   Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:38:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:38:11
+!!! annotated symbol 4 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 5 /.ts/lib.es2018.asynciterable.d.ts:32:11
+!!! annotated symbol 6 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 7 /.ts/lib.es2018.asynciterable.d.ts:32:11
+!!! annotated symbol 8 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 9 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 10 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 11 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 12 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 13 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 14 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 15 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 16 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 17 /.ts/lib.es2015.iterable.d.ts:31:11
         yield "a";
     };
     const assignability5: () => AsyncIterable<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterable<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterable<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterable|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterable|3|}<number>'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:38:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:38:11
         yield* ["a", "b"];
     };
     const assignability6: () => AsyncIterable<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterable<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterable<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterable|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterable|3|}<number>'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:38:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:38:11
         yield* (async function * () { yield "a"; })();
     };
     const assignability7: () => AsyncIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterator<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterator<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterator|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterator|3|}<number>'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:32:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:32:11
         yield "a";
     };
     const assignability8: () => AsyncIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterator<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterator<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterator|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterator|3|}<number>'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:32:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:32:11
         yield* ["a", "b"];
     };
     const assignability9: () => AsyncIterator<number> = async function * () {
           ~~~~~~~~~~~~~~
-!!! error TS2322: Type '() => AsyncIterableIterator<string>' is not assignable to type '() => AsyncIterator<number>'.
-!!! error TS2322:   Type 'AsyncIterableIterator<string>' is not assignable to type 'AsyncIterator<number>'.
+!!! error TS2322: Type '() => {|AsyncIterableIterator|0|}<string>' is not assignable to type '() => {|AsyncIterator|1|}<number>'.
+!!! error TS2322:   Type '{|AsyncIterableIterator|2|}<string>' is not assignable to type '{|AsyncIterator|3|}<number>'.
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2018.asynciterable.d.ts:32:11
+!!! annotated symbol 2 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 3 /.ts/lib.es2018.asynciterable.d.ts:32:11
         yield* (async function * () { yield "a"; })();
     };
     async function * explicitReturnType1(): AsyncIterableIterator<number> {
@@ -181,10 +231,15 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.es2018.2.ts(
     }
     async function * explicitReturnType12(): Iterator<number> {
                                              ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'AsyncIterableIterator<any>' is not assignable to type 'Iterator<number>'.
+!!! error TS2322: Type '{|AsyncIterableIterator|0|}<any>' is not assignable to type '{|Iterator|1|}<number>'.
 !!! error TS2322:   Types of property 'next' are incompatible.
-!!! error TS2322:     Type '(value?: any) => Promise<IteratorResult<any>>' is not assignable to type '(value?: any) => IteratorResult<number>'.
+!!! error TS2322:     Type '(value?: any) => {|Promise|2|}<{|IteratorResult|3|}<any>>' is not assignable to type '(value?: any) => {|IteratorResult|4|}<number>'.
 !!! error TS2322:       Type 'Promise<IteratorResult<any>>' is missing the following properties from type 'IteratorResult<number>': done, value
+!!! annotated symbol 0 /.ts/lib.es2018.asynciterable.d.ts:42:11
+!!! annotated symbol 1 /.ts/lib.es2015.iterable.d.ts:36:11
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1399:11
+!!! annotated symbol 3 /.ts/lib.es2015.iterable.d.ts:31:11
+!!! annotated symbol 4 /.ts/lib.es2015.iterable.d.ts:31:11
         yield 1;
     }
     async function * yieldStar() {

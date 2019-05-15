@@ -29,5 +29,7 @@ tests/cases/compiler/genericCloneReturnTypes.ts(25,1): error TS2322: Type 'Bar<s
     b = b2;
     b = b3;
     ~
-!!! error TS2322: Type 'Bar<string>' is not assignable to type 'Bar<number>'.
+!!! error TS2322: Type '{|Bar|0|}<string>' is not assignable to type '{|Bar|1|}<number>'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/genericCloneReturnTypes.ts:1:7
+!!! annotated symbol 1 tests/cases/compiler/genericCloneReturnTypes.ts:1:7

@@ -40,8 +40,10 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/re
     // Fails, can't redeclare readonly property
     class E extends D {
           ~
-!!! error TS2415: Class 'E' incorrectly extends base class 'D'.
+!!! error TS2415: Class '{|E|0|}' incorrectly extends base class '{|D|1|}'.
 !!! error TS2415:   Property 'x' is private in type 'D' but not in type 'E'.
+!!! annotated symbol 0 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts:33:7
+!!! annotated symbol 1 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/readonlyConstructorAssignment.ts:26:7
         constructor(readonly x: number) {
             super(x);
             this.x = 1;

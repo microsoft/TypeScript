@@ -87,34 +87,50 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
         c = d; // error
         ~
-!!! error TS2322: Type 'D' is not assignable to type 'C'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|C|1|}'.
 !!! error TS2322:   Property 'opt' is optional in type 'D' but required in type 'C'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:60:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:51:15
         c = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type 'C'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{|C|1|}'.
 !!! error TS2322:   Property 'opt' is optional in type 'E' but required in type 'C'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:63:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:51:15
         c = f; // ok
         c = a; // ok
     
         a = d; // error
         ~
-!!! error TS2322: Type 'D' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! error TS2322:   Property 'opt' is optional in type 'D' but required in type '{ opt: Base; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:60:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:56:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:3:7
         a = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! error TS2322:   Property 'opt' is optional in type 'E' but required in type '{ opt: Base; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:63:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:56:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:3:7
         a = f; // ok
         a = c; // ok
     
         b = d; // error
         ~
-!!! error TS2322: Type 'D' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! error TS2322:   Property 'opt' is optional in type 'D' but required in type '{ opt: Base; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:60:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:57:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:3:7
         b = e; // error
         ~
-!!! error TS2322: Type 'E' is not assignable to type '{ opt: Base; }'.
+!!! error TS2322: Type '{|E|0|}' is not assignable to type '{ {|opt|1|}: {|Base|2|}; }'.
 !!! error TS2322:   Property 'opt' is optional in type 'E' but required in type '{ opt: Base; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:63:15
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:57:15
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality.ts:3:7
         b = f; // ok
         b = a; // ok
         b = c; // ok

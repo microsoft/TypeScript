@@ -43,8 +43,12 @@ tests/cases/conformance/jsx/file.tsx(30,11): error TS2322: Type '{ y: true; x: 2
     let x2 = <OverWriteAttr {...anyobj} x={3} />
     let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
               ~~~~~~~~~~~~~
-!!! error TS2322: Type '{ y: true; x: 2; overwrite: string; }' is not assignable to type 'Prop'.
+!!! error TS2322: Type '{ {|y|0|}: true; {|x|1|}: 2; {|overwrite|2|}: string; }' is not assignable to type '{|Prop|3|}'.
 !!! error TS2322:   Types of property 'y' are incompatible.
 !!! error TS2322:     Type 'true' is not assignable to type 'false'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:30:55
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:4:14
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:30:25
+!!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:12:11
     
     

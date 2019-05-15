@@ -20,8 +20,10 @@ tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbst
     NewA(A);
     NewA(B);
          ~
-!!! error TS2345: Argument of type 'typeof B' is not assignable to parameter of type 'typeof A'.
+!!! error TS2345: Argument of type 'typeof {|B|0|}' is not assignable to parameter of type 'typeof {|A|1|}'.
 !!! error TS2345:   Cannot assign an abstract constructor type to a non-abstract constructor type.
+!!! annotated symbol 0 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractFactoryFunction.ts:2:16
+!!! annotated symbol 1 tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractFactoryFunction.ts:1:7
     
     NewB(A);
     NewB(B);

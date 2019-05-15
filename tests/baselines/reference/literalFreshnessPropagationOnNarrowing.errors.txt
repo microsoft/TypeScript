@@ -67,6 +67,8 @@ tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts(60,5): error TS23
         // Error in all extant branches
         arr = [...['y']];
         ~~~
-!!! error TS2322: Type 'string[]' is not assignable to type 'XY[]'.
-!!! error TS2322:   Type 'string' is not assignable to type 'XY'.
+!!! error TS2322: Type 'string[]' is not assignable to type '{|XY|0|}[]'.
+!!! error TS2322:   Type 'string' is not assignable to type '{|XY|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts:31:10
+!!! annotated symbol 1 tests/cases/compiler/literalFreshnessPropagationOnNarrowing.ts:31:10
     }

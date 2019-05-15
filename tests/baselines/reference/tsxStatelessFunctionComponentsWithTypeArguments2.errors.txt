@@ -25,8 +25,15 @@ tests/cases/conformance/jsx/file.tsx(31,52): error TS2322: Type '(val: string) =
     function Baz<T>(arg: T) {
         let a0 = <ComponentSpecific1 {...arg} />
                   ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'T' is not assignable to type 'IntrinsicAttributes & { prop: unknown; "ignore-prop": string; }'.
-!!! error TS2322:   Type 'T' is not assignable to type '{ prop: unknown; "ignore-prop": string; }'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|IntrinsicAttributes|1|} & { {|prop|2|}: unknown; {|"ignore-prop"|3|}: string; }'.
+!!! error TS2322:   Type '{|T|4|}' is not assignable to type '{ {|prop|5|}: unknown; {|"ignore-prop"|6|}: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:12:14
+!!! annotated symbol 1 /.lib/react.d.ts:2367:15
+!!! annotated symbol 2 tests/cases/conformance/jsx/file.tsx:3:44
+!!! annotated symbol 3 tests/cases/conformance/jsx/file.tsx:3:53
+!!! annotated symbol 4 tests/cases/conformance/jsx/file.tsx:12:14
+!!! annotated symbol 5 tests/cases/conformance/jsx/file.tsx:3:44
+!!! annotated symbol 6 tests/cases/conformance/jsx/file.tsx:3:53
     }
     
     declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;

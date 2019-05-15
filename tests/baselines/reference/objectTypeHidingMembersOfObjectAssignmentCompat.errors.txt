@@ -21,10 +21,12 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
     var o: Object;
     o = i; // error
     ~
-!!! error TS2322: Type 'I' is not assignable to type 'Object'.
+!!! error TS2322: Type '{|I|0|}' is not assignable to type '{|Object|1|}'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => void' is not assignable to type '() => string'.
 !!! error TS2322:       Type 'void' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts:1:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:120:11
     i = o; // ok
     
     class C {
@@ -33,10 +35,12 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
     var c: C;
     o = c; // error
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'Object'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type '{|Object|1|}'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => void' is not assignable to type '() => string'.
 !!! error TS2322:       Type 'void' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts:10:7
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:120:11
     c = o; // ok
     
     var a = {
@@ -44,8 +48,10 @@ tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentC
     }
     o = a; // error
     ~
-!!! error TS2322: Type '{ toString: () => void; }' is not assignable to type 'Object'.
+!!! error TS2322: Type '{ {|toString|0|}: () => void; }' is not assignable to type '{|Object|1|}'.
 !!! error TS2322:   Types of property 'toString' are incompatible.
 !!! error TS2322:     Type '() => void' is not assignable to type '() => string'.
 !!! error TS2322:       Type 'void' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/members/objectTypeHidingMembersOfObjectAssignmentCompat.ts:18:5
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:120:11
     a = o; // ok

@@ -186,8 +186,9 @@ tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerCon
 !!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
         f: <MyString>null, 
         ~
-!!! error TS2322: Type 'MyString' is not assignable to type 'string'.
+!!! error TS2322: Type '{|MyString|0|}' is not assignable to type 'string'.
 !!! related TS6501 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:78:10: The expected type comes from this index signature.
+!!! annotated symbol 0 tests/cases/conformance/types/objectTypeLiteral/indexSignatures/stringIndexerConstrainsPropertyDeclarations.ts:3:11
     
         get X() { 
             ~

@@ -207,337 +207,465 @@ tests/cases/compiler/typedArraysCrossAssignability01.ts(89,5): error TS2322: Typ
         arr_Int8Array = arr_Int8Array;
         arr_Int8Array = arr_Uint8Array;
         ~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8Array' is not assignable to type 'Int8Array'.
+!!! error TS2322: Type '{|Uint8Array|0|}' is not assignable to type '{|Int8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Int8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1963:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1688:11
         arr_Int8Array = arr_Int16Array;
         ~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int16Array' is not assignable to type 'Int8Array'.
+!!! error TS2322: Type '{|Int16Array|0|}' is not assignable to type '{|Int8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int16Array"' is not assignable to type '"Int8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2512:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1688:11
         arr_Int8Array = arr_Uint16Array;
         ~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint16Array' is not assignable to type 'Int8Array'.
+!!! error TS2322: Type '{|Uint16Array|0|}' is not assignable to type '{|Int8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"Int8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2787:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1688:11
         arr_Int8Array = arr_Int32Array;
         ~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int32Array' is not assignable to type 'Int8Array'.
+!!! error TS2322: Type '{|Int32Array|0|}' is not assignable to type '{|Int8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int32Array"' is not assignable to type '"Int8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3062:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1688:11
         arr_Int8Array = arr_Uint32Array;
         ~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint32Array' is not assignable to type 'Int8Array'.
+!!! error TS2322: Type '{|Uint32Array|0|}' is not assignable to type '{|Int8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"Int8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3337:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1688:11
         arr_Int8Array = arr_Float32Array;
         ~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float32Array' is not assignable to type 'Int8Array'.
+!!! error TS2322: Type '{|Float32Array|0|}' is not assignable to type '{|Int8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float32Array"' is not assignable to type '"Int8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3611:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1688:11
         arr_Int8Array = arr_Float64Array;
         ~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float64Array' is not assignable to type 'Int8Array'.
+!!! error TS2322: Type '{|Float64Array|0|}' is not assignable to type '{|Int8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float64Array"' is not assignable to type '"Int8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3887:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1688:11
         arr_Int8Array = arr_Uint8ClampedArray;
         ~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Int8Array'.
+!!! error TS2322: Type '{|Uint8ClampedArray|0|}' is not assignable to type '{|Int8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"Int8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2238:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1688:11
     
         arr_Uint8Array = arr_Int8Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int8Array' is not assignable to type 'Uint8Array'.
+!!! error TS2322: Type '{|Int8Array|0|}' is not assignable to type '{|Uint8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int8Array"' is not assignable to type '"UInt8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1688:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1963:11
         arr_Uint8Array = arr_Uint8Array;
         arr_Uint8Array = arr_Int16Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int16Array' is not assignable to type 'Uint8Array'.
+!!! error TS2322: Type '{|Int16Array|0|}' is not assignable to type '{|Uint8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int16Array"' is not assignable to type '"UInt8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2512:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1963:11
         arr_Uint8Array = arr_Uint16Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint16Array' is not assignable to type 'Uint8Array'.
+!!! error TS2322: Type '{|Uint16Array|0|}' is not assignable to type '{|Uint8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"UInt8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2787:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1963:11
         arr_Uint8Array = arr_Int32Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int32Array' is not assignable to type 'Uint8Array'.
+!!! error TS2322: Type '{|Int32Array|0|}' is not assignable to type '{|Uint8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int32Array"' is not assignable to type '"UInt8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3062:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1963:11
         arr_Uint8Array = arr_Uint32Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint32Array' is not assignable to type 'Uint8Array'.
+!!! error TS2322: Type '{|Uint32Array|0|}' is not assignable to type '{|Uint8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"UInt8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3337:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1963:11
         arr_Uint8Array = arr_Float32Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float32Array' is not assignable to type 'Uint8Array'.
+!!! error TS2322: Type '{|Float32Array|0|}' is not assignable to type '{|Uint8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float32Array"' is not assignable to type '"UInt8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3611:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1963:11
         arr_Uint8Array = arr_Float64Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float64Array' is not assignable to type 'Uint8Array'.
+!!! error TS2322: Type '{|Float64Array|0|}' is not assignable to type '{|Uint8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float64Array"' is not assignable to type '"UInt8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3887:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1963:11
         arr_Uint8Array = arr_Uint8ClampedArray;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Uint8Array'.
+!!! error TS2322: Type '{|Uint8ClampedArray|0|}' is not assignable to type '{|Uint8Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"UInt8Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2238:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1963:11
     
         arr_Int16Array = arr_Int8Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int8Array' is not assignable to type 'Int16Array'.
+!!! error TS2322: Type '{|Int8Array|0|}' is not assignable to type '{|Int16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int8Array"' is not assignable to type '"Int16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1688:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2512:11
         arr_Int16Array = arr_Uint8Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8Array' is not assignable to type 'Int16Array'.
+!!! error TS2322: Type '{|Uint8Array|0|}' is not assignable to type '{|Int16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Int16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1963:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2512:11
         arr_Int16Array = arr_Int16Array;
         arr_Int16Array = arr_Uint16Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint16Array' is not assignable to type 'Int16Array'.
+!!! error TS2322: Type '{|Uint16Array|0|}' is not assignable to type '{|Int16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"Int16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2787:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2512:11
         arr_Int16Array = arr_Int32Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int32Array' is not assignable to type 'Int16Array'.
+!!! error TS2322: Type '{|Int32Array|0|}' is not assignable to type '{|Int16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int32Array"' is not assignable to type '"Int16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3062:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2512:11
         arr_Int16Array = arr_Uint32Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint32Array' is not assignable to type 'Int16Array'.
+!!! error TS2322: Type '{|Uint32Array|0|}' is not assignable to type '{|Int16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"Int16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3337:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2512:11
         arr_Int16Array = arr_Float32Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float32Array' is not assignable to type 'Int16Array'.
+!!! error TS2322: Type '{|Float32Array|0|}' is not assignable to type '{|Int16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float32Array"' is not assignable to type '"Int16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3611:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2512:11
         arr_Int16Array = arr_Float64Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float64Array' is not assignable to type 'Int16Array'.
+!!! error TS2322: Type '{|Float64Array|0|}' is not assignable to type '{|Int16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float64Array"' is not assignable to type '"Int16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3887:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2512:11
         arr_Int16Array = arr_Uint8ClampedArray;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Int16Array'.
+!!! error TS2322: Type '{|Uint8ClampedArray|0|}' is not assignable to type '{|Int16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"Int16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2238:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2512:11
     
         arr_Uint16Array = arr_Int8Array;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int8Array' is not assignable to type 'Uint16Array'.
+!!! error TS2322: Type '{|Int8Array|0|}' is not assignable to type '{|Uint16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int8Array"' is not assignable to type '"Uint16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1688:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2787:11
         arr_Uint16Array = arr_Uint8Array;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8Array' is not assignable to type 'Uint16Array'.
+!!! error TS2322: Type '{|Uint8Array|0|}' is not assignable to type '{|Uint16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Uint16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1963:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2787:11
         arr_Uint16Array = arr_Int16Array;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int16Array' is not assignable to type 'Uint16Array'.
+!!! error TS2322: Type '{|Int16Array|0|}' is not assignable to type '{|Uint16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int16Array"' is not assignable to type '"Uint16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2512:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2787:11
         arr_Uint16Array = arr_Uint16Array;
         arr_Uint16Array = arr_Int32Array;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int32Array' is not assignable to type 'Uint16Array'.
+!!! error TS2322: Type '{|Int32Array|0|}' is not assignable to type '{|Uint16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int32Array"' is not assignable to type '"Uint16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3062:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2787:11
         arr_Uint16Array = arr_Uint32Array;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint32Array' is not assignable to type 'Uint16Array'.
+!!! error TS2322: Type '{|Uint32Array|0|}' is not assignable to type '{|Uint16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"Uint16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3337:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2787:11
         arr_Uint16Array = arr_Float32Array;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float32Array' is not assignable to type 'Uint16Array'.
+!!! error TS2322: Type '{|Float32Array|0|}' is not assignable to type '{|Uint16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float32Array"' is not assignable to type '"Uint16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3611:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2787:11
         arr_Uint16Array = arr_Float64Array;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float64Array' is not assignable to type 'Uint16Array'.
+!!! error TS2322: Type '{|Float64Array|0|}' is not assignable to type '{|Uint16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float64Array"' is not assignable to type '"Uint16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3887:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2787:11
         arr_Uint16Array = arr_Uint8ClampedArray;
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Uint16Array'.
+!!! error TS2322: Type '{|Uint8ClampedArray|0|}' is not assignable to type '{|Uint16Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"Uint16Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2238:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2787:11
     
         arr_Int32Array = arr_Int8Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int8Array' is not assignable to type 'Int32Array'.
+!!! error TS2322: Type '{|Int8Array|0|}' is not assignable to type '{|Int32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int8Array"' is not assignable to type '"Int32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1688:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3062:11
         arr_Int32Array = arr_Uint8Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8Array' is not assignable to type 'Int32Array'.
+!!! error TS2322: Type '{|Uint8Array|0|}' is not assignable to type '{|Int32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Int32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1963:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3062:11
         arr_Int32Array = arr_Int16Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int16Array' is not assignable to type 'Int32Array'.
+!!! error TS2322: Type '{|Int16Array|0|}' is not assignable to type '{|Int32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int16Array"' is not assignable to type '"Int32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2512:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3062:11
         arr_Int32Array = arr_Uint16Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint16Array' is not assignable to type 'Int32Array'.
+!!! error TS2322: Type '{|Uint16Array|0|}' is not assignable to type '{|Int32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"Int32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2787:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3062:11
         arr_Int32Array = arr_Int32Array;
         arr_Int32Array = arr_Uint32Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint32Array' is not assignable to type 'Int32Array'.
+!!! error TS2322: Type '{|Uint32Array|0|}' is not assignable to type '{|Int32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"Int32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3337:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3062:11
         arr_Int32Array = arr_Float32Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float32Array' is not assignable to type 'Int32Array'.
+!!! error TS2322: Type '{|Float32Array|0|}' is not assignable to type '{|Int32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float32Array"' is not assignable to type '"Int32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3611:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3062:11
         arr_Int32Array = arr_Float64Array;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float64Array' is not assignable to type 'Int32Array'.
+!!! error TS2322: Type '{|Float64Array|0|}' is not assignable to type '{|Int32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float64Array"' is not assignable to type '"Int32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3887:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3062:11
         arr_Int32Array = arr_Uint8ClampedArray;
         ~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Int32Array'.
+!!! error TS2322: Type '{|Uint8ClampedArray|0|}' is not assignable to type '{|Int32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"Int32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2238:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3062:11
     
         arr_Float32Array = arr_Int8Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int8Array' is not assignable to type 'Float32Array'.
+!!! error TS2322: Type '{|Int8Array|0|}' is not assignable to type '{|Float32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int8Array"' is not assignable to type '"Float32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1688:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3611:11
         arr_Float32Array = arr_Uint8Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8Array' is not assignable to type 'Float32Array'.
+!!! error TS2322: Type '{|Uint8Array|0|}' is not assignable to type '{|Float32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Float32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1963:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3611:11
         arr_Float32Array = arr_Int16Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int16Array' is not assignable to type 'Float32Array'.
+!!! error TS2322: Type '{|Int16Array|0|}' is not assignable to type '{|Float32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int16Array"' is not assignable to type '"Float32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2512:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3611:11
         arr_Float32Array = arr_Uint16Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint16Array' is not assignable to type 'Float32Array'.
+!!! error TS2322: Type '{|Uint16Array|0|}' is not assignable to type '{|Float32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"Float32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2787:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3611:11
         arr_Float32Array = arr_Int32Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int32Array' is not assignable to type 'Float32Array'.
+!!! error TS2322: Type '{|Int32Array|0|}' is not assignable to type '{|Float32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int32Array"' is not assignable to type '"Float32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3062:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3611:11
         arr_Float32Array = arr_Uint32Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint32Array' is not assignable to type 'Float32Array'.
+!!! error TS2322: Type '{|Uint32Array|0|}' is not assignable to type '{|Float32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"Float32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3337:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3611:11
         arr_Float32Array = arr_Float32Array;
         arr_Float32Array = arr_Float64Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float64Array' is not assignable to type 'Float32Array'.
+!!! error TS2322: Type '{|Float64Array|0|}' is not assignable to type '{|Float32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float64Array"' is not assignable to type '"Float32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3887:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3611:11
         arr_Float32Array = arr_Uint8ClampedArray;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Float32Array'.
+!!! error TS2322: Type '{|Uint8ClampedArray|0|}' is not assignable to type '{|Float32Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"Float32Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2238:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3611:11
     
         arr_Float64Array = arr_Int8Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int8Array' is not assignable to type 'Float64Array'.
+!!! error TS2322: Type '{|Int8Array|0|}' is not assignable to type '{|Float64Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int8Array"' is not assignable to type '"Float64Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1688:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3887:11
         arr_Float64Array = arr_Uint8Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8Array' is not assignable to type 'Float64Array'.
+!!! error TS2322: Type '{|Uint8Array|0|}' is not assignable to type '{|Float64Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Float64Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1963:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3887:11
         arr_Float64Array = arr_Int16Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int16Array' is not assignable to type 'Float64Array'.
+!!! error TS2322: Type '{|Int16Array|0|}' is not assignable to type '{|Float64Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int16Array"' is not assignable to type '"Float64Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2512:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3887:11
         arr_Float64Array = arr_Uint16Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint16Array' is not assignable to type 'Float64Array'.
+!!! error TS2322: Type '{|Uint16Array|0|}' is not assignable to type '{|Float64Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"Float64Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2787:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3887:11
         arr_Float64Array = arr_Int32Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int32Array' is not assignable to type 'Float64Array'.
+!!! error TS2322: Type '{|Int32Array|0|}' is not assignable to type '{|Float64Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int32Array"' is not assignable to type '"Float64Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3062:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3887:11
         arr_Float64Array = arr_Uint32Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint32Array' is not assignable to type 'Float64Array'.
+!!! error TS2322: Type '{|Uint32Array|0|}' is not assignable to type '{|Float64Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"Float64Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3337:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3887:11
         arr_Float64Array = arr_Float32Array;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float32Array' is not assignable to type 'Float64Array'.
+!!! error TS2322: Type '{|Float32Array|0|}' is not assignable to type '{|Float64Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float32Array"' is not assignable to type '"Float64Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3611:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3887:11
         arr_Float64Array = arr_Float64Array;
         arr_Float64Array = arr_Uint8ClampedArray;
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8ClampedArray' is not assignable to type 'Float64Array'.
+!!! error TS2322: Type '{|Uint8ClampedArray|0|}' is not assignable to type '{|Float64Array|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint8ClampedArray"' is not assignable to type '"Float64Array"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2238:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:3887:11
     
         arr_Uint8ClampedArray = arr_Int8Array;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int8Array' is not assignable to type 'Uint8ClampedArray'.
+!!! error TS2322: Type '{|Int8Array|0|}' is not assignable to type '{|Uint8ClampedArray|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int8Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1688:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2238:11
         arr_Uint8ClampedArray = arr_Uint8Array;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint8Array' is not assignable to type 'Uint8ClampedArray'.
+!!! error TS2322: Type '{|Uint8Array|0|}' is not assignable to type '{|Uint8ClampedArray|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"UInt8Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1963:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2238:11
         arr_Uint8ClampedArray = arr_Int16Array;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int16Array' is not assignable to type 'Uint8ClampedArray'.
+!!! error TS2322: Type '{|Int16Array|0|}' is not assignable to type '{|Uint8ClampedArray|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int16Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2512:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2238:11
         arr_Uint8ClampedArray = arr_Uint16Array;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint16Array' is not assignable to type 'Uint8ClampedArray'.
+!!! error TS2322: Type '{|Uint16Array|0|}' is not assignable to type '{|Uint8ClampedArray|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint16Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:2787:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2238:11
         arr_Uint8ClampedArray = arr_Int32Array;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Int32Array' is not assignable to type 'Uint8ClampedArray'.
+!!! error TS2322: Type '{|Int32Array|0|}' is not assignable to type '{|Uint8ClampedArray|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Int32Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3062:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2238:11
         arr_Uint8ClampedArray = arr_Uint32Array;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Uint32Array' is not assignable to type 'Uint8ClampedArray'.
+!!! error TS2322: Type '{|Uint32Array|0|}' is not assignable to type '{|Uint8ClampedArray|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Uint32Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3337:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2238:11
         arr_Uint8ClampedArray = arr_Float32Array;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float32Array' is not assignable to type 'Uint8ClampedArray'.
+!!! error TS2322: Type '{|Float32Array|0|}' is not assignable to type '{|Uint8ClampedArray|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float32Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3611:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2238:11
         arr_Uint8ClampedArray = arr_Float64Array;
         ~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Float64Array' is not assignable to type 'Uint8ClampedArray'.
+!!! error TS2322: Type '{|Float64Array|0|}' is not assignable to type '{|Uint8ClampedArray|1|}'.
 !!! error TS2322:   Types of property '[Symbol.toStringTag]' are incompatible.
 !!! error TS2322:     Type '"Float64Array"' is not assignable to type '"Uint8ClampedArray"'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:3887:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:2238:11
         arr_Uint8ClampedArray = arr_Uint8ClampedArray;
         
     }

@@ -46,31 +46,41 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS26
         a = a;
         a = b;
         ~
-!!! error TS2322: Type 'B' is not assignable to type '1'.
+!!! error TS2322: Type '{|B|0|}' is not assignable to type '1'.
 !!! error TS2322:   Type '2' is not assignable to type '1'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
         a = c;
         ~
-!!! error TS2322: Type 'C' is not assignable to type '1'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type '1'.
 !!! error TS2322:   Type '2' is not assignable to type '1'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:3:6
         a = d;
         ~
-!!! error TS2322: Type 'D' is not assignable to type '1'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '1'.
 !!! error TS2322:   Type '0' is not assignable to type '1'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:4:6
     }
     
     function f2(a: A, b: B, c: C, d: D) {
         b = a;
         ~
-!!! error TS2322: Type '1' is not assignable to type 'B'.
+!!! error TS2322: Type '1' is not assignable to type '{|B|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
         b = b;
         b = c;
         ~
-!!! error TS2322: Type 'C' is not assignable to type 'B'.
-!!! error TS2322:   Type '1' is not assignable to type 'B'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type '{|B|1|}'.
+!!! error TS2322:   Type '1' is not assignable to type '{|B|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:3:6
+!!! annotated symbol 1 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
+!!! annotated symbol 2 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
         b = d;
         ~
-!!! error TS2322: Type 'D' is not assignable to type 'B'.
-!!! error TS2322:   Type '0' is not assignable to type 'B'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|B|1|}'.
+!!! error TS2322:   Type '0' is not assignable to type '{|B|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:4:6
+!!! annotated symbol 1 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
+!!! annotated symbol 2 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
     }
     
     function f3(a: A, b: B, c: C, d: D) {
@@ -79,20 +89,29 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS26
         c = c;
         c = d;
         ~
-!!! error TS2322: Type 'D' is not assignable to type 'C'.
-!!! error TS2322:   Type '0' is not assignable to type 'C'.
+!!! error TS2322: Type '{|D|0|}' is not assignable to type '{|C|1|}'.
+!!! error TS2322:   Type '0' is not assignable to type '{|C|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:4:6
+!!! annotated symbol 1 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:3:6
+!!! annotated symbol 2 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:3:6
     }
     
     function f4(a: A, b: B, c: C, d: D) {
         d = a;
         d = b;
         ~
-!!! error TS2322: Type 'B' is not assignable to type 'D'.
-!!! error TS2322:   Type '3' is not assignable to type 'D'.
+!!! error TS2322: Type '{|B|0|}' is not assignable to type '{|D|1|}'.
+!!! error TS2322:   Type '3' is not assignable to type '{|D|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
+!!! annotated symbol 1 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:4:6
+!!! annotated symbol 2 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:4:6
         d = c;
         ~
-!!! error TS2322: Type 'C' is not assignable to type 'D'.
-!!! error TS2322:   Type '3' is not assignable to type 'D'.
+!!! error TS2322: Type '{|C|0|}' is not assignable to type '{|D|1|}'.
+!!! error TS2322:   Type '3' is not assignable to type '{|D|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:3:6
+!!! annotated symbol 1 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:4:6
+!!! annotated symbol 2 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:4:6
         d = d;
     }
     
@@ -109,15 +128,18 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS26
 !!! error TS2322: Type '3' is not assignable to type '1'.
         b = 0;
         ~
-!!! error TS2322: Type '0' is not assignable to type 'B'.
+!!! error TS2322: Type '0' is not assignable to type '{|B|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
         b = 1;
         ~
-!!! error TS2322: Type '1' is not assignable to type 'B'.
+!!! error TS2322: Type '1' is not assignable to type '{|B|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:2:6
         b = 2;
         b = 3;
         c = 0;
         ~
-!!! error TS2322: Type '0' is not assignable to type 'C'.
+!!! error TS2322: Type '0' is not assignable to type '{|C|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:3:6
         c = 1;
         c = 2;
         c = 3;
@@ -126,7 +148,8 @@ tests/cases/conformance/types/literal/numericLiteralTypes3.ts(98,14): error TS26
         d = 2;
         d = 3;
         ~
-!!! error TS2322: Type '3' is not assignable to type 'D'.
+!!! error TS2322: Type '3' is not assignable to type '{|D|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/literal/numericLiteralTypes3.ts:4:6
     }
     
     function f6(a: A, b: B, c: C, d: D) {

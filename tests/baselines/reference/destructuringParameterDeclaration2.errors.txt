@@ -83,12 +83,16 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     
     c0({ z: 1 });      // Error, implied type is { z: {x: any, y: {j: any}} }
          ~
-!!! error TS2322: Type 'number' is not assignable to type '{ x: any; y: { j: any; }; }'.
+!!! error TS2322: Type 'number' is not assignable to type '{ {|x|0|}: any; {|y|1|}: { {|j|2|}: any; }; }'.
+!!! annotated dropped!: 0
+!!! annotated dropped!: 1
+!!! annotated dropped!: 2
     c1({});            // Error, implied type is {z:number}?
        ~~
-!!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ z: number; }'.
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ {|z|0|}: number; }'.
 !!! error TS2345:   Property 'z' is missing in type '{}' but required in type '{ z: number; }'.
 !!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21: 'z' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21
     c1({ z: true });   // Error, implied type is {z:number}?
          ~
 !!! error TS2322: Type 'true' is not assignable to type 'number'.
@@ -131,9 +135,15 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
         d4({x, y, c}) { }
         ~~
 !!! error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
-!!! error TS2416:   Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
+!!! error TS2416:   Type '({ x, y, c }: { {|x|0|}: any; {|y|1|}: any; {|c|2|}: any; }) => void' is not assignable to type '({ x, y, z }?: { {|x|3|}: any; {|y|4|}: any; {|z|5|}: any; }) => any'.
 !!! error TS2416:     Types of parameters '__0' and '__0' are incompatible.
 !!! error TS2416:       Property 'c' is missing in type '{ x: any; y: any; z: any; }' but required in type '{ x: any; y: any; c: any; }'.
+!!! annotated dropped!: 0
+!!! annotated dropped!: 1
+!!! annotated dropped!: 2
+!!! annotated dropped!: 3
+!!! annotated dropped!: 4
+!!! annotated dropped!: 5
         e0([a, b, q]) { }
     }
     

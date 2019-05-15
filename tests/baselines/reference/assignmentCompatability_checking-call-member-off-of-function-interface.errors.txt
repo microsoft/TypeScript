@@ -21,14 +21,16 @@ tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-functio
     // Should fail
     x = '';
     ~
-!!! error TS2322: Type '""' is not assignable to type 'Callable'.
+!!! error TS2322: Type '""' is not assignable to type '{|Callable|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     x = [''];
     ~
 !!! error TS2741: Property 'call' is missing in type 'string[]' but required in type 'Callable'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
     x = 4;
     ~
-!!! error TS2322: Type '4' is not assignable to type 'Callable'.
+!!! error TS2322: Type '4' is not assignable to type '{|Callable|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     x = {};
     ~
 !!! error TS2741: Property 'call' is missing in type '{}' but required in type 'Callable'.
@@ -43,18 +45,22 @@ tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-functio
     // Should Fail
     fn('');
        ~~
-!!! error TS2345: Argument of type '""' is not assignable to parameter of type 'Callable'.
+!!! error TS2345: Argument of type '""' is not assignable to parameter of type '{|Callable|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     fn(['']);
        ~~~~
-!!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'Callable'.
+!!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type '{|Callable|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     fn(4);
        ~
-!!! error TS2345: Argument of type '4' is not assignable to parameter of type 'Callable'.
+!!! error TS2345: Argument of type '4' is not assignable to parameter of type '{|Callable|0|}'.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     fn({});
        ~~
-!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Callable'.
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{|Callable|0|}'.
 !!! error TS2345:   Property 'call' is missing in type '{}' but required in type 'Callable'.
 !!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:3:11
     
     
     // Should work

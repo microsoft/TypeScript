@@ -29,8 +29,10 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWit
     // should be error
     class Derived extends Base {
           ~~~~~~~
-!!! error TS2417: Class static side 'typeof Derived' incorrectly extends base class static side 'typeof Base'.
+!!! error TS2417: Class static side 'typeof {|Derived|0|}' incorrectly extends base class static side 'typeof {|Base|1|}'.
 !!! error TS2417:   Property 'x' is private in type 'typeof Derived' but not in type 'typeof Base'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts:13:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassWithPrivateStaticShadowingPublicStatic.ts:1:7
         private static x: string; 
         private static fn(): string {
             return '';

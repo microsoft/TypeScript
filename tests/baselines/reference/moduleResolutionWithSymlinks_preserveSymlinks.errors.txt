@@ -13,8 +13,10 @@
     // Should fail. We no longer resolve any symlinks.
     x = new C2();
     ~
-!!! error TS2322: Type 'import("/app/node_modules/linked2/index").C' is not assignable to type 'import("/app/node_modules/linked/index").C'.
+!!! error TS2322: Type 'import("/app/node_modules/linked2/index").{|C|0|}' is not assignable to type 'import("/app/node_modules/linked/index").{|C|1|}'.
 !!! error TS2322:   Types have separate declarations of a private property 'x'.
+!!! annotated symbol 0 /app/node_modules/linked2/index.d.ts:2:14
+!!! annotated symbol 1 /app/node_modules/linked/index.d.ts:2:14
     
 ==== /linked/index.d.ts (0 errors) ====
     export { real } from "real";

@@ -13,6 +13,8 @@ tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts(9
     
     f(stooges); // Should throw
       ~~~~~~~
-!!! error TS2345: Argument of type '{ name: string; age: number; }[]' is not assignable to parameter of type '{ [x: string]: unknown; }'.
+!!! error TS2345: Argument of type '{ {|name|0|}: string; {|age|1|}: number; }[]' is not assignable to parameter of type '{ [x: string]: unknown; }'.
 !!! error TS2345:   Index signature is missing in type '{ name: string; age: number; }[]'.
+!!! annotated symbol 0 tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts:4:5
+!!! annotated symbol 1 tests/cases/compiler/indexSignatureOfTypeUnknownStillRequiresIndexSignature.ts:4:18
     

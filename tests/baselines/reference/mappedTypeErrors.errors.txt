@@ -68,12 +68,16 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
     type T01 = { [P in number]: string };  // Error
     type T02 = { [P in Date]: number };  // Error
                        ~~~~
-!!! error TS2322: Type 'Date' is not assignable to type 'string | number | symbol'.
-!!! error TS2322:   Type 'Date' is not assignable to type 'number'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type '{|Date|1|}' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:729:11
     type T03 = Record<Date, number>;  // Error
                       ~~~~
-!!! error TS2344: Type 'Date' does not satisfy the constraint 'string | number | symbol'.
-!!! error TS2344:   Type 'Date' is not assignable to type 'number'.
+!!! error TS2344: Type '{|Date|0|}' does not satisfy the constraint 'string | number | symbol'.
+!!! error TS2344:   Type '{|Date|1|}' is not assignable to type 'number'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:729:11
     
     type T10 = Pick<Shape, "name">;
     type T11 = Pick<Shape, "foo">;  // Error
@@ -96,19 +100,23 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
     function f1<T>(x: T) {
         let y: Pick<Shape, T>;  // Error
                            ~
-!!! error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
-!!! error TS2344:   Type 'T' is not assignable to type '"visible"'.
+!!! error TS2344: Type '{|T|0|}' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+!!! error TS2344:   Type '{|T|1|}' is not assignable to type '"visible"'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:32:13
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:32:13
     }
     
     function f2<T extends string | number>(x: T) {
         let y: Pick<Shape, T>;  // Error
                            ~
-!!! error TS2344: Type 'T' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
+!!! error TS2344: Type '{|T|0|}' does not satisfy the constraint '"name" | "width" | "height" | "visible"'.
 !!! error TS2344:   Type 'string | number' is not assignable to type '"name" | "width" | "height" | "visible"'.
 !!! error TS2344:     Type 'string' is not assignable to type '"name" | "width" | "height" | "visible"'.
-!!! error TS2344:       Type 'T' is not assignable to type '"visible"'.
+!!! error TS2344:       Type '{|T|1|}' is not assignable to type '"visible"'.
 !!! error TS2344:         Type 'string | number' is not assignable to type '"visible"'.
 !!! error TS2344:           Type 'string' is not assignable to type '"visible"'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:36:13
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:36:13
     }
     
     function f3<T extends keyof Shape>(x: T) {
@@ -156,14 +164,24 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
     function f20() {
         let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
                                                 ~~~~~~~~
-!!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
+!!! error TS2345: Argument of type '{ {|x|0|}: number; }' is not assignable to parameter of type '{|Readonly|1|}<{ {|x|2|}: number; {|y|3|}: number; }>'.
 !!! error TS2345:   Property 'y' is missing in type '{ x: number; }' but required in type 'Readonly<{ x: number; y: number; }>'.
 !!! related TS2728 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:37: 'y' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:47
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:31
+!!! annotated symbol 3 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:37
         let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
         let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
                                                               ~~~~
-!!! error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
+!!! error TS2345: Argument of type '{ {|x|0|}: number; {|y|1|}: number; {|z|2|}: number; }' is not assignable to parameter of type '{|Readonly|3|}<{ {|x|4|}: number; {|y|5|}: number; }>'.
 !!! error TS2345:   Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:77:47
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:77:53
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:77:59
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1438:6
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:77:31
+!!! annotated symbol 5 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:77:37
     }
     
     function f21() {
@@ -171,8 +189,14 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
         let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
                                                              ~~~~
-!!! error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Partial<{ x: number; y: number; }>'.
+!!! error TS2345: Argument of type '{ {|x|0|}: number; {|y|1|}: number; {|z|2|}: number; }' is not assignable to parameter of type '{|Partial|3|}<{ {|x|4|}: number; {|y|5|}: number; }>'.
 !!! error TS2345:   Object literal may only specify known properties, and 'z' does not exist in type 'Partial<{ x: number; y: number; }>'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:83:46
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:83:52
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:83:58
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 4 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:83:30
+!!! annotated symbol 5 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:83:36
     }
     
     // Verify use of Pick<T, K> for setState functions (#12793)
@@ -200,8 +224,11 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
 !!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
     setState(foo, { c: true });  // Error
                     ~~~~~~~
-!!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, "a" | "b">'.
+!!! error TS2345: Argument of type '{ {|c|0|}: boolean; }' is not assignable to parameter of type '{|Pick|1|}<{|Foo|2|}, "a" | "b">'.
 !!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, "a" | "b">'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:106:17
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:88:11
     
     class C<T> {
         state: T;
@@ -224,8 +251,11 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
 !!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:89:5: The expected type comes from property 'a' which is declared here on type 'Pick<Foo, "a">'
     c.setState({ c: true });  // Error
                  ~~~~~~~
-!!! error TS2345: Argument of type '{ c: boolean; }' is not assignable to parameter of type 'Pick<Foo, "a" | "b">'.
+!!! error TS2345: Argument of type '{ {|c|0|}: boolean; }' is not assignable to parameter of type '{|Pick|1|}<{|Foo|2|}, "a" | "b">'.
 !!! error TS2345:   Object literal may only specify known properties, and 'c' does not exist in type 'Pick<Foo, "a" | "b">'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:124:14
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 2 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:88:11
     
     type T2 = { a?: number, [key: string]: any };
     
@@ -248,8 +278,10 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         pf: {[P in F]?: T[P]},
         pt: {[P in T]?: T[P]}, // note: should be in keyof T
                    ~
-!!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
-!!! error TS2322:   Type 'T' is not assignable to type 'symbol'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type '{|T|1|}' is not assignable to type 'symbol'.
+!!! annotated symbol 0 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:134:11
+!!! annotated symbol 1 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:134:11
                         ~~~~
 !!! error TS2536: Type 'P' cannot be used to index type 'T'.
     };

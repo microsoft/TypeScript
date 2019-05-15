@@ -11,8 +11,10 @@ tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts(7,7): error
     
     class C extends B {
           ~
-!!! error TS2415: Class 'C' incorrectly extends base class 'B'.
+!!! error TS2415: Class '{|C|0|}' incorrectly extends base class '{|B|1|}'.
 !!! error TS2415:   Types have separate declarations of a private property 'myMethod'.
+!!! annotated symbol 0 tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts:7:7
+!!! annotated symbol 1 tests/cases/compiler/inheritanceGrandParentPrivateMemberCollision.ts:5:7
         private myMethod() { }
     }
     

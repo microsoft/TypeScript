@@ -24,9 +24,12 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
     class B extends A {
           ~
-!!! error TS2415: Class 'B' incorrectly extends base class 'A'.
+!!! error TS2415: Class '{|B|0|}' incorrectly extends base class '{|A|1|}'.
 !!! error TS2415:   Index signatures are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'Derived'.
+!!! error TS2415:     Type 'string' is not assignable to type '{|Derived|2|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:11:7
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:7:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:4:11
         [x: number]: string; // error
     }
     
@@ -37,21 +40,32 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
     
         class B extends A<Base> {
               ~
-!!! error TS2415: Class 'B' incorrectly extends base class 'A<Base>'.
+!!! error TS2415: Class '{|B|0|}' incorrectly extends base class '{|A|1|}<{|Base|2|}>'.
 !!! error TS2415:   Index signatures are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'Base'.
+!!! error TS2415:     Type 'string' is not assignable to type '{|Base|3|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:20:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:16:11
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:3:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:3:11
                           ~~~~
-!!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
+!!! error TS2344: Type '{|Base|0|}' does not satisfy the constraint '{|Derived|1|}'.
 !!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 !!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:4:34: 'bar' is declared here.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:3:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:4:11
             [x: number]: string; // error
         }
     
         class B3<T extends Derived> extends A<T> {
               ~~
-!!! error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
+!!! error TS2415: Class '{|B3|0|}<{|T|1|}>' incorrectly extends base class '{|A|2|}<{|T|3|}>'.
 !!! error TS2415:   Index signatures are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'T'.
+!!! error TS2415:     Type 'string' is not assignable to type '{|T|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:24:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:24:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:16:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:24:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:24:14
             [x: number]: string; // error
         }
     }

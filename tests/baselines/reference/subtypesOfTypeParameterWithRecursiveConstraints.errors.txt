@@ -133,8 +133,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D2<T, U, V>' is not assignable to the same property in base type 'Base<T>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'T'.
-!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'T'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     Type '{|Foo|2|}<{|T|3|}>' is not assignable to type '{|T|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:66:32
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:66:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:66:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:66:14
         }
     
         class D3<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<T> {
@@ -144,8 +149,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Base<T>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'T'.
-!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'T'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2416:     Type '{|Foo|2|}<{|V|3|}>' is not assignable to type '{|T|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:71:50
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:71:14
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:71:50
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:71:14
         }
     
         class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
@@ -155,8 +165,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D4<T, U, V>' is not assignable to the same property in base type 'Base<U>'.
-!!! error TS2416:   Type 'T' is not assignable to type 'U'.
-!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'U'.
+!!! error TS2416:   Type '{|T|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2416:     Type '{|Foo|2|}<{|U|3|}>' is not assignable to type '{|U|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:76:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:76:32
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:76:32
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:76:32
         }
     
         class D5<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<U> {
@@ -171,8 +186,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Base<U>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'U'.
-!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'U'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2416:     Type '{|Foo|2|}<{|V|3|}>' is not assignable to type '{|U|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:86:50
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:86:32
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:86:50
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:86:32
         }
     
         class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
@@ -182,8 +202,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Base<V>'.
-!!! error TS2416:   Type 'T' is not assignable to type 'V'.
-!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'V'.
+!!! error TS2416:   Type '{|T|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2416:     Type '{|Foo|2|}<{|U|3|}>' is not assignable to type '{|V|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:91:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:91:50
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:91:32
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:91:50
         }
     
         class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
@@ -193,8 +218,13 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base<V>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'V'.
-!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'V'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|V|1|}'.
+!!! error TS2416:     Type '{|Foo|2|}<{|T|3|}>' is not assignable to type '{|V|4|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:96:32
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:96:50
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:96:14
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:96:50
         }
     
         class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base<V> {
@@ -214,10 +244,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             foo: T
             ~~~
 !!! error TS2416: Property 'foo' in type 'D1<T, U, V>' is not assignable to the same property in base type 'Base2<T>'.
-!!! error TS2416:   Type 'T' is not assignable to type 'Foo<T>'.
-!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'Foo<T>'.
-!!! error TS2416:       Type 'U' is not assignable to type 'T'.
-!!! error TS2416:         Type 'Foo<T>' is not assignable to type 'T'.
+!!! error TS2416:   Type '{|T|0|}' is not assignable to type '{|Foo|1|}<{|T|2|}>'.
+!!! error TS2416:     Type '{|Foo|3|}<{|U|4|}>' is not assignable to type '{|Foo|5|}<{|T|6|}>'.
+!!! error TS2416:       Type '{|U|7|}' is not assignable to type '{|T|8|}'.
+!!! error TS2416:         Type '{|Foo|9|}<{|T|10|}>' is not assignable to type '{|T|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:113:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:113:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:113:32
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:113:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:113:32
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:113:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:113:14
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:113:14
         }
     
         class D2<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<T> {
@@ -234,10 +276,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'Base2<T>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'Foo<T>'.
-!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'Foo<T>'.
-!!! error TS2416:       Type 'V' is not assignable to type 'T'.
-!!! error TS2416:         Type 'Foo<V>' is not assignable to type 'T'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|Foo|1|}<{|T|2|}>'.
+!!! error TS2416:     Type '{|Foo|3|}<{|V|4|}>' is not assignable to type '{|Foo|5|}<{|T|6|}>'.
+!!! error TS2416:       Type '{|V|7|}' is not assignable to type '{|T|8|}'.
+!!! error TS2416:         Type '{|Foo|9|}<{|V|10|}>' is not assignable to type '{|T|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:123:50
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:123:14
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:123:50
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:123:14
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:123:50
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:123:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:123:50
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:123:14
         }
     
         class D4<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
@@ -252,10 +306,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
             foo: U
             ~~~
 !!! error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'Base2<U>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'Foo<U>'.
-!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'Foo<U>'.
-!!! error TS2416:       Type 'T' is not assignable to type 'U'.
-!!! error TS2416:         Type 'Foo<U>' is not assignable to type 'U'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|Foo|1|}<{|U|2|}>'.
+!!! error TS2416:     Type '{|Foo|3|}<{|T|4|}>' is not assignable to type '{|Foo|5|}<{|U|6|}>'.
+!!! error TS2416:       Type '{|T|7|}' is not assignable to type '{|U|8|}'.
+!!! error TS2416:         Type '{|Foo|9|}<{|U|10|}>' is not assignable to type '{|U|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:133:32
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:133:32
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:133:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:133:32
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:133:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:133:32
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:133:32
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:133:32
         }
     
         class D6<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<U> {
@@ -265,10 +331,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'Base2<U>'.
-!!! error TS2416:   Type 'V' is not assignable to type 'Foo<U>'.
-!!! error TS2416:     Type 'Foo<V>' is not assignable to type 'Foo<U>'.
-!!! error TS2416:       Type 'V' is not assignable to type 'U'.
-!!! error TS2416:         Type 'Foo<V>' is not assignable to type 'U'.
+!!! error TS2416:   Type '{|V|0|}' is not assignable to type '{|Foo|1|}<{|U|2|}>'.
+!!! error TS2416:     Type '{|Foo|3|}<{|V|4|}>' is not assignable to type '{|Foo|5|}<{|U|6|}>'.
+!!! error TS2416:       Type '{|V|7|}' is not assignable to type '{|U|8|}'.
+!!! error TS2416:         Type '{|Foo|9|}<{|V|10|}>' is not assignable to type '{|U|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:138:50
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:138:32
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:138:50
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:138:32
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:138:50
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:138:32
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:138:50
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:138:32
         }
     
         class D7<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
@@ -278,10 +356,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'V'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'Base2<V>'.
-!!! error TS2416:   Type 'T' is not assignable to type 'Foo<V>'.
-!!! error TS2416:     Type 'Foo<U>' is not assignable to type 'Foo<V>'.
-!!! error TS2416:       Type 'U' is not assignable to type 'V'.
-!!! error TS2416:         Type 'Foo<T>' is not assignable to type 'V'.
+!!! error TS2416:   Type '{|T|0|}' is not assignable to type '{|Foo|1|}<{|V|2|}>'.
+!!! error TS2416:     Type '{|Foo|3|}<{|U|4|}>' is not assignable to type '{|Foo|5|}<{|V|6|}>'.
+!!! error TS2416:       Type '{|U|7|}' is not assignable to type '{|V|8|}'.
+!!! error TS2416:         Type '{|Foo|9|}<{|T|10|}>' is not assignable to type '{|V|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:143:14
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:143:50
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:143:32
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:143:50
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:143:32
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:143:50
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:143:14
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:143:50
         }
     
         class D8<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {
@@ -291,10 +381,22 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
 !!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'V'.
             ~~~
 !!! error TS2416: Property 'foo' in type 'D8<T, U, V>' is not assignable to the same property in base type 'Base2<V>'.
-!!! error TS2416:   Type 'U' is not assignable to type 'Foo<V>'.
-!!! error TS2416:     Type 'Foo<T>' is not assignable to type 'Foo<V>'.
-!!! error TS2416:       Type 'T' is not assignable to type 'V'.
-!!! error TS2416:         Type 'Foo<U>' is not assignable to type 'V'.
+!!! error TS2416:   Type '{|U|0|}' is not assignable to type '{|Foo|1|}<{|V|2|}>'.
+!!! error TS2416:     Type '{|Foo|3|}<{|T|4|}>' is not assignable to type '{|Foo|5|}<{|V|6|}>'.
+!!! error TS2416:       Type '{|T|7|}' is not assignable to type '{|V|8|}'.
+!!! error TS2416:         Type '{|Foo|9|}<{|U|10|}>' is not assignable to type '{|V|11|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:148:32
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:148:50
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:148:14
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:148:50
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:148:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:148:50
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:3:7
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:148:32
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithRecursiveConstraints.ts:148:50
         }
     
         class D9<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>> extends Base2<V> {

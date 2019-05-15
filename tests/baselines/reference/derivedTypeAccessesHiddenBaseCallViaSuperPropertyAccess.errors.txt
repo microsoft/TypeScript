@@ -18,8 +18,11 @@ tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclara
             var r = super.foo({ a: 1 }); // { a: number }
             var r2 = super.foo({ a: 1, b: 2 }); // { a: number }
                                        ~~~~
-!!! error TS2345: Argument of type '{ a: number; b: number; }' is not assignable to parameter of type '{ a: number; }'.
+!!! error TS2345: Argument of type '{ {|a|0|}: number; {|b|1|}: number; }' is not assignable to parameter of type '{ {|a|2|}: number; }'.
 !!! error TS2345:   Object literal may only specify known properties, and 'b' does not exist in type '{ a: number; }'.
+!!! annotated symbol 0 tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts:14:30
+!!! annotated symbol 1 tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts:14:36
+!!! annotated symbol 2 tests/cases/conformance/classes/propertyMemberDeclarations/memberFunctionDeclarations/derivedTypeAccessesHiddenBaseCallViaSuperPropertyAccess.ts:2:14
             var r3 = this.foo({ a: 1, b: 2 }); // { a: number; b: number; }
         }
     }

@@ -39,9 +39,11 @@ tests/cases/compiler/recursiveTypeRelations.ts(27,61): error TS2304: Cannot find
                                          ~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'ClassNameObject'.
                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(obj: any, key: keyof S) => any' is not assignable to parameter of type '(previousValue: any, currentValue: string, currentIndex: number, array: string[]) => any'.
+!!! error TS2345: Argument of type '(obj: any, key: keyof {|S|0|}) => any' is not assignable to parameter of type '(previousValue: any, currentValue: string, currentIndex: number, array: string[]) => any'.
 !!! error TS2345:   Types of parameters 'key' and 'currentValue' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type 'keyof S'.
+!!! error TS2345:     Type 'string' is not assignable to type 'keyof {|S|1|}'.
+!!! annotated symbol 0 tests/cases/compiler/recursiveTypeRelations.ts:18:21
+!!! annotated symbol 1 tests/cases/compiler/recursiveTypeRelations.ts:18:21
                                                                 ~~~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'ClassNameObject'.
             const exportedClassName = styles[key];

@@ -16,7 +16,9 @@ tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOve
     
     class Derived2 extends Derived1 {
           ~~~~~~~~
-!!! error TS2415: Class 'Derived2' incorrectly extends base class 'Derived1'.
+!!! error TS2415: Class '{|Derived2|0|}' incorrectly extends base class '{|Derived1|1|}'.
 !!! error TS2415:   Property 'a' is protected in type 'Derived2' but public in type 'Derived1'.
+!!! annotated symbol 0 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts:12:7
+!!! annotated symbol 1 tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassOverridesProtectedMembers4.ts:8:7
         protected a: typeof x; // Error, parent was public
     }

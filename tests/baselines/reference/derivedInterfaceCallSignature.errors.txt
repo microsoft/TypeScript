@@ -16,9 +16,12 @@ tests/cases/compiler/derivedInterfaceCallSignature.ts(11,11): error TS2430: Inte
     
     interface D3SvgArea extends D3SvgPath {
               ~~~~~~~~~
-!!! error TS2430: Interface 'D3SvgArea' incorrectly extends interface 'D3SvgPath'.
+!!! error TS2430: Interface '{|D3SvgArea|0|}' incorrectly extends interface '{|D3SvgPath|1|}'.
 !!! error TS2430:   Types of property 'x' are incompatible.
-!!! error TS2430:     Type '(x: (data: any, index?: number) => number) => D3SvgArea' is not assignable to type '() => (data: any, index?: number) => number'.
+!!! error TS2430:     Type '(x: (data: any, index?: number) => number) => {|D3SvgArea|2|}' is not assignable to type '() => (data: any, index?: number) => number'.
+!!! annotated symbol 0 tests/cases/compiler/derivedInterfaceCallSignature.ts:11:11
+!!! annotated symbol 1 tests/cases/compiler/derivedInterfaceCallSignature.ts:1:11
+!!! annotated symbol 2 tests/cases/compiler/derivedInterfaceCallSignature.ts:11:11
         x(x: (data: any, index?: number) => number): D3SvgArea;
         y(y: (data: any, index?: number) => number): D3SvgArea;
         y0(): (data: any, index?: number) => number;

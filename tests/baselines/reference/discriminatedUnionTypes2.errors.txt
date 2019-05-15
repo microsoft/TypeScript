@@ -33,8 +33,15 @@ tests/cases/conformance/types/union/discriminatedUnionTypes2.ts(32,11): error TS
     function f13(x: { a: null; b: string } | { a: string, c: number }) {
         x = { a: null, b: "foo", c: 4};  // Error
                                  ~~~~
-!!! error TS2322: Type '{ a: null; b: string; c: number; }' is not assignable to type '{ a: null; b: string; } | { a: string; c: number; }'.
+!!! error TS2322: Type '{ {|a|0|}: null; {|b|1|}: string; {|c|2|}: number; }' is not assignable to type '{ {|a|3|}: null; {|b|4|}: string; } | { {|a|5|}: string; {|c|6|}: number; }'.
 !!! error TS2322:   Object literal may only specify known properties, and 'c' does not exist in type '{ a: null; b: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts:27:11
+!!! annotated symbol 1 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts:27:20
+!!! annotated symbol 2 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts:27:30
+!!! annotated symbol 3 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts:26:19
+!!! annotated symbol 4 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts:26:28
+!!! annotated symbol 5 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts:26:44
+!!! annotated symbol 6 tests/cases/conformance/types/union/discriminatedUnionTypes2.ts:26:55
     }
     
     function f14<T>(x: { a: 0; b: string } | { a: T, c: number }) {

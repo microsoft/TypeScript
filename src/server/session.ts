@@ -2559,7 +2559,8 @@ namespace ts.server {
         return { line: lc.line + 1, offset: lc.character + 1 };
     }
 
-    function convertAnnotationSpanToDiagnosticAnnotationSpan(span: AnnotationSpan): protocol.DiagnosticAnnotationSpan | undefined {
+    /* @internal */
+    export function convertAnnotationSpanToDiagnosticAnnotationSpan(span: AnnotationSpan): protocol.DiagnosticAnnotationSpan | undefined {
         switch (span.kind) {
             case "symbol":
                 return convertSymbolSpanIntoDiagnosticSymbolSpan(span);

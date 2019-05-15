@@ -68,21 +68,32 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|NonNullable|1|}<{|T|2|}>'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:10:13
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:10:13
     }
     
     function f2<T extends string | undefined>(x: T, y: NonNullable<T>) {
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'NonNullable<T>'.
-!!! error TS2322:   Type 'string | undefined' is not assignable to type 'NonNullable<T>'.
-!!! error TS2322:     Type 'undefined' is not assignable to type 'NonNullable<T>'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|NonNullable|1|}<{|T|2|}>'.
+!!! error TS2322:   Type 'string | undefined' is not assignable to type '{|NonNullable|3|}<{|T|4|}>'.
+!!! error TS2322:     Type 'undefined' is not assignable to type '{|NonNullable|5|}<{|T|6|}>'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:15:13
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:15:13
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:15:13
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypes1.ts:15:13
         let s1: string = x;  // Error
             ~~
-!!! error TS2322: Type 'T' is not assignable to type 'string'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type 'string'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'string'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:15:13
         let s2: string = y;
     }
     
@@ -90,22 +101,40 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type 'T[keyof T] | undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
-!!! error TS2322:   Type 'undefined' is not assignable to type 'NonNullable<Partial<T>[keyof T]>'.
+!!! error TS2322: Type '{|T|0|}[keyof {|T|1|}] | undefined' is not assignable to type '{|NonNullable|2|}<{|Partial|3|}<{|T|4|}>[keyof {|T|5|}]>'.
+!!! error TS2322:   Type 'undefined' is not assignable to type '{|NonNullable|6|}<{|Partial|7|}<{|T|8|}>[keyof {|T|9|}]>'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:22:13
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:22:13
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:22:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:22:13
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 7 /.ts/lib.es5.d.ts:1424:6
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:22:13
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes1.ts:22:13
     }
     
     function f4<T extends { x: string | undefined }>(x: T["x"], y: NonNullable<T["x"]>) {
         x = y;
         y = x;  // Error
         ~
-!!! error TS2322: Type 'T["x"]' is not assignable to type 'NonNullable<T["x"]>'.
-!!! error TS2322:   Type 'string | undefined' is not assignable to type 'NonNullable<T["x"]>'.
-!!! error TS2322:     Type 'undefined' is not assignable to type 'NonNullable<T["x"]>'.
+!!! error TS2322: Type '{|T|0|}["x"]' is not assignable to type '{|NonNullable|1|}<{|T|2|}["x"]>'.
+!!! error TS2322:   Type 'string | undefined' is not assignable to type '{|NonNullable|3|}<{|T|4|}["x"]>'.
+!!! error TS2322:     Type 'undefined' is not assignable to type '{|NonNullable|5|}<{|T|6|}["x"]>'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:27:13
+!!! annotated symbol 1 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:27:13
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:27:13
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:1474:6
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypes1.ts:27:13
         let s1: string = x;  // Error
             ~~
-!!! error TS2322: Type 'T["x"]' is not assignable to type 'string'.
+!!! error TS2322: Type '{|T|0|}["x"]' is not assignable to type 'string'.
 !!! error TS2322:   Type 'string | undefined' is not assignable to type 'string'.
 !!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:27:13
         let s2: string = y;
     }
     
@@ -180,22 +209,116 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
     function f7<T>(x: T, y: FunctionProperties<T>, z: NonFunctionProperties<T>) {
         x = y;  // Error
         ~
-!!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'T'.
-!!! error TS2322:   'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Pick|0|}<{|T|1|}, { [{|K|2|} in keyof {|T|3|}]: {|T|4|}[{|K|5|}] extends {|Function|6|} ? {|K|7|} : never; }[keyof {|T|8|}]>' is not assignable to type '{|T|9|}'.
+!!! error TS2322:   '{|Pick|10|}<{|T|11|}, { [{|K|12|} in keyof {|T|13|}]: {|T|14|}[{|K|15|}] extends {|Function|16|} ? {|K|17|} : never; }[keyof {|T|18|}]>' is assignable to the constraint of type '{|T|19|}', but '{|T|20|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 10 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 13 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 14 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 15 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 16 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 17 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 18 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 19 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 20 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
         x = z;  // Error
         ~
-!!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'T'.
-!!! error TS2322:   'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|Pick|0|}<{|T|1|}, { [{|K|2|} in keyof {|T|3|}]: {|T|4|}[{|K|5|}] extends {|Function|6|} ? never : {|K|7|}; }[keyof {|T|8|}]>' is not assignable to type '{|T|9|}'.
+!!! error TS2322:   '{|Pick|10|}<{|T|11|}, { [{|K|12|} in keyof {|T|13|}]: {|T|14|}[{|K|15|}] extends {|Function|16|} ? never : {|K|17|}; }[keyof {|T|18|}]>' is assignable to the constraint of type '{|T|19|}', but '{|T|20|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 10 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 13 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 14 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 15 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 16 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 17 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 18 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 19 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 20 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
         y = x;
         y = z;  // Error
         ~
-!!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>'.
-!!! error TS2322:   Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322: Type '{|Pick|0|}<{|T|1|}, { [{|K|2|} in keyof {|T|3|}]: {|T|4|}[{|K|5|}] extends {|Function|6|} ? never : {|K|7|}; }[keyof {|T|8|}]>' is not assignable to type '{|Pick|9|}<{|T|10|}, { [{|K|11|} in keyof {|T|12|}]: {|T|13|}[{|K|14|}] extends {|Function|15|} ? {|K|16|} : never; }[keyof {|T|17|}]>'.
+!!! error TS2322:   Type '{|T|18|}[keyof {|T|19|}] extends {|Function|20|} ? keyof {|T|21|} : never' is not assignable to type '{|T|22|}[keyof {|T|23|}] extends {|Function|24|} ? never : keyof {|T|25|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 9 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 13 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 14 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 15 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 16 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 17 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 18 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 19 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 20 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 21 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 22 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 23 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 24 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 25 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
         z = x;
         z = y;  // Error
         ~
-!!! error TS2322: Type 'Pick<T, { [K in keyof T]: T[K] extends Function ? K : never; }[keyof T]>' is not assignable to type 'Pick<T, { [K in keyof T]: T[K] extends Function ? never : K; }[keyof T]>'.
-!!! error TS2322:   Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322: Type '{|Pick|0|}<{|T|1|}, { [{|K|2|} in keyof {|T|3|}]: {|T|4|}[{|K|5|}] extends {|Function|6|} ? {|K|7|} : never; }[keyof {|T|8|}]>' is not assignable to type '{|Pick|9|}<{|T|10|}, { [{|K|11|} in keyof {|T|12|}]: {|T|13|}[{|K|14|}] extends {|Function|15|} ? never : {|K|16|}; }[keyof {|T|17|}]>'.
+!!! error TS2322:   Type '{|T|18|}[keyof {|T|19|}] extends {|Function|20|} ? never : keyof {|T|21|}' is not assignable to type '{|T|22|}[keyof {|T|23|}] extends {|Function|24|} ? keyof {|T|25|} : never'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes1.ts:93:36
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 9 /.ts/lib.es5.d.ts:1445:6
+!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 13 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 14 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 15 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 16 tests/cases/conformance/types/conditional/conditionalTypes1.ts:96:39
+!!! annotated symbol 17 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 18 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 19 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 20 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 21 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 22 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 23 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
+!!! annotated symbol 24 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 25 tests/cases/conformance/types/conditional/conditionalTypes1.ts:102:13
     }
     
     function f8<T>(x: keyof T, y: FunctionPropertyNames<T>, z: NonFunctionPropertyNames<T>) {
@@ -203,24 +326,68 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         x = z;
         y = x;  // Error
         ~
-!!! error TS2322: Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:   Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:     Type 'string' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
+!!! error TS2322: Type 'keyof {|T|0|}' is not assignable to type '{|T|1|}[keyof {|T|2|}] extends {|Function|3|} ? keyof {|T|4|} : never'.
+!!! error TS2322:   Type 'string | number | symbol' is not assignable to type '{|T|5|}[keyof {|T|6|}] extends {|Function|7|} ? keyof {|T|8|} : never'.
+!!! error TS2322:     Type 'string' is not assignable to type '{|T|9|}[keyof {|T|10|}] extends {|Function|11|} ? keyof {|T|12|} : never'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 7 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
         y = z;  // Error
         ~
-!!! error TS2322: Type 'T[keyof T] extends Function ? never : keyof T' is not assignable to type 'T[keyof T] extends Function ? keyof T : never'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'never'.
+!!! error TS2322: Type '{|T|0|}[keyof {|T|1|}] extends {|Function|2|} ? never : keyof {|T|3|}' is not assignable to type '{|T|4|}[keyof {|T|5|}] extends {|Function|6|} ? keyof {|T|7|} : never'.
+!!! error TS2322:   Type 'keyof {|T|8|}' is not assignable to type 'never'.
 !!! error TS2322:     Type 'string | number | symbol' is not assignable to type 'never'.
 !!! error TS2322:       Type 'string' is not assignable to type 'never'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
         z = x;  // Error
         ~
-!!! error TS2322: Type 'keyof T' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:   Type 'string | number | symbol' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:     Type 'string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
+!!! error TS2322: Type 'keyof {|T|0|}' is not assignable to type '{|T|1|}[keyof {|T|2|}] extends {|Function|3|} ? never : keyof {|T|4|}'.
+!!! error TS2322:   Type 'string | number | symbol' is not assignable to type '{|T|5|}[keyof {|T|6|}] extends {|Function|7|} ? never : keyof {|T|8|}'.
+!!! error TS2322:     Type 'string' is not assignable to type '{|T|9|}[keyof {|T|10|}] extends {|Function|11|} ? never : keyof {|T|12|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 3 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 7 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 11 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
         z = y;  // Error
         ~
-!!! error TS2322: Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
-!!! error TS2322:   Type 'keyof T' is not assignable to type 'never'.
+!!! error TS2322: Type '{|T|0|}[keyof {|T|1|}] extends {|Function|2|} ? keyof {|T|3|} : never' is not assignable to type '{|T|4|}[keyof {|T|5|}] extends {|Function|6|} ? never : keyof {|T|7|}'.
+!!! error TS2322:   Type 'keyof {|T|8|}' is not assignable to type 'never'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 6 /.ts/lib.es5.d.ts:272:11
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:111:13
     }
     
     type DeepReadonly<T> =
@@ -272,20 +439,45 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         let z2: 0 | "" = y;
         x = y;  // Error
         ~
-!!! error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
-!!! error TS2322:   'ZeroOf<T>' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-!!! error TS2322:     Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
-!!! error TS2322:       Type '0' is not assignable to type 'T'.
-!!! error TS2322:         '0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-!!! error TS2322:           Type '"" | 0' is not assignable to type 'T'.
-!!! error TS2322:             '"" | 0' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
-!!! error TS2322:               Type '""' is not assignable to type 'T'.
-!!! error TS2322:                 '""' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322: Type '{|ZeroOf|0|}<{|T|1|}>' is not assignable to type '{|T|2|}'.
+!!! error TS2322:   '{|ZeroOf|3|}<{|T|4|}>' is assignable to the constraint of type '{|T|5|}', but '{|T|6|}' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:     Type '0 | ({|T|7|} extends string ? "" : false)' is not assignable to type '{|T|8|}'.
+!!! error TS2322:       Type '0' is not assignable to type '{|T|9|}'.
+!!! error TS2322:         '0' is assignable to the constraint of type '{|T|10|}', but '{|T|11|}' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:           Type '"" | 0' is not assignable to type '{|T|12|}'.
+!!! error TS2322:             '"" | 0' is assignable to the constraint of type '{|T|13|}', but '{|T|14|}' could be instantiated with a different subtype of constraint 'string | number'.
+!!! error TS2322:               Type '""' is not assignable to type '{|T|15|}'.
+!!! error TS2322:                 '""' is assignable to the constraint of type '{|T|16|}', but '{|T|17|}' could be instantiated with a different subtype of constraint 'string | number'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:140:6
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:140:6
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 7 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 8 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 9 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 10 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 11 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 12 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 13 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 14 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 15 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 16 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 17 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
         y = x;  // Error
         ~
-!!! error TS2322: Type 'T' is not assignable to type 'ZeroOf<T>'.
-!!! error TS2322:   Type 'string | number' is not assignable to type 'ZeroOf<T>'.
-!!! error TS2322:     Type 'string' is not assignable to type 'ZeroOf<T>'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|ZeroOf|1|}<{|T|2|}>'.
+!!! error TS2322:   Type 'string | number' is not assignable to type '{|ZeroOf|3|}<{|T|4|}>'.
+!!! error TS2322:     Type 'string' is not assignable to type '{|ZeroOf|5|}<{|T|6|}>'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:140:6
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:140:6
+!!! annotated symbol 4 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
+!!! annotated symbol 5 tests/cases/conformance/types/conditional/conditionalTypes1.ts:140:6
+!!! annotated symbol 6 tests/cases/conformance/types/conditional/conditionalTypes1.ts:156:14
     }
     
     type T35<T extends { a: string, b: number }> = T[];
@@ -417,8 +609,12 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
     const f44 = <U>(value: T94<U>): T95<U> => value;
     const f45 = <U>(value: T95<U>): T94<U> => value;  // Error
                                               ~~~~~
-!!! error TS2322: Type 'T95<U>' is not assignable to type 'T94<U>'.
+!!! error TS2322: Type '{|T95|0|}<{|U|1|}>' is not assignable to type '{|T94|2|}<{|U|3|}>'.
 !!! error TS2322:   Type 'boolean' is not assignable to type 'true'.
+!!! annotated symbol 0 tests/cases/conformance/types/conditional/conditionalTypes1.ts:286:6
+!!! annotated symbol 1 tests/cases/conformance/types/conditional/conditionalTypes1.ts:288:14
+!!! annotated symbol 2 tests/cases/conformance/types/conditional/conditionalTypes1.ts:285:6
+!!! annotated symbol 3 tests/cases/conformance/types/conditional/conditionalTypes1.ts:288:14
     
     // Repro from #21863
     

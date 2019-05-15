@@ -69,7 +69,9 @@ tests/cases/compiler/interfaceDeclaration3.ts(54,11): error TS2430: Interface 'I
     
     interface I2 extends I1 { item:string; }
               ~~
-!!! error TS2430: Interface 'I2' incorrectly extends interface 'I1'.
+!!! error TS2430: Interface '{|I2|0|}' incorrectly extends interface '{|I1|1|}'.
 !!! error TS2430:   Types of property 'item' are incompatible.
 !!! error TS2430:     Type 'string' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/compiler/interfaceDeclaration3.ts:54:11
+!!! annotated symbol 1 tests/cases/compiler/interfaceDeclaration3.ts:1:11
     

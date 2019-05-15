@@ -61,8 +61,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     a3 = b3; // ok
     b3 = a3; // ok
     ~~
-!!! error TS2322: Type '<T>(x: T) => void' is not assignable to type '<T>(x: T) => T'.
-!!! error TS2322:   Type 'void' is not assignable to type 'T'.
+!!! error TS2322: Type '<{|T|0|}>(x: {|T|1|}) => void' is not assignable to type '<{|T|2|}>(x: {|T|3|}) => {|T|4|}'.
+!!! error TS2322:   Type 'void' is not assignable to type '{|T|5|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:10:10
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:10:10
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:38:10
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:38:10
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:38:10
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:38:10
     var b4: <T, U>(x: T, y: U) => string; 
     a4 = b4; // ok
     b4 = a4; // ok
@@ -76,31 +82,111 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     a11 = b11; // ok
     b11 = a11; // ok
     ~~~
-!!! error TS2322: Type '<T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base' is not assignable to type '<T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base'.
+!!! error TS2322: Type '<{|T|0|}>(x: { {|foo|1|}: {|T|2|}; }, y: { {|foo|3|}: {|T|4|}; {|bar|5|}: {|T|6|}; }) => {|Base|7|}' is not assignable to type '<{|T|8|}, {|U|9|}>(x: { {|foo|10|}: {|T|11|}; }, y: { {|foo|12|}: {|U|13|}; {|bar|14|}: {|U|15|}; }) => {|Base|16|}'.
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
-!!! error TS2322:     Type '{ foo: U; bar: U; }' is not assignable to type '{ foo: T; bar: T; }'.
+!!! error TS2322:     Type '{ {|foo|17|}: {|U|18|}; {|bar|19|}: {|U|20|}; }' is not assignable to type '{ {|foo|21|}: {|T|22|}; {|bar|23|}: {|T|24|}; }'.
 !!! error TS2322:       Types of property 'foo' are incompatible.
-!!! error TS2322:         Type 'U' is not assignable to type 'T'.
-!!! error TS2322:           'U' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:         Type '{|U|25|}' is not assignable to type '{|T|26|}'.
+!!! error TS2322:           '{|U|27|}' is assignable to the constraint of type '{|T|28|}', but '{|T|29|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:34
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:42
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:3:7
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:11
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:14
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:22
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:11
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:37
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:14
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:45
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:14
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:3:7
+!!! annotated symbol 17 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:37
+!!! annotated symbol 18 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:14
+!!! annotated symbol 19 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:45
+!!! annotated symbol 20 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:14
+!!! annotated symbol 21 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:34
+!!! annotated symbol 22 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:11
+!!! annotated symbol 23 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:14:42
+!!! annotated symbol 24 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:11
+!!! annotated symbol 25 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:14
+!!! annotated symbol 26 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:11
+!!! annotated symbol 27 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:14
+!!! annotated symbol 28 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:11
+!!! annotated symbol 29 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:50:11
     var b15: <U, V>(x: { a: U; b: V; }) => U[]; 
     a15 = b15; // ok, T = U, T = V
     b15 = a15; // ok
     ~~~
-!!! error TS2322: Type '<T>(x: { a: T; b: T; }) => T[]' is not assignable to type '<U, V>(x: { a: U; b: V; }) => U[]'.
+!!! error TS2322: Type '<{|T|0|}>(x: { {|a|1|}: {|T|2|}; {|b|3|}: {|T|4|}; }) => {|T|5|}[]' is not assignable to type '<{|U|6|}, {|V|7|}>(x: { {|a|8|}: {|U|9|}; {|b|10|}: {|V|11|}; }) => {|U|12|}[]'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type '{ a: U; b: V; }' is not assignable to type '{ a: U; b: U; }'.
+!!! error TS2322:     Type '{ {|a|13|}: {|U|14|}; {|b|15|}: {|V|16|}; }' is not assignable to type '{ {|a|17|}: {|U|18|}; {|b|19|}: {|U|20|}; }'.
 !!! error TS2322:       Types of property 'b' are incompatible.
-!!! error TS2322:         Type 'V' is not assignable to type 'U'.
-!!! error TS2322:           'V' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322:         Type '{|V|21|}' is not assignable to type '{|U|22|}'.
+!!! error TS2322:           '{|V|23|}' is assignable to the constraint of type '{|U|24|}', but '{|U|25|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:15:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:15:19
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:15:11
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:15:25
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:15:11
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:15:11
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:22
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:28
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:22
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:28
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14
+!!! annotated symbol 17 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:15:19
+!!! annotated symbol 18 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 19 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:15:25
+!!! annotated symbol 20 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 21 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14
+!!! annotated symbol 22 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 23 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14
+!!! annotated symbol 24 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 25 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
     var b16: <T>(x: { a: T; b: T }) => T[]; 
     a15 = b16; // ok
     b15 = a16; // ok
     ~~~
-!!! error TS2322: Type '<T extends Base>(x: { a: T; b: T; }) => T[]' is not assignable to type '<U, V>(x: { a: U; b: V; }) => U[]'.
+!!! error TS2322: Type '<{|T|0|} extends {|Base|1|}>(x: { {|a|2|}: {|T|3|}; {|b|4|}: {|T|5|}; }) => {|T|6|}[]' is not assignable to type '<{|U|7|}, {|V|8|}>(x: { {|a|9|}: {|U|10|}; {|b|11|}: {|V|12|}; }) => {|U|13|}[]'.
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2322:     Type '{ a: U; b: V; }' is not assignable to type '{ a: Base; b: Base; }'.
+!!! error TS2322:     Type '{ {|a|14|}: {|U|15|}; {|b|16|}: {|V|17|}; }' is not assignable to type '{ {|a|18|}: {|Base|19|}; {|b|20|}: {|Base|21|}; }'.
 !!! error TS2322:       Types of property 'a' are incompatible.
-!!! error TS2322:         Type 'U' is not assignable to type 'Base'.
+!!! error TS2322:         Type '{|U|22|}' is not assignable to type '{|Base|23|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:16:11
+!!! annotated symbol 1 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:3:7
+!!! annotated symbol 2 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:16:32
+!!! annotated symbol 3 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:16:11
+!!! annotated symbol 4 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:16:38
+!!! annotated symbol 5 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:16:11
+!!! annotated symbol 6 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:16:11
+!!! annotated symbol 7 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 8 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14
+!!! annotated symbol 9 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:22
+!!! annotated symbol 10 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 11 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:28
+!!! annotated symbol 12 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14
+!!! annotated symbol 13 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 14 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:22
+!!! annotated symbol 15 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 16 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:28
+!!! annotated symbol 17 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:14
+!!! annotated symbol 18 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:16:32
+!!! annotated symbol 19 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:3:7
+!!! annotated symbol 20 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:16:38
+!!! annotated symbol 21 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:3:7
+!!! annotated symbol 22 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:53:11
+!!! annotated symbol 23 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures5.ts:3:7
     var b17: <T>(x: (a: T) => T) => T[]; 
     a17 = b17; // ok
     b17 = a17; // ok

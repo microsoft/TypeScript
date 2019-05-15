@@ -28,17 +28,20 @@ tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(26
     enum E { A }
     var e: E = x;
         ~
-!!! error TS2322: Type 'true' is not assignable to type 'E'.
+!!! error TS2322: Type 'true' is not assignable to type '{|E|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts:8:6
     
     class C { foo: string }
     var f: C = x;
         ~
-!!! error TS2322: Type 'true' is not assignable to type 'C'.
+!!! error TS2322: Type 'true' is not assignable to type '{|C|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts:11:7
     
     interface I { bar: string }
     var g: I = x;
         ~
-!!! error TS2322: Type 'true' is not assignable to type 'I'.
+!!! error TS2322: Type 'true' is not assignable to type '{|I|0|}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts:14:11
     
     var h: { (): string } = x;
         ~
@@ -53,8 +56,11 @@ tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts(26
     function i<T>(a: T) {
         a = x;
         ~
-!!! error TS2322: Type 'boolean' is not assignable to type 'T'.
-!!! error TS2322:   'boolean' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type 'boolean' is not assignable to type '{|T|0|}'.
+!!! error TS2322:   'boolean' is assignable to the constraint of type '{|T|1|}', but '{|T|2|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts:23:12
+!!! annotated symbol 1 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts:23:12
+!!! annotated symbol 2 tests/cases/conformance/types/primitives/boolean/invalidBooleanAssignments.ts:23:12
     }
     i = x;
     ~

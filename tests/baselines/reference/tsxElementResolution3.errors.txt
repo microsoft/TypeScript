@@ -16,5 +16,7 @@ tests/cases/conformance/jsx/file.tsx(12,2): error TS2322: Type '{ w: string; }' 
     // Error
     <span w='err' />;
      ~~~~
-!!! error TS2322: Type '{ w: string; }' is not assignable to type '{ n: string; }'.
+!!! error TS2322: Type '{ {|w|0|}: string; }' is not assignable to type '{ {|n|1|}: string; }'.
 !!! error TS2322:   Property 'w' does not exist on type '{ n: string; }'.
+!!! annotated symbol 0 tests/cases/conformance/jsx/file.tsx:12:7
+!!! annotated symbol 1 tests/cases/conformance/jsx/file.tsx:4:21

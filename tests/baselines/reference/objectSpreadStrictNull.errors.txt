@@ -33,24 +33,30 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,5): error TS23
         // undefined
         let undefinedUnionStops: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedNumber };
             ~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+!!! error TS2322: Type '{ {|sn|0|}: number | undefined; }' is not assignable to type '{ {|sn|1|}: string | number; }'.
 !!! error TS2322:   Types of property 'sn' are incompatible.
 !!! error TS2322:     Type 'number | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+!!! annotated symbol 0 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:7:24
+!!! annotated symbol 1 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:14:32
         let undefinedUnionDuplicates: { sn: string | number } = { ...definiteBoolean, ...definiteString, ...undefinedString, ...undefinedNumber };
             ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ sn: number | undefined; }' is not assignable to type '{ sn: string | number; }'.
+!!! error TS2322: Type '{ {|sn|0|}: number | undefined; }' is not assignable to type '{ {|sn|1|}: string | number; }'.
 !!! error TS2322:   Types of property 'sn' are incompatible.
 !!! error TS2322:     Type 'number | undefined' is not assignable to type 'string | number'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'string | number'.
+!!! annotated symbol 0 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:7:24
+!!! annotated symbol 1 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:15:37
         let allUndefined: { sn: string | number | undefined } = { ...undefinedString, ...undefinedNumber };
     
         let undefinedWithOptionalContinues: { sn: string | number | boolean } = { ...definiteBoolean, ...undefinedString, ...optionalNumber };
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ sn: string | number | undefined; }' is not assignable to type '{ sn: string | number | boolean; }'.
+!!! error TS2322: Type '{ {|sn|0|}: string | number | undefined; }' is not assignable to type '{ {|sn|1|}: string | number | boolean; }'.
 !!! error TS2322:   Types of property 'sn' are incompatible.
 !!! error TS2322:     Type 'string | number | undefined' is not assignable to type 'string | number | boolean'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'string | number | boolean'.
+!!! annotated symbol 0 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:6:24
+!!! annotated symbol 1 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:18:43
     }
     
     type Movie = {
@@ -79,9 +85,12 @@ tests/cases/conformance/types/spread/objectSpreadStrictNull.ts(42,5): error TS23
         // error: not optional, undefined remains
         fields = { ...fields, ...nearlyPartialFields };
         ~~~~~~
-!!! error TS2322: Type '{ foo: number | undefined; bar: string | undefined; }' is not assignable to type 'Fields'.
+!!! error TS2322: Type '{ {|foo|0|}: number | undefined; {|bar|1|}: string | undefined; }' is not assignable to type '{|Fields|2|}'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
 !!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
 !!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+!!! annotated symbol 0 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:35:5
+!!! annotated symbol 1 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:36:5
+!!! annotated symbol 2 tests/cases/conformance/types/spread/objectSpreadStrictNull.ts:30:11
     }
     

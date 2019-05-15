@@ -21,11 +21,19 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
         constructor(x: T, y: U);
         constructor(x: T = 1, public y: U = x) { // error
                     ~~~~~~~~
-!!! error TS2322: Type '1' is not assignable to type 'T'.
-!!! error TS2322:   '1' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '1' is not assignable to type '{|T|0|}'.
+!!! error TS2322:   '1' is assignable to the constraint of type '{|T|1|}', but '{|T|2|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:9
+!!! annotated symbol 1 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:9
+!!! annotated symbol 2 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:9
                               ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'T' is not assignable to type 'U'.
-!!! error TS2322:   'T' is assignable to the constraint of type 'U', but 'U' could be instantiated with a different subtype of constraint '{}'.
+!!! error TS2322: Type '{|T|0|}' is not assignable to type '{|U|1|}'.
+!!! error TS2322:   '{|T|2|}' is assignable to the constraint of type '{|U|3|}', but '{|U|4|}' could be instantiated with a different subtype of constraint '{}'.
+!!! annotated symbol 0 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:9
+!!! annotated symbol 1 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:12
+!!! annotated symbol 2 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:9
+!!! annotated symbol 3 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:12
+!!! annotated symbol 4 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:8:12
             var z = x;
         }
     }
@@ -34,8 +42,14 @@ tests/cases/conformance/classes/constructorDeclarations/constructorParameters/co
         constructor(x);
         constructor(x: T = new Date()) { // error
                     ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Date' is not assignable to type 'T'.
-!!! error TS2322:   'Date' is assignable to the constraint of type 'T', but 'T' could be instantiated with a different subtype of constraint 'Date'.
+!!! error TS2322: Type '{|Date|0|}' is not assignable to type '{|T|1|}'.
+!!! error TS2322:   '{|Date|2|}' is assignable to the constraint of type '{|T|3|}', but '{|T|4|}' could be instantiated with a different subtype of constraint '{|Date|5|}'.
+!!! annotated symbol 0 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 1 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:15:9
+!!! annotated symbol 2 /.ts/lib.es5.d.ts:729:11
+!!! annotated symbol 3 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:15:9
+!!! annotated symbol 4 tests/cases/conformance/classes/constructorDeclarations/constructorParameters/constructorImplementationWithDefaultValues2.ts:15:9
+!!! annotated symbol 5 /.ts/lib.es5.d.ts:729:11
             var y = x;
         }
     }

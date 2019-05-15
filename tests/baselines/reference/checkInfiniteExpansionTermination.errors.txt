@@ -23,10 +23,20 @@ tests/cases/compiler/checkInfiniteExpansionTermination.ts(16,1): error TS2322: T
     var values2: ISubject<Bar>;
     values = values2;
     ~~~~~~
-!!! error TS2322: Type 'ISubject<Bar>' is not assignable to type 'IObservable<Foo>'.
+!!! error TS2322: Type '{|ISubject|0|}<{|Bar|1|}>' is not assignable to type '{|IObservable|2|}<{|Foo|3|}>'.
 !!! error TS2322:   Types of property 'n' are incompatible.
-!!! error TS2322:     Type 'IObservable<Bar[]>' is not assignable to type 'IObservable<Foo[]>'.
-!!! error TS2322:       Type 'Bar[]' is not assignable to type 'Foo[]'.
+!!! error TS2322:     Type '{|IObservable|4|}<{|Bar|5|}[]>' is not assignable to type '{|IObservable|6|}<{|Foo|7|}[]>'.
+!!! error TS2322:       Type '{|Bar|8|}[]' is not assignable to type '{|Foo|9|}[]'.
 !!! error TS2322:         Property 'x' is missing in type 'Bar' but required in type 'Foo'.
 !!! related TS2728 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:17: 'x' is declared here.
+!!! annotated symbol 0 tests/cases/compiler/checkInfiniteExpansionTermination.ts:9:11
+!!! annotated symbol 1 tests/cases/compiler/checkInfiniteExpansionTermination.ts:12:11
+!!! annotated symbol 2 tests/cases/compiler/checkInfiniteExpansionTermination.ts:4:11
+!!! annotated symbol 3 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:11
+!!! annotated symbol 4 tests/cases/compiler/checkInfiniteExpansionTermination.ts:4:11
+!!! annotated symbol 5 tests/cases/compiler/checkInfiniteExpansionTermination.ts:12:11
+!!! annotated symbol 6 tests/cases/compiler/checkInfiniteExpansionTermination.ts:4:11
+!!! annotated symbol 7 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:11
+!!! annotated symbol 8 tests/cases/compiler/checkInfiniteExpansionTermination.ts:12:11
+!!! annotated symbol 9 tests/cases/compiler/checkInfiniteExpansionTermination.ts:11:11
     
