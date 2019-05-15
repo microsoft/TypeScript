@@ -1467,31 +1467,39 @@ namespace ts {
             }
 
             const typeChecker = program.getTypeChecker();
-            const symbol = getSymbolAtLocationForQuickInfo(node, typeChecker);
+            const nodeForQuickInfo = getNodeForQuickInfo(node);
+            const symbol = getSymbolAtLocationForQuickInfo(nodeForQuickInfo, typeChecker);
 
             if (!symbol || typeChecker.isUnknownSymbol(symbol)) {
-                const type = shouldGetType(sourceFile, node, position) ? typeChecker.getTypeAtLocation(node) : undefined;
+                const type = shouldGetType(sourceFile, nodeForQuickInfo, position) ? typeChecker.getTypeAtLocation(nodeForQuickInfo) : undefined;
                 return type && {
                     kind: ScriptElementKind.unknown,
                     kindModifiers: ScriptElementKindModifier.none,
-                    textSpan: createTextSpanFromNode(node, sourceFile),
-                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(node))),
+                    textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
+                    displayParts: typeChecker.runWithCancellationToken(cancellationToken, typeChecker => typeToDisplayParts(typeChecker, type, getContainerNode(nodeForQuickInfo))),
                     documentation: type.symbol ? type.symbol.getDocumentationComment(typeChecker) : undefined,
                     tags: type.symbol ? type.symbol.getJsDocTags() : undefined
                 };
             }
 
             const { symbolKind, displayParts, documentation, tags } = typeChecker.runWithCancellationToken(cancellationToken, typeChecker =>
-                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(node), node)
+                SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker, symbol, sourceFile, getContainerNode(nodeForQuickInfo), nodeForQuickInfo)
             );
             return {
                 kind: symbolKind,
                 kindModifiers: SymbolDisplay.getSymbolModifiers(symbol),
-                textSpan: createTextSpanFromNode(node, sourceFile),
+                textSpan: createTextSpanFromNode(nodeForQuickInfo, sourceFile),
                 displayParts,
                 documentation,
                 tags,
             };
+        }
+
+        function getNodeForQuickInfo(node: Node): Node {
+            if (isNewExpression(node.parent) && node.pos === node.parent.pos) {
+                return node.parent.expression;
+            }
+            return node;
         }
 
         function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {

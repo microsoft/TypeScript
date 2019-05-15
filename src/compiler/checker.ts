@@ -10196,7 +10196,6 @@ namespace ts {
         function getSimplifiedType(type: Type, writing: boolean): Type {
             return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type, writing) :
                 type.flags & TypeFlags.Conditional ? getSimplifiedConditionalType(<ConditionalType>type, writing) :
-                type.flags & TypeFlags.Substitution ? writing ? (<SubstitutionType>type).typeVariable : (<SubstitutionType>type).substitute :
                 type;
         }
 
@@ -12290,7 +12289,7 @@ namespace ts {
             let depth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
-            let suppressNextError = false;
+            let overrideNextErrorInfo: DiagnosticMessageChain | undefined;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -12432,6 +12431,12 @@ namespace ts {
                 if (isFreshLiteralType(target)) {
                     target = (<FreshableType>target).regularType;
                 }
+                if (source.flags & TypeFlags.Substitution) {
+                    source = (<SubstitutionType>source).substitute;
+                }
+                if (target.flags & TypeFlags.Substitution) {
+                    target = (<SubstitutionType>target).typeVariable;
+                }
                 if (source.flags & TypeFlags.Simplifiable) {
                     source = getSimplifiedType(source, /*writing*/ false);
                 }
@@ -12571,10 +12576,14 @@ namespace ts {
                 }
 
                 if (!result && reportErrors) {
-                    const maybeSuppress = suppressNextError;
-                    suppressNextError = false;
+                    let maybeSuppress = overrideNextErrorInfo;
+                    overrideNextErrorInfo = undefined;
                     if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Object) {
+                        const currentError = errorInfo;
                         tryElaborateArrayLikeErrors(source, target, reportErrors);
+                        if (errorInfo !== currentError) {
+                            maybeSuppress = errorInfo;
+                        }
                     }
                     if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
@@ -13506,15 +13515,19 @@ namespace ts {
                 if (unmatchedProperty) {
                     if (reportErrors) {
                         const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false));
+                        let shouldSkipElaboration = false;
                         if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
                             headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
-                            suppressNextError = true; // Retain top-level error for interface implementing issues, otherwise omit it
+                            shouldSkipElaboration = true; // Retain top-level error for interface implementing issues, otherwise omit it
                         }
                         if (props.length === 1) {
                             const propName = symbolToString(unmatchedProperty);
                             reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, ...getTypeNamesForErrorDisplay(source, target));
                             if (length(unmatchedProperty.declarations)) {
                                 associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations[0], Diagnostics._0_is_declared_here, propName));
+                            }
+                            if (shouldSkipElaboration) {
+                                overrideNextErrorInfo = errorInfo;
                             }
                         }
                         else if (tryElaborateArrayLikeErrors(source, target, /*reportErrors*/ false)) {
@@ -13524,7 +13537,11 @@ namespace ts {
                             else {
                                 reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
                             }
+                            if (shouldSkipElaboration) {
+                                overrideNextErrorInfo = errorInfo;
+                            }
                         }
+                        // ELSE: No array like or unmatched property error - just issue top level error (errorInfo = undefined)
                     }
                     return Ternary.False;
                 }
