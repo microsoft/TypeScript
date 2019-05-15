@@ -284,7 +284,6 @@ namespace ts {
             // Write build information if applicable
             if (!buildInfoPath || targetSourceFile || emitSkipped) return;
             const program = host.getProgramBuildInfo();
-            if (!bundle && !program) return;
             if (host.isEmitBlocked(buildInfoPath) || compilerOptions.noEmit) {
                 emitSkipped = true;
                 return;

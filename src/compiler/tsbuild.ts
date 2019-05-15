@@ -1524,7 +1524,7 @@ namespace ts {
             if (buildInfoPath) {
                 const value = state.readFileWithCache(buildInfoPath);
                 const buildInfo = value && getBuildInfo(value);
-                if (buildInfo && buildInfo.version !== version) {
+                if (buildInfo && (buildInfo.bundle || buildInfo.program) && buildInfo.version !== version) {
                     return {
                         type: UpToDateStatusType.TsVersionOutputOfDate,
                         version: buildInfo.version

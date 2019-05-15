@@ -418,7 +418,12 @@ namespace fakes {
     export const version = "FakeTSVersion";
 
     export class SolutionBuilderHost extends CompilerHost implements ts.SolutionBuilderHost<ts.BuilderProgram> {
-        createProgram = ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        createProgram: ts.CreateProgram<ts.BuilderProgram>;
+
+        constructor(sys: System | vfs.FileSystem, options?: ts.CompilerOptions, setParentNodes?: boolean, createProgram?: ts.CreateProgram<ts.BuilderProgram>) {
+            super(sys, options, setParentNodes);
+            this.createProgram = createProgram || ts.createEmitAndSemanticDiagnosticsBuilderProgram;
+        }
 
         readFile(path: string) {
             const value = super.readFile(path);

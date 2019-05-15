@@ -2,9 +2,9 @@ namespace ts {
     describe("unittests:: tsbuild:: on 'sample1' project", () => {
         let projFs: vfs.FileSystem;
         const { time, tick } = getTime();
-        const testsOutputs = ["/src/tests/index.js"];
-        const logicOutputs = ["/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts"];
-        const coreOutputs = ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map"];
+        const testsOutputs = ["/src/tests/index.js", "/src/tests/index.d.ts", "/src/tests/tsconfig.tsbuildinfo"];
+        const logicOutputs = ["/src/logic/index.js", "/src/logic/index.js.map", "/src/logic/index.d.ts", "/src/logic/tsconfig.tsbuildinfo"];
+        const coreOutputs = ["/src/core/index.js", "/src/core/index.d.ts", "/src/core/index.d.ts.map", "/src/core/tsconfig.tsbuildinfo"];
         const allExpectedOutputs = [...testsOutputs, ...logicOutputs, ...coreOutputs];
 
         before(() => {
@@ -269,6 +269,35 @@ namespace ts {
                     [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
                     [Diagnostics.Project_0_is_out_of_date_because_output_for_it_was_generated_with_version_1_that_differs_with_current_version_2, "src/tests/tsconfig.json", fakes.version, version],
                     [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"],
+                );
+            });
+
+            it("does not rebuild if there is no program and bundle in the ts build info event if version doesnt match ts version", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs, /*options*/ undefined, /*setParentNodes*/ undefined, createAbstractBuilder);
+                let builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
+                builder.build();
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
+                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/tests/tsconfig.json", "src/tests/index.js"],
+                    [Diagnostics.Building_project_0, "/src/tests/tsconfig.json"]
+                );
+                verifyOutputsPresent(fs, allExpectedOutputs);
+
+                host.clearDiagnostics();
+                tick();
+                builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
+                changeCompilerVersion(host);
+                builder.build();
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json", "src/tests/tsconfig.json"),
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/core/tsconfig.json", "src/core/anotherModule.ts", "src/core/anotherModule.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/logic/tsconfig.json", "src/logic/index.ts", "src/logic/index.js"],
+                    [Diagnostics.Project_0_is_up_to_date_because_newest_input_1_is_older_than_oldest_output_2, "src/tests/tsconfig.json", "src/tests/index.ts", "src/tests/index.js"]
                 );
             });
 
