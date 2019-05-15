@@ -7116,10 +7116,10 @@ namespace ts {
         if (!renderContext) {
             return Debug.fail("Type or symbol passed into diagnostic rendering pipeline with no renderer provided.");
         }
-        if (arg.checker) {
-            return renderContext.typeToString(arg, offset);
+        if (arg.escapedName) {
+            return renderContext.symbolToString(arg, offset);
         }
-        return renderContext.symbolToString(arg, offset);
+        return renderContext.typeToString(arg as Type, offset);
     }
 
     export function formatStringFromArgs(text: string, args: ArrayLike<string | number | Type | Symbol>, baseIndex = 0, renderContext?: DiagnosticRenderContext): string {

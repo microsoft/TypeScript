@@ -3741,7 +3741,6 @@ namespace ts {
         /* @internal */ isReferenced?: SymbolFlags; // True if the symbol is referenced elsewhere. Keeps track of the meaning of a reference in case a symbol is both a type parameter and parameter.
         /* @internal */ isReplaceableByMethod?: boolean; // Can this Javascript class property be replaced by a method symbol?
         /* @internal */ isAssigned?: boolean;   // True if the symbol is a parameter with assignments
-        /* @internal */ checker?: undefined;    // A symbol cannot be associated with a checker since they may outlive checker lifetimes
     }
 
     /* @internal */
@@ -4035,6 +4034,8 @@ namespace ts {
         restrictiveInstantiation?: Type; // Instantiation with type parameters mapped to unconstrained form
         /* @internal */
         immediateBaseConstraint?: Type;  // Immediate base constraint cache
+        /* @internal */
+        escapedName?: undefined; // Never set
     }
 
     /* @internal */
@@ -4069,8 +4070,8 @@ namespace ts {
 
     // Unique symbol types (TypeFlags.UniqueESSymbol)
     export interface UniqueESSymbolType extends Type {
+        __uniqueESSymbolBrand: any;
         symbol: Symbol;
-        escapedName: __String;
     }
 
     export interface StringLiteralType extends LiteralType {

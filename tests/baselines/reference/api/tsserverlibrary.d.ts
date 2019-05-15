@@ -2277,8 +2277,8 @@ declare namespace ts {
         regularType: LiteralType;
     }
     interface UniqueESSymbolType extends Type {
+        __uniqueESSymbolBrand: any;
         symbol: Symbol;
-        escapedName: __String;
     }
     interface StringLiteralType extends LiteralType {
         value: string;

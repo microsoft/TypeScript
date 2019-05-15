@@ -6698,7 +6698,7 @@ namespace ts {
          */
         function getPropertyNameFromType(type: StringLiteralType | NumberLiteralType | UniqueESSymbolType): __String {
             if (type.flags & TypeFlags.UniqueESSymbol) {
-                return (<UniqueESSymbolType>type).escapedName;
+                return `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
             }
             if (type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                 return escapeLeadingUnderscores("" + (<StringLiteralType | NumberLiteralType>type).value);
@@ -10851,7 +10851,6 @@ namespace ts {
         function createUniqueESSymbolType(symbol: Symbol) {
             const type = <UniqueESSymbolType>createType(TypeFlags.UniqueESSymbol);
             type.symbol = symbol;
-            type.escapedName = `__@${type.symbol.escapedName}@${getSymbolId(type.symbol)}` as __String;
             return type;
         }
 
