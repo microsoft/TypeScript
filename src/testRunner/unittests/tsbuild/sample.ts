@@ -417,6 +417,22 @@ namespace ts {
                     verifyOutputsAbsent(fs, absentOutputs);
                 }
             });
+
+            it("building using buildReferencedProject", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { verbose: true });
+                builder.buildReferences("/src/tests");
+                host.assertDiagnosticMessages(
+                    getExpectedDiagnosticForProjectsInBuild("src/core/tsconfig.json", "src/logic/tsconfig.json"),
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/core/tsconfig.json", "src/core/anotherModule.js"],
+                    [Diagnostics.Building_project_0, "/src/core/tsconfig.json"],
+                    [Diagnostics.Project_0_is_out_of_date_because_output_file_1_does_not_exist, "src/logic/tsconfig.json", "src/logic/index.js"],
+                    [Diagnostics.Building_project_0, "/src/logic/tsconfig.json"],
+                );
+                verifyOutputsPresent(fs, [...coreOutputs, ...logicOutputs]);
+                verifyOutputsAbsent(fs, testsOutputs);
+            });
         });
 
         describe("downstream-blocked compilations", () => {

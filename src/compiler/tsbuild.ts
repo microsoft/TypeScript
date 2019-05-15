@@ -275,6 +275,8 @@ namespace ts {
     export interface SolutionBuilder<T extends BuilderProgram> {
         build(project?: string, cancellationToken?: CancellationToken): ExitStatus;
         clean(project?: string): ExitStatus;
+        buildReferences(project: string, cancellationToken?: CancellationToken): ExitStatus;
+        cleanReferences(project?: string): ExitStatus;
         getNextInvalidatedProject(cancellationToken?: CancellationToken): InvalidatedProject<T> | undefined;
 
         // Currently used for testing but can be made public if needed:
@@ -565,7 +567,7 @@ namespace ts {
             (state.buildOrder = createBuildOrder(state, state.rootNames.map(f => resolveProjectName(state, f))));
     }
 
-    function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined) {
+    function getBuildOrderFor(state: SolutionBuilderState, project: string | undefined, onlyReferences: boolean | undefined) {
         const resolvedProject = project && resolveProjectName(state, project);
         if (resolvedProject) {
             const projectPath = toResolvedConfigFilePath(state, resolvedProject);
@@ -575,7 +577,10 @@ namespace ts {
             );
             if (projectIndex === -1) return undefined;
         }
-        return resolvedProject ? createBuildOrder(state, [resolvedProject]) : getBuildOrder(state);
+        const buildOrder = resolvedProject ? createBuildOrder(state, [resolvedProject]) : getBuildOrder(state);
+        Debug.assert(!onlyReferences || resolvedProject !== undefined);
+        Debug.assert(!onlyReferences || buildOrder[buildOrder.length - 1] === resolvedProject);
+        return onlyReferences ? buildOrder.slice(0, buildOrder.length - 1) : buildOrder;
     }
 
     function enableCache(state: SolutionBuilderState) {
@@ -653,7 +658,6 @@ namespace ts {
         if (state.options.watch) { reportWatchStatus(state, Diagnostics.Starting_compilation_in_watch_mode); }
         enableCache(state);
         const buildOrder = getBuildOrder(state);
-        reportBuildQueue(state, buildOrder);
         buildOrder.forEach(configFileName =>
             state.projectPendingBuild.set(
                 toResolvedConfigFilePath(state, configFileName),
@@ -1186,7 +1190,11 @@ namespace ts {
             !isIncrementalCompilation(config.options);
     }
 
-    function getNextInvalidatedProject<T extends BuilderProgram>(state: SolutionBuilderState<T>, buildOrder: readonly ResolvedConfigFileName[]): InvalidatedProject<T> | undefined {
+    function getNextInvalidatedProject<T extends BuilderProgram>(
+        state: SolutionBuilderState<T>,
+        buildOrder: readonly ResolvedConfigFileName[],
+        reportQueue: boolean
+    ): InvalidatedProject<T> | undefined {
         if (!state.projectPendingBuild.size) return undefined;
         if (state.currentInvalidatedProject) {
             // Only if same buildOrder the currentInvalidated project can be sent again
@@ -1201,6 +1209,11 @@ namespace ts {
             const projectPath = toResolvedConfigFilePath(state, project);
             const reloadLevel = state.projectPendingBuild.get(projectPath);
             if (reloadLevel === undefined) continue;
+
+            if (reportQueue) {
+                reportQueue = false;
+                reportBuildQueue(state, buildOrder);
+            }
 
             const config = parseConfigFile(state, project, projectPath);
             if (!config) {
@@ -1678,17 +1691,19 @@ namespace ts {
         }
     }
 
-    function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken): ExitStatus {
-        const buildOrder = getBuildOrderFor(state, project);
+    function build(state: SolutionBuilderState, project?: string, cancellationToken?: CancellationToken, onlyReferences?: boolean): ExitStatus {
+        const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
         setupInitialBuild(state, cancellationToken);
 
+        let reportQueue = true;
         let successfulProjects = 0;
         let errorProjects = 0;
         while (true) {
-            const invalidatedProject = getNextInvalidatedProject(state, buildOrder);
+            const invalidatedProject = getNextInvalidatedProject(state, buildOrder, reportQueue);
             if (!invalidatedProject) break;
+            reportQueue = false;
             invalidatedProject.done(cancellationToken);
             if (state.diagnostics.has(invalidatedProject.projectPath)) {
                 errorProjects++;
@@ -1709,8 +1724,8 @@ namespace ts {
             ExitStatus.Success;
     }
 
-    function clean(state: SolutionBuilderState, project?: string) {
-        const buildOrder = getBuildOrderFor(state, project);
+    function clean(state: SolutionBuilderState, project?: string, onlyReferences?: boolean) {
+        const buildOrder = getBuildOrderFor(state, project, onlyReferences);
         if (!buildOrder) return ExitStatus.InvalidProject_OutputsSkipped;
 
         const { options, host } = state;
@@ -1783,7 +1798,7 @@ namespace ts {
             state.projectErrorsReported.clear();
             reportWatchStatus(state, Diagnostics.File_change_detected_Starting_incremental_compilation);
         }
-        const invalidatedProject = getNextInvalidatedProject(state, getBuildOrder(state));
+        const invalidatedProject = getNextInvalidatedProject(state, getBuildOrder(state), /*reportQueue*/ false);
         if (invalidatedProject) {
             invalidatedProject.done();
             if (state.projectPendingBuild.size) {
@@ -1923,9 +1938,11 @@ namespace ts {
         return {
             build: (project, cancellationToken) => build(state, project, cancellationToken),
             clean: project => clean(state, project),
+            buildReferences: (project, cancellationToken) => build(state, project, cancellationToken, /*onlyReferences*/ true),
+            cleanReferences: project => clean(state, project, /*onlyReferences*/ true),
             getNextInvalidatedProject: cancellationToken => {
                 setupInitialBuild(state, cancellationToken);
-                return getNextInvalidatedProject(state, getBuildOrder(state));
+                return getNextInvalidatedProject(state, getBuildOrder(state), /*reportQueue*/ false);
             },
             getBuildOrder: () => getBuildOrder(state),
             getUpToDateStatusOfProject: project => {
