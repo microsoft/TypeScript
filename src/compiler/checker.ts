@@ -411,7 +411,7 @@ namespace ts {
             }
         };
 
-        type SpanAwareTextWriter = EmitTextWriter & { getPendingAnnotationSpans(): AnnotationSpan[] | undefined; setSpanOffsetPos(offset: number): void }
+        type SpanAwareTextWriter = EmitTextWriter & { getPendingAnnotationSpans(): AnnotationSpan[] | undefined; setSpanOffsetPos(offset: number): void };
 
         function getSpanAwareTextWriter() {
             let spans: AnnotationSpan[] | undefined;
@@ -422,13 +422,13 @@ namespace ts {
             };
             const captureExpansionSpan = (start: number, length: number, printCallback: (writer: EmitTextWriter) => string) => {
                 (spans || (spans = [])).push(registerExpansionCallback(start + offset, length, printCallback));
-            }
+            };
             const typeWriter = createTextWriter("", captureSymbolSpan, captureExpansionSpan) as SpanAwareTextWriter;
             typeWriter.getPendingAnnotationSpans = () => {
                 const result = spans;
                 spans = undefined;
                 return result;
-            }
+            };
             typeWriter.setSpanOffsetPos = newOffset => void (offset = newOffset);
             return typeWriter;
         }
@@ -3483,7 +3483,7 @@ namespace ts {
                         const printer = getExpansionSpanAwarePrinter(writer, sourceFile);
                         printer.writeNode(EmitHint.Unspecified, expansionCb(), sourceFile, writer);
                         return writer.getText();
-                    }
+                    };
                     writer.writeExpansionSpan!(start, length, printCb);
                     return result;
                 }

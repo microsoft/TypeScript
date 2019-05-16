@@ -5854,7 +5854,7 @@ namespace ts {
         getIndent(): number;
         isAtStartOfLine(): boolean;
         getTextPosWithWriteLine?(): number;
-        writeExpansionSpan?(start: number, length: number, printCallback: (writer: EmitTextWriter) => string): void; 
+        writeExpansionSpan?(start: number, length: number, printCallback: (writer: EmitTextWriter) => string): void;
     }
 
     export interface GetEffectiveTypeRootsHost {

@@ -2091,7 +2091,7 @@ namespace ts.server {
                 // TODO: Issue an error response of some kind?
                 return { text: "..." };
             }
-            return { text: result.text, annotations: mapDefined(result.annotations, convertAnnotationSpanToDiagnosticAnnotationSpan) }
+            return { text: result.text, annotations: mapDefined(result.annotations, convertAnnotationSpanToDiagnosticAnnotationSpan) };
         }
 
         getCanonicalFileName(fileName: string) {
